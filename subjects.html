@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subjects — Inspire Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS (matches dashboard exactly) ── */
+:root{
+  --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
+  --gold:#d4a017;--gold2:#f0c040;
+  --orange:#e8620a;
+  --white:#ffffff;
+  --border:#1e3a5f;
+  --muted:#7a8fa6;
+  --green:#16803c;--red:#b92b1a;
+  --r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;} html{overflow-x:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--navy2);}
+::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
+
+.gold{color:var(--gold);}
+.muted{color:var(--muted);}
+.mono{font-family:'DM Mono',monospace;}
+.serif{font-family:'Playfair Display',serif;}
+
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.fade-in{animation:fadeIn .4s ease both;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:var(--green);}
+#toast.error{border-color:var(--red);}
+
+.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
+.badge-gold{background:#d4a01722;color:var(--gold);}
+.badge-green{background:#16803c22;color:#4ade80;}
+.badge-blue{background:#1c4f8a22;color:#60a5fa;}
+.badge-purple{background:#7c3aed22;color:#c4b5fd;}
+.badge-teal{background:#0b6e6d22;color:#5eead4;}
+.badge-orange{background:#e8620a22;color:var(--orange);}
+
+.mastery-not_started{color:var(--muted);}
+.mastery-learning{color:#f87171;}
+.mastery-developing{color:#fb923c;}
+.mastery-secure{color:#facc15;}
+.mastery-mastered{color:#4ade80;}
+
+/* ── NAV (matches dashboard) ── */
+.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
+.topnav-logo{display:flex;align-items:center;gap:.6rem;}
+.topnav-logo img{height:36px;width:auto;}
+.logo-text{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--gold);}
+.nav-links{display:flex;gap:.3rem;flex:1;}
+.nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;border:none;transition:all .2s;cursor:pointer;}
+.nav-link:hover,.nav-link.active{background:var(--navy3);color:var(--white);}
+.nav-user{display:flex;align-items:center;gap:.75rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
+.nav-user:hover{border-color:var(--gold);}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;}
+
+/* ── MAIN ── */
+main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
+
+/* ── PAGE HEADER ── */
+.page-header{margin-bottom:2rem;}
+.breadcrumb{font-size:.78rem;color:var(--muted);margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem;}
+.breadcrumb a{color:var(--muted);transition:color .2s;}
+.breadcrumb a:hover{color:var(--gold);}
+.breadcrumb span{color:var(--border);}
+.page-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;margin-bottom:.3rem;}
+.page-title em{font-style:normal;color:var(--gold);}
+.page-sub{font-size:.9rem;color:var(--muted);}
+
+/* ── SUBJECT TABS ── */
+.subject-tabs{display:flex;gap:.5rem;margin-bottom:2rem;flex-wrap:wrap;}
+.subject-tab{
+  display:flex;align-items:center;gap:.55rem;
+  padding:.55rem 1.1rem;border-radius:var(--r);
+  border:1px solid var(--border);background:var(--navy2);
+  font-size:.85rem;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all .2s;
+}
+.subject-tab:hover{border-color:rgba(212,160,23,.4);color:var(--white);}
+.subject-tab.active{border-color:var(--gold);color:var(--white);background:var(--navy3);}
+.subject-tab .tab-icon{font-size:1.1rem;line-height:1;}
+.subject-tab .tab-count{
+  font-family:'DM Mono',monospace;font-size:.62rem;
+  background:var(--navy);padding:.1rem .4rem;border-radius:3px;
+  color:var(--muted);
+}
+.subject-tab.active .tab-count{background:rgba(212,160,23,.15);color:var(--gold);}
+
+/* ── SUBJECT HERO CARD ── */
+.subject-hero{
+  border-radius:var(--r);padding:1.8rem 2rem;margin-bottom:2rem;
+  position:relative;overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--navy2);
+}
+.subject-hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  border-radius:var(--r) var(--r) 0 0;
+}
+.hero-maths::before{background:linear-gradient(90deg,#1c4f8a,#3b82f6);}
+.hero-physics::before{background:linear-gradient(90deg,#7c3aed,#a78bfa);}
+.hero-chemistry::before{background:linear-gradient(90deg,#0b6e6d,#2dd4bf);}
+.hero-biology::before{background:linear-gradient(90deg,#16803c,#4ade80);}
+
+.hero-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;}
+.hero-left{}
+.hero-icon{font-size:2.8rem;line-height:1;margin-bottom:.6rem;}
+.hero-name{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:.25rem;}
+.hero-desc{font-size:.86rem;color:var(--muted);max-width:480px;line-height:1.6;}
+.hero-meta{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap;}
+
+.hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:.8rem;min-width:160px;}
+.hero-stat{text-align:right;}
+.hero-stat .hs-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1;}
+.hero-stat .hs-lbl{font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;}
+.hero-progress{width:100%;}
+.hero-progress .hp-bar{height:6px;background:var(--navy);border-radius:3px;overflow:hidden;margin-bottom:.3rem;}
+.hero-progress .hp-fill{height:100%;border-radius:3px;transition:width .8s ease;}
+.hero-progress .hp-label{font-size:.72rem;color:var(--muted);text-align:right;}
+
+/* ── FILTER ROW ── */
+.filter-row{display:flex;align-items:center;gap:.6rem;margin-bottom:1.2rem;flex-wrap:wrap;}
+.filter-label{font-size:.75rem;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em;}
+.filter-btn{padding:.35rem .8rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.filter-btn:hover{border-color:var(--gold);color:var(--white);}
+.filter-btn.active{border-color:var(--gold);background:rgba(212,160,23,.1);color:var(--gold);}
+.search-box{
+  margin-left:auto;
+  display:flex;align-items:center;gap:.5rem;
+  background:var(--navy2);border:1px solid var(--border);
+  border-radius:var(--r);padding:.38rem .8rem;
+  transition:border-color .2s;
+}
+.search-box:focus-within{border-color:var(--gold);}
+.search-box input{background:none;border:none;outline:none;color:var(--white);font-size:.84rem;width:180px;}
+.search-box input::placeholder{color:var(--muted);}
+
+/* ── TOPICS GRID ── */
+.topics-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.85rem;
+}
+.topic-card{
+  background:var(--navy2);border:1px solid var(--border);
+  border-radius:var(--r);padding:1.1rem 1.2rem;
+  cursor:pointer;transition:all .22s;
+  display:flex;flex-direction:column;gap:.55rem;
+  position:relative;
+}
+.topic-card:hover{border-color:rgba(212,160,23,.35);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.25);}
+
+.topic-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;}
+.topic-name{font-size:.95rem;font-weight:700;line-height:1.3;flex:1;}
+.mastery-dot{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px;
+  background:var(--border);
+}
+.mastery-dot.mastered{background:#4ade80;}
+.mastery-dot.secure{background:#facc15;}
+.mastery-dot.developing{background:#fb923c;}
+.mastery-dot.learning{background:#f87171;}
+.mastery-dot.not_started{background:var(--border);}
+
+.topic-desc{font-size:.78rem;color:var(--muted);line-height:1.5;}
+.topic-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:.1rem;}
+.topic-meta{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;}
+.topic-mastery{font-size:.72rem;font-weight:600;}
+.topic-score{font-size:.72rem;color:var(--muted);font-family:'DM Mono',monospace;}
+
+.topic-action{
+  font-size:.75rem;font-weight:700;
+  color:var(--gold);display:flex;align-items:center;gap:.25rem;
+  opacity:0;transition:opacity .2s;white-space:nowrap;
+}
+.topic-card:hover .topic-action{opacity:1;}
+
+/* paper separator */
+.paper-separator{
+  grid-column:1/-1;
+  display:flex;align-items:center;gap:.8rem;
+  padding:.4rem 0;margin:.4rem 0 .2rem;
+}
+.paper-label{
+  font-family:'DM Mono',monospace;font-size:.63rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);white-space:nowrap;
+}
+.paper-line{flex:1;height:1px;background:var(--border);}
+
+/* empty state */
+.empty-state{
+  grid-column:1/-1;text-align:center;
+  padding:3rem 2rem;color:var(--muted);
+}
+.empty-state .es-icon{font-size:2.5rem;margin-bottom:.8rem;}
+.empty-state p{font-size:.88rem;}
+
+/* loading skeleton */
+.skeleton{
+  background:linear-gradient(90deg,var(--navy2) 25%,var(--navy3) 50%,var(--navy2) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.2s infinite;
+  border-radius:var(--r);
+}
+@keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .topnav{padding:.75rem 1rem;gap:.75rem;}
+  .nav-links{display:none;}
+  .nav-user span:last-child{display:none;}
+  main{padding:1.2rem 1rem 6rem;}
+  .topics-grid{grid-template-columns:1fr;}
+  .hero-right{display:none;}
+  .subject-tabs{gap:.35rem;flex-wrap:nowrap;overflow-x:auto;padding-bottom:.25rem;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .subject-tabs::-webkit-scrollbar{display:none;}
+  .subject-tab{padding:.45rem .8rem;font-size:.8rem;flex-shrink:0;}
+  .filter-row{gap:.4rem;flex-wrap:wrap;}
+  .search-box input{width:130px;}
+  .page-title{font-size:1.4rem;}
+  .hero-inner{flex-direction:column;}
+}
+@media(max-width:480px){
+  .subject-tab .tab-count{display:none;}
+  .filter-btn{padding:.3rem .65rem;font-size:.74rem;}
+  .page-title{font-size:1.2rem;}
+}
+
+/* ── Mobile Bottom Navigation ──────────────────────────────────── */
+.mobile-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:var(--navy2);border-top:1px solid var(--border);
+  padding:.5rem 0 env(safe-area-inset-bottom,.5rem);
+}
+.mobile-nav-inner{
+  display:flex;justify-content:space-around;align-items:center;
+  max-width:600px;margin:0 auto;
+}
+.mob-nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:.2rem;
+  background:none;border:none;color:var(--muted);
+  font-size:.62rem;font-family:'DM Sans',sans-serif;font-weight:600;
+  padding:.5rem .75rem;border-radius:8px;cursor:pointer;transition:color .2s;
+  min-width:44px;min-height:44px;justify-content:center;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.mob-nav-btn .mob-icon{font-size:1.25rem;line-height:1;}
+.mob-nav-btn.active{color:var(--gold);}
+.mob-nav-btn:hover{color:var(--white);}
+@media(max-width:768px){
+  .mobile-nav{display:block;}
+}
+</style>
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#c9a84c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Inspire Science">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav class="topnav">
+<a href="index.html" style="text-decoration:none;color:inherit;"><div class="topnav-logo">
+    <img src="1775416612494_image.png" alt="Inspire Science"
+         style="background:#fff;border-radius:6px;padding:2px 6px;"
+         onerror="this.style.display='none'">
+    <span class="logo-text">Inspire Science</span>
+  </div></a>
+  
+  <div class="nav-links">
+    <button class="nav-link" onclick="location.href='dashboard.html'">Dashboard</button>
+    <button class="nav-link active">Subjects</button>
+    <button class="nav-link" onclick="location.href='progress.html'">My Progress</button>
+    <button class="nav-link" onclick="location.href='revision.html'">Personalised Learning</button>
+    <button class="nav-link" onclick="location.href='quiz.html'">Quick Quiz</button>
+  </div>
+  <div class="nav-user" onclick="toggleUserMenu()">
+    <div class="avatar" id="nav-avatar" style="background:var(--gold);color:var(--navy);">?</div>
+    <span id="nav-name">Loading…</span>
+  </div>
+</nav>
+
+<!-- ══════════ MAIN ══════════ -->
+<main>
+
+  <!-- Page header -->
+  <div class="page-header fade-in">
+    <div class="breadcrumb">
+      <a href="dashboard.html">Dashboard</a>
+      <span>›</span>
+      <span style="color:var(--white)">Subjects</span>
+    </div>
+    <h1 class="page-title">Your <em>Subjects</em></h1>
+    <p class="page-sub" id="page-sub">Choose a subject to browse topics and start quizzes.</p>
+  </div>
+
+  <!-- Subject tabs -->
+  <div class="subject-tabs" id="subject-tabs">
+    <div class="skeleton" style="width:110px;height:38px;"></div>
+    <div class="skeleton" style="width:100px;height:38px;"></div>
+    <div class="skeleton" style="width:115px;height:38px;"></div>
+    <div class="skeleton" style="width:105px;height:38px;"></div>
+  </div>
+
+  <!-- Subject hero -->
+  <div class="subject-hero fade-in" id="subject-hero">
+    <div class="skeleton" style="height:120px;border-radius:var(--r);"></div>
+  </div>
+
+  <!-- Filter row -->
+  <div class="filter-row" id="filter-row" style="display:none">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-filter="all" onclick="applyFilter(this)">All Topics</button>
+    <button class="filter-btn" data-filter="not_started" onclick="applyFilter(this)">Not Started</button>
+    <button class="filter-btn" data-filter="in_progress" onclick="applyFilter(this)">In Progress</button>
+    <button class="filter-btn" data-filter="mastered" onclick="applyFilter(this)">Mastered ✓</button>
+    <div class="search-box">
+      <span style="color:var(--muted);font-size:.9rem;">🔍</span>
+      <input type="text" id="topic-search" placeholder="Search topics…" oninput="renderTopics()">
+    </div>
+  </div>
+
+  <!-- Topics grid -->
+  <div class="topics-grid" id="topics-grid">
+    <div class="skeleton" style="height:120px;"></div>
+    <div class="skeleton" style="height:120px;"></div>
+    <div class="skeleton" style="height:120px;"></div>
+    <div class="skeleton" style="height:120px;"></div>
+    <div class="skeleton" style="height:120px;"></div>
+    <div class="skeleton" style="height:120px;"></div>
+  </div>
+
+</main>
+<div id="toast"></div>
+
+<!-- ══════════ SCRIPTS ══════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="perf-utils.js"></script>
+<script>
+const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+async function getUser(){ perfStart('auth-session'); const{data:{user}}=await supa.auth.getUser(); perfEnd('auth-session'); return user; }
+async function getProfile(uid){
+  const cached=getCachedProfile();
+  if(cached&&cached.id===uid){ console.debug('⚡ [Inspire] profile: cache hit'); return cached; }
+  perfStart('profile-fetch');
+  const{data}=await supa.from('profiles').select('*').eq('id',uid).single();
+  perfEnd('profile-fetch');
+  if(data) setCachedProfile(data);
+  return data;
+}
+async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window.location.href='index.html'; }
+function toast(msg,type='success'){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.className='show '+type;setTimeout(()=>t.className='',3000);}
+function timeAgo(ts){if(!ts)return'Never';const d=new Date(ts),now=new Date(),diff=Math.floor((now-d)/1000);if(diff<60)return'Just now';if(diff<3600)return Math.floor(diff/60)+'m ago';if(diff<86400)return Math.floor(diff/3600)+'h ago';return Math.floor(diff/86400)+'d ago';}
+function masteryLabel(m){return{not_started:'Not Started',learning:'Learning',developing:'Developing',secure:'Secure',mastered:'Mastered'}[m]||'Not Started';}
+</script>
+
+<script>
+/* ══════════════════════════════════════
+   APP STATE
+══════════════════════════════════════ */
+const subjectMeta={
+  1:{cls:'maths',   icon:'∑', color:'#3b82f6', badge:'badge-blue'},
+  2:{cls:'physics', icon:'⚡', color:'#a78bfa', badge:'badge-purple'},
+  3:{cls:'chemistry',icon:'⚗',color:'#2dd4bf', badge:'badge-teal'},
+  4:{cls:'biology', icon:'🧬',color:'#4ade80', badge:'badge-green'},
+};
+
+let allSubjects=[], allTopics=[], allProgress=[], allQuizzes=[];
+let activeSubjectId=null;
+let activeFilter='all';
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+(async()=>{
+  const timeoutHandle = setTimeout(() => showTimeoutError(() => location.reload()), 8000);
+  perfStart('subjects-load');
+
+  // Auth — profile served from cache on return visits
+  const user=await getUser();
+  if(!user){ clearTimeout(timeoutHandle); window.location.href='index.html'; return; }
+  const profile=await getProfile(user.id);
+
+  // Render shell immediately
+  document.getElementById('nav-name').textContent=profile.full_name.split(' ')[0];
+  const av=document.getElementById('nav-avatar');
+  av.textContent=profile.full_name[0].toUpperCase();
+  av.style.background=profile.avatar_color||'var(--gold)';
+  av.style.color='var(--navy)';
+
+  // Update page sub with exam board
+  const board=(profile.exam_board||'AQA').toUpperCase();
+  const tier=profile.tier||'Higher';
+  document.getElementById('page-sub').textContent=
+    `${board} · ${tier} Tier — browse topics and track your progress.`;
+  // Store board on window for use in goToTopic and descriptions
+  window._board = board;
+
+  // Load all data in parallel
+  const [sRes,tRes,pRes,qRes]=await Promise.all([
+    supa.from('subjects').select('*').order('order_idx'),
+    supa.from('topics').select('*').order('order_idx'),
+    supa.from('topic_progress').select('*').eq('student_id',user.id),
+    supa.from('quizzes').select('id,topic_id,title').eq('is_published',true),
+  ]);
+
+  allSubjects=sRes.data||[];
+  allTopics=tRes.data||[];
+  allProgress=pRes.data||[];
+  allQuizzes=qRes.data||[];
+
+  // Determine which subject to show first
+  // Priority: URL param → first subject with biology slug (AQA default) → first subject
+  const params=new URLSearchParams(window.location.search);
+  const urlSubject=parseInt(params.get('subject'));
+  if(urlSubject && allSubjects.find(s=>s.id===urlSubject)){
+    activeSubjectId=urlSubject;
+  } else {
+    // Default to Biology if available, otherwise first
+    const bio=allSubjects.find(s=>s.slug==='biology');
+    activeSubjectId=bio?.id||allSubjects[0]?.id;
+  }
+
+  renderTabs();
+  renderHero();
+  renderTopics();
+  document.getElementById('filter-row').style.display='flex';
+  clearTimeout(timeoutHandle);
+  perfEnd('subjects-load');
+})();
+
+/* ══════════════════════════════════════
+   RENDER TABS
+══════════════════════════════════════ */
+function renderTabs(){
+  const container=document.getElementById('subject-tabs');
+  container.innerHTML='';
+  allSubjects.forEach(s=>{
+    const meta=subjectMeta[s.id]||{cls:'maths',icon:'📚'};
+    const topicCount=allTopics.filter(t=>t.subject_id===s.id).length;
+    const btn=document.createElement('button');
+    btn.className='subject-tab'+(s.id===activeSubjectId?' active':'');
+    btn.innerHTML=`
+      <span class="tab-icon">${s.icon||meta.icon}</span>
+      <span>${s.name}</span>
+      <span class="tab-count">${topicCount}</span>`;
+    btn.onclick=()=>switchSubject(s.id);
+    container.appendChild(btn);
+  });
+}
+
+/* ══════════════════════════════════════
+   RENDER HERO
+══════════════════════════════════════ */
+function renderHero(){
+  const s=allSubjects.find(x=>x.id===activeSubjectId);
+  if(!s)return;
+  const meta=subjectMeta[s.id]||{cls:'maths',color:'var(--gold)'};
+  const topics=allTopics.filter(t=>t.subject_id===s.id);
+  const progForSubject=allProgress.filter(p=>topics.some(t=>t.id===p.topic_id));
+  const masteredCount=progForSubject.filter(p=>p.mastery_level==='mastered').length;
+  const avgScore=progForSubject.length?
+    progForSubject.reduce((a,b)=>a+(parseFloat(b.best_score)||0),0)/progForSubject.length:0;
+  const quizCount=allQuizzes.filter(q=>topics.some(t=>t.id===q.topic_id)).length;
+
+  const hero=document.getElementById('subject-hero');
+  hero.className=`subject-hero fade-in hero-${meta.cls}`;
+  hero.innerHTML=`
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-icon">${s.icon||meta.icon}</div>
+        <div class="hero-name">${s.name}</div>
+        <div class="hero-desc">${subjectDesc(s.slug)}</div>
+        <div class="hero-meta">
+          <span class="badge ${meta.badge}">${topics.length} Topics</span>
+          <span class="badge badge-gold">${quizCount} Quizzes</span>
+          ${masteredCount>0?`<span class="badge badge-green">${masteredCount} Mastered</span>`:''}
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat">
+          <div class="hs-num" style="color:${meta.color}">${Math.round(avgScore)}%</div>
+          <div class="hs-lbl">Avg Mastery</div>
+        </div>
+        <div class="hero-progress" style="width:140px">
+          <div class="hp-bar">
+            <div class="hp-fill" style="width:${Math.round(avgScore)}%;background:${meta.color}"></div>
+          </div>
+          <div class="hp-label">${masteredCount} of ${topics.length} mastered</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function subjectDesc(slug){
+  return {
+    biology: window._board==='EDEXCEL'
+      ? 'Edexcel 1BI0 — Key Concepts, Cells & Control, Genetics, Natural Selection, Health & Disease, Plant Structures, Animal Coordination, Exchange & Transport, Ecosystems.'
+      : 'AQA 8461 — Cell Biology, Organisation, Infection & Response, Bioenergetics, Homeostasis, Inheritance, Variation & Evolution, Ecology.',
+    chemistry: window._board==='EDEXCEL'
+      ? 'Edexcel 1CH0 — Key Concepts, States of Matter, Chemical Changes, Extracting Metals, Groups in the Periodic Table, Rates of Reaction, Fuels & Earth Science.'
+      : 'AQA 8462 — Atomic Structure, Bonding, Quantitative Chemistry, Chemical Changes, Energy Changes, Rate of Reaction, Organic Chemistry, Chemical Analysis.',
+    physics: window._board==='EDEXCEL'
+      ? 'Edexcel 1PH0 — Motion & Forces, Conservation of Energy, Waves, Light & EM Spectrum, Radioactivity, Astronomy, Electricity & Circuits, Magnetism, Particle Model.'
+      : 'AQA 8463 — Energy, Electricity, Particle Model, Atomic Structure, Forces, Waves, Magnetism & Electromagnetism, Space Physics.',
+    maths: window._board==='EDEXCEL'
+      ? 'Edexcel 1MA1 — Number, Algebra, Ratio & Proportion, Geometry & Measures, Probability, Statistics. Foundation and Higher Tier.'
+      : 'AQA 8300 — Number, Algebra, Ratio & Proportion, Geometry, Probability, Statistics. Foundation and Higher Tier.',
+  }[slug]||'Explore all topics and track your progress.';
+}
+
+/* ══════════════════════════════════════
+   RENDER TOPICS
+══════════════════════════════════════ */
+function renderTopics(){
+  const grid=document.getElementById('topics-grid');
+  const s=allSubjects.find(x=>x.id===activeSubjectId);
+  if(!s){grid.innerHTML='';return;}
+
+  const meta=subjectMeta[s.id]||{color:'var(--gold)'};
+  let topics=allTopics.filter(t=>t.subject_id===s.id);
+
+  // Search filter
+  const search=document.getElementById('topic-search')?.value?.toLowerCase()||'';
+  if(search) topics=topics.filter(t=>
+    t.name.toLowerCase().includes(search)||
+    (t.description||'').toLowerCase().includes(search)
+  );
+
+  // Mastery filter
+  if(activeFilter!=='all'){
+    topics=topics.filter(t=>{
+      const prog=allProgress.find(p=>p.topic_id===t.id);
+      const m=prog?.mastery_level||'not_started';
+      if(activeFilter==='not_started') return m==='not_started';
+      if(activeFilter==='in_progress') return m==='learning'||m==='developing'||m==='secure';
+      if(activeFilter==='mastered') return m==='mastered';
+      return true;
+    });
+  }
+
+  if(topics.length===0){
+    grid.innerHTML=`
+      <div class="empty-state">
+        <div class="es-icon">🔍</div>
+        <p>${search?'No topics match your search.':'No topics found for this filter.'}</p>
+      </div>`;
+    return;
+  }
+
+  // Separate Paper 1 and Paper 2 for Biology/Chemistry/Physics
+  // (first half = Paper 1, second half = Paper 2 — approximate split)
+  const hasPapers=['biology','chemistry','physics'].includes(s.slug);
+  const midpoint=hasPapers?Math.ceil(allTopics.filter(t=>t.subject_id===s.id).length/2):null;
+
+  let html='';
+  let paper2Started=false;
+
+  topics.forEach((t,i)=>{
+    const prog=allProgress.find(p=>p.topic_id===t.id);
+    const m=prog?.mastery_level||'not_started';
+    const score=prog?.best_score?parseFloat(prog.best_score).toFixed(0)+'%':null;
+    const quizExists=allQuizzes.some(q=>q.topic_id===t.id);
+    const origIndex=allTopics.filter(tp=>tp.subject_id===s.id).findIndex(tp=>tp.id===t.id);
+
+    // Paper separator
+    if(hasPapers && !paper2Started && origIndex>=midpoint){
+      paper2Started=true;
+      html+=`
+        <div class="paper-separator">
+          <div class="paper-label">Paper 2</div>
+          <div class="paper-line"></div>
+        </div>`;
+    }
+    // First topic — add Paper 1 label
+    if(hasPapers && i===0 && origIndex<midpoint){
+      html=`
+        <div class="paper-separator">
+          <div class="paper-label">Paper 1</div>
+          <div class="paper-line"></div>
+        </div>`+html;
+    }
+
+    html+=`
+      <div class="topic-card" onclick="goToTopic(${t.id},'${encodeURIComponent(t.name)}')">
+        <div class="topic-top">
+          <div class="topic-name">${t.name}</div>
+          <div class="mastery-dot ${m}" title="${masteryLabel(m)}"></div>
+        </div>
+        ${t.description?`<div class="topic-desc">${t.description}</div>`:''}
+        <div class="topic-bottom">
+          <div class="topic-meta">
+            <span class="topic-mastery mastery-${m}">${masteryLabel(m)}</span>
+            ${score?`<span class="topic-score">Best: ${score}</span>`:''}
+            ${quizExists?`<span class="badge badge-gold" style="font-size:.58rem;">Quiz</span>`:''}
+          </div>
+          <div class="topic-action">
+            ${quizExists?'Start Quiz →':'View →'}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  grid.innerHTML=html;
+}
+
+/* ══════════════════════════════════════
+   INTERACTIONS
+══════════════════════════════════════ */
+function switchSubject(id){
+  activeSubjectId=id;
+  activeFilter='all';
+  document.getElementById('topic-search').value='';
+  // Reset filter buttons
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter==='all'));
+  // Update URL without reload
+  const url=new URL(window.location);
+  url.searchParams.set('subject',id);
+  window.history.replaceState({},'',url);
+  renderTabs();
+  renderHero();
+  renderTopics();
+}
+
+function applyFilter(btn){
+  activeFilter=btn.dataset.filter;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTopics();
+}
+
+function goToTopic(topicId, topicName){
+  // Check if quiz exists for this topic
+  const quiz=allQuizzes.find(q=>q.topic_id===topicId);
+  if(quiz){
+    window.location.href=`quiz.html?id=${quiz.id}`;
+  } else {
+    toast(`No quiz available for "${decodeURIComponent(topicName)}" yet — coming soon!`,'error');
+  }
+}
+
+function toggleUserMenu(){
+  // Simple dropdown — sign out option
+  if(confirm('Sign out of Inspire Science?')) signOut();
+}
+
+function masteryLabel(m){
+  return{not_started:'Not Started',learning:'Learning',developing:'Developing',secure:'Secure',mastered:'Mastered'}[m]||'Not Started';
+}
+</script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+      }
+    </script>
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mob-nav-btn" onclick="location.href='dashboard.html'">
+      <span class="mob-icon">🏠</span>Home
+    </button>
+    <button class="mob-nav-btn active" onclick="location.href='subjects.html'">
+      <span class="mob-icon">📚</span>Subjects
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='progress.html'">
+      <span class="mob-icon">📈</span>Progress
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='assessment.html'">
+      <span class="mob-icon">📋</span>Tests
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='tools.html'">
+      <span class="mob-icon">🔧</span>Tools
+    </button>
+  </div>
+</nav>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inspire Science — GCSE Revision Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
+  --gold:#d4a017;--gold2:#f0c040;
+  --orange:#e8620a;
+  --white:#ffffff;
+  --border:#1e3a5f;
+  --muted:#7a8fa6;
+  --green:#16803c;--red:#b92b1a;
+  --r:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;}
+input,select{font-family:'DM Sans',sans-serif;}
+
+.page{display:flex;min-height:100vh;}
+
+/* Left panel */
+.left-panel{
+  width:420px;flex-shrink:0;
+  background:linear-gradient(160deg,#0a1628 0%,#112240 50%,#0e1e38 100%);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:3rem 2.5rem;position:relative;overflow:hidden;
+}
+.left-panel::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(212,160,23,.08),transparent 70%);}
+.left-panel::after{content:'';position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(28,79,138,.15),transparent 70%);}
+.left-content{position:relative;z-index:1;text-align:center;width:100%;}
+.logo-wrap{background:#fff;border-radius:14px;padding:10px 20px;display:inline-block;margin-bottom:2rem;box-shadow:0 4px 20px rgba(0,0,0,.3);}
+.logo-wrap img{height:56px;width:auto;display:block;}
+.left-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;margin-bottom:.6rem;line-height:1.2;}
+.left-title em{font-style:normal;color:var(--gold);}
+.left-sub{font-size:.9rem;color:var(--muted);line-height:1.7;max-width:300px;margin:0 auto 2rem;}
+.features{display:flex;flex-direction:column;gap:.7rem;text-align:left;width:100%;}
+.feature{display:flex;align-items:center;gap:.8rem;font-size:.84rem;color:var(--muted);}
+.feature-icon{width:32px;height:32px;border-radius:8px;background:rgba(212,160,23,.12);border:1px solid rgba(212,160,23,.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.feature strong{color:var(--white);}
+
+.flashcard-cta{
+  display:flex;align-items:center;gap:.8rem;
+  margin-top:1.5rem;padding:.9rem 1rem;
+  background:linear-gradient(135deg,rgba(212,160,23,.15),rgba(212,160,23,.08));
+  border:1.5px solid rgba(212,160,23,.35);
+  border-radius:10px;text-decoration:none;color:var(--white);
+  transition:all .2s;width:100%;text-align:left;
+}
+.flashcard-cta:hover{background:linear-gradient(135deg,rgba(212,160,23,.25),rgba(212,160,23,.15));border-color:var(--gold);transform:translateY(-1px);}
+.flashcard-cta-icon{font-size:1.4rem;flex-shrink:0;}
+.flashcard-cta-text{flex:1;}
+.flashcard-cta-text strong{display:block;font-size:.9rem;font-weight:700;color:var(--gold);}
+.flashcard-cta-text span{font-size:.75rem;color:var(--muted);}
+.flashcard-cta-arrow{font-size:1.1rem;color:var(--gold);flex-shrink:0;}
+
+/* Right panel */
+.right-panel{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;background:var(--navy);}
+.auth-box{width:100%;max-width:480px;}
+
+/* Tabs */
+.auth-tabs{display:flex;gap:.3rem;margin-bottom:2rem;background:var(--navy2);border-radius:var(--r);padding:.3rem;border:1px solid var(--border);}
+.auth-tab{flex:1;padding:.6rem;border-radius:6px;font-size:.88rem;font-weight:600;background:none;color:var(--muted);transition:all .2s;}
+.auth-tab.active{background:var(--navy3);color:var(--white);}
+
+/* Step indicator */
+.step-indicator{display:flex;align-items:center;gap:.4rem;margin-bottom:1.8rem;}
+.step-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--muted);font-family:'DM Mono',monospace;transition:all .3s;flex-shrink:0;}
+.step-dot.active{border-color:var(--gold);background:var(--gold);color:var(--navy);}
+.step-dot.done{border-color:var(--green);background:var(--green);color:#fff;}
+.step-line{flex:1;height:1px;background:var(--border);}
+
+/* Forms */
+.auth-form{display:none;}
+.auth-form.active{display:block;}
+.form-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.3rem;}
+.form-sub{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;}
+
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.08em;}
+.field input,.field select{width:100%;padding:.75rem 1rem;border-radius:var(--r);background:var(--navy2);border:1.5px solid var(--border);color:var(--white);font-size:.9rem;outline:none;transition:border-color .2s;}
+.field input:focus,.field select:focus{border-color:var(--gold);}
+.field input::placeholder{color:var(--muted);}
+.field select option{background:var(--navy2);}
+
+.submit-btn{width:100%;padding:.85rem;border-radius:var(--r);background:var(--gold);color:var(--navy);font-size:.95rem;font-weight:700;transition:all .2s;margin-top:.5rem;}
+.submit-btn:hover{background:var(--gold2);}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;}
+
+.form-footer{text-align:center;margin-top:1rem;font-size:.82rem;color:var(--muted);}
+.form-footer a,.form-footer button{color:var(--gold);background:none;font-size:.82rem;text-decoration:underline;cursor:pointer;}
+
+/* Signup steps */
+.signup-step{display:none;}
+.signup-step.active{display:block;}
+
+/* Board cards */
+.board-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1.2rem;}
+.board-card{background:var(--navy2);border:2px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.board-card:hover:not(.soon){border-color:rgba(212,160,23,.5);}
+.board-card.selected{border-color:var(--gold);background:rgba(212,160,23,.08);}
+.board-card.soon{opacity:.45;cursor:not-allowed;}
+.board-name{font-weight:700;font-size:.9rem;margin-bottom:.15rem;}
+.board-full{font-size:.7rem;color:var(--muted);}
+.soon-badge{position:absolute;top:.4rem;right:.4rem;background:var(--navy3);border-radius:4px;font-size:.58rem;font-family:'DM Mono',monospace;padding:.1rem .4rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.board-tick{position:absolute;top:.4rem;left:.4rem;width:16px;height:16px;border-radius:50%;background:var(--gold);display:none;align-items:center;justify-content:center;font-size:.6rem;color:var(--navy);}
+.board-card.selected .board-tick{display:flex;}
+
+/* Tier cards */
+.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.2rem;}
+.tier-card{background:var(--navy2);border:2px solid var(--border);border-radius:var(--r);padding:1.2rem 1rem;text-align:center;cursor:pointer;transition:all .2s;}
+.tier-card:hover{border-color:rgba(212,160,23,.5);}
+.tier-card.selected{border-color:var(--gold);background:rgba(212,160,23,.08);}
+.tier-icon{font-size:1.6rem;margin-bottom:.4rem;}
+.tier-name{font-weight:700;font-size:.95rem;margin-bottom:.3rem;}
+.tier-desc{font-size:.75rem;color:var(--muted);line-height:1.5;}
+
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:var(--green);}
+#toast.error{border-color:var(--red);}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media(max-width:800px){
+  .page{flex-direction:column;}
+  .left-panel{width:100%;padding:1.5rem;border-right:none;border-bottom:1px solid var(--border);}
+  .left-title{font-size:1.2rem;}
+  .features{display:none;}
+  .left-sub{margin-bottom:0;font-size:.82rem;}
+  .logo-wrap img{height:44px;}
+  .right-panel{padding:1.2rem 1rem;align-items:flex-start;}
+}
+@media(max-width:480px){
+  /* Login page on small phones */
+  .left-panel{padding:1.2rem 1rem;}
+  .logo-wrap{margin-bottom:1rem;}
+  .left-title{font-size:1.1rem;}
+  .flashcard-cta{padding:.75rem .9rem;}
+  .right-panel{padding:1rem;}
+  .auth-box{max-width:100%;}
+  /* Bigger touch targets on form inputs */
+  .field input,.field select{padding:.85rem 1rem;font-size:1rem;}
+  .submit-btn{padding:1rem;font-size:1rem;}
+  .board-grid{gap:.5rem;}
+  .board-card{padding:.85rem .75rem;}
+  .tier-grid{gap:.6rem;}
+  .tier-card{padding:1rem .75rem;}
+}
+</style>
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#c9a84c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Inspire Science">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+<div class="page">
+
+  <!-- LEFT -->
+  <div class="left-panel">
+    <div class="left-content">
+      <div class="logo-wrap">
+        <img src="1775416612494_image.png" alt="Inspire Science" onerror="this.style.display='none'">
+      </div>
+      <h1 class="left-title">Master your <em>GCSEs</em> with confidence</h1>
+      <p class="left-sub">Personalised quizzes, instant feedback and progress tracking.</p>
+      <div class="features">
+        <div class="feature"><div class="feature-icon">🎯</div><div><strong>Topic-by-topic quizzes</strong> mapped to your exact spec</div></div>
+        <div class="feature"><div class="feature-icon">📊</div><div><strong>Track your mastery</strong> across every topic</div></div>
+        <div class="feature"><div class="feature-icon">⚡</div><div><strong>Instant explanations</strong> for every question</div></div>
+        <div class="feature"><div class="feature-icon">🔥</div><div><strong>Daily streaks</strong> to keep you consistent</div></div>
+      </div>
+
+      <a href="/?redirect=flashcards" class="flashcard-cta">
+        <span class="flashcard-cta-icon">🃏</span>
+        <div class="flashcard-cta-text">
+          <strong>Flashcards</strong>
+          <span>541 exam-grade cards &middot; Spaced repetition</span>
+        </div>
+        <span class="flashcard-cta-arrow">&#8594;</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+    <div class="auth-box">
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="auth-form active" id="form-login">
+        <h2 class="form-title">Welcome back</h2>
+        <p class="form-sub">Sign in to continue your revision</p>
+        <div class="field"><label>Email</label><input type="email" id="li-email" placeholder="your@email.com"></div>
+        <div class="field"><label>Password</label><input type="password" id="li-pass" placeholder="••••••••"></div>
+        <button class="submit-btn" onclick="doLogin()" id="login-btn">Sign In →</button>
+        <div class="form-footer">
+          <button onclick="resetPw()">Forgot password?</button> &nbsp;·&nbsp;
+          <button onclick="switchTab('signup')">Create an account</button>
+        </div>
+      </div>
+
+      <!-- SIGNUP — 3 steps -->
+      <div class="auth-form" id="form-signup">
+
+        <div class="step-indicator">
+          <div class="step-dot active" id="dot-1">1</div>
+          <div class="step-line"></div>
+          <div class="step-dot" id="dot-2">2</div>
+          <div class="step-line"></div>
+          <div class="step-dot" id="dot-3">3</div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="signup-step active" id="step-1">
+          <h2 class="form-title">Create your account</h2>
+          <p class="form-sub">Step 1 of 3 — Your details</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="field"><label>First Name</label><input type="text" id="su-firstname" placeholder="e.g. Alex"></div>
+            <div class="field"><label>Last Name</label><input type="text" id="su-lastname" placeholder="e.g. Johnson"></div>
+          </div>
+          <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="your@email.com"></div>
+          <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="At least 8 characters"></div>
+          <div class="field">
+            <label>Year Group</label>
+            <select id="su-year">
+              <option value="">Select year group</option>
+              <option value="Year 9">Year 9</option>
+              <option value="Year 10">Year 10</option>
+              <option value="Year 11">Year 11</option>
+              <option value="Year 12">Year 12</option>
+            </select>
+          </div>
+          <button class="submit-btn" onclick="goStep2()">Continue →</button>
+          <div class="form-footer">Already have an account? <button onclick="switchTab('login')">Sign in</button></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="signup-step" id="step-2">
+          <h2 class="form-title">Your exam board</h2>
+          <p class="form-sub">Step 2 of 3 — Select your exam board</p>
+          <div class="board-grid">
+            <div class="board-card" id="board-AQA" onclick="selectBoard('AQA')">
+              <div class="board-tick">✓</div>
+              <div class="board-name">AQA</div>
+              <div class="board-full">Assessment & Qualifications Alliance</div>
+            </div>
+            <div class="board-card soon">
+              <div class="soon-badge">Soon</div>
+              <div class="board-name">Edexcel</div>
+              <div class="board-full">Pearson Edexcel</div>
+            </div>
+            <div class="board-card soon">
+              <div class="soon-badge">Soon</div>
+              <div class="board-name">OCR</div>
+              <div class="board-full">Oxford, Cambridge & RSA</div>
+            </div>
+            <div class="board-card soon">
+              <div class="soon-badge">Soon</div>
+              <div class="board-name">WJEC</div>
+              <div class="board-full">Welsh Joint Education</div>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="goStep3()">Continue →</button>
+          <div class="form-footer"><button onclick="showStep(1)">← Back</button></div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="signup-step" id="step-3">
+          <h2 class="form-title">Your tier</h2>
+          <p class="form-sub">Step 3 of 3 — Foundation or Higher?</p>
+          <div class="tier-grid">
+            <div class="tier-card" id="tier-Higher" onclick="selectTier('Higher')">
+              <div class="tier-icon">🎯</div>
+              <div class="tier-name">Higher</div>
+              <div class="tier-desc">Grades 4–9. Includes harder topics and Higher-only questions.</div>
+            </div>
+            <div class="tier-card" id="tier-Foundation" onclick="selectTier('Foundation')">
+              <div class="tier-icon">📚</div>
+              <div class="tier-name">Foundation</div>
+              <div class="tier-desc">Grades 1–5. Core content without the hardest Higher-only topics.</div>
+            </div>
+          </div>
+          <button class="submit-btn" onclick="doSignup()" id="signup-btn">Create My Account →</button>
+          <div class="form-footer"><button onclick="showStep(2)">← Back</button></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="perf-utils.js"></script>
+<script>
+const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+let selectedBoard='AQA';
+let selectedTier='';
+
+function toast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='show '+type;
+  setTimeout(()=>t.className='',3500);
+}
+
+function switchTab(tab){
+  document.getElementById('form-login').classList.toggle('active',tab==='login');
+  document.getElementById('form-signup').classList.toggle('active',tab==='signup');
+  document.getElementById('tab-login').classList.toggle('active',tab==='login');
+  document.getElementById('tab-signup').classList.toggle('active',tab==='signup');
+}
+
+function showStep(n){
+  document.querySelectorAll('.signup-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step-'+n).classList.add('active');
+  for(let i=1;i<=3;i++){
+    const d=document.getElementById('dot-'+i);
+    d.classList.remove('active','done');
+    if(i<n){d.classList.add('done');d.textContent='✓';}
+    else if(i===n){d.classList.add('active');d.textContent=i;}
+    else d.textContent=i;
+  }
+}
+
+function goStep2(){
+  const firstName=document.getElementById('su-firstname').value.trim();
+  const lastName=document.getElementById('su-lastname').value.trim();
+  const email=document.getElementById('su-email').value.trim();
+  const pass=document.getElementById('su-pass').value;
+  const year=document.getElementById('su-year').value;
+  if(!firstName){toast('Please enter your first name','error');return;}
+  if(!lastName){toast('Please enter your last name','error');return;}
+  if(!email||!email.includes('@')){toast('Please enter a valid email','error');return;}
+  if(pass.length<8){toast('Password must be at least 8 characters','error');return;}
+  if(!year){toast('Please select your year group','error');return;}
+  showStep(2);
+  selectBoard('AQA'); // auto-select AQA
+}
+
+function goStep3(){
+  showStep(3);
+}
+
+function selectBoard(code){
+  const card=document.getElementById('board-'+code);
+  if(!card||card.classList.contains('soon')) return;
+  document.querySelectorAll('.board-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedBoard=code;
+}
+
+function selectTier(tier){
+  document.querySelectorAll('.tier-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('tier-'+tier).classList.add('selected');
+  selectedTier=tier;
+}
+
+async function doLogin(){
+  const email=document.getElementById('li-email').value.trim();
+  const pass=document.getElementById('li-pass').value;
+  if(!email||!pass){toast('Please enter your email and password','error');return;}
+  const btn=document.getElementById('login-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Signing in…';
+  perfStart('login');
+  const {data,error}=await supa.auth.signInWithPassword({email,password:pass});
+  if(error){toast(error.message,'error');btn.disabled=false;btn.textContent='Sign In →';return;}
+  perfEnd('login');
+
+  const params=new URLSearchParams(window.location.search);
+  const redirect=params.get('redirect');
+  if(redirect==='flashcards'){window.location.href='flashcards.html';return;}
+
+  // Fetch full profile once and cache it — inner pages read from cache
+  perfStart('profile-fetch');
+  const {data:profile}=await supa.from('profiles').select('*').eq('id',data.user.id).single();
+  perfEnd('profile-fetch');
+  if(profile) setCachedProfile(profile);
+
+  window.location.href=(profile?.role==='teacher'||profile?.role==='admin')?'teacher.html':'dashboard.html';
+}
+
+async function doSignup(){
+  if(!selectedTier){toast('Please select Foundation or Higher','error');return;}
+  const firstName=document.getElementById('su-firstname').value.trim();
+  const lastName=document.getElementById('su-lastname').value.trim();
+  const fullName=(firstName+' '+lastName).trim();
+  const email=document.getElementById('su-email').value.trim();
+  const pass=document.getElementById('su-pass').value;
+  const year=document.getElementById('su-year').value;
+  const boardIds={AQA:1,EDEXCEL:2,OCR:3,WJEC:4,CCEA:5};
+  const btn=document.getElementById('signup-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Creating account…';
+  const {data,error}=await supa.auth.signUp({
+    email,password:pass,
+    options:{data:{full_name:fullName,first_name:firstName,last_name:lastName,year_group:year,role:'student'}}
+  });
+  if(error){toast(error.message,'error');btn.disabled=false;btn.textContent='Create My Account →';return;}
+  if(data.user){
+    const profileData = {
+      id:data.user.id,
+      full_name:fullName,
+      first_name:firstName,
+      last_name:lastName,
+      year_group:year,
+      role:'student',
+      exam_board:selectedBoard.toLowerCase(),
+      exam_board_id:boardIds[selectedBoard]||1,
+      tier:selectedTier
+    };
+    await supa.from('profiles').upsert(profileData);
+    if(data.session){
+      setCachedProfile(profileData);
+      window.location.href='dashboard.html';
+    } else {
+      btn.disabled=false;btn.textContent='Account created ✓';
+      toast('Check your email to confirm your account, then sign in.','success');
+      setTimeout(()=>switchTab('login'),3000);
+    }
+  }
+}
+
+async function resetPw(){
+  const email=prompt('Enter your email address:');
+  if(!email) return;
+  const {error}=await supa.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+'/reset-password.html'});
+  if(error) toast(error.message,'error');
+  else toast('Password reset email sent!');
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('form-login').classList.contains('active')) doLogin();
+});
+
+(async()=>{
+  if(sessionStorage.getItem('password_reset_flow')) return;
+  const {data:{session}}=await supa.auth.getSession();
+  if(session){
+    const params=new URLSearchParams(window.location.search);
+    if(params.get('redirect')==='flashcards'){window.location.href='flashcards.html';return;}
+    window.location.href='dashboard.html';
+  }
+})();
+</script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+      }
+    </script>
+</body>
+</html>

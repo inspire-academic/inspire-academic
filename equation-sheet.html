@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equation Sheet — Inspire Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #f8f6f0;
+  --bg2:    #ffffff;
+  --navy:   #0b1628;
+  --navy2:  #112240;
+  --gold:   #c9853a;
+  --gold2:  #e8a050;
+  --teal:   #1a7a6e;
+  --blue:   #1d4e89;
+  --red:    #9b2335;
+  --green:  #1e6340;
+  --purple: #5b3c8a;
+  --border: #d8d0c4;
+  --text:   #1a1a1a;
+  --muted:  #6b6558;
+  --r: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Paper texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--navy);
+  padding: 1rem 2rem;
+  display: flex; align-items: center; gap: 1.5rem;
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 3px solid var(--gold);
+}
+.header-logo {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--gold); letter-spacing: .05em;
+}
+.header-title {
+  font-size: .85rem; color: rgba(255,255,255,.6);
+  font-family: 'DM Mono', monospace;
+}
+.header-right { margin-left: auto; display: flex; gap: .5rem; align-items: center; }
+.board-pill {
+  padding: .25rem .7rem; border-radius: 3px;
+  font-size: .68rem; font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .08em; text-transform: uppercase;
+  cursor: pointer; transition: all .15s;
+  border: 1px solid;
+}
+.board-pill.aqa    { border-color: rgba(29,78,137,.5); color: #60a5fa; background: rgba(29,78,137,.2); }
+.board-pill.edexcel { border-color: rgba(155,35,53,.5); color: #fca5a5; background: rgba(155,35,53,.2); }
+.board-pill.both   { border-color: rgba(201,133,58,.5); color: var(--gold2); background: rgba(201,133,58,.15); }
+.board-pill.active { opacity: 1; }
+.board-pill:not(.active) { opacity: .5; }
+
+/* ── CONTROLS ── */
+.controls {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: .7rem 2rem;
+  display: flex; gap: 1rem; align-items: center;
+  position: sticky; top: 57px; z-index: 90;
+  flex-wrap: wrap;
+}
+.search-wrap {
+  position: relative; flex: 1; min-width: 200px;
+}
+.search-wrap input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: .82rem;
+  padding: .45rem .9rem .45rem 2.2rem;
+  outline: none; transition: border-color .15s;
+}
+.search-wrap input:focus { border-color: var(--gold); }
+.search-wrap::before {
+  content: '🔍';
+  position: absolute; left: .7rem; top: 50%;
+  transform: translateY(-50%); font-size: .78rem;
+}
+.subject-tabs { display: flex; gap: .3rem; }
+.stab {
+  padding: .35rem .9rem; border-radius: var(--r);
+  font-size: .78rem; font-weight: 600;
+  border: 1px solid var(--border);
+  background: none; color: var(--muted);
+  cursor: pointer; transition: all .15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.stab:hover { border-color: var(--gold); color: var(--gold); }
+.stab.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.tier-toggle {
+  display: flex; gap: .2rem;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--r); padding: .2rem;
+}
+.ttab {
+  padding: .25rem .7rem; border-radius: 5px;
+  font-size: .72rem; font-weight: 700;
+  border: none; background: none;
+  color: var(--muted); cursor: pointer;
+  transition: all .15s; font-family: 'DM Mono', monospace;
+}
+.ttab.active { background: var(--gold); color: #fff; }
+
+/* Count badge */
+.eq-count {
+  font-size: .72rem; color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin-left: auto; white-space: nowrap;
+}
+
+/* ── MAIN LAYOUT ── */
+.main { display: flex; min-height: calc(100vh - 110px); position: relative; z-index: 1; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 1rem .8rem;
+  position: sticky; top: 110px;
+  height: calc(100vh - 110px);
+  overflow-y: auto;
+}
+.sidebar-section { margin-bottom: 1.2rem; }
+.sidebar-label {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: .5rem;
+  padding-bottom: .3rem; border-bottom: 1px solid var(--border);
+  font-family: 'DM Mono', monospace;
+}
+.sidebar-link {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .35rem .6rem; border-radius: 5px;
+  font-size: .8rem; color: var(--muted);
+  cursor: pointer; transition: all .12s;
+  border: none; background: none;
+  width: 100%; text-align: left;
+  font-family: 'DM Sans', sans-serif;
+}
+.sidebar-link:hover { background: var(--bg); color: var(--text); }
+.sidebar-link.active { background: rgba(201,133,58,.12); color: var(--gold); font-weight: 600; }
+.sidebar-count {
+  margin-left: auto; font-size: .65rem;
+  font-family: 'DM Mono', monospace;
+  background: var(--bg); border-radius: 3px;
+  padding: .05rem .3rem; color: var(--muted);
+}
+
+/* ── CONTENT ── */
+.content { flex: 1; padding: 2rem; max-width: 900px; }
+
+/* ── SECTION ── */
+.eq-section { margin-bottom: 3rem; }
+.section-header {
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 1.5rem; padding-bottom: .7rem;
+  border-bottom: 2px solid var(--navy);
+}
+.section-icon { font-size: 1.4rem; }
+.section-title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.6rem; font-weight: 700; color: var(--navy);
+}
+.section-count {
+  font-size: .72rem; color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin-left: auto;
+}
+
+/* ── EQUATION CARD ── */
+.eq-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: box-shadow .15s;
+  page-break-inside: avoid;
+}
+.eq-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+.eq-card.higher-only { border-left: 3px solid var(--purple); }
+.eq-card.alevel-only { border-left: 3px solid var(--red); }
+.eq-card.hidden { display: none; }
+
+.eq-card-header {
+  display: flex; align-items: center; gap: .8rem;
+  padding: .8rem 1rem .5rem;
+  cursor: pointer;
+  user-select: none;
+}
+.eq-name {
+  font-size: .92rem; font-weight: 600; color: var(--navy);
+  flex: 1;
+}
+.eq-badges { display: flex; gap: .3rem; flex-wrap: wrap; }
+.eq-badge {
+  font-size: .6rem; font-weight: 700;
+  padding: .1rem .45rem; border-radius: 3px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.badge-gcse    { background: rgba(26,122,110,.12); color: var(--teal); border: 1px solid rgba(26,122,110,.25); }
+.badge-higher  { background: rgba(91,60,138,.12);  color: var(--purple); border: 1px solid rgba(91,60,138,.25); }
+.badge-alevel  { background: rgba(155,35,53,.12);  color: var(--red); border: 1px solid rgba(155,35,53,.25); }
+.badge-aqa     { background: rgba(29,78,137,.12);  color: var(--blue); border: 1px solid rgba(29,78,137,.25); }
+.badge-edexcel { background: rgba(155,35,53,.12);  color: var(--red); border: 1px solid rgba(155,35,53,.25); }
+.badge-given   { background: rgba(201,133,58,.12); color: var(--gold); border: 1px solid rgba(201,133,58,.25); }
+
+.eq-expand-btn {
+  font-size: .72rem; color: var(--muted);
+  background: none; border: none; cursor: pointer;
+  padding: .2rem .4rem; border-radius: 4px;
+  transition: all .12s; font-family: 'DM Mono', monospace;
+}
+.eq-expand-btn:hover { background: var(--bg); color: var(--text); }
+
+/* ── FORMULA DISPLAY ── */
+.eq-formula-wrap {
+  padding: .6rem 1rem;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.eq-formula {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.5rem; font-weight: 600;
+  color: var(--gold2); text-align: center;
+  letter-spacing: .02em;
+}
+.eq-copy-btn {
+  position: absolute; right: .7rem;
+  background: none; border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.5); border-radius: 4px;
+  padding: .2rem .5rem; font-size: .65rem;
+  cursor: pointer; transition: all .12s;
+  font-family: 'DM Mono', monospace;
+}
+.eq-copy-btn:hover { border-color: var(--gold2); color: var(--gold2); }
+
+/* ── EXPANDED CONTENT ── */
+.eq-body {
+  padding: .8rem 1rem 1rem;
+  display: none;
+  border-top: 1px solid var(--border);
+}
+.eq-body.open { display: block; }
+.eq-vars { display: flex; flex-direction: column; gap: .3rem; margin-bottom: .8rem; }
+.eq-var {
+  display: flex; align-items: baseline; gap: .6rem;
+  font-size: .82rem;
+}
+.ev-sym {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic; font-size: 1rem;
+  color: var(--gold); min-width: 20px;
+}
+.ev-name { color: var(--text); font-weight: 500; }
+.ev-unit {
+  font-family: 'DM Mono', monospace;
+  font-size: .72rem; color: var(--muted);
+  background: var(--bg); padding: .05rem .35rem;
+  border-radius: 3px; border: 1px solid var(--border);
+}
+.eq-tip {
+  background: rgba(26,122,110,.06);
+  border-left: 3px solid var(--teal);
+  border-radius: 0 4px 4px 0;
+  padding: .5rem .8rem;
+  font-size: .8rem; color: var(--text);
+  line-height: 1.6; margin-bottom: .6rem;
+}
+.eq-triangle {
+  display: flex; justify-content: center; margin: .6rem 0;
+}
+.triangle-svg { width: 120px; height: 100px; }
+
+/* ── WORKED EXAMPLE ── */
+.worked-example {
+  background: rgba(201,133,58,.05);
+  border: 1px solid rgba(201,133,58,.2);
+  border-radius: var(--r); padding: .7rem .9rem;
+  margin-top: .6rem;
+}
+.we-title {
+  font-size: .7rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: .4rem;
+  font-family: 'DM Mono', monospace;
+}
+.we-steps { font-size: .8rem; line-height: 1.8; color: var(--text); }
+.we-step { display: flex; gap: .5rem; }
+.we-num {
+  font-family: 'DM Mono', monospace;
+  color: var(--gold); min-width: 18px; font-size: .75rem;
+}
+.we-math {
+  font-family: 'Crimson Pro', serif;
+  font-size: .95rem; color: var(--navy);
+}
+
+/* ── PRINT BUTTON ── */
+.print-btn {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  background: var(--navy); color: #fff;
+  border: none; border-radius: var(--r);
+  padding: .7rem 1.4rem; font-size: .82rem;
+  font-weight: 600; cursor: pointer; z-index: 200;
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  transition: all .15s; font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: .5rem;
+}
+.print-btn:hover { background: var(--gold); color: var(--navy); transform: translateY(-2px); }
+
+/* ── NO RESULTS ── */
+.no-results {
+  text-align: center; padding: 4rem 2rem; color: var(--muted);
+  display: none;
+}
+.no-results.show { display: block; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 1.5rem; left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--navy); border: 1px solid var(--gold);
+  color: #fff; padding: .5rem 1.2rem; border-radius: var(--r);
+  font-size: .82rem; z-index: 9999; opacity: 0;
+  transition: all .3s; white-space: nowrap;
+  font-family: 'DM Mono', monospace;
+}
+#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+@media print {
+  .header, .controls, .sidebar, .print-btn, #toast { display: none !important; }
+  .main { display: block; }
+  .content { padding: 0; max-width: 100%; }
+  .eq-body { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">Inspire</div>
+  <div class="header-title">📐 Equation Reference Sheet</div>
+  <div class="header-right">
+    <button class="board-pill aqa active" onclick="toggleBoard('aqa',this)">AQA</button>
+    <button class="board-pill edexcel active" onclick="toggleBoard('edexcel',this)">Edexcel</button>
+  </div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search-wrap">
+    <input type="text" id="eq-search" placeholder="Search equations, symbols, units..." oninput="filterEquations(this.value)">
+  </div>
+  <div class="subject-tabs">
+    <button class="stab active" onclick="filterSubject('all',this)">All</button>
+    <button class="stab" onclick="filterSubject('physics',this)">Physics</button>
+    <button class="stab" onclick="filterSubject('chemistry',this)">Chemistry</button>
+    <button class="stab" onclick="filterSubject('maths',this)">Maths</button>
+  </div>
+  <div class="tier-toggle">
+    <button class="ttab active" onclick="filterTier('gcse',this)">GCSE</button>
+    <button class="ttab" onclick="filterTier('higher',this)">Higher</button>
+    <button class="ttab" onclick="filterTier('alevel',this)">A-Level</button>
+  </div>
+  <div class="eq-count" id="eq-count">Loading...</div>
+</div>
+
+<div class="main">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <!-- populated by JS -->
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="content">
+    <!-- populated by JS -->
+    <div class="no-results" id="no-results">
+      <div style="font-size:2rem;margin-bottom:.8rem">🔍</div>
+      <div style="font-size:1.1rem;font-weight:600;color:var(--navy);margin-bottom:.4rem">No equations found</div>
+      <div>Try a different search term or subject filter</div>
+    </div>
+  </div>
+</div>
+
+<button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+<div id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// EQUATIONS DATABASE
+// ─────────────────────────────────────────────
+const SECTIONS = [
+  {
+    id: 'forces-motion',
+    title: 'Forces & Motion',
+    icon: '🚀',
+    subject: 'physics',
+    equations: [
+      {
+        name: 'Speed',
+        formula: 'v = d / t',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'v', name:'speed', unit:'m/s' },
+          { sym:'d', name:'distance', unit:'m' },
+          { sym:'t', name:'time', unit:'s' }
+        ],
+        tip: 'Remember the formula triangle: cover the quantity you want to find.',
+        triangle: ['d','v','t','÷'],
+        given: true,
+        example: {
+          q: 'A car travels 240 m in 12 s. Find its speed.',
+          steps: ['v = d ÷ t', 'v = 240 ÷ 12', 'v = 20 m/s']
+        }
+      },
+      {
+        name: 'Acceleration',
+        formula: 'a = Δv / t',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'a', name:'acceleration', unit:'m/s²' },
+          { sym:'Δv', name:'change in velocity', unit:'m/s' },
+          { sym:'t', name:'time', unit:'s' }
+        ],
+        tip: 'Δv = final velocity − initial velocity. Negative acceleration = deceleration.',
+        given: true,
+        example: {
+          q: 'A cyclist accelerates from 4 m/s to 10 m/s in 3 s. Find acceleration.',
+          steps: ['a = Δv ÷ t', 'a = (10 − 4) ÷ 3', 'a = 6 ÷ 3 = 2 m/s²']
+        }
+      },
+      {
+        name: "Newton's Second Law",
+        formula: 'F = m × a',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'F', name:'resultant force', unit:'N' },
+          { sym:'m', name:'mass', unit:'kg' },
+          { sym:'a', name:'acceleration', unit:'m/s²' }
+        ],
+        tip: 'A larger force produces a larger acceleration. A larger mass requires more force for the same acceleration.',
+        given: true,
+        example: {
+          q: 'A 1200 kg car accelerates at 3 m/s². Find the resultant force.',
+          steps: ['F = m × a', 'F = 1200 × 3', 'F = 3600 N']
+        }
+      },
+      {
+        name: 'Weight',
+        formula: 'W = m × g',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'W', name:'weight', unit:'N' },
+          { sym:'m', name:'mass', unit:'kg' },
+          { sym:'g', name:'gravitational field strength', unit:'N/kg' }
+        ],
+        tip: 'On Earth g = 9.81 N/kg (use 10 in GCSE unless told otherwise). Weight is a force — it acts downwards.',
+        given: true
+      },
+      {
+        name: 'Momentum',
+        formula: 'p = m × v',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'p', name:'momentum', unit:'kg m/s' },
+          { sym:'m', name:'mass', unit:'kg' },
+          { sym:'v', name:'velocity', unit:'m/s' }
+        ],
+        tip: 'The law of conservation of momentum: total momentum before = total momentum after (closed system).',
+        given: true,
+        example: {
+          q: 'A 2 kg ball moving at 6 m/s. Find its momentum.',
+          steps: ['p = m × v', 'p = 2 × 6', 'p = 12 kg m/s']
+        }
+      },
+      {
+        name: 'SUVAT — v² = u² + 2as',
+        formula: 'v² = u² + 2as',
+        tier: 'higher', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'v', name:'final velocity', unit:'m/s' },
+          { sym:'u', name:'initial velocity', unit:'m/s' },
+          { sym:'a', name:'acceleration', unit:'m/s²' },
+          { sym:'s', name:'displacement', unit:'m' }
+        ],
+        tip: 'Use this equation when time is not given and not needed.',
+        given: false
+      },
+      {
+        name: 'SUVAT — s = ut + ½at²',
+        formula: 's = ut + ½at²',
+        tier: 'higher', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'s', name:'displacement', unit:'m' },
+          { sym:'u', name:'initial velocity', unit:'m/s' },
+          { sym:'t', name:'time', unit:'s' },
+          { sym:'a', name:'acceleration', unit:'m/s²' }
+        ],
+        tip: 'If starting from rest, u = 0 and the equation simplifies to s = ½at².',
+        given: false
+      },
+    ]
+  },
+  {
+    id: 'energy',
+    title: 'Energy',
+    icon: '⚡',
+    subject: 'physics',
+    equations: [
+      {
+        name: 'Work Done',
+        formula: 'W = F × d',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'W', name:'work done', unit:'J' },
+          { sym:'F', name:'force', unit:'N' },
+          { sym:'d', name:'distance', unit:'m' }
+        ],
+        tip: 'Work is only done when the force and displacement are in the same direction. 1 joule = 1 newton × 1 metre.',
+        given: true,
+        example: {
+          q: 'A force of 50 N moves an object 8 m. Find the work done.',
+          steps: ['W = F × d', 'W = 50 × 8', 'W = 400 J']
+        }
+      },
+      {
+        name: 'Gravitational PE',
+        formula: 'GPE = m × g × h',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'GPE', name:'gravitational potential energy', unit:'J' },
+          { sym:'m', name:'mass', unit:'kg' },
+          { sym:'g', name:'gravitational field strength', unit:'N/kg' },
+          { sym:'h', name:'height', unit:'m' }
+        ],
+        tip: 'As an object gains height, GPE increases. As it falls, GPE converts to KE (assuming no air resistance).',
+        given: true
+      },
+      {
+        name: 'Kinetic Energy',
+        formula: 'KE = ½ × m × v²',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'KE', name:'kinetic energy', unit:'J' },
+          { sym:'m', name:'mass', unit:'kg' },
+          { sym:'v', name:'speed', unit:'m/s' }
+        ],
+        tip: 'KE depends on v². Doubling speed quadruples KE — this is why speed has such a large effect on stopping distance.',
+        given: true,
+        example: {
+          q: 'A 1400 kg car travels at 20 m/s. Find its KE.',
+          steps: ['KE = ½ × m × v²', 'KE = ½ × 1400 × 20²', 'KE = ½ × 1400 × 400', 'KE = 280,000 J = 280 kJ']
+        }
+      },
+      {
+        name: 'Power',
+        formula: 'P = W / t',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'P', name:'power', unit:'W' },
+          { sym:'W', name:'work done / energy transferred', unit:'J' },
+          { sym:'t', name:'time', unit:'s' }
+        ],
+        tip: 'Also: P = F × v (power = force × velocity). Useful when time is not given.',
+        given: true
+      },
+      {
+        name: 'Efficiency',
+        formula: 'η = Eout / Ein',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'η', name:'efficiency (as a decimal)', unit:'—' },
+          { sym:'Eout', name:'useful energy output', unit:'J' },
+          { sym:'Ein', name:'total energy input', unit:'J' }
+        ],
+        tip: 'Multiply by 100 for percentage. No device can be more than 100% efficient. Wasted energy is usually thermal.',
+        given: false,
+        example: {
+          q: 'A motor uses 500 J of electrical energy and does 350 J of useful work.',
+          steps: ['η = Eout ÷ Ein', 'η = 350 ÷ 500 = 0.7', 'η = 70%']
+        }
+      },
+    ]
+  },
+  {
+    id: 'electricity',
+    title: 'Electricity',
+    icon: '🔌',
+    subject: 'physics',
+    equations: [
+      {
+        name: "Ohm's Law",
+        formula: 'V = I × R',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'V', name:'voltage (potential difference)', unit:'V' },
+          { sym:'I', name:'current', unit:'A' },
+          { sym:'R', name:'resistance', unit:'Ω' }
+        ],
+        tip: 'A classic formula triangle: cover V, I, or R to rearrange. Remember: resistance is constant only for ohmic conductors.',
+        triangle: ['V','I','R','×'],
+        given: true,
+        example: {
+          q: 'A 12 V supply drives a current of 3 A. Find the resistance.',
+          steps: ['R = V ÷ I', 'R = 12 ÷ 3', 'R = 4 Ω']
+        }
+      },
+      {
+        name: 'Electrical Power',
+        formula: 'P = V × I',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'P', name:'power', unit:'W' },
+          { sym:'V', name:'voltage', unit:'V' },
+          { sym:'I', name:'current', unit:'A' }
+        ],
+        tip: 'Also P = I²R (useful when V is unknown) and P = V²/R. Choose the form that matches given values.',
+        given: true
+      },
+      {
+        name: 'Charge & Current',
+        formula: 'Q = I × t',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'Q', name:'charge', unit:'C' },
+          { sym:'I', name:'current', unit:'A' },
+          { sym:'t', name:'time', unit:'s' }
+        ],
+        tip: 'Current is the rate of flow of charge. 1 ampere = 1 coulomb per second.',
+        given: true
+      },
+      {
+        name: 'Energy Transferred',
+        formula: 'E = Q × V',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'E', name:'energy', unit:'J' },
+          { sym:'Q', name:'charge', unit:'C' },
+          { sym:'V', name:'voltage', unit:'V' }
+        ],
+        tip: 'Voltage is energy transferred per unit charge: V = E/Q.',
+        given: true
+      },
+      {
+        name: 'Transformer Equation',
+        formula: 'Vs/Vp = Ns/Np',
+        tier: 'higher', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'Vs', name:'secondary voltage', unit:'V' },
+          { sym:'Vp', name:'primary voltage', unit:'V' },
+          { sym:'Ns', name:'secondary turns', unit:'—' },
+          { sym:'Np', name:'primary turns', unit:'—' }
+        ],
+        tip: 'Step-up: Ns > Np → Vs > Vp. Step-down: Ns < Np → Vs < Vp.',
+        given: true
+      },
+    ]
+  },
+  {
+    id: 'waves',
+    title: 'Waves',
+    icon: '🌊',
+    subject: 'physics',
+    equations: [
+      {
+        name: 'Wave Speed',
+        formula: 'v = f × λ',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'v', name:'wave speed', unit:'m/s' },
+          { sym:'f', name:'frequency', unit:'Hz' },
+          { sym:'λ', name:'wavelength', unit:'m' }
+        ],
+        tip: 'All EM waves travel at c = 3×10⁸ m/s in a vacuum. Sound travels at ~340 m/s in air.',
+        given: true,
+        example: {
+          q: 'A wave has frequency 500 Hz and wavelength 0.7 m. Find its speed.',
+          steps: ['v = f × λ', 'v = 500 × 0.7', 'v = 350 m/s']
+        }
+      },
+      {
+        name: 'Period & Frequency',
+        formula: 'T = 1 / f',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'T', name:'period', unit:'s' },
+          { sym:'f', name:'frequency', unit:'Hz' }
+        ],
+        tip: 'Period is the time for one complete wave. Frequency is how many waves pass per second.',
+        given: false
+      },
+    ]
+  },
+  {
+    id: 'atomic',
+    title: 'Atomic & Nuclear',
+    icon: '☢️',
+    subject: 'physics',
+    equations: [
+      {
+        name: 'Mass-Energy Equivalence',
+        formula: 'E = mc²',
+        tier: 'alevel', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'E', name:'energy', unit:'J' },
+          { sym:'m', name:'mass', unit:'kg' },
+          { sym:'c', name:'speed of light', unit:'m/s' }
+        ],
+        tip: 'c = 3×10⁸ m/s. Even a tiny mass corresponds to an enormous amount of energy.',
+        given: true
+      },
+      {
+        name: 'Half-Life',
+        formula: 'A = A₀ × (½)^(t/t½)',
+        tier: 'higher', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'A', name:'activity at time t', unit:'Bq' },
+          { sym:'A₀', name:'initial activity', unit:'Bq' },
+          { sym:'t½', name:'half-life', unit:'s' }
+        ],
+        tip: 'Count the number of half-lives: after n half-lives, activity = A₀ ÷ 2ⁿ.',
+        given: false,
+        example: {
+          q: 'Initial activity 800 Bq, half-life 20 min. Activity after 60 min?',
+          steps: ['n = 60 ÷ 20 = 3 half-lives', 'A = 800 ÷ 2³ = 800 ÷ 8', 'A = 100 Bq']
+        }
+      },
+    ]
+  },
+  {
+    id: 'moles',
+    title: 'Moles & Quantitative',
+    icon: '⚗️',
+    subject: 'chemistry',
+    equations: [
+      {
+        name: 'Amount of Substance',
+        formula: 'n = m / Mr',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'n', name:'amount of substance', unit:'mol' },
+          { sym:'m', name:'mass', unit:'g' },
+          { sym:'Mr', name:'relative formula mass', unit:'g/mol' }
+        ],
+        tip: 'Mr is found by adding up all the Ar values in the formula. Always use grams in this equation.',
+        given: false,
+        example: {
+          q: 'Find the moles in 44 g of CO₂ (Mr = 44).',
+          steps: ['n = m ÷ Mr', 'n = 44 ÷ 44', 'n = 1 mol']
+        }
+      },
+      {
+        name: 'Concentration',
+        formula: 'c = n / V',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'c', name:'concentration', unit:'mol/dm³' },
+          { sym:'n', name:'moles', unit:'mol' },
+          { sym:'V', name:'volume', unit:'dm³' }
+        ],
+        tip: 'Convert cm³ to dm³ by dividing by 1000. 1 dm³ = 1 litre.',
+        given: false
+      },
+      {
+        name: 'Percentage Yield',
+        formula: '% yield = (actual/theoretical) × 100',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'actual', name:'actual yield', unit:'g' },
+          { sym:'theoretical', name:'theoretical yield', unit:'g' }
+        ],
+        tip: 'Always ≤ 100%. Common reasons for low yield: incomplete reaction, side reactions, product lost during purification.',
+        given: false
+      },
+      {
+        name: 'Atom Economy',
+        formula: 'AE = (Mr of desired / Mr of all) × 100',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'AE', name:'atom economy', unit:'%' },
+          { sym:'Mr desired', name:'Mr of desired product(s)', unit:'g/mol' },
+          { sym:'Mr all', name:'sum of Mr of all products', unit:'g/mol' }
+        ],
+        tip: '100% atom economy means no waste products. Industrial chemists aim for high atom economy.',
+        given: false
+      },
+    ]
+  },
+  {
+    id: 'algebra',
+    title: 'Algebra',
+    icon: '✕',
+    subject: 'maths',
+    equations: [
+      {
+        name: 'Quadratic Formula',
+        formula: 'x = (−b ± √(b²−4ac)) / 2a',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'a,b,c', name:'coefficients in ax² + bx + c = 0', unit:'—' },
+          { sym:'x', name:'solution(s)', unit:'—' }
+        ],
+        tip: 'The discriminant b²−4ac tells you how many solutions: >0 two solutions, =0 one solution, <0 no real solutions.',
+        given: true
+      },
+      {
+        name: 'Gradient of a Line',
+        formula: 'm = (y₂−y₁) / (x₂−x₁)',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'m', name:'gradient (slope)', unit:'—' },
+          { sym:'(x₁,y₁) (x₂,y₂)', name:'two points on the line', unit:'—' }
+        ],
+        tip: 'Gradient = rise ÷ run. In physics, the gradient of a graph has physical meaning (e.g. gradient of d-t = speed).',
+        given: false
+      },
+      {
+        name: 'Straight Line',
+        formula: 'y = mx + c',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'m', name:'gradient', unit:'—' },
+          { sym:'c', name:'y-intercept', unit:'—' }
+        ],
+        tip: 'Rearrange equations into this form to identify gradient and intercept.',
+        given: false
+      },
+    ]
+  },
+  {
+    id: 'geometry',
+    title: 'Geometry & Trigonometry',
+    icon: '📐',
+    subject: 'maths',
+    equations: [
+      {
+        name: "Pythagoras' Theorem",
+        formula: 'a² + b² = c²',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'c', name:'hypotenuse (longest side)', unit:'—' },
+          { sym:'a,b', name:'the other two sides', unit:'—' }
+        ],
+        tip: 'Only applies to right-angled triangles. Used extensively in vectors and forces at angles.',
+        given: true,
+        example: {
+          q: 'Find the hypotenuse when a=3, b=4.',
+          steps: ['c² = 3² + 4²', 'c² = 9 + 16 = 25', 'c = √25 = 5']
+        }
+      },
+      {
+        name: 'SOH CAH TOA',
+        formula: 'sin θ = O/H,  cos θ = A/H,  tan θ = O/A',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'O', name:'opposite side', unit:'—' },
+          { sym:'A', name:'adjacent side', unit:'—' },
+          { sym:'H', name:'hypotenuse', unit:'—' },
+          { sym:'θ', name:'angle', unit:'°' }
+        ],
+        tip: 'SOH: Sin Opposite Hypotenuse. CAH: Cos Adjacent Hypotenuse. TOA: Tan Opposite Adjacent.',
+        given: true
+      },
+      {
+        name: 'Area of a Circle',
+        formula: 'A = π r²',
+        tier: 'gcse', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'A', name:'area', unit:'m²' },
+          { sym:'r', name:'radius', unit:'m' }
+        ],
+        tip: 'Used in physics for cross-sectional areas (e.g. hydraulics, pressure calculations).',
+        given: true
+      },
+      {
+        name: 'Sine Rule',
+        formula: 'a/sin A = b/sin B = c/sin C',
+        tier: 'higher', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'a,b,c', name:'side lengths', unit:'—' },
+          { sym:'A,B,C', name:'opposite angles', unit:'°' }
+        ],
+        tip: 'Use when you know an angle and its opposite side.',
+        given: false
+      },
+      {
+        name: 'Cosine Rule',
+        formula: 'a² = b² + c² − 2bc cos A',
+        tier: 'higher', boards: ['aqa','edexcel'],
+        vars: [
+          { sym:'a', name:'side opposite angle A', unit:'—' },
+          { sym:'b,c', name:'the other two sides', unit:'—' },
+          { sym:'A', name:'included angle', unit:'°' }
+        ],
+        tip: 'Use when you know two sides and the included angle, or all three sides.',
+        given: false
+      },
+    ]
+  },
+]
+
+// ─────────────────────────────────────────────
+// STATE & FILTERS
+// ─────────────────────────────────────────────
+let activeSubject = 'all'
+let activeTier    = 'gcse'
+let searchTerm    = ''
+let activeBoards  = new Set(['aqa','edexcel'])
+
+// ─────────────────────────────────────────────
+// BUILD UI
+// ─────────────────────────────────────────────
+function buildAll() {
+  buildSidebar()
+  buildContent()
+  updateCount()
+}
+
+function buildSidebar() {
+  const sb = document.getElementById('sidebar')
+  const subjects = [
+    { id:'physics',   label:'Physics',   icon:'🚀' },
+    { id:'chemistry', label:'Chemistry', icon:'⚗️' },
+    { id:'maths',     label:'Maths',     icon:'✕' }
+  ]
+  sb.innerHTML = subjects.map(sub => {
+    const sections = SECTIONS.filter(s => s.subject === sub.id)
+    if (!sections.length) return ''
+    return `<div class="sidebar-section">
+      <div class="sidebar-label">${sub.icon} ${sub.label}</div>
+      ${sections.map(sec => `
+        <button class="sidebar-link" onclick="scrollToSection('${sec.id}')">
+          ${sec.title}
+          <span class="sidebar-count">${sec.equations.length}</span>
+        </button>`).join('')}
+    </div>`
+  }).join('')
+}
+
+function buildContent() {
+  const content = document.getElementById('content')
+  let html = ''
+  let totalVisible = 0
+
+  SECTIONS.forEach(sec => {
+    if (activeSubject !== 'all' && sec.subject !== activeSubject) return
+
+    const visibleEqs = sec.equations.filter(eq => isVisible(eq))
+    if (!visibleEqs.length) return
+
+    totalVisible += visibleEqs.length
+    html += `<div class="eq-section" id="sec-${sec.id}">
+      <div class="section-header">
+        <span class="section-icon">${sec.icon}</span>
+        <span class="section-title">${sec.title}</span>
+        <span class="section-count">${visibleEqs.length} equations</span>
+      </div>
+      ${visibleEqs.map((eq, i) => buildEqCard(eq, `${sec.id}-${i}`)).join('')}
+    </div>`
+  })
+
+  content.innerHTML = html + document.getElementById('no-results').outerHTML
+  if (!totalVisible) document.getElementById('no-results').classList.add('show')
+}
+
+function isVisible(eq) {
+  // Board filter
+  if (!eq.boards.some(b => activeBoards.has(b))) return false
+
+  // Tier filter
+  if (activeTier === 'gcse'   && eq.tier === 'alevel') return false
+  if (activeTier === 'higher' && eq.tier === 'alevel') return false
+  // alevel shows everything
+
+  // Search
+  if (searchTerm) {
+    const q = searchTerm.toLowerCase()
+    const inName    = eq.name.toLowerCase().includes(q)
+    const inFormula = eq.formula.toLowerCase().includes(q)
+    const inVars    = eq.vars?.some(v => v.name.toLowerCase().includes(q) || v.sym.toLowerCase().includes(q) || v.unit.toLowerCase().includes(q))
+    if (!inName && !inFormula && !inVars) return false
+  }
+
+  return true
+}
+
+function buildEqCard(eq, id) {
+  const tierClass = eq.tier === 'higher' ? 'higher-only' : eq.tier === 'alevel' ? 'alevel-only' : ''
+
+  const badges = [
+    `<span class="eq-badge badge-gcse">${eq.tier === 'gcse' ? 'GCSE' : eq.tier === 'higher' ? 'GCSE Higher' : 'A-Level'}</span>`,
+    eq.given ? `<span class="eq-badge badge-given">Given</span>` : '',
+  ].filter(Boolean).join('')
+
+  const vars = (eq.vars || []).map(v =>
+    `<div class="eq-var">
+      <span class="ev-sym">${v.sym}</span>
+      <span class="ev-name">${v.name}</span>
+      <span class="ev-unit">${v.unit}</span>
+    </div>`
+  ).join('')
+
+  const example = eq.example ? `
+    <div class="worked-example">
+      <div class="we-title">Worked Example</div>
+      <div class="we-steps">
+        <div class="we-step"><span class="we-num">Q.</span><span>${eq.example.q}</span></div>
+        ${eq.example.steps.map((s, i) => `
+          <div class="we-step">
+            <span class="we-num">${i+1}.</span>
+            <span class="we-math">${s}</span>
+          </div>`).join('')}
+      </div>
+    </div>` : ''
+
+  return `<div class="eq-card ${tierClass}" id="eq-${id}">
+    <div class="eq-card-header" onclick="toggleCard('${id}')">
+      <span class="eq-name">${eq.name}</span>
+      <div class="eq-badges">${badges}</div>
+      <button class="eq-expand-btn" id="expand-${id}">▸ Details</button>
+    </div>
+    <div class="eq-formula-wrap">
+      <div class="eq-formula">${eq.formula}</div>
+      <button class="eq-copy-btn" onclick="copyFormula(event,'${eq.formula}')">Copy</button>
+    </div>
+    <div class="eq-body" id="body-${id}">
+      ${eq.tip ? `<div class="eq-tip">💡 ${eq.tip}</div>` : ''}
+      <div class="eq-vars">${vars}</div>
+      ${example}
+    </div>
+  </div>`
+}
+
+function toggleCard(id) {
+  const body = document.getElementById('body-' + id)
+  const btn  = document.getElementById('expand-' + id)
+  const open = body.classList.toggle('open')
+  btn.textContent = open ? '▾ Details' : '▸ Details'
+}
+
+function scrollToSection(id) {
+  const el = document.getElementById('sec-' + id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+function copyFormula(e, formula) {
+  e.stopPropagation()
+  navigator.clipboard?.writeText(formula).then(() => toast('Copied: ' + formula))
+}
+
+// ─────────────────────────────────────────────
+// FILTERS
+// ─────────────────────────────────────────────
+function filterSubject(sub, btn) {
+  activeSubject = sub
+  document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  buildContent(); updateCount()
+}
+
+function filterTier(tier, btn) {
+  activeTier = tier
+  document.querySelectorAll('.ttab').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  buildContent(); updateCount()
+}
+
+function filterEquations(q) {
+  searchTerm = q.trim()
+  buildContent(); updateCount()
+}
+
+function toggleBoard(board, btn) {
+  if (activeBoards.has(board)) {
+    if (activeBoards.size > 1) activeBoards.delete(board)
+  } else {
+    activeBoards.add(board)
+  }
+  btn.classList.toggle('active', activeBoards.has(board))
+  buildContent(); updateCount()
+}
+
+function updateCount() {
+  let count = 0
+  SECTIONS.forEach(sec => {
+    if (activeSubject !== 'all' && sec.subject !== activeSubject) return
+    sec.equations.forEach(eq => { if (isVisible(eq)) count++ })
+  })
+  document.getElementById('eq-count').textContent = `${count} equations shown`
+}
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast')
+  el.textContent = msg; el.className = 'show'
+  clearTimeout(el._t)
+  el._t = setTimeout(() => el.className = '', 2500)
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+window.addEventListener('load', buildAll)
+</script>
+</body>
+</html>

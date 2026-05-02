@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspire Science — Revision Packs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --navy:   #0B1D3A;
+  --navy2:  #112240;
+  --navy3:  #1A3361;
+  --gold:   #D4A017;
+  --gold2:  #F0C040;
+  --white:  #F0EDE6;
+  --muted:  #7A8BA8;
+  --border: rgba(212,160,23,.18);
+  --r: 10px;
+  --green:  #2ECC71;
+  --amber:  #F39C12;
+  --red:    #E74C3C;
+  --blue:   #3498DB;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { font-family: 'DM Sans', sans-serif; background: var(--navy); color: var(--white); min-height: 100vh; }
+
+/* ── Loading ── */
+#loading-overlay {
+  position: fixed; inset: 0; background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; flex-direction: column; gap: 1rem;
+}
+.loading-spinner {
+  width: 40px; height: 40px; border: 3px solid var(--border);
+  border-top-color: var(--gold); border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Layout ── */
+.app { display: flex; min-height: 100vh; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 220px; flex-shrink: 0; background: var(--navy2);
+  border-right: 1px solid var(--border); display: flex;
+  flex-direction: column; padding: 1.5rem 0;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 0 1.5rem 1.5rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem;
+}
+.sidebar-logo .inspire { font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.1rem; }
+.sidebar-logo .science { font-weight: 700; font-size: 1.1rem; color: var(--white); }
+.sidebar-logo .badge { font-family: 'DM Mono', monospace; font-size: .6rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: .2rem; }
+
+.nav-section-label {
+  font-family: 'DM Mono', monospace; font-size: .58rem; text-transform: uppercase;
+  letter-spacing: .12em; color: var(--muted); padding: .75rem 1.5rem .3rem;
+}
+.nav-item {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .65rem 1.5rem; cursor: pointer; font-size: .9rem;
+  color: var(--muted); transition: all .15s; border-left: 3px solid transparent;
+}
+.nav-item:hover { color: var(--white); background: rgba(255,255,255,.04); }
+.nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(212,160,23,.06); }
+.nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+
+.sidebar-footer {
+  margin-top: auto; padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+}
+.teacher-name { font-size: .8rem; color: var(--muted); }
+.teacher-name strong { display: block; color: var(--white); font-size: .9rem; margin-bottom: .15rem; }
+.sign-out-btn {
+  margin-top: .75rem; width: 100%; background: transparent; border: 1px solid var(--border);
+  color: var(--muted); padding: .5rem; border-radius: var(--r);
+  font-size: .8rem; cursor: pointer; transition: all .15s;
+}
+.sign-out-btn:hover { border-color: var(--red); color: var(--red); }
+
+/* ── Main ── */
+.main { flex: 1; padding: 2rem; overflow-y: auto; }
+
+.view { display: none; }
+.view.active { display: block; }
+
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2rem;
+}
+.page-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; }
+.page-sub { color: var(--muted); font-size: .9rem; margin-top: .3rem; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .6rem 1.2rem; border-radius: var(--r);
+  font-size: .85rem; font-weight: 500; cursor: pointer;
+  transition: all .15s; border: none; font-family: 'DM Sans', sans-serif;
+}
+.btn-gold { background: var(--gold); color: var(--navy); }
+.btn-gold:hover { background: var(--gold2); }
+.btn-outline {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted);
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.btn-danger { background: transparent; border: 1px solid rgba(231,76,60,.3); color: var(--red); }
+.btn-danger:hover { background: rgba(231,76,60,.1); }
+.btn-sm { padding: .35rem .75rem; font-size: .78rem; }
+
+/* ── Cards ── */
+.card {
+  background: var(--navy2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1.5rem;
+}
+.card + .card { margin-top: 1rem; }
+
+/* ── Stats ── */
+.stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2rem; }
+.stat-card { background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r); padding: 1.25rem 1.5rem; }
+.stat-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-family: 'DM Mono', monospace; }
+.stat-value { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin: .3rem 0 .1rem; line-height: 1; }
+.stat-sub { font-size: .8rem; color: var(--muted); }
+
+/* ── Pack cards grid ── */
+.packs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+.pack-card {
+  background: var(--navy2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1.25rem; transition: border-color .15s;
+}
+.pack-card:hover { border-color: rgba(212,160,23,.4); }
+.pack-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; margin-bottom: .75rem; }
+.pack-card-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; line-height: 1.3; }
+.pack-card-meta { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .75rem; }
+.pack-card-actions { display: flex; gap: .5rem; margin-top: 1rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+
+/* ── Badges ── */
+.badge {
+  font-family: 'DM Mono', monospace; font-size: .6rem;
+  padding: .22rem .65rem; border-radius: 20px; border: 1px solid;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.badge-physics  { color: #60a5fa; border-color: rgba(96,165,250,.3); background: rgba(96,165,250,.07); }
+.badge-biology  { color: #4ade80; border-color: rgba(74,222,128,.3); background: rgba(74,222,128,.07); }
+.badge-chemistry{ color: #f472b6; border-color: rgba(244,114,182,.3); background: rgba(244,114,182,.07); }
+.badge-maths, .badge-mathematics { color: #fb923c; border-color: rgba(251,146,60,.3); background: rgba(251,146,60,.07); }
+.badge-aqa      { color: var(--gold); border-color: rgba(212,160,23,.3); background: rgba(212,160,23,.07); }
+.badge-edexcel  { color: #a78bfa; border-color: rgba(167,139,250,.3); background: rgba(167,139,250,.07); }
+.badge-ocr      { color: #22d3ee; border-color: rgba(34,211,238,.3); background: rgba(34,211,238,.07); }
+.badge-higher   { color: #a78bfa; border-color: rgba(167,139,250,.25); background: rgba(167,139,250,.06); }
+.badge-foundation { color: #94a3b8; border-color: rgba(148,163,184,.25); background: rgba(148,163,184,.06); }
+
+/* ── Form elements ── */
+.form-group { margin-bottom: 1.25rem; }
+.form-label {
+  display: block; font-family: 'DM Mono', monospace; font-size: .68rem;
+  text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .4rem;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%; background: var(--navy); border: 1px solid var(--border);
+  color: var(--white); border-radius: 8px; padding: .65rem .9rem;
+  font-size: .9rem; font-family: 'DM Sans', sans-serif; transition: border-color .15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none; border-color: var(--gold);
+}
+.form-textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
+.form-select option { background: var(--navy2); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+
+/* ── Section builder ── */
+.section-item {
+  background: var(--navy); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1.25rem; margin-bottom: .75rem;
+}
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.section-type-label {
+  font-family: 'DM Mono', monospace; font-size: .65rem;
+  text-transform: uppercase; letter-spacing: .08em; color: var(--gold);
+}
+.section-actions { display: flex; gap: .4rem; }
+.add-section-bar {
+  display: flex; gap: .6rem; padding: 1rem; background: rgba(0,0,0,.2);
+  border-radius: var(--r); border: 1px dashed var(--border); margin-top: .5rem;
+}
+.add-section-bar span { font-size: .8rem; color: var(--muted); align-self: center; margin-right: .4rem; }
+
+/* ── MCQ question builder ── */
+.mcq-question {
+  background: rgba(0,0,0,.2); border-radius: 8px;
+  padding: 1rem; margin-bottom: .75rem;
+}
+.mcq-question-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
+.mcq-q-num { font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--muted); }
+.option-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .4rem; }
+.option-radio { accent-color: var(--gold); cursor: pointer; flex-shrink: 0; }
+.option-input { flex: 1; }
+
+/* ── Mark point rows ── */
+.mark-point-row { display: flex; align-items: center; gap: .5rem; margin-bottom: .4rem; }
+.mark-point-row .form-input { flex: 1; }
+
+/* ── Assignment table ── */
+.table-card { background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 1.5rem; }
+.table-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.table-title { font-weight: 600; font-size: .95rem; }
+.table-count { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--muted); }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: .75rem 1.25rem; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border-bottom: 1px solid var(--border); background: rgba(0,0,0,.15); }
+td { padding: .8rem 1.25rem; font-size: .88rem; border-bottom: 1px solid rgba(255,255,255,.04); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,.025); }
+
+/* ── Progress bars ── */
+.prog-track { height: 4px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; min-width: 80px; }
+.prog-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+.prog-fill.done { background: var(--green); }
+
+/* ── Status pills ── */
+.pill {
+  display: inline-block; font-family: 'DM Mono', monospace; font-size: .62rem;
+  padding: .25rem .7rem; border-radius: 20px; text-transform: uppercase; letter-spacing: .05em;
+}
+.pill-pending { color: var(--muted); border: 1px solid var(--border); }
+.pill-progress { color: var(--gold); border: 1px solid rgba(212,160,23,.4); background: rgba(212,160,23,.06); }
+.pill-done { color: var(--green); border: 1px solid rgba(46,204,113,.3); background: rgba(46,204,113,.06); }
+.pill-overdue { color: var(--red); border: 1px solid rgba(231,76,60,.3); background: rgba(231,76,60,.06); }
+
+/* ── Modal ── */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: var(--navy2); border: 1px solid var(--border);
+  border-radius: var(--r); width: 100%; max-width: 560px; max-height: 90vh;
+  overflow-y: auto; padding: 1.75rem;
+}
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.modal-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
+.modal-close { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: var(--white); }
+.modal-footer { display: flex; gap: .75rem; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+
+/* ── Topic tags ── */
+.tags-input-wrap { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; min-height: 42px; background: var(--navy); border: 1px solid var(--border); border-radius: 8px; padding: .4rem .7rem; cursor: text; }
+.tags-input-wrap:focus-within { border-color: var(--gold); }
+.tag-chip {
+  display: inline-flex; align-items: center; gap: .3rem;
+  background: rgba(212,160,23,.12); border: 1px solid rgba(212,160,23,.3);
+  color: var(--gold); border-radius: 20px; padding: .2rem .65rem;
+  font-size: .78rem; font-family: 'DM Mono', monospace;
+}
+.tag-chip-remove { cursor: pointer; opacity: .7; line-height: 1; font-size: .85rem; }
+.tag-chip-remove:hover { opacity: 1; }
+.tags-text-input {
+  background: none; border: none; outline: none; color: var(--white);
+  font-size: .88rem; font-family: 'DM Sans', sans-serif; min-width: 120px; flex: 1;
+}
+
+/* ── Toast ── */
+#toast {
+  position: fixed; bottom: 2rem; right: 2rem; background: var(--navy2);
+  border: 1px solid var(--border); padding: .8rem 1.2rem; border-radius: var(--r);
+  font-size: .85rem; transform: translateY(100px); opacity: 0; transition: all .3s;
+  z-index: 9999; max-width: 320px;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+#toast.success { border-color: var(--green); color: var(--green); }
+#toast.error { border-color: var(--red); color: var(--red); }
+
+/* ── Analytics charts ── */
+.analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+.completion-bar-row { display: flex; align-items: center; gap: .75rem; padding: .6rem 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+.completion-bar-row:last-child { border-bottom: none; }
+.completion-name { font-size: .85rem; min-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.completion-track { flex: 1; height: 6px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; }
+.completion-fill { height: 100%; border-radius: 4px; }
+.completion-pct { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--muted); min-width: 36px; text-align: right; }
+
+/* ── Empty ── */
+.empty-state { text-align: center; padding: 4rem 2rem; color: var(--muted); }
+.empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.empty-title { font-size: 1.1rem; color: var(--white); margin-bottom: .5rem; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+@media(max-width:900px) {
+  .sidebar { width: 60px; }
+  .sidebar-logo, .sidebar-footer, .nav-item span, .nav-section-label { display: none; }
+  .stat-row { grid-template-columns: repeat(2,1fr); }
+  .form-row, .form-row-3 { grid-template-columns: 1fr; }
+  .analytics-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div style="color:var(--muted);font-size:.85rem;">Loading revision packs…</div>
+</div>
+
+<div class="app">
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar">
+    <a href="teacher.html" style="text-decoration:none;color:inherit;">
+      <div class="sidebar-logo">
+        <div><span class="inspire">Inspire</span> <span class="science">Science</span></div>
+        <div class="badge">Revision Packs</div>
+      </div>
+    </a>
+
+    <div class="nav-section-label">Revision Engine</div>
+    <div class="nav-item active" onclick="showView('packs')" id="nav-packs">
+      <span class="icon">📦</span><span>Pack Library</span>
+    </div>
+    <div class="nav-item" onclick="showView('builder')" id="nav-builder">
+      <span class="icon">✏️</span><span>Create Pack</span>
+    </div>
+    <div class="nav-item" onclick="showView('assign')" id="nav-assign">
+      <span class="icon">📤</span><span>Assign</span>
+    </div>
+    <div class="nav-item" onclick="showView('analytics')" id="nav-analytics">
+      <span class="icon">📈</span><span>Analytics</span>
+    </div>
+
+    <div class="nav-section-label">Main</div>
+    <div class="nav-item" onclick="location.href='teacher.html'">
+      <span class="icon">◀</span><span>Back to Dashboard</span>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="teacher-name">
+        <strong id="teacher-name-display">Teacher</strong>
+        Signed in
+      </div>
+      <button class="sign-out-btn" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- ════════════════════════════════════
+         VIEW: PACK LIBRARY
+    ════════════════════════════════════ -->
+    <div class="view active" id="view-packs">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Pack Library</div>
+          <div class="page-sub">All revision packs — click a pack to preview or assign</div>
+        </div>
+        <button class="btn btn-gold" onclick="showView('builder')">＋ Create New Pack</button>
+      </div>
+
+      <!-- Filters -->
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;" id="pack-filters">
+        <button class="btn btn-outline btn-sm active-filter" onclick="filterPacks('all',this)" style="color:var(--gold);border-color:var(--gold);">All</button>
+        <button class="btn btn-outline btn-sm" onclick="filterPacks('physics',this)">Physics</button>
+        <button class="btn btn-outline btn-sm" onclick="filterPacks('biology',this)">Biology</button>
+        <button class="btn btn-outline btn-sm" onclick="filterPacks('chemistry',this)">Chemistry</button>
+        <button class="btn btn-outline btn-sm" onclick="filterPacks('maths',this)">Maths</button>
+      </div>
+
+      <div class="packs-grid" id="packs-grid">
+        <div style="color:var(--muted);font-size:.9rem;padding:2rem;">Loading packs…</div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         VIEW: PACK BUILDER
+    ════════════════════════════════════ -->
+    <div class="view" id="view-builder">
+      <div class="page-header">
+        <div>
+          <div class="page-title" id="builder-page-title">Create Revision Pack</div>
+          <div class="page-sub">Build a structured pack with content, MCQs, and exam questions</div>
+        </div>
+        <div style="display:flex;gap:.75rem;">
+          <button class="btn btn-outline" onclick="resetBuilder()">✕ Clear</button>
+          <button class="btn btn-gold" onclick="savePack()">💾 Save Pack</button>
+        </div>
+      </div>
+
+      <!-- Pack Metadata -->
+      <div class="card" style="margin-bottom:1rem;">
+        <div style="font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:1rem;">Pack Details</div>
+        <div class="form-group">
+          <label class="form-label">Pack Title *</label>
+          <input class="form-input" id="pack-title" placeholder="e.g. Energy — Forms, Conservation &amp; Dissipation">
+        </div>
+        <div class="form-row-3">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Subject *</label>
+            <select class="form-select" id="pack-subject">
+              <option value="">Select…</option>
+              <option value="physics">Physics</option>
+              <option value="biology">Biology</option>
+              <option value="chemistry">Chemistry</option>
+              <option value="maths">Maths</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Exam Board *</label>
+            <select class="form-select" id="pack-board">
+              <option value="">Select…</option>
+              <option value="aqa">AQA</option>
+              <option value="edexcel">Edexcel</option>
+              <option value="ocr">OCR</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Tier *</label>
+            <select class="form-select" id="pack-tier">
+              <option value="">Select…</option>
+              <option value="foundation">Foundation</option>
+              <option value="higher">Higher</option>
+              <option value="both">Both</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:1.25rem;margin-bottom:0;">
+          <label class="form-label">Topics Covered (press Enter to add)</label>
+          <div class="tags-input-wrap" id="topics-wrap" onclick="document.getElementById('topics-input').focus()">
+            <input class="tags-text-input" id="topics-input" placeholder="Type a topic and press Enter…" onkeydown="handleTopicKey(event)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Builder -->
+      <div class="card" style="margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div style="font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);">Sections</div>
+          <div style="font-size:.8rem;color:var(--muted);" id="section-count-label">0 sections</div>
+        </div>
+        <div id="sections-container"></div>
+        <div class="add-section-bar">
+          <span>Add section:</span>
+          <button class="btn btn-outline btn-sm" onclick="addSection('content')">📖 Content</button>
+          <button class="btn btn-outline btn-sm" onclick="addSection('mcq')">✅ MCQ Quiz</button>
+          <button class="btn btn-outline btn-sm" onclick="addSection('exam_question')">📝 Exam Question</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         VIEW: ASSIGN
+    ════════════════════════════════════ -->
+    <div class="view" id="view-assign">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Assign Packs</div>
+          <div class="page-sub">Assign revision packs to individual students or groups</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <!-- Left: Assignment form -->
+        <div class="card">
+          <div style="font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:1.25rem;">New Assignment</div>
+
+          <div class="form-group">
+            <label class="form-label">Pack *</label>
+            <select class="form-select" id="assign-pack">
+              <option value="">Select a pack…</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Student *</label>
+            <select class="form-select" id="assign-student">
+              <option value="">Select a student…</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Due Date</label>
+            <input type="date" class="form-input" id="assign-due">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Message to Student (optional)</label>
+            <textarea class="form-textarea" id="assign-message" placeholder="e.g. Focus on the equations section — this will be on your mock."></textarea>
+          </div>
+          <div style="margin-top:1.25rem;">
+            <button class="btn btn-gold" style="width:100%;" onclick="createAssignment()">📤 Assign Pack</button>
+          </div>
+        </div>
+
+        <!-- Right: Recent assignments -->
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem;">Recent Assignments</div>
+          <div id="recent-assignments">
+            <div style="color:var(--muted);font-size:.88rem;padding:1rem 0;">Loading…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════
+         VIEW: ANALYTICS
+    ════════════════════════════════════ -->
+    <div class="view" id="view-analytics">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Revision Analytics</div>
+          <div class="page-sub">Completion rates, scores, and student engagement across all packs</div>
+        </div>
+        <button class="btn btn-outline" onclick="loadAnalytics()">↻ Refresh</button>
+      </div>
+
+      <div class="stat-row" id="analytics-stats">
+        <div class="stat-card"><div class="stat-label">Total Assigned</div><div class="stat-value" id="an-total">—</div><div class="stat-sub">assignments</div></div>
+        <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="an-done">—</div><div class="stat-sub">fully finished</div></div>
+        <div class="stat-card"><div class="stat-label">In Progress</div><div class="stat-value" id="an-progress">—</div><div class="stat-sub">started</div></div>
+        <div class="stat-card"><div class="stat-label">Avg MCQ Score</div><div class="stat-value" id="an-score">—</div><div class="stat-sub">across all packs</div></div>
+      </div>
+
+      <div class="analytics-grid">
+        <!-- Completion by pack -->
+        <div class="card">
+          <div style="font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:1rem;">Completion by Pack</div>
+          <div id="completion-by-pack"><div style="color:var(--muted);font-size:.85rem;">Loading…</div></div>
+        </div>
+        <!-- Engagement by student -->
+        <div class="card">
+          <div style="font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:1rem;">Student Engagement</div>
+          <div id="engagement-by-student"><div style="color:var(--muted);font-size:.85rem;">Loading…</div></div>
+        </div>
+      </div>
+
+      <!-- Full assignments table -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">All Assignments</div>
+          <div class="table-count" id="analytics-table-count"></div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Pack</th>
+              <th>Assigned</th>
+              <th>Due</th>
+              <th>Status</th>
+              <th>Progress</th>
+              <th>MCQ Score</th>
+            </tr>
+          </thead>
+          <tbody id="analytics-tbody">
+            <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem;">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── ASSIGN MODAL (from pack card) ── -->
+<div class="modal-backdrop" id="assign-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Assign Pack</div>
+      <button class="modal-close" onclick="closeModal('assign-modal')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Pack</label>
+      <input class="form-input" id="modal-pack-name" readonly style="opacity:.6;">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Student *</label>
+      <select class="form-select" id="modal-student"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Due Date</label>
+      <input type="date" class="form-input" id="modal-due">
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">Message to Student (optional)</label>
+      <textarea class="form-textarea" id="modal-message" placeholder="e.g. Focus on the equations section…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('assign-modal')">Cancel</button>
+      <button class="btn btn-gold" onclick="assignFromModal()">📤 Assign</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DELETE CONFIRM MODAL ── -->
+<div class="modal-backdrop" id="delete-modal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header">
+      <div class="modal-title">Delete Pack?</div>
+      <button class="modal-close" onclick="closeModal('delete-modal')">×</button>
+    </div>
+    <p style="color:var(--muted);font-size:.9rem;line-height:1.6;">This will permanently delete the pack and all its assignments. This cannot be undone.</p>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Delete Pack</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SB_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const { createClient } = supabase;
+const sb = createClient(SB_URL, SB_KEY);
+
+// ── State ──
+let allPacks = [];
+let allStudents = [];
+let allAssignments = [];
+let currentFilter = 'all';
+let editingPackId = null;
+let deletePackId = null;
+let modalPackId = null;
+let topicTags = [];
+let sections = [];
+let sectionCounter = 0;
+
+// ── Init ──
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+
+  const { data: profile } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
+  if (!['teacher','admin'].includes(profile?.role)) { location.href = 'dashboard.html'; return; }
+
+  const name = profile?.first_name || profile?.full_name?.split(' ')[0] || 'Teacher';
+  document.getElementById('teacher-name-display').textContent = name;
+
+  await Promise.all([loadPacks(), loadStudents(), loadAssignments()]);
+  populateAssignDropdowns();
+
+  document.getElementById('loading-overlay').style.display = 'none';
+})();
+
+// ── Navigation ──
+function showView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  const navEl = document.getElementById('nav-' + view);
+  if (navEl) navEl.classList.add('active');
+  if (view === 'analytics') loadAnalytics();
+  if (view === 'assign') renderRecentAssignments();
+}
+
+// ── Load Data ──
+async function loadPacks() {
+  const { data, error } = await sb.from('revision_packs').select('*').order('created_at', { ascending: false });
+  if (error) { showToast('Error loading packs', 'error'); return; }
+  allPacks = data || [];
+  renderPacks(currentFilter);
+}
+
+async function loadStudents() {
+  const { data } = await sb.from('profiles').select('id, first_name, last_name, full_name, exam_board, tier, year_group').eq('role', 'student').order('full_name');
+  allStudents = data || [];
+}
+
+async function loadAssignments() {
+  const { data } = await sb.from('revision_assignments')
+    .select(`id, pack_id, assigned_to, due_date, status, message, assigned_at,
+      revision_packs(title, subject),
+      profiles!revision_assignments_assigned_to_fkey(first_name, last_name, full_name)`)
+    .order('assigned_at', { ascending: false });
+  allAssignments = data || [];
+}
+
+// ── Render Packs ──
+function renderPacks(filter) {
+  currentFilter = filter;
+  const grid = document.getElementById('packs-grid');
+  const filtered = filter === 'all' ? allPacks : allPacks.filter(p => p.subject === filter);
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">No packs yet</div><p style="font-size:.85rem;">Click "Create New Pack" to build your first revision pack.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => {
+    const sCount = p.sections?.length || 0;
+    const tCount = p.topic_list?.length || 0;
+    const aCount = allAssignments.filter(a => a.pack_id === p.id).length;
+    return `
+    <div class="pack-card">
+      <div class="pack-card-header">
+        <div class="pack-card-title">${esc(p.title)}</div>
+      </div>
+      <div class="pack-card-meta">
+        <span class="badge badge-${p.subject}">${cap(p.subject)}</span>
+        <span class="badge badge-${p.exam_board}">${(p.exam_board||'').toUpperCase()}</span>
+        <span class="badge badge-${p.difficulty_tier}">${cap(p.difficulty_tier)}</span>
+      </div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.4rem;">
+        ${sCount} section${sCount!==1?'s':''} · ${tCount} topic${tCount!==1?'s':''} · assigned ${aCount}×
+      </div>
+      ${p.topic_list?.slice(0,3).map(t => `<span class="tag-chip" style="margin-bottom:.3rem;">${esc(t)}</span>`).join('') || ''}
+      ${p.topic_list?.length > 3 ? `<span style="font-size:.72rem;color:var(--muted);">+${p.topic_list.length-3} more</span>` : ''}
+      <div class="pack-card-actions">
+        <button class="btn btn-gold btn-sm" onclick="openAssignModal('${p.id}')">📤 Assign</button>
+        <button class="btn btn-outline btn-sm" onclick="editPack('${p.id}')">✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="promptDelete('${p.id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterPacks(filter, btn) {
+  document.querySelectorAll('#pack-filters .btn').forEach(b => {
+    b.style.color = ''; b.style.borderColor = '';
+  });
+  btn.style.color = 'var(--gold)'; btn.style.borderColor = 'var(--gold)';
+  renderPacks(filter);
+}
+
+// ── BUILDER ──
+function resetBuilder() {
+  editingPackId = null;
+  document.getElementById('builder-page-title').textContent = 'Create Revision Pack';
+  document.getElementById('pack-title').value = '';
+  document.getElementById('pack-subject').value = '';
+  document.getElementById('pack-board').value = '';
+  document.getElementById('pack-tier').value = '';
+  topicTags = [];
+  renderTopicTags();
+  sections = [];
+  sectionCounter = 0;
+  document.getElementById('sections-container').innerHTML = '';
+  updateSectionCount();
+}
+
+function editPack(id) {
+  const p = allPacks.find(x => x.id === id);
+  if (!p) return;
+  editingPackId = id;
+  document.getElementById('builder-page-title').textContent = 'Edit Pack';
+  document.getElementById('pack-title').value = p.title || '';
+  document.getElementById('pack-subject').value = p.subject || '';
+  document.getElementById('pack-board').value = p.exam_board || '';
+  document.getElementById('pack-tier').value = p.difficulty_tier || '';
+  topicTags = [...(p.topic_list || [])];
+  renderTopicTags();
+  sections = [];
+  sectionCounter = 0;
+  document.getElementById('sections-container').innerHTML = '';
+  (p.sections || []).forEach(s => addSection(s.type, s));
+  showView('builder');
+}
+
+// ── Topics Tag Input ──
+function handleTopicKey(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    const val = e.target.value.trim().replace(/,$/, '');
+    if (val && !topicTags.includes(val)) { topicTags.push(val); renderTopicTags(); }
+    e.target.value = '';
+  }
+}
+function removeTopic(tag) {
+  topicTags = topicTags.filter(t => t !== tag);
+  renderTopicTags();
+}
+function renderTopicTags() {
+  const wrap = document.getElementById('topics-wrap');
+  const input = document.getElementById('topics-input');
+  wrap.innerHTML = '';
+  topicTags.forEach(t => {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.innerHTML = `${esc(t)} <span class="tag-chip-remove" onclick="removeTopic('${esc(t)}')">×</span>`;
+    wrap.appendChild(chip);
+  });
+  wrap.appendChild(input);
+}
+
+// ── Section Builder ──
+function addSection(type, data = {}) {
+  sectionCounter++;
+  const id = 'sec_' + sectionCounter;
+  sections.push({ id, type, data });
+  renderSection(id, type, data);
+  updateSectionCount();
+}
+
+function renderSection(id, type, data) {
+  const container = document.getElementById('sections-container');
+  const div = document.createElement('div');
+  div.className = 'section-item'; div.id = 'section-' + id;
+
+  const typeLabels = { content: '📖 Content Section', mcq: '✅ MCQ Quiz', exam_question: '📝 Exam Question' };
+
+  let inner = `
+    <div class="section-header">
+      <span class="section-type-label">${typeLabels[type]}</span>
+      <div class="section-actions">
+        <button class="btn btn-danger btn-sm" onclick="removeSection('${id}')">✕ Remove</button>
+      </div>
+    </div>`;
+
+  if (type === 'content') {
+    inner += `
+      <div class="form-group">
+        <label class="form-label">Section Title *</label>
+        <input class="form-input" id="${id}-title" placeholder="e.g. Forms of Energy" value="${esc(data.title||'')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subtitle / Learning Objective</label>
+        <input class="form-input" id="${id}-subtitle" placeholder="e.g. Understand the eight forms of energy" value="${esc(data.subtitle||'')}">
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Key Points (one per line)</label>
+        <textarea class="form-textarea" id="${id}-keypoints" placeholder="Kinetic energy is the energy of motion&#10;Thermal energy is stored in the movement of particles&#10;…">${(data.cards?.[0]?.key_points||[]).join('\n')}</textarea>
+      </div>`;
+  }
+
+  if (type === 'mcq') {
+    inner += `
+      <div class="form-group">
+        <label class="form-label">Section Title</label>
+        <input class="form-input" id="${id}-title" placeholder="e.g. Quick Check" value="${esc(data.title||'Quick Check')}">
+      </div>
+      <div id="${id}-questions">`;
+
+    const questions = data.questions || [{ stem:'', options:['','','',''], correct_index:0, explanation:'' }];
+    questions.forEach((q, qi) => {
+      inner += renderMCQQuestion(id, qi, q);
+    });
+
+    inner += `</div>
+      <button class="btn btn-outline btn-sm" style="margin-top:.5rem;" onclick="addMCQQuestion('${id}')">＋ Add Question</button>`;
+  }
+
+  if (type === 'exam_question') {
+    inner += `
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Label (e.g. 6-mark question)</label>
+          <input class="form-input" id="${id}-label" placeholder="6-mark question" value="${esc(data.label||'')}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Marks *</label>
+          <input type="number" class="form-input" id="${id}-marks" placeholder="6" min="1" max="20" value="${data.marks||''}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Question Stem *</label>
+        <textarea class="form-textarea" id="${id}-stem" placeholder="Describe the energy changes that occur when a ball is dropped from a height…">${esc(data.stem||'')}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Model Answer</label>
+        <textarea class="form-textarea" id="${id}-model" placeholder="The ball has gravitational potential energy at the top…">${esc(data.model_answer||'')}</textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Mark Points (one per line)</label>
+        <textarea class="form-textarea" id="${id}-markpoints" placeholder="Gravitational PE converts to kinetic energy (1)&#10;Speed increases as it falls (1)&#10;…">${(data.mark_points||[]).join('\n')}</textarea>
+      </div>`;
+  }
+
+  div.innerHTML = inner;
+  container.appendChild(div);
+}
+
+function renderMCQQuestion(secId, qi, q = {}) {
+  const qid = `${secId}-q${qi}`;
+  const options = q.options || ['','','',''];
+  return `
+  <div class="mcq-question" id="${qid}">
+    <div class="mcq-question-header">
+      <span class="mcq-q-num">Q${qi+1}</span>
+      <button class="btn btn-danger btn-sm" onclick="removeMCQQuestion('${qid}')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Question Stem</label>
+      <input class="form-input" id="${qid}-stem" placeholder="Which of the following…" value="${esc(q.stem||'')}">
+    </div>
+    <div style="margin-bottom:.75rem;">
+      <label class="form-label">Options (select correct answer)</label>
+      ${options.map((opt, oi) => `
+        <div class="option-row">
+          <input type="radio" class="option-radio" name="${qid}-correct" value="${oi}" ${q.correct_index===oi?'checked':''}>
+          <input class="form-input option-input" id="${qid}-opt${oi}" placeholder="Option ${String.fromCharCode(65+oi)}" value="${esc(opt)}">
+        </div>`).join('')}
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label class="form-label">Explanation</label>
+      <input class="form-input" id="${qid}-explanation" placeholder="The correct answer is… because…" value="${esc(q.explanation||'')}">
+    </div>
+  </div>`;
+}
+
+function addMCQQuestion(secId) {
+  const container = document.getElementById(secId + '-questions');
+  const existing = container.querySelectorAll('.mcq-question').length;
+  const div = document.createElement('div');
+  div.innerHTML = renderMCQQuestion(secId, existing, {});
+  container.appendChild(div.firstElementChild);
+}
+
+function removeMCQQuestion(qid) {
+  document.getElementById(qid)?.remove();
+}
+
+function removeSection(id) {
+  document.getElementById('section-' + id)?.remove();
+  sections = sections.filter(s => s.id !== id);
+  updateSectionCount();
+}
+
+function updateSectionCount() {
+  const count = document.getElementById('sections-container').children.length;
+  document.getElementById('section-count-label').textContent = count + ' section' + (count !== 1 ? 's' : '');
+}
+
+// ── Collect + Save Pack ──
+function collectSections() {
+  const built = [];
+  document.querySelectorAll('#sections-container .section-item').forEach((el, i) => {
+    const id = el.id.replace('section-', '');
+    const sec = sections.find(s => s.id === id);
+    if (!sec) return;
+    const type = sec.type;
+    const sId = 'section-' + (i + 1);
+
+    if (type === 'content') {
+      const kp = (document.getElementById(id+'-keypoints')?.value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+      built.push({
+        id: sId, type: 'content',
+        title: document.getElementById(id+'-title')?.value.trim() || '',
+        subtitle: document.getElementById(id+'-subtitle')?.value.trim() || '',
+        cards: [{ heading: document.getElementById(id+'-title')?.value.trim()||'', key_points: kp }]
+      });
+    }
+
+    if (type === 'mcq') {
+      const questions = [];
+      el.querySelectorAll('.mcq-question').forEach((qEl, qi) => {
+        const qid = qEl.id;
+        const opts = [0,1,2,3].map(oi => document.getElementById(qid+'-opt'+oi)?.value.trim()||'');
+        const correctRadio = qEl.querySelector(`input[name="${qid}-correct"]:checked`);
+        questions.push({
+          id: 'q' + (qi+1),
+          stem: document.getElementById(qid+'-stem')?.value.trim()||'',
+          options: opts,
+          correct_index: correctRadio ? parseInt(correctRadio.value) : 0,
+          explanation: document.getElementById(qid+'-explanation')?.value.trim()||''
+        });
+      });
+      built.push({
+        id: sId, type: 'mcq',
+        title: document.getElementById(id+'-title')?.value.trim() || 'Quick Check',
+        questions
+      });
+    }
+
+    if (type === 'exam_question') {
+      const mp = (document.getElementById(id+'-markpoints')?.value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+      built.push({
+        id: sId, type: 'exam_question',
+        label: document.getElementById(id+'-label')?.value.trim()||'',
+        title: document.getElementById(id+'-label')?.value.trim()||'Exam Question',
+        marks: parseInt(document.getElementById(id+'-marks')?.value)||6,
+        stem: document.getElementById(id+'-stem')?.value.trim()||'',
+        model_answer: document.getElementById(id+'-model')?.value.trim()||'',
+        mark_points: mp
+      });
+    }
+  });
+  return built;
+}
+
+async function savePack() {
+  const title = document.getElementById('pack-title').value.trim();
+  const subject = document.getElementById('pack-subject').value;
+  const board = document.getElementById('pack-board').value;
+  const tier = document.getElementById('pack-tier').value;
+
+  if (!title || !subject || !board || !tier) {
+    showToast('Please fill in all required pack details', 'error'); return;
+  }
+
+  const sectionsData = collectSections();
+  const payload = {
+    title, subject, exam_board: board, difficulty_tier: tier,
+    topic_list: topicTags, sections: sectionsData,
+    updated_at: new Date().toISOString()
+  };
+
+  let error;
+  if (editingPackId) {
+    ({ error } = await sb.from('revision_packs').update(payload).eq('id', editingPackId));
+  } else {
+    ({ error } = await sb.from('revision_packs').insert([{ ...payload, created_at: new Date().toISOString() }]));
+  }
+
+  if (error) { showToast('Error saving pack: ' + error.message, 'error'); return; }
+
+  showToast(editingPackId ? 'Pack updated ✓' : 'Pack created ✓', 'success');
+  await loadPacks();
+  populateAssignDropdowns();
+  resetBuilder();
+  showView('packs');
+}
+
+// ── Delete ──
+function promptDelete(id) {
+  deletePackId = id;
+  document.getElementById('delete-modal').classList.add('open');
+}
+async function confirmDelete() {
+  if (!deletePackId) return;
+  const { error } = await sb.from('revision_packs').delete().eq('id', deletePackId);
+  if (error) { showToast('Error deleting pack', 'error'); return; }
+  closeModal('delete-modal');
+  showToast('Pack deleted', 'success');
+  deletePackId = null;
+  await loadPacks();
+  populateAssignDropdowns();
+}
+
+// ── Assign ──
+function populateAssignDropdowns() {
+  // Main assign view
+  const packSel = document.getElementById('assign-pack');
+  const studentSel = document.getElementById('assign-student');
+  const modalStudentSel = document.getElementById('modal-student');
+
+  packSel.innerHTML = '<option value="">Select a pack…</option>' +
+    allPacks.map(p => `<option value="${p.id}">${esc(p.title)}</option>`).join('');
+
+  const studentOptions = allStudents.map(s => {
+    const name = s.first_name ? `${s.first_name} ${s.last_name||''}`.trim() : (s.full_name || 'Unknown');
+    return `<option value="${s.id}">${esc(name)}</option>`;
+  }).join('');
+
+  studentSel.innerHTML = '<option value="">Select a student…</option>' + studentOptions;
+  modalStudentSel.innerHTML = '<option value="">Select a student…</option>' + studentOptions;
+}
+
+function openAssignModal(packId) {
+  const pack = allPacks.find(p => p.id === packId);
+  modalPackId = packId;
+  document.getElementById('modal-pack-name').value = pack?.title || '';
+  document.getElementById('modal-due').value = '';
+  document.getElementById('modal-message').value = '';
+  document.getElementById('assign-modal').classList.add('open');
+}
+
+async function assignFromModal() {
+  const studentId = document.getElementById('modal-student').value;
+  const due = document.getElementById('modal-due').value;
+  const msg = document.getElementById('modal-message').value.trim();
+  if (!studentId) { showToast('Please select a student', 'error'); return; }
+  await doAssign(modalPackId, studentId, due, msg);
+  closeModal('assign-modal');
+}
+
+async function createAssignment() {
+  const packId = document.getElementById('assign-pack').value;
+  const studentId = document.getElementById('assign-student').value;
+  const due = document.getElementById('assign-due').value;
+  const msg = document.getElementById('assign-message').value.trim();
+  if (!packId || !studentId) { showToast('Please select a pack and student', 'error'); return; }
+  await doAssign(packId, studentId, due, msg);
+  document.getElementById('assign-pack').value = '';
+  document.getElementById('assign-student').value = '';
+  document.getElementById('assign-due').value = '';
+  document.getElementById('assign-message').value = '';
+}
+
+async function doAssign(packId, studentId, due, msg) {
+  const { data: { session } } = await sb.auth.getSession();
+  const { error } = await sb.from('revision_assignments').insert([{
+    pack_id: packId, assigned_to: studentId,
+    assigned_by: session.user.id,
+    due_date: due || null, message: msg || null,
+    status: 'pending', assigned_at: new Date().toISOString()
+  }]);
+  if (error) { showToast('Error creating assignment: ' + error.message, 'error'); return; }
+  showToast('Pack assigned successfully ✓', 'success');
+  await loadAssignments();
+  renderRecentAssignments();
+}
+
+function renderRecentAssignments() {
+  const container = document.getElementById('recent-assignments');
+  const recent = allAssignments.slice(0, 10);
+  if (!recent.length) {
+    container.innerHTML = `<div style="color:var(--muted);font-size:.85rem;padding:.5rem 0;">No assignments yet.</div>`;
+    return;
+  }
+  container.innerHTML = recent.map(a => {
+    const packName = a.revision_packs?.title || '—';
+    const p = a.profiles;
+    const studentName = p ? (p.first_name ? `${p.first_name} ${p.last_name||''}`.trim() : p.full_name) : '—';
+    const due = a.due_date ? new Date(a.due_date).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No due date';
+    const pillCls = { pending:'pill-pending', in_progress:'pill-progress', completed:'pill-done' }[a.status] || 'pill-pending';
+    return `
+    <div style="padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;">
+      <div>
+        <div style="font-size:.88rem;font-weight:500;">${esc(studentName)}</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.1rem;">${esc(packName)}</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:.1rem;">Due ${due}</div>
+      </div>
+      <span class="pill ${pillCls}">${a.status?.replace('_',' ') || 'pending'}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── Analytics ──
+async function loadAnalytics() {
+  await Promise.all([loadPacks(), loadAssignments()]);
+
+  // Stats
+  const total = allAssignments.length;
+  const done = allAssignments.filter(a => a.status === 'completed').length;
+  const prog = allAssignments.filter(a => a.status === 'in_progress').length;
+
+  // Fetch attempts for scores
+  const aIds = allAssignments.map(a => a.id);
+  let attempts = [];
+  if (aIds.length) {
+    const { data } = await sb.from('revision_attempts').select('assignment_id, overall_score').in('assignment_id', aIds);
+    attempts = data || [];
+  }
+  const scores = attempts.map(a => a.overall_score).filter(s => s != null && s > 0);
+  const avgScore = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+
+  document.getElementById('an-total').textContent = total;
+  document.getElementById('an-done').textContent = done;
+  document.getElementById('an-progress').textContent = prog;
+  document.getElementById('an-score').textContent = avgScore != null ? avgScore + '%' : '—';
+
+  // Completion by pack
+  const packStats = {};
+  allPacks.forEach(p => { packStats[p.id] = { title: p.title, total: 0, done: 0 }; });
+  allAssignments.forEach(a => {
+    if (!packStats[a.pack_id]) return;
+    packStats[a.pack_id].total++;
+    if (a.status === 'completed') packStats[a.pack_id].done++;
+  });
+
+  const packRows = Object.values(packStats).filter(p => p.total > 0)
+    .sort((a,b) => b.total - a.total).slice(0, 8);
+
+  document.getElementById('completion-by-pack').innerHTML = packRows.length
+    ? packRows.map(p => {
+        const pct = p.total ? Math.round((p.done/p.total)*100) : 0;
+        const col = pct >= 70 ? 'var(--green)' : pct >= 40 ? 'var(--amber)' : 'var(--red)';
+        return `<div class="completion-bar-row">
+          <div class="completion-name" title="${esc(p.title)}">${esc(p.title)}</div>
+          <div class="completion-track"><div class="completion-fill" style="width:${pct}%;background:${col}"></div></div>
+          <div class="completion-pct">${pct}%</div>
+        </div>`;
+      }).join('')
+    : '<div style="color:var(--muted);font-size:.85rem;">No data yet.</div>';
+
+  // Engagement by student
+  const studentStats = {};
+  allAssignments.forEach(a => {
+    const p = a.profiles;
+    const name = p ? (p.first_name ? `${p.first_name} ${p.last_name||''}`.trim() : p.full_name) : 'Unknown';
+    if (!studentStats[a.assigned_to]) studentStats[a.assigned_to] = { name, total: 0, done: 0 };
+    studentStats[a.assigned_to].total++;
+    if (a.status === 'completed') studentStats[a.assigned_to].done++;
+  });
+
+  const studentRows = Object.values(studentStats).sort((a,b) => b.done - a.done).slice(0, 8);
+  document.getElementById('engagement-by-student').innerHTML = studentRows.length
+    ? studentRows.map(s => {
+        const pct = s.total ? Math.round((s.done/s.total)*100) : 0;
+        return `<div class="completion-bar-row">
+          <div class="completion-name">${esc(s.name)}</div>
+          <div class="completion-track"><div class="completion-fill ${pct===100?'done':''}" style="width:${pct}%"></div></div>
+          <div class="completion-pct">${s.done}/${s.total}</div>
+        </div>`;
+      }).join('')
+    : '<div style="color:var(--muted);font-size:.85rem;">No data yet.</div>';
+
+  // Full table
+  document.getElementById('analytics-table-count').textContent = total + ' assignment' + (total!==1?'s':'');
+  const attemptMap = {};
+  attempts.forEach(a => { attemptMap[a.assignment_id] = a; });
+
+  document.getElementById('analytics-tbody').innerHTML = allAssignments.length
+    ? allAssignments.map(a => {
+        const packName = a.revision_packs?.title || '—';
+        const p = a.profiles;
+        const studentName = p ? (p.first_name ? `${p.first_name} ${p.last_name||''}`.trim() : p.full_name) : '—';
+        const assigned = new Date(a.assigned_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+        const due = a.due_date ? new Date(a.due_date).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '—';
+        const isOverdue = a.due_date && new Date(a.due_date) < new Date() && a.status !== 'completed';
+        const pillCls = isOverdue ? 'pill-overdue' : { pending:'pill-pending', in_progress:'pill-progress', completed:'pill-done' }[a.status] || 'pill-pending';
+        const statusLabel = isOverdue ? 'Overdue' : (a.status||'pending').replace('_',' ');
+        const att = attemptMap[a.id];
+        const score = att?.overall_score != null ? att.overall_score + '%' : '—';
+
+        // Progress
+        const pack = allPacks.find(pk => pk.id === a.pack_id);
+        const totalSec = pack?.sections?.length || 0;
+        const pct = 0; // Would need sections_completed from attempt
+
+        return `<tr>
+          <td>${esc(studentName)}</td>
+          <td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(packName)}</td>
+          <td style="color:var(--muted);font-size:.82rem;">${assigned}</td>
+          <td style="color:var(--muted);font-size:.82rem;">${due}</td>
+          <td><span class="pill ${pillCls}">${statusLabel}</span></td>
+          <td><div class="prog-track"><div class="prog-fill" style="width:${a.status==='completed'?100:a.status==='in_progress'?50:0}%"></div></div></td>
+          <td style="font-family:'DM Mono',monospace;font-size:.82rem;">${score}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem;">No assignments yet.</td></tr>';
+}
+
+// ── Modal helpers ──
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── Utilities ──
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function cap(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''; }
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show ' + type;
+  setTimeout(() => { t.className = ''; }, 3000);
+}
+
+async function signOut() { await sb.auth.signOut(); location.href = 'index.html'; }
+</script>
+</body>
+</html>

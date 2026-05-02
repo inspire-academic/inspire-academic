@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personalised Learning — Inspire Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+/* ── DESIGN TOKENS — matches existing platform ── */
+:root {
+  --navy:   #0b1628;
+  --navy2:  #112240;
+  --navy3:  #1a3a5c;
+  --gold:   #c9a84c;
+  --gold2:  #e8c96a;
+  --white:  #e8eaf0;
+  --muted:  #6b7f99;
+  --border: #1e2d45;
+  --r:      10px;
+  --green:  #22c55e;
+  --red:    #ef4444;
+  --amber:  #f59e0b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body {
+  font-family:'DM Sans',sans-serif;
+  background:var(--navy);
+  color:var(--white);
+  min-height:100vh;
+  line-height:1.6;
+}
+
+/* ── TOPNAV — identical to dashboard ── */
+.topnav {
+  background:var(--navy2);
+  border-bottom:1px solid var(--border);
+  padding:.8rem 1.5rem;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  position:sticky;top:0;z-index:100;
+}
+.topnav-logo img{height:36px;width:auto;border-radius:8px;}
+.topnav-title {
+  font-family:'Playfair Display',serif;
+  font-size:1rem;
+  font-weight:600;
+  color:var(--gold);
+  margin-right:.5rem;
+}
+.nav-links{display:flex;gap:.3rem;}
+.nav-link {
+  background:none;
+  border:none;
+  color:var(--muted);
+  padding:.45rem .9rem;
+  border-radius:6px;
+  font-size:.85rem;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;
+  transition:all .15s;
+}
+.nav-link:hover,.nav-link.active{background:var(--navy3);color:var(--white);}
+.nav-user {
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  cursor:pointer;
+  padding:.4rem .8rem;
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  transition:border-color .2s;
+}
+.nav-user:hover{border-color:var(--gold);}
+.avatar {
+  width:32px;height:32px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;font-weight:600;
+}
+
+/* ── PAGE ── */
+main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
+
+/* ── HERO ── */
+.page-hero {
+  margin-bottom:2.5rem;
+}
+.page-hero h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.6rem,4vw,2.2rem);
+  font-weight:700;
+  color:var(--white);
+  margin-bottom:.4rem;
+}
+.page-hero p {
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+/* ── STATS ROW ── */
+.stats-row {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:1rem;
+  margin-bottom:2.5rem;
+}
+.stat-card {
+  background:var(--navy2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:1.2rem;
+}
+.stat-label {
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:.4rem;
+}
+.stat-val {
+  font-family:'Playfair Display',serif;
+  font-size:1.8rem;
+  font-weight:600;
+  color:var(--gold);
+}
+.stat-sub {
+  font-size:.75rem;
+  color:var(--muted);
+  margin-top:.1rem;
+}
+
+/* ── SECTION HEADER ── */
+.section-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:1rem;
+}
+.section-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;
+  font-weight:600;
+}
+.section-count {
+  font-family:'DM Mono',monospace;
+  font-size:.7rem;
+  color:var(--muted);
+}
+
+/* ── FILTERS ── */
+.filters {
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+  margin-bottom:1.5rem;
+}
+.filter-btn {
+  font-family:'DM Mono',monospace;
+  font-size:.68rem;
+  padding:.35rem .9rem;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  transition:all .15s;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.filter-btn:hover { border-color:var(--gold);color:var(--gold); }
+.filter-btn.active { border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08); }
+
+/* ── PACK CARDS ── */
+.packs-grid {
+  display:grid;
+  gap:1rem;
+}
+
+.pack-card {
+  background:var(--navy2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:1.4rem 1.6rem;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:1rem;
+  align-items:center;
+  transition:border-color .2s,transform .15s;
+  cursor:pointer;
+  text-decoration:none;
+  color:inherit;
+}
+.pack-card:hover { border-color:var(--gold);transform:translateY(-1px); }
+.pack-card.completed { border-color:rgba(34,197,94,.3); }
+.pack-card.overdue   { border-color:rgba(239,68,68,.3); }
+
+.pack-left { min-width:0; }
+
+.pack-meta {
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  flex-wrap:wrap;
+  margin-bottom:.5rem;
+}
+.pack-badge {
+  font-family:'DM Mono',monospace;
+  font-size:.6rem;
+  padding:.25rem .7rem;
+  border-radius:20px;
+  border:1px solid;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.badge-physics  { color:#60a5fa;border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.07); }
+.badge-biology  { color:#4ade80;border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.07); }
+.badge-chemistry{ color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.07); }
+.badge-maths    { color:#fb923c;border-color:rgba(251,146,60,.3);background:rgba(251,146,60,.07); }
+.badge-aqa      { color:var(--gold);border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.07); }
+.badge-edexcel  { color:#a78bfa;border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.07); }
+.badge-ocr      { color:#22d3ee;border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.07); }
+.badge-higher   { color:#a78bfa;border-color:rgba(167,139,250,.25);background:rgba(167,139,250,.06); }
+.badge-foundation{ color:#94a3b8;border-color:rgba(148,163,184,.25);background:rgba(148,163,184,.06); }
+
+.pack-title {
+  font-family:'Playfair Display',serif;
+  font-size:1rem;
+  font-weight:600;
+  color:var(--white);
+  margin-bottom:.35rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.pack-topics {
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem;
+  margin-bottom:.6rem;
+}
+.topic-chip {
+  font-family:'DM Mono',monospace;
+  font-size:.6rem;
+  padding:.2rem .6rem;
+  border:1px solid var(--border);
+  border-radius:20px;
+  color:var(--muted);
+}
+
+.pack-footer {
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+.due-label {
+  font-family:'DM Mono',monospace;
+  font-size:.68rem;
+}
+.due-ok     { color:var(--muted); }
+.due-soon   { color:var(--amber); }
+.due-overdue{ color:var(--red); }
+
+/* progress bar */
+.pack-progress-wrap {
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  min-width:120px;
+}
+.pack-prog-track {
+  flex:1;height:4px;
+  background:var(--border);
+  border-radius:4px;overflow:hidden;
+}
+.pack-prog-fill {
+  height:100%;
+  border-radius:4px;
+  transition:width .4s ease;
+}
+.fill-pending    { background:var(--border); }
+.fill-inprogress { background:linear-gradient(90deg,var(--gold),var(--gold2)); }
+.fill-completed  { background:var(--green); }
+
+.pack-prog-pct {
+  font-family:'DM Mono',monospace;
+  font-size:.68rem;
+  min-width:28px;
+  text-align:right;
+}
+
+/* ── RIGHT SIDE CTA ── */
+.pack-right {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:.6rem;
+  flex-shrink:0;
+}
+.status-badge {
+  font-family:'DM Mono',monospace;
+  font-size:.62rem;
+  padding:.3rem .8rem;
+  border-radius:20px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.status-pending    { color:var(--muted);border:1px solid var(--border); }
+.status-in_progress{ color:var(--gold);border:1px solid rgba(201,168,76,.4);background:rgba(201,168,76,.06); }
+.status-completed  { color:var(--green);border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.06); }
+
+.cta-btn {
+  font-family:'DM Mono',monospace;
+  font-size:.72rem;
+  padding:.55rem 1.2rem;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:500;
+  letter-spacing:.04em;
+  transition:opacity .15s,transform .1s;
+  white-space:nowrap;
+  text-decoration:none;
+  display:inline-block;
+  text-align:center;
+}
+.cta-btn:hover { opacity:.88;transform:translateY(-1px); }
+.cta-start    { background:var(--gold);color:var(--navy); }
+.cta-continue { background:var(--navy3);color:var(--gold);border:1px solid rgba(201,168,76,.3); }
+.cta-review   { background:transparent;color:var(--muted);border:1px solid var(--border); }
+
+/* ── TEACHER MESSAGE ── */
+.teacher-msg {
+  background:rgba(201,168,76,.05);
+  border:1px solid rgba(201,168,76,.2);
+  border-left:3px solid var(--gold);
+  border-radius:0 6px 6px 0;
+  padding:.6rem .9rem;
+  margin-top:.5rem;
+  font-size:.8rem;
+  color:#c8d4e8;
+  font-style:italic;
+}
+.teacher-msg-label {
+  font-family:'DM Mono',monospace;
+  font-size:.6rem;
+  color:var(--gold);
+  font-style:normal;
+  display:block;
+  margin-bottom:.2rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align:center;
+  padding:4rem 2rem;
+  color:var(--muted);
+}
+.empty-state h3 {
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;
+  color:var(--white);
+  margin-bottom:.5rem;
+}
+.empty-state p { font-size:.88rem;line-height:1.7; }
+
+/* ── LOADING ── */
+.loading-state {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:40vh;
+  gap:1rem;
+  color:var(--muted);
+  font-size:.9rem;
+}
+.spinner {
+  width:32px;height:32px;
+  border:2px solid var(--border);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── TOAST ── */
+#toast {
+  position:fixed;bottom:2rem;right:2rem;
+  background:var(--navy2);border:1px solid var(--border);
+  padding:.8rem 1.2rem;border-radius:var(--r);
+  font-size:.85rem;transform:translateY(100px);
+  opacity:0;transition:all .3s;z-index:9999;max-width:320px;
+}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:var(--green);color:var(--green);}
+#toast.error{border-color:var(--red);color:var(--red);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .pack-card { grid-template-columns:1fr; }
+  .pack-right { flex-direction:row;align-items:center; }
+  .topnav { padding:.8rem 1rem; }
+  main { padding:1.5rem 1rem 3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a href="dashboard.html" style="text-decoration:none;color:inherit;">
+    <div class="topnav-logo">
+      <img src="icons/icon-192.png" alt="Inspire Science" style="height:36px;width:auto;">
+    </div>
+  </a>
+  <div class="topnav-title">Student Portal</div>
+  <div class="nav-links">
+    <button class="nav-link" onclick="location.href='dashboard.html'">Dashboard</button>
+    <button class="nav-link" onclick="location.href='subjects.html'">Subjects</button>
+    <button class="nav-link" onclick="location.href='progress.html'">My Progress</button>
+    <button class="nav-link active">Personalised Learning</button>
+  </div>
+  <div class="nav-user" id="nav-user" onclick="signOut()">
+    <div class="avatar" id="nav-avatar" style="background:var(--gold);color:var(--navy);">?</div>
+    <span id="nav-name">Loading…</span>
+    <span style="color:var(--muted);font-size:.75rem;">Sign out</span>
+  </div>
+</nav>
+
+<main>
+
+  <!-- LOADING -->
+  <div class="loading-state" id="loading-state">
+    <div class="spinner"></div>
+    <span>Loading your revision packs…</span>
+  </div>
+
+  <!-- CONTENT (hidden until loaded) -->
+  <div id="page-content" style="display:none;">
+
+    <!-- HERO -->
+    <div class="page-hero">
+      <h1 id="page-heading">Your Personalised Learning</h1>
+      <p id="page-sub">Revision packs assigned by your teacher, tailored to your topics.</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Assigned</div>
+        <div class="stat-val" id="stat-total">0</div>
+        <div class="stat-sub">revision packs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Completed</div>
+        <div class="stat-val" id="stat-completed">0</div>
+        <div class="stat-sub">packs finished</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">In Progress</div>
+        <div class="stat-val" id="stat-inprogress">0</div>
+        <div class="stat-sub">packs started</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg MCQ Score</div>
+        <div class="stat-val" id="stat-score">—</div>
+        <div class="stat-sub">across all packs</div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">All</button>
+      <button class="filter-btn" data-filter="pending" onclick="setFilter('pending',this)">Pending</button>
+      <button class="filter-btn" data-filter="in_progress" onclick="setFilter('in_progress',this)">In Progress</button>
+      <button class="filter-btn" data-filter="completed" onclick="setFilter('completed',this)">Completed</button>
+    </div>
+
+    <!-- PACKS LIST -->
+    <div class="section-header">
+      <span class="section-title">Your Revision Packs</span>
+      <span class="section-count" id="packs-count"></span>
+    </div>
+
+    <div class="packs-grid" id="packs-grid"></div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <h3>No packs here yet</h3>
+      <p>Your teacher will assign personalised revision packs to you here.<br>Check back after your next session.</p>
+    </div>
+
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let allAssignments = [];
+let currentFilter  = 'all';
+
+(async () => {
+  // Auth check
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+  const user = session.user;
+
+  // Load profile
+  const { data: profile } = await sb
+    .from('profiles')
+    .select('first_name, full_name, avatar_color')
+    .eq('id', user.id)
+    .single();
+
+  const firstName = profile?.first_name
+    || profile?.full_name?.split(' ')[0]
+    || user.email?.split('@')[0]
+    || 'Student';
+
+  const initials = firstName.charAt(0).toUpperCase();
+  const avatarColor = profile?.avatar_color || '#c9a84c';
+
+  document.getElementById('nav-name').textContent   = firstName;
+  document.getElementById('nav-avatar').textContent = initials;
+  document.getElementById('nav-avatar').style.background = avatarColor;
+  document.getElementById('nav-avatar').style.color = '#0b1628';
+
+  document.getElementById('page-heading').textContent =
+    `${firstName}'s Personalised Learning`;
+
+  // Load assignments with pack data and latest attempt
+  const { data: assignments, error } = await sb
+    .from('revision_assignments')
+    .select(`
+      id, pack_id, due_date, message, status, assigned_at,
+      revision_packs (
+        id, title, subject, exam_board, difficulty_tier, topic_list, sections
+      )
+    `)
+    .eq('assigned_to', user.id)
+    .order('assigned_at', { ascending: false });
+
+  if (error) { showToast('Could not load revision packs', 'error'); }
+
+  // Load latest attempt for each assignment
+  const assignmentIds = (assignments || []).map(a => a.id);
+  let attempts = [];
+  if (assignmentIds.length) {
+    const { data: attemptData } = await sb
+      .from('revision_attempts')
+      .select('assignment_id, sections_completed, mcq_results, overall_score, completed_at, last_active')
+      .in('assignment_id', assignmentIds)
+      .order('last_active', { ascending: false });
+    attempts = attemptData || [];
+  }
+
+  // Map latest attempt per assignment
+  const attemptMap = {};
+  attempts.forEach(a => {
+    if (!attemptMap[a.assignment_id]) attemptMap[a.assignment_id] = a;
+  });
+
+  allAssignments = (assignments || []).map(a => ({
+    ...a,
+    attempt: attemptMap[a.id] || null
+  }));
+
+  renderStats();
+  renderPacks(currentFilter);
+
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('page-content').style.display  = 'block';
+})();
+
+function renderStats() {
+  const total       = allAssignments.length;
+  const completed   = allAssignments.filter(a => a.status === 'completed').length;
+  const inProgress  = allAssignments.filter(a => a.status === 'in_progress').length;
+
+  // Average MCQ score across all attempts
+  const scores = allAssignments
+    .map(a => a.attempt?.overall_score)
+    .filter(s => s != null && s > 0);
+  const avgScore = scores.length
+    ? Math.round(scores.reduce((a,b) => a + b, 0) / scores.length)
+    : null;
+
+  document.getElementById('stat-total').textContent      = total;
+  document.getElementById('stat-completed').textContent  = completed;
+  document.getElementById('stat-inprogress').textContent = inProgress;
+  document.getElementById('stat-score').textContent      = avgScore != null ? avgScore + '%' : '—';
+}
+
+function renderPacks(filter) {
+  const grid  = document.getElementById('packs-grid');
+  const empty = document.getElementById('empty-state');
+  const count = document.getElementById('packs-count');
+  grid.innerHTML = '';
+
+  const filtered = filter === 'all'
+    ? allAssignments
+    : allAssignments.filter(a => a.status === filter);
+
+  count.textContent = filtered.length + ' pack' + (filtered.length !== 1 ? 's' : '');
+
+  if (!filtered.length) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  filtered.forEach(a => {
+    const pack    = a.revision_packs;
+    const attempt = a.attempt;
+    if (!pack) return;
+
+    const totalSections = pack.sections?.length || 0;
+    const doneSections  = attempt?.sections_completed?.length || 0;
+    const pct           = totalSections > 0
+      ? Math.round((doneSections / totalSections) * 100) : 0;
+
+    const dueInfo   = getDueInfo(a.due_date);
+    const statusCls = 'status-' + a.status;
+    const cardCls   = a.status === 'completed' ? 'completed'
+                    : dueInfo.overdue ? 'overdue' : '';
+
+    const fillCls = a.status === 'completed' ? 'fill-completed'
+                  : a.status === 'in_progress' ? 'fill-inprogress'
+                  : 'fill-pending';
+
+    const ctaText = a.status === 'completed' ? 'Review'
+                  : a.status === 'in_progress' ? 'Continue →'
+                  : 'Start →';
+    const ctaCls  = a.status === 'completed' ? 'cta-review'
+                  : a.status === 'in_progress' ? 'cta-continue'
+                  : 'cta-start';
+
+    const topicsHtml = (pack.topic_list || []).slice(0, 4).map(t =>
+      `<span class="topic-chip">${escHtml(t)}</span>`
+    ).join('') + (pack.topic_list?.length > 4
+      ? `<span class="topic-chip">+${pack.topic_list.length - 4} more</span>` : '');
+
+    const msgHtml = a.message
+      ? `<div class="teacher-msg">
+           <span class="teacher-msg-label">From your teacher</span>
+           ${escHtml(a.message)}
+         </div>` : '';
+
+    const url = `revision-pack.html?assignment_id=${a.id}`;
+
+    const card = document.createElement('a');
+    card.href      = url;
+    card.className = `pack-card ${cardCls}`;
+    card.innerHTML = `
+      <div class="pack-left">
+        <div class="pack-meta">
+          <span class="pack-badge badge-${pack.subject}">${cap(pack.subject)}</span>
+          <span class="pack-badge badge-${pack.exam_board}">${pack.exam_board.toUpperCase()}</span>
+          <span class="pack-badge badge-${pack.difficulty_tier}">${cap(pack.difficulty_tier)}</span>
+        </div>
+        <div class="pack-title">${escHtml(pack.title)}</div>
+        <div class="pack-topics">${topicsHtml}</div>
+        ${msgHtml}
+        <div class="pack-footer">
+          <span class="due-label ${dueInfo.cls}">${dueInfo.label}</span>
+          <div class="pack-progress-wrap">
+            <div class="pack-prog-track">
+              <div class="pack-prog-fill ${fillCls}" style="width:${pct}%"></div>
+            </div>
+            <span class="pack-prog-pct" style="color:${a.status === 'completed' ? 'var(--green)' : 'var(--muted)'}">${pct}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="pack-right">
+        <span class="status-badge ${statusCls}">${statusLabel(a.status)}</span>
+        <span class="cta-btn ${ctaCls}">${ctaText}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPacks(filter);
+}
+
+function getDueInfo(dueDateStr) {
+  if (!dueDateStr) return { label: 'No due date', cls: 'due-ok', overdue: false };
+  const due   = new Date(dueDateStr);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  due.setHours(0,0,0,0);
+  const diff  = Math.round((due - today) / (1000 * 60 * 60 * 24));
+
+  if (diff < 0)  return { label: `Overdue by ${Math.abs(diff)} day${Math.abs(diff)!==1?'s':''}`, cls:'due-overdue', overdue:true };
+  if (diff === 0) return { label: 'Due today', cls:'due-soon', overdue:false };
+  if (diff <= 3)  return { label: `Due in ${diff} day${diff!==1?'s':''}`, cls:'due-soon', overdue:false };
+  return { label: `Due ${formatDate(dueDateStr)}`, cls:'due-ok', overdue:false };
+}
+
+function statusLabel(s) {
+  return s === 'pending' ? 'Not started'
+       : s === 'in_progress' ? 'In progress'
+       : 'Completed';
+}
+
+function formatDate(str) {
+  return new Date(str).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function cap(str) {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  location.href = 'index.html';
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  setTimeout(() => { t.className = ''; }, 3000);
+}
+</script>
+</body>
+</html>
