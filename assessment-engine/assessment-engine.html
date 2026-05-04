@@ -575,34 +575,25 @@ function renderPlan() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// CLAUDE API
+// CLAUDE API — routes through Netlify edge function
+// API key lives securely on the server, never in the browser
 // ═══════════════════════════════════════════════════════════
 async function callClaude(systemPrompt, userMessage, model='haiku') {
-  const key = ANTHROPIC_API_KEY;
-  if (!key || key === 'YOUR_ANTHROPIC_API_KEY_HERE') {
-    throw new Error('Anthropic API key not configured. Please contact your teacher.');
-  }
+  const pKey = model === 'sonnet' ? 'sonnet' : 'haiku';
 
-  const modelId = model === 'sonnet' ? MODELS.SONNET : MODELS.HAIKU;
-  const pKey    = model === 'sonnet' ? 'sonnet' : 'haiku';
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch('/api/assessment-center', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'anthropic-beta': 'prompt-caching-2024-07-31',
-      'x-api-key': key
-    },
-    body: JSON.stringify({
-      model: modelId,
-      max_tokens: 1000,
-      system: [{ type:'text', text:systemPrompt, cache_control:{ type:'ephemeral' } }],
-      messages: [{ role:'user', content:userMessage }]
-    })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'claude', systemPrompt, userMessage, model })
   });
 
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Network error' }));
+    throw new Error(err.error || 'Server error ' + res.status);
+  }
+
   const data = await res.json();
-  if (data.error) throw new Error(data.error.message);
+  if (data.error) throw new Error(data.error);
 
   // Cost tracking
   const u = data.usage || {};
@@ -613,11 +604,11 @@ async function callClaude(systemPrompt, userMessage, model='haiku') {
     (u.cache_read_input_tokens||0)*p.cacheRead +
     (u.output_tokens||0)*p.output
   ) / 1_000_000;
-  cost.calls.push({ model:modelId, cost:c, cached:(u.cache_read_input_tokens||0)>0 });
+  cost.calls.push({ model, cost:c, cached:(u.cache_read_input_tokens||0)>0 });
   cost.total += c;
   updateCostBadge();
 
-  return data.content?.[0]?.text || '';
+  return data.text || '';
 }
 
 async function generateQuestions() {
