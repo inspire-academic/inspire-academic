@@ -877,7 +877,7 @@ For 'fix_misconception' gaps, use targeted drill with worked examples.`;
 Overall score: ${d.overallScore}%
 Profile: ${profile} — ${d.profileDescription || ''}
 Gaps to address: ${gapList}
-Strengths (don't over-focus on these): ${(d.strengths||[]).join(', ')}`;
+Strengths (don\'t over-focus on these): ${(d.strengths||[]).join(', ')}`;
 
   const txt = await callClaude(sys, msg, 'sonnet');
   try {
