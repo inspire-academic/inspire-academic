@@ -162,6 +162,20 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
   .grade-arrow{display:none;}
   .wrap{padding:1.5rem 1rem;}
 }
+
+/* MCQ Options */
+.mcq-option{display:flex;align-items:flex-start;gap:.75rem;padding:.85rem 1rem;border-radius:var(--r);border:1.5px solid var(--border);background:var(--navy);cursor:pointer;transition:all .2s;text-align:left;width:100%;color:var(--white);}
+.mcq-option:hover{border-color:var(--gold);background:rgba(212,160,23,.06);}
+.mcq-option.selected{border-color:var(--teal);background:rgba(0,201,167,.08);}
+.mcq-option.correct{border-color:#4ade80;background:rgba(74,222,128,.1);}
+.mcq-option.wrong{border-color:#f87171;background:rgba(248,113,113,.1);}
+.mcq-option.not-sure{border-color:var(--muted);background:rgba(122,143,166,.08);font-style:italic;}
+.opt-label{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:.1rem;font-family:'DM Mono',monospace;}
+.mcq-option.selected .opt-label{background:var(--teal);border-color:var(--teal);color:var(--navy);}
+.mcq-option.not-sure .opt-label{border-color:var(--muted);}
+.opt-text{font-size:.9rem;line-height:1.5;}
+.timer-bar{width:100%;height:4px;background:var(--border);border-radius:2px;margin-bottom:1rem;overflow:hidden;}
+.timer-fill{height:100%;background:var(--teal);border-radius:2px;transition:width 1s linear;}
 </style>
 </head>
 <body>
@@ -274,20 +288,19 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
   <!-- ═══ SECTION 2: ASSESS ═══ -->
   <div class="section" id="section-assess">
     <div style="margin-bottom:1.5rem;">
-      <h2 class="serif" style="font-size:1.6rem;margin-bottom:.4rem;">Diagnostic Questions</h2>
-      <p class="muted" id="assess-sub">5 questions · Loading...</p>
+      <h2 class="serif" style="font-size:1.6rem;margin-bottom:.4rem;">Diagnostic Assessment</h2>
+      <p class="muted" id="assess-sub">Loading questions...</p>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="assess-progress" style="width:20%;"></div></div>
+    <div class="progress-bar"><div class="progress-fill" id="assess-progress" style="width:0%;"></div></div>
     <div class="card" id="q-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
         <span class="badge badge-gold" id="q-topic">Topic</span>
-        <span class="muted" style="font-size:.82rem;">Question <span id="q-num">1</span> of <span id="q-total">5</span></span>
+        <span class="muted" style="font-size:.82rem;">Question <span id="q-num">1</span> of <span id="q-total">36</span></span>
       </div>
-      <p style="font-size:1.05rem;font-weight:500;margin-bottom:1.25rem;line-height:1.6;" id="q-text">Loading question...</p>
-      <div style="font-size:.8rem;color:var(--muted);margin-bottom:.5rem;">Your answer (<span id="q-marks">?</span> marks)</div>
-      <textarea id="q-answer" class="form-textarea" placeholder="Write your full answer here..."></textarea>
-      <button class="btn btn-gold" style="width:100%;margin-top:1rem;" id="btn-next" onclick="nextQuestion()">
-        Next Question →
+      <p style="font-size:1.05rem;font-weight:600;margin-bottom:1.5rem;line-height:1.7;" id="q-text">Loading question...</p>
+      <div id="q-options" style="display:flex;flex-direction:column;gap:.6rem;"></div>
+      <button class="btn btn-gold" style="width:100%;margin-top:1.25rem;opacity:.4;" id="btn-next" onclick="nextQuestion()" disabled>
+        Select an answer to continue →
       </button>
     </div>
   </div>
@@ -342,17 +355,18 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 <!-- Toast -->
 <div id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
-// CONFIG
+// SUPABASE CONFIG — matches your platform
 // ═══════════════════════════════════════════════════════════
-const ANTHROPIC_API_KEY = "YOUR_ANTHROPIC_API_KEY_HERE";
+const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-const MODELS = {
-  HAIKU:  "claude-haiku-4-5-20251001",
-  SONNET: "claude-sonnet-4-6"
-};
-
+// ═══════════════════════════════════════════════════════════
+// PRICING (for cost tracking)
+// ═══════════════════════════════════════════════════════════
 const PRICING = {
   haiku:  { input:.80,  output:4.00,  cacheWrite:1.00,  cacheRead:.08  },
   sonnet: { input:3.00, output:15.00, cacheWrite:3.75,  cacheRead:.30  }
@@ -362,15 +376,39 @@ const PRICING = {
 // STATE
 // ═══════════════════════════════════════════════════════════
 const S = {
-  config: null,
-  questions: [],
-  answers: [],
-  currentQ: 0,
-  diagnosis: null,
-  plan: null
+  config:      null,
+  questions:   [],   // from Supabase
+  answers:     [],   // {question_id, chosen, correct, topic, not_sure}
+  currentQ:    0,
+  selectedOpt: null, // currently selected option
+  diagnosis:   null,
+  plan:        null,
+  studentId:   null
 };
 
 const cost = { calls:[], total:0 };
+
+// ═══════════════════════════════════════════════════════════
+// INIT — get logged-in student
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const { data: { user } } = await supa.auth.getUser();
+    if (user) {
+      S.studentId = user.id;
+      // Pre-fill name from profile
+      const { data: profile } = await supa.from('profiles')
+        .select('first_name').eq('id', user.id).single();
+      if (profile?.first_name) {
+        document.getElementById('inp-name').value = profile.first_name;
+        checkSetup();
+      }
+    }
+  } catch(e) {
+    // Not logged in or no profile — continue as guest
+    console.log('Guest mode');
+  }
+});
 
 // ═══════════════════════════════════════════════════════════
 // SETUP
@@ -398,14 +436,22 @@ async function startAssessment() {
 
   const btn = document.getElementById('btn-start');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Generating questions...';
+  btn.innerHTML = '<span class="spinner"></span> Loading questions...';
 
   try {
-    S.questions = await generateQuestions();
-    S.answers   = new Array(S.questions.length).fill('');
-    S.currentQ  = 0;
+    S.questions = await loadQuestionsFromSupabase();
+
+    if (!S.questions || S.questions.length === 0) {
+      throw new Error('No validated questions found for this subject yet. Please check back soon.');
+    }
+
+    S.answers  = [];
+    S.currentQ = 0;
     goTo('assess');
-    loadQuestion();
+    renderQuestion();
+    const total = S.questions.length;
+    document.getElementById('assess-sub').textContent =
+      `${total} questions · ${S.config.level} ${S.config.subject} · ${S.config.board} · Select one answer per question`;
     toast('Assessment ready — good luck ' + name + '!', 'success');
   } catch(e) {
     toast('Error: ' + e.message, 'error');
@@ -415,90 +461,365 @@ async function startAssessment() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// ASSESS
+// LOAD QUESTIONS FROM SUPABASE
+// Uses the get_diagnostic_questions() function
+// Falls back to direct query if function not found
 // ═══════════════════════════════════════════════════════════
-function loadQuestion() {
-  const q = S.questions[S.currentQ];
-  document.getElementById('q-topic').textContent   = q.topic;
-  document.getElementById('q-num').textContent     = S.currentQ + 1;
-  document.getElementById('q-total').textContent   = S.questions.length;
-  document.getElementById('q-text').textContent    = q.question;
-  document.getElementById('q-marks').textContent   = q.marks;
-  document.getElementById('q-answer').value        = S.answers[S.currentQ] || '';
-  document.getElementById('assess-sub').textContent = `${S.config.level} ${S.config.subject} · ${S.config.board}`;
+async function loadQuestionsFromSupabase() {
+  const { config } = S;
 
-  const pct = ((S.currentQ + 1) / S.questions.length) * 100;
-  document.getElementById('assess-progress').style.width = pct + '%';
+  // Try the balanced RPC function first
+  try {
+    const { data, error } = await supa.rpc('get_diagnostic_questions', {
+      p_subject:   config.subject,
+      p_board:     config.board,
+      p_level:     config.level,
+      p_tier:      'Higher',
+      p_per_topic: 4
+    });
 
-  const isLast = S.currentQ === S.questions.length - 1;
-  document.getElementById('btn-next').textContent = isLast ? 'Complete Assessment →' : 'Next Question →';
+    if (!error && data && data.length > 0) {
+      console.log(`Loaded ${data.length} questions via RPC`);
+      return shuffleArray(data);
+    }
+  } catch(e) {
+    console.warn('RPC not available, falling back to direct query:', e.message);
+  }
+
+  // Fallback: direct query
+  const { data, error } = await supa
+    .from('diagnostic_questions')
+    .select('*')
+    .eq('subject', config.subject)
+    .eq('level', config.level)
+    .eq('validated', true)
+    .eq('active', true)
+    .in('exam_board', [config.board, 'Universal'])
+    .in('tier', ['Higher', 'Both'])
+    .order('topic')
+    .limit(36);
+
+  if (error) throw new Error('Could not load questions: ' + error.message);
+  return shuffleByTopic(data || []);
 }
 
-async function nextQuestion() {
-  S.answers[S.currentQ] = document.getElementById('q-answer').value;
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function shuffleByTopic(questions) {
+  // Group by topic, take up to 4 per topic, shuffle within topic
+  const byTopic = {};
+  questions.forEach(q => {
+    if (!byTopic[q.topic]) byTopic[q.topic] = [];
+    byTopic[q.topic].push(q);
+  });
+  const result = [];
+  Object.values(byTopic).forEach(topicQs => {
+    const shuffled = shuffleArray(topicQs).slice(0, 4);
+    result.push(...shuffled);
+  });
+  return result;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER MCQ QUESTION
+// ═══════════════════════════════════════════════════════════
+function renderQuestion() {
+  const q   = S.questions[S.currentQ];
+  const pct = ((S.currentQ) / S.questions.length) * 100;
+
+  document.getElementById('q-topic').textContent    = q.topic;
+  document.getElementById('q-num').textContent      = S.currentQ + 1;
+  document.getElementById('q-total').textContent    = S.questions.length;
+  document.getElementById('q-text').textContent     = q.question_text;
+  document.getElementById('assess-progress').style.width = pct + '%';
+
+  S.selectedOpt = null;
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.disabled = true;
+  nextBtn.style.opacity = '.4';
+  nextBtn.textContent = 'Select an answer to continue →';
+
+  const isLast = S.currentQ === S.questions.length - 1;
+  if (!nextBtn._hasListener) {
+    nextBtn.addEventListener('click', nextQuestion);
+    nextBtn._hasListener = true;
+  }
+
+  // Build options
+  const opts = [
+    { key: 'a', text: q.option_a },
+    { key: 'b', text: q.option_b },
+    { key: 'c', text: q.option_c },
+    { key: 'd', text: q.option_d },
+    { key: 'e', text: q.option_e || 'Not sure' }
+  ];
+
+  const container = document.getElementById('q-options');
+  container.innerHTML = '';
+
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'mcq-option' + (opt.key === 'e' ? ' not-sure' : '');
+    btn.dataset.key = opt.key;
+    btn.innerHTML = `
+      <div class="opt-label">${opt.key.toUpperCase()}</div>
+      <div class="opt-text">${opt.text}</div>`;
+    btn.addEventListener('click', () => selectOption(opt.key));
+    container.appendChild(btn);
+  });
+}
+
+function selectOption(key) {
+  S.selectedOpt = key;
+
+  // Update visual state
+  document.querySelectorAll('.mcq-option').forEach(btn => {
+    btn.classList.remove('selected');
+    if (btn.dataset.key === key) btn.classList.add('selected');
+  });
+
+  // Enable next button
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.disabled = false;
+  nextBtn.style.opacity = '1';
+  const isLast = S.currentQ === S.questions.length - 1;
+  nextBtn.textContent = isLast ? 'Complete Assessment →' : 'Next Question →';
+}
+
+function nextQuestion() {
+  if (!S.selectedOpt) return;
+
+  const q      = S.questions[S.currentQ];
+  const chosen = S.selectedOpt;
+  const correct = chosen === q.correct_answer;
+  const notSure = chosen === 'e';
+
+  // Record answer
+  S.answers.push({
+    question_id:  q.id,
+    topic:        q.topic,
+    subtopic:     q.subtopic,
+    difficulty:   q.difficulty,
+    chosen,
+    correct_answer: q.correct_answer,
+    correct:      correct,
+    not_sure:     notSure,
+    misconception: !correct && !notSure ? getMisconception(q, chosen) : null
+  });
+
   if (S.currentQ < S.questions.length - 1) {
     S.currentQ++;
-    loadQuestion();
+    renderQuestion();
   } else {
-    await runDiagnosis();
+    // All answered — run diagnosis
+    runDiagnosis();
   }
 }
 
+function getMisconception(q, chosen) {
+  const map = { a: q.misconception_a, b: q.misconception_b,
+                c: q.misconception_c, d: q.misconception_d };
+  return map[chosen] || null;
+}
+
 // ═══════════════════════════════════════════════════════════
-// DIAGNOSE
+// DIAGNOSE — compute topic scores then call Claude
 // ═══════════════════════════════════════════════════════════
 async function runDiagnosis() {
   goTo('diagnose');
   document.getElementById('diagnose-content').innerHTML = `
     <div class="card" style="text-align:center;padding:3rem;">
       <div class="spinner" style="width:32px;height:32px;margin:0 auto 1rem;"></div>
-      <p class="muted">Marking your answers and analysing gaps...</p>
+      <p class="muted">Analysing your results across all topics...</p>
     </div>`;
+
   try {
-    S.diagnosis = await diagnoseAnswers();
+    // Compute topic scores locally (fast, no AI needed)
+    const topicScores = computeTopicScores();
+    const overallPct  = Math.round(
+      (S.answers.filter(a => a.correct).length / S.answers.length) * 100
+    );
+    const notSureCount = S.answers.filter(a => a.not_sure).length;
+
+    // Call Claude for rich diagnosis and grade prediction
+    S.diagnosis = await claudeDiagnose(topicScores, overallPct, notSureCount);
+    S.diagnosis.topicScores = topicScores;
+    S.diagnosis.overallScore = overallPct;
+    S.diagnosis.notSureCount = notSureCount;
+
+    // Save attempt to Supabase
+    await saveAttempt();
+
     renderDiagnosis();
     toast('Diagnosis complete!', 'success');
   } catch(e) {
-    toast('Error during diagnosis: ' + e.message, 'error');
+    toast('Error: ' + e.message, 'error');
+    console.error(e);
+  }
+}
+
+function computeTopicScores() {
+  const topics = {};
+  S.answers.forEach(a => {
+    if (!topics[a.topic]) topics[a.topic] = { correct:0, total:0, not_sure:0, misconceptions:[] };
+    topics[a.topic].total++;
+    if (a.correct)      topics[a.topic].correct++;
+    if (a.not_sure)     topics[a.topic].not_sure++;
+    if (a.misconception) topics[a.topic].misconceptions.push(a.misconception);
+  });
+  // Convert to array with score %
+  return Object.entries(topics).map(([topic, d]) => ({
+    topic,
+    score:        Math.round((d.correct / d.total) * 100),
+    correct:      d.correct,
+    total:        d.total,
+    not_sure:     d.not_sure,
+    misconceptions: [...new Set(d.misconceptions)]
+  })).sort((a, b) => a.score - b.score); // worst first
+}
+
+async function claudeDiagnose(topicScores, overallPct, notSureCount) {
+  const { name, subject, level, board } = S.config;
+  const total = S.answers.length;
+
+  const sys = `You are an expert ${level} ${subject} examiner for ${board}.
+Analyse a student's diagnostic assessment results and identify knowledge gaps.
+Return ONLY valid JSON, no markdown:
+{
+  "currentGrade": string,
+  "targetGrade": string,
+  "studentProfile": "struggling"|"developing"|"secure"|"strong",
+  "profileDescription": string (1 sentence describing the student's overall position),
+  "gaps": [
+    {
+      "topic": string,
+      "score": number,
+      "priority": "critical"|"high"|"medium"|"low",
+      "reason": string,
+      "approach": "reteach_from_scratch"|"fix_misconception"|"consolidate"|"extend"
+    }
+  ],
+  "strengths": [string],
+  "teacherNote": string (brief note flagging anything requiring teacher attention)
+}
+Only include topics with score < 80% in gaps. Order by priority.`;
+
+  const topicSummary = topicScores.map(t =>
+    `${t.topic}: ${t.score}% (${t.correct}/${t.total} correct, ${t.not_sure} not sure${t.misconceptions.length ? ', misconceptions: ' + t.misconceptions.slice(0,2).join('; ') : ''})`
+  ).join('
+');
+
+  const msg = `Student: ${name}
+Overall score: ${overallPct}%
+"Not sure" responses: ${notSureCount}/${total} (${Math.round(notSureCount/total*100)}%)
+
+Topic breakdown:
+${topicSummary}`;
+
+  const txt = await callClaude(sys, msg, 'sonnet');
+  try {
+    return JSON.parse(txt.replace(/```json|```/g,'').trim());
+  } catch(e) {
+    console.error('Parse error:', txt);
+    return fallbackDiagnosis(overallPct, topicScores);
   }
 }
 
 function renderDiagnosis() {
-  const d = S.diagnosis;
-  const sc = d.overallScore || 0;
+  const d  = S.diagnosis;
+  const sc = d.overallScore;
   const scColor = sc >= 70 ? '#4ade80' : sc >= 50 ? 'var(--gold)' : '#f87171';
+  const notSurePct = Math.round((d.notSureCount / S.answers.length) * 100);
+
+  const profileColors = {
+    struggling: '#f87171', developing: 'var(--gold)',
+    secure: 'var(--teal)', strong: '#4ade80'
+  };
+  const profileColor = profileColors[d.studentProfile] || 'var(--gold)';
 
   let html = `
     <div class="card" style="text-align:center;margin-bottom:1.25rem;">
-      <div class="score-big" style="color:${scColor};">${sc}%</div>
-      <p style="margin-top:.5rem;font-size:1rem;">
+      <div style="font-size:3.5rem;font-weight:900;color:${scColor};font-family:'Playfair Display',serif;line-height:1;">${sc}%</div>
+      <div style="margin-top:.5rem;font-size:1rem;">
         Current grade: <strong>${d.currentGrade}</strong> &nbsp;→&nbsp;
-        Target grade: <strong style="color:var(--teal);">${d.targetGrade}</strong>
-      </p>
-    </div>
-    <div class="card" style="margin-bottom:1.25rem;">
-      <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:1rem;">Knowledge Gaps</h3>`;
+        Target: <strong style="color:var(--teal);">${d.targetGrade}</strong>
+      </div>
+      <div style="margin-top:.75rem;display:inline-block;padding:.35rem 1rem;border-radius:20px;background:${profileColor}22;color:${profileColor};font-weight:700;font-size:.85rem;">
+        ${d.studentProfile?.toUpperCase() || 'DEVELOPING'}
+      </div>
+      <p style="margin-top:.75rem;color:var(--muted);font-size:.9rem;">${d.profileDescription || ''}</p>
+      ${notSurePct >= 30 ? `
+      <div style="margin-top:1rem;padding:.75rem;background:rgba(212,160,23,.1);border-radius:var(--r);border:1px solid rgba(212,160,23,.3);">
+        <span style="color:var(--gold);font-size:.85rem;">⚠ ${notSurePct}% of questions answered "Not sure" — your study plan will focus on building foundational knowledge.</span>
+      </div>` : ''}
+    </div>`;
 
-  (d.gaps || []).forEach(g => {
-    html += `
-      <div class="gap-card ${g.priority}">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
-          <strong style="font-size:.95rem;">${g.topic}</strong>
-          <span class="badge badge-${g.priority==='critical'?'red':g.priority==='high'?'orange':g.priority==='medium'?'gold':'green'}">${g.priority}</span>
-        </div>
-        <p style="font-size:.85rem;color:var(--muted);margin-bottom:.5rem;">${g.reason}</p>
-        <div style="display:flex;gap:1.5rem;font-size:.82rem;color:var(--muted);">
-          <span>Score: <strong style="color:var(--white);">${g.score}%</strong></span>
-          <span>Marks at stake: <strong style="color:var(--white);">${g.marksAtStake}</strong></span>
-        </div>
-      </div>`;
-  });
+  // Topic breakdown
+  if (d.topicScores && d.topicScores.length > 0) {
+    html += `<div class="card" style="margin-bottom:1.25rem;">
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Topic Breakdown</h3>`;
+    d.topicScores.forEach(t => {
+      const color = t.score >= 75 ? '#4ade80' : t.score >= 50 ? 'var(--gold)' : '#f87171';
+      const barW  = t.score + '%';
+      html += `
+        <div style="margin-bottom:.85rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;">
+            <span style="font-size:.85rem;font-weight:600;">${t.topic}</span>
+            <span style="font-size:.82rem;color:${color};font-weight:700;">${t.score}%</span>
+          </div>
+          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${barW};background:${color};border-radius:3px;transition:width .6s ease;"></div>
+          </div>
+          ${t.not_sure > 0 ? `<div style="font-size:.75rem;color:var(--muted);margin-top:.2rem;">${t.not_sure} "Not sure" response${t.not_sure > 1 ? 's' : ''}</div>` : ''}
+        </div>`;
+    });
+    html += `</div>`;
+  }
 
-  html += `
-    </div>
-    <button class="btn btn-gold" style="width:100%;font-size:1rem;padding:.9rem;" id="btn-plan" onclick="runPlan()">
-      Generate My Study Plan →
-    </button>`;
+  // Gaps
+  if (d.gaps && d.gaps.length > 0) {
+    html += `<div class="card" style="margin-bottom:1.25rem;">
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Priority Knowledge Gaps</h3>`;
+    d.gaps.forEach(g => {
+      const pColors = { critical:'#f87171', high:'var(--orange)', medium:'var(--gold)', low:'#4ade80' };
+      const pc = pColors[g.priority] || 'var(--gold)';
+      const approachIcons = {
+        reteach_from_scratch: '📚 Needs full re-teaching',
+        fix_misconception:    '🔧 Misconception to correct',
+        consolidate:          '🔄 Needs consolidation',
+        extend:               '⬆ Ready to extend'
+      };
+      html += `
+        <div class="gap-card ${g.priority}" style="margin-bottom:.75rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
+            <strong style="font-size:.95rem;">${g.topic}</strong>
+            <span class="badge badge-${g.priority==='critical'?'red':g.priority==='high'?'orange':g.priority==='medium'?'gold':'green'}">${g.priority}</span>
+          </div>
+          <p style="font-size:.85rem;color:var(--muted);margin-bottom:.4rem;">${g.reason}</p>
+          <span style="font-size:.78rem;color:${pc};">${approachIcons[g.approach] || ''}</span>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Strengths
+  if (d.strengths && d.strengths.length > 0) {
+    html += `<div class="card" style="margin-bottom:1.25rem;">
+      <h3 style="font-size:1rem;font-weight:700;margin-bottom:.75rem;">✓ Strengths</h3>
+      ${d.strengths.map(s => `<div style="font-size:.88rem;color:#4ade80;margin-bottom:.3rem;">✓ ${s}</div>`).join('')}
+    </div>`;
+  }
+
+  html += `<button class="btn btn-gold" style="width:100%;font-size:1rem;padding:.9rem;" onclick="runPlan()">
+    Generate My Study Plan →
+  </button>`;
 
   document.getElementById('diagnose-content').innerHTML = html;
 }
@@ -511,14 +832,59 @@ async function runPlan() {
   document.getElementById('plan-content').innerHTML = `
     <div class="card" style="text-align:center;padding:3rem;">
       <div class="spinner" style="width:32px;height:32px;margin:0 auto 1rem;"></div>
-      <p class="muted">Building your personalised 3-week study plan...</p>
+      <p class="muted">Building your personalised study plan...</p>
     </div>`;
+
   try {
-    S.plan = await generatePlan();
+    S.plan = await claudePlan();
     renderPlan();
     toast('Study plan ready!', 'success');
   } catch(e) {
-    toast('Error generating plan: ' + e.message, 'error');
+    toast('Error: ' + e.message, 'error');
+  }
+}
+
+async function claudePlan() {
+  const { name, subject, level } = S.config;
+  const d = S.diagnosis;
+  const profile = d.studentProfile || 'developing';
+  const weeks   = profile === 'struggling' ? 6 : 3;
+  const gapList = (d.gaps||[]).map(g =>
+    `${g.topic} (${g.priority}, approach: ${g.approach})`).join('; ');
+
+  const sys = `You are a ${level} ${subject} tutor creating a personalised ${weeks}-week study plan.
+The student's profile is: ${profile}.
+Return ONLY valid JSON, no markdown:
+{
+  "gradeJourney": [{"week":number,"grade":string,"description":string}],
+  "weeks": [
+    {
+      "number": number,
+      "title": string,
+      "focus": string,
+      "why": string,
+      "tasks": [
+        {"id":string,"type":"video"|"drill"|"test","label":string,"mins":number,"topic":string}
+      ]
+    }
+  ]
+}
+Each week must have exactly 3 tasks. Match tasks directly to diagnosed gaps.
+For 'reteach_from_scratch' gaps, start with video then drill.
+For 'fix_misconception' gaps, use targeted drill with worked examples.`;
+
+  const msg = `Create a ${weeks}-week plan for ${name}.
+Overall score: ${d.overallScore}%
+Profile: ${profile} — ${d.profileDescription || ''}
+Gaps to address: ${gapList}
+Strengths (don't over-focus on these): ${(d.strengths||[]).join(', ')}`;
+
+  const txt = await callClaude(sys, msg, 'sonnet');
+  try {
+    return JSON.parse(txt.replace(/```json|```/g,'').trim());
+  } catch(e) {
+    console.error('Parse error:', txt);
+    return fallbackPlan();
   }
 }
 
@@ -526,7 +892,6 @@ function renderPlan() {
   const p = S.plan;
   let html = '';
 
-  // Grade journey
   if (p.gradeJourney && p.gradeJourney.length) {
     html += `<div class="grade-row">`;
     p.gradeJourney.forEach((g, i) => {
@@ -541,7 +906,6 @@ function renderPlan() {
     html += `</div>`;
   }
 
-  // Weeks
   (p.weeks || []).forEach(w => {
     html += `
       <div class="card week-card">
@@ -549,17 +913,19 @@ function renderPlan() {
           <span class="week-num">Week ${w.number}</span>
           <span class="week-title">${w.title}</span>
         </div>
+        ${w.focus ? `<div style="font-size:.8rem;color:var(--teal);margin-bottom:.4rem;font-weight:600;">Focus: ${w.focus}</div>` : ''}
         <p class="week-why">${w.why}</p>
         <div class="tasks-grid">`;
 
     (w.tasks || []).forEach(t => {
-      const icon = t.type === 'video' ? '▶' : t.type === 'drill' ? '◎' : '✓';
-      const badgeCls = t.type === 'video' ? 'badge-teal' : t.type === 'drill' ? 'badge-gold' : 'badge-green';
+      const icon    = t.type==='video' ? '▶' : t.type==='drill' ? '◎' : '✓';
+      const badgeCls= t.type==='video' ? 'badge-teal' : t.type==='drill' ? 'badge-gold' : 'badge-green';
       html += `
         <div class="task-item">
           <div class="task-icon">${icon}</div>
           <div class="task-name">${t.label}</div>
-          <div class="task-mins"><span class="badge ${badgeCls}">${t.mins} min</span></div>
+          ${t.topic ? `<div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">${t.topic}</div>` : ''}
+          <div><span class="badge ${badgeCls}">${t.mins} min</span></div>
         </div>`;
     });
 
@@ -575,8 +941,37 @@ function renderPlan() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// SAVE ATTEMPT TO SUPABASE
+// ═══════════════════════════════════════════════════════════
+async function saveAttempt() {
+  if (!S.studentId) return; // guest — don't save
+  try {
+    await supa.from('diagnostic_attempts').insert({
+      student_id:     S.studentId,
+      student_name:   S.config.name,
+      subject:        S.config.subject,
+      exam_board:     S.config.board,
+      level:          S.config.level,
+      tier:           'Higher',
+      overall_score:  S.diagnosis.overallScore,
+      current_grade:  S.diagnosis.currentGrade,
+      target_grade:   S.diagnosis.targetGrade,
+      total_questions:S.answers.length,
+      correct_count:  S.answers.filter(a => a.correct).length,
+      not_sure_count: S.answers.filter(a => a.not_sure).length,
+      question_results: S.answers,
+      topic_scores:   S.diagnosis.topicScores,
+      gaps:           S.diagnosis.gaps,
+      completed:      true
+    });
+    console.log('Attempt saved to Supabase');
+  } catch(e) {
+    console.warn('Could not save attempt:', e.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
 // CLAUDE API — routes through Netlify edge function
-// API key lives securely on the server, never in the browser
 // ═══════════════════════════════════════════════════════════
 async function callClaude(systemPrompt, userMessage, model='haiku') {
   const pKey = model === 'sonnet' ? 'sonnet' : 'haiku';
@@ -595,7 +990,6 @@ async function callClaude(systemPrompt, userMessage, model='haiku') {
   const data = await res.json();
   if (data.error) throw new Error(data.error);
 
-  // Cost tracking
   const u = data.usage || {};
   const p = PRICING[pKey];
   const c = (
@@ -611,102 +1005,45 @@ async function callClaude(systemPrompt, userMessage, model='haiku') {
   return data.text || '';
 }
 
-async function generateQuestions() {
-  const { name, subject, level, board } = S.config;
-  const sys = `You are an expert ${level} ${subject} examiner for ${board}.
-Generate exactly 5 diagnostic exam questions. Return ONLY a valid JSON array, no markdown, no extra text.
-Each item: {"id":number,"topic":string,"marks":number,"difficulty":"easy"|"medium"|"hard","question":string}
-Questions must be authentic ${board} exam style, testing key specification topics.
-Mark allocations should reflect question difficulty (easy:2-3, medium:4-5, hard:6).`;
-
-  const txt = await callClaude(sys, `Generate 5 ${level} ${subject} diagnostic questions for a student named ${name}.`, 'haiku');
-  try {
-    const clean = txt.replace(/```json|```/g,'').trim();
-    return JSON.parse(clean);
-  } catch(e) {
-    console.error('Parse error:', txt);
-    return fallbackQuestions();
-  }
-}
-
-async function diagnoseAnswers() {
-  const { name, subject, level, board } = S.config;
-  const sys = `You are an expert ${level} ${subject} examiner for ${board}.
-Mark the student's answers and identify knowledge gaps.
-Return ONLY valid JSON, no markdown:
-{"overallScore":number,"currentGrade":string,"targetGrade":string,"gaps":[{"topic":string,"score":number,"marksAtStake":number,"priority":"critical"|"high"|"medium"|"low","reason":string}]}
-Be accurate and honest. Grade using ${board} grade boundaries.`;
-
-  const qa = S.questions.map((q,i) =>
-    `Q${i+1} [${q.topic}, ${q.marks} marks]: ${q.question}\nAnswer: ${S.answers[i]||'(no answer given)'}`
-  ).join('\n\n');
-
-  const txt = await callClaude(sys, `Mark ${name}'s answers:\n\n${qa}`, 'sonnet');
-  try {
-    const clean = txt.replace(/```json|```/g,'').trim();
-    return JSON.parse(clean);
-  } catch(e) {
-    console.error('Parse error:', txt);
-    return fallbackDiagnosis();
-  }
-}
-
-async function generatePlan() {
-  const { name, subject, level } = S.config;
-  const gapList = (S.diagnosis.gaps||[]).map(g=>`${g.topic} (${g.priority}: ${g.reason})`).join('; ');
-  const sys = `You are a ${level} ${subject} tutor creating a personalised 3-week study plan.
-Return ONLY valid JSON, no markdown:
-{"gradeJourney":[{"week":number,"grade":string,"description":string}],"weeks":[{"number":number,"title":string,"why":string,"tasks":[{"id":string,"type":"video"|"drill"|"test","label":string,"mins":number}]}]}
-Each week must have exactly 3 tasks. Tasks should directly address the diagnosed gaps.`;
-
-  const txt = await callClaude(sys, `Create a 3-week plan for ${name} to address these gaps: ${gapList}`, 'sonnet');
-  try {
-    const clean = txt.replace(/```json|```/g,'').trim();
-    return JSON.parse(clean);
-  } catch(e) {
-    console.error('Parse error:', txt);
-    return fallbackPlan();
-  }
-}
-
 // ═══════════════════════════════════════════════════════════
 // FALLBACKS
 // ═══════════════════════════════════════════════════════════
-function fallbackQuestions() {
-  return [
-    {id:1,topic:"Core Concepts",marks:3,difficulty:"easy",question:"Define the key term and give one example."},
-    {id:2,topic:"Application",marks:4,difficulty:"medium",question:"Explain how this concept applies in a real-world situation."},
-    {id:3,topic:"Calculations",marks:5,difficulty:"medium",question:"Calculate the answer and show your working clearly."},
-    {id:4,topic:"Analysis",marks:5,difficulty:"hard",question:"Analyse the relationship between these two factors."},
-    {id:5,topic:"Evaluation",marks:6,difficulty:"hard",question:"Evaluate the advantages and disadvantages of this approach."}
-  ];
-}
-
-function fallbackDiagnosis() {
+function fallbackDiagnosis(score, topicScores) {
+  const grade = score >= 80 ? '7' : score >= 65 ? '6' : score >= 50 ? '5' : score >= 35 ? '4' : '3';
+  const target = String(Math.min(9, parseInt(grade) + 2));
+  const gaps = topicScores
+    .filter(t => t.score < 70)
+    .map(t => ({
+      topic: t.topic,
+      score: t.score,
+      priority: t.score < 40 ? 'critical' : t.score < 55 ? 'high' : 'medium',
+      reason: t.not_sure > 1 ? 'Multiple "not sure" responses suggest topic not covered' : 'Low score indicates gaps in understanding',
+      approach: t.not_sure > 1 ? 'reteach_from_scratch' : 'fix_misconception'
+    }));
   return {
-    overallScore:50, currentGrade:"5", targetGrade:"7",
-    gaps:[
-      {topic:"Core Concepts",score:40,marksAtStake:10,priority:"critical",reason:"Fundamental gaps in core understanding"},
-      {topic:"Application",score:55,marksAtStake:8,priority:"high",reason:"Difficulty applying knowledge to new contexts"}
-    ]
+    currentGrade: grade, targetGrade: target,
+    studentProfile: score < 40 ? 'struggling' : score < 60 ? 'developing' : 'secure',
+    profileDescription: `Scored ${score}% overall with room to improve.`,
+    gaps, strengths: topicScores.filter(t => t.score >= 75).map(t => t.topic)
   };
 }
 
 function fallbackPlan() {
   return {
-    gradeJourney:[
-      {week:1,grade:"5",description:"Foundation building"},
-      {week:2,grade:"6",description:"Skill development"},
-      {week:3,grade:"7",description:"Exam technique"}
+    gradeJourney: [
+      {week:1,grade:'5',description:'Foundation building'},
+      {week:2,grade:'6',description:'Skill development'},
+      {week:3,grade:'7',description:'Exam technique'}
     ],
-    weeks:[
-      {number:1,title:"Foundation",why:"Build core understanding from the ground up",
-       tasks:[
-         {id:"t1",type:"video",label:"Watch: Core Concept Overview",mins:15},
-         {id:"t2",type:"drill",label:"Practice: Key Definitions",mins:20},
-         {id:"t3",type:"test",label:"Test: Topic Mini Quiz",mins:15}
-       ]}
-    ]
+    weeks: [{
+      number:1, title:'Foundation', focus:'Core concepts',
+      why:'Build solid understanding of priority topics',
+      tasks:[
+        {id:'t1',type:'video',label:'Watch: Core Concept Overview',mins:15,topic:''},
+        {id:'t2',type:'drill',label:'Practice: Key Questions',mins:20,topic:''},
+        {id:'t3',type:'test',label:'Check: Mini Topic Test',mins:15,topic:''}
+      ]
+    }]
   };
 }
 
@@ -716,36 +1053,30 @@ function fallbackPlan() {
 const STAGES = ['setup','assess','diagnose','plan','execute','track'];
 
 function goTo(stage) {
-  STAGES.forEach(s => {
-    document.getElementById('section-'+s).classList.remove('active');
-  });
+  STAGES.forEach(s => document.getElementById('section-'+s).classList.remove('active'));
   document.getElementById('section-'+stage).classList.add('active');
 
-  const idx = STAGES.indexOf(stage);
-  // Skip 'setup' in pipeline (pipeline shows stages 1-5 = assess onwards)
-  const pipeIdx = idx - 1; // 0=assess, 1=diagnose, 2=plan, 3=execute, 4=track
+  const idx     = STAGES.indexOf(stage);
+  const pipeIdx = idx - 1;
 
   for (let i = 0; i < 5; i++) {
-    const dot = document.getElementById('dot-'+i);
-    const lbl = document.getElementById('lbl-'+i);
+    const dot  = document.getElementById('dot-'+i);
+    const lbl  = document.getElementById('lbl-'+i);
     const line = document.getElementById('line-'+i);
     dot.classList.remove('active','done');
     lbl.classList.remove('active');
     if (line) line.classList.remove('done');
 
     if (i < pipeIdx) {
-      dot.classList.add('done');
-      dot.innerHTML = '✓';
+      dot.classList.add('done'); dot.innerHTML = '✓';
       if (line) line.classList.add('done');
     } else if (i === pipeIdx) {
-      dot.classList.add('active');
-      dot.innerHTML = i+1;
+      dot.classList.add('active'); dot.innerHTML = i+1;
       lbl.classList.add('active');
     } else {
       dot.innerHTML = i+1;
     }
   }
-
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -757,7 +1088,7 @@ function updateCostBadge() {
   let html = `<div style="margin-bottom:.5rem;"><strong>Session total: $${cost.total.toFixed(6)}</strong></div>`;
   cost.calls.forEach((c,i) => {
     const cached = c.cached ? ' ⚡ CACHED' : '';
-    html += `<div style="margin:.3rem 0;color:var(--muted);">Call ${i+1}: ${c.model.split('-')[1]}${cached} — $${c.cost.toFixed(6)}</div>`;
+    html += `<div style="margin:.3rem 0;color:var(--muted);">Call ${i+1}: ${c.model}${cached} — $${c.cost.toFixed(6)}</div>`;
   });
   document.getElementById('cost-list').innerHTML = html;
 }
@@ -766,9 +1097,6 @@ function toggleCost() {
   document.getElementById('cost-panel').classList.toggle('open');
 }
 
-// ═══════════════════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════════════════
 function toast(msg, type='info') {
   const t = document.getElementById('toast');
   t.textContent = msg;
