@@ -1,6 +1,6 @@
 // ─── ANTHROPIC API CONFIGURATION ───────────────────────────────────────────
-const ANTHROPIC_API_KEY = "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"; // Replace with real key
-const YOUTUBE_API_KEY = "AIzaSyCq_7BBx1m7BZ_WRI3xTFMjVYS3sVYhhF4"; // Already set
+const ANTHROPIC_API_KEY = "YOUR_ANTHROPIC_API_KEY_HERE"; // Replace with real key
+const YOUTUBE_API_KEY = "YOUR_Youtube_API_KEY_HERE"; // Replace with real key
 
 const MODELS = {
   HAIKU:  "claude-haiku-4-5-20251001",
