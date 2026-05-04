@@ -713,8 +713,7 @@ Only include topics with score < 80% in gaps. Order by priority.`;
 
   const topicSummary = topicScores.map(t =>
     `${t.topic}: ${t.score}% (${t.correct}/${t.total} correct, ${t.not_sure} not sure${t.misconceptions.length ? ', misconceptions: ' + t.misconceptions.slice(0,2).join('; ') : ''})`
-  ).join('
-');
+  ).join('\n');
 
   const msg = `Student: ${name}
 Overall score: ${overallPct}%
