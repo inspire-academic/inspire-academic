@@ -462,31 +462,15 @@ async function startAssessment() {
 
 // ═══════════════════════════════════════════════════════════
 // LOAD QUESTIONS FROM SUPABASE
-// Uses the get_diagnostic_questions() function
-// Falls back to direct query if function not found
+// Falls back to direct query if RPC times out or unavailable
 // ═══════════════════════════════════════════════════════════
 async function loadQuestionsFromSupabase() {
   const { config } = S;
 
-  // Try the balanced RPC function first
-  try {
-    const { data, error } = await supa.rpc('get_diagnostic_questions', {
-      p_subject:   config.subject,
-      p_board:     config.board,
-      p_level:     config.level,
-      p_tier:      'Higher',
-      p_per_topic: 4
-    });
-
-    if (!error && data && data.length > 0) {
-      console.log(`Loaded ${data.length} questions via RPC`);
-      return shuffleArray(data);
-    }
-  } catch(e) {
-    console.warn('RPC not available, falling back to direct query:', e.message);
-  }
-
-  // Fallback: direct query
+  // Skip RPC — go straight to direct query (more reliable)
+  // The direct query handles everything we need
+  
+  // Direct query
   const { data, error } = await supa
     .from('diagnostic_questions')
     .select('*')
@@ -499,8 +483,17 @@ async function loadQuestionsFromSupabase() {
     .order('topic')
     .limit(36);
 
-  if (error) throw new Error('Could not load questions: ' + error.message);
-  return shuffleByTopic(data || []);
+  if (error) {
+    console.error('Supabase query error:', error);
+    throw new Error('Could not load questions: ' + error.message);
+  }
+  
+  if (!data || data.length === 0) {
+    throw new Error('No validated questions found for ' + config.subject);
+  }
+
+  console.log(`Loaded ${data.length} questions from Supabase`);
+  return shuffleByTopic(data);
 }
 
 function shuffleArray(arr) {
