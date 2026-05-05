@@ -697,15 +697,12 @@ async function checkMileIQAccess() {
     const { data: { user } } = await supa.auth.getUser();
     if (!user) return;
 
-    const { data: profile } = await supa.from('profiles')
-      .select('email')
-      .eq('id', user.id)
-      .single();
-
     const AUTHORIZED_EMAIL = 'appiaheric2@gmail.com';
 
-    if (profile?.email === AUTHORIZED_EMAIL) {
+    // Check the auth user's email directly
+    if (user.email === AUTHORIZED_EMAIL) {
       document.getElementById('mileiq-card').style.display = 'block';
+      console.log('✓ MileIQ access granted for:', user.email);
     }
   } catch(e) {
     console.log('MileIQ check skipped:', e);
