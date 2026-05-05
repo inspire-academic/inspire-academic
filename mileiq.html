@@ -254,13 +254,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    // Check authorization
-    const { data: profile } = await supa.from('profiles').select('email').eq('id', user.id).single();
-    if (profile?.email !== AUTHORIZED_EMAIL) {
+    // Check authorization - use auth.users.email directly
+    if (user.email !== AUTHORIZED_EMAIL) {
       toast('Unauthorized access', 'error');
       setTimeout(() => location.href = '/dashboard.html', 2000);
       return;
     }
+    console.log('✓ MileIQ authorized for:', user.email);
 
     S.user = user;
     document.getElementById('inp-date').valueAsDate = new Date();
