@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MileIQ — Mileage Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+:root{
+  --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
+  --gold:#d4a017;--gold2:#f0c040;
+  --teal:#00c9a7;--teal2:#00d9b5;
+  --white:#ffffff;
+  --border:#1e3a5f;
+  --muted:#7a8fa6;
+  --green:#16803c;--red:#b92b1a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{overflow-x:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;}
+input,select,textarea{font-family:'DM Sans',sans-serif;}
+
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--navy2);}
+::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
+
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:6px;font-size:.9rem;font-weight:600;transition:all .2s;cursor:pointer;border:none;}
+.btn-gold{background:var(--gold);color:var(--navy);}
+.btn-gold:hover{background:var(--gold2);}
+.btn-gold:disabled{opacity:.5;cursor:not-allowed;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.btn-red{background:var(--red);color:var(--white);}
+.btn-red:hover{opacity:.9;}
+
+.card{background:var(--navy2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;}
+.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
+.badge-gold{background:#d4a01722;color:var(--gold);}
+.badge-green{background:#16803c22;color:#4ade80;}
+.badge-teal{background:#00c9a722;color:var(--teal);}
+
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:6px;font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:var(--green);}
+#toast.error{border-color:var(--red);}
+
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .4s ease both;}
+
+.wrap{max-width:900px;margin:0 auto;padding:2rem 1.5rem;}
+
+.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topnav-logo{display:flex;align-items:center;gap:.75rem;}
+.logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:var(--navy);}
+.topnav-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--gold);}
+
+.form-group{margin-bottom:1.25rem;}
+.form-label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.08em;}
+.form-input,.form-select,.form-textarea{width:100%;padding:.7rem 1rem;border-radius:6px;background:var(--navy);border:1.5px solid var(--border);color:var(--white);font-size:.9rem;outline:none;transition:border-color .2s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);}
+.form-input::placeholder{color:var(--muted);}
+.form-select option{background:var(--navy2);}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+.journey-list{display:grid;gap:1rem;margin-top:1.5rem;}
+.journey-item{padding:1rem;background:var(--navy);border-radius:6px;border-left:3px solid var(--gold);display:flex;justify-content:space-between;align-items:flex-start;}
+.journey-info{flex:1;}
+.journey-date{font-size:.8rem;color:var(--muted);text-transform:uppercase;}
+.journey-route{font-weight:600;font-size:.95rem;margin:.25rem 0;}
+.journey-distance{font-size:.85rem;color:var(--teal);}
+.journey-actions{display:flex;gap:.5rem;}
+.journey-actions button{padding:.35rem .75rem;font-size:.8rem;}
+
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:2rem 0;}
+.stat-box{background:var(--navy);border:1px solid var(--border);border-radius:6px;padding:1rem;text-align:center;}
+.stat-value{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--teal);}
+.stat-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;margin-top:.5rem;}
+
+.upload-area{border:2px dashed var(--border);border-radius:6px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;}
+.upload-area:hover{border-color:var(--gold);background:rgba(212,160,23,.05);}
+.upload-area.dragover{border-color:var(--teal);background:rgba(0,201,167,.1);}
+
+.receipt-preview{width:100%;max-width:200px;border-radius:6px;margin-top:.75rem;border:1px solid var(--border);}
+
+.hidden{display:none;}
+
+@media(max-width:600px){
+  .two-col{grid-template-columns:1fr;}
+  .stats-grid{grid-template-columns:1fr;}
+  .journey-item{flex-direction:column;}
+  .journey-actions{margin-top:.75rem;width:100%;}
+  .journey-actions button{flex:1;}
+  .topnav{padding:.7rem 1rem;flex-direction:column;gap:.5rem;}
+}
+  </style>
+</head>
+<body>
+
+<!-- Top Nav -->
+<div class="topnav">
+  <div class="topnav-logo">
+    <div class="logo-mark">🚗</div>
+    <div>
+      <div class="topnav-title">MileIQ</div>
+      <div style="font-size:.75rem;color:var(--muted);">Mileage Tracker</div>
+    </div>
+  </div>
+  <button class="btn btn-outline" onclick="goBack()">← Back to Dashboard</button>
+</div>
+
+<div class="wrap">
+
+  <!-- Intro -->
+  <div style="text-align:center;margin-bottom:2.5rem;">
+    <h1 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:.5rem;">Track Your Mileage</h1>
+    <p class="muted">Log journeys, upload receipts, generate monthly reports.</p>
+  </div>
+
+  <!-- New Journey Form -->
+  <div class="card fade-in" id="journey-form-card">
+    <h2 style="font-size:1.3rem;margin-bottom:1.5rem;">Add Journey</h2>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label class="form-label">Journey Date</label>
+        <input type="date" id="inp-date" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Start Time</label>
+        <input type="time" id="inp-start-time" class="form-input">
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label class="form-label">Start Location (Postcode)</label>
+        <input type="text" id="inp-start-location" class="form-input" placeholder="e.g. SW1A 1AA" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Destination (Postcode)</label>
+        <input type="text" id="inp-destination" class="form-input" placeholder="e.g. E1 6AN" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Purpose of Travel</label>
+      <input type="text" id="inp-purpose" class="form-input" placeholder="e.g. Client visit, Training, Meeting">
+    </div>
+
+    <div class="two-col">
+      <div class="form-group">
+        <label class="form-label">End Time (Auto)</label>
+        <input type="time" id="inp-end-time" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Distance (Miles)</label>
+        <input type="number" id="inp-distance" class="form-input" step="0.1" placeholder="Will calculate automatically" readonly>
+      </div>
+    </div>
+
+    <!-- Receipt Upload -->
+    <div class="form-group">
+      <label class="form-label">Receipt Image (Optional)</label>
+      <div class="upload-area" id="upload-area" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" onclick="document.getElementById('inp-receipt').click()">
+        <div id="upload-text">📸 Click to upload or drag receipt image</div>
+        <img id="receipt-preview" class="receipt-preview hidden">
+      </div>
+      <input type="file" id="inp-receipt" class="hidden" accept="image/*" onchange="handleFileSelect(event)">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Receipt Note</label>
+      <input type="text" id="inp-receipt-note" class="form-input" placeholder="Notes about this receipt">
+    </div>
+
+    <button class="btn btn-gold" style="width:100%;padding:.9rem;font-size:1rem;" id="btn-save" onclick="saveJourney()">
+      Save Journey
+    </button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid fade-in" style="margin-top:3rem;">
+    <div class="stat-box">
+      <div class="stat-value" id="stat-this-month">0</div>
+      <div class="stat-label">This Month</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="stat-journeys">0</div>
+      <div class="stat-label">Journeys</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="stat-avg">0</div>
+      <div class="stat-label">Avg per Journey</div>
+    </div>
+  </div>
+
+  <!-- Journey List -->
+  <div style="margin-top:3rem;">
+    <h2 style="font-size:1.3rem;margin-bottom:1rem;">Recent Journeys</h2>
+    <div class="journey-list" id="journey-list"></div>
+  </div>
+
+  <!-- Monthly Report Section -->
+  <div class="card fade-in" style="margin-top:3rem;background:linear-gradient(135deg,#112240 0%,#0f2a4a 100%);">
+    <h3 style="font-size:1.1rem;margin-bottom:1rem;">📊 Monthly Report</h3>
+    <p class="muted" style="margin-bottom:1rem;">Generate and download your mileage report for the current month.</p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+      <button class="btn btn-gold" onclick="generateReport('pdf')">Download PDF</button>
+      <button class="btn btn-gold" onclick="generateReport('excel')">Download Excel</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════
+const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+const AUTHORIZED_EMAIL = 'appiaheric2@gmail.com'; // REPLACE WITH ACTUAL EMAIL
+const GOOGLE_MAPS_API_KEY = 'YOUR_GOOGLE_MAPS_API_KEY'; // Set as env var
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const S = {
+  user: null,
+  journeys: [],
+  receiptFile: null,
+  receiptPreview: null
+};
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const { data: { user } } = await supa.auth.getUser();
+    if (!user) {
+      location.href = '/dashboard.html';
+      return;
+    }
+
+    // Check authorization
+    const { data: profile } = await supa.from('profiles').select('email').eq('id', user.id).single();
+    if (profile?.email !== AUTHORIZED_EMAIL) {
+      toast('Unauthorized access', 'error');
+      setTimeout(() => location.href = '/dashboard.html', 2000);
+      return;
+    }
+
+    S.user = user;
+    document.getElementById('inp-date').valueAsDate = new Date();
+    loadJourneys();
+    updateStats();
+  } catch(e) {
+    console.error('Init error:', e);
+    toast('Error: ' + e.message, 'error');
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// LOAD JOURNEYS
+// ═══════════════════════════════════════════════════════════
+async function loadJourneys() {
+  try {
+    const { data, error } = await supa
+      .from('mileiq_journeys')
+      .select('*')
+      .eq('student_id', S.user.id)
+      .eq('archived', false)
+      .order('journey_date', { ascending: false })
+      .limit(50);
+
+    if (error) throw error;
+    S.journeys = data || [];
+    renderJourneys();
+  } catch(e) {
+    console.error('Load error:', e);
+  }
+}
+
+function renderJourneys() {
+  const list = document.getElementById('journey-list');
+  if (S.journeys.length === 0) {
+    list.innerHTML = '<div class="muted">No journeys logged yet. Add one above!</div>';
+    return;
+  }
+
+  list.innerHTML = S.journeys.map((j, i) => `
+    <div class="journey-item fade-in">
+      <div class="journey-info">
+        <div class="journey-date">${new Date(j.journey_date).toLocaleDateString()}</div>
+        <div class="journey-route">${j.start_location} → ${j.destination}</div>
+        <div class="journey-distance">${j.distance_miles} miles · ${j.purpose || 'No purpose noted'}</div>
+      </div>
+      <div class="journey-actions">
+        ${j.receipt_image_url ? '<button class="btn btn-outline" onclick="viewReceipt(' + j.id + ')">📸 View</button>' : ''}
+        <button class="btn btn-red" onclick="deleteJourney(' + j.id + ')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// SAVE JOURNEY
+// ═══════════════════════════════════════════════════════════
+async function saveJourney() {
+  const date = document.getElementById('inp-date').value;
+  const startLocation = document.getElementById('inp-start-location').value.trim();
+  const destination = document.getElementById('inp-destination').value.trim();
+  const distance = parseFloat(document.getElementById('inp-distance').value);
+  const purpose = document.getElementById('inp-purpose').value.trim();
+  const receiptNote = document.getElementById('inp-receipt-note').value.trim();
+
+  if (!date || !startLocation || !destination || !distance) {
+    toast('Fill all required fields', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+  try {
+    // Upload receipt if present
+    let receiptUrl = null;
+    if (S.receiptFile) {
+      const path = `${S.user.id}/${Date.now()}_receipt`;
+      const { data, error } = await supa.storage.from('mileiq-receipts').upload(path, S.receiptFile);
+      if (error) throw error;
+      const { data: pubData } = supa.storage.from('mileiq-receipts').getPublicUrl(path);
+      receiptUrl = pubData.publicUrl;
+    }
+
+    // Insert journey
+    const { error } = await supa.from('mileiq_journeys').insert({
+      student_id: S.user.id,
+      student_name: S.user.user_metadata?.full_name || 'User',
+      student_email: S.user.email,
+      journey_date: date,
+      start_location: startLocation,
+      destination: destination,
+      distance_miles: distance,
+      distance_source: 'google_maps',
+      purpose: purpose,
+      receipt_image_url: receiptUrl,
+      receipt_note: receiptNote,
+      receipt_uploaded: !!receiptUrl
+    });
+
+    if (error) throw error;
+
+    toast('Journey saved!', 'success');
+    document.getElementById('inp-start-location').value = '';
+    document.getElementById('inp-destination').value = '';
+    document.getElementById('inp-distance').value = '';
+    document.getElementById('inp-purpose').value = '';
+    document.getElementById('inp-receipt-note').value = '';
+    S.receiptFile = null;
+    document.getElementById('receipt-preview').classList.add('hidden');
+    document.getElementById('upload-text').style.display = 'block';
+
+    loadJourneys();
+    updateStats();
+  } catch(e) {
+    toast('Error: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Save Journey';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// DISTANCE CALCULATION (Google Maps)
+// ═══════════════════════════════════════════════════════════
+async function calculateDistance() {
+  const start = document.getElementById('inp-start-location').value.trim();
+  const dest = document.getElementById('inp-destination').value.trim();
+
+  if (!start || !dest) return;
+
+  try {
+    // Call our backend function for secure API access
+    const res = await fetch('/api/mileiq-distance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ start, destination: dest })
+    });
+
+    const data = await res.json();
+    if (data.distance_miles) {
+      document.getElementById('inp-distance').value = parseFloat(data.distance_miles).toFixed(1);
+    }
+  } catch(e) {
+    console.warn('Distance calc error:', e);
+  }
+}
+
+document.getElementById('inp-destination')?.addEventListener('blur', calculateDistance);
+
+// ═══════════════════════════════════════════════════════════
+// RECEIPT UPLOAD
+// ═══════════════════════════════════════════════════════════
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upload-area').classList.add('dragover');
+}
+
+function handleDragLeave(e) {
+  document.getElementById('upload-area').classList.remove('dragover');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-area').classList.remove('dragover');
+  const files = e.dataTransfer.files;
+  if (files.length > 0) handleFileSelect({ target: { files } });
+}
+
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  S.receiptFile = file;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    document.getElementById('receipt-preview').src = evt.target.result;
+    document.getElementById('receipt-preview').classList.remove('hidden');
+    document.getElementById('upload-text').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════════════════════
+// DELETE JOURNEY
+// ═══════════════════════════════════════════════════════════
+async function deleteJourney(id) {
+  if (!confirm('Delete this journey?')) return;
+
+  try {
+    const { error } = await supa.from('mileiq_journeys').delete().eq('id', id);
+    if (error) throw error;
+    toast('Journey deleted', 'success');
+    loadJourneys();
+    updateStats();
+  } catch(e) {
+    toast('Error: ' + e.message, 'error');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════════════════
+function updateStats() {
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const thisMonth = S.journeys.filter(j =>
+    new Date(j.journey_date) >= monthStart
+  );
+
+  const totalMiles = thisMonth.reduce((sum, j) => sum + (j.distance_miles || 0), 0);
+  const avgMiles = thisMonth.length > 0 ? (totalMiles / thisMonth.length).toFixed(1) : 0;
+
+  document.getElementById('stat-this-month').textContent = totalMiles.toFixed(1);
+  document.getElementById('stat-journeys').textContent = thisMonth.length;
+  document.getElementById('stat-avg').textContent = avgMiles;
+}
+
+// ═══════════════════════════════════════════════════════════
+// REPORT GENERATION (Placeholder)
+// ═══════════════════════════════════════════════════════════
+async function generateReport(format) {
+  toast(`${format.toUpperCase()} report generation coming soon!`, 'success');
+  // TODO: Implement PDF + Excel generation
+}
+
+// ═══════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════
+function goBack() {
+  location.href = '/dashboard.html';
+}
+
+function viewReceipt(id) {
+  const j = S.journeys.find(j => j.id === id);
+  if (j?.receipt_image_url) window.open(j.receipt_image_url, '_blank');
+}
+
+function toast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>

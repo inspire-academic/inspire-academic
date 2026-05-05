@@ -344,6 +344,18 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
     </button>
   </div>
 
+  <!-- MileIQ Button (Conditional) -->
+  <div class="today-quiz fade-in" id="mileiq-card" style="background:linear-gradient(135deg,#0f2a4a 0%,#1a3a5c 100%);border-color:rgba(0,201,167,0.5);display:none;">
+    <div class="tq-left">
+      <div class="tq-label" style="color:#00c9a7;">🚗 Mileage Tracking</div>
+      <h3>MileIQ</h3>
+      <p id="mileiq-desc" style="color:var(--muted);">Track journeys, upload receipts, generate monthly reports</p>
+    </div>
+    <button class="btn btn-gold" onclick="openMileIQ()" style="font-size:1rem;padding:.8rem 2rem;background:#00c9a7;color:#0b1628;">
+      Open MileIQ →
+    </button>
+  </div>
+
   <!-- Stats Row -->
   <div class="stats-row fade-in">
     <div class="stat-card">
@@ -678,6 +690,32 @@ async function loadDailyChallenge(profile) {
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("/sw.js");
       }
-    </script>
+    
+// MileIQ Access Control
+async function checkMileIQAccess() {
+  try {
+    const { data: { user } } = await supa.auth.getUser();
+    if (!user) return;
+
+    const { data: profile } = await supa.from('profiles')
+      .select('email')
+      .eq('id', user.id)
+      .single();
+
+    const AUTHORIZED_EMAIL = 'appiaheric2@gmail.com';
+
+    if (profile?.email === AUTHORIZED_EMAIL) {
+      document.getElementById('mileiq-card').style.display = 'block';
+    }
+  } catch(e) {
+    console.log('MileIQ check skipped:', e);
+  }
+}
+
+function openMileIQ() {
+  location.href = '/mileiq.html';
+}
+
+</script>
 </body>
 </html>
