@@ -485,8 +485,59 @@ function updateStats() {
 // REPORT GENERATION (Placeholder)
 // ═══════════════════════════════════════════════════════════
 async function generateReport(format) {
-  toast(`${format.toUpperCase()} report generation coming soon!`, 'success');
-  // TODO: Implement PDF + Excel generation
+  try {
+    const btn = event.target;
+    btn.disabled = true;
+    btn.innerHTML = format === 'pdf' ? '⏳ Generating PDF...' : '⏳ Generating Excel...';
+
+    // Get current month data
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    
+    const monthJourneys = S.journeys.filter(j =>
+      new Date(j.journey_date) >= monthStart
+    );
+
+    if (monthJourneys.length === 0) {
+      toast('No journeys this month to report', 'error');
+      btn.disabled = false;
+      btn.innerHTML = format === 'pdf' ? 'Download PDF' : 'Download Excel';
+      return;
+    }
+
+    // Call backend report generator
+    const res = await fetch('/api/mileiq-reports', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        format: format,
+        journeys: monthJourneys,
+        studentName: S.user.user_metadata?.full_name || S.user.email,
+        month: monthStart.toISOString()
+      })
+    });
+
+    if (!res.ok) throw new Error('Report generation failed');
+
+    // Download the file
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `MileIQ_${now.toLocaleDateString().replace(/\//g, '-')}.${format === 'pdf' ? 'pdf' : 'csv'}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+
+    toast(`${format.toUpperCase()} report downloaded!`, 'success');
+  } catch(e) {
+    toast('Error: ' + e.message, 'error');
+  } finally {
+    const btn = event.target;
+    btn.disabled = false;
+    btn.innerHTML = format === 'pdf' ? 'Download PDF' : 'Download Excel';
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
