@@ -484,15 +484,16 @@ function updateStats() {
 // ═══════════════════════════════════════════════════════════
 // REPORT GENERATION (Placeholder)
 // ═══════════════════════════════════════════════════════════
-async function generateReport(format) {
+function generateReport(format) {
   try {
     const btn = event.target;
     btn.disabled = true;
-    btn.innerHTML = format === 'pdf' ? '⏳ Generating PDF...' : '⏳ Generating Excel...';
+    btn.innerHTML = format === 'pdf' ? '⏳ Generating...' : '⏳ Generating...';
 
     // Get current month data
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthStr = now.toLocaleString('default', { month: 'long', year: 'numeric' });
     
     const monthJourneys = S.journeys.filter(j =>
       new Date(j.journey_date) >= monthStart
@@ -505,30 +506,11 @@ async function generateReport(format) {
       return;
     }
 
-    // Call backend report generator
-    const res = await fetch('/api/mileiq-reports', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        format: format,
-        journeys: monthJourneys,
-        studentName: S.user.user_metadata?.full_name || S.user.email,
-        month: monthStart.toISOString()
-      })
-    });
-
-    if (!res.ok) throw new Error('Report generation failed');
-
-    // Download the file
-    const blob = await res.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `MileIQ_${now.toLocaleDateString().replace(/\//g, '-')}.${format === 'pdf' ? 'pdf' : 'csv'}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    if (format === 'excel') {
+      generateExcelReport(monthJourneys, monthStr);
+    } else {
+      generatePDFReport(monthJourneys, monthStr);
+    }
 
     toast(`${format.toUpperCase()} report downloaded!`, 'success');
   } catch(e) {
@@ -538,6 +520,87 @@ async function generateReport(format) {
     btn.disabled = false;
     btn.innerHTML = format === 'pdf' ? 'Download PDF' : 'Download Excel';
   }
+}
+
+function generateExcelReport(journeys, monthStr) {
+  const totalMiles = journeys.reduce((sum, j) => sum + (parseFloat(j.distance_miles) || 0), 0);
+  const studentName = S.user.user_metadata?.full_name || S.user.email;
+  
+  let csv = `MileIQ Monthly Mileage Report
+`;
+  csv += `${studentName}
+`;
+  csv += `${monthStr}
+
+`;
+  csv += `Date,Start Location,Destination,Purpose,Distance (Miles)
+`;
+  
+  journeys.forEach(j => {
+    const date = new Date(j.journey_date).toLocaleDateString();
+    const distance = parseFloat(j.distance_miles) || 0;
+    csv += `"${date}","${j.start_location}","${j.destination}","${j.purpose || ''}",${distance}
+`;
+  });
+  
+  csv += `
+Total Mileage:,${totalMiles.toFixed(1)}
+`;
+  csv += `Number of Journeys:,${journeys.length}
+`;
+  csv += `Average per Journey:,${(totalMiles / (journeys.length || 1)).toFixed(1)}
+`;
+  
+  downloadFile(csv, `MileIQ_${monthStr.replace(' ', '_')}.csv`, 'text/csv');
+}
+
+function generatePDFReport(journeys, monthStr) {
+  const totalMiles = journeys.reduce((sum, j) => sum + (parseFloat(j.distance_miles) || 0), 0);
+  const studentName = S.user.user_metadata?.full_name || S.user.email;
+  
+  // Simple PDF generation
+  let pdfContent = `%PDF-1.4
+1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj
+2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj
+3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>endobj
+4 0 obj<</Length 600>>stream
+BT
+/F1 24 Tf 50 750 Td (MileIQ Monthly Report) Tj
+0 -40 Td /F1 12 Tf (${studentName}) Tj
+0 -20 Td (${monthStr}) Tj
+0 -50 Td /F1 14 Tf (Total Mileage: ${totalMiles.toFixed(1)} miles) Tj
+0 -30 Td /F1 10 Tf (Journeys: ${journeys.length}) Tj
+0 -20 Td (Average: ${(totalMiles / (journeys.length || 1)).toFixed(1)} miles per journey) Tj
+ET
+endstream
+endobj
+5 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj
+xref
+0 6
+0000000000 65535 f
+0000000009 00000 n
+0000000056 00000 n
+0000000115 00000 n
+0000000317 00000 n
+0000000967 00000 n
+trailer<</Size 6/Root 1 0 R>>
+startxref
+1047
+%%EOF`;
+
+  downloadFile(pdfContent, `MileIQ_${monthStr.replace(' ', '_')}.pdf`, 'application/pdf');
+}
+
+function downloadFile(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
 }
 
 // ═══════════════════════════════════════════════════════════
