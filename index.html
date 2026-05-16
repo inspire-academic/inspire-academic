@@ -393,7 +393,7 @@ async function doLogin(){
   perfEnd('profile-fetch');
   if(profile) setCachedProfile(profile);
 
-  window.location.href=(profile?.role==='teacher'||profile?.role==='admin')?'teacher.html':'dashboard.html';
+  const r=profile?.role; window.location.href=(r==='teacher'||r==='teacher_manager'||r==='admin'||r==='super_admin')?'teacher.html':'dashboard.html';
 }
 
 async function doSignup(){
