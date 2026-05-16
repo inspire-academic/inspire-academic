@@ -491,6 +491,13 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
   const {user,profile} = await requireAuth() || {};
   if(!user){ clearTimeout(timeoutHandle); return; }
 
+  // Redirect teachers/admins to their dashboard
+  const teacherRoles = ['teacher', 'teacher_manager', 'admin', 'super_admin'];
+  if(teacherRoles.includes(profile?.role)){
+    window.location.href = 'teacher.html';
+    return;
+  }
+
   // 2. Render shell immediately — student sees their name before data loads
   const hr=new Date().getHours();
   document.getElementById('greeting-time').textContent=hr<12?'morning':hr<17?'afternoon':'evening';
