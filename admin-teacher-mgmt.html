@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manage Teachers — Inspire Academic</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --navy:#0B1D3A;--navy2:#112240;--navy3:#1A3361;
+  --gold:#D4A017;--gold2:#F0C040;
+  --white:#F0EDE6;--muted:#7A8BA8;
+  --border:rgba(212,160,23,.18);--r:10px;
+  --green:#2ECC71;--amber:#F39C12;--red:#E74C3C;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;}
+a{text-decoration:none;color:inherit;}
+
+#loading-overlay{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:1rem;}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
+.spinner-sm{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.app{display:flex;min-height:100vh;}
+.sidebar{width:220px;flex-shrink:0;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:1.5rem 0;position:sticky;top:0;height:100vh;}
+.sidebar-logo{padding:0 1.5rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
+.inspire{font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:1.1rem;}
+.science{font-weight:700;font-size:1.1rem;}
+.s-badge{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.65rem 1.5rem;font-size:.9rem;color:var(--muted);transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,.04);}
+.nav-item.here{color:var(--gold);border-left-color:var(--gold);background:rgba(212,160,23,.06);}
+.nav-item .ico{font-size:1rem;width:20px;text-align:center;}
+.sidebar-footer{margin-top:auto;padding:1rem 1.5rem;border-top:1px solid var(--border);}
+.uname{font-size:.8rem;color:var(--muted);}
+.uname strong{display:block;color:var(--white);font-size:.9rem;margin-bottom:.15rem;}
+.sign-out{margin-top:.75rem;width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:.5rem;border-radius:var(--r);font-size:.8rem;transition:all .15s;}
+.sign-out:hover{border-color:var(--red);color:var(--red);}
+
+.main{flex:1;padding:2rem;overflow-y:auto;}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.pt{font-family:'Playfair Display',serif;font-size:1.8rem;}
+.ps{color:var(--muted);font-size:.9rem;margin-top:.3rem;}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+.sc{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;}
+.sl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.sv{font-family:'Playfair Display',serif;font-size:2.2rem;color:var(--gold);margin:.3rem 0 .1rem;line-height:1;}
+.ss{font-size:.8rem;color:var(--muted);}
+
+.tc{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem;}
+.th{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.tt{font-weight:600;font-size:.95rem;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:.75rem 1.25rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(0,0,0,.15);}
+td{padding:.85rem 1.25rem;font-size:.88rem;border-bottom:1px solid rgba(255,255,255,.04);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.02);}
+
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:7px;font-size:.85rem;font-weight:600;transition:all .2s;border:none;cursor:pointer;}
+.bg{background:var(--gold);color:var(--navy);}.bg:hover{background:var(--gold2);}
+.bo{background:transparent;border:1px solid var(--border);color:var(--muted);}.bo:hover{border-color:var(--gold);color:var(--gold);}
+.bs{padding:.35rem .75rem;font-size:.78rem;}
+
+.chip{display:inline-block;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
+.cg{background:rgba(46,204,113,.15);color:var(--green);}
+.ca{background:rgba(243,156,18,.15);color:var(--amber);}
+.cb{background:rgba(52,152,219,.15);color:#3498DB;}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.modal{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:2rem;width:100%;max-width:520px;position:relative;max-height:90vh;overflow-y:auto;}
+.mc{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.3rem;line-height:1;cursor:pointer;}
+.mc:hover{color:var(--white);}
+.mt{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.3rem;}
+.ms{color:var(--muted);font-size:.85rem;margin-bottom:1.5rem;line-height:1.5;}
+
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.08em;}
+.field input{width:100%;padding:.72rem 1rem;border-radius:var(--r);background:var(--navy3);border:1.5px solid var(--border);color:var(--white);font-size:.9rem;outline:none;transition:border-color .2s;}
+.field input:focus{border-color:var(--gold);}
+.field input::placeholder{color:var(--muted);}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;}
+.slabel{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--white);cursor:pointer;padding:.4rem .6rem;border-radius:6px;border:1px solid var(--border);transition:all .15s;}
+.slabel:hover{border-color:rgba(212,160,23,.4);}
+.slabel input{accent-color:var(--gold);width:15px;height:15px;flex-shrink:0;}
+
+.ibox{background:rgba(212,160,23,.07);border:1px solid rgba(212,160,23,.2);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:1.2rem;font-size:.82rem;color:var(--muted);line-height:1.5;}
+.ibox strong{color:var(--gold);}
+
+.pscroll{max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);}
+.prow{display:flex;align-items:center;gap:.75rem;padding:.6rem 1rem;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .1s;}
+.prow:last-child{border-bottom:none;}
+.prow:hover{background:rgba(255,255,255,.03);}
+.prow input{accent-color:var(--gold);width:15px;height:15px;flex-shrink:0;}
+.pname{flex:1;font-size:.87rem;}
+.pmeta{font-size:.75rem;color:var(--muted);}
+
+.sinput{width:100%;padding:.6rem 1rem;border-radius:var(--r);background:var(--navy3);border:1.5px solid var(--border);color:var(--white);font-size:.85rem;outline:none;margin-bottom:.6rem;}
+.sinput:focus{border-color:var(--gold);}
+
+.empty{text-align:center;padding:3rem 1rem;color:var(--muted);}
+.ei{font-size:2.5rem;margin-bottom:.75rem;}
+.et{font-size:1rem;color:var(--white);margin-bottom:.4rem;}
+
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:340px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.ok{border-color:var(--green);}
+#toast.err{border-color:var(--red);}
+
+@media(max-width:768px){.stat-row{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div style="color:var(--muted);font-size:.9rem;margin-top:.5rem;">Loading…</div>
+</div>
+
+<div class="app">
+  <nav class="sidebar">
+    <a href="index.html"><div class="sidebar-logo">
+      <div><span class="inspire">Inspire</span> <span class="science">Science</span></div>
+      <div class="s-badge">Admin Console</div>
+    </div></a>
+    <a href="teacher.html"><div class="nav-item"><span class="ico">📊</span><span>Dashboard</span></div></a>
+    <div class="nav-item here"><span class="ico">👩‍🏫</span><span>Manage Teachers</span></div>
+    <div style="height:1px;background:var(--border);margin:.5rem 0;"></div>
+    <a href="teacher-revision.html"><div class="nav-item"><span class="ico">📦</span><span>Revision Packs</span></div></a>
+    <a href="teacher-assessment-create.html"><div class="nav-item"><span class="ico">📝</span><span>Create Assessment</span></div></a>
+    <div class="sidebar-footer">
+      <div class="uname"><strong id="admin-name">Admin</strong>Admin Account</div>
+      <button class="sign-out" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="ph">
+      <div>
+        <div class="pt">Manage Teachers</div>
+        <div class="ps">Create teacher accounts, assign students, manage access</div>
+      </div>
+      <button class="btn bg" onclick="openAdd()">+ Add Teacher</button>
+    </div>
+
+    <div class="stat-row">
+      <div class="sc"><div class="sl">Teachers</div><div class="sv" id="s1">—</div><div class="ss">registered</div></div>
+      <div class="sc"><div class="sl">Assigned</div><div class="sv" id="s2">—</div><div class="ss">student slots</div></div>
+      <div class="sc"><div class="sl">Unassigned</div><div class="sv" id="s3">—</div><div class="ss">students</div></div>
+      <div class="sc"><div class="sl">Total Students</div><div class="sv" id="s4">—</div><div class="ss">in system</div></div>
+    </div>
+
+    <div class="tc">
+      <div class="th">
+        <div class="tt">All Teachers</div>
+        <input type="text" class="sinput" style="width:220px;margin:0;" placeholder="Search…" oninput="filterT(this.value)">
+      </div>
+      <div id="twrap"><div class="empty"><div class="spinner" style="margin:0 auto;"></div></div></div>
+    </div>
+  </main>
+</div>
+
+<!-- ADD TEACHER MODAL -->
+<div class="modal-bg" id="m-add" style="display:none;">
+  <div class="modal">
+    <button class="mc" onclick="cm('m-add')">✕</button>
+    <div class="mt">Add New Teacher</div>
+    <div class="ms">Creates their account and sends an invite email so they can set their own password.</div>
+    <div class="ibox">✉️ They will receive: <strong>"You've been invited to Inspire Academic as a Teacher"</strong> with a link to set their password.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="field"><label>First Name</label><input type="text" id="tc-first" placeholder="e.g. Sarah"></div>
+      <div class="field"><label>Last Name</label><input type="text" id="tc-last" placeholder="e.g. Smith"></div>
+    </div>
+    <div class="field"><label>Email Address</label><input type="email" id="tc-email" placeholder="teacher@email.com"></div>
+    <div class="field"><label>School / Organisation</label><input type="text" id="tc-school" placeholder="e.g. St. Mary's School"></div>
+    <div class="field">
+      <label>Subjects Taught</label>
+      <div class="sgrid">
+        <label class="slabel"><input type="checkbox" class="tc-sub" value="Physics"> Physics</label>
+        <label class="slabel"><input type="checkbox" class="tc-sub" value="Chemistry"> Chemistry</label>
+        <label class="slabel"><input type="checkbox" class="tc-sub" value="Biology"> Biology</label>
+        <label class="slabel"><input type="checkbox" class="tc-sub" value="Mathematics"> Mathematics</label>
+      </div>
+    </div>
+    <div style="display:flex;gap:.75rem;margin-top:1.2rem;">
+      <button class="btn bg" style="flex:1;" id="btn-create" onclick="createTeacher()">Send Invite & Create Account</button>
+      <button class="btn bo" onclick="cm('m-add')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ASSIGN STUDENTS MODAL -->
+<div class="modal-bg" id="m-assign" style="display:none;">
+  <div class="modal">
+    <button class="mc" onclick="cm('m-assign')">✕</button>
+    <div class="mt" id="at">Assign Students</div>
+    <div class="ms">Tick students to assign. Unticking removes the assignment.</div>
+    <div class="field"><label>Subject / Context (optional)</label><input type="text" id="a-subject" placeholder="e.g. GCSE Physics Year 11"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+      <label style="font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Students</label>
+      <div style="display:flex;gap:.5rem;">
+        <button class="btn bo bs" onclick="tickAll(true)">Select All</button>
+        <button class="btn bo bs" onclick="tickAll(false)">Clear All</button>
+      </div>
+    </div>
+    <input type="text" class="sinput" placeholder="Search students…" oninput="filterPicker(this.value)">
+    <div class="pscroll" id="picker"></div>
+    <div style="display:flex;gap:.75rem;margin-top:1.5rem;">
+      <button class="btn bg" style="flex:1;" id="btn-save" onclick="saveAssign()">Save Assignments</button>
+      <button class="btn bo" onclick="cm('m-assign')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW STUDENTS MODAL -->
+<div class="modal-bg" id="m-view" style="display:none;">
+  <div class="modal">
+    <button class="mc" onclick="cm('m-view')">✕</button>
+    <div id="vc"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+let _session=null,_teachers=[],_students=[],_tid=null;
+
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='show '+type;
+  setTimeout(()=>t.className='',3500);
+}
+
+function cm(id){document.getElementById(id).style.display='none';}
+
+async function init(){
+  const{data:{session}}=await supa.auth.getSession();
+  if(!session){window.location.href='/';return;}
+  _session=session;
+
+  const{data:p}=await supa.from('profiles').select('role,full_name').eq('id',session.user.id).maybeSingle();
+  if(!p||!['admin','super_admin'].includes(p.role)){window.location.href='/teacher.html';return;}
+
+  document.getElementById('admin-name').textContent=p.full_name||session.user.email;
+  window._aid=session.user.id;
+
+  await Promise.all([loadTeachers(),loadStudents()]);
+  document.getElementById('loading-overlay').style.display='none';
+}
+
+async function signOut(){await supa.auth.signOut();window.location.href='/';}
+
+async function loadTeachers(){
+  const{data}=await supa.from('profiles')
+    .select('id,full_name,role,subjects,school_affiliation,is_verified,created_at')
+    .in('role',['teacher_manager','teacher','admin','super_admin'])
+    .order('full_name');
+
+  const{data:asgn}=await supa.from('teacher_student_assignments').select('teacher_id').eq('is_active',true);
+  const cm={};(asgn||[]).forEach(a=>{cm[a.teacher_id]=(cm[a.teacher_id]||0)+1;});
+  _teachers=(data||[]).map(t=>({...t,sc:cm[t.id]||0}));
+
+  // stats
+  document.getElementById('s1').textContent=_teachers.length;
+  const{data:all}=await supa.from('teacher_student_assignments').select('student_id').eq('is_active',true);
+  const aset=new Set((all||[]).map(a=>a.student_id));
+  document.getElementById('s2').textContent=aset.size;
+  document.getElementById('s3').textContent=Math.max(0,_students.length-aset.size);
+
+  renderT(_teachers);
+}
+
+async function loadStudents(){
+  const{data}=await supa.from('profiles').select('id,full_name,year_group,exam_board').eq('role','student').order('full_name');
+  _students=data||[];
+  document.getElementById('s4').textContent=_students.length;
+}
+
+function renderT(list){
+  const w=document.getElementById('twrap');
+  if(!list.length){
+    w.innerHTML=`<div class="empty"><div class="ei">👩‍🏫</div><div class="et">No teachers yet</div><div>Click "+ Add Teacher" to create the first account</div></div>`;
+    return;
+  }
+  w.innerHTML=`<table><thead><tr><th>Name</th><th>School</th><th>Subjects</th><th>Students</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+    ${list.map(t=>`<tr>
+      <td><strong>${esc(t.full_name||'—')}</strong><div style="font-size:.75rem;color:var(--muted);font-family:'DM Mono',monospace">${t.role}</div></td>
+      <td style="color:var(--muted)">${esc(t.school_affiliation||'—')}</td>
+      <td style="color:var(--muted);font-size:.82rem">${esc((t.subjects||[]).join(', ')||'—')}</td>
+      <td><span style="font-family:'DM Mono',monospace;color:${t.sc>0?'var(--gold)':'var(--muted)'}">${t.sc}</span></td>
+      <td>${t.is_verified?'<span class="chip cg">Active</span>':'<span class="chip ca">Pending</span>'}</td>
+      <td><div style="display:flex;gap:.4rem;">
+        <button class="btn bo bs" onclick="openAssign('${t.id}','${esc(t.full_name||'')}')">👥 Assign</button>
+        <button class="btn bo bs" onclick="viewStu('${t.id}','${esc(t.full_name||'')}')">👁 View</button>
+      </div></td>
+    </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function filterT(q){
+  const lq=q.toLowerCase();
+  renderT(_teachers.filter(t=>(t.full_name||'').toLowerCase().includes(lq)||(t.school_affiliation||'').toLowerCase().includes(lq)));
+}
+
+// ── Create Teacher ───────────────────────────────────────────────
+function openAdd(){
+  ['tc-first','tc-last','tc-email','tc-school'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('.tc-sub').forEach(c=>c.checked=false);
+  document.getElementById('m-add').style.display='flex';
+}
+
+async function createTeacher(){
+  const fn=document.getElementById('tc-first').value.trim();
+  const ln=document.getElementById('tc-last').value.trim();
+  const em=document.getElementById('tc-email').value.trim();
+  const sc=document.getElementById('tc-school').value.trim();
+  const su=[...document.querySelectorAll('.tc-sub:checked')].map(c=>c.value);
+
+  if(!fn){toast('Please enter first name','err');return;}
+  if(!ln){toast('Please enter last name','err');return;}
+  if(!em||!em.includes('@')){toast('Please enter a valid email','err');return;}
+
+  const btn=document.getElementById('btn-create');
+  btn.disabled=true;btn.innerHTML='<span class="spinner-sm"></span> Creating…';
+
+  try{
+    const res=await fetch('/api/create-teacher',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${_session.access_token}`},
+      body:JSON.stringify({firstName:fn,lastName:ln,email:em,school:sc,subjects:su,adminUserId:window._aid})
+    });
+    const data=await res.json();
+    if(!res.ok){toast(data.error||'Failed to create account','err');}
+    else{toast(`✓ Invite sent to ${em}`,'ok');cm('m-add');await loadTeachers();}
+  }catch(e){toast('Network error — please try again','err');console.error(e);}
+
+  btn.disabled=false;btn.textContent='Send Invite & Create Account';
+}
+
+// ── Assign Students ──────────────────────────────────────────────
+async function openAssign(tid,tname){
+  _tid=tid;
+  document.getElementById('at').textContent=`Assign Students — ${tname}`;
+  document.getElementById('a-subject').value='';
+
+  const{data:ex}=await supa.from('teacher_student_assignments').select('student_id').eq('teacher_id',tid).eq('is_active',true);
+  const aset=new Set((ex||[]).map(e=>e.student_id));
+  renderPicker(_students,aset);
+  document.getElementById('m-assign').style.display='flex';
+}
+
+function renderPicker(list,aset=new Set()){
+  const el=document.getElementById('picker');
+  if(!list.length){el.innerHTML='<div style="padding:1rem;text-align:center;color:var(--muted);font-size:.85rem;">No students found</div>';return;}
+  el.innerHTML=list.map(s=>`<label class="prow">
+    <input type="checkbox" value="${s.id}" ${aset.has(s.id)?'checked':''}>
+    <div style="flex:1;"><div class="pname">${esc(s.full_name||'Unknown')}</div><div class="pmeta">${s.year_group||'—'} · ${s.exam_board||'—'}</div></div>
+    ${aset.has(s.id)?'<span class="chip cb" style="font-size:.6rem;">Assigned</span>':''}
+  </label>`).join('');
+}
+
+function filterPicker(q){
+  const lq=q.toLowerCase();
+  const checked=new Set([...document.querySelectorAll('#picker input:checked')].map(c=>c.value));
+  renderPicker(_students.filter(s=>(s.full_name||'').toLowerCase().includes(lq)),checked);
+}
+
+function tickAll(s){document.querySelectorAll('#picker input[type=checkbox]').forEach(c=>c.checked=s);}
+
+async function saveAssign(){
+  const ids=[...document.querySelectorAll('#picker input:checked')].map(c=>c.value);
+  const subj=document.getElementById('a-subject').value.trim()||null;
+  const btn=document.getElementById('btn-save');
+  btn.disabled=true;btn.innerHTML='<span class="spinner-sm"></span> Saving…';
+
+  // Soft-delete all then re-insert selected
+  await supa.from('teacher_student_assignments').update({is_active:false}).eq('teacher_id',_tid);
+
+  if(ids.length>0){
+    const rows=ids.map(sid=>({teacher_id:_tid,student_id:sid,subject:subj,assigned_by:window._aid,is_active:true}));
+    const{error}=await supa.from('teacher_student_assignments').upsert(rows,{onConflict:'teacher_id,student_id'});
+    if(error){toast('Error saving: '+error.message,'err');btn.disabled=false;btn.textContent='Save Assignments';return;}
+  }
+
+  await supa.from('assessment_audit_log').insert({
+    event_type:'students_assigned_to_teacher',actor_id:window._aid,
+    target_type:'teacher',target_id:_tid,
+    metadata:{student_count:ids.length,subject:subj}
+  });
+
+  toast(`✓ ${ids.length} student${ids.length!==1?'s':''} assigned`,'ok');
+  cm('m-assign');await loadTeachers();
+  btn.disabled=false;btn.textContent='Save Assignments';
+}
+
+// ── View Teacher Students ─────────────────────────────────────────
+async function viewStu(tid,tname){
+  const vc=document.getElementById('vc');
+  vc.innerHTML='<div class="empty"><div class="spinner" style="margin:0 auto;"></div></div>';
+  document.getElementById('m-view').style.display='flex';
+
+  const{data:asgn}=await supa.from('teacher_student_assignments').select('student_id,subject,assigned_at').eq('teacher_id',tid).eq('is_active',true);
+
+  if(!asgn||!asgn.length){
+    vc.innerHTML=`<div class="mt">${esc(tname)}</div>
+    <div class="empty"><div class="ei">👤</div><div class="et">No students assigned yet</div><div>Use the Assign button to add students</div></div>
+    <button class="btn bg" style="width:100%;margin-top:1rem;" onclick="cm('m-view');openAssign('${tid}','${esc(tname)}')">👥 Assign Students Now</button>`;
+    return;
+  }
+
+  const ids=asgn.map(a=>a.student_id);
+  const{data:stus}=await supa.from('profiles').select('id,full_name,year_group,exam_board').in('id',ids);
+  const sm={};(stus||[]).forEach(s=>sm[s.id]=s);
+
+  vc.innerHTML=`<div class="mt">${esc(tname)}'s Students</div>
+  <div style="color:var(--muted);font-size:.85rem;margin-bottom:1.2rem;">${asgn.length} student${asgn.length!==1?'s':''} assigned</div>
+  <table><thead><tr><th>Name</th><th>Year</th><th>Subject</th><th>Assigned</th></tr></thead><tbody>
+    ${asgn.map(a=>{
+      const s=sm[a.student_id]||{};
+      const d=a.assigned_at?new Date(a.assigned_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
+      return`<tr><td><strong>${esc(s.full_name||'Unknown')}</strong></td><td style="color:var(--muted)">${s.year_group||'—'}</td><td style="color:var(--muted)">${esc(a.subject||'—')}</td><td style="color:var(--muted);font-size:.8rem">${d}</td></tr>`;
+    }).join('')}
+  </tbody></table>
+  <div style="display:flex;gap:.75rem;margin-top:1.5rem;">
+    <button class="btn bg" onclick="cm('m-view');openAssign('${tid}','${esc(tname)}')">✏️ Edit Assignments</button>
+    <button class="btn bo" onclick="cm('m-view')">Close</button>
+  </div>`;
+}
+
+init();
+</script>
+</body>
+</html>

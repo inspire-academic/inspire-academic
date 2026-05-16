@@ -296,6 +296,11 @@ tr:hover td { background: rgba(255,255,255,.025); }
     <div class="nav-item" onclick="showView('users')" id="nav-users" style="display:none">
       <span class="icon">👥</span><span>Users &amp; Roles</span>
     </div>
+    <a href="admin-teacher-mgmt.html" style="text-decoration:none;color:inherit;">
+      <div class="nav-item" id="nav-teacher-mgmt" style="display:none">
+        <span class="icon">👩‍🏫</span><span>Manage Teachers</span>
+      </div>
+    </a>
 
     <div style="height:1px;background:var(--border);margin:.5rem 0;"></div>
 
@@ -528,7 +533,8 @@ async function init() {
   const { data: profile } = await supa.from('profiles')
     .select('role, full_name').eq('id', uid).maybeSingle();
 
-  if (!profile || (profile.role !== 'teacher' && profile.role !== 'admin')) {
+  const validRoles = ['teacher', 'teacher_manager', 'admin', 'super_admin'];
+  if (!profile || !validRoles.includes(profile.role)) {
     window.location.href = '/dashboard.html';
     return;
   }
@@ -539,13 +545,14 @@ async function init() {
   // Store role globally so other functions can check it
   window._myRole = profile.role;
 
-  // Show admin-only nav item
-  if (profile.role === 'admin') {
+  // Show admin-only nav items
+  if (profile.role === 'admin' || profile.role === 'super_admin') {
     document.getElementById('nav-users').style.display = 'flex';
+    document.getElementById('nav-teacher-mgmt').style.display = 'flex';
   }
 
   await loadAll();
-  if (profile.role === 'admin') await loadUsers();
+  if (profile.role === 'admin' || profile.role === 'super_admin') await loadUsers();
   document.getElementById('loading-overlay').style.display = 'none';
 }
 
@@ -558,11 +565,35 @@ async function signOut() {
 async function loadAll() {
   document.getElementById('refresh-time').textContent = 'Loading…';
 
-  // 1. All student profiles
-  const { data: profiles } = await supa.from('profiles')
-    .select('id, full_name, year_group, role')
-    .eq('role', 'student')
-    .order('full_name');
+  // 1. Student profiles — filtered for teacher_manager, all for admin
+  let profiles;
+  if (window._myRole === 'teacher_manager') {
+    const { data: assigned } = await supa.rpc('get_teacher_students', {
+      p_teacher_user_id: window._teacherId
+    });
+    if (!assigned || assigned.length === 0) {
+      // No students assigned yet — show empty state and stop
+      _allStudents = [];
+      _topicMap = {}; _subjectMap = {}; _quizMap = {}; _allTopicProgress = [];
+      renderOverview();
+      document.getElementById('refresh-time').textContent = 'No students assigned';
+      document.getElementById('loading-overlay').style.display = 'none';
+      return;
+    }
+    const ids = assigned.map(s => s.student_id);
+    const { data: p } = await supa.from('profiles')
+      .select('id, full_name, year_group, role')
+      .in('id', ids)
+      .order('full_name');
+    profiles = p;
+  } else {
+    // Admin / super_admin — see all students
+    const { data: p } = await supa.from('profiles')
+      .select('id, full_name, year_group, role')
+      .eq('role', 'student')
+      .order('full_name');
+    profiles = p;
+  }
 
   // 2. All quiz attempts (with joined quiz title/subject via quizzes table)
   const { data: attempts } = await supa.from('quiz_attempts')
@@ -703,10 +734,11 @@ function renderOverview() {
 
   const tbody = document.getElementById('students-tbody');
   if (_allStudents.length === 0) {
+    const isTeacher = window._myRole === 'teacher_manager' || window._myRole === 'teacher';
     tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">
       <div class="empty-icon">👤</div>
-      <div class="empty-title">No students yet</div>
-      <div>Students will appear here once they create accounts</div>
+      <div class="empty-title">${isTeacher ? 'No students assigned yet' : 'No students yet'}</div>
+      <div>${isTeacher ? 'Contact your admin to have students assigned to your account.' : 'Students will appear here once they create accounts.'}</div>
     </div></td></tr>`;
     return;
   }
@@ -1390,9 +1422,11 @@ function renderUsers() {
           style="background:var(--navy3);border:1px solid var(--border);
                  color:var(--white);padding:.3rem .6rem;border-radius:6px;
                  font-size:.82rem;cursor:pointer;outline:none">
-          <option value="student"  ${u.role==='student'  ? 'selected':''}>Student</option>
-          <option value="teacher"  ${u.role==='teacher'  ? 'selected':''}>Teacher</option>
-          <option value="admin"    ${u.role==='admin'    ? 'selected':''}>Admin</option>
+          <option value="student"         ${u.role==='student'         ? 'selected':''}>Student</option>
+          <option value="teacher_manager" ${u.role==='teacher_manager' ? 'selected':''}>Teacher Manager</option>
+          <option value="teacher"         ${u.role==='teacher'         ? 'selected':''}>Teacher (legacy)</option>
+          <option value="admin"           ${u.role==='admin'           ? 'selected':''}>Admin</option>
+          <option value="super_admin"     ${u.role==='super_admin'     ? 'selected':''}>Super Admin</option>
         </select>
       </td>
     </tr>`).join('');
