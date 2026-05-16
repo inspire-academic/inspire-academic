@@ -296,9 +296,6 @@ tr:hover td { background: rgba(255,255,255,.025); }
     <div class="nav-item" onclick="showView('users')" id="nav-users" style="display:none">
       <span class="icon">👥</span><span>Users &amp; Roles</span>
     </div>
-    <a class="nav-item" href="admin-teacher-mgmt.html" id="nav-teacher-mgmt" style="display:none;text-decoration:none;color:inherit;">
-      <span class="icon">👩‍🏫</span><span>Manage Teachers</span>
-    </a>
 
     <div style="height:1px;background:var(--border);margin:.5rem 0;"></div>
 
@@ -531,7 +528,7 @@ async function init() {
   const { data: profile } = await supa.from('profiles')
     .select('role, full_name').eq('id', uid).maybeSingle();
 
-  if (!profile || !['teacher','teacher_manager','admin','super_admin'].includes(profile.role)) {
+  if (!profile || (profile.role !== 'teacher' && profile.role !== 'admin')) {
     window.location.href = '/dashboard.html';
     return;
   }
@@ -542,10 +539,9 @@ async function init() {
   // Store role globally so other functions can check it
   window._myRole = profile.role;
 
-  // Show admin-only nav item for admins and super_admins
-  if (profile.role === 'admin' || profile.role === 'super_admin') {
+  // Show admin-only nav item
+  if (profile.role === 'admin') {
     document.getElementById('nav-users').style.display = 'flex';
-    document.getElementById('nav-teacher-mgmt').style.display = 'flex';
   }
 
   await loadAll();
@@ -562,34 +558,11 @@ async function signOut() {
 async function loadAll() {
   document.getElementById('refresh-time').textContent = 'Loading…';
 
-  // 1. All student profiles — filtered by assignment for teacher_manager
-  let profiles;
-  if (window._myRole === 'teacher_manager') {
-    // Get only assigned students via RPC
-    const { data: assignedStudents } = await supa.rpc('get_teacher_students', {
-      p_teacher_user_id: window._teacherId
-    });
-    if (!assignedStudents || assignedStudents.length === 0) {
-      _allStudents = [];
-      _topicMap = {}; _subjectMap = {}; _quizMap = {}; _allTopicProgress = [];
-      renderOverview(); renderHeatmap(); renderDifficulty();
-      document.getElementById('refresh-time').textContent = 'No students assigned yet';
-      return;
-    }
-    const assignedIds = assignedStudents.map(s => s.student_id);
-    const { data: p } = await supa.from('profiles')
-      .select('id, full_name, year_group, role')
-      .in('id', assignedIds)
-      .order('full_name');
-    profiles = p;
-  } else {
-    // Admin / super_admin — see all students
-    const { data: p } = await supa.from('profiles')
-      .select('id, full_name, year_group, role')
-      .eq('role', 'student')
-      .order('full_name');
-    profiles = p;
-  }
+  // 1. All student profiles
+  const { data: profiles } = await supa.from('profiles')
+    .select('id, full_name, year_group, role')
+    .eq('role', 'student')
+    .order('full_name');
 
   // 2. All quiz attempts (with joined quiz title/subject via quizzes table)
   const { data: attempts } = await supa.from('quiz_attempts')
@@ -1417,11 +1390,9 @@ function renderUsers() {
           style="background:var(--navy3);border:1px solid var(--border);
                  color:var(--white);padding:.3rem .6rem;border-radius:6px;
                  font-size:.82rem;cursor:pointer;outline:none">
-          <option value="student"         ${u.role==='student'         ? 'selected':''}>Student</option>
-          <option value="teacher_manager" ${u.role==='teacher_manager' ? 'selected':''}>Teacher Manager</option>
-          <option value="teacher"         ${u.role==='teacher'         ? 'selected':''}>Teacher (legacy)</option>
-          <option value="admin"           ${u.role==='admin'           ? 'selected':''}>Admin</option>
-          <option value="super_admin"     ${u.role==='super_admin'     ? 'selected':''}>Super Admin</option>
+          <option value="student"  ${u.role==='student'  ? 'selected':''}>Student</option>
+          <option value="teacher"  ${u.role==='teacher'  ? 'selected':''}>Teacher</option>
+          <option value="admin"    ${u.role==='admin'    ? 'selected':''}>Admin</option>
         </select>
       </td>
     </tr>`).join('');
