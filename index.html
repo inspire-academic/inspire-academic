@@ -197,7 +197,8 @@ input,select{font-family:'DM Sans',sans-serif;}
 
       <div class="auth-tabs">
         <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
-        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Student Account</button>
+        <button class="auth-tab" id="tab-teacher" onclick="switchTab('teacher')">Teacher Account</button>
       </div>
 
       <!-- LOGIN -->
@@ -299,10 +300,42 @@ input,select{font-family:'DM Sans',sans-serif;}
         </div>
 
       </div>
-    </div>
-  </div>
-</div>
-<div id="toast"></div>
+      <!-- TEACHER SIGNUP -->
+      <div class="auth-form" id="form-teacher">
+        <h2 class="form-title">Teacher Registration</h2>
+        <p class="form-sub">Create a Teacher Manager account — admin will assign your students</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="field"><label>First Name</label><input type="text" id="tc-firstname" placeholder="e.g. Sarah"></div>
+          <div class="field"><label>Last Name</label><input type="text" id="tc-lastname" placeholder="e.g. Smith"></div>
+        </div>
+        <div class="field"><label>Email</label><input type="email" id="tc-email" placeholder="your@email.com"></div>
+        <div class="field"><label>Password</label><input type="password" id="tc-pass" placeholder="At least 8 characters"></div>
+        <div class="field"><label>School / Organisation</label><input type="text" id="tc-school" placeholder="e.g. St. Mary's School or My Tutoring"></div>
+        <div class="field">
+          <label>Subjects You Teach</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.4rem;">
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--white);cursor:pointer;">
+              <input type="checkbox" class="tc-subject" value="Physics" style="accent-color:var(--gold)"> Physics
+            </label>
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--white);cursor:pointer;">
+              <input type="checkbox" class="tc-subject" value="Chemistry" style="accent-color:var(--gold)"> Chemistry
+            </label>
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--white);cursor:pointer;">
+              <input type="checkbox" class="tc-subject" value="Biology" style="accent-color:var(--gold)"> Biology
+            </label>
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--white);cursor:pointer;">
+              <input type="checkbox" class="tc-subject" value="Mathematics" style="accent-color:var(--gold)"> Mathematics
+            </label>
+          </div>
+        </div>
+        <div style="background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.25);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:1rem;font-size:.82rem;color:var(--muted);">
+          ℹ️ Your account will need to be <strong style="color:var(--gold)">verified by the admin</strong> before you can access student data. Students will be assigned to you by the admin.
+        </div>
+        <button class="submit-btn" onclick="doTeacherSignup()" id="teacher-signup-btn">Create Teacher Account →</button>
+        <div class="form-footer">Already have an account? <button onclick="switchTab('login')">Sign in</button></div>
+      </div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="perf-utils.js"></script>
@@ -323,8 +356,10 @@ function toast(msg,type='success'){
 function switchTab(tab){
   document.getElementById('form-login').classList.toggle('active',tab==='login');
   document.getElementById('form-signup').classList.toggle('active',tab==='signup');
+  document.getElementById('form-teacher').classList.toggle('active',tab==='teacher');
   document.getElementById('tab-login').classList.toggle('active',tab==='login');
   document.getElementById('tab-signup').classList.toggle('active',tab==='signup');
+  document.getElementById('tab-teacher').classList.toggle('active',tab==='teacher');
 }
 
 function showStep(n){
@@ -393,7 +428,8 @@ async function doLogin(){
   perfEnd('profile-fetch');
   if(profile) setCachedProfile(profile);
 
-  window.location.href=(profile?.role==='teacher'||profile?.role==='admin')?'teacher.html':'dashboard.html';
+  const r = profile?.role;
+  window.location.href = (r==='teacher'||r==='teacher_manager'||r==='admin'||r==='super_admin') ? 'teacher.html' : 'dashboard.html';
 }
 
 async function doSignup(){
@@ -444,7 +480,61 @@ async function resetPw(){
   else toast('Password reset email sent!');
 }
 
-document.addEventListener('keydown',e=>{
+async function doTeacherSignup(){
+  const firstName=document.getElementById('tc-firstname').value.trim();
+  const lastName=document.getElementById('tc-lastname').value.trim();
+  const email=document.getElementById('tc-email').value.trim();
+  const pass=document.getElementById('tc-pass').value;
+  const school=document.getElementById('tc-school').value.trim();
+  const subjects=[...document.querySelectorAll('.tc-subject:checked')].map(c=>c.value);
+
+  if(!firstName){toast('Please enter your first name','error');return;}
+  if(!lastName){toast('Please enter your last name','error');return;}
+  if(!email||!email.includes('@')){toast('Please enter a valid email','error');return;}
+  if(pass.length<8){toast('Password must be at least 8 characters','error');return;}
+  if(!school){toast('Please enter your school or organisation','error');return;}
+  if(subjects.length===0){toast('Please select at least one subject','error');return;}
+
+  const btn=document.getElementById('teacher-signup-btn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Creating account…';
+
+  const fullName=(firstName+' '+lastName).trim();
+  const {data,error}=await supa.auth.signUp({
+    email,password:pass,
+    options:{data:{full_name:fullName,first_name:firstName,last_name:lastName,role:'teacher_manager'}}
+  });
+
+  if(error){toast(error.message,'error');btn.disabled=false;btn.textContent='Create Teacher Account →';return;}
+
+  if(data.user){
+    // Insert into profiles
+    await supa.from('profiles').upsert({
+      id:data.user.id,
+      full_name:fullName,
+      first_name:firstName,
+      last_name:lastName,
+      role:'teacher_manager',
+      subjects:subjects,
+      school_affiliation:school,
+      is_verified:false
+    });
+    // Insert into teacher_profiles
+    await supa.from('teacher_profiles').upsert({
+      user_id:data.user.id,
+      is_active:true
+    });
+
+    if(data.session){
+      window.location.href='teacher.html';
+    } else {
+      btn.disabled=false;btn.textContent='Account created ✓';
+      toast('Check your email to confirm your account, then sign in.','success');
+      setTimeout(()=>switchTab('login'),3000);
+    }
+  }
+}
+
+
   if(e.key==='Enter'&&document.getElementById('form-login').classList.contains('active')) doLogin();
 });
 

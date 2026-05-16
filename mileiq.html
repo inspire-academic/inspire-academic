@@ -308,8 +308,8 @@ function renderJourneys() {
         <div class="journey-distance">${j.distance_miles} miles · ${j.purpose || 'No purpose noted'}</div>
       </div>
       <div class="journey-actions">
-        ${j.receipt_image_url ? '<button class="btn btn-outline" onclick="viewReceipt(' + j.id + ')">📸 View</button>' : ''}
-        <button class="btn btn-red" onclick="deleteJourney(' + j.id + ')">Delete</button>
+        ${j.receipt_image_url ? `<button class="btn btn-outline" onclick="viewReceipt(${j.id})">📸 View</button>` : ''}
+        <button class="btn btn-red" onclick="deleteJourney(${j.id})">Delete</button>
       </div>
     </div>
   `).join('');
@@ -452,13 +452,20 @@ async function deleteJourney(id) {
   if (!confirm('Delete this journey?')) return;
 
   try {
-    const { error } = await supa.from('mileiq_journeys').delete().eq('id', id);
+    // Ensure id is a number
+    const journeyId = parseInt(id, 10);
+    if (isNaN(journeyId)) {
+      throw new Error('Invalid journey ID');
+    }
+
+    const { error } = await supa.from('mileiq_journeys').delete().eq('id', journeyId);
     if (error) throw error;
     toast('Journey deleted', 'success');
     loadJourneys();
     updateStats();
   } catch(e) {
     toast('Error: ' + e.message, 'error');
+    console.error('Delete error:', e);
   }
 }
 
@@ -525,33 +532,68 @@ function generateReport(format) {
 function generateExcelReport(journeys, monthStr) {
   const totalMiles = journeys.reduce((sum, j) => sum + (parseFloat(j.distance_miles) || 0), 0);
   const studentName = S.user.user_metadata?.full_name || S.user.email;
+  const now = new Date();
+  const monthNum = now.getMonth() + 1;
+  const year = now.getFullYear();
   
-  let csv = `MileIQ Monthly Mileage Report
-`;
-  csv += `${studentName}
-`;
-  csv += `${monthStr}
-
-`;
-  csv += `Date,Start Location,Destination,Purpose,Distance (Miles)
-`;
+  // Create workbook using XLSX library
+  const wb = XLSX.utils.book_new();
   
-  journeys.forEach(j => {
-    const date = new Date(j.journey_date).toLocaleDateString();
-    const distance = parseFloat(j.distance_miles) || 0;
-    csv += `"${date}","${j.start_location}","${j.destination}","${j.purpose || ''}",${distance}
-`;
-  });
+  // MILEAGE SHEET
+  const mileageData = [];
   
-  csv += `
-Total Mileage:,${totalMiles.toFixed(1)}
-`;
-  csv += `Number of Journeys:,${journeys.length}
-`;
-  csv += `Average per Journey:,${(totalMiles / (journeys.length || 1)).toFixed(1)}
-`;
+  // Header rows
+  mileageData.push(['STAFF NAME', studentName, 'FUEL TYPE', '', 'START MILEAGE', '', 'MONTH', monthNum, '', 'FUEL RATES']);
+  mileageData.push(['VEHICLE REG. NO.', '', 'ENGINE SIZE', '', 'FINISH MILEAGE', '', 'YEAR', year, '', '1st Mar - 31st May']);
+  mileageData.push(['', '', '', '', '', '', '', '', '', 'Petrol']);
+  mileageData.push(['DATE', 'DESTINATION / POST CODE', '', '', 'JOB NUMBER / PURPOSE OF TRAVEL', '', '', 'MILEAGE', '', 'Engine size']);
   
-  downloadFile(csv, `MileIQ_${monthStr.replace(' ', '_')}.csv`, 'text/csv');
+  // Journey rows (days 1-31)
+  for (let day = 1; day <= 31; day++) {
+    const journeyForDay = journeys.find(j => {
+      const jDate = new Date(j.journey_date);
+      return jDate.getDate() === day;
+    });
+    
+    if (journeyForDay) {
+      mileageData.push([
+        day,
+        journeyForDay.destination,
+        '',
+        '',
+        journeyForDay.purpose || '',
+        '',
+        '',
+        journeyForDay.distance_miles || '',
+        '',
+        ''
+      ]);
+    } else {
+      mileageData.push([day, '', '', '', '', '', '', '', '', '']);
+    }
+  }
+  
+  const mileageSheet = XLSX.utils.aoa_to_sheet(mileageData);
+  XLSX.utils.book_append_sheet(wb, mileageSheet, 'MILEAGE SHEET');
+  
+  // DATA SHEET (reference sheet - copy minimal data)
+  const dataSheet = XLSX.utils.aoa_to_sheet([
+    ['Fuel types'],
+    ['Petrol'],
+    ['Diesel'],
+    ['Electric'],
+    [],
+    ['Months'],
+    ['January'], ['February'], ['March'], ['April'], ['May'], ['June'],
+    ['July'], ['August'], ['September'], ['October'], ['November'], ['December'],
+    [],
+    ['Years'],
+    [year]
+  ]);
+  XLSX.utils.book_append_sheet(wb, dataSheet, 'DATA');
+  
+  // Download
+  XLSX.writeFile(wb, `MileIQ_${monthStr.replace(' ', '_')}.xlsx`);
 }
 
 function generatePDFReport(journeys, monthStr) {
@@ -622,5 +664,6 @@ function toast(msg, type = 'info') {
   setTimeout(() => t.classList.remove('show'), 3500);
 }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
 </body>
 </html>
