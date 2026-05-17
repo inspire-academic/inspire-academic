@@ -330,6 +330,9 @@ tr:hover td { background: rgba(255,255,255,.025); }
     <div class="nav-item" onclick="showView('assign')" id="nav-assign">
       <span class="icon">📤</span><span>Assign</span>
     </div>
+    <div class="nav-item" onclick="showView('submissions')" id="nav-submissions">
+      <span class="icon">📥</span><span>Submissions</span>
+    </div>
     <div class="nav-item" onclick="showView('analytics')" id="nav-analytics">
       <span class="icon">📈</span><span>Analytics</span>
     </div>
@@ -528,6 +531,70 @@ tr:hover td { background: rgba(255,255,255,.025); }
     </div>
 
     <!-- ════════════════════════════════════
+         VIEW: SUBMISSIONS
+    ════════════════════════════════════ -->
+    <div class="view" id="view-submissions">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Student Submissions</div>
+          <div class="page-sub">Review submitted work, add feedback, and grades</div>
+        </div>
+        <div style="display:flex;gap:.75rem;">
+          <button class="btn btn-outline" onclick="loadSubmissions()">↻ Refresh</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-row" style="margin-bottom:2rem;">
+        <div class="stat-card">
+          <div class="stat-label">Total Submissions</div>
+          <div class="stat-value" id="sub-total">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Review</div>
+          <div class="stat-value" id="sub-pending" style="color:var(--amber);">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Reviewed</div>
+          <div class="stat-value" id="sub-reviewed" style="color:var(--green);">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Score</div>
+          <div class="stat-value" id="sub-avg-score">—</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+        <button class="btn btn-outline btn-sm" onclick="filterSubmissions('all',this)" style="color:var(--gold);border-color:var(--gold);">All</button>
+        <button class="btn btn-outline btn-sm" onclick="filterSubmissions('submitted',this)">Pending Review</button>
+        <button class="btn btn-outline btn-sm" onclick="filterSubmissions('reviewed',this)">Reviewed</button>
+      </div>
+
+      <!-- Submissions Table -->
+      <div class="card">
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);">
+                <th style="text-align:left;padding:.75rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace;">Student</th>
+                <th style="text-align:left;padding:.75rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace;">Document</th>
+                <th style="text-align:left;padding:.75rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace;">Submitted</th>
+                <th style="text-align:left;padding:.75rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace;">Files</th>
+                <th style="text-align:left;padding:.75rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace;">Status</th>
+                <th style="text-align:left;padding:.75rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace;">Score</th>
+                <th style="text-align:left;padding:.75rem;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:'DM Mono',monospace;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="submissions-tbody">
+              <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted);">Loading submissions…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════
          VIEW: ANALYTICS
     ════════════════════════════════════ -->
     <div class="view" id="view-analytics">
@@ -632,6 +699,52 @@ tr:hover td { background: rgba(255,255,255,.025); }
   </div>
 </div>
 
+<!-- ── REVIEW SUBMISSION MODAL ── -->
+<div class="modal-backdrop" id="review-modal">
+  <div class="modal" style="max-width:700px;">
+    <div class="modal-header">
+      <div class="modal-title">📋 Review Submission</div>
+      <button class="modal-close" onclick="closeModal('review-modal')">×</button>
+    </div>
+    <div style="padding:1.5rem;">
+      <!-- Student & Document Info -->
+      <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1.5rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div>
+            <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;">Student</div>
+            <div id="review-student-name" style="font-size:.9rem;font-weight:500;"></div>
+          </div>
+          <div>
+            <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;">Document</div>
+            <div id="review-doc-name" style="font-size:.9rem;font-weight:500;"></div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+          <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;">Submitted Files</div>
+          <div id="review-files-list"></div>
+        </div>
+      </div>
+
+      <!-- Score Input -->
+      <div class="form-group">
+        <label class="form-label">Score (0-100%)</label>
+        <input type="number" id="review-score-input" class="form-input" min="0" max="100" placeholder="Enter score">
+      </div>
+
+      <!-- Feedback Input -->
+      <div class="form-group">
+        <label class="form-label">Feedback</label>
+        <textarea id="review-feedback-input" class="form-textarea" rows="6" placeholder="Provide detailed feedback for the student..."></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('review-modal')">Cancel</button>
+      <button class="btn btn-gold" onclick="submitReview()">✅ Mark as Reviewed</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -651,7 +764,10 @@ let modalPackId = null;
 let topicTags = [];
 let sections = [];
 let sectionCounter = 0;
-let uploadedDocuments = []; // Track documents for the current pack
+let uploadedDocuments = [];
+let allSubmissions = [];
+let currentSubmissionFilter = 'all';
+let reviewingSubmissionId = null; // Track documents for the current pack
 
 // ── Init ──
 (async () => {
@@ -679,6 +795,7 @@ function showView(view) {
   if (navEl) navEl.classList.add('active');
   if (view === 'analytics') loadAnalytics();
   if (view === 'assign') renderRecentAssignments();
+  if (view === 'submissions') loadSubmissions();
 }
 
 // ── Load Data ──
@@ -1448,6 +1565,241 @@ function showToast(msg, type='') {
   const t = document.getElementById('toast');
   t.textContent = msg; t.className = 'show ' + type;
   setTimeout(() => { t.className = ''; }, 3000);
+}
+
+// ── Submissions Management ──
+async function loadSubmissions() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return;
+
+  const { data, error } = await sb
+    .from('revision_pack_submissions')
+    .select(`
+      *,
+      revision_submission_files (*),
+      profiles!revision_pack_submissions_student_id_fkey (first_name, last_name, full_name),
+      revision_pack_documents (file_name, revision_packs (title))
+    `)
+    .order('submitted_at', { ascending: false });
+
+  if (error) {
+    console.error('Error loading submissions:', error);
+    showToast('Error loading submissions', 'error');
+    return;
+  }
+
+  allSubmissions = data || [];
+  renderSubmissionsStats();
+  renderSubmissions(currentSubmissionFilter);
+}
+
+function renderSubmissionsStats() {
+  const total = allSubmissions.length;
+  const pending = allSubmissions.filter(s => s.status === 'submitted').length;
+  const reviewed = allSubmissions.filter(s => s.status === 'reviewed').length;
+  
+  const scores = allSubmissions
+    .filter(s => s.score != null)
+    .map(s => s.score);
+  const avgScore = scores.length 
+    ? Math.round(scores.reduce((a,b) => a + b, 0) / scores.length)
+    : null;
+
+  document.getElementById('sub-total').textContent = total;
+  document.getElementById('sub-pending').textContent = pending;
+  document.getElementById('sub-reviewed').textContent = reviewed;
+  document.getElementById('sub-avg-score').textContent = avgScore != null ? avgScore + '%' : '—';
+}
+
+function filterSubmissions(status, btn) {
+  currentSubmissionFilter = status;
+  document.querySelectorAll('#view-submissions .btn-sm').forEach(b => {
+    b.style.color = ''; b.style.borderColor = '';
+  });
+  btn.style.color = 'var(--gold)'; btn.style.borderColor = 'var(--gold)';
+  renderSubmissions(status);
+}
+
+function renderSubmissions(filter) {
+  const tbody = document.getElementById('submissions-tbody');
+  
+  const filtered = filter === 'all' 
+    ? allSubmissions 
+    : allSubmissions.filter(s => s.status === filter);
+
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted);">No submissions found</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(s => {
+    const student = s.profiles;
+    const studentName = student 
+      ? (student.first_name ? `${student.first_name} ${student.last_name||''}`.trim() : student.full_name)
+      : 'Unknown';
+    
+    const docName = s.revision_pack_documents?.file_name || 'Unknown document';
+    const packTitle = s.revision_pack_documents?.revision_packs?.title || '';
+    
+    const submittedDate = new Date(s.submitted_at).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    const fileCount = s.revision_submission_files?.length || 0;
+    
+    const statusBadge = s.status === 'reviewed'
+      ? `<span class="pill pill-done">Reviewed</span>`
+      : `<span class="pill pill-pending">Pending</span>`;
+
+    const scoreDisplay = s.score != null 
+      ? `<span style="font-family:'DM Mono',monospace;font-size:.85rem;">${s.score}%</span>`
+      : '—';
+
+    const actionBtn = s.status === 'submitted'
+      ? `<button class="btn btn-gold btn-sm" onclick="openReviewModal('${s.id}')">📋 Review</button>`
+      : `<button class="btn btn-outline btn-sm" onclick="openReviewModal('${s.id}')">👁️ View</button>`;
+
+    const downloadBtn = `<button class="btn btn-outline btn-sm" onclick="downloadSubmission('${s.id}')" title="Download files">⬇️</button>`;
+
+    return `<tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:.75rem;">
+        <div style="font-size:.88rem;font-weight:500;">${esc(studentName)}</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.15rem;">v${s.submission_number}</div>
+      </td>
+      <td style="padding:.75rem;">
+        <div style="font-size:.85rem;">${esc(docName)}</div>
+        ${packTitle ? `<div style="font-size:.72rem;color:var(--muted);margin-top:.15rem;">${esc(packTitle)}</div>` : ''}
+      </td>
+      <td style="padding:.75rem;font-size:.8rem;color:var(--muted);">${submittedDate}</td>
+      <td style="padding:.75rem;font-size:.85rem;">${fileCount} file${fileCount !== 1 ? 's' : ''}</td>
+      <td style="padding:.75rem;">${statusBadge}</td>
+      <td style="padding:.75rem;">${scoreDisplay}</td>
+      <td style="padding:.75rem;">
+        <div style="display:flex;gap:.5rem;">
+          ${actionBtn}
+          ${downloadBtn}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function openReviewModal(submissionId) {
+  const submission = allSubmissions.find(s => s.id === submissionId);
+  if (!submission) return;
+
+  reviewingSubmissionId = submissionId;
+
+  const student = submission.profiles;
+  const studentName = student 
+    ? (student.first_name ? `${student.first_name} ${student.last_name||''}`.trim() : student.full_name)
+    : 'Unknown';
+  
+  const docName = submission.revision_pack_documents?.file_name || 'Unknown document';
+
+  document.getElementById('review-student-name').textContent = studentName;
+  document.getElementById('review-doc-name').textContent = docName;
+
+  const files = submission.revision_submission_files || [];
+  document.getElementById('review-files-list').innerHTML = files.length
+    ? files.map(f => {
+        const icon = f.file_type === 'pdf' ? '📄' : f.file_type.includes('doc') ? '📝' : '🖼️';
+        const sizeKB = Math.round(f.file_size / 1024);
+        return `<div style="display:flex;align-items:center;gap:.5rem;padding:.4rem 0;">
+          <span>${icon}</span>
+          <span style="flex:1;font-size:.82rem;">${esc(f.file_name)}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);">${sizeKB} KB</span>
+        </div>`;
+      }).join('')
+    : '<div style="color:var(--muted);font-size:.8rem;">No files</div>';
+
+  document.getElementById('review-score-input').value = submission.score || '';
+  document.getElementById('review-feedback-input').value = submission.feedback || '';
+
+  document.getElementById('review-modal').classList.add('open');
+}
+
+async function submitReview() {
+  const score = parseInt(document.getElementById('review-score-input').value);
+  const feedback = document.getElementById('review-feedback-input').value.trim();
+
+  if (isNaN(score) || score < 0 || score > 100) {
+    showToast('Please enter a valid score (0-100)', 'error');
+    return;
+  }
+
+  if (!feedback) {
+    showToast('Please provide feedback', 'error');
+    return;
+  }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return;
+
+  const { error } = await sb
+    .from('revision_pack_submissions')
+    .update({
+      score,
+      feedback,
+      status: 'reviewed',
+      reviewed_at: new Date().toISOString(),
+      reviewed_by: session.user.id
+    })
+    .eq('id', reviewingSubmissionId);
+
+  if (error) {
+    console.error('Review error:', error);
+    showToast('Error saving review: ' + error.message, 'error');
+    return;
+  }
+
+  showToast('Review submitted successfully ✓', 'success');
+  closeModal('review-modal');
+  await loadSubmissions();
+}
+
+async function downloadSubmission(submissionId) {
+  const submission = allSubmissions.find(s => s.id === submissionId);
+  if (!submission) return;
+
+  const files = submission.revision_submission_files || [];
+  if (!files.length) {
+    showToast('No files to download', 'error');
+    return;
+  }
+
+  showToast('Downloading files...', '');
+
+  for (const file of files) {
+    try {
+      const { data, error } = await sb.storage
+        .from('revision-submissions')
+        .download(file.file_path);
+
+      if (error) {
+        console.error('Download error:', error);
+        showToast('Download failed: ' + file.file_name, 'error');
+        continue;
+      }
+
+      const url = URL.createObjectURL(data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.file_name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Download error:', err);
+    }
+  }
+
+  showToast('Download complete ✓', 'success');
 }
 
 async function signOut() { await sb.auth.signOut(); location.href = 'index.html'; }
