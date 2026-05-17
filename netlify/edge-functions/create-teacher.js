@@ -105,17 +105,27 @@ export default async function(request, context) {
     })
   })
 
-  const createData = await createRes.json()
+  const createData = await createRes.text()
+  let createJson
+  try {
+    createJson = JSON.parse(createData)
+  } catch(e) {
+    console.error('Supabase invite response (not JSON):', createData)
+    return new Response(JSON.stringify({ error: 'Supabase error: ' + createData.substring(0, 200) }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    })
+  }
 
   if (!createRes.ok) {
-    console.error('Supabase create user error:', createData)
-    return new Response(JSON.stringify({ error: createData.message || createData.msg || 'Failed to create user' }), {
+    console.error('Supabase invite error:', createJson)
+    return new Response(JSON.stringify({ error: createJson.message || createJson.msg || 'Failed to create user' }), {
       status: createRes.status,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
     })
   }
 
-  const newUserId = createData.id
+  const newUserId = createJson.id
 
   // Step 3: Upsert into profiles table (invite may auto-create a partial profile)
   const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
