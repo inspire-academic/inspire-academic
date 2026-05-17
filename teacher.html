@@ -542,8 +542,9 @@ async function init() {
   document.getElementById('teacher-name-display').textContent =
     profile.full_name || session.user.email;
 
-  // Store role globally so other functions can check it
+  // Store role and user ID globally
   window._myRole = profile.role;
+  window._teacherId = session.user.id;
 
   // Show admin-only nav items
   if (profile.role === 'admin' || profile.role === 'super_admin') {
@@ -596,16 +597,25 @@ async function loadAll() {
   }
 
   // 2. All quiz attempts (with joined quiz title/subject via quizzes table)
-  const { data: attempts } = await supa.from('quiz_attempts')
-    .select('id, student_id, quiz_id, score, max_score, percentage, passed, completed_at, started_at');
+  // Filter by assigned students for teacher_manager
+  const studentIds = (profiles || []).map(p => p.id);
+
+  const { data: attempts } = studentIds.length > 0
+    ? await supa.from('quiz_attempts')
+        .select('id, student_id, quiz_id, score, max_score, percentage, passed, completed_at, started_at')
+        .in('student_id', studentIds)
+    : { data: [] };
 
   // 3. All quizzes (to map quiz_id → topic/subject info)
   const { data: quizzes } = await supa.from('quizzes')
     .select('id, title, exam_board');
 
-  // 4. Topic progress (mastery per topic per student)
-  const { data: topicProgressRows } = await supa.from('topic_progress')
-    .select('student_id, topic_id, attempts_count, best_score, latest_score, mastery_level, last_attempted');
+  // 4. Topic progress — filtered by assigned students
+  const { data: topicProgressRows } = studentIds.length > 0
+    ? await supa.from('topic_progress')
+        .select('student_id, topic_id, attempts_count, best_score, latest_score, mastery_level, last_attempted')
+        .in('student_id', studentIds)
+    : { data: [] };
 
   // 5. Topics (to get subject names)
   const { data: topicsRows } = await supa.from('topics')
