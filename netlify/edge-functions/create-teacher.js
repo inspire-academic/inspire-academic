@@ -116,14 +116,14 @@ export default async function(request, context) {
 
   const newUserId = createData.id
 
-  // Step 3: Insert into profiles table
+  // Step 3: Upsert into profiles table (invite may auto-create a partial profile)
   const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
     method: 'POST',
     headers: {
       'apikey':        SUPABASE_SERVICE_KEY,
       'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
       'Content-Type':  'application/json',
-      'Prefer':        'return=minimal'
+      'Prefer':        'return=minimal,resolution=merge-duplicates'
     },
     body: JSON.stringify({
       id:                 newUserId,
@@ -133,7 +133,7 @@ export default async function(request, context) {
       role:               'teacher_manager',
       subjects:           subjects || [],
       school_affiliation: school || null,
-      is_verified:        true  // Admin-created = auto-verified
+      is_verified:        true
     })
   })
 
