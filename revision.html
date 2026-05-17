@@ -294,6 +294,55 @@ main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
   text-align:right;
 }
 
+/* ── DOCUMENTS ── */
+.pack-documents {
+  margin-top:.75rem;
+  padding-top:.75rem;
+  border-top:1px solid var(--border);
+}
+.pack-documents-label {
+  font-family:'DM Mono',monospace;
+  font-size:.6rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  margin-bottom:.4rem;
+}
+.doc-item {
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.4rem .7rem;
+  background:var(--navy3);
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-bottom:.4rem;
+  text-decoration:none;
+  color:inherit;
+  transition:all .15s;
+}
+.doc-item:hover {
+  border-color:var(--gold);
+  background:rgba(201,168,76,.08);
+}
+.doc-icon {
+  font-size:1rem;
+  flex-shrink:0;
+}
+.doc-name {
+  flex:1;
+  font-size:.78rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.doc-size {
+  font-family:'DM Mono',monospace;
+  font-size:.68rem;
+  color:var(--muted);
+  flex-shrink:0;
+}
+
 /* ── RIGHT SIDE CTA ── */
 .pack-right {
   display:flex;
@@ -557,6 +606,28 @@ let currentFilter  = 'all';
 
   if (error) { showToast('Could not load revision packs', 'error'); }
 
+  // Load documents for all packs
+  const packIds = (assignments || []).map(a => a.pack_id).filter(Boolean);
+  let allDocuments = [];
+  if (packIds.length) {
+    const { data: docData } = await sb
+      .from('revision_pack_documents')
+      .select('*')
+      .in('pack_id', packIds)
+      .order('uploaded_at', { ascending: false });
+    allDocuments = docData || [];
+  }
+
+  // Map documents by pack_id (only show released documents)
+  const documentsMap = {};
+  allDocuments.forEach(doc => {
+    const shouldShow = !doc.release_date || new Date(doc.release_date) <= new Date();
+    if (shouldShow) {
+      if (!documentsMap[doc.pack_id]) documentsMap[doc.pack_id] = [];
+      documentsMap[doc.pack_id].push(doc);
+    }
+  });
+
   // Load latest attempt for each assignment
   const assignmentIds = (assignments || []).map(a => a.id);
   let attempts = [];
@@ -577,7 +648,8 @@ let currentFilter  = 'all';
 
   allAssignments = (assignments || []).map(a => ({
     ...a,
-    attempt: attemptMap[a.id] || null
+    attempt: attemptMap[a.id] || null,
+    documents: documentsMap[a.pack_id] || []
   }));
 
   renderStats();
@@ -661,6 +733,20 @@ function renderPacks(filter) {
            ${escHtml(a.message)}
          </div>` : '';
 
+    const documentsHtml = a.documents?.length
+      ? `<div class="pack-documents">
+           <div class="pack-documents-label">📎 Attached Documents</div>
+           ${a.documents.map(doc => {
+             const icon = doc.file_type === 'pdf' ? '📄' : doc.file_type.includes('doc') ? '📝' : '🖼️';
+             const sizeKB = Math.round(doc.file_size / 1024);
+             return `<div class="doc-item" onclick="downloadDocument('${doc.file_path}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();">
+               <span class="doc-icon">${icon}</span>
+               <span class="doc-name">${escHtml(doc.file_name)}</span>
+               <span class="doc-size">${sizeKB} KB</span>
+             </div>`;
+           }).join('')}
+         </div>` : '';
+
     const url = `revision-pack.html?assignment_id=${a.id}`;
 
     const card = document.createElement('a');
@@ -676,6 +762,7 @@ function renderPacks(filter) {
         <div class="pack-title">${escHtml(pack.title)}</div>
         <div class="pack-topics">${topicsHtml}</div>
         ${msgHtml}
+        ${documentsHtml}
         <div class="pack-footer">
           <span class="due-label ${dueInfo.cls}">${dueInfo.label}</span>
           <div class="pack-progress-wrap">
@@ -740,6 +827,36 @@ function escHtml(str) {
 async function signOut() {
   await sb.auth.signOut();
   location.href = 'index.html';
+}
+
+async function downloadDocument(filePath, fileName) {
+  try {
+    showToast('Downloading...', '');
+    
+    const { data, error } = await sb.storage
+      .from('revision-documents')
+      .download(filePath);
+
+    if (error) {
+      showToast('Download failed: ' + error.message, 'error');
+      return;
+    }
+
+    // Create download link
+    const url = URL.createObjectURL(data);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('Downloaded ✓', 'success');
+  } catch (err) {
+    showToast('Download error', 'error');
+    console.error('Download error:', err);
+  }
 }
 
 function showToast(msg, type='') {

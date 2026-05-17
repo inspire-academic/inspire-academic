@@ -437,6 +437,29 @@ tr:hover td { background: rgba(255,255,255,.025); }
         </div>
       </div>
 
+      <!-- Documents Upload -->
+      <div class="card" style="margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <div style="font-family:'DM Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);">Attached Documents</div>
+          <div style="font-size:.8rem;color:var(--muted);" id="documents-count-label">0 documents</div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label class="form-label">Upload Workbook/Worksheet</label>
+          <div style="display:flex;gap:.75rem;align-items:flex-end;flex-wrap:wrap;">
+            <input type="file" id="doc-upload-input" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.webp" style="display:none;" onchange="handleDocUpload(event)">
+            <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('doc-upload-input').click()">
+              📎 Upload Document
+            </button>
+            <div style="flex:1;min-width:200px;">
+              <label class="form-label" style="margin-bottom:.3rem;">Release Date (Optional)</label>
+              <input type="datetime-local" id="doc-release-date" class="form-input" style="font-size:.8rem;padding:.5rem .75rem;">
+              <div style="font-size:.7rem;color:var(--muted);margin-top:.2rem;">Leave empty to make visible immediately</div>
+            </div>
+          </div>
+        </div>
+        <div id="documents-list"></div>
+      </div>
+
       <!-- Section Builder -->
       <div class="card" style="margin-bottom:1rem;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
@@ -628,6 +651,7 @@ let modalPackId = null;
 let topicTags = [];
 let sections = [];
 let sectionCounter = 0;
+let uploadedDocuments = []; // Track documents for the current pack
 
 // ── Init ──
 (async () => {
@@ -740,9 +764,11 @@ function resetBuilder() {
   sectionCounter = 0;
   document.getElementById('sections-container').innerHTML = '';
   updateSectionCount();
+  uploadedDocuments = [];
+  renderDocumentsList();
 }
 
-function editPack(id) {
+async function editPack(id) {
   const p = allPacks.find(x => x.id === id);
   if (!p) return;
   editingPackId = id;
@@ -757,6 +783,20 @@ function editPack(id) {
   sectionCounter = 0;
   document.getElementById('sections-container').innerHTML = '';
   (p.sections || []).forEach(s => addSection(s.type, s));
+  
+  // Load existing documents
+  const docs = await loadPackDocuments(id);
+  uploadedDocuments = docs.map(d => ({
+    id: d.id, // Store DB ID for editing
+    file_name: d.file_name,
+    file_path: d.file_path,
+    file_type: d.file_type,
+    file_size: d.file_size,
+    release_date: d.release_date,
+    uploaded_at: d.uploaded_at
+  }));
+  renderDocumentsList();
+  
   showView('builder');
 }
 
@@ -981,6 +1021,147 @@ function collectSections() {
   return built;
 }
 
+// ── Document Upload Handling ──
+async function handleDocUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const maxSize = 10 * 1024 * 1024; // 10MB
+  if (file.size > maxSize) {
+    showToast('File too large. Maximum size is 10MB', 'error');
+    event.target.value = '';
+    return;
+  }
+
+  const allowedTypes = [
+    'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/msword',
+    'image/png', 'image/jpeg', 'image/jpg', 'image/webp'
+  ];
+  if (!allowedTypes.includes(file.type)) {
+    showToast('Invalid file type. Only PDF, Word, and images allowed', 'error');
+    event.target.value = '';
+    return;
+  }
+
+  // Show upload progress
+  showToast('Uploading document...', '');
+
+  const releaseDateInput = document.getElementById('doc-release-date').value;
+  const releaseDate = releaseDateInput ? new Date(releaseDateInput).toISOString() : null;
+
+  // Upload to Supabase Storage
+  const timestamp = Date.now();
+  const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const filePath = `${timestamp}_${sanitizedName}`;
+
+  const { data: uploadData, error: uploadError } = await sb.storage
+    .from('revision-documents')
+    .upload(filePath, file);
+
+  if (uploadError) {
+    showToast('Upload failed: ' + uploadError.message, 'error');
+    event.target.value = '';
+    return;
+  }
+
+  // Add to temporary list (will be saved to DB when pack is saved)
+  uploadedDocuments.push({
+    file_name: file.name,
+    file_path: filePath,
+    file_type: file.type.split('/')[1] || 'unknown',
+    file_size: file.size,
+    release_date: releaseDate,
+    uploaded_at: new Date().toISOString()
+  });
+
+  renderDocumentsList();
+  showToast('Document uploaded ✓', 'success');
+  event.target.value = '';
+  document.getElementById('doc-release-date').value = '';
+}
+
+function renderDocumentsList() {
+  const container = document.getElementById('documents-list');
+  const count = document.getElementById('documents-count-label');
+  
+  count.textContent = uploadedDocuments.length + ' document' + (uploadedDocuments.length !== 1 ? 's' : '');
+
+  if (!uploadedDocuments.length) {
+    container.innerHTML = '<div style="color:var(--muted);font-size:.8rem;padding:.5rem 0;">No documents attached yet</div>';
+    return;
+  }
+
+  container.innerHTML = uploadedDocuments.map((doc, idx) => {
+    const icon = doc.file_type === 'pdf' ? '📄' : doc.file_type.includes('doc') ? '📝' : '🖼️';
+    const sizeKB = Math.round(doc.file_size / 1024);
+    const releaseInfo = doc.release_date 
+      ? `<div style="font-size:.7rem;color:var(--amber);margin-top:.2rem;">📅 Releases: ${new Date(doc.release_date).toLocaleString('en-GB')}</div>`
+      : '<div style="font-size:.7rem;color:var(--green);margin-top:.2rem;">✓ Visible immediately</div>';
+    
+    return `
+      <div style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;margin-bottom:.5rem;display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:.85rem;font-weight:500;display:flex;align-items:center;gap:.5rem;">
+            <span>${icon}</span>
+            <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(doc.file_name)}</span>
+          </div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:.2rem;">${sizeKB} KB</div>
+          ${releaseInfo}
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="removeDocument(${idx})" style="flex-shrink:0;">✕</button>
+      </div>
+    `;
+  }).join('');
+}
+
+async function removeDocument(index) {
+  const doc = uploadedDocuments[index];
+  
+  // If document has an ID, it's already in the database
+  if (doc.id) {
+    const { error: dbError } = await sb
+      .from('revision_pack_documents')
+      .delete()
+      .eq('id', doc.id);
+    
+    if (dbError) {
+      showToast('Error removing from database: ' + dbError.message, 'error');
+      return;
+    }
+  }
+  
+  // Delete from storage
+  const { error } = await sb.storage
+    .from('revision-documents')
+    .remove([doc.file_path]);
+
+  if (error) {
+    console.warn('Storage deletion warning:', error);
+    // Continue anyway - file might already be deleted or not exist
+  }
+
+  uploadedDocuments.splice(index, 1);
+  renderDocumentsList();
+  showToast('Document removed', 'success');
+}
+
+async function loadPackDocuments(packId) {
+  const { data, error } = await sb
+    .from('revision_pack_documents')
+    .select('*')
+    .eq('pack_id', packId)
+    .order('uploaded_at', { ascending: false });
+
+  if (error) {
+    console.error('Error loading documents:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
 async function savePack() {
   const title = document.getElementById('pack-title').value.trim();
   const subject = document.getElementById('pack-subject').value;
@@ -998,14 +1179,37 @@ async function savePack() {
     updated_at: new Date().toISOString()
   };
 
-  let error;
+  let error, packId;
   if (editingPackId) {
     ({ error } = await sb.from('revision_packs').update(payload).eq('id', editingPackId));
+    packId = editingPackId;
   } else {
-    ({ error } = await sb.from('revision_packs').insert([{ ...payload, created_at: new Date().toISOString() }]));
+    const { data, error: insertError } = await sb.from('revision_packs').insert([{ ...payload, created_at: new Date().toISOString() }]).select().single();
+    error = insertError;
+    packId = data?.id;
   }
 
   if (error) { showToast('Error saving pack: ' + error.message, 'error'); return; }
+
+  // Save documents to database
+  if (uploadedDocuments.length > 0 && packId) {
+    const { data: { user } } = await sb.auth.getUser();
+    const documentsToInsert = uploadedDocuments.map(doc => ({
+      pack_id: packId,
+      file_name: doc.file_name,
+      file_path: doc.file_path,
+      file_type: doc.file_type,
+      file_size: doc.file_size,
+      release_date: doc.release_date,
+      uploaded_by: user.id
+    }));
+
+    const { error: docError } = await sb.from('revision_pack_documents').insert(documentsToInsert);
+    if (docError) {
+      console.error('Error saving documents:', docError);
+      showToast('Pack saved but documents failed: ' + docError.message, 'error');
+    }
+  }
 
   showToast(editingPackId ? 'Pack updated ✓' : 'Pack created ✓', 'success');
   await loadPacks();
@@ -1013,6 +1217,7 @@ async function savePack() {
   resetBuilder();
   showView('packs');
 }
+
 
 // ── Delete ──
 function promptDelete(id) {
