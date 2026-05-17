@@ -182,10 +182,34 @@ export default async function(request, context) {
     })
   })
 
+  // Step 6: Send password recovery email so teacher is prompted to set their password
+  // This replaces the invite link with a proper "Set your password" flow
+  await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${newUserId}`, {
+    method: 'PUT',
+    headers: {
+      'apikey':        SUPABASE_SERVICE_KEY,
+      'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+      'Content-Type':  'application/json'
+    },
+    body: JSON.stringify({
+      email_confirm: true  // Confirm email so recovery link works immediately
+    })
+  })
+
+  await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
+    method: 'POST',
+    headers: {
+      'apikey':        SUPABASE_SERVICE_KEY,
+      'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+      'Content-Type':  'application/json'
+    },
+    body: JSON.stringify({ email })
+  })
+
   return new Response(JSON.stringify({
     success: true,
     userId:  newUserId,
-    message: `Teacher account created for ${fullName}. An invite email has been sent to ${email}.`
+    message: `Teacher account created for ${fullName}. A password setup email has been sent to ${email}.`
   }), {
     status: 200,
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
