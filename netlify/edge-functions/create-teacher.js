@@ -215,7 +215,11 @@ export default async function(request, context) {
       'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
       'Content-Type':  'application/json'
     },
-    body: JSON.stringify({ email })
+    body: JSON.stringify({
+      email,
+      gotrue_meta_security: {},
+      redirect_to: 'https://www.inspireacademic.org/reset-password.html'
+    })
   })
 
   return new Response(JSON.stringify({
