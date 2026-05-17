@@ -84,10 +84,10 @@ export default async function(request, context) {
     })
   }
 
-  // Step 2: Invite user via Supabase Admin invite endpoint (sends invite email)
+  // Step 2: Create user via Supabase Admin API then send password recovery
   const fullName = `${firstName} ${lastName}`.trim()
 
-  const createRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/invite`, {
+  const createRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users`, {
     method: 'POST',
     headers: {
       'apikey':        SUPABASE_SERVICE_KEY,
@@ -96,7 +96,8 @@ export default async function(request, context) {
     },
     body: JSON.stringify({
       email,
-      data: {
+      email_confirm: true,
+      user_metadata: {
         full_name:  fullName,
         first_name: firstName,
         last_name:  lastName,
