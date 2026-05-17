@@ -6,6 +6,7 @@
 // ============================================================
 
 export default async function(request, context) {
+  try {
 
   // Handle CORS preflight
   if (request.method === 'OPTIONS') {
@@ -46,8 +47,8 @@ export default async function(request, context) {
     })
   }
 
-  const SUPABASE_URL     = Deno.env.get('SUPABASE_URL')     || 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
-  const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+  const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+  const SUPABASE_SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || Deno.env.get('SUPABASE_SERVICE_KEY')
 
   if (!SUPABASE_SERVICE_KEY) {
     return new Response(JSON.stringify({ error: 'Server configuration error: missing service key' }), {
@@ -214,4 +215,12 @@ export default async function(request, context) {
     status: 200,
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
   })
+
+  } catch (err) {
+    console.error('create-teacher error:', err)
+    return new Response(JSON.stringify({ error: err.message || 'Internal server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    })
+  }
 }
