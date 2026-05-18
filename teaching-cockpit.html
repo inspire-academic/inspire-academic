@@ -375,52 +375,35 @@ const sb = supabase.createClient(
 
 console.log('✅ Supabase client created');
 
-// ── Init ──
+// ── Init (NO REDIRECTS FOR DEBUGGING) ──
 (async () => {
   console.log('🚀 Teaching Cockpit: Starting initialization...');
+  console.log('⚠️ AUTH CHECKS DISABLED FOR DEBUGGING');
   
-  const { data: { session } } = await sb.auth.getSession();
-  console.log('📋 Session:', session ? 'Found' : 'None');
-  
-  if (!session) { 
-    console.log('❌ No session - redirecting to index');
-    location.href = 'index.html'; 
-    return; 
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    console.log('📋 Session:', session);
+    
+    if (session) {
+      const { data: profile, error } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
+      console.log('📊 Profile:', profile);
+      console.log('⚠️ Error:', error);
+      
+      if (profile) {
+        const name = profile.first_name || profile.full_name || 'Teacher';
+        document.getElementById('teacher-name-display').textContent = name;
+        console.log('✅ Name set:', name);
+      }
+    } else {
+      console.log('❌ No session found');
+      document.getElementById('teacher-name-display').textContent = 'Guest';
+    }
+    
+    console.log('✅ Teaching Cockpit ready! (NO AUTH ENFORCEMENT)');
+  } catch (err) {
+    console.error('💥 ERROR:', err);
+    document.getElementById('teacher-name-display').textContent = 'Error';
   }
-
-  console.log('🔍 Fetching profile for user:', session.user.id);
-  const { data: profile, error } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
-  
-  console.log('📊 Profile data:', profile);
-  console.log('⚠️ Profile error:', error);
-  
-  if (error) {
-    console.error('❌ Profile load error:', error);
-    console.log('🔄 Redirecting to teacher.html');
-    location.href = 'teacher.html';
-    return;
-  }
-  
-  if (!profile) {
-    console.error('❌ No profile found');
-    console.log('🔄 Redirecting to teacher.html');
-    location.href = 'teacher.html';
-    return;
-  }
-  
-  console.log('👤 Profile role:', profile.role);
-  console.log('✅ Role check:', ['teacher','admin'].includes(profile.role));
-  
-  if (!['teacher','admin'].includes(profile.role)) { 
-    console.log('❌ Not teacher/admin - redirecting to dashboard');
-    location.href = 'dashboard.html'; 
-    return; 
-  }
-
-  console.log('✅ Auth passed! Loading cockpit...');
-  const name = profile.first_name || profile.full_name || 'Teacher';
-  document.getElementById('teacher-name-display').textContent = name;
-  console.log('✅ Teaching Cockpit ready!');
 })();
 
 // ── Load Template ──
