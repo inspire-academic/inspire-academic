@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspire Teaching Cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --navy: #0b1628;
+  --navy2: #152035;
+  --navy3: #1f2937;
+  --gold: #c9a84c;
+  --amber: #f59e0b;
+  --green: #10b981;
+  --red: #ef4444;
+  --muted: #9ca3af;
+  --border: #374151;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px;
+  background: var(--navy2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo .inspire {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.sidebar-logo .science {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.badge {
+  font-size: .65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-top: .2rem;
+  font-family: 'DM Mono', monospace;
+}
+
+.nav-section-label {
+  font-size: .65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  padding: 1.5rem 1.25rem .5rem;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem 1.25rem;
+  cursor: pointer;
+  transition: all .15s;
+  color: #d1d5db;
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  background: var(--navy3);
+  color: #fff;
+}
+
+.nav-item .icon {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.teacher-name {
+  font-size: .8rem;
+  margin-bottom: .75rem;
+}
+
+.sign-out-btn {
+  width: 100%;
+  padding: .6rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: .8rem;
+  transition: all .15s;
+}
+
+.sign-out-btn:hover {
+  background: var(--navy3);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* ── MAIN CONTENT ── */
+.main-content {
+  flex: 1;
+  padding: 2.5rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-header {
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: .5rem;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── SUBJECT CARDS GRID ── */
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+}
+
+.subject-card {
+  background: var(--navy2);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 2.5rem;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.subject-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,.3);
+}
+
+.subject-card.template {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, var(--navy2) 0%, #1a2332 100%);
+}
+
+.subject-card.template::before {
+  content: '✨';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+}
+
+.subject-card.coming-soon {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.subject-card.coming-soon:hover {
+  transform: none;
+  border-color: var(--border);
+}
+
+.subject-icon {
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  display: block;
+}
+
+.subject-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: .5rem;
+}
+
+.subject-description {
+  font-size: .9rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.subject-meta {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  font-size: .8rem;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.subject-meta.coming {
+  color: var(--muted);
+}
+
+.coming-soon-badge {
+  background: var(--navy3);
+  color: var(--muted);
+  padding: .25rem .75rem;
+  border-radius: 20px;
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-family: 'DM Mono', monospace;
+}
+
+@media (max-width: 768px) {
+  .sidebar { width: 200px; }
+  .main-content { padding: 1.5rem; }
+  .subjects-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .page-title { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar">
+    <a href="teacher.html" style="text-decoration:none;color:inherit;">
+      <div class="sidebar-logo">
+        <div><span class="inspire">Inspire</span> <span class="science">Science</span></div>
+        <div class="badge">Teaching Cockpit</div>
+      </div>
+    </a>
+
+    <div class="nav-section-label">Navigation</div>
+    <a href="teacher.html" class="nav-item">
+      <span class="icon">◀</span><span>Back to Dashboard</span>
+    </a>
+
+    <div class="sidebar-footer">
+      <div class="teacher-name">
+        <strong id="teacher-name-display">Teacher</strong>
+        Signed in
+      </div>
+      <button class="sign-out-btn" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main-content">
+    <div class="page-header">
+      <div class="page-title">Inspire Teaching Cockpit</div>
+      <div class="page-subtitle">
+        Access world-class teaching resources and interactive lessons.<br>
+        Choose a subject to begin or use the universal template for any topic.
+      </div>
+    </div>
+
+    <div class="subjects-grid">
+      <!-- Template Card - ACTIVE -->
+      <div class="subject-card template" onclick="loadTemplate()">
+        <span class="subject-icon">📋</span>
+        <div class="subject-name">Template</div>
+        <div class="subject-description">
+          Universal whiteboard template with full teaching tools - ready to use for any subject or topic.
+        </div>
+        <div class="subject-meta">
+          <span>🚀 Ready to Launch</span>
+        </div>
+      </div>
+
+      <!-- Physics Card - COMING SOON -->
+      <div class="subject-card coming-soon">
+        <span class="subject-icon">⚛️</span>
+        <div class="subject-name">Physics</div>
+        <div class="subject-description">
+          Interactive physics lessons covering energy, forces, electricity, and more.
+        </div>
+        <div class="subject-meta coming">
+          <span class="coming-soon-badge">Coming Soon</span>
+        </div>
+      </div>
+
+      <!-- Chemistry Card - COMING SOON -->
+      <div class="subject-card coming-soon">
+        <span class="subject-icon">🧪</span>
+        <div class="subject-name">Chemistry</div>
+        <div class="subject-description">
+          Comprehensive chemistry lessons on atomic structure, bonding, reactions, and analysis.
+        </div>
+        <div class="subject-meta coming">
+          <span class="coming-soon-badge">Coming Soon</span>
+        </div>
+      </div>
+
+      <!-- Biology Card - COMING SOON -->
+      <div class="subject-card coming-soon">
+        <span class="subject-icon">🧬</span>
+        <div class="subject-name">Biology</div>
+        <div class="subject-description">
+          Biology lessons covering cells, genetics, ecology, and human body systems.
+        </div>
+        <div class="subject-meta coming">
+          <span class="coming-soon-badge">Coming Soon</span>
+        </div>
+      </div>
+
+      <!-- Mathematics Card - COMING SOON -->
+      <div class="subject-card coming-soon">
+        <span class="subject-icon">📐</span>
+        <div class="subject-name">Mathematics</div>
+        <div class="subject-description">
+          Mathematics lessons across algebra, geometry, statistics, and problem-solving.
+        </div>
+        <div class="subject-meta coming">
+          <span class="coming-soon-badge">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const sb = supabase.createClient(
+  'https://ygtsrdwoikqnrbexjrtl.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0NDc2MjAsImV4cCI6MjA1OTAyMzYyMH0.hR0xY0_rU2SgNMdqzcah-N7YKO_BIgSQ58dZtWiTEMw'
+);
+
+// ── Init ──
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+
+  const { data: profile } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
+  if (!['teacher','admin'].includes(profile?.role)) { location.href = 'dashboard.html'; return; }
+
+  const name = profile.first_name || profile.full_name || 'Teacher';
+  document.getElementById('teacher-name-display').textContent = name;
+})();
+
+// ── Load Template ──
+function loadTemplate() {
+  // Open template in fullscreen
+  window.location.href = 'teaching-lessons/template/Inspire_ALPHA_Phase2_6_STABLE_CLEAN_PEN_MENU_TEMPLATE.html';
+}
+
+// ── Sign Out ──
+async function signOut() {
+  await sb.auth.signOut();
+  location.href = 'index.html';
+}
+</script>
+
+</body>
+</html>
