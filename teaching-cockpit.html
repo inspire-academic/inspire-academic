@@ -365,10 +365,15 @@ body {
 </div>
 
 <script>
+console.log('🔥 SCRIPT LOADED!');
+console.log('Supabase available?', typeof supabase);
+
 const sb = supabase.createClient(
   'https://ygtsrdwoikqnrbexjrtl.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM0NDc2MjAsImV4cCI6MjA1OTAyMzYyMH0.hR0xY0_rU2SgNMdqzcah-N7YKO_BIgSQ58dZtWiTEMw'
 );
+
+console.log('✅ Supabase client created');
 
 // ── Init ──
 (async () => {
