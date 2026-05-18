@@ -1110,7 +1110,8 @@ async function loadSubmissions() {
     .from('revision_pack_submissions')
     .select(`
       *,
-      revision_submission_files (*)
+      revision_submission_files (*),
+      revision_marked_work_files (*)
     `)
     .eq('student_id', session.user.id)
     .order('submitted_at', { ascending: false });
@@ -1349,7 +1350,65 @@ function viewFeedback(assignmentId, documentId, documentName) {
   });
   document.getElementById('feedback-date').textContent = reviewedDate;
 
+  // Display marked work files if any
+  const markedWorkFiles = allSubmissions
+    .find(s => s.assignment_id === assignmentId && s.document_id === documentId)
+    ?.revision_marked_work_files || [];
+  
+  const markedWorkSection = document.getElementById('marked-work-section');
+  if (markedWorkFiles.length > 0) {
+    markedWorkSection.innerHTML = `
+      <div style="padding:1rem;background:var(--navy3);border:1px solid var(--border);border-radius:8px;">
+        <div style="font-size:.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;">📥 Marked Work from Teacher</div>
+        ${markedWorkFiles.map(f => {
+          const icon = f.file_type === 'pdf' ? '📄' : f.file_type.includes('doc') ? '📝' : '🖼️';
+          const sizeKB = Math.round(f.file_size / 1024);
+          return `<button onclick="downloadMarkedWork('${f.file_path}', '${escHtml(f.file_name)}')" 
+                    style="width:100%;display:flex;align-items:center;gap:.6rem;padding:.7rem .9rem;background:var(--navy);border:1px solid var(--border);border-radius:6px;margin-bottom:.4rem;cursor:pointer;transition:all .15s;color:inherit;font-family:inherit;" 
+                    onmouseover="this.style.borderColor='var(--gold)'" 
+                    onmouseout="this.style.borderColor='var(--border)'">
+              <span style="font-size:1.1rem;">${icon}</span>
+              <span style="flex:1;text-align:left;font-size:.85rem;">${escHtml(f.file_name)}</span>
+              <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);">${sizeKB} KB</span>
+              <span style="font-size:.9rem;">⬇️</span>
+            </button>`;
+        }).join('')}
+      </div>
+    `;
+  } else {
+    markedWorkSection.innerHTML = '';
+  }
+
   document.getElementById('feedback-modal').classList.add('open');
+}
+
+async function downloadMarkedWork(filePath, fileName) {
+  try {
+    showToast('Downloading...', '');
+    
+    const { data, error } = await sb.storage
+      .from('revision-marked-work')
+      .download(filePath);
+
+    if (error) {
+      showToast('Download failed: ' + error.message, 'error');
+      return;
+    }
+
+    const url = URL.createObjectURL(data);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('Downloaded ✓', 'success');
+  } catch (err) {
+    showToast('Download error', 'error');
+    console.error('Download error:', err);
+  }
 }
 
 function closeFeedbackModal() {
@@ -1433,6 +1492,8 @@ function showToast(msg, type='') {
         <label class="form-label">Teacher Comments</label>
         <div id="feedback-text" style="background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:1rem;font-size:.85rem;line-height:1.6;min-height:100px;white-space:pre-wrap;"></div>
       </div>
+
+      <div id="marked-work-section" style="margin-bottom:1.5rem;"></div>
 
       <div style="font-size:.75rem;color:var(--muted);margin-bottom:1.5rem;">
         Reviewed <span id="feedback-date"></span>

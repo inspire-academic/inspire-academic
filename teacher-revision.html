@@ -736,6 +736,20 @@ tr:hover td { background: rgba(255,255,255,.025); }
         <label class="form-label">Feedback</label>
         <textarea id="review-feedback-input" class="form-textarea" rows="6" placeholder="Provide detailed feedback for the student..."></textarea>
       </div>
+
+      <!-- Upload Marked Work -->
+      <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+        <label class="form-label">Return Marked Work (Optional)</label>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem;">
+          Upload annotated/marked documents to return to the student
+        </div>
+        <input type="file" id="marked-work-input" multiple accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.webp" style="display:none;" onchange="handleMarkedWorkFiles(event)">
+        <button type="button" class="btn btn-outline" onclick="document.getElementById('marked-work-input').click()" style="width:100%;">
+          📎 Choose Files
+        </button>
+        <div id="marked-work-files-list" style="margin-top:.75rem;"></div>
+        <div id="existing-marked-work" style="margin-top:.75rem;"></div>
+      </div>
     </div>
 
     <div class="modal-footer">
@@ -767,7 +781,8 @@ let sectionCounter = 0;
 let uploadedDocuments = [];
 let allSubmissions = [];
 let currentSubmissionFilter = 'all';
-let reviewingSubmissionId = null; // Track documents for the current pack
+let reviewingSubmissionId = null;
+let markedWorkFiles = [];
 
 // ── Init ──
 (async () => {
@@ -1577,6 +1592,7 @@ async function loadSubmissions() {
     .select(`
       *,
       revision_submission_files (*),
+      revision_marked_work_files (*),
       profiles!revision_pack_submissions_student_id_fkey (first_name, last_name, full_name),
       revision_pack_documents (file_name, revision_packs (title))
     `)
@@ -1688,6 +1704,68 @@ function renderSubmissions(filter) {
   }).join('');
 }
 
+// ── Marked Work Upload Functions ──
+function handleMarkedWorkFiles(event) {
+  const files = Array.from(event.target.files);
+  const maxSize = 20 * 1024 * 1024;
+
+  for (const file of files) {
+    if (file.size > maxSize) {
+      showToast(`File too large: ${file.name}. Max 20MB`, 'error');
+      continue;
+    }
+
+    const allowedTypes = [
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/msword',
+      'image/png', 'image/jpeg', 'image/jpg', 'image/webp'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      showToast(`Invalid file type: ${file.name}`, 'error');
+      continue;
+    }
+
+    markedWorkFiles.push(file);
+  }
+
+  renderMarkedWorkFilesList();
+  event.target.value = '';
+}
+
+function removeMarkedWorkFile(index) {
+  markedWorkFiles.splice(index, 1);
+  renderMarkedWorkFilesList();
+}
+
+function renderMarkedWorkFilesList() {
+  const container = document.getElementById('marked-work-files-list');
+  
+  if (!markedWorkFiles.length) {
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = markedWorkFiles.map((file, idx) => {
+    const icon = file.type.includes('pdf') ? '📄' 
+               : file.type.includes('word') || file.type.includes('doc') ? '📝' 
+               : '🖼️';
+    const sizeKB = Math.round(file.size / 1024);
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+    const sizeText = file.size > 1024 * 1024 ? `${sizeMB} MB` : `${sizeKB} KB`;
+
+    return `
+      <div style="display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:var(--navy3);border:1px solid var(--border);border-radius:6px;margin-bottom:.4rem;">
+        <span style="font-size:1rem;">${icon}</span>
+        <span style="flex:1;font-size:.8rem;">${esc(file.name)}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);">${sizeText}</span>
+        <button onclick="removeMarkedWorkFile(${idx})" style="background:transparent;border:none;color:var(--red);cursor:pointer;padding:.2rem .4rem;">✕</button>
+      </div>
+    `;
+  }).join('');
+}
+
 async function openReviewModal(submissionId) {
   const submission = allSubmissions.find(s => s.id === submissionId);
   if (!submission) return;
@@ -1720,6 +1798,26 @@ async function openReviewModal(submissionId) {
   document.getElementById('review-score-input').value = submission.score || '';
   document.getElementById('review-feedback-input').value = submission.feedback || '';
 
+  // Reset and display marked work
+  markedWorkFiles = [];
+  renderMarkedWorkFilesList();
+
+  const existingMarkedWork = submission.revision_marked_work_files || [];
+  document.getElementById('existing-marked-work').innerHTML = existingMarkedWork.length
+    ? `<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);">
+         <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;">Previously Uploaded</div>
+         ${existingMarkedWork.map(f => {
+           const icon = f.file_type === 'pdf' ? '📄' : f.file_type.includes('doc') ? '📝' : '🖼️';
+           const sizeKB = Math.round(f.file_size / 1024);
+           return `<div style="display:flex;align-items:center;gap:.5rem;padding:.4rem 0;">
+             <span>${icon}</span>
+             <span style="flex:1;font-size:.82rem;">${esc(f.file_name)}</span>
+             <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);">${sizeKB} KB</span>
+           </div>`;
+         }).join('')}
+       </div>`
+    : '';
+
   document.getElementById('review-modal').classList.add('open');
 }
 
@@ -1740,6 +1838,36 @@ async function submitReview() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
 
+  // Upload marked work files if any
+  const uploadedMarkedWork = [];
+  if (markedWorkFiles.length > 0) {
+    showToast('Uploading marked work...', '');
+    
+    for (const file of markedWorkFiles) {
+      const timestamp = Date.now();
+      const sanitized = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const filePath = `${reviewingSubmissionId}/${timestamp}_${sanitized}`;
+
+      const { error: uploadError } = await sb.storage
+        .from('revision-marked-work')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error('Marked work upload error:', uploadError);
+        showToast('Error uploading marked work: ' + file.name, 'error');
+        continue;
+      }
+
+      uploadedMarkedWork.push({
+        file_name: file.name,
+        file_path: filePath,
+        file_type: file.type.split('/')[1] || 'unknown',
+        file_size: file.size
+      });
+    }
+  }
+
+  // Update submission
   const { error } = await sb
     .from('revision_pack_submissions')
     .update({
@@ -1755,6 +1883,24 @@ async function submitReview() {
     console.error('Review error:', error);
     showToast('Error saving review: ' + error.message, 'error');
     return;
+  }
+
+  // Save marked work files
+  if (uploadedMarkedWork.length > 0) {
+    const fileRecords = uploadedMarkedWork.map(f => ({
+      submission_id: reviewingSubmissionId,
+      uploaded_by: session.user.id,
+      ...f
+    }));
+
+    const { error: filesError } = await sb
+      .from('revision_marked_work_files')
+      .insert(fileRecords);
+
+    if (filesError) {
+      console.error('Marked work DB error:', filesError);
+      showToast('Review saved but marked work failed to link', 'error');
+    }
   }
 
   showToast('Review submitted successfully ✓', 'success');
