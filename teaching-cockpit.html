@@ -375,34 +375,45 @@ const sb = supabase.createClient(
 
 console.log('✅ Supabase client created');
 
-// ── Init (NO REDIRECTS FOR DEBUGGING) ──
+// ── Init ──
 (async () => {
-  console.log('🚀 Teaching Cockpit: Starting initialization...');
-  console.log('⚠️ AUTH CHECKS DISABLED FOR DEBUGGING');
+  console.log('🚀 Teaching Cockpit: Starting...');
   
   try {
     const { data: { session } } = await sb.auth.getSession();
-    console.log('📋 Session:', session);
     
-    if (session) {
-      const { data: profile, error } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
-      console.log('📊 Profile:', profile);
-      console.log('⚠️ Error:', error);
-      
-      if (profile) {
-        const name = profile.first_name || profile.full_name || 'Teacher';
-        document.getElementById('teacher-name-display').textContent = name;
-        console.log('✅ Name set:', name);
-      }
-    } else {
-      console.log('❌ No session found');
-      document.getElementById('teacher-name-display').textContent = 'Guest';
+    if (!session) {
+      console.log('❌ No session - redirecting to login');
+      setTimeout(() => location.href = 'index.html', 100);
+      return;
     }
     
-    console.log('✅ Teaching Cockpit ready! (NO AUTH ENFORCEMENT)');
+    console.log('✅ Session found');
+    const { data: profile, error } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
+    
+    if (error || !profile) {
+      console.error('Profile load failed:', error);
+      document.getElementById('teacher-name-display').textContent = 'Teacher';
+      return;
+    }
+    
+    console.log('✅ Profile loaded, role:', profile.role);
+    
+    // Only redirect if definitely NOT a teacher/admin
+    if (profile.role && !['teacher', 'admin'].includes(profile.role)) {
+      console.log('❌ Not authorized - redirecting');
+      setTimeout(() => location.href = 'dashboard.html', 100);
+      return;
+    }
+    
+    // Set name
+    const name = profile.first_name || profile.full_name || 'Teacher';
+    document.getElementById('teacher-name-display').textContent = name;
+    console.log('✅ Teaching Cockpit ready for', name);
+    
   } catch (err) {
-    console.error('💥 ERROR:', err);
-    document.getElementById('teacher-name-display').textContent = 'Error';
+    console.error('💥 Init error:', err);
+    document.getElementById('teacher-name-display').textContent = 'Teacher';
   }
 })();
 
