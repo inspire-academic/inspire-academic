@@ -375,8 +375,24 @@ const sb = supabase.createClient(
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { location.href = 'index.html'; return; }
 
-  const { data: profile } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
-  if (!['teacher','admin'].includes(profile?.role)) { location.href = 'dashboard.html'; return; }
+  const { data: profile, error } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
+  
+  if (error) {
+    console.error('Profile load error:', error);
+    location.href = 'teacher.html';
+    return;
+  }
+  
+  if (!profile) {
+    console.error('No profile found');
+    location.href = 'teacher.html';
+    return;
+  }
+  
+  if (!['teacher','admin'].includes(profile.role)) { 
+    location.href = 'dashboard.html'; 
+    return; 
+  }
 
   const name = profile.first_name || profile.full_name || 'Teacher';
   document.getElementById('teacher-name-display').textContent = name;
