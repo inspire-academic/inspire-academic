@@ -372,30 +372,50 @@ const sb = supabase.createClient(
 
 // ── Init ──
 (async () => {
+  console.log('🚀 Teaching Cockpit: Starting initialization...');
+  
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { location.href = 'index.html'; return; }
+  console.log('📋 Session:', session ? 'Found' : 'None');
+  
+  if (!session) { 
+    console.log('❌ No session - redirecting to index');
+    location.href = 'index.html'; 
+    return; 
+  }
 
+  console.log('🔍 Fetching profile for user:', session.user.id);
   const { data: profile, error } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
   
+  console.log('📊 Profile data:', profile);
+  console.log('⚠️ Profile error:', error);
+  
   if (error) {
-    console.error('Profile load error:', error);
+    console.error('❌ Profile load error:', error);
+    console.log('🔄 Redirecting to teacher.html');
     location.href = 'teacher.html';
     return;
   }
   
   if (!profile) {
-    console.error('No profile found');
+    console.error('❌ No profile found');
+    console.log('🔄 Redirecting to teacher.html');
     location.href = 'teacher.html';
     return;
   }
   
+  console.log('👤 Profile role:', profile.role);
+  console.log('✅ Role check:', ['teacher','admin'].includes(profile.role));
+  
   if (!['teacher','admin'].includes(profile.role)) { 
+    console.log('❌ Not teacher/admin - redirecting to dashboard');
     location.href = 'dashboard.html'; 
     return; 
   }
 
+  console.log('✅ Auth passed! Loading cockpit...');
   const name = profile.first_name || profile.full_name || 'Teacher';
   document.getElementById('teacher-name-display').textContent = name;
+  console.log('✅ Teaching Cockpit ready!');
 })();
 
 // ── Load Template ──
