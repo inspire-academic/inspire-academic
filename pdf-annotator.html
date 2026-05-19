@@ -36,7 +36,6 @@ body {
   flex-direction:column;
 }
 
-/* ── HEADER ── */
 .header {
   background:var(--navy2);
   border-bottom:1px solid var(--border);
@@ -110,7 +109,6 @@ body {
   border-color:#d4b961;
 }
 
-/* ── TOOLBAR ── */
 .toolbar {
   background:var(--navy2);
   border-bottom:1px solid var(--border);
@@ -206,7 +204,6 @@ body {
   font-family:'DM Sans',sans-serif;
 }
 
-/* ── CANVAS CONTAINER ── */
 .canvas-container {
   flex:1;
   overflow-y:auto;
@@ -247,12 +244,10 @@ body {
   border-radius:4px;
 }
 
-/* ── CURSOR STYLES ── */
 .cursor-crosshair { cursor:crosshair; }
 .cursor-pen { cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15 3l2 2-10 10H5v-2L15 3z" fill="white" stroke="black" stroke-width="1"/></svg>') 2 18, auto; }
 .cursor-text { cursor:text; }
 
-/* ── TEXT INPUT ── */
 .text-input-wrapper {
   position:absolute;
   z-index:10;
@@ -261,15 +256,14 @@ body {
 .text-input {
   border:2px solid var(--gold);
   background:rgba(255,255,255,.95);
-  padding:.25rem;
+  padding:.25rem .5rem;
   font-family:'DM Sans',sans-serif;
   font-size:16px;
-  min-width:100px;
+  min-width:150px;
   outline:none;
-  border-radius:2px;
+  border-radius:4px;
 }
 
-/* ── LOADING ── */
 .loading {
   position:fixed;
   top:0;
@@ -298,7 +292,6 @@ body {
   to { transform:rotate(360deg); }
 }
 
-/* ── TOAST ── */
 .toast {
   position:fixed;
   top:1rem;
@@ -322,7 +315,6 @@ body {
 </head>
 <body>
 
-<!-- Header -->
 <div class="header">
   <div class="header-left">
     <div class="logo">
@@ -337,7 +329,6 @@ body {
   </div>
 </div>
 
-<!-- Toolbar -->
 <div class="toolbar">
   <div class="tool-group">
     <button class="tool-btn active" onclick="setTool('pen')" data-tool="pen" title="Pen">✏️</button>
@@ -365,8 +356,8 @@ body {
   </div>
   
   <div class="tool-group">
-    <button class="tool-btn" onclick="undo()" title="Undo">↶</button>
-    <button class="tool-btn" onclick="redo()" title="Redo">↷</button>
+    <button class="tool-btn" onclick="undo()" title="Undo (Ctrl+Z)">↶</button>
+    <button class="tool-btn" onclick="redo()" title="Redo (Ctrl+Y)">↷</button>
   </div>
   
   <div class="tool-group">
@@ -376,27 +367,21 @@ body {
   </div>
 </div>
 
-<!-- Canvas Container -->
 <div class="canvas-container" id="canvas-container">
-  <!-- Pages will be dynamically added here -->
 </div>
 
-<!-- Loading Overlay -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
   <div>Loading PDF pages...</div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast">
   <span id="toast-message"></span>
 </div>
 
 <script>
-// ── Config ──
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-// ── State ──
 let pdfDoc = null;
 let scale = 1.5;
 let currentTool = 'pen';
@@ -408,7 +393,18 @@ let pdfUrl = '';
 let fileName = '';
 let pdfBytes = null;
 
-// ── Init ──
+// ── Keyboard Shortcuts ──
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === 'z') {
+    e.preventDefault();
+    undo();
+  }
+  if (e.ctrlKey && e.key === 'y') {
+    e.preventDefault();
+    redo();
+  }
+});
+
 (async () => {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -422,15 +418,12 @@ let pdfBytes = null;
     
     document.getElementById('file-name').textContent = fileName;
     
-    // Fetch PDF bytes
     const response = await fetch(pdfUrl);
     pdfBytes = await response.arrayBuffer();
     
-    // Load PDF
     const loadingTask = pdfjsLib.getDocument(pdfBytes);
     pdfDoc = await loadingTask.promise;
     
-    // Render all pages
     await renderAllPages();
     
     document.getElementById('loading').style.display = 'none';
@@ -442,7 +435,6 @@ let pdfBytes = null;
   }
 })();
 
-// ── Render All Pages ──
 async function renderAllPages() {
   const container = document.getElementById('canvas-container');
   container.innerHTML = '';
@@ -452,26 +444,22 @@ async function renderAllPages() {
     const page = await pdfDoc.getPage(pageNum);
     const viewport = page.getViewport({ scale });
     
-    // Create page wrapper
     const pageWrapper = document.createElement('div');
     pageWrapper.className = 'page-wrapper';
     pageWrapper.style.width = viewport.width + 'px';
     pageWrapper.style.height = viewport.height + 'px';
     
-    // Page number label
     const pageLabel = document.createElement('div');
     pageLabel.className = 'page-number';
     pageLabel.textContent = `Page ${pageNum} of ${pdfDoc.numPages}`;
     pageWrapper.appendChild(pageLabel);
     
-    // PDF canvas
     const pdfCanvas = document.createElement('canvas');
     pdfCanvas.className = 'page-canvas';
     pdfCanvas.width = viewport.width;
     pdfCanvas.height = viewport.height;
     pageWrapper.appendChild(pdfCanvas);
     
-    // Annotation canvas
     const annotationCanvas = document.createElement('canvas');
     annotationCanvas.className = `annotation-canvas ${currentCursor === 'pen' ? 'cursor-pen' : 'cursor-crosshair'}`;
     annotationCanvas.width = viewport.width;
@@ -480,11 +468,9 @@ async function renderAllPages() {
     
     container.appendChild(pageWrapper);
     
-    // Render PDF
     const pdfCtx = pdfCanvas.getContext('2d');
     await page.render({ canvasContext: pdfCtx, viewport }).promise;
     
-    // Store page data
     const annotationCtx = annotationCanvas.getContext('2d');
     pages.push({
       pageNum,
@@ -496,12 +482,10 @@ async function renderAllPages() {
       texts: []
     });
     
-    // Attach drawing events
     attachDrawingEvents(annotationCanvas, pages.length - 1);
   }
 }
 
-// ── Drawing Events ──
 function attachDrawingEvents(canvas, pageIndex) {
   let isDrawing = false;
   let lastX = 0;
@@ -573,7 +557,6 @@ function attachDrawingEvents(canvas, pageIndex) {
   });
 }
 
-// ── Text Tool ──
 function addTextBox(e, canvas, pageIndex) {
   const rect = canvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -581,8 +564,9 @@ function addTextBox(e, canvas, pageIndex) {
   
   const wrapper = document.createElement('div');
   wrapper.className = 'text-input-wrapper';
-  wrapper.style.left = (rect.left + x) + 'px';
-  wrapper.style.top = (rect.top + y) + 'px';
+  wrapper.style.position = 'fixed';
+  wrapper.style.left = e.clientX + 'px';
+  wrapper.style.top = e.clientY + 'px';
   
   const input = document.createElement('input');
   input.type = 'text';
@@ -596,7 +580,6 @@ function addTextBox(e, canvas, pageIndex) {
   
   input.addEventListener('blur', () => {
     if (input.value.trim()) {
-      // Draw text on canvas
       const ctx = pages[pageIndex].annotationCtx;
       ctx.font = `${currentSize * 4}px DM Sans, sans-serif`;
       ctx.fillStyle = currentColor;
@@ -616,10 +599,12 @@ function addTextBox(e, canvas, pageIndex) {
     if (e.key === 'Enter') {
       input.blur();
     }
+    if (e.key === 'Escape') {
+      wrapper.remove();
+    }
   });
 }
 
-// ── Tool Functions ──
 function setTool(tool) {
   currentTool = tool;
   document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
@@ -631,7 +616,6 @@ function setTool(tool) {
     document.getElementById('color-picker').value = '#ffff00';
   }
   
-  // Update cursor class
   document.querySelectorAll('.annotation-canvas').forEach(canvas => {
     canvas.className = 'annotation-canvas';
     if (currentCursor === 'pen') {
@@ -673,6 +657,7 @@ function undo() {
       redrawPage(page);
     }
   });
+  showToast('Undo', '');
 }
 
 function redo() {
@@ -682,6 +667,7 @@ function redo() {
       redrawPage(page);
     }
   });
+  showToast('Redo', '');
 }
 
 function clearAll() {
@@ -699,7 +685,6 @@ function redrawPage(page) {
   const ctx = page.annotationCtx;
   ctx.clearRect(0, 0, page.annotationCanvas.width, page.annotationCanvas.height);
   
-  // Redraw strokes
   page.strokes.forEach(stroke => {
     ctx.strokeStyle = stroke.color;
     ctx.lineWidth = stroke.size;
@@ -729,7 +714,6 @@ function redrawPage(page) {
     ctx.stroke();
   });
   
-  // Redraw texts
   page.texts.forEach(text => {
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1.0;
@@ -742,7 +726,6 @@ function redrawPage(page) {
   ctx.globalAlpha = 1.0;
 }
 
-// ── Zoom ──
 function zoomIn() {
   scale += 0.2;
   renderAllPages();
@@ -760,35 +743,32 @@ function resetZoom() {
   renderAllPages();
 }
 
-// ── Download ──
 async function downloadAnnotated() {
   try {
-    showToast('Preparing PDF download...', '');
+    showToast('Preparing PDF...', '');
     
-    // Load original PDF with pdf-lib
     const pdfLibDoc = await PDFLib.PDFDocument.load(pdfBytes);
-    const pdfPages = pdfLibDoc.getPages();
     
-    // Embed annotations on each page
     for (let i = 0; i < pages.length; i++) {
       const page = pages[i];
-      const pdfPage = pdfPages[i];
+      const pdfPage = pdfLibDoc.getPages()[i];
       
-      // Merge PDF canvas and annotation canvas
+      if (page.strokes.length === 0 && page.texts.length === 0) continue;
+      
       const mergedCanvas = document.createElement('canvas');
       mergedCanvas.width = page.pdfCanvas.width;
       mergedCanvas.height = page.pdfCanvas.height;
       const mergedCtx = mergedCanvas.getContext('2d');
       
+      mergedCtx.fillStyle = '#ffffff';
+      mergedCtx.fillRect(0, 0, mergedCanvas.width, mergedCanvas.height);
       mergedCtx.drawImage(page.pdfCanvas, 0, 0);
       mergedCtx.drawImage(page.annotationCanvas, 0, 0);
       
-      // Convert to PNG
       const pngDataUrl = mergedCanvas.toDataURL('image/png');
       const pngImageBytes = await fetch(pngDataUrl).then(res => res.arrayBuffer());
       const pngImage = await pdfLibDoc.embedPng(pngImageBytes);
       
-      // Draw image on PDF page
       const { width, height } = pdfPage.getSize();
       pdfPage.drawImage(pngImage, {
         x: 0,
@@ -798,21 +778,22 @@ async function downloadAnnotated() {
       });
     }
     
-    // Save PDF
     const pdfBytesOutput = await pdfLibDoc.save();
     const blob = new Blob([pdfBytesOutput], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = fileName.replace('.pdf', '_annotated.pdf');
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
     
     showToast('Downloaded! ✓', 'success');
     
   } catch (error) {
     console.error('Download error:', error);
-    showToast('Download failed', 'error');
+    showToast('Download failed: ' + error.message, 'error');
   }
 }
 
@@ -825,7 +806,6 @@ function goBack() {
   }
 }
 
-// ── Toast ──
 function showToast(message, type = '') {
   const toast = document.getElementById('toast');
   const toastMessage = document.getElementById('toast-message');
@@ -835,7 +815,7 @@ function showToast(message, type = '') {
   
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 3000);
+  }, 2000);
 }
 </script>
 
