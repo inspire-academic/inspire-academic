@@ -395,6 +395,24 @@ main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
   color:var(--navy);
 }
 
+.doc-actions-row {
+  display:flex;
+  gap:.5rem;
+  width:100%;
+}
+
+.doc-action-btn-kami {
+  background:rgba(139,92,246,.1);
+  border-color:rgba(139,92,246,.3);
+  color:#a78bfa;
+}
+
+.doc-action-btn-kami:hover {
+  background:rgba(139,92,246,.2);
+  border-color:#a78bfa;
+  color:#c4b5fd;
+}
+
 /* ── MODALS ── */
 .modal {
   display:none;
@@ -972,6 +990,13 @@ function renderPacks(filter) {
                </button>`;
              }
              
+             // Kami button (only for PDFs)
+             const kamiButton = doc.file_type === 'pdf' 
+               ? `<button class="doc-action-btn doc-action-btn-kami" onclick="openInKami('${doc.file_path}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();" title="Open in Kami for digital annotation">
+                    ✏️ Annotate in Kami
+                  </button>`
+               : '';
+             
              return `
                <div class="doc-item-wrapper">
                  <div class="doc-item" onclick="downloadDocument('${doc.file_path}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();">
@@ -982,7 +1007,10 @@ function renderPacks(filter) {
                    </div>
                    ${statusBadge}
                  </div>
-                 ${actionButton}
+                 <div class="doc-actions-row">
+                   ${kamiButton}
+                   ${actionButton}
+                 </div>
                </div>
              `;
            }).join('')}
@@ -1071,6 +1099,35 @@ async function signOut() {
   location.href = 'index.html';
 }
 
+// ── Open in Kami ──
+async function openInKami(filePath, fileName) {
+  try {
+    showToast('Opening in Kami...', '');
+    
+    // Generate signed URL (2 hours expiry)
+    const { data, error } = await sb.storage
+      .from('revision-documents')
+      .createSignedUrl(filePath, 7200);
+    
+    if (error) {
+      console.error('Kami URL error:', error);
+      showToast('Failed to open in Kami', 'error');
+      return;
+    }
+    
+    // Encode URL for Kami
+    const kamiUrl = `https://web.kamiapp.com/?file=${encodeURIComponent(data.signedUrl)}`;
+    
+    // Open in new tab
+    window.open(kamiUrl, '_blank', 'noopener,noreferrer');
+    showToast('Opened in Kami ✓', 'success');
+    
+  } catch (err) {
+    console.error('Kami error:', err);
+    showToast('Error opening Kami', 'error');
+  }
+}
+
 async function downloadDocument(filePath, fileName) {
   try {
     showToast('Downloading...', '');
@@ -1110,8 +1167,7 @@ async function loadSubmissions() {
     .from('revision_pack_submissions')
     .select(`
       *,
-      revision_submission_files (*),
-      revision_marked_work_files (*)
+      revision_submission_files (*)
     `)
     .eq('student_id', session.user.id)
     .order('submitted_at', { ascending: false });
@@ -1350,65 +1406,7 @@ function viewFeedback(assignmentId, documentId, documentName) {
   });
   document.getElementById('feedback-date').textContent = reviewedDate;
 
-  // Display marked work files if any
-  const markedWorkFiles = allSubmissions
-    .find(s => s.assignment_id === assignmentId && s.document_id === documentId)
-    ?.revision_marked_work_files || [];
-  
-  const markedWorkSection = document.getElementById('marked-work-section');
-  if (markedWorkFiles.length > 0) {
-    markedWorkSection.innerHTML = `
-      <div style="padding:1rem;background:var(--navy3);border:1px solid var(--border);border-radius:8px;">
-        <div style="font-size:.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;">📥 Marked Work from Teacher</div>
-        ${markedWorkFiles.map(f => {
-          const icon = f.file_type === 'pdf' ? '📄' : f.file_type.includes('doc') ? '📝' : '🖼️';
-          const sizeKB = Math.round(f.file_size / 1024);
-          return `<button onclick="downloadMarkedWork('${f.file_path}', '${escHtml(f.file_name)}')" 
-                    style="width:100%;display:flex;align-items:center;gap:.6rem;padding:.7rem .9rem;background:var(--navy);border:1px solid var(--border);border-radius:6px;margin-bottom:.4rem;cursor:pointer;transition:all .15s;color:inherit;font-family:inherit;" 
-                    onmouseover="this.style.borderColor='var(--gold)'" 
-                    onmouseout="this.style.borderColor='var(--border)'">
-              <span style="font-size:1.1rem;">${icon}</span>
-              <span style="flex:1;text-align:left;font-size:.85rem;">${escHtml(f.file_name)}</span>
-              <span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);">${sizeKB} KB</span>
-              <span style="font-size:.9rem;">⬇️</span>
-            </button>`;
-        }).join('')}
-      </div>
-    `;
-  } else {
-    markedWorkSection.innerHTML = '';
-  }
-
   document.getElementById('feedback-modal').classList.add('open');
-}
-
-async function downloadMarkedWork(filePath, fileName) {
-  try {
-    showToast('Downloading...', '');
-    
-    const { data, error } = await sb.storage
-      .from('revision-marked-work')
-      .download(filePath);
-
-    if (error) {
-      showToast('Download failed: ' + error.message, 'error');
-      return;
-    }
-
-    const url = URL.createObjectURL(data);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    showToast('Downloaded ✓', 'success');
-  } catch (err) {
-    showToast('Download error', 'error');
-    console.error('Download error:', err);
-  }
 }
 
 function closeFeedbackModal() {
@@ -1492,8 +1490,6 @@ function showToast(msg, type='') {
         <label class="form-label">Teacher Comments</label>
         <div id="feedback-text" style="background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:1rem;font-size:.85rem;line-height:1.6;min-height:100px;white-space:pre-wrap;"></div>
       </div>
-
-      <div id="marked-work-section" style="margin-bottom:1.5rem;"></div>
 
       <div style="font-size:.75rem;color:var(--muted);margin-bottom:1.5rem;">
         Reviewed <span id="feedback-date"></span>
