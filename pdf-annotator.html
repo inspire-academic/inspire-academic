@@ -29,6 +29,7 @@ body {
   height:100vh;
   display:flex;
   flex-direction:column;
+  touch-action: none;
 }
 
 .header {
@@ -209,6 +210,7 @@ body {
   position:absolute;
   top:0;
   left:0;
+  touch-action: none;
 }
 
 .page-number {
@@ -228,15 +230,15 @@ body {
 
 .text-input {
   position:absolute;
-  border:2px solid var(--gold);
+  border:3px solid var(--gold);
   background:white;
-  padding:.25rem .5rem;
+  padding:.4rem .6rem;
   font-family:'DM Sans',sans-serif;
-  font-size:16px;
-  min-width:150px;
+  min-width:200px;
   outline:none;
-  border-radius:4px;
-  z-index:1000;
+  border-radius:6px;
+  z-index:100;
+  box-shadow:0 4px 12px rgba(201,168,76,0.3);
 }
 
 .loading {
@@ -458,35 +460,43 @@ function attachDrawingEvents(canvas, wrapper, pageIndex) {
   let lastX = 0;
   let lastY = 0;
   
-  canvas.addEventListener('mousedown', (e) => {
+  const getCoords = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+    const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
+    return { x, y };
+  };
+  
+  const startDrawing = (e) => {
+    e.preventDefault();
+    
     if (currentTool === 'text') {
       addTextBox(e, wrapper, pageIndex);
       return;
     }
     
     isDrawing = true;
-    const rect = canvas.getBoundingClientRect();
-    lastX = e.clientX - rect.left;
-    lastY = e.clientY - rect.top;
+    const { x, y } = getCoords(e);
+    lastX = x;
+    lastY = y;
     
     pages[pageIndex].strokes.push({
       tool: currentTool,
       color: currentColor,
       size: currentSize,
-      points: [{x: lastX, y: lastY}]
+      points: [{ x, y }]
     });
     pages[pageIndex].redoStack = [];
-  });
+  };
   
-  canvas.addEventListener('mousemove', (e) => {
+  const draw = (e) => {
     if (!isDrawing || currentTool === 'text') return;
+    e.preventDefault();
     
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const { x, y } = getCoords(e);
     
     const currentStroke = pages[pageIndex].strokes[pages[pageIndex].strokes.length - 1];
-    currentStroke.points.push({x, y});
+    currentStroke.points.push({ x, y });
     
     const ctx = pages[pageIndex].annotationCtx;
     ctx.strokeStyle = currentColor;
@@ -509,16 +519,42 @@ function attachDrawingEvents(canvas, wrapper, pageIndex) {
     
     lastX = x;
     lastY = y;
-  });
+  };
   
-  canvas.addEventListener('mouseup', () => { isDrawing = false; });
-  canvas.addEventListener('mouseout', () => { isDrawing = false; });
+  const stopDrawing = () => {
+    isDrawing = false;
+  };
+  
+  // Mouse events
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  
+  // Touch/Pen events for tablets
+  canvas.addEventListener('touchstart', startDrawing);
+  canvas.addEventListener('touchmove', draw);
+  canvas.addEventListener('touchend', stopDrawing);
+  
+  // Pointer events (for pen tablets like Huion)
+  canvas.addEventListener('pointerdown', startDrawing);
+  canvas.addEventListener('pointermove', draw);
+  canvas.addEventListener('pointerup', stopDrawing);
+  canvas.addEventListener('pointerout', stopDrawing);
 }
 
 function addTextBox(e, wrapper, pageIndex) {
+  console.log('Text tool clicked!'); // Debug
+  
   const rect = wrapper.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+  const x = (e.clientX || e.touches?.[0]?.clientX || 0) - rect.left;
+  const y = (e.clientY || e.touches?.[0]?.clientY || 0) - rect.top;
+  
+  console.log('Creating text box at', x, y); // Debug
+  
+  // Remove any existing text inputs first
+  const existingInputs = wrapper.querySelectorAll('.text-input');
+  existingInputs.forEach(inp => inp.remove());
   
   const input = document.createElement('input');
   input.type = 'text';
@@ -527,20 +563,30 @@ function addTextBox(e, wrapper, pageIndex) {
   input.style.top = y + 'px';
   input.style.color = currentColor;
   input.style.fontSize = (currentSize * 4) + 'px';
+  input.placeholder = 'Type here...';
   
   wrapper.appendChild(input);
-  input.focus();
+  
+  // Focus after a tiny delay to ensure it's rendered
+  setTimeout(() => {
+    input.focus();
+    input.select();
+  }, 10);
+  
+  console.log('Text input created and focused'); // Debug
   
   const finishText = () => {
+    console.log('Finishing text:', input.value); // Debug
     if (input.value.trim()) {
       const ctx = pages[pageIndex].annotationCtx;
       ctx.font = `${currentSize * 4}px DM Sans, sans-serif`;
       ctx.fillStyle = currentColor;
-      ctx.fillText(input.value, x, y);
+      ctx.fillText(input.value, x, y + (currentSize * 4));
       
       pages[pageIndex].texts.push({
         text: input.value,
-        x, y,
+        x, 
+        y: y + (currentSize * 4),
         color: currentColor,
         size: currentSize * 4
       });
@@ -550,13 +596,19 @@ function addTextBox(e, wrapper, pageIndex) {
   
   input.addEventListener('blur', finishText);
   input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') finishText();
-    if (e.key === 'Escape') input.remove();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      finishText();
+    }
+    if (e.key === 'Escape') {
+      input.remove();
+    }
   });
 }
 
 function setTool(tool) {
   currentTool = tool;
+  console.log('Tool changed to:', tool); // Debug
   document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tool === tool);
   });
