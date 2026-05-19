@@ -4,22 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PDF Annotator - Inspire Academic</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <style>
 :root {
   --navy: #0b1628;
   --navy2: #152035;
   --navy3: #1f2937;
   --gold: #c9a84c;
-  --amber: #f59e0b;
   --red: #ef4444;
   --green: #10b981;
-  --blue: #3b82f6;
-  --purple: #8b5cf6;
   --muted: #9ca3af;
   --border: #374151;
 }
@@ -106,7 +101,6 @@ body {
 
 .btn-primary:hover {
   background:#d4b961;
-  border-color:#d4b961;
 }
 
 .toolbar {
@@ -166,24 +160,10 @@ body {
   border:1px solid var(--border);
   cursor:pointer;
   padding:2px;
-  background:transparent;
-}
-
-.color-picker::-webkit-color-swatch-wrapper {
-  padding:0;
-}
-
-.color-picker::-webkit-color-swatch {
-  border:none;
-  border-radius:4px;
 }
 
 .size-slider {
   width:100px;
-  height:4px;
-  background:var(--border);
-  border-radius:2px;
-  cursor:pointer;
 }
 
 .tool-label {
@@ -201,13 +181,11 @@ body {
   border:1px solid var(--border);
   color:#fff;
   cursor:pointer;
-  font-family:'DM Sans',sans-serif;
 }
 
 .canvas-container {
   flex:1;
   overflow-y:auto;
-  overflow-x:hidden;
   padding:2rem;
   display:flex;
   flex-direction:column;
@@ -245,31 +223,25 @@ body {
 }
 
 .cursor-crosshair { cursor:crosshair; }
-.cursor-pen { cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M15 3l2 2-10 10H5v-2L15 3z" fill="white" stroke="black" stroke-width="1"/></svg>') 2 18, auto; }
+.cursor-pen { cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M15 3l2 2-10 10H5v-2L15 3z" fill="white" stroke="black"/></svg>') 2 18, auto; }
 .cursor-text { cursor:text; }
 
-.text-input-wrapper {
-  position:absolute;
-  z-index:10;
-}
-
 .text-input {
+  position:absolute;
   border:2px solid var(--gold);
-  background:rgba(255,255,255,.95);
+  background:white;
   padding:.25rem .5rem;
   font-family:'DM Sans',sans-serif;
   font-size:16px;
   min-width:150px;
   outline:none;
   border-radius:4px;
+  z-index:1000;
 }
 
 .loading {
   position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
+  inset:0;
   background:rgba(11,22,40,.95);
   display:flex;
   align-items:center;
@@ -308,7 +280,6 @@ body {
 }
 
 .toast.show { display:flex; }
-
 .toast.success { border-color:var(--green); color:var(--green); }
 .toast.error { border-color:var(--red); color:var(--red); }
 </style>
@@ -325,16 +296,16 @@ body {
   <div class="header-right">
     <button class="btn" onclick="goBack()">← Back</button>
     <button class="btn" onclick="clearAll()">🗑️ Clear All</button>
-    <button class="btn btn-primary" onclick="downloadAnnotated()">💾 Download Annotated PDF</button>
+    <button class="btn btn-primary" onclick="downloadAnnotated()">💾 Download PDF</button>
   </div>
 </div>
 
 <div class="toolbar">
   <div class="tool-group">
-    <button class="tool-btn active" onclick="setTool('pen')" data-tool="pen" title="Pen">✏️</button>
-    <button class="tool-btn" onclick="setTool('highlighter')" data-tool="highlighter" title="Highlighter">🖍️</button>
-    <button class="tool-btn" onclick="setTool('text')" data-tool="text" title="Text">T</button>
-    <button class="tool-btn" onclick="setTool('eraser')" data-tool="eraser" title="Eraser">🧹</button>
+    <button class="tool-btn active" onclick="setTool('pen')" data-tool="pen">✏️</button>
+    <button class="tool-btn" onclick="setTool('highlighter')" data-tool="highlighter">🖍️</button>
+    <button class="tool-btn" onclick="setTool('text')" data-tool="text">T</button>
+    <button class="tool-btn" onclick="setTool('eraser')" data-tool="eraser">🧹</button>
   </div>
   
   <div class="tool-group">
@@ -361,18 +332,17 @@ body {
   </div>
   
   <div class="tool-group">
-    <button class="tool-btn" onclick="zoomIn()" title="Zoom In">🔍+</button>
-    <button class="tool-btn" onclick="zoomOut()" title="Zoom Out">🔍−</button>
-    <button class="tool-btn" onclick="resetZoom()" title="Reset Zoom">⚖️</button>
+    <button class="tool-btn" onclick="zoomIn()">🔍+</button>
+    <button class="tool-btn" onclick="zoomOut()">🔍−</button>
+    <button class="tool-btn" onclick="resetZoom()">⚖️</button>
   </div>
 </div>
 
-<div class="canvas-container" id="canvas-container">
-</div>
+<div class="canvas-container" id="canvas-container"></div>
 
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div>Loading PDF pages...</div>
+  <div>Loading PDF...</div>
 </div>
 
 <div class="toast" id="toast">
@@ -380,6 +350,7 @@ body {
 </div>
 
 <script>
+const { jsPDF } = window.jspdf;
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 let pdfDoc = null;
@@ -391,9 +362,7 @@ let currentCursor = 'crosshair';
 let pages = [];
 let pdfUrl = '';
 let fileName = '';
-let pdfBytes = null;
 
-// ── Keyboard Shortcuts ──
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.key === 'z') {
     e.preventDefault();
@@ -412,16 +381,13 @@ document.addEventListener('keydown', (e) => {
     fileName = params.get('name') || 'document.pdf';
     
     if (!pdfUrl) {
-      showToast('No PDF URL provided', 'error');
+      showToast('No PDF URL', 'error');
       return;
     }
     
     document.getElementById('file-name').textContent = fileName;
     
-    const response = await fetch(pdfUrl);
-    pdfBytes = await response.arrayBuffer();
-    
-    const loadingTask = pdfjsLib.getDocument(pdfBytes);
+    const loadingTask = pdfjsLib.getDocument(pdfUrl);
     pdfDoc = await loadingTask.promise;
     
     await renderAllPages();
@@ -474,6 +440,7 @@ async function renderAllPages() {
     const annotationCtx = annotationCanvas.getContext('2d');
     pages.push({
       pageNum,
+      pageWrapper,
       pdfCanvas,
       annotationCanvas,
       annotationCtx,
@@ -482,18 +449,18 @@ async function renderAllPages() {
       texts: []
     });
     
-    attachDrawingEvents(annotationCanvas, pages.length - 1);
+    attachDrawingEvents(annotationCanvas, pageWrapper, pages.length - 1);
   }
 }
 
-function attachDrawingEvents(canvas, pageIndex) {
+function attachDrawingEvents(canvas, wrapper, pageIndex) {
   let isDrawing = false;
   let lastX = 0;
   let lastY = 0;
   
   canvas.addEventListener('mousedown', (e) => {
     if (currentTool === 'text') {
-      addTextBox(e, canvas, pageIndex);
+      addTextBox(e, wrapper, pageIndex);
       return;
     }
     
@@ -532,11 +499,7 @@ function attachDrawingEvents(canvas, pageIndex) {
       ctx.lineWidth = currentSize * 3;
     } else {
       ctx.globalCompositeOperation = 'source-over';
-      if (currentTool === 'highlighter') {
-        ctx.globalAlpha = 0.3;
-      } else {
-        ctx.globalAlpha = 1.0;
-      }
+      ctx.globalAlpha = currentTool === 'highlighter' ? 0.3 : 1.0;
     }
     
     ctx.beginPath();
@@ -548,37 +511,27 @@ function attachDrawingEvents(canvas, pageIndex) {
     lastY = y;
   });
   
-  canvas.addEventListener('mouseup', () => {
-    isDrawing = false;
-  });
-  
-  canvas.addEventListener('mouseout', () => {
-    isDrawing = false;
-  });
+  canvas.addEventListener('mouseup', () => { isDrawing = false; });
+  canvas.addEventListener('mouseout', () => { isDrawing = false; });
 }
 
-function addTextBox(e, canvas, pageIndex) {
-  const rect = canvas.getBoundingClientRect();
+function addTextBox(e, wrapper, pageIndex) {
+  const rect = wrapper.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
-  
-  const wrapper = document.createElement('div');
-  wrapper.className = 'text-input-wrapper';
-  wrapper.style.position = 'fixed';
-  wrapper.style.left = e.clientX + 'px';
-  wrapper.style.top = e.clientY + 'px';
   
   const input = document.createElement('input');
   input.type = 'text';
   input.className = 'text-input';
+  input.style.left = x + 'px';
+  input.style.top = y + 'px';
   input.style.color = currentColor;
   input.style.fontSize = (currentSize * 4) + 'px';
   
   wrapper.appendChild(input);
-  document.body.appendChild(wrapper);
   input.focus();
   
-  input.addEventListener('blur', () => {
+  const finishText = () => {
     if (input.value.trim()) {
       const ctx = pages[pageIndex].annotationCtx;
       ctx.font = `${currentSize * 4}px DM Sans, sans-serif`;
@@ -592,16 +545,13 @@ function addTextBox(e, canvas, pageIndex) {
         size: currentSize * 4
       });
     }
-    wrapper.remove();
-  });
+    input.remove();
+  };
   
+  input.addEventListener('blur', finishText);
   input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      input.blur();
-    }
-    if (e.key === 'Escape') {
-      wrapper.remove();
-    }
+    if (e.key === 'Enter') finishText();
+    if (e.key === 'Escape') input.remove();
   });
 }
 
@@ -618,13 +568,9 @@ function setTool(tool) {
   
   document.querySelectorAll('.annotation-canvas').forEach(canvas => {
     canvas.className = 'annotation-canvas';
-    if (currentCursor === 'pen') {
-      canvas.classList.add('cursor-pen');
-    } else if (tool === 'text') {
-      canvas.classList.add('cursor-text');
-    } else {
-      canvas.classList.add('cursor-crosshair');
-    }
+    if (currentCursor === 'pen') canvas.classList.add('cursor-pen');
+    else if (tool === 'text') canvas.classList.add('cursor-text');
+    else canvas.classList.add('cursor-crosshair');
   });
 }
 
@@ -640,13 +586,9 @@ function changeCursor() {
   currentCursor = document.getElementById('cursor-select').value;
   document.querySelectorAll('.annotation-canvas').forEach(canvas => {
     canvas.className = 'annotation-canvas';
-    if (currentCursor === 'pen') {
-      canvas.classList.add('cursor-pen');
-    } else if (currentTool === 'text') {
-      canvas.classList.add('cursor-text');
-    } else {
-      canvas.classList.add('cursor-crosshair');
-    }
+    if (currentCursor === 'pen') canvas.classList.add('cursor-pen');
+    else if (currentTool === 'text') canvas.classList.add('cursor-text');
+    else canvas.classList.add('cursor-crosshair');
   });
 }
 
@@ -671,7 +613,7 @@ function redo() {
 }
 
 function clearAll() {
-  if (confirm('Clear all annotations on all pages?')) {
+  if (confirm('Clear all annotations?')) {
     pages.forEach(page => {
       page.strokes = [];
       page.redoStack = [];
@@ -696,20 +638,13 @@ function redrawPage(page) {
       ctx.lineWidth = stroke.size * 3;
     } else {
       ctx.globalCompositeOperation = 'source-over';
-      if (stroke.tool === 'highlighter') {
-        ctx.globalAlpha = 0.3;
-      } else {
-        ctx.globalAlpha = 1.0;
-      }
+      ctx.globalAlpha = stroke.tool === 'highlighter' ? 0.3 : 1.0;
     }
     
     ctx.beginPath();
     stroke.points.forEach((point, i) => {
-      if (i === 0) {
-        ctx.moveTo(point.x, point.y);
-      } else {
-        ctx.lineTo(point.x, point.y);
-      }
+      if (i === 0) ctx.moveTo(point.x, point.y);
+      else ctx.lineTo(point.x, point.y);
     });
     ctx.stroke();
   });
@@ -747,49 +682,38 @@ async function downloadAnnotated() {
   try {
     showToast('Preparing PDF...', '');
     
-    const pdfLibDoc = await PDFLib.PDFDocument.load(pdfBytes);
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'pt',
+      format: 'a4'
+    });
     
     for (let i = 0; i < pages.length; i++) {
       const page = pages[i];
-      const pdfPage = pdfLibDoc.getPages()[i];
-      
-      if (page.strokes.length === 0 && page.texts.length === 0) continue;
       
       const mergedCanvas = document.createElement('canvas');
       mergedCanvas.width = page.pdfCanvas.width;
       mergedCanvas.height = page.pdfCanvas.height;
-      const mergedCtx = mergedCanvas.getContext('2d');
+      const ctx = mergedCanvas.getContext('2d');
       
-      mergedCtx.fillStyle = '#ffffff';
-      mergedCtx.fillRect(0, 0, mergedCanvas.width, mergedCanvas.height);
-      mergedCtx.drawImage(page.pdfCanvas, 0, 0);
-      mergedCtx.drawImage(page.annotationCanvas, 0, 0);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, mergedCanvas.width, mergedCanvas.height);
+      ctx.drawImage(page.pdfCanvas, 0, 0);
+      ctx.drawImage(page.annotationCanvas, 0, 0);
       
-      const pngDataUrl = mergedCanvas.toDataURL('image/png');
-      const pngImageBytes = await fetch(pngDataUrl).then(res => res.arrayBuffer());
-      const pngImage = await pdfLibDoc.embedPng(pngImageBytes);
+      const imgData = mergedCanvas.toDataURL('image/jpeg', 0.95);
       
-      const { width, height } = pdfPage.getSize();
-      pdfPage.drawImage(pngImage, {
-        x: 0,
-        y: 0,
-        width: width,
-        height: height
-      });
+      if (i > 0) pdf.addPage();
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
     }
     
-    const pdfBytesOutput = await pdfLibDoc.save();
-    const blob = new Blob([pdfBytesOutput], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName.replace('.pdf', '_annotated.pdf');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    pdf.save(fileName.replace('.pdf', '_annotated.pdf'));
     
-    showToast('Downloaded! ✓', 'success');
+    showToast('Downloaded ✓', 'success');
     
   } catch (error) {
     console.error('Download error:', error);
@@ -800,22 +724,15 @@ async function downloadAnnotated() {
 function goBack() {
   if (confirm('Go back? Unsaved annotations will be lost.')) {
     window.close();
-    if (!window.closed) {
-      window.history.back();
-    }
+    if (!window.closed) window.history.back();
   }
 }
 
 function showToast(message, type = '') {
   const toast = document.getElementById('toast');
-  const toastMessage = document.getElementById('toast-message');
-  
-  toastMessage.textContent = message;
+  toast.querySelector('#toast-message').textContent = message;
   toast.className = 'toast show ' + type;
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 2000);
+  setTimeout(() => toast.classList.remove('show'), 2000);
 }
 </script>
 
