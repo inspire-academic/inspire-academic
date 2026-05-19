@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Annotator - Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<style>
+:root {
+  --navy: #0b1628;
+  --navy2: #152035;
+  --navy3: #1f2937;
+  --gold: #c9a84c;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --green: #10b981;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --muted: #9ca3af;
+  --border: #374151;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:'DM Sans',sans-serif;
+  background:var(--navy);
+  color:#fff;
+  overflow:hidden;
+  height:100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background:var(--navy2);
+  border-bottom:1px solid var(--border);
+  padding:.75rem 1.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+}
+
+.header-left {
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+
+.logo {
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;
+  font-weight:600;
+}
+
+.inspire { color:var(--gold); }
+.science { color:#fff; }
+
+.file-name {
+  font-size:.85rem;
+  color:var(--muted);
+  max-width:400px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.header-right {
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+}
+
+.btn {
+  padding:.5rem 1rem;
+  border-radius:6px;
+  font-size:.8rem;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .15s;
+  border:1px solid var(--border);
+  background:transparent;
+  color:#fff;
+  font-family:'DM Sans',sans-serif;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+}
+
+.btn:hover {
+  border-color:var(--gold);
+  background:rgba(201,168,76,.05);
+}
+
+.btn-primary {
+  background:var(--gold);
+  color:var(--navy);
+  border-color:var(--gold);
+}
+
+.btn-primary:hover {
+  background:#d4b961;
+  border-color:#d4b961;
+}
+
+/* ── TOOLBAR ── */
+.toolbar {
+  background:var(--navy2);
+  border-bottom:1px solid var(--border);
+  padding:.5rem 1.5rem;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+
+.tool-group {
+  display:flex;
+  gap:.5rem;
+  align-items:center;
+  padding-right:1rem;
+  border-right:1px solid var(--border);
+}
+
+.tool-group:last-child {
+  border-right:none;
+}
+
+.tool-btn {
+  width:36px;
+  height:36px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  transition:all .15s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.1rem;
+}
+
+.tool-btn:hover {
+  background:var(--navy3);
+  color:#fff;
+  border-color:var(--gold);
+}
+
+.tool-btn.active {
+  background:var(--gold);
+  color:var(--navy);
+  border-color:var(--gold);
+}
+
+.color-picker {
+  width:36px;
+  height:36px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  cursor:pointer;
+  padding:2px;
+  background:transparent;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+  padding:0;
+}
+
+.color-picker::-webkit-color-swatch {
+  border:none;
+  border-radius:4px;
+}
+
+.size-slider {
+  width:100px;
+  height:4px;
+  background:var(--border);
+  border-radius:2px;
+  cursor:pointer;
+}
+
+.tool-label {
+  font-size:.7rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+
+/* ── CANVAS CONTAINER ── */
+.canvas-container {
+  flex:1;
+  overflow:auto;
+  padding:2rem;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  background:var(--navy3);
+  height:calc(100vh - 110px);
+}
+
+.canvas-wrapper {
+  position:relative;
+  box-shadow:0 8px 24px rgba(0,0,0,.3);
+  background:#fff;
+}
+
+#pdf-canvas {
+  display:block;
+  cursor:crosshair;
+}
+
+#annotation-canvas {
+  position:absolute;
+  top:0;
+  left:0;
+  cursor:crosshair;
+}
+
+/* ── LOADING ── */
+.loading {
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(11,22,40,.95);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:1rem;
+  z-index:1000;
+}
+
+.spinner {
+  width:40px;
+  height:40px;
+  border:3px solid var(--border);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform:rotate(360deg); }
+}
+
+/* ── TOAST ── */
+.toast {
+  position:fixed;
+  top:1rem;
+  right:1rem;
+  background:var(--navy2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:1rem 1.25rem;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+  display:none;
+  align-items:center;
+  gap:.75rem;
+  z-index:1001;
+}
+
+.toast.show { display:flex; }
+
+.toast.success { border-color:var(--green); color:var(--green); }
+.toast.error { border-color:var(--red); color:var(--red); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">
+      <span class="inspire">Inspire</span> <span class="science">Science</span>
+    </div>
+    <div class="file-name" id="file-name">Loading...</div>
+  </div>
+  <div class="header-right">
+    <button class="btn" onclick="goBack()">← Back</button>
+    <button class="btn" onclick="clearAll()">🗑️ Clear All</button>
+    <button class="btn btn-primary" onclick="downloadAnnotated()">💾 Download Annotated PDF</button>
+  </div>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <div class="tool-group">
+    <button class="tool-btn active" onclick="setTool('pen')" data-tool="pen" title="Pen">✏️</button>
+    <button class="tool-btn" onclick="setTool('highlighter')" data-tool="highlighter" title="Highlighter">🖍️</button>
+    <button class="tool-btn" onclick="setTool('eraser')" data-tool="eraser" title="Eraser">🧹</button>
+  </div>
+  
+  <div class="tool-group">
+    <span class="tool-label">Color</span>
+    <input type="color" class="color-picker" id="color-picker" value="#000000">
+  </div>
+  
+  <div class="tool-group">
+    <span class="tool-label">Size</span>
+    <input type="range" class="size-slider" id="size-slider" min="1" max="20" value="3">
+  </div>
+  
+  <div class="tool-group">
+    <button class="tool-btn" onclick="undo()" title="Undo">↶</button>
+    <button class="tool-btn" onclick="redo()" title="Redo">↷</button>
+  </div>
+  
+  <div class="tool-group">
+    <button class="tool-btn" onclick="zoomIn()" title="Zoom In">🔍+</button>
+    <button class="tool-btn" onclick="zoomOut()" title="Zoom Out">🔍−</button>
+    <button class="tool-btn" onclick="resetZoom()" title="Reset Zoom">⚖️</button>
+  </div>
+</div>
+
+<!-- Canvas Container -->
+<div class="canvas-container" id="canvas-container">
+  <div class="canvas-wrapper" id="canvas-wrapper">
+    <canvas id="pdf-canvas"></canvas>
+    <canvas id="annotation-canvas"></canvas>
+  </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div>Loading PDF...</div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span id="toast-message"></span>
+</div>
+
+<script>
+// ── Config ──
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ── State ──
+let pdfDoc = null;
+let pageNum = 1;
+let pageRendering = false;
+let pageNumPending = null;
+let scale = 1.5;
+let currentTool = 'pen';
+let currentColor = '#000000';
+let currentSize = 3;
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+let strokes = [];
+let redoStack = [];
+let pdfUrl = '';
+let fileName = '';
+
+const pdfCanvas = document.getElementById('pdf-canvas');
+const pdfCtx = pdfCanvas.getContext('2d');
+const annotationCanvas = document.getElementById('annotation-canvas');
+const annotationCtx = annotationCanvas.getContext('2d');
+
+// ── Init ──
+(async () => {
+  try {
+    // Get URL params
+    const params = new URLSearchParams(window.location.search);
+    pdfUrl = params.get('url');
+    fileName = params.get('name') || 'document.pdf';
+    
+    if (!pdfUrl) {
+      showToast('No PDF URL provided', 'error');
+      return;
+    }
+    
+    document.getElementById('file-name').textContent = fileName;
+    
+    // Load PDF
+    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+    pdfDoc = await loadingTask.promise;
+    
+    renderPage(pageNum);
+    
+    document.getElementById('loading').style.display = 'none';
+    
+  } catch (error) {
+    console.error('PDF load error:', error);
+    showToast('Failed to load PDF', 'error');
+  }
+})();
+
+// ── Render PDF Page ──
+async function renderPage(num) {
+  pageRendering = true;
+  
+  const page = await pdfDoc.getPage(num);
+  const viewport = page.getViewport({ scale });
+  
+  pdfCanvas.height = viewport.height;
+  pdfCanvas.width = viewport.width;
+  annotationCanvas.height = viewport.height;
+  annotationCanvas.width = viewport.width;
+  
+  const renderContext = {
+    canvasContext: pdfCtx,
+    viewport: viewport
+  };
+  
+  await page.render(renderContext).promise;
+  
+  pageRendering = false;
+  
+  if (pageNumPending !== null) {
+    renderPage(pageNumPending);
+    pageNumPending = null;
+  }
+  
+  redrawAnnotations();
+}
+
+// ── Tool Functions ──
+function setTool(tool) {
+  currentTool = tool;
+  document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tool === tool);
+  });
+  
+  if (tool === 'highlighter') {
+    currentColor = '#ffff00';
+    annotationCtx.globalAlpha = 0.3;
+  } else {
+    annotationCtx.globalAlpha = 1.0;
+  }
+}
+
+document.getElementById('color-picker').addEventListener('change', (e) => {
+  currentColor = e.target.value;
+});
+
+document.getElementById('size-slider').addEventListener('input', (e) => {
+  currentSize = parseInt(e.target.value);
+});
+
+// ── Drawing ──
+annotationCanvas.addEventListener('mousedown', startDrawing);
+annotationCanvas.addEventListener('mousemove', draw);
+annotationCanvas.addEventListener('mouseup', stopDrawing);
+annotationCanvas.addEventListener('mouseout', stopDrawing);
+
+function startDrawing(e) {
+  isDrawing = true;
+  const rect = annotationCanvas.getBoundingClientRect();
+  lastX = e.clientX - rect.left;
+  lastY = e.clientY - rect.top;
+  
+  strokes.push({
+    tool: currentTool,
+    color: currentColor,
+    size: currentSize,
+    points: [{x: lastX, y: lastY}]
+  });
+  redoStack = [];
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+  
+  const rect = annotationCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  
+  const currentStroke = strokes[strokes.length - 1];
+  currentStroke.points.push({x, y});
+  
+  annotationCtx.strokeStyle = currentColor;
+  annotationCtx.lineWidth = currentSize;
+  annotationCtx.lineCap = 'round';
+  annotationCtx.lineJoin = 'round';
+  
+  if (currentTool === 'eraser') {
+    annotationCtx.globalCompositeOperation = 'destination-out';
+    annotationCtx.lineWidth = currentSize * 3;
+  } else {
+    annotationCtx.globalCompositeOperation = 'source-over';
+    if (currentTool === 'highlighter') {
+      annotationCtx.globalAlpha = 0.3;
+    }
+  }
+  
+  annotationCtx.beginPath();
+  annotationCtx.moveTo(lastX, lastY);
+  annotationCtx.lineTo(x, y);
+  annotationCtx.stroke();
+  
+  lastX = x;
+  lastY = y;
+}
+
+function stopDrawing() {
+  isDrawing = false;
+}
+
+function redrawAnnotations() {
+  annotationCtx.clearRect(0, 0, annotationCanvas.width, annotationCanvas.height);
+  
+  strokes.forEach(stroke => {
+    annotationCtx.strokeStyle = stroke.color;
+    annotationCtx.lineWidth = stroke.size;
+    annotationCtx.lineCap = 'round';
+    annotationCtx.lineJoin = 'round';
+    
+    if (stroke.tool === 'eraser') {
+      annotationCtx.globalCompositeOperation = 'destination-out';
+      annotationCtx.lineWidth = stroke.size * 3;
+    } else {
+      annotationCtx.globalCompositeOperation = 'source-over';
+      if (stroke.tool === 'highlighter') {
+        annotationCtx.globalAlpha = 0.3;
+      } else {
+        annotationCtx.globalAlpha = 1.0;
+      }
+    }
+    
+    annotationCtx.beginPath();
+    stroke.points.forEach((point, i) => {
+      if (i === 0) {
+        annotationCtx.moveTo(point.x, point.y);
+      } else {
+        annotationCtx.lineTo(point.x, point.y);
+      }
+    });
+    annotationCtx.stroke();
+  });
+  
+  annotationCtx.globalCompositeOperation = 'source-over';
+  annotationCtx.globalAlpha = 1.0;
+}
+
+function undo() {
+  if (strokes.length > 0) {
+    redoStack.push(strokes.pop());
+    redrawAnnotations();
+  }
+}
+
+function redo() {
+  if (redoStack.length > 0) {
+    strokes.push(redoStack.pop());
+    redrawAnnotations();
+  }
+}
+
+function clearAll() {
+  if (confirm('Clear all annotations?')) {
+    strokes = [];
+    redoStack = [];
+    redrawAnnotations();
+  }
+}
+
+// ── Zoom ──
+function zoomIn() {
+  scale += 0.2;
+  renderPage(pageNum);
+}
+
+function zoomOut() {
+  if (scale > 0.5) {
+    scale -= 0.2;
+    renderPage(pageNum);
+  }
+}
+
+function resetZoom() {
+  scale = 1.5;
+  renderPage(pageNum);
+}
+
+// ── Download ──
+async function downloadAnnotated() {
+  try {
+    showToast('Preparing download...', '');
+    
+    // Merge PDF and annotations
+    const mergedCanvas = document.createElement('canvas');
+    mergedCanvas.width = pdfCanvas.width;
+    mergedCanvas.height = pdfCanvas.height;
+    const mergedCtx = mergedCanvas.getContext('2d');
+    
+    mergedCtx.drawImage(pdfCanvas, 0, 0);
+    mergedCtx.drawImage(annotationCanvas, 0, 0);
+    
+    // Convert to blob
+    mergedCanvas.toBlob((blob) => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName.replace('.pdf', '_annotated.pdf');
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Downloaded! ✓', 'success');
+    }, 'image/png');
+    
+  } catch (error) {
+    console.error('Download error:', error);
+    showToast('Download failed', 'error');
+  }
+}
+
+function goBack() {
+  if (confirm('Go back? Unsaved annotations will be lost.')) {
+    window.close();
+    if (!window.closed) {
+      window.history.back();
+    }
+  }
+}
+
+// ── Toast ──
+function showToast(message, type = '') {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
+  
+  toastMessage.textContent = message;
+  toast.className = 'toast show ' + type;
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+</script>
+
+</body>
+</html>

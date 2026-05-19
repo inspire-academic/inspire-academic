@@ -990,10 +990,10 @@ function renderPacks(filter) {
                </button>`;
              }
              
-             // Kami button (only for PDFs)
+             // Annotator button (only for PDFs)
              const kamiButton = doc.file_type === 'pdf' 
-               ? `<button class="doc-action-btn doc-action-btn-kami" onclick="openInKami('${doc.file_path}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();" title="Open in Kami for digital annotation">
-                    ✏️ Annotate in Kami
+               ? `<button class="doc-action-btn doc-action-btn-kami" onclick="openInKami('${doc.file_path}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();" title="Annotate this PDF with our built-in editor">
+                    ✏️ Annotate PDF
                   </button>`
                : '';
              
@@ -1099,10 +1099,10 @@ async function signOut() {
   location.href = 'index.html';
 }
 
-// ── Open in Kami ──
+// ── Open in PDF Annotator ──
 async function openInKami(filePath, fileName) {
   try {
-    showToast('Opening in Kami...', '');
+    showToast('Opening annotator...', '');
     
     // Generate signed URL (2 hours expiry)
     const { data, error } = await sb.storage
@@ -1110,21 +1110,21 @@ async function openInKami(filePath, fileName) {
       .createSignedUrl(filePath, 7200);
     
     if (error) {
-      console.error('Kami URL error:', error);
-      showToast('Failed to open in Kami', 'error');
+      console.error('URL error:', error);
+      showToast('Failed to open annotator', 'error');
       return;
     }
     
-    // Try Kami's direct viewer URL format
-    const kamiUrl = `https://web.kamihq.com/web/viewer.html?source=filepicker&document_identifier=default&file=${encodeURIComponent(data.signedUrl)}`;
+    // Open custom PDF annotator
+    const annotatorUrl = `pdf-annotator.html?url=${encodeURIComponent(data.signedUrl)}&name=${encodeURIComponent(fileName)}`;
     
     // Open in new tab
-    window.open(kamiUrl, '_blank', 'noopener,noreferrer');
-    showToast('Opened in Kami ✓', 'success');
+    window.open(annotatorUrl, '_blank', 'noopener,noreferrer');
+    showToast('Opened annotator ✓', 'success');
     
   } catch (err) {
-    console.error('Kami error:', err);
-    showToast('Error opening Kami', 'error');
+    console.error('Annotator error:', err);
+    showToast('Error opening annotator', 'error');
   }
 }
 
