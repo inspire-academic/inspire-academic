@@ -1115,8 +1115,8 @@ async function openInKami(filePath, fileName) {
       return;
     }
     
-    // Encode URL for Kami
-    const kamiUrl = `https://web.kamiapp.com/?file=${encodeURIComponent(data.signedUrl)}`;
+    // Try Kami's direct viewer URL format
+    const kamiUrl = `https://web.kamihq.com/web/viewer.html?source=filepicker&document_identifier=default&file=${encodeURIComponent(data.signedUrl)}`;
     
     // Open in new tab
     window.open(kamiUrl, '_blank', 'noopener,noreferrer');
