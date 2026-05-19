@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biology Lessons - Inspire Teaching Cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --navy: #0b1628;
+  --navy2: #152035;
+  --navy3: #1f2937;
+  --gold: #c9a84c;
+  --amber: #f59e0b;
+  --green: #10b981;
+  --red: #ef4444;
+  --muted: #9ca3af;
+  --border: #374151;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: #fff;
+  min-height: 100vh;
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px;
+  background: var(--navy2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  padding: 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo .inspire {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.sidebar-logo .science {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.badge {
+  font-size: .65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-top: .2rem;
+  font-family: 'DM Mono', monospace;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .75rem 1.25rem;
+  cursor: pointer;
+  transition: all .15s;
+  color: #d1d5db;
+  text-decoration: none;
+}
+
+.nav-item:hover {
+  background: var(--navy3);
+  color: #fff;
+}
+
+.nav-item .icon {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.teacher-name {
+  font-size: .8rem;
+  margin-bottom: .75rem;
+}
+
+.sign-out-btn {
+  width: 100%;
+  padding: .6rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: .8rem;
+  transition: all .15s;
+}
+
+.sign-out-btn:hover {
+  background: var(--navy3);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* ── MAIN CONTENT ── */
+.main-content {
+  flex: 1;
+  padding: 2.5rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-header {
+  margin-bottom: 2.5rem;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .85rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.breadcrumb a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: .5rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── FILTERS ── */
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.filter-label {
+  font-size: .7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-family: 'DM Mono', monospace;
+}
+
+.filter-select {
+  padding: .6rem 1rem;
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: #fff;
+  font-size: .85rem;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.filter-select:hover {
+  border-color: var(--gold);
+}
+
+/* ── LESSONS GRID ── */
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.lesson-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.lesson-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,.3);
+}
+
+.lesson-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.lesson-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: .5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.lesson-description {
+  font-size: .85rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.lesson-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.meta-tag {
+  background: var(--navy3);
+  padding: .25rem .75rem;
+  border-radius: 20px;
+  font-size: .7rem;
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+}
+
+.lesson-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.tag {
+  background: var(--navy3);
+  padding: .2rem .6rem;
+  border-radius: 12px;
+  font-size: .7rem;
+  color: var(--muted);
+}
+
+.no-lessons {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--muted);
+}
+
+.no-lessons-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .sidebar { width: 200px; }
+  .main-content { padding: 1.5rem; }
+  .lessons-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 2rem; }
+  .filters { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar">
+    <a href="teaching-cockpit.html" style="text-decoration:none;color:inherit;">
+      <div class="sidebar-logo">
+        <div><span class="inspire">Inspire</span> <span class="science">Science</span></div>
+        <div class="badge">Biology Lessons</div>
+      </div>
+    </a>
+
+    <a href="teaching-cockpit.html" class="nav-item">
+      <span class="icon">◀</span><span>Back to Cockpit</span>
+    </a>
+
+    <div class="sidebar-footer">
+      <div class="teacher-name">
+        <strong id="teacher-name-display">Teacher</strong>
+        Signed in
+      </div>
+      <button class="sign-out-btn" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main-content">
+    <div class="page-header">
+      <div class="breadcrumb">
+        <a href="teaching-cockpit.html">Teaching Cockpit</a>
+        <span>›</span>
+        <span>Physics</span>
+      </div>
+      <div class="page-title">
+        <span>🧬</span>
+        Biology Lessons
+      </div>
+      <div class="page-subtitle">
+        Interactive biology lessons covering the full GCSE curriculum for AQA and Edexcel
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <div class="filter-group">
+        <label class="filter-label">Year Group</label>
+        <select class="filter-select" id="filter-year" onchange="filterLessons()">
+          <option value="all">All Years</option>
+          <option value="Year 7">Year 7</option>
+          <option value="Year 8">Year 8</option>
+          <option value="Year 9">Year 9</option>
+          <option value="Year 10">Year 10</option>
+          <option value="Year 11">Year 11</option>
+          <option value="A Level">A Level</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Topic</label>
+        <select class="filter-select" id="filter-topic" onchange="filterLessons()">
+          <option value="all">All Topics</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Lessons Grid -->
+    <div class="lessons-grid" id="lessons-grid">
+      <div class="no-lessons">
+        <div class="no-lessons-icon">🧬</div>
+        <div>Loading lessons...</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const sb = supabase.createClient(
+  'https://ygtsrdwoikqnrbexjrtl.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo'
+);
+
+let allLessons = [];
+let topics = new Set();
+
+// ── Init ──
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.href = 'index.html'; return; }
+
+  const { data: profile } = await sb.from('profiles').select('first_name, full_name, role').eq('id', session.user.id).single();
+  if (profile?.role && !['teacher', 'admin'].includes(profile.role)) { 
+    setTimeout(() => location.href = 'dashboard.html', 100);
+    return; 
+  }
+
+  const name = profile?.first_name || profile?.full_name || 'Teacher';
+  document.getElementById('teacher-name-display').textContent = name;
+
+  await loadLessons();
+})();
+
+// ── Load Lessons ──
+async function loadLessons() {
+  const { data, error } = await sb
+    .from('teaching_lessons')
+    .select('*')
+    .eq('subject', 'biology')
+    .eq('is_published', true)
+    .order('topic', { ascending: true })
+    .order('title', { ascending: true });
+
+  if (error) {
+    console.error('Error loading lessons:', error);
+    document.getElementById('lessons-grid').innerHTML = `
+      <div class="no-lessons">
+        <div class="no-lessons-icon">⚠️</div>
+        <div>Error loading lessons</div>
+      </div>
+    `;
+    return;
+  }
+
+  allLessons = data || [];
+
+  // Build topics list
+  topics = new Set(allLessons.map(l => l.topic).filter(Boolean));
+  const topicSelect = document.getElementById('filter-topic');
+  topicSelect.innerHTML = '<option value="all">All Topics</option>';
+  [...topics].sort().forEach(topic => {
+    topicSelect.innerHTML += `<option value="${topic}">${topic}</option>`;
+  });
+
+  renderLessons(allLessons);
+}
+
+// ── Filter Lessons ──
+function filterLessons() {
+  const yearFilter = document.getElementById('filter-year').value;
+  const topicFilter = document.getElementById('filter-topic').value;
+
+  let filtered = allLessons;
+
+  if (yearFilter !== 'all') {
+    filtered = filtered.filter(l => l.year_group === yearFilter);
+  }
+
+  if (topicFilter !== 'all') {
+    filtered = filtered.filter(l => l.topic === topicFilter);
+  }
+
+  renderLessons(filtered);
+}
+
+// ── Render Lessons ──
+function renderLessons(lessons) {
+  const grid = document.getElementById('lessons-grid');
+
+  if (!lessons.length) {
+    grid.innerHTML = `
+      <div class="no-lessons">
+        <div class="no-lessons-icon">🔍</div>
+        <div>No lessons found matching your filters</div>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = lessons.map(lesson => {
+    const tags = lesson.tags || [];
+    const icon = getTopicIcon(lesson.topic);
+    
+    return `
+      <div class="lesson-card" onclick="loadLesson('${lesson.html_file_name}')">
+        <div class="lesson-icon">${icon}</div>
+        <div class="lesson-title">${esc(lesson.title)}</div>
+        <div class="lesson-description">${esc(lesson.description)}</div>
+        <div class="lesson-meta">
+          <span class="meta-tag">${lesson.year_group}</span>
+          <span class="meta-tag">${lesson.topic}</span>
+        </div>
+        ${tags.length ? `
+          <div class="lesson-tags">
+            ${tags.map(tag => `<span class="tag">${esc(tag)}</span>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Load Lesson ──
+function loadLesson(filename) {
+  // For now, all biology lessons are in /teaching-lessons/biology/ folder
+  window.location.href = `teaching-lessons/biology/${filename}`;
+}
+
+// ── Topic Icons ──
+function getTopicIcon(topic) {
+  const icons = {
+    'Cells': '🔬',
+    'Organization': '🫀',
+    'Infection': '🦠',
+    'Bioenergetics': '⚡',
+    'Homeostasis': '🌡️',
+    'Inheritance': '🧬',
+    'Evolution': '🦎',
+    'Ecology': '🌿',
+    'Photosynthesis': '🌱',
+    'Respiration': '💨'
+  };
+  return icons[topic] || '🧬';
+}
+
+// ── Helpers ──
+function esc(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  location.href = 'index.html';
+}
+</script>
+
+</body>
+</html>
