@@ -228,17 +228,38 @@ body {
 .cursor-pen { cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M15 3l2 2-10 10H5v-2L15 3z" fill="white" stroke="black"/></svg>') 2 18, auto; }
 .cursor-text { cursor:text; }
 
-.text-input {
+.text-box {
   position:absolute;
-  border:3px solid var(--gold);
-  background:white;
+  border:3px solid transparent;
+  background:transparent;
   padding:.4rem .6rem;
   font-family:'DM Sans',sans-serif;
   min-width:200px;
-  outline:none;
   border-radius:6px;
   z-index:100;
-  box-shadow:0 4px 12px rgba(201,168,76,0.3);
+  cursor:move;
+  transition:border-color .2s;
+}
+
+.text-box:hover {
+  border-color:rgba(201,168,76,0.3);
+}
+
+.text-box.selected {
+  border-color:var(--gold);
+  box-shadow:0 0 0 1px var(--gold);
+}
+
+.text-box textarea {
+  width:100%;
+  background:white;
+  border:none;
+  outline:none;
+  resize:none;
+  font-family:'DM Sans',sans-serif;
+  overflow:hidden;
+  padding:.2rem;
+  border-radius:4px;
 }
 
 .loading {
@@ -364,6 +385,7 @@ let currentCursor = 'crosshair';
 let pages = [];
 let pdfUrl = '';
 let fileName = '';
+let selectedTextBox = null;
 
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.key === 'z') {
@@ -448,7 +470,7 @@ async function renderAllPages() {
       annotationCtx,
       strokes: [],
       redoStack: [],
-      texts: []
+      textBoxes: []
     });
     
     attachDrawingEvents(annotationCanvas, pageWrapper, pages.length - 1);
@@ -468,13 +490,12 @@ function attachDrawingEvents(canvas, wrapper, pageIndex) {
   };
   
   const startDrawing = (e) => {
-    e.preventDefault();
-    
     if (currentTool === 'text') {
       addTextBox(e, wrapper, pageIndex);
       return;
     }
     
+    e.preventDefault();
     isDrawing = true;
     const { x, y } = getCoords(e);
     lastX = x;
@@ -525,18 +546,15 @@ function attachDrawingEvents(canvas, wrapper, pageIndex) {
     isDrawing = false;
   };
   
-  // Mouse events
   canvas.addEventListener('mousedown', startDrawing);
   canvas.addEventListener('mousemove', draw);
   canvas.addEventListener('mouseup', stopDrawing);
   canvas.addEventListener('mouseout', stopDrawing);
   
-  // Touch/Pen events for tablets
   canvas.addEventListener('touchstart', startDrawing);
   canvas.addEventListener('touchmove', draw);
   canvas.addEventListener('touchend', stopDrawing);
   
-  // Pointer events (for pen tablets like Huion)
   canvas.addEventListener('pointerdown', startDrawing);
   canvas.addEventListener('pointermove', draw);
   canvas.addEventListener('pointerup', stopDrawing);
@@ -544,71 +562,127 @@ function attachDrawingEvents(canvas, wrapper, pageIndex) {
 }
 
 function addTextBox(e, wrapper, pageIndex) {
-  console.log('Text tool clicked!'); // Debug
-  
   const rect = wrapper.getBoundingClientRect();
   const x = (e.clientX || e.touches?.[0]?.clientX || 0) - rect.left;
   const y = (e.clientY || e.touches?.[0]?.clientY || 0) - rect.top;
   
-  console.log('Creating text box at', x, y); // Debug
+  const textBoxDiv = document.createElement('div');
+  textBoxDiv.className = 'text-box selected';
+  textBoxDiv.style.left = x + 'px';
+  textBoxDiv.style.top = y + 'px';
   
-  // Remove any existing text inputs first
-  const existingInputs = wrapper.querySelectorAll('.text-input');
-  existingInputs.forEach(inp => inp.remove());
+  const textarea = document.createElement('textarea');
+  textarea.rows = 1;
+  textarea.style.color = currentColor;
+  textarea.style.fontSize = (currentSize * 4) + 'px';
+  textarea.placeholder = 'Type here...';
   
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.className = 'text-input';
-  input.style.left = x + 'px';
-  input.style.top = y + 'px';
-  input.style.color = currentColor;
-  input.style.fontSize = (currentSize * 4) + 'px';
-  input.placeholder = 'Type here...';
+  textBoxDiv.appendChild(textarea);
+  wrapper.appendChild(textBoxDiv);
   
-  wrapper.appendChild(input);
-  
-  // Focus after a tiny delay to ensure it's rendered
-  setTimeout(() => {
-    input.focus();
-    input.select();
-  }, 10);
-  
-  console.log('Text input created and focused'); // Debug
-  
-  const finishText = () => {
-    console.log('Finishing text:', input.value); // Debug
-    if (input.value.trim()) {
-      const ctx = pages[pageIndex].annotationCtx;
-      ctx.font = `${currentSize * 4}px DM Sans, sans-serif`;
-      ctx.fillStyle = currentColor;
-      ctx.fillText(input.value, x, y + (currentSize * 4));
-      
-      pages[pageIndex].texts.push({
-        text: input.value,
-        x, 
-        y: y + (currentSize * 4),
-        color: currentColor,
-        size: currentSize * 4
-      });
-    }
-    input.remove();
+  const textBoxData = {
+    element: textBoxDiv,
+    textarea: textarea,
+    x, y,
+    color: currentColor,
+    size: currentSize * 4
   };
   
-  input.addEventListener('blur', finishText);
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      finishText();
-    }
+  pages[pageIndex].textBoxes.push(textBoxData);
+  
+  setTimeout(() => {
+    textarea.focus();
+    autoResize(textarea);
+  }, 10);
+  
+  textarea.addEventListener('input', () => autoResize(textarea));
+  
+  textarea.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      input.remove();
+      if (textarea.value.trim()) {
+        deselectTextBox();
+      } else {
+        textBoxDiv.remove();
+        const idx = pages[pageIndex].textBoxes.indexOf(textBoxData);
+        if (idx > -1) pages[pageIndex].textBoxes.splice(idx, 1);
+      }
+    }
+  });
+  
+  makeDraggable(textBoxDiv, textBoxData, pageIndex);
+  
+  textBoxDiv.addEventListener('click', (e) => {
+    if (e.target === textarea) return;
+    selectTextBox(textBoxDiv, textarea);
+  });
+  
+  selectedTextBox = textBoxDiv;
+}
+
+function autoResize(textarea) {
+  textarea.style.height = 'auto';
+  textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+function makeDraggable(element, data, pageIndex) {
+  let isDragging = false;
+  let startX, startY, initialLeft, initialTop;
+  
+  element.addEventListener('mousedown', (e) => {
+    if (e.target.tagName === 'TEXTAREA') return;
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    initialLeft = parseInt(element.style.left);
+    initialTop = parseInt(element.style.top);
+    element.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+  
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    const newLeft = initialLeft + dx;
+    const newTop = initialTop + dy;
+    element.style.left = newLeft + 'px';
+    element.style.top = newTop + 'px';
+    data.x = newLeft;
+    data.y = newTop;
+  });
+  
+  document.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      element.style.cursor = 'move';
     }
   });
 }
 
+function selectTextBox(element, textarea) {
+  if (selectedTextBox) {
+    selectedTextBox.classList.remove('selected');
+  }
+  element.classList.add('selected');
+  selectedTextBox = element;
+  textarea.focus();
+}
+
+function deselectTextBox() {
+  if (selectedTextBox) {
+    selectedTextBox.classList.remove('selected');
+    selectedTextBox = null;
+  }
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.text-box') && selectedTextBox) {
+    deselectTextBox();
+  }
+});
+
 function setTool(tool) {
   currentTool = tool;
-  console.log('Tool changed to:', tool); // Debug
   document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tool === tool);
   });
@@ -669,7 +743,8 @@ function clearAll() {
     pages.forEach(page => {
       page.strokes = [];
       page.redoStack = [];
-      page.texts = [];
+      page.textBoxes.forEach(tb => tb.element.remove());
+      page.textBoxes = [];
       redrawPage(page);
     });
   }
@@ -699,14 +774,6 @@ function redrawPage(page) {
       else ctx.lineTo(point.x, point.y);
     });
     ctx.stroke();
-  });
-  
-  page.texts.forEach(text => {
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 1.0;
-    ctx.font = `${text.size}px DM Sans, sans-serif`;
-    ctx.fillStyle = text.color;
-    ctx.fillText(text.text, text.x, text.y);
   });
   
   ctx.globalCompositeOperation = 'source-over';
@@ -753,6 +820,17 @@ async function downloadAnnotated() {
       ctx.drawImage(page.pdfCanvas, 0, 0);
       ctx.drawImage(page.annotationCanvas, 0, 0);
       
+      page.textBoxes.forEach(tb => {
+        if (tb.textarea.value.trim()) {
+          ctx.font = `${tb.size}px DM Sans, sans-serif`;
+          ctx.fillStyle = tb.color;
+          const lines = tb.textarea.value.split('\n');
+          lines.forEach((line, idx) => {
+            ctx.fillText(line, tb.x + 10, tb.y + 20 + (idx * tb.size * 1.2));
+          });
+        }
+      });
+      
       const imgData = mergedCanvas.toDataURL('image/jpeg', 0.95);
       
       if (i > 0) pdf.addPage();
@@ -769,7 +847,7 @@ async function downloadAnnotated() {
     
   } catch (error) {
     console.error('Download error:', error);
-    showToast('Download failed: ' + error.message, 'error');
+    showToast('Download failed', 'error');
   }
 }
 
