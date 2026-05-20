@@ -211,7 +211,6 @@ body {
   top:0;
   left:0;
   touch-action: none;
-  pointer-events: none;
 }
 
 .page-number {
@@ -232,24 +231,13 @@ body {
 .text-box {
   position:absolute;
   background:white;
-  padding:.4rem .6rem;
+  padding:.5rem;
   font-family:'DM Sans',sans-serif;
   min-width:150px;
-  border-radius:6px;
+  border-radius:4px;
   z-index:100;
   cursor:move;
-  box-shadow:0 2px 8px rgba(0,0,0,0.1);
-  border:2px solid transparent;
-  transition: border-color 0.2s;
-}
-
-.text-box:hover {
-  border-color:rgba(201,168,76,0.5);
-}
-
-.text-box.selected {
-  border-color:var(--gold);
-  box-shadow:0 4px 12px rgba(201,168,76,0.3);
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);
 }
 
 .text-box textarea {
@@ -386,8 +374,8 @@ let currentCursor = 'crosshair';
 let pages = [];
 let pdfUrl = '';
 let fileName = '';
-let selectedTextBox = null;
 
+// Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.key === 'z') {
     e.preventDefault();
@@ -452,7 +440,7 @@ async function renderAllPages() {
     pageWrapper.appendChild(pdfCanvas);
     
     const annotationCanvas = document.createElement('canvas');
-    annotationCanvas.className = 'annotation-canvas';
+    annotationCanvas.className = `annotation-canvas ${currentCursor === 'pen' ? 'cursor-pen' : 'cursor-crosshair'}`;
     annotationCanvas.width = viewport.width;
     annotationCanvas.height = viewport.height;
     pageWrapper.appendChild(annotationCanvas);
@@ -550,33 +538,27 @@ function attachDrawingEvents(canvas, wrapper, pageIndex) {
     isDrawing = false;
   };
   
-  wrapper.addEventListener('mousedown', (e) => {
-    if (e.target.closest('.text-box')) return;
-    startDrawing(e);
-  });
+  // Mouse events
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
   
-  wrapper.addEventListener('mousemove', draw);
-  wrapper.addEventListener('mouseup', stopDrawing);
-  wrapper.addEventListener('mouseout', stopDrawing);
+  // Touch/Pen events
+  canvas.addEventListener('touchstart', startDrawing);
+  canvas.addEventListener('touchmove', draw);
+  canvas.addEventListener('touchend', stopDrawing);
   
-  wrapper.addEventListener('touchstart', (e) => {
-    if (e.target.closest('.text-box')) return;
-    startDrawing(e);
-  });
-  wrapper.addEventListener('touchmove', draw);
-  wrapper.addEventListener('touchend', stopDrawing);
-  
-  wrapper.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.text-box')) return;
-    startDrawing(e);
-  });
-  wrapper.addEventListener('pointermove', draw);
-  wrapper.addEventListener('pointerup', stopDrawing);
+  // Pointer events (Huion/Wacom tablets)
+  canvas.addEventListener('pointerdown', startDrawing);
+  canvas.addEventListener('pointermove', draw);
+  canvas.addEventListener('pointerup', stopDrawing);
+  canvas.addEventListener('pointerout', stopDrawing);
 }
 
 function addTextBox(x, y, wrapper, pageIndex) {
   const textBoxDiv = document.createElement('div');
-  textBoxDiv.className = 'text-box selected';
+  textBoxDiv.className = 'text-box';
   textBoxDiv.style.left = x + 'px';
   textBoxDiv.style.top = y + 'px';
   
@@ -609,7 +591,7 @@ function addTextBox(x, y, wrapper, pageIndex) {
   textarea.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (textarea.value.trim()) {
-        deselectTextBox();
+        textarea.blur();
       } else {
         textBoxDiv.remove();
         const idx = pages[pageIndex].textBoxes.indexOf(textBoxData);
@@ -618,13 +600,7 @@ function addTextBox(x, y, wrapper, pageIndex) {
     }
   });
   
-  makeDraggable(textBoxDiv, textBoxData, textarea);
-  
-  textBoxDiv.addEventListener('click', (e) => {
-    selectTextBox(textBoxDiv, textarea);
-  });
-  
-  selectedTextBox = textBoxDiv;
+  makeDraggable(textBoxDiv, textBoxData);
 }
 
 function autoResize(textarea) {
@@ -632,43 +608,31 @@ function autoResize(textarea) {
   textarea.style.height = textarea.scrollHeight + 'px';
 }
 
-function makeDraggable(element, data, textarea) {
+function makeDraggable(element, data) {
   let isDragging = false;
-  let dragStarted = false;
   let startX, startY, initialLeft, initialTop;
   
   element.addEventListener('mousedown', (e) => {
-    if (e.target === textarea) return;
-    
+    if (e.target.tagName === 'TEXTAREA') return;
     isDragging = true;
-    dragStarted = false;
     startX = e.clientX;
     startY = e.clientY;
     initialLeft = parseInt(element.style.left) || 0;
     initialTop = parseInt(element.style.top) || 0;
     element.style.cursor = 'grabbing';
     e.preventDefault();
-    e.stopPropagation();
   });
   
   document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-    
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
-    
-    if (!dragStarted && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
-      dragStarted = true;
-    }
-    
-    if (dragStarted) {
-      const newLeft = initialLeft + dx;
-      const newTop = initialTop + dy;
-      element.style.left = newLeft + 'px';
-      element.style.top = newTop + 'px';
-      data.x = newLeft;
-      data.y = newTop;
-    }
+    const newLeft = initialLeft + dx;
+    const newTop = initialTop + dy;
+    element.style.left = newLeft + 'px';
+    element.style.top = newTop + 'px';
+    data.x = newLeft;
+    data.y = newTop;
   });
   
   document.addEventListener('mouseup', () => {
@@ -678,28 +642,6 @@ function makeDraggable(element, data, textarea) {
     }
   });
 }
-
-function selectTextBox(element, textarea) {
-  if (selectedTextBox && selectedTextBox !== element) {
-    selectedTextBox.classList.remove('selected');
-  }
-  element.classList.add('selected');
-  selectedTextBox = element;
-  textarea.focus();
-}
-
-function deselectTextBox() {
-  if (selectedTextBox) {
-    selectedTextBox.classList.remove('selected');
-    selectedTextBox = null;
-  }
-}
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.text-box') && selectedTextBox) {
-    deselectTextBox();
-  }
-});
 
 function setTool(tool) {
   currentTool = tool;
@@ -711,6 +653,13 @@ function setTool(tool) {
     currentColor = '#ffff00';
     document.getElementById('color-picker').value = '#ffff00';
   }
+  
+  document.querySelectorAll('.annotation-canvas').forEach(canvas => {
+    canvas.className = 'annotation-canvas';
+    if (currentCursor === 'pen') canvas.classList.add('cursor-pen');
+    else if (tool === 'text') canvas.classList.add('cursor-text');
+    else canvas.classList.add('cursor-crosshair');
+  });
 }
 
 document.getElementById('color-picker').addEventListener('change', (e) => {
@@ -723,6 +672,12 @@ document.getElementById('size-slider').addEventListener('input', (e) => {
 
 function changeCursor() {
   currentCursor = document.getElementById('cursor-select').value;
+  document.querySelectorAll('.annotation-canvas').forEach(canvas => {
+    canvas.className = 'annotation-canvas';
+    if (currentCursor === 'pen') canvas.classList.add('cursor-pen');
+    else if (currentTool === 'text') canvas.classList.add('cursor-text');
+    else canvas.classList.add('cursor-crosshair');
+  });
 }
 
 function undo() {
@@ -827,13 +782,14 @@ async function downloadAnnotated() {
       ctx.drawImage(page.pdfCanvas, 0, 0);
       ctx.drawImage(page.annotationCanvas, 0, 0);
       
+      // Render text boxes
       page.textBoxes.forEach(tb => {
         if (tb.textarea.value.trim()) {
           ctx.font = `${tb.size}px DM Sans, sans-serif`;
           ctx.fillStyle = tb.color;
           const lines = tb.textarea.value.split('\n');
           lines.forEach((line, idx) => {
-            ctx.fillText(line, tb.x + 10, tb.y + 20 + (idx * tb.size * 1.2));
+            ctx.fillText(line, tb.x + 8, tb.y + tb.size + (idx * tb.size * 1.2));
           });
         }
       });
