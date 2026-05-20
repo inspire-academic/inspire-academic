@@ -532,6 +532,9 @@ function attachDrawingEvents(canvas, wrapper, pageIndex) {
     
     lastX = x;
     lastY = y;
+    
+    // Keep cursor visible during drawing
+    canvas.style.cursor = '';
   };
   
   const stopDrawing = () => {
@@ -576,7 +579,8 @@ function addTextBox(x, y, wrapper, pageIndex) {
     textarea: textarea,
     x, y,
     color: currentColor,
-    size: currentSize * 4
+    size: currentSize * 4,
+    finalized: false
   };
   
   pages[pageIndex].textBoxes.push(textBoxData);
@@ -588,15 +592,31 @@ function addTextBox(x, y, wrapper, pageIndex) {
   
   textarea.addEventListener('input', () => autoResize(textarea));
   
+  const finalizeTextBox = () => {
+    if (textarea.value.trim()) {
+      // Render text to canvas
+      const ctx = pages[pageIndex].annotationCtx;
+      ctx.font = `${textBoxData.size}px DM Sans, sans-serif`;
+      ctx.fillStyle = textBoxData.color;
+      const lines = textarea.value.split('\n');
+      lines.forEach((line, idx) => {
+        ctx.fillText(line, textBoxData.x + 8, textBoxData.y + textBoxData.size + (idx * textBoxData.size * 1.2));
+      });
+      textBoxData.finalized = true;
+    }
+    // Remove the text box div
+    textBoxDiv.remove();
+    if (!textarea.value.trim()) {
+      const idx = pages[pageIndex].textBoxes.indexOf(textBoxData);
+      if (idx > -1) pages[pageIndex].textBoxes.splice(idx, 1);
+    }
+  };
+  
+  textarea.addEventListener('blur', finalizeTextBox);
+  
   textarea.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      if (textarea.value.trim()) {
-        textarea.blur();
-      } else {
-        textBoxDiv.remove();
-        const idx = pages[pageIndex].textBoxes.indexOf(textBoxData);
-        if (idx > -1) pages[pageIndex].textBoxes.splice(idx, 1);
-      }
+      finalizeTextBox();
     }
   });
   
@@ -784,7 +804,7 @@ async function downloadAnnotated() {
       
       // Render text boxes
       page.textBoxes.forEach(tb => {
-        if (tb.textarea.value.trim()) {
+        if (tb.finalized && tb.textarea.value.trim()) {
           ctx.font = `${tb.size}px DM Sans, sans-serif`;
           ctx.fillStyle = tb.color;
           const lines = tb.textarea.value.split('\n');
