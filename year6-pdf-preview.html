@@ -446,13 +446,14 @@
   <h2>📄 Project Report Preview</h2>
   <div class="toolbar-actions">
     <button class="btn btn-secondary" onclick="window.close()">← Back</button>
-    <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <button class="btn btn-primary" onclick="downloadPDF()" id="download-btn">📥 Download PDF</button>
   </div>
 </div>
 
 <div class="report-container" id="report"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -781,6 +782,38 @@ async function generateReport(){
 
 // Generate report on load
 generateReport();
+
+// Download as proper PDF with maintained formatting
+async function downloadPDF(){
+  const btn = document.getElementById('download-btn');
+  btn.textContent = '⏳ Generating PDF...';
+  btn.disabled = true;
+  
+  const element = document.getElementById('report');
+  const projectTitle = new URLSearchParams(window.location.search).get('title') || 'Project_Report';
+  const studentName = new URLSearchParams(window.location.search).get('student') || 'Student';
+  
+  const opt = {
+    margin: 0,
+    filename: `${studentName}_${projectTitle}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  
+  try {
+    await html2pdf().set(opt).from(element).save();
+    btn.textContent = '✓ Downloaded!';
+    setTimeout(() => {
+      btn.textContent = '📥 Download PDF';
+      btn.disabled = false;
+    }, 2000);
+  } catch(error){
+    console.error('PDF generation error:', error);
+    btn.textContent = '❌ Error - Try Again';
+    btn.disabled = false;
+  }
+}
 </script>
 
 </body>
