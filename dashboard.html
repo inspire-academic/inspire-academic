@@ -303,6 +303,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
     <button class="nav-link" onclick="location.href='progress.html'">My Progress</button>
     <button class="nav-link" onclick="location.href='revision.html'">Personalised Learning</button>
     <button class="nav-link" onclick="location.href='assessment.html'">Assessments</button>
+    <button class="nav-link" onclick="location.href='year6-dashboard.html'">Sci_Bridge</button>
     <button class="nav-link" onclick="location.href='tools.html'">Tools</button>
   </div>
   <div class="nav-user" id="nav-user" onclick="signOut()">
@@ -495,12 +496,6 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
   const teacherRoles = ['teacher', 'teacher_manager', 'admin', 'super_admin'];
   if(teacherRoles.includes(profile?.role)){
     window.location.href = 'teacher.html';
-    return;
-  }
-
-  // Redirect Year 6 students to Year 6 dashboard
-  if(profile?.programme === 'year6_bridging'){
-    window.location.href = 'year6-dashboard.html';
     return;
   }
 
