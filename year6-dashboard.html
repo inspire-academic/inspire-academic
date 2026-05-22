@@ -83,8 +83,8 @@ input,select{font-family:'DM Sans',sans-serif;}
 }
 .topnav-title span{color:var(--gold);}
 .topnav-welcome{display:flex;align-items:center;gap:1rem;}
-.topnav-name{font-size:.88rem;color:var(--muted);}
-.topnav-name strong{color:var(--white);font-weight:600;}
+.topnav-name{font-size:1.05rem;color:var(--white);font-weight:500;}
+.topnav-name strong{color:var(--gold);font-weight:600;}
 .topnav button{background:transparent;border:1px solid var(--border);color:var(--muted);
   padding:.5rem 1rem;border-radius:var(--r);font-size:.82rem;transition:all .2s;}
 .topnav button:hover{border-color:var(--gold);color:var(--gold);}
@@ -132,11 +132,20 @@ main{max-width:1200px;margin:0 auto;padding:2rem;}
 .project-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:1.2rem;}
 .project-card{
   background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
-  padding:1.8rem;transition:all .2s;cursor:pointer;position:relative;
+  overflow:hidden;transition:all .2s;cursor:pointer;position:relative;
 }
-.project-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+.project-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,160,23,.1);}
 .project-card.locked{cursor:not-allowed;opacity:.6;}
-.project-card.locked:hover{transform:none;border-color:var(--border);}
+.project-card.locked:hover{transform:none;border-color:var(--border);box-shadow:none;}
+
+.project-hero-image{
+  width:100%;height:180px;object-fit:cover;display:block;
+  background:linear-gradient(135deg, var(--navy3), var(--navy2));
+}
+
+.project-card-content{
+  padding:1.8rem;
+}
 
 .project-number{
   position:absolute;top:1rem;right:1rem;
@@ -201,7 +210,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem;}
     Year 6 <span>Science Bridging Programme</span>
   </div>
   <div class="topnav-welcome">
-    <div class="topnav-name">Welcome, <strong id="user-name">...</strong></div>
+    <div class="topnav-name">Welcome back, <strong id="user-name">...</strong></div>
     <button onclick="signOut()">Sign Out</button>
   </div>
 </nav>
@@ -381,30 +390,48 @@ function renderProject(project, status, canAccess){
   
   const statusClass = status.replace(' ', '-');
   
+  // Project images - using the workbook cover images for consistency
+  const projectImages = {
+    1: 'https://raw.githubusercontent.com/inspire-academic/inspire-academic/main/projects/project1-hero.jpg',
+    2: 'https://raw.githubusercontent.com/inspire-academic/inspire-academic/main/projects/project2-hero.jpg',
+    3: 'https://raw.githubusercontent.com/inspire-academic/inspire-academic/main/projects/project3-hero.jpg',
+    4: 'https://raw.githubusercontent.com/inspire-academic/inspire-academic/main/projects/project4-hero.jpg'
+  };
+  
   return `
     <div class="project-card ${canAccess ? '' : 'locked'}" 
          onclick="${canAccess ? `window.location.href='year6-project.html?id=${project.id}'` : ''}">
-      <div class="project-number">P${project.order_number}</div>
-      <div class="project-status ${statusClass}">${statusLabels[status]}</div>
       
-      <h3 class="project-title">${project.title}</h3>
-      <p class="project-subtitle">${project.subtitle}</p>
-      <p class="project-description">${project.description}</p>
+      ${projectImages[project.order_number] ? `
+        <img src="${projectImages[project.order_number]}" 
+             alt="${project.title}" 
+             class="project-hero-image"
+             onerror="this.style.display='none'">
+      ` : ''}
       
-      ${canAccess ? `
-        <div class="project-actions">
-          <a href="year6-project.html?id=${project.id}" class="project-btn project-btn-primary">
-            ${status === 'completed' ? 'View Report' : status === 'in-progress' ? 'Continue' : 'Start Project'}
-          </a>
-          <a href="${project.booklet_pdf_url}" target="_blank" class="project-btn project-btn-secondary">
-            View Booklet
-          </a>
-        </div>
-      ` : `
-        <div style="text-align:center;padding:1rem;color:var(--muted);font-size:.85rem;">
-          Complete Project ${project.order_number - 1} to unlock
-        </div>
-      `}
+      <div class="project-card-content">
+        <div class="project-number">P${project.order_number}</div>
+        <div class="project-status ${statusClass}">${statusLabels[status]}</div>
+        
+        <h3 class="project-title">${project.title}</h3>
+        <p class="project-subtitle">${project.subtitle}</p>
+        <p class="project-description">${project.description}</p>
+        
+        ${canAccess ? `
+          <div class="project-actions">
+            <a href="year6-project.html?id=${project.id}" class="project-btn project-btn-primary">
+              ${status === 'completed' ? 'View Report' : status === 'in-progress' ? 'Continue' : 'Start Project'}
+            </a>
+            <a href="${project.booklet_pdf_url}" target="_blank" class="project-btn project-btn-secondary">
+              View Booklet
+            </a>
+          </div>
+        ` : `
+          <div style="text-align:center;padding:1rem;color:var(--muted);font-size:.85rem;">
+            Complete Project ${project.order_number - 1} to unlock
+          </div>
+        `}
+      </div>
     </div>
   `;
 }
