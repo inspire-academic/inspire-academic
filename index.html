@@ -238,6 +238,9 @@ input,select{font-family:'DM Sans',sans-serif;}
             <label>Year Group</label>
             <select id="su-year">
               <option value="">Select year group</option>
+              <option value="Year 6">Year 6</option>
+              <option value="Year 7">Year 7</option>
+              <option value="Year 8">Year 8</option>
               <option value="Year 9">Year 9</option>
               <option value="Year 10">Year 10</option>
               <option value="Year 11">Year 11</option>
@@ -413,6 +416,9 @@ async function doSignup(){
   });
   if(error){toast(error.message,'error');btn.disabled=false;btn.textContent='Create My Account →';return;}
   if(data.user){
+    // Auto-assign programme based on year group
+    const programme = (year === 'Year 6') ? 'year6_bridging' : 'gcse';
+    
     const profileData = {
       id:data.user.id,
       full_name:fullName,
@@ -422,7 +428,8 @@ async function doSignup(){
       role:'student',
       exam_board:selectedBoard.toLowerCase(),
       exam_board_id:boardIds[selectedBoard]||1,
-      tier:selectedTier
+      tier:selectedTier,
+      programme:programme
     };
     await supa.from('profiles').upsert(profileData);
     if(data.session){
