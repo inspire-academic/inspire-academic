@@ -202,7 +202,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
     <div class="pdf-header">
       <h3>📖 Project Booklet</h3>
       <div class="pdf-nav">
-        <button onclick="toast('Download feature coming soon!')">Download PDF</button>
+        <button onclick="downloadBooklet()">📥 Download PDF</button>
       </div>
     </div>
     <div class="pdf-viewer">
@@ -973,6 +973,15 @@ async function submitProject(){
     toast('This project has been submitted. You can still make changes.', 'success');
   }
 })();
+
+// Download booklet PDF
+function downloadBooklet(){
+  if(!currentProject || !currentProject.booklet_pdf_url){
+    toast('Booklet not available', 'error');
+    return;
+  }
+  window.open(currentProject.booklet_pdf_url, '_blank');
+}
 </script>
 
 </body>
