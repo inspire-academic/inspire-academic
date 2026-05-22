@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project Workspace — Inspire Academic</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
+  --gold:#d4a017;--gold2:#f0c040;
+  --orange:#e8620a;
+  --white:#ffffff;
+  --border:#1e3a5f;
+  --muted:#7a8fa6;
+  --green:#16803c;--red:#b92b1a;
+  --r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;}
+input,select,textarea{font-family:'DM Sans',sans-serif;}
+
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--navy2);}
+::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
+
+/* Top nav */
+.topnav{
+  background:var(--navy2);border-bottom:1px solid var(--border);
+  padding:.8rem 1.5rem;display:flex;align-items:center;gap:1rem;
+  position:sticky;top:0;z-index:100;
+}
+.topnav-back{background:none;border:1px solid var(--border);color:var(--muted);
+  padding:.4rem .8rem;border-radius:var(--r);font-size:.85rem;transition:all .2s;}
+.topnav-back:hover{border-color:var(--gold);color:var(--gold);}
+.topnav-title{flex:1;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;}
+.topnav-title span{color:var(--gold);}
+.topnav-status{font-size:.75rem;font-family:'DM Mono',monospace;text-transform:uppercase;
+  letter-spacing:.08em;padding:.3rem .6rem;border-radius:4px;background:rgba(212,160,23,.15);
+  color:var(--gold);border:1px solid rgba(212,160,23,.3);}
+.topnav-status.saved{background:rgba(22,128,60,.15);color:#4ade80;border-color:rgba(22,128,60,.3);}
+
+/* Split layout */
+.split-container{display:flex;height:calc(100vh - 60px);}
+
+/* Left panel - PDF viewer */
+.left-panel{
+  width:45%;flex-shrink:0;background:var(--navy2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.pdf-header{
+  padding:1rem 1.5rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.pdf-header h3{font-size:.95rem;font-weight:600;}
+.pdf-nav{display:flex;gap:.5rem;}
+.pdf-nav button{background:transparent;border:1px solid var(--border);color:var(--muted);
+  padding:.4rem .8rem;border-radius:var(--r);font-size:.8rem;transition:all .2s;}
+.pdf-nav button:hover:not(:disabled){border-color:var(--gold);color:var(--gold);}
+.pdf-nav button:disabled{opacity:.4;cursor:not-allowed;}
+
+.pdf-viewer{flex:1;overflow:auto;padding:1rem;background:var(--navy);}
+.pdf-viewer iframe{width:100%;height:100%;border:none;border-radius:var(--r);}
+
+/* Right panel - Form */
+.right-panel{
+  flex:1;display:flex;flex-direction:column;overflow:hidden;
+}
+.form-header{
+  padding:1rem 1.5rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.form-header h3{font-size:.95rem;font-weight:600;}
+.section-nav{display:flex;gap:.3rem;flex-wrap:wrap;}
+.section-tab{
+  padding:.35rem .7rem;border-radius:4px;font-size:.75rem;
+  background:var(--navy2);border:1px solid var(--border);color:var(--muted);
+  transition:all .2s;
+}
+.section-tab:hover{border-color:var(--gold);color:var(--gold);}
+.section-tab.active{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+.section-tab.completed{border-color:var(--green);color:var(--green);}
+
+.form-content{flex:1;overflow:auto;padding:2rem;}
+.form-section{display:none;}
+.form-section.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.section-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.5rem;}
+.section-subtitle{font-size:.9rem;color:var(--muted);margin-bottom:2rem;line-height:1.6;}
+
+.field{margin-bottom:1.5rem;}
+.field-label{display:block;font-size:.85rem;font-weight:600;color:var(--muted);
+  margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em;}
+.field-input,.field-textarea,.field-select{
+  width:100%;padding:.8rem 1rem;border-radius:var(--r);
+  background:var(--navy2);border:1.5px solid var(--border);
+  color:var(--white);font-size:.9rem;outline:none;transition:border-color .2s;
+}
+.field-input:focus,.field-textarea:focus,.field-select:focus{border-color:var(--gold);}
+.field-textarea{min-height:120px;resize:vertical;line-height:1.6;}
+.field-input::placeholder,.field-textarea::placeholder{color:var(--muted);}
+
+.checkbox-group{display:flex;flex-direction:column;gap:.7rem;}
+.checkbox-item{display:flex;align-items:center;gap:.7rem;}
+.checkbox-item input[type="checkbox"]{
+  width:18px;height:18px;cursor:pointer;
+  accent-color:var(--gold);
+}
+.checkbox-item label{font-size:.9rem;cursor:pointer;}
+
+.photo-upload{
+  border:2px dashed var(--border);border-radius:var(--r);
+  padding:2rem;text-align:center;cursor:pointer;transition:all .2s;
+  background:var(--navy2);
+}
+.photo-upload:hover{border-color:var(--gold);background:rgba(212,160,23,.05);}
+.photo-upload-icon{font-size:2rem;margin-bottom:.5rem;}
+.photo-upload-text{font-size:.9rem;color:var(--muted);}
+.photo-upload-text strong{color:var(--white);display:block;margin-bottom:.2rem;}
+
+.photo-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:1rem;margin-top:1rem;}
+.photo-item{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:1;}
+.photo-item img{width:100%;height:100%;object-fit:cover;}
+.photo-remove{
+  position:absolute;top:.3rem;right:.3rem;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--red);color:white;border:none;
+  font-size:.7rem;cursor:pointer;
+}
+
+.table-builder{
+  border:1px solid var(--border);border-radius:var(--r);overflow:hidden;
+}
+.table-builder table{width:100%;border-collapse:collapse;}
+.table-builder th{
+  background:var(--navy2);padding:.7rem;text-align:left;
+  font-size:.8rem;font-weight:600;border-bottom:1px solid var(--border);
+}
+.table-builder td{padding:.6rem;}
+.table-builder td input{
+  width:100%;padding:.5rem;background:var(--navy2);border:1px solid var(--border);
+  border-radius:4px;color:var(--white);font-size:.85rem;
+}
+
+.form-actions{
+  position:sticky;bottom:0;background:var(--navy2);
+  border-top:1px solid var(--border);padding:1rem 1.5rem;
+  display:flex;gap:.8rem;justify-content:space-between;
+}
+.btn{
+  padding:.7rem 1.5rem;border-radius:var(--r);font-size:.9rem;font-weight:600;
+  transition:all .2s;border:none;cursor:pointer;
+}
+.btn-primary{background:var(--gold);color:var(--navy);}
+.btn-primary:hover{background:var(--gold2);}
+.btn-secondary{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+.btn-success{background:var(--green);color:white;}
+.btn-success:hover{opacity:.9;}
+
+#toast{
+  position:fixed;bottom:2rem;right:2rem;background:var(--navy2);
+  border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);
+  font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;
+  z-index:9999;max-width:320px;
+}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:var(--green);}
+#toast.error{border-color:var(--red);}
+
+.spinner{
+  width:16px;height:16px;border:2px solid rgba(255,255,255,.3);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+@media(max-width:1024px){
+  .split-container{flex-direction:column;height:auto;}
+  .left-panel{width:100%;height:400px;border-right:none;border-bottom:1px solid var(--border);}
+  .right-panel{height:auto;}
+  .section-nav{display:none;}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <button class="topnav-back" onclick="window.location.href='year6-dashboard.html'">← Back to Dashboard</button>
+  <div class="topnav-title">
+    <span id="project-title">Loading...</span>
+  </div>
+  <div class="topnav-status" id="save-status">Draft</div>
+</nav>
+
+<div class="split-container">
+  <!-- Left: PDF Viewer -->
+  <div class="left-panel">
+    <div class="pdf-header">
+      <h3>📖 Project Booklet</h3>
+      <div class="pdf-nav">
+        <button onclick="toast('Download feature coming soon!')">Download PDF</button>
+      </div>
+    </div>
+    <div class="pdf-viewer">
+      <iframe id="pdf-iframe" src=""></iframe>
+    </div>
+  </div>
+
+  <!-- Right: Interactive Form -->
+  <div class="right-panel">
+    <div class="form-header">
+      <h3>📝 My Project Report</h3>
+      <div class="section-nav" id="section-nav"></div>
+    </div>
+
+    <div class="form-content">
+      <div id="form-sections"></div>
+    </div>
+
+    <div class="form-actions">
+      <div style="display:flex;gap:.8rem;">
+        <button class="btn btn-secondary" onclick="prevSection()">← Previous</button>
+        <button class="btn btn-secondary" onclick="nextSection()">Next →</button>
+      </div>
+      <div style="display:flex;gap:.8rem;">
+        <button class="btn btn-secondary" onclick="saveDraft()">💾 Save Draft</button>
+        <button class="btn btn-primary" onclick="previewPDF()">👁️ Preview PDF</button>
+        <button class="btn btn-success" onclick="submitProject()" id="submit-btn">✓ Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="perf-utils.js"></script>
+<script>
+const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+let currentUser, currentProfile, currentProject, currentSubmission;
+let currentSection = 0;
+let autoSaveTimer = null;
+let formData = {};
+
+// Auth helpers
+async function getUser(){
+  const {data:{user}} = await supa.auth.getUser();
+  return user;
+}
+
+async function getProfile(uid){
+  const cached = getCachedProfile();
+  if(cached && cached.id === uid) return cached;
+  const {data} = await supa.from('profiles').select('*').eq('id',uid).single();
+  if(data) setCachedProfile(data);
+  return data;
+}
+
+function toast(msg, type='success'){
+  const t=document.getElementById('toast');
+  if(!t)return;
+  t.textContent=msg; t.className='show '+type;
+  setTimeout(()=>t.className='',3000);
+}
+
+// Project form sections for Project 1
+const project1Sections = [
+  {
+    id: 'section1',
+    title: 'Section 1: Scientific Questions',
+    subtitle: 'What makes a question scientific? Learn to identify and create testable questions.',
+    fields: [
+      {
+        type: 'checkbox-group',
+        label: 'Activity 1.1 — Question Sorting (tick the scientific questions)',
+        name: 'question_sorting',
+        options: [
+          'Does a plant grow taller in sunlight?',
+          'What is the best football team?',
+          'Does sugar dissolve faster in hot water?',
+          'Why do people like music?'
+        ]
+      },
+      {
+        type: 'textarea',
+        label: 'Activity 1.2 — Rewrite this question to make it scientific: "Which shoes are better?"',
+        name: 'scientific_question_1',
+        placeholder: 'Example: Which shoes have better grip on wet surfaces?'
+      },
+      {
+        type: 'textarea',
+        label: 'Rewrite this question to make it scientific: "Which paper plane is best?"',
+        name: 'scientific_question_2',
+        placeholder: 'Your scientific question...'
+      },
+      {
+        type: 'textarea',
+        label: 'Reflection: Why do scientists need questions that can be tested?',
+        name: 'reflection_testing',
+        placeholder: 'Write your reflection here... (200 words max)',
+        maxlength: 1000
+      },
+      {
+        type: 'photo-upload',
+        label: 'Upload photos (optional)',
+        name: 'section1_photos',
+        section: 'section1'
+      }
+    ]
+  },
+  {
+    id: 'section2',
+    title: 'Section 2: Variables & Fair Testing',
+    subtitle: 'In science, we change one thing at a time. Learn about independent, dependent, and control variables.',
+    fields: [
+      {
+        type: 'text',
+        label: 'Question: Does the height a ball is dropped from affect how high it bounces? — Independent variable (what you change)',
+        name: 'independent_var',
+        placeholder: 'Height the ball is dropped from'
+      },
+      {
+        type: 'text',
+        label: 'Dependent variable (what you measure)',
+        name: 'dependent_var',
+        placeholder: 'How high the ball bounces'
+      },
+      {
+        type: 'text',
+        label: 'One control variable (what you keep the same)',
+        name: 'control_var',
+        placeholder: 'Same ball, same surface, etc.'
+      },
+      {
+        type: 'textarea',
+        label: 'Is This Fair? A pupil tests how far a toy car rolls but uses different cars and changes the ramp height each time. Is this a fair test? Why or why not?',
+        name: 'fair_test_evaluation',
+        placeholder: 'Your answer...'
+      },
+      {
+        type: 'photo-upload',
+        label: 'Upload photos of your setup (optional)',
+        name: 'section2_photos',
+        section: 'section2'
+      }
+    ]
+  },
+  {
+    id: 'section3',
+    title: 'Section 3: Planning Your Investigation',
+    subtitle: 'Now you will plan your own scientific investigation.',
+    fields: [
+      {
+        type: 'text',
+        label: 'Investigation Title',
+        name: 'investigation_title',
+        placeholder: 'Example: How ramp length affects toy car distance'
+      },
+      {
+        type: 'textarea',
+        label: 'Aim (What are you trying to find out?)',
+        name: 'aim',
+        placeholder: 'I am trying to find out...'
+      },
+      {
+        type: 'text',
+        label: 'Independent Variable',
+        name: 'plan_independent_var',
+        placeholder: 'What will you change?'
+      },
+      {
+        type: 'text',
+        label: 'Dependent Variable',
+        name: 'plan_dependent_var',
+        placeholder: 'What will you measure?'
+      },
+      {
+        type: 'text',
+        label: 'Control Variables',
+        name: 'plan_control_vars',
+        placeholder: 'What will you keep the same?'
+      },
+      {
+        type: 'textarea',
+        label: 'Prediction (Your hypothesis) — I predict that...',
+        name: 'prediction',
+        placeholder: 'I predict that...'
+      },
+      {
+        type: 'textarea',
+        label: 'Method (Number your steps clearly)',
+        name: 'method',
+        placeholder: '1. Stack books to make a ramp\n2. Place the ramp at 30cm\n3. ...',
+        rows: 10
+      },
+      {
+        type: 'textarea',
+        label: 'Equipment Needed',
+        name: 'equipment',
+        placeholder: 'List all equipment needed...'
+      },
+      {
+        type: 'photo-upload',
+        label: 'Upload photos of your planning (optional)',
+        name: 'section3_photos',
+        section: 'section3'
+      }
+    ]
+  },
+  {
+    id: 'section4',
+    title: 'Section 4: Results & Data',
+    subtitle: 'Record your measurements and calculate averages.',
+    fields: [
+      {
+        type: 'table',
+        label: 'Results Table',
+        name: 'results_table',
+        columns: ['Ramp Length (cm)', 'Trial 1 (cm)', 'Trial 2 (cm)', 'Average (cm)'],
+        rows: [
+          ['30', '', '', ''],
+          ['60', '', '', ''],
+          ['90', '', '', '']
+        ]
+      },
+      {
+        type: 'textarea',
+        label: 'Reflection: Why do scientists repeat measurements?',
+        name: 'repeat_reflection',
+        placeholder: 'Scientists repeat measurements because...'
+      },
+      {
+        type: 'photo-upload',
+        label: 'Upload photos of your experiment in action',
+        name: 'section4_photos',
+        section: 'section4'
+      }
+    ]
+  },
+  {
+    id: 'section5',
+    title: 'Section 5: Drawing a Graph',
+    subtitle: 'Create a graph to visualize your results.',
+    fields: [
+      {
+        type: 'checkbox-group',
+        label: 'Graph Checklist (check all that apply)',
+        name: 'graph_checklist',
+        options: [
+          'Title included',
+          'Labelled axes',
+          'Correct units',
+          'Sensible scale'
+        ]
+      },
+      {
+        type: 'photo-upload',
+        label: 'Upload your graph (hand-drawn or computer-generated)',
+        name: 'section5_photos',
+        section: 'section5',
+        required: true
+      },
+      {
+        type: 'textarea',
+        label: 'Describe your graph (optional)',
+        name: 'graph_description',
+        placeholder: 'What pattern does your graph show?'
+      }
+    ]
+  },
+  {
+    id: 'section6',
+    title: 'Section 6: Conclusion',
+    subtitle: 'A conclusion answers the question using evidence.',
+    fields: [
+      {
+        type: 'textarea',
+        label: 'My Conclusion (use sentence starters if helpful: "The results show that...", "As the independent variable increased...", "This means that...")',
+        name: 'conclusion',
+        placeholder: 'The results show that...',
+        rows: 8
+      },
+      {
+        type: 'photo-upload',
+        label: 'Upload any additional observations (optional)',
+        name: 'section6_photos',
+        section: 'section6'
+      }
+    ]
+  },
+  {
+    id: 'section7',
+    title: 'Section 7: Evaluation & Improvement',
+    subtitle: 'Scientists always think about how their investigation could be better.',
+    fields: [
+      {
+        type: 'textarea',
+        label: 'What Worked Well?',
+        name: 'worked_well',
+        placeholder: 'Write about what went well in your investigation...'
+      },
+      {
+        type: 'textarea',
+        label: 'What Could Be Improved?',
+        name: 'improvements',
+        placeholder: 'What could have been done better?'
+      },
+      {
+        type: 'textarea',
+        label: 'One Improvement I Would Make Next Time',
+        name: 'next_time',
+        placeholder: 'Next time I would...'
+      },
+      {
+        type: 'photo-upload',
+        label: 'Upload your favorite photos from this project',
+        name: 'section7_photos',
+        section: 'section7'
+      }
+    ]
+  },
+  {
+    id: 'section8',
+    title: 'Final Reflection',
+    subtitle: 'Complete your journey as a science investigator.',
+    fields: [
+      {
+        type: 'textarea',
+        label: 'I learned that science is about...',
+        name: 'final_learning',
+        placeholder: 'I learned that science is about...'
+      },
+      {
+        type: 'textarea',
+        label: 'I can now explain what a fair test is because...',
+        name: 'fair_test_explanation',
+        placeholder: 'I can now explain...'
+      },
+      {
+        type: 'textarea',
+        label: 'One thing I am proud of in this project is...',
+        name: 'proud_of',
+        placeholder: 'One thing I am proud of...'
+      }
+    ]
+  }
+];
+
+// Render form sections
+function renderSections(){
+  const container = document.getElementById('form-sections');
+  const navContainer = document.getElementById('section-nav');
+  
+  container.innerHTML = project1Sections.map((section, idx) => `
+    <div class="form-section ${idx === 0 ? 'active' : ''}" id="${section.id}">
+      <h2 class="section-title">${section.title}</h2>
+      <p class="section-subtitle">${section.subtitle}</p>
+      ${section.fields.map(field => renderField(field)).join('')}
+    </div>
+  `).join('');
+  
+  navContainer.innerHTML = project1Sections.map((section, idx) => `
+    <button class="section-tab ${idx === 0 ? 'active' : ''}" 
+            data-section="${idx}" 
+            onclick="goToSection(${idx})">
+      S${idx + 1}
+    </button>
+  `).join('');
+}
+
+// Render individual fields
+function renderField(field){
+  switch(field.type){
+    case 'text':
+      return `
+        <div class="field">
+          <label class="field-label">${field.label}</label>
+          <input type="text" class="field-input" 
+                 name="${field.name}" 
+                 placeholder="${field.placeholder || ''}"
+                 onchange="onFieldChange()">
+        </div>
+      `;
+    case 'textarea':
+      return `
+        <div class="field">
+          <label class="field-label">${field.label}</label>
+          <textarea class="field-textarea" 
+                    name="${field.name}" 
+                    placeholder="${field.placeholder || ''}"
+                    rows="${field.rows || 5}"
+                    maxlength="${field.maxlength || 5000}"
+                    onchange="onFieldChange()"></textarea>
+        </div>
+      `;
+    case 'checkbox-group':
+      return `
+        <div class="field">
+          <label class="field-label">${field.label}</label>
+          <div class="checkbox-group">
+            ${field.options.map((opt, i) => `
+              <div class="checkbox-item">
+                <input type="checkbox" id="${field.name}_${i}" 
+                       name="${field.name}" value="${opt}"
+                       onchange="onFieldChange()">
+                <label for="${field.name}_${i}">${opt}</label>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    case 'table':
+      return `
+        <div class="field">
+          <label class="field-label">${field.label}</label>
+          <div class="table-builder">
+            <table>
+              <thead>
+                <tr>${field.columns.map(col => `<th>${col}</th>`).join('')}</tr>
+              </thead>
+              <tbody>
+                ${field.rows.map((row, ri) => `
+                  <tr>
+                    ${row.map((cell, ci) => ci === 0 ? 
+                      `<td>${cell}</td>` : 
+                      `<td><input type="text" data-table="${field.name}" data-row="${ri}" data-col="${ci}" value="${cell}" onchange="onFieldChange()"></td>`
+                    ).join('')}
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    case 'photo-upload':
+      return `
+        <div class="field">
+          <label class="field-label">${field.label}</label>
+          <div class="photo-upload" onclick="document.getElementById('photo-${field.section}').click()">
+            <div class="photo-upload-icon">📸</div>
+            <div class="photo-upload-text">
+              <strong>Click to upload photos</strong>
+              <span>JPG, PNG, or HEIC (max 5MB each)</span>
+            </div>
+          </div>
+          <input type="file" id="photo-${field.section}" 
+                 accept="image/*" multiple style="display:none"
+                 onchange="handlePhotoUpload(event, '${field.section}')">
+          <div class="photo-preview" id="preview-${field.section}"></div>
+        </div>
+      `;
+    default:
+      return '';
+  }
+}
+
+// Navigation
+function goToSection(idx){
+  currentSection = idx;
+  document.querySelectorAll('.form-section').forEach((s, i) => {
+    s.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.section-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  document.querySelector('.form-content').scrollTop = 0;
+}
+
+function nextSection(){
+  if(currentSection < project1Sections.length - 1){
+    goToSection(currentSection + 1);
+  }
+}
+
+function prevSection(){
+  if(currentSection > 0){
+    goToSection(currentSection - 1);
+  }
+}
+
+// Form data handling
+function onFieldChange(){
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => saveDraft(true), 3000); // Auto-save after 3s of inactivity
+}
+
+function collectFormData(){
+  const data = {};
+  
+  // Text and textarea inputs
+  document.querySelectorAll('.field-input, .field-textarea').forEach(input => {
+    if(input.name) data[input.name] = input.value;
+  });
+  
+  // Checkboxes
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    if(!data[cb.name]) data[cb.name] = [];
+    if(cb.checked) data[cb.name].push(cb.value);
+  });
+  
+  // Tables
+  const tables = {};
+  document.querySelectorAll('[data-table]').forEach(input => {
+    const tableName = input.dataset.table;
+    if(!tables[tableName]) tables[tableName] = [];
+    if(!tables[tableName][input.dataset.row]) tables[tableName][input.dataset.row] = [];
+    tables[tableName][input.dataset.row][input.dataset.col] = input.value;
+  });
+  Object.keys(tables).forEach(key => data[key] = tables[key]);
+  
+  return data;
+}
+
+function populateForm(data){
+  if(!data) return;
+  
+  // Text inputs
+  Object.keys(data).forEach(key => {
+    const input = document.querySelector(`[name="${key}"]`);
+    if(input && (input.tagName === 'INPUT' || input.tagName === 'TEXTAREA')){
+      input.value = data[key];
+    }
+  });
+  
+  // Checkboxes
+  Object.keys(data).forEach(key => {
+    if(Array.isArray(data[key])){
+      document.querySelectorAll(`input[name="${key}"]`).forEach(cb => {
+        cb.checked = data[key].includes(cb.value);
+      });
+    }
+  });
+  
+  // Tables
+  Object.keys(data).forEach(key => {
+    if(Array.isArray(data[key]) && data[key].length > 0 && Array.isArray(data[key][0])){
+      data[key].forEach((row, ri) => {
+        row.forEach((cell, ci) => {
+          const input = document.querySelector(`[data-table="${key}"][data-row="${ri}"][data-col="${ci}"]`);
+          if(input) input.value = cell;
+        });
+      });
+    }
+  });
+}
+
+// Photo upload
+async function handlePhotoUpload(event, section){
+  const files = event.target.files;
+  if(!files.length) return;
+  
+  const preview = document.getElementById(`preview-${section}`);
+  
+  for(let file of files){
+    if(file.size > 5 * 1024 * 1024){
+      toast('File too large. Max 5MB per photo.', 'error');
+      continue;
+    }
+    
+    // Upload to Supabase storage
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${currentUser.id}/${section}/${Date.now()}.${fileExt}`;
+    
+    const {data, error} = await supa.storage
+      .from('project-photos')
+      .upload(fileName, file);
+    
+    if(error){
+      toast('Upload failed: ' + error.message, 'error');
+      continue;
+    }
+    
+    // Get public URL
+    const {data: {publicUrl}} = supa.storage
+      .from('project-photos')
+      .getPublicUrl(fileName);
+    
+    // Save to database
+    await supa.from('submission_photos').insert({
+      submission_id: currentSubmission.id,
+      section_name: section,
+      photo_url: publicUrl
+    });
+    
+    // Add preview
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    div.innerHTML = `
+      <img src="${publicUrl}" alt="Uploaded photo">
+      <button class="photo-remove" onclick="removePhoto('${fileName}', this.parentElement)">×</button>
+    `;
+    preview.appendChild(div);
+  }
+  
+  toast('Photos uploaded successfully!');
+}
+
+async function removePhoto(fileName, element){
+  await supa.storage.from('project-photos').remove([fileName]);
+  element.remove();
+  toast('Photo removed');
+}
+
+// Save draft
+async function saveDraft(silent = false){
+  if(!currentSubmission) return;
+  
+  const data = collectFormData();
+  
+  const {error} = await supa.from('student_submissions')
+    .update({
+      submission_data: data,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', currentSubmission.id);
+  
+  if(error){
+    if(!silent) toast('Save failed: ' + error.message, 'error');
+    return;
+  }
+  
+  document.getElementById('save-status').textContent = 'Saved ✓';
+  document.getElementById('save-status').classList.add('saved');
+  
+  if(!silent) toast('Draft saved successfully!');
+  
+  setTimeout(() => {
+    document.getElementById('save-status').classList.remove('saved');
+    document.getElementById('save-status').textContent = 'Draft';
+  }, 2000);
+}
+
+// Preview PDF
+function previewPDF(){
+  saveDraft(true);
+  toast('Opening PDF preview...');
+  window.open(`year6-pdf-preview.html?submission=${currentSubmission.id}`, '_blank');
+}
+
+// Submit project
+async function submitProject(){
+  if(!confirm('Are you ready to submit? You can still edit after submission, but your tutor will be notified.')) return;
+  
+  const data = collectFormData();
+  
+  const {error} = await supa.from('student_submissions')
+    .update({
+      submission_data: data,
+      status: 'submitted',
+      submitted_at: new Date().toISOString()
+    })
+    .eq('id', currentSubmission.id);
+  
+  if(error){
+    toast('Submission failed: ' + error.message, 'error');
+    return;
+  }
+  
+  toast('Project submitted successfully! 🎉');
+  setTimeout(() => window.location.href = 'year6-dashboard.html', 2000);
+}
+
+// Init
+(async()=>{
+  // Get project ID from URL
+  const params = new URLSearchParams(window.location.search);
+  const projectId = parseInt(params.get('id'));
+  
+  if(!projectId){
+    toast('Invalid project ID', 'error');
+    window.location.href = 'year6-dashboard.html';
+    return;
+  }
+  
+  // Auth
+  currentUser = await getUser();
+  if(!currentUser){
+    window.location.href = 'index.html';
+    return;
+  }
+  
+  currentProfile = await getProfile(currentUser.id);
+  if(currentProfile?.programme !== 'year6_bridging'){
+    toast('Access denied', 'error');
+    window.location.href = 'dashboard.html';
+    return;
+  }
+  
+  // Load project
+  const {data: project} = await supa.from('projects')
+    .select('*')
+    .eq('id', projectId)
+    .single();
+  
+  if(!project){
+    toast('Project not found', 'error');
+    window.location.href = 'year6-dashboard.html';
+    return;
+  }
+  
+  currentProject = project;
+  document.getElementById('project-title').textContent = project.title;
+  document.getElementById('pdf-iframe').src = project.booklet_pdf_url;
+  
+  // Load or create submission
+  let {data: submissions} = await supa.from('student_submissions')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .eq('project_id', projectId);
+  
+  if(!submissions || submissions.length === 0){
+    // Create new submission
+    const {data: newSub, error} = await supa.from('student_submissions')
+      .insert({
+        user_id: currentUser.id,
+        project_id: projectId,
+        status: 'draft',
+        submission_data: {}
+      })
+      .select()
+      .single();
+    
+    if(error){
+      toast('Failed to create submission: ' + error.message, 'error');
+      return;
+    }
+    
+    currentSubmission = newSub;
+  } else {
+    currentSubmission = submissions[0];
+  }
+  
+  // Render form
+  renderSections();
+  
+  // Populate with existing data
+  if(currentSubmission.submission_data){
+    populateForm(currentSubmission.submission_data);
+  }
+  
+  // Load photos
+  const {data: photos} = await supa.from('submission_photos')
+    .select('*')
+    .eq('submission_id', currentSubmission.id);
+  
+  if(photos){
+    photos.forEach(photo => {
+      const preview = document.getElementById(`preview-${photo.section_name}`);
+      if(preview){
+        const div = document.createElement('div');
+        div.className = 'photo-item';
+        div.innerHTML = `
+          <img src="${photo.photo_url}" alt="Uploaded photo">
+          <button class="photo-remove" onclick="removePhoto('${photo.photo_url.split('/').pop()}', this.parentElement)">×</button>
+        `;
+        preview.appendChild(div);
+      }
+    });
+  }
+  
+  // Update submit button if already submitted
+  if(currentSubmission.status === 'submitted'){
+    document.getElementById('submit-btn').textContent = '✓ Submitted';
+    document.getElementById('submit-btn').classList.add('btn-secondary');
+    document.getElementById('submit-btn').classList.remove('btn-success');
+    toast('This project has been submitted. You can still make changes.', 'success');
+  }
+})();
+</script>
+
+</body>
+</html>

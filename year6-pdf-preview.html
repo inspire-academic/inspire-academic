@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project Report Preview — Inspire Academic</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* Screen styles */
+@media screen {
+  body{
+    font-family:'DM Sans',sans-serif;
+    background:#0b1628;
+    color:#fff;
+    padding:2rem;
+    margin:0;
+  }
+  .toolbar{
+    max-width:900px;
+    margin:0 auto 1rem;
+    padding:1rem;
+    background:#112240;
+    border:1px solid #1e3a5f;
+    border-radius:6px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .toolbar h2{
+    font-size:1.1rem;
+    font-weight:600;
+    color:#d4a017;
+    margin:0;
+  }
+  .toolbar-actions{
+    display:flex;
+    gap:.8rem;
+  }
+  .btn{
+    padding:.6rem 1.2rem;
+    border-radius:6px;
+    border:none;
+    font-size:.9rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .btn-primary{
+    background:#d4a017;
+    color:#0b1628;
+  }
+  .btn-primary:hover{
+    background:#f0c040;
+  }
+  .btn-secondary{
+    background:transparent;
+    border:1px solid #1e3a5f;
+    color:#7a8fa6;
+  }
+  .btn-secondary:hover{
+    border-color:#d4a017;
+    color:#d4a017;
+  }
+  .report-container{
+    max-width:900px;
+    margin:0 auto;
+    background:#fff;
+    box-shadow:0 4px 20px rgba(0,0,0,.3);
+  }
+}
+
+/* Print styles - Professional PDF output */
+@media print {
+  body{
+    margin:0;
+    padding:0;
+    background:#fff;
+  }
+  .toolbar{
+    display:none;
+  }
+  .report-container{
+    box-shadow:none;
+  }
+  .page-break{
+    page-break-after:always;
+  }
+}
+
+/* Report styles */
+.report-container{
+  background:#fff;
+  color:#1a1a1a;
+}
+
+.report-page{
+  padding:3rem 3rem 4rem;
+  min-height:11in;
+  position:relative;
+}
+
+/* Cover page */
+.cover-page{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:11in;
+  background:linear-gradient(160deg, #0a1628 0%, #112240 50%, #0e1e38 100%);
+  color:#fff;
+  text-align:center;
+  padding:4rem 3rem;
+}
+
+.cover-logo{
+  margin-bottom:2rem;
+}
+
+.cover-logo img{
+  height:80px;
+  width:auto;
+  background:#fff;
+  padding:12px 24px;
+  border-radius:12px;
+}
+
+.cover-badge{
+  display:inline-block;
+  background:rgba(212,160,23,.2);
+  border:1px solid rgba(212,160,23,.4);
+  color:#d4a017;
+  font-size:.8rem;
+  font-family:'DM Mono',monospace;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  padding:.4rem .9rem;
+  border-radius:6px;
+  margin-bottom:2rem;
+}
+
+.cover-title{
+  font-family:'Playfair Display',serif;
+  font-size:3rem;
+  font-weight:900;
+  margin-bottom:1rem;
+  line-height:1.2;
+}
+
+.cover-subtitle{
+  font-size:1.8rem;
+  font-weight:300;
+  color:#d4a017;
+  margin-bottom:3rem;
+}
+
+.cover-student{
+  font-size:1.3rem;
+  margin-bottom:.5rem;
+}
+
+.cover-date{
+  font-size:1rem;
+  color:#7a8fa6;
+  margin-bottom:4rem;
+}
+
+.cover-footer{
+  margin-top:auto;
+  padding-top:3rem;
+  border-top:1px solid rgba(212,160,23,.3);
+  font-size:.9rem;
+  color:#7a8fa6;
+}
+
+/* Content pages */
+.page-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-bottom:1rem;
+  border-bottom:2px solid #d4a017;
+  margin-bottom:2rem;
+}
+
+.page-number{
+  font-family:'DM Mono',monospace;
+  font-size:.8rem;
+  color:#7a8fa6;
+}
+
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.8rem;
+  font-weight:700;
+  color:#0b1628;
+  margin-bottom:.5rem;
+}
+
+.section-subtitle{
+  font-size:1rem;
+  color:#7a8fa6;
+  margin-bottom:2rem;
+  line-height:1.6;
+}
+
+.field-group{
+  margin-bottom:2rem;
+}
+
+.field-label{
+  font-size:.85rem;
+  font-weight:600;
+  color:#7a8fa6;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:.5rem;
+  display:block;
+}
+
+.field-value{
+  font-size:1rem;
+  color:#1a1a1a;
+  line-height:1.7;
+  padding:.8rem 1rem;
+  background:#f7f6f2;
+  border-radius:6px;
+  border-left:3px solid #d4a017;
+}
+
+.field-value ul{
+  margin:0;
+  padding-left:1.5rem;
+}
+
+.field-value ul li{
+  margin-bottom:.3rem;
+}
+
+.field-value.empty{
+  color:#7a8fa6;
+  font-style:italic;
+}
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+  gap:1rem;
+  margin-top:1rem;
+}
+
+.photo-item{
+  border-radius:8px;
+  overflow:hidden;
+  border:1px solid #e5e5e5;
+}
+
+.photo-item img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.table-container{
+  margin:1rem 0;
+  border:1px solid #e5e5e5;
+  border-radius:6px;
+  overflow:hidden;
+}
+
+.table-container table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.table-container th{
+  background:#0b1628;
+  color:#fff;
+  padding:.8rem;
+  text-align:left;
+  font-size:.85rem;
+  font-weight:600;
+}
+
+.table-container td{
+  padding:.8rem;
+  border-bottom:1px solid #e5e5e5;
+}
+
+.table-container tr:last-child td{
+  border-bottom:none;
+}
+
+/* Badge page */
+.badge-page{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:11in;
+  text-align:center;
+  background:linear-gradient(160deg, #f7f6f2 0%, #fff 100%);
+}
+
+.badge-container{
+  max-width:600px;
+}
+
+.badge-icon{
+  width:200px;
+  height:200px;
+  margin:0 auto 2rem;
+  background:linear-gradient(135deg, #d4a017, #f0c040);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:5rem;
+  box-shadow:0 10px 40px rgba(212,160,23,.3);
+}
+
+.badge-title{
+  font-family:'Playfair Display',serif;
+  font-size:2.5rem;
+  font-weight:900;
+  color:#0b1628;
+  margin-bottom:1rem;
+}
+
+.badge-subtitle{
+  font-size:1.2rem;
+  color:#7a8fa6;
+  margin-bottom:2rem;
+}
+
+.badge-name{
+  font-size:1.8rem;
+  font-weight:700;
+  color:#d4a017;
+  margin-bottom:3rem;
+}
+
+.badge-skills{
+  text-align:left;
+  background:#fff;
+  padding:2rem;
+  border-radius:12px;
+  border:1px solid #e5e5e5;
+}
+
+.badge-skills h4{
+  font-size:1rem;
+  font-weight:600;
+  color:#7a8fa6;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:1rem;
+}
+
+.badge-skills ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.badge-skills li{
+  padding:.5rem 0;
+  border-bottom:1px solid #f7f6f2;
+  color:#1a1a1a;
+}
+
+.badge-skills li:last-child{
+  border-bottom:none;
+}
+
+.badge-skills li::before{
+  content:'✓';
+  color:#16803c;
+  font-weight:700;
+  margin-right:.5rem;
+}
+
+.footer-text{
+  margin-top:3rem;
+  font-size:.9rem;
+  color:#7a8fa6;
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <h2>📄 Project Report Preview</h2>
+  <div class="toolbar-actions">
+    <button class="btn btn-secondary" onclick="window.close()">← Back</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨️ Download PDF</button>
+  </div>
+</div>
+
+<div class="report-container" id="report"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+function formatDate(date){
+  return new Date(date).toLocaleDateString('en-GB', {
+    day:'numeric', month:'long', year:'numeric'
+  });
+}
+
+function renderField(label, value, type='text'){
+  if(!value || (Array.isArray(value) && value.length === 0)){
+    return `
+      <div class="field-group">
+        <div class="field-label">${label}</div>
+        <div class="field-value empty">Not completed</div>
+      </div>
+    `;
+  }
+  
+  if(Array.isArray(value)){
+    return `
+      <div class="field-group">
+        <div class="field-label">${label}</div>
+        <div class="field-value">
+          <ul>
+            ${value.map(v => `<li>${v}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Handle tables
+  if(type === 'table' && Array.isArray(value) && value.length > 0){
+    return `
+      <div class="field-group">
+        <div class="field-label">${label}</div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Ramp Length (cm)</th>
+                <th>Trial 1 (cm)</th>
+                <th>Trial 2 (cm)</th>
+                <th>Average (cm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${value.map(row => `
+                <tr>
+                  ${row.map(cell => `<td>${cell || '—'}</td>`).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+  
+  return `
+    <div class="field-group">
+      <div class="field-label">${label}</div>
+      <div class="field-value">${value.replace(/\n/g, '<br>')}</div>
+    </div>
+  `;
+}
+
+function renderPhotos(photos){
+  if(!photos || photos.length === 0) return '';
+  return `
+    <div class="photo-grid">
+      ${photos.map(photo => `
+        <div class="photo-item">
+          <img src="${photo.photo_url}" alt="Project photo">
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+async function generateReport(){
+  const params = new URLSearchParams(window.location.search);
+  const submissionId = params.get('submission');
+  
+  if(!submissionId){
+    document.getElementById('report').innerHTML = '<p style="color:#fff;text-align:center;padding:3rem;">Invalid submission ID</p>';
+    return;
+  }
+  
+  // Load submission
+  const {data: submission} = await supa.from('student_submissions')
+    .select('*')
+    .eq('id', submissionId)
+    .single();
+  
+  if(!submission){
+    document.getElementById('report').innerHTML = '<p style="color:#fff;text-align:center;padding:3rem;">Submission not found</p>';
+    return;
+  }
+  
+  // Load profile
+  const {data: profile} = await supa.from('profiles')
+    .select('*')
+    .eq('id', submission.user_id)
+    .single();
+  
+  // Load project
+  const {data: project} = await supa.from('projects')
+    .select('*')
+    .eq('id', submission.project_id)
+    .single();
+  
+  // Load photos
+  const {data: photos} = await supa.from('submission_photos')
+    .select('*')
+    .eq('submission_id', submissionId);
+  
+  const data = submission.submission_data || {};
+  const studentName = profile?.full_name || profile?.first_name || 'Student';
+  
+  // Group photos by section
+  const photosBySection = {};
+  if(photos){
+    photos.forEach(photo => {
+      if(!photosBySection[photo.section_name]) photosBySection[photo.section_name] = [];
+      photosBySection[photo.section_name].push(photo);
+    });
+  }
+  
+  // Generate report HTML
+  const reportHTML = `
+    <!-- Cover Page -->
+    <div class="cover-page">
+      <div class="cover-logo">
+        <img src="1775416612494_image.png" alt="Inspire Academic">
+      </div>
+      <div class="cover-badge">Year 6 Science Bridging Programme</div>
+      <h1 class="cover-title">Project 1 Report</h1>
+      <h2 class="cover-subtitle">${project.title}</h2>
+      <div class="cover-student">${studentName}</div>
+      <div class="cover-date">${formatDate(submission.created_at)}</div>
+      <div class="cover-footer">
+        <strong>INSPIRE Academic™</strong><br>
+        Wonder • Understanding • Purpose
+      </div>
+    </div>
+    
+    <!-- Overview Page -->
+    <div class="report-page page-break">
+      <div class="page-header">
+        <h2 style="margin:0;font-size:1.2rem;color:#0b1628;">Project Overview</h2>
+        <div class="page-number">Page 2</div>
+      </div>
+      
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#0b1628;margin-bottom:1rem;">
+        ${project.title}
+      </h3>
+      
+      <p style="font-size:1rem;line-height:1.7;color:#1a1a1a;margin-bottom:2rem;">
+        ${project.description}
+      </p>
+      
+      <div style="background:#f7f6f2;padding:1.5rem;border-radius:8px;border-left:3px solid #d4a017;">
+        <h4 style="font-size:.9rem;font-weight:600;color:#7a8fa6;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;">
+          Learning Objectives
+        </h4>
+        <ul style="margin:0;padding-left:1.5rem;line-height:1.8;color:#1a1a1a;">
+          <li>Ask scientific questions</li>
+          <li>Plan and carry out a fair test</li>
+          <li>Identify variables</li>
+          <li>Record and analyse data</li>
+          <li>Draw and interpret graphs</li>
+          <li>Explain conclusions using evidence</li>
+        </ul>
+      </div>
+      
+      <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid #e5e5e5;">
+        <p style="font-size:.9rem;color:#7a8fa6;">
+          <strong>Submission Date:</strong> ${formatDate(submission.submitted_at || submission.updated_at)}<br>
+          <strong>Status:</strong> ${submission.status === 'submitted' ? 'Submitted for Review' : 'Draft'}
+        </p>
+      </div>
+    </div>
+    
+    <!-- Section 1 -->
+    <div class="report-page page-break">
+      <div class="page-header">
+        <h2 class="section-title">Section 1: Scientific Questions</h2>
+        <div class="page-number">Page 3</div>
+      </div>
+      
+      ${renderField('Question Sorting', data.question_sorting)}
+      ${renderField('Scientific Question 1', data.scientific_question_1)}
+      ${renderField('Scientific Question 2', data.scientific_question_2)}
+      ${renderField('Reflection: Why Scientists Need Testable Questions', data.reflection_testing)}
+      ${photosBySection.section1 ? renderPhotos(photosBySection.section1) : ''}
+    </div>
+    
+    <!-- Section 2 -->
+    <div class="report-page page-break">
+      <div class="page-header">
+        <h2 class="section-title">Section 2: Variables & Fair Testing</h2>
+        <div class="page-number">Page 4</div>
+      </div>
+      
+      ${renderField('Independent Variable', data.independent_var)}
+      ${renderField('Dependent Variable', data.dependent_var)}
+      ${renderField('Control Variable', data.control_var)}
+      ${renderField('Fair Test Evaluation', data.fair_test_evaluation)}
+      ${photosBySection.section2 ? renderPhotos(photosBySection.section2) : ''}
+    </div>
+    
+    <!-- Section 3 -->
+    <div class="report-page page-break">
+      <div class="page-header">
+        <h2 class="section-title">Section 3: Planning the Investigation</h2>
+        <div class="page-number">Page 5</div>
+      </div>
+      
+      ${renderField('Investigation Title', data.investigation_title)}
+      ${renderField('Aim', data.aim)}
+      ${renderField('Independent Variable', data.plan_independent_var)}
+      ${renderField('Dependent Variable', data.plan_dependent_var)}
+      ${renderField('Control Variables', data.plan_control_vars)}
+      ${renderField('Prediction', data.prediction)}
+      ${renderField('Method', data.method)}
+      ${renderField('Equipment Needed', data.equipment)}
+      ${photosBySection.section3 ? renderPhotos(photosBySection.section3) : ''}
+    </div>
+    
+    <!-- Section 4 -->
+    <div class="report-page page-break">
+      <div class="page-header">
+        <h2 class="section-title">Section 4: Results & Data</h2>
+        <div class="page-number">Page 6</div>
+      </div>
+      
+      ${renderField('Results Table', data.results_table, 'table')}
+      ${renderField('Why Scientists Repeat Measurements', data.repeat_reflection)}
+      ${photosBySection.section4 ? renderPhotos(photosBySection.section4) : ''}
+    </div>
+    
+    <!-- Section 5 -->
+    <div class="report-page page-break">
+      <div class="page-header">
+        <h2 class="section-title">Section 5: Graph</h2>
+        <div class="page-number">Page 7</div>
+      </div>
+      
+      ${renderField('Graph Checklist', data.graph_checklist)}
+      ${photosBySection.section5 ? renderPhotos(photosBySection.section5) : '<div class="field-value empty">No graph uploaded</div>'}
+      ${renderField('Graph Description', data.graph_description)}
+    </div>
+    
+    <!-- Section 6 -->
+    <div class="report-page page-break">
+      <div class="page-header">
+        <h2 class="section-title">Section 6: Conclusion</h2>
+        <div class="page-number">Page 8</div>
+      </div>
+      
+      ${renderField('My Conclusion', data.conclusion)}
+      ${photosBySection.section6 ? renderPhotos(photosBySection.section6) : ''}
+    </div>
+    
+    <!-- Section 7 -->
+    <div class="report-page page-break">
+      <div class="page-header">
+        <h2 class="section-title">Section 7: Evaluation & Improvement</h2>
+        <div class="page-number">Page 9</div>
+      </div>
+      
+      ${renderField('What Worked Well', data.worked_well)}
+      ${renderField('What Could Be Improved', data.improvements)}
+      ${renderField('One Improvement for Next Time', data.next_time)}
+      ${photosBySection.section7 ? renderPhotos(photosBySection.section7) : ''}
+    </div>
+    
+    <!-- Section 8 -->
+    <div class="report-page page-break">
+      <div class="page-header">
+        <h2 class="section-title">Final Reflection</h2>
+        <div class="page-number">Page 10</div>
+      </div>
+      
+      ${renderField('I Learned That Science Is About...', data.final_learning)}
+      ${renderField('I Can Now Explain What a Fair Test Is Because...', data.fair_test_explanation)}
+      ${renderField('One Thing I Am Proud Of', data.proud_of)}
+    </div>
+    
+    <!-- Badge Page -->
+    <div class="badge-page">
+      <div class="badge-container">
+        <div class="badge-icon">🏆</div>
+        
+        <h2 class="badge-title">Science Investigator</h2>
+        <p class="badge-subtitle">This certificate is awarded to</p>
+        <h3 class="badge-name">${studentName}</h3>
+        
+        <div class="badge-skills">
+          <h4>For Demonstrating:</h4>
+          <ul>
+            <li>Asking scientific questions</li>
+            <li>Planning fair tests</li>
+            <li>Identifying variables correctly</li>
+            <li>Recording data carefully</li>
+            <li>Drawing and interpreting graphs</li>
+            <li>Explaining results using evidence</li>
+          </ul>
+        </div>
+        
+        <p class="footer-text">
+          <strong>INSPIRE Academic™</strong><br>
+          Year 6 Science Bridging Programme<br>
+          © ${new Date().getFullYear()}
+        </p>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('report').innerHTML = reportHTML;
+}
+
+// Generate report on load
+generateReport();
+</script>
+
+</body>
+</html>
