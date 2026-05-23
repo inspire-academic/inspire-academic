@@ -443,7 +443,12 @@ tr:hover td { background: rgba(255,255,255,.025); }
           <div class="page-sub">All students — quiz activity and topic mastery</div>
           <div class="last-refresh" id="refresh-time"></div>
         </div>
-        <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+        <div style="display:flex;gap:.75rem;">
+          <button class="refresh-btn" onclick="window.open('dashboard.html', '_blank');" style="background:rgba(212,160,23,.1);border:1px solid var(--gold);color:var(--gold);">
+            👁️ Student View (Test)
+          </button>
+          <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
+        </div>
       </div>
 
       <div class="stat-row" id="overview-stats">
