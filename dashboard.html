@@ -594,9 +594,13 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
   const {user,profile} = await requireAuth() || {};
   if(!user){ clearTimeout(timeoutHandle); return; }
 
-  // Redirect teachers/admins to their dashboard
+  // Allow teachers to preview student view if ?preview=true
+  const urlParams = new URLSearchParams(window.location.search);
+  const isPreview = urlParams.get('preview') === 'true';
+
+  // Redirect teachers/admins to their dashboard (unless previewing)
   const teacherRoles = ['teacher', 'teacher_manager', 'admin', 'super_admin'];
-  if(teacherRoles.includes(profile?.role)){
+  if(!isPreview && teacherRoles.includes(profile?.role)){
     window.location.href = 'teacher.html';
     return;
   }

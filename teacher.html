@@ -370,7 +370,7 @@ tr:hover td { background: rgba(255,255,255,.025); }
         <span class="icon">🎯</span><span>Teaching Cockpit</span>
       </div>
     </a>
-    <div class="nav-item" style="cursor:pointer;" onclick="window.open('dashboard.html','_self');">
+    <div class="nav-item" style="cursor:pointer;" onclick="window.open('dashboard.html?preview=true','_self');">
       <span class="icon">👁️</span><span>Student View</span>
     </div>
 
@@ -444,7 +444,7 @@ tr:hover td { background: rgba(255,255,255,.025); }
           <div class="last-refresh" id="refresh-time"></div>
         </div>
         <div style="display:flex;gap:.75rem;">
-          <button class="refresh-btn" onclick="window.open('dashboard.html', '_self');" style="background:rgba(212,160,23,.1);border:1px solid var(--gold);color:var(--gold);">
+          <button class="refresh-btn" onclick="window.open('dashboard.html?preview=true', '_self');" style="background:rgba(212,160,23,.1);border:1px solid var(--gold);color:var(--gold);">
             👁️ Student View (Test)
           </button>
           <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
