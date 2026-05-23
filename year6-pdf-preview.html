@@ -124,29 +124,33 @@
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  min-height:11in;
+  min-height:10.5in;
+  max-height:10.5in;
   background:#fff;
   color:#0b1628;
   text-align:center;
-  padding:4rem 3rem;
+  padding:2.5rem 2rem;
   border:8px solid #0a1628;
   position:relative;
   page-break-after:always;
+  box-sizing:border-box;
+  margin:0.25in auto;
+  width:8in;
 }
 
 .cover-page::before{
   content:'';
   position:absolute;
-  top:15px;
-  left:15px;
-  right:15px;
-  bottom:15px;
+  top:12px;
+  left:12px;
+  right:12px;
+  bottom:12px;
   border:2px solid #d4a017;
   pointer-events:none;
 }
 
 .cover-logo{
-  margin-bottom:2rem;
+  margin-bottom:1.5rem;
 }
 
 .cover-logo img{
@@ -168,7 +172,7 @@
   letter-spacing:.1em;
   padding:.4rem .9rem;
   border-radius:6px;
-  margin-bottom:2rem;
+  margin-bottom:1.5rem;
   font-weight:600;
 }
 
@@ -185,7 +189,7 @@
   font-size:1.8rem;
   font-weight:300;
   color:#d4a017;
-  margin-bottom:3rem;
+  margin-bottom:2rem;
 }
 
 .cover-student{
@@ -198,12 +202,12 @@
 .cover-date{
   font-size:1rem;
   color:#5a6f86;
-  margin-bottom:4rem;
+  margin-bottom:2rem;
 }
 
 .cover-footer{
   margin-top:auto;
-  padding-top:3rem;
+  padding-top:1.5rem;
   border-top:2px solid #e5e7eb;
   font-size:.9rem;
   color:#5a6f86;
