@@ -393,10 +393,15 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
         </div>
         <div class="profile-form-group">
           <label class="profile-label">Exam Board</label>
-          <select class="profile-select" id="profile-exam-board">
+          <select class="profile-select" id="profile-exam-board" onchange="toggleCustomExamBoard()">
             <option value="AQA">AQA</option>
             <option value="Edexcel">Edexcel</option>
+            <option value="Other">Other</option>
           </select>
+        </div>
+        <div class="profile-form-group" id="custom-exam-board-group" style="display:none;">
+          <label class="profile-label">Specify Exam Board</label>
+          <input type="text" class="profile-input" id="profile-exam-board-custom" placeholder="e.g., OCR, WJEC, Cambridge">
         </div>
         <div class="profile-actions">
           <button class="profile-save-btn" id="profile-save-btn" onclick="saveProfile()">
@@ -714,6 +719,17 @@ function toggleProfileDropdown(){
   dropdown.classList.toggle('show');
 }
 
+// Toggle custom exam board field visibility
+function toggleCustomExamBoard(){
+  const select=document.getElementById('profile-exam-board');
+  const customGroup=document.getElementById('custom-exam-board-group');
+  if(select.value==='Other'){
+    customGroup.style.display='block';
+  }else{
+    customGroup.style.display='none';
+  }
+}
+
 // Close dropdown when clicking outside
 document.addEventListener('click',function(e){
   const wrapper=document.querySelector('.profile-dropdown-wrapper');
@@ -732,7 +748,19 @@ async function saveProfile(){
   const firstName=document.getElementById('profile-first-name').value.trim();
   const lastName=document.getElementById('profile-last-name').value.trim();
   const yearGroup=document.getElementById('profile-year-group').value;
-  const examBoard=document.getElementById('profile-exam-board').value;
+  let examBoard=document.getElementById('profile-exam-board').value;
+  
+  // If "Other" selected, use custom value
+  if(examBoard==='Other'){
+    const customBoard=document.getElementById('profile-exam-board-custom').value.trim();
+    if(!customBoard){
+      alert('Please specify your exam board');
+      btn.disabled=false;
+      btnText.textContent='Save Changes';
+      return;
+    }
+    examBoard=customBoard;
+  }
   
   if(!firstName || !lastName){
     alert('Please enter both first and last name');
@@ -801,7 +829,16 @@ async function loadProfileData(){
       document.getElementById('profile-first-name').value=profile.first_name||'';
       document.getElementById('profile-last-name').value=profile.last_name||'';
       document.getElementById('profile-year-group').value=profile.year_group||'Y10';
-      document.getElementById('profile-exam-board').value=profile.exam_board||'AQA';
+      
+      // Handle exam board - if not AQA or Edexcel, treat as custom
+      const examBoard=profile.exam_board||'AQA';
+      if(examBoard==='AQA' || examBoard==='Edexcel'){
+        document.getElementById('profile-exam-board').value=examBoard;
+      }else{
+        document.getElementById('profile-exam-board').value='Other';
+        document.getElementById('profile-exam-board-custom').value=examBoard;
+        document.getElementById('custom-exam-board-group').style.display='block';
+      }
     }
     
     // Set email (from auth user, not profiles table)
