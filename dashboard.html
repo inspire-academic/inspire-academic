@@ -354,6 +354,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
     <button class="nav-link" onclick="location.href='assessment.html'">Assessments</button>
     <button class="nav-link" onclick="location.href='year6-dashboard.html'">Sci_Bridge</button>
     <button class="nav-link" onclick="location.href='tools.html'">Tools</button>
+    <button class="nav-link" id="teacher-dashboard-link" onclick="location.href='teacher.html'" style="display:none;background:rgba(212,160,23,.1);border:1px solid var(--gold);color:var(--gold);">🎓 Teacher Dashboard</button>
   </div>
   <div class="profile-dropdown-wrapper">
     <div class="nav-user" id="nav-user-btn" onclick="toggleProfileDropdown()">
@@ -851,7 +852,32 @@ async function loadProfileData(){
 // Call loadProfileData when dashboard data loads
 (async()=>{
   await loadProfileData();
+  await checkTeacherRole();
 })();
+
+// Check if user is a teacher and show Teacher Dashboard link
+async function checkTeacherRole(){
+  try{
+    const{data:{user}}=await supa.auth.getUser();
+    if(!user) return;
+    
+    const{data:profile}=await supa
+      .from('profiles')
+      .select('role')
+      .eq('id',user.id)
+      .single();
+    
+    // Show Teacher Dashboard link if user is teacher, admin, etc.
+    if(profile && ['teacher','teacher_manager','admin','super_admin'].includes(profile.role)){
+      const teacherLink=document.getElementById('teacher-dashboard-link');
+      if(teacherLink){
+        teacherLink.style.display='block';
+      }
+    }
+  }catch(e){
+    console.error('Role check error:',e);
+  }
+}
 
 // ── Daily Challenge ──────────────────────────────────────
 // Picks a quiz deterministically based on day-of-year so every
