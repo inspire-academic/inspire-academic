@@ -417,7 +417,7 @@ async function doSignup(){
   if(error){toast(error.message,'error');btn.disabled=false;btn.textContent='Create My Account →';return;}
   if(data.user){
     // Auto-assign programme based on year group
-    const programme = (year === 'Year 6') ? 'year6_bridging' : 'gcse';
+    const programme = 'year6_bridging'; // All students get Year 6 access
     
     const profileData = {
       id:data.user.id,

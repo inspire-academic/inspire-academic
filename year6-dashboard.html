@@ -342,12 +342,12 @@ async function requireAuth(){
   if(!user){ window.location.href='index.html'; return null; }
   const profile = await getProfile(user.id);
   
-  // Check if user is enrolled in Year 6 programme
-  if(profile?.programme !== 'year6_bridging'){
-    toast('You are not enrolled in the Year 6 programme', 'error');
-    window.location.href='dashboard.html';
-    return null;
-  }
+  //   // Check if user is enrolled in Year 6 programme
+  //   if(profile?.programme !== 'year6_bridging'){
+  //     toast('You are not enrolled in the Year 6 programme', 'error');
+  //     window.location.href='dashboard.html';
+  //     return null;
+  //   }
   
   return {user,profile};
 }

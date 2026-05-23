@@ -887,11 +887,11 @@ async function submitProject(){
   }
   
   currentProfile = await getProfile(currentUser.id);
-  if(currentProfile?.programme !== 'year6_bridging'){
-    toast('Access denied', 'error');
-    window.location.href = 'dashboard.html';
-    return;
-  }
+  //   if(currentProfile?.programme !== 'year6_bridging'){
+  //     toast('Access denied', 'error');
+  //     window.location.href = 'dashboard.html';
+  //     return;
+  //   }
   
   // Load project
   const {data: project} = await supa.from('projects')
