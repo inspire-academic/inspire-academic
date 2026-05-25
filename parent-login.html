@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Login - Inspire Academic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --navy: #0b1628;
+      --gold: #c9a84c;
+      --bg: #f8f9fa;
+      --border: rgba(255,255,255,.15);
+    }
+    
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, var(--navy) 0%, #1a2642 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    
+    .container {
+      max-width: 440px;
+      width: 100%;
+    }
+    
+    .card {
+      background: rgba(255,255,255,.98);
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    
+    .logo-text .gold { color: var(--gold); }
+    
+    .tagline {
+      font-size: .875rem;
+      color: #666;
+      margin-top: .25rem;
+    }
+    
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--navy);
+      margin-bottom: .5rem;
+      text-align: center;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: .95rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: .5rem;
+      color: var(--navy);
+      font-weight: 500;
+      font-size: .9rem;
+    }
+    
+    input {
+      width: 100%;
+      padding: .875rem 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      transition: all .2s;
+      background: white;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,.1);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--gold) 0%, #b8964a 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      margin-top: 1.5rem;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(201,168,76,.3);
+    }
+    
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .forgot-password {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: .875rem;
+    }
+    
+    .forgot-password a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+    
+    .divider {
+      text-align: center;
+      margin: 2rem 0;
+      color: #999;
+      font-size: .875rem;
+      position: relative;
+    }
+    
+    .divider::before,
+    .divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background: #ddd;
+    }
+    
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+    
+    .student-login {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(201,168,76,.08);
+      border-radius: 8px;
+      font-size: .9rem;
+      color: #555;
+    }
+    
+    .student-login a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .student-login a:hover {
+      text-decoration: underline;
+    }
+    
+    .error {
+      background: #ffebee;
+      color: #c62828;
+      padding: .875rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: .9rem;
+      display: none;
+    }
+    
+    @media (max-width: 640px) {
+      .card { padding: 2rem 1.5rem; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <div class="logo">
+      <div class="logo-text"><span class="gold">Inspire</span> Academic</div>
+      <div class="tagline">Parent Portal</div>
+    </div>
+    
+    <h1>Welcome Back</h1>
+    <p class="subtitle">Track your child's GCSE revision progress</p>
+    
+    <div class="error" id="error-message"></div>
+    
+    <form id="login-form">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" required placeholder="your.email@example.com" autocomplete="email">
+      </div>
+      
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" required placeholder="Enter your password" autocomplete="current-password">
+      </div>
+      
+      <button type="submit" class="btn" id="submit-btn">
+        <span id="btn-text">Log In</span>
+      </button>
+    </form>
+    
+    <div class="forgot-password">
+      <a href="#" id="forgot-password-link">Forgot your password?</a>
+    </div>
+    
+    <div class="divider">or</div>
+    
+    <div class="student-login">
+      Are you a student? <a href="index.html">Student login here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI1MDczNzEsImV4cCI6MjAyODA4MzM3MX0.yaIUvdt_ERle3cZLw3WD6Z-Lu1Gy8k6_-drop-Wcmc';
+const supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const form = document.getElementById('login-form');
+const submitBtn = document.getElementById('submit-btn');
+const btnText = document.getElementById('btn-text');
+const errorMsg = document.getElementById('error-message');
+
+// Check if already logged in as parent
+(async () => {
+  const { data: { user } } = await supa.auth.getUser();
+  if (user) {
+    // Check if this is a parent account
+    const { data: parentProfile } = await supa
+      .from('parent_profiles')
+      .select('id')
+      .eq('user_id', user.id)
+      .single();
+    
+    if (parentProfile) {
+      window.location.href = 'parent-dashboard.html';
+    }
+  }
+})();
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  errorMsg.style.display = 'none';
+  submitBtn.disabled = true;
+  btnText.textContent = 'Logging in...';
+  
+  try {
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+    
+    // Check if parent exists with this email
+    const { data: parentProfile } = await supa
+      .from('parent_profiles')
+      .select('id, user_id')
+      .eq('email', email)
+      .single();
+    
+    if (!parentProfile) {
+      throw new Error('No parent account found with this email. Please check your email or contact support.');
+    }
+    
+    // If parent has no user_id yet, they need to set up their password
+    if (!parentProfile.user_id) {
+      errorMsg.textContent = 'Please check your email for a password setup link. If you haven\'t received one, contact support.';
+      errorMsg.style.display = 'block';
+      submitBtn.disabled = false;
+      btnText.textContent = 'Log In';
+      return;
+    }
+    
+    // Attempt login
+    const { data, error } = await supa.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+    
+    if (error) throw error;
+    
+    // Update last login
+    await supa
+      .from('parent_profiles')
+      .update({ last_login: new Date().toISOString() })
+      .eq('user_id', data.user.id);
+    
+    // Redirect to parent dashboard
+    window.location.href = 'parent-dashboard.html';
+    
+  } catch (error) {
+    console.error('Login error:', error);
+    errorMsg.textContent = error.message || 'Invalid email or password';
+    errorMsg.style.display = 'block';
+    
+    submitBtn.disabled = false;
+    btnText.textContent = 'Log In';
+  }
+});
+
+// Forgot password
+document.getElementById('forgot-password-link').addEventListener('click', async (e) => {
+  e.preventDefault();
+  
+  const email = document.getElementById('email').value.trim();
+  if (!email) {
+    alert('Please enter your email address first');
+    return;
+  }
+  
+  try {
+    const { error } = await supa.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://inspireacademic.org/parent-dashboard.html'
+    });
+    
+    if (error) throw error;
+    
+    alert('Password reset email sent! Please check your inbox.');
+  } catch (error) {
+    alert('Error: ' + error.message);
+  }
+});
+</script>
+
+</body>
+</html>

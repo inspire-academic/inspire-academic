@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Inspire Academic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --navy: #0b1628;
+      --gold: #c9a84c;
+      --bg: #f8f9fa;
+      --border: rgba(255,255,255,.15);
+    }
+    
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, var(--navy) 0%, #1a2642 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    
+    .container {
+      max-width: 540px;
+      width: 100%;
+    }
+    
+    .card {
+      background: rgba(255,255,255,.98);
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    
+    .logo-text .gold { color: var(--gold); }
+    
+    .tagline {
+      font-size: .875rem;
+      color: #666;
+      margin-top: .25rem;
+    }
+    
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--navy);
+      margin-bottom: .5rem;
+      text-align: center;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: .95rem;
+    }
+    
+    .section-title {
+      font-weight: 600;
+      color: var(--navy);
+      margin: 1.5rem 0 1rem;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    
+    .section-title:first-of-type { margin-top: 0; }
+    
+    .optional-badge {
+      background: rgba(201,168,76,.15);
+      color: var(--gold);
+      padding: .25rem .5rem;
+      border-radius: 4px;
+      font-size: .75rem;
+      font-weight: 500;
+    }
+    
+    .parent-info-box {
+      background: rgba(201,168,76,.08);
+      border: 1px solid rgba(201,168,76,.2);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      font-size: .875rem;
+      color: #555;
+    }
+    
+    .parent-info-box strong {
+      color: var(--gold);
+      display: block;
+      margin-bottom: .5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: .5rem;
+      color: var(--navy);
+      font-weight: 500;
+      font-size: .9rem;
+    }
+    
+    label .required { color: #d32f2f; }
+    
+    input, select {
+      width: 100%;
+      padding: .875rem 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      transition: all .2s;
+      background: white;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,.1);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .checkbox-group {
+      margin: 1rem 0;
+    }
+    
+    .checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      cursor: pointer;
+      padding: .75rem;
+      border-radius: 8px;
+      transition: background .2s;
+    }
+    
+    .checkbox-label:hover {
+      background: rgba(201,168,76,.05);
+    }
+    
+    input[type="checkbox"] {
+      width: auto;
+      margin-top: .25rem;
+      cursor: pointer;
+    }
+    
+    .checkbox-text {
+      font-size: .875rem;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--gold) 0%, #b8964a 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      margin-top: 1.5rem;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(201,168,76,.3);
+    }
+    
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .login-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #666;
+      font-size: .9rem;
+    }
+    
+    .login-link a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+    
+    .error {
+      background: #ffebee;
+      color: #c62828;
+      padding: .875rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: .9rem;
+      display: none;
+    }
+    
+    .success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: .875rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: .9rem;
+      display: none;
+    }
+    
+    @media (max-width: 640px) {
+      .card { padding: 2rem 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <div class="logo">
+      <div class="logo-text"><span class="gold">Inspire</span> Academic</div>
+      <div class="tagline">UK's Premium GCSE Revision Platform</div>
+    </div>
+    
+    <h1>Create Your Account</h1>
+    <p class="subtitle">Start your GCSE revision journey today — completely free!</p>
+    
+    <div class="error" id="error-message"></div>
+    <div class="success" id="success-message"></div>
+    
+    <form id="register-form">
+      <!-- STUDENT INFORMATION -->
+      <div class="section-title">📚 Student Information</div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name <span class="required">*</span></label>
+          <input type="text" id="student-first-name" required placeholder="e.g., Kofi">
+        </div>
+        <div class="form-group">
+          <label>Last Name <span class="required">*</span></label>
+          <input type="text" id="student-last-name" required placeholder="e.g., Appiah">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Email Address <span class="required">*</span></label>
+        <input type="email" id="student-email" required placeholder="your.email@example.com">
+      </div>
+      
+      <div class="form-group">
+        <label>Password <span class="required">*</span></label>
+        <input type="password" id="student-password" required placeholder="At least 8 characters" minlength="8">
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Year Group <span class="required">*</span></label>
+          <select id="year-group" required>
+            <option value="">Select year...</option>
+            <option value="Y7">Year 7</option>
+            <option value="Y8">Year 8</option>
+            <option value="Y9">Year 9</option>
+            <option value="Y10">Year 10</option>
+            <option value="Y11">Year 11</option>
+            <option value="A Level">A Level</option>
+            <option value="Sci-Bridging Y6">Sci-Bridging Y6</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Exam Board <span class="required">*</span></label>
+          <select id="exam-board" required>
+            <option value="">Select board...</option>
+            <option value="AQA">AQA</option>
+            <option value="Edexcel">Edexcel</option>
+            <option value="OCR">OCR</option>
+            <option value="WJEC">WJEC</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- PARENT INFORMATION (OPTIONAL) -->
+      <div class="section-title">
+        👨‍👩‍👧 Parent/Guardian Information
+        <span class="optional-badge">Optional</span>
+      </div>
+      
+      <div class="parent-info-box">
+        <strong>💡 Why add parent details?</strong>
+        Your parent/guardian can track your progress, see your achievements, and receive weekly updates on your learning journey!
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Parent First Name</label>
+          <input type="text" id="parent-first-name" placeholder="e.g., Mary">
+        </div>
+        <div class="form-group">
+          <label>Parent Last Name</label>
+          <input type="text" id="parent-last-name" placeholder="e.g., Appiah">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Parent Email</label>
+        <input type="email" id="parent-email" placeholder="parent@example.com">
+      </div>
+      
+      <!-- TERMS -->
+      <div class="checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="terms" required>
+          <span class="checkbox-text">
+            I agree to the <a href="/terms.html" target="_blank" style="color:var(--gold)">Terms of Service</a> and <a href="/privacy.html" target="_blank" style="color:var(--gold)">Privacy Policy</a>
+          </span>
+        </label>
+      </div>
+      
+      <button type="submit" class="btn" id="submit-btn">
+        <span id="btn-text">Create Free Account</span>
+      </button>
+    </form>
+    
+    <div class="login-link">
+      Already have an account? <a href="index.html">Log in here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI1MDczNzEsImV4cCI6MjAyODA4MzM3MX0.yaIUvdt_ERle3cZLw3WD6Z-Lu1Gy8k6_-drop-Wcmc';
+const supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const form = document.getElementById('register-form');
+const submitBtn = document.getElementById('submit-btn');
+const btnText = document.getElementById('btn-text');
+const errorMsg = document.getElementById('error-message');
+const successMsg = document.getElementById('success-message');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  // Clear messages
+  errorMsg.style.display = 'none';
+  successMsg.style.display = 'none';
+  
+  // Disable button
+  submitBtn.disabled = true;
+  btnText.textContent = 'Creating your account...';
+  
+  try {
+    // Get form values
+    const studentFirstName = document.getElementById('student-first-name').value.trim();
+    const studentLastName = document.getElementById('student-last-name').value.trim();
+    const studentEmail = document.getElementById('student-email').value.trim().toLowerCase();
+    const studentPassword = document.getElementById('student-password').value;
+    const yearGroup = document.getElementById('year-group').value;
+    const examBoard = document.getElementById('exam-board').value;
+    
+    const parentFirstName = document.getElementById('parent-first-name').value.trim();
+    const parentLastName = document.getElementById('parent-last-name').value.trim();
+    const parentEmail = document.getElementById('parent-email').value.trim().toLowerCase();
+    
+    // 1. Create student auth account
+    const { data: authData, error: authError } = await supa.auth.signUp({
+      email: studentEmail,
+      password: studentPassword,
+      options: {
+        data: {
+          first_name: studentFirstName,
+          last_name: studentLastName,
+          full_name: `${studentFirstName} ${studentLastName}`,
+          year_group: yearGroup,
+          exam_board: examBoard,
+          role: 'student'
+        }
+      }
+    });
+    
+    if (authError) throw authError;
+    
+    const userId = authData.user.id;
+    
+    // 2. Update student profile with subscription tier
+    const { error: profileError } = await supa
+      .from('profiles')
+      .update({
+        first_name: studentFirstName,
+        last_name: studentLastName,
+        full_name: `${studentFirstName} ${studentLastName}`,
+        year_group: yearGroup,
+        exam_board: examBoard,
+        role: 'student',
+        subscription_tier: 'free',
+        subscription_status: 'active',
+        quiz_limit_reset_date: new Date().toISOString(),
+        quizzes_this_period: 0
+      })
+      .eq('id', userId);
+    
+    if (profileError) throw profileError;
+    
+    // 3. Create parent account if parent email provided
+    if (parentEmail && parentFirstName && parentLastName) {
+      await createParentAccount(userId, parentEmail, parentFirstName, parentLastName);
+    }
+    
+    // 4. Show success message
+    successMsg.textContent = '✓ Account created! Please check your email to verify your account.';
+    successMsg.style.display = 'block';
+    
+    // 5. Redirect to login after 3 seconds
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 3000);
+    
+  } catch (error) {
+    console.error('Registration error:', error);
+    errorMsg.textContent = error.message || 'Failed to create account. Please try again.';
+    errorMsg.style.display = 'block';
+    
+    submitBtn.disabled = false;
+    btnText.textContent = 'Create Free Account';
+  }
+});
+
+async function createParentAccount(studentId, parentEmail, parentFirstName, parentLastName) {
+  try {
+    // Check if parent already exists
+    const { data: existingParent } = await supa
+      .from('parent_profiles')
+      .select('id')
+      .eq('email', parentEmail)
+      .single();
+    
+    let parentId;
+    
+    if (existingParent) {
+      // Parent already exists (sibling case)
+      parentId = existingParent.id;
+    } else {
+      // Create new parent profile
+      const { data: newParent, error: parentError } = await supa
+        .from('parent_profiles')
+        .insert({
+          email: parentEmail,
+          first_name: parentFirstName,
+          last_name: parentLastName,
+          email_notifications: true,
+          weekly_report_day: 'Sunday'
+        })
+        .select()
+        .single();
+      
+      if (parentError) throw parentError;
+      parentId = newParent.id;
+    }
+    
+    // Link student to parent
+    const { error: linkError } = await supa
+      .from('student_parent_links')
+      .insert({
+        student_id: studentId,
+        parent_id: parentId,
+        relationship: 'parent',
+        is_primary: true
+      });
+    
+    if (linkError && !linkError.message.includes('duplicate')) {
+      throw linkError;
+    }
+    
+    // Send welcome email to parent (via Netlify function)
+    await fetch('/.netlify/functions/send-parent-welcome', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        parentEmail: parentEmail,
+        parentName: `${parentFirstName} ${parentLastName}`,
+        studentName: document.getElementById('student-first-name').value
+      })
+    });
+    
+  } catch (error) {
+    console.error('Parent account creation error:', error);
+    // Don't throw - student account should still succeed
+  }
+}
+</script>
+
+</body>
+</html>
