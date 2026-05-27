@@ -886,7 +886,11 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
   <div class="game-topbar">
     <button class="back-btn" onclick="goTo('dashboard')">&#8592;</button>
     <div class="game-mode-label" id="game-mode-label">Maths</div>
-    <button class="pause-btn" id="pause-btn" onclick="togglePause('game')" title="Pause">
+    <button class="action-btn" id="mode-toggle-btn" onclick="togglePlayMode('game')"
+      style="font-size:.65rem;padding:5px 10px;font-family:'DM Mono',monospace;letter-spacing:.04em;">
+      RELAXED
+    </button>
+    <button class="pause-btn" id="pause-btn" onclick="togglePause('game')" title="Pause" style="display:none">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
     </button>
     <div class="lives-row" id="lives-row"></div>
@@ -1066,7 +1070,11 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
   <div class="nvr-topbar">
     <button class="back-btn" onclick="goTo('logic-hub')">&#8592;</button>
     <div class="nvr-mode-label" id="nvr-mode-label">Pattern Sequences</div>
-    <button class="pause-btn" id="nvr-pause-btn" onclick="togglePause('nvr')" title="Pause">
+    <button class="action-btn" id="nvr-mode-toggle-btn" onclick="togglePlayMode('nvr')"
+      style="font-size:.65rem;padding:5px 10px;font-family:'DM Mono',monospace;letter-spacing:.04em;">
+      RELAXED
+    </button>
+    <button class="pause-btn" id="nvr-pause-btn" onclick="togglePause('nvr')" title="Pause" style="display:none">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
     </button>
     <div class="lives-row" id="nvr-lives-row"></div>
@@ -1297,7 +1305,9 @@ function selectWeek(el, week) {
 }
 
 function startTTGame(mode) {
-  showModeSelector({ type:'tt', mode });
+  // Times tables default to timed for fluency building
+  _playMode = (mode === 'boss') ? 'timed' : 'click';
+  _actuallyStartTT(mode);
 }
 
 function _actuallyStartTT(mode) {
@@ -1319,6 +1329,7 @@ function _actuallyStartTT(mode) {
   document.getElementById('game-mode-label').textContent = labels[state.currentMode]||'Times Tables';
   setTimerVisible('game', _playMode==='timed');
   setPauseVisible('game', _playMode==='timed');
+  updateModeToggleBtn('game');
   goTo('game');
   loadTTQuestion();
 }
@@ -1514,7 +1525,8 @@ function updateDashboard() {
 // GAME ENGINE
 // ══════════════════════════════════════
 function startGame(subject) {
-  showModeSelector({ type:'game', subject });
+  _playMode = 'click'; // default relaxed — child can switch inside session
+  _actuallyStartGame(subject);
 }
 
 function _actuallyStartGame(subject) {
@@ -1536,6 +1548,7 @@ function _actuallyStartGame(subject) {
   document.getElementById('game-mode-label').textContent  = labels[subject]||'Maths';
   setTimerVisible('game', _playMode==='timed');
   setPauseVisible('game', _playMode==='timed');
+  updateModeToggleBtn('game');
   goTo('game');
   loadQuestion();
 }
@@ -2112,7 +2125,8 @@ function updateNVRStats() {
 }
 
 function startNVR(mode) {
-  showModeSelector({ type:'nvr', mode });
+  _playMode = 'click'; // NVR always relaxed by default
+  _actuallyStartNVR(mode);
 }
 
 function _actuallyStartNVR(mode) {
@@ -2131,6 +2145,7 @@ function _actuallyStartNVR(mode) {
   document.getElementById('nvr-mode-label').textContent = labels[mode]||'NVR';
   setTimerVisible('nvr', _playMode==='timed');
   setPauseVisible('nvr', _playMode==='timed');
+  updateModeToggleBtn('nvr');
   goTo('nvr-game');
   loadNVRQuestion();
 }
@@ -2383,8 +2398,36 @@ async function getNVRHint() {
 // Subjects/modes that default to Timed
 // NVR always defaults to Relaxed
 
+function togglePlayMode(context) {
+  // Switch between timed and relaxed mid-session
+  _playMode = (_playMode === 'click') ? 'timed' : 'click';
+  updateModeToggleBtn(context);
+  setTimerVisible(context, _playMode === 'timed');
+  setPauseVisible(context, _playMode === 'timed');
+  // If switching to timed, restart timer on current question
+  if(_playMode === 'timed' && !answered) {
+    if(context === 'game') startTimer(currentQ?.level || 1);
+    else startNVRTimer();
+  } else {
+    // Switching to relaxed — stop timer
+    if(context === 'game') clearInterval(state.timerInterval);
+    else clearInterval(nvrState.timerInterval);
+  }
+}
+
+function updateModeToggleBtn(context) {
+  const id = context === 'game' ? 'mode-toggle-btn' : 'nvr-mode-toggle-btn';
+  const btn = document.getElementById(id);
+  if(!btn) return;
+  btn.textContent = _playMode === 'timed' ? 'TIMED' : 'RELAXED';
+  btn.style.color = _playMode === 'timed' ? 'var(--coral)' : 'var(--mint)';
+  btn.style.borderColor = _playMode === 'timed' ? 'rgba(224,92,92,.3)' : 'rgba(74,222,128,.3)';
+}
+
 function showModeSelector(pendingStart) {
-  _pendingStart = pendingStart;
+  // Kept for compatibility but now just starts directly
+  confirmPlayMode();
+}
   const isNVR = pendingStart.type === 'nvr';
   const isTT  = pendingStart.type === 'tt';
 
