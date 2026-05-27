@@ -1,1590 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inspire Science — Teacher Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-:root {
-  --navy:   #0B1D3A;
-  --navy2:  #112240;
-  --navy3:  #1A3361;
-  --gold:   #D4A017;
-  --gold2:  #F0C040;
-  --white:  #F0EDE6;
-  --muted:  #7A8BA8;
-  --border: rgba(212,160,23,.18);
-  --r: 10px;
-  --green:  #2ECC71;
-  --amber:  #F39C12;
-  --red:    #E74C3C;
-  --blue:   #3498DB;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--navy);
-  color: var(--white);
-  min-height: 100vh;
-}
-
-/* ── Loading overlay ── */
-#loading-overlay {
-  position: fixed; inset: 0; background: var(--navy);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 9999; flex-direction: column; gap: 1rem;
-}
-.loading-spinner {
-  width: 40px; height: 40px;
-  border: 3px solid var(--border);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── Layout ── */
-.app { display: flex; min-height: 100vh; }
-
-/* ── Sidebar ── */
-.sidebar {
-  width: 220px; flex-shrink: 0;
-  background: var(--navy2);
-  border-right: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  padding: 1.5rem 0;
-  position: sticky; top: 0; height: 100vh;
-}
-.sidebar-logo {
-  padding: 0 1.5rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 1rem;
-}
-.sidebar-logo .inspire { font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.1rem; }
-.sidebar-logo .science { font-weight: 700; font-size: 1.1rem; color: var(--white); }
-.sidebar-logo .badge { font-family: 'DM Mono', monospace; font-size: .6rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: .2rem; }
-
-.nav-item {
-  display: flex; align-items: center; gap: .75rem;
-  padding: .65rem 1.5rem;
-  cursor: pointer; font-size: .9rem;
-  color: var(--muted); transition: all .15s;
-  border-left: 3px solid transparent;
-}
-.nav-item:hover { color: var(--white); background: rgba(255,255,255,.04); }
-.nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(212,160,23,.06); }
-.nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
-
-.sidebar-footer {
-  margin-top: auto;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--border);
-}
-.teacher-name { font-size: .8rem; color: var(--muted); }
-.teacher-name strong { display: block; color: var(--white); font-size: .9rem; margin-bottom: .15rem; }
-.sign-out-btn {
-  margin-top: .75rem; width: 100%;
-  background: transparent; border: 1px solid var(--border);
-  color: var(--muted); padding: .5rem; border-radius: var(--r);
-  font-size: .8rem; cursor: pointer; transition: all .15s;
-}
-.sign-out-btn:hover { border-color: var(--red); color: var(--red); }
-
-/* ── Main ── */
-.main { flex: 1; padding: 2rem; overflow-y: auto; }
-
-.page-header {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  margin-bottom: 2rem;
-}
-.page-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; }
-.page-sub { color: var(--muted); font-size: .9rem; margin-top: .3rem; }
-.last-refresh { font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--muted); margin-top: .25rem; }
-
-.refresh-btn {
-  background: transparent; border: 1px solid var(--border);
-  color: var(--muted); padding: .5rem 1rem; border-radius: var(--r);
-  font-size: .82rem; cursor: pointer; transition: all .15s;
-  display: flex; align-items: center; gap: .4rem;
-}
-.refresh-btn:hover { border-color: var(--gold); color: var(--gold); }
-
-/* ── View panels ── */
-.view { display: none; }
-.view.active { display: block; }
-
-/* ── Stat cards row ── */
-.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
-.stat-card {
-  background: var(--navy2); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 1.25rem 1.5rem;
-}
-.stat-label { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-.stat-value { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin: .3rem 0 .1rem; line-height: 1; }
-.stat-sub { font-size: .8rem; color: var(--muted); }
-
-/* ── Table ── */
-.table-card {
-  background: var(--navy2); border: 1px solid var(--border);
-  border-radius: var(--r); overflow: hidden; margin-bottom: 1.5rem;
-}
-.table-header {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.table-title { font-weight: 600; font-size: .95rem; }
-.table-count { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--muted); }
-
-table { width: 100%; border-collapse: collapse; }
-th {
-  text-align: left; padding: .75rem 1.25rem;
-  font-size: .72rem; text-transform: uppercase; letter-spacing: .08em;
-  color: var(--muted); border-bottom: 1px solid var(--border);
-  background: rgba(0,0,0,.15);
-}
-td { padding: .8rem 1.25rem; font-size: .88rem; border-bottom: 1px solid rgba(255,255,255,.04); }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(255,255,255,.025); }
-.clickable { cursor: pointer; }
-.clickable:hover td { background: rgba(212,160,23,.05); }
-
-/* ── Mastery bar ── */
-.mastery-bar { display: flex; gap: 2px; align-items: center; }
-.mastery-seg {
-  height: 6px; border-radius: 3px; flex: 1;
-  background: rgba(255,255,255,.08);
-}
-.mastery-seg.new      { background: rgba(255,255,255,.12); }
-.mastery-seg.learning { background: var(--red); opacity: .7; }
-.mastery-seg.review   { background: var(--amber); opacity: .8; }
-.mastery-seg.mastered { background: var(--green); }
-
-/* ── Mastery % pill ── */
-.pct-pill {
-  display: inline-block; padding: .2rem .6rem; border-radius: 20px;
-  font-family: 'DM Mono', monospace; font-size: .78rem; font-weight: 500;
-}
-.pct-high  { background: rgba(46,204,113,.15); color: var(--green); }
-.pct-mid   { background: rgba(243,156,18,.15);  color: var(--amber); }
-.pct-low   { background: rgba(231,76,60,.15);   color: var(--red); }
-.pct-none  { background: rgba(255,255,255,.06); color: var(--muted); }
-
-/* ── Activity dot ── */
-.activity-dot {
-  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
-  margin-right: .4rem;
-}
-.dot-today   { background: var(--green); box-shadow: 0 0 6px var(--green); }
-.dot-week    { background: var(--amber); }
-.dot-old     { background: var(--red); opacity: .7; }
-.dot-never   { background: rgba(255,255,255,.15); }
-
-/* ── Heatmap grid ── */
-.heatmap-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: .75rem;
-  margin-bottom: 1.5rem;
-}
-.heatmap-cell {
-  background: var(--navy2); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 1rem;
-  cursor: pointer; transition: all .15s;
-}
-.heatmap-cell:hover { border-color: rgba(212,160,23,.4); }
-.heatmap-cell .cell-subject { font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .2rem; }
-.heatmap-cell .cell-topic { font-size: .88rem; font-weight: 600; margin-bottom: .6rem; line-height: 1.3; }
-.heatmap-cell .cell-bar-wrap { background: rgba(255,255,255,.06); border-radius: 3px; height: 5px; overflow: hidden; }
-.heatmap-cell .cell-bar { height: 100%; border-radius: 3px; transition: width .6s; }
-.heatmap-cell .cell-stats { display: flex; justify-content: space-between; margin-top: .5rem; font-size: .75rem; color: var(--muted); }
-
-/* ── Card difficulty list ── */
-.diff-row { display: flex; align-items: center; gap: 1rem; padding: .9rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,.04); }
-.diff-row:last-child { border-bottom: none; }
-.diff-rank { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--muted); width: 24px; flex-shrink: 0; }
-.diff-card-id { flex: 1; font-size: .82rem; }
-.diff-card-id .card-path { color: var(--muted); font-size: .72rem; margin-top: .1rem; }
-.diff-ef { font-family: 'DM Mono', monospace; font-size: .82rem; text-align: right; }
-.diff-students { font-size: .78rem; color: var(--muted); text-align: right; min-width: 60px; }
-.ef-bar { height: 4px; border-radius: 2px; margin-top: .3rem; }
-
-/* ── Student detail ── */
-.back-btn {
-  display: inline-flex; align-items: center; gap: .4rem;
-  background: transparent; border: 1px solid var(--border);
-  color: var(--muted); padding: .45rem .9rem; border-radius: var(--r);
-  font-size: .82rem; cursor: pointer; transition: all .15s; margin-bottom: 1.5rem;
-}
-.back-btn:hover { border-color: var(--gold); color: var(--gold); }
-
-.student-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
-.meta-chip {
-  background: var(--navy2); border: 1px solid var(--border);
-  border-radius: 20px; padding: .35rem .9rem;
-  font-size: .82rem; color: var(--muted);
-}
-.meta-chip strong { color: var(--white); }
-
-.subject-section { margin-bottom: 2rem; }
-.subject-label {
-  font-size: .7rem; text-transform: uppercase; letter-spacing: .1em;
-  color: var(--gold); font-family: 'DM Mono', monospace;
-  margin-bottom: .75rem; padding-bottom: .5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-/* ── Empty / error states ── */
-.empty-state {
-  text-align: center; padding: 4rem 2rem; color: var(--muted);
-}
-.empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
-.empty-state .empty-title { font-size: 1.1rem; color: var(--white); margin-bottom: .5rem; }
-
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-/* ── Responsive ── */
-@media (max-width: 900px) {
-  .sidebar { width: 60px; }
-  .sidebar-logo, .sidebar-footer, .nav-item span { display: none; }
-  .stat-row { grid-template-columns: repeat(2, 1fr); }
-}
-</style>
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#c9a84c">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Inspire Science">
-    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inspire Academic - Teacher Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0b1628;
+      --gold: #c9a84c;
+      --border: #374151;
+      --muted: #9ca3af;
+      --white: #ffffff;
+      --green: #4ade80;
+      --amber: #fbbf24;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      display: flex;
+    }
+    .sidebar {
+      width: 175px;
+      background: rgba(0,0,0,0.3);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 0;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .logo {
+      padding: 0 1.5rem;
+      margin-bottom: 2rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .nav {
+      list-style: none;
+    }
+    .nav li {
+      margin: 0;
+    }
+    .nav a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+    .nav a:hover, .nav a.active {
+      color: var(--white);
+      background: rgba(201,168,76,0.1);
+      border-left-color: var(--gold);
+    }
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      background: rgba(0,0,0,0.2);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .topbar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+    .card-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+    .card-stats {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .stat-value {
+      font-weight: 600;
+    }
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+    .stat.submitted .stat-value { color: var(--amber); }
+    .stat.reviewed .stat-value { color: var(--green); }
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--muted);
+    }
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+    .error {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #fca5a5;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+  </style>
 </head>
 <body>
+  <div class="sidebar">
+    <div class="logo">Inspire Science</div>
+    <ul class="nav">
+      <li><a href="/" class="nav-link">Overview</a></li>
+      <li><a href="#" class="nav-link active">Assessments</a></li>
+      <li><a href="/teaching-cockpit.html" class="nav-link">Teaching Cockpit</a></li>
+    </ul>
+  </div>
 
-<!-- Loading overlay -->
-<div id="loading-overlay">
-  <div class="loading-spinner"></div>
-  <div style="color:var(--muted);font-size:.85rem;">Loading dashboard…</div>
-</div>
-
-<div class="app">
-  <!-- Sidebar -->
-  <nav class="sidebar">
-    <a href="index.html" style="text-decoration:none;color:inherit;"><div class="sidebar-logo">
-      <div><span class="inspire">Inspire</span> <span class="science">Science</span></div>
-      <div class="badge">Teacher Dashboard</div>
-    </div></a>
-
-    <div class="nav-item active" onclick="showView('overview')" id="nav-overview">
-      <span class="icon">📊</span><span>Overview</span>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title">Teacher Dashboard</div>
+      <button onclick="location.href='/'" style="background: var(--gold); color: var(--navy); border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 500;">← Home</button>
     </div>
-    <div class="nav-item" onclick="showView('heatmap')" id="nav-heatmap">
-      <span class="icon">🔥</span><span>Topic Heatmap</span>
-    </div>
-    <div class="nav-item" onclick="showView('difficulty')" id="nav-difficulty">
-      <span class="icon">⚡</span><span>Hard Cards</span>
-    </div>
-    <div class="nav-item" onclick="showView('assessments')" id="nav-assessments">
-      <span class="icon">📋</span><span>Assessments</span>
-    </div>
-    <div class="nav-item" onclick="showView('users')" id="nav-users" style="display:none">
-      <span class="icon">👥</span><span>Users &amp; Roles</span>
-    </div>
-    <a href="admin-teacher-mgmt.html" style="text-decoration:none;color:inherit;">
-      <div class="nav-item" id="nav-teacher-mgmt" style="display:none">
-        <span class="icon">👩‍🏫</span><span>Manage Teachers</span>
-      </div>
-    </a>
-
-    <div style="height:1px;background:var(--border);margin:.5rem 0;"></div>
-
-    <a href="teacher-revision.html" style="text-decoration:none;color:inherit;">
-      <div class="nav-item">
-        <span class="icon">📦</span><span>Revision Packs</span>
-      </div>
-    </a>
-    <a href="teacher-assessment-create.html" style="text-decoration:none;color:inherit;">
-      <div class="nav-item">
-        <span class="icon">📝</span><span>Create Assessment</span>
-      </div>
-    </a>
-    <a href="teaching-cockpit.html" style="text-decoration:none;color:inherit;">
-      <div class="nav-item">
-        <span class="icon">🎯</span><span>Teaching Cockpit</span>
-      </div>
-    </a>
-
-    <div class="sidebar-footer">
-      <div class="teacher-name">
-        <strong id="teacher-name-display">Teacher</strong>
-        Signed in
-      </div>
-      <button class="sign-out-btn" onclick="signOut()">Sign out</button>
-    </div>
-  </nav>
-
-  <!-- Main content -->
-  <main class="main">
-
-    <!-- ══ VIEW: OVERVIEW ══ -->
-    <div class="view active" id="view-overview">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Class Overview</div>
-          <div class="page-sub">All students — quiz activity and topic mastery</div>
-          <div class="last-refresh" id="refresh-time"></div>
-        </div>
-        <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
-      </div>
-
-      <div class="stat-row" id="overview-stats">
-        <div class="stat-card"><div class="stat-label">Total Students</div><div class="stat-value" id="stat-students">—</div><div class="stat-sub">with accounts</div></div>
-        <div class="stat-card"><div class="stat-label">Active This Week</div><div class="stat-value" id="stat-active">—</div><div class="stat-sub">studied ≥1 session</div></div>
-        <div class="stat-card"><div class="stat-label">Quizzes Taken</div><div class="stat-value" id="stat-reviews">—</div><div class="stat-sub">total quiz attempts</div></div>
-        <div class="stat-card"><div class="stat-label">Avg Mastery</div><div class="stat-value" id="stat-mastery">—</div><div class="stat-sub">avg score across class</div></div>
-      </div>
-
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-title">Students</div>
-          <div class="table-count" id="student-count-label"></div>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>Year</th>
-              <th>Last Active</th>
-              <th>Streak</th>
-              <th>Reviewed</th>
-              <th>Accuracy</th>
-              <th>Mastery</th>
-              <th>Mastery %</th>
-            </tr>
-          </thead>
-          <tbody id="students-tbody">
-            <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:2rem;">Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ══ VIEW: HEATMAP ══ -->
-    <div class="view" id="view-heatmap">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Topic Heatmap</div>
-          <div class="page-sub">Average mastery per topic across all students who have studied it</div>
-        </div>
-        <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
-      </div>
-      <div id="heatmap-filters" style="display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap;">
-        <button class="refresh-btn active-filter" onclick="filterHeatmap('all')" id="hf-all" style="color:var(--gold);border-color:var(--gold);">All subjects</button>
-        <button class="refresh-btn" onclick="filterHeatmap('Physics')" id="hf-Physics">Physics</button>
-        <button class="refresh-btn" onclick="filterHeatmap('Chemistry')" id="hf-Chemistry">Chemistry</button>
-        <button class="refresh-btn" onclick="filterHeatmap('Biology')" id="hf-Biology">Biology</button>
-        <button class="refresh-btn" onclick="filterHeatmap('Mathematics')" id="hf-Mathematics">Mathematics</button>
-      </div>
-      <div class="heatmap-grid" id="heatmap-grid"></div>
-    </div>
-
-    <!-- ══ VIEW: HARD CARDS ══ -->
-    <div class="view" id="view-difficulty">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Hardest Cards</div>
-          <div class="page-sub">Cards with the lowest average ease factor across students (seen ≥ 2 times)</div>
-        </div>
-        <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
-      </div>
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-title">Cards by difficulty</div>
-          <div class="table-count" id="diff-count-label"></div>
-        </div>
-        <div id="difficulty-list"></div>
-      </div>
-    </div>
-
-    <!-- ══ VIEW: STUDENT DETAIL ══ -->
-    <div class="view" id="view-student">
-      <button class="back-btn" onclick="showView('overview')">← Back to overview</button>
-      <div id="student-detail-content"></div>
-    </div>
-
-    <!-- ══ VIEW: ASSESSMENTS ══ -->
-    <div class="view" id="view-assessments">
-      <div class="page-header" style="display:flex;justify-content:space-between;align-items:flex-start;">
-        <div>
-          <div class="page-title">Assessments</div>
-          <div class="page-sub">Manage assigned assessments and review student submissions</div>
-        </div>
-        <a href="teacher-assessment-create.html" class="btn" style="background:var(--gold);color:var(--navy);padding:.6rem 1.2rem;border-radius:8px;font-weight:700;font-size:.85rem;text-decoration:none;">+ Create Assessment</a>
-      </div>
-
-      <div id="assessments-panel">
-        <div style="color:var(--muted);padding:2rem 0;">Loading assessments…</div>
-      </div>
-    </div>
-
-    <!-- ══ MODAL: REVIEW ATTEMPT ══ -->
-    <div id="review-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;overflow-y:auto;">
-      <div style="max-width:800px;margin:2rem auto;background:var(--navy2);border-radius:12px;border:1px solid var(--border);padding:2rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
-          <div class="page-title" id="review-modal-title">Review Attempt</div>
-          <button onclick="closeReviewModal()" style="background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;">✕</button>
-        </div>
-        <div id="review-modal-meta" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem;"></div>
-        <div id="review-modal-body"></div>
-        <div style="display:flex;gap:1rem;justify-content:flex-end;margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);">
-          <button onclick="closeReviewModal()" style="background:var(--navy);border:1px solid var(--border);color:var(--white);padding:.65rem 1.2rem;border-radius:8px;cursor:pointer;font-size:.85rem;">Close</button>
-          <button id="btn-release" onclick="releaseResults()" style="background:var(--gold);color:var(--navy);border:none;padding:.65rem 1.4rem;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;">✓ Release results to student</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ MODAL: ASSIGN ASSESSMENT ══ -->
-    <div id="assign-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;overflow-y:auto;">
-      <div style="max-width:560px;margin:2rem auto;background:var(--navy2);border-radius:12px;border:1px solid var(--border);padding:2rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
-          <div class="page-title">Assign Assessment</div>
-          <button onclick="closeAssignModal()" style="background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer;">✕</button>
-        </div>
-        <div id="assign-modal-title" style="color:var(--gold);font-weight:700;margin-bottom:1rem;"></div>
-        <div style="margin-bottom:1rem;">
-          <label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:.4rem;">ASSIGN TO</label>
-          <div style="display:flex;gap:.75rem;margin-bottom:.75rem;">
-            <button onclick="setAssignTarget('all')" id="btn-assign-all" style="flex:1;padding:.6rem;border-radius:8px;border:1px solid var(--gold);background:var(--gold);color:var(--navy);font-weight:700;font-size:.82rem;cursor:pointer;">All students</button>
-            <button onclick="setAssignTarget('select')" id="btn-assign-select" style="flex:1;padding:.6rem;border-radius:8px;border:1px solid var(--border);background:none;color:var(--white);font-size:.82rem;cursor:pointer;">Select specific students</button>
-          </div>
-          <div id="student-select-list" style="display:none;max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:.5rem;"></div>
-        </div>
-        <div style="margin-bottom:1.5rem;">
-          <label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:.4rem;">DEADLINE (optional)</label>
-          <input type="datetime-local" id="assign-deadline" style="width:100%;padding:.65rem .9rem;background:var(--navy);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:.85rem;">
-        </div>
-        <div style="display:flex;gap:1rem;justify-content:flex-end;">
-          <button onclick="closeAssignModal()" style="background:none;border:1px solid var(--border);color:var(--white);padding:.65rem 1.2rem;border-radius:8px;cursor:pointer;font-size:.85rem;">Cancel</button>
-          <button onclick="confirmAssign()" style="background:var(--gold);color:var(--navy);border:none;padding:.65rem 1.4rem;border-radius:8px;font-weight:700;font-size:.85rem;cursor:pointer;">Assign →</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ VIEW: USERS & ROLES (admin only) ══ -->
-    <div class="view" id="view-users">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Users &amp; Roles</div>
-          <div class="page-sub">Assign roles to registered users — admin only</div>
-        </div>
-        <button class="refresh-btn" onclick="loadUsers()">↻ Refresh</button>
-      </div>
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-title">All registered users</div>
-          <div class="table-count" id="users-count-label"></div>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Year group</th>
-              <th>Joined</th>
-              <th>Current role</th>
-              <th>Change role</th>
-            </tr>
-          </thead>
-          <tbody id="users-tbody">
-            <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </main>
-</div>
-
-<script>
-// ── Config ──────────────────────────────────────────────────────────
-const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
-const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
-
-// ── State ────────────────────────────────────────────────────────────
-let _allStudents = [];       // [{id, name, year, totalAttempts, avgPct, lastActiveTs, streak, attempts, topicProgress}]
-let _topicMap = {};          // topicId → {title, subject}
-let _subjectMap = {};        // subjectId → name
-let _quizMap = {};           // quizId → quiz row
-let _allTopicProgress = [];  // all topic_progress rows
-let _heatmapFilter = 'all';
-let _heatmapCells = [];
-
-const SUBJECTS = ['Physics','Chemistry','Biology','Mathematics'];
-
-// ── Auth ─────────────────────────────────────────────────────────────
-async function init() {
-  const { data: { session } } = await supa.auth.getSession();
-  if (!session) { window.location.href = '/'; return; }
-
-  const uid = session.user.id;
-  window._teacherId = uid;
-  const { data: profile } = await supa.from('profiles')
-    .select('role, full_name').eq('id', uid).maybeSingle();
-
-  const validRoles = ['teacher', 'teacher_manager', 'admin', 'super_admin'];
-  if (!profile || !validRoles.includes(profile.role)) {
-    window.location.href = '/dashboard.html';
-    return;
-  }
-
-  document.getElementById('teacher-name-display').textContent =
-    profile.full_name || session.user.email;
-
-  // Store role and user ID globally
-  window._myRole = profile.role;
-  window._teacherId = session.user.id;
-
-  // Show admin-only nav items
-  if (profile.role === 'admin' || profile.role === 'super_admin') {
-    document.getElementById('nav-users').style.display = 'flex';
-    document.getElementById('nav-teacher-mgmt').style.display = 'flex';
-  }
-
-  await loadAll();
-  if (profile.role === 'admin' || profile.role === 'super_admin') await loadUsers();
-  document.getElementById('loading-overlay').style.display = 'none';
-}
-
-async function signOut() {
-  await supa.auth.signOut();
-  window.location.href = '/';
-}
-
-// ── Data loading ──────────────────────────────────────────────────────
-async function loadAll() {
-  document.getElementById('refresh-time').textContent = 'Loading…';
-
-  // 1. Student profiles — filtered for teacher_manager, all for admin
-  let profiles;
-  if (window._myRole === 'teacher_manager') {
-    const { data: assigned } = await supa.rpc('get_teacher_students', {
-      p_teacher_user_id: window._teacherId
-    });
-    if (!assigned || assigned.length === 0) {
-      // No students assigned yet — show empty state and stop
-      _allStudents = [];
-      _topicMap = {}; _subjectMap = {}; _quizMap = {}; _allTopicProgress = [];
-      renderOverview();
-      document.getElementById('refresh-time').textContent = 'No students assigned';
-      document.getElementById('loading-overlay').style.display = 'none';
-      return;
-    }
-    const ids = assigned.map(s => s.student_id);
-    const { data: p } = await supa.from('profiles')
-      .select('id, full_name, year_group, role')
-      .in('id', ids)
-      .order('full_name');
-    profiles = p;
-  } else {
-    // Admin / super_admin — see all students
-    const { data: p } = await supa.from('profiles')
-      .select('id, full_name, year_group, role')
-      .eq('role', 'student')
-      .order('full_name');
-    profiles = p;
-  }
-
-  // 2. All quiz attempts (with joined quiz title/subject via quizzes table)
-  // Filter by assigned students for teacher_manager
-  const studentIds = (profiles || []).map(p => p.id);
-
-  const { data: attempts } = studentIds.length > 0
-    ? await supa.from('quiz_attempts')
-        .select('id, student_id, quiz_id, score, max_score, percentage, passed, completed_at, started_at')
-        .in('student_id', studentIds)
-    : { data: [] };
-
-  // 3. All quizzes (to map quiz_id → topic/subject info)
-  const { data: quizzes } = await supa.from('quizzes')
-    .select('id, title, exam_board');
-
-  // 4. Topic progress — filtered by assigned students
-  const { data: topicProgressRows } = studentIds.length > 0
-    ? await supa.from('topic_progress')
-        .select('student_id, topic_id, attempts_count, best_score, latest_score, mastery_level, last_attempted')
-        .in('student_id', studentIds)
-    : { data: [] };
-
-  // 5. Topics (to get subject names)
-  const { data: topicsRows } = await supa.from('topics')
-    .select('id, name, subject_id');
-
-  // 6. Subjects
-  const { data: subjectsRows } = await supa.from('subjects')
-    .select('id, name');
-
-  // 7. Streaks
-  const { data: streakRows } = await supa.from('streaks')
-    .select('student_id, current_streak, longest_streak, last_activity');
-
-  // ── Build lookup maps ──
-  const quizMap = {};
-  (quizzes || []).forEach(q => { quizMap[q.id] = q; });
-
-  const subjectMap = {};
-  (subjectsRows || []).forEach(s => { subjectMap[s.id] = s.name; });
-
-  const topicMap = {};
-  (topicsRows || []).forEach(t => {
-    // Store by both integer and string key to handle type mismatches
-    const entry = { title: t.name, subject: subjectMap[t.subject_id] || subjectMap[String(t.subject_id)] || 'Unknown' };
-    topicMap[t.id] = entry;
-    topicMap[String(t.id)] = entry;
-  });
-
-  const streakMap = {};
-  (streakRows || []).forEach(r => { streakMap[r.student_id] = r; });
-
-  // ── Index attempts by student ──
-  const attemptsByStudent = {};
-  (attempts || []).forEach(a => {
-    if (!attemptsByStudent[a.student_id]) attemptsByStudent[a.student_id] = [];
-    attemptsByStudent[a.student_id].push(a);
-  });
-
-  // ── Index topic progress by student ──
-  const topicProgressByStudent = {};
-  (topicProgressRows || []).forEach(r => {
-    if (!topicProgressByStudent[r.student_id]) topicProgressByStudent[r.student_id] = [];
-    topicProgressByStudent[r.student_id].push(r);
-  });
-
-  // ── Build student objects ──
-  _allStudents = (profiles || []).map(p => {
-    const myAttempts = attemptsByStudent[p.id] || [];
-    const myTopics   = topicProgressByStudent[p.id] || [];
-    const myStreak   = streakMap[p.id] || null;
-
-    // Compute derived stats from quiz_attempts
-    const totalAttempts = myAttempts.length;
-    const completedAttempts = myAttempts.filter(a => a.completed_at);
-    const avgPct = completedAttempts.length > 0
-      ? Math.round(completedAttempts.reduce((sum, a) => sum + (parseFloat(a.percentage) || 0), 0) / completedAttempts.length)
-      : null;
-
-    // Last active = most recent completed_at
-    const lastActiveTs = completedAttempts.length > 0
-      ? Math.max(...completedAttempts.map(a => new Date(a.completed_at).getTime()))
-      : null;
-
-    return {
-      id: p.id,
-      name: p.full_name || 'Unknown',
-      year: p.year_group || '—',
-      totalAttempts,
-      avgPct,
-      lastActiveTs,
-      streak: myStreak?.current_streak || 0,
-      longestStreak: myStreak?.longest_streak || 0,
-      attempts: myAttempts,
-      topicProgress: myTopics
-    };
-  });
-
-  // Store for heatmap use
-  _topicMap = topicMap;
-  _subjectMap = subjectMap;
-  _quizMap = quizMap;
-  _allTopicProgress = topicProgressRows || [];
-
-  // Refresh all views
-  renderOverview();
-  renderHeatmap();
-  renderDifficulty();
-
-  const now = new Date();
-  document.getElementById('refresh-time').textContent =
-    `Last updated ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
-}
-
-// ── View switching ────────────────────────────────────────────────────
-function showView(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
-  const nav = document.getElementById('nav-' + name);
-  if (nav) nav.classList.add('active');
-  if (name === 'assessments') loadAssessmentsPanel();
-}
-
-// ── Overview ──────────────────────────────────────────────────────────
-function renderOverview() {
-  const now = Date.now();
-  const weekAgo = now - 7 * 86400000;
-
-  let totalAttempts = 0, activeThisWeek = 0, avgPctSum = 0, avgPctCount = 0;
-
-  _allStudents.forEach(s => {
-    totalAttempts += s.totalAttempts;
-    if (s.lastActiveTs && s.lastActiveTs > weekAgo) activeThisWeek++;
-    if (s.avgPct !== null) { avgPctSum += s.avgPct; avgPctCount++; }
-  });
-
-  const classAvgPct = avgPctCount > 0 ? Math.round(avgPctSum / avgPctCount) : 0;
-
-  document.getElementById('stat-students').textContent = _allStudents.length;
-  document.getElementById('stat-active').textContent = activeThisWeek;
-  document.getElementById('stat-reviews').textContent = totalAttempts.toLocaleString();
-  document.getElementById('stat-mastery').textContent = classAvgPct + '%';
-
-  document.getElementById('student-count-label').textContent =
-    _allStudents.length + ' student' + (_allStudents.length !== 1 ? 's' : '');
-
-  const tbody = document.getElementById('students-tbody');
-  if (_allStudents.length === 0) {
-    const isTeacher = window._myRole === 'teacher_manager' || window._myRole === 'teacher';
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">
-      <div class="empty-icon">👤</div>
-      <div class="empty-title">${isTeacher ? 'No students assigned yet' : 'No students yet'}</div>
-      <div>${isTeacher ? 'Contact your admin to have students assigned to your account.' : 'Students will appear here once they create accounts.'}</div>
-    </div></td></tr>`;
-    return;
-  }
-
-  // Sort by last active desc
-  const sorted = [..._allStudents].sort((a, b) => (b.lastActiveTs || 0) - (a.lastActiveTs || 0));
-
-  tbody.innerHTML = sorted.map(s => {
-    // Activity indicator
-    const daysSince = s.lastActiveTs ? Math.floor((now - s.lastActiveTs) / 86400000) : null;
-    let dotClass = 'dot-never', activityText = 'Never';
-    if (s.lastActiveTs) {
-      const d = new Date(s.lastActiveTs);
-      const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-      const timeStr = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-      activityText = `${dateStr}, ${timeStr}`;
-      if (daysSince === 0)      dotClass = 'dot-today';
-      else if (daysSince <= 7)  dotClass = 'dot-week';
-      else                      dotClass = 'dot-old';
-    }
-
-    // Mastery bar: use topic_progress mastery_level
-    const topics = s.topicProgress || [];
-    const masteredCount  = topics.filter(t => t.mastery_level === 'mastered').length;
-    const secureCount    = topics.filter(t => t.mastery_level === 'secure').length;
-    const learningCount  = topics.filter(t => t.mastery_level === 'learning').length;
-    const totalTopics    = topics.length || 1;
-    const barSegs = `
-      <div class="mastery-bar">
-        <div class="mastery-seg learning" style="flex:${learningCount}"></div>
-        <div class="mastery-seg review"   style="flex:${secureCount}"></div>
-        <div class="mastery-seg mastered" style="flex:${masteredCount}"></div>
-        <div class="mastery-seg new"      style="flex:${Math.max(0, 10 - totalTopics)}"></div>
-      </div>`;
-
-    const masteryPct = topics.length > 0 ? Math.round(masteredCount / topics.length * 100) : null;
-    const pctClass = masteryPct === null ? 'pct-none'
-      : masteryPct >= 70 ? 'pct-high'
-      : masteryPct >= 40 ? 'pct-mid' : 'pct-low';
-    const pctLabel = masteryPct !== null ? masteryPct + '%' : '—';
-
-    // Avg score as "accuracy" column
-    const avgLabel = s.avgPct !== null ? s.avgPct + '%' : '—';
-
-    return `<tr class="clickable" onclick="showStudent('${s.id}')">
-      <td><strong>${escHtml(s.name)}</strong></td>
-      <td style="color:var(--muted)">${escHtml(String(s.year))}</td>
-      <td><span class="activity-dot ${dotClass}"></span>${activityText}</td>
-      <td style="font-family:'DM Mono',monospace">${s.streak > 0 ? '🔥 ' + s.streak : '—'}</td>
-      <td style="font-family:'DM Mono',monospace">${s.totalAttempts.toLocaleString()}</td>
-      <td style="font-family:'DM Mono',monospace">${avgLabel}</td>
-      <td style="min-width:120px">${barSegs}</td>
-      <td><span class="pct-pill ${pctClass}">${pctLabel}</span></td>
-    </tr>`;
-  }).join('');
-}
-
-// ── Topic Heatmap ──────────────────────────────────────────────────────
-function renderHeatmap() {
-  // Aggregate topic_progress across all students by topic
-  const topicAgg = {}; // topicId → { title, subject, mastered, secure, learning, students }
-
-  _allTopicProgress.forEach(r => {
-    const tid = r.topic_id;
-    const info = _topicMap[tid] || _topicMap[String(tid)] || { title: 'Topic ' + tid, subject: 'Unknown' };
-    if (!topicAgg[tid]) topicAgg[tid] = { title: info.title, subject: info.subject, mastered: 0, secure: 0, learning: 0, students: 0, scoreSum: 0 };
-    topicAgg[tid].students++;
-    topicAgg[tid].scoreSum += parseFloat(r.best_score) || 0;
-    if (r.mastery_level === 'mastered')  topicAgg[tid].mastered++;
-    else if (r.mastery_level === 'secure') topicAgg[tid].secure++;
-    else                                   topicAgg[tid].learning++;
-  });
-
-  const cells = Object.values(topicAgg).map(t => ({
-    ...t,
-    pct: t.students > 0 ? Math.round(t.scoreSum / t.students) : 0
-  })).sort((a, b) => a.pct - b.pct); // worst first
-
-  _heatmapCells = cells;
-  renderHeatmapCells(_heatmapFilter);
-}
-
-function filterHeatmap(subject) {
-  _heatmapFilter = subject;
-  document.querySelectorAll('[id^="hf-"]').forEach(b => {
-    b.style.color = ''; b.style.borderColor = '';
-  });
-  const btn = document.getElementById('hf-' + subject);
-  if (btn) { btn.style.color = 'var(--gold)'; btn.style.borderColor = 'var(--gold)'; }
-  renderHeatmapCells(subject);
-}
-
-function renderHeatmapCells(subject) {
-  const grid = document.getElementById('heatmap-grid');
-  const filtered = subject === 'all'
-    ? _heatmapCells
-    : _heatmapCells.filter(c => c.subject === subject);
-
-  if (filtered.length === 0) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
-      <div class="empty-icon">📚</div>
-      <div class="empty-title">No data yet</div>
-      <div>Topics will appear once students start studying</div>
-    </div>`;
-    return;
-  }
-
-  grid.innerHTML = filtered.map(cell => {
-    const pct = cell.pct;
-    const barColor = pct >= 70 ? 'var(--green)' : pct >= 40 ? 'var(--amber)' : 'var(--red)';
-    return `<div class="heatmap-cell">
-      <div class="cell-subject">${escHtml(cell.subject)}</div>
-      <div class="cell-topic">${escHtml(cell.title)}</div>
-      <div class="cell-bar-wrap">
-        <div class="cell-bar" style="width:${pct}%;background:${barColor}"></div>
-      </div>
-      <div class="cell-stats">
-        <span>${pct}% mastered</span>
-        <span>${cell.students} student${cell.students !== 1 ? 's' : ''}</span>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ── Hard Topics (lowest avg score across students) ────────────────────
-function renderDifficulty() {
-  // Use topic_progress: find topics where average best_score is lowest
-  const topicAgg = {};
-  _allTopicProgress.forEach(r => {
-    const tid = r.topic_id;
-    const info = _topicMap[tid] || _topicMap[String(tid)] || { title: 'Topic ' + tid, subject: 'Unknown' };
-    if (!topicAgg[tid]) topicAgg[tid] = { title: info.title, subject: info.subject, scoreSum: 0, count: 0 };
-    topicAgg[tid].scoreSum += parseFloat(r.best_score) || 0;
-    topicAgg[tid].count++;
-  });
-
-  const sorted = Object.values(topicAgg)
-    .filter(t => t.count >= 1)
-    .map(t => ({ ...t, avgScore: Math.round(t.scoreSum / t.count) }))
-    .sort((a, b) => a.avgScore - b.avgScore)
-    .slice(0, 40);
-
-  document.getElementById('diff-count-label').textContent =
-    sorted.length + ' topics ranked by difficulty';
-
-  const list = document.getElementById('difficulty-list');
-  if (sorted.length === 0) {
-    list.innerHTML = `<div class="empty-state">
-      <div class="empty-icon">⚡</div>
-      <div class="empty-title">No data yet</div>
-      <div>Topics will appear once students have attempted quizzes</div>
-    </div>`;
-    return;
-  }
-
-  list.innerHTML = sorted.map((t, i) => {
-    const pct = t.avgScore;
-    const barColor = pct >= 70 ? 'var(--green)' : pct >= 40 ? 'var(--amber)' : 'var(--red)';
-    return `<div class="diff-row">
-      <div class="diff-rank">#${i+1}</div>
-      <div class="diff-card-id">
-        <div><strong>${escHtml(t.title)}</strong></div>
-        <div class="card-path">${escHtml(t.subject)}</div>
-        <div class="ef-bar" style="width:${pct}%;background:${barColor};max-width:200px"></div>
-      </div>
-      <div>
-        <div class="diff-ef" style="color:${barColor}">${pct}% avg</div>
-        <div class="diff-students">${t.count} student${t.count !== 1 ? 's' : ''}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ── Student Detail ────────────────────────────────────────────────────
-function showStudent(userId) {
-  const student = _allStudents.find(s => s.id === userId);
-  if (!student) return;
-  showView('student');
-  renderStudentDetail(student);
-}
-
-function renderStudentDetail(s) {
-  const lastDate = s.lastActiveTs
-    ? new Date(s.lastActiveTs).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' +
-      new Date(s.lastActiveTs).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
-    : 'Never';
-
-  // Group topic progress by subject
-  const bySubject = {};
-  (s.topicProgress || []).forEach(r => {
-    const info = _topicMap[r.topic_id] || _topicMap[String(r.topic_id)] || { title: 'Topic ' + r.topic_id, subject: 'Unknown' };
-    const subj = info.subject;
-    if (!bySubject[subj]) bySubject[subj] = [];
-    bySubject[subj].push({ ...r, topicTitle: info.title });
-  });
-  SUBJECTS.forEach(sub => { if (!bySubject[sub]) bySubject[sub] = []; });
-
-  // Recent quiz attempts (last 10)
-  const recentAttempts = [...(s.attempts || [])]
-    .filter(a => a.completed_at)
-    .sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at))
-    .slice(0, 10);
-
-  const container = document.getElementById('student-detail-content');
-  container.innerHTML = `
-    <div class="page-title" style="margin-bottom:.5rem">${escHtml(s.name)}</div>
-    <div class="student-meta">
-      <div class="meta-chip">Year <strong>${escHtml(String(s.year))}</strong></div>
-      <div class="meta-chip">Quizzes taken <strong>${s.totalAttempts}</strong></div>
-      <div class="meta-chip">Avg score <strong>${s.avgPct !== null ? s.avgPct + '%' : '—'}</strong></div>
-      <div class="meta-chip">Streak <strong>${s.streak > 0 ? '🔥 ' + s.streak + ' day' + (s.streak !== 1 ? 's' : '') : 'None'}</strong></div>
-      <div class="meta-chip">Last active <strong>${lastDate}</strong></div>
-    </div>
-
-    ${SUBJECTS.map(subj => {
-      const topics = bySubject[subj] || [];
-      if (topics.length === 0) {
-        return `<div class="subject-section">
-          <div class="subject-label">${subj}</div>
-          <div style="color:var(--muted);font-size:.85rem;padding:.5rem 0">No quizzes attempted yet</div>
-        </div>`;
-      }
-      const sorted = topics.sort((a, b) => (parseFloat(a.best_score)||0) - (parseFloat(b.best_score)||0));
-      return `<div class="subject-section">
-        <div class="subject-label">${subj}</div>
-        <div class="table-card">
-          <table>
-            <thead><tr>
-              <th>Topic</th>
-              <th>Attempts</th>
-              <th>Best score</th>
-              <th>Latest score</th>
-              <th>Mastery</th>
-              <th>Last attempted</th>
-            </tr></thead>
-            <tbody>
-              ${sorted.map(t => {
-                const best = t.best_score !== null ? Math.round(parseFloat(t.best_score)) + '%' : '—';
-                const latest = t.latest_score !== null ? Math.round(parseFloat(t.latest_score)) + '%' : '—';
-                const ml = t.mastery_level || 'learning';
-                const mlColor = ml === 'mastered' ? 'var(--green)' : ml === 'secure' ? 'var(--amber)' : 'var(--red)';
-                const lastAtt = t.last_attempted
-                  ? new Date(t.last_attempted).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
-                  : '—';
-                return `<tr>
-                  <td><strong>${escHtml(t.topicTitle)}</strong></td>
-                  <td style="font-family:'DM Mono',monospace;color:var(--muted)">${t.attempts_count || 0}</td>
-                  <td style="font-family:'DM Mono',monospace;color:var(--green)">${best}</td>
-                  <td style="font-family:'DM Mono',monospace;color:var(--muted)">${latest}</td>
-                  <td><span style="color:${mlColor};font-size:.82rem;text-transform:capitalize">${ml}</span></td>
-                  <td style="color:var(--muted);font-size:.82rem">${lastAtt}</td>
-                </tr>`;
-              }).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>`;
-    }).join('')}
-
-    ${recentAttempts.length > 0 ? `
-    <div class="subject-section">
-      <div class="subject-label">Recent Quiz History</div>
-      <div class="table-card">
-        <table>
-          <thead><tr>
-            <th>Quiz</th>
-            <th>Score</th>
-            <th>%</th>
-            <th>Result</th>
-            <th>Date</th>
-          </tr></thead>
-          <tbody>
-            ${recentAttempts.map(a => {
-              const quiz = _quizMap[a.quiz_id] || {};
-              const pct = a.percentage !== null ? Math.round(parseFloat(a.percentage)) : null;
-              const pctColor = pct === null ? 'var(--muted)' : pct >= 70 ? 'var(--green)' : pct >= 40 ? 'var(--amber)' : 'var(--red)';
-              const date = new Date(a.completed_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' +
-                           new Date(a.completed_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-              return `<tr>
-                <td>${escHtml(quiz.title || 'Quiz ' + a.quiz_id)}</td>
-                <td style="font-family:'DM Mono',monospace;color:var(--muted)">${a.score}/${a.max_score}</td>
-                <td style="font-family:'DM Mono',monospace;color:${pctColor}">${pct !== null ? pct + '%' : '—'}</td>
-                <td><span style="color:${a.passed ? 'var(--green)' : 'var(--red)'};font-size:.82rem">${a.passed ? '✓ Pass' : '✗ Fail'}</span></td>
-                <td style="color:var(--muted);font-size:.82rem">${date}</td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>` : ''}
-  `;
-}
-// ── Assessments Management ──────────────────────────────────────────────
-let _assessmentData = [];
-let _currentReviewAttemptId = null;
-let _currentAssignAssessmentId = null;
-let _assignTarget = 'all';
-
-async function loadAssessmentsPanel() {
-  const panel = document.getElementById('assessments-panel');
-  panel.innerHTML = '<div style="color:var(--muted);padding:2rem 0;">Loading…</div>';
-
-  try {
-    // Step 1: Get all revision assignments
-    const { data: assignments, error: assignError } = await supa
-      .from('revision_assignments')
-      .select('id, pack_id, assigned_to, assigned_by, due_date, message, status, assigned_at')
-      .order('assigned_at', { ascending: false });
-
-    if (assignError) {
-      console.error('Error loading assignments:', assignError);
-      panel.innerHTML = '<div style="color:var(--red);">Error: ' + assignError.message + '</div>';
-      return;
-    }
-
-    if (!assignments?.length) {
-      panel.innerHTML = `<div class="empty-state">
-        <div class="empty-icon">📋</div>
-        <div class="empty-title">No assignments yet</div>
-        <div>Assignments appear when you assign revision packs to students.</div>
-      </div>`;
-      return;
-    }
-
-    // Step 2: Get pack details for each assignment
-    const packIds = [...new Set(assignments.map(a => a.pack_id))];
-    const { data: packs } = await supa
-      .from('revision_packs')
-      .select('id, title, subject, exam_board, difficulty_tier')
-      .in('id', packIds);
-
-    const packsMap = {};
-    (packs || []).forEach(p => {
-      packsMap[p.id] = p;
-    });
-
-    // Step 3: Get submission counts
-    const assignmentIds = assignments.map(a => a.id);
-    const { data: submissions } = await supa
-      .from('revision_pack_submissions')
-      .select('id, assignment_id, status');
-
-    const submissionCounts = {};
-    (submissions || []).forEach(sub => {
-      if (!submissionCounts[sub.assignment_id]) {
-        submissionCounts[sub.assignment_id] = {
-          total: 0,
-          submitted: 0,
-          reviewed: 0
-        };
-      }
-      submissionCounts[sub.assignment_id].total++;
-      if (sub.status === 'submitted') submissionCounts[sub.assignment_id].submitted++;
-      if (sub.status === 'reviewed') submissionCounts[sub.assignment_id].reviewed++;
-    });
-
-    // Step 4: Render
-    let html = '';
-    assignments.forEach(assign => {
-      const pack = packsMap[assign.pack_id];
-      if (!pack) return;
+    
+    <div class="content">
+      <div class="section-title">Assessments</div>
+      <div class="section-desc">Manage assigned assessments and review student submissions</div>
       
-      const counts = submissionCounts[assign.id] || { total: 0, submitted: 0, reviewed: 0 };
-      const statusColor = counts.submitted > 0 ? 'var(--amber)' : 'var(--muted)';
-      const dueDate = assign.due_date ? new Date(assign.due_date).toLocaleDateString('en-GB') : 'No due date';
+      <div id="assessments-panel" class="loading">Loading assignments...</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTcyMzc3NjksImV4cCI6MjAxMjgxMzc2OX0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+    
+    const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadAssessmentsPanel() {
+      const panel = document.getElementById('assessments-panel');
       
-      html += `<div class="card" style="margin-bottom:1rem;padding:1.2rem 1.4rem;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
-          <div style="flex:1;">
-            <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem;">${escHtml(pack.title)}</div>
-            <div style="font-size:.78rem;color:var(--muted);">${pack.exam_board} · ${pack.subject} · ${pack.difficulty_tier}</div>
-            <div style="display:flex;gap:1rem;margin-top:.6rem;flex-wrap:wrap;">
-              <span style="font-size:.78rem;color:var(--muted);">Due: ${dueDate}</span>
-              <span style="font-size:.78rem;color:${statusColor};">✓ ${counts.submitted} submitted</span>
-              <span style="font-size:.78rem;color:var(--green);">✔ ${counts.reviewed} reviewed</span>
+      try {
+        // Get assignments
+        const { data: assignments, error: assignError } = await supa
+          .from('revision_assignments')
+          .select('id, pack_id, assigned_to, due_date, message, status, assigned_at')
+          .order('assigned_at', { ascending: false });
+
+        if (assignError) throw assignError;
+
+        if (!assignments?.length) {
+          panel.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">📋</div>
+              <div style="font-weight: 600; margin-bottom: 0.5rem;">No assignments yet</div>
+              <div>Assignments appear when you assign revision packs to students.</div>
             </div>
-            ${assign.message ? `<div style="margin-top:.6rem;padding:.5rem;background:rgba(201,168,76,.1);border-left:3px solid var(--gold);color:var(--gold);font-size:.78rem;">${escHtml(assign.message)}</div>` : ''}
-          </div>
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap;flex-shrink:0;">
-            <button onclick="openAssignmentSubmissions('${assign.id}')"
-              style="background:var(--navy);border:1px solid var(--border);color:var(--white);padding:.45rem .9rem;border-radius:7px;font-size:.78rem;cursor:pointer;">
-              📋 Review
-            </button>
-            <button onclick="withdrawAssignment('${assign.id}', '${escHtml(pack.title)}')"
-              style="background:var(--navy);border:1px solid rgba(239,68,68,.4);color:#f87171;padding:.45rem .9rem;border-radius:7px;font-size:.78rem;cursor:pointer;">
-              ✕ Withdraw
-            </button>
-          </div>
-        </div>
-        <div id="submissions-panel-${assign.id}" style="display:none;margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;"></div>
-      </div>`;
-    });
+          `;
+          return;
+        }
 
-    panel.innerHTML = html || '<div style="color:var(--muted);">No assignments found</div>';
+        // Get pack details
+        const packIds = [...new Set(assignments.map(a => a.pack_id))];
+        const { data: packs } = await supa
+          .from('revision_packs')
+          .select('id, title, subject, exam_board, difficulty_tier')
+          .in('id', packIds);
 
-  } catch (err) {
-    console.error('Assessment panel error:', err);
-    panel.innerHTML = '<div style="color:var(--red);">Error: ' + err.message + '</div>';
-  }
-}
+        const packsMap = {};
+        (packs || []).forEach(p => { packsMap[p.id] = p; });
 
-async function openAssignmentSubmissions(assignmentId) {
-  const panel = document.getElementById(`submissions-panel-${assignmentId}`);
-  if (panel.style.display !== 'none') { panel.style.display = 'none'; return; }
-  panel.style.display = 'block';
-  panel.innerHTML = '<div style="color:var(--muted);font-size:.82rem;">Loading submissions…</div>';
+        // Get submission counts
+        const { data: submissions } = await supa
+          .from('revision_pack_submissions')
+          .select('id, assignment_id, status');
 
-  const { data: submissions } = await supa
-    .from('revision_pack_submissions')
-    .select('*')
-    .eq('assignment_id', assignmentId)
-    .order('submitted_at', { ascending: false });
+        const counts = {};
+        (submissions || []).forEach(sub => {
+          if (!counts[sub.assignment_id]) {
+            counts[sub.assignment_id] = { total: 0, submitted: 0, reviewed: 0 };
+          }
+          counts[sub.assignment_id].total++;
+          if (sub.status === 'submitted') counts[sub.assignment_id].submitted++;
+          if (sub.status === 'reviewed') counts[sub.assignment_id].reviewed++;
+        });
 
-  if (!submissions?.length) {
-    panel.innerHTML = '<div style="color:var(--muted);font-size:.82rem;padding:.5rem 0;">No submissions yet.</div>';
-    return;
-  }
+        // Render
+        let html = '';
+        assignments.forEach(assign => {
+          const pack = packsMap[assign.pack_id];
+          if (!pack) return;
+          const c = counts[assign.id] || { submitted: 0, reviewed: 0, total: 0 };
+          const dueDate = assign.due_date ? new Date(assign.due_date).toLocaleDateString('en-GB') : 'No due date';
+          
+          html += `
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">${escapeHtml(pack.title)}</div>
+                  <div class="card-meta">${pack.exam_board} • ${pack.subject} • ${pack.difficulty_tier}</div>
+                </div>
+              </div>
+              <div class="card-stats">
+                <div class="stat">
+                  <div class="stat-label">Due</div>
+                  <div class="stat-value">${dueDate}</div>
+                </div>
+                <div class="stat submitted">
+                  <div class="stat-label">Submitted</div>
+                  <div class="stat-value">✓ ${c.submitted}</div>
+                </div>
+                <div class="stat reviewed">
+                  <div class="stat-label">Reviewed</div>
+                  <div class="stat-value">✔ ${c.reviewed}</div>
+                </div>
+              </div>
+              ${assign.message ? `
+                <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(201,168,76,0.1); border-left: 3px solid var(--gold); color: var(--gold); font-size: 0.85rem;">
+                  ${escapeHtml(assign.message)}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
 
-  panel.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:.82rem;">
-    <thead><tr style="color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;">
-      <th style="text-align:left;padding:.4rem .6rem;">Student</th>
-      <th style="text-align:left;padding:.4rem .6rem;">Status</th>
-      <th style="text-align:left;padding:.4rem .6rem;">Score</th>
-      <th style="text-align:left;padding:.4rem .6rem;">Submitted</th>
-      <th style="text-align:left;padding:.4rem .6rem;">Feedback</th>
-      <th style="text-align:left;padding:.4rem .6rem;">Actions</th>
-    </tr></thead>
-    <tbody>
-      ${submissions.map(sub => {
-        const submitted = sub.submitted_at
-          ? new Date(sub.submitted_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ', ' +
-            new Date(sub.submitted_at).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' })
-          : '-';
-        
-        const statusColor = sub.status === 'submitted' ? 'var(--amber)'
-          : sub.status === 'reviewed' ? 'var(--green)' : 'var(--muted)';
-        
-        return `<tr style="border-bottom:1px solid var(--border);">
-          <td style="padding:.4rem .6rem;font-size:.75rem;color:var(--muted);">${sub.student_id.substring(0, 8)}…</td>
-          <td style="padding:.4rem .6rem;color:${statusColor};">${sub.status}</td>
-          <td style="padding:.4rem .6rem;">${sub.score !== null ? sub.score + '%' : '-'}</td>
-          <td style="padding:.4rem .6rem;font-size:.75rem;">${submitted}</td>
-          <td style="padding:.4rem .6rem;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${sub.feedback || '-'}</td>
-          <td style="padding:.4rem .6rem;">
-            ${sub.status === 'submitted' ? `
-              <button onclick="markReviewed('${sub.id}')" style="background:transparent;border:none;color:var(--green);cursor:pointer;font-size:.78rem;">
-                ✔ Mark reviewed
-              </button>
-            ` : ''}
-          </td>
-        </tr>`;
-      }).join('')}
-    </tbody>
-  </table>`;
-}
+        panel.innerHTML = html || '<div class="error">No assignments found</div>';
 
-async function markReviewed(submissionId) {
-  const feedback = prompt('Add optional feedback:');
-  const score = prompt('Enter score (0-100):');
-  
-  if (score === null) return;
-  
-  const { error } = await supa.from('revision_pack_submissions')
-    .update({
-      status: 'reviewed',
-      feedback: feedback || null,
-      score: parseInt(score) || null,
-      reviewed_at: new Date().toISOString(),
-      reviewed_by: (await supa.auth.getUser()).data.user?.id
-    })
-    .eq('id', submissionId);
-  
-  if (!error) {
-    location.reload();
-  }
-}
-      ${attempts.map(att => {
-        const name = att.profiles?.full_name || 'Unknown';
-        const year = att.profiles?.year_group || '—';
-        const pct = att.percentage != null ? Math.round(att.percentage) + '%' : '—';
-        const submitted = att.submitted_at
-          ? new Date(att.submitted_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ', ' +
-            new Date(att.submitted_at).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' })
-          : '—';
-        const released = att.released_at
-          ? '<span style="color:var(--green);font-size:.75rem;">✓ Released</span>'
-          : '<span style="color:var(--muted);font-size:.75rem;">Pending</span>';
-        const statusColor = att.status === 'submitted' ? 'var(--amber)'
-          : att.status === 'reviewed' ? 'var(--green)' : 'var(--muted)';
-        return `<tr style="border-top:1px solid rgba(255,255,255,0.05);">
-          <td style="padding:.5rem .6rem;"><strong>${escHtml(name)}</strong><br><span style="color:var(--muted);font-size:.72rem;">${year}</span></td>
-          <td style="padding:.5rem .6rem;color:${statusColor};">${att.status}</td>
-          <td style="padding:.5rem .6rem;font-family:'DM Mono',monospace;">${pct}</td>
-          <td style="padding:.5rem .6rem;color:var(--muted);">${submitted}</td>
-          <td style="padding:.5rem .6rem;">${released}</td>
-          <td style="padding:.5rem .6rem;">
-            ${att.status === 'submitted' || att.status === 'reviewed' ? `
-              <button onclick="openReviewModal('${att.id}', '${escHtml(name)}')"
-                style="background:var(--navy);border:1px solid var(--border);color:var(--white);padding:.3rem .7rem;border-radius:6px;font-size:.75rem;cursor:pointer;">
-                Review & release
-              </button>` : '—'}
-          </td>
-        </tr>`;
-      }).join('')}
-    </tbody>
-  </table>`;
-}
-
-let _reviewAttemptData = null;
-let _reviewResponses = null;
-let _reviewQuestions = null;
-
-async function openReviewModal(attemptId, studentName) {
-  _currentReviewAttemptId = attemptId;
-  document.getElementById('review-modal-title').textContent = `Review — ${studentName}`;
-  document.getElementById('review-modal-body').innerHTML = '<div style="color:var(--muted);">Loading…</div>';
-  document.getElementById('review-modal').style.display = 'block';
-
-  // Fetch attempt + responses + questions in parallel
-  const [attRes, respRes] = await Promise.all([
-    supa.from('assessment_attempts').select('*, assessments(*)').eq('id', attemptId).single(),
-    supa.from('attempt_question_responses').select('*').eq('attempt_id', attemptId)
-  ]);
-
-  _reviewAttemptData = attRes.data;
-  _reviewResponses = respRes.data || [];
-
-  const assessment = _reviewAttemptData?.assessments;
-  if (assessment) {
-    const { data: qs } = await supa.from('assessment_questions')
-      .select('*').eq('assessment_id', assessment.id).order('question_number');
-    _reviewQuestions = qs || [];
-  }
-
-  const attempt = _reviewAttemptData;
-  const pct = attempt?.percentage != null ? Math.round(attempt.percentage) : null;
-
-  document.getElementById('review-modal-meta').innerHTML = [
-    `<span style="background:var(--navy);border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.78rem;">Score: <strong>${attempt?.total_marks_awarded}/${attempt?.total_marks_available}</strong></span>`,
-    pct != null ? `<span style="background:var(--navy);border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;font-size:.78rem;">Percentage: <strong>${pct}%</strong></span>` : '',
-    attempt?.released_at ? `<span style="background:rgba(74,222,128,.1);border:1px solid var(--green);border-radius:6px;padding:.3rem .7rem;font-size:.78rem;color:var(--green);">✓ Results already released</span>` : ''
-  ].filter(Boolean).join('');
-
-  const responseMap = {};
-  _reviewResponses.forEach(r => { responseMap[r.question_id] = r; });
-
-  document.getElementById('review-modal-body').innerHTML = `
-    <div style="margin-bottom:1rem;">
-      <label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em;">Overall feedback (optional)</label>
-      <textarea id="overall-feedback" style="width:100%;padding:.75rem;background:var(--navy);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:.85rem;min-height:80px;resize:vertical;"
-        placeholder="Add overall feedback for this student…">${attempt?.teacher_feedback || ''}</textarea>
-    </div>
-    ${(_reviewQuestions || []).map(q => {
-      const r = responseMap[q.id] || {};
-      const isNS = r.student_answer === 'NS';
-      const isCorrect = !isNS && r.student_answer === q.correct_answer;
-      const ansColor = isNS ? 'var(--muted)' : isCorrect ? 'var(--green)' : 'var(--red)';
-      return `<div style="border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:.75rem;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.6rem;">
-          <div style="font-size:.82rem;flex:1;">${escHtml(q.question_text)}</div>
-          <div style="font-size:.75rem;color:var(--muted);flex-shrink:0;">[${q.marks_available}m]</div>
-        </div>
-        <div style="display:flex;gap:1.5rem;font-size:.78rem;margin-bottom:.6rem;flex-wrap:wrap;">
-          <span>Student: <strong style="color:${ansColor};">${isNS ? '❓ Not sure' : (r.student_answer || '—')}</strong></span>
-          <span>Correct: <strong style="color:var(--green);">${q.correct_answer || '—'}</strong></span>
-          <span>Marks: <strong>${r.marks_awarded != null ? r.marks_awarded : '?'}/${q.marks_available}</strong></span>
-          ${isNS ? '<span style="color:var(--amber);font-size:.72rem;">📚 Knowledge gap flagged</span>' : ''}
-          ${!isNS && !isCorrect ? '<span style="color:var(--red);font-size:.72rem;">⚠ Misconception likely</span>' : ''}
-        </div>
-        <input type="text" placeholder="Add per-question feedback (optional)…"
-          id="feedback-${r.id}"
-          value="${escHtml(r.tutor_feedback || '')}"
-          style="width:100%;padding:.5rem .7rem;background:var(--navy);border:1px solid var(--border);border-radius:6px;color:var(--white);font-size:.78rem;">
-      </div>`;
-    }).join('')}`;
-
-  // Update release button
-  const btn = document.getElementById('btn-release');
-  if (attempt?.released_at) {
-    btn.textContent = '✓ Results already released';
-    btn.style.background = 'var(--green)';
-    btn.disabled = true;
-  } else {
-    btn.textContent = '✓ Release results to student';
-    btn.style.background = 'var(--gold)';
-    btn.disabled = false;
-  }
-}
-
-async function releaseResults() {
-  if (!_currentReviewAttemptId) return;
-  const btn = document.getElementById('btn-release');
-  btn.disabled = true;
-  btn.textContent = 'Saving…';
-
-  // Save per-question feedback
-  const saves = (_reviewQuestions || []).map(q => {
-    const r = (_reviewResponses || []).find(x => x.question_id === q.id);
-    if (!r) return Promise.resolve();
-    const feedback = document.getElementById(`feedback-${r.id}`)?.value || '';
-    return supa.from('attempt_question_responses')
-      .update({ tutor_feedback: feedback, tutor_confirmed: true })
-      .eq('id', r.id);
-  });
-  await Promise.all(saves);
-
-  // Save overall feedback + release
-  const overallFeedback = document.getElementById('overall-feedback')?.value || '';
-  await supa.from('assessment_attempts').update({
-    teacher_feedback: overallFeedback,
-    released_at: new Date().toISOString(),
-    status: 'reviewed',
-    reviewed_at: new Date().toISOString()
-  }).eq('id', _currentReviewAttemptId);
-
-  btn.textContent = '✓ Released!';
-  btn.style.background = 'var(--green)';
-
-  // Refresh submissions panel
-  setTimeout(() => {
-    closeReviewModal();
-    loadAssessmentsPanel();
-  }, 1200);
-}
-
-function closeReviewModal() {
-  document.getElementById('review-modal').style.display = 'none';
-  _currentReviewAttemptId = null;
-}
-
-async function withdrawAssignment(assignmentId, title) {
-  if (!confirm(`Withdraw "${title}"?\n\nThis will hide it from all students immediately. Existing submissions are preserved.`)) return;
-  await supa.from('revision_assignments').update({ status: 'withdrawn' }).eq('id', assignmentId);
-  loadAssessmentsPanel();
-}
-
-// ── Assign modal ─────────────────────────────────────────────────────────
-function openAssignModal(assessmentId) {
-  _currentAssignAssessmentId = assessmentId;
-  const a = _assessmentData.find(x => x.id === assessmentId);
-  document.getElementById('assign-modal-title').textContent = a?.title || '';
-  document.getElementById('assign-modal').style.display = 'block';
-  setAssignTarget('all');
-  // Populate student list
-  const list = document.getElementById('student-select-list');
-  list.innerHTML = _allStudents.map(s => `
-    <label style="display:flex;align-items:center;gap:.6rem;padding:.4rem .2rem;cursor:pointer;font-size:.82rem;">
-      <input type="checkbox" value="${s.id}" style="accent-color:var(--gold);">
-      ${escHtml(s.name)} <span style="color:var(--muted);font-size:.75rem;">${s.year || ''}</span>
-    </label>`).join('');
-}
-
-function setAssignTarget(target) {
-  _assignTarget = target;
-  document.getElementById('btn-assign-all').style.background = target === 'all' ? 'var(--gold)' : 'none';
-  document.getElementById('btn-assign-all').style.color = target === 'all' ? 'var(--navy)' : 'var(--white)';
-  document.getElementById('btn-assign-select').style.background = target === 'select' ? 'var(--gold)' : 'none';
-  document.getElementById('btn-assign-select').style.color = target === 'select' ? 'var(--navy)' : 'var(--white)';
-  document.getElementById('student-select-list').style.display = target === 'select' ? 'block' : 'none';
-}
-
-async function confirmAssign() {
-  if (!_currentAssignAssessmentId) return;
-  const deadline = document.getElementById('assign-deadline').value || null;
-  let studentIds = [];
-
-  if (_assignTarget === 'all') {
-    studentIds = _allStudents.map(s => s.id);
-  } else {
-    document.querySelectorAll('#student-select-list input:checked').forEach(cb => {
-      studentIds.push(cb.value);
-    });
-    if (!studentIds.length) { alert('Please select at least one student.'); return; }
-  }
-
-  const rows = studentIds.map(sid => ({
-    assessment_id: _currentAssignAssessmentId,
-    student_id: sid,
-    assigned_by: window._teacherId || null,
-    deadline: deadline || null
-  }));
-
-  // Upsert to avoid duplicate assignments
-  const { error } = await supa.from('assessment_assignments')
-    .upsert(rows, { onConflict: 'assessment_id,student_id' });
-
-  if (error) { alert('Error assigning: ' + error.message); return; }
-
-  closeAssignModal();
-  alert(`✓ Assigned to ${studentIds.length} student${studentIds.length !== 1 ? 's' : ''}.`);
-}
-
-function closeAssignModal() {
-  document.getElementById('assign-modal').style.display = 'none';
-  _currentAssignAssessmentId = null;
-}
-
-// ── Users & Roles (admin only) ────────────────────────────────────────
-let _allUsers = [];
-
-async function loadUsers() {
-  // Need service role for auth.users — use profiles + a join via SQL function
-  // We query profiles and join email from auth.users via a Supabase RPC or
-  // simply use the admin API. Since we only have anon key, we use profiles
-  // joined with a view. For now, query profiles and get email from user metadata.
-  const { data: profiles } = await supa.from('profiles')
-    .select('id, full_name, year_group, role, created_at')
-    .order('full_name');
-
-  // Get emails — stored in user_metadata via auth trigger or we use auth.users
-  // via a postgres function. Simplest: store email in profiles on signup.
-  // We'll use auth.users via RPC if available, else fall back to profiles only.
-  let emailMap = {};
-  try {
-    const { data: emailData } = await supa.rpc('get_user_emails');
-    if (emailData) emailData.forEach(r => { emailMap[r.id] = r.email; });
-  } catch(e) {
-    // RPC not available — emails won't show (acceptable)
-  }
-
-  _allUsers = (profiles || []).map(p => ({
-    id: p.id,
-    name: p.full_name || '—',
-    email: emailMap[p.id] || '—',
-    year: p.year_group || '—',
-    role: p.role || 'student',
-    joined: p.created_at
-      ? new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' +
-        new Date(p.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
-      : '—'
-  }));
-
-  renderUsers();
-}
-
-function renderUsers() {
-  document.getElementById('users-count-label').textContent =
-    _allUsers.length + ' user' + (_allUsers.length !== 1 ? 's' : '');
-
-  const tbody = document.getElementById('users-tbody');
-  if (_allUsers.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">No users found</td></tr>`;
-    return;
-  }
-
-  const roleBadge = r => {
-    const colors = { admin: '#9B59B6', teacher: 'var(--gold)', student: 'var(--blue)' };
-    return `<span style="
-      display:inline-block;padding:.18rem .6rem;border-radius:20px;
-      font-family:'DM Mono',monospace;font-size:.72rem;
-      background:${colors[r]||'var(--muted)'}22;
-      color:${colors[r]||'var(--muted)'};border:1px solid ${colors[r]||'var(--muted)'}44
-    ">${r||'—'}</span>`;
-  };
-
-  tbody.innerHTML = _allUsers.map(u => `
-    <tr>
-      <td><strong>${escHtml(u.name)}</strong></td>
-      <td style="color:var(--muted);font-family:'DM Mono',monospace;font-size:.8rem">${escHtml(u.email)}</td>
-      <td style="color:var(--muted)">${escHtml(String(u.year))}</td>
-      <td style="color:var(--muted);font-size:.82rem">${u.joined || '—'}</td>
-      <td>${roleBadge(u.role)}</td>
-      <td>
-        <select onchange="changeRole('${u.id}', this.value, this)"
-          style="background:var(--navy3);border:1px solid var(--border);
-                 color:var(--white);padding:.3rem .6rem;border-radius:6px;
-                 font-size:.82rem;cursor:pointer;outline:none">
-          <option value="student"         ${u.role==='student'         ? 'selected':''}>Student</option>
-          <option value="teacher_manager" ${u.role==='teacher_manager' ? 'selected':''}>Teacher Manager</option>
-          <option value="teacher"         ${u.role==='teacher'         ? 'selected':''}>Teacher (legacy)</option>
-          <option value="admin"           ${u.role==='admin'           ? 'selected':''}>Admin</option>
-          <option value="super_admin"     ${u.role==='super_admin'     ? 'selected':''}>Super Admin</option>
-        </select>
-      </td>
-    </tr>`).join('');
-}
-
-async function changeRole(userId, newRole, selectEl) {
-  // Prevent admin from accidentally demoting themselves
-  const { data: { session } } = await supa.auth.getSession();
-  if (userId === session?.user?.id && newRole !== 'admin') {
-    if (!confirm('This will remove your own admin access. Are you sure?')) {
-      selectEl.value = 'admin'; return;
-    }
-  }
-
-  selectEl.disabled = true;
-  const { error } = await supa.from('profiles')
-    .update({ role: newRole })
-    .eq('id', userId);
-
-  if (error) {
-    alert('Failed to update role: ' + error.message);
-    selectEl.disabled = false;
-    return;
-  }
-
-  // Update local state and re-render badge in the same row
-  const user = _allUsers.find(u => u.id === userId);
-  if (user) user.role = newRole;
-
-  // Flash the row green briefly
-  const row = selectEl.closest('tr');
-  row.style.transition = 'background .3s';
-  row.style.background = 'rgba(46,204,113,.12)';
-  setTimeout(() => { row.style.background = ''; }, 1200);
-  selectEl.disabled = false;
-
-  // Refresh the role badge cell (2nd-to-last)
-  const cells = row.querySelectorAll('td');
-  const roleBadge = r => {
-    const colors = { admin: '#9B59B6', teacher: 'var(--gold)', student: 'var(--blue)' };
-    return `<span style="display:inline-block;padding:.18rem .6rem;border-radius:20px;font-family:'DM Mono',monospace;font-size:.72rem;background:${colors[r]||'var(--muted)'}22;color:${colors[r]||'var(--muted)'};border:1px solid ${colors[r]||'var(--muted)'}44">${r}</span>`;
-  };
-  cells[cells.length - 2].innerHTML = roleBadge(newRole);
-}
-
-// ── Utilities ─────────────────────────────────────────────────────────
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ── Boot ──────────────────────────────────────────────────────────────
-init();
-</script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/sw.js");
+      } catch (err) {
+        console.error(err);
+        panel.innerHTML = `<div class="error">Error: ${err.message}</div>`;
       }
-    </script>
+    }
+
+    function escapeHtml(text) {
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // Load on page ready
+    document.addEventListener('DOMContentLoaded', loadAssessmentsPanel);
+  </script>
 </body>
 </html>

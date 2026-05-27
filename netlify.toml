@@ -1,23 +1,46 @@
+functionsDirectory = "C:\\Deploy_Inspire_Academic\\netlify\\functions"
+functionsDirectoryOrigin = "config-v1"
+plugins = []
+headers = []
+redirects = []
+
 [build]
-  functions = "netlify/functions"
-  publish = "."
-  edge_functions = "netlify/edge-functions"
+edge_functions = "C:\\Deploy_Inspire_Academic\\netlify\\edge-functions"
+publish = "C:\\Deploy_Inspire_Academic"
+publishOrigin = "config"
+functions = "C:\\Deploy_Inspire_Academic\\netlify\\functions"
+
+  [build.environment]
+
+  [build.processing]
+
+    [build.processing.css]
+
+    [build.processing.html]
+
+    [build.processing.images]
+
+    [build.processing.js]
+
+  [build.services]
+
+[[edge_functions]]
+path = "/api/generate-question"
+function = "generate-question"
+
+[[edge_functions]]
+path = "/api/assessment-center"
+function = "assessment-center"
+
+[[edge_functions]]
+path = "/api/mileiq-distance"
+function = "mileiq-distance"
+
+[[edge_functions]]
+path = "/api/create-teacher"
+function = "create-teacher"
 
 [functions]
+
+  [functions."*"]
   node_bundler = "esbuild"
-
-[[edge_functions]]
-  path = "/api/generate-question"
-  function = "generate-question"
-
-[[edge_functions]]
-  path = "/api/assessment-center"
-  function = "assessment-center"
-
-[[edge_functions]]
-  path = "/api/mileiq-distance"
-  function = "mileiq-distance"
-
-[[edge_functions]]
-  path = "/api/create-teacher"
-  function = "create-teacher"
