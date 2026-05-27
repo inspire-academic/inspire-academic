@@ -802,8 +802,33 @@ const Voice = {
     this.synth.onvoiceschanged = load;
   },
 
+  _pickVoice() {
+    if (!this._voices.length) return null;
+    // Priority order — best natural voices first
+    const preferred = [
+      'Google UK English Female',
+      'Microsoft Libby Online (Natural)',
+      'Microsoft Sonia Online (Natural)',
+      'Microsoft Mia Online (Natural)',
+      'Google UK English Male',
+      'Microsoft Ryan Online (Natural)',
+      'Google US English',
+    ];
+    for (const name of preferred) {
+      const v = this._voices.find(v => v.name === name);
+      if (v) return v;
+    }
+    // Fall back to any online/natural English voice
+    const natural = this._voices.find(v =>
+      v.lang.startsWith('en') && (v.name.includes('Online') || v.name.includes('Natural'))
+    );
+    if (natural) return natural;
+    // Last resort — any English voice
+    return this._voices.find(v => v.lang.startsWith('en')) || null;
+  },
+
   _rate() {
-    return this.speed === 'slow' ? 0.75 : this.speed === 'fast' ? 1.4 : 1.0;
+    return this.speed === 'slow' ? 0.82 : this.speed === 'fast' ? 1.25 : 1.0;
   },
 
   speak(text, priority = false) {
@@ -811,13 +836,10 @@ const Voice = {
     if (priority) this.synth.cancel();
     const utter = new SpeechSynthesisUtterance(text);
     utter.rate   = this._rate();
-    utter.pitch  = 1.05;
+    utter.pitch  = 1.1;   // slightly warmer/lighter
     utter.volume = 1;
-    // Prefer a natural English voice
-    const pref = this._voices.find(v =>
-      v.lang.startsWith('en') && !v.name.includes('Google') && v.localService
-    ) || this._voices.find(v => v.lang.startsWith('en'));
-    if (pref) utter.voice = pref;
+    const voice = this._pickVoice();
+    if (voice) utter.voice = voice;
     this.synth.speak(utter);
   },
 
