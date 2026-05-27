@@ -759,6 +759,33 @@ main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
       <p>Your teacher will assign personalised revision packs to you here.<br>Check back after your next session.</p>
     </div>
 
+    <!-- ASSESSMENTS CTA -->
+    <div style="
+      margin-top: 2.5rem;
+      background: linear-gradient(135deg, var(--navy2) 0%, #112a44 100%);
+      border: 1px solid rgba(212,160,23,0.35);
+      border-radius: 10px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      cursor: pointer;
+      transition: all .2s;
+    " onclick="location.href='assessment.html'"
+       onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.3)'"
+       onmouseout="this.style.borderColor='rgba(212,160,23,0.35)';this.style.transform='';this.style.boxShadow=''">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;">📋 Formal Assessments</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:.3rem;">Take a Timed Assessment</div>
+        <div style="font-size:.85rem;color:var(--muted);">Exam-style tests with marking, instant feedback and progress tracking — mapped to your spec.</div>
+      </div>
+      <button class="btn btn-gold" onclick="event.stopPropagation();location.href='assessment.html'" style="white-space:nowrap;">
+        Go to Assessments →
+      </button>
+    </div>
+
   </div>
 
 </main>

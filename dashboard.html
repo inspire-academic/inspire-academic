@@ -351,7 +351,6 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
     <button class="nav-link" onclick="location.href='subjects.html'">Subjects</button>
     <button class="nav-link" onclick="location.href='progress.html'">My Progress</button>
     <button class="nav-link" onclick="location.href='revision.html'">Personalised Learning</button>
-    <button class="nav-link" onclick="location.href='assessment.html'">Assessments</button>
     <button class="nav-link" onclick="location.href='year6-dashboard.html'">Sci_Bridge</button>
     <button class="nav-link" onclick="location.href='tools.html'">Tools</button>
     <button class="nav-link" id="teacher-dashboard-link" onclick="location.href='teacher.html'" style="display:none;background:rgba(212,160,23,.1);border:1px solid var(--gold);color:var(--gold);">🎓 Teacher Dashboard</button>
@@ -456,6 +455,35 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
     </div>
     <button class="btn btn-gold" onclick="openMileIQ()" style="font-size:1rem;padding:.8rem 2rem;background:#00c9a7;color:#0b1628;">
       Open MileIQ →
+    </button>
+  </div>
+
+  <!-- Protégé CTA -->
+  <div class="today-quiz fade-in" id="protege-card" onclick="location.href='protege.html'" style="
+    background: linear-gradient(135deg, #0a0a1f 0%, #12082e 50%, #0d1628 100%);
+    border-color: rgba(180,100,255,0.45);
+    cursor: pointer;
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+  " onmouseover="this.style.borderColor='rgba(180,100,255,0.85)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px rgba(130,60,220,0.25)'" onmouseout="this.style.borderColor='rgba(180,100,255,0.45)';this.style.transform='';this.style.boxShadow=''">
+    <!-- subtle star shimmer -->
+    <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 80% 50%,rgba(130,60,220,0.12) 0%,transparent 70%);"></div>
+    <div class="tq-left" style="position:relative;">
+      <div class="tq-label" style="color:#b46cff;letter-spacing:.15em;">✦ INSPIRE PROTÉGÉ</div>
+      <h3 style="font-size:1.35rem;">Build the next generation of <span style="color:#b46cff;">Science &amp; Maths</span> superstars</h3>
+      <p style="color:var(--muted);">An AI-powered learning world that turns young minds into prodigies — maths, science, space &amp; beyond.</p>
+    </div>
+    <button class="btn" onclick="event.stopPropagation();location.href='protege.html'" style="
+      background: linear-gradient(135deg,#7c2fff,#b46cff);
+      color: white;
+      font-size: 1rem;
+      padding: .8rem 2rem;
+      white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(124,47,255,0.4);
+      position:relative;
+    ">
+      Enter Protégé →
     </button>
   </div>
 
@@ -957,8 +985,8 @@ async function loadDailyChallenge(profile) {
     <button class="mob-nav-btn" onclick="location.href='progress.html'">
       <span class="mob-icon">📈</span>Progress
     </button>
-    <button class="mob-nav-btn" onclick="location.href='assessment.html'">
-      <span class="mob-icon">📋</span>Tests
+    <button class="mob-nav-btn" onclick="location.href='protege.html'">
+      <span class="mob-icon">✦</span>Protégé
     </button>
     <button class="mob-nav-btn" onclick="location.href='tools.html'">
       <span class="mob-icon">🔧</span>Tools
