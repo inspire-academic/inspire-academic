@@ -465,8 +465,100 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
   animation:ptcl 1s ease-out forwards; }
 @keyframes ptcl { 0%{transform:translate(0,0) scale(1);opacity:1} 100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0} }
 
-/* ── RESPONSIVE ── */
-@media(max-width:400px) {
+/* ── LOGIC HUB ── */
+#logic-hub { gap:14px; }
+.logic-hero { width:100%; background:linear-gradient(135deg,#1a1002,#2a1a04);
+  border:1px solid rgba(212,160,23,.3); border-radius:16px; padding:20px;
+  position:relative; overflow:hidden; }
+.logic-hero::before { content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 80% 50%, rgba(212,160,23,.08) 0%, transparent 60%); }
+.logic-hero-title { font-family:'Playfair Display',serif; font-size:1.4rem;
+  font-weight:900; margin-bottom:6px; position:relative; }
+.logic-hero-sub { font-size:.82rem; color:var(--muted); line-height:1.6;
+  max-width:340px; position:relative; }
+.logic-hero-tag { display:inline-block; background:var(--gold); color:#0a0a0a;
+  font-size:.62rem; font-weight:700; padding:3px 10px; border-radius:50px;
+  margin-bottom:10px; letter-spacing:.06em; text-transform:uppercase; }
+.logic-progress-row { display:flex; gap:10px; margin-top:14px;
+  flex-wrap:wrap; position:relative; }
+.lp-stat { background:rgba(0,0,0,.3); border:1px solid rgba(212,160,23,.2);
+  border-radius:10px; padding:8px 14px; text-align:center; flex:1; min-width:70px; }
+.lp-val { font-family:'Playfair Display',serif; font-size:1.3rem;
+  font-weight:900; color:var(--gold); }
+.lp-lbl { font-size:.6rem; color:var(--muted); font-family:'DM Mono',monospace;
+  letter-spacing:.06em; text-transform:uppercase; }
+
+/* zone cards */
+.zone-grid { display:flex; flex-direction:column; gap:10px; width:100%; }
+.zone-card { background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:16px 18px; cursor:pointer; transition:all .22s;
+  display:flex; align-items:center; gap:14px; }
+.zone-card:hover { border-color:var(--gold); transform:translateX(4px);
+  box-shadow:-4px 0 20px rgba(212,160,23,.1); }
+.zone-card.locked { opacity:.45; cursor:default; }
+.zone-card.locked:hover { transform:none; box-shadow:none; border-color:var(--border); }
+.zone-icon { width:48px; height:48px; border-radius:12px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; }
+.zone-info { flex:1; }
+.zone-name { font-weight:700; font-size:.95rem; margin-bottom:3px; }
+.zone-desc { font-size:.75rem; color:var(--muted); line-height:1.5; }
+.zone-badge { font-size:.6rem; font-weight:700; padding:2px 8px; border-radius:50px;
+  margin-top:5px; display:inline-block; letter-spacing:.05em; text-transform:uppercase; }
+.zone-badge.live   { background:rgba(74,222,128,.15); color:var(--mint);
+  border:1px solid rgba(74,222,128,.25); }
+.zone-badge.coming { background:rgba(255,255,255,.06); color:var(--muted);
+  border:1px solid rgba(255,255,255,.1); }
+.zone-badge.new    { background:rgba(212,160,23,.15); color:var(--gold);
+  border:1px solid rgba(212,160,23,.25); }
+.zone-arrow { color:var(--muted); font-size:1.1rem; flex-shrink:0; }
+
+/* ── NVR GAME ── */
+#nvr-game { gap:12px; }
+.nvr-topbar { width:100%; display:flex; align-items:center; gap:10px; }
+.nvr-mode-label { font-family:'DM Mono',monospace; font-size:.7rem;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--gold); flex:1; }
+
+/* NVR question card */
+.nvr-card { width:100%; background:var(--surface); border:1px solid var(--border);
+  border-radius:18px; padding:20px; text-align:center; }
+.nvr-instruction { font-size:.82rem; color:var(--muted); margin-bottom:14px;
+  font-family:'DM Mono',monospace; letter-spacing:.05em; line-height:1.6; }
+.nvr-question-area { display:flex; align-items:center; justify-content:center;
+  gap:8px; flex-wrap:wrap; margin-bottom:6px; }
+.nvr-svg-frame { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
+  border-radius:10px; padding:6px; display:inline-flex;
+  align-items:center; justify-content:center; }
+.nvr-svg-frame.answer { cursor:pointer; transition:all .2s; border-color:rgba(255,255,255,.08); }
+.nvr-svg-frame.answer:hover { border-color:var(--gold); background:rgba(212,160,23,.07); transform:scale(1.04); }
+.nvr-svg-frame.answer.correct { border-color:var(--mint); background:rgba(74,222,128,.1); }
+.nvr-svg-frame.answer.wrong   { border-color:var(--coral); background:rgba(224,92,92,.1); }
+.nvr-separator { font-family:'Playfair Display',serif; font-size:1.8rem;
+  color:var(--muted); padding:0 2px; }
+.nvr-question-mark { background:rgba(212,160,23,.12); border:2px dashed rgba(212,160,23,.4);
+  border-radius:10px; width:72px; height:72px; display:inline-flex;
+  align-items:center; justify-content:center; font-family:'Playfair Display',serif;
+  font-size:1.8rem; color:var(--gold); }
+.nvr-answers-label { font-size:.68rem; color:var(--muted); font-family:'DM Mono',monospace;
+  letter-spacing:.1em; text-transform:uppercase; margin:10px 0 8px; }
+.nvr-answer-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.nvr-answer-label { font-size:.65rem; color:var(--muted); text-align:center;
+  margin-top:4px; font-family:'DM Mono',monospace; }
+
+/* NVR type selector */
+.nvr-type-row { display:flex; gap:6px; overflow-x:auto; width:100%;
+  scrollbar-width:none; padding-bottom:2px; }
+.nvr-type-chip { flex-shrink:0; padding:7px 14px; border-radius:50px;
+  font-size:.72rem; font-weight:600; cursor:pointer; border:1px solid var(--border);
+  background:var(--surface); color:var(--muted); transition:all .2s;
+  font-family:'DM Mono',monospace; letter-spacing:.04em; }
+.nvr-type-chip.active { background:rgba(212,160,23,.15); border-color:var(--gold);
+  color:var(--gold); }
+.nvr-type-chip:hover:not(.active) { border-color:var(--muted); color:var(--white); }
+.nvr-score-row { display:flex; gap:8px; justify-content:center; width:100%; flex-wrap:wrap; }
+.nvr-score-pill { background:var(--surface); border:1px solid var(--border);
+  border-radius:50px; padding:7px 16px; font-size:.78rem; color:var(--muted);
+  font-family:'DM Mono',monospace; display:flex; align-items:center; gap:6px; }
+.nvr-score-pill span { color:var(--gold); font-weight:700; }
   .subject-grid { grid-template-columns:1fr 1fr; }
   .q-question { font-size:26px; }
 }
@@ -604,12 +696,13 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
         <div class="subj-level">Lv. 1</div>
       </div>
     </div>
-    <div class="subj-card s-logic">
-      <div class="coming-tag">Soon</div>
-      <img class="subj-img" src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=80&q=70&fit=crop" alt="Logic">
-      <div class="subj-name">Logic</div>
+    <div class="subj-card s-logic" onclick="goTo('logic-hub')" style="opacity:1;cursor:pointer;">
+      <div class="hot-tag" style="background:var(--gold);color:#0a0a0a;">New</div>
+      <img class="subj-img" src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=80&q=70&fit=crop" alt="Logic" style="filter:brightness(.85)">
+      <div class="subj-name">Logic &amp; NVR</div>
       <div class="subj-bottom">
-        <div class="subj-level">Unlocks Lv. 5</div>
+        <div class="subj-stars" id="logic-stars"></div>
+        <div class="subj-level">11+ Prep</div>
       </div>
     </div>
   </div>
@@ -806,7 +899,140 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
   <div class="fb-xp" id="fb-xp">+10 XP</div>
 </div>
 
-<!-- ════════ TUTOR OVERLAY ════════ -->
+<!-- ════════ LOGIC HUB ════════ -->
+<div id="logic-hub" class="screen">
+  <div class="tt-header">
+    <button class="back-btn" onclick="goTo('dashboard')">&#8592;</button>
+    <div class="tt-title">Logic &amp; NVR</div>
+  </div>
+
+  <div class="logic-hero">
+    <span class="logic-hero-tag">11+ Preparation</span>
+    <div class="logic-hero-title">Non-Verbal Reasoning &amp; Logic</div>
+    <div class="logic-hero-sub">The cognitive skills tested in grammar school entry exams — and the reasoning skills that make exceptional thinkers at any age.</div>
+    <div class="logic-progress-row">
+      <div class="lp-stat"><div class="lp-val" id="nvr-solved">0</div><div class="lp-lbl">Solved</div></div>
+      <div class="lp-stat"><div class="lp-val" id="nvr-accuracy">—</div><div class="lp-lbl">Accuracy</div></div>
+      <div class="lp-stat"><div class="lp-val" id="nvr-streak-local">0</div><div class="lp-lbl">Streak</div></div>
+      <div class="lp-stat"><div class="lp-val" id="nvr-level-local">1</div><div class="lp-lbl">NVR Level</div></div>
+    </div>
+  </div>
+
+  <div class="dash-section-title">Training Zones</div>
+  <div class="zone-grid">
+
+    <div class="zone-card" onclick="startNVR('patterns')">
+      <div class="zone-icon" style="background:rgba(124,47,255,.15)">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--violet)"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+      </div>
+      <div class="zone-info">
+        <div class="zone-name">Pattern Sequences</div>
+        <div class="zone-desc">Identify the rule in a sequence of shapes and select what comes next.</div>
+        <span class="zone-badge live">Live</span>
+      </div>
+      <div class="zone-arrow">&#8250;</div>
+    </div>
+
+    <div class="zone-card" onclick="startNVR('rotation')">
+      <div class="zone-icon" style="background:rgba(96,165,250,.12)">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--sky)"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg>
+      </div>
+      <div class="zone-info">
+        <div class="zone-name">Spatial Rotation</div>
+        <div class="zone-desc">Mentally rotate a shape and identify its correct orientation from the options.</div>
+        <span class="zone-badge live">Live</span>
+      </div>
+      <div class="zone-arrow">&#8250;</div>
+    </div>
+
+    <div class="zone-card" onclick="startNVR('matrices')">
+      <div class="zone-icon" style="background:rgba(74,222,128,.1)">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--mint)"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm0 11h7v7h-7z"/></svg>
+      </div>
+      <div class="zone-info">
+        <div class="zone-name">Shape Matrices</div>
+        <div class="zone-desc">A 3×3 grid follows a rule — find the missing piece that completes the pattern.</div>
+        <span class="zone-badge new">New</span>
+      </div>
+      <div class="zone-arrow">&#8250;</div>
+    </div>
+
+    <div class="zone-card" onclick="startNVR('mirror')">
+      <div class="zone-icon" style="background:rgba(224,92,92,.1)">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--coral)"><path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/></svg>
+      </div>
+      <div class="zone-info">
+        <div class="zone-name">Mirror Images</div>
+        <div class="zone-desc">Identify the correct reflection of a shape across a mirror line.</div>
+        <span class="zone-badge live">Live</span>
+      </div>
+      <div class="zone-arrow">&#8250;</div>
+    </div>
+
+    <div class="zone-card locked">
+      <div class="zone-icon" style="background:rgba(255,255,255,.05)">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--muted)"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+      </div>
+      <div class="zone-info">
+        <div class="zone-name">Shape Codes</div>
+        <div class="zone-desc">Shapes encode letters or numbers — crack the code to find the answer.</div>
+        <span class="zone-badge coming">Coming Soon</span>
+      </div>
+    </div>
+
+    <div class="zone-card locked">
+      <div class="zone-icon" style="background:rgba(255,255,255,.05)">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--muted)"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
+      </div>
+      <div class="zone-info">
+        <div class="zone-name">Analogy Chains</div>
+        <div class="zone-desc">Shape A is to Shape B as Shape C is to — ? Build fluid reasoning.</div>
+        <span class="zone-badge coming">Coming Soon</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════ NVR GAME ════════ -->
+<div id="nvr-game" class="screen">
+  <div class="nvr-topbar">
+    <button class="back-btn" onclick="goTo('logic-hub')">&#8592;</button>
+    <div class="nvr-mode-label" id="nvr-mode-label">Pattern Sequences</div>
+    <div class="lives-row" id="nvr-lives-row"></div>
+  </div>
+
+  <div class="timer-track"><div class="timer-fill" id="nvr-timer-fill"></div></div>
+
+  <div class="nvr-card">
+    <div class="nvr-instruction" id="nvr-instruction">Study the sequence. Select the shape that comes next.</div>
+    <div class="nvr-question-area" id="nvr-question-area"></div>
+    <div class="nvr-answers-label">Select the correct answer</div>
+    <div class="nvr-answer-row" id="nvr-answer-row"></div>
+  </div>
+
+  <div class="nvr-score-row">
+    <div class="nvr-score-pill">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--gold)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span id="nvr-score">0</span> pts
+    </div>
+    <div class="nvr-score-pill">Correct: <span id="nvr-correct">0</span></div>
+    <div class="nvr-score-pill">Q <span id="nvr-qnum">1</span> / 15</div>
+  </div>
+
+  <div class="hint-box" id="nvr-hint-box"></div>
+
+  <div class="action-row">
+    <button id="nvr-speak-btn" class="action-btn" onclick="speakNVR()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+      Listen
+    </button>
+    <button class="action-btn" onclick="getNVRHint()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/></svg>
+      Hint
+    </button>
+  </div>
+</div>
 <div id="tutor-overlay">
   <div class="tutor-frame">
     <div class="tutor-topbar">
@@ -1151,9 +1377,10 @@ function updateDashboard() {
   const ranks=['Rookie','Explorer','Scholar','Champion','Legend','Genius'];
   document.getElementById('rank-label').textContent = ranks[Math.min(state.level-1,ranks.length-1)];
   renderRankStars(Math.min(state.level,3));
-  renderStars('math-stars', Math.min(state.correctAnswers>0?2:0,3));
-  renderStars('sci-stars',  1);
-  renderStars('space-stars',0);
+  renderStars('math-stars',  Math.min(state.correctAnswers>0?2:0,3));
+  renderStars('sci-stars',   1);
+  renderStars('space-stars', 0);
+  renderStars('logic-stars', Math.min(nvrState.nvrLevel-1, 3));
   document.getElementById('math-level').textContent = `Lv. ${state.mathLevel}`;
   const pct = Math.min(100, Math.round((state.totalXp%500)/5));
   document.getElementById('prog-fill').style.width = pct+'%';
@@ -1479,6 +1706,521 @@ function copyCode(){
 function joinFriend(name){
   if(!state.name||state.name==='Hero'){ goTo('profile'); return; }
   startGame('math');
+}
+
+// ══════════════════════════════════════
+// NVR ENGINE
+// ══════════════════════════════════════
+
+// SVG shape primitives — everything drawn programmatically
+const NVR = {
+  // Shape library — returns SVG inner HTML for a given shape/config
+  S: {
+    circle:  (x,y,r,fill,stroke) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="${stroke||'none'}" stroke-width="2"/>`,
+    rect:    (x,y,w,h,fill,stroke,rx) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke||'none'}" stroke-width="2" rx="${rx||0}"/>`,
+    tri:     (x,y,s,fill,stroke,dir) => {
+      const h = s*0.866;
+      const pts = dir==='down'
+        ? `${x},${y-h/3} ${x+s/2},${y+2*h/3} ${x-s/2},${y+2*h/3}`
+        : `${x},${y-2*h/3} ${x+s/2},${y+h/3} ${x-s/2},${y+h/3}`;
+      return `<polygon points="${pts}" fill="${fill}" stroke="${stroke||'none'}" stroke-width="2"/>`;
+    },
+    star:    (x,y,r,fill) => {
+      const pts=[]; const n=5;
+      for(let i=0;i<n*2;i++){
+        const a=(i*Math.PI/n)-Math.PI/2;
+        const ri=i%2===0?r:r*.45;
+        pts.push(`${x+ri*Math.cos(a)},${y+ri*Math.sin(a)}`);
+      }
+      return `<polygon points="${pts.join(' ')}" fill="${fill}" stroke="none"/>`;
+    },
+    cross:   (x,y,s,fill) => `<path d="M${x-s/4},${y-s/2} h${s/2} v${s/2-s/4} h${s/2-s/4} v${s/2} h${-(s/2-s/4)} v${s/2-s/4} h${-s/2} v${-(s/2-s/4)} h${-(s/2-s/4)} v${-s/2} h${s/2-s/4} Z" fill="${fill}"/>`,
+    diamond: (x,y,s,fill,stroke) => `<polygon points="${x},${y-s/2} ${x+s/2},${y} ${x},${y+s/2} ${x-s/2},${y}" fill="${fill}" stroke="${stroke||'none'}" stroke-width="2"/>`,
+    hex:     (x,y,r,fill) => {
+      const pts=[]; for(let i=0;i<6;i++){const a=i*60*(Math.PI/180)-Math.PI/6;pts.push(`${x+r*Math.cos(a)},${y+r*Math.sin(a)}`);}
+      return `<polygon points="${pts.join(' ')}" fill="${fill}" stroke="none"/>`;
+    },
+    line:    (x1,y1,x2,y2,stroke,w) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="${w||2}" stroke-linecap="round"/>`,
+  },
+
+  COLORS: {
+    solid:  ['#b46cff','#60a5fa','#4ade80','#f59e0b','#e05c5c','#f8f6ff'],
+    light:  ['rgba(180,108,255,.3)','rgba(96,165,250,.3)','rgba(74,222,128,.3)','rgba(245,158,11,.3)'],
+    none:   'none',
+    white:  '#f8f6ff',
+    muted:  '#3a3a5c',
+  },
+
+  // Make a 64x64 SVG frame with shapes
+  frame(content, size=64) {
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">${content}</svg>`;
+  },
+
+  // Background rect
+  bg(color='rgba(255,255,255,.04)', size=64) {
+    return `<rect width="${size}" height="${size}" fill="${color}" rx="4"/>`;
+  },
+};
+
+// ── PATTERN SEQUENCE GENERATOR ──────────────────────────────────
+// A sequence has a "rule" — size growing, colour cycling, shape changing,
+// count increasing, rotation stepping, fill toggling
+
+const SHAPES_LIST = ['circle','rect','diamond','tri','hex','star'];
+const FILLS_LIST  = NVR.COLORS.solid;
+
+function drawShape(type, cx, cy, size, fill, stroke, extra) {
+  const s = NVR.S;
+  switch(type) {
+    case 'circle':  return s.circle(cx, cy, size/2-2, fill, stroke);
+    case 'rect':    return s.rect(cx-size/2+4, cy-size/2+4, size-8, size-8, fill, stroke);
+    case 'diamond': return s.diamond(cx, cy, size-4, fill, stroke);
+    case 'tri':     return s.tri(cx, cy, size-8, fill, stroke, extra||'up');
+    case 'hex':     return s.hex(cx, cy, size/2-4, fill);
+    case 'star':    return s.star(cx, cy, size/2-4, fill);
+    case 'cross':   return s.cross(cx, cy, size, fill);
+    default:        return s.circle(cx, cy, size/2-2, fill, stroke);
+  }
+}
+
+function generatePatternSequence() {
+  // Pick a base shape and a transformation rule
+  const rules = ['size','color','count','rotation','fill_toggle','shape_morph'];
+  const rule   = rules[Math.floor(Math.random()*rules.length)];
+  const shape  = SHAPES_LIST[Math.floor(Math.random()*SHAPES_LIST.length)];
+  const color  = FILLS_LIST[Math.floor(Math.random()*FILLS_LIST.length)];
+  const seq    = []; // 4 items: show 3, answer is 4th
+
+  for(let i=0;i<4;i++) {
+    let content = NVR.bg();
+    let fill = color, stroke = 'none', sz = 32;
+    switch(rule) {
+      case 'size':
+        sz = 16 + i*12; // grows: 16,28,40,52
+        content += drawShape(shape, 32, 32, sz, fill);
+        break;
+      case 'color':
+        fill = FILLS_LIST[i % FILLS_LIST.length];
+        content += drawShape(shape, 32, 32, 36, fill);
+        break;
+      case 'count': {
+        const n = i+1; // 1,2,3,4 shapes
+        const positions = [{x:32,y:32},{x:20,y:20},{x:44,y:20},{x:20,y:44},{x:44,y:44}];
+        for(let j=0;j<n;j++) content += drawShape(shape, positions[j].x, positions[j].y, 20, fill);
+        break;
+      }
+      case 'rotation': {
+        const angles = [0,45,90,135];
+        const a = angles[i];
+        content += `<g transform="rotate(${a} 32 32)">${drawShape(shape, 32, 32, 36, fill)}</g>`;
+        break;
+      }
+      case 'fill_toggle':
+        fill   = i%2===0 ? color : 'none';
+        stroke = i%2===0 ? 'none' : color;
+        content += drawShape(shape, 32, 32, 36, fill, stroke);
+        break;
+      case 'shape_morph':
+        content += drawShape(SHAPES_LIST[i % SHAPES_LIST.length], 32, 32, 36, fill);
+        break;
+    }
+    seq.push({content, rule, index:i});
+  }
+  return { seq, rule, shape, color, type:'patterns',
+    instruction:'Study the sequence carefully. Which shape comes next?',
+    hint: ruleHint(rule) };
+}
+
+function ruleHint(rule) {
+  const hints = {
+    size:        'Look at the size of the shape in each step. Is it getting bigger or smaller?',
+    color:       'Follow the colour carefully. What colour pattern do you notice?',
+    count:       'Count the number of shapes in each step. What is the pattern?',
+    rotation:    'Notice how the shape is turning. By how many degrees each time?',
+    fill_toggle: 'Look at whether the shape is filled in or hollow. Does it alternate?',
+    shape_morph: 'The shape itself is changing. What comes after in this sequence of shapes?',
+  };
+  return hints[rule] || 'Look for the rule that connects each step to the next.';
+}
+
+// ── ROTATION GENERATOR ──────────────────────────────────────────
+function generateRotation() {
+  const shape  = ['rect','tri','cross','diamond','hex'][Math.floor(Math.random()*5)];
+  const color  = FILLS_LIST[Math.floor(Math.random()*FILLS_LIST.length)];
+  const angles = [0, 45, 90, 135, 180, 270];
+  const base   = angles[Math.floor(Math.random()*angles.length)];
+  const rotate = [90,135,180,45][Math.floor(Math.random()*4)];
+  const correct= (base + rotate) % 360;
+
+  function makeFrame(angle) {
+    return NVR.bg() + `<g transform="rotate(${angle} 32 32)">${drawShape(shape, 32, 32, 40, color)}</g>`;
+  }
+
+  // Generate 4 answer options — one correct, three wrong
+  const wrongAngles = angles.filter(a => a !== correct);
+  const wrongs = shuffle([...wrongAngles]).slice(0,3);
+  const answers = shuffle([correct, ...wrongs]);
+
+  return {
+    original: makeFrame(base),
+    answers: answers.map(a => ({ content: makeFrame(a), correct: a === correct })),
+    type: 'rotation',
+    instruction: 'The shape on the left has been rotated. Which option shows the correct result?',
+    hint: 'Imagine picking up the shape and turning it. Which answer matches?',
+  };
+}
+
+// ── MATRIX GENERATOR ────────────────────────────────────────────
+function generateMatrix() {
+  // 3x3 grid — row rule: colour cycles, shape cycles, or size cycles
+  const ruleType = ['color_row','shape_row','fill_row'][Math.floor(Math.random()*3)];
+  const shapes   = shuffle([...SHAPES_LIST]).slice(0,3);
+  const colors   = shuffle([...FILLS_LIST]).slice(0,3);
+  const cells    = []; // 9 cells, last one is the answer
+
+  for(let row=0;row<3;row++) {
+    for(let col=0;col<3;col++) {
+      let fill, shape;
+      switch(ruleType) {
+        case 'color_row':
+          fill  = colors[col]; shape = shapes[row]; break;
+        case 'shape_row':
+          fill  = colors[row]; shape = shapes[col]; break;
+        case 'fill_row':
+          fill  = col===0?colors[row]:col===1?'none':colors[(row+1)%3];
+          shape = shapes[row]; break;
+        default:
+          fill = colors[col]; shape = shapes[row];
+      }
+      const stroke = fill==='none' ? colors[row] : 'none';
+      cells.push(NVR.bg() + drawShape(shape, 32, 32, 36, fill, stroke));
+    }
+  }
+
+  // The 9th cell (index 8) is correct answer
+  const correct = cells[8];
+  // Generate 3 plausible wrong answers
+  const wrongCells = [
+    NVR.bg() + drawShape(shapes[0], 32, 32, 36, colors[(0+1)%3]),
+    NVR.bg() + drawShape(shapes[(shapes.indexOf(shapes[2])+1)%3]||shapes[0], 32, 32, 36, colors[2]),
+    NVR.bg() + drawShape(shapes[1], 32, 32, 36, colors[0]),
+  ];
+  const answers = shuffle([{content:correct, correct:true}, ...wrongCells.map(c=>({content:c,correct:false}))]);
+
+  return {
+    cells: cells.slice(0,8), // show first 8
+    answers,
+    type: 'matrices',
+    instruction: 'The 3×3 grid follows a rule. Which shape belongs in the empty space?',
+    hint: 'Look at each row and each column. What changes? What stays the same?',
+  };
+}
+
+// ── MIRROR GENERATOR ────────────────────────────────────────────
+function generateMirror() {
+  const shape = SHAPES_LIST[Math.floor(Math.random()*SHAPES_LIST.length)];
+  const color = FILLS_LIST[Math.floor(Math.random()*FILLS_LIST.length)];
+  const axis  = ['vertical','horizontal'][Math.floor(Math.random()*2)];
+
+  // Original — shape offset from centre
+  const offX = (Math.random()-.5)*20;
+  const offY = (Math.random()-.5)*20;
+  const cx = 32+offX, cy = 32+offY;
+  const original = NVR.bg() + drawShape(shape, cx, cy, 32, color);
+
+  // Correct mirror
+  const mirrorCx = axis==='vertical' ? 32+(32-cx) : cx;
+  const mirrorCy = axis==='horizontal' ? 32+(32-cy) : cy;
+  const correct  = NVR.bg() + NVR.S.line(axis==='vertical'?32:0, axis==='vertical'?0:32,
+    axis==='vertical'?32:64, axis==='vertical'?64:32, 'rgba(255,255,255,.25)', 1.5)
+    + drawShape(shape, mirrorCx, mirrorCy, 32, color);
+
+  // Wrong mirrors — rotations instead of true reflections
+  const wrongs = [90,180,270].map(deg =>
+    NVR.bg() + `<g transform="rotate(${deg} 32 32)">${drawShape(shape, cx, cy, 32, color)}</g>`
+  );
+  const answers = shuffle([{content:correct,correct:true}, ...wrongs.map(c=>({content:c,correct:false}))]);
+
+  return {
+    original,
+    axis,
+    answers,
+    type: 'mirror',
+    instruction: `The shape is reflected across the ${axis} mirror line. Which option is correct?`,
+    hint: axis==='vertical'
+      ? 'For a vertical mirror: left becomes right, but up and down stay the same.'
+      : 'For a horizontal mirror: top becomes bottom, but left and right stay the same.',
+  };
+}
+
+// ── NVR STATE ───────────────────────────────────────────────────
+const nvrState = {
+  mode: 'patterns', currentQ: null, answered: false,
+  score: 0, correct: 0, total: 0, qNum: 0, maxQ: 15,
+  lives: 3, timerInterval: null, timeLeft: 100,
+  totalSolved: 0, totalCorrect: 0, localStreak: 0, nvrLevel: 1,
+  currentSpeakText: ''
+};
+
+function updateNVRStats() {
+  document.getElementById('nvr-solved').textContent    = nvrState.totalSolved;
+  document.getElementById('nvr-level-local').textContent = nvrState.nvrLevel;
+  document.getElementById('nvr-streak-local').textContent= nvrState.localStreak;
+  document.getElementById('nvr-accuracy').textContent  = nvrState.totalSolved > 0
+    ? Math.round((nvrState.totalCorrect/nvrState.totalSolved)*100)+'%' : '—';
+}
+
+function startNVR(mode) {
+  nvrState.mode     = mode;
+  nvrState.score    = 0;
+  nvrState.correct  = 0;
+  nvrState.total    = 0;
+  nvrState.qNum     = 0;
+  nvrState.lives    = 3;
+  nvrState.answered = false;
+  updateNVRLives();
+  document.getElementById('nvr-score').textContent   = '0';
+  document.getElementById('nvr-correct').textContent = '0';
+  document.getElementById('nvr-qnum').textContent    = '1';
+  document.getElementById('nvr-hint-box').style.display = 'none';
+  const labels = {patterns:'Pattern Sequences',rotation:'Spatial Rotation',matrices:'Shape Matrices',mirror:'Mirror Images'};
+  document.getElementById('nvr-mode-label').textContent = labels[mode]||'NVR';
+  goTo('nvr-game');
+  loadNVRQuestion();
+}
+
+function loadNVRQuestion() {
+  nvrState.answered = false;
+  nvrState.qNum++;
+  document.getElementById('nvr-qnum').textContent    = nvrState.qNum;
+  document.getElementById('nvr-hint-box').style.display = 'none';
+
+  let q;
+  switch(nvrState.mode) {
+    case 'patterns': q = generatePatternSequence(); break;
+    case 'rotation': q = generateRotation();        break;
+    case 'matrices': q = generateMatrix();          break;
+    case 'mirror':   q = generateMirror();          break;
+    default:         q = generatePatternSequence();
+  }
+  nvrState.currentQ = q;
+  renderNVRQuestion(q);
+  startNVRTimer();
+}
+
+function renderNVRQuestion(q) {
+  document.getElementById('nvr-instruction').textContent = q.instruction;
+  nvrState.currentSpeakText = q.instruction;
+
+  const qa = document.getElementById('nvr-question-area');
+  const ar = document.getElementById('nvr-answer-row');
+  qa.innerHTML = ''; ar.innerHTML = '';
+
+  if(q.type === 'patterns') {
+    // Show 3 frames then ? 
+    q.seq.slice(0,3).forEach((item,i) => {
+      qa.innerHTML += `<div class="nvr-svg-frame">${NVR.frame(item.content)}</div>`;
+      if(i<2) qa.innerHTML += `<div class="nvr-separator">→</div>`;
+    });
+    qa.innerHTML += `<div class="nvr-separator">→</div>`;
+    qa.innerHTML += `<div class="nvr-question-mark">?</div>`;
+
+    // Answers: correct is seq[3], generate wrong variants
+    const correct = q.seq[3].content;
+    const wrongs  = generatePatternWrongs(q);
+    const opts    = shuffle([{content:correct,correct:true},...wrongs]);
+    opts.forEach((opt,i) => {
+      const letter = ['A','B','C','D'][i];
+      ar.innerHTML += `
+        <div style="text-align:center">
+          <div class="nvr-svg-frame answer" onclick="checkNVR(this,${opt.correct})" data-correct="${opt.correct}">
+            ${NVR.frame(opt.content)}
+          </div>
+          <div class="nvr-answer-label">${letter}</div>
+        </div>`;
+    });
+
+  } else if(q.type === 'rotation') {
+    qa.innerHTML = `<div class="nvr-svg-frame">${NVR.frame(q.original)}</div>
+      <div class="nvr-separator" style="font-size:1.2rem">&#8594;</div>
+      <div class="nvr-question-mark">?</div>`;
+    q.answers.forEach((opt,i) => {
+      const letter = ['A','B','C','D'][i];
+      ar.innerHTML += `
+        <div style="text-align:center">
+          <div class="nvr-svg-frame answer" onclick="checkNVR(this,${opt.correct})">
+            ${NVR.frame(opt.content)}
+          </div>
+          <div class="nvr-answer-label">${letter}</div>
+        </div>`;
+    });
+
+  } else if(q.type === 'matrices') {
+    // 3x3 grid with last cell as ?
+    qa.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:4px;max-width:240px;margin:0 auto 6px';
+    q.cells.forEach(cell => {
+      qa.innerHTML += `<div class="nvr-svg-frame">${NVR.frame(cell)}</div>`;
+    });
+    qa.innerHTML += `<div class="nvr-question-mark" style="width:76px;height:76px">?</div>`;
+    q.answers.forEach((opt,i) => {
+      const letter = ['A','B','C','D'][i];
+      ar.innerHTML += `
+        <div style="text-align:center">
+          <div class="nvr-svg-frame answer" onclick="checkNVR(this,${opt.correct})">
+            ${NVR.frame(opt.content)}
+          </div>
+          <div class="nvr-answer-label">${letter}</div>
+        </div>`;
+    });
+
+  } else if(q.type === 'mirror') {
+    // Mirror line + original
+    const lineEl = q.axis==='vertical'
+      ? `<div style="width:2px;height:72px;background:rgba(255,255,255,.3);border-radius:2px;align-self:center"></div>`
+      : `<div style="height:2px;width:72px;background:rgba(255,255,255,.3);border-radius:2px;align-self:center"></div>`;
+    qa.innerHTML = `<div class="nvr-svg-frame">${NVR.frame(q.original)}</div>${lineEl}<div class="nvr-question-mark">?</div>`;
+    q.answers.forEach((opt,i) => {
+      const letter = ['A','B','C','D'][i];
+      ar.innerHTML += `
+        <div style="text-align:center">
+          <div class="nvr-svg-frame answer" onclick="checkNVR(this,${opt.correct})">
+            ${NVR.frame(opt.content)}
+          </div>
+          <div class="nvr-answer-label">${letter}</div>
+        </div>`;
+    });
+  }
+}
+
+function generatePatternWrongs(q) {
+  // Generate 3 plausible wrong answers by applying different rules/variants
+  const wrongs = [];
+  // Wrong 1: use a different colour
+  const altColor = FILLS_LIST.find(c=>c!==q.color)||FILLS_LIST[0];
+  const w1 = NVR.bg() + drawShape(q.shape, 32, 32, 44, altColor);
+  wrongs.push({content:w1, correct:false});
+  // Wrong 2: use the sequence item before the correct one
+  wrongs.push({content: q.seq[1].content, correct:false});
+  // Wrong 3: entirely different shape
+  const altShape = SHAPES_LIST.find(s=>s!==q.shape)||SHAPES_LIST[0];
+  const w3 = NVR.bg() + drawShape(altShape, 32, 32, 36, q.color);
+  wrongs.push({content:w3, correct:false});
+  return wrongs;
+}
+
+function checkNVR(el, isCorrect) {
+  if(nvrState.answered) return;
+  nvrState.answered = true;
+  clearInterval(nvrState.timerInterval);
+  nvrState.total++;
+  nvrState.totalSolved++;
+
+  // Mark all frames
+  document.querySelectorAll('#nvr-answer-row .nvr-svg-frame.answer').forEach(f => {
+    if(f.dataset.correct==='true') f.classList.add('correct');
+  });
+
+  if(isCorrect) {
+    nvrState.correct++;
+    nvrState.totalCorrect++;
+    nvrState.localStreak++;
+    const pts = 15 + Math.floor(nvrState.timeLeft/8);
+    nvrState.score += pts;
+    document.getElementById('nvr-score').textContent   = nvrState.score;
+    document.getElementById('nvr-correct').textContent = nvrState.correct;
+    el.classList.add('correct');
+    spawnXpFloat(pts);
+    spawnParticles();
+    Voice.speak(['Correct.','Well done.','Excellent.','Right.'][Math.floor(Math.random()*4)], true);
+  } else {
+    el.classList.add('wrong');
+    nvrState.lives = Math.max(0, nvrState.lives-1);
+    nvrState.localStreak = 0;
+    updateNVRLives();
+    Voice.speak('Not quite. Look at the hint.', true);
+    // Show explanation
+    const hb = document.getElementById('nvr-hint-box');
+    hb.style.display = 'block';
+    hb.textContent   = nvrState.currentQ.hint;
+  }
+
+  // Update NVR level
+  if(nvrState.totalSolved > 0 && nvrState.totalSolved % 10 === 0) nvrState.nvrLevel++;
+  updateNVRStats();
+
+  setTimeout(() => {
+    if(nvrState.lives<=0 || nvrState.qNum>=nvrState.maxQ) endNVR();
+    else loadNVRQuestion();
+  }, isCorrect ? 1800 : 2800);
+}
+
+function startNVRTimer() {
+  if(nvrState.timerInterval) clearInterval(nvrState.timerInterval);
+  nvrState.timeLeft = 100;
+  const fill = document.getElementById('nvr-timer-fill');
+  fill.style.width='100%'; fill.classList.remove('urgent');
+  const dur = nvrState.mode==='matrices' ? 35000 : 25000;
+  const tick=100; const dec=(tick/dur)*100;
+  nvrState.timerInterval = setInterval(()=>{
+    nvrState.timeLeft = Math.max(0,nvrState.timeLeft-dec);
+    fill.style.width = nvrState.timeLeft+'%';
+    if(nvrState.timeLeft<30) fill.classList.add('urgent');
+    if(nvrState.timeLeft<=0){
+      clearInterval(nvrState.timerInterval);
+      if(!nvrState.answered) {
+        nvrState.answered=true; nvrState.lives=Math.max(0,nvrState.lives-1);
+        updateNVRLives(); nvrState.totalSolved++;
+        const hb=document.getElementById('nvr-hint-box');
+        hb.style.display='block'; hb.textContent=nvrState.currentQ.hint;
+        setTimeout(()=>{ if(nvrState.lives<=0||nvrState.qNum>=nvrState.maxQ) endNVR(); else loadNVRQuestion(); },2500);
+      }
+    }
+  },tick);
+}
+
+function updateNVRLives() {
+  const row=document.getElementById('nvr-lives-row');
+  if(row) row.innerHTML=Array.from({length:3},(_,i)=>
+    `<div class="life-dot ${i>=nvrState.lives?'lost':''}"></div>`).join('');
+}
+
+function endNVR() {
+  clearInterval(nvrState.timerInterval); Voice.stop();
+  updateNVRStats();
+  // Report to Protégé
+  window.parent?.postMessage({type:'MATHGENIUS_SESSION_END',
+    xpEarned:nvrState.score, questionsAnswered:nvrState.total,
+    correctAnswers:nvrState.correct, maxCombo:0,
+    topicsPlayed:[{type:'nvr_'+nvrState.mode, correct:nvrState.correct, total:nvrState.total}]
+  },'*');
+  // Reuse level-up screen
+  document.getElementById('lu-score').textContent   = nvrState.score;
+  document.getElementById('lu-xp').textContent      = nvrState.score;
+  document.getElementById('lu-streak').textContent  = `${nvrState.correct} / ${nvrState.total} correct`;
+  const pct = nvrState.total>0 ? Math.round((nvrState.correct/nvrState.total)*100) : 0;
+  const msgs = pct>=80
+    ? ["Outstanding. Your spatial reasoning is exceptional.",
+       "Excellent work. Pattern recognition at this level is rare.",
+       "That is the kind of thinking grammar schools look for."]
+    : pct>=60
+    ? ["Good effort. These skills develop with practice.",
+       "You are building the reasoning skills that matter most.",
+       "Each session makes these patterns easier to see."]
+    : ["These are challenging problems. That is the point.",
+       "NVR skills are learned — not fixed. Keep practising.",
+       "Every attempt builds your visual reasoning strength."];
+  document.getElementById('lu-message').textContent = msgs[Math.floor(Math.random()*msgs.length)];
+  launchConfetti(); goTo('levelup');
+}
+
+function speakNVR() { Voice.speak(nvrState.currentSpeakText, true); }
+
+async function getNVRHint() {
+  const hb = document.getElementById('nvr-hint-box');
+  hb.style.display='block';
+  const hint = nvrState.currentQ?.hint || 'Look carefully at what changes between each step.';
+  hb.textContent = hint;
+  if(Voice.enabled) Voice.speak(hint, false);
 }
 
 // ══════════════════════════════════════
