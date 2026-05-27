@@ -574,35 +574,45 @@ let STATE = {
 
 // ── INIT ──────────────────────────────────────────────────────────
 async function init() {
-  const { data: { session } } = await supa.auth.getSession()
-  if (!session) { window.location.href = '/index.html'; return }
-  STATE.userId = session.user.id
+  try {
+    const { data: { session } } = await supa.auth.getSession()
+    if (!session) { window.location.href = '/index.html'; return }
+    STATE.userId = session.user.id
 
-  // Parallel fetch everything
-  const [profileRes, progressRes, masteryRes, settingsRes, streakRes] = await Promise.all([
-    supa.from('profiles').select('first_name,full_name').eq('id', STATE.userId).single(),
-    supa.from('protege_progress').select('*').eq('student_id', STATE.userId).eq('module','mathgenius').maybeSingle(),
-    supa.from('protege_topic_mastery').select('*').eq('student_id', STATE.userId),
-    supa.from('protege_settings').select('*').eq('student_id', STATE.userId).maybeSingle(),
-    supa.from('streaks').select('*').eq('student_id', STATE.userId).maybeSingle()
-  ])
+    // Parallel fetch everything — individual failures won't block the page
+    const [profileRes, progressRes, masteryRes, settingsRes, streakRes] = await Promise.all([
+      supa.from('profiles').select('first_name,full_name').eq('id', STATE.userId).single().catch(()=>({data:null})),
+      supa.from('protege_progress').select('*').eq('student_id', STATE.userId).eq('module','mathgenius').maybeSingle().catch(()=>({data:null})),
+      supa.from('protege_topic_mastery').select('*').eq('student_id', STATE.userId).catch(()=>({data:[]})),
+      supa.from('protege_settings').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null})),
+      supa.from('streaks').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null}))
+    ])
 
-  STATE.userName  = profileRes.data?.first_name || profileRes.data?.full_name?.split(' ')[0] || 'Champion'
-  STATE.progress  = progressRes.data
-  STATE.mastery   = masteryRes.data || []
-  STATE.settings  = settingsRes.data
-  STATE.streak    = streakRes.data
+    STATE.userName  = profileRes.data?.first_name || profileRes.data?.full_name?.split(' ')[0] || 'Champion'
+    STATE.progress  = progressRes.data
+    STATE.mastery   = masteryRes.data || []
+    STATE.settings  = settingsRes.data
+    STATE.streak    = streakRes.data
 
-  // If no settings row yet, create defaults
-  if (!STATE.settings) {
-    const { data } = await supa.from('protege_settings')
-      .insert({ student_id: STATE.userId }).select().single()
-    STATE.settings = data || { voice_enabled: true, voice_speed: 'normal', auto_read_questions: false }
+    // Create default settings if missing — but don't block on failure
+    if (!STATE.settings) {
+      try {
+        const { data } = await supa.from('protege_settings')
+          .insert({ student_id: STATE.userId }).select().single()
+        STATE.settings = data
+      } catch(e) {}
+      if (!STATE.settings) STATE.settings = { voice_enabled: true, voice_speed: 'normal', auto_read_questions: false }
+    }
+
+    renderUI()
+  } catch(e) {
+    console.error('[Protégé] init error:', e)
+    // Still show the page — don't leave the user on the loading screen
+    renderUI()
+  } finally {
+    document.getElementById('loadingScreen').style.display = 'none'
+    initStars()
   }
-
-  renderUI()
-  document.getElementById('loadingScreen').style.display = 'none'
-  initStars()
 }
 
 // ── RENDER ────────────────────────────────────────────────────────
