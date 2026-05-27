@@ -562,6 +562,60 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
   .subject-grid { grid-template-columns:1fr 1fr; }
   .q-question { font-size:26px; }
 }
+
+/* ── MODE SELECTOR MODAL ── */
+.mode-select-overlay { display:none; position:fixed; inset:0; z-index:300;
+  background:rgba(0,0,0,.8); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center; padding:20px; }
+.mode-select-overlay.open { display:flex; }
+.mode-select-box { background:var(--surface2); border:1px solid var(--border);
+  border-radius:20px; padding:28px 24px; max-width:400px; width:100%; }
+.ms-title { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700;
+  text-align:center; margin-bottom:6px; }
+.ms-sub { font-size:.82rem; color:var(--muted); text-align:center;
+  line-height:1.6; margin-bottom:22px; }
+.ms-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
+.ms-card { background:var(--surface); border:2px solid var(--border);
+  border-radius:14px; padding:18px 14px; cursor:pointer; transition:all .2s; text-align:center; }
+.ms-card:hover { border-color:var(--violet); transform:translateY(-2px); }
+.ms-card.sel { border-color:var(--gold); background:rgba(212,160,23,.08); }
+.ms-card-icon { width:40px; height:40px; border-radius:10px; margin:0 auto 10px;
+  display:flex; align-items:center; justify-content:center; }
+.ms-card-name { font-weight:700; font-size:.9rem; margin-bottom:5px; }
+.ms-card-desc { font-size:.72rem; color:var(--muted); line-height:1.5; }
+.ms-default-tag { font-size:.6rem; color:var(--gold); font-family:'DM Mono',monospace;
+  letter-spacing:.05em; text-transform:uppercase; margin-top:5px; display:block; }
+.ms-start-btn { width:100%; background:linear-gradient(135deg,var(--purple),var(--violet));
+  color:white; border:none; border-radius:50px; padding:13px;
+  font-size:.95rem; font-weight:700; cursor:pointer; transition:all .2s;
+  font-family:'DM Sans',sans-serif; }
+.ms-start-btn:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(124,47,255,.35); }
+/* PAUSE */
+.pause-btn { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1);
+  border-radius:10px; width:36px; height:36px; color:var(--muted);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .2s; flex-shrink:0; border:none; }
+.pause-btn:hover { color:var(--gold); }
+.pause-btn.paused { color:var(--gold); background:rgba(212,160,23,.1); }
+/* NEXT BTN */
+.next-btn { display:none; width:100%; background:linear-gradient(135deg,var(--purple),var(--violet));
+  color:white; border:none; border-radius:50px; padding:14px;
+  font-size:.95rem; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif;
+  transition:all .2s; align-items:center; justify-content:center; gap:8px; }
+.next-btn.show { display:flex; animation:fade-up-in .3s ease; }
+.next-btn:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(124,47,255,.35); }
+@keyframes fade-up-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+/* PAUSED OVERLAY */
+.q-card, .nvr-card { position:relative; }
+.paused-overlay { display:none; position:absolute; inset:0; z-index:20;
+  background:rgba(6,6,15,.88); border-radius:18px; backdrop-filter:blur(3px);
+  align-items:center; justify-content:center; flex-direction:column; gap:10px; }
+.paused-overlay.show { display:flex; }
+.paused-title { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; }
+.paused-sub { font-size:.8rem; color:var(--muted); }
+.resume-btn { background:var(--gold); color:#0a0a0a; border:none; border-radius:50px;
+  padding:10px 26px; font-weight:700; cursor:pointer; font-size:.88rem;
+  font-family:'DM Sans',sans-serif; margin-top:4px; }
 </style>
 </head>
 <body>
@@ -832,12 +886,20 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
   <div class="game-topbar">
     <button class="back-btn" onclick="goTo('dashboard')">&#8592;</button>
     <div class="game-mode-label" id="game-mode-label">Maths</div>
+    <button class="pause-btn" id="pause-btn" onclick="togglePause('game')" title="Pause">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
     <div class="lives-row" id="lives-row"></div>
   </div>
 
-  <div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
+  <div class="timer-track" id="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
 
   <div class="q-card">
+    <div class="paused-overlay" id="game-paused-overlay">
+      <div class="paused-title">Paused</div>
+      <div class="paused-sub">Take your time. Ready when you are.</div>
+      <button class="resume-btn" onclick="togglePause('game')">Resume</button>
+    </div>
     <div class="q-level-tag" id="q-level-tag">Level 1</div>
     <img class="q-subject-img" id="q-img" src="" alt="">
     <div class="q-type-label" id="q-type-label">Calculate</div>
@@ -847,6 +909,11 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
 
   <div class="answer-grid" id="answer-grid"></div>
   <div class="combo-bar"><div class="combo-text" id="combo-text"></div></div>
+
+  <button class="next-btn" id="next-btn" onclick="advanceFromNext('game')">
+    Next Question
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+  </button>
 
   <div class="action-row">
     <button id="speak-btn" class="action-btn" onclick="speakQuestion()">
@@ -999,12 +1066,20 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
   <div class="nvr-topbar">
     <button class="back-btn" onclick="goTo('logic-hub')">&#8592;</button>
     <div class="nvr-mode-label" id="nvr-mode-label">Pattern Sequences</div>
+    <button class="pause-btn" id="nvr-pause-btn" onclick="togglePause('nvr')" title="Pause">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
     <div class="lives-row" id="nvr-lives-row"></div>
   </div>
 
-  <div class="timer-track"><div class="timer-fill" id="nvr-timer-fill"></div></div>
+  <div class="timer-track" id="nvr-timer-track"><div class="timer-fill" id="nvr-timer-fill"></div></div>
 
   <div class="nvr-card">
+    <div class="paused-overlay" id="nvr-paused-overlay">
+      <div class="paused-title">Paused</div>
+      <div class="paused-sub">Study the shapes. Ready when you are.</div>
+      <button class="resume-btn" onclick="togglePause('nvr')">Resume</button>
+    </div>
     <div class="nvr-instruction" id="nvr-instruction">Study the sequence. Select the shape that comes next.</div>
     <div class="nvr-question-area" id="nvr-question-area"></div>
     <div class="nvr-answers-label">Select the correct answer</div>
@@ -1020,6 +1095,11 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
     <div class="nvr-score-pill">Q <span id="nvr-qnum">1</span> / 15</div>
   </div>
 
+  <button class="next-btn" id="nvr-next-btn" onclick="advanceFromNext('nvr')">
+    Next Question
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+  </button>
+
   <div class="hint-box" id="nvr-hint-box"></div>
 
   <div class="action-row">
@@ -1033,6 +1113,34 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
     </button>
   </div>
 </div>
+
+<!-- ════════ MODE SELECTOR ════════ -->
+<div class="mode-select-overlay" id="mode-select-overlay">
+  <div class="mode-select-box">
+    <div class="ms-title" id="ms-title">How would you like to practise?</div>
+    <div class="ms-sub">Choose before you begin. You can change it next time.</div>
+    <div class="ms-cards">
+      <div class="ms-card" id="ms-timed" onclick="selectPlayMode('timed')">
+        <div class="ms-card-icon" style="background:rgba(224,92,92,.15)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--coral)"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+        </div>
+        <div class="ms-card-name">Timed</div>
+        <div class="ms-card-desc">Race against the clock. Builds speed and fluency under pressure.</div>
+        <span class="ms-default-tag" id="ms-timed-tag" style="display:none">Recommended</span>
+      </div>
+      <div class="ms-card sel" id="ms-click" onclick="selectPlayMode('click')">
+        <div class="ms-card-icon" style="background:rgba(74,222,128,.1)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--mint)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        </div>
+        <div class="ms-card-name">Relaxed</div>
+        <div class="ms-card-desc">No timer. Study each question at your own pace. Click to advance.</div>
+        <span class="ms-default-tag" id="ms-click-tag">Recommended</span>
+      </div>
+    </div>
+    <button class="ms-start-btn" onclick="confirmPlayMode()">Begin Session</button>
+  </div>
+</div>
+
 <div id="tutor-overlay">
   <div class="tutor-frame">
     <div class="tutor-topbar">
@@ -1180,15 +1288,18 @@ function selectWeek(el, week) {
 }
 
 function startTTGame(mode) {
+  showModeSelector({ type:'tt', mode });
+}
+
+function _actuallyStartTT(mode) {
+  _paused = false;
   state.currentMode = 'tt_' + mode;
   state.currentSubject = 'tt';
-  state.lives = 3;
-  state.score = 0;
-  state.combo = 0;
-  state.questionsAnswered = 0;
-  state.correctAnswers = 0;
-  state.aiSimScore = 0;
+  state.lives = 3; state.score = 0; state.combo = 0;
+  state.questionsAnswered = 0; state.correctAnswers = 0; state.aiSimScore = 0;
+  qIndex = 0;
   updateLives();
+  hideNextBtn('game');
   document.getElementById('game-av').textContent = state.avatar[0];
   document.getElementById('game-player-name').textContent = state.name;
   document.getElementById('game-score').textContent = '0';
@@ -1197,6 +1308,8 @@ function startTTGame(mode) {
   document.getElementById('hint-box').style.display = 'none';
   const labels = {tt_daily:'Daily Mission',tt_mixed:'Mixed Practice',tt_boss:'Boss Battle',tt_families:'Fact Families'};
   document.getElementById('game-mode-label').textContent = labels[state.currentMode]||'Times Tables';
+  setTimerVisible('game', _playMode==='timed');
+  setPauseVisible('game', _playMode==='timed');
   goTo('game');
   loadTTQuestion();
 }
@@ -1392,12 +1505,18 @@ function updateDashboard() {
 // GAME ENGINE
 // ══════════════════════════════════════
 function startGame(subject) {
+  showModeSelector({ type:'game', subject });
+}
+
+function _actuallyStartGame(subject) {
+  _paused = false;
   state.currentSubject = subject;
   state.currentMode    = 'standard';
   state.lives=3; state.score=0; state.combo=0;
   state.questionsAnswered=0; state.correctAnswers=0; state.aiSimScore=0;
   qIndex=0;
   updateLives();
+  hideNextBtn('game');
   document.getElementById('game-av').textContent          = (state.avatar||'A')[0];
   document.getElementById('game-player-name').textContent = state.name;
   document.getElementById('game-score').textContent       = '0';
@@ -1406,6 +1525,8 @@ function startGame(subject) {
   document.getElementById('hint-box').style.display       = 'none';
   const labels={math:'Maths',science:'Science',space:'Space'};
   document.getElementById('game-mode-label').textContent  = labels[subject]||'Maths';
+  setTimerVisible('game', _playMode==='timed');
+  setPauseVisible('game', _playMode==='timed');
   goTo('game');
   loadQuestion();
 }
@@ -1471,12 +1592,14 @@ function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.rando
 
 function startTimer(level) {
   if(state.timerInterval) clearInterval(state.timerInterval);
+  if(_playMode === 'click') { state.timeLeft = 100; return; } // no timer in click mode
   const dur=level===1?20000:level===2?15000:12000;
   state.timeLeft=100;
   const tick=100; const dec=(tick/dur)*100;
   const fill=document.getElementById('timer-fill');
   fill.style.width='100%'; fill.classList.remove('urgent');
   state.timerInterval=setInterval(()=>{
+    if(_paused) return;
     state.timeLeft=Math.max(0,state.timeLeft-dec);
     fill.style.width=state.timeLeft+'%';
     if(state.timeLeft<30) fill.classList.add('urgent');
@@ -1489,7 +1612,10 @@ function timeUp() {
   document.getElementById('combo-text').textContent='';
   loseLife();
   showFeedback(false,"Time's up",`The answer was ${currentQ.a}`,0);
-  setTimeout(nextQ,2000);
+  // Always require click after time-up — child needs to see the answer
+  document.getElementById('hint-box').style.display='block';
+  document.getElementById('hint-box').textContent = currentQ.hint;
+  showNextBtn('game');
 }
 
 function checkAnswer(selected,btn,q) {
@@ -1544,7 +1670,13 @@ function checkAnswer(selected,btn,q) {
 
   document.getElementById('game-score').textContent    = state.score;
   document.getElementById('game-xp-live').textContent  = state.score;
-  setTimeout(nextQ, 2200);
+
+  if(correct && _playMode === 'timed') {
+    setTimeout(nextQ, 1800); // auto-advance correct in timed mode
+  } else {
+    // Click mode always, OR wrong answer always — show Next button
+    showNextBtn('game');
+  }
 }
 
 function nextQ() {
@@ -1971,20 +2103,25 @@ function updateNVRStats() {
 }
 
 function startNVR(mode) {
+  showModeSelector({ type:'nvr', mode });
+}
+
+function _actuallyStartNVR(mode) {
+  _paused = false;
   nvrState.mode     = mode;
-  nvrState.score    = 0;
-  nvrState.correct  = 0;
-  nvrState.total    = 0;
-  nvrState.qNum     = 0;
-  nvrState.lives    = 3;
-  nvrState.answered = false;
+  nvrState.score    = 0; nvrState.correct  = 0;
+  nvrState.total    = 0; nvrState.qNum     = 0;
+  nvrState.lives    = 3; nvrState.answered = false;
   updateNVRLives();
+  hideNextBtn('nvr');
   document.getElementById('nvr-score').textContent   = '0';
   document.getElementById('nvr-correct').textContent = '0';
   document.getElementById('nvr-qnum').textContent    = '1';
   document.getElementById('nvr-hint-box').style.display = 'none';
   const labels = {patterns:'Pattern Sequences',rotation:'Spatial Rotation',matrices:'Shape Matrices',mirror:'Mirror Images'};
   document.getElementById('nvr-mode-label').textContent = labels[mode]||'NVR';
+  setTimerVisible('nvr', _playMode==='timed');
+  setPauseVisible('nvr', _playMode==='timed');
   goTo('nvr-game');
   loadNVRQuestion();
 }
@@ -2148,20 +2285,27 @@ function checkNVR(el, isCorrect) {
   if(nvrState.totalSolved > 0 && nvrState.totalSolved % 10 === 0) nvrState.nvrLevel++;
   updateNVRStats();
 
-  setTimeout(() => {
-    if(nvrState.lives<=0 || nvrState.qNum>=nvrState.maxQ) endNVR();
-    else loadNVRQuestion();
-  }, isCorrect ? 1800 : 2800);
+  if(isCorrect && _playMode === 'timed') {
+    setTimeout(() => {
+      if(nvrState.lives<=0 || nvrState.qNum>=nvrState.maxQ) endNVR();
+      else loadNVRQuestion();
+    }, 1800);
+  } else {
+    // Click mode always, or wrong answer always — show Next button
+    showNextBtn('nvr');
+  }
 }
 
 function startNVRTimer() {
   if(nvrState.timerInterval) clearInterval(nvrState.timerInterval);
+  if(_playMode === 'click') { nvrState.timeLeft = 100; return; }
   nvrState.timeLeft = 100;
   const fill = document.getElementById('nvr-timer-fill');
   fill.style.width='100%'; fill.classList.remove('urgent');
   const dur = nvrState.mode==='matrices' ? 35000 : 25000;
   const tick=100; const dec=(tick/dur)*100;
   nvrState.timerInterval = setInterval(()=>{
+    if(_paused) return;
     nvrState.timeLeft = Math.max(0,nvrState.timeLeft-dec);
     fill.style.width = nvrState.timeLeft+'%';
     if(nvrState.timeLeft<30) fill.classList.add('urgent');
@@ -2172,7 +2316,7 @@ function startNVRTimer() {
         updateNVRLives(); nvrState.totalSolved++;
         const hb=document.getElementById('nvr-hint-box');
         hb.style.display='block'; hb.textContent=nvrState.currentQ.hint;
-        setTimeout(()=>{ if(nvrState.lives<=0||nvrState.qNum>=nvrState.maxQ) endNVR(); else loadNVRQuestion(); },2500);
+        showNextBtn('nvr');
       }
     }
   },tick);
@@ -2221,6 +2365,156 @@ async function getNVRHint() {
   const hint = nvrState.currentQ?.hint || 'Look carefully at what changes between each step.';
   hb.textContent = hint;
   if(Voice.enabled) Voice.speak(hint, false);
+}
+
+// ══════════════════════════════════════
+// PLAY MODE SYSTEM (Timed vs Relaxed/Click)
+// ══════════════════════════════════════
+
+// Pending game start info — stored while modal is open
+let _pendingStart = null; // { type: 'game'|'tt'|'nvr', subject, mode }
+let _playMode = 'click';  // 'timed' | 'click' — current session mode
+let _paused   = false;
+let _pausedTimeLeft = 100; // saved timer progress when paused
+
+// Subjects/modes that default to Timed
+const TIMED_DEFAULTS = ['math','science','space','tt_daily','tt_boss','tt_mixed','tt_families'];
+// NVR always defaults to Relaxed
+
+function showModeSelector(pendingStart) {
+  _pendingStart = pendingStart;
+  const isNVR = pendingStart.type === 'nvr';
+  const isTT  = pendingStart.type === 'tt';
+
+  // Set recommended default
+  const defaultTimed = TIMED_DEFAULTS.includes(pendingStart.subject||pendingStart.mode||'');
+  const defaultMode  = (isNVR) ? 'click' : defaultTimed ? 'timed' : 'click';
+  selectPlayMode(defaultMode);
+
+  // Update title
+  document.getElementById('ms-title').textContent =
+    isNVR ? 'How would you like to train?' : 'How would you like to practise?';
+
+  document.getElementById('mode-select-overlay').classList.add('open');
+}
+
+function selectPlayMode(mode) {
+  _playMode = mode;
+  document.getElementById('ms-timed').classList.toggle('sel', mode==='timed');
+  document.getElementById('ms-click').classList.toggle('sel', mode==='click');
+  document.getElementById('ms-timed-tag').style.display = mode==='timed' ? 'block' : 'none';
+  document.getElementById('ms-click-tag').style.display = mode==='click' ? 'block' : 'none';
+}
+
+function confirmPlayMode() {
+  document.getElementById('mode-select-overlay').classList.remove('open');
+  if(!_pendingStart) return;
+  const p = _pendingStart; _pendingStart = null;
+  if(p.type==='game')  _actuallyStartGame(p.subject);
+  if(p.type==='tt')    _actuallyStartTT(p.mode);
+  if(p.type==='nvr')   _actuallyStartNVR(p.mode);
+}
+
+// ── PAUSE SYSTEM ─────────────────────────────────────────────────
+function togglePause(context) {
+  if(_playMode === 'click') return; // no pause needed in click mode
+
+  _paused = !_paused;
+  const isGame = context === 'game';
+
+  const overlay = document.getElementById(isGame ? 'game-paused-overlay' : 'nvr-paused-overlay');
+  const btn     = document.getElementById(isGame ? 'pause-btn' : 'nvr-pause-btn');
+  const track   = document.getElementById(isGame ? 'timer-track' : 'nvr-timer-track');
+
+  overlay.classList.toggle('show', _paused);
+  btn.classList.toggle('paused', _paused);
+
+  if(_paused) {
+    // Freeze timer
+    if(isGame) { clearInterval(state.timerInterval); _pausedTimeLeft = state.timeLeft; }
+    else        { clearInterval(nvrState.timerInterval); _pausedTimeLeft = nvrState.timeLeft; }
+    Voice.stop();
+  } else {
+    // Resume timer from where it was
+    if(isGame) { state.timeLeft = _pausedTimeLeft; resumeTimer(); }
+    else        { nvrState.timeLeft = _pausedTimeLeft; resumeNVRTimer(); }
+  }
+}
+
+function resumeTimer() {
+  if(answered) return; // don't restart if already answered
+  const fill = document.getElementById('timer-fill');
+  const tick=100; const dec=0.5; // approximate — recalculate from level
+  const dur = currentQ?.level===1?20000:currentQ?.level===2?15000:12000;
+  const decActual = (tick/dur)*100;
+  state.timerInterval = setInterval(()=>{
+    if(_paused) return;
+    state.timeLeft = Math.max(0, state.timeLeft - decActual);
+    fill.style.width = state.timeLeft + '%';
+    if(state.timeLeft < 30) fill.classList.add('urgent');
+    if(state.timeLeft <= 0){ clearInterval(state.timerInterval); if(!answered) timeUp(); }
+  }, tick);
+}
+
+function resumeNVRTimer() {
+  if(nvrState.answered) return;
+  const fill = document.getElementById('nvr-timer-fill');
+  const dur  = nvrState.mode==='matrices' ? 35000 : 25000;
+  const tick=100; const dec=(tick/dur)*100;
+  nvrState.timerInterval = setInterval(()=>{
+    if(_paused) return;
+    nvrState.timeLeft = Math.max(0, nvrState.timeLeft - dec);
+    fill.style.width = nvrState.timeLeft + '%';
+    if(nvrState.timeLeft < 30) fill.classList.add('urgent');
+    if(nvrState.timeLeft <= 0){
+      clearInterval(nvrState.timerInterval);
+      if(!nvrState.answered) {
+        nvrState.answered=true; nvrState.lives=Math.max(0,nvrState.lives-1);
+        updateNVRLives();
+        showNextBtn('nvr');
+      }
+    }
+  }, tick);
+}
+
+// ── NEXT BUTTON ───────────────────────────────────────────────────
+function showNextBtn(context) {
+  const id = context==='game' ? 'next-btn' : 'nvr-next-btn';
+  document.getElementById(id).classList.add('show');
+}
+
+function hideNextBtn(context) {
+  const id = context==='game' ? 'next-btn' : 'nvr-next-btn';
+  document.getElementById(id).classList.remove('show');
+}
+
+function advanceFromNext(context) {
+  hideNextBtn(context);
+  hideFeedback();
+  if(context === 'game') {
+    qIndex++;
+    const isBoss = state.currentMode==='tt_boss';
+    const limit  = isBoss ? 10 : 20;
+    if(state.lives<=0 || qIndex>=limit) endGame();
+    else if(state.currentSubject==='tt') loadTTQuestion();
+    else loadQuestion();
+  } else {
+    if(nvrState.lives<=0 || nvrState.qNum>=nvrState.maxQ) endNVR();
+    else loadNVRQuestion();
+  }
+}
+
+// ── TIMER VISIBILITY ─────────────────────────────────────────────
+function setTimerVisible(context, visible) {
+  const id = context==='game' ? 'timer-track' : 'nvr-timer-track';
+  const el = document.getElementById(id);
+  if(el) el.style.opacity = visible ? '1' : '0.15';
+}
+
+function setPauseVisible(context, visible) {
+  const id = context==='game' ? 'pause-btn' : 'nvr-pause-btn';
+  const el = document.getElementById(id);
+  if(el) el.style.opacity = visible ? '1' : '0';
 }
 
 // ══════════════════════════════════════
