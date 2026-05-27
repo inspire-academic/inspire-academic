@@ -1176,6 +1176,15 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
 
 <script>
 // ══════════════════════════════════════
+// PLAY MODE STATE — declared first so all functions can reference it
+// ══════════════════════════════════════
+let _pendingStart   = null;
+let _playMode       = 'click';
+let _paused         = false;
+let _pausedTimeLeft = 100;
+const TIMED_DEFAULTS = ['math','science','space','tt_daily','tt_boss','tt_mixed','tt_families'];
+
+// ══════════════════════════════════════
 // URL PARAMS
 // ══════════════════════════════════════
 const _params    = new URLSearchParams(location.search);
@@ -2371,14 +2380,7 @@ async function getNVRHint() {
 // PLAY MODE SYSTEM (Timed vs Relaxed/Click)
 // ══════════════════════════════════════
 
-// Pending game start info — stored while modal is open
-let _pendingStart = null; // { type: 'game'|'tt'|'nvr', subject, mode }
-let _playMode = 'click';  // 'timed' | 'click' — current session mode
-let _paused   = false;
-let _pausedTimeLeft = 100; // saved timer progress when paused
-
 // Subjects/modes that default to Timed
-const TIMED_DEFAULTS = ['math','science','space','tt_daily','tt_boss','tt_mixed','tt_families'];
 // NVR always defaults to Relaxed
 
 function showModeSelector(pendingStart) {
