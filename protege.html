@@ -12,361 +12,371 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
-  --navy:   #0b1628;
-  --navy2:  #112240;
-  --navy3:  #1a3a5c;
-  --gold:   #d4a017;
-  --gold2:  #f0c040;
-  --white:  #ffffff;
-  --border: #1e3a5f;
-  --muted:  #7a8fa6;
-  /* Protégé palette */
+  --navy:     #0b1628;
+  --navy2:    #112240;
+  --navy3:    #1a3a5c;
+  --gold:     #d4a017;
+  --gold2:    #f0c040;
+  --white:    #ffffff;
+  --border:   #1e3a5f;
+  --muted:    #7a8fa6;
   --p-dark:   #06060f;
   --p-mid:    #0e0820;
   --p-purple: #7c2fff;
   --p-violet: #b46cff;
   --p-glow:   rgba(124,47,255,0.25);
   --p-border: rgba(180,108,255,0.25);
-  --r: 10px;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { overflow-x: hidden; }
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { overflow-x:hidden; }
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--p-dark);
-  color: var(--white);
-  min-height: 100vh;
-  overflow-x: hidden;
+  font-family:'DM Sans',sans-serif;
+  background:var(--p-dark);
+  color:var(--white);
+  min-height:100vh;
+  overflow-x:hidden;
 }
-a { text-decoration: none; color: inherit; }
-button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
+a { text-decoration:none; color:inherit; }
+button { cursor:pointer; font-family:'DM Sans',sans-serif; }
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--p-dark); }
+::-webkit-scrollbar-thumb { background:rgba(124,47,255,.4); border-radius:3px; }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--p-dark); }
-::-webkit-scrollbar-thumb { background: rgba(124,47,255,.4); border-radius: 3px; }
-
-/* ── STARS CANVAS ── */
+/* ── STAR BG ── */
 #stars-bg {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  position:fixed; inset:0; z-index:0; pointer-events:none;
   background:
     radial-gradient(ellipse at 20% 30%, rgba(124,47,255,0.08) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 70%, rgba(60,20,120,0.12) 0%, transparent 60%),
     var(--p-dark);
 }
 .star {
-  position: absolute; border-radius: 50%; background: white; opacity: 0;
-  animation: twinkle var(--d) var(--dl) infinite ease-in-out;
+  position:absolute; border-radius:50%; background:white; opacity:0;
+  animation:twinkle var(--d) var(--dl) infinite ease-in-out;
 }
 @keyframes twinkle {
   0%,100%{opacity:0;transform:scale(1)}
   50%{opacity:var(--op);transform:scale(1.3)}
 }
 
-/* ── NAV (matches Inspire exactly) ── */
-.topnav {
-  background: rgba(11,22,40,0.92);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  padding: .9rem 2rem;
-  display: flex; align-items: center; gap: 1.5rem;
-  position: sticky; top: 0; z-index: 100;
-}
-.topnav-logo img { height: 36px; width: auto; border-radius: 8px; max-width: 120px; }
-.topnav-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem; font-weight: 700;
-  color: var(--gold); flex: 1;
-}
-.nav-links { display: flex; gap: .3rem; }
-.nav-link {
-  padding: .45rem .9rem; border-radius: 6px;
-  font-size: .82rem; font-weight: 500;
-  color: var(--muted); background: none; border: none;
-  transition: all .2s;
-}
-.nav-link:hover { background: var(--navy3); color: var(--white); }
-.nav-link.active {
-  background: rgba(124,47,255,.15);
-  color: var(--p-violet);
-}
-.nav-user {
-  display: flex; align-items: center; gap: .75rem;
-  padding: .4rem .8rem; border: 1px solid var(--border);
-  border-radius: 6px; font-size: .82rem;
-  cursor: pointer; transition: all .2s;
-}
-.nav-user:hover { border-color: var(--p-violet); }
-.avatar {
-  width: 30px; height: 30px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: .82rem; flex-shrink: 0;
-}
-
 /* ── LOADING ── */
 .loading-screen {
-  position: fixed; inset: 0; background: var(--p-dark);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 999; flex-direction: column; gap: 16px;
+  position:fixed; inset:0; background:var(--p-dark);
+  display:flex; align-items:center; justify-content:center;
+  z-index:999; flex-direction:column; gap:16px;
 }
 .loading-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px; font-weight: 700; color: var(--p-violet);
+  font-family:'Playfair Display',serif;
+  font-size:22px; font-weight:700; color:var(--p-violet);
 }
 .spinner {
-  width: 32px; height: 32px;
-  border: 2px solid rgba(180,108,255,.2);
-  border-top-color: var(--p-violet);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
+  width:32px; height:32px;
+  border:2px solid rgba(180,108,255,.2);
+  border-top-color:var(--p-violet);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ── NAV ── */
+.topnav {
+  background:rgba(11,22,40,0.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:.9rem 2rem;
+  display:flex; align-items:center; gap:1.5rem;
+  position:sticky; top:0; z-index:100;
+}
+.topnav-logo img { height:36px; width:auto; border-radius:8px; max-width:120px; }
+.topnav-title {
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem; font-weight:700;
+  color:var(--gold); flex:1;
+}
+.nav-links { display:flex; gap:.3rem; }
+.nav-link {
+  padding:.45rem .9rem; border-radius:6px;
+  font-size:.82rem; font-weight:500;
+  color:var(--muted); background:none; border:none;
+  transition:all .2s;
+}
+.nav-link:hover { background:var(--navy3); color:var(--white); }
+.nav-link.active { background:rgba(124,47,255,.15); color:var(--p-violet); }
+.nav-user {
+  display:flex; align-items:center; gap:.75rem;
+  padding:.4rem .8rem; border:1px solid var(--border);
+  border-radius:6px; font-size:.82rem;
+  cursor:pointer; transition:all .2s;
+}
+.nav-user:hover { border-color:var(--p-violet); }
+.avatar {
+  width:30px; height:30px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:.82rem; flex-shrink:0;
+}
 
 /* ── HERO ── */
 .hero {
-  position: relative; z-index: 1;
-  min-height: calc(100vh - 58px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center;
-  padding: 3rem 1.5rem;
+  position:relative; z-index:1;
+  min-height:calc(100vh - 58px);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding:3rem 1.5rem;
 }
+
+/* Welcome name — BIG, celebrated */
+.hero-welcome-wrap {
+  margin-bottom:2rem;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:.5rem;
+}
+.hero-welcome-pre {
+  font-family:'DM Mono',monospace;
+  font-size:.75rem; letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--p-violet); opacity:.7;
+}
+.hero-welcome-name {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(48px, 9vw, 90px);
+  font-weight:900;
+  line-height:1;
+  background:linear-gradient(135deg, #ffffff 0%, var(--p-violet) 60%, #7c2fff 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-.02em;
+  animation:name-glow 3s ease-in-out infinite alternate;
+}
+@keyframes name-glow {
+  from { filter:drop-shadow(0 0 20px rgba(180,108,255,0.3)); }
+  to   { filter:drop-shadow(0 0 40px rgba(180,108,255,0.7)); }
+}
+.hero-welcome-sub {
+  font-size:1rem; color:var(--muted); font-weight:400;
+  letter-spacing:.02em;
+}
+
 .hero-eyebrow {
-  font-family: 'DM Mono', monospace;
-  font-size: .7rem; letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--p-violet); opacity: .8;
-  margin-bottom: 1.2rem;
-  display: flex; align-items: center; gap: 10px;
+  font-family:'DM Mono',monospace;
+  font-size:.7rem; letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--p-violet); opacity:.8;
+  margin-bottom:1.2rem;
+  display:flex; align-items:center; gap:10px;
 }
 .hero-eyebrow::before,
 .hero-eyebrow::after {
-  content: ''; display: block;
-  width: 32px; height: 1px;
-  background: var(--p-violet); opacity: .4;
+  content:''; display:block;
+  width:32px; height:1px;
+  background:var(--p-violet); opacity:.4;
 }
 .hero-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(42px, 8vw, 80px);
-  font-weight: 900; line-height: 1.05;
-  margin-bottom: 1.2rem;
-  letter-spacing: -.02em;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px, 7vw, 68px);
+  font-weight:900; line-height:1.05;
+  margin-bottom:1.2rem;
+  letter-spacing:-.02em;
 }
-.hero-title .line1 { color: var(--white); display: block; }
-.hero-title .line2 {
-  color: var(--p-violet);
-  font-style: italic;
-  display: block;
-}
+.hero-title .line1 { color:var(--white); display:block; }
+.hero-title .line2 { color:var(--p-violet); font-style:italic; display:block; }
 .hero-sub {
-  font-size: clamp(15px, 2vw, 18px);
-  color: var(--muted);
-  max-width: 540px;
-  line-height: 1.7;
-  margin-bottom: 2.5rem;
-}
-.hero-greeting {
-  display: inline-block;
-  background: rgba(180,108,255,.1);
-  border: 1px solid var(--p-border);
-  border-radius: 50px;
-  padding: .5rem 1.4rem;
-  font-size: .9rem; color: var(--p-violet);
-  font-weight: 600;
-  margin-bottom: 1.4rem;
+  font-size:clamp(15px,2vw,17px);
+  color:var(--muted);
+  max-width:520px;
+  line-height:1.7;
+  margin-bottom:2.5rem;
 }
 
-/* ── SUBJECT CARDS ── */
-.subjects-row {
-  position: relative; z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.2rem;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1.5rem 5rem;
-}
-.subject-card {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 16px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all .25s cubic-bezier(.34,1.2,.64,1);
-  position: relative;
-}
-.subject-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 48px rgba(0,0,0,.5);
-}
-.subject-card.active { border-color: var(--p-border); box-shadow: 0 0 0 1px rgba(180,108,255,.15); }
-.subject-card.active:hover { border-color: var(--p-violet); box-shadow: 0 16px 48px var(--p-glow), 0 0 0 1px var(--p-border); }
-.subject-card.locked { opacity: .5; cursor: default; }
-.subject-card.locked:hover { transform: none; box-shadow: none; }
-
-.sc-accent { height: 3px; width: 100%; }
-.sc-body { padding: 1.4rem; }
-.sc-icon { font-size: 2.2rem; margin-bottom: .8rem; display: block; line-height: 1; }
-.sc-badge {
-  display: inline-block;
-  font-family: 'DM Mono', monospace;
-  font-size: .58rem; font-weight: 600;
-  letter-spacing: .1em; text-transform: uppercase;
-  padding: .2rem .55rem; border-radius: 3px;
-  margin-bottom: .65rem;
-}
-.sc-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.15rem; font-weight: 700;
-  margin-bottom: .3rem; line-height: 1.2;
-}
-.sc-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
-.sc-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  padding-top: .9rem; border-top: 1px solid rgba(255,255,255,.06);
-}
-.sc-meta { font-size: .72rem; color: var(--muted); font-family: 'DM Mono', monospace; }
-.sc-btn {
-  background: rgba(124,47,255,.2);
-  border: 1px solid rgba(180,108,255,.35);
-  color: var(--p-violet);
-  padding: .45rem 1.1rem;
-  border-radius: 6px; font-size: .82rem;
-  font-weight: 700; transition: all .2s;
-  font-family: 'DM Sans', sans-serif;
-}
-.sc-btn:hover { background: var(--p-purple); color: white; }
-.sc-btn.gold {
-  background: var(--gold); border-color: var(--gold);
-  color: var(--navy);
-  box-shadow: 0 4px 18px rgba(212,160,23,.35);
-}
-.sc-btn.gold:hover { background: var(--gold2); }
-.sc-btn.dim { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.08); color: var(--muted); cursor: default; }
-
-/* ── MODAL OVERLAY (full-page game launcher) ── */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.92);
-  z-index: 500;
-  display: none; align-items: flex-start;
-  justify-content: center;
-  padding: .75rem;
-  backdrop-filter: blur(6px);
-}
-.modal-overlay.open { display: flex; }
-.modal-frame {
-  background: #06060f;
-  border: 1px solid var(--p-border);
-  border-radius: 14px;
-  width: 100%; max-width: 1280px;
-  height: calc(100vh - 1.5rem);
-  display: flex; flex-direction: column;
-  overflow: hidden;
-  animation: modalIn .25s ease;
-}
-@keyframes modalIn {
-  from { opacity:0; transform:scale(.97) translateY(8px); }
-  to   { opacity:1; transform:scale(1) translateY(0); }
-}
-.modal-topbar {
-  display: flex; align-items: center; gap: 1rem;
-  padding: .8rem 1.2rem;
-  background: rgba(255,255,255,.03);
-  border-bottom: 1px solid var(--p-border);
-  flex-shrink: 0;
-}
-.modal-icon { font-size: 1.3rem; flex-shrink: 0; }
-.modal-name {
-  font-family: 'Playfair Display', serif;
-  font-size: .95rem; font-weight: 700; flex: 1;
-  color: var(--p-violet);
-}
-.modal-close {
-  background: none; border: 1px solid rgba(255,255,255,.1);
-  color: var(--muted); width: 32px; height: 32px;
-  border-radius: 6px; font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s;
-}
-.modal-close:hover { border-color: var(--p-violet); color: var(--white); }
-.modal-iframe-wrap { flex: 1; position: relative; overflow: hidden; }
-.modal-iframe-wrap iframe {
-  width: 100%; height: 100%;
-  border: none; display: block;
-}
-.iframe-loading {
-  position: absolute; inset: 0;
-  background: var(--p-dark);
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 12px;
-}
-.iframe-loading p { font-size: .82rem; color: var(--muted); font-family: 'DM Mono', monospace; }
-
-/* ── SECTION LABEL ── */
-.section-label {
-  position: relative; z-index: 1;
-  max-width: 1100px; margin: 0 auto 1rem;
-  padding: 0 1.5rem;
-  display: flex; align-items: center; gap: 12px;
-}
-.section-label-line { flex: 1; height: 1px; background: rgba(255,255,255,.07); }
-.section-label-text {
-  font-family: 'DM Mono', monospace;
-  font-size: .65rem; letter-spacing: .15em;
-  text-transform: uppercase; color: var(--muted);
-  white-space: nowrap;
-}
-
-/* ── HERO LAUNCH BTN ── */
+/* ── HERO BUTTONS ── */
 .hero-launch {
-  display: inline-flex; align-items: center; gap: .7rem;
-  background: linear-gradient(135deg, var(--p-purple), var(--p-violet));
-  color: white; border: none;
-  padding: 1rem 2.4rem; border-radius: 50px;
-  font-size: 1.1rem; font-weight: 700;
-  box-shadow: 0 8px 32px var(--p-glow);
-  transition: all .22s cubic-bezier(.34,1.2,.64,1);
-  letter-spacing: .02em;
-  animation: hero-pulse 3s ease-in-out infinite;
+  display:inline-flex; align-items:center; gap:.7rem;
+  background:linear-gradient(135deg, var(--p-purple), var(--p-violet));
+  color:white; border:none;
+  padding:1rem 2.4rem; border-radius:50px;
+  font-size:1.05rem; font-weight:700;
+  box-shadow:0 8px 32px var(--p-glow);
+  transition:all .22s cubic-bezier(.34,1.2,.64,1);
+  letter-spacing:.02em;
+  animation:hero-pulse 3s ease-in-out infinite;
 }
 .hero-launch:hover {
-  transform: scale(1.06) translateY(-2px);
-  box-shadow: 0 14px 48px rgba(124,47,255,.5);
+  transform:scale(1.06) translateY(-2px);
+  box-shadow:0 14px 48px rgba(124,47,255,.5);
 }
 @keyframes hero-pulse {
   0%,100%{box-shadow:0 8px 32px var(--p-glow)}
   50%{box-shadow:0 8px 48px rgba(124,47,255,.5)}
 }
 .hero-secondary {
-  display: inline-flex; align-items: center; gap: .5rem;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,.12);
-  color: var(--muted); padding: .9rem 2rem;
-  border-radius: 50px; font-size: .95rem; font-weight: 500;
-  transition: all .2s; margin-left: .75rem;
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:transparent;
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--muted); padding:.9rem 2rem;
+  border-radius:50px; font-size:.95rem; font-weight:500;
+  transition:all .2s; margin-left:.75rem;
 }
-.hero-secondary:hover { border-color: rgba(255,255,255,.3); color: var(--white); }
+.hero-secondary:hover { border-color:rgba(255,255,255,.3); color:var(--white); }
 
-/* ── FLOATING PARTICLES ── */
-.particle {
-  position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
-  animation: particle-float var(--d) var(--dl) ease-in-out infinite alternate;
+/* ── SECTION LABEL ── */
+.section-label {
+  position:relative; z-index:1;
+  max-width:1100px; margin:0 auto 1rem;
+  padding:0 1.5rem;
+  display:flex; align-items:center; gap:12px;
 }
-@keyframes particle-float {
-  from { transform: translateY(0) translateX(0); opacity: var(--op); }
-  to   { transform: translateY(var(--ty)) translateX(var(--tx)); opacity: 0; }
+.section-label-line { flex:1; height:1px; background:rgba(255,255,255,.07); }
+.section-label-text {
+  font-family:'DM Mono',monospace;
+  font-size:.65rem; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--muted);
+  white-space:nowrap;
 }
 
-/* ── MOBILE ── */
+/* ── SUBJECT CARDS ── */
+.subjects-row {
+  position:relative; z-index:1;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+  gap:1.2rem;
+  max-width:1100px;
+  margin:0 auto;
+  padding:0 1.5rem 5rem;
+}
+.subject-card {
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:all .25s cubic-bezier(.34,1.2,.64,1);
+  position:relative;
+}
+.subject-card:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,.5); }
+.subject-card.active { border-color:var(--p-border); box-shadow:0 0 0 1px rgba(180,108,255,.15); }
+.subject-card.active:hover { border-color:var(--p-violet); box-shadow:0 16px 48px var(--p-glow),0 0 0 1px var(--p-border); }
+.subject-card.locked { opacity:.5; cursor:default; }
+.subject-card.locked:hover { transform:none; box-shadow:none; }
+
+/* card image banner — photo realistic */
+.sc-banner {
+  height:160px;
+  width:100%;
+  object-fit:cover;
+  display:block;
+  filter:brightness(.75) saturate(.9);
+  transition:filter .3s;
+}
+.subject-card:hover .sc-banner { filter:brightness(.9) saturate(1.1); }
+.subject-card.locked .sc-banner { filter:brightness(.4) saturate(0); }
+
+.sc-accent { height:3px; width:100%; }
+.sc-body { padding:1.4rem; }
+.sc-badge {
+  display:inline-block;
+  font-family:'DM Mono',monospace;
+  font-size:.58rem; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  padding:.2rem .55rem; border-radius:3px;
+  margin-bottom:.65rem;
+}
+.sc-name {
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem; font-weight:700;
+  margin-bottom:.3rem; line-height:1.2;
+}
+.sc-desc { font-size:.82rem; color:var(--muted); line-height:1.6; margin-bottom:1rem; }
+.sc-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  padding-top:.9rem; border-top:1px solid rgba(255,255,255,.06);
+}
+.sc-meta { font-size:.72rem; color:var(--muted); font-family:'DM Mono',monospace; }
+.sc-btn {
+  background:rgba(124,47,255,.2);
+  border:1px solid rgba(180,108,255,.35);
+  color:var(--p-violet);
+  padding:.45rem 1.1rem;
+  border-radius:6px; font-size:.82rem;
+  font-weight:700; transition:all .2s;
+  font-family:'DM Sans',sans-serif;
+}
+.sc-btn:hover { background:var(--p-purple); color:white; }
+.sc-btn.gold {
+  background:var(--gold); border-color:var(--gold);
+  color:var(--navy);
+  box-shadow:0 4px 18px rgba(212,160,23,.35);
+}
+.sc-btn.gold:hover { background:var(--gold2); }
+.sc-btn.dim { background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.08); color:var(--muted); cursor:default; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.92);
+  z-index:500;
+  display:none; align-items:flex-start; justify-content:center;
+  padding:.75rem;
+  backdrop-filter:blur(6px);
+}
+.modal-overlay.open { display:flex; }
+.modal-frame {
+  background:#06060f;
+  border:1px solid var(--p-border);
+  border-radius:14px;
+  width:100%; max-width:1280px;
+  height:calc(100vh - 1.5rem);
+  display:flex; flex-direction:column;
+  overflow:hidden;
+  animation:modalIn .25s ease;
+}
+@keyframes modalIn {
+  from{opacity:0;transform:scale(.97) translateY(8px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+.modal-topbar {
+  display:flex; align-items:center; gap:1rem;
+  padding:.8rem 1.2rem;
+  background:rgba(255,255,255,.03);
+  border-bottom:1px solid var(--p-border);
+  flex-shrink:0;
+}
+.modal-name {
+  font-family:'Playfair Display',serif;
+  font-size:.95rem; font-weight:700; flex:1;
+  color:var(--p-violet);
+}
+.modal-close {
+  background:none; border:1px solid rgba(255,255,255,.1);
+  color:var(--muted); width:32px; height:32px;
+  border-radius:6px; font-size:1rem;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .2s;
+}
+.modal-close:hover { border-color:var(--p-violet); color:var(--white); }
+.modal-iframe-wrap { flex:1; position:relative; overflow:hidden; }
+.modal-iframe-wrap iframe { width:100%; height:100%; border:none; display:block; }
+.iframe-loading {
+  position:absolute; inset:0;
+  background:var(--p-dark);
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:12px;
+}
+.iframe-loading p { font-size:.82rem; color:var(--muted); font-family:'DM Mono',monospace; }
+
+/* ── RESPONSIVE ── */
 @media(max-width:768px) {
-  .nav-links { display: none; }
-  .topnav { padding: .75rem 1rem; }
-  .hero { padding: 2rem 1rem; }
-  .subjects-row { padding: 0 1rem 5rem; grid-template-columns: 1fr 1fr; }
-  .hero-secondary { display: none; }
+  .nav-links { display:none; }
+  .topnav { padding:.75rem 1rem; }
+  .hero { padding:2rem 1rem; }
+  .subjects-row { padding:0 1rem 5rem; grid-template-columns:1fr 1fr; }
+  .hero-secondary { display:none; }
+  .hero-welcome-name { font-size:clamp(36px,12vw,60px); }
 }
 @media(max-width:480px) {
-  .subjects-row { grid-template-columns: 1fr; }
+  .subjects-row { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -376,13 +386,13 @@ button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
 
 <!-- LOADING -->
 <div class="loading-screen" id="loadingScreen">
-  <div class="loading-logo">✦ Protégé</div>
+  <div class="loading-logo">Protégé</div>
   <div class="spinner"></div>
 </div>
 
 <!-- NAV -->
 <nav class="topnav">
-  <a href="dashboard.html" style="text-decoration:none;color:inherit;">
+  <a href="dashboard.html">
     <div class="topnav-logo">
       <img src="/icons/icon-192.png" alt="Inspire Science" onerror="this.style.display='none'">
     </div>
@@ -394,7 +404,7 @@ button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
     <button class="nav-link" onclick="location.href='progress.html'">My Progress</button>
     <button class="nav-link" onclick="location.href='revision.html'">Personalised Learning</button>
     <button class="nav-link" onclick="location.href='tools.html'">Tools</button>
-    <button class="nav-link active">✦ Protégé</button>
+    <button class="nav-link active">Protégé</button>
   </div>
   <div class="nav-user" onclick="location.href='dashboard.html'">
     <div class="avatar" id="nav-avatar" style="background:var(--p-purple);color:white;">?</div>
@@ -402,30 +412,35 @@ button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
   </div>
 </nav>
 
-<!-- HERO SECTION -->
+<!-- HERO -->
 <section class="hero">
-  <div id="user-greeting" class="hero-greeting" style="display:none">
-    Welcome back, <span id="greeting-name">Champion</span> ✦
+
+  <!-- BIG celebrated welcome — shown once name loads -->
+  <div class="hero-welcome-wrap" id="hero-welcome-wrap">
+    <div class="hero-welcome-pre">Welcome back</div>
+    <div class="hero-welcome-name" id="hero-welcome-name">Champion</div>
+    <div class="hero-welcome-sub">Your journey continues today</div>
   </div>
+
   <div class="hero-eyebrow">Inspire Protégé Programme</div>
   <h1 class="hero-title">
     <span class="line1">Become a</span>
     <span class="line2">Science &amp; Maths Superstar</span>
   </h1>
   <p class="hero-sub">
-    A deliberately designed world that builds extraordinary young minds — through AI-powered games, adaptive challenges, and a journey that makes learning feel like a superpower.
+    A deliberately designed world that builds extraordinary young minds — through adaptive challenges, a personal AI tutor, and a journey that makes learning feel like a superpower.
   </p>
   <div>
     <button class="hero-launch" onclick="launchGame('mathgenius')">
-      ▶ &nbsp;Launch MathGenius Academy
+      &#9654;&nbsp; Launch MathGenius Academy
     </button>
     <button class="hero-secondary" onclick="document.querySelector('.subjects-row').scrollIntoView({behavior:'smooth'})">
-      Explore all modules ↓
+      Explore all modules &darr;
     </button>
   </div>
 </section>
 
-<!-- SUBJECTS SECTION -->
+<!-- MODULES -->
 <div class="section-label">
   <div class="section-label-line"></div>
   <div class="section-label-text">Learning Modules</div>
@@ -436,27 +451,33 @@ button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
 
   <!-- MathGenius Academy — LIVE -->
   <div class="subject-card active" onclick="launchGame('mathgenius')">
+    <img class="sc-banner"
+      src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80&fit=crop"
+      alt="Mathematics — equations on a blackboard"
+      onerror="this.style.display='none'">
     <div class="sc-accent" style="background:linear-gradient(90deg,#7c2fff,#b46cff)"></div>
     <div class="sc-body">
-      <span class="sc-icon">🧮</span>
-      <span class="sc-badge" style="background:rgba(124,47,255,.2);color:#b46cff;">⭐ Live Now</span>
+      <span class="sc-badge" style="background:rgba(124,47,255,.2);color:#b46cff;">Live Now</span>
       <div class="sc-name">MathGenius Academy</div>
-      <div class="sc-desc">AI-powered maths adventures. Combo streaks, adaptive difficulty, a personal AI tutor, and friend battles. Every question makes you sharper.</div>
+      <div class="sc-desc">Adaptive maths challenges with a personal AI tutor. Combo streaks, dynamic difficulty, and multiplayer friend battles. Every question makes you sharper.</div>
       <div class="sc-footer">
         <span class="sc-meta">Maths · Science · Space · Logic</span>
-        <button class="sc-btn gold" onclick="event.stopPropagation();launchGame('mathgenius')">Play →</button>
+        <button class="sc-btn gold" onclick="event.stopPropagation();launchGame('mathgenius')">Play &rarr;</button>
       </div>
     </div>
   </div>
 
-  <!-- Science Explorer — Coming Soon -->
+  <!-- Science Explorer -->
   <div class="subject-card locked">
+    <img class="sc-banner"
+      src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80&fit=crop"
+      alt="Science — laboratory glassware"
+      onerror="this.style.display='none'">
     <div class="sc-accent" style="background:linear-gradient(90deg,#16803c,#4ade80)"></div>
     <div class="sc-body">
-      <span class="sc-icon">🔬</span>
       <span class="sc-badge" style="background:rgba(122,143,166,.1);color:var(--muted);border:1px solid rgba(255,255,255,.08);">Coming Soon</span>
       <div class="sc-name">Science Explorer</div>
-      <div class="sc-desc">Biology, Chemistry and Physics brought to life. Build molecules, dissect virtual specimens, and run experiments with instant AI feedback.</div>
+      <div class="sc-desc">Biology, Chemistry and Physics brought to life. Build molecules, conduct virtual experiments, and explore the natural world with precision.</div>
       <div class="sc-footer">
         <span class="sc-meta">All Sciences · Yr 5–9</span>
         <button class="sc-btn dim">Soon</button>
@@ -464,14 +485,17 @@ button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
     </div>
   </div>
 
-  <!-- Space Command — Coming Soon -->
+  <!-- Space Command -->
   <div class="subject-card locked">
+    <img class="sc-banner"
+      src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=80&fit=crop"
+      alt="Space — Earth from orbit"
+      onerror="this.style.display='none'">
     <div class="sc-accent" style="background:linear-gradient(90deg,#1c4f8a,#3b82f6)"></div>
     <div class="sc-body">
-      <span class="sc-icon">🚀</span>
       <span class="sc-badge" style="background:rgba(122,143,166,.1);color:var(--muted);border:1px solid rgba(255,255,255,.08);">Coming Soon</span>
       <div class="sc-name">Space Command</div>
-      <div class="sc-desc">Navigate the solar system, learn orbital mechanics, and answer astrophysics challenges to unlock new missions and planets.</div>
+      <div class="sc-desc">Navigate the solar system, study orbital mechanics, and answer astrophysics challenges to unlock new missions across the cosmos.</div>
       <div class="sc-footer">
         <span class="sc-meta">Astronomy · Physics · Maths</span>
         <button class="sc-btn dim">Soon</button>
@@ -479,14 +503,17 @@ button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
     </div>
   </div>
 
-  <!-- Logic Labyrinth — Coming Soon -->
+  <!-- Logic Labyrinth -->
   <div class="subject-card locked">
+    <img class="sc-banner"
+      src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&q=80&fit=crop"
+      alt="Logic — chess board strategy"
+      onerror="this.style.display='none'">
     <div class="sc-accent" style="background:linear-gradient(90deg,#b45309,#f59e0b)"></div>
     <div class="sc-body">
-      <span class="sc-icon">🧩</span>
       <span class="sc-badge" style="background:rgba(122,143,166,.1);color:var(--muted);border:1px solid rgba(255,255,255,.08);">Coming Soon</span>
       <div class="sc-name">Logic Labyrinth</div>
-      <div class="sc-desc">Puzzles, patterns, and problem-solving designed to build the kind of mathematical thinking that sets prodigies apart from everyone else.</div>
+      <div class="sc-desc">Structured puzzles, pattern recognition, and problem-solving designed to build the mathematical thinking that distinguishes exceptional minds.</div>
       <div class="sc-footer">
         <span class="sc-meta">Logic · Problem Solving</span>
         <button class="sc-btn dim">Soon</button>
@@ -496,13 +523,12 @@ button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
 
 </div>
 
-<!-- GAME MODAL -->
+<!-- MODAL -->
 <div class="modal-overlay" id="gameModal">
   <div class="modal-frame">
     <div class="modal-topbar">
-      <span class="modal-icon" id="modal-icon">🧮</span>
       <span class="modal-name" id="modal-name">MathGenius Academy</span>
-      <button class="modal-close" onclick="closeModal()" title="Close">✕</button>
+      <button class="modal-close" onclick="closeModal()" title="Close">&times;</button>
     </div>
     <div class="modal-iframe-wrap">
       <div class="iframe-loading" id="iframe-loading">
@@ -516,23 +542,17 @@ button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ── SUPABASE ──────────────────────────────────────
 const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
 const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
 const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-// ── GAME REGISTRY ─────────────────────────────────
 const GAMES = {
-  mathgenius: { file: '/math-genius-academy.html', icon: '🧮', name: 'MathGenius Academy' }
+  mathgenius: { file: '/math-genius-academy.html', name: 'MathGenius Academy' }
 }
 
-// ── AUTH ──────────────────────────────────────────
 async function init() {
   const { data: { session } } = await supa.auth.getSession()
-  if (!session) {
-    window.location.href = '/index.html'
-    return
-  }
+  if (!session) { window.location.href = '/index.html'; return }
 
   const { data: profile } = await supa
     .from('profiles')
@@ -543,48 +563,36 @@ async function init() {
   const name    = profile?.first_name || profile?.full_name?.split(' ')[0] || 'Champion'
   const initial = name[0]?.toUpperCase() || '?'
 
-  document.getElementById('nav-name').textContent   = name
-  document.getElementById('nav-avatar').textContent = initial
+  document.getElementById('nav-name').textContent    = name
+  document.getElementById('nav-avatar').textContent  = initial
+  document.getElementById('hero-welcome-name').textContent = name
 
-  // Show personalised greeting
-  const greet = document.getElementById('user-greeting')
-  document.getElementById('greeting-name').textContent = name
-  greet.style.display = 'inline-block'
+  const wrap = document.getElementById('hero-welcome-wrap')
+  wrap.style.display = 'flex'
 
   document.getElementById('loadingScreen').style.display = 'none'
-
-  // Animate stars and particles
   initStars()
-  initParticles()
 }
 
-// ── GAME LAUNCHER ─────────────────────────────────
 function launchGame(gameId) {
   const game = GAMES[gameId]
   if (!game) return
-
-  // Pass user name into the game via URL param
   const name = document.getElementById('nav-name').textContent || ''
   let src = game.file
   if (name && name !== 'Student') src += `?name=${encodeURIComponent(name)}`
-
-  document.getElementById('modal-icon').textContent   = game.icon
-  document.getElementById('modal-name').textContent   = game.name
-  document.getElementById('iframe-loading').style.display = 'flex'
-  document.getElementById('game-iframe').style.opacity = '0'
-  document.getElementById('game-iframe').src = src
+  document.getElementById('modal-name').textContent          = game.name
+  document.getElementById('iframe-loading').style.display   = 'flex'
+  document.getElementById('game-iframe').style.opacity      = '0'
+  document.getElementById('game-iframe').src                = src
   document.getElementById('gameModal').classList.add('open')
   document.body.style.overflow = 'hidden'
-
-  // Update URL
   history.pushState({ game: gameId }, '', `?game=${gameId}`)
 }
 
 function iframeLoaded() {
   document.getElementById('iframe-loading').style.display = 'none'
-  const iframe = document.getElementById('game-iframe')
-  iframe.style.opacity = '1'
-  iframe.style.transition = 'opacity .3s ease'
+  const f = document.getElementById('game-iframe')
+  f.style.opacity = '1'; f.style.transition = 'opacity .3s ease'
 }
 
 function closeModal() {
@@ -594,77 +602,29 @@ function closeModal() {
   history.pushState({}, '', window.location.pathname)
 }
 
-// Close on backdrop click
 document.getElementById('gameModal').addEventListener('click', function(e) {
   if (e.target === this) closeModal()
 })
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal() })
 
-// XP sync from game iframe
 window.addEventListener('message', (e) => {
-  if (e.data?.type === 'MATHGENIUS_XP') {
-    console.log('[Protégé] XP earned:', e.data.xp, e.data.subject)
-    // TODO: sync to Supabase progress table
-  }
+  if (e.data?.type === 'MATHGENIUS_XP') console.log('[Protégé] XP:', e.data.xp)
 })
 
-// Auto-launch from URL param
-const gameParam = new URLSearchParams(location.search).get('game')
-if (gameParam && GAMES[gameParam]) {
-  // Wait for auth then launch
-  supa.auth.getSession().then(({ data: { session } }) => {
-    if (session) launchGame(gameParam)
-  })
-}
+const gp = new URLSearchParams(location.search).get('game')
+if (gp && GAMES[gp]) supa.auth.getSession().then(({data:{session}}) => { if(session) launchGame(gp) })
 
-// ── VISUAL EFFECTS ─────────────────────────────────
 function initStars() {
   const bg = document.getElementById('stars-bg')
   for (let i = 0; i < 140; i++) {
-    const s = document.createElement('div')
-    s.className = 'star'
-    const size = Math.random() * 2.5 + 0.5
-    s.style.cssText = `
-      width:${size}px;height:${size}px;
-      left:${Math.random()*100}%;
-      top:${Math.random()*100}%;
-      --d:${2+Math.random()*5}s;
-      --dl:${Math.random()*6}s;
-      --op:${.3+Math.random()*.7};
-    `
+    const s = document.createElement('div'); s.className = 'star'
+    const sz = Math.random()*2.5+.5
+    s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*5}s;--dl:${Math.random()*6}s;--op:${.3+Math.random()*.7};`
     bg.appendChild(s)
   }
 }
 
-function initParticles() {
-  const colors = ['rgba(124,47,255,0.6)','rgba(180,108,255,0.5)','rgba(212,160,23,0.4)','rgba(60,130,246,0.4)']
-  for (let i = 0; i < 12; i++) {
-    const p = document.createElement('div')
-    p.className = 'particle'
-    const size = 3 + Math.random() * 5
-    p.style.cssText = `
-      width:${size}px;height:${size}px;
-      left:${Math.random()*100}%;
-      top:${Math.random()*100}%;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      --d:${4+Math.random()*8}s;
-      --dl:${Math.random()*6}s;
-      --op:${.4+Math.random()*.5};
-      --ty:${(Math.random()-.5)*80}px;
-      --tx:${(Math.random()-.5)*60}px;
-    `
-    document.body.appendChild(p)
-  }
-}
-
-// ── BOOT ──────────────────────────────────────────
 init()
-</script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js')
-  }
 </script>
 </body>
 </html>
