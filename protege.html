@@ -538,7 +538,20 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif;}
 // ── CONFIG ────────────────────────────────────────────────────────
 const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
 const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
-const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+// Hard timeout — loading screen always hides after 6 seconds no matter what
+setTimeout(() => {
+  const ls = document.getElementById('loadingScreen')
+  if (ls) ls.style.display = 'none'
+}, 6000)
+
+let supa
+try {
+  supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+} catch(e) {
+  console.error('[Protégé] Supabase failed to init:', e)
+  document.getElementById('loadingScreen').style.display = 'none'
+}
 
 const XP_PER_LEVEL = 500
 
@@ -574,6 +587,10 @@ let STATE = {
 
 // ── INIT ──────────────────────────────────────────────────────────
 async function init() {
+  if (!supa) {
+    document.getElementById('loadingScreen').style.display = 'none'
+    return
+  }
   try {
     const { data: { session } } = await supa.auth.getSession()
     if (!session) { window.location.href = '/index.html'; return }
