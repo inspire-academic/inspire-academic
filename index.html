@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Inspire Science — GCSE Revision Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"></noscript>
 <style>
 :root{
   --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
@@ -16,7 +19,7 @@
   --r:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
+body{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
 button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;}
 input,select{font-family:'DM Sans',sans-serif;}
@@ -307,9 +310,11 @@ input,select{font-family:'DM Sans',sans-serif;}
 </div>
 <div id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="perf-utils.js"></script>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script src="perf-utils.js" defer></script>
+<script defer>
+window.addEventListener('DOMContentLoaded', () => {
+
 const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
@@ -354,7 +359,7 @@ function goStep2(){
   if(pass.length<8){toast('Password must be at least 8 characters','error');return;}
   if(!year){toast('Please select your year group','error');return;}
   showStep(2);
-  selectBoard('AQA'); // auto-select AQA
+  selectBoard('AQA');
 }
 
 function goStep3(){
@@ -390,7 +395,6 @@ async function doLogin(){
   const redirect=params.get('redirect');
   if(redirect==='flashcards'){window.location.href='flashcards.html';return;}
 
-  // Fetch full profile once and cache it — inner pages read from cache
   perfStart('profile-fetch');
   const {data:profile}=await supa.from('profiles').select('*').eq('id',data.user.id).single();
   perfEnd('profile-fetch');
@@ -416,9 +420,7 @@ async function doSignup(){
   });
   if(error){toast(error.message,'error');btn.disabled=false;btn.textContent='Create My Account →';return;}
   if(data.user){
-    // Auto-assign programme based on year group
-    const programme = 'year6_bridging'; // All students get Year 6 access
-    
+    const programme = 'year6_bridging';
     const profileData = {
       id:data.user.id,
       full_name:fullName,
@@ -455,7 +457,20 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&document.getElementById('form-login').classList.contains('active')) doLogin();
 });
 
-(async()=>{
+// Expose all functions to window so HTML onclick attributes can reach them
+window.switchTab=switchTab;
+window.showStep=showStep;
+window.goStep2=goStep2;
+window.goStep3=goStep3;
+window.selectBoard=selectBoard;
+window.selectTier=selectTier;
+window.doLogin=doLogin;
+window.doSignup=doSignup;
+window.resetPw=resetPw;
+
+// Session check runs AFTER login form is painted — not before.
+// Login form shows instantly; logged-in users get redirected ~100ms later.
+const checkSession = async () => {
   if(sessionStorage.getItem('password_reset_flow')) return;
   const {data:{session}}=await supa.auth.getSession();
   if(session){
@@ -463,7 +478,15 @@ document.addEventListener('keydown',e=>{
     if(params.get('redirect')==='flashcards'){window.location.href='flashcards.html';return;}
     window.location.href='dashboard.html';
   }
-})();
+};
+
+if('requestIdleCallback' in window){
+  requestIdleCallback(checkSession, {timeout:2000});
+} else {
+  setTimeout(checkSession, 100); // Safari fallback
+}
+
+}); // end DOMContentLoaded
 </script>
     <script>
       if ("serviceWorker" in navigator) {
