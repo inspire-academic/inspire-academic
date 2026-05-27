@@ -94,57 +94,6 @@ body {
 }
 .sign-out-btn:hover { border-color: var(--red); color: var(--red); }
 
-/* profile dropdown for teacher dashboard */
-.sidebar-footer{position:relative;}
-.profile-dropdown{
-  position:absolute;bottom:calc(100% + .5rem);left:0;
-  background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
-  min-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:1001;
-  display:none;
-}
-.profile-dropdown.show{display:block;}
-.profile-dropdown-header{
-  padding:1rem 1.25rem;border-bottom:1px solid var(--border);
-}
-.profile-dropdown-title{font-weight:600;font-size:.9rem;color:var(--gold);}
-.profile-dropdown-body{padding:1.25rem;}
-.profile-form-group{margin-bottom:1rem;}
-.profile-form-group:last-of-type{margin-bottom:0;}
-.profile-label{
-  display:block;font-size:.75rem;text-transform:uppercase;
-  letter-spacing:.08em;color:var(--muted);margin-bottom:.4rem;
-}
-.profile-input,.profile-select{
-  width:100%;background:var(--navy);border:1px solid var(--border);
-  border-radius:var(--r);padding:.65rem .9rem;color:var(--white);
-  font-size:.88rem;transition:border-color .2s;
-}
-.profile-input:focus,.profile-select:focus{
-  outline:none;border-color:var(--gold);
-}
-.profile-input:disabled{
-  background:var(--navy3);color:var(--muted);cursor:not-allowed;
-}
-.profile-actions{
-  display:flex;gap:.6rem;margin-top:1.25rem;padding-top:1.25rem;
-  border-top:1px solid var(--border);
-}
-.profile-save-btn{
-  flex:1;background:var(--gold);color:var(--navy);
-  border:none;padding:.7rem;border-radius:var(--r);
-  font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s;
-}
-.profile-save-btn:hover{background:var(--gold2);}
-.profile-save-btn:disabled{opacity:.5;cursor:not-allowed;}
-.profile-signout-btn{
-  flex:1;background:transparent;border:1px solid var(--red);
-  color:var(--red);padding:.7rem;border-radius:var(--r);
-  font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s;
-}
-.profile-signout-btn:hover{background:var(--red);color:var(--white);}
-.teacher-name-clickable{cursor:pointer;transition:all .15s;}
-.teacher-name-clickable:hover{color:var(--gold);}
-
 /* ── Main ── */
 .main { flex: 1; padding: 2rem; overflow-y: auto; }
 
@@ -370,65 +319,13 @@ tr:hover td { background: rgba(255,255,255,.025); }
         <span class="icon">🎯</span><span>Teaching Cockpit</span>
       </div>
     </a>
-    <div class="nav-item" style="cursor:pointer;" onclick="window.open('dashboard.html?preview=true','_self');">
-      <span class="icon">👁️</span><span>Student View</span>
-    </div>
 
     <div class="sidebar-footer">
-      <div class="teacher-name teacher-name-clickable" onclick="toggleProfileDropdown()">
+      <div class="teacher-name">
         <strong id="teacher-name-display">Teacher</strong>
-        Signed in · <span style="font-size:.7rem;">▼</span>
+        Signed in
       </div>
-      <div class="profile-dropdown" id="profile-dropdown">
-        <div class="profile-dropdown-header">
-          <div class="profile-dropdown-title">Account Settings</div>
-        </div>
-        <div class="profile-dropdown-body">
-          <div class="profile-form-group">
-            <label class="profile-label">First Name</label>
-            <input type="text" class="profile-input" id="profile-first-name" placeholder="Your first name">
-          </div>
-          <div class="profile-form-group">
-            <label class="profile-label">Last Name</label>
-            <input type="text" class="profile-input" id="profile-last-name" placeholder="Your last name">
-          </div>
-          <div class="profile-form-group">
-            <label class="profile-label">Email</label>
-            <input type="email" class="profile-input" id="profile-email" disabled>
-          </div>
-          <div class="profile-form-group">
-            <label class="profile-label">Year Group</label>
-            <select class="profile-select" id="profile-year-group">
-              <option value="Y7">Year 7</option>
-              <option value="Y8">Year 8</option>
-              <option value="Y9">Year 9</option>
-              <option value="Y10">Year 10</option>
-              <option value="Y11">Year 11</option>
-              <option value="A Level">A Level</option>
-              <option value="Sci-Bridging Y6">Sci-Bridging Y6</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="profile-form-group">
-            <label class="profile-label">Exam Board</label>
-            <select class="profile-select" id="profile-exam-board" onchange="toggleCustomExamBoard()">
-              <option value="AQA">AQA</option>
-              <option value="Edexcel">Edexcel</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="profile-form-group" id="custom-exam-board-group" style="display:none;">
-            <label class="profile-label">Specify Exam Board</label>
-            <input type="text" class="profile-input" id="profile-exam-board-custom" placeholder="e.g., OCR, WJEC, Cambridge">
-          </div>
-          <div class="profile-actions">
-            <button class="profile-save-btn" id="profile-save-btn" onclick="saveProfile()">
-              <span id="profile-save-text">Save Changes</span>
-            </button>
-            <button class="profile-signout-btn" onclick="signOut()">Sign Out</button>
-          </div>
-        </div>
-      </div>
+      <button class="sign-out-btn" onclick="signOut()">Sign out</button>
     </div>
   </nav>
 
@@ -1159,82 +1056,114 @@ async function loadAssessmentsPanel() {
   const panel = document.getElementById('assessments-panel');
   panel.innerHTML = '<div style="color:var(--muted);padding:2rem 0;">Loading…</div>';
 
-  // Load all assessments with attempt counts
-  const { data: assessments } = await supa.from('assessments')
-    .select('*').order('created_at', { ascending: false });
+  try {
+    // Get all revision assignments (assigned packs)
+    const { data: assignments, error: assignError } = await supa
+      .from('revision_assignments')
+      .select(`
+        id,
+        pack_id,
+        assigned_to,
+        assigned_by,
+        due_date,
+        message,
+        status,
+        assigned_at,
+        revision_packs(id, title, subject, created_by, exam_board, difficulty_tier)
+      `)
+      .order('assigned_at', { ascending: false });
 
-  if (!assessments?.length) {
-    panel.innerHTML = `<div class="empty-state">
-      <div class="empty-icon">📋</div>
-      <div class="empty-title">No assessments yet</div>
-      <div>Create your first assessment using the button above.</div>
-    </div>`;
-    return;
-  }
+    if (assignError) {
+      console.error('Error loading assignments:', assignError);
+      panel.innerHTML = '<div style="color:var(--red);">Error loading assignments</div>';
+      return;
+    }
 
-  // Load attempt counts per assessment
-  const { data: attempts } = await supa.from('assessment_attempts')
-    .select('assessment_id, status, student_id, percentage, submitted_at, released_at, id');
+    if (!assignments?.length) {
+      panel.innerHTML = `<div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div class="empty-title">No assignments yet</div>
+        <div>Assignments appear when you assign revision packs to students.</div>
+      </div>`;
+      return;
+    }
 
-  const attemptsByAssessment = {};
-  (attempts || []).forEach(a => {
-    if (!attemptsByAssessment[a.assessment_id]) attemptsByAssessment[a.assessment_id] = [];
-    attemptsByAssessment[a.assessment_id].push(a);
-  });
+    // Get submission counts for each assignment
+    const { data: submissions } = await supa
+      .from('revision_pack_submissions')
+      .select('id, assignment_id, status, submitted_at, score, reviewed_at');
 
-  _assessmentData = assessments;
+    // Build submission counts map
+    const submissionCounts = {};
+    if (submissions) {
+      submissions.forEach(sub => {
+        if (!submissionCounts[sub.assignment_id]) {
+          submissionCounts[sub.assignment_id] = {
+            total: 0,
+            submitted: 0,
+            reviewed: 0
+          };
+        }
+        submissionCounts[sub.assignment_id].total++;
+        if (sub.status === 'submitted') submissionCounts[sub.assignment_id].submitted++;
+        if (sub.status === 'reviewed') submissionCounts[sub.assignment_id].reviewed++;
+      });
+    }
 
-  panel.innerHTML = assessments.map(a => {
-    const atts = attemptsByAssessment[a.id] || [];
-    const submitted = atts.filter(x => x.status === 'submitted' || x.status === 'reviewed').length;
-    const inProgress = atts.filter(x => x.status === 'in_progress').length;
-    const released = atts.filter(x => x.released_at).length;
-    const needsReview = submitted - released;
-
-    return `<div class="card" style="margin-bottom:1rem;padding:1.2rem 1.4rem;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
-        <div style="flex:1;">
-          <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem;">${escHtml(a.title)}</div>
-          <div style="font-size:.78rem;color:var(--muted);">${a.exam_board} · ${a.subject} · ${a.tier} · ${a.status}</div>
-          <div style="display:flex;gap:1rem;margin-top:.6rem;flex-wrap:wrap;">
-            <span style="font-size:.78rem;color:var(--muted);">📥 ${atts.length} attempts</span>
-            <span style="font-size:.78rem;color:var(--muted);">🔄 ${inProgress} in progress</span>
-            <span style="font-size:.78rem;color:var(--muted);">✓ ${submitted} submitted</span>
-            ${needsReview > 0 ? `<span style="font-size:.78rem;color:var(--gold);font-weight:700;">⚠ ${needsReview} awaiting review</span>` : ''}
+    // Render assignments
+    panel.innerHTML = assignments.map(assign => {
+      const pack = assign.revision_packs;
+      if (!pack) return '';
+      
+      const counts = submissionCounts[assign.id] || { total: 0, submitted: 0, reviewed: 0 };
+      const statusColor = counts.submitted > 0 ? 'var(--amber)' : 'var(--muted)';
+      
+      return `<div class="card" style="margin-bottom:1rem;padding:1.2rem 1.4rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
+          <div style="flex:1;">
+            <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem;">${escHtml(pack.title)}</div>
+            <div style="font-size:.78rem;color:var(--muted);">${pack.exam_board} · ${pack.subject} · ${pack.difficulty_tier}</div>
+            <div style="display:flex;gap:1rem;margin-top:.6rem;flex-wrap:wrap;">
+              <span style="font-size:.78rem;color:var(--muted);">Due: ${assign.due_date ? new Date(assign.due_date).toLocaleDateString('en-GB') : 'No due date'}</span>
+              <span style="font-size:.78rem;color:${statusColor};">✓ ${counts.submitted} submitted</span>
+              <span style="font-size:.78rem;color:var(--green);">✔ ${counts.reviewed} reviewed</span>
+            </div>
+            ${assign.message ? `<div style="margin-top:.6rem;padding:.5rem;background:rgba(201,168,76,.1);border-left:3px solid var(--gold);color:var(--gold);font-size:.78rem;">${escHtml(assign.message)}</div>` : ''}
+          </div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;flex-shrink:0;">
+            <button onclick="openAssignmentSubmissions('${assign.id}')"
+              style="background:var(--navy);border:1px solid var(--border);color:var(--white);padding:.45rem .9rem;border-radius:7px;font-size:.78rem;cursor:pointer;">
+              📋 Review
+            </button>
+            <button onclick="withdrawAssignment('${assign.id}', '${escHtml(pack.title)}')"
+              style="background:var(--navy);border:1px solid rgba(239,68,68,.4);color:#f87171;padding:.45rem .9rem;border-radius:7px;font-size:.78rem;cursor:pointer;">
+              ✕ Withdraw
+            </button>
           </div>
         </div>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap;flex-shrink:0;">
-          <button onclick="openAssignModal('${a.id}')"
-            style="background:var(--navy);border:1px solid var(--border);color:var(--white);padding:.45rem .9rem;border-radius:7px;font-size:.78rem;cursor:pointer;">
-            👥 Assign
-          </button>
-          <button onclick="openSubmissions('${a.id}')"
-            style="background:var(--navy);border:1px solid var(--border);color:var(--white);padding:.45rem .9rem;border-radius:7px;font-size:.78rem;cursor:pointer;">
-            📋 Review submissions
-          </button>
-          <button onclick="withdrawAssessment('${a.id}', '${escHtml(a.title)}')"
-            style="background:var(--navy);border:1px solid rgba(239,68,68,.4);color:#f87171;padding:.45rem .9rem;border-radius:7px;font-size:.78rem;cursor:pointer;">
-            ✕ Withdraw
-          </button>
-        </div>
-      </div>
-      <div id="submissions-panel-${a.id}" style="display:none;margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;"></div>
-    </div>`;
-  }).join('');
+        <div id="submissions-panel-${assign.id}" style="display:none;margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;"></div>
+      </div>`;
+    }).join('');
+
+  } catch (err) {
+    console.error('Assessment panel error:', err);
+    panel.innerHTML = '<div style="color:var(--red);">Error loading assignments</div>';
+  }
 }
 
-async function openSubmissions(assessmentId) {
-  const panel = document.getElementById(`submissions-panel-${assessmentId}`);
+async function openAssignmentSubmissions(assignmentId) {
+  const panel = document.getElementById(`submissions-panel-${assignmentId}`);
   if (panel.style.display !== 'none') { panel.style.display = 'none'; return; }
   panel.style.display = 'block';
   panel.innerHTML = '<div style="color:var(--muted);font-size:.82rem;">Loading submissions…</div>';
 
-  const { data: attempts } = await supa.from('assessment_attempts')
-    .select('*, profiles(full_name, year_group)')
-    .eq('assessment_id', assessmentId)
+  const { data: submissions } = await supa
+    .from('revision_pack_submissions')
+    .select('*')
+    .eq('assignment_id', assignmentId)
     .order('submitted_at', { ascending: false });
 
-  if (!attempts?.length) {
+  if (!submissions?.length) {
     panel.innerHTML = '<div style="color:var(--muted);font-size:.82rem;padding:.5rem 0;">No submissions yet.</div>';
     return;
   }
@@ -1245,10 +1174,58 @@ async function openSubmissions(assessmentId) {
       <th style="text-align:left;padding:.4rem .6rem;">Status</th>
       <th style="text-align:left;padding:.4rem .6rem;">Score</th>
       <th style="text-align:left;padding:.4rem .6rem;">Submitted</th>
-      <th style="text-align:left;padding:.4rem .6rem;">Released</th>
+      <th style="text-align:left;padding:.4rem .6rem;">Feedback</th>
       <th style="text-align:left;padding:.4rem .6rem;">Actions</th>
     </tr></thead>
     <tbody>
+      ${submissions.map(sub => {
+        const submitted = sub.submitted_at
+          ? new Date(sub.submitted_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ', ' +
+            new Date(sub.submitted_at).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' })
+          : '-';
+        
+        const statusColor = sub.status === 'submitted' ? 'var(--amber)'
+          : sub.status === 'reviewed' ? 'var(--green)' : 'var(--muted)';
+        
+        return `<tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:.4rem .6rem;font-size:.75rem;color:var(--muted);">${sub.student_id.substring(0, 8)}…</td>
+          <td style="padding:.4rem .6rem;color:${statusColor};">${sub.status}</td>
+          <td style="padding:.4rem .6rem;">${sub.score !== null ? sub.score + '%' : '-'}</td>
+          <td style="padding:.4rem .6rem;font-size:.75rem;">${submitted}</td>
+          <td style="padding:.4rem .6rem;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${sub.feedback || '-'}</td>
+          <td style="padding:.4rem .6rem;">
+            ${sub.status === 'submitted' ? `
+              <button onclick="markReviewed('${sub.id}')" style="background:transparent;border:none;color:var(--green);cursor:pointer;font-size:.78rem;">
+                ✔ Mark reviewed
+              </button>
+            ` : ''}
+          </td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>`;
+}
+
+async function markReviewed(submissionId) {
+  const feedback = prompt('Add optional feedback:');
+  const score = prompt('Enter score (0-100):');
+  
+  if (score === null) return;
+  
+  const { error } = await supa.from('revision_pack_submissions')
+    .update({
+      status: 'reviewed',
+      feedback: feedback || null,
+      score: parseInt(score) || null,
+      reviewed_at: new Date().toISOString(),
+      reviewed_by: (await supa.auth.getUser()).data.user?.id
+    })
+    .eq('id', submissionId);
+  
+  if (!error) {
+    location.reload();
+  }
+}
       ${attempts.map(att => {
         const name = att.profiles?.full_name || 'Unknown';
         const year = att.profiles?.year_group || '—';
@@ -1403,9 +1380,9 @@ function closeReviewModal() {
   _currentReviewAttemptId = null;
 }
 
-async function withdrawAssessment(assessmentId, title) {
-  if (!confirm(`Withdraw "${title}"?\n\nThis will hide it from all students immediately. Existing attempts are preserved.`)) return;
-  await supa.from('assessments').update({ status: 'withdrawn' }).eq('id', assessmentId);
+async function withdrawAssignment(assignmentId, title) {
+  if (!confirm(`Withdraw "${title}"?\n\nThis will hide it from all students immediately. Existing submissions are preserved.`)) return;
+  await supa.from('revision_assignments').update({ status: 'withdrawn' }).eq('id', assignmentId);
   loadAssessmentsPanel();
 }
 
@@ -1599,139 +1576,6 @@ function escHtml(str) {
 
 // ── Boot ──────────────────────────────────────────────────────────────
 init();
-
-// ── Profile Dropdown ──────────────────────────────────────
-function toggleProfileDropdown(){
-  const dropdown=document.getElementById('profile-dropdown');
-  dropdown.classList.toggle('show');
-}
-
-// Toggle custom exam board field visibility
-function toggleCustomExamBoard(){
-  const select=document.getElementById('profile-exam-board');
-  const customGroup=document.getElementById('custom-exam-board-group');
-  if(select.value==='Other'){
-    customGroup.style.display='block';
-  }else{
-    customGroup.style.display='none';
-  }
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click',function(e){
-  const footer=document.querySelector('.sidebar-footer');
-  const dropdown=document.getElementById('profile-dropdown');
-  if(footer && !footer.contains(e.target)){
-    dropdown.classList.remove('show');
-  }
-});
-
-async function saveProfile(){
-  const btn=document.getElementById('profile-save-btn');
-  const btnText=document.getElementById('profile-save-text');
-  btn.disabled=true;
-  btnText.textContent='Saving...';
-  
-  const firstName=document.getElementById('profile-first-name').value.trim();
-  const lastName=document.getElementById('profile-last-name').value.trim();
-  const yearGroup=document.getElementById('profile-year-group').value;
-  let examBoard=document.getElementById('profile-exam-board').value;
-  
-  // If "Other" selected, use custom value
-  if(examBoard==='Other'){
-    const customBoard=document.getElementById('profile-exam-board-custom').value.trim();
-    if(!customBoard){
-      alert('Please specify your exam board');
-      btn.disabled=false;
-      btnText.textContent='Save Changes';
-      return;
-    }
-    examBoard=customBoard;
-  }
-  
-  if(!firstName || !lastName){
-    alert('Please enter both first and last name');
-    btn.disabled=false;
-    btnText.textContent='Save Changes';
-    return;
-  }
-  
-  try{
-    const{data:{user}}=await supa.auth.getUser();
-    if(!user){
-      alert('Not logged in');
-      return;
-    }
-    
-    const{error}=await supa
-      .from('profiles')
-      .update({
-        first_name:firstName,
-        last_name:lastName,
-        full_name:`${firstName} ${lastName}`,
-        year_group:yearGroup,
-        exam_board:examBoard
-      })
-      .eq('id',user.id);
-    
-    if(error){
-      console.error('Update error:',error);
-      alert('Error saving profile: '+error.message);
-    }else{
-      // Update teacher name display
-      document.getElementById('teacher-name-display').textContent=`${firstName} ${lastName}`;
-      
-      // Close dropdown
-      document.getElementById('profile-dropdown').classList.remove('show');
-      
-      alert('✓ Profile updated successfully!');
-    }
-  }catch(e){
-    console.error('Save error:',e);
-    alert('Error saving profile');
-  }finally{
-    btn.disabled=false;
-    btnText.textContent='Save Changes';
-  }
-}
-
-// Load profile data when page loads
-async function loadProfileData(){
-  try{
-    const{data:{user}}=await supa.auth.getUser();
-    if(!user) return;
-    
-    const{data:profile}=await supa
-      .from('profiles')
-      .select('first_name,last_name,year_group,exam_board')
-      .eq('id',user.id)
-      .single();
-    
-    if(profile){
-      document.getElementById('profile-first-name').value=profile.first_name||'';
-      document.getElementById('profile-last-name').value=profile.last_name||'';
-      document.getElementById('profile-year-group').value=profile.year_group||'Y10';
-      
-      // Handle exam board - if not AQA or Edexcel, treat as custom
-      const examBoard=profile.exam_board||'AQA';
-      if(examBoard==='AQA' || examBoard==='Edexcel'){
-        document.getElementById('profile-exam-board').value=examBoard;
-      }else{
-        document.getElementById('profile-exam-board').value='Other';
-        document.getElementById('profile-exam-board-custom').value=examBoard;
-        document.getElementById('custom-exam-board-group').style.display='block';
-      }
-    }
-    
-    // Set email (from auth user, not profiles table)
-    document.getElementById('profile-email').value=user.email||'';
-  }catch(e){
-    console.error('Load profile error:',e);
-  }
-}
-
-// Call loadProfileData after init
-setTimeout(loadProfileData,500);
 </script>
     <script>
       if ("serviceWorker" in navigator) {
