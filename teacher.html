@@ -1057,25 +1057,15 @@ async function loadAssessmentsPanel() {
   panel.innerHTML = '<div style="color:var(--muted);padding:2rem 0;">Loading…</div>';
 
   try {
-    // Get all revision assignments (assigned packs)
+    // Step 1: Get all revision assignments
     const { data: assignments, error: assignError } = await supa
       .from('revision_assignments')
-      .select(`
-        id,
-        pack_id,
-        assigned_to,
-        assigned_by,
-        due_date,
-        message,
-        status,
-        assigned_at,
-        revision_packs(id, title, subject, created_by, exam_board, difficulty_tier)
-      `)
+      .select('id, pack_id, assigned_to, assigned_by, due_date, message, status, assigned_at')
       .order('assigned_at', { ascending: false });
 
     if (assignError) {
       console.error('Error loading assignments:', assignError);
-      panel.innerHTML = '<div style="color:var(--red);">Error loading assignments</div>';
+      panel.innerHTML = '<div style="color:var(--red);">Error: ' + assignError.message + '</div>';
       return;
     }
 
@@ -1088,43 +1078,55 @@ async function loadAssessmentsPanel() {
       return;
     }
 
-    // Get submission counts for each assignment
+    // Step 2: Get pack details for each assignment
+    const packIds = [...new Set(assignments.map(a => a.pack_id))];
+    const { data: packs } = await supa
+      .from('revision_packs')
+      .select('id, title, subject, exam_board, difficulty_tier')
+      .in('id', packIds);
+
+    const packsMap = {};
+    (packs || []).forEach(p => {
+      packsMap[p.id] = p;
+    });
+
+    // Step 3: Get submission counts
+    const assignmentIds = assignments.map(a => a.id);
     const { data: submissions } = await supa
       .from('revision_pack_submissions')
-      .select('id, assignment_id, status, submitted_at, score, reviewed_at');
+      .select('id, assignment_id, status');
 
-    // Build submission counts map
     const submissionCounts = {};
-    if (submissions) {
-      submissions.forEach(sub => {
-        if (!submissionCounts[sub.assignment_id]) {
-          submissionCounts[sub.assignment_id] = {
-            total: 0,
-            submitted: 0,
-            reviewed: 0
-          };
-        }
-        submissionCounts[sub.assignment_id].total++;
-        if (sub.status === 'submitted') submissionCounts[sub.assignment_id].submitted++;
-        if (sub.status === 'reviewed') submissionCounts[sub.assignment_id].reviewed++;
-      });
-    }
+    (submissions || []).forEach(sub => {
+      if (!submissionCounts[sub.assignment_id]) {
+        submissionCounts[sub.assignment_id] = {
+          total: 0,
+          submitted: 0,
+          reviewed: 0
+        };
+      }
+      submissionCounts[sub.assignment_id].total++;
+      if (sub.status === 'submitted') submissionCounts[sub.assignment_id].submitted++;
+      if (sub.status === 'reviewed') submissionCounts[sub.assignment_id].reviewed++;
+    });
 
-    // Render assignments
-    panel.innerHTML = assignments.map(assign => {
-      const pack = assign.revision_packs;
-      if (!pack) return '';
+    // Step 4: Render
+    let html = '';
+    assignments.forEach(assign => {
+      const pack = packsMap[assign.pack_id];
+      if (!pack) return;
       
       const counts = submissionCounts[assign.id] || { total: 0, submitted: 0, reviewed: 0 };
       const statusColor = counts.submitted > 0 ? 'var(--amber)' : 'var(--muted)';
+      const dueDate = assign.due_date ? new Date(assign.due_date).toLocaleDateString('en-GB') : 'No due date';
       
-      return `<div class="card" style="margin-bottom:1rem;padding:1.2rem 1.4rem;">
+      html += `<div class="card" style="margin-bottom:1rem;padding:1.2rem 1.4rem;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;">
           <div style="flex:1;">
             <div style="font-weight:700;font-size:1rem;margin-bottom:.3rem;">${escHtml(pack.title)}</div>
             <div style="font-size:.78rem;color:var(--muted);">${pack.exam_board} · ${pack.subject} · ${pack.difficulty_tier}</div>
             <div style="display:flex;gap:1rem;margin-top:.6rem;flex-wrap:wrap;">
-              <span style="font-size:.78rem;color:var(--muted);">Due: ${assign.due_date ? new Date(assign.due_date).toLocaleDateString('en-GB') : 'No due date'}</span>
+              <span style="font-size:.78rem;color:var(--muted);">Due: ${dueDate}</span>
               <span style="font-size:.78rem;color:${statusColor};">✓ ${counts.submitted} submitted</span>
               <span style="font-size:.78rem;color:var(--green);">✔ ${counts.reviewed} reviewed</span>
             </div>
@@ -1143,11 +1145,13 @@ async function loadAssessmentsPanel() {
         </div>
         <div id="submissions-panel-${assign.id}" style="display:none;margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;"></div>
       </div>`;
-    }).join('');
+    });
+
+    panel.innerHTML = html || '<div style="color:var(--muted);">No assignments found</div>';
 
   } catch (err) {
     console.error('Assessment panel error:', err);
-    panel.innerHTML = '<div style="color:var(--red);">Error loading assignments</div>';
+    panel.innerHTML = '<div style="color:var(--red);">Error: ' + err.message + '</div>';
   }
 }
 
