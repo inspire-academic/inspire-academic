@@ -697,11 +697,15 @@
   <div class="combo-display" id="combo-display"></div>
 
   <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+    <button id="speak-question-btn" class="ai-hint-btn" style="display:none;align-items:center;gap:6px;"
+      title="Read question aloud" aria-label="Read question aloud">
+      &#128266; Listen
+    </button>
     <button class="ai-hint-btn" onclick="getHint()">
-      🤖 Get a Hint
+      Ask for a Hint
     </button>
     <div class="ai-hint-btn" style="cursor:default;" id="score-display">
-      ⭐ <span id="game-score">0</span> pts
+      &#11088; <span id="game-score">0</span> pts
     </div>
   </div>
   <div class="ai-hint-box" id="ai-hint-box"></div>
@@ -773,10 +777,96 @@
 
 <script>
 // ══════════════════════════════════════
+// URL PARAMS — read context from Protégé
+// ══════════════════════════════════════
+const _params = new URLSearchParams(location.search);
+const _urlName     = _params.get('name')    || '';
+const _voiceOn     = _params.get('voice')   === '1';
+const _autoRead    = _params.get('autoread')=== '1';
+const _voiceSpeed  = _params.get('speed')  || 'normal';
+
+// ══════════════════════════════════════
+// VOICE ENGINE
+// ══════════════════════════════════════
+const Voice = {
+  enabled:   _voiceOn,
+  autoRead:  _autoRead,
+  speed:     _voiceSpeed,
+  synth:     window.speechSynthesis,
+  _voices:   [],
+
+  init() {
+    if (!this.synth) return;
+    const load = () => { this._voices = this.synth.getVoices(); };
+    load();
+    this.synth.onvoiceschanged = load;
+  },
+
+  _rate() {
+    return this.speed === 'slow' ? 0.75 : this.speed === 'fast' ? 1.4 : 1.0;
+  },
+
+  speak(text, priority = false) {
+    if (!this.enabled || !this.synth) return;
+    if (priority) this.synth.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate   = this._rate();
+    utter.pitch  = 1.05;
+    utter.volume = 1;
+    // Prefer a natural English voice
+    const pref = this._voices.find(v =>
+      v.lang.startsWith('en') && !v.name.includes('Google') && v.localService
+    ) || this._voices.find(v => v.lang.startsWith('en'));
+    if (pref) utter.voice = pref;
+    this.synth.speak(utter);
+  },
+
+  stop() { this.synth?.cancel(); },
+
+  // Update from Protégé settings postMessage
+  update(settings) {
+    this.enabled  = settings.voice_enabled !== false;
+    this.autoRead = settings.auto_read_questions === true;
+    this.speed    = settings.voice_speed || 'normal';
+  }
+};
+Voice.init();
+
+// Listen for settings updates from parent Protégé page
+window.addEventListener('message', (e) => {
+  if (e.data?.type === 'PROTEGE_SETTINGS') Voice.update(e.data);
+});
+
+// ══════════════════════════════════════
+// SESSION TRACKER — for postMessage reporting
+// ══════════════════════════════════════
+const sessionTopics = {}; // { type: { correct, total } }
+
+function recordTopicResult(type, isCorrect) {
+  if (!sessionTopics[type]) sessionTopics[type] = { correct: 0, total: 0 };
+  sessionTopics[type].total++;
+  if (isCorrect) sessionTopics[type].correct++;
+}
+
+function reportSessionToProtege(totalXp) {
+  const topicsPlayed = Object.entries(sessionTopics).map(([type, d]) => ({
+    type, correct: d.correct, total: d.total
+  }));
+  window.parent?.postMessage({
+    type:              'MATHGENIUS_SESSION_END',
+    xpEarned:          totalXp,
+    questionsAnswered: state.questionsAnswered,
+    correctAnswers:    state.correctAnswers,
+    maxCombo:          state.maxCombo,
+    topicsPlayed
+  }, '*');
+}
+
+// ══════════════════════════════════════
 // STATE
 // ══════════════════════════════════════
 const state = {
-  name: 'Hero', avatar: '🦁', grade: 'Year 1', xp: 0, level: 1,
+  name: _urlName || 'Hero', avatar: '🦁', grade: 'Year 1', xp: 0, level: 1,
   streak: 1, totalXp: 0, mathLevel: 1, combo: 0, maxCombo: 0,
   lives: 3, score: 0, questionsAnswered: 0, correctAnswers: 0,
   currentSubject: 'math', timerInterval: null, timeLeft: 100,
@@ -885,6 +975,15 @@ function createProfile() {
   spawnParticles(200, 200);
 }
 
+// Auto-skip to dashboard if name passed via URL from Protégé
+if(_urlName) {
+  state.name = _urlName;
+  document.addEventListener('DOMContentLoaded', () => {
+    updateDashboard();
+    goTo('dashboard');
+  });
+}
+
 function updateDashboard() {
   document.getElementById('dash-av').textContent = state.avatar;
   document.getElementById('dash-name').textContent = state.name;
@@ -944,7 +1043,6 @@ function loadQuestion() {
   document.getElementById('ai-hint-box').style.display = 'none';
 
   const pool = questions[state.currentSubject] || questions.math;
-  // Prefer questions matching current math level, fall back to any
   let filtered = pool.filter(q => q.level <= state.mathLevel + 1);
   if(!filtered.length) filtered = pool;
   currentQ = filtered[Math.floor(Math.random() * filtered.length)];
@@ -955,6 +1053,17 @@ function loadQuestion() {
   document.getElementById('q-hint').textContent = currentQ.type === 'word' ? '📖 Word Problem' : currentQ.type === 'mul' ? '✖️ Multiply!' : currentQ.type === 'div' ? '➗ Divide!' : currentQ.type === 'sub' ? '➖ Subtract!' : currentQ.type === 'add' ? '➕ Add!' : '🔢 Calculate:';
   document.getElementById('q-question').textContent = currentQ.q;
   document.getElementById('q-context').textContent = currentQ.context || '';
+
+  // Voice
+  const speakText = currentQ.type === 'word'
+    ? currentQ.q
+    : `What is ${currentQ.q.replace(/×/g,'times').replace(/÷/g,'divided by').replace(/−/g,'minus')}?`;
+  const speakBtn = document.getElementById('speak-question-btn');
+  if(speakBtn) {
+    speakBtn.style.display = Voice.enabled ? 'flex' : 'none';
+    speakBtn.onclick = () => Voice.speak(speakText, true);
+  }
+  if(Voice.autoRead) setTimeout(() => Voice.speak(speakText, true), 400);
 
   // Generate answers
   const wrong = generateWrongAnswers(currentQ.a, currentQ.level);
@@ -978,7 +1087,6 @@ function loadQuestion() {
     }
   }, aiDelay);
 
-  // Timer
   startTimer(currentQ.level);
 }
 
@@ -1024,6 +1132,9 @@ function checkAnswer(selected, btn) {
   const comboBonus = state.combo * 3;
   let xpEarned = 0;
 
+  // Track topic for mastery map
+  recordTopicResult(currentQ.type || 'add', correct);
+
   if(correct) {
     state.correctAnswers++;
     state.combo++;
@@ -1035,9 +1146,8 @@ function checkAnswer(selected, btn) {
     btn.classList.add('correct');
     btn.setAttribute('data-emoji', '✅');
 
-    // Combo display
     if(state.combo >= 2) {
-      const combos = ['', '', '🔥 2x Combo!', '⚡ 3x Combo!!', '🌟 4x Combo!!!', '💥 UNSTOPPABLE!', '👑 GENIUS MODE!'];
+      const combos = ['', '', '2x Combo!', '3x Combo!!', '4x Combo!!!', 'UNSTOPPABLE!', 'GENIUS MODE!'];
       document.getElementById('combo-display').textContent = combos[Math.min(state.combo, combos.length-1)];
     }
 
@@ -1045,29 +1155,32 @@ function checkAnswer(selected, btn) {
     spawnParticles();
 
     const praises = [
-      {e:'🎉', t:'Brilliant!', s:'That was perfect!'},
-      {e:'⭐', t:'Amazing!', s:'You\'re a natural genius!'},
-      {e:'🚀', t:'Superstar!', s:'Incredible brain power!'},
-      {e:'🏆', t:'Champion!', s:`+${comboBonus} combo bonus!`},
-      {e:'💫', t:'Legendary!', s:'Your class would be amazed!'}
+      {e:'', t:'Brilliant!', s:'That was perfect!'},
+      {e:'', t:'Amazing!', s:"You're a natural genius!"},
+      {e:'', t:'Superstar!', s:'Incredible brain power!'},
+      {e:'', t:'Champion!', s:`+${comboBonus} combo bonus!`},
+      {e:'', t:'Legendary!', s:'Your class would be amazed!'}
     ];
     const p = praises[Math.min(state.combo-1, praises.length-1)];
     showFeedback(true, p.t, p.s, xpEarned, p.e);
 
-    // Level up math if doing well
+    // Voice praise
+    const vp = ['Brilliant!','Amazing work!','Correct!','Superstar!','Genius!'];
+    Voice.speak(vp[Math.floor(Math.random()*vp.length)], true);
+
     if(state.correctAnswers > 0 && state.correctAnswers % 5 === 0) state.mathLevel = Math.min(state.mathLevel+1, 5);
 
   } else {
     state.combo = 0;
     document.getElementById('combo-display').textContent = '';
     btn.classList.add('wrong');
-    btn.setAttribute('data-emoji', '❌');
-    // Show correct answer
+    btn.setAttribute('data-emoji', '');
     document.querySelectorAll('.ans-btn').forEach(b => {
       if(parseInt(b.textContent) === currentQ.a || b.textContent == currentQ.a) b.classList.add('correct');
     });
     loseLife();
     showFeedback(false, 'Not quite!', `The answer is ${currentQ.a}. ${currentQ.hint}`, 0);
+    Voice.speak(`Not quite. ${currentQ.hint}`, true);
   }
 
   document.getElementById('game-score').textContent = state.score;
@@ -1088,19 +1201,23 @@ function nextQuestion() {
 
 function endGame() {
   clearInterval(state.timerInterval);
+  Voice.stop();
+  reportSessionToProtege(state.score);
   updateDashboard();
   document.getElementById('lu-score').textContent = state.score;
   document.getElementById('lu-xp').textContent = state.score;
-  document.getElementById('lu-streak').textContent = `🔥 ${state.streak} Day${state.streak!==1?'s':''}`;
+  document.getElementById('lu-streak').textContent = `${state.streak} Day${state.streak!==1?'s':''}`;
   state.level = Math.floor(state.totalXp / 500) + 1;
   const msgs = [
-    "You're on your way to math genius! 🧠",
-    "Your class won't believe how fast you're improving! ⚡",
-    "Keep this up and you'll be the top of your class! 🏆",
-    "Professor Cosmo is SO proud of you! 🤖",
-    "Math prodigy in training — that's YOU! 🌟"
+    "You're on your way to math genius!",
+    "Your class won't believe how fast you're improving!",
+    "Keep this up and you'll be top of your class!",
+    "Professor Cosmo is so proud of you!",
+    "Math prodigy in training — that's YOU!"
   ];
-  document.getElementById('lu-message').textContent = msgs[Math.floor(Math.random()*msgs.length)];
+  const msg = msgs[Math.floor(Math.random()*msgs.length)];
+  document.getElementById('lu-message').textContent = msg;
+  Voice.speak(msg, true);
   launchConfetti();
   goTo('levelup');
 }
