@@ -697,7 +697,7 @@
   <div class="combo-display" id="combo-display"></div>
 
   <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
-    <button id="speak-question-btn" class="ai-hint-btn" style="display:none;align-items:center;gap:6px;"
+    <button id="speak-question-btn" class="ai-hint-btn" style="display:flex;align-items:center;gap:6px;"
       title="Read question aloud" aria-label="Read question aloud">
       &#128266; Listen
     </button>
@@ -781,7 +781,7 @@
 // ══════════════════════════════════════
 const _params = new URLSearchParams(location.search);
 const _urlName     = _params.get('name')    || '';
-const _voiceOn     = _params.get('voice')   === '1';
+const _voiceOn     = _params.get('voice') !== '0'; // default ON — pass ?voice=0 to disable
 const _autoRead    = _params.get('autoread')=== '1';
 const _voiceSpeed  = _params.get('speed')  || 'normal';
 
@@ -1060,7 +1060,7 @@ function loadQuestion() {
     : `What is ${currentQ.q.replace(/×/g,'times').replace(/÷/g,'divided by').replace(/−/g,'minus')}?`;
   const speakBtn = document.getElementById('speak-question-btn');
   if(speakBtn) {
-    speakBtn.style.display = Voice.enabled ? 'flex' : 'none';
+    speakBtn.style.display = 'flex';
     speakBtn.onclick = () => Voice.speak(speakText, true);
   }
   if(Voice.autoRead) setTimeout(() => Voice.speak(speakText, true), 400);
@@ -1263,26 +1263,27 @@ async function getHint() {
   if(!currentQ) return;
   const box = document.getElementById('ai-hint-box');
   box.style.display = 'block';
-  box.textContent = '🤖 Professor Cosmo is thinking... ✨';
+  box.textContent = 'Professor Cosmo is thinking...';
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
+    const response = await fetch('/api/protege-ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model:"claude-sonnet-4-20250514",
-        max_tokens:200,
-        messages:[{
-          role:"user",
-          content:`You are Professor Cosmo, a fun, encouraging math tutor for a 7-year-old child. Give a SHORT, playful hint (2-3 sentences max) for this question. Use simple words, emojis, and make it feel like a magical discovery. Do NOT give the answer directly — just guide them. Question: "${currentQ.q}" The answer is ${currentQ.a}. Child's grade: ${state.grade}.`
-        }]
+        mode:     'hint',
+        question: currentQ.q,
+        answer:   currentQ.a,
+        hint:     currentQ.hint,
+        grade:    state.grade,
+        name:     state.name
       })
     });
     const data = await response.json();
-    const hint = data.content?.[0]?.text || currentQ.hint;
-    box.textContent = '🤖 ' + hint;
+    const hint = data.text || currentQ.hint;
+    box.textContent = hint;
+    if(Voice.enabled) Voice.speak(hint, false);
   } catch(e) {
-    box.textContent = '🤖 ' + currentQ.hint;
+    box.textContent = currentQ.hint;
   }
 }
 
@@ -1296,6 +1297,9 @@ function closeTutor() {
   document.getElementById('tutor-overlay').classList.remove('show');
 }
 
+// Tutor conversation history (in-memory for the session)
+const tutorHistory = [];
+
 async function sendTutorMsg() {
   const input = document.getElementById('tutor-input');
   const msg = input.value.trim();
@@ -1303,34 +1307,40 @@ async function sendTutorMsg() {
   input.value = '';
 
   const msgs = document.getElementById('tutor-msgs');
-  // Add user message
   const userDiv = document.createElement('div');
   userDiv.className = 'msg user';
   userDiv.textContent = msg;
   msgs.appendChild(userDiv);
 
-  // Loading
   const loadDiv = document.createElement('div');
   loadDiv.className = 'msg ai';
-  loadDiv.textContent = '🤖 Thinking... ✨';
+  loadDiv.textContent = 'Professor Cosmo is thinking...';
   msgs.appendChild(loadDiv);
   msgs.scrollTop = msgs.scrollHeight;
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
+    const response = await fetch('/api/protege-ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model:"claude-sonnet-4-20250514",
-        max_tokens:300,
-        system:`You are Professor Cosmo, a brilliant and fun math tutor for a 7-year-old named ${state.name} who is in ${state.grade}. You explain maths and science in simple, magical, exciting ways using emojis and analogies. You LOVE the child's curiosity. Keep answers SHORT (3-5 sentences), encouraging, and end with a little challenge or fun fact. Never use complex words. Make the child feel like a genius.`,
-        messages:[{role:"user", content:msg}]
+        mode:        'tutor',
+        name:        state.name,
+        grade:       state.grade,
+        userMessage: msg,
+        history:     tutorHistory
       })
     });
     const data = await response.json();
-    loadDiv.textContent = '🤖 ' + (data.content?.[0]?.text || 'That\'s a great question! Keep exploring! 🌟');
+    const reply = data.text || "That's a fascinating question. Keep that curiosity going!";
+    loadDiv.textContent = reply;
+    // Maintain history for multi-turn conversation
+    tutorHistory.push({ role: 'user',      content: msg   });
+    tutorHistory.push({ role: 'assistant', content: reply });
+    // Keep history to last 10 turns (20 messages) to avoid token bloat
+    if(tutorHistory.length > 20) tutorHistory.splice(0, 2);
+    if(Voice.enabled) Voice.speak(reply, false);
   } catch(e) {
-    loadDiv.textContent = '🤖 Wow, great question! Your brain is amazing for asking that! 🌟';
+    loadDiv.textContent = "Great question! Your curiosity is what makes great scientists and mathematicians.";
   }
   msgs.scrollTop = msgs.scrollHeight;
 }
