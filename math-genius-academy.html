@@ -1122,33 +1122,6 @@ html,body { height:100%; overflow:hidden; font-family:'DM Sans',sans-serif; back
   </div>
 </div>
 
-<!-- ════════ MODE SELECTOR ════════ -->
-<div class="mode-select-overlay" id="mode-select-overlay">
-  <div class="mode-select-box">
-    <div class="ms-title" id="ms-title">How would you like to practise?</div>
-    <div class="ms-sub">Choose before you begin. You can change it next time.</div>
-    <div class="ms-cards">
-      <div class="ms-card" id="ms-timed" onclick="selectPlayMode('timed')">
-        <div class="ms-card-icon" style="background:rgba(224,92,92,.15)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--coral)"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
-        </div>
-        <div class="ms-card-name">Timed</div>
-        <div class="ms-card-desc">Race against the clock. Builds speed and fluency under pressure.</div>
-        <span class="ms-default-tag" id="ms-timed-tag" style="display:none">Recommended</span>
-      </div>
-      <div class="ms-card sel" id="ms-click" onclick="selectPlayMode('click')">
-        <div class="ms-card-icon" style="background:rgba(74,222,128,.1)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--mint)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-        </div>
-        <div class="ms-card-name">Relaxed</div>
-        <div class="ms-card-desc">No timer. Study each question at your own pace. Click to advance.</div>
-        <span class="ms-default-tag" id="ms-click-tag">Recommended</span>
-      </div>
-    </div>
-    <button class="ms-start-btn" onclick="confirmPlayMode()">Begin Session</button>
-  </div>
-</div>
-
 <div id="tutor-overlay">
   <div class="tutor-frame">
     <div class="tutor-topbar">
@@ -1191,6 +1164,24 @@ let _playMode       = 'click';
 let _paused         = false;
 let _pausedTimeLeft = 100;
 const TIMED_DEFAULTS = ['math','science','space','tt_daily','tt_boss','tt_mixed','tt_families'];
+
+// NVR STATE — hoisted here so updateDashboard() can reference nvrState.nvrLevel
+const nvrState = {
+  mode:'patterns', currentQ:null, answered:false,
+  score:0, correct:0, total:0, qNum:0, maxQ:15,
+  lives:3, timerInterval:null, timeLeft:100,
+  totalSolved:0, totalCorrect:0, localStreak:0, nvrLevel:1,
+  currentSpeakText:''
+};
+
+// Hard timeout — loading screen always dismisses after 5 seconds
+setTimeout(() => {
+  const ls = document.getElementById('loading');
+  if(ls && ls.classList.contains('active')) {
+    if(_urlName){ state.name=_urlName; updateDashboard(); }
+    goTo(_urlName ? 'dashboard' : 'welcome');
+  }
+}, 5000);
 
 // ══════════════════════════════════════
 // URL PARAMS
@@ -2108,13 +2099,6 @@ function generateMirror() {
 }
 
 // ── NVR STATE ───────────────────────────────────────────────────
-const nvrState = {
-  mode: 'patterns', currentQ: null, answered: false,
-  score: 0, correct: 0, total: 0, qNum: 0, maxQ: 15,
-  lives: 3, timerInterval: null, timeLeft: 100,
-  totalSolved: 0, totalCorrect: 0, localStreak: 0, nvrLevel: 1,
-  currentSpeakText: ''
-};
 
 function updateNVRStats() {
   document.getElementById('nvr-solved').textContent    = nvrState.totalSolved;
@@ -2424,40 +2408,8 @@ function updateModeToggleBtn(context) {
   btn.style.borderColor = _playMode === 'timed' ? 'rgba(224,92,92,.3)' : 'rgba(74,222,128,.3)';
 }
 
-function showModeSelector(pendingStart) {
-  // Kept for compatibility but now just starts directly
-  confirmPlayMode();
-}
-  const isNVR = pendingStart.type === 'nvr';
-  const isTT  = pendingStart.type === 'tt';
-
-  // Set recommended default
-  const defaultTimed = TIMED_DEFAULTS.includes(pendingStart.subject||pendingStart.mode||'');
-  const defaultMode  = (isNVR) ? 'click' : defaultTimed ? 'timed' : 'click';
-  selectPlayMode(defaultMode);
-
-  // Update title
-  document.getElementById('ms-title').textContent =
-    isNVR ? 'How would you like to train?' : 'How would you like to practise?';
-
-  document.getElementById('mode-select-overlay').classList.add('open');
-}
-
 function selectPlayMode(mode) {
   _playMode = mode;
-  document.getElementById('ms-timed').classList.toggle('sel', mode==='timed');
-  document.getElementById('ms-click').classList.toggle('sel', mode==='click');
-  document.getElementById('ms-timed-tag').style.display = mode==='timed' ? 'block' : 'none';
-  document.getElementById('ms-click-tag').style.display = mode==='click' ? 'block' : 'none';
-}
-
-function confirmPlayMode() {
-  document.getElementById('mode-select-overlay').classList.remove('open');
-  if(!_pendingStart) return;
-  const p = _pendingStart; _pendingStart = null;
-  if(p.type==='game')  _actuallyStartGame(p.subject);
-  if(p.type==='tt')    _actuallyStartTT(p.mode);
-  if(p.type==='nvr')   _actuallyStartNVR(p.mode);
 }
 
 // ── PAUSE SYSTEM ─────────────────────────────────────────────────
@@ -2584,8 +2536,13 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeTutor(); });
 
 initStars();
 setTimeout(()=>{
-  if(_urlName){ state.name=_urlName; updateDashboard(); goTo('dashboard'); }
-  else goTo('welcome');
+  try {
+    if(_urlName){ state.name=_urlName; updateDashboard(); goTo('dashboard'); }
+    else goTo('welcome');
+  } catch(e) {
+    console.error('[MathGenius] boot error:', e);
+    goTo(_urlName ? 'dashboard' : 'welcome');
+  }
 },600);
 </script>
 </body>
