@@ -596,26 +596,40 @@ async function init() {
     if (!session) { window.location.href = '/index.html'; return }
     STATE.userId = session.user.id
 
-    // Use getUser() for fresh auth data — matches dashboard.html approach
-    const { data: { user } } = await supa.auth.getUser()
+    // Try sessionStorage cache first (set by dashboard.html via perf-utils.js)
+    let profile = null
+    try {
+      const raw = sessionStorage.getItem('ia_profile_cache')
+      if (raw) {
+        const { profile: cached, ts } = JSON.parse(raw)
+        if (Date.now() - ts < 15 * 60 * 1000) profile = cached
+      }
+    } catch(e) {}
 
-    // Parallel fetch everything — individual failures won't block the page
-    const [profileRes, progressRes, masteryRes, settingsRes, streakRes] = await Promise.all([
-      supa.from('profiles').select('*').eq('id', STATE.userId).single().catch(()=>({data:null})),
-      supa.from('protege_progress').select('*').eq('student_id', STATE.userId).eq('module','mathgenius').maybeSingle().catch(()=>({data:null})),
-      supa.from('protege_topic_mastery').select('*').eq('student_id', STATE.userId).catch(()=>({data:[]})),
-      supa.from('protege_settings').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null})),
-      supa.from('streaks').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null}))
-    ])
+    // Fall back to fresh DB fetch if no cache
+    if (!profile) {
+      const { data } = await supa.from('profiles').select('*').eq('id', STATE.userId).single().catch(()=>({data:null}))
+      profile = data
+    }
 
-    const profile = profileRes.data
-    // Exact same fallback chain as dashboard.html line 640
+    // Use getUser() for user_metadata fallback
+    const { data: { user } } = await supa.auth.getUser().catch(()=>({data:{user:session.user}}))
+
+    // Full fallback chain — mirrors dashboard.html line 640
     STATE.userName = profile?.first_name
       || (profile?.full_name ? profile.full_name.split(' ')[0] : null)
       || user?.user_metadata?.first_name
       || user?.user_metadata?.full_name?.split(' ')[0]
       || user?.email?.split('@')[0]
       || 'Student'
+
+    // Parallel fetch Protégé-specific data
+    const [progressRes, masteryRes, settingsRes, streakRes] = await Promise.all([
+      supa.from('protege_progress').select('*').eq('student_id', STATE.userId).eq('module','mathgenius').maybeSingle().catch(()=>({data:null})),
+      supa.from('protege_topic_mastery').select('*').eq('student_id', STATE.userId).catch(()=>({data:[]})),
+      supa.from('protege_settings').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null})),
+      supa.from('streaks').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null}))
+    ])
     STATE.progress  = progressRes.data
     STATE.mastery   = masteryRes.data || []
     STATE.settings  = settingsRes.data
