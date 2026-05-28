@@ -596,16 +596,26 @@ async function init() {
     if (!session) { window.location.href = '/index.html'; return }
     STATE.userId = session.user.id
 
+    // Use getUser() for fresh auth data — matches dashboard.html approach
+    const { data: { user } } = await supa.auth.getUser()
+
     // Parallel fetch everything — individual failures won't block the page
     const [profileRes, progressRes, masteryRes, settingsRes, streakRes] = await Promise.all([
-      supa.from('profiles').select('first_name,full_name').eq('id', STATE.userId).single().catch(()=>({data:null})),
+      supa.from('profiles').select('*').eq('id', STATE.userId).single().catch(()=>({data:null})),
       supa.from('protege_progress').select('*').eq('student_id', STATE.userId).eq('module','mathgenius').maybeSingle().catch(()=>({data:null})),
       supa.from('protege_topic_mastery').select('*').eq('student_id', STATE.userId).catch(()=>({data:[]})),
       supa.from('protege_settings').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null})),
       supa.from('streaks').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null}))
     ])
 
-    STATE.userName  = profileRes.data?.first_name || profileRes.data?.full_name?.split(' ')[0] || 'Champion'
+    const profile = profileRes.data
+    // Exact same fallback chain as dashboard.html line 640
+    STATE.userName = profile?.first_name
+      || (profile?.full_name ? profile.full_name.split(' ')[0] : null)
+      || user?.user_metadata?.first_name
+      || user?.user_metadata?.full_name?.split(' ')[0]
+      || user?.email?.split('@')[0]
+      || 'Student'
     STATE.progress  = progressRes.data
     STATE.mastery   = masteryRes.data || []
     STATE.settings  = settingsRes.data
