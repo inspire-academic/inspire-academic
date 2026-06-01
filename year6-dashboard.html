@@ -374,10 +374,12 @@ function getProjectStatus(projectId, submissions){
   return 'locked';
 }
 
-function canAccessProject(projectId, submissions){
-  if(projectId === 1) return true; // First project always accessible
-  const prevSub = submissions.find(s => s.project_id === projectId - 1);
-  return prevSub && prevSub.status === 'submitted';
+function canAccessProject(project, allProjects, submissions){
+  if(project.order_number === 1) return true;
+  const prevProject = allProjects.find(p => p.order_number === project.order_number - 1);
+  if(!prevProject) return false;
+  const prevSub = submissions.find(s => s.project_id === prevProject.id);
+  return prevSub && (prevSub.status === 'submitted' || prevSub.status === 'graded');
 }
 
 // Render project card
@@ -478,7 +480,7 @@ function renderProject(project, status, canAccess){
   // Render projects
   const projectsHtml = projects.map(project => {
     const status = getProjectStatus(project.id, submissions);
-    const canAccess = canAccessProject(project.id, submissions);
+    const canAccess = canAccessProject(project, projects, submissions);
     return renderProject(project, status, canAccess);
   }).join('');
   
