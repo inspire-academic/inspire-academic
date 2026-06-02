@@ -23,6 +23,10 @@ function = "create-teacher"
 path = "/api/mark-exam-response"
 function = "mark-exam-response"
 
+[[edge_functions]]
+path = "/api/protege-ai"
+function = "protege-ai"
+
 # Legacy path — revision-pack.html calls this directly
 [[edge_functions]]
 path = "/.netlify/functions/mark-exam-response"
