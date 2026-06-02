@@ -557,23 +557,35 @@ function renderQuestion(){
   const opts=document.getElementById('options-wrap');
   const letters=['A','B','C','D'];
   const optTexts=[q.option_a,q.option_b,q.option_c,q.option_d].filter(Boolean);
-  opts.innerHTML=optTexts.map((txt,i)=>`
+
+  // Shuffle options so the correct answer isn't always in the same position
+  const correctText = optTexts[letters.indexOf(q.correct_answer)];
+  const shuffled = optTexts
+    .map((text, i) => ({ text, originalLetter: letters[i] }))
+    .sort(() => Math.random() - 0.5);
+
+  // Remap correct answer to new shuffled position
+  const newCorrectLetter = letters[shuffled.findIndex(o => o.text === correctText)];
+  q._shuffledCorrect = newCorrectLetter; // store for answer checking
+
+  opts.innerHTML=shuffled.map((o,i)=>`
     <button class="option" onclick="selectAnswer('${letters[i]}',${i})">
       <div class="opt-letter">${letters[i]}</div>
-      <div class="opt-text">${txt}</div>
+      <div class="opt-text">${o.text}</div>
     </button>`).join('');
 }
 
 async function selectAnswer(letter, idx){
   const q=questions[currentQ];
-  const isCorrect=letter===q.correct_answer;
+  const correctLetter = q._shuffledCorrect || q.correct_answer;
+  const isCorrect=letter===correctLetter;
   answers.push({question_id:q.id,answer:letter,correct:isCorrect,marks:isCorrect?q.marks:0});
 
   // Visual feedback
   document.querySelectorAll('.option').forEach((o,i)=>{
     o.disabled=true;
     const l=['A','B','C','D'][i];
-    if(l===q.correct_answer) o.classList.add('correct');
+    if(l===correctLetter) o.classList.add('correct');
     else if(i===idx) o.classList.add('wrong');
   });
 
@@ -721,7 +733,7 @@ function showResults(cor, wrong, pct, passed, elapsed){
           <div class="ar-q">${q.question_text.substring(0,80)}${q.question_text.length>80?'…':''}</div>
           <div class="ar-ans">
             Your answer: <strong>${a?a.answer:'—'}</strong> · 
-            Correct: <strong>${q.correct_answer}</strong>
+            Correct: <strong>${q._shuffledCorrect || q.correct_answer}</strong>
           </div>
           ${!isC?`<div style="font-size:.78rem;color:var(--muted);margin-top:.3rem;font-style:italic;">${q.explanation||''}</div>`:''}
         </div>
