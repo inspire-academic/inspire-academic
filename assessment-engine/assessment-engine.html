@@ -682,27 +682,41 @@ async function claudeDiagnose(topicScores, overallPct, notSureCount) {
   const { name, subject, level, board } = S.config;
   const total = S.answers.length;
 
-  const sys = `You are an expert ${level} ${subject} examiner for ${board}.
-Analyse a student's diagnostic assessment results and identify knowledge gaps.
+  const boardGuidance = {
+    AQA: `AQA ${subject}: Grade boundaries typically: Grade 4 ~45%, Grade 6 ~65%, Grade 9 ~85%. AQA rewards precise use of command words and scientific terminology. Common weaknesses: students confuse "describe" with "explain"; calculation errors from not showing working; Biology students weak on required practicals; Chemistry students weak on moles calculations; Physics students weak on wave equation and transformer calculations.`,
+    Edexcel: `Edexcel ${subject}: Grade boundaries typically: Grade 4 ~42%, Grade 6 ~62%, Grade 9 ~82%. Edexcel rewards application to novel contexts ("Suggest" questions). Common weaknesses: students struggle with unfamiliar contexts even when underlying knowledge is secure; Biology students weak on evaluating evidence; Chemistry students weak on ionic equations; Physics students weak on resolving vectors and moments.`
+  }
+
+  const sys = `You are a senior ${board} GCSE ${subject} examiner and learning diagnostician.
+You analyse student assessment data to produce actionable, specification-accurate diagnoses.
+
+${boardGuidance[board] || boardGuidance.AQA}
+
+Your diagnosis must be:
+- Specific to the ${board} ${subject} specification — reference actual topic names
+- Honest about grade predictions — do not inflate grades
+- Actionable — every gap must have a clear, specific remediation approach
+- Teacher-aware — flag anything that needs human intervention
+
 Return ONLY valid JSON, no markdown:
 {
   "currentGrade": string,
   "targetGrade": string,
   "studentProfile": "struggling"|"developing"|"secure"|"strong",
-  "profileDescription": string (1 sentence describing the student's overall position),
+  "profileDescription": string (1 sentence describing the student's overall position relative to ${board} grade boundaries),
   "gaps": [
     {
       "topic": string,
       "score": number,
       "priority": "critical"|"high"|"medium"|"low",
-      "reason": string,
+      "reason": string (specific to ${board} ${subject} — what exactly is weak and why it matters for the exam),
       "approach": "reteach_from_scratch"|"fix_misconception"|"consolidate"|"extend"
     }
   ],
   "strengths": [string],
-  "teacherNote": string (brief note flagging anything requiring teacher attention)
+  "teacherNote": string (flag anything requiring teacher attention — persistent misconceptions, possible exam anxiety shown by high not-sure rate, gaps that need practical demonstration)
 }
-Only include topics with score < 80% in gaps. Order by priority.`;
+Only include topics with score < 80% in gaps. Order by priority descending.`;
 
   const topicSummary = topicScores.map(t =>
     `${t.topic}: ${t.score}% (${t.correct}/${t.total} correct, ${t.not_sure} not sure${t.misconceptions.length ? ', misconceptions: ' + t.misconceptions.slice(0,2).join('; ') : ''})`
@@ -837,15 +851,24 @@ async function runPlan() {
 }
 
 async function claudePlan() {
-  const { name, subject, level } = S.config;
+  const { name, subject, level, board } = S.config;
   const d = S.diagnosis;
   const profile = d.studentProfile || 'developing';
   const weeks   = profile === 'struggling' ? 6 : 3;
   const gapList = (d.gaps||[]).map(g =>
     `${g.topic} (${g.priority}, approach: ${g.approach})`).join('; ');
 
-  const sys = `You are a ${level} ${subject} tutor creating a personalised ${weeks}-week study plan.
+  const sys = `You are an expert ${board} GCSE ${subject} tutor building a precise, specification-aligned study plan.
+The plan must be grounded in the ${board} ${subject} specification — every task must reference real spec content.
 The student's profile is: ${profile}.
+
+TASK TYPE DEFINITIONS:
+- "video": Watch and take notes on a specific concept (10–15 mins) — specify exactly what to focus on
+- "drill": Practice questions on a specific skill (15–20 mins) — specify the skill and question type
+- "test": Short self-test or past paper questions on a topic (20–30 mins) — specify the topic and question style
+
+${board} CONTEXT: Tasks should reference ${board}-specific exam technique where relevant (e.g. "practise AQA 6-mark explain questions on...").
+
 Return ONLY valid JSON, no markdown:
 {
   "gradeJourney": [{"week":number,"grade":string,"description":string}],
@@ -854,7 +877,7 @@ Return ONLY valid JSON, no markdown:
       "number": number,
       "title": string,
       "focus": string,
-      "why": string,
+      "why": string (explain why this week's focus matters for ${board} exam performance),
       "tasks": [
         {"id":string,"type":"video"|"drill"|"test","label":string,"mins":number,"topic":string}
       ]
@@ -862,8 +885,9 @@ Return ONLY valid JSON, no markdown:
   ]
 }
 Each week must have exactly 3 tasks. Match tasks directly to diagnosed gaps.
-For 'reteach_from_scratch' gaps, start with video then drill.
-For 'fix_misconception' gaps, use targeted drill with worked examples.`;
+For 'reteach_from_scratch' gaps: video → drill → short test.
+For 'fix_misconception' gaps: targeted drill with worked examples → test.
+For 'consolidate' gaps: drill → test.`;
 
   const msg = `Create a ${weeks}-week plan for ${name}.
 Overall score: ${d.overallScore}%
