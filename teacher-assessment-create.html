@@ -1546,8 +1546,8 @@ async function generateQuestions() {
 }
 
 async function generateQuestionForTopic(topic) {
-  // Call our Netlify function — secure server-side proxy to Anthropic
-  const response = await fetch('/api/generate-question', {
+  // Call edge function via direct path — bypasses netlify.toml routing
+  const response = await fetch('/.netlify/edge-functions/generate-question', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

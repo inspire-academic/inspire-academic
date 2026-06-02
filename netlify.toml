@@ -35,11 +35,3 @@ function = "mark-exam-response"
 [functions]
   [functions."*"]
   node_bundler = "esbuild"
-
-# Workaround for Netlify Projects platform edge function routing bug
-# Forces /api/* requests to resolve through the edge function layer
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/edge-functions/:splat"
-  status = 200
-  force = true
