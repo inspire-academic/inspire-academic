@@ -32,17 +32,28 @@
     window._currentUser = session.user;
     var meta = session.user.user_metadata || {};
     window._userName = meta.full_name || session.user.email || 'Student';
-    hideOverlay();
-    // Set student name once DOM is ready
-    function setName() {
-      var el = document.getElementById('student-name');
-      if (el) el.textContent = window._userName.split(' ')[0];
+    // Fetch student exam board, then point CONTENT at the right data set
+    function finishLoad() {
+      function setName() {
+        var el = document.getElementById('student-name');
+        if (el) el.textContent = window._userName.split(' ')[0];
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setName);
+      } else { setName(); }
     }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setName);
-    } else {
-      setName();
-    }
+    window._supa.from('profiles').select('exam_board').eq('id', session.user.id).single()
+      .then(function(res) {
+        var board = (res.data && res.data.exam_board) ? res.data.exam_board.toUpperCase() : 'AQA';
+        window._studentBoard = board;
+        window.CONTENT = (board === 'EDEXCEL') ? window.CONTENT_EDEXCEL : window.CONTENT_AQA;
+        hideOverlay(); finishLoad();
+      })
+      .catch(function() {
+        window._studentBoard = 'AQA';
+        window.CONTENT = window.CONTENT_AQA;
+        hideOverlay(); finishLoad();
+      });
   }
 
   // Safety timeout — if Supabase hangs for 8 seconds, redirect to login
@@ -1095,7 +1106,8 @@ window.onerror = function(msg, src, line, col, err) {
 // ═══════════════════════════════════════════════════════
 //  CONTENT LIBRARY — Exam-board accurate GCSE content
 // ═══════════════════════════════════════════════════════
-const CONTENT = {
+// AQA content (original 1,000-card deck)
+const CONTENT_AQA = {
   Physics: {
     color: '#1B6CA8', icon: '⚡', topics: {
       'Forces & Motion': {
@@ -2482,6 +2494,452 @@ const CONTENT = {
     }
   }
 };
+
+// ═══════════════════════════════════════════════════════
+//  EDEXCEL CONTENT — Spec-accurate 1PE0/1CH0/1BI0/1MA1
+// ═══════════════════════════════════════════════════════
+const CONTENT_EDEXCEL = {
+  Physics: {
+    color: '#1B6CA8', icon: '⚡', topics: {
+      'Motion & Forces': {
+        recall: [
+          { q: 'State the equation that links speed, distance and time.', a: '<strong>speed = distance / time</strong> (s = d/t). Speed in m/s, distance in m, time in s.', grade: 'F' },
+          { q: 'What is the difference between speed and velocity?', a: 'Speed is a <strong>scalar</strong> — it has magnitude only. Velocity is a <strong>vector</strong> — it has both magnitude and direction.', grade: 'F' },
+          { q: 'State Newton\'s First Law of Motion.', a: 'An object remains at rest or moves at <strong>constant velocity</strong> unless acted on by a <strong>resultant force</strong>.', grade: 'F' },
+          { q: 'State Newton\'s Second Law of Motion.', a: '<strong>F = ma</strong>: The resultant force on an object equals its mass × acceleration. F in Newtons, m in kg, a in m/s².', grade: 'F' },
+          { q: 'State Newton\'s Third Law of Motion.', a: 'When two objects interact, they exert <strong>equal and opposite forces</strong> on each other. These forces act on <em>different</em> objects.', grade: 'F' },
+          { q: 'Define momentum and state its equation.', a: '<strong>p = mv</strong>. Momentum is a vector quantity: p = momentum (kg m/s), m = mass (kg), v = velocity (m/s).', grade: 'F' },
+          { q: 'State the principle of conservation of momentum.', a: 'The <strong>total momentum</strong> of a system remains constant provided <strong>no external forces</strong> act (closed system).', grade: 'F' },
+          { q: 'What is terminal velocity?', a: 'The <strong>constant velocity</strong> reached when the driving force equals all resistive forces — resultant force = 0, acceleration = 0.', grade: 'F' },
+          { q: 'What are the two types of quantities in physics? Give examples of each.', a: '<strong>Scalars</strong> have magnitude only: speed, distance, mass, energy. <strong>Vectors</strong> have magnitude and direction: velocity, displacement, force, acceleration.', grade: 'F' },
+          { q: 'Define the term \'resultant force\'.', a: 'The <strong>single force</strong> that has the same effect as all the individual forces acting on an object combined (vector sum of all forces).', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A car of mass 1200 kg accelerates from rest to 20 m/s in 8 s. Calculate the resultant force acting on the car.', marks: 3, a: '<strong>a = Δv/Δt = 20/8 = 2.5 m/s².</strong> F = ma = 1200 × 2.5 = <strong>3000 N.</strong>', points: ['a = (v−u)/t = 20/8 = 2.5 m/s²', 'F = ma', 'F = 1200 × 2.5 = 3000 N'], mistake: 'Using distance/time instead of change in velocity/time for acceleration. a = Δv/t, not d/t.', grade: 'F' },
+          { q: 'Explain, using Newton\'s Laws, why a seatbelt reduces injury in a car crash.', marks: 4, a: 'By Newton\'s 1st Law, in a crash the body <strong>continues to move forward</strong> (inertia) as the car decelerates. Without a seatbelt, the body hits the dashboard in a very short time — by the impulse equation F = Δp/Δt, a <strong>shorter stopping time</strong> means a <strong>larger force</strong>. The seatbelt <strong>extends the stopping time</strong>, reducing the force on the body and therefore reducing injury.', points: ['Newton 1st Law — body continues forward', 'Short stopping time without belt → large force', 'Seatbelt increases stopping time', 'F = Δp/Δt → longer Δt → smaller F'], mistake: 'Saying the seatbelt reduces momentum. The momentum change is the same — the seatbelt reduces the rate of change (force).', grade: 'H' }
+        ]
+      },
+      'Conservation of Energy': {
+        recall: [
+          { q: 'State the principle of conservation of energy.', a: 'Energy cannot be created or destroyed — it can only be <strong>transferred</strong> from one form to another. Total energy in a closed system is constant.', grade: 'F' },
+          { q: 'State the equation for gravitational potential energy.', a: '<strong>GPE = mgh</strong> where m = mass (kg), g = gravitational field strength (9.8 N/kg), h = height (m). Unit: joules.', grade: 'F' },
+          { q: 'State the equation for kinetic energy.', a: '<strong>KE = ½mv²</strong> where m = mass (kg), v = speed (m/s). Unit: joules.', grade: 'F' },
+          { q: 'Define power.', a: '<strong>Power = energy transferred / time</strong>. P = E/t. Unit: watts (W). 1 W = 1 J/s.', grade: 'F' },
+          { q: 'Define efficiency and state how it is calculated.', a: '<strong>Efficiency = (useful output energy / total input energy) × 100%</strong>. No device is 100% efficient — energy is always dissipated, usually as heat.', grade: 'F' },
+          { q: 'What is meant by \'dissipated\' energy?', a: 'Energy that is <strong>transferred to the surroundings</strong> in a non-useful form, usually heat or sound. It is not lost — it spreads out and becomes harder to use.', grade: 'F' },
+          { q: 'State the equation for work done.', a: '<strong>W = Fd</strong> where W = work done (J), F = force (N), d = distance moved in the direction of the force (m).', grade: 'F' },
+          { q: 'What is specific heat capacity?', a: 'The <strong>energy required to raise the temperature of 1 kg of a substance by 1°C</strong>. Equation: Q = mcΔT.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A 2 kg ball falls from rest from a height of 5 m. Calculate its speed just before it hits the ground. (g = 9.8 N/kg)', marks: 4, a: 'GPE lost = mgh = 2 × 9.8 × 5 = 98 J. This equals KE gained: ½mv² = 98. v² = 2×98/2 = 98. v = <strong>√98 ≈ 9.9 m/s.</strong>', points: ['GPE = mgh = 98 J', 'GPE = KE at bottom (conservation)', 'KE = ½mv²; 98 = ½×2×v²', 'v = √98 ≈ 9.9 m/s'], mistake: 'Not using conservation of energy — using kinematics instead (which also works, but energy method is expected here).', grade: 'F' }
+        ]
+      },
+      'Waves': {
+        recall: [
+          { q: 'State the equation linking wave speed, frequency and wavelength.', a: '<strong>v = fλ</strong> where v = wave speed (m/s), f = frequency (Hz), λ = wavelength (m).', grade: 'F' },
+          { q: 'What is the difference between transverse and longitudinal waves?', a: 'In a <strong>transverse</strong> wave, oscillations are perpendicular to the direction of energy transfer (e.g. light). In a <strong>longitudinal</strong> wave, oscillations are parallel to direction of transfer (e.g. sound).', grade: 'F' },
+          { q: 'Define frequency and period of a wave.', a: '<strong>Frequency (f)</strong> = number of complete waves per second (Hz). <strong>Period (T)</strong> = time for one complete wave (s). f = 1/T.', grade: 'F' },
+          { q: 'What happens to a wave when it crosses a boundary between two media?', a: 'The wave may be <strong>reflected</strong>, <strong>refracted</strong> (change in speed and direction) and/or <strong>absorbed</strong>. Frequency does not change; wavelength and speed change.', grade: 'F' },
+          { q: 'What is the law of reflection?', a: '<strong>Angle of incidence = angle of reflection</strong>. Both angles are measured from the normal to the surface.', grade: 'F' },
+          { q: 'What is refraction?', a: 'The <strong>change in direction</strong> (and speed) of a wave as it crosses a boundary between two media of different densities. Caused by change in wave speed.', grade: 'F' },
+          { q: 'What is ultrasound and how is it used in medicine?', a: 'Sound waves with <strong>frequency above 20 kHz</strong> (above human hearing range). Used in medical imaging — pulses are reflected at tissue boundaries; time of return gives depth information.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A wave has a frequency of 400 Hz and a wavelength of 0.85 m. Calculate the wave speed.', marks: 2, a: '<strong>v = fλ = 400 × 0.85 = 340 m/s.</strong>', points: ['v = fλ', 'v = 340 m/s'], mistake: 'Dividing instead of multiplying: v = fλ, not v = f/λ.', grade: 'F' },
+          { q: 'Explain why a ray of light bends when it passes from air into glass.', marks: 3, a: 'Light travels more slowly in glass than in air. When a ray enters the glass at an angle, one side of the wavefront slows down <strong>before</strong> the other, causing the ray to <strong>change direction towards the normal</strong>. This change in speed and direction is refraction. The frequency stays the same; only speed and wavelength change.', points: ['Light slows down in glass', 'Change in speed causes change in direction', 'Ray bends towards normal (denser medium)', 'Frequency unchanged'], mistake: 'Saying light bends because it changes frequency — frequency is always constant. Speed and wavelength change, not frequency.', grade: 'F' }
+        ]
+      },
+      'Light & EM Spectrum': {
+        recall: [
+          { q: 'List the parts of the electromagnetic spectrum in order of increasing frequency.', a: '<strong>Radio → Microwave → Infrared → Visible → Ultraviolet → X-rays → Gamma rays.</strong> All EM waves travel at 3 × 10⁸ m/s in a vacuum.', grade: 'F' },
+          { q: 'State one use and one hazard of ultraviolet radiation.', a: '<strong>Use:</strong> Sterilisation, tanning beds, detecting forged banknotes. <strong>Hazard:</strong> Causes skin cancer, damages eyes (cataracts), damages DNA.', grade: 'F' },
+          { q: 'State one use and one hazard of X-rays.', a: '<strong>Use:</strong> Medical imaging (bone fractures), security scanning. <strong>Hazard:</strong> Ionising radiation — can damage DNA and cause cancer. Controlled doses used.', grade: 'F' },
+          { q: 'What is total internal reflection and when does it occur?', a: 'When a ray of light travelling in a <strong>denser medium</strong> hits the boundary at an angle <strong>greater than the critical angle</strong>, it is completely reflected back — no refraction occurs.', grade: 'F' },
+          { q: 'Give two applications of total internal reflection.', a: '<strong>Optical fibres</strong> (communications, endoscopes): light bounces along the fibre. <strong>Periscopes/binoculars:</strong> prisms use TIR to reflect light.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Describe how optical fibres use total internal reflection to transmit data. Include the condition for TIR to occur.', marks: 4, a: 'Light enters the optical fibre and strikes the glass-air boundary at an angle <strong>greater than the critical angle</strong>. Total internal reflection occurs — all light is reflected back into the glass, none is refracted out. This repeats along the fibre, allowing light to travel long distances with very little energy loss. Because visible light has a very high frequency, it can carry large amounts of data rapidly.', points: ['Light hits boundary at angle > critical angle', 'Total internal reflection — no refraction', 'Light bounces along fibre', 'High frequency → high data capacity'], mistake: 'Confusing TIR with ordinary reflection. TIR only occurs when the angle exceeds the critical angle AND light travels in the denser medium.', grade: 'H' }
+        ]
+      },
+      'Radioactivity': {
+        recall: [
+          { q: 'What is the structure of an atom?', a: 'A <strong>nucleus</strong> containing <strong>protons</strong> (positive) and <strong>neutrons</strong> (neutral), surrounded by <strong>electrons</strong> (negative) in shells. Most of the atom is empty space.', grade: 'F' },
+          { q: 'What are isotopes?', a: 'Atoms of the <strong>same element</strong> (same proton number) with <strong>different numbers of neutrons</strong> (different mass numbers). They have identical chemical properties.', grade: 'F' },
+          { q: 'Describe the properties of alpha, beta and gamma radiation.', a: '<strong>Alpha (α):</strong> 2 protons + 2 neutrons, charge +2, stopped by paper/skin. <strong>Beta (β):</strong> fast electron, charge −1, stopped by thin aluminium. <strong>Gamma (γ):</strong> EM wave, no charge, stopped (reduced) by thick lead.', grade: 'F' },
+          { q: 'Define half-life.', a: 'The time taken for the <strong>activity</strong> of a radioactive source (or number of unstable nuclei) to fall to <strong>half</strong> its original value.', grade: 'F' },
+          { q: 'What is nuclear fission?', a: 'A heavy nucleus (e.g. uranium-235) is <strong>split into two smaller nuclei</strong> by absorbing a neutron. This releases <strong>energy and further neutrons</strong>, which can trigger a chain reaction.', grade: 'F' },
+          { q: 'What is nuclear fusion?', a: 'Two <strong>light nuclei</strong> (e.g. hydrogen isotopes) <strong>combine</strong> to form a heavier nucleus. Releases large amounts of energy. Requires extremely high temperatures — difficult to achieve on Earth.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A radioactive sample has an activity of 240 Bq. After 30 minutes the activity is 30 Bq. Calculate the half-life of the sample.', marks: 3, a: '240 → 120 → 60 → 30: <strong>three half-lives</strong> have passed. Time for three half-lives = 30 minutes. <strong>Half-life = 30/3 = 10 minutes.</strong>', points: ['240 → 120 → 60 → 30 = 3 half-lives', 'Total time = 30 min for 3 half-lives', 'Half-life = 10 minutes'], mistake: 'Dividing total time by 2 instead of counting how many halvings occurred. Always count the steps first.', grade: 'F' }
+        ]
+      },
+      'Electricity & Circuits': {
+        recall: [
+          { q: 'State Ohm\'s Law.', a: '<strong>V = IR</strong>: voltage (V) = current (A) × resistance (Ω). An ohmic conductor obeys Ohm\'s law — constant resistance at constant temperature.', grade: 'F' },
+          { q: 'What is the difference between series and parallel circuits?', a: 'In <strong>series</strong>: components share one path — same current flows through all; voltages add. In <strong>parallel</strong>: components have separate branches — same voltage across each; currents add.', grade: 'F' },
+          { q: 'Define electric current.', a: '<strong>Rate of flow of charge</strong>. Q = It. Current in amperes (A), charge in coulombs (C), time in seconds.', grade: 'F' },
+          { q: 'State the equation for electrical power.', a: '<strong>P = IV</strong> and <strong>P = I²R</strong>. Power in watts, current in amperes, voltage in volts, resistance in ohms.', grade: 'F' },
+          { q: 'What is the difference between AC and DC?', a: '<strong>DC (direct current):</strong> current flows in one direction only (e.g. batteries). <strong>AC (alternating current):</strong> current reverses direction periodically (UK mains: 230 V, 50 Hz).', grade: 'F' },
+          { q: 'State the function of the three pins in a UK plug.', a: '<strong>Live (brown):</strong> carries 230 V AC. <strong>Neutral (blue):</strong> completes the circuit at ~0 V. <strong>Earth (green/yellow):</strong> safety wire — carries current if fault occurs, causing fuse to blow.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Two resistors of 6 Ω and 3 Ω are connected in parallel to a 12 V supply. Calculate the total current drawn from the supply.', marks: 4, a: 'In parallel: same voltage across each. I₁ = 12/6 = 2 A; I₂ = 12/3 = 4 A. <strong>Total current = 2 + 4 = 6 A.</strong>', points: ['Voltage is 12V across each resistor', 'I₁ = V/R₁ = 12/6 = 2 A', 'I₂ = V/R₂ = 12/3 = 4 A', 'Total I = I₁ + I₂ = 6 A'], mistake: 'Adding resistances and dividing total voltage — that is for series circuits. In parallel, calculate each current separately then add.', grade: 'F' }
+        ]
+      },
+      'Magnetism': {
+        recall: [
+          { q: 'Describe the magnetic field pattern around a bar magnet.', a: 'Field lines run from <strong>north to south</strong> outside the magnet (south to north inside). Lines are closest together at the poles (strongest field). Lines never cross.', grade: 'F' },
+          { q: 'What is an electromagnet?', a: 'A <strong>temporary magnet</strong> made by passing electric current through a coil of wire (solenoid) wrapped around an iron core. Magnetic field is switched off when current stops.', grade: 'F' },
+          { q: 'State the motor effect.', a: 'A <strong>current-carrying conductor</strong> in a magnetic field experiences a <strong>force</strong>. The force is greatest when the conductor is at right angles to the field.', grade: 'F' },
+          { q: 'State Fleming\'s Left-Hand Rule.', a: '<strong>Thumb</strong> = direction of force (motion), <strong>First finger</strong> = direction of Field, <strong>Second finger</strong> = direction of conventional Current (FBI rule).', grade: 'F' },
+          { q: 'What is electromagnetic induction?', a: 'A <strong>voltage (and current if in a complete circuit) is induced</strong> in a conductor when it moves through a magnetic field, or when a magnetic field through a coil changes.', grade: 'F' },
+          { q: 'What is a transformer and how does it work?', a: 'A transformer changes the <strong>voltage</strong> of AC electricity. Uses two coils on an iron core. Changing AC in the primary creates a changing magnetic field, inducing a voltage in the secondary. V₁/V₂ = n₁/n₂.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A transformer has 200 turns on the primary coil and 50 turns on the secondary coil. The input voltage is 240 V. Calculate the output voltage and state whether it is a step-up or step-down transformer.', marks: 3, a: 'V₂ = V₁ × (n₂/n₁) = 240 × (50/200) = 240 × 0.25 = <strong>60 V.</strong> This is a <strong>step-down</strong> transformer (voltage decreases).', points: ['V₁/V₂ = n₁/n₂ → V₂ = V₁ × n₂/n₁', 'V₂ = 240 × 50/200 = 60 V', 'Step-down transformer'], mistake: 'Inverting the ratio: multiplying instead of dividing (or vice versa). Always check: fewer turns → lower voltage (step-down).', grade: 'F' }
+        ]
+      },
+      'Astronomy': {
+        recall: [
+          { q: 'Describe the life cycle of a star the size of our Sun.', a: '<strong>Nebula → protostar → main sequence star → red giant → planetary nebula → white dwarf → black dwarf</strong> (eventually).', grade: 'F' },
+          { q: 'Describe the life cycle of a star much more massive than the Sun.', a: '<strong>Nebula → protostar → main sequence star → red supergiant → supernova → neutron star OR black hole.</strong>', grade: 'F' },
+          { q: 'What evidence supports the Big Bang theory?', a: '1. <strong>Red-shift:</strong> light from distant galaxies is shifted to longer wavelengths — galaxies are moving away, universe is expanding. 2. <strong>CMB radiation:</strong> microwave background radiation — thermal afterglow of the Big Bang.', grade: 'F' },
+          { q: 'What is red-shift?', a: 'The shift of light from distant galaxies towards <strong>longer wavelengths</strong> (towards the red end of the spectrum). Caused by galaxies moving away from us — the Doppler effect. More distant galaxies show greater red-shift.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Explain how red-shift provides evidence for the Big Bang theory.', marks: 4, a: 'Light from distant galaxies shows a <strong>red-shift</strong> — the wavelengths are longer than expected. This indicates the galaxies are <strong>moving away</strong> from us (Doppler effect). More distant galaxies show <strong>greater red-shift</strong>, meaning they are receding faster. This suggests the universe is <strong>expanding</strong>. Tracing this expansion backwards implies that at some point in the past, all matter was concentrated in one place — consistent with a Big Bang.', points: ['Red-shift detected in light from galaxies', 'Galaxies moving away — Doppler effect', 'Greater distance → greater red-shift', 'Universe expanding — evidence for Big Bang'], mistake: 'Confusing red-shift with the Doppler effect for sound. Red-shift applies the same principle to light — moving source stretches the wavelength.', grade: 'F' }
+        ]
+      }
+    }
+  },
+  Chemistry: {
+    color: '#2D6A4F', icon: '🧪', topics: {
+      'Key Concepts': {
+        recall: [
+          { q: 'What is the relative atomic mass (Ar) of an element?', a: 'The <strong>weighted average mass</strong> of all isotopes of an element compared to 1/12 the mass of a carbon-12 atom.', grade: 'F' },
+          { q: 'State the equation for relative formula mass (Mr).', a: 'Mr = <strong>sum of all relative atomic masses</strong> in the formula. E.g. H₂O: (2×1) + 16 = 18.', grade: 'F' },
+          { q: 'What is Avogadro\'s constant?', a: '<strong>6.02 × 10²³</strong> — the number of particles (atoms, molecules or ions) in one mole of a substance.', grade: 'F' },
+          { q: 'State the equation linking moles, mass and relative formula mass.', a: '<strong>n = m / Mr</strong> where n = moles, m = mass (g), Mr = relative formula mass.', grade: 'F' },
+          { q: 'What is the electron configuration of sodium (Na, proton number 11)?', a: '<strong>2, 8, 1</strong> — 2 electrons in the first shell, 8 in the second, 1 in the third (outer shell).', grade: 'F' },
+          { q: 'What determines the position of an element in the periodic table?', a: 'Elements are arranged in order of <strong>increasing proton number</strong> (atomic number). Elements in the same <strong>group</strong> have the same number of outer electrons and similar chemical properties.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Calculate the number of moles in 8.8 g of carbon dioxide (CO₂). Mr(CO₂) = 44', marks: 2, a: 'n = m/Mr = 8.8/44 = <strong>0.2 mol.</strong>', points: ['n = m/Mr', 'n = 8.8/44 = 0.2 mol'], mistake: 'Dividing Mr by mass instead of mass by Mr. Always n = mass ÷ Mr.', grade: 'F' }
+        ]
+      },
+      'States of Matter & Mixtures': {
+        recall: [
+          { q: 'Describe the arrangement and movement of particles in a solid, liquid and gas.', a: '<strong>Solid:</strong> regular arrangement, close together, vibrate in fixed positions. <strong>Liquid:</strong> random, close together, flow past each other. <strong>Gas:</strong> random, far apart, fast and random motion.', grade: 'F' },
+          { q: 'What is a pure substance?', a: 'A substance made of <strong>only one type of element or compound</strong>. It has a <strong>sharp, fixed melting/boiling point</strong>.', grade: 'F' },
+          { q: 'How can you separate a mixture by filtration?', a: 'Used to separate an <strong>insoluble solid</strong> from a liquid. The mixture is poured through filter paper; the liquid (filtrate) passes through; the solid (residue) is retained.', grade: 'F' },
+          { q: 'How does chromatography work?', a: 'Components in a mixture have different <strong>solubility in the solvent</strong> and different <strong>attraction to the stationary phase</strong>. More soluble/less attracted components travel further. Rf = distance moved by substance / distance moved by solvent.', grade: 'F' },
+          { q: 'How is distillation used to separate a mixture?', a: 'Used to separate liquids with <strong>different boiling points</strong>. The mixture is heated; the component with the lower boiling point vapourises first, is condensed and collected separately.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A student carries out paper chromatography on an unknown ink. Substance A travels 6 cm; the solvent front travels 10 cm. Calculate the Rf value and suggest whether substance A could be pure dye X which has Rf = 0.65.', marks: 3, a: 'Rf = 6/10 = <strong>0.6.</strong> This is close to but <strong>not equal</strong> to 0.65 — substance A is <strong>probably not</strong> dye X (Rf values should match exactly for same substance under same conditions).', points: ['Rf = distance substance / distance solvent', 'Rf = 6/10 = 0.6', '0.6 ≠ 0.65 — not the same substance'], mistake: 'Saying "it could be" because the values are close. Rf values should match exactly — experimental error may cause slight variation, but a clear difference (0.6 vs 0.65) is significant.', grade: 'F' }
+        ]
+      },
+      'Chemical Bonding': {
+        recall: [
+          { q: 'Describe ionic bonding.', a: 'Electrons are <strong>transferred</strong> from metal atoms to non-metal atoms. This forms positive metal ions and negative non-metal ions. The ions are held together by <strong>strong electrostatic forces of attraction</strong>.', grade: 'F' },
+          { q: 'Describe covalent bonding.', a: '<strong>Shared pairs of electrons</strong> between non-metal atoms. Each shared pair forms one covalent bond. Both atoms attract the shared electrons.', grade: 'F' },
+          { q: 'Describe metallic bonding.', a: 'A lattice of <strong>positive metal ions</strong> surrounded by a <strong>sea of delocalised electrons</strong>. Strong electrostatic attraction between the ions and electrons holds the structure together.', grade: 'F' },
+          { q: 'Why do ionic compounds have high melting points?', a: 'They form a giant ionic lattice with <strong>many strong electrostatic bonds</strong> between oppositely charged ions. A large amount of energy is needed to overcome these forces.', grade: 'F' },
+          { q: 'Why can ionic compounds conduct electricity when dissolved in water but not when solid?', a: 'In solution or molten, the <strong>ions are free to move</strong> and carry charge. In solid form, ions are in <strong>fixed positions</strong> in the lattice and cannot move.', grade: 'F' },
+          { q: 'What are nanoparticles and why are they useful?', a: 'Particles with dimensions of <strong>1–100 nm</strong>. Very high surface area to volume ratio — makes them very reactive. Used in medicines, sunscreens, electronics.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Explain why graphite is a good conductor of electricity but diamond is not, even though both are made entirely of carbon atoms.', marks: 4, a: 'In <strong>graphite</strong>: each carbon atom forms 3 covalent bonds, leaving one <strong>delocalised electron per atom</strong> that is free to move between layers and carry electric current. In <strong>diamond</strong>: each carbon forms <strong>4 covalent bonds</strong>, using all four outer electrons. There are <strong>no delocalised electrons</strong>, so no charge carriers — diamond cannot conduct electricity.', points: ['Graphite: 3 bonds per C, leaving 1 delocalised electron', 'Delocalised electrons carry charge in graphite', 'Diamond: 4 bonds per C — all electrons in bonds', 'No free electrons in diamond → no conduction'], mistake: 'Saying graphite conducts because it is a metal. Graphite is a non-metal but an exceptional conductor due to delocalised electrons between layers.', grade: 'H' }
+        ]
+      },
+      'Periodic Table': {
+        recall: [
+          { q: 'Why are elements in the same group of the periodic table similar in their chemical properties?', a: 'Elements in the same group have the <strong>same number of electrons in their outer shell</strong>. Chemical reactions involve the outer electrons, so elements in the same group react similarly.', grade: 'F' },
+          { q: 'Describe the trend in reactivity down Group 1.', a: 'Reactivity <strong>increases</strong> down Group 1. As you go down, the outer electron is in a higher (more distant) shell, further from the nucleus and more shielded → <strong>easier to lose</strong> → more reactive.', grade: 'F' },
+          { q: 'Describe the trend in reactivity down Group 7 (halogens).', a: 'Reactivity <strong>decreases</strong> down Group 7. As you go down, the atom is larger and the outer shell is further from the nucleus → <strong>harder to gain</strong> an electron → less reactive.', grade: 'F' },
+          { q: 'What are the transition metals and give two properties?', a: 'Elements between Groups 2 and 3 (e.g. Fe, Cu, Ni). Properties: <strong>high melting points</strong>, <strong>form coloured compounds</strong>, can act as <strong>catalysts</strong>, can form ions with different charges.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Chlorine displaces bromine from potassium bromide solution. Write a word equation and explain, in terms of electron gain, why chlorine can displace bromine.', marks: 3, a: '<strong>Chlorine + potassium bromide → potassium chloride + bromine.</strong> Chlorine is <strong>more reactive</strong> than bromine because it is higher in Group 7 — its outer shell is closer to the nucleus so it can <strong>gain an electron more easily</strong>. Chlorine atoms therefore displace bromide ions from solution.', points: ['Correct word equation', 'Cl higher in group 7 — more reactive', 'Cl gains electrons more readily — outer shell closer to nucleus'], mistake: 'Saying chlorine is more reactive because it is smaller, without explaining why size affects reactivity (nuclear attraction, electron gain).', grade: 'F' }
+        ]
+      },
+      'Acids & Alkalis': {
+        recall: [
+          { q: 'Define acids and alkalis in terms of ions.', a: '<strong>Acids</strong> produce H⁺ ions in aqueous solution. <strong>Alkalis</strong> produce OH⁻ ions in aqueous solution. Neutralisation: H⁺ + OH⁻ → H₂O.', grade: 'F' },
+          { q: 'What is the pH scale?', a: 'A scale from 0–14 measuring <strong>acidity/alkalinity</strong>. pH < 7 = acid; pH 7 = neutral; pH > 7 = alkali. Each unit change represents a <strong>10-fold</strong> change in H⁺ concentration.', grade: 'F' },
+          { q: 'What is the difference between a strong and weak acid?', a: 'A <strong>strong acid</strong> (e.g. HCl) fully ionises in water — all H⁺ released. A <strong>weak acid</strong> (e.g. ethanoic acid) only partially ionises — equilibrium between ionised and unionised forms.', grade: 'F' },
+          { q: 'Name the salt and other product formed when an acid reacts with a metal.', a: 'Acid + metal → <strong>salt + hydrogen gas</strong>. The salt formed depends on the acid: hydrochloric acid → chloride salts; sulfuric acid → sulfate salts; nitric acid → nitrate salts.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Describe how you would make pure, dry copper sulfate crystals from copper oxide and dilute sulfuric acid.', marks: 5, a: '1. Add <strong>excess copper oxide</strong> to warm dilute sulfuric acid — stir until no more dissolves (ensures all acid is used). 2. <strong>Filter</strong> off excess copper oxide. 3. <strong>Evaporate</strong> filtrate gently to concentrate solution. 4. Allow to cool so <strong>crystals form</strong>. 5. <strong>Filter</strong> off crystals and pat dry.', points: ['Add excess CuO to acid', 'Filter to remove excess CuO', 'Evaporate to concentrate', 'Allow to cool — crystals form', 'Filter and dry crystals'], mistake: 'Boiling the solution to dryness — this destroys the crystal structure (water of crystallisation). Always evaporate gently until crystals start to form, then leave to cool.', grade: 'H' }
+        ]
+      },
+      'Energy Changes': {
+        recall: [
+          { q: 'What is an exothermic reaction? Give two examples.', a: 'A reaction that <strong>releases energy</strong> to the surroundings — temperature increases. Examples: <strong>combustion</strong>, oxidation of metals, neutralisation, hand warmers.', grade: 'F' },
+          { q: 'What is an endothermic reaction? Give two examples.', a: 'A reaction that <strong>absorbs energy</strong> from the surroundings — temperature decreases. Examples: <strong>thermal decomposition</strong>, dissolving ammonium nitrate in water, photosynthesis.', grade: 'F' },
+          { q: 'What is activation energy?', a: 'The <strong>minimum energy</strong> that colliding particles must have for a reaction to occur. Represented by the energy barrier on a reaction profile diagram.', grade: 'F' },
+          { q: 'How do catalysts work?', a: 'Catalysts provide an <strong>alternative reaction pathway</strong> with a <strong>lower activation energy</strong>. More particles have sufficient energy to react → increased reaction rate. Catalyst is not consumed.', grade: 'F' },
+          { q: 'How is bond energy used to calculate energy change in a reaction?', a: 'Energy change = <strong>energy to break bonds</strong> (reactants) − <strong>energy released forming bonds</strong> (products). Exothermic if energy released (products) > energy taken in (reactants).', grade: 'F' }
+        ],
+        exam: [
+          { q: 'The following bond energies are given: H–H = 436 kJ/mol; Cl–Cl = 242 kJ/mol; H–Cl = 431 kJ/mol. Calculate the energy change for H₂ + Cl₂ → 2HCl.', marks: 3, a: '<strong>Energy in (break bonds):</strong> 436 + 242 = 678 kJ. <strong>Energy out (form bonds):</strong> 2 × 431 = 862 kJ. <strong>ΔH = 678 − 862 = −184 kJ/mol</strong> (exothermic).', points: ['Energy in = 436 + 242 = 678 kJ', 'Energy out = 2 × 431 = 862 kJ', 'ΔH = 678 − 862 = −184 kJ/mol (exothermic)'], mistake: 'Forgetting to multiply H–Cl by 2 (two H–Cl bonds formed in 2HCl). Always count bonds from the balanced equation.', grade: 'F' }
+        ]
+      },
+      'Rates of Reaction': {
+        recall: [
+          { q: 'List four factors that affect the rate of a chemical reaction.', a: '1. <strong>Temperature</strong> 2. <strong>Concentration</strong> (or pressure for gases) 3. <strong>Surface area</strong> of solid reactants 4. <strong>Catalyst</strong>. Each affects the frequency or energy of collisions.', grade: 'F' },
+          { q: 'Explain how increasing temperature increases reaction rate using collision theory.', a: 'Higher temperature → particles have <strong>more kinetic energy</strong> → move faster → <strong>more frequent collisions</strong> and a higher proportion have energy ≥ activation energy → rate increases.', grade: 'F' },
+          { q: 'Explain how increasing concentration increases reaction rate.', a: 'Higher concentration → <strong>more particles per unit volume</strong> → more frequent collisions → rate increases.', grade: 'F' },
+          { q: 'How does increasing surface area increase reaction rate?', a: 'More surface area → <strong>more particles exposed</strong> on the surface of the solid → more frequent collisions with solution/gas particles → increased rate.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A student investigates the reaction between marble chips and hydrochloric acid. Describe a method to measure reaction rate and explain how the student could use the results to compare rates under different conditions.', marks: 5, a: 'Method: collect the CO₂ gas produced using an <strong>upturned measuring cylinder</strong> (water displacement) or a <strong>gas syringe</strong>. Record volume of gas at regular time intervals. Plot volume vs time. <strong>Rate</strong> = gradient of the graph (steeper = faster rate). To compare: use the same mass of marble chips but vary one factor (e.g. temperature or concentration of HCl). Keep all other variables constant. The steeper the initial gradient, the faster the rate under those conditions.', points: ['Method to collect CO₂ (gas syringe or water displacement)', 'Record volume at regular intervals', 'Plot volume vs time graph', 'Rate = gradient', 'Fair test — one variable changed, others constant'], mistake: 'Timing when the reaction stops is not ideal — the rate changes throughout. Use the initial gradient (steepest part) for rate comparison.', grade: 'H' }
+        ]
+      },
+      'Organic Chemistry': {
+        recall: [
+          { q: 'What are alkanes? State the general formula.', a: 'Alkanes are <strong>saturated hydrocarbons</strong> — contain only C–C single bonds. General formula: <strong>CₙH₂ₙ₊₂</strong>. Examples: methane (CH₄), ethane (C₂H₆).', grade: 'F' },
+          { q: 'What are alkenes? How do they differ from alkanes?', a: 'Alkenes are <strong>unsaturated hydrocarbons</strong> — contain a C=C double bond. General formula: <strong>CₙH₂ₙ</strong>. More reactive than alkanes due to the double bond.', grade: 'F' },
+          { q: 'How is crude oil separated by fractional distillation?', a: 'Crude oil is heated and the vapours rise up a <strong>fractionating column</strong>. Shorter chain hydrocarbons (lower boiling points) rise higher and condense at cooler temperatures at the top.', grade: 'F' },
+          { q: 'What is cracking and why is it carried out?', a: 'Long chain hydrocarbons are broken into <strong>shorter, more useful chains</strong> by heating with a catalyst (or steam). Produces alkenes (for plastics) and shorter alkanes (fuels) which are in higher demand.', grade: 'F' },
+          { q: 'How can you test for an alkene?', a: 'Add <strong>bromine water</strong>: alkenes decolourise bromine water (orange → colourless) due to addition across the C=C double bond. Alkanes do not decolourise bromine water.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Explain what is meant by addition polymerisation and draw the repeating unit of poly(ethene).', marks: 3, a: 'Addition polymerisation: many <strong>alkene monomers</strong> (containing C=C bonds) react together — the double bond opens and links to form a long chain polymer. The <strong>repeating unit of poly(ethene)</strong> is –[CH₂–CH₂]– (the n subscript with brackets and a line through each bond).', points: ['Monomers contain C=C double bond', 'Double bond opens to link monomers', 'Correct repeating unit: –[CH₂–CH₂]–'], mistake: 'Drawing the repeating unit with a double bond — in poly(ethene) the double bond has opened and been used to link. The repeating unit has only single bonds.', grade: 'H' }
+        ]
+      }
+    }
+  },
+  Biology: {
+    color: '#8B3A8B', icon: '🔬', topics: {
+      'Key Concepts — Cells': {
+        recall: [
+          { q: 'State the key differences between a eukaryotic and a prokaryotic cell.', a: '<strong>Eukaryotic:</strong> has a membrane-bound nucleus, larger (10–100 µm), e.g. animal and plant cells. <strong>Prokaryotic:</strong> no nucleus (DNA free in cytoplasm), smaller (~1 µm), e.g. bacteria.', grade: 'F' },
+          { q: 'List the organelles found in plant cells but NOT in animal cells.', a: '<strong>Cell wall</strong> (cellulose), <strong>chloroplasts</strong> (photosynthesis), <strong>permanent vacuole</strong> (filled with cell sap for turgor).', grade: 'F' },
+          { q: 'What is the function of mitochondria?', a: 'Site of <strong>aerobic respiration</strong> — produces ATP (energy) for cellular processes.', grade: 'F' },
+          { q: 'What is the function of ribosomes?', a: 'Site of <strong>protein synthesis</strong> — translate mRNA to make proteins.', grade: 'F' },
+          { q: 'What is osmosis?', a: 'The movement of water molecules through a <strong>partially permeable membrane</strong> from a region of <strong>higher water potential</strong> to a region of <strong>lower water potential</strong>.', grade: 'F' },
+          { q: 'What is active transport?', a: 'Movement of molecules <strong>against</strong> a concentration gradient, across a cell membrane, using <strong>energy from respiration</strong> (ATP). Requires carrier proteins.', grade: 'F' },
+          { q: 'What is mitosis used for?', a: '<strong>Growth, repair and asexual reproduction</strong>. Produces two genetically identical daughter cells with the same number of chromosomes as the parent cell (diploid).', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Explain why a cell needs to be small to exchange substances efficiently. Include surface area to volume ratio in your answer.', marks: 4, a: 'As a cell gets larger, its volume increases faster than its surface area. This means the <strong>surface area to volume ratio decreases</strong>. A small cell has a <strong>high SA:V ratio</strong>, meaning there is proportionally more membrane surface area available for diffusion per unit of cytoplasm. This means substances can diffuse in and out quickly enough to supply the whole cell. Large cells would have a low SA:V ratio — diffusion would be too slow to supply the centre.', points: ['SA:V ratio decreases as size increases', 'Small cell = high SA:V ratio', 'More membrane surface relative to volume', 'Faster diffusion — meets metabolic demands'], mistake: 'Saying smaller cells are "more efficient" without explaining SA:V ratio. Examiners want the concept that SA:V ratio decreases with size.', grade: 'H' }
+        ]
+      },
+      'Cells & Control': {
+        recall: [
+          { q: 'What is the function of the nervous system?', a: 'The nervous system <strong>detects stimuli</strong> and <strong>coordinates responses</strong> to maintain homeostasis and respond to the environment. Uses electrical impulses along neurones.', grade: 'F' },
+          { q: 'Describe the components of a reflex arc.', a: '<strong>Receptor → sensory neurone → relay neurone (in spinal cord) → motor neurone → effector</strong>. Reflexes are automatic and fast — the brain is not involved in the initial response.', grade: 'F' },
+          { q: 'What is a synapse?', a: 'A <strong>gap between two neurones</strong>. Electrical impulse causes release of <strong>neurotransmitters</strong> which diffuse across the gap and bind to receptors on the next neurone, continuing the signal.', grade: 'F' },
+          { q: 'State four areas of the brain and their functions.', a: '<strong>Cerebral cortex:</strong> conscious thought, learning, memory, personality. <strong>Cerebellum:</strong> balance and coordination. <strong>Medulla oblongata:</strong> breathing and heart rate. <strong>Hypothalamus:</strong> temperature regulation, thirst, hunger.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Explain why reflexes are important, including why the response does not pass through the conscious brain.', marks: 4, a: 'Reflexes protect the body from harm. They are <strong>automatic</strong> and <strong>very fast</strong>. Speed is achieved because the impulse travels through the <strong>spinal cord</strong> without going to the brain — this reduces the time taken. The brain does receive information about the reflex <em>after</em> the response, but is not needed to initiate it. The short pathway (receptor → spinal cord → effector) means the response happens in milliseconds, reducing potential injury.', points: ['Reflexes protect the body', 'Automatic — no conscious thought', 'Fast because bypasses conscious brain', 'Shorter pathway through spinal cord'], mistake: 'Saying the brain is "not involved at all" — the brain does receive information afterwards. The key point is it is not needed to initiate the response.', grade: 'F' }
+        ]
+      },
+      'Genetics': {
+        recall: [
+          { q: 'What is a gene?', a: 'A <strong>section of DNA</strong> on a chromosome that codes for a specific protein (and hence a characteristic).', grade: 'F' },
+          { q: 'Define the terms dominant and recessive allele.', a: 'A <strong>dominant allele</strong> is expressed even when only one copy is present. A <strong>recessive allele</strong> is only expressed when two copies are present (homozygous).', grade: 'F' },
+          { q: 'What is meiosis and why is it important?', a: 'Meiosis produces <strong>4 genetically different gametes</strong> (sex cells) each with half the chromosome number (haploid). It creates genetic variation in the offspring.', grade: 'F' },
+          { q: 'What is the genotype and phenotype of an individual?', a: '<strong>Genotype:</strong> the genetic makeup (alleles present). <strong>Phenotype:</strong> the observable characteristics — result of genotype and environment.', grade: 'F' },
+          { q: 'What is cystic fibrosis and how is it inherited?', a: 'Cystic fibrosis is an inherited disorder caused by a <strong>recessive allele</strong>. Causes thick mucus in lungs and digestive system. Both parents must carry the allele for a child to be affected (carrier × carrier = 25% chance affected).', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Two parents who are both carriers for cystic fibrosis (Ff × Ff) have children. Using a Punnett square, calculate the probability of a child having cystic fibrosis.', marks: 4, a: 'Punnett square: FF, Ff, Ff, ff. Phenotypes: 3 unaffected (FF or Ff): 1 affected (ff). <strong>Probability of cystic fibrosis = 1 in 4 = 25%.</strong>', points: ['Correct Punnett square set up with Ff × Ff', 'Four outcomes: FF, Ff, Ff, ff', 'ff = affected', 'Probability = 1/4 = 25%'], mistake: 'Using capital F for cystic fibrosis — CF is recessive, so the affected genotype is ff (lowercase). Parents are Ff (carriers, unaffected).', grade: 'F' }
+        ]
+      },
+      'Natural Selection & Evolution': {
+        recall: [
+          { q: 'Explain natural selection in four steps.', a: '1. <strong>Variation:</strong> individuals in a population vary due to random mutations. 2. <strong>Selection pressure:</strong> some variants survive better. 3. <strong>Survival and reproduction:</strong> better-adapted individuals reproduce more. 4. <strong>Inheritance:</strong> favourable alleles passed to next generation — frequency increases.', grade: 'F' },
+          { q: 'What is the evidence for evolution?', a: '1. <strong>Fossil record</strong> — shows gradual changes over time. 2. <strong>Similarities in DNA/proteins</strong> — related species have similar sequences. 3. <strong>Selective breeding</strong> — shows variation can be amplified. 4. <strong>Antibiotic resistance</strong> — observable natural selection today.', grade: 'F' },
+          { q: 'What is selective breeding?', a: 'Humans select individuals with <strong>desirable traits</strong> and breed them together over many generations to increase the frequency of those traits. Also called artificial selection.', grade: 'F' },
+          { q: 'What is cloning and give one example?', a: 'Producing <strong>genetically identical</strong> copies of an organism. Examples: <strong>tissue culture</strong> (plant cells), <strong>embryo splitting</strong>, <strong>somatic cell nuclear transfer</strong> (Dolly the sheep).', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Explain how a population of bacteria can become resistant to an antibiotic over time. Use the concept of natural selection in your answer.', marks: 4, a: 'In a population of bacteria, random <strong>mutations</strong> mean some individuals are naturally resistant to the antibiotic. When the antibiotic is applied, <strong>non-resistant bacteria are killed</strong>. The resistant bacteria <strong>survive and reproduce</strong>, passing on the resistance gene. Over time, the population consists mainly of resistant bacteria. This is natural selection — the antibiotic acts as a <strong>selection pressure</strong>.', points: ['Random mutation produces resistance', 'Antibiotic kills non-resistant bacteria', 'Resistant bacteria survive and reproduce', 'Resistance gene inherited — frequency increases'], mistake: 'Saying bacteria "develop" resistance when exposed to antibiotics. Resistance is not acquired by an individual — it pre-exists in some individuals via random mutation.', grade: 'F' }
+        ]
+      },
+      'Health, Disease & Medicine': {
+        recall: [
+          { q: 'What are the four main types of pathogen?', a: '<strong>Bacteria, viruses, fungi</strong> and <strong>protists</strong>. Each causes disease by different mechanisms.', grade: 'F' },
+          { q: 'How does the body defend itself against pathogens?', a: '<strong>Physical barriers:</strong> skin, mucus in airways, cilia. <strong>Chemical:</strong> stomach acid, enzymes in tears/saliva. <strong>Immune response:</strong> white blood cells — phagocytes (engulf pathogens) and lymphocytes (produce antibodies).', grade: 'F' },
+          { q: 'How does vaccination protect against disease?', a: 'A <strong>weakened/dead pathogen or antigen</strong> is introduced. The immune system produces <strong>antibodies and memory cells</strong>. On future exposure, memory cells allow a faster, larger immune response — the person is immune.', grade: 'F' },
+          { q: 'What is herd immunity?', a: 'When a large enough proportion of a population is immune, <strong>transmission of the disease is reduced</strong>, protecting even unvaccinated individuals. The pathogen cannot spread easily.', grade: 'F' },
+          { q: 'Why do antibiotics not work against viral infections?', a: 'Antibiotics work by targeting structures specific to <strong>bacteria</strong> (e.g. cell wall, ribosomes). Viruses do not have these structures — viruses replicate using the host cell\'s machinery.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Describe the stages of a clinical trial for a new drug. Explain why a double-blind trial with a placebo is used.', marks: 5, a: '<strong>Stage 1:</strong> tested on cells/tissues in a lab. <strong>Stage 2:</strong> tested on animals for safety/efficacy. <strong>Stage 3 (clinical trials):</strong> tested on small group of healthy volunteers (safety/dose). <strong>Stage 4:</strong> tested on larger group of patients. A <strong>double-blind trial</strong>: neither patients nor doctors know who receives the drug or placebo. This prevents <strong>bias</strong> — patients cannot influence results by expecting improvement (placebo effect), and doctors cannot unconsciously treat groups differently.', points: ['Lab/animal testing first', 'Clinical trial on healthy volunteers then patients', 'Double blind: neither patient nor doctor knows treatment', 'Prevents placebo effect / bias', 'Placebo = inactive treatment for comparison'], mistake: 'Confusing single-blind (only patient doesn\'t know) with double-blind (neither patient nor doctor knows). Double-blind is more robust against bias.', grade: 'H' }
+        ]
+      },
+      'Plant Biology': {
+        recall: [
+          { q: 'State the word equation for photosynthesis.', a: 'carbon dioxide + water → <strong>glucose + oxygen</strong>. (Requires light energy and chlorophyll.)', grade: 'F' },
+          { q: 'What are the three limiting factors for photosynthesis?', a: '<strong>Light intensity</strong>, <strong>CO₂ concentration</strong> and <strong>temperature</strong>. Any one of these, when in short supply, will limit the rate of photosynthesis.', grade: 'F' },
+          { q: 'What is transpiration?', a: 'The <strong>evaporation of water</strong> from the leaves of a plant (mainly through stomata). Creates a water potential gradient that draws water up through the xylem.', grade: 'F' },
+          { q: 'What factors increase the rate of transpiration?', a: '<strong>Higher temperature</strong>, <strong>increased light intensity</strong>, <strong>lower humidity</strong> and <strong>increased wind speed</strong> all increase transpiration rate.', grade: 'F' },
+          { q: 'What is the role of auxins in plant growth?', a: 'Auxins are plant hormones that control <strong>cell elongation</strong>. Produced at growing tips. In phototropism: light causes uneven distribution — cells on shaded side elongate more → plant bends toward light.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A student sets up a potometer to measure transpiration rate in different conditions. Explain what a potometer measures and how the student could use it to investigate the effect of wind speed on transpiration.', marks: 4, a: 'A potometer measures the <strong>rate of water uptake</strong> by a plant shoot (which estimates transpiration rate). The student sets up the potometer in still air and records how far the air bubble moves in a set time. This is repeated using a fan to simulate wind at different speeds. <strong>All other variables must be kept constant</strong> (light, temperature, humidity). A higher wind speed should cause faster transpiration — removing water vapour from around stomata, maintaining a steep concentration gradient.', points: ['Potometer measures water uptake (as proxy for transpiration)', 'Record bubble movement per unit time', 'Fan to vary wind speed — one variable changed', 'Control other variables', 'Greater wind → removes water vapour → steeper gradient → faster transpiration'], mistake: 'Saying the potometer measures transpiration directly — it measures water uptake. Some water is used for photosynthesis, but the assumption is most is transpired.', grade: 'H' }
+        ]
+      },
+      'Animal Coordination': {
+        recall: [
+          { q: 'What is the endocrine system?', a: 'A system of <strong>glands</strong> that produce and secrete <strong>hormones</strong> directly into the blood. Hormones travel to target organs and cause a response. Slower but longer-lasting than the nervous system.', grade: 'F' },
+          { q: 'How does insulin regulate blood glucose?', a: 'After eating, blood glucose rises. The <strong>pancreas</strong> releases <strong>insulin</strong>. Insulin causes liver and muscle cells to absorb glucose and convert it to <strong>glycogen</strong> (storage). Blood glucose returns to normal.', grade: 'F' },
+          { q: 'What is the difference between Type 1 and Type 2 diabetes?', a: '<strong>Type 1:</strong> pancreas produces <strong>no insulin</strong> (autoimmune). Treated with insulin injections. <strong>Type 2:</strong> body cells become <strong>resistant to insulin</strong>. Often linked to obesity. Managed by diet, exercise, medication.', grade: 'F' },
+          { q: 'What is ADH and how does it regulate water levels?', a: '<strong>ADH (antidiuretic hormone)</strong> is released by the pituitary gland when blood is too concentrated. It causes the kidneys to <strong>reabsorb more water</strong>, producing concentrated urine. Blood water potential is restored.', grade: 'F' },
+          { q: 'What is the role of FSH and LH in the menstrual cycle?', a: '<strong>FSH</strong> (from pituitary): stimulates follicle development and oestrogen production. <strong>LH</strong> (from pituitary): triggers ovulation at mid-cycle.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Explain how the body responds to a rise in blood glucose concentration after a meal. Include the organs and hormones involved.', marks: 5, a: 'After a meal, glucose is absorbed from the gut into the blood — blood glucose concentration rises. The <strong>beta cells of the pancreas</strong> detect this and secrete <strong>insulin</strong> into the blood. Insulin travels to the <strong>liver and muscle cells</strong>, where it stimulates the uptake of glucose and its conversion to <strong>glycogen</strong>. This removes glucose from the blood, returning it to normal levels. Insulin secretion then decreases as blood glucose normalises — this is negative feedback.', points: ['Blood glucose rises after meal', 'Pancreas (beta cells) secretes insulin', 'Insulin causes liver/muscle cells to absorb glucose', 'Glucose → glycogen (glycogenesis)', 'Blood glucose returns to normal — negative feedback'], mistake: 'Saying "the liver produces insulin" — insulin is produced by the pancreas. The liver responds to insulin.', grade: 'F' }
+        ]
+      },
+      'Ecosystems': {
+        recall: [
+          { q: 'Define biodiversity.', a: 'The <strong>variety of living organisms</strong> in an area — includes species diversity, genetic diversity and ecosystem diversity.', grade: 'F' },
+          { q: 'What is a food chain? Give an example.', a: 'Shows the <strong>feeding relationships</strong> between organisms — the direction of energy transfer. E.g. grass → rabbit → fox. Starts with a producer (photosynthesising organism).', grade: 'F' },
+          { q: 'Describe the carbon cycle.', a: 'Carbon enters the atmosphere as CO₂ via <strong>respiration, combustion and decomposition</strong>. Removed by <strong>photosynthesis</strong>. Locked up in fossil fuels and organisms. Cycling maintains atmospheric CO₂ balance.', grade: 'F' },
+          { q: 'What is eutrophication?', a: 'Excess <strong>fertilisers</strong> leach into water → algae grow rapidly (algal bloom) → algae block light → aquatic plants die → decomposers break down dead plants using oxygen → <strong>fish suffocate</strong> due to low oxygen (deoxygenation).', grade: 'F' },
+          { q: 'What is the nitrogen cycle?', a: 'Nitrogen fixed by bacteria (or lightning) → taken up by plants as nitrates → eaten by animals → returned to soil by decomposers (ammonification) → denitrifying bacteria convert nitrates back to N₂.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Explain how deforestation can affect global carbon dioxide levels.', marks: 4, a: 'Trees absorb CO₂ during <strong>photosynthesis</strong>. When trees are felled, this CO₂ uptake is <strong>lost</strong>. If trees are burnt, the stored carbon is <strong>released immediately</strong> as CO₂. If left to decay, decomposers release CO₂ over time through <strong>respiration</strong>. The net result is an <strong>increase in atmospheric CO₂</strong>, which enhances the greenhouse effect and contributes to climate change.', points: ['Trees absorb CO₂ via photosynthesis', 'Felling removes CO₂ uptake', 'Burning releases stored carbon as CO₂', 'Decomposition also releases CO₂', 'Net rise in atmospheric CO₂'], mistake: 'Saying deforestation reduces oxygen production only — the bigger issue for climate is loss of a CO₂ sink and release of stored carbon.', grade: 'F' }
+        ]
+      },
+      'Respiration': {
+        recall: [
+          { q: 'State the word equation for aerobic respiration.', a: 'glucose + oxygen → <strong>carbon dioxide + water</strong> (+ energy transferred to ATP).', grade: 'F' },
+          { q: 'State the word equation for anaerobic respiration in animals.', a: 'glucose → <strong>lactic acid</strong> (+ small amount of energy).', grade: 'F' },
+          { q: 'What is oxygen debt and how is it repaid?', a: 'During intense exercise, anaerobic respiration produces lactic acid. After exercise, <strong>extra oxygen</strong> is needed to oxidise lactic acid to CO₂ and water — this is the oxygen debt (EPOC). Repaid by breathing faster after exercise.', grade: 'F' },
+          { q: 'Where in the cell does aerobic respiration occur?', a: 'Mainly in the <strong>mitochondria</strong> — the inner membrane and matrix are where ATP is produced. Glycolysis (first stage) occurs in the cytoplasm.', grade: 'F' },
+          { q: 'What is fermentation? Give one use.', a: 'Anaerobic respiration in <strong>yeast</strong>: glucose → <strong>ethanol + carbon dioxide</strong>. Used in <strong>bread-making</strong> (CO₂ makes dough rise) and <strong>brewing</strong> (ethanol produced).', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Compare aerobic and anaerobic respiration in terms of reactants, products and ATP yield.', marks: 4, a: '<strong>Aerobic:</strong> requires oxygen; reactants = glucose + O₂; products = CO₂ + water; releases a <strong>large amount of ATP</strong> (approximately 38 ATP per glucose). <strong>Anaerobic (animals):</strong> no oxygen required; reactant = glucose only; product = lactic acid; releases a <strong>small amount of ATP</strong> (2 ATP per glucose). Aerobic is far more efficient — used for sustained activity. Anaerobic used when oxygen supply is insufficient.', points: ['Aerobic needs oxygen; anaerobic does not', 'Aerobic products: CO₂ + water; anaerobic: lactic acid', 'Aerobic: large ATP yield; anaerobic: small ATP yield', 'Aerobic is more efficient'], mistake: 'Saying anaerobic respiration produces no ATP — it does produce a small amount (2 ATP per glucose). It is just far less efficient than aerobic.', grade: 'F' }
+        ]
+      }
+    }
+  },
+  Maths: {
+    color: '#B85C1A', icon: '∑', topics: {
+      'Number': {
+        recall: [
+          { q: 'What does HCF stand for and how do you find it?', a: '<strong>Highest Common Factor</strong> — the largest number that divides into both numbers exactly. Method: list factors of each number and find the largest common one. Or use prime factor decomposition and multiply common factors.', grade: 'F' },
+          { q: 'What does LCM stand for and how do you find it?', a: '<strong>Lowest Common Multiple</strong> — the smallest number that is a multiple of both. Method: list multiples or use prime factor decomposition (multiply all prime factors, using the highest power of each).', grade: 'F' },
+          { q: 'What is standard form? Give an example.', a: 'A way of writing very large or small numbers: <strong>A × 10ⁿ</strong> where 1 ≤ A < 10 and n is an integer. Example: 4.56 × 10³ = 4560.', grade: 'F' },
+          { q: 'How do you calculate percentage change?', a: '<strong>% change = (change / original) × 100</strong>. Increase: positive; decrease: negative. Example: price rises from £40 to £50 → change = 10, % change = (10/40)×100 = 25%.', grade: 'F' },
+          { q: 'What is a surd? Give an example.', a: 'An <strong>irrational root</strong> that cannot be simplified to a rational number. Example: √2, √3, √5. √4 = 2 is NOT a surd (it is rational).', grade: 'H' },
+          { q: 'State the rules of indices for multiplication and division.', a: '<strong>Multiply:</strong> aᵐ × aⁿ = aᵐ⁺ⁿ. <strong>Divide:</strong> aᵐ ÷ aⁿ = aᵐ⁻ⁿ. <strong>Power of power:</strong> (aᵐ)ⁿ = aᵐⁿ. <strong>Zero power:</strong> a⁰ = 1.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Write 0.000342 in standard form.', marks: 2, a: '<strong>3.42 × 10⁻⁴.</strong>', points: ['A = 3.42 (between 1 and 10)', 'Power = -4 (decimal point moves 4 places right)'], mistake: 'Using a positive power for a small number. For numbers less than 1, the power of 10 is negative.', grade: 'F' },
+          { q: 'Express 360 as a product of its prime factors.', marks: 3, a: '360 = 2 × 180 = 2 × 2 × 90 = 2 × 2 × 2 × 45 = 2 × 2 × 2 × 9 × 5 = <strong>2³ × 3² × 5.</strong>', points: ['Method shown (factor tree or division)', 'Correct prime factors', '360 = 2³ × 3² × 5'], mistake: 'Including 1 as a prime factor or stopping too early (leaving composite numbers). Continue until all factors are prime.', grade: 'F' }
+        ]
+      },
+      'Algebra': {
+        recall: [
+          { q: 'How do you expand double brackets? Give an example.', a: 'Use FOIL or the grid method: <strong>(a+b)(c+d) = ac + ad + bc + bd</strong>. Example: (x+3)(x+2) = x² + 2x + 3x + 6 = x² + 5x + 6.', grade: 'F' },
+          { q: 'How do you factorise a quadratic of the form x² + bx + c?', a: 'Find two numbers that <strong>multiply to c</strong> and <strong>add to b</strong>. Write as (x + p)(x + q). Example: x² + 7x + 12 = (x+3)(x+4) since 3×4=12 and 3+4=7.', grade: 'F' },
+          { q: 'What is the quadratic formula?', a: '<strong>x = (−b ± √(b² − 4ac)) / 2a</strong> for ax² + bx + c = 0. Use when factorising is not possible.', grade: 'H' },
+          { q: 'How do you solve simultaneous equations by elimination?', a: 'Make the <strong>coefficient of one variable the same</strong> in both equations. Add or subtract to eliminate that variable. Solve for the remaining variable, then substitute back.', grade: 'F' },
+          { q: 'What is the nth term formula for an arithmetic sequence?', a: '<strong>nth term = a + (n−1)d</strong> where a = first term, d = common difference. Example: sequence 3, 7, 11, 15 → a=3, d=4 → nth term = 3+(n-1)×4 = 4n−1.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Solve 3x² − 5x − 2 = 0.', marks: 3, a: 'Try factorising: 3x² − 5x − 2 = (3x + 1)(x − 2) [check: 3x×x = 3x², 3x×(−2)+(1×x)=−6x+x=−5x, 1×(−2)=−2 ✓]. Solutions: <strong>x = −1/3 or x = 2.</strong>', points: ['Correct factorisation (3x+1)(x-2)', 'x = -1/3 from 3x+1 = 0', 'x = 2 from x-2 = 0'], mistake: 'Factorising as (3x−1)(x+2) — always check by expanding back. Or use the quadratic formula as a check.', grade: 'F' }
+        ]
+      },
+      'Ratio & Proportion': {
+        recall: [
+          { q: 'How do you divide a quantity in a given ratio?', a: '1. Add the parts of the ratio to find the total number of parts. 2. Divide the quantity by the total. 3. Multiply by each part. Example: £120 in ratio 3:2 → total = 5 parts; £120/5 = £24/part; shares = 3×£24 = £72 and 2×£24 = £48.', grade: 'F' },
+          { q: 'What is direct proportion and how do you recognise it?', a: 'Two quantities are in <strong>direct proportion</strong> if y = kx (constant ratio). Graph is a <strong>straight line through the origin</strong>. Doubling x doubles y.', grade: 'F' },
+          { q: 'What is inverse proportion?', a: 'Two quantities are in <strong>inverse proportion</strong> if y = k/x (their product is constant). As x increases, y decreases proportionally. Graph is a reciprocal curve.', grade: 'F' },
+          { q: 'State the formula for compound interest.', a: '<strong>A = P(1 + r/100)ⁿ</strong> where A = final amount, P = principal, r = percentage rate, n = number of periods.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A car travels 120 miles on 4 gallons of fuel. How far can it travel on 7 gallons? Write the equation of proportion.', marks: 3, a: 'Rate = 120/4 = 30 miles/gallon. Distance ∝ fuel: d = 30f. For 7 gallons: d = 30 × 7 = <strong>210 miles.</strong>', points: ['Rate = 120/4 = 30 miles per gallon', 'd = 30f (equation of proportion)', 'd = 210 miles for 7 gallons'], mistake: 'Using ratio 4:7 without first finding the unit rate. Always establish the rate per unit first.', grade: 'F' }
+        ]
+      },
+      'Graphs': {
+        recall: [
+          { q: 'What is the equation of a straight line and what do m and c represent?', a: '<strong>y = mx + c</strong>. m = gradient (steepness — rise ÷ run). c = y-intercept (where the line crosses the y-axis).', grade: 'F' },
+          { q: 'How do you find the gradient of a straight line from a graph?', a: 'Choose two points on the line. <strong>Gradient = (y₂ − y₁) / (x₂ − x₁)</strong>. Rise over run. Use large triangles for accuracy.', grade: 'F' },
+          { q: 'Describe the graph of y = x².', a: 'A <strong>parabola (U-shape)</strong> with vertex at the origin (0,0), symmetric about the y-axis. All y values are ≥ 0.', grade: 'F' },
+          { q: 'What does a distance-time graph show and how do you find speed?', a: 'Shows how distance changes with time. A horizontal line = stationary. <strong>Speed = gradient</strong> of the line. Steeper gradient = faster speed.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A line passes through (1, 5) and (4, 14). Find the equation of the line.', marks: 3, a: 'Gradient m = (14−5)/(4−1) = 9/3 = 3. Using y = mx + c: 5 = 3(1) + c → c = 2. <strong>Equation: y = 3x + 2.</strong>', points: ['m = (y₂−y₁)/(x₂−x₁) = 9/3 = 3', 'Substitute a point: 5 = 3(1) + c', 'c = 2; equation: y = 3x + 2'], mistake: 'Not substituting a point to find c. After finding the gradient, always substitute one point to find the y-intercept.', grade: 'F' }
+        ]
+      },
+      'Geometry — Shapes': {
+        recall: [
+          { q: 'State the interior angle sum of a polygon with n sides.', a: '<strong>(n − 2) × 180°</strong>. Example: pentagon (n=5): (5−2)×180 = 540°. Hexagon: (6−2)×180 = 720°.', grade: 'F' },
+          { q: 'State the conditions for congruent triangles (SSS, SAS, ASA, RHS).', a: '<strong>SSS:</strong> three sides equal. <strong>SAS:</strong> two sides and included angle. <strong>ASA:</strong> two angles and included side. <strong>RHS:</strong> right angle, hypotenuse and one side.', grade: 'F' },
+          { q: 'State the conditions for similar triangles.', a: 'Two triangles are similar if all corresponding <strong>angles are equal</strong> (AAA) OR all corresponding <strong>sides are in the same ratio</strong>. Similar triangles have the same shape but different size.', grade: 'F' },
+          { q: 'What are the properties of a parallelogram?', a: 'Two pairs of <strong>parallel sides</strong>, two pairs of equal opposite sides, opposite angles are equal, diagonals bisect each other.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'Triangle ABC is similar to triangle DEF. AB = 6 cm, BC = 9 cm, DE = 10 cm. Find EF.', marks: 3, a: 'Scale factor = DE/AB = 10/6 = 5/3. EF = BC × scale factor = 9 × 5/3 = <strong>15 cm.</strong>', points: ['Scale factor = DE/AB = 10/6', 'EF = BC × scale factor', 'EF = 9 × 5/3 = 15 cm'], mistake: 'Adding the scale factor instead of multiplying. For similar shapes, multiply corresponding sides by the scale factor.', grade: 'F' }
+        ]
+      },
+      'Geometry — Areas & Volumes': {
+        recall: [
+          { q: 'State the formula for the area of a circle.', a: '<strong>A = πr²</strong> where r is the radius. In terms of diameter: A = π(d/2)².', grade: 'F' },
+          { q: 'State the formula for the circumference of a circle.', a: '<strong>C = 2πr = πd.</strong>', grade: 'F' },
+          { q: 'State the formula for the volume of a cylinder.', a: '<strong>V = πr²h</strong> where r = radius, h = height.', grade: 'F' },
+          { q: 'State the formula for the volume of a cone.', a: '<strong>V = (1/3)πr²h</strong> where r = base radius, h = perpendicular height.', grade: 'F' },
+          { q: 'How do you find the arc length and sector area?', a: 'Arc length = (θ/360) × 2πr. Sector area = (θ/360) × πr². θ is the angle at the centre in degrees.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A cylinder has radius 5 cm and height 12 cm. Calculate the volume. Give your answer in terms of π.', marks: 2, a: 'V = πr²h = π × 25 × 12 = <strong>300π cm³.</strong>', points: ['V = πr²h', 'V = π × 25 × 12 = 300π cm³'], mistake: 'Using diameter instead of radius in the formula. r = 5, so r² = 25.', grade: 'F' }
+        ]
+      },
+      'Trigonometry & Pythagoras': {
+        recall: [
+          { q: 'State Pythagoras\' theorem.', a: 'In a right-angled triangle: <strong>a² + b² = c²</strong> where c is the hypotenuse (longest side, opposite right angle).', grade: 'F' },
+          { q: 'State the three trigonometric ratios (SOH CAH TOA).', a: '<strong>sin θ = opposite / hypotenuse. cos θ = adjacent / hypotenuse. tan θ = opposite / adjacent.</strong>', grade: 'F' },
+          { q: 'State the sine rule.', a: '<strong>a/sin A = b/sin B = c/sin C</strong>. Used when you have a side and its opposite angle plus one other.', grade: 'H' },
+          { q: 'State the cosine rule.', a: '<strong>a² = b² + c² − 2bc cos A.</strong> Used when you have two sides and the included angle (SAS) or all three sides (SSS).', grade: 'H' },
+          { q: 'State the exact trigonometric values for 30°, 45° and 60°.', a: 'sin30°=½, cos30°=√3/2, tan30°=1/√3. sin45°=1/√2, cos45°=1/√2, tan45°=1. sin60°=√3/2, cos60°=½, tan60°=√3.', grade: 'F' }
+        ],
+        exam: [
+          { q: 'A ladder 5.2 m long leans against a wall. The foot is 1.8 m from the base of the wall. Calculate the angle the ladder makes with the ground.', marks: 3, a: 'cos θ = adjacent/hypotenuse = 1.8/5.2. θ = cos⁻¹(1.8/5.2) = <strong>69.8° (to 1 d.p.).</strong>', points: ['Identify cos (adjacent and hypotenuse known)', 'cos θ = 1.8/5.2', 'θ = cos⁻¹(0.346...) = 69.8°'], mistake: 'Using sin or tan instead of cos. Adjacent (base) and hypotenuse (ladder) are given → use cos.', grade: 'F' }
+        ]
+      },
+      'Probability': {
+        recall: [
+          { q: 'State the probability of mutually exclusive events.', a: 'For mutually exclusive events A and B: <strong>P(A or B) = P(A) + P(B)</strong>. Mutually exclusive means they cannot both happen at the same time.', grade: 'F' },
+          { q: 'State the multiplication rule for independent events.', a: 'For independent events A and B: <strong>P(A and B) = P(A) × P(B)</strong>.', grade: 'F' },
+          { q: 'What is a Venn diagram used for in probability?', a: 'Shows the relationship between sets. Used to find P(A ∪ B) = P(A) + P(B) − P(A ∩ B) and P(A|B) = P(A ∩ B) / P(B) (conditional probability).', grade: 'H' },
+          { q: 'How do you calculate conditional probability?', a: '<strong>P(A|B) = P(A and B) / P(B)</strong>. Read as "probability of A given B". Reduces the sample space to just outcomes where B has occurred.', grade: 'H' }
+        ],
+        exam: [
+          { q: 'A bag contains 5 red and 3 blue counters. Two counters are drawn without replacement. Calculate the probability that both are red.', marks: 3, a: 'P(first red) = 5/8. P(second red | first was red) = 4/7. P(both red) = 5/8 × 4/7 = <strong>20/56 = 5/14.</strong>', points: ['P(1st red) = 5/8', 'P(2nd red) = 4/7 (without replacement)', 'P(both) = 5/8 × 4/7 = 5/14'], mistake: 'Using 5/8 × 5/8 (forgetting that one red counter has already been removed). Without replacement: denominator and numerator both decrease.', grade: 'F' }
+        ]
+      },
+      'Statistics': {
+        recall: [
+          { q: 'State the formulae for mean, median and mode.', a: '<strong>Mean:</strong> sum of all values ÷ number of values. <strong>Median:</strong> middle value when ordered. <strong>Mode:</strong> most frequent value. <strong>Range:</strong> max − min.', grade: 'F' },
+          { q: 'What does a scatter graph show? Define positive and negative correlation.', a: 'Shows relationship between two variables. <strong>Positive correlation:</strong> as x increases, y increases. <strong>Negative correlation:</strong> as x increases, y decreases. <strong>No correlation:</strong> no pattern.', grade: 'F' },
+          { q: 'How is a cumulative frequency graph used?', a: 'Plot cumulative frequency against the upper class boundary. Read off <strong>median</strong> at the 50th percentile, <strong>LQ</strong> at 25th, <strong>UQ</strong> at 75th percentile. <strong>IQR = UQ − LQ.</strong>', grade: 'H' },
+          { q: 'What is frequency density and when is it used?', a: 'Used in histograms when class widths are unequal. <strong>Frequency density = frequency / class width.</strong> The area of each bar represents frequency.', grade: 'H' }
+        ],
+        exam: [
+          { q: 'The mean of five numbers is 12. Four of the numbers are 8, 15, 10 and 14. Find the fifth number.', marks: 3, a: 'Total of all five = mean × n = 12 × 5 = 60. Sum of known four = 8+15+10+14 = 47. <strong>Fifth number = 60 − 47 = 13.</strong>', points: ['Total = mean × n = 60', 'Sum of four = 47', 'Fifth = 60 − 47 = 13'], mistake: 'Averaging the four numbers and subtracting from the mean — this does not work. Find the total first, then subtract known values.', grade: 'F' }
+        ]
+      }
+    }
+  }
+};
+
+// Default CONTENT to AQA — overridden at runtime by board detection
+window.CONTENT_AQA = CONTENT_AQA;
+window.CONTENT_EDEXCEL = CONTENT_EDEXCEL;
+window.CONTENT = CONTENT_AQA; // fallback until profile loads
+
 // ═══════════════════════════════════════════════════════
 //  SPACED REPETITION ENGINE (SM-2 inspired)
 // ═══════════════════════════════════════════════════════
