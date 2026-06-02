@@ -913,17 +913,20 @@ async function checkTeacherRole(){
 }
 
 // ── Daily Challenge ──────────────────────────────────────
-// Picks a quiz deterministically based on day-of-year so every
-// student sees the same quiz today, rotating through all quizzes
-// for their exam board. Never repeats within a full cycle.
+// Rotates fairly across ALL subjects day-by-day so students
+// never get Biology every day. Strategy:
+//   1. Group quizzes by subject
+//   2. Use dayOfYear to pick which subject "owns" today
+//   3. Use dayOfYear to pick a quiz within that subject's pool
+// This guarantees Physics/Chemistry/Biology/Maths each get
+// roughly equal airtime regardless of question bank size.
 async function loadDailyChallenge(profile) {
   try {
     const board = profile?.exam_board || null;
 
-    // Fetch all quizzes, filtered by exam board if known
-    // Use ilike for case-insensitive match (handles 'aqa' vs 'AQA')
+    // Fetch all quizzes with subject info, board-filtered where possible
     let query = supa.from('quizzes')
-      .select('id, title, difficulty, topics(name, subjects(name))')
+      .select('id, title, difficulty, topics(name, subjects(id, name))')
       .order('id', { ascending: true });
 
     if (board) {
@@ -932,10 +935,10 @@ async function loadDailyChallenge(profile) {
 
     let { data: quizzes, error } = await query;
 
-    // Fallback: if board filter returns nothing, show any published quiz
+    // Fallback: if board filter returns nothing, fetch without board filter
     if (!error && (!quizzes || quizzes.length === 0)) {
       const { data: fallback } = await supa.from('quizzes')
-        .select('id, title, difficulty, topics(name, subjects(name))')
+        .select('id, title, difficulty, topics(name, subjects(id, name))')
         .order('id', { ascending: true });
       quizzes = fallback;
     }
@@ -946,12 +949,36 @@ async function loadDailyChallenge(profile) {
       return;
     }
 
-    // Use day-of-year as a deterministic index so it rotates daily
+    // Day-of-year seed — same for all students on any given day
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 0);
     const dayOfYear = Math.floor((now - start) / 86400000);
-    const idx = dayOfYear % quizzes.length;
-    const quiz = quizzes[idx];
+
+    // Group quizzes by subject name (case-insensitive key)
+    const bySubject = {};
+    for (const q of quizzes) {
+      const subjectName = q.topics?.subjects?.name || 'General';
+      const key = subjectName.toLowerCase();
+      if (!bySubject[key]) bySubject[key] = { name: subjectName, quizzes: [] };
+      bySubject[key].quizzes.push(q);
+    }
+
+    // Sort subject keys so order is stable across calls
+    const subjectKeys = Object.keys(bySubject).sort();
+
+    if (subjectKeys.length === 0) {
+      document.getElementById('tq-title').textContent = 'No challenge available';
+      document.getElementById('tq-desc').textContent = 'Check back soon.';
+      return;
+    }
+
+    // Pick today's subject by rotating through the sorted subject list
+    const todaySubjectKey = subjectKeys[dayOfYear % subjectKeys.length];
+    const todayPool = bySubject[todaySubjectKey].quizzes;
+
+    // Pick a quiz within that subject's pool — use a different divisor to
+    // avoid always landing on the first quiz within a subject
+    const quiz = todayPool[Math.floor(dayOfYear / subjectKeys.length) % todayPool.length];
 
     // Build description line
     const subject = quiz.topics?.subjects?.name || '';
@@ -959,9 +986,9 @@ async function loadDailyChallenge(profile) {
     const tier    = quiz.difficulty
       ? quiz.difficulty.charAt(0).toUpperCase() + quiz.difficulty.slice(1) + ' tier'
       : '';
-    const parts = [subject, topic, tier, '~10 minutes'].filter(Boolean);
-    // Deduplicate subject/topic if they're the same string
-    const desc = [...new Set(parts)].join(' · ');
+    const boardLabel = (board || 'AQA').toUpperCase();
+    const parts = [`${subject} · ${boardLabel} Revision`, topic, tier, '~10 minutes'].filter(Boolean);
+    const desc = parts.join(' · ');
 
     document.getElementById('tq-title').textContent = quiz.title;
     document.getElementById('tq-desc').textContent  = `10 questions · ${desc}`;
