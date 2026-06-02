@@ -419,13 +419,21 @@ let activeFilter='all';
     supa.from('subjects').select('*').order('order_idx'),
     supa.from('topics').select('*').order('order_idx'),
     supa.from('topic_progress').select('*').eq('student_id',user.id),
-    supa.from('quizzes').select('id,topic_id,title').eq('is_published',true),
+    supa.from('quizzes').select('id,topic_id,title,exam_board').eq('is_published',true).ilike('exam_board',board),
   ]);
 
   allSubjects=sRes.data||[];
   allTopics=tRes.data||[];
   allProgress=pRes.data||[];
   allQuizzes=qRes.data||[];
+
+  // Fallback: if board filter returned no quizzes, load all published quizzes
+  // (handles edge cases where exam_board column is null/unpopulated)
+  if(allQuizzes.length === 0) {
+    const {data:fallbackQuizzes} = await supa.from('quizzes')
+      .select('id,topic_id,title,exam_board').eq('is_published',true);
+    allQuizzes = fallbackQuizzes || [];
+  }
 
   // Determine which subject to show first
   // Priority: URL param → first subject with biology slug (AQA default) → first subject
