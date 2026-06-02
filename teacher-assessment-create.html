@@ -1546,8 +1546,8 @@ async function generateQuestions() {
 }
 
 async function generateQuestionForTopic(topic) {
-  // Call edge function via direct path — bypasses netlify.toml routing
-  const response = await fetch('/.netlify/edge-functions/generate-question', {
+  // Call via /api/ path — redirected to Netlify Function by netlify.toml
+  const response = await fetch('/api/generate-question', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

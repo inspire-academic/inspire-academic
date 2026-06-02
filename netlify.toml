@@ -3,6 +3,7 @@ publish = "."
 functions = "netlify/functions"
 edge_functions = "netlify/edge-functions"
 
+# Edge functions kept for reference but routing via [[redirects]] below
 [[edge_functions]]
 path = "/api/generate-question"
 function = "generate-question"
@@ -27,7 +28,6 @@ function = "mark-exam-response"
 path = "/api/protege-ai"
 function = "protege-ai"
 
-# Legacy path — revision-pack.html calls this directly
 [[edge_functions]]
 path = "/.netlify/functions/mark-exam-response"
 function = "mark-exam-response"
@@ -35,3 +35,28 @@ function = "mark-exam-response"
 [functions]
   [functions."*"]
   node_bundler = "esbuild"
+
+# Route /api/* to Netlify Functions (Node.js) — reliable on Projects platform
+[[redirects]]
+  from = "/api/generate-question"
+  to = "/.netlify/functions/generate-question"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/assessment-center"
+  to = "/.netlify/functions/assessment-center"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/mark-exam-response"
+  to = "/.netlify/functions/mark-exam-response"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/protege-ai"
+  to = "/.netlify/functions/protege-ai"
+  status = 200
+  force = true
