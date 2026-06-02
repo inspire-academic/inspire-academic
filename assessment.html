@@ -892,7 +892,7 @@ async function openAssessment(assessmentId) {
 
   // Load questions
   const { data: questions } = await supa
-    .from('assessment_questions')
+    .from('assessment_questions_safe')
     .select('*')
     .eq('assessment_id', assessmentId)
     .order('question_number', { ascending: true })
@@ -1283,7 +1283,7 @@ async function showResults(attempt) {
   // Load questions if not already in memory (e.g. viewing from list)
   if (!currentQuestions.length && currentAssessment) {
     const { data: qs } = await supa
-      .from('assessment_questions')
+      .from('assessment_questions_safe')
       .select('*')
       .eq('assessment_id', currentAssessment.id)
       .order('question_number', { ascending: true })
