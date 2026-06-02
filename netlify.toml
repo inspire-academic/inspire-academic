@@ -19,6 +19,15 @@ function = "mileiq-distance"
 path = "/api/create-teacher"
 function = "create-teacher"
 
+[[edge_functions]]
+path = "/api/mark-exam-response"
+function = "mark-exam-response"
+
+# Legacy path — revision-pack.html calls this directly
+[[edge_functions]]
+path = "/.netlify/functions/mark-exam-response"
+function = "mark-exam-response"
+
 [functions]
   [functions."*"]
   node_bundler = "esbuild"
