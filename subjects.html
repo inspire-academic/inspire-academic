@@ -463,7 +463,11 @@ function renderTabs(){
   container.innerHTML='';
   allSubjects.forEach(s=>{
     const meta=subjectMeta[s.id]||{cls:'maths',icon:'📚'};
-    const topicCount=allTopics.filter(t=>t.subject_id===s.id).length;
+    const subjectTopics=allTopics.filter(t=>t.subject_id===s.id);
+    const boardTopics=(window._board && window._board!=='AQA')
+      ? subjectTopics.filter(t=>allQuizzes.some(q=>q.topic_id===t.id))
+      : subjectTopics;
+    const topicCount=boardTopics.length;
     const btn=document.createElement('button');
     btn.className='subject-tab'+(s.id===activeSubjectId?' active':'');
     btn.innerHTML=`
@@ -545,6 +549,12 @@ function renderTopics(){
 
   const meta=subjectMeta[s.id]||{color:'var(--gold)'};
   let topics=allTopics.filter(t=>t.subject_id===s.id);
+
+  // For non-AQA boards, only show topics that have at least one quiz for this board
+  // This prevents AQA-era topics (Circle Theorems etc.) showing for Edexcel students
+  if(window._board && window._board !== 'AQA'){
+    topics=topics.filter(t=>allQuizzes.some(q=>q.topic_id===t.id));
+  }
 
   // Search filter
   const search=document.getElementById('topic-search')?.value?.toLowerCase()||'';
