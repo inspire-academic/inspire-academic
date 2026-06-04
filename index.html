@@ -264,8 +264,8 @@ input,select{font-family:'DM Sans',sans-serif;}
               <div class="board-name">AQA</div>
               <div class="board-full">Assessment & Qualifications Alliance</div>
             </div>
-            <div class="board-card soon">
-              <div class="soon-badge">Soon</div>
+            <div class="board-card" id="board-Edexcel" onclick="selectBoard('Edexcel')">
+              <div class="board-tick"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
               <div class="board-name">Edexcel</div>
               <div class="board-full">Pearson Edexcel</div>
             </div>
@@ -411,7 +411,7 @@ async function doSignup(){
   const email=document.getElementById('su-email').value.trim();
   const pass=document.getElementById('su-pass').value;
   const year=document.getElementById('su-year').value;
-  const boardIds={AQA:1,EDEXCEL:2,OCR:3,WJEC:4,CCEA:5};
+  const boardIds={AQA:1,Edexcel:2,OCR:3,WJEC:4,CCEA:5};
   const btn=document.getElementById('signup-btn');
   btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Creating account…';
   const {data,error}=await supa.auth.signUp({
