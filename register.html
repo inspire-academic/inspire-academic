@@ -509,6 +509,18 @@ async function createParentAccount(studentId, parentEmail, parentFirstName, pare
       throw linkError;
     }
     
+    // Invite parent — creates their auth account and sends password setup email
+    await fetch('/.netlify/functions/invite-parent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        parentEmail: parentEmail,
+        parentName: `${parentFirstName} ${parentLastName}`,
+        studentName: document.getElementById('student-first-name').value,
+        parentProfileId: parentId
+      })
+    });
+
     // Send welcome email to parent (via Netlify function)
     await fetch('/.netlify/functions/send-parent-welcome', {
       method: 'POST',
