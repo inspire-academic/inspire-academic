@@ -47,6 +47,11 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif;}
 .badge-teal{background:#0b6e6d22;color:#5eead4;}
 .badge-orange{background:#e8620a22;color:var(--orange);}
 
+.lesson-card-small{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1rem;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:.4rem;}
+.lesson-card-small:hover{border-color:var(--gold);transform:translateY(-2px);}
+.lesson-card-small .lc-num{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.lesson-card-small .lc-title{font-weight:600;font-size:.85rem;line-height:1.35;}
+.lesson-card-small .lc-play{display:inline-flex;align-items:center;gap:.3rem;font-size:.75rem;color:var(--gold);font-weight:600;margin-top:.25rem;}
 .mastery-not_started{color:var(--muted);}
 .mastery-learning{color:#f87171;}
 .mastery-developing{color:#fb923c;}
@@ -335,6 +340,17 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
     </div>
   </div>
 
+  <!-- Video Lessons section (shown when subject has lessons) -->
+  <div id="lessons-section" style="display:none;margin-bottom:2rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;gap:.6rem;">
+        <span style="font-size:1.1rem;">🎬</span>
+        <span style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;">Video Lessons</span>
+      </div>
+    </div>
+    <div id="lessons-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;"></div>
+  </div>
+
   <!-- Topics grid -->
   <div class="topics-grid" id="topics-grid">
     <div class="skeleton" style="height:120px;"></div>
@@ -350,13 +366,13 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 
 <!-- ══════════ SCRIPTS ══════════ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="perf-utils.js"></script>
+<script src="perf-utils-v2.js"></script>
 <script>
 const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
 
-async function getUser(){ perfStart('auth-session'); const{data:{user}}=await supa.auth.getUser(); perfEnd('auth-session'); return user; }
+async function getUser(){ perfStart('auth-session'); const user = await getFastUser(supa); perfEnd('auth-session'); return user; }
 async function getProfile(uid){
   const cached=getCachedProfile();
   if(cached&&cached.id===uid){ console.debug('⚡ [Inspire] profile: cache hit'); return cached; }
@@ -370,6 +386,27 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
 function toast(msg,type='success'){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.className='show '+type;setTimeout(()=>t.className='',3000);}
 function timeAgo(ts){if(!ts)return'Never';const d=new Date(ts),now=new Date(),diff=Math.floor((now-d)/1000);if(diff<60)return'Just now';if(diff<3600)return Math.floor(diff/60)+'m ago';if(diff<86400)return Math.floor(diff/3600)+'h ago';return Math.floor(diff/86400)+'d ago';}
 function masteryLabel(m){return{not_started:'Not Started',learning:'Learning',developing:'Developing',secure:'Secure',mastered:'Mastered'}[m]||'Not Started';}
+
+async function loadLessonsForSubject(subjectSlug){
+  const section=document.getElementById('lessons-section');
+  const grid=document.getElementById('lessons-grid');
+  if(!section||!grid) return;
+  section.style.display='none';
+  const{data}=await supa.from('teaching_lessons')
+    .select('id,title,topic,order_index,video_url')
+    .eq('subject',subjectSlug)
+    .eq('is_published',true)
+    .not('video_url','is',null)
+    .order('order_index',{ascending:true});
+  if(!data||data.length===0) return;
+  section.style.display='block';
+  grid.innerHTML=data.map((l,i)=>`
+    <div class="lesson-card-small" onclick="window.location.href='lessons.html?lesson=${l.id}'">
+      <div class="lc-num">Lesson ${l.order_index||i+1}</div>
+      <div class="lc-title">${l.title}</div>
+      <div class="lc-play">▶ Watch now</div>
+    </div>`).join('');
+}
 </script>
 
 <script>
@@ -411,28 +448,36 @@ let activeFilter='all';
   const tier=profile.tier||'Higher';
   document.getElementById('page-sub').textContent=
     `${board} · ${tier} Tier — browse topics and track your progress.`;
-  // Store board on window for use in goToTopic and descriptions
+  // Store board and tier on window for use in goToTopic and descriptions
   window._board = board;
+  window._tier = tier; // 'Higher' or 'Foundation'
+
+  // Map student tier to quiz difficulty levels they should see
+  // Higher students: higher + challenge + medium
+  // Foundation students: foundation + medium
+  const tierDifficulties = tier === 'Foundation'
+    ? ['foundation','medium']
+    : ['higher','challenge','medium'];
 
   // Load all data in parallel
   const [sRes,tRes,pRes,qRes]=await Promise.all([
     supa.from('subjects').select('*').order('order_idx'),
     supa.from('topics').select('*').order('order_idx'),
     supa.from('topic_progress').select('*').eq('student_id',user.id),
-    supa.from('quizzes').select('id,topic_id,title,exam_board').eq('is_published',true).ilike('exam_board',board),
+    supa.from('quizzes').select('id,topic_id,title,exam_board,difficulty').eq('is_published',true).ilike('exam_board',board),
   ]);
 
   allSubjects=sRes.data||[];
   allTopics=tRes.data||[];
   allProgress=pRes.data||[];
-  allQuizzes=qRes.data||[];
+  allQuizzes=(qRes.data||[]).filter(q=>tierDifficulties.includes(q.difficulty));
 
   // Fallback: if board filter returned no quizzes, load all published quizzes
   // (handles edge cases where exam_board column is null/unpopulated)
   if(allQuizzes.length === 0) {
     const {data:fallbackQuizzes} = await supa.from('quizzes')
-      .select('id,topic_id,title,exam_board').eq('is_published',true);
-    allQuizzes = fallbackQuizzes || [];
+      .select('id,topic_id,title,exam_board,difficulty').eq('is_published',true);
+    allQuizzes = (fallbackQuizzes || []).filter(q=>tierDifficulties.includes(q.difficulty));
   }
 
   // Determine which subject to show first
@@ -451,6 +496,9 @@ let activeFilter='all';
   renderHero();
   renderTopics();
   document.getElementById('filter-row').style.display='flex';
+  // Load video lessons for initial subject
+  const initSubject=allSubjects.find(x=>x.id===activeSubjectId);
+  if(initSubject) loadLessonsForSubject(initSubject.name.toLowerCase());
   clearTimeout(timeoutHandle);
   perfEnd('subjects-load');
 })();
@@ -656,6 +704,9 @@ function switchSubject(id){
   renderTabs();
   renderHero();
   renderTopics();
+  // Load video lessons for this subject
+  const s=allSubjects.find(x=>x.id===id);
+  if(s) loadLessonsForSubject(s.name.toLowerCase());
 }
 
 function applyFilter(btn){
