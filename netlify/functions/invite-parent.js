@@ -1,56 +1,59 @@
-const { createClient } = require('@supabase/supabase-js');
-
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
-    const { parentEmail, parentName, studentName, parentProfileId } = JSON.parse(event.body);
+    const { parentEmail, parentName, parentProfileId } = JSON.parse(event.body);
 
     if (!parentEmail || !parentProfileId) {
       return { statusCode: 400, body: JSON.stringify({ error: 'Missing required fields' }) };
     }
 
-    // Use service role key — allows admin auth operations
-    const supabaseAdmin = createClient(
-      process.env.SUPABASE_URL || 'https://ygtsrdwoikqnrbexjrtl.supabase.co',
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
+    const SUPABASE_URL = process.env.SUPABASE_URL || 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+    const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    // Check if auth account already exists for this email
-    const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
-    const existingUser = existingUsers?.users?.find(u => u.email === parentEmail);
+    // Invite user via Supabase Admin REST API
+    const inviteRes = await fetch(`${SUPABASE_URL}/auth/v1/invite`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SERVICE_KEY,
+        'Authorization': `Bearer ${SERVICE_KEY}`
+      },
+      body: JSON.stringify({
+        email: parentEmail,
+        data: { role: 'parent', full_name: parentName },
+        redirect_to: 'https://inspireacademic.org/parent-login.html'
+      })
+    });
 
-    let parentUserId;
+    const inviteData = await inviteRes.json();
 
-    if (existingUser) {
-      // Auth account already exists — just link it
-      parentUserId = existingUser.id;
-    } else {
-      // Invite the parent — sends them a "Set your password" email
-      const { data: inviteData, error: inviteError } = await supabaseAdmin.auth.admin.inviteUserByEmail(
-        parentEmail,
-        {
-          data: {
-            role: 'parent',
-            full_name: parentName
-          },
-          redirectTo: 'https://inspireacademic.org/parent-login.html'
-        }
-      );
-
-      if (inviteError) throw inviteError;
-      parentUserId = inviteData.user.id;
+    if (!inviteRes.ok) {
+      throw new Error(inviteData.message || inviteData.error_description || 'Invite failed');
     }
 
-    // Update parent_profiles with the auth user_id
-    const { error: updateError } = await supabaseAdmin
-      .from('parent_profiles')
-      .update({ user_id: parentUserId })
-      .eq('id', parentProfileId);
+    const parentUserId = inviteData.id;
 
-    if (updateError) throw updateError;
+    // Update parent_profiles with the auth user_id
+    const updateRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/parent_profiles?id=eq.${parentProfileId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SERVICE_KEY,
+          'Authorization': `Bearer ${SERVICE_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ user_id: parentUserId })
+      }
+    );
+
+    if (!updateRes.ok) {
+      throw new Error('Failed to update parent profile');
+    }
 
     return {
       statusCode: 200,
