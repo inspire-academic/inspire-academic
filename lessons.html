@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Lessons — Inspire Academic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --navy:#0b1628; --navy2:#112240; --navy3:#1a3a5c;
+      --gold:#c9a84c; --gold2:rgba(201,168,76,.12);
+      --white:#f0f4ff; --muted:#7a8fa6;
+      --border:rgba(255,255,255,.08);
+      --r:10px;
+      --green:#10b981; --red:#ef4444;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;}
+
+    /* ── TOP NAV ── */
+    .topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
+    .topnav-logo{display:flex;align-items:center;gap:.6rem;}
+    .logo-text{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;}
+    .logo-text .gold{color:var(--gold);}
+    .nav-links{display:flex;gap:.3rem;flex:1;}
+    .nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;border:none;transition:all .2s;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:.4rem;}
+    .nav-link:hover{background:var(--navy3);color:var(--white);}
+    .nav-user{display:flex;align-items:center;gap:.75rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;}
+    .avatar{width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;}
+
+    /* ── LAYOUT ── */
+    .app{display:flex;min-height:calc(100vh - 57px);}
+
+    /* ── SIDEBAR ── */
+    .sidebar{width:300px;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;max-height:calc(100vh - 57px);position:sticky;top:57px;}
+    .sidebar-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);}
+    .sidebar-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.75rem;}
+    .subject-pills{display:flex;gap:.4rem;flex-wrap:wrap;}
+    .subject-pill{padding:.3rem .75rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+    .subject-pill:hover{border-color:var(--gold);color:var(--white);}
+    .subject-pill.active{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+    .lesson-list{flex:1;overflow-y:auto;padding:.75rem 0;}
+    .lesson-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.5rem;cursor:pointer;transition:all .15s;border-left:3px solid transparent;}
+    .lesson-item:hover{background:var(--navy3);}
+    .lesson-item.active{background:var(--navy3);border-left-color:var(--gold);}
+    .lesson-num{width:24px;height:24px;border-radius:50%;background:var(--navy3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--muted);flex-shrink:0;font-family:'DM Mono',monospace;}
+    .lesson-item.active .lesson-num{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+    .lesson-info{flex:1;min-width:0;}
+    .lesson-name{font-size:.82rem;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .lesson-subject-tag{font-size:.7rem;color:var(--muted);margin-top:.15rem;}
+    .lesson-watched{font-size:.75rem;color:var(--green);flex-shrink:0;}
+    .no-lessons{padding:2rem 1.5rem;text-align:center;color:var(--muted);font-size:.85rem;}
+
+    /* ── MAIN VIDEO AREA ── */
+    .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+    .video-area{padding:2rem;flex:1;}
+    .video-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:400px;background:var(--navy2);border-radius:var(--r);border:1px solid var(--border);gap:1rem;}
+    .video-placeholder-icon{font-size:3rem;}
+    .video-placeholder-text{color:var(--muted);font-size:.9rem;}
+    .video-wrapper{position:relative;padding-bottom:56.25%;height:0;border-radius:var(--r);overflow:hidden;background:#000;display:none;}
+    .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+    .video-meta{margin-top:1.5rem;}
+    .video-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.5rem;}
+    .video-subject-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;margin-bottom:1rem;}
+    .video-description{color:var(--muted);font-size:.875rem;line-height:1.65;max-width:720px;}
+    .video-actions{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap;}
+    .btn{padding:.55rem 1.1rem;border-radius:var(--r);font-size:.82rem;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s;display:flex;align-items:center;gap:.4rem;}
+    .btn-gold{background:var(--gold);color:var(--navy);}
+    .btn-gold:hover{background:#d4a843;}
+    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
+    .btn-outline:hover{border-color:var(--gold);color:var(--white);}
+    .btn-green{background:var(--green);color:white;}
+
+    /* ── NEXT/PREV ── */
+    .nav-btns{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;border-top:1px solid var(--border);background:var(--navy2);}
+    .nav-btn{display:flex;align-items:center;gap:.5rem;padding:.55rem 1rem;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+    .nav-btn:hover:not(:disabled){border-color:var(--gold);color:var(--white);}
+    .nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+    .lesson-counter{font-size:.8rem;color:var(--muted);font-family:'DM Mono',monospace;}
+
+    /* ── SUBJECT COLOURS ── */
+    .chem{background:rgba(21,101,192,.15);color:#64b5f6;}
+    .phys{background:rgba(106,27,154,.15);color:#ce93d8;}
+    .bio{background:rgba(46,125,50,.15);color:#81c784;}
+    .maths{background:rgba(230,81,0,.15);color:#ffb74d;}
+
+    /* ── LOADING ── */
+    .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:3rem auto;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:768px){
+      .sidebar{width:100%;max-height:200px;position:relative;top:0;}
+      .app{flex-direction:column;}
+      .lesson-item{padding:.6rem 1rem;}
+      .video-area{padding:1rem;}
+      .nav-btns{padding:.75rem 1rem;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-logo">
+    <div class="logo-text">Inspire <span class="gold">Academic</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="dashboard.html" class="nav-link">🏠 Dashboard</a>
+    <a href="subjects.html" class="nav-link">📚 Subjects</a>
+    <a href="lessons.html" class="nav-link" style="color:var(--white);background:var(--navy3);">🎬 Lessons</a>
+  </div>
+  <div class="nav-user" id="nav-user">
+    <div class="avatar" id="nav-avatar">?</div>
+    <span id="nav-name" style="font-size:.82rem;"></span>
+  </div>
+</nav>
+
+<!-- APP LAYOUT -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">📹 Video Lessons</div>
+      <div class="subject-pills" id="subject-pills">
+        <button class="subject-pill active" data-subject="all" onclick="filterSubject(this)">All</button>
+        <button class="subject-pill" data-subject="chemistry" onclick="filterSubject(this)">⚗️ Chemistry</button>
+        <button class="subject-pill" data-subject="biology" onclick="filterSubject(this)">🧬 Biology</button>
+        <button class="subject-pill" data-subject="physics" onclick="filterSubject(this)">⚡ Physics</button>
+        <button class="subject-pill" data-subject="maths" onclick="filterSubject(this)">📐 Maths</button>
+      </div>
+    </div>
+    <div class="lesson-list" id="lesson-list">
+      <div class="spinner"></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="video-area">
+
+      <!-- Placeholder (shown before a lesson is selected) -->
+      <div class="video-placeholder" id="video-placeholder">
+        <div class="video-placeholder-icon">🎬</div>
+        <div class="video-placeholder-text">Select a lesson from the left to start watching</div>
+      </div>
+
+      <!-- Video player -->
+      <div class="video-wrapper" id="video-wrapper">
+        <iframe id="video-iframe" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+      </div>
+
+      <!-- Video metadata -->
+      <div class="video-meta" id="video-meta" style="display:none;">
+        <div class="video-subject-badge" id="video-badge"></div>
+        <div class="video-title" id="video-title"></div>
+        <div class="video-description" id="video-desc"></div>
+        <div class="video-actions">
+          <button class="btn btn-gold" onclick="markWatched()">✓ Mark as Watched</button>
+          <button class="btn btn-outline" onclick="goToQuizzes()">📝 Take a Quiz on this Topic</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- NEXT / PREV -->
+    <div class="nav-btns" id="nav-btns" style="display:none;">
+      <button class="nav-btn" id="btn-prev" onclick="navigateLesson(-1)" disabled>← Previous</button>
+      <span class="lesson-counter" id="lesson-counter"></span>
+      <button class="nav-btn" id="btn-next" onclick="navigateLesson(1)">Next →</button>
+    </div>
+  </main>
+
+</div>
+
+<script>
+const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM3MDI3NzksImV4cCI6MjA1OTI3ODc3OX0.tWAkNwpzyfHVBHFHlHMAaAYKVhOB8PCUJ6j1GUfnXPE';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+let allLessons = [];
+let filteredLessons = [];
+let currentIndex = -1;
+let watched = new Set();
+let currentUser = null;
+
+// ── Extract YouTube video ID from any YouTube URL ──
+function getYouTubeId(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
+
+function getSubjectClass(subject) {
+  const s = (subject || '').toLowerCase();
+  if (s === 'chemistry') return 'chem';
+  if (s === 'physics') return 'phys';
+  if (s === 'biology') return 'bio';
+  if (s.includes('math')) return 'maths';
+  return 'chem';
+}
+
+function capitalise(str) {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+}
+
+function subjectIcon(subject) {
+  const s = (subject || '').toLowerCase();
+  if (s === 'chemistry') return '⚗️';
+  if (s === 'physics') return '⚡';
+  if (s === 'biology') return '🧬';
+  if (s.includes('math')) return '📐';
+  return '📖';
+}
+
+// ── Auth ──
+async function init() {
+  const { data: { user } } = await supa.auth.getUser();
+  if (!user) { window.location.href = 'index.html'; return; }
+  currentUser = user;
+
+  // Get profile for name
+  const { data: profile } = await supa.from('profiles').select('first_name, full_name').eq('id', user.id).single();
+  const name = profile?.first_name || (profile?.full_name?.split(' ')[0]) || '';
+  document.getElementById('nav-name').textContent = name;
+  document.getElementById('nav-avatar').textContent = name[0]?.toUpperCase() || '?';
+
+  // Load watched lessons from localStorage
+  try {
+    const raw = localStorage.getItem(`ia_watched_${user.id}`);
+    if (raw) watched = new Set(JSON.parse(raw));
+  } catch(e) {}
+
+  // Check URL param for direct lesson link
+  const params = new URLSearchParams(window.location.search);
+  const lessonId = params.get('lesson');
+
+  await loadLessons(lessonId);
+}
+
+// ── Load lessons from Supabase ──
+async function loadLessons(autoLoadId = null) {
+  const { data, error } = await supa
+    .from('teaching_lessons')
+    .select('id, title, subject, topic, description, video_url, order_index')
+    .eq('is_published', true)
+    .not('video_url', 'is', null)
+    .order('subject', { ascending: true })
+    .order('order_index', { ascending: true });
+
+  if (error || !data?.length) {
+    document.getElementById('lesson-list').innerHTML =
+      '<div class="no-lessons">No lessons available yet.<br>Check back soon!</div>';
+    return;
+  }
+
+  allLessons = data;
+  filteredLessons = [...allLessons];
+  renderSidebar();
+
+  // Auto-load lesson from URL param or first lesson
+  if (autoLoadId) {
+    const idx = filteredLessons.findIndex(l => l.id === autoLoadId);
+    if (idx >= 0) loadLesson(idx);
+  }
+}
+
+// ── Render sidebar list ──
+function renderSidebar() {
+  const list = document.getElementById('lesson-list');
+
+  if (!filteredLessons.length) {
+    list.innerHTML = '<div class="no-lessons">No lessons in this subject yet.</div>';
+    return;
+  }
+
+  list.innerHTML = filteredLessons.map((lesson, i) => {
+    const isWatched = watched.has(lesson.id);
+    const isActive = i === currentIndex;
+    return `
+      <div class="lesson-item ${isActive ? 'active' : ''}" onclick="loadLesson(${i})" id="lesson-item-${i}">
+        <div class="lesson-num">${String(i + 1).padStart(2, '0')}</div>
+        <div class="lesson-info">
+          <div class="lesson-name">${lesson.title}</div>
+          <div class="lesson-subject-tag">${subjectIcon(lesson.subject)} ${capitalise(lesson.subject)}</div>
+        </div>
+        ${isWatched ? '<div class="lesson-watched">✓</div>' : ''}
+      </div>`;
+  }).join('');
+}
+
+// ── Filter by subject ──
+function filterSubject(btn) {
+  document.querySelectorAll('.subject-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+
+  const subject = btn.dataset.subject;
+  filteredLessons = subject === 'all'
+    ? [...allLessons]
+    : allLessons.filter(l => l.subject?.toLowerCase() === subject);
+
+  currentIndex = -1;
+  renderSidebar();
+
+  // Hide video if active lesson no longer in filtered list
+  document.getElementById('video-placeholder').style.display = 'flex';
+  document.getElementById('video-wrapper').style.display = 'none';
+  document.getElementById('video-meta').style.display = 'none';
+  document.getElementById('nav-btns').style.display = 'none';
+}
+
+// ── Load a lesson ──
+function loadLesson(index) {
+  if (index < 0 || index >= filteredLessons.length) return;
+  currentIndex = index;
+
+  const lesson = filteredLessons[index];
+  const videoId = getYouTubeId(lesson.video_url);
+
+  // Update URL without reload
+  const url = new URL(window.location);
+  url.searchParams.set('lesson', lesson.id);
+  window.history.replaceState({}, '', url);
+
+  // Swap placeholder for player
+  document.getElementById('video-placeholder').style.display = 'none';
+  document.getElementById('video-wrapper').style.display = 'block';
+  document.getElementById('video-meta').style.display = 'block';
+  document.getElementById('nav-btns').style.display = 'flex';
+
+  // Set iframe
+  const iframe = document.getElementById('video-iframe');
+  iframe.src = videoId
+    ? `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`
+    : '';
+
+  // Set metadata
+  const subClass = getSubjectClass(lesson.subject);
+  document.getElementById('video-badge').className = `video-subject-badge ${subClass}`;
+  document.getElementById('video-badge').textContent = `${subjectIcon(lesson.subject)} ${capitalise(lesson.subject)} · ${lesson.topic || ''}`;
+  document.getElementById('video-title').textContent = lesson.title;
+  document.getElementById('video-desc').textContent = lesson.description || '';
+
+  // Update sidebar
+  renderSidebar();
+
+  // Update nav buttons
+  document.getElementById('btn-prev').disabled = index === 0;
+  document.getElementById('btn-next').disabled = index === filteredLessons.length - 1;
+  document.getElementById('lesson-counter').textContent = `${index + 1} / ${filteredLessons.length}`;
+
+  // Scroll sidebar item into view
+  setTimeout(() => {
+    const el = document.getElementById(`lesson-item-${index}`);
+    if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, 100);
+
+  // Scroll to top of video on mobile
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Navigate prev/next ──
+function navigateLesson(direction) {
+  loadLesson(currentIndex + direction);
+}
+
+// ── Mark as watched ──
+function markWatched() {
+  if (currentIndex < 0) return;
+  const lesson = filteredLessons[currentIndex];
+  watched.add(lesson.id);
+
+  // Persist to localStorage
+  try {
+    localStorage.setItem(`ia_watched_${currentUser.id}`, JSON.stringify([...watched]));
+  } catch(e) {}
+
+  renderSidebar();
+
+  // Update button
+  const btn = document.querySelector('.btn-gold');
+  if (btn) {
+    btn.textContent = '✓ Watched';
+    btn.style.background = 'var(--green)';
+    btn.style.color = 'white';
+  }
+}
+
+// ── Go to quizzes for this topic ──
+function goToQuizzes() {
+  if (currentIndex < 0) return;
+  const lesson = filteredLessons[currentIndex];
+  window.location.href = `subjects.html?subject=${encodeURIComponent(lesson.subject)}`;
+}
+
+init().catch(console.error);
+</script>
+</body>
+</html>
