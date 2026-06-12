@@ -1150,75 +1150,87 @@ function handleQuizOfDay(e) {
 
 // ── MAIN DATA LOAD ──
 async function loadDashboard() {
-  const { data: { user } } = await sb.auth.getUser();
+  // Auth check — only redirect on genuine no-session
+  let user = null;
+  try {
+    const { data } = await sb.auth.getUser();
+    user = data?.user;
+  } catch(e) { /* network error — don't redirect */ }
+
   if (!user) {
     window.location.href = 'index.html';
     return;
   }
 
-  // Parallel fetch
-  const [profileRes, topicProgressRes, quizAttemptsRes, streakRes, physicsSubjectRes] = await Promise.all([
-    sb.from('profiles').select('*').eq('id', user.id).single(),
-    sb.from('topic_progress').select('*').eq('student_id', user.id),
-    sb.from('quiz_attempts').select('*').eq('student_id', user.id),
-    sb.from('streaks').select('*').eq('student_id', user.id).single(),
-    sb.from('subjects').select('*').eq('slug', 'physics').single(),
+  // Safe fetch helper — never throws, always returns data or fallback
+  const safeFetch = async (query, fallback = null) => {
+    try {
+      const res = await query;
+      return res.data ?? fallback;
+    } catch(e) {
+      console.warn('Query failed:', e.message);
+      return fallback;
+    }
+  };
+
+  // Parallel fetch — each isolated so one failure can't kill the rest
+  const [profile, topicProgress, quizAttempts, streak, physicsSubject] = await Promise.all([
+    safeFetch(sb.from('profiles').select('*').eq('id', user.id).single()),
+    safeFetch(sb.from('topic_progress').select('*').eq('student_id', user.id), []),
+    // Try student_id first, fall back to user_id
+    safeFetch(sb.from('quiz_attempts').select('*').eq('student_id', user.id), [])
+      .then(d => d?.length ? d : safeFetch(sb.from('quiz_attempts').select('*').eq('user_id', user.id), [])),
+    safeFetch(sb.from('streaks').select('*').eq('student_id', user.id).single()),
+    safeFetch(sb.from('subjects').select('*').eq('id', 2).single()), // Physics = id 2
   ]);
 
-  const profile = profileRes.data;
-  const topicProgress = topicProgressRes.data || [];
-  const quizAttempts = quizAttemptsRes.data || [];
-  const streak = streakRes.data;
-
-  // Greet
-  const firstName = profile?.first_name || profile?.full_name?.split(' ')[0] || 'Student';
+  // Exam board badge
   const examBoard = profile?.exam_board || 'AQA';
+  const tier = profile?.tier || 'Foundation & Higher';
   document.getElementById('exam-board-badge').innerHTML = `
     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    ${examBoard} · ${profile?.tier || 'Foundation & Higher'}
+    ${examBoard} · ${tier}
   `;
   document.getElementById('board-filter-label').textContent = `${examBoard} Specification`;
 
   // Stats
-  const passedQuizzes = quizAttempts.filter(a => a.passed).length;
-  const topicsStarted = topicProgress.length;
-  document.getElementById('stat-quizzes').textContent = `${passedQuizzes} passed`;
+  const passedQuizzes = (quizAttempts || []).filter(a => a.passed).length;
+  const topicsStarted = (topicProgress || []).length;
+  document.getElementById('stat-quizzes').textContent = passedQuizzes ? `${passedQuizzes} passed` : '0 passed';
   document.getElementById('stat-topics').textContent = `${topicsStarted} / 8`;
-  document.getElementById('stat-streak').textContent = streak ? `${streak.current_streak} days` : '–';
+  document.getElementById('stat-streak').textContent = streak?.current_streak ? `${streak.current_streak} days` : '–';
 
-  // Overall % from topic_progress best_scores
+  // Overall % — only from Physics topics
+  const progressMap = {};
+  (topicProgress || []).forEach(tp => { progressMap[tp.topic_id] = tp; });
+
+  // Load DB topics for Physics (subject_id = 2)
+  let dbTopics = [];
+  try {
+    const { data } = await sb.from('topics')
+      .select('*')
+      .eq('subject_id', physicsSubject?.id || 2)
+      .eq('is_published', true)
+      .order('order_idx');
+    dbTopics = data || [];
+  } catch(e) { console.warn('Topics fetch failed:', e.message); }
+
+  // Calculate overall % from Physics topics only
+  const physicsProgress = dbTopics
+    .map(t => progressMap[t.id])
+    .filter(Boolean);
   let overallPct = 0;
-  if (topicProgress.length > 0) {
-    const avg = topicProgress.reduce((sum, t) => sum + (parseFloat(t.best_score) || 0), 0) / topicProgress.length;
-    overallPct = Math.round(avg);
+  if (physicsProgress.length > 0) {
+    overallPct = Math.round(
+      physicsProgress.reduce((sum, t) => sum + (parseFloat(t.best_score) || 0), 0) / physicsProgress.length
+    );
   }
   animateDonut(overallPct);
   document.getElementById('current-grade').textContent = overallPct > 0 ? scoreToGrade(overallPct) : '–';
   document.getElementById('target-grade').textContent = profile?.target_grade || '–';
 
-  // Build topic progress lookup by slug
-  const progressMap = {};
-  topicProgress.forEach(tp => {
-    // We'll match by topic_id later; for now store by id
-    progressMap[tp.topic_id] = tp;
-  });
-
-  // Load Physics topics from DB to get IDs for progress matching
-  const subjectId = physicsSubjectRes.data?.id;
-  let dbTopics = [];
-  if (subjectId) {
-    const { data } = await sb.from('topics')
-      .select('*')
-      .eq('subject_id', subjectId)
-      .eq('is_published', true)
-      .order('order_idx');
-    dbTopics = data || [];
-  }
-
-  // Render topic cards — merge DB topics with our AQA spec data
-  renderTopics(dbTopics, progressMap, quizAttempts);
-
-  // Next lesson — find lowest progress topic
+  // Render topics and next lesson
+  renderTopics(dbTopics, progressMap, quizAttempts || []);
   setNextLesson(dbTopics, progressMap);
 }
 
