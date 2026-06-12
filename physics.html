@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCSE Physics – Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+/* ── TOKENS ── */
+:root {
+  --navy:      #0b1628;
+  --navy2:     #0d1f3c;
+  --navy3:     #111f38;
+  --gold:      #c9a84c;
+  --gold2:     #b8942e;
+  --white:     #ffffff;
+  --muted:     #94a3b8;
+  --border:    rgba(201,168,76,0.15);
+  --sidebar-w: 220px;
+  --font-display: 'Playfair Display', serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+  --physics-blue: #3b82f6;
+  --physics-cyan: #06b6d4;
+  --radius:    12px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: var(--font-body);
+  background: #0f1923;
+  color: var(--white);
+  overflow-x: hidden;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--navy);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 50;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  padding: 1.25rem 1.2rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.sidebar-logo-icon {
+  width: 36px; height: 36px;
+  background: var(--navy2);
+  border: 1.5px solid var(--gold);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar-logo-text { line-height: 1.1; }
+.sidebar-logo-text .name {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+.sidebar-logo-text .sub {
+  font-size: 0.6rem;
+  color: var(--gold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.sidebar-nav { padding: 0.75rem 0; flex: 1; }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.2rem;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+.nav-item.active {
+  color: var(--white);
+  background: rgba(59,130,246,0.15);
+  border-left-color: var(--physics-blue);
+  font-weight: 600;
+}
+
+.nav-item svg { flex-shrink: 0; opacity: 0.7; }
+.nav-item.active svg { opacity: 1; }
+
+.nav-section-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 1rem 1.2rem 0.3rem;
+}
+
+/* AI Assistant button */
+.ai-btn {
+  margin: 0.75rem 1rem 1rem;
+  background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2));
+  border: 1px solid rgba(139,92,246,0.4);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.ai-btn:hover { background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(139,92,246,0.3)); }
+.ai-btn .ai-label { font-size: 0.75rem; font-weight: 600; color: var(--white); }
+.ai-btn .ai-sub { font-size: 0.62rem; color: rgba(255,255,255,0.5); }
+.ai-pulse {
+  width: 8px; height: 8px;
+  background: #a78bfa;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* ── MAIN CONTENT ── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 260px;
+  background: var(--navy);
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/images/physics/physics_hero.png');
+  background-size: cover;
+  background-position: center 30%;
+  opacity: 0.45;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(11,22,40,0.95) 0%, rgba(11,22,40,0.7) 55%, rgba(11,22,40,0.2) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  padding: 2rem 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 580px;
+}
+
+.hero-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.hero-tagline {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 0.4rem;
+}
+
+.hero-desc {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  max-width: 420px;
+}
+
+.hero-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(8px);
+}
+
+.hero-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  max-width: 380px;
+  backdrop-filter: blur(8px);
+}
+.hero-search input {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  flex: 1;
+}
+.hero-search input::placeholder { color: rgba(255,255,255,0.4); }
+
+/* Progress card in hero */
+.hero-progress {
+  position: relative;
+  z-index: 2;
+  width: 280px;
+  flex-shrink: 0;
+  margin: 1.5rem 1.5rem 1.5rem 0;
+  background: rgba(13,31,60,0.85);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  backdrop-filter: blur(12px);
+  align-self: center;
+}
+
+.progress-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.progress-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.donut-container {
+  position: relative;
+  width: 80px; height: 80px;
+  flex-shrink: 0;
+}
+.donut-container svg { transform: rotate(-90deg); }
+.donut-bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 8; }
+.donut-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dasharray 1s ease; }
+.donut-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.donut-pct {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+.donut-label {
+  font-size: 0.55rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.progress-stats { flex: 1; }
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.72rem;
+}
+.stat-row .stat-icon { font-size: 0.75rem; }
+.stat-row .stat-label { color: var(--muted); flex: 1; }
+.stat-row .stat-val { font-weight: 600; color: var(--white); }
+
+.grades-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.grade-box {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 0.5rem;
+  text-align: center;
+}
+.grade-box .g-label { font-size: 0.58rem; color: var(--muted); margin-bottom: 0.2rem; }
+.grade-box .g-val { font-size: 1.3rem; font-weight: 700; color: var(--white); }
+.grade-box.target .g-val { color: var(--gold); }
+
+.progress-link {
+  font-size: 0.72rem;
+  color: var(--physics-blue);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.progress-link:hover { text-decoration: underline; }
+
+/* ── BODY GRID ── */
+.body-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  flex: 1;
+}
+
+/* ── SECTION HEADERS ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+.section-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+}
+.section-header .section-icon {
+  width: 28px; height: 28px;
+  background: rgba(59,130,246,0.15);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+}
+.view-all {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--physics-blue);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 0.2rem;
+}
+.view-all:hover { text-decoration: underline; }
+
+/* ── TOPICS FRAME ── */
+.topics-frame {
+  background: rgba(13,31,60,0.4);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+  padding: 1rem;
+  height: 420px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201,168,76,0.3) transparent;
+}
+.topics-frame::-webkit-scrollbar { width: 4px; }
+.topics-frame::-webkit-scrollbar-track { background: transparent; }
+.topics-frame::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 2px; }
+
+/* Scroll fade hint at bottom */
+.topics-wrap { position: relative; }
+.topics-fade {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40px;
+  background: linear-gradient(transparent, rgba(13,31,60,0.95));
+  border-radius: 0 0 16px 16px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+/* ── TOPIC CARD ── */
+.topic-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  display: block;
+}
+.topic-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59,130,246,0.4);
+  box-shadow: 0 4px 20px rgba(59,130,246,0.15);
+}
+
+.topic-img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  display: block;
+}
+
+.topic-body { padding: 0.6rem 0.7rem 0.5rem; }
+.topic-num {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--physics-blue);
+  margin-bottom: 0.15rem;
+}
+.topic-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.15rem;
+  line-height: 1.3;
+}
+.topic-desc {
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.topic-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.topic-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.topic-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--physics-blue), var(--physics-cyan));
+  border-radius: 2px;
+  transition: width 0.8s ease;
+}
+.topic-progress-txt {
+  font-size: 0.6rem;
+  color: var(--muted);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+}
+
+.topic-arrow {
+  width: 20px; height: 20px;
+  background: rgba(59,130,246,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── RIGHT PANEL ── */
+.right-panel { display: flex; flex-direction: column; gap: 1rem; }
+
+/* Continue Journey */
+.continue-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+.continue-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.continue-icon {
+  width: 32px; height: 32px;
+  background: rgba(59,130,246,0.2);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.continue-header h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--physics-blue);
+}
+.next-lesson-card {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+.next-lesson-img {
+  width: 64px; height: 64px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.next-lesson-info { flex: 1; }
+.next-label { font-size: 0.6rem; color: var(--muted); margin-bottom: 0.15rem; }
+.next-title { font-size: 0.82rem; font-weight: 700; color: var(--white); margin-bottom: 0.15rem; line-height: 1.3; }
+.next-topic { font-size: 0.65rem; color: var(--muted); margin-bottom: 0.3rem; }
+.next-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+.difficulty-stars { color: var(--gold); letter-spacing: -0.1em; }
+
+.continue-btn {
+  width: 100%;
+  background: var(--physics-blue);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  transition: background 0.2s;
+}
+.continue-btn:hover { background: #2563eb; }
+
+/* Skills Lab */
+.skills-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+.skill-tile {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 0.5rem 0.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.skill-tile:hover { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); }
+.skill-tile .skill-icon { font-size: 1.1rem; margin-bottom: 0.2rem; }
+.skill-tile .skill-name { font-size: 0.56rem; color: rgba(255,255,255,0.7); line-height: 1.3; }
+
+/* Quote card */
+.quote-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+}
+.quote-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+  opacity: 0.5;
+}
+.quote-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(transparent, rgba(11,22,40,0.9));
+}
+.quote-text {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.5;
+  font-style: italic;
+  margin-bottom: 0.3rem;
+}
+.quote-attr { font-size: 0.6rem; color: var(--gold); font-weight: 600; }
+
+/* ── QUICK ACCESS STRIP ── */
+.quick-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+}
+.quick-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.quick-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+.quick-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.quick-title { font-size: 0.78rem; font-weight: 600; color: var(--white); margin-bottom: 0.15rem; }
+.quick-desc { font-size: 0.65rem; color: var(--muted); line-height: 1.4; margin-bottom: 0.3rem; }
+.quick-link { font-size: 0.65rem; color: var(--gold); font-weight: 500; }
+
+/* ── LOADING STATES ── */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 1.5rem; right: 1.5rem;
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.8rem;
+  color: var(--white);
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── COMING SOON MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 340px;
+  text-align: center;
+}
+.modal-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.modal-title { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 0.5rem; }
+.modal-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; }
+.modal-close {
+  background: var(--navy);
+  border: 1px solid var(--border);
+  color: var(--white);
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .body-grid { grid-template-columns: 1fr; }
+  .right-panel { display: grid; grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .main { margin-left: 0; }
+  .topics-grid { grid-template-columns: repeat(2, 1fr); }
+  .quick-strip { grid-template-columns: repeat(2, 1fr); }
+  .hero-progress { display: none; }
+  .right-panel { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a href="index.html" class="sidebar-logo">
+    <div class="sidebar-logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.5" width="18" height="18">
+        <path d="M12 2L9 9H2l5.5 4-2 7L12 16l6.5 4-2-7L22 9h-7z"/>
+      </svg>
+    </div>
+    <div class="sidebar-logo-text">
+      <div class="name">INSPIRE</div>
+      <div class="sub">Science™</div>
+    </div>
+  </a>
+
+  <nav class="sidebar-nav">
+    <a class="nav-item active" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      My Progress
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Topics
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      Lessons
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Quizzes
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Exam Practice
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+      Required Practicals
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Revision Notes
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Mock Exams
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Flashcards
+    </a>
+    <a class="nav-item" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Achievements
+    </a>
+  </nav>
+
+  <div class="ai-btn" onclick="showComingSoon()">
+    <div class="ai-pulse"></div>
+    <div>
+      <div class="ai-label">Ask Inspire AI ✦</div>
+      <div class="ai-sub">Your AI tutor</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">GCSE Science · Physics</span>
+      <h1>GCSE Physics</h1>
+      <p class="hero-tagline">Master Physics. Understand the Universe.</p>
+      <p class="hero-desc">Build deep understanding, exam skills and confidence with premium lessons, practice and feedback.</p>
+      <div class="hero-badges">
+        <span class="badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          AQA &amp; Edexcel Aligned
+        </span>
+        <span class="badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          For Grades 1–9
+        </span>
+        <span class="badge" id="exam-board-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Loading…
+        </span>
+      </div>
+      <div class="hero-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" placeholder="Search Physics topics, lessons, questions…" oninput="handleSearch(this.value)">
+      </div>
+    </div>
+
+    <!-- PROGRESS CARD -->
+    <div class="hero-progress">
+      <div class="progress-title">Your Progress</div>
+      <div class="progress-donut-wrap">
+        <div class="donut-container">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle class="donut-bg" cx="40" cy="40" r="32"/>
+            <circle class="donut-fill" id="donut-fill" cx="40" cy="40" r="32"
+              stroke="url(#donutGrad)"
+              stroke-dasharray="0 201"
+              stroke-dashoffset="0"/>
+            <defs>
+              <linearGradient id="donutGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#3b82f6"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="donut-text">
+            <span class="donut-pct" id="overall-pct">–</span>
+            <span class="donut-label">Overall</span>
+          </div>
+        </div>
+        <div class="progress-stats">
+          <div class="stat-row">
+            <span class="stat-icon">📋</span>
+            <span class="stat-label">Quizzes Passed</span>
+            <span class="stat-val" id="stat-quizzes">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-icon">📊</span>
+            <span class="stat-label">Topics Started</span>
+            <span class="stat-val" id="stat-topics">–</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-icon">🔥</span>
+            <span class="stat-label">Day Streak</span>
+            <span class="stat-val" id="stat-streak">–</span>
+          </div>
+        </div>
+      </div>
+      <div class="grades-row">
+        <div class="grade-box">
+          <div class="g-label">Current Grade</div>
+          <div class="g-val" id="current-grade">–</div>
+        </div>
+        <div class="grade-box target">
+          <div class="g-label">Target Grade</div>
+          <div class="g-val" id="target-grade">–</div>
+        </div>
+      </div>
+      <a href="#" class="progress-link">View full progress →</a>
+    </div>
+  </section>
+
+  <!-- BODY GRID -->
+  <div class="body-grid">
+
+    <!-- LEFT: TOPICS JOURNEY -->
+    <div>
+      <div class="section-header">
+        <div class="section-icon">📖</div>
+        <h2>Your Physics Journey</h2>
+        <span style="font-size:0.65rem;color:var(--muted);margin-left:0.5rem;" id="board-filter-label"></span>
+      </div>
+      <div class="topics-wrap">
+        <div class="topics-frame" id="topics-frame">
+          <div class="topics-grid" id="topics-grid">
+            <!-- Injected by JS -->
+            <div class="skeleton" style="height:160px;border-radius:10px;"></div>
+            <div class="skeleton" style="height:160px;border-radius:10px;"></div>
+            <div class="skeleton" style="height:160px;border-radius:10px;"></div>
+            <div class="skeleton" style="height:160px;border-radius:10px;"></div>
+            <div class="skeleton" style="height:160px;border-radius:10px;"></div>
+            <div class="skeleton" style="height:160px;border-radius:10px;"></div>
+          </div>
+        </div>
+        <div class="topics-fade"></div>
+      </div>
+
+      <!-- QUICK STRIP inside left col -->
+      <div style="margin-top:1rem;">
+        <div class="section-header">
+          <div class="section-icon">⚡</div>
+          <h2>Quick Access</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;">
+          <a class="quick-card" href="#">
+            <span class="quick-icon">📝</span>
+            <div>
+              <div class="quick-title">Exam Practice</div>
+              <div class="quick-desc">GCSE style questions and past papers</div>
+              <div class="quick-link">Start practice →</div>
+            </div>
+          </a>
+          <a class="quick-card" href="#" onclick="handleQuizOfDay(event)">
+            <span class="quick-icon">🧠</span>
+            <div>
+              <div class="quick-title">Quiz of the Day</div>
+              <div class="quick-desc">5 quick questions to test your knowledge</div>
+              <div class="quick-link">Start quiz →</div>
+            </div>
+          </a>
+          <a class="quick-card" href="#">
+            <span class="quick-icon">🔬</span>
+            <div>
+              <div class="quick-title">Required Practicals</div>
+              <div class="quick-desc">All required practicals explained step-by-step</div>
+              <div class="quick-link">View practicals →</div>
+            </div>
+          </a>
+          <a class="quick-card" href="#">
+            <span class="quick-icon">🏆</span>
+            <div>
+              <div class="quick-title">Achievements</div>
+              <div class="quick-desc">Keep going and unlock rewards</div>
+              <div class="quick-link">View achievements →</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+      <!-- Continue Journey -->
+      <div class="continue-card">
+        <div class="continue-header">
+          <div class="continue-icon">🚀</div>
+          <h3>Continue Your Journey</h3>
+        </div>
+        <div class="next-lesson-card">
+          <img class="next-lesson-img" id="next-lesson-img" src="assets/images/physics/topic_energy.png" alt="Next lesson">
+          <div class="next-lesson-info">
+            <div class="next-label">Next Lesson</div>
+            <div class="next-title" id="next-lesson-title">Loading…</div>
+            <div class="next-topic" id="next-lesson-topic"></div>
+            <div class="next-meta">
+              <span id="next-lesson-time">~20 min</span>
+              <span>•</span>
+              <span>Difficulty: <span class="difficulty-stars" id="next-difficulty">★★☆</span></span>
+            </div>
+          </div>
+        </div>
+        <button class="continue-btn" onclick="handleContinue()">
+          Continue Lesson ▶
+        </button>
+      </div>
+
+      <!-- Skills Lab -->
+      <div class="skills-card">
+        <div class="section-header" style="margin-bottom:0;">
+          <div class="section-icon">🧪</div>
+          <h2 style="font-size:0.88rem;">Physics Skills Lab</h2>
+          <a href="#" class="view-all">View all →</a>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-tile" onclick="showComingSoon()">
+            <div class="skill-icon">⚖️</div>
+            <div class="skill-name">Rearranging Equations</div>
+          </div>
+          <div class="skill-tile" onclick="showComingSoon()">
+            <div class="skill-icon">📈</div>
+            <div class="skill-name">Graph Interpretation</div>
+          </div>
+          <div class="skill-tile" onclick="showComingSoon()">
+            <div class="skill-icon">🔄</div>
+            <div class="skill-name">Unit Conversions</div>
+          </div>
+          <div class="skill-tile" onclick="showComingSoon()">
+            <div class="skill-icon">📊</div>
+            <div class="skill-name">Data Analysis</div>
+          </div>
+          <div class="skill-tile" onclick="showComingSoon()">
+            <div class="skill-icon">🔟</div>
+            <div class="skill-name">Scientific Notation</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quote card -->
+      <div class="quote-card">
+        <img class="quote-img" src="assets/images/physics/physics_quote.png" alt="Physics quote">
+        <div class="quote-overlay">
+          <p class="quote-text">"Physics is not just about how the universe works — it's about how we discover, question and shape the future."</p>
+          <span class="quote-attr">– Inspire Science™</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- COMING SOON MODAL -->
+<div class="modal-overlay" id="coming-soon-modal">
+  <div class="modal-box">
+    <div class="modal-icon">✨</div>
+    <div class="modal-title">Coming Soon</div>
+    <p class="modal-desc">This feature is being built to Inspire standard. It will be ready very soon — watch this space!</p>
+    <button class="modal-close" onclick="closeModal()">Got it</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── SUPABASE INIT ──
+const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.eSNqPS6NpFidAaTaAhHAQqBtUJBUROWKWxRAfFmqnDQ';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// AQA Physics topics — official spec order
+const AQA_PHYSICS_TOPICS = [
+  { order: 1, name: 'Energy',                        slug: 'energy',             desc: 'Energy stores, transfers and resources',         img: 'assets/images/physics/topic_energy.png' },
+  { order: 2, name: 'Electricity',                   slug: 'electricity',        desc: 'Circuits, resistance and mains electricity',      img: 'assets/images/physics/topic_electricity.png' },
+  { order: 3, name: 'Particle Model of Matter',      slug: 'particle-model',     desc: 'States of matter, pressure and density',          img: 'assets/images/physics/topic_particle_model.png' },
+  { order: 4, name: 'Atomic Structure & Radiation',  slug: 'atomic-structure',   desc: 'Atoms, radioactivity and nuclear radiation',      img: 'assets/images/physics/topic_atomic_structure.png' },
+  { order: 5, name: 'Forces',                        slug: 'forces',             desc: 'Motion, Newton\'s laws and momentum',             img: 'assets/images/physics/topic_forces.png' },
+  { order: 6, name: 'Waves',                         slug: 'waves',              desc: 'Properties of waves, EM spectrum and sound',     img: 'assets/images/physics/topic_waves.png' },
+  { order: 7, name: 'Magnetism & Electromagnetism',  slug: 'magnetism',          desc: 'Magnets, motors and electromagnetic induction',   img: 'assets/images/physics/topic_magnetism.png' },
+  { order: 8, name: 'Space Physics',                 slug: 'space-physics',      desc: 'Our solar system, stars and the universe',        img: 'assets/images/physics/topic_space.png' },
+];
+
+// Grade boundaries (AQA standard)
+function scoreToGrade(pct) {
+  if (pct >= 90) return '9';
+  if (pct >= 80) return '7';
+  if (pct >= 70) return '6';
+  if (pct >= 60) return '5';
+  if (pct >= 50) return '4';
+  if (pct >= 40) return '3';
+  if (pct >= 30) return '2';
+  return '1';
+}
+
+// Animate donut
+function animateDonut(pct) {
+  const circumference = 2 * Math.PI * 32; // r=32
+  const fill = document.getElementById('donut-fill');
+  const pctEl = document.getElementById('overall-pct');
+  const target = (pct / 100) * circumference;
+  let current = 0;
+  const step = target / 40;
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    fill.setAttribute('stroke-dasharray', `${current} ${circumference}`);
+    pctEl.textContent = Math.round((current / circumference) * 100) + '%';
+    if (current >= target) clearInterval(timer);
+  }, 20);
+}
+
+// Show toast
+function showToast(msg, duration = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+// Modal
+function showComingSoon() {
+  document.getElementById('coming-soon-modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('coming-soon-modal').classList.remove('open');
+}
+
+// Search handler
+function handleSearch(val) {
+  const cards = document.querySelectorAll('.topic-card');
+  const q = val.toLowerCase();
+  cards.forEach(c => {
+    const name = c.querySelector('.topic-name')?.textContent.toLowerCase() || '';
+    const desc = c.querySelector('.topic-desc')?.textContent.toLowerCase() || '';
+    c.style.display = (!q || name.includes(q) || desc.includes(q)) ? '' : 'none';
+  });
+}
+
+// Continue lesson
+function handleContinue() {
+  showToast('Opening your next lesson…');
+}
+
+// Quiz of Day
+function handleQuizOfDay(e) {
+  e.preventDefault();
+  showComingSoon();
+}
+
+// ── MAIN DATA LOAD ──
+async function loadDashboard() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  // Parallel fetch
+  const [profileRes, topicProgressRes, quizAttemptsRes, streakRes, physicsSubjectRes] = await Promise.all([
+    sb.from('profiles').select('*').eq('id', user.id).single(),
+    sb.from('topic_progress').select('*').eq('student_id', user.id),
+    sb.from('quiz_attempts').select('*').eq('student_id', user.id),
+    sb.from('streaks').select('*').eq('student_id', user.id).single(),
+    sb.from('subjects').select('*').eq('slug', 'physics').single(),
+  ]);
+
+  const profile = profileRes.data;
+  const topicProgress = topicProgressRes.data || [];
+  const quizAttempts = quizAttemptsRes.data || [];
+  const streak = streakRes.data;
+
+  // Greet
+  const firstName = profile?.first_name || profile?.full_name?.split(' ')[0] || 'Student';
+  const examBoard = profile?.exam_board || 'AQA';
+  document.getElementById('exam-board-badge').innerHTML = `
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    ${examBoard} · ${profile?.tier || 'Foundation & Higher'}
+  `;
+  document.getElementById('board-filter-label').textContent = `${examBoard} Specification`;
+
+  // Stats
+  const passedQuizzes = quizAttempts.filter(a => a.passed).length;
+  const topicsStarted = topicProgress.length;
+  document.getElementById('stat-quizzes').textContent = `${passedQuizzes} passed`;
+  document.getElementById('stat-topics').textContent = `${topicsStarted} / 8`;
+  document.getElementById('stat-streak').textContent = streak ? `${streak.current_streak} days` : '–';
+
+  // Overall % from topic_progress best_scores
+  let overallPct = 0;
+  if (topicProgress.length > 0) {
+    const avg = topicProgress.reduce((sum, t) => sum + (parseFloat(t.best_score) || 0), 0) / topicProgress.length;
+    overallPct = Math.round(avg);
+  }
+  animateDonut(overallPct);
+  document.getElementById('current-grade').textContent = overallPct > 0 ? scoreToGrade(overallPct) : '–';
+  document.getElementById('target-grade').textContent = profile?.target_grade || '–';
+
+  // Build topic progress lookup by slug
+  const progressMap = {};
+  topicProgress.forEach(tp => {
+    // We'll match by topic_id later; for now store by id
+    progressMap[tp.topic_id] = tp;
+  });
+
+  // Load Physics topics from DB to get IDs for progress matching
+  const subjectId = physicsSubjectRes.data?.id;
+  let dbTopics = [];
+  if (subjectId) {
+    const { data } = await sb.from('topics')
+      .select('*')
+      .eq('subject_id', subjectId)
+      .eq('is_published', true)
+      .order('order_idx');
+    dbTopics = data || [];
+  }
+
+  // Render topic cards — merge DB topics with our AQA spec data
+  renderTopics(dbTopics, progressMap, quizAttempts);
+
+  // Next lesson — find lowest progress topic
+  setNextLesson(dbTopics, progressMap);
+}
+
+function renderTopics(dbTopics, progressMap, quizAttempts) {
+  const grid = document.getElementById('topics-grid');
+  grid.innerHTML = '';
+
+  // Use AQA spec topics as the authoritative list
+  // Try to match each to a DB topic for progress data
+  AQA_PHYSICS_TOPICS.forEach(specTopic => {
+    // Try to find matching DB topic by slug or name similarity
+    const dbTopic = dbTopics.find(t =>
+      t.slug === specTopic.slug ||
+      t.name.toLowerCase().includes(specTopic.slug.split('-')[0])
+    );
+    const tp = dbTopic ? progressMap[dbTopic.id] : null;
+    const bestScore = tp ? Math.round(parseFloat(tp.best_score) || 0) : 0;
+    const masteryLevel = tp?.mastery_level || 'not_started';
+
+    // Count quizzes for this topic from DB
+    const topicQuizCount = dbTopic ? 5 : 5; // default; refine when quiz counts are available
+
+    const progressPct = bestScore;
+    const progressLabel = tp ? `${bestScore}% best score` : 'Not started';
+
+    const card = document.createElement('a');
+    card.className = 'topic-card';
+    card.href = `topic.html?subject=physics&topic=${specTopic.slug}`;
+    card.innerHTML = `
+      <img class="topic-img" src="${specTopic.img}" alt="${specTopic.name}" loading="lazy"
+        onerror="this.style.background='linear-gradient(135deg,#0d1f3c,#1e3a5f)';this.style.minHeight='90px'">
+      <div class="topic-body">
+        <div class="topic-num">Topic ${specTopic.order}</div>
+        <div class="topic-name">${specTopic.name}</div>
+        <div class="topic-desc">${specTopic.desc}</div>
+        <div class="topic-progress-row">
+          <div class="topic-progress-bar">
+            <div class="topic-progress-fill" style="width:${progressPct}%"></div>
+          </div>
+          <div class="topic-arrow">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+              <path d="M2 1l3 3-3 3" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="topic-progress-txt">${progressLabel}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function setNextLesson(dbTopics, progressMap) {
+  // Find first topic with no progress, or lowest score
+  let nextTopic = AQA_PHYSICS_TOPICS[0];
+  let lowestScore = 101;
+
+  AQA_PHYSICS_TOPICS.forEach(specTopic => {
+    const dbTopic = dbTopics.find(t => t.slug === specTopic.slug || t.name.toLowerCase().includes(specTopic.slug.split('-')[0]));
+    const tp = dbTopic ? progressMap[dbTopic.id] : null;
+    const score = tp ? parseFloat(tp.best_score) || 0 : 0;
+    if (score < lowestScore) {
+      lowestScore = score;
+      nextTopic = specTopic;
+    }
+  });
+
+  document.getElementById('next-lesson-title').textContent = nextTopic.name;
+  document.getElementById('next-lesson-topic').textContent = `Topic ${nextTopic.order} · ${nextTopic.desc}`;
+  document.getElementById('next-lesson-img').src = nextTopic.img;
+
+  // Difficulty based on topic order
+  const stars = nextTopic.order <= 2 ? '★★☆' : nextTopic.order <= 5 ? '★★★' : '★★★';
+  document.getElementById('next-difficulty').textContent = stars;
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  loadDashboard().catch(err => {
+    console.error('Dashboard load error:', err);
+    showToast('Could not load all data. Please refresh.');
+    // Still render static topics so page isn't blank
+    renderTopics([], {}, []);
+    // Set placeholder next lesson
+    document.getElementById('next-lesson-title').textContent = 'Energy Stores and Transfers';
+    document.getElementById('next-lesson-topic').textContent = 'Topic 1 · Energy stores, transfers and resources';
+  });
+});
+</script>
+</body>
+</html>
