@@ -1158,7 +1158,12 @@ async function loadDashboard() {
   } catch(e) { /* network error — don't redirect */ }
 
   if (!user) {
-    window.location.href = 'index.html';
+    // DEBUG MODE: show page without redirect
+    console.warn('No session');
+    renderTopics([], {}, []);
+    animateDonut(0);
+    document.getElementById('next-lesson-title').textContent = 'Energy Stores and Transfers';
+    document.getElementById('next-lesson-topic').textContent = 'Topic 1 · Energy stores, transfers and resources';
     return;
   }
 
