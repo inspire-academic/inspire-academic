@@ -554,6 +554,17 @@ function renderHero(){
           <span class="badge badge-gold">${quizCount} Quizzes</span>
           ${masteredCount>0?`<span class="badge badge-green">${masteredCount} Mastered</span>`:''}
         </div>
+        ${s.slug==='physics'?`
+        <a href="physics.html" style="
+          display:inline-flex;align-items:center;gap:.5rem;
+          margin-top:1rem;padding:.5rem 1.1rem;
+          background:linear-gradient(135deg,#2563eb,#06b6d4);
+          color:#fff;border-radius:6px;font-size:.78rem;font-weight:600;
+          text-decoration:none;box-shadow:0 2px 8px rgba(37,99,235,0.3);
+          transition:opacity 0.2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          ✨ Open Physics Dashboard
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>`:''}
       </div>
       <div class="hero-right">
         <div class="hero-stat">
