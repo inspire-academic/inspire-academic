@@ -1,6 +1,6 @@
 // ============================================================
 // perf-utils-v2.js — Inspire Academic shared utilities
-// Performance timing, profile caching, error handling
+// Performance timing, profile caching, auth helpers
 // ============================================================
 
 // ── PERFORMANCE TIMING ──
@@ -20,23 +20,40 @@ function perfEnd(label) {
   return 0;
 }
 
+// ── FAST USER (cached auth) ──
+let _cachedUser = null;
+
+async function getFastUser(supaClient) {
+  if (_cachedUser) return _cachedUser;
+  try {
+    const { data: { session } } = await supaClient.auth.getSession();
+    if (session?.user) {
+      _cachedUser = session.user;
+      return _cachedUser;
+    }
+    const { data: { user } } = await supaClient.auth.getUser();
+    _cachedUser = user || null;
+    return _cachedUser;
+  } catch(e) {
+    console.warn('getFastUser error:', e.message);
+    return null;
+  }
+}
+
 // ── PROFILE CACHE ──
-// Caches student profile in sessionStorage to avoid repeat fetches
 const PROFILE_CACHE_KEY = 'inspire_profile_v2';
 
 function setCachedProfile(profile) {
   try {
     sessionStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify(profile));
-  } catch (e) {
-    // sessionStorage unavailable — fail silently
-  }
+  } catch(e) {}
 }
 
 function getCachedProfile() {
   try {
     const raw = sessionStorage.getItem(PROFILE_CACHE_KEY);
     return raw ? JSON.parse(raw) : null;
-  } catch (e) {
+  } catch(e) {
     return null;
   }
 }
@@ -44,41 +61,37 @@ function getCachedProfile() {
 function clearProfileCache() {
   try {
     sessionStorage.removeItem(PROFILE_CACHE_KEY);
-  } catch (e) {
-    // fail silently
-  }
+  } catch(e) {}
 }
 
-// ── ERROR HANDLING ──
+// ── ERROR / TIMEOUT HANDLING ──
 function showTimeoutError(retryFn) {
-  // Find or create error container
-  let el = document.getElementById('timeout-error');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'timeout-error';
-    el.style.cssText = `
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: #112240; border: 1px solid #1e3a5f; border-radius: 8px;
-      padding: 2rem; text-align: center; z-index: 9999; max-width: 360px;
-      font-family: 'DM Sans', sans-serif; color: #fff;
-    `;
-    document.body.appendChild(el);
-  }
-  el.innerHTML = `
-    <div style="font-size:2rem;margin-bottom:.75rem;">⏱️</div>
-    <div style="font-weight:600;margin-bottom:.5rem;">Taking longer than usual…</div>
-    <div style="font-size:.82rem;color:#7a8fa6;margin-bottom:1.25rem;">
-      There may be a connection issue. Please try refreshing.
-    </div>
-    <button onclick="${retryFn ? '(' + retryFn.toString() + ')()' : 'location.reload()'}" style="
-      background:#d4a017;border:none;color:#0b1628;padding:.6rem 1.5rem;
-      border-radius:6px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;
-    ">Retry</button>
+  const existing = document.getElementById('ia-timeout-banner');
+  if (existing) existing.remove();
+  const banner = document.createElement('div');
+  banner.id = 'ia-timeout-banner';
+  banner.style.cssText = `
+    position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+    background:#112240;border:1px solid #d4a017;border-radius:8px;
+    padding:.9rem 1.4rem;font-size:.85rem;color:#fff;
+    display:flex;align-items:center;gap:1rem;z-index:9999;
+    box-shadow:0 4px 20px rgba(0,0,0,.4);max-width:420px;width:90%;
   `;
-  el.style.display = 'block';
+  banner.innerHTML = `
+    <span>⚠️ Still loading your data…</span>
+    <button onclick="document.getElementById('ia-timeout-banner').remove();(${retryFn ? retryFn.toString() : 'function(){location.reload()}'})()"
+      style="background:#d4a017;color:#0b1628;border:none;border-radius:5px;
+             padding:.4rem .9rem;font-weight:700;cursor:pointer;font-size:.82rem;white-space:nowrap;">
+      Retry
+    </button>
+  `;
+  document.body.appendChild(banner);
+  setTimeout(() => banner?.remove(), 15000);
 }
 
 function hideTimeoutError() {
-  const el = document.getElementById('timeout-error');
-  if (el) el.style.display = 'none';
+  const el = document.getElementById('ia-timeout-banner');
+  if (el) el.remove();
+  const old = document.getElementById('timeout-error');
+  if (old) old.style.display = 'none';
 }
