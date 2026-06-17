@@ -107,9 +107,6 @@ a{color:inherit;text-decoration:none}
 .prop-card.drag-over{border:2px dashed var(--sage);background:var(--sage-light)}
 .drag-handle{position:absolute;top:10px;left:10px;color:var(--text-faint);cursor:grab;font-size:16px;opacity:0;transition:opacity .15s;z-index:2}
 .prop-card:hover .drag-handle{opacity:1}
-.delete-card-btn{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:6px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-faint);opacity:0;transition:opacity .15s;z-index:2}
-.prop-card:hover .delete-card-btn{opacity:1}
-.delete-card-btn:hover{background:var(--red-light);color:var(--red)}
 .prop-card:hover{border-color:#aaa}
 .prop-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.7rem}
 .prop-addr{font-size:14px;font-weight:500;line-height:1.4}
@@ -992,7 +989,6 @@ function renderProperties() {
         ondragend="onDragEnd(event)"
         onclick="handleCardClick(event,'${p.id}')">
       <i class="ti ti-grip-vertical drag-handle" title="Drag to reorder"></i>
-      <button class="delete-card-btn" onclick="deletePropertyCard(event,'${p.id}')" title="Delete property"><i class="ti ti-trash"></i></button>
       <div class="prop-top" style="padding-left:8px">
         <div><div class="prop-addr">${p.address}</div><div class="prop-type">${p.property_type||''}</div></div>
         ${ring(score)}
@@ -1048,18 +1044,7 @@ function handleCardClick(e, id) {
   if (e.target.closest('.drag-handle') || e.target.closest('.delete-card-btn')) return;
   showPropDetail(id);
 }
-async function deletePropertyCard(e, id) {
-  e.stopPropagation();
-  const p = properties.find(x => x.id === id);
-  if (!confirm('Delete ' + p.address + ' and all its data?\nThis cannot be undone.')) return;
-  const { error } = await sb.from('properties').delete().eq('id', id);
-  if (error) { toast('Error: ' + error.message); return; }
-  // Remove from saved order too
-  const order = getSavedOrder().filter(oid => oid !== id);
-  saveOrder(order);
-  toast('Property deleted');
-  loadAll();
-}
+
 
 function showPropDetail(id) {
   currentPropId = id;
