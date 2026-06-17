@@ -639,6 +639,7 @@ async function loadAll() {
   renderFinance();
   renderTasks();
   renderInsights();
+  renderTaxReport();
 }
 
 // ── HELPERS ──────────────────────────────────────────────────
@@ -1316,7 +1317,8 @@ async function deleteDoc(id,filePath){
 // ── TAX REPORT ────────────────────────────────────────────────
 function renderTaxReport(){
   const el=document.getElementById('tax-report-body');if(!el)return;
-  const yr=document.getElementById('tax-year-select')?.value||'2024-25';
+  const sel=document.getElementById('tax-year-select');
+  const yr=sel?sel.value:'2024-25';
   const parts=yr.split('-');const startYr=parseInt(parts[0]);const endYrShort=parseInt(parts[1]);
   const startDate=new Date(startYr+'-04-06');
   const endDate=new Date((2000+endYrShort)+'-04-05');
