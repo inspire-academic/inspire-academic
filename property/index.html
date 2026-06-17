@@ -190,6 +190,26 @@ a{color:inherit;text-decoration:none}
 .tax-total-row{display:flex;justify-content:space-between;padding:10px 0;font-size:15px;font-weight:700;border-top:2px solid #e0e0e0;margin-top:4px}
 .comp-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #efefef;font-size:13.5px}
 .comp-row:last-child{border-bottom:none}
+
+/* WATCHDOG */
+.wd-card{background:var(--card);border:var(--border);border-radius:12px;overflow:hidden}
+.wd-header{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;border-bottom:var(--border)}
+.wd-title{font-size:14px;font-weight:700}
+.wd-score{display:flex;align-items:center;gap:8px}
+.rag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px}
+.rag-green{background:#E8F0E9;color:#2d5c33}
+.rag-amber{background:#FDF3E3;color:#7a4f0a}
+.rag-red{background:#FCEBEB;color:#8b1f1f}
+.rag-dot{width:8px;height:8px;border-radius:50%}
+.rag-dot-green{background:#6B8F71}
+.rag-dot-amber{background:#D4943A}
+.rag-dot-red{background:#E24B4A}
+.wd-checks{padding:.25rem 0}
+.wd-check{display:flex;align-items:center;justify-content:space-between;padding:8px 1.25rem;border-bottom:1px solid #f5f5f5;font-size:13px}
+.wd-check:last-child{border-bottom:none}
+.wd-check-name{display:flex;align-items:center;gap:8px;font-weight:500}
+.wd-check-status{font-size:11.5px;font-weight:700}
+.status-ok{color:#2d5c33}.status-warn{color:#7a4f0a}.status-fail{color:#8b1f1f}.status-missing{color:#8b1f1f}
 </style>
 </head>
 <body>
@@ -227,6 +247,7 @@ a{color:inherit;text-decoration:none}
     <div class="nav-item active" onclick="nav('dashboard',this)"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
     <div class="nav-item" onclick="nav('properties',this)"><i class="ti ti-building-estate"></i> Properties</div>
     <div class="nav-item" onclick="nav('compliance',this)"><i class="ti ti-shield-check"></i> Compliance</div>
+    <div class="nav-item" onclick="nav('watchdog',this)"><i class="ti ti-eye"></i> Watchdog</div>
     <span class="nav-section">Finance</span>
     <div class="nav-item" onclick="nav('finance',this)"><i class="ti ti-chart-bar"></i> Finances</div>
     <div class="nav-item" onclick="nav('tasks',this)"><i class="ti ti-checklist"></i> Tasks</div>
@@ -278,6 +299,20 @@ a{color:inherit;text-decoration:none}
           <div class="prop-grid" id="property-grid"><div class="loading"><div class="spinner"></div></div></div>
         </div>
         <div id="prop-detail" style="display:none"></div>
+      </div>
+
+
+      <!-- WATCHDOG -->
+      <div id="view-watchdog" class="view" style="display:none">
+        <div class="section-hdr">
+          <span class="section-title">Compliance Watchdog</span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="font-size:12px;font-weight:600;color:var(--text-muted)">Checks every property against UK legal requirements</span>
+            <button class="btn btn-primary btn-sm" onclick="renderWatchdog()"><i class="ti ti-refresh"></i> Refresh</button>
+          </div>
+        </div>
+        <div class="metrics" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.25rem" id="watchdog-metrics"><div class="loading"><div class="spinner"></div></div></div>
+        <div id="watchdog-grid" style="display:grid;gap:12px"><div class="loading"><div class="spinner"></div></div></div>
       </div>
 
       <!-- COMPLIANCE -->
@@ -634,6 +669,7 @@ async function loadAll() {
   renderDashboard();
   renderProperties();
   renderCompliance();
+  renderWatchdog();
   renderFinance();
   renderTasks();
   renderInsights();
@@ -714,16 +750,22 @@ function renderDashboard() {
   const totalExpenses = expenses.filter(e => {
     const d = new Date(e.date); return d.getFullYear() === new Date().getFullYear();
   }).reduce((s,e) => s + Number(e.amount||0), 0);
+  const taxAdvisory = calcTaxAdvisory(totalRent, totalMortgage);
   document.getElementById('dash-snapshot').innerHTML = `
     <div class="panel-title"><i class="ti ti-home"></i> Portfolio summary</div>
-    <div class="row"><span class="row-muted">Portfolio value</span><span style="font-weight:500">${fmtGBP(totalValue)}</span></div>
-    <div class="row"><span class="row-muted">Gross monthly rent</span><span style="font-weight:500;color:var(--sage)">${fmtGBP(totalRent)}</span></div>
-    <div class="row"><span class="row-muted">Mortgage costs</span><span style="color:var(--red)">${fmtGBP(totalMortgage)}</span></div>
-    <div class="row"><span class="row-muted">Net monthly</span><span style="font-weight:500;color:var(--sage)">${fmtGBP(netMonthly)}</span></div>
-    <div class="row"><span class="row-muted">Expenses this year</span><span style="color:var(--amber)">${fmtGBP(totalExpenses)}</span></div>
+    <div class="row"><span class="row-muted">Portfolio value</span><span style="font-weight:700">${fmtGBP(totalValue)}</span></div>
+    <div class="row"><span class="row-muted">Gross monthly rent</span><span style="font-weight:700;color:var(--sage)">${fmtGBP(totalRent)}</span></div>
+    <div class="row"><span class="row-muted">Mortgage costs</span><span style="color:var(--red);font-weight:600">${fmtGBP(totalMortgage)}</span></div>
+    <div class="row"><span class="row-muted">Net monthly</span><span style="font-weight:700;color:var(--sage)">${fmtGBP(netMonthly)}</span></div>
+    <div class="row"><span class="row-muted">Expenses this year</span><span style="color:var(--amber);font-weight:600">${fmtGBP(totalExpenses)}</span></div>
+    <div class="row" style="background:#FDF3E3;margin:4px -4px;padding:8px 4px;border-radius:6px;border:none">
+      <span style="font-weight:700;color:#7a4f0a"><i class="ti ti-piggy-bank"></i> Set aside for tax (est.)</span>
+      <span style="font-weight:700;color:#7a4f0a">${fmtGBP(taxAdvisory.monthly)}/mo</span>
+    </div>
+    <div style="font-size:11.5px;color:var(--text-faint);font-weight:500;margin-top:4px">${taxAdvisory.basis} · Running liability: <strong style="color:var(--amber)">${fmtGBP(taxAdvisory.runningLiability)}</strong></div>
     <div style="margin-top:.75rem">
-      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:3px"><span>Occupancy</span><span style="font-weight:500;color:var(--text)">${Math.round((tenanted/properties.length)*100)}%</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${Math.round((tenanted/properties.length)*100)}%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:3px;font-weight:600"><span>Occupancy</span><span style="color:var(--text)">${Math.round((tenanted/Math.max(properties.length,1))*100)}%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.round((tenanted/Math.max(properties.length,1))*100)}%"></div></div>
     </div>
   `;
 }
@@ -947,17 +989,41 @@ function renderFinance() {
     <div class="metric-card"><div class="metric-label">Annual net (est.)</div><div class="metric-val green">${fmtGBP((totalRent-totalMortgage)*12)}</div><div class="metric-sub">after mortgage</div></div>
     <div class="metric-card"><div class="metric-label">Total expenses logged</div><div class="metric-val amber">${fmtGBP(totalExp)}</div><div class="metric-sub">all time</div></div>
   `;
+  const ta = calcTaxAdvisory(totalRent, totalMortgage);
   document.getElementById('fin-by-prop').innerHTML = `
-    <div class="panel-title"><i class="ti ti-receipt"></i> Rent by property</div>
+    <div class="panel-title"><i class="ti ti-receipt"></i> Rent · Net · Tax advisory</div>
+    <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;font-size:11px;font-weight:700;color:var(--text-faint);padding:0 0 6px;border-bottom:var(--border);text-transform:uppercase;letter-spacing:.04em">
+      <span>Property</span><span style="text-align:right;padding-right:12px">Rent</span><span style="text-align:right;padding-right:12px">Net</span><span style="text-align:right;color:var(--amber)">Tax reserve</span>
+    </div>
     ${properties.map(p => {
       const t = getTenancy(p.id);
-      return `<div class="row"><span class="row-muted" style="font-size:12px">${p.address}</span>
-        <div style="display:flex;align-items:center;gap:8px">
-          ${p.status==='void'?'<span class="badge badge-amber" style="font-size:10px">void</span>':''}
-          <span style="font-weight:500;color:var(--sage)">${t ? fmtGBP(t.rent_monthly) : '—'}</span>
-        </div></div>`;
+      const rent = t ? Number(t.rent_monthly||0) : 0;
+      const mortgage = Number(p.mortgage_monthly||0);
+      const net = rent - mortgage;
+      const propTax = calcTaxAdvisory(rent, mortgage);
+      return \`<div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;padding:8px 0;border-bottom:1px solid #f5f5f5;align-items:center;font-size:12.5px">
+        <span style="font-weight:500;color:var(--text-muted)">\${p.address.split(',')[0]}\${p.status==='void'?' <span class=\"badge badge-amber\" style=\"font-size:10px\">void</span>':''}</span>
+        <span style="text-align:right;padding-right:12px;font-weight:700;color:var(--sage)">\${rent?fmtGBP(rent):'—'}</span>
+        <span style="text-align:right;padding-right:12px;font-weight:600;color:\${net>0?'var(--sage)':'var(--red)'}">\${rent?fmtGBP(net):'—'}</span>
+        <span style="text-align:right;font-weight:700;color:var(--amber)">\${rent?fmtGBP(propTax.monthly):'—'}</span>
+      </div>\`;
     }).join('')}
-    <div class="row" style="border-top:0.5px solid #ddd;padding-top:8px;margin-top:4px"><span style="font-weight:500">Total</span><span style="font-weight:500;color:var(--sage)">${fmtGBP(totalRent)}</span></div>
+    <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;padding:10px 0;margin-top:4px;border-top:2px solid #e0e0e0;font-size:13.5px;font-weight:700">
+      <span>Portfolio total</span>
+      <span style="text-align:right;padding-right:12px;color:var(--sage)">${fmtGBP(totalRent)}</span>
+      <span style="text-align:right;padding-right:12px;color:var(--sage)">${fmtGBP(totalRent-totalMortgage)}</span>
+      <span style="text-align:right;color:var(--amber)">${fmtGBP(ta.monthly)}</span>
+    </div>
+    <div style="margin-top:.75rem;background:#FDF3E3;border-radius:8px;padding:.75rem 1rem">
+      <div style="font-size:12px;font-weight:700;color:#7a4f0a;margin-bottom:4px"><i class="ti ti-piggy-bank"></i> Tax advisory — ${ta.basis}</div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:#7a4f0a">
+        <span>Set aside monthly</span><span>${fmtGBP(ta.monthly)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:#7a4f0a;margin-top:4px">
+        <span>Running annual liability (est.)</span><span>${fmtGBP(ta.annual)}</span>
+      </div>
+      <div style="font-size:11px;color:#9a6b2f;margin-top:6px;font-weight:500">Based on ${ta.rateLabel} income tax rate. Not financial advice — consult your accountant.</div>
+    </div>
   `;
   const cats = {};
   expenses.forEach(e => { cats[e.category] = (cats[e.category]||0) + Number(e.amount||0); });
@@ -1383,6 +1449,167 @@ function printTaxReport(){
   const w=window.open('','_blank');
   w.document.write('<!DOCTYPE html><html><head><title>Tax Report '+yr+'</title><style>body{font-family:Arial,sans-serif;padding:2rem;color:#111;font-size:14px;max-width:800px;margin:0 auto}.tax-section{margin-bottom:1.5rem}.tax-section-title{font-size:15px;font-weight:700;border-bottom:2px solid #6B8F71;padding-bottom:6px;margin-bottom:12px}.tax-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:13.5px}.tax-total-row{display:flex;justify-content:space-between;padding:10px 0;font-size:15px;font-weight:700;border-top:2px solid #ccc;margin-top:4px}button{display:none}h1{color:#6B8F71;margin-bottom:.25rem}p{color:#666;margin-bottom:2rem}</style></head><body><h1>KeyHold — Property Tax Report</h1><p>Self Assessment summary · Tax year '+yr+'</p>'+content+'</body></html>');
   w.document.close();w.print();
+}
+
+
+// ── TAX ADVISORY CALCULATOR ──────────────────────────────────
+function calcTaxAdvisory(grossRent, mortgageCosts) {
+  // UK 2024-25: Personal allowance £12,570, Basic rate 20% up to £50,270, Higher 40% above
+  // Section 24: mortgage interest NOT deductible from profit, but 20% credit applied
+  // We estimate conservatively at basic rate (20%) on net profit after allowable expenses
+  // For monthly advisory we use: taxable = gross rent - mortgage (as proxy for expenses)
+  // Then apply 20% basic rate as the minimum to set aside
+  const annualRent = grossRent * 12;
+  const annualMortgage = mortgageCosts * 12;
+  // Estimate allowable expenses as ~15% of rent (insurance, repairs, fees etc)
+  const estimatedExpenses = annualRent * 0.15;
+  const taxableProfit = Math.max(0, annualRent - estimatedExpenses);
+  // Personal allowance assumption: assume already used by employment income
+  // so all rental profit taxable
+  let rate = 0.20; let rateLabel = 'basic rate (20%)';
+  if (taxableProfit > 37700) { rate = 0.40; rateLabel = 'higher rate (40%)'; }
+  // Section 24: mortgage interest gives 20% credit back
+  const mortgageCredit = annualMortgage * 0.20;
+  const rawTax = taxableProfit * rate;
+  const annualTax = Math.max(0, rawTax - mortgageCredit);
+  const monthly = Math.round(annualTax / 12);
+  // Running liability = months elapsed in current tax year * monthly
+  const now = new Date();
+  const taxYearStart = now.getMonth() >= 3 ? new Date(now.getFullYear(), 3, 6) : new Date(now.getFullYear()-1, 3, 6);
+  const monthsElapsed = Math.max(1, Math.round((now - taxYearStart) / (1000*60*60*24*30.44)));
+  const runningLiability = monthly * monthsElapsed;
+  return { monthly, annual: annualTax, runningLiability, basis: 'Est. ' + rateLabel, rateLabel };
+}
+
+// ── COMPLIANCE WATCHDOG ───────────────────────────────────────
+const REQUIRED_CHECKS = [
+  { key:'gas_cert',           label:'Gas Safety Certificate',         freq:'Annual',        law:'Gas Safety (Installation & Use) Regs 1998', critical:true },
+  { key:'eicr',               label:'Electrical Safety (EICR)',        freq:'Every 5 years', law:'Electrical Safety Standards Regs 2020',     critical:true },
+  { key:'epc',                label:'EPC (min. rating E)',             freq:'On letting',    law:'Energy Efficiency (Private Rented) Regs',    critical:true },
+  { key:'smoke_co',           label:'Smoke & CO alarms',              freq:'Each tenancy',  law:'Smoke & Carbon Monoxide Alarm Regs 2022',    critical:true },
+  { key:'deposit_protected',  label:'Deposit protected (30 days)',     freq:'Per tenancy',   law:'Housing Act 2004',                           critical:true },
+  { key:'right_to_rent',      label:'Right to Rent check',            freq:'Before tenancy',law:'Immigration Act 2014',                        critical:true },
+  { key:'how_to_rent',        label:'How to Rent booklet served',      freq:'Each tenancy',  law:'Deregulation Act 2015',                      critical:false },
+  { key:'tenancy_agreement',  label:'Written tenancy agreement',       freq:'Per tenancy',   law:'Best practice / Renters Rights Bill',         critical:false },
+  { key:'legionella',         label:'Legionella risk assessment',      freq:'Periodically',  law:'Health & Safety at Work Act 1974',           critical:false },
+  { key:'fire_risk',          label:'Fire risk assessment (HMO/flats)',freq:'Annually',      law:'Regulatory Reform (Fire Safety) Order 2005', critical:false },
+];
+
+function watchdogCheckProperty(p) {
+  const t = getTenancy(p.id);
+  const compItems = complianceItems.filter(c => c.property_id === p.id);
+  const results = [];
+
+  REQUIRED_CHECKS.forEach(chk => {
+    let status = 'missing'; let note = 'Not recorded in system';
+    
+    if (chk.key === 'deposit_protected') {
+      if (!t) { status = 'na'; note = 'No active tenancy'; }
+      else if (t.deposit_protected_at) {
+        const days = Math.round((new Date(t.deposit_protected_at) - new Date(t.tenancy_start)) / 86400000);
+        status = days <= 30 ? 'ok' : 'fail';
+        note = days <= 30 ? 'Protected within 30 days' : 'Protected after 30 days — possible breach';
+      } else if (t.deposit_amount > 0) { status = 'fail'; note = 'Deposit taken but no protection date recorded'; }
+      else { status = 'ok'; note = 'No deposit taken'; }
+    }
+    else if (chk.key === 'right_to_rent') {
+      if (!t) { status = 'na'; note = 'No active tenancy'; }
+      else { status = t.right_to_rent_checked ? 'ok' : 'fail'; note = t.right_to_rent_checked ? 'Check completed' : 'Not recorded — legal requirement before tenancy starts'; }
+    }
+    else if (chk.key === 'how_to_rent') {
+      if (!t) { status = 'na'; note = 'No active tenancy'; }
+      else { status = t.how_to_rent_served ? 'ok' : 'warn'; note = t.how_to_rent_served ? 'Booklet served' : 'Not recorded — required to serve Section 21 notice'; }
+    }
+    else if (chk.key === 'tenancy_agreement') {
+      if (!t) { status = 'na'; note = 'No active tenancy'; }
+      else { status = t.tenant_name ? 'ok' : 'warn'; note = t.tenant_name ? 'Tenancy recorded' : 'No tenancy details recorded'; }
+    }
+    else if (chk.key === 'epc') {
+      const epcRating = p.epc_rating;
+      if (!epcRating) { status = 'missing'; note = 'EPC rating not recorded'; }
+      else if (['F','G'].includes(epcRating)) { status = 'fail'; note = 'Rating ' + epcRating + ' — below legal minimum E. Cannot let legally.'; }
+      else { 
+        const epcItem = compItems.find(c => c.item_type === 'epc');
+        if (epcItem && epcItem.status === 'expired') { status = 'warn'; note = 'EPC expired — renew before re-letting'; }
+        else { status = 'ok'; note = 'Rating ' + epcRating + ' — meets minimum E requirement'; }
+      }
+    }
+    else {
+      const item = compItems.find(c => c.item_type === chk.key);
+      if (!item) { status = chk.critical ? 'missing' : 'warn'; note = 'No record found — add via Compliance tab'; }
+      else if (item.status === 'expired') { status = 'fail'; note = 'Expired ' + fmtDate(item.expiry_date); }
+      else if (item.status === 'due_soon') { status = 'warn'; note = 'Expires ' + fmtDate(item.expiry_date) + ' — renew soon'; }
+      else if (item.status === 'ok') { status = 'ok'; note = 'Valid until ' + fmtDate(item.expiry_date); }
+      else { status = 'warn'; note = 'No expiry date set — update record'; }
+    }
+    results.push({ ...chk, status, note });
+  });
+
+  const scored = results.filter(r => r.status !== 'na');
+  const okCount = scored.filter(r => r.status === 'ok').length;
+  const score = scored.length ? Math.round((okCount / scored.length) * 100) : 100;
+  const hasRed = scored.some(r => r.status === 'fail' || r.status === 'missing');
+  const hasAmber = scored.some(r => r.status === 'warn');
+  const rag = hasRed ? 'red' : hasAmber ? 'amber' : 'green';
+  return { results, score, rag };
+}
+
+function renderWatchdog() {
+  if (!properties.length) {
+    document.getElementById('watchdog-metrics').innerHTML = '<div style="grid-column:1/-1" class="empty"><i class="ti ti-building"></i>No properties yet</div>';
+    document.getElementById('watchdog-grid').innerHTML = '';
+    return;
+  }
+  const propResults = properties.map(p => ({ p, ...watchdogCheckProperty(p) }));
+  const fullyCompliant = propResults.filter(r => r.rag === 'green').length;
+  const needsAttention = propResults.filter(r => r.rag === 'amber').length;
+  const critical = propResults.filter(r => r.rag === 'red').length;
+  const totalIssues = propResults.reduce((s,r) => s + r.results.filter(c => c.status !== 'ok' && c.status !== 'na').length, 0);
+
+  document.getElementById('watchdog-metrics').innerHTML = `
+    <div class="metric-card"><div class="metric-label">Fully compliant</div><div class="metric-val green">${fullyCompliant}</div><div class="metric-sub">properties</div></div>
+    <div class="metric-card"><div class="metric-label">Needs attention</div><div class="metric-val amber">${needsAttention}</div><div class="metric-sub">amber issues</div></div>
+    <div class="metric-card"><div class="metric-label">Critical issues</div><div class="metric-val ${critical?'red':'green'}">${critical}</div><div class="metric-sub">${critical?'immediate action':'none'}</div></div>
+    <div class="metric-card"><div class="metric-label">Total issues</div><div class="metric-val ${totalIssues?'amber':'green'}">${totalIssues}</div><div class="metric-sub">across portfolio</div></div>
+  `;
+
+  const statusIcon = s => {
+    if (s === 'ok')      return '<i class="ti ti-circle-check" style="color:#6B8F71;font-size:16px"></i>';
+    if (s === 'warn')    return '<i class="ti ti-alert-triangle" style="color:#D4943A;font-size:16px"></i>';
+    if (s === 'fail')    return '<i class="ti ti-circle-x" style="color:#E24B4A;font-size:16px"></i>';
+    if (s === 'missing') return '<i class="ti ti-question-mark" style="color:#E24B4A;font-size:16px"></i>';
+    return '<i class="ti ti-minus" style="color:#ccc;font-size:16px"></i>';
+  };
+  const statusLabel = s => {
+    if (s === 'ok')      return '<span class="wd-check-status status-ok">✓ OK</span>';
+    if (s === 'warn')    return '<span class="wd-check-status status-warn">⚠ Review</span>';
+    if (s === 'fail')    return '<span class="wd-check-status status-fail">✗ Fail</span>';
+    if (s === 'missing') return '<span class="wd-check-status status-missing">✗ Missing</span>';
+    return '<span class="wd-check-status" style="color:#999">N/A</span>';
+  };
+  const ragLabel = r => `<span class="rag rag-${r}"><span class="rag-dot rag-dot-${r}"></span>${r==='green'?'Compliant':r==='amber'?'Review needed':'Action required'}</span>`;
+
+  document.getElementById('watchdog-grid').innerHTML = propResults.map(({p, results, score, rag}) => `
+    <div class="wd-card">
+      <div class="wd-header">
+        <div>
+          <div class="wd-title">${p.address}</div>
+          <div style="font-size:12px;font-weight:500;color:var(--text-faint);margin-top:2px">${p.property_type||''} · ${p.status}</div>
+        </div>
+        <div class="wd-score">
+          <div style="font-size:13px;font-weight:700;color:var(--text-muted)">${score}%</div>
+          ${ragLabel(rag)}
+          <button class="btn btn-sm" onclick="nav('properties',document.querySelector('[onclick*=properties]'));setTimeout(()=>showPropDetail('${p.id}'),200)"><i class="ti ti-arrow-right"></i></button>
+        </div>
+      </div>
+      <div class="wd-checks">
+        ${results.map(r => `
+          <div class="wd-check">
+            <div class="wd-check-name">${statusIcon(r.status)}<div><div>${r.label}${r.critical?'<span style="color:var(--red);font-size:10px;margin-left:4px;font-weight:700">LEGAL</span>':''}</div><div style="font-size:11px;font-weight:500;color:var(--text-faint)">${r.note}</div></div></div>
+            ${statusLabel(r.status)}
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
 }
 
 // ── INIT ──────────────────────────────────────────────────────
