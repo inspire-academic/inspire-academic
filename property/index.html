@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KeyHold — Property Suite</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sage:#6B8F71;--sage-light:#E8F0E9;--sage-dark:#4a6b50;
+  --amber:#D4943A;--amber-light:#FDF3E3;
+  --red:#E24B4A;--red-light:#FCEBEB;
+  --border:0.5px solid #e2e2e2;
+  --text:#1a1a1a;--text-muted:#666;--text-faint:#999;
+  --bg:#F8F6F2;--card:#fff;--surface:#f4f3f0;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none}
+
+/* ── AUTH SCREEN ── */
+#auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
+.auth-card{background:var(--card);border:var(--border);border-radius:16px;padding:2.5rem;width:100%;max-width:380px}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+.auth-logo-icon{width:36px;height:36px;background:var(--sage);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.auth-logo-text{font-size:17px;font-weight:600}
+.auth-card h2{font-size:16px;font-weight:500;margin-bottom:0.35rem}
+.auth-card p{font-size:13px;color:var(--text-muted);margin-bottom:1.5rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:5px}
+.field input{width:100%;padding:9px 12px;border:0.5px solid #d0d0d0;border-radius:8px;font-size:14px;background:#fff;color:var(--text);outline:none;font-family:inherit}
+.field input:focus{border-color:var(--sage)}
+.btn-auth{width:100%;padding:10px;background:var(--sage);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+.btn-auth:hover{background:var(--sage-dark)}
+.auth-error{font-size:12px;color:var(--red);margin-top:0.75rem;display:none}
+
+/* ── SHELL ── */
+#app{display:none;height:100vh;overflow:hidden;flex-direction:row}
+#app.visible{display:flex}
+
+/* ── SIDEBAR ── */
+.sidebar{width:210px;flex-shrink:0;background:var(--card);border-right:var(--border);display:flex;flex-direction:column;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:1.1rem 1rem 1rem;border-bottom:var(--border)}
+.logo-mark{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600}
+.logo-icon{width:28px;height:28px;background:var(--sage);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+.nav-section{font-size:10px;font-weight:600;color:var(--text-faint);padding:1rem 1rem 0.3rem;letter-spacing:.07em;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 1rem;font-size:13px;cursor:pointer;color:var(--text-muted);border-left:2px solid transparent;transition:all .12s}
+.nav-item:hover{background:var(--surface);color:var(--text)}
+.nav-item.active{color:var(--sage);background:var(--sage-light);border-left-color:var(--sage);font-weight:500}
+.nav-item i{font-size:16px;flex-shrink:0}
+.sidebar-footer{margin-top:auto;padding:1rem;border-top:var(--border)}
+.signout-btn{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);cursor:pointer;padding:6px 0}
+.signout-btn:hover{color:var(--red)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--card);border-bottom:var(--border);padding:.7rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.page-title{font-size:15px;font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.content{flex:1;overflow-y:auto;padding:1.5rem}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;font-size:13px;border-radius:8px;border:0.5px solid #d0d0d0;background:#fff;cursor:pointer;color:var(--text);font-family:inherit;transition:background .12s}
+.btn:hover{background:var(--surface)}
+.btn-primary{background:var(--sage);color:#fff;border-color:var(--sage)}
+.btn-primary:hover{background:var(--sage-dark);border-color:var(--sage-dark)}
+.btn-danger{background:var(--red-light);color:var(--red);border-color:#f0b8b8}
+.btn-sm{padding:4px 10px;font-size:12px}
+
+/* ── CARDS / PANELS ── */
+.card{background:var(--card);border:var(--border);border-radius:12px;padding:1.1rem 1.25rem}
+.metric-card{background:var(--surface);border-radius:8px;padding:.9rem 1rem;cursor:default}
+.metric-label{font-size:11px;color:var(--text-muted);margin-bottom:5px}
+.metric-val{font-size:22px;font-weight:500}
+.metric-sub{font-size:11px;color:var(--text-faint);margin-top:3px}
+.metrics{display:grid;gap:10px}
+.panel-title{font-size:13px;font-weight:500;color:var(--text-muted);margin-bottom:.9rem;display:flex;align-items:center;gap:7px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:500}
+.badge-green{background:var(--sage-light);color:var(--sage-dark)}
+.badge-amber{background:var(--amber-light);color:#9a6b1f}
+.badge-red{background:var(--red-light);color:#a32d2d}
+.badge-blue{background:#e8f0fb;color:#2a5aa0}
+.badge-grey{background:#f0f0f0;color:#666}
+
+/* ── TABLES / ROWS ── */
+.row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:var(--border);font-size:13px}
+.row:last-child{border-bottom:none}
+.row-muted{color:var(--text-muted)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── ALERTS ── */
+.alert{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:var(--border)}
+.alert:last-child{border-bottom:none}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.dot-red{background:var(--red)}.dot-amber{background:var(--amber)}.dot-green{background:var(--sage)}
+.alert-body{flex:1}
+.alert-title{font-size:13px;line-height:1.5}
+.alert-sub{font-size:11px;color:var(--text-faint);margin-top:2px}
+
+/* ── PROPERTY GRID ── */
+.prop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.prop-card{background:var(--card);border:var(--border);border-radius:12px;padding:1.1rem 1.25rem;cursor:pointer;transition:border-color .15s}
+.prop-card:hover{border-color:#aaa}
+.prop-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.7rem}
+.prop-addr{font-size:14px;font-weight:500;line-height:1.4}
+.prop-type{font-size:11px;color:var(--text-faint);margin-top:2px}
+.prop-meta{display:flex;gap:1.2rem;margin-bottom:.8rem}
+.meta-item{font-size:12px;color:var(--text-muted)}
+.meta-val{font-weight:500;color:var(--text);display:block;font-size:13px}
+.ring-wrap{position:relative;width:42px;height:42px;flex-shrink:0}
+.ring-wrap svg{width:42px;height:42px}
+.ring-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:9px;font-weight:600;text-align:center}
+
+/* ── TABS ── */
+.tabs{display:flex;border-bottom:var(--border);margin-bottom:1.1rem}
+.tab{padding:8px 14px;font-size:13px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-0.5px}
+.tab.active{color:var(--sage);border-bottom-color:var(--sage);font-weight:500}
+.tab:hover:not(.active){color:var(--text)}
+
+/* ── FORMS ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-field{margin-bottom:.85rem}
+.form-field label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.form-field input,.form-field select,.form-field textarea{width:100%;padding:8px 10px;border:0.5px solid #d0d0d0;border-radius:7px;font-size:13px;background:#fff;color:var(--text);outline:none;font-family:inherit}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--sage)}
+.form-field textarea{resize:vertical;min-height:70px}
+.form-actions{display:flex;gap:8px;margin-top:1rem}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border-radius:14px;padding:1.5rem;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.modal-title{font-size:15px;font-weight:500}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-muted);line-height:1}
+
+/* ── TASK ── */
+.task-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:var(--border);font-size:13px}
+.task-row:last-child{border-bottom:none}
+.task-check{width:17px;height:17px;border-radius:4px;border:0.5px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#fafafa}
+.task-check.done{background:var(--sage);border-color:var(--sage);color:#fff}
+.task-label{flex:1}.task-label.done{color:var(--text-faint);text-decoration:line-through}
+.task-due{font-size:11px;color:var(--text-faint)}.task-due.overdue{color:var(--red);font-weight:500}
+
+/* ── COMPLIANCE RING ── */
+.comp-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:var(--border);font-size:13px}
+.comp-row:last-child{border-bottom:none}
+
+/* ── LOADING ── */
+.loading{text-align:center;padding:3rem;color:var(--text-muted);font-size:13px}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid #e0e0e0;border-top-color:var(--sage);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:.5rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text-muted)}
+.empty i{font-size:36px;display:block;margin-bottom:.75rem;color:#ccc}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1a1a1a;color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none}
+#toast.show{opacity:1}
+
+/* ── UTILS ── */
+.green{color:var(--sage)}.amber{color:var(--amber)}.red{color:var(--red)}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);cursor:pointer;margin-bottom:1rem}
+.back-btn:hover{color:var(--text)}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem}
+.section-title{font-size:14px;font-weight:500}
+.progress-bar{height:4px;border-radius:2px;background:#e8e8e8;overflow:hidden;margin-top:5px}
+.progress-fill{height:100%;border-radius:2px;background:var(--sage)}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon"><i class="ti ti-building"></i></div>
+      <div class="auth-logo-text">KeyHold</div>
+    </div>
+    <h2>Property Suite</h2>
+    <p>Private access — authorised users only</p>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="auth-email" placeholder="your@email.com">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="auth-password" placeholder="••••••••">
+    </div>
+    <button class="btn-auth" onclick="signIn()">Sign in</button>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-icon"><i class="ti ti-building"></i></div>
+        KeyHold
+      </div>
+    </div>
+    <span class="nav-section">Overview</span>
+    <div class="nav-item active" onclick="nav('dashboard',this)"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
+    <div class="nav-item" onclick="nav('properties',this)"><i class="ti ti-building-estate"></i> Properties</div>
+    <div class="nav-item" onclick="nav('compliance',this)"><i class="ti ti-shield-check"></i> Compliance</div>
+    <span class="nav-section">Finance</span>
+    <div class="nav-item" onclick="nav('finance',this)"><i class="ti ti-chart-bar"></i> Finances</div>
+    <div class="nav-item" onclick="nav('tasks',this)"><i class="ti ti-checklist"></i> Tasks</div>
+    <span class="nav-section">Growth</span>
+    <div class="nav-item" onclick="nav('insights',this)"><i class="ti ti-bulb"></i> Insights</div>
+    <div class="sidebar-footer">
+      <div class="signout-btn" onclick="signOut()"><i class="ti ti-logout" style="font-size:15px"></i> Sign out</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title" id="page-title">Dashboard</div>
+      <div class="topbar-right">
+        <button class="btn btn-primary" onclick="openModal('modal-add-property')"><i class="ti ti-plus"></i> Add property</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div id="view-dashboard" class="view">
+        <div class="metrics" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.25rem" id="dash-metrics">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+        <div class="section-hdr"><span class="section-title">Needs your attention</span></div>
+        <div class="card" style="margin-bottom:1.25rem" id="dash-alerts">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="section-hdr"><span class="section-title">Open tasks</span><button class="btn btn-sm" onclick="nav('tasks',document.querySelector('[onclick*=tasks]'))">All tasks</button></div>
+            <div class="card" id="dash-tasks"><div class="loading"><div class="spinner"></div></div></div>
+          </div>
+          <div>
+            <div class="section-hdr"><span class="section-title">Portfolio snapshot</span></div>
+            <div class="card" id="dash-snapshot"><div class="loading"><div class="spinner"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROPERTIES -->
+      <div id="view-properties" class="view" style="display:none">
+        <div id="props-list">
+          <div class="section-hdr">
+            <span class="section-title">All properties</span>
+          </div>
+          <div class="prop-grid" id="property-grid"><div class="loading"><div class="spinner"></div></div></div>
+        </div>
+        <div id="prop-detail" style="display:none"></div>
+      </div>
+
+      <!-- COMPLIANCE -->
+      <div id="view-compliance" class="view" style="display:none">
+        <div class="metrics" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.25rem" id="comp-metrics">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+        <div class="card" id="comp-table"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+
+      <!-- FINANCE -->
+      <div id="view-finance" class="view" style="display:none">
+        <div class="metrics" style="grid-template-columns:repeat(3,1fr);margin-bottom:1.25rem" id="fin-metrics">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+        <div class="two-col">
+          <div class="card" id="fin-by-prop"><div class="loading"><div class="spinner"></div></div></div>
+          <div>
+            <div class="card" style="margin-bottom:12px" id="fin-expenses"><div class="loading"><div class="spinner"></div></div></div>
+            <div class="card" id="fin-tax">
+              <div class="panel-title"><i class="ti ti-receipt"></i> Tax reminders</div>
+              <div class="alert"><div class="dot dot-amber"></div><div class="alert-body"><div class="alert-title">Section 24 — mortgage interest relief capped at 20% basic rate</div></div></div>
+              <div class="alert"><div class="dot dot-green"></div><div class="alert-body"><div class="alert-title">Property allowance — first £1,000 rental income tax-free</div></div></div>
+              <div class="alert"><div class="dot dot-green"></div><div class="alert-body"><div class="alert-title">Allowable expenses — repairs, insurance, agent fees, ground rent</div></div></div>
+              <div class="alert"><div class="dot dot-amber"></div><div class="alert-body"><div class="alert-title">CGT on property — 18% basic rate / 24% higher rate (from Apr 2024)</div></div></div>
+              <div style="margin-top:1rem"><button class="btn btn-sm" onclick="openModal('modal-add-expense')"><i class="ti ti-plus"></i> Log expense</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TASKS -->
+      <div id="view-tasks" class="view" style="display:none">
+        <div class="section-hdr">
+          <span class="section-title">Tasks</span>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-task')"><i class="ti ti-plus"></i> Add task</button>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="section-hdr"><span class="section-title" style="font-size:13px;color:var(--text-muted)">Open</span></div>
+            <div class="card" id="tasks-open"><div class="loading"><div class="spinner"></div></div></div>
+          </div>
+          <div>
+            <div class="section-hdr"><span class="section-title" style="font-size:13px;color:var(--text-muted)">Completed</span></div>
+            <div class="card" id="tasks-done"><div class="loading"><div class="spinner"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSIGHTS -->
+      <div id="view-insights" class="view" style="display:none">
+        <div class="section-hdr"><span class="section-title">Ways to grow and protect your portfolio</span></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem"><i class="ti ti-trending-up" style="color:var(--sage);font-size:18px"></i><span style="font-weight:500;font-size:13px">Raise rents to market</span></div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Review rents annually at tenancy renewal. A phased increase aligned to market rates protects income without losing good tenants. Serve a Section 13 notice correctly.</div>
+          </div>
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem"><i class="ti ti-bolt" style="color:var(--sage);font-size:18px"></i><span style="font-weight:500;font-size:13px">EPC upgrades</span></div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Properties rated A–B command 10–15% higher rents and attract longer tenancies. Minimum C rating likely required by 2028. Boiler Upgrade Scheme grants available now.</div>
+          </div>
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem"><i class="ti ti-cash" style="color:var(--sage);font-size:18px"></i><span style="font-weight:500;font-size:13px">Remortgage review</span></div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Review buy-to-let mortgages annually. Standard variable rates cost significantly more than fixed deals. A broker with whole-of-market access can find the best rates.</div>
+          </div>
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem"><i class="ti ti-home-plus" style="color:var(--sage);font-size:18px"></i><span style="font-weight:500;font-size:13px">Expand the portfolio</span></div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Growing equity across your portfolio can be released via remortgage to fund a next purchase. Aim for properties with 6%+ yield in areas with strong rental demand.</div>
+          </div>
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem"><i class="ti ti-building-community" style="color:var(--sage);font-size:18px"></i><span style="font-weight:500;font-size:13px">Consider HMO</span></div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Larger properties can yield 20–40% more as licensed HMOs. Requires council licensing, fire safety works, and more active management. High yield for the right property.</div>
+          </div>
+          <div class="card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:.5rem"><i class="ti ti-shield" style="color:var(--sage);font-size:18px"></i><span style="font-weight:500;font-size:13px">Insurance review</span></div>
+            <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Portfolio landlord policies are often cheaper than individual policies. Ensure you have buildings, loss of rent, liability, and legal expenses cover. Review annually.</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px" id="insights-portfolio"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+
+<!-- Add Property -->
+<div class="modal-bg" id="modal-add-property">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add property</span>
+      <button class="modal-close" onclick="closeModal('modal-add-property')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-field" style="grid-column:1/-1"><label>Address</label><input id="p-address" placeholder="12 Manor Close, Birmingham, B1 1AA"></div>
+      <div class="form-field"><label>Property type</label><input id="p-type" placeholder="3-bed semi-detached"></div>
+      <div class="form-field"><label>Status</label>
+        <select id="p-status"><option value="tenanted">Tenanted</option><option value="void">Void</option><option value="refurb">Refurbishment</option></select>
+      </div>
+      <div class="form-field"><label>Purchase price (£)</label><input id="p-purchase" type="number" placeholder="250000"></div>
+      <div class="form-field"><label>Current value (£)</label><input id="p-value" type="number" placeholder="300000"></div>
+      <div class="form-field"><label>Purchase date</label><input id="p-date" type="date"></div>
+      <div class="form-field"><label>EPC rating</label>
+        <select id="p-epc"><option value="">Unknown</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select>
+      </div>
+      <div class="form-field"><label>Mortgage monthly (£)</label><input id="p-mortgage" type="number" placeholder="600"></div>
+      <div class="form-field"><label>Mortgage lender</label><input id="p-lender" placeholder="Nationwide"></div>
+      <div class="form-field" style="grid-column:1/-1"><label>Notes</label><textarea id="p-notes" placeholder="Any notes about this property..."></textarea></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addProperty()"><i class="ti ti-check"></i> Save property</button>
+      <button class="btn" onclick="closeModal('modal-add-property')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Task -->
+<div class="modal-bg" id="modal-add-task">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add task</span>
+      <button class="modal-close" onclick="closeModal('modal-add-task')">×</button>
+    </div>
+    <div class="form-field"><label>Task title</label><input id="t-title" placeholder="Book gas safety engineer"></div>
+    <div class="form-grid">
+      <div class="form-field"><label>Property</label><select id="t-property"><option value="">All / General</option></select></div>
+      <div class="form-field"><label>Due date</label><input id="t-due" type="date"></div>
+      <div class="form-field"><label>Priority</label>
+        <select id="t-priority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select>
+      </div>
+      <div class="form-field"><label>Category</label>
+        <select id="t-category"><option value="compliance">Compliance</option><option value="maintenance">Maintenance</option><option value="finance">Finance</option><option value="tenant">Tenant</option><option value="general" selected>General</option></select>
+      </div>
+    </div>
+    <div class="form-field"><label>Notes</label><textarea id="t-notes" placeholder="Any additional details..."></textarea></div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addTask()"><i class="ti ti-check"></i> Save task</button>
+      <button class="btn" onclick="closeModal('modal-add-task')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Expense -->
+<div class="modal-bg" id="modal-add-expense">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Log expense</span>
+      <button class="modal-close" onclick="closeModal('modal-add-expense')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-field"><label>Description</label><input id="e-desc" placeholder="Boiler repair"></div>
+      <div class="form-field"><label>Amount (£)</label><input id="e-amount" type="number" step="0.01" placeholder="250.00"></div>
+      <div class="form-field"><label>Date</label><input id="e-date" type="date"></div>
+      <div class="form-field"><label>Category</label>
+        <select id="e-category">
+          <option value="maintenance">Maintenance / repairs</option>
+          <option value="insurance">Insurance</option>
+          <option value="mortgage_interest">Mortgage interest</option>
+          <option value="agent_fees">Agent fees</option>
+          <option value="professional_fees">Professional fees</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-field"><label>Property</label><select id="e-property"><option value="">Portfolio-wide</option></select></div>
+    </div>
+    <div class="form-field"><label>Notes</label><textarea id="e-notes" placeholder="Any details for your records..."></textarea></div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addExpense()"><i class="ti ti-check"></i> Save expense</button>
+      <button class="btn" onclick="closeModal('modal-add-expense')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Tenancy -->
+<div class="modal-bg" id="modal-add-tenancy">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="tenancy-modal-title">Add tenancy</span>
+      <button class="modal-close" onclick="closeModal('modal-add-tenancy')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-field"><label>Tenant name(s)</label><input id="tn-name" placeholder="Sarah & James Abbott"></div>
+      <div class="form-field"><label>Monthly rent (£)</label><input id="tn-rent" type="number" placeholder="1200"></div>
+      <div class="form-field"><label>Tenancy start</label><input id="tn-start" type="date"></div>
+      <div class="form-field"><label>Tenancy end</label><input id="tn-end" type="date"></div>
+      <div class="form-field"><label>Deposit (£)</label><input id="tn-deposit" type="number" placeholder="1200"></div>
+      <div class="form-field"><label>Deposit scheme</label>
+        <select id="tn-scheme"><option value="">Select scheme</option><option>TDS</option><option>DPS</option><option>mydeposits</option></select>
+      </div>
+      <div class="form-field"><label>Tenant email</label><input id="tn-email" type="email" placeholder="tenant@email.com"></div>
+      <div class="form-field"><label>Tenant phone</label><input id="tn-phone" placeholder="07700 000000"></div>
+      <div class="form-field"><label>Right to Rent checked</label>
+        <select id="tn-rtr"><option value="false">No</option><option value="true">Yes</option></select>
+      </div>
+      <div class="form-field"><label>How to Rent booklet served</label>
+        <select id="tn-htr"><option value="false">No</option><option value="true">Yes</option></select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addTenancy()"><i class="ti ti-check"></i> Save tenancy</button>
+      <button class="btn" onclick="closeModal('modal-add-tenancy')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Compliance Item -->
+<div class="modal-bg" id="modal-add-compliance">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add compliance item</span>
+      <button class="modal-close" onclick="closeModal('modal-add-compliance')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-field"><label>Type</label>
+        <select id="c-type">
+          <option value="gas_cert">Gas Safety Certificate</option>
+          <option value="eicr">EICR (Electrical)</option>
+          <option value="epc">EPC</option>
+          <option value="smoke_co">Smoke / CO alarms</option>
+          <option value="legionella">Legionella risk assessment</option>
+          <option value="pat">PAT testing</option>
+          <option value="fire_risk">Fire risk assessment</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-field"><label>Label / description</label><input id="c-label" placeholder="Gas Safety Certificate 2025"></div>
+      <div class="form-field"><label>Last completed</label><input id="c-last" type="date"></div>
+      <div class="form-field"><label>Expiry date</label><input id="c-expiry" type="date"></div>
+      <div class="form-field"><label>Contractor</label><input id="c-contractor" placeholder="Gas Safe Engineer"></div>
+      <div class="form-field"><label>Cost (£)</label><input id="c-cost" type="number" placeholder="90"></div>
+      <div class="form-field" style="grid-column:1/-1"><label>Certificate ref / notes</label><input id="c-ref" placeholder="Ref number or notes"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addComplianceItem()"><i class="ti ti-check"></i> Save</button>
+      <button class="btn" onclick="closeModal('modal-add-compliance')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const OWNER_ID     = '81e1e051-8c1a-4db9-b57c-c1a70df34434';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── STATE ────────────────────────────────────────────────────
+let properties = [], tenancies = [], complianceItems = [], tasks = [], expenses = [];
+let currentPropId = null;
+
+// ── AUTH ─────────────────────────────────────────────────────
+async function signIn() {
+  const email    = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const errEl    = document.getElementById('auth-error');
+  errEl.style.display = 'none';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; return; }
+  if (data.user.id !== OWNER_ID) {
+    await sb.auth.signOut();
+    errEl.textContent = 'Access denied.';
+    errEl.style.display = 'block';
+    return;
+  }
+  showApp();
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+
+async function checkSession() {
+  const { data } = await sb.auth.getSession();
+  if (data.session && data.session.user.id === OWNER_ID) showApp();
+}
+
+function showApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  loadAll();
+}
+
+// ── LOAD ALL DATA ────────────────────────────────────────────
+async function loadAll() {
+  const [p, t, c, tk, ex] = await Promise.all([
+    sb.from('properties').select('*').order('address'),
+    sb.from('tenancies').select('*').eq('active', true),
+    sb.from('compliance_items').select('*').order('expiry_date'),
+    sb.from('property_tasks').select('*').order('due_date'),
+    sb.from('expenses').select('*').order('date', { ascending: false })
+  ]);
+  properties     = p.data || [];
+  tenancies      = t.data || [];
+  complianceItems= c.data || [];
+  tasks          = tk.data|| [];
+  expenses       = ex.data|| [];
+  populatePropertySelects();
+  renderDashboard();
+  renderProperties();
+  renderCompliance();
+  renderFinance();
+  renderTasks();
+  renderInsights();
+}
+
+// ── HELPERS ──────────────────────────────────────────────────
+function getTenancy(propId) { return tenancies.find(t => t.property_id === propId); }
+function fmtGBP(n) { return n != null ? '£' + Number(n).toLocaleString('en-GB', {minimumFractionDigits:0,maximumFractionDigits:0}) : '—'; }
+function fmtDate(d) { if (!d) return '—'; const dt = new Date(d); return dt.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+function daysUntil(d) { if (!d) return null; return Math.round((new Date(d) - new Date()) / 86400000); }
+function compScore(propId) {
+  const items = complianceItems.filter(c => c.property_id === propId);
+  if (!items.length) return null;
+  const ok = items.filter(c => c.status === 'ok').length;
+  return Math.round((ok / items.length) * 100);
+}
+function scoreColor(s) {
+  if (s === null) return ['#999','#f0f0f0'];
+  if (s >= 90) return ['#6B8F71','#E8F0E9'];
+  if (s >= 70) return ['#D4943A','#FDF3E3'];
+  return ['#E24B4A','#FCEBEB'];
+}
+function ring(score) {
+  const [c, bg] = scoreColor(score);
+  const label = score === null ? '?' : score + '%';
+  const r = 17, cx = 21, cy = 21, circ = 2 * Math.PI * r;
+  const fill = score !== null ? (score / 100) * circ : 0;
+  return `<div class="ring-wrap"><svg viewBox="0 0 42 42"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${bg}" stroke-width="4"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${c}" stroke-width="4" stroke-dasharray="${fill} ${circ}" stroke-dashoffset="${circ/4}" stroke-linecap="round"/></svg><div class="ring-label" style="color:${c};font-size:${score===null?'10':'9'}px">${label}</div></div>`;
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── DASHBOARD ────────────────────────────────────────────────
+function renderDashboard() {
+  const totalRent = tenancies.reduce((s,t) => s + Number(t.rent_monthly||0), 0);
+  const totalMortgage = properties.reduce((s,p) => s + Number(p.mortgage_monthly||0), 0);
+  const netMonthly = totalRent - totalMortgage;
+  const tenanted = properties.filter(p => p.status === 'tenanted').length;
+  const alerts = complianceItems.filter(c => c.status === 'expired' || c.status === 'due_soon');
+
+  document.getElementById('dash-metrics').innerHTML = `
+    <div class="metric-card"><div class="metric-label">Properties</div><div class="metric-val">${properties.length}</div><div class="metric-sub">${tenanted} tenanted · ${properties.length - tenanted} void</div></div>
+    <div class="metric-card"><div class="metric-label">Monthly rent</div><div class="metric-val green">${fmtGBP(totalRent)}</div><div class="metric-sub">gross income</div></div>
+    <div class="metric-card"><div class="metric-label">Net monthly</div><div class="metric-val ${netMonthly > 0 ? 'green' : 'red'}">${fmtGBP(netMonthly)}</div><div class="metric-sub">after mortgage costs</div></div>
+    <div class="metric-card"><div class="metric-label">Compliance alerts</div><div class="metric-val ${alerts.length ? 'amber' : 'green'}">${alerts.length}</div><div class="metric-sub">${alerts.length ? 'items need attention' : 'all clear'}</div></div>
+  `;
+
+  // Alerts
+  const urgent = [...alerts].sort((a,b) => new Date(a.expiry_date) - new Date(b.expiry_date)).slice(0, 5);
+  const expiringSoon = tenancies.filter(t => { const d = daysUntil(t.tenancy_end); return d !== null && d <= 60 && d >= 0; });
+  let alertHtml = '';
+  urgent.forEach(ci => {
+    const prop = properties.find(p => p.id === ci.property_id);
+    const days = daysUntil(ci.expiry_date);
+    const isExpired = days !== null && days < 0;
+    alertHtml += `<div class="alert"><div class="dot ${isExpired?'dot-red':'dot-amber'}"></div><div class="alert-body"><div class="alert-title"><strong>${prop?.address||'Unknown'}</strong> — ${ci.label} ${isExpired?'expired':'expires in '+days+' days'}</div><div class="alert-sub">${fmtDate(ci.expiry_date)}</div></div></div>`;
+  });
+  expiringSoon.forEach(t => {
+    const prop = properties.find(p => p.id === t.property_id);
+    const days = daysUntil(t.tenancy_end);
+    alertHtml += `<div class="alert"><div class="dot dot-amber"></div><div class="alert-body"><div class="alert-title"><strong>${prop?.address||'Unknown'}</strong> — tenancy ends in ${days} days</div><div class="alert-sub">Tenant: ${t.tenant_name}</div></div></div>`;
+  });
+  if (!alertHtml) alertHtml = '<div style="font-size:13px;color:var(--text-muted);padding:.5rem 0"><i class="ti ti-circle-check" style="color:var(--sage)"></i> No urgent issues — all clear</div>';
+  document.getElementById('dash-alerts').innerHTML = alertHtml;
+
+  // Tasks
+  const openTasks = tasks.filter(t => !t.completed).slice(0,6);
+  document.getElementById('dash-tasks').innerHTML = openTasks.length
+    ? openTasks.map(t => taskRow(t)).join('')
+    : '<div class="empty"><i class="ti ti-circle-check"></i>No open tasks</div>';
+
+  // Snapshot
+  const totalValue = properties.reduce((s,p) => s + Number(p.current_value||0), 0);
+  const totalExpenses = expenses.filter(e => {
+    const d = new Date(e.date); return d.getFullYear() === new Date().getFullYear();
+  }).reduce((s,e) => s + Number(e.amount||0), 0);
+  document.getElementById('dash-snapshot').innerHTML = `
+    <div class="panel-title"><i class="ti ti-home"></i> Portfolio summary</div>
+    <div class="row"><span class="row-muted">Portfolio value</span><span style="font-weight:500">${fmtGBP(totalValue)}</span></div>
+    <div class="row"><span class="row-muted">Gross monthly rent</span><span style="font-weight:500;color:var(--sage)">${fmtGBP(totalRent)}</span></div>
+    <div class="row"><span class="row-muted">Mortgage costs</span><span style="color:var(--red)">${fmtGBP(totalMortgage)}</span></div>
+    <div class="row"><span class="row-muted">Net monthly</span><span style="font-weight:500;color:var(--sage)">${fmtGBP(netMonthly)}</span></div>
+    <div class="row"><span class="row-muted">Expenses this year</span><span style="color:var(--amber)">${fmtGBP(totalExpenses)}</span></div>
+    <div style="margin-top:.75rem">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:3px"><span>Occupancy</span><span style="font-weight:500;color:var(--text)">${Math.round((tenanted/properties.length)*100)}%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.round((tenanted/properties.length)*100)}%"></div></div>
+    </div>
+  `;
+}
+
+// ── PROPERTIES ───────────────────────────────────────────────
+function renderProperties() {
+  const grid = document.getElementById('property-grid');
+  if (!properties.length) { grid.innerHTML = '<div class="empty"><i class="ti ti-building"></i>No properties yet — add your first one</div>'; return; }
+  grid.innerHTML = properties.map(p => {
+    const t = getTenancy(p.id);
+    const score = compScore(p.id);
+    const [col] = scoreColor(score);
+    const alerts = complianceItems.filter(c => c.property_id === p.id && (c.status === 'expired' || c.status === 'due_soon')).length;
+    return `<div class="prop-card" onclick="showPropDetail('${p.id}')">
+      <div class="prop-top">
+        <div><div class="prop-addr">${p.address}</div><div class="prop-type">${p.property_type||''}</div></div>
+        ${ring(score)}
+      </div>
+      <div class="prop-meta">
+        <div class="meta-item"><span class="meta-val">${t ? fmtGBP(t.rent_monthly) : '—'}</span>pcm</div>
+        <div class="meta-item"><span class="meta-val">${p.epc_rating||'?'}</span>EPC</div>
+        <div class="meta-item"><span class="meta-val">${fmtGBP(p.current_value)}</span>value</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <span class="badge ${p.status==='tenanted'?'badge-green':p.status==='void'?'badge-amber':'badge-grey'}">${p.status}</span>
+        ${alerts ? `<span style="font-size:11px;color:var(--red)"><i class="ti ti-alert-triangle"></i> ${alerts} issue${alerts>1?'s':''}</span>` : '<span style="font-size:11px;color:var(--sage)"><i class="ti ti-check"></i> Compliant</span>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showPropDetail(id) {
+  currentPropId = id;
+  const p = properties.find(x => x.id === id);
+  const t = getTenancy(id);
+  const score = compScore(id);
+  const [col, bg] = scoreColor(score);
+  document.getElementById('props-list').style.display = 'none';
+  const detail = document.getElementById('prop-detail');
+  detail.style.display = 'block';
+  detail.innerHTML = `
+    <div class="back-btn" onclick="hidePropDetail()"><i class="ti ti-arrow-left"></i> All properties</div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem">
+      <div>
+        <div style="font-size:18px;font-weight:500">${p.address}</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:3px">${p.property_type||''} · ${p.status} · Est. ${fmtGBP(p.current_value)}</div>
+      </div>
+      <span class="badge" style="background:${bg};color:${col}">Compliance ${score !== null ? score+'%' : 'n/a'}</span>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this,'dtab-overview')">Overview</div>
+      <div class="tab" onclick="switchTab(this,'dtab-compliance')">Compliance</div>
+      <div class="tab" onclick="switchTab(this,'dtab-tenancy')">Tenancy</div>
+      <div class="tab" onclick="switchTab(this,'dtab-finance')">Finance</div>
+    </div>
+    <div id="dtab-overview">${propOverviewHtml(p, t)}</div>
+    <div id="dtab-compliance" style="display:none">${propComplianceHtml(id)}</div>
+    <div id="dtab-tenancy" style="display:none">${propTenancyHtml(p, t)}</div>
+    <div id="dtab-finance" style="display:none">${propFinanceHtml(p, t)}</div>
+  `;
+}
+
+function propOverviewHtml(p, t) {
+  return `<div class="two-col">
+    <div class="card">
+      <div class="panel-title"><i class="ti ti-home"></i> Property details</div>
+      <div class="row"><span class="row-muted">Address</span><span>${p.address}</span></div>
+      <div class="row"><span class="row-muted">Type</span><span>${p.property_type||'—'}</span></div>
+      <div class="row"><span class="row-muted">Status</span><span class="badge ${p.status==='tenanted'?'badge-green':'badge-amber'}">${p.status}</span></div>
+      <div class="row"><span class="row-muted">EPC rating</span><span>${p.epc_rating||'—'}</span></div>
+      <div class="row"><span class="row-muted">Purchase price</span><span>${fmtGBP(p.purchase_price)}</span></div>
+      <div class="row"><span class="row-muted">Current value</span><span>${fmtGBP(p.current_value)}</span></div>
+      <div class="row"><span class="row-muted">Purchase date</span><span>${fmtDate(p.purchase_date)}</span></div>
+      ${p.notes ? `<div style="margin-top:.75rem;font-size:12px;color:var(--text-muted)">${p.notes}</div>` : ''}
+      <div style="margin-top:1rem;display:flex;gap:8px">
+        <button class="btn btn-sm" onclick="editProperty('${p.id}')"><i class="ti ti-edit"></i> Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteProperty('${p.id}')"><i class="ti ti-trash"></i> Delete</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="panel-title"><i class="ti ti-user"></i> Tenant</div>
+      ${t ? `
+        <div class="row"><span class="row-muted">Name</span><span>${t.tenant_name}</span></div>
+        <div class="row"><span class="row-muted">Rent</span><span style="color:var(--sage);font-weight:500">${fmtGBP(t.rent_monthly)}/mo</span></div>
+        <div class="row"><span class="row-muted">Tenancy start</span><span>${fmtDate(t.tenancy_start)}</span></div>
+        <div class="row"><span class="row-muted">Tenancy end</span><span>${fmtDate(t.tenancy_end)}</span></div>
+        <div class="row"><span class="row-muted">Deposit</span><span>${fmtGBP(t.deposit_amount)} · ${t.deposit_scheme||'—'}</span></div>
+        <div class="row"><span class="row-muted">Right to Rent</span><span class="badge ${t.right_to_rent_checked?'badge-green':'badge-red'}">${t.right_to_rent_checked?'Done':'Not done'}</span></div>
+        <div class="row"><span class="row-muted">How to Rent</span><span class="badge ${t.how_to_rent_served?'badge-green':'badge-red'}">${t.how_to_rent_served?'Served':'Not served'}</span></div>
+        ${t.tenant_email ? `<div class="row"><span class="row-muted">Email</span><span>${t.tenant_email}</span></div>` : ''}
+        ${t.tenant_phone ? `<div class="row"><span class="row-muted">Phone</span><span>${t.tenant_phone}</span></div>` : ''}
+      ` : `<div class="empty" style="padding:1.5rem 0"><i class="ti ti-user-off"></i>No active tenancy</div>`}
+      <div style="margin-top:.75rem">
+        <button class="btn btn-sm btn-primary" onclick="openTenancyModal('${p.id}')"><i class="ti ti-plus"></i> ${t ? 'Update tenancy' : 'Add tenancy'}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function propComplianceHtml(propId) {
+  const items = complianceItems.filter(c => c.property_id === propId);
+  const statusBadge = (s) => {
+    if (s==='ok') return '<span class="badge badge-green">OK</span>';
+    if (s==='due_soon') return '<span class="badge badge-amber">Due soon</span>';
+    if (s==='expired') return '<span class="badge badge-red">Expired</span>';
+    return '<span class="badge badge-grey">Unknown</span>';
+  };
+  return `<div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem">
+      <div class="panel-title" style="margin-bottom:0"><i class="ti ti-shield-check"></i> Compliance items</div>
+      <button class="btn btn-sm btn-primary" onclick="openComplianceModal('${propId}')"><i class="ti ti-plus"></i> Add item</button>
+    </div>
+    ${items.length ? items.map(ci => `
+      <div class="comp-row">
+        <div style="display:flex;align-items:center;gap:8px">
+          <i class="ti ti-${ci.status==='ok'?'circle-check':'alert-triangle'}" style="color:${ci.status==='ok'?'var(--sage)':'var(--red)'}"></i>
+          <div><div style="font-size:13px">${ci.label}</div><div style="font-size:11px;color:var(--text-faint)">${ci.contractor||''} · Expires ${fmtDate(ci.expiry_date)}</div></div>
+        </div>
+        ${statusBadge(ci.status)}
+      </div>`).join('')
+    : '<div class="empty" style="padding:1.5rem 0"><i class="ti ti-shield"></i>No compliance items yet — add certificates and checks</div>'}
+  </div>`;
+}
+
+function propTenancyHtml(p, t) {
+  return `<div class="card">
+    <div class="panel-title"><i class="ti ti-file-text"></i> Tenancy details</div>
+    ${t ? `
+      <div class="row"><span class="row-muted">Tenant</span><span>${t.tenant_name}</span></div>
+      <div class="row"><span class="row-muted">Monthly rent</span><span style="color:var(--sage);font-weight:500">${fmtGBP(t.rent_monthly)}</span></div>
+      <div class="row"><span class="row-muted">Start date</span><span>${fmtDate(t.tenancy_start)}</span></div>
+      <div class="row"><span class="row-muted">End date</span><span>${fmtDate(t.tenancy_end)}</span></div>
+      <div class="row"><span class="row-muted">Deposit</span><span>${fmtGBP(t.deposit_amount)}</span></div>
+      <div class="row"><span class="row-muted">Deposit scheme</span><span>${t.deposit_scheme||'—'}</span></div>
+      <div class="row"><span class="row-muted">Deposit protected</span><span>${fmtDate(t.deposit_protected_at)}</span></div>
+      <div class="row"><span class="row-muted">Rent due day</span><span>Day ${t.rent_due_day||1} of month</span></div>
+      <div class="row"><span class="row-muted">Right to Rent checked</span><span class="badge ${t.right_to_rent_checked?'badge-green':'badge-red'}">${t.right_to_rent_checked?'Yes':'No'}</span></div>
+      <div class="row"><span class="row-muted">How to Rent served</span><span class="badge ${t.how_to_rent_served?'badge-green':'badge-red'}">${t.how_to_rent_served?'Yes':'No'}</span></div>
+      <div class="row"><span class="row-muted">Email</span><span>${t.tenant_email||'—'}</span></div>
+      <div class="row"><span class="row-muted">Phone</span><span>${t.tenant_phone||'—'}</span></div>
+    ` : '<div class="empty" style="padding:1.5rem 0"><i class="ti ti-user-off"></i>No active tenancy recorded</div>'}
+    <div style="margin-top:.75rem"><button class="btn btn-sm btn-primary" onclick="openTenancyModal('${p.id}')"><i class="ti ti-edit"></i> ${t?'Edit tenancy':'Add tenancy'}</button></div>
+  </div>`;
+}
+
+function propFinanceHtml(p, t) {
+  const rent = t ? Number(t.rent_monthly||0) : 0;
+  const mortgage = Number(p.mortgage_monthly||0);
+  const reserve = Math.round(rent * 0.1);
+  const net = rent - mortgage - reserve;
+  const annualGross = rent * 12;
+  const yield_ = p.current_value ? ((annualGross / Number(p.current_value)) * 100).toFixed(2) : '—';
+  const propExpenses = expenses.filter(e => e.property_id === p.id);
+  const totalExp = propExpenses.reduce((s,e) => s + Number(e.amount||0), 0);
+  return `<div class="two-col">
+    <div class="card">
+      <div class="panel-title"><i class="ti ti-chart-bar"></i> Monthly breakdown</div>
+      <div class="row"><span class="row-muted">Rent income</span><span style="color:var(--sage);font-weight:500">${fmtGBP(rent)}</span></div>
+      <div class="row"><span class="row-muted">Mortgage</span><span style="color:var(--red)">−${fmtGBP(mortgage)}</span></div>
+      <div class="row"><span class="row-muted">Maintenance reserve (10%)</span><span style="color:var(--amber)">−${fmtGBP(reserve)}</span></div>
+      <div class="row" style="border-top:0.5px solid #ddd;padding-top:10px;margin-top:4px"><span style="font-weight:500">Net monthly</span><span style="font-weight:500;color:${net>0?'var(--sage)':'var(--red)'}">${fmtGBP(net)}</span></div>
+      <div class="row"><span class="row-muted">Annual gross</span><span>${fmtGBP(annualGross)}</span></div>
+      <div class="row"><span class="row-muted">Gross yield</span><span>${yield_}%</span></div>
+    </div>
+    <div class="card">
+      <div class="panel-title"><i class="ti ti-receipt"></i> Logged expenses</div>
+      ${propExpenses.length ? propExpenses.slice(0,8).map(e => `
+        <div class="row"><span class="row-muted" style="font-size:12px">${e.description}</span><span style="font-size:12px;color:var(--amber)">−${fmtGBP(e.amount)}</span></div>
+      `).join('') : '<div style="font-size:13px;color:var(--text-muted);padding:.5rem 0">No expenses logged yet</div>'}
+      <div class="row" style="border-top:0.5px solid #ddd;padding-top:8px;margin-top:4px"><span style="font-weight:500;font-size:13px">Total logged</span><span style="font-weight:500;color:var(--amber)">${fmtGBP(totalExp)}</span></div>
+    </div>
+  </div>`;
+}
+
+function hidePropDetail() {
+  document.getElementById('props-list').style.display = 'block';
+  document.getElementById('prop-detail').style.display = 'none';
+  currentPropId = null;
+}
+
+// ── COMPLIANCE ────────────────────────────────────────────────
+function renderCompliance() {
+  const expired  = complianceItems.filter(c => c.status === 'expired').length;
+  const dueSoon  = complianceItems.filter(c => c.status === 'due_soon').length;
+  const ok       = complianceItems.filter(c => c.status === 'ok').length;
+  const unknown  = complianceItems.filter(c => c.status === 'unknown').length;
+  document.getElementById('comp-metrics').innerHTML = `
+    <div class="metric-card"><div class="metric-label">Expired</div><div class="metric-val ${expired?'red':'green'}">${expired}</div><div class="metric-sub">immediate action</div></div>
+    <div class="metric-card"><div class="metric-label">Due within 30 days</div><div class="metric-val ${dueSoon?'amber':'green'}">${dueSoon}</div><div class="metric-sub">book now</div></div>
+    <div class="metric-card"><div class="metric-label">All clear</div><div class="metric-val green">${ok}</div><div class="metric-sub">compliant items</div></div>
+    <div class="metric-card"><div class="metric-label">Unknown / unset</div><div class="metric-val ${unknown?'amber':'green'}">${unknown}</div><div class="metric-sub">need expiry dates</div></div>
+  `;
+  const sorted = [...complianceItems].sort((a,b) => {
+    const order = {expired:0,due_soon:1,unknown:2,ok:3};
+    return (order[a.status]||3) - (order[b.status]||3);
+  });
+  document.getElementById('comp-table').innerHTML = `
+    <div class="panel-title"><i class="ti ti-list-check"></i> All compliance items</div>
+    ${sorted.length ? sorted.map(ci => {
+      const prop = properties.find(p => p.id === ci.property_id);
+      const days = daysUntil(ci.expiry_date);
+      const statusBadge = ci.status==='ok'?'<span class="badge badge-green">OK</span>':ci.status==='due_soon'?`<span class="badge badge-amber">Due in ${days}d</span>`:ci.status==='expired'?`<span class="badge badge-red">Expired ${Math.abs(days)}d ago</span>`:'<span class="badge badge-grey">No date</span>';
+      return `<div class="comp-row">
+        <div>
+          <div style="font-size:13px;font-weight:500">${ci.label}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${prop?.address||'Unknown'} · ${ci.contractor||''} · Expires ${fmtDate(ci.expiry_date)}</div>
+        </div>
+        ${statusBadge}
+      </div>`;
+    }).join('') : '<div class="empty"><i class="ti ti-shield"></i>No compliance items yet — open a property and add certificates</div>'}
+  `;
+}
+
+// ── FINANCE ───────────────────────────────────────────────────
+function renderFinance() {
+  const totalRent = tenancies.reduce((s,t) => s + Number(t.rent_monthly||0), 0);
+  const totalMortgage = properties.reduce((s,p) => s + Number(p.mortgage_monthly||0), 0);
+  const totalExp = expenses.reduce((s,e) => s + Number(e.amount||0), 0);
+  document.getElementById('fin-metrics').innerHTML = `
+    <div class="metric-card"><div class="metric-label">Annual gross rent</div><div class="metric-val green">${fmtGBP(totalRent*12)}</div><div class="metric-sub">${fmtGBP(totalRent)}/mo</div></div>
+    <div class="metric-card"><div class="metric-label">Annual net (est.)</div><div class="metric-val green">${fmtGBP((totalRent-totalMortgage)*12)}</div><div class="metric-sub">after mortgage</div></div>
+    <div class="metric-card"><div class="metric-label">Total expenses logged</div><div class="metric-val amber">${fmtGBP(totalExp)}</div><div class="metric-sub">all time</div></div>
+  `;
+  document.getElementById('fin-by-prop').innerHTML = `
+    <div class="panel-title"><i class="ti ti-receipt"></i> Rent by property</div>
+    ${properties.map(p => {
+      const t = getTenancy(p.id);
+      return `<div class="row"><span class="row-muted" style="font-size:12px">${p.address}</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${p.status==='void'?'<span class="badge badge-amber" style="font-size:10px">void</span>':''}
+          <span style="font-weight:500;color:var(--sage)">${t ? fmtGBP(t.rent_monthly) : '—'}</span>
+        </div></div>`;
+    }).join('')}
+    <div class="row" style="border-top:0.5px solid #ddd;padding-top:8px;margin-top:4px"><span style="font-weight:500">Total</span><span style="font-weight:500;color:var(--sage)">${fmtGBP(totalRent)}</span></div>
+  `;
+  const cats = {};
+  expenses.forEach(e => { cats[e.category] = (cats[e.category]||0) + Number(e.amount||0); });
+  document.getElementById('fin-expenses').innerHTML = `
+    <div class="panel-title"><i class="ti ti-cash"></i> Expenses by category</div>
+    ${Object.keys(cats).length ? Object.entries(cats).map(([cat,amt]) =>
+      `<div class="row"><span class="row-muted" style="font-size:12px">${cat.replace(/_/g,' ')}</span><span style="color:var(--amber)">${fmtGBP(amt)}</span></div>`
+    ).join('') : '<div style="font-size:13px;color:var(--text-muted);padding:.5rem 0">No expenses logged yet</div>'}
+    <div style="margin-top:.75rem"><button class="btn btn-sm" onclick="openModal('modal-add-expense')"><i class="ti ti-plus"></i> Log expense</button></div>
+  `;
+}
+
+// ── TASKS ─────────────────────────────────────────────────────
+function renderTasks() {
+  const open = tasks.filter(t => !t.completed);
+  const done = tasks.filter(t => t.completed);
+  document.getElementById('tasks-open').innerHTML = open.length
+    ? open.map(t => taskRow(t)).join('')
+    : '<div class="empty"><i class="ti ti-circle-check"></i>All done!</div>';
+  document.getElementById('tasks-done').innerHTML = done.length
+    ? done.slice(0,10).map(t => taskRow(t)).join('')
+    : '<div class="empty" style="padding:1.5rem 0"><i class="ti ti-checkbox"></i>No completed tasks</div>';
+}
+
+function taskRow(t) {
+  const prop = properties.find(p => p.id === t.property_id);
+  const days = daysUntil(t.due_date);
+  const overdue = days !== null && days < 0 && !t.completed;
+  return `<div class="task-row">
+    <div class="task-check ${t.completed?'done':''}" onclick="toggleTask('${t.id}',${t.completed})">
+      ${t.completed ? '<i class="ti ti-check" style="font-size:10px"></i>' : ''}
+    </div>
+    <div style="flex:1">
+      <span class="task-label ${t.completed?'done':''}">${t.title}</span>
+      ${prop ? `<div style="font-size:11px;color:var(--text-faint)">${prop.address}</div>` : ''}
+    </div>
+    <span class="task-due ${overdue?'overdue':''}">${t.due_date ? fmtDate(t.due_date) : ''}</span>
+  </div>`;
+}
+
+async function toggleTask(id, currentDone) {
+  const { error } = await sb.from('property_tasks').update({
+    completed: !currentDone,
+    completed_at: !currentDone ? new Date().toISOString() : null
+  }).eq('id', id);
+  if (!error) { tasks = tasks.map(t => t.id===id ? {...t, completed:!currentDone} : t); renderTasks(); renderDashboard(); }
+}
+
+// ── INSIGHTS ──────────────────────────────────────────────────
+function renderInsights() {
+  const totalRent = tenancies.reduce((s,t) => s + Number(t.rent_monthly||0), 0);
+  const totalValue = properties.reduce((s,p) => s + Number(p.current_value||0), 0);
+  document.getElementById('insights-portfolio').innerHTML = `
+    <div class="panel-title"><i class="ti ti-chart-line"></i> 5-year value projection (5% annual growth)</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
+      ${[0,1,2,3,5].map(yr => {
+        const val = Math.round(totalValue * Math.pow(1.05, yr));
+        return `<div style="text-align:center"><div style="font-size:11px;color:var(--text-faint)">${yr===0?'Now':'Year '+yr}</div><div style="font-weight:500;font-size:15px;margin-top:4px;color:${yr>0?'var(--sage)':'var(--text)'}">${fmtGBP(val)}</div><div style="font-size:11px;color:var(--text-faint)">${yr===0?'est.':'+'+Math.round((Math.pow(1.05,yr)-1)*100)+'%'}</div></div>`;
+      }).join('')}
+    </div>
+    <div style="font-size:11px;color:var(--text-faint);margin-top:1rem">Based on historic 5% annual growth. Not financial advice.</div>
+  `;
+}
+
+// ── CRUD ──────────────────────────────────────────────────────
+async function addProperty() {
+  const data = {
+    user_id: OWNER_ID,
+    address: document.getElementById('p-address').value.trim(),
+    property_type: document.getElementById('p-type').value,
+    status: document.getElementById('p-status').value,
+    purchase_price: document.getElementById('p-purchase').value || null,
+    current_value: document.getElementById('p-value').value || null,
+    purchase_date: document.getElementById('p-date').value || null,
+    epc_rating: document.getElementById('p-epc').value || null,
+    mortgage_monthly: document.getElementById('p-mortgage').value || null,
+    mortgage_lender: document.getElementById('p-lender').value || null,
+    notes: document.getElementById('p-notes').value || null,
+  };
+  if (!data.address) { toast('Please enter an address'); return; }
+  const { error } = await sb.from('properties').insert(data);
+  if (error) { toast('Error: ' + error.message); return; }
+  toast('Property added'); closeModal('modal-add-property'); loadAll();
+}
+
+async function deleteProperty(id) {
+  if (!confirm('Delete this property and all its data? This cannot be undone.')) return;
+  const { error } = await sb.from('properties').delete().eq('id', id);
+  if (error) { toast('Error: ' + error.message); return; }
+  toast('Property deleted'); hidePropDetail(); loadAll();
+}
+
+function editProperty(id) {
+  const p = properties.find(x => x.id === id);
+  document.getElementById('p-address').value = p.address || '';
+  document.getElementById('p-type').value = p.property_type || '';
+  document.getElementById('p-status').value = p.status || 'tenanted';
+  document.getElementById('p-purchase').value = p.purchase_price || '';
+  document.getElementById('p-value').value = p.current_value || '';
+  document.getElementById('p-date').value = p.purchase_date || '';
+  document.getElementById('p-epc').value = p.epc_rating || '';
+  document.getElementById('p-mortgage').value = p.mortgage_monthly || '';
+  document.getElementById('p-lender').value = p.mortgage_lender || '';
+  document.getElementById('p-notes').value = p.notes || '';
+  openModal('modal-add-property');
+  document.querySelector('#modal-add-property .btn-primary').onclick = async () => {
+    const data = {
+      address: document.getElementById('p-address').value.trim(),
+      property_type: document.getElementById('p-type').value,
+      status: document.getElementById('p-status').value,
+      purchase_price: document.getElementById('p-purchase').value || null,
+      current_value: document.getElementById('p-value').value || null,
+      purchase_date: document.getElementById('p-date').value || null,
+      epc_rating: document.getElementById('p-epc').value || null,
+      mortgage_monthly: document.getElementById('p-mortgage').value || null,
+      mortgage_lender: document.getElementById('p-lender').value || null,
+      notes: document.getElementById('p-notes').value || null,
+    };
+    const { error } = await sb.from('properties').update(data).eq('id', id);
+    if (error) { toast('Error: ' + error.message); return; }
+    toast('Property updated'); closeModal('modal-add-property'); loadAll();
+    setTimeout(() => showPropDetail(id), 500);
+  };
+}
+
+let tenancyPropId = null;
+function openTenancyModal(propId) {
+  tenancyPropId = propId;
+  const t = getTenancy(propId);
+  document.getElementById('tenancy-modal-title').textContent = t ? 'Edit tenancy' : 'Add tenancy';
+  if (t) {
+    document.getElementById('tn-name').value = t.tenant_name || '';
+    document.getElementById('tn-rent').value = t.rent_monthly || '';
+    document.getElementById('tn-start').value = t.tenancy_start || '';
+    document.getElementById('tn-end').value = t.tenancy_end || '';
+    document.getElementById('tn-deposit').value = t.deposit_amount || '';
+    document.getElementById('tn-scheme').value = t.deposit_scheme || '';
+    document.getElementById('tn-email').value = t.tenant_email || '';
+    document.getElementById('tn-phone').value = t.tenant_phone || '';
+    document.getElementById('tn-rtr').value = t.right_to_rent_checked ? 'true' : 'false';
+    document.getElementById('tn-htr').value = t.how_to_rent_served ? 'true' : 'false';
+  }
+  openModal('modal-add-tenancy');
+}
+
+async function addTenancy() {
+  const data = {
+    user_id: OWNER_ID,
+    property_id: tenancyPropId,
+    tenant_name: document.getElementById('tn-name').value.trim(),
+    rent_monthly: document.getElementById('tn-rent').value || null,
+    tenancy_start: document.getElementById('tn-start').value || null,
+    tenancy_end: document.getElementById('tn-end').value || null,
+    deposit_amount: document.getElementById('tn-deposit').value || null,
+    deposit_scheme: document.getElementById('tn-scheme').value || null,
+    tenant_email: document.getElementById('tn-email').value || null,
+    tenant_phone: document.getElementById('tn-phone').value || null,
+    right_to_rent_checked: document.getElementById('tn-rtr').value === 'true',
+    how_to_rent_served: document.getElementById('tn-htr').value === 'true',
+    active: true,
+  };
+  if (!data.tenant_name) { toast('Tenant name required'); return; }
+  const existing = getTenancy(tenancyPropId);
+  let error;
+  if (existing) {
+    ({ error } = await sb.from('tenancies').update(data).eq('id', existing.id));
+  } else {
+    ({ error } = await sb.from('tenancies').insert(data));
+  }
+  if (error) { toast('Error: ' + error.message); return; }
+  toast('Tenancy saved'); closeModal('modal-add-tenancy'); await loadAll();
+  showPropDetail(tenancyPropId);
+}
+
+async function addTask() {
+  const data = {
+    user_id: OWNER_ID,
+    title: document.getElementById('t-title').value.trim(),
+    property_id: document.getElementById('t-property').value || null,
+    due_date: document.getElementById('t-due').value || null,
+    priority: document.getElementById('t-priority').value,
+    category: document.getElementById('t-category').value,
+    description: document.getElementById('t-notes').value || null,
+  };
+  if (!data.title) { toast('Task title required'); return; }
+  const { error } = await sb.from('property_tasks').insert(data);
+  if (error) { toast('Error: ' + error.message); return; }
+  toast('Task added'); closeModal('modal-add-task'); loadAll();
+}
+
+async function addExpense() {
+  const data = {
+    user_id: OWNER_ID,
+    description: document.getElementById('e-desc').value.trim(),
+    amount: document.getElementById('e-amount').value || null,
+    date: document.getElementById('e-date').value || null,
+    category: document.getElementById('e-category').value,
+    property_id: document.getElementById('e-property').value || null,
+    notes: document.getElementById('e-notes').value || null,
+  };
+  if (!data.description || !data.amount) { toast('Description and amount required'); return; }
+  const { error } = await sb.from('expenses').insert(data);
+  if (error) { toast('Error: ' + error.message); return; }
+  toast('Expense logged'); closeModal('modal-add-expense'); loadAll();
+}
+
+let compliancePropId = null;
+function openComplianceModal(propId) {
+  compliancePropId = propId;
+  openModal('modal-add-compliance');
+}
+
+async function addComplianceItem() {
+  const data = {
+    user_id: OWNER_ID,
+    property_id: compliancePropId,
+    item_type: document.getElementById('c-type').value,
+    label: document.getElementById('c-label').value.trim(),
+    last_done: document.getElementById('c-last').value || null,
+    expiry_date: document.getElementById('c-expiry').value || null,
+    contractor: document.getElementById('c-contractor').value || null,
+    cost: document.getElementById('c-cost').value || null,
+    certificate_ref: document.getElementById('c-ref').value || null,
+  };
+  if (!data.label) { toast('Label required'); return; }
+  const { error } = await sb.from('compliance_items').insert(data);
+  if (error) { toast('Error: ' + error.message); return; }
+  toast('Compliance item saved'); closeModal('modal-add-compliance'); await loadAll();
+  showPropDetail(compliancePropId);
+}
+
+// ── UI HELPERS ────────────────────────────────────────────────
+function nav(view, el) {
+  document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+  document.getElementById('view-'+view).style.display = 'block';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const titles = {dashboard:'Dashboard',properties:'Properties',compliance:'Compliance',finance:'Finances',tasks:'Tasks',insights:'Insights & growth'};
+  document.getElementById('page-title').textContent = titles[view] || view;
+  if (view === 'properties') hidePropDetail();
+}
+
+function switchTab(el, target) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('[id^="dtab-"]').forEach(t => t.style.display = 'none');
+  document.getElementById(target).style.display = 'block';
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.modal-bg').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => m.classList.remove('open'));
+  if (e.key === 'Enter' && document.getElementById('auth-screen').style.display !== 'none') signIn();
+});
+
+function populatePropertySelects() {
+  ['t-property','e-property'].forEach(id => {
+    const sel = document.getElementById(id);
+    const first = sel.options[0];
+    sel.innerHTML = '';
+    sel.appendChild(first);
+    properties.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id; opt.textContent = p.address;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+checkSession();
+</script>
+</body>
+</html>
