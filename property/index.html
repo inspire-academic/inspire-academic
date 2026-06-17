@@ -256,12 +256,12 @@ a{color:inherit;text-decoration:none}
 
   /* ── MOBILE HEADER BAR (logo + title) ── */
   .mobile-header { display:none; }
-@media(max-width:768px){.mobile-header {
+  .mobile-header {
     display:flex; align-items:center; gap:10px;
     padding:.6rem 1rem; background:var(--card);
     border-bottom:var(--border); flex-shrink:0;
   }
-  .mobile-header img { height:32px; width:auto } }
+  .mobile-header img { height:32px; width:auto }
   .mobile-header-text { font-size:12px; font-weight:700; color:var(--text-faint); letter-spacing:.05em; text-transform:uppercase }
 
   /* ── METRICS GRIDS ── */
@@ -333,6 +333,35 @@ a{color:inherit;text-decoration:none}
   .prop-snapshot-grid { grid-template-columns:1fr 1fr !important }
   .metric-val { font-size:18px }
   .content { padding:.75rem }
+}
+
+
+/* ── DESKTOP OVERRIDES (ensure nothing bleeds from mobile) ── */
+@media (min-width: 769px) {
+  .mobile-header { display:none !important }
+  #mobile-fab    { display:none !important }
+  .topbar        { display:flex !important }
+  .sidebar {
+    width:215px !important; height:100vh !important;
+    flex-direction:column !important; position:relative !important;
+    border-right:var(--border) !important; border-top:none !important;
+    overflow-y:auto !important; overflow-x:hidden !important;
+  }
+  .sidebar-logo   { display:block !important }
+  .nav-section    { display:block !important }
+  .sidebar-footer { display:block !important }
+  .nav-item {
+    flex-direction:row !important; padding:9px 1rem !important;
+    font-size:13.5px !important; border-left:3px solid transparent !important;
+    border-top:none !important; min-width:unset !important;
+    justify-content:flex-start !important; text-align:left !important;
+    white-space:normal !important;
+  }
+  .nav-item i { font-size:17px !important }
+  .nav-item.active { border-top:none !important; border-left:3px solid var(--sage) !important }
+  .main { padding-bottom:0 !important }
+  .modal-bg { align-items:center !important }
+  .modal { border-radius:14px !important; max-width:540px !important }
 }
 
 </style>
