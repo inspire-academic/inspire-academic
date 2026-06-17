@@ -210,6 +210,131 @@ a{color:inherit;text-decoration:none}
 .wd-check-name{display:flex;align-items:center;gap:8px;font-weight:500}
 .wd-check-status{font-size:11.5px;font-weight:700}
 .status-ok{color:#2d5c33}.status-warn{color:#7a4f0a}.status-fail{color:#8b1f1f}.status-missing{color:#8b1f1f}
+
+/* ═══════════════════════════════════════════
+   MOBILE — max-width 768px
+   ═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── SHELL ── */
+  .shell { position:relative }
+  #app { flex-direction:column; height:100vh; overflow:hidden }
+
+  /* ── SIDEBAR → BOTTOM NAV ── */
+  .sidebar {
+    width:100%; height:auto; flex-direction:row;
+    position:fixed; bottom:0; left:0; right:0;
+    border-right:none; border-top:var(--border);
+    z-index:50; overflow-x:auto; overflow-y:hidden;
+    padding:0; flex-shrink:0;
+    background:var(--card);
+  }
+  .sidebar-logo { display:none }
+  .nav-section  { display:none }
+  .sidebar-footer { display:none }
+  .nav-item {
+    flex-direction:column; gap:3px; padding:8px 12px;
+    font-size:10px; font-weight:600; border-left:none;
+    border-top:3px solid transparent;
+    white-space:nowrap; flex-shrink:0; min-width:60px;
+    align-items:center; text-align:center;
+  }
+  .nav-item i { font-size:20px }
+  .nav-item.active {
+    border-left:none; border-top:3px solid var(--sage);
+    background:var(--sage-light);
+  }
+
+  /* ── MAIN ── */
+  .main { flex:1; overflow:hidden; display:flex; flex-direction:column; padding-bottom:60px }
+  .content { padding:1rem; flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch }
+
+  /* ── TOPBAR ── */
+  .topbar { padding:.65rem 1rem }
+  .page-title { font-size:15px }
+  .topbar-right .btn span { display:none }
+
+  /* ── MOBILE HEADER BAR (logo + title) ── */
+  .mobile-header { display:none; }
+@media(max-width:768px){.mobile-header {
+    display:flex; align-items:center; gap:10px;
+    padding:.6rem 1rem; background:var(--card);
+    border-bottom:var(--border); flex-shrink:0;
+  }
+  .mobile-header img { height:32px; width:auto } }
+  .mobile-header-text { font-size:12px; font-weight:700; color:var(--text-faint); letter-spacing:.05em; text-transform:uppercase }
+
+  /* ── METRICS GRIDS ── */
+  .metrics { grid-template-columns:1fr 1fr !important }
+  .metric-val { font-size:20px }
+
+  /* ── TWO COL → ONE COL ── */
+  .two-col { grid-template-columns:1fr !important }
+
+  /* ── PROPERTY GRID ── */
+  .prop-grid { grid-template-columns:1fr !important }
+
+  /* ── PROPERTY SNAPSHOT (6 cards → 2x3) ── */
+  .prop-snapshot-grid { grid-template-columns:1fr 1fr 1fr !important }
+
+  /* ── FORMS ── */
+  .form-grid { grid-template-columns:1fr !important }
+  .form-field[style*="grid-column"] { grid-column:1 !important }
+
+  /* ── MODALS ── */
+  .modal-bg { align-items:flex-end }
+  .modal {
+    border-radius:16px 16px 0 0;
+    max-height:85vh; padding:1.25rem;
+    width:100%; max-width:100%;
+  }
+
+  /* ── TABS ── */
+  .tabs { overflow-x:auto; -webkit-overflow-scrolling:touch; flex-wrap:nowrap }
+  .tab { white-space:nowrap; flex-shrink:0; padding:9px 12px; font-size:13px }
+
+  /* ── CARDS ── */
+  .card { padding:.9rem 1rem }
+
+  /* ── COMPLIANCE TABLE ── */
+  .comp-row { flex-wrap:wrap; gap:6px }
+
+  /* ── WATCHDOG ── */
+  .wd-check { flex-wrap:wrap; gap:6px; padding:10px 1rem }
+
+  /* ── FINANCE TABLE ── */
+  #fin-by-prop .row,
+  #fin-by-prop > div[style*="grid"] { font-size:12px }
+
+  /* ── AUTH ── */
+  .auth-card { border-radius:0; min-height:100vh; padding:2rem 1.5rem; max-width:100%; border:none }
+
+  /* ── BACK BTN ── */
+  .back-btn { font-size:13px; padding:.25rem 0; margin-bottom:.75rem }
+
+  /* ── SECTION HEADERS ── */
+  .section-hdr { flex-wrap:wrap; gap:8px }
+
+  /* ── INSIGHTS GRID ── */
+  #view-insights > div[style*="grid-template-columns:repeat(3"] {
+    grid-template-columns:1fr !important;
+  }
+
+  /* ── TAX REPORT ── */
+  .tax-row { font-size:12.5px }
+  .tax-total-row { font-size:14px }
+
+  /* ── HIDE TOPBAR ON MOBILE (use mobile-header instead) ── */
+  .topbar { display:none }
+}
+
+@media (max-width: 480px) {
+  .metrics { grid-template-columns:1fr 1fr !important }
+  .prop-snapshot-grid { grid-template-columns:1fr 1fr !important }
+  .metric-val { font-size:18px }
+  .content { padding:.75rem }
+}
+
 </style>
 </head>
 <body>
@@ -238,6 +363,13 @@ a{color:inherit;text-decoration:none}
 
 <!-- APP -->
 <div id="app">
+  <div class="mobile-header" onclick="nav('dashboard',document.querySelector('[onclick*=dashboard]'))" style="cursor:pointer">
+    <img src="Inspire_Real_Estate.png" alt="Inspire Real Estates">
+    <div>
+      <div style="font-size:14px;font-weight:700;color:var(--text)">KeyHold</div>
+      <div class="mobile-header-text">Property Suite</div>
+    </div>
+  </div>
   <div class="sidebar">
     <div class="sidebar-logo" onclick="nav('dashboard',document.querySelector('[onclick*=dashboard]'))" style="cursor:pointer;padding:.75rem 1rem 1rem;text-align:center;border-bottom:var(--border)">
       <img src="Inspire_Real_Estate.png" alt="Inspire Real Estates" style="width:130px;display:block;margin:0 auto .4rem">
@@ -603,6 +735,9 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
+
+<button id="mobile-fab" onclick="openModal('modal-add-property')" style="display:none;position:fixed;bottom:72px;right:1rem;width:50px;height:50px;border-radius:50%;background:var(--sage);color:#fff;border:none;font-size:24px;cursor:pointer;z-index:49;box-shadow:0 4px 12px rgba(0,0,0,.2);align-items:center;justify-content:center">+</button>
+
 <div id="toast"></div>
 
 <script>
@@ -838,7 +973,7 @@ function showPropDetail(id) {
       <span class="badge" style="background:${bg};color:${col}">Compliance ${score !== null ? score+'%' : 'n/a'}</span>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:1.25rem">
+    <div class="prop-snapshot-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:1.25rem">
       <div class="metric-card">
         <div class="metric-label">Monthly rent</div>
         <div class="metric-val green" style="font-size:18px">${pRent ? fmtGBP(pRent) : '—'}</div>
@@ -1675,6 +1810,18 @@ function renderWatchdog() {
       </div>
     </div>`).join('');
 }
+
+// ── MOBILE INIT ──────────────────────────────────────────────
+function initMobile() {
+  const isMobile = window.innerWidth <= 768;
+  const fab = document.getElementById('mobile-fab');
+  if (fab) fab.style.display = isMobile ? 'flex' : 'none';
+  // Show topbar on desktop only
+  const topbar = document.querySelector('.topbar');
+  if (topbar) topbar.style.display = isMobile ? 'none' : 'flex';
+}
+window.addEventListener('resize', initMobile);
+initMobile();
 
 // ── INIT ──────────────────────────────────────────────────────
 checkSession();
