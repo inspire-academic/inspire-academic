@@ -990,24 +990,28 @@ function renderFinance() {
     <div class="metric-card"><div class="metric-label">Total expenses logged</div><div class="metric-val amber">${fmtGBP(totalExp)}</div><div class="metric-sub">all time</div></div>
   `;
   const ta = calcTaxAdvisory(totalRent, totalMortgage);
+  const propRows = properties.map(p => {
+    const t = getTenancy(p.id);
+    const rent = t ? Number(t.rent_monthly||0) : 0;
+    const mortgage = Number(p.mortgage_monthly||0);
+    const net = rent - mortgage;
+    const propTax = calcTaxAdvisory(rent, mortgage);
+    const voidBadge = p.status==='void' ? '<span class="badge badge-amber" style="font-size:10px">void</span>' : '';
+    const netCol = rent ? fmtGBP(net) : '—';
+    const netColor = net > 0 ? 'var(--sage)' : 'var(--red)';
+    return '<div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;padding:8px 0;border-bottom:1px solid #f5f5f5;align-items:center;font-size:12.5px">'
+      + '<span style="font-weight:500;color:var(--text-muted)">' + p.address.split(',')[0] + ' ' + voidBadge + '</span>'
+      + '<span style="text-align:right;padding-right:12px;font-weight:700;color:var(--sage)">' + (rent ? fmtGBP(rent) : '—') + '</span>'
+      + '<span style="text-align:right;padding-right:12px;font-weight:600;color:' + netColor + '">' + netCol + '</span>'
+      + '<span style="text-align:right;font-weight:700;color:var(--amber)">' + (rent ? fmtGBP(propTax.monthly) : '—') + '</span>'
+      + '</div>';
+  }).join('');
   document.getElementById('fin-by-prop').innerHTML = `
     <div class="panel-title"><i class="ti ti-receipt"></i> Rent · Net · Tax advisory</div>
     <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;font-size:11px;font-weight:700;color:var(--text-faint);padding:0 0 6px;border-bottom:var(--border);text-transform:uppercase;letter-spacing:.04em">
       <span>Property</span><span style="text-align:right;padding-right:12px">Rent</span><span style="text-align:right;padding-right:12px">Net</span><span style="text-align:right;color:var(--amber)">Tax reserve</span>
     </div>
-    ${properties.map(p => {
-      const t = getTenancy(p.id);
-      const rent = t ? Number(t.rent_monthly||0) : 0;
-      const mortgage = Number(p.mortgage_monthly||0);
-      const net = rent - mortgage;
-      const propTax = calcTaxAdvisory(rent, mortgage);
-      return \`<div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;padding:8px 0;border-bottom:1px solid #f5f5f5;align-items:center;font-size:12.5px">
-        <span style="font-weight:500;color:var(--text-muted)">\${p.address.split(',')[0]}\${p.status==='void'?' <span class=\"badge badge-amber\" style=\"font-size:10px\">void</span>':''}</span>
-        <span style="text-align:right;padding-right:12px;font-weight:700;color:var(--sage)">\${rent?fmtGBP(rent):'—'}</span>
-        <span style="text-align:right;padding-right:12px;font-weight:600;color:\${net>0?'var(--sage)':'var(--red)'}">\${rent?fmtGBP(net):'—'}</span>
-        <span style="text-align:right;font-weight:700;color:var(--amber)">\${rent?fmtGBP(propTax.monthly):'—'}</span>
-      </div>\`;
-    }).join('')}
+    ${propRows}
     <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0;padding:10px 0;margin-top:4px;border-top:2px solid #e0e0e0;font-size:13.5px;font-weight:700">
       <span>Portfolio total</span>
       <span style="text-align:right;padding-right:12px;color:var(--sage)">${fmtGBP(totalRent)}</span>
