@@ -614,7 +614,7 @@ const OWNER_ID     = '81e1e051-8c1a-4db9-b57c-c1a70df34434';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── STATE ────────────────────────────────────────────────────
-let properties = [], tenancies = [], complianceItems = [], tasks = [], expenses = [];
+let properties = [], tenancies = [], complianceItems = [], tasks = [], expenses = [], documents = [];
 let currentPropId = null;
 
 // ── AUTH ─────────────────────────────────────────────────────
@@ -653,18 +653,20 @@ function showApp() {
 
 // ── LOAD ALL DATA ────────────────────────────────────────────
 async function loadAll() {
-  const [p, t, c, tk, ex] = await Promise.all([
+  const [p, t, c, tk, ex, docs] = await Promise.all([
     sb.from('properties').select('*').order('address'),
     sb.from('tenancies').select('*').eq('active', true),
     sb.from('compliance_items').select('*').order('expiry_date'),
     sb.from('property_tasks').select('*').order('due_date'),
-    sb.from('expenses').select('*').order('date', { ascending: false })
+    sb.from('expenses').select('*').order('date', { ascending: false }),
+    sb.from('property_documents').select('*').order('uploaded_at', { ascending: false })
   ]);
   properties     = p.data || [];
   tenancies      = t.data || [];
   complianceItems= c.data || [];
   tasks          = tk.data|| [];
   expenses       = ex.data|| [];
+  documents      = docs.data|| [];
   populatePropertySelects();
   renderDashboard();
   renderProperties();
