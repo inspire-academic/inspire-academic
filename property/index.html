@@ -102,7 +102,14 @@ a{color:inherit;text-decoration:none}
 
 /* ── PROPERTY GRID ── */
 .prop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
-.prop-card{background:var(--card);border:var(--border);border-radius:12px;padding:1.1rem 1.25rem;cursor:pointer;transition:border-color .15s}
+.prop-card{background:var(--card);border:var(--border);border-radius:12px;padding:1.1rem 1.25rem;cursor:pointer;transition:border-color .15s,box-shadow .15s,opacity .15s;position:relative}
+.prop-card.dragging{opacity:.4;box-shadow:0 8px 24px rgba(0,0,0,.15);border-color:var(--sage)}
+.prop-card.drag-over{border:2px dashed var(--sage);background:var(--sage-light)}
+.drag-handle{position:absolute;top:10px;left:10px;color:var(--text-faint);cursor:grab;font-size:16px;opacity:0;transition:opacity .15s;z-index:2}
+.prop-card:hover .drag-handle{opacity:1}
+.delete-card-btn{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:6px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-faint);opacity:0;transition:opacity .15s;z-index:2}
+.prop-card:hover .delete-card-btn{opacity:1}
+.delete-card-btn:hover{background:var(--red-light);color:var(--red)}
 .prop-card:hover{border-color:#aaa}
 .prop-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.7rem}
 .prop-addr{font-size:14px;font-weight:500;line-height:1.4}
@@ -362,6 +369,14 @@ a{color:inherit;text-decoration:none}
   .main { padding-bottom:0 !important }
   .modal-bg { align-items:center !important }
   .modal { border-radius:14px !important; max-width:540px !important }
+}
+
+
+/* Mobile drag reorder */
+@media (max-width: 768px) {
+  .drag-handle { opacity:1 !important; }
+  .delete-card-btn { opacity:1 !important; }
+  .prop-card { padding-left:2rem; }
 }
 
 </style>
@@ -937,16 +952,48 @@ function renderDashboard() {
 }
 
 // ── PROPERTIES ───────────────────────────────────────────────
+// ── PROPERTY ORDER (persisted in localStorage) ────────────────
+function getSavedOrder() {
+  try { return JSON.parse(localStorage.getItem('prop_order') || '[]'); } catch(e) { return []; }
+}
+function saveOrder(ids) {
+  localStorage.setItem('prop_order', JSON.stringify(ids));
+}
+function getSortedProperties() {
+  const order = getSavedOrder();
+  if (!order.length) return [...properties];
+  const sorted = [...properties].sort((a,b) => {
+    const ai = order.indexOf(a.id); const bi = order.indexOf(b.id);
+    if (ai === -1 && bi === -1) return 0;
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+  return sorted;
+}
+
+let dragSrcId = null;
+
 function renderProperties() {
   const grid = document.getElementById('property-grid');
   if (!properties.length) { grid.innerHTML = '<div class="empty"><i class="ti ti-building"></i>No properties yet — add your first one</div>'; return; }
-  grid.innerHTML = properties.map(p => {
+  const sorted = getSortedProperties();
+  grid.innerHTML = sorted.map(p => {
     const t = getTenancy(p.id);
     const score = compScore(p.id);
-    const [col] = scoreColor(score);
     const alerts = complianceItems.filter(c => c.property_id === p.id && (c.status === 'expired' || c.status === 'due_soon')).length;
-    return `<div class="prop-card" onclick="showPropDetail('${p.id}')">
-      <div class="prop-top">
+    return `<div class="prop-card"
+        draggable="true"
+        data-id="${p.id}"
+        ondragstart="onDragStart(event,'${p.id}')"
+        ondragover="onDragOver(event)"
+        ondragleave="onDragLeave(event)"
+        ondrop="onDrop(event,'${p.id}')"
+        ondragend="onDragEnd(event)"
+        onclick="handleCardClick(event,'${p.id}')">
+      <i class="ti ti-grip-vertical drag-handle" title="Drag to reorder"></i>
+      <button class="delete-card-btn" onclick="deletePropertyCard(event,'${p.id}')" title="Delete property"><i class="ti ti-trash"></i></button>
+      <div class="prop-top" style="padding-left:8px">
         <div><div class="prop-addr">${p.address}</div><div class="prop-type">${p.property_type||''}</div></div>
         ${ring(score)}
       </div>
@@ -961,6 +1008,57 @@ function renderProperties() {
       </div>
     </div>`;
   }).join('');
+}
+
+// ── DRAG HANDLERS ──────────────────────────────────────────────
+function onDragStart(e, id) {
+  dragSrcId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => e.target.classList.add('dragging'), 0);
+}
+function onDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+function onDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+function onDrop(e, targetId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (dragSrcId === targetId) return;
+  const sorted = getSortedProperties();
+  const ids = sorted.map(p => p.id);
+  const fromIdx = ids.indexOf(dragSrcId);
+  const toIdx   = ids.indexOf(targetId);
+  if (fromIdx === -1 || toIdx === -1) return;
+  ids.splice(fromIdx, 1);
+  ids.splice(toIdx, 0, dragSrcId);
+  saveOrder(ids);
+  renderProperties();
+  toast('Order saved');
+}
+function onDragEnd(e) {
+  e.target.classList.remove('dragging');
+  document.querySelectorAll('.prop-card').forEach(c => c.classList.remove('drag-over'));
+}
+function handleCardClick(e, id) {
+  // Don't open detail if clicking drag handle or delete button
+  if (e.target.closest('.drag-handle') || e.target.closest('.delete-card-btn')) return;
+  showPropDetail(id);
+}
+async function deletePropertyCard(e, id) {
+  e.stopPropagation();
+  const p = properties.find(x => x.id === id);
+  if (!confirm('Delete ' + p.address + ' and all its data?\nThis cannot be undone.')) return;
+  const { error } = await sb.from('properties').delete().eq('id', id);
+  if (error) { toast('Error: ' + error.message); return; }
+  // Remove from saved order too
+  const order = getSavedOrder().filter(oid => oid !== id);
+  saveOrder(order);
+  toast('Property deleted');
+  loadAll();
 }
 
 function showPropDetail(id) {
