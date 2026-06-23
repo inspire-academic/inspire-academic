@@ -3,6 +3,12 @@ publish = "."
 functions = "netlify/functions"
 edge_functions = "netlify/edge-functions"
 
+[context.production]
+  branch = "main"
+
+[context.staging]
+  branch = "staging"
+
 # Edge functions kept for reference but routing via [[redirects]] below
 [[edge_functions]]
 path = "/api/generate-question"
