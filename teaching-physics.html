@@ -6,8 +6,9 @@
 <title>Physics Lessons - Inspire Teaching Cockpit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="assets/css/tokens.css">
 <style>
 :root {
   --navy: #0b1628;
@@ -24,7 +25,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
   background: var(--navy);
   color: #fff;
   min-height: 100vh;
@@ -53,14 +54,14 @@ body {
 }
 
 .sidebar-logo .inspire {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 1.4rem;
   font-weight: 600;
   color: var(--gold);
 }
 
 .sidebar-logo .science {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 1.4rem;
   font-weight: 600;
   color: #fff;
@@ -72,7 +73,7 @@ body {
   text-transform: uppercase;
   letter-spacing: .08em;
   margin-top: .2rem;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 
 .nav-item {
@@ -158,7 +159,7 @@ body {
 }
 
 .page-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 2.5rem;
   font-weight: 600;
   margin-bottom: .5rem;
@@ -192,7 +193,7 @@ body {
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: .08em;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 
 .filter-select {
@@ -203,7 +204,7 @@ body {
   color: #fff;
   font-size: .85rem;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
 }
 
 .filter-select:hover {
@@ -241,7 +242,7 @@ body {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: .5rem;
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
 }
 
 .lesson-description {
@@ -264,7 +265,7 @@ body {
   border-radius: 20px;
   font-size: .7rem;
   color: var(--gold);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 
 .lesson-tags {

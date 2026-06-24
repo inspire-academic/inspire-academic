@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inspire Science · Interactive Periodic Table</title>
+<link rel="stylesheet" href="assets/css/tokens.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
-
 :root {
   --navy: #0b1628;
   --navy2: #0f1e36;
@@ -35,7 +34,7 @@
 
 body {
   background: var(--navy);
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
@@ -75,7 +74,7 @@ header {
   gap: 0.6rem;
 }
 .mode-label {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   color: var(--text-dim);
@@ -83,7 +82,7 @@ header {
 .mode-labels {
   display: flex;
   gap: 0.4rem;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 0.72rem;
 }
 .mode-labels span {
@@ -112,7 +111,7 @@ header {
   background: var(--navy2);
 }
 .tab-btn {
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
   font-size: 0.8rem;
   font-weight: 500;
   padding: 0.45rem 1.1rem;
@@ -149,7 +148,7 @@ header {
   width: 100%;
 }
 .pt-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 1rem;
   color: var(--gold);
   margin-bottom: 0.6rem;
@@ -159,7 +158,7 @@ header {
   font-size: 0.7rem;
   color: var(--text-dim);
   margin-bottom: 1rem;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   letter-spacing: 0.06em;
 }
 
@@ -201,13 +200,13 @@ header {
   border-color: var(--gold);
 }
 .elem-btn .an {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 0.52rem;
   color: rgba(255,255,255,0.5);
   line-height: 1;
 }
 .elem-btn .sym {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 1rem;
   font-weight: 700;
   line-height: 1;
@@ -244,7 +243,7 @@ header {
   align-items: center;
   justify-content: flex-end;
   padding-right: 4px;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 0.5rem;
   color: var(--text-dim);
   letter-spacing: 0.05em;
@@ -324,13 +323,13 @@ header {
   min-width: 72px;
   flex-shrink: 0;
 }
-.modal-an { font-family:'DM Mono',monospace; font-size:0.7rem; color: var(--gold); }
-.modal-sym { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:900; color: var(--gold); line-height:1; }
-.modal-mass { font-family:'DM Mono',monospace; font-size:0.62rem; color: var(--text-dim); }
-.modal-info h2 { font-family:'Playfair Display',serif; font-size:1.4rem; color: var(--text); }
+.modal-an { font-family:var(--font-mono); font-size:0.7rem; color: var(--gold); }
+.modal-sym { font-family:var(--font-display); font-size:2.2rem; font-weight:800; color: var(--gold); line-height:1; }
+.modal-mass { font-family:var(--font-mono); font-size:0.62rem; color: var(--text-dim); }
+.modal-info h2 { font-family:var(--font-display); font-size:1.4rem; color: var(--text); }
 .modal-info .modal-cat { font-size:0.68rem; color: var(--text-dim); margin-top:0.2rem; letter-spacing:0.06em; text-transform:uppercase; }
 .modal-info .modal-config {
-  font-family:'DM Mono',monospace;
+  font-family:var(--font-mono);
   font-size:0.75rem;
   color: var(--gold2);
   margin-top:0.5rem;
@@ -367,7 +366,7 @@ header {
   padding: 0.6rem 0.8rem;
 }
 .fact-box .fv { font-size:1rem; font-weight:600; color: var(--gold2); line-height:1; }
-.fact-box .fk { font-family:'DM Mono',monospace; font-size:0.58rem; color: var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-top:0.2rem; }
+.fact-box .fk { font-family:var(--font-mono); font-size:0.58rem; color: var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-top:0.2rem; }
 
 /* ─── BONDING SECTION ─── */
 .bonding-section {
@@ -377,12 +376,12 @@ header {
   width: 100%;
 }
 .bond-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 1.2rem;
   color: var(--gold);
   margin-bottom: 0.3rem;
 }
-.bond-subtitle { font-size:0.72rem; color: var(--text-dim); margin-bottom: 1.5rem; font-family:'DM Mono',monospace; letter-spacing:0.06em; }
+.bond-subtitle { font-size:0.72rem; color: var(--text-dim); margin-bottom: 1.5rem; font-family:var(--font-mono); letter-spacing:0.06em; }
 
 .bond-controls {
   display: flex;
@@ -393,7 +392,7 @@ header {
 }
 .bond-ctrl-group { display:flex; flex-direction:column; gap:0.4rem; }
 .bond-ctrl-group label {
-  font-family:'DM Mono',monospace; font-size:0.65rem; color: var(--text-dim); letter-spacing:0.07em; text-transform:uppercase;
+  font-family:var(--font-mono); font-size:0.65rem; color: var(--text-dim); letter-spacing:0.07em; text-transform:uppercase;
 }
 /* elem-search replaced by select-wrap */
 .select-wrap {
@@ -414,7 +413,7 @@ header {
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text);
-  font-family:'DM Mono',monospace;
+  font-family:var(--font-mono);
   font-size:0.8rem;
   padding: 0.5rem 2rem 0.5rem 0.8rem;
   outline: none;
@@ -437,7 +436,7 @@ header {
   background: var(--gold-dim);
   border: 1px solid var(--gold);
   color: var(--gold);
-  font-family:'DM Sans',sans-serif;
+  font-family:var(--font-body);
   font-weight:600;
   font-size:0.85rem;
   padding: 0.6rem 1.4rem;
@@ -501,7 +500,7 @@ header {
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 8px;
   color: var(--text);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   padding: 5px 10px;
@@ -537,7 +536,7 @@ header {
 
 .colour-panel-section { margin-bottom: 4px; }
 .colour-panel-label {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 0.58rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -588,7 +587,7 @@ header {
   padding: 2px;
 }
 .colour-custom-hex {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 0.7rem;
   color: var(--text-dim);
   letter-spacing: 0.05em;
@@ -1222,7 +1221,7 @@ function startAtomAnimation(Z, sym, cat){
       ctx.lineWidth = 1;
       ctx.stroke();
       // shell label
-      ctx.font = `500 8px 'DM Mono', monospace`;
+      ctx.font = `500 8px 'JetBrains Mono', monospace`;
       ctx.fillStyle = SHELL_COLS[si]+'80';
       ctx.textAlign = 'center';
       ctx.fillText(`n=${si+1}`, cx, cy - shellRadii[si] - 6);
@@ -1281,7 +1280,7 @@ function startAtomAnimation(Z, sym, cat){
     });
 
     // symbol
-    ctx.font = `bold ${Math.max(10, Math.min(16, 30-sym.length*2))}px 'Playfair Display', serif`;
+    ctx.font = `bold ${Math.max(10, Math.min(16, 30-sym.length*2))}px 'Fraunces', serif`;
     ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillStyle='rgba(255,255,255,0.95)';
     ctx.fillText(sym, cx, cy);
@@ -1610,14 +1609,14 @@ function showChemicalError(result, e1, e2, bondType, W, H, ctx){
   drawAtomCircle(ctx, cx+110, cy, 38, e2[1], e2[5], e2[1], '#e74c3c');
 
   // Bond type label (crossed out)
-  ctx.font="500 10px 'DM Mono',monospace";
+  ctx.font="500 10px 'JetBrains Mono',monospace";
   ctx.fillStyle='rgba(231,76,60,0.7)'; ctx.textAlign='center';
   const bondLabel = bondType==='covalent'?'covalent bond':bondType==='ionic'?'ionic bond':'metallic bond';
   ctx.fillText(`✗  ${e1[1]} ${bondLabel} ${e2[1]}  ✗`, cx, cy+68);
 
   // Suggestion strip if switching bond type
   if(result.suggestSwitch){
-    ctx.font="600 9px 'DM Sans',monospace";
+    ctx.font="600 9px 'Plus Jakarta Sans',monospace";
     ctx.fillStyle='rgba(212,168,67,0.8)';
     ctx.fillText(`→ Try: ${result.suggestSwitch} bond instead`, cx, cy+84);
   }
@@ -1629,7 +1628,7 @@ function showChemicalError(result, e1, e2, bondType, W, H, ctx){
     ? `<br><strong>Try these instead:</strong> ${result.suggestions.map(s=>`<em>${s}</em>`).join(' &nbsp;·&nbsp; ')}`
     : '';
   const switchBtn = result.suggestSwitch
-    ? `<br><button onclick="switchBondType('${result.suggestSwitch}')" style="margin-top:0.6rem;background:rgba(212,168,67,0.15);border:1px solid #d4a843;color:#d4a843;font-family:'DM Mono',monospace;font-size:0.75rem;padding:0.4rem 1rem;border-radius:5px;cursor:pointer;">Switch to ${result.suggestSwitch} bond →</button>`
+    ? `<br><button onclick="switchBondType('${result.suggestSwitch}')" style="margin-top:0.6rem;background:rgba(212,168,67,0.15);border:1px solid #d4a843;color:#d4a843;font-family:var(--font-mono);font-size:0.75rem;padding:0.4rem 1rem;border-radius:5px;cursor:pointer;">Switch to ${result.suggestSwitch} bond →</button>`
     : '';
   desc.innerHTML = `
 <div style="display:flex;align-items:flex-start;gap:0.8rem;margin-bottom:0.6rem;">
@@ -1928,7 +1927,7 @@ function animateIonic(ctx, e1, e2, W, H){
       ctx.beginPath(); ctx.arc(tx, ty, 14, 0, Math.PI*2); ctx.fillStyle = eg; ctx.fill();
       ctx.beginPath(); ctx.arc(tx, ty, 6,  0, Math.PI*2); ctx.fillStyle = '#ffe66d'; ctx.fill();
       ctx.save();
-      ctx.font = "bold 7px 'DM Mono',monospace";
+      ctx.font = "bold 7px 'JetBrains Mono',monospace";
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillStyle = '#1a1a1a'; ctx.fillText('e⁻', tx, ty);
       ctx.restore();
@@ -1941,7 +1940,7 @@ function animateIonic(ctx, e1, e2, W, H){
 
     // Element names
     ctx.save();
-    ctx.font = "600 12px 'DM Sans',sans-serif";
+    ctx.font = "600 12px 'Plus Jakarta Sans',sans-serif";
     ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
     ctx.fillStyle = 'rgba(255,255,255,0.85)';
     ctx.fillText(e1[2], x1, labelY);
@@ -1951,7 +1950,7 @@ function animateIonic(ctx, e1, e2, W, H){
     // Charge superscripts — tight against top of each atom circle
     if (allDone) {
       ctx.save();
-      ctx.font = "bold 13px 'Playfair Display',serif";
+      ctx.font = "bold 13px 'Fraunces',serif";
       ctx.textBaseline = 'alphabetic';
       // Na+: right of top-right edge
       ctx.textAlign = 'left';
@@ -1966,7 +1965,7 @@ function animateIonic(ctx, e1, e2, W, H){
     // Electrostatic label
     if (allDone) {
       ctx.save();
-      ctx.font = "500 8px 'DM Mono',monospace";
+      ctx.font = "500 8px 'JetBrains Mono',monospace";
       ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
       ctx.fillStyle = 'rgba(255,255,255,0.45)';
       ctx.fillText('electrostatic attraction', cx, labelY + 16);
@@ -1976,7 +1975,7 @@ function animateIonic(ctx, e1, e2, W, H){
     // Dot/cross key — two lines so nothing truncates on mobile
     if (allDone) {
       ctx.save();
-      ctx.font = "500 7.5px 'DM Mono',monospace";
+      ctx.font = "500 7.5px 'JetBrains Mono',monospace";
       ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
       ctx.fillStyle = 'rgba(255,255,255,0.3)';
       ctx.fillText('●  ' + e1[1] + ' electrons (dots)   ✕  ' + e2[1] + ' electrons (crosses)', cx, labelY + 28);
@@ -2132,7 +2131,7 @@ function animateCovalent(ctx, e1, e2, W, H){
       // Bond label above midpoint
       const bLabel = order===1?'σ bond':order===2?'σ + π bond':'σ + 2π bond';
       ctx.save();
-      ctx.font="bold 9px 'DM Mono',monospace";
+      ctx.font="bold 9px 'JetBrains Mono',monospace";
       ctx.textAlign='center'; ctx.textBaseline='alphabetic';
       ctx.fillStyle='#f0c96a';
       ctx.fillText(bLabel, midX, cy - dotR - 10);
@@ -2142,7 +2141,7 @@ function animateCovalent(ctx, e1, e2, W, H){
     // ── LAYER 5: labels ─────────────────────────────────────────
     const labelY = cy + dotR + ES + 14;
     ctx.save();
-    ctx.font="600 12px 'DM Sans',sans-serif";
+    ctx.font="600 12px 'Plus Jakarta Sans',sans-serif";
     ctx.textAlign='center'; ctx.textBaseline='alphabetic';
     ctx.fillStyle='rgba(255,255,255,0.85)';
     ctx.fillText(e1[2], x1, labelY);
@@ -2152,7 +2151,7 @@ function animateCovalent(ctx, e1, e2, W, H){
     // Bond order info
     if (stable) {
       ctx.save();
-      ctx.font="500 8px 'DM Mono',monospace";
+      ctx.font="500 8px 'JetBrains Mono',monospace";
       ctx.textAlign='center'; ctx.textBaseline='alphabetic';
       ctx.fillStyle='rgba(255,255,255,0.4)';
       ctx.fillText('Shared pairs: '+order+'   ●='+e1[1]+' electron   ×='+e2[1]+' electron', midX, labelY+16);
@@ -2236,7 +2235,7 @@ function animateMetallic(ctx, e1, e2, W, H){
       eg.addColorStop(1,'transparent');
       ctx.beginPath(); ctx.arc(el.x,el.y,8,0,Math.PI*2); ctx.fillStyle=eg; ctx.fill();
       ctx.beginPath(); ctx.arc(el.x,el.y,3,0,Math.PI*2); ctx.fillStyle='#ffe66d'; ctx.fill();
-      ctx.font="bold 6px 'DM Mono',monospace";
+      ctx.font="bold 6px 'JetBrains Mono',monospace";
       ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillStyle='#222'; ctx.fillText('e⁻',el.x,el.y);
     });
@@ -2251,7 +2250,7 @@ function animateMetallic(ctx, e1, e2, W, H){
       ctx.beginPath(); ctx.arc(ion.x,ion.y,12,0,Math.PI*2);
       ctx.fillStyle='#1a6ca8'; ctx.fill();
       ctx.strokeStyle='rgba(52,152,219,0.6)'; ctx.lineWidth=1.5; ctx.stroke();
-      ctx.font=`bold ${e1[1].length>2?6:8}px 'Playfair Display',serif`;
+      ctx.font=`bold ${e1[1].length>2?6:8}px 'Fraunces',serif`;
       ctx.textAlign='center'; ctx.textBaseline='middle';
       ctx.fillStyle='white';
       ctx.fillText(e1[1]+cation, ion.x, ion.y);
@@ -2260,15 +2259,15 @@ function animateMetallic(ctx, e1, e2, W, H){
 
     // labels
     ctx.textBaseline='alphabetic';
-    ctx.font="600 11px 'DM Sans',sans-serif";
+    ctx.font="600 11px 'Plus Jakarta Sans',sans-serif";
     ctx.textAlign='center'; ctx.fillStyle='rgba(255,255,255,0.75)';
     ctx.fillText('Metal Cation Lattice — '+e1[2], cx, bndY-12);
-    ctx.font="500 9px 'DM Mono',monospace";
+    ctx.font="500 9px 'JetBrains Mono',monospace";
     ctx.fillStyle='rgba(255,230,100,0.7)';
     ctx.fillText('delocalised electron sea  (carries charge → electrical conductivity)', cx, bndY+bndH+16);
 
     const outer1label=shells1[shells1.length-1];
-    ctx.font="500 9px 'DM Mono',monospace";
+    ctx.font="500 9px 'JetBrains Mono',monospace";
     ctx.fillStyle='rgba(255,255,255,0.45)'; ctx.textAlign='center';
     ctx.fillText(`Each ${e1[1]} atom releases ${outer1label} outer electron(s) into the delocalised sea`, cx, bndY+bndH+32);
 
@@ -2285,7 +2284,7 @@ function drawAtomCircle(ctx,x,y,r,sym,cat,label,col){
   ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
   ctx.fillStyle=g; ctx.fill();
   ctx.strokeStyle=col+'99'; ctx.lineWidth=1.5; ctx.stroke();
-  ctx.font=`bold ${label.length>3?10:14}px 'Playfair Display',serif`;
+  ctx.font=`bold ${label.length>3?10:14}px 'Fraunces',serif`;
   ctx.textAlign='center'; ctx.textBaseline='middle';
   ctx.fillStyle='white'; ctx.fillText(label,x,y);
   ctx.textBaseline='alphabetic'; // always reset after use
@@ -2332,7 +2331,7 @@ function drawElectronLegend(ctx, W, H, e1, e2, outer1, outer2, type, order, stab
   if(!stable) return;
   const y=H-52;
   ctx.textBaseline='alphabetic';
-  ctx.font="500 8.5px 'DM Mono',monospace";
+  ctx.font="500 8.5px 'JetBrains Mono',monospace";
   ctx.textAlign='center'; ctx.fillStyle='rgba(255,255,255,0.35)';
   ctx.fillText('─────────────────── Electron accounting ───────────────────', W/2, y);
 

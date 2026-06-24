@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MileIQ — Mileage Tracker</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+<style>
 :root{
   --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
   --gold:#d4a017;--gold2:#f0c040;
@@ -18,10 +21,10 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{overflow-x:hidden;}
-body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;}
+body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;}
 a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;}
-input,select,textarea{font-family:'DM Sans',sans-serif;}
+button{cursor:pointer;font-family:var(--font-body);border:none;}
+input,select,textarea{font-family:var(--font-body);}
 
 ::-webkit-scrollbar{width:6px;}
 ::-webkit-scrollbar-track{background:var(--navy2);}
@@ -37,7 +40,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 .btn-red:hover{opacity:.9;}
 
 .card{background:var(--navy2);border:1px solid var(--border);border-radius:6px;padding:1.5rem;}
-.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
 .badge-gold{background:#d4a01722;color:var(--gold);}
 .badge-green{background:#16803c22;color:#4ade80;}
 .badge-teal{background:#00c9a722;color:var(--teal);}
@@ -57,8 +60,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 
 .topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .topnav-logo{display:flex;align-items:center;gap:.75rem;}
-.logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:var(--navy);}
-.topnav-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--gold);}
+.logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--navy);}
+.topnav-title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--gold);}
 
 .form-group{margin-bottom:1.25rem;}
 .form-label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.08em;}
@@ -80,7 +83,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:2rem 0;}
 .stat-box{background:var(--navy);border:1px solid var(--border);border-radius:6px;padding:1rem;text-align:center;}
-.stat-value{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--teal);}
+.stat-value{font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--teal);}
 .stat-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;margin-top:.5rem;}
 
 .upload-area{border:2px dashed var(--border);border-radius:6px;padding:2rem;text-align:center;cursor:pointer;transition:all .2s;}
@@ -119,7 +122,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 
   <!-- Intro -->
   <div style="text-align:center;margin-bottom:2.5rem;">
-    <h1 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:.5rem;">Track Your Mileage</h1>
+    <h1 style="font-family:var(--font-display);font-size:2rem;margin-bottom:.5rem;">Track Your Mileage</h1>
     <p class="muted">Log journeys, upload receipts, generate monthly reports.</p>
   </div>
 

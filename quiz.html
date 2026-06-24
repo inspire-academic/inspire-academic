@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Quiz — Inspire Science</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="assets/css/tokens.css">
 <style>
 :root{
   --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
@@ -17,10 +20,10 @@
   --r:6px;
 }
 *{box-sizing:border-box;margin:0;padding:0;} html{overflow-x:hidden;}
-body{font-family:DM Sans,sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
+body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:DM Sans,sans-serif;}
-input,select{font-family:DM Sans,sans-serif;}
+button{cursor:pointer;font-family:var(--font-body);}
+input,select{font-family:var(--font-body);}
 
 /* scrollbar */
 ::-webkit-scrollbar{width:6px;}
@@ -31,8 +34,8 @@ input,select{font-family:DM Sans,sans-serif;}
 .gold{color:var(--gold);}
 .orange{color:var(--orange);}
 .muted{color:var(--muted);}
-.mono{font-family:DM Mono,monospace;}
-.serif{font-family:Playfair Display,serif;}
+.mono{font-family:var(--font-mono);}
+.serif{font-family:var(--font-display);}
 
 /* btn styles */
 .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:var(--r);border:none;font-size:.9rem;font-weight:600;transition:all .2s;}
@@ -47,7 +50,7 @@ input,select{font-family:DM Sans,sans-serif;}
 .card:hover{border-color:var(--navy3);}
 
 /* badge */
-.badge{display:inline-block;font-family:DM Mono,monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
 .badge-gold{background:#d4a01722;color:var(--gold);}
 .badge-green{background:#16803c22;color:#4ade80;}
 .badge-red{background:#b92b1a22;color:#f87171;}
@@ -99,13 +102,13 @@ body{background:var(--navy);}
   .timer{font-size:.82rem;padding:.3rem .55rem;}
 }
 .quiz-meta{flex:1;text-align:center;}
-.quiz-title{font-family:Playfair Display,serif;font-size:1.1rem;font-weight:700;}
+.quiz-title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;}
 .quiz-subtitle{font-size:.75rem;color:var(--muted);}
 
 /* timer */
 .timer{
   display:flex;align-items:center;gap:.5rem;
-  font-family:DM Mono,monospace;font-size:1rem;font-weight:600;
+  font-family:var(--font-mono);font-size:1rem;font-weight:600;
   padding:.4rem .9rem;border:1px solid var(--border);border-radius:var(--r);
 }
 .timer.warning{color:var(--orange);border-color:var(--orange);}
@@ -119,7 +122,7 @@ body{background:var(--navy);}
 }
 .qp-track{flex:1;height:4px;background:var(--navy);border-radius:2px;overflow:hidden;}
 .qp-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--orange));border-radius:2px;transition:width .4s ease;}
-.qp-label{font-family:DM Mono,monospace;font-size:.72rem;color:var(--muted);white-space:nowrap;}
+.qp-label{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);white-space:nowrap;}
 
 main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
 
@@ -129,7 +132,7 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
 
 /* INTRO screen */
 .intro-hero{text-align:center;padding:2rem 0;}
-.intro-hero h1{font-family:Playfair Display,serif;font-size:2.2rem;font-weight:900;margin-bottom:.5rem;}
+.intro-hero h1{font-family:var(--font-display);font-size:2.2rem;font-weight:800;margin-bottom:.5rem;}
 .intro-hero h1 span{color:var(--gold);}
 .intro-meta{
   display:flex;justify-content:center;gap:2rem;margin:1.5rem 0;flex-wrap:wrap;
@@ -139,7 +142,7 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
   background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
   min-width:100px;
 }
-.intro-meta-item .im-val{font-family:Playfair Display,serif;font-size:1.6rem;font-weight:700;color:var(--gold);}
+.intro-meta-item .im-val{font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--gold);}
 .intro-meta-item .im-lbl{font-size:.72rem;color:var(--muted);margin-top:.2rem;}
 .intro-rules{
   background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
@@ -156,7 +159,7 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
   animation:fadeIn .3s ease;
 }
 .q-number{
-  font-family:DM Mono,monospace;font-size:.7rem;letter-spacing:.15em;
+  font-family:var(--font-mono);font-size:.7rem;letter-spacing:.15em;
   text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;
   display:flex;align-items:center;gap:.5rem;
 }
@@ -166,7 +169,7 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
   font-size:.68rem;color:var(--muted);
 }
 .q-text{
-  font-family:Playfair Display,serif;font-size:1.2rem;line-height:1.5;
+  font-family:var(--font-display);font-size:1.2rem;line-height:1.5;
   margin-bottom:1.5rem;color:var(--white);
 }
 
@@ -185,7 +188,7 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
 .opt-letter{
   width:28px;height:28px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-family:DM Mono,monospace;font-size:.78rem;font-weight:700;
+  font-family:var(--font-mono);font-size:.78rem;font-weight:700;
   background:var(--navy2);border:1px solid var(--border);
   flex-shrink:0;transition:all .2s;color:var(--white);
 }
@@ -203,7 +206,7 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
 .explanation.correct-exp{background:#16803c22;border:1px solid #4ade8044;}
 .explanation.wrong-exp{background:#b92b1a22;border:1px solid #f8717144;}
 .exp-label{
-  font-family:DM Mono,monospace;font-size:.68rem;letter-spacing:.1em;
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;
   text-transform:uppercase;font-weight:600;margin-bottom:.4rem;display:block;
 }
 .correct-exp .exp-label{color:#4ade80;}
@@ -218,10 +221,10 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   margin:0 auto 1.5rem;border:4px solid;
 }
-.score-circle .sc-pct{font-family:Playfair Display,serif;font-size:2.4rem;font-weight:900;line-height:1;}
+.score-circle .sc-pct{font-family:var(--font-display);font-size:2.4rem;font-weight:800;line-height:1;}
 .score-circle .sc-lbl{font-size:.75rem;margin-top:.2rem;color:var(--white);}
 .results-grade{
-  font-family:Playfair Display,serif;font-size:1.4rem;font-weight:700;
+  font-family:var(--font-display);font-size:1.4rem;font-weight:700;
   margin-bottom:.3rem;
 }
 .results-sub{font-size:.88rem;color:var(--muted);}
@@ -234,7 +237,7 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
   background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
   padding:1rem;text-align:center;
 }
-.rb-card .rb-val{font-family:Playfair Display,serif;font-size:1.6rem;font-weight:700;}
+.rb-card .rb-val{font-family:var(--font-display);font-size:1.6rem;font-weight:700;}
 .rb-card .rb-lbl{font-size:.72rem;color:var(--muted);margin-top:.2rem;}
 
 .answer-review{margin-top:1.5rem;}
@@ -247,7 +250,7 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
 .ar-q{font-size:.88rem;margin-bottom:.3rem;color:var(--white);}
 .ar-ans{font-size:.8rem;color:var(--muted);}
 .ar-result{
-  font-family:DM Mono,monospace;font-size:.72rem;font-weight:600;
+  font-family:var(--font-mono);font-size:.72rem;font-weight:600;
   padding:.2rem .5rem;border-radius:3px;
 }
 .ar-correct{background:#16803c22;color:#4ade80;}
@@ -322,7 +325,7 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
   <!-- INTRO -->
   <div class="screen active" id="screen-intro">
     <div class="intro-hero fade-in">
-      <div style="font-family:DM Mono,monospace;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;">Ready to be tested?</div>
+      <div style="font-family:var(--font-mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;">Ready to be tested?</div>
       <h1 id="intro-title">Loading <span>Quiz</span>…</h1>
       <p id="intro-desc" style="color:var(--muted);max-width:500px;margin:.5rem auto 0;font-size:.95rem;"></p>
       <div class="intro-meta">
@@ -723,7 +726,7 @@ function showResults(cor, wrong, pct, passed, elapsed){
 
   // Answer review
   const rev=document.getElementById('answer-review');
-  rev.innerHTML='<h3 style="font-family:Playfair Display,serif;font-size:1.1rem;margin-bottom:1rem;">Question Review</h3>'+
+  rev.innerHTML='<h3 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:1rem;">Question Review</h3>'+
     questions.map((q,i)=>{
       const a=answers[i];
       const isC=a&&a.correct;

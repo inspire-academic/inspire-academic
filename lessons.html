@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Video Lessons — Inspire Academic</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+<style>
     :root {
       --navy:#0b1628; --navy2:#112240; --navy3:#1a3a5c;
       --gold:#c9a84c; --gold2:rgba(201,168,76,.12);
@@ -18,12 +19,12 @@
       --green:#10b981; --red:#ef4444;
     }
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;}
+    body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;}
 
     /* ── TOP NAV ── */
     .topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
     .topnav-logo{display:flex;align-items:center;gap:.6rem;}
-    .logo-text{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;}
+    .logo-text{font-family:var(--font-display);font-size:1.2rem;font-weight:700;}
     .logo-text .gold{color:var(--gold);}
     .nav-links{display:flex;gap:.3rem;flex:1;}
     .nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;border:none;transition:all .2s;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:.4rem;}
@@ -37,16 +38,16 @@
     /* ── SIDEBAR ── */
     .sidebar{width:300px;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;max-height:calc(100vh - 57px);position:sticky;top:57px;}
     .sidebar-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);}
-    .sidebar-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.75rem;}
+    .sidebar-title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:.75rem;}
     .subject-pills{display:flex;gap:.4rem;flex-wrap:wrap;}
-    .subject-pill{padding:.3rem .75rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+    .subject-pill{padding:.3rem .75rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--font-body);}
     .subject-pill:hover{border-color:var(--gold);color:var(--white);}
     .subject-pill.active{background:var(--gold);border-color:var(--gold);color:var(--navy);}
     .lesson-list{flex:1;overflow-y:auto;padding:.75rem 0;}
     .lesson-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.5rem;cursor:pointer;transition:all .15s;border-left:3px solid transparent;}
     .lesson-item:hover{background:var(--navy3);}
     .lesson-item.active{background:var(--navy3);border-left-color:var(--gold);}
-    .lesson-num{width:24px;height:24px;border-radius:50%;background:var(--navy3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--muted);flex-shrink:0;font-family:'DM Mono',monospace;}
+    .lesson-num{width:24px;height:24px;border-radius:50%;background:var(--navy3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--muted);flex-shrink:0;font-family:var(--font-mono);}
     .lesson-item.active .lesson-num{background:var(--gold);border-color:var(--gold);color:var(--navy);}
     .lesson-info{flex:1;min-width:0;}
     .lesson-name{font-size:.82rem;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -63,11 +64,11 @@
     .video-wrapper{position:relative;padding-bottom:56.25%;height:0;border-radius:var(--r);overflow:hidden;background:#000;display:none;}
     .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
     .video-meta{margin-top:1.5rem;}
-    .video-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.5rem;}
+    .video-title{font-family:var(--font-display);font-size:1.5rem;font-weight:700;margin-bottom:.5rem;}
     .video-subject-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;margin-bottom:1rem;}
     .video-description{color:var(--muted);font-size:.875rem;line-height:1.65;max-width:720px;}
     .video-actions{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap;}
-    .btn{padding:.55rem 1.1rem;border-radius:var(--r);font-size:.82rem;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s;display:flex;align-items:center;gap:.4rem;}
+    .btn{padding:.55rem 1.1rem;border-radius:var(--r);font-size:.82rem;font-weight:600;cursor:pointer;border:none;font-family:var(--font-body);transition:all .2s;display:flex;align-items:center;gap:.4rem;}
     .btn-gold{background:var(--gold);color:var(--navy);}
     .btn-gold:hover{background:#d4a843;}
     .btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
@@ -76,10 +77,10 @@
 
     /* ── NEXT/PREV ── */
     .nav-btns{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;border-top:1px solid var(--border);background:var(--navy2);}
-    .nav-btn{display:flex;align-items:center;gap:.5rem;padding:.55rem 1rem;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+    .nav-btn{display:flex;align-items:center;gap:.5rem;padding:.55rem 1rem;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--font-body);}
     .nav-btn:hover:not(:disabled){border-color:var(--gold);color:var(--white);}
     .nav-btn:disabled{opacity:.3;cursor:not-allowed;}
-    .lesson-counter{font-size:.8rem;color:var(--muted);font-family:'DM Mono',monospace;}
+    .lesson-counter{font-size:.8rem;color:var(--muted);font-family:var(--font-mono);}
 
     /* ── SUBJECT COLOURS ── */
     .chem{background:rgba(21,101,192,.15);color:#64b5f6;}

@@ -4,8 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Assessment — Inspire Science</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="assets/css/tokens.css">
 <style>
 :root {
   --navy:        #0b1628;
@@ -31,7 +34,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
   background: var(--navy);
   color: var(--text-primary);
   min-height: 100vh;
@@ -46,10 +49,10 @@ body {
   gap: 16px; z-index: 999;
 }
 .loading-logo {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 28px; font-weight: 700; color: var(--gold);
 }
-.loading-sub { font-size: 13px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
+.loading-sub { font-size: 13px; color: var(--text-muted); font-family:var(--font-mono); }
 .spinner {
   width: 32px; height: 32px;
   border: 2px solid var(--navy-border);
@@ -70,7 +73,7 @@ body {
   z-index: 100; backdrop-filter: blur(8px);
 }
 .topbar-logo {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 20px; font-weight: 700;
   color: var(--gold); text-decoration: none;
   letter-spacing: 0.02em;
@@ -78,7 +81,7 @@ body {
 .topbar-divider { width: 1px; height: 20px; background: var(--navy-border); }
 .topbar-title { font-size: 13px; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.04em; }
 .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 16px; }
-.topbar-student { font-size: 12px; color: var(--text-muted); font-family: 'DM Mono', monospace; }
+.topbar-student { font-size: 12px; color: var(--text-muted); font-family:var(--font-mono); }
 
 /* ── PROGRESS BAR ── */
 .progress-bar-wrap {
@@ -106,13 +109,13 @@ body {
 }
 .list-header { margin-bottom: 40px; }
 .list-eyebrow {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 11px; color: var(--gold);
   letter-spacing: 0.1em; text-transform: uppercase;
   margin-bottom: 8px;
 }
 .list-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 28px; font-weight: 700;
   color: var(--text-primary); margin-bottom: 8px;
 }
@@ -137,7 +140,7 @@ body {
   margin-bottom: 12px;
 }
 .assessment-card-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 18px; font-weight: 700;
   color: var(--text-primary); line-height: 1.3;
 }
@@ -145,7 +148,7 @@ body {
 
 .status-pill {
   display: inline-flex; align-items: center; gap: 5px;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 10px; font-weight: 600;
   letter-spacing: 0.08em; text-transform: uppercase;
   padding: 4px 12px; border-radius: 20px;
@@ -171,7 +174,7 @@ body {
   display: flex; gap: 16px; flex-wrap: wrap;
 }
 .meta-tag {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 11px; color: var(--text-muted);
   display: flex; align-items: center; gap: 5px;
 }
@@ -185,7 +188,7 @@ body {
 }
 .card-topics-count {
   font-size: 12px; color: var(--text-muted);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 .card-cta {
   font-size: 13px; font-weight: 600;
@@ -199,7 +202,7 @@ body {
 }
 .empty-icon { font-size: 48px; margin-bottom: 16px; }
 .empty-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 22px; color: var(--text-primary);
   margin-bottom: 8px;
 }
@@ -221,14 +224,14 @@ body {
   padding: 32px 24px; overflow-y: auto;
 }
 .attempt-side-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 16px; font-weight: 700;
   color: var(--text-primary); margin-bottom: 6px;
   line-height: 1.3;
 }
 .attempt-side-meta {
   font-size: 11px; color: var(--text-muted);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   margin-bottom: 24px; line-height: 1.8;
 }
 .side-section-title {
@@ -252,14 +255,14 @@ body {
 .topic-dot.unanswered { background: var(--navy-border); }
 .topic-name-side { flex: 1; line-height: 1.3; }
 .topic-q-count {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 10px; color: var(--text-muted);
 }
 
 .side-submit-wrap { margin-top: 24px; }
 .answered-summary {
   font-size: 12px; color: var(--text-muted);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   margin-bottom: 12px; text-align: center;
 }
 .answered-summary strong { color: var(--gold); }
@@ -268,7 +271,7 @@ body {
   width: 100%;
   background: var(--gold); border: none;
   color: var(--navy); padding: 12px;
-  border-radius: 8px; font-family: 'DM Sans', sans-serif;
+  border-radius: 8px; font-family:var(--font-body);
   font-size: 14px; font-weight: 700;
   cursor: pointer; transition: all var(--transition);
   letter-spacing: 0.02em;
@@ -285,13 +288,13 @@ body {
 
 .attempt-header { margin-bottom: 40px; }
 .attempt-eyebrow {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 11px; color: var(--gold);
   letter-spacing: 0.1em; text-transform: uppercase;
   margin-bottom: 8px;
 }
 .attempt-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 26px; font-weight: 700;
   color: var(--text-primary); margin-bottom: 8px;
 }
@@ -309,11 +312,11 @@ body {
 .topic-section-label {
   font-size: 11px; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--gold); font-family: 'DM Mono', monospace;
+  color: var(--gold); font-family:var(--font-mono);
 }
 .topic-section-marks {
   font-size: 11px; color: var(--text-muted);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   margin-left: auto;
 }
 
@@ -336,7 +339,7 @@ body {
   background: var(--navy-light);
   border: 1px solid var(--navy-border);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'DM Mono', monospace; font-size: 11px;
+  font-family:var(--font-mono); font-size: 11px;
   color: var(--text-muted); flex-shrink: 0;
   transition: all var(--transition);
 }
@@ -346,7 +349,7 @@ body {
   color: var(--gold);
 }
 .question-marks {
-  margin-left: auto; font-family: 'DM Mono', monospace;
+  margin-left: auto; font-family:var(--font-mono);
   font-size: 11px; color: var(--text-muted);
   flex-shrink: 0;
 }
@@ -372,7 +375,7 @@ body {
   width: 24px; height: 24px; border-radius: 50%;
   border: 1.5px solid var(--navy-border);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'DM Mono', monospace; font-size: 11px;
+  font-family:var(--font-mono); font-size: 11px;
   color: var(--text-muted); flex-shrink: 0;
   transition: all var(--transition);
 }
@@ -390,7 +393,7 @@ body {
   border: 1.5px solid var(--navy-border);
   border-radius: 8px;
   color: var(--text-primary);
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
   font-size: 14px; line-height: 1.7;
   padding: 14px 16px;
   resize: vertical; min-height: 100px;
@@ -404,7 +407,7 @@ body {
 .answer-textarea::placeholder { color: var(--text-muted); }
 .char-hint {
   font-size: 11px; color: var(--text-muted);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   margin-top: 6px; text-align: right;
 }
 
@@ -415,7 +418,7 @@ body {
   border: 1.5px solid var(--navy-border);
   border-radius: 8px;
   color: var(--text-primary);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 16px; padding: 12px 16px;
   outline: none;
   transition: border-color var(--transition), box-shadow var(--transition);
@@ -432,7 +435,7 @@ body {
 }
 .not-ready-icon { font-size: 48px; margin-bottom: 20px; }
 .not-ready-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 24px; font-weight: 700;
   color: var(--text-primary); margin-bottom: 12px;
 }
@@ -451,7 +454,7 @@ body {
   border-bottom: 1px solid var(--navy-border);
   font-size: 10px; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--gold); font-family: 'DM Mono', monospace;
+  color: var(--gold); font-family:var(--font-mono);
 }
 .blueprint-preview-row {
   display: flex; align-items: center;
@@ -461,7 +464,7 @@ body {
 }
 .blueprint-preview-row:last-child { border-bottom: none; }
 .bp-topic { flex: 1; color: var(--text-primary); }
-.bp-marks { font-family: 'DM Mono', monospace; color: var(--gold); }
+.bp-marks { font-family:var(--font-mono); color: var(--gold); }
 
 /* ══════════════════════════════════════
    VIEW 3: RESULTS
@@ -479,7 +482,7 @@ body {
   font-size: 32px; margin: 0 auto 20px;
 }
 .results-title {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 30px; font-weight: 700;
   color: var(--text-primary); margin-bottom: 8px;
 }
@@ -499,10 +502,10 @@ body {
   font-size: 10px; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text-muted); margin-bottom: 8px;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 .score-card-value {
-  font-family: 'Playfair Display', serif;
+  font-family:var(--font-display);
   font-size: 36px; font-weight: 700;
   color: var(--gold); line-height: 1;
 }
@@ -513,7 +516,7 @@ body {
 .feedback-section-title {
   font-size: 11px; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--gold); font-family: 'DM Mono', monospace;
+  color: var(--gold); font-family:var(--font-mono);
   margin-bottom: 16px; padding-bottom: 8px;
   border-bottom: 1px solid var(--navy-border);
 }
@@ -528,13 +531,13 @@ body {
   gap: 12px; margin-bottom: 12px;
 }
 .feedback-q-num {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 11px; color: var(--text-muted);
   flex-shrink: 0; padding-top: 2px;
 }
 .feedback-q-text { font-size: 14px; color: var(--text-primary); flex: 1; line-height: 1.6; }
 .feedback-marks {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: 12px; flex-shrink: 0;
 }
 .marks-auto { color: var(--success); }
@@ -548,7 +551,7 @@ body {
   font-size: 10px; font-weight: 600;
   letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--text-muted); min-width: 80px;
-  font-family: 'DM Mono', monospace; padding-top: 2px;
+  font-family:var(--font-mono); padding-top: 2px;
 }
 .feedback-answer-val { color: var(--text-secondary); line-height: 1.5; }
 .feedback-answer-val.correct { color: var(--success); }
@@ -563,7 +566,7 @@ body {
   border: 1px solid var(--navy-border);
   color: var(--text-secondary);
   padding: 12px 24px; border-radius: 8px;
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
   font-size: 14px; font-weight: 500;
   cursor: pointer; transition: all var(--transition);
 }
@@ -571,7 +574,7 @@ body {
 .btn-primary {
   background: var(--gold); border: none;
   color: var(--navy); padding: 12px 28px;
-  border-radius: 8px; font-family: 'DM Sans', sans-serif;
+  border-radius: 8px; font-family:var(--font-body);
   font-size: 14px; font-weight: 700;
   cursor: pointer; transition: all var(--transition);
 }
@@ -621,7 +624,7 @@ body {
   <span class="topbar-title" id="topbar-context">Assessments</span>
   <div class="topbar-right">
     <span class="topbar-student" id="topbar-student"></span>
-    <a href="/dashboard.html" style="font-size:13px;color:var(--text-muted);text-decoration:none;font-family:'DM Mono',monospace;">← Dashboard</a>
+    <a href="/dashboard.html" style="font-size:13px;color:var(--text-muted);text-decoration:none;font-family:var(--font-mono);">← Dashboard</a>
   </div>
 </header>
 

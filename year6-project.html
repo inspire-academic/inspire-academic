@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Project Workspace — Inspire Academic</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="assets/css/tokens.css">
 <style>
 :root{
   --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
@@ -17,10 +20,10 @@
   --r:6px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
+body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:'DM Sans',sans-serif;}
-input,select,textarea{font-family:'DM Sans',sans-serif;}
+button{cursor:pointer;font-family:var(--font-body);}
+input,select,textarea{font-family:var(--font-body);}
 
 ::-webkit-scrollbar{width:6px;}
 ::-webkit-scrollbar-track{background:var(--navy2);}
@@ -35,9 +38,9 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 .topnav-back{background:none;border:1px solid var(--border);color:var(--muted);
   padding:.4rem .8rem;border-radius:var(--r);font-size:.85rem;transition:all .2s;}
 .topnav-back:hover{border-color:var(--gold);color:var(--gold);}
-.topnav-title{flex:1;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;}
+.topnav-title{flex:1;font-family:var(--font-display);font-size:1rem;font-weight:700;}
 .topnav-title span{color:var(--gold);}
-.topnav-status{font-size:.75rem;font-family:'DM Mono',monospace;text-transform:uppercase;
+.topnav-status{font-size:.75rem;font-family:var(--font-mono);text-transform:uppercase;
   letter-spacing:.08em;padding:.3rem .6rem;border-radius:4px;background:rgba(212,160,23,.15);
   color:var(--gold);border:1px solid rgba(212,160,23,.3);}
 .topnav-status.saved{background:rgba(22,128,60,.15);color:#4ade80;border-color:rgba(22,128,60,.3);}
@@ -88,7 +91,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 .form-section.active{display:block;animation:fadeIn .3s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-.section-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.5rem;}
+.section-title{font-family:var(--font-display);font-size:1.5rem;font-weight:700;margin-bottom:.5rem;}
 .section-subtitle{font-size:.9rem;color:var(--muted);margin-bottom:2rem;line-height:1.6;}
 
 .field{margin-bottom:1.5rem;}

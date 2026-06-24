@@ -4,8 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inspire Science — Teacher Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="assets/css/tokens.css">
 <style>
 :root {
   --navy:   #0B1D3A;
@@ -26,7 +29,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
   background: var(--navy);
   color: var(--white);
   min-height: 100vh;
@@ -64,9 +67,9 @@ body {
   border-bottom: 1px solid var(--border);
   margin-bottom: 1rem;
 }
-.sidebar-logo .inspire { font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.1rem; }
+.sidebar-logo .inspire { font-family:var(--font-display); font-style: italic; color: var(--gold); font-size: 1.1rem; }
 .sidebar-logo .science { font-weight: 700; font-size: 1.1rem; color: var(--white); }
-.sidebar-logo .badge { font-family: 'DM Mono', monospace; font-size: .6rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: .2rem; }
+.sidebar-logo .badge { font-family:var(--font-mono); font-size: .6rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: .2rem; }
 
 .nav-item {
   display: flex; align-items: center; gap: .75rem;
@@ -152,9 +155,9 @@ body {
   display: flex; align-items: flex-start; justify-content: space-between;
   margin-bottom: 2rem;
 }
-.page-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; }
+.page-title { font-family:var(--font-display); font-size: 1.8rem; }
 .page-sub { color: var(--muted); font-size: .9rem; margin-top: .3rem; }
-.last-refresh { font-family: 'DM Mono', monospace; font-size: .72rem; color: var(--muted); margin-top: .25rem; }
+.last-refresh { font-family:var(--font-mono); font-size: .72rem; color: var(--muted); margin-top: .25rem; }
 
 .refresh-btn {
   background: transparent; border: 1px solid var(--border);
@@ -175,7 +178,7 @@ body {
   border-radius: var(--r); padding: 1.25rem 1.5rem;
 }
 .stat-label { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-.stat-value { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin: .3rem 0 .1rem; line-height: 1; }
+.stat-value { font-family:var(--font-display); font-size: 2.2rem; color: var(--gold); margin: .3rem 0 .1rem; line-height: 1; }
 .stat-sub { font-size: .8rem; color: var(--muted); }
 
 /* ── Table ── */
@@ -189,7 +192,7 @@ body {
   display: flex; align-items: center; justify-content: space-between;
 }
 .table-title { font-weight: 600; font-size: .95rem; }
-.table-count { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--muted); }
+.table-count { font-family:var(--font-mono); font-size: .75rem; color: var(--muted); }
 
 table { width: 100%; border-collapse: collapse; }
 th {
@@ -218,7 +221,7 @@ tr:hover td { background: rgba(255,255,255,.025); }
 /* ── Mastery % pill ── */
 .pct-pill {
   display: inline-block; padding: .2rem .6rem; border-radius: 20px;
-  font-family: 'DM Mono', monospace; font-size: .78rem; font-weight: 500;
+  font-family:var(--font-mono); font-size: .78rem; font-weight: 500;
 }
 .pct-high  { background: rgba(46,204,113,.15); color: var(--green); }
 .pct-mid   { background: rgba(243,156,18,.15);  color: var(--amber); }
@@ -257,10 +260,10 @@ tr:hover td { background: rgba(255,255,255,.025); }
 /* ── Card difficulty list ── */
 .diff-row { display: flex; align-items: center; gap: 1rem; padding: .9rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,.04); }
 .diff-row:last-child { border-bottom: none; }
-.diff-rank { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--muted); width: 24px; flex-shrink: 0; }
+.diff-rank { font-family:var(--font-mono); font-size: .75rem; color: var(--muted); width: 24px; flex-shrink: 0; }
 .diff-card-id { flex: 1; font-size: .82rem; }
 .diff-card-id .card-path { color: var(--muted); font-size: .72rem; margin-top: .1rem; }
-.diff-ef { font-family: 'DM Mono', monospace; font-size: .82rem; text-align: right; }
+.diff-ef { font-family:var(--font-mono); font-size: .82rem; text-align: right; }
 .diff-students { font-size: .78rem; color: var(--muted); text-align: right; min-width: 60px; }
 .ef-bar { height: 4px; border-radius: 2px; margin-top: .3rem; }
 
@@ -284,7 +287,7 @@ tr:hover td { background: rgba(255,255,255,.025); }
 .subject-section { margin-bottom: 2rem; }
 .subject-label {
   font-size: .7rem; text-transform: uppercase; letter-spacing: .1em;
-  color: var(--gold); font-family: 'DM Mono', monospace;
+  color: var(--gold); font-family:var(--font-mono);
   margin-bottom: .75rem; padding-bottom: .5rem;
   border-bottom: 1px solid var(--border);
 }
@@ -911,9 +914,9 @@ function renderOverview() {
       <td><strong>${escHtml(s.name)}</strong></td>
       <td style="color:var(--muted)">${escHtml(String(s.year))}</td>
       <td><span class="activity-dot ${dotClass}"></span>${activityText}</td>
-      <td style="font-family:'DM Mono',monospace">${s.streak > 0 ? '🔥 ' + s.streak : '—'}</td>
-      <td style="font-family:'DM Mono',monospace">${s.totalAttempts.toLocaleString()}</td>
-      <td style="font-family:'DM Mono',monospace">${avgLabel}</td>
+      <td style="font-family:var(--font-mono)">${s.streak > 0 ? '🔥 ' + s.streak : '—'}</td>
+      <td style="font-family:var(--font-mono)">${s.totalAttempts.toLocaleString()}</td>
+      <td style="font-family:var(--font-mono)">${avgLabel}</td>
       <td style="min-width:120px">${barSegs}</td>
       <td><span class="pct-pill ${pctClass}">${pctLabel}</span></td>
     </tr>`;
@@ -1109,9 +1112,9 @@ function renderStudentDetail(s) {
                   : '—';
                 return `<tr>
                   <td><strong>${escHtml(t.topicTitle)}</strong></td>
-                  <td style="font-family:'DM Mono',monospace;color:var(--muted)">${t.attempts_count || 0}</td>
-                  <td style="font-family:'DM Mono',monospace;color:var(--green)">${best}</td>
-                  <td style="font-family:'DM Mono',monospace;color:var(--muted)">${latest}</td>
+                  <td style="font-family:var(--font-mono);color:var(--muted)">${t.attempts_count || 0}</td>
+                  <td style="font-family:var(--font-mono);color:var(--green)">${best}</td>
+                  <td style="font-family:var(--font-mono);color:var(--muted)">${latest}</td>
                   <td><span style="color:${mlColor};font-size:.82rem;text-transform:capitalize">${ml}</span></td>
                   <td style="color:var(--muted);font-size:.82rem">${lastAtt}</td>
                 </tr>`;
@@ -1143,8 +1146,8 @@ function renderStudentDetail(s) {
                            new Date(a.completed_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
               return `<tr>
                 <td>${escHtml(quiz.title || 'Quiz ' + a.quiz_id)}</td>
-                <td style="font-family:'DM Mono',monospace;color:var(--muted)">${a.score}/${a.max_score}</td>
-                <td style="font-family:'DM Mono',monospace;color:${pctColor}">${pct !== null ? pct + '%' : '—'}</td>
+                <td style="font-family:var(--font-mono);color:var(--muted)">${a.score}/${a.max_score}</td>
+                <td style="font-family:var(--font-mono);color:${pctColor}">${pct !== null ? pct + '%' : '—'}</td>
                 <td><span style="color:${a.passed ? 'var(--green)' : 'var(--red)'};font-size:.82rem">${a.passed ? '✓ Pass' : '✗ Fail'}</span></td>
                 <td style="color:var(--muted);font-size:.82rem">${date}</td>
               </tr>`;
@@ -1271,7 +1274,7 @@ async function openSubmissions(assessmentId) {
         return `<tr style="border-top:1px solid rgba(255,255,255,0.05);">
           <td style="padding:.5rem .6rem;"><strong>${escHtml(name)}</strong><br><span style="color:var(--muted);font-size:.72rem;">${year}</span></td>
           <td style="padding:.5rem .6rem;color:${statusColor};">${att.status}</td>
-          <td style="padding:.5rem .6rem;font-family:'DM Mono',monospace;">${pct}</td>
+          <td style="padding:.5rem .6rem;font-family:var(--font-mono);">${pct}</td>
           <td style="padding:.5rem .6rem;color:var(--muted);">${submitted}</td>
           <td style="padding:.5rem .6rem;">${released}</td>
           <td style="padding:.5rem .6rem;">
@@ -1528,7 +1531,7 @@ function renderUsers() {
     const colors = { admin: '#9B59B6', teacher: 'var(--gold)', student: 'var(--blue)' };
     return `<span style="
       display:inline-block;padding:.18rem .6rem;border-radius:20px;
-      font-family:'DM Mono',monospace;font-size:.72rem;
+      font-family:var(--font-mono);font-size:.72rem;
       background:${colors[r]||'var(--muted)'}22;
       color:${colors[r]||'var(--muted)'};border:1px solid ${colors[r]||'var(--muted)'}44
     ">${r||'—'}</span>`;
@@ -1537,7 +1540,7 @@ function renderUsers() {
   tbody.innerHTML = _allUsers.map(u => `
     <tr>
       <td><strong>${escHtml(u.name)}</strong></td>
-      <td style="color:var(--muted);font-family:'DM Mono',monospace;font-size:.8rem">${escHtml(u.email)}</td>
+      <td style="color:var(--muted);font-family:var(--font-mono);font-size:.8rem">${escHtml(u.email)}</td>
       <td style="color:var(--muted)">${escHtml(String(u.year))}</td>
       <td style="color:var(--muted);font-size:.82rem">${u.joined || '—'}</td>
       <td>${roleBadge(u.role)}</td>
@@ -1591,7 +1594,7 @@ async function changeRole(userId, newRole, selectEl) {
   const cells = row.querySelectorAll('td');
   const roleBadge = r => {
     const colors = { admin: '#9B59B6', teacher: 'var(--gold)', student: 'var(--blue)' };
-    return `<span style="display:inline-block;padding:.18rem .6rem;border-radius:20px;font-family:'DM Mono',monospace;font-size:.72rem;background:${colors[r]||'var(--muted)'}22;color:${colors[r]||'var(--muted)'};border:1px solid ${colors[r]||'var(--muted)'}44">${r}</span>`;
+    return `<span style="display:inline-block;padding:.18rem .6rem;border-radius:20px;font-family:var(--font-mono);font-size:.72rem;background:${colors[r]||'var(--muted)'}22;color:${colors[r]||'var(--muted)'};border:1px solid ${colors[r]||'var(--muted)'}44">${r}</span>`;
   };
   cells[cells.length - 2].innerHTML = roleBadge(newRole);
 }

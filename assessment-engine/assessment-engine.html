@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Assessment Center — Inspire Academic</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
 <style>
 :root{
   --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
@@ -18,10 +21,10 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{overflow-x:hidden;}
-body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
+body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;}
-input,select,textarea{font-family:'DM Sans',sans-serif;}
+button{cursor:pointer;font-family:var(--font-body);border:none;}
+input,select,textarea{font-family:var(--font-body);}
 
 ::-webkit-scrollbar{width:6px;}
 ::-webkit-scrollbar-track{background:var(--navy2);}
@@ -30,8 +33,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 .gold{color:var(--gold);}
 .teal{color:var(--teal);}
 .muted{color:var(--muted);}
-.serif{font-family:'Playfair Display',serif;}
-.mono{font-family:'DM Mono',monospace;}
+.serif{font-family:var(--font-display);}
+.mono{font-family:var(--font-mono);}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:var(--r);font-size:.9rem;font-weight:600;transition:all .2s;cursor:pointer;border:none;}
@@ -47,7 +50,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 .card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;}
 
 /* Badges */
-.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
 .badge-gold{background:#d4a01722;color:var(--gold);}
 .badge-green{background:#16803c22;color:#4ade80;}
 .badge-red{background:#b92b1a22;color:#f87171;}
@@ -74,8 +77,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 /* Top nav */
 .topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .topnav-logo{display:flex;align-items:center;gap:.75rem;}
-.logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:var(--navy);}
-.topnav-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--gold);}
+.logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--navy);}
+.topnav-title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--gold);}
 .topnav-sub{font-size:.75rem;color:var(--muted);}
 
 /* Pipeline */
@@ -123,7 +126,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 /* Grade journey */
 .grade-row{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:.5rem;margin-bottom:2rem;}
 .grade-box{text-align:center;padding:1rem;background:var(--navy);border-radius:var(--r);border:1px solid var(--border);}
-.grade-val{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--teal);}
+.grade-val{font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:var(--teal);}
 .grade-wk{font-size:.75rem;color:var(--muted);text-transform:uppercase;}
 .grade-desc{font-size:.8rem;color:var(--white);margin-top:.25rem;}
 .grade-arrow{color:var(--gold);font-size:1.2rem;text-align:center;}
@@ -141,7 +144,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 .task-mins{font-size:.75rem;color:var(--muted);}
 
 /* Cost badge */
-#cost-badge{position:fixed;bottom:1.5rem;left:1.5rem;background:var(--navy2);border:1px solid var(--border);padding:.6rem 1rem;border-radius:var(--r);font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;z-index:100;font-family:'DM Mono',monospace;}
+#cost-badge{position:fixed;bottom:1.5rem;left:1.5rem;background:var(--navy2);border:1px solid var(--border);padding:.6rem 1rem;border-radius:var(--r);font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;z-index:100;font-family:var(--font-mono);}
 #cost-badge:hover{border-color:var(--gold);}
 #cost-panel{display:none;position:fixed;bottom:4.5rem;left:1.5rem;background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;max-width:380px;z-index:101;font-size:.8rem;}
 #cost-panel.open{display:block;}
@@ -151,7 +154,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 .section.active{display:block;animation:fadeIn .35s ease;}
 
 /* Score display */
-.score-big{font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;line-height:1;}
+.score-big{font-family:var(--font-display);font-size:4rem;font-weight:800;line-height:1;}
 
 /* Responsive */
 @media(max-width:600px){
@@ -170,7 +173,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif;}
 .mcq-option.correct{border-color:#4ade80;background:rgba(74,222,128,.1);}
 .mcq-option.wrong{border-color:#f87171;background:rgba(248,113,113,.1);}
 .mcq-option.not-sure{border-color:var(--muted);background:rgba(122,143,166,.08);font-style:italic;}
-.opt-label{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:.1rem;font-family:'DM Mono',monospace;}
+.opt-label{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:.1rem;font-family:var(--font-mono);}
 .mcq-option.selected .opt-label{background:var(--teal);border-color:var(--teal);color:var(--navy);}
 .mcq-option.not-sure .opt-label{border-color:var(--muted);}
 .opt-text{font-size:.9rem;line-height:1.5;}
@@ -752,7 +755,7 @@ function renderDiagnosis() {
 
   let html = `
     <div class="card" style="text-align:center;margin-bottom:1.25rem;">
-      <div style="font-size:3.5rem;font-weight:900;color:${scColor};font-family:'Playfair Display',serif;line-height:1;">${sc}%</div>
+      <div style="font-size:3.5rem;font-weight:800;color:${scColor};font-family:var(--font-display);line-height:1;">${sc}%</div>
       <div style="margin-top:.5rem;font-size:1rem;">
         Current grade: <strong>${d.currentGrade}</strong> &nbsp;→&nbsp;
         Target: <strong style="color:var(--teal);">${d.targetGrade}</strong>

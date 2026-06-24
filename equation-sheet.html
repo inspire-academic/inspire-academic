@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Equation Sheet — Inspire Science</title>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
 <style>
 :root {
   --bg:     #f8f6f0;
@@ -25,7 +26,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -55,13 +56,13 @@ body::before {
 }
 .header-title {
   font-size: .85rem; color: rgba(255,255,255,.6);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 .header-right { margin-left: auto; display: flex; gap: .5rem; align-items: center; }
 .board-pill {
   padding: .25rem .7rem; border-radius: 3px;
   font-size: .68rem; font-weight: 700;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   letter-spacing: .08em; text-transform: uppercase;
   cursor: pointer; transition: all .15s;
   border: 1px solid;
@@ -90,7 +91,7 @@ body::before {
   border: 1px solid var(--border);
   border-radius: var(--r);
   color: var(--text);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: .82rem;
   padding: .45rem .9rem .45rem 2.2rem;
   outline: none; transition: border-color .15s;
@@ -108,7 +109,7 @@ body::before {
   border: 1px solid var(--border);
   background: none; color: var(--muted);
   cursor: pointer; transition: all .15s;
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
 }
 .stab:hover { border-color: var(--gold); color: var(--gold); }
 .stab.active { background: var(--navy); color: #fff; border-color: var(--navy); }
@@ -122,14 +123,14 @@ body::before {
   font-size: .72rem; font-weight: 700;
   border: none; background: none;
   color: var(--muted); cursor: pointer;
-  transition: all .15s; font-family: 'DM Mono', monospace;
+  transition: all .15s; font-family:var(--font-mono);
 }
 .ttab.active { background: var(--gold); color: #fff; }
 
 /* Count badge */
 .eq-count {
   font-size: .72rem; color: var(--muted);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   margin-left: auto; white-space: nowrap;
 }
 
@@ -152,7 +153,7 @@ body::before {
   letter-spacing: .12em; text-transform: uppercase;
   color: var(--muted); margin-bottom: .5rem;
   padding-bottom: .3rem; border-bottom: 1px solid var(--border);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 .sidebar-link {
   display: flex; align-items: center; gap: .5rem;
@@ -161,13 +162,13 @@ body::before {
   cursor: pointer; transition: all .12s;
   border: none; background: none;
   width: 100%; text-align: left;
-  font-family: 'DM Sans', sans-serif;
+  font-family:var(--font-body);
 }
 .sidebar-link:hover { background: var(--bg); color: var(--text); }
 .sidebar-link.active { background: rgba(201,133,58,.12); color: var(--gold); font-weight: 600; }
 .sidebar-count {
   margin-left: auto; font-size: .65rem;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   background: var(--bg); border-radius: 3px;
   padding: .05rem .3rem; color: var(--muted);
 }
@@ -189,7 +190,7 @@ body::before {
 }
 .section-count {
   font-size: .72rem; color: var(--muted);
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   margin-left: auto;
 }
 
@@ -222,7 +223,7 @@ body::before {
 .eq-badge {
   font-size: .6rem; font-weight: 700;
   padding: .1rem .45rem; border-radius: 3px;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   letter-spacing: .05em; text-transform: uppercase;
 }
 .badge-gcse    { background: rgba(26,122,110,.12); color: var(--teal); border: 1px solid rgba(26,122,110,.25); }
@@ -236,7 +237,7 @@ body::before {
   font-size: .72rem; color: var(--muted);
   background: none; border: none; cursor: pointer;
   padding: .2rem .4rem; border-radius: 4px;
-  transition: all .12s; font-family: 'DM Mono', monospace;
+  transition: all .12s; font-family:var(--font-mono);
 }
 .eq-expand-btn:hover { background: var(--bg); color: var(--text); }
 
@@ -259,7 +260,7 @@ body::before {
   color: rgba(255,255,255,.5); border-radius: 4px;
   padding: .2rem .5rem; font-size: .65rem;
   cursor: pointer; transition: all .12s;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 .eq-copy-btn:hover { border-color: var(--gold2); color: var(--gold2); }
 
@@ -282,7 +283,7 @@ body::before {
 }
 .ev-name { color: var(--text); font-weight: 500; }
 .ev-unit {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   font-size: .72rem; color: var(--muted);
   background: var(--bg); padding: .05rem .35rem;
   border-radius: 3px; border: 1px solid var(--border);
@@ -311,12 +312,12 @@ body::before {
   font-size: .7rem; font-weight: 700;
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--gold); margin-bottom: .4rem;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 .we-steps { font-size: .8rem; line-height: 1.8; color: var(--text); }
 .we-step { display: flex; gap: .5rem; }
 .we-num {
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
   color: var(--gold); min-width: 18px; font-size: .75rem;
 }
 .we-math {
@@ -332,7 +333,7 @@ body::before {
   padding: .7rem 1.4rem; font-size: .82rem;
   font-weight: 600; cursor: pointer; z-index: 200;
   box-shadow: 0 4px 16px rgba(0,0,0,.2);
-  transition: all .15s; font-family: 'DM Sans', sans-serif;
+  transition: all .15s; font-family:var(--font-body);
   display: flex; align-items: center; gap: .5rem;
 }
 .print-btn:hover { background: var(--gold); color: var(--navy); transform: translateY(-2px); }
@@ -352,7 +353,7 @@ body::before {
   color: #fff; padding: .5rem 1.2rem; border-radius: var(--r);
   font-size: .82rem; z-index: 9999; opacity: 0;
   transition: all .3s; white-space: nowrap;
-  font-family: 'DM Mono', monospace;
+  font-family:var(--font-mono);
 }
 #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 

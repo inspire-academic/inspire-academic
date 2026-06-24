@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Parent Dashboard - Inspire Academic</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <style>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+<style>
     :root {
       --navy: #0b1628;
       --gold: #c9a84c;
@@ -19,7 +20,7 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family:var(--font-body);
       background: var(--bg);
       color: var(--navy);
       min-height: 100vh;
@@ -37,7 +38,7 @@
     }
     
     .logo {
-      font-family: 'Playfair Display', serif;
+      font-family:var(--font-display);
       font-size: 1.5rem;
       font-weight: 700;
     }
@@ -61,7 +62,7 @@
       padding: .5rem 1rem;
       border-radius: 6px;
       cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
+      font-family:var(--font-body);
       font-size: .9rem;
       transition: all .2s;
     }
@@ -78,7 +79,7 @@
     }
     
     .page-title {
-      font-family: 'Playfair Display', serif;
+      font-family:var(--font-display);
       font-size: 2rem;
       margin-bottom: .5rem;
     }
@@ -180,7 +181,7 @@
       color: white;
       border: none;
       border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
+      font-family:var(--font-body);
       font-weight: 600;
       cursor: pointer;
       margin-top: 1rem;

@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Progress Report - Inspire Academic</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <style>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+<style>
     :root {
       --navy: #0b1628;
       --gold: #c9a84c;
@@ -26,7 +27,7 @@
     * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family:var(--font-body);
       background: var(--bg);
       color: var(--navy);
       min-height: 100vh;
@@ -56,7 +57,7 @@
       padding: .45rem .9rem;
       border-radius: 6px;
       cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
+      font-family:var(--font-body);
       font-size: .875rem;
       text-decoration: none;
       transition: background .2s;
@@ -64,7 +65,7 @@
     .back-btn:hover { background: rgba(255,255,255,.18); }
 
     .logo {
-      font-family: 'Playfair Display', serif;
+      font-family:var(--font-display);
       font-size: 1.35rem;
       font-weight: 700;
     }
@@ -77,7 +78,7 @@
       padding: .45rem .9rem;
       border-radius: 6px;
       cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
+      font-family:var(--font-body);
       font-size: .875rem;
       transition: background .2s;
     }
@@ -118,7 +119,7 @@
       font-weight: 600;
     }
     .student-name {
-      font-family: 'Playfair Display', serif;
+      font-family:var(--font-display);
       font-size: 2.25rem;
       font-weight: 700;
       margin-bottom: .5rem;
@@ -145,7 +146,7 @@
       text-align: center;
     }
     .hero-stat-value {
-      font-family: 'Playfair Display', serif;
+      font-family:var(--font-display);
       font-size: 2rem;
       font-weight: 700;
       color: var(--gold);
@@ -182,7 +183,7 @@
       flex-shrink: 0;
     }
     .section-title {
-      font-family: 'Playfair Display', serif;
+      font-family:var(--font-display);
       font-size: 1.2rem;
       font-weight: 700;
     }
@@ -205,7 +206,7 @@
     .summary-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.08); }
     .summary-card-icon { font-size: 1.5rem; margin-bottom: .75rem; }
     .summary-card-value {
-      font-family: 'Playfair Display', serif;
+      font-family:var(--font-display);
       font-size: 1.75rem;
       font-weight: 700;
       color: var(--navy);
