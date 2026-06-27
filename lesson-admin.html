@@ -382,8 +382,8 @@ async function init(){
   const user = session?.user;
 
   if(!user){
-    // Session genuinely absent — send to login
-    window.location.href = 'index.html'; return;
+    // Session genuinely absent — send to login, then come back here
+    window.location.href = 'index.html?next=lesson-admin.html'; return;
   }
 
   if(user.email.trim().toLowerCase() !== ADMIN_EMAIL.toLowerCase()){
