@@ -680,6 +680,7 @@ async function generateReport(){
   }
   
   const activeSections = projectSections[submission.project_id] || project1Sections;
+  const meta = projectMeta[submission.project_id] || {};
 
   // Generate report HTML
   const reportHTML = `
@@ -711,20 +712,15 @@ async function generateReport(){
       </h3>
       
       <p style="font-size:1rem;line-height:1.7;color:#1a1a1a;margin-bottom:2rem;">
-        ${project.description}
+        ${meta.subtitle || project.description}
       </p>
-      
+
       <div style="background:#f7f6f2;padding:1.5rem;border-radius:8px;border-left:3px solid #d4a017;">
         <h4 style="font-size:.9rem;font-weight:600;color:#7a8fa6;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;">
           Learning Objectives
         </h4>
         <ul style="margin:0;padding-left:1.5rem;line-height:1.8;color:#1a1a1a;">
-          <li>Ask scientific questions</li>
-          <li>Plan and carry out a fair test</li>
-          <li>Identify variables</li>
-          <li>Record and analyse data</li>
-          <li>Draw and interpret graphs</li>
-          <li>Explain conclusions using evidence</li>
+          ${(meta.objectives || []).map(obj => `<li>${obj}</li>`).join('')}
         </ul>
       </div>
       

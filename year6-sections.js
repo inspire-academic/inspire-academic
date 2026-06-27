@@ -732,3 +732,30 @@ const projectSections = {
   1: project1Sections,
   4: project2Sections
 };
+
+const projectMeta = {
+  1: {
+    title: 'The Great Science Investigator',
+    subtitle: 'Learning how science works',
+    objectives: [
+      'Ask scientific questions',
+      'Plan and carry out a fair test',
+      'Identify variables',
+      'Record and analyse data',
+      'Draw and interpret graphs',
+      'Explain conclusions using evidence'
+    ]
+  },
+  4: {
+    title: 'Kitchen Chemistry: Matter, Mixtures & Change',
+    subtitle: 'Exploring particles, materials, and how substances change',
+    objectives: [
+      'Explain what matter is made of using particle theory',
+      'Describe the properties of solids, liquids, and gases',
+      'Identify and separate mixtures using scientific methods',
+      'Distinguish between physical and chemical changes',
+      'Observe and record evidence of chemical reactions',
+      'Use scientific vocabulary to explain what you observe'
+    ]
+  }
+};
