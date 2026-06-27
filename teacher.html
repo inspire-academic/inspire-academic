@@ -662,6 +662,22 @@ async function init() {
       document.getElementById('nav-teacher-mgmt').style.display = 'flex';
     }
 
+    if (session.user.email.trim().toLowerCase() === 'inspire.science.uk@gmail.com') {
+      const sidebar = document.querySelector('nav.sidebar');
+      const footer  = sidebar.querySelector('.sidebar-footer');
+
+      const divider = document.createElement('div');
+      divider.style.cssText = 'height:1px;background:var(--border);margin:.5rem 0;';
+
+      const link = document.createElement('a');
+      link.href = 'lesson-admin.html';
+      link.style.cssText = 'text-decoration:none;color:inherit;';
+      link.innerHTML = '<div class="nav-item" style="border-left-color:var(--gold);color:var(--gold);"><span class="icon">⚡</span><span>Lesson Admin</span></div>';
+
+      sidebar.insertBefore(divider, footer);
+      sidebar.insertBefore(link, footer);
+    }
+
     try { await loadAll(); } catch(e) { console.error('[Teacher] loadAll error:', e); }
     try {
       if (profile.role === 'admin' || profile.role === 'super_admin') await loadUsers();
