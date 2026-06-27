@@ -1401,7 +1401,7 @@ async function submitProject(){
   }
   
   // Render form
-  activeSections = projectSections[currentProject.id] || project1Sections;
+  activeSections = projectSections[projectId] || project1Sections;
   renderSections(activeSections);
   
   // Populate with existing data
