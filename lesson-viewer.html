@@ -58,11 +58,14 @@ body{font-family:var(--font-body);background:var(--navy);color:var(--white);}
 .viewer-content{
   position:fixed;top:56px;left:0;right:0;bottom:0;
   background:var(--navy);
+  overflow:hidden;
 }
 
-/* iframe fills entire content area */
+/* iframe pins to all four edges — avoids height:100% quirks in fixed parents */
 .content-iframe{
-  width:100%;height:100%;border:none;display:block;
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;
+  border:none;margin:0;padding:0;
 }
 
 /* Video embed (16:9, centred) */
