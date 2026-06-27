@@ -212,7 +212,16 @@ async function renderContent(lesson){
       </iframe>`;
 
     const response = await fetch(lesson.content_url);
-    const html = await response.text();
+    let html = await response.text();
+
+    // Override internal masterclass layout constraints so content fills the iframe
+    const overrideStyle = `<style>
+.app{grid-template-columns:260px 1fr!important;}
+.main{max-width:100%!important;padding:32px 40px!important;}
+body{overflow-x:hidden!important;}
+</style>`;
+    html = html.replace('</head>', overrideStyle + '</head>');
+
     const blob = new Blob([html], { type: 'text/html' });
     const blobUrl = URL.createObjectURL(blob);
 
