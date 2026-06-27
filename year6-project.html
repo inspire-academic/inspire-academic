@@ -251,6 +251,7 @@ let currentUser, currentProfile, currentProject, currentSubmission;
 let currentSection = 0;
 let autoSaveTimer = null;
 let formData = {};
+let activeSections = [];
 
 // Auth helpers
 async function getUser(){
@@ -556,22 +557,463 @@ const project1Sections = [
   }
 ];
 
+const project2Sections = [
+  {
+    id: 's1',
+    title: 'Section 1: MATTER & PARTICLES',
+    subtitle: 'What Is Matter?',
+    fields: [
+      {
+        type: 'textarea',
+        label: 'Activity 1.1 Matter Hunt\nLook around you. List five things made of matter.',
+        placeholder: ''
+      },
+      {
+        type: 'drawing',
+        label: 'Activity 1.2 Particle Diagrams\nDraw how you think particles are arranged in each state of matter. Use Fig. 2 and Fig. 3 above to guide you.',
+        columns: ['SOLID', 'LIQUID', 'GAS']
+      },
+      {
+        type: 'textarea',
+        label: 'Reflection\nWhy do solids keep their shape but liquids and gases do not? Use particle theory in your answer.',
+        placeholder: ''
+      }
+    ]
+  },
+  {
+    id: 's2',
+    title: 'Section 2: MIXTURES & SEPARATION',
+    subtitle: 'What Is a Mixture?',
+    fields: [
+      {
+        type: 'table',
+        label: 'Activity 2.1 Soluble or Insoluble?\nPredict whether each substance will dissolve in water. Tick your answer.',
+        columns: ['Substance', 'Soluble?', 'Insoluble?'],
+        rows: ['Sugar', 'Sand', 'Salt', 'Flour']
+      },
+      {
+        type: 'table',
+        label: 'INVESTIGATION 2 — The Dissolving Race\nVariables',
+        columns: ['Variable Type', 'Your Answer'],
+        rows: [
+          'Independent variable (what I will change)',
+          'Dependent variable (what I will measure)',
+          'Control variables (what I will keep the same)'
+        ]
+      },
+      {
+        type: 'textarea',
+        label: 'My Prediction\nI predict that:',
+        placeholder: ''
+      },
+      {
+        type: 'table',
+        label: 'Activity 2.2 Which Separation Method?\nFor each mixture below, choose the best separation method and give your reason.',
+        columns: ['Mixture', 'Best Separation Method', 'Reason'],
+        rows: [
+          'Sand and water',
+          'Salt water (to recover salt)',
+          'Pure water from salt water',
+          'Iron filings and sand',
+          'Different coloured inks',
+          'Gravel and sand'
+        ]
+      }
+    ]
+  },
+  {
+    id: 's3',
+    title: 'Section 3: PHYSICAL & CHEMICAL CHANGE',
+    subtitle: 'Not all changes are the same. Some can be reversed; others cannot. The key question is: has a new substance been formed?',
+    fields: [
+      {
+        type: 'table',
+        label: 'Activity 3.1 Physical or Chemical?\nRead each change below. Decide if it is physical or chemical, and explain how you know.',
+        columns: ['Change', 'Physical or Chemical?', 'How Do You Know?'],
+        rows: [
+          'Ice melting into water',
+          'Burning wood',
+          'Dissolving salt in water',
+          'Baking a cake',
+          'Tearing paper',
+          'Rusting iron nail'
+        ]
+      },
+      {
+        type: 'textarea',
+        label: 'INVESTIGATION 4 — Fizz, Foam & Gas\nMy Prediction\nWhat do you think will happen when the substances are mixed?',
+        placeholder: ''
+      },
+      {
+        type: 'table',
+        label: 'Observation Table',
+        columns: ['Time', 'What I Saw', 'What I Heard', 'Other Observations'],
+        rows: ['At the start', 'During the reaction', 'After the reaction']
+      },
+      {
+        type: 'checkbox-group',
+        label: 'Signs of Chemical Change — Tick what you observed',
+        options: [
+          'Bubbles forming',
+          'Foam produced',
+          'Gas released',
+          'Temperature change (feel the container)',
+          'New smell (different from vinegar alone)',
+          'Colour change (if food colouring used)'
+        ]
+      },
+      {
+        type: 'textarea',
+        label: 'Conclusion Questions\n1. What evidence suggested a chemical reaction happened? List at least two observations.',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: '2. The gas produced is carbon dioxide (CO₂). How does the washing-up liquid make the CO₂ visible?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: '3. Was this a physical or chemical change? Justify your answer with evidence from your observations.',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'Evaluation\nWhat worked well in this investigation?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'What could be improved?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'How could the investigation be made more reliable (i.e. give more trustworthy results)?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: '★ EXTENSION: The Kitchen Volcano\nHow could you make the reaction more dramatic, or change its rate? Change one variable at a time and predict what will happen.',
+        placeholder: 'Try: more bicarbonate of soda / warm vinegar instead of cold / a narrower container / different types of acid (lemon juice instead of vinegar).'
+      },
+      {
+        type: 'textarea',
+        label: 'Extension Challenge — Think Like a Chemist\nWhat do you think would happen if:\n• More bicarbonate of soda was added?\n• Warm vinegar was used instead of cold?\n• The container was sealed tightly after mixing?',
+        placeholder: ''
+      }
+    ]
+  },
+  {
+    id: 's4',
+    title: 'Section 4: KITCHEN ACIDS & ALKALIS',
+    subtitle: 'What Are Acids and Alkalis?',
+    fields: [
+      {
+        type: 'table',
+        label: 'Activity 4.1 Kitchen pH Detective — Predictions\nBefore carrying out Investigation 4, predict whether each substance is acidic, alkaline, or neutral.',
+        columns: ['Kitchen Substance', 'My Prediction (Acid / Alkali / Neutral)', 'Actual Result'],
+        rows: [
+          'Lemon juice',
+          'Soap',
+          'Tap water',
+          'Vinegar',
+          'Bicarbonate of soda solution',
+          'Orange juice'
+        ]
+      },
+      {
+        type: 'table',
+        label: 'Results Table',
+        columns: ['Substance', 'Colour with Indicator', 'Acid, Alkali, or Neutral?', 'Estimated pH'],
+        rows: [
+          'Vinegar',
+          'Lemon juice',
+          'Bicarbonate of soda solution',
+          'Soap solution',
+          'Tap water',
+          'Orange juice'
+        ]
+      },
+      {
+        type: 'textarea',
+        label: 'Conclusion\nWhich of the kitchen substances tested were acids?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'Which were alkalis?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'Did any result surprise you? Explain why, using your knowledge of acids and alkalis.',
+        placeholder: ''
+      }
+    ]
+  },
+  {
+    id: 's5',
+    title: 'Section 5: CHEMISTRY VOCABULARY',
+    subtitle: 'Learning precise scientific vocabulary is essential for communicating clearly in science.',
+    fields: [
+      { type: 'text', label: 'Matter', placeholder: '' },
+      { type: 'text', label: 'Particle', placeholder: '' },
+      { type: 'text', label: 'Solid', placeholder: '' },
+      { type: 'text', label: 'Liquid', placeholder: '' },
+      { type: 'text', label: 'Gas', placeholder: '' },
+      { type: 'text', label: 'Mixture', placeholder: '' },
+      { type: 'text', label: 'Dissolve', placeholder: '' },
+      { type: 'text', label: 'Soluble', placeholder: '' },
+      { type: 'text', label: 'Insoluble', placeholder: '' },
+      { type: 'text', label: 'Solution', placeholder: '' },
+      { type: 'text', label: 'Solute', placeholder: '' },
+      { type: 'text', label: 'Solvent', placeholder: '' },
+      { type: 'text', label: 'Evaporation', placeholder: '' },
+      { type: 'text', label: 'Filtration', placeholder: '' },
+      { type: 'text', label: 'Chromatography', placeholder: '' },
+      { type: 'text', label: 'Distillation', placeholder: '' },
+      { type: 'text', label: 'Physical change', placeholder: '' },
+      { type: 'text', label: 'Chemical change', placeholder: '' },
+      { type: 'text', label: 'Reactant', placeholder: '' },
+      { type: 'text', label: 'Product', placeholder: '' },
+      { type: 'text', label: 'Acid', placeholder: '' },
+      { type: 'text', label: 'Alkali', placeholder: '' },
+      { type: 'text', label: 'Neutral', placeholder: '' },
+      { type: 'text', label: 'pH', placeholder: '' },
+      { type: 'text', label: 'Indicator', placeholder: '' },
+      { type: 'text', label: 'Neutralisation', placeholder: '' },
+      { type: 'text', label: 'Reversible', placeholder: '' },
+      { type: 'text', label: 'Irreversible', placeholder: '' }
+    ]
+  },
+  {
+    id: 's6',
+    title: 'Section 6: PREPARING FOR YEAR 7',
+    subtitle: 'What to Expect in Secondary School Science',
+    fields: [
+      {
+        type: 'checkbox-group',
+        label: 'Safety in the Laboratory',
+        options: [
+          'Wear safety goggles when instructed',
+          'Tie long hair back',
+          'Never eat or drink in the laboratory',
+          'Follow all instructions carefully',
+          'Tell your teacher immediately if something spills or breaks',
+          'Wash your hands after practical work'
+        ]
+      }
+    ]
+  },
+  {
+    id: 's7',
+    title: 'Final Reflection: BECOMING A CHEMIST',
+    subtitle: 'Complete the sentences below:',
+    fields: [
+      {
+        type: 'textarea',
+        label: 'I learned that matter is made of',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'I can now explain the difference between a physical and chemical change because',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'One thing I found surprising about chemistry was',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'One separation method I would like to try again is',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'One thing I am proud of in this project is',
+        placeholder: ''
+      },
+      {
+        type: 'checkbox-group',
+        label: 'What Have I Achieved?\nA checklist:',
+        options: [
+          'I can explain particle theory',
+          'I can describe solids, liquids and gases',
+          'I can explain dissolving',
+          'I can choose a separation method',
+          'I can identify chemical change',
+          'I can explain acids and alkalis',
+          'I can plan a fair investigation',
+          'I am ready for Year 7 Chemistry'
+        ]
+      }
+    ]
+  },
+  {
+    id: 's8',
+    title: 'Appendix: KITCHEN CHEMISTRY INVESTIGATIONS',
+    subtitle: 'Kitchen Chemistry Investigations',
+    fields: [
+      {
+        type: 'checkbox-group',
+        label: '⚠ SAFETY GUIDELINES — ALWAYS FOLLOW THESE RULES',
+        options: [
+          'Always work with an adult supervisor present',
+          'Do NOT taste or eat anything used in investigations',
+          'Clean all equipment thoroughly before and after use',
+          'Wash hands thoroughly after all investigations',
+          'Work on a clear, protected surface. Use a tray.',
+          'Handle hot liquids with care. Use oven gloves and always wait for liquids to cool before handling.'
+        ]
+      },
+      {
+        type: 'drawing',
+        label: 'INVESTIGATION 1 — Ice, Water, Steam\nObserve ice cubes carefully. Draw how you think the particles are arranged. (use the table below)',
+        columns: ['SOLID (Ice)', 'LIQUID (Water)', 'GAS (Steam)']
+      },
+      {
+        type: 'textarea',
+        label: 'Watch ice melting. What do you think happens to the particles as they gain energy?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'With adult supervision, observe water boiling. What does steam tell you about particle movement?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'Observe steam condensing on a cold surface. What does this tell you about particle energy?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'Conclusion\nUse particle theory to explain what happens when ice melts and then the water boils:',
+        placeholder: ''
+      },
+      {
+        type: 'table',
+        label: 'INVESTIGATION 2 — The Dissolving Race\nResults',
+        columns: ['Substance', 'Time to Dissolve (seconds)', 'Observations'],
+        rows: ['Sugar', 'Salt', 'Flour (control — insoluble)']
+      },
+      {
+        type: 'textarea',
+        label: 'Conclusion\nWhich substance dissolved fastest?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'Why do you think this happened? Use particle theory in your answer.',
+        placeholder: ''
+      },
+      {
+        type: 'table',
+        label: 'INVESTIGATION 3 — The Kitchen Separation Challenge\nPlanning\nPlan your sequence of steps carefully before you begin. Think: which substances can each method separate?',
+        columns: ['Step', 'Method I Will Use', 'This Will Separate', 'Reason'],
+        rows: ['Step 1', 'Step 2', 'Step 3', 'Step 4']
+      },
+      {
+        type: 'textarea',
+        label: 'Results and Reflection\nDid you successfully separate all four substances?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'Which step was most difficult? Why?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'INVESTIGATION 4 — Fizz, Foam and Gas\nMy Prediction\nWhat do you think will happen when the vinegar and bicarbonate of soda are mixed? Write your prediction and give a reason.',
+        placeholder: ''
+      },
+      {
+        type: 'table',
+        label: 'Observation Table',
+        columns: ['Time', 'What I Saw', 'What I Heard', 'What I Felt (temperature)'],
+        rows: ['At the start', 'During the reaction', 'After the reaction']
+      },
+      {
+        type: 'checkbox-group',
+        label: 'Signs of Chemical Change — Tick what you observed',
+        options: [
+          'Bubbles forming',
+          'Foam produced',
+          'Gas released (CO₂)',
+          'Temperature change (container felt cooler)',
+          'New smell (different from vinegar alone)',
+          'Change in appearance of the mixture'
+        ]
+      },
+      {
+        type: 'textarea',
+        label: 'Conclusion\n1. List two pieces of evidence from your observations that show a chemical reaction took place.',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: '2. The gas produced in this reaction is carbon dioxide (CO₂). How does the washing-up liquid make this visible?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: '3. This reaction felt slightly cooler than room temperature. What does this tell you about the energy involved?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: '4. Was this a physical or chemical change? Give two reasons for your answer.',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'Evaluation\nWhat worked well in this investigation?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'What could be improved to make the results more reliable?',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: 'How could you change one variable to test a new question? Write a new investigation question you could explore.',
+        placeholder: ''
+      },
+      {
+        type: 'textarea',
+        label: '★ Extension Challenge\nChange one variable at a time and predict what will happen:\nTry warm vinegar instead of cold. Does the reaction happen faster? Why?\nTry more bicarbonate of soda. Does more gas form?\nTry lemon juice instead of vinegar. Does an acid-alkali reaction still occur?\nRecord your prediction, carry out the test, and write what you found.',
+        placeholder: ''
+      }
+    ]
+  }
+];
+
+const projectSections = {
+  1: project1Sections,
+  2: project2Sections
+};
+
 // Render form sections
-function renderSections(){
+function renderSections(sections){
   const container = document.getElementById('form-sections');
   const navContainer = document.getElementById('section-nav');
   
-  container.innerHTML = project1Sections.map((section, idx) => `
+  container.innerHTML = sections.map((section, idx) => `
     <div class="form-section ${idx === 0 ? 'active' : ''}" id="${section.id}">
       <h2 class="section-title">${section.title}</h2>
       <p class="section-subtitle">${section.subtitle}</p>
-      ${section.fields.map(field => renderField(field)).join('')}
+      ${section.fields.map((field, fi) => renderField(Object.assign({}, field, {name: field.name || (section.id + '_f' + fi)}))).join('')}
     </div>
   `).join('');
-  
-  navContainer.innerHTML = project1Sections.map((section, idx) => `
-    <button class="section-tab ${idx === 0 ? 'active' : ''}" 
-            data-section="${idx}" 
+
+  navContainer.innerHTML = sections.map((section, idx) => `
+    <button class="section-tab ${idx === 0 ? 'active' : ''}"
+            data-section="${idx}"
             onclick="goToSection(${idx})">
       S${idx + 1}
     </button>
@@ -580,13 +1022,14 @@ function renderSections(){
 
 // Render individual fields
 function renderField(field){
+  const lbl = (field.label || '').replace(/\n/g, '<br>');
   switch(field.type){
     case 'text':
       return `
         <div class="field">
-          <label class="field-label">${field.label}</label>
-          <input type="text" class="field-input" 
-                 name="${field.name}" 
+          <label class="field-label">${lbl}</label>
+          <input type="text" class="field-input"
+                 name="${field.name}"
                  placeholder="${field.placeholder || ''}"
                  onchange="onFieldChange()">
         </div>
@@ -594,9 +1037,9 @@ function renderField(field){
     case 'textarea':
       return `
         <div class="field">
-          <label class="field-label">${field.label}</label>
-          <textarea class="field-textarea" 
-                    name="${field.name}" 
+          <label class="field-label">${lbl}</label>
+          <textarea class="field-textarea"
+                    name="${field.name}"
                     placeholder="${field.placeholder || ''}"
                     rows="${field.rows || 5}"
                     maxlength="${field.maxlength || 5000}"
@@ -606,11 +1049,11 @@ function renderField(field){
     case 'checkbox-group':
       return `
         <div class="field">
-          <label class="field-label">${field.label}</label>
+          <label class="field-label">${lbl}</label>
           <div class="checkbox-group">
             ${field.options.map((opt, i) => `
               <div class="checkbox-item">
-                <input type="checkbox" id="${field.name}_${i}" 
+                <input type="checkbox" id="${field.name}_${i}"
                        name="${field.name}" value="${opt}"
                        onchange="onFieldChange()">
                 <label for="${field.name}_${i}">${opt}</label>
@@ -622,7 +1065,7 @@ function renderField(field){
     case 'table':
       return `
         <div class="field">
-          <label class="field-label">${field.label}</label>
+          <label class="field-label">${lbl}</label>
           <div class="table-builder">
             <table>
               <thead>
@@ -631,10 +1074,13 @@ function renderField(field){
               <tbody>
                 ${field.rows.map((row, ri) => `
                   <tr>
-                    ${row.map((cell, ci) => ci === 0 ? 
-                      `<td>${cell}</td>` : 
-                      `<td><input type="text" data-table="${field.name}" data-row="${ri}" data-col="${ci}" value="${cell}" onchange="onFieldChange()"></td>`
-                    ).join('')}
+                    ${typeof row === 'string'
+                      ? `<td style="font-weight:500;font-size:.85rem;padding:.6rem .7rem;">${row}</td>${field.columns.slice(1).map((_, ci) => `<td><input type="text" data-table="${field.name}" data-row="${ri}" data-col="${ci + 1}" value="" onchange="onFieldChange()"></td>`).join('')}`
+                      : row.map((cell, ci) => ci === 0
+                          ? `<td>${cell}</td>`
+                          : `<td><input type="text" data-table="${field.name}" data-row="${ri}" data-col="${ci}" value="${cell}" onchange="onFieldChange()"></td>`
+                        ).join('')
+                    }
                   </tr>
                 `).join('')}
               </tbody>
@@ -642,10 +1088,24 @@ function renderField(field){
           </div>
         </div>
       `;
+    case 'drawing':
+      return `
+        <div class="field">
+          <label class="field-label">${lbl}</label>
+          <div style="display:grid;grid-template-columns:repeat(${(field.columns || []).length},1fr);gap:1rem;margin-top:.5rem;">
+            ${(field.columns || []).map((col, ci) => `
+              <div>
+                <div style="text-align:center;font-size:.8rem;font-weight:700;padding:.5rem;background:var(--navy3);border:1px solid var(--border);border-radius:4px 4px 0 0;color:var(--gold);">${col}</div>
+                <textarea class="field-textarea" name="${field.name}_col${ci}" placeholder="Describe the particle arrangement..." style="border-radius:0 0 4px 4px;min-height:140px;" onchange="onFieldChange()"></textarea>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
     case 'photo-upload':
       return `
         <div class="field">
-          <label class="field-label">${field.label}</label>
+          <label class="field-label">${lbl}</label>
           <div class="photo-upload" onclick="document.getElementById('photo-${field.section}').click()">
             <div class="photo-upload-icon">📸</div>
             <div class="photo-upload-text">
@@ -653,7 +1113,7 @@ function renderField(field){
               <span>JPG, PNG, or HEIC (max 5MB each)</span>
             </div>
           </div>
-          <input type="file" id="photo-${field.section}" 
+          <input type="file" id="photo-${field.section}"
                  accept="image/*" multiple style="display:none"
                  onchange="handlePhotoUpload(event, '${field.section}')">
           <div class="photo-preview" id="preview-${field.section}"></div>
@@ -677,7 +1137,7 @@ function goToSection(idx){
 }
 
 function nextSection(){
-  if(currentSection < project1Sections.length - 1){
+  if(currentSection < activeSections.length - 1){
     goToSection(currentSection + 1);
   }
 }
@@ -941,7 +1401,8 @@ async function submitProject(){
   }
   
   // Render form
-  renderSections();
+  activeSections = projectSections[currentProject.id] || project1Sections;
+  renderSections(activeSections);
   
   // Populate with existing data
   if(currentSubmission.submission_data){
