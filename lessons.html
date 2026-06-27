@@ -136,6 +136,8 @@ main{max-width:1280px;margin:0 auto;padding:2rem;}
 #toast.show{transform:translateY(0);opacity:1;}
 #toast.success{border-color:var(--green);}
 #toast.error{border-color:var(--red);}
+.back-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:600;color:var(--muted);background:var(--navy2);border:1px solid var(--border);padding:.35rem .85rem;border-radius:var(--r);transition:all .2s;margin-bottom:1rem;text-decoration:none;}
+.back-link:hover{border-color:var(--gold);color:var(--gold);}
 </style>
 </head>
 <body>
@@ -159,8 +161,9 @@ main{max-width:1280px;margin:0 auto;padding:2rem;}
 
 <!-- PAGE HERO -->
 <div class="page-hero">
-  <h1>Lesson <span>Library</span></h1>
-  <p>Interactive masterclasses, video lessons, and revision resources — all in one place.</p>
+  <a id="back-btn" class="back-link" href="#" style="display:none;">← Back</a>
+  <h1 id="hero-title">Lesson <span>Library</span></h1>
+  <p id="hero-sub">Interactive masterclasses, video lessons, and revision resources — all in one place.</p>
 </div>
 
 <!-- FILTER BAR -->
@@ -207,10 +210,22 @@ const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 
+const urlParams = new URLSearchParams(window.location.search);
+const paramSubjectId = urlParams.get('subject'); // e.g. '2'
+const paramTopic     = urlParams.get('topic');   // e.g. 'energy'
+
+// Map subject_id → { href, label, slug } for back button and tab pre-selection
+const SUBJECT_MAP = {
+  '1': { href:'chemistry.html', label:'Chemistry', slug:'chemistry' },
+  '2': { href:'physics.html',   label:'Physics',   slug:'physics'   },
+  '3': { href:'biology.html',   label:'Biology',   slug:'biology'   },
+  '4': { href:'maths.html',     label:'Maths',     slug:'maths'     },
+};
+
 let allLessons = [];
 let progressMap = {}; // lesson_id → { started_at, completed_at }
 let currentUser = null;
-let filters = { subject: 'all', board: 'all', tier: 'all' };
+let filters = { subject: 'all', board: 'all', tier: 'all', topic: null };
 
 const TYPE_ICON  = { html:'⚡', video:'🎬', pdf:'📋', doc:'📝' };
 const TYPE_LABEL = { html:'Interactive', video:'Video', pdf:'PDF', doc:'Word' };
@@ -270,6 +285,7 @@ function applyFilters(){
     if(filters.subject !== 'all' && !subjectName.includes(filters.subject)) return false;
     if(filters.board !== 'all' && l.exam_board !== filters.board && l.exam_board !== 'Both') return false;
     if(filters.tier !== 'all' && l.tier !== filters.tier && l.tier !== 'Both') return false;
+    if(filters.topic && l.topics?.slug !== filters.topic) return false;
     return true;
   });
 }
@@ -364,11 +380,14 @@ async function loadProgress(userId){
 }
 
 async function loadLessons(){
-  const { data, error } = await supa
+  let query = supa
     .from('lessons')
-    .select('*, subjects(id, name), topics(id, name)')
-    .eq('is_published', true)
-    .order('order_number', { ascending: true });
+    .select('*, subjects(id, name), topics(id, name, slug)')
+    .eq('is_published', true);
+
+  if(paramSubjectId) query = query.eq('subject_id', paramSubjectId);
+
+  const { data, error } = await query.order('order_number', { ascending: true });
 
   if(error){
     document.getElementById('main-content').innerHTML = `
@@ -394,10 +413,58 @@ async function init(){
   document.getElementById('nav-name').textContent = name;
   document.getElementById('nav-avatar').textContent = (name[0] || '?').toUpperCase();
 
+  // Apply URL param filters before loading so renderGrid is correct on first call
+  applyUrlParams();
+
   await Promise.all([
     loadProgress(user.id),
     loadLessons()
   ]);
+
+  // Update hero title after lessons are loaded (so we have topic names)
+  updateHeroFromParams();
+}
+
+function applyUrlParams(){
+  if(!paramSubjectId && !paramTopic) return;
+
+  const subjectInfo = SUBJECT_MAP[paramSubjectId];
+
+  // Back button
+  if(subjectInfo){
+    const btn = document.getElementById('back-btn');
+    btn.href  = subjectInfo.href;
+    btn.textContent = `← Back to ${subjectInfo.label}`;
+    btn.style.display = 'inline-flex';
+  }
+
+  // Pre-select subject tab
+  if(subjectInfo){
+    document.querySelectorAll('.subject-tab').forEach(b => b.classList.remove('active'));
+    const tab = document.querySelector(`.subject-tab[data-subject="${subjectInfo.slug}"]`);
+    if(tab) tab.classList.add('active');
+    filters.subject = subjectInfo.slug;
+  }
+
+  // Pre-set topic filter
+  if(paramTopic) filters.topic = paramTopic;
+}
+
+function updateHeroFromParams(){
+  if(!paramSubjectId && !paramTopic) return;
+  const titleEl = document.getElementById('hero-title');
+  const subEl   = document.getElementById('hero-sub');
+  const subjectInfo = SUBJECT_MAP[paramSubjectId];
+
+  if(paramTopic){
+    const topicLesson = allLessons.find(l => l.topics?.slug === paramTopic);
+    const topicName   = topicLesson?.topics?.name || paramTopic.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    titleEl.innerHTML = `${topicName} <span>Lessons</span>`;
+    subEl.textContent = subjectInfo ? `${subjectInfo.label} · all lessons for this topic.` : 'All lessons for this topic.';
+  } else if(subjectInfo){
+    titleEl.innerHTML = `${subjectInfo.label} <span>Lessons</span>`;
+    subEl.textContent = `All masterclasses and resources for ${subjectInfo.label}.`;
+  }
 }
 
 init();

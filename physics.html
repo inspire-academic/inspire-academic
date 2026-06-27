@@ -612,7 +612,7 @@ function renderTopics(dbTopics, progressMap, quizAttempts) {
 
     const card = document.createElement('a');
     card.className = 'topic-card';
-    card.href = `topic.html?subject=physics&topic=${specTopic.slug}`;
+    card.href = `lessons.html?subject=2&topic=${specTopic.slug}`;
     card.innerHTML = `
       <img class="topic-img" src="${specTopic.img}" alt="${specTopic.name}" loading="lazy"
         onerror="this.style.background='linear-gradient(135deg,#eff6ff,#dbeafe)';this.style.minHeight='90px'">
