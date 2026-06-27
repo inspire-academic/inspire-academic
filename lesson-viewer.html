@@ -171,9 +171,8 @@ function showError(title, sub){
     </div>`;
 }
 
-function renderContent(lesson){
+async function renderContent(lesson){
   const content = document.getElementById('viewer-content');
-  const overlay = document.getElementById('loading-overlay');
 
   if(lesson.lesson_type === 'video'){
     const embedUrl = getEmbedUrl(lesson.content_url);
@@ -193,14 +192,36 @@ function renderContent(lesson){
     return;
   }
 
-  let iframeSrc = lesson.content_url || '';
-  let sandboxAttr = '';
-  let extraAllow = '';
-
   if(lesson.lesson_type === 'html'){
-    sandboxAttr = 'sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"';
-    extraAllow = 'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"';
-  } else if(lesson.lesson_type === 'doc'){
+    // Supabase Storage serves .html as text/plain, which makes browsers render
+    // raw source. Fetch the content and re-serve it via a Blob URL typed as
+    // text/html so the browser renders it correctly.
+    content.innerHTML = `
+      <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div><div class="loading-text">Loading lesson…</div>
+      </div>
+      <iframe
+        id="html-iframe"
+        class="content-iframe"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>`;
+
+    const response = await fetch(lesson.content_url);
+    const html = await response.text();
+    const blob = new Blob([html], { type: 'text/html' });
+    const blobUrl = URL.createObjectURL(blob);
+
+    const iframe = document.getElementById('html-iframe');
+    iframe.onload = () => document.getElementById('loading-overlay')?.classList.add('hidden');
+    iframe.src = blobUrl;
+    return;
+  }
+
+  let iframeSrc = lesson.content_url || '';
+
+  if(lesson.lesson_type === 'doc'){
     iframeSrc = `https://docs.google.com/viewer?url=${encodeURIComponent(lesson.content_url)}&embedded=true`;
   }
 
@@ -211,8 +232,6 @@ function renderContent(lesson){
     <iframe
       class="content-iframe"
       src="${iframeSrc}"
-      ${sandboxAttr}
-      ${extraAllow}
       allowfullscreen
       onload="document.getElementById('loading-overlay').classList.add('hidden')">
     </iframe>`;
@@ -310,7 +329,7 @@ async function init(){
   await trackStart(lessonId);
 
   renderHeader(lesson, progress);
-  renderContent(lesson);
+  await renderContent(lesson);
 }
 
 init();
