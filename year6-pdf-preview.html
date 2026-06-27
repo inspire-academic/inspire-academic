@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -501,6 +501,7 @@
 <div class="report-container" id="report"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="year6-sections.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
@@ -585,6 +586,50 @@ function renderPhotos(photos){
   `;
 }
 
+
+function renderPDFField(field, fieldName, data, photosBySection){
+  const lbl = (field.label || '').replace(/\n/g, '<br>');
+  switch(field.type){
+    case 'drawing':
+      return (field.columns || []).map((col, ci) => {
+        const val = data[fieldName + '_col' + ci];
+        return renderField(lbl + ' — ' + col, val);
+      }).join('');
+    case 'photo-upload':
+      if(field.section && photosBySection[field.section]){
+        return `<div class="field-group"><div class="field-label">${lbl}</div>${renderPhotos(photosBySection[field.section])}</div>`;
+      }
+      return '';
+    case 'table': {
+      const val = data[fieldName];
+      if(!val || !Array.isArray(val) || val.length === 0){
+        return `<div class="field-group"><div class="field-label">${lbl}</div><div class="field-value empty">Not completed</div></div>`;
+      }
+      const cols = field.columns || [];
+      const thead = cols.length ? `<thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>` : '';
+      const tbody = val.map(row=>`<tr>${(Array.isArray(row)?row:[row]).map(cell=>`<td>${cell||'&#x2014;'}</td>`).join('')}</tr>`).join('');
+      return `<div class="field-group"><div class="field-label">${lbl}</div><div class="table-container"><table>${thead}<tbody>${tbody}</tbody></table></div></div>`;
+    }
+    default:
+      return renderField(lbl, data[fieldName]);
+  }
+}
+
+function renderSectionForPDF(section, idx, data, photosBySection){
+  const fields = section.fields.map((field, fi) => {
+    const name = field.name || (section.id + '_f' + fi);
+    return renderPDFField(field, name, data, photosBySection);
+  }).join('');
+  return `
+    <div class="section-page">
+      <div class="page-header">
+        <h2 class="section-title">${section.title}</h2>
+        <div class="page-number">Page ${idx + 3}</div>
+      </div>
+      ${fields}
+    </div>
+  `;
+}
 async function generateReport(){
   const params = new URLSearchParams(window.location.search);
   const submissionId = params.get('submission');
@@ -634,6 +679,8 @@ async function generateReport(){
     });
   }
   
+  const activeSections = projectSections[submission.project_id] || project1Sections;
+
   // Generate report HTML
   const reportHTML = `
     <!-- Cover Page -->
@@ -642,7 +689,7 @@ async function generateReport(){
         <img src="1775416612494_image.png" alt="Inspire Academic">
       </div>
       <div class="cover-badge">Year 6 Science Bridging Programme</div>
-      <h1 class="cover-title">Project 1 Report</h1>
+      <h1 class="cover-title">Project ${submission.project_id} Report</h1>
       <h2 class="cover-subtitle">${project.title}</h2>
       <div class="cover-student">${studentName}</div>
       <div class="cover-date">${formatDate(submission.created_at)}</div>
@@ -689,112 +736,8 @@ async function generateReport(){
       </div>
     </div>
     
-    <!-- Section 1 -->
-    <div class="section-page">
-      <div class="page-header">
-        <h2 class="section-title">Section 1: Scientific Questions</h2>
-        <div class="page-number">Page 3</div>
-      </div>
-      
-      <div class="field-group">${renderField('Question Sorting', data.question_sorting)}</div>
-      <div class="field-group">${renderField('Scientific Question 1', data.scientific_question_1)}</div>
-      <div class="field-group">${renderField('Scientific Question 2', data.scientific_question_2)}</div>
-      <div class="field-group">${renderField('Reflection: Why Scientists Need Testable Questions', data.reflection_testing)}</div>
-      ${photosBySection.section1 ? renderPhotos(photosBySection.section1) : ''}
-    </div>
-    
-    <!-- Section 2 -->
-    <div class="section-page">
-      <div class="page-header">
-        <h2 class="section-title">Section 2: Variables & Fair Testing</h2>
-        <div class="page-number">Page 4</div>
-      </div>
-      
-      <div class="field-group">${renderField('Independent Variable', data.independent_var)}</div>
-      <div class="field-group">${renderField('Dependent Variable', data.dependent_var)}</div>
-      <div class="field-group">${renderField('Control Variable', data.control_var)}</div>
-      <div class="field-group">${renderField('Fair Test Evaluation', data.fair_test_evaluation)}</div>
-      ${photosBySection.section2 ? renderPhotos(photosBySection.section2) : ''}
-    </div>
-    
-    <!-- Section 3 -->
-    <div class="section-page">
-      <div class="page-header">
-        <h2 class="section-title">Section 3: Planning the Investigation</h2>
-        <div class="page-number">Page 5</div>
-      </div>
-      
-      <div class="field-group">${renderField('Investigation Title', data.investigation_title)}</div>
-      <div class="field-group">${renderField('Aim', data.aim)}</div>
-      <div class="field-group">${renderField('Independent Variable', data.plan_independent_var)}</div>
-      <div class="field-group">${renderField('Dependent Variable', data.plan_dependent_var)}</div>
-      <div class="field-group">${renderField('Control Variables', data.plan_control_vars)}</div>
-      <div class="field-group">${renderField('Prediction', data.prediction)}</div>
-      <div class="field-group">${renderField('Method', data.method)}</div>
-      <div class="field-group">${renderField('Equipment Needed', data.equipment)}</div>
-      ${photosBySection.section3 ? renderPhotos(photosBySection.section3) : ''}
-    </div>
-    
-    <!-- Section 4 -->
-    <div class="section-page">
-      <div class="page-header">
-        <h2 class="section-title">Section 4: Results & Data</h2>
-        <div class="page-number">Page 6</div>
-      </div>
-      
-      <div class="field-group">${renderField('Results Table', data.results_table, 'table')}</div>
-      <div class="field-group">${renderField('Why Scientists Repeat Measurements', data.repeat_reflection)}</div>
-      ${photosBySection.section4 ? renderPhotos(photosBySection.section4) : ''}
-    </div>
-    
-    <!-- Section 5 -->
-    <div class="section-page">
-      <div class="page-header">
-        <h2 class="section-title">Section 5: Graph</h2>
-        <div class="page-number">Page 7</div>
-      </div>
-      
-      <div class="field-group">${renderField('Graph Checklist', data.graph_checklist)}</div>
-      ${photosBySection.section5 ? renderPhotos(photosBySection.section5) : '<div class="field-value empty">No graph uploaded</div>'}
-      <div class="field-group">${renderField('Graph Description', data.graph_description)}</div>
-    </div>
-    
-    <!-- Section 6 -->
-    <div class="section-page">
-      <div class="page-header">
-        <h2 class="section-title">Section 6: Conclusion</h2>
-        <div class="page-number">Page 8</div>
-      </div>
-      
-      <div class="field-group">${renderField('My Conclusion', data.conclusion)}</div>
-      ${photosBySection.section6 ? renderPhotos(photosBySection.section6) : ''}
-    </div>
-    
-    <!-- Section 7 -->
-    <div class="section-page">
-      <div class="page-header">
-        <h2 class="section-title">Section 7: Evaluation & Improvement</h2>
-        <div class="page-number">Page 9</div>
-      </div>
-      
-      <div class="field-group">${renderField('What Worked Well', data.worked_well)}</div>
-      <div class="field-group">${renderField('What Could Be Improved', data.improvements)}</div>
-      <div class="field-group">${renderField('One Improvement for Next Time', data.next_time)}</div>
-      ${photosBySection.section7 ? renderPhotos(photosBySection.section7) : ''}
-    </div>
-    
-    <!-- Section 8 -->
-    <div class="section-page">
-      <div class="page-header">
-        <h2 class="section-title">Final Reflection</h2>
-        <div class="page-number">Page 10</div>
-      </div>
-      
-      <div class="field-group">${renderField('I Learned That Science Is About...', data.final_learning)}</div>
-      <div class="field-group">${renderField('I Can Now Explain What a Fair Test Is Because...', data.fair_test_explanation)}</div>
-      <div class="field-group">${renderField('One Thing I Am Proud Of', data.proud_of)}</div>
-    </div>
-    
+    ${activeSections.map((section, idx) => renderSectionForPDF(section, idx, data, photosBySection)).join('')}
+
     <!-- Badge Page -->
     <div class="badge-page">
       <div class="badge-container">
