@@ -375,10 +375,22 @@ function toast(msg, type='success'){
 
 // ── Auth ──
 async function init(){
-  const { data:{ user } } = await supa.auth.getUser();
-  if(!user || user.email !== ADMIN_EMAIL){
+  // getSession() reads from local storage immediately — no server round-trip.
+  // getUser() makes a live JWT verification call that can return null if the
+  // session hasn't finished restoring, causing a false redirect on load.
+  const { data:{ session } } = await supa.auth.getSession();
+  const user = session?.user;
+
+  if(!user){
+    // Session genuinely absent — send to login
     window.location.href = 'index.html'; return;
   }
+
+  if(user.email.trim().toLowerCase() !== ADMIN_EMAIL.toLowerCase()){
+    // Authenticated but not admin
+    window.location.href = 'index.html'; return;
+  }
+
   document.getElementById('admin-email-display').textContent = user.email;
   await Promise.all([loadSubjects(), loadLessons()]);
 }
