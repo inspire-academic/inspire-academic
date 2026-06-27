@@ -1,118 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video Lessons — Inspire Academic</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lessons — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-    :root {
-      --navy:#0b1628; --navy2:#112240; --navy3:#1a3a5c;
-      --gold:#c9a84c; --gold2:rgba(201,168,76,.12);
-      --white:#f0f4ff; --muted:#7a8fa6;
-      --border:rgba(255,255,255,.08);
-      --r:10px;
-      --green:#10b981; --red:#ef4444;
-    }
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;}
+:root{--navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;--gold:#d4a017;--gold2:#f0c040;--orange:#e8620a;--white:#ffffff;--border:#1e3a5f;--muted:#7a8fa6;--green:#16803c;--red:#b92b1a;--r:6px;}
+*{box-sizing:border-box;margin:0;padding:0;} html{overflow-x:hidden;}
+body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--font-body);}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--navy2);}::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
 
-    /* ── TOP NAV ── */
-    .topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
-    .topnav-logo{display:flex;align-items:center;gap:.6rem;}
-    .logo-text{font-family:var(--font-display);font-size:1.2rem;font-weight:700;}
-    .logo-text .gold{color:var(--gold);}
-    .nav-links{display:flex;gap:.3rem;flex:1;}
-    .nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;border:none;transition:all .2s;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:.4rem;}
-    .nav-link:hover{background:var(--navy3);color:var(--white);}
-    .nav-user{display:flex;align-items:center;gap:.75rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;}
-    .avatar{width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;}
+/* ── NAV ── */
+.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
+.topnav-logo{display:flex;align-items:center;gap:.6rem;}
+.topnav-logo img{height:36px;width:auto;}
+.logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
+.nav-links{display:flex;gap:.3rem;flex:1;}
+.nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;border:none;transition:all .2s;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:.4rem;}
+.nav-link:hover,.nav-link.active{background:var(--navy3);color:var(--white);}
+.nav-user{display:flex;align-items:center;gap:.75rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
+.nav-user:hover{border-color:var(--gold);}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;}
 
-    /* ── LAYOUT ── */
-    .app{display:flex;min-height:calc(100vh - 57px);}
+/* ── PAGE HEADER ── */
+.page-hero{padding:2.5rem 2rem 0;max-width:1280px;margin:0 auto;}
+.page-hero h1{font-family:var(--font-display);font-size:1.9rem;font-weight:800;margin-bottom:.35rem;}
+.page-hero h1 span{color:var(--gold);}
+.page-hero p{color:var(--muted);font-size:.92rem;max-width:560px;}
 
-    /* ── SIDEBAR ── */
-    .sidebar{width:300px;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;max-height:calc(100vh - 57px);position:sticky;top:57px;}
-    .sidebar-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);}
-    .sidebar-title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:.75rem;}
-    .subject-pills{display:flex;gap:.4rem;flex-wrap:wrap;}
-    .subject-pill{padding:.3rem .75rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--font-body);}
-    .subject-pill:hover{border-color:var(--gold);color:var(--white);}
-    .subject-pill.active{background:var(--gold);border-color:var(--gold);color:var(--navy);}
-    .lesson-list{flex:1;overflow-y:auto;padding:.75rem 0;}
-    .lesson-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.5rem;cursor:pointer;transition:all .15s;border-left:3px solid transparent;}
-    .lesson-item:hover{background:var(--navy3);}
-    .lesson-item.active{background:var(--navy3);border-left-color:var(--gold);}
-    .lesson-num{width:24px;height:24px;border-radius:50%;background:var(--navy3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--muted);flex-shrink:0;font-family:var(--font-mono);}
-    .lesson-item.active .lesson-num{background:var(--gold);border-color:var(--gold);color:var(--navy);}
-    .lesson-info{flex:1;min-width:0;}
-    .lesson-name{font-size:.82rem;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .lesson-subject-tag{font-size:.7rem;color:var(--muted);margin-top:.15rem;}
-    .lesson-watched{font-size:.75rem;color:var(--green);flex-shrink:0;}
-    .no-lessons{padding:2rem 1.5rem;text-align:center;color:var(--muted);font-size:.85rem;}
+/* ── FILTER BAR ── */
+.filter-bar{padding:1.5rem 2rem .75rem;max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:.75rem;position:sticky;top:57px;background:var(--navy);z-index:50;border-bottom:1px solid var(--border);}
+.subject-tabs{display:flex;gap:.4rem;flex-wrap:wrap;}
+.subject-tab{background:var(--navy2);border:1.5px solid var(--border);color:var(--muted);padding:.45rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;transition:all .2s;}
+.subject-tab:hover{border-color:rgba(212,160,23,.4);color:var(--white);}
+.subject-tab.active{border-color:var(--gold);color:var(--gold);background:rgba(212,160,23,.08);}
+.subject-tab[data-subject="physics"].active   {border-color:#818cf8;color:#818cf8;background:rgba(129,140,248,.1);}
+.subject-tab[data-subject="chemistry"].active {border-color:#fb923c;color:#fb923c;background:rgba(251,146,60,.1);}
+.subject-tab[data-subject="biology"].active   {border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,.1);}
+.subject-tab[data-subject="maths"].active     {border-color:#60a5fa;color:#60a5fa;background:rgba(96,165,250,.1);}
 
-    /* ── MAIN VIDEO AREA ── */
-    .main{flex:1;display:flex;flex-direction:column;min-width:0;}
-    .video-area{padding:2rem;flex:1;}
-    .video-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:400px;background:var(--navy2);border-radius:var(--r);border:1px solid var(--border);gap:1rem;}
-    .video-placeholder-icon{font-size:3rem;}
-    .video-placeholder-text{color:var(--muted);font-size:.9rem;}
-    .video-wrapper{position:relative;padding-bottom:56.25%;height:0;border-radius:var(--r);overflow:hidden;background:#000;display:none;}
-    .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-    .video-meta{margin-top:1.5rem;}
-    .video-title{font-family:var(--font-display);font-size:1.5rem;font-weight:700;margin-bottom:.5rem;}
-    .video-subject-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;margin-bottom:1rem;}
-    .video-description{color:var(--muted);font-size:.875rem;line-height:1.65;max-width:720px;}
-    .video-actions{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap;}
-    .btn{padding:.55rem 1.1rem;border-radius:var(--r);font-size:.82rem;font-weight:600;cursor:pointer;border:none;font-family:var(--font-body);transition:all .2s;display:flex;align-items:center;gap:.4rem;}
-    .btn-gold{background:var(--gold);color:var(--navy);}
-    .btn-gold:hover{background:#d4a843;}
-    .btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
-    .btn-outline:hover{border-color:var(--gold);color:var(--white);}
-    .btn-green{background:var(--green);color:white;}
+.filter-row{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.filter-group{display:flex;align-items:center;gap:.5rem;}
+.filter-label{font-size:.72rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+.filter-pills{display:flex;gap:.35rem;}
+.filter-pill{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.28rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;transition:all .2s;}
+.filter-pill:hover{border-color:rgba(212,160,23,.4);color:var(--white);}
+.filter-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(212,160,23,.08);}
+.results-count{margin-left:auto;font-size:.78rem;font-family:var(--font-mono);color:var(--muted);}
 
-    /* ── NEXT/PREV ── */
-    .nav-btns{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;border-top:1px solid var(--border);background:var(--navy2);}
-    .nav-btn{display:flex;align-items:center;gap:.5rem;padding:.55rem 1rem;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--font-body);}
-    .nav-btn:hover:not(:disabled){border-color:var(--gold);color:var(--white);}
-    .nav-btn:disabled{opacity:.3;cursor:not-allowed;}
-    .lesson-counter{font-size:.8rem;color:var(--muted);font-family:var(--font-mono);}
+/* ── MAIN ── */
+main{max-width:1280px;margin:0 auto;padding:2rem;}
 
-    /* ── SUBJECT COLOURS ── */
-    .chem{background:rgba(21,101,192,.15);color:#64b5f6;}
-    .phys{background:rgba(106,27,154,.15);color:#ce93d8;}
-    .bio{background:rgba(46,125,50,.15);color:#81c784;}
-    .maths{background:rgba(230,81,0,.15);color:#ffb74d;}
+/* ── SUBJECT GROUPS ── */
+.subject-section{margin-bottom:3rem;}
+.subject-section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;}
+.subject-section-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.subject-section-name{font-family:var(--font-display);font-size:1.15rem;font-weight:700;}
+.subject-section-count{font-size:.78rem;font-family:var(--font-mono);color:var(--muted);}
 
-    /* ── LOADING ── */
-    .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:3rem auto;}
-    @keyframes spin{to{transform:rotate(360deg);}}
+/* ── TOPIC GROUPS ── */
+.topic-group{margin-bottom:1.75rem;}
+.topic-group-header{font-size:.72rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);}
 
-    /* ── RESPONSIVE ── */
-    @media(max-width:768px){
-      .sidebar{width:100%;max-height:200px;position:relative;top:0;}
-      .app{flex-direction:column;}
-      .lesson-item{padding:.6rem 1rem;}
-      .video-area{padding:1rem;}
-      .nav-btns{padding:.75rem 1rem;}
-    }
-  </style>
+/* ── LESSON GRID ── */
+.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+@media(max-width:1100px){.lesson-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.lesson-grid{grid-template-columns:1fr;}}
+
+/* ── LESSON CARD ── */
+.lesson-card{
+  background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
+  padding:1.1rem 1.1rem 0;cursor:pointer;transition:all .22s;
+  display:flex;flex-direction:column;gap:.6rem;position:relative;overflow:hidden;
+}
+.lesson-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--card-accent,var(--gold));border-radius:3px 0 0 3px;
+  transition:width .2s;
+}
+.lesson-card:hover{border-color:var(--card-accent,var(--gold));transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.25);}
+.lesson-card:hover::before{width:4px;}
+
+.card-top{display:flex;align-items:flex-start;gap:.6rem;}
+.card-type-icon{font-size:1.5rem;flex-shrink:0;line-height:1;}
+.card-title-wrap{flex:1;min-width:0;}
+.card-title{font-size:.9rem;font-weight:700;line-height:1.35;margin-bottom:.25rem;}
+.card-topic{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.card-badges{display:flex;gap:.35rem;flex-wrap:wrap;}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:.18rem .5rem;border-radius:3px;}
+.badge-board  {background:rgba(96,165,250,.12);color:#60a5fa;}
+.badge-tier   {background:rgba(167,139,250,.12);color:#a78bfa;}
+.badge-type   {background:rgba(212,160,23,.1);color:var(--gold);}
+.badge-dur    {background:rgba(122,143,166,.1);color:var(--muted);}
+
+/* ── PROGRESS STRIP (bottom of card) ── */
+.progress-strip{
+  margin:0 -1.1rem;padding:.55rem 1.1rem;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:.5rem;
+  font-size:.75rem;font-weight:600;margin-top:auto;
+}
+.progress-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.progress-not-started .progress-dot{background:var(--muted);}
+.progress-not-started .progress-label{color:var(--muted);}
+.progress-started .progress-dot{background:#fbbf24;}
+.progress-started .progress-label{color:#fbbf24;}
+.progress-completed .progress-dot{background:#4ade80;}
+.progress-completed .progress-label{color:#4ade80;}
+
+/* ── LOADING ── */
+.skeleton-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+@media(max-width:1100px){.skeleton-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.skeleton-grid{grid-template-columns:1fr;}}
+.skeleton-card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;height:150px;animation:shimmer 1.4s ease infinite;}
+@keyframes shimmer{0%,100%{opacity:1;}50%{opacity:.55;}}
+
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:3rem auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── EMPTY STATE ── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 2rem;gap:1rem;color:var(--muted);}
+.empty-icon{font-size:3rem;}
+.empty-title{font-family:var(--font-display);font-size:1.2rem;color:var(--white);}
+.empty-sub{font-size:.88rem;max-width:360px;text-align:center;}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:var(--green);}
+#toast.error{border-color:var(--red);}
+</style>
 </head>
 <body>
 
-<!-- TOP NAV -->
+<!-- NAV -->
 <nav class="topnav">
   <div class="topnav-logo">
-    <div class="logo-text">Inspire <span class="gold">Academic</span></div>
+    <div class="logo-text">Inspire Academic</div>
   </div>
   <div class="nav-links">
     <a href="dashboard.html" class="nav-link">🏠 Dashboard</a>
     <a href="subjects.html" class="nav-link">📚 Subjects</a>
-    <a href="lessons.html" class="nav-link" style="color:var(--white);background:var(--navy3);">🎬 Lessons</a>
+    <a href="lessons.html" class="nav-link active">⚡ Lessons</a>
+    <a href="revision.html" class="nav-link">🔁 Revision</a>
   </div>
   <div class="nav-user" id="nav-user">
     <div class="avatar" id="nav-avatar">?</div>
@@ -120,285 +157,250 @@
   </div>
 </nav>
 
-<!-- APP LAYOUT -->
-<div class="app">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-title">📹 Video Lessons</div>
-      <div class="subject-pills" id="subject-pills">
-        <button class="subject-pill active" data-subject="all" onclick="filterSubject(this)">All</button>
-        <button class="subject-pill" data-subject="chemistry" onclick="filterSubject(this)">⚗️ Chemistry</button>
-        <button class="subject-pill" data-subject="biology" onclick="filterSubject(this)">🧬 Biology</button>
-        <button class="subject-pill" data-subject="physics" onclick="filterSubject(this)">⚡ Physics</button>
-        <button class="subject-pill" data-subject="maths" onclick="filterSubject(this)">📐 Maths</button>
-      </div>
-    </div>
-    <div class="lesson-list" id="lesson-list">
-      <div class="spinner"></div>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-    <div class="video-area">
-
-      <!-- Placeholder (shown before a lesson is selected) -->
-      <div class="video-placeholder" id="video-placeholder">
-        <div class="video-placeholder-icon">🎬</div>
-        <div class="video-placeholder-text">Select a lesson from the left to start watching</div>
-      </div>
-
-      <!-- Video player -->
-      <div class="video-wrapper" id="video-wrapper">
-        <iframe id="video-iframe" src="" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-      </div>
-
-      <!-- Video metadata -->
-      <div class="video-meta" id="video-meta" style="display:none;">
-        <div class="video-subject-badge" id="video-badge"></div>
-        <div class="video-title" id="video-title"></div>
-        <div class="video-description" id="video-desc"></div>
-        <div class="video-actions">
-          <button class="btn btn-gold" onclick="markWatched()">✓ Mark as Watched</button>
-          <button class="btn btn-outline" onclick="goToQuizzes()">📝 Take a Quiz on this Topic</button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- NEXT / PREV -->
-    <div class="nav-btns" id="nav-btns" style="display:none;">
-      <button class="nav-btn" id="btn-prev" onclick="navigateLesson(-1)" disabled>← Previous</button>
-      <span class="lesson-counter" id="lesson-counter"></span>
-      <button class="nav-btn" id="btn-next" onclick="navigateLesson(1)">Next →</button>
-    </div>
-  </main>
-
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <h1>Lesson <span>Library</span></h1>
+  <p>Interactive masterclasses, video lessons, and revision resources — all in one place.</p>
 </div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="subject-tabs" id="subject-tabs">
+    <button class="subject-tab active" data-subject="all" onclick="setSubjectFilter(this)">All Subjects</button>
+    <button class="subject-tab" data-subject="physics"   onclick="setSubjectFilter(this)">⚡ Physics</button>
+    <button class="subject-tab" data-subject="chemistry" onclick="setSubjectFilter(this)">⚗️ Chemistry</button>
+    <button class="subject-tab" data-subject="biology"   onclick="setSubjectFilter(this)">🧬 Biology</button>
+    <button class="subject-tab" data-subject="maths"     onclick="setSubjectFilter(this)">📐 Maths</button>
+  </div>
+  <div class="filter-row">
+    <div class="filter-group">
+      <span class="filter-label">Exam board</span>
+      <div class="filter-pills">
+        <button class="filter-pill active" data-board="all"     onclick="setBoardFilter(this)">All</button>
+        <button class="filter-pill"        data-board="AQA"     onclick="setBoardFilter(this)">AQA</button>
+        <button class="filter-pill"        data-board="Edexcel" onclick="setBoardFilter(this)">Edexcel</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Tier</span>
+      <div class="filter-pills">
+        <button class="filter-pill active" data-tier="all"        onclick="setTierFilter(this)">All</button>
+        <button class="filter-pill"        data-tier="Higher"     onclick="setTierFilter(this)">Higher</button>
+        <button class="filter-pill"        data-tier="Foundation" onclick="setTierFilter(this)">Foundation</button>
+      </div>
+    </div>
+    <div class="results-count" id="results-count"></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+  <div class="skeleton-grid">
+    ${Array(6).fill('<div class="skeleton-card"></div>').join('')}
+  </div>
+</main>
+
+<div id="toast"></div>
 
 <script>
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM3MDI3NzksImV4cCI6MjA1OTI3ODc3OX0.tWAkNwpzyfHVBHFHlHMAaAYKVhOB8PCUJ6j1GUfnXPE';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 
 let allLessons = [];
-let filteredLessons = [];
-let currentIndex = -1;
-let watched = new Set();
+let progressMap = {}; // lesson_id → { started_at, completed_at }
 let currentUser = null;
+let filters = { subject: 'all', board: 'all', tier: 'all' };
 
-// ── Extract YouTube video ID from any YouTube URL ──
-function getYouTubeId(url) {
-  if (!url) return null;
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([a-zA-Z0-9_-]{11})/);
-  return match ? match[1] : null;
+const TYPE_ICON  = { html:'⚡', video:'🎬', pdf:'📋', doc:'📝' };
+const TYPE_LABEL = { html:'Interactive', video:'Video', pdf:'PDF', doc:'Word' };
+
+const SUBJECT_META = {
+  physics:   { accent:'#818cf8', dot:'#818cf8', bg:'rgba(129,140,248,.1)' },
+  chemistry: { accent:'#fb923c', dot:'#fb923c', bg:'rgba(251,146,60,.1)'  },
+  biology:   { accent:'#4ade80', dot:'#4ade80', bg:'rgba(74,222,128,.1)'  },
+  maths:     { accent:'#60a5fa', dot:'#60a5fa', bg:'rgba(96,165,250,.1)'  },
+};
+
+function subjectMeta(name){
+  const key = Object.keys(SUBJECT_META).find(k => (name||'').toLowerCase().includes(k));
+  return SUBJECT_META[key] || { accent:'#d4a017', dot:'#d4a017', bg:'rgba(212,160,23,.1)' };
 }
 
-function getSubjectClass(subject) {
-  const s = (subject || '').toLowerCase();
-  if (s === 'chemistry') return 'chem';
-  if (s === 'physics') return 'phys';
-  if (s === 'biology') return 'bio';
-  if (s.includes('math')) return 'maths';
-  return 'chem';
+function progressState(lessonId){
+  const p = progressMap[lessonId];
+  if(!p) return 'not-started';
+  if(p.completed_at) return 'completed';
+  return 'started';
 }
 
-function capitalise(str) {
-  return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+function progressLabel(state){
+  return { 'not-started':'Not Started', started:'In Progress', completed:'Completed' }[state];
 }
 
-function subjectIcon(subject) {
-  const s = (subject || '').toLowerCase();
-  if (s === 'chemistry') return '⚗️';
-  if (s === 'physics') return '⚡';
-  if (s === 'biology') return '🧬';
-  if (s.includes('math')) return '📐';
-  return '📖';
+function toast(msg, type='success'){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show ' + type;
+  setTimeout(() => t.className = '', 3000);
 }
 
-// ── Auth ──
-async function init() {
-  const { data: { user } } = await supa.auth.getUser();
-  if (!user) { window.location.href = 'index.html'; return; }
-  currentUser = user;
-
-  // Get profile for name
-  const { data: profile } = await supa.from('profiles').select('first_name, full_name').eq('id', user.id).single();
-  const name = profile?.first_name || (profile?.full_name?.split(' ')[0]) || '';
-  document.getElementById('nav-name').textContent = name;
-  document.getElementById('nav-avatar').textContent = name[0]?.toUpperCase() || '?';
-
-  // Load watched lessons from localStorage
-  try {
-    const raw = localStorage.getItem(`ia_watched_${user.id}`);
-    if (raw) watched = new Set(JSON.parse(raw));
-  } catch(e) {}
-
-  // Check URL param for direct lesson link
-  const params = new URLSearchParams(window.location.search);
-  const lessonId = params.get('lesson');
-
-  await loadLessons(lessonId);
+// ── Filters ──
+function setSubjectFilter(btn){
+  document.querySelectorAll('.subject-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filters.subject = btn.dataset.subject;
+  renderGrid();
+}
+function setBoardFilter(btn){
+  document.querySelectorAll('[data-board]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filters.board = btn.dataset.board;
+  renderGrid();
+}
+function setTierFilter(btn){
+  document.querySelectorAll('[data-tier]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filters.tier = btn.dataset.tier;
+  renderGrid();
 }
 
-// ── Load lessons from Supabase ──
-async function loadLessons(autoLoadId = null) {
-  const { data, error } = await supa
-    .from('teaching_lessons')
-    .select('id, title, subject, topic, description, video_url, order_index')
-    .eq('is_published', true)
-    .not('video_url', 'is', null)
-    .order('subject', { ascending: true })
-    .order('order_index', { ascending: true });
-
-  if (error || !data?.length) {
-    document.getElementById('lesson-list').innerHTML =
-      '<div class="no-lessons">No lessons available yet.<br>Check back soon!</div>';
-    return;
-  }
-
-  allLessons = data;
-  filteredLessons = [...allLessons];
-  renderSidebar();
-
-  // Auto-load lesson from URL param or first lesson
-  if (autoLoadId) {
-    const idx = filteredLessons.findIndex(l => l.id === autoLoadId);
-    if (idx >= 0) loadLesson(idx);
-  }
+function applyFilters(){
+  return allLessons.filter(l => {
+    const subjectName = (l.subjects?.name || '').toLowerCase();
+    if(filters.subject !== 'all' && !subjectName.includes(filters.subject)) return false;
+    if(filters.board !== 'all' && l.exam_board !== filters.board && l.exam_board !== 'Both') return false;
+    if(filters.tier !== 'all' && l.tier !== filters.tier && l.tier !== 'Both') return false;
+    return true;
+  });
 }
 
-// ── Render sidebar list ──
-function renderSidebar() {
-  const list = document.getElementById('lesson-list');
+// ── Render ──
+function renderCard(lesson){
+  const subj = lesson.subjects?.name || '';
+  const meta = subjectMeta(subj);
+  const topic = lesson.topics?.name || '';
+  const typeIcon = TYPE_ICON[lesson.lesson_type] || '📄';
+  const typeLabel = TYPE_LABEL[lesson.lesson_type] || lesson.lesson_type;
+  const state = progressState(lesson.id);
 
-  if (!filteredLessons.length) {
-    list.innerHTML = '<div class="no-lessons">No lessons in this subject yet.</div>';
-    return;
-  }
-
-  list.innerHTML = filteredLessons.map((lesson, i) => {
-    const isWatched = watched.has(lesson.id);
-    const isActive = i === currentIndex;
-    return `
-      <div class="lesson-item ${isActive ? 'active' : ''}" onclick="loadLesson(${i})" id="lesson-item-${i}">
-        <div class="lesson-num">${String(i + 1).padStart(2, '0')}</div>
-        <div class="lesson-info">
-          <div class="lesson-name">${lesson.title}</div>
-          <div class="lesson-subject-tag">${subjectIcon(lesson.subject)} ${capitalise(lesson.subject)}</div>
+  return `
+    <div class="lesson-card"
+         style="--card-accent:${meta.accent}"
+         onclick="window.location.href='lesson-viewer.html?id=${lesson.id}'">
+      <div class="card-top">
+        <div class="card-type-icon">${typeIcon}</div>
+        <div class="card-title-wrap">
+          <div class="card-title">${lesson.title}</div>
+          ${topic ? `<div class="card-topic">${topic}</div>` : ''}
         </div>
-        ${isWatched ? '<div class="lesson-watched">✓</div>' : ''}
+      </div>
+      <div class="card-badges">
+        <span class="badge badge-type">${typeLabel}</span>
+        ${lesson.exam_board ? `<span class="badge badge-board">${lesson.exam_board}</span>` : ''}
+        ${lesson.tier ? `<span class="badge badge-tier">${lesson.tier}</span>` : ''}
+        ${lesson.duration_minutes ? `<span class="badge badge-dur">~${lesson.duration_minutes}m</span>` : ''}
+      </div>
+      <div class="progress-strip progress-${state}">
+        <div class="progress-dot"></div>
+        <span class="progress-label">${progressLabel(state)}</span>
+      </div>
+    </div>`;
+}
+
+function renderGrid(){
+  const filtered = applyFilters();
+  const main = document.getElementById('main-content');
+  const countEl = document.getElementById('results-count');
+  countEl.textContent = `${filtered.length} lesson${filtered.length === 1 ? '' : 's'}`;
+
+  if(!filtered.length){
+    main.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔭</div>
+        <div class="empty-title">No lessons found</div>
+        <div class="empty-sub">Try adjusting your filters. More lessons are added regularly.</div>
+      </div>`;
+    return;
+  }
+
+  // Group by subject, then topic
+  const subjects = {};
+  filtered.forEach(l => {
+    const subj = l.subjects?.name || 'Other';
+    const topic = l.topics?.name || 'General';
+    if(!subjects[subj]) subjects[subj] = {};
+    if(!subjects[subj][topic]) subjects[subj][topic] = [];
+    subjects[subj][topic].push(l);
+  });
+
+  main.innerHTML = Object.entries(subjects).map(([subj, topics]) => {
+    const meta = subjectMeta(subj);
+    const totalLessons = Object.values(topics).flat().length;
+    return `
+      <div class="subject-section">
+        <div class="subject-section-header">
+          <div class="subject-section-dot" style="background:${meta.dot}"></div>
+          <div class="subject-section-name">${subj}</div>
+          <div class="subject-section-count">${totalLessons} lesson${totalLessons===1?'':'s'}</div>
+        </div>
+        ${Object.entries(topics).map(([topic, lessons]) => `
+          <div class="topic-group">
+            ${Object.keys(topics).length > 1 ? `<div class="topic-group-header">${topic}</div>` : ''}
+            <div class="lesson-grid">
+              ${lessons.map(l => renderCard(l)).join('')}
+            </div>
+          </div>
+        `).join('')}
       </div>`;
   }).join('');
 }
 
-// ── Filter by subject ──
-function filterSubject(btn) {
-  document.querySelectorAll('.subject-pill').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-
-  const subject = btn.dataset.subject;
-  filteredLessons = subject === 'all'
-    ? [...allLessons]
-    : allLessons.filter(l => l.subject?.toLowerCase() === subject);
-
-  currentIndex = -1;
-  renderSidebar();
-
-  // Hide video if active lesson no longer in filtered list
-  document.getElementById('video-placeholder').style.display = 'flex';
-  document.getElementById('video-wrapper').style.display = 'none';
-  document.getElementById('video-meta').style.display = 'none';
-  document.getElementById('nav-btns').style.display = 'none';
+// ── Data Loading ──
+async function loadProgress(userId){
+  const { data } = await supa.from('lesson_progress')
+    .select('lesson_id, started_at, completed_at')
+    .eq('student_id', userId);
+  if(data) data.forEach(p => { progressMap[p.lesson_id] = p; });
 }
 
-// ── Load a lesson ──
-function loadLesson(index) {
-  if (index < 0 || index >= filteredLessons.length) return;
-  currentIndex = index;
+async function loadLessons(){
+  const { data, error } = await supa
+    .from('lessons')
+    .select('*, subjects(id, name), topics(id, name)')
+    .eq('is_published', true)
+    .order('order_number', { ascending: true });
 
-  const lesson = filteredLessons[index];
-  const videoId = getYouTubeId(lesson.video_url);
-
-  // Update URL without reload
-  const url = new URL(window.location);
-  url.searchParams.set('lesson', lesson.id);
-  window.history.replaceState({}, '', url);
-
-  // Swap placeholder for player
-  document.getElementById('video-placeholder').style.display = 'none';
-  document.getElementById('video-wrapper').style.display = 'block';
-  document.getElementById('video-meta').style.display = 'block';
-  document.getElementById('nav-btns').style.display = 'flex';
-
-  // Set iframe
-  const iframe = document.getElementById('video-iframe');
-  iframe.src = videoId
-    ? `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`
-    : '';
-
-  // Set metadata
-  const subClass = getSubjectClass(lesson.subject);
-  document.getElementById('video-badge').className = `video-subject-badge ${subClass}`;
-  document.getElementById('video-badge').textContent = `${subjectIcon(lesson.subject)} ${capitalise(lesson.subject)} · ${lesson.topic || ''}`;
-  document.getElementById('video-title').textContent = lesson.title;
-  document.getElementById('video-desc').textContent = lesson.description || '';
-
-  // Update sidebar
-  renderSidebar();
-
-  // Update nav buttons
-  document.getElementById('btn-prev').disabled = index === 0;
-  document.getElementById('btn-next').disabled = index === filteredLessons.length - 1;
-  document.getElementById('lesson-counter').textContent = `${index + 1} / ${filteredLessons.length}`;
-
-  // Scroll sidebar item into view
-  setTimeout(() => {
-    const el = document.getElementById(`lesson-item-${index}`);
-    if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  }, 100);
-
-  // Scroll to top of video on mobile
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ── Navigate prev/next ──
-function navigateLesson(direction) {
-  loadLesson(currentIndex + direction);
-}
-
-// ── Mark as watched ──
-function markWatched() {
-  if (currentIndex < 0) return;
-  const lesson = filteredLessons[currentIndex];
-  watched.add(lesson.id);
-
-  // Persist to localStorage
-  try {
-    localStorage.setItem(`ia_watched_${currentUser.id}`, JSON.stringify([...watched]));
-  } catch(e) {}
-
-  renderSidebar();
-
-  // Update button
-  const btn = document.querySelector('.btn-gold');
-  if (btn) {
-    btn.textContent = '✓ Watched';
-    btn.style.background = 'var(--green)';
-    btn.style.color = 'white';
+  if(error){
+    document.getElementById('main-content').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠️</div>
+        <div class="empty-title">Could not load lessons</div>
+        <div class="empty-sub">${error.message}</div>
+      </div>`;
+    return;
   }
+
+  allLessons = data || [];
+  renderGrid();
 }
 
-// ── Go to quizzes for this topic ──
-function goToQuizzes() {
-  if (currentIndex < 0) return;
-  const lesson = filteredLessons[currentIndex];
-  window.location.href = `subjects.html?subject=${encodeURIComponent(lesson.subject)}`;
+async function init(){
+  const { data:{ user } } = await supa.auth.getUser();
+  if(!user){ window.location.href = 'index.html'; return; }
+  currentUser = user;
+
+  const { data: profile } = await supa.from('profiles').select('first_name, full_name').eq('id', user.id).single();
+  const name = profile?.first_name || profile?.full_name?.split(' ')[0] || '';
+  document.getElementById('nav-name').textContent = name;
+  document.getElementById('nav-avatar').textContent = (name[0] || '?').toUpperCase();
+
+  await Promise.all([
+    loadProgress(user.id),
+    loadLessons()
+  ]);
 }
 
-init().catch(console.error);
+init();
 </script>
 </body>
 </html>
