@@ -587,7 +587,17 @@ function renderHero(){
           transition:opacity 0.2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
           🧬 Open Biology Dashboard
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>`:''}      </div>
+        </a>`:s.slug==='maths'?`
+        <a href="maths.html" style="
+          display:inline-flex;align-items:center;gap:.5rem;
+          margin-top:1rem;padding:.5rem 1.1rem;
+          background:linear-gradient(135deg,#1c4f8a,#3b82f6);
+          color:#fff;border-radius:6px;font-size:.78rem;font-weight:600;
+          text-decoration:none;box-shadow:0 2px 8px rgba(28,79,138,0.3);
+          transition:opacity 0.2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          ∑ Open Maths Dashboard
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>`:''}
       <div class="hero-right">
         <div class="hero-stat">
           <div class="hs-num" style="color:${meta.color}">${Math.round(avgScore)}%</div>
