@@ -387,7 +387,7 @@
       letter-spacing: -.055em; margin-bottom: 14px;
     }
     [data-theme="dark"]  .hero h1 { color: #f0f6ff }
-    [data-theme="light"] .hero h1 { color: #0d1929 }
+    [data-theme="light"] .hero h1 { color: #ffffff; text-shadow: 0 2px 12px rgba(0,0,0,.45) }
     .hero-tagline {
       font-size: 16px; font-weight: 600;
       color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;
@@ -728,27 +728,7 @@
       background: rgba(37,99,235,.2); border-color: rgba(37,99,235,.35);
       color: var(--cyan-bright);
     }
-    .lesson-thumb {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: linear-gradient(135deg,rgba(29,78,216,.3),rgba(6,182,212,.2));
-      border: 1px solid var(--border-strong);
-      display: grid; place-items: center;
-      flex-shrink: 0; position: relative; overflow: hidden;
-    }
-    .lesson-thumb::after {
-      content: ''; position: absolute;
-      width: 48px; height: 48px; border-radius: 50%;
-      border: 1px solid rgba(6,182,212,.3);
-    }
-    .lesson-thumb-inner {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--cyan-bright);
-      box-shadow: 0 0 16px var(--cyan-bright);
-    }
-    [data-theme="light"] .lesson-thumb-inner {
-      background: var(--blue-mid);
-      box-shadow: 0 0 16px rgba(29,78,216,.5);
-    }
+    .lesson-info img { flex-shrink: 0 }
     .lesson-info { display: flex; align-items: center; gap: 14px; margin-bottom: 14px }
     .lesson-title {
       font-family: 'Fraunces', serif;
@@ -851,19 +831,30 @@
     [data-theme="light"] .skills-view-all { color: var(--blue-mid) }
 
     
-    .quote-card { padding: 20px; position: relative; overflow: hidden }
+    .quote-card {
+      padding: 20px; position: relative; overflow: hidden;
+      background-image: url('/assets/images/physics/journey/working-scientifically.jpg');
+      background-size: cover; background-position: center;
+    }
+    .quote-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(7,16,30,.72); border-radius: inherit; z-index: 0;
+    }
     .quote-mark {
       font-family: 'Fraunces', serif; font-size: 80px; line-height: 1;
       position: absolute; right: 14px; top: -8px;
-      color: rgba(201,168,76,.14); pointer-events: none;
+      color: rgba(201,168,76,.28); pointer-events: none;
+      z-index: 1;
     }
     .quote-text {
       font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.45;
-      font-weight: 650; letter-spacing: -.02em; margin-bottom: 12px; position: relative;
+      font-weight: 650; letter-spacing: -.02em; margin-bottom: 12px;
+      position: relative; z-index: 1; color: #f0f6ff;
     }
     .quote-author {
       font-size: 11px; font-weight: 800; letter-spacing: .1em;
       text-transform: uppercase; color: var(--gold);
+      position: relative; z-index: 1;
     }
 
     
@@ -1430,7 +1421,7 @@
           </div>
           <div style="padding:0 18px">
             <div class="lesson-info">
-              <div class="lesson-thumb"><div class="lesson-thumb-inner"></div></div>
+              <img src="/assets/images/physics/journey/electricity.jpg" alt="Series Circuits" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid rgba(37,99,235,.4)">
               <div>
                 <div class="lesson-title">Series Circuits</div>
                 <div class="lesson-meta">Topic 2 · Electricity · 18 min</div>
