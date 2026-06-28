@@ -5,27 +5,28 @@
   const params = new URLSearchParams(window.location.search);
   const ref = params.get('ref');
   const REFS = {
-    physics: { label: '← Physics', href: 'physics.html' }
+    physics:   { label: '← Physics',   href: 'physics.html',   bg: 'rgba(37,99,235,.18)',  border: 'rgba(37,99,235,.4)',  borderHover: 'rgba(37,99,235,.75)'  },
+    chemistry: { label: '← Chemistry', href: 'chemistry.html', bg: 'rgba(16,185,129,.18)', border: 'rgba(16,185,129,.4)', borderHover: 'rgba(16,185,129,.75)' },
+    biology:   { label: '← Biology',   href: 'biology.html',   bg: 'rgba(22,163,74,.18)',  border: 'rgba(22,163,74,.4)',  borderHover: 'rgba(22,163,74,.75)'  },
+    maths:     { label: '← Maths',     href: 'maths.html',     bg: 'rgba(59,130,246,.18)', border: 'rgba(59,130,246,.4)', borderHover: 'rgba(59,130,246,.75)' },
   };
   const src = REFS[ref];
   if (!src) return;
-
-  const BASE_STYLE = [
-    'display:inline-flex', 'align-items:center', 'flex-shrink:0',
-    'color:rgba(240,246,255,.85)', 'font-size:12px', 'font-weight:700',
-    'text-decoration:none', 'white-space:nowrap',
-    'background:rgba(37,99,235,.18)', 'border:1px solid rgba(37,99,235,.4)',
-    'border-radius:20px', 'padding:5px 14px', 'transition:border-color .15s',
-    'font-family:inherit'
-  ].join(';');
 
   function makeBtn(extra) {
     const btn = document.createElement('a');
     btn.href = src.href;
     btn.textContent = src.label;
-    btn.style.cssText = BASE_STYLE + (extra ? ';' + extra : '');
-    btn.addEventListener('mouseenter', () => btn.style.borderColor = 'rgba(37,99,235,.75)');
-    btn.addEventListener('mouseleave', () => btn.style.borderColor = 'rgba(37,99,235,.4)');
+    btn.style.cssText = [
+      'display:inline-flex', 'align-items:center', 'flex-shrink:0',
+      'color:rgba(240,246,255,.85)', 'font-size:12px', 'font-weight:700',
+      'text-decoration:none', 'white-space:nowrap',
+      `background:${src.bg}`, `border:1px solid ${src.border}`,
+      'border-radius:20px', 'padding:5px 14px', 'transition:border-color .15s',
+      'font-family:inherit'
+    ].join(';') + (extra ? ';' + extra : '');
+    btn.addEventListener('mouseenter', () => btn.style.borderColor = src.borderHover);
+    btn.addEventListener('mouseleave', () => btn.style.borderColor = src.border);
     return btn;
   }
 
