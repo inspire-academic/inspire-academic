@@ -1532,8 +1532,36 @@
   © <span id="footerYear"></span> Inspire Science™ · Inspire Vision™ · All rights reserved.
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  // ── PROFILE — populate name from logged-in user ──────────────
+  (async () => {
+    try {
+      const supa = supabase.createClient(
+        'https://ygtsrdwoikqnrbexjrtl.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo'
+      );
+      const { data: { user } } = await supa.auth.getUser();
+      if (!user) return;
+      const { data: profile } = await supa.from('profiles')
+        .select('first_name,full_name').eq('id', user.id).single();
+      const firstName = profile?.first_name
+        || (profile?.full_name ? profile.full_name.split(' ')[0] : null)
+        || user.email?.split('@')[0]
+        || 'Student';
+      const initial = firstName[0]?.toUpperCase() || '?';
+      const sidebarName = document.querySelector('.student-name');
+      if (sidebarName) sidebarName.textContent = firstName;
+      const heroName = document.querySelector('.welcome-name');
+      if (heroName) heroName.textContent = firstName;
+      const avatarInitial = document.getElementById('studentInitial');
+      if (avatarInitial) avatarInitial.textContent = initial;
+      const avatarImg = document.getElementById('studentAvatarImg');
+      if (avatarImg) avatarImg.alt = firstName;
+    } catch (_) {}
+  })();
   // ── THEME ────────────────────────────────────────────────────
   const html = document.documentElement;
   const btn  = document.getElementById('themeToggle');
