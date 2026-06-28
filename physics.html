@@ -1162,7 +1162,7 @@
         <div class="welcome-name">Kwame</div>
         <div class="welcome-streak">
           <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>
-          12 day streak
+          <span id="streakCount">—</span> day streak
         </div>
       </div>
     </section>
@@ -1357,7 +1357,7 @@
                     style="filter:drop-shadow(0 0 4px #f97316)"/>
                 </svg>
                 <div class="ring-label">
-                  <span class="ring-pct">72%</span>
+                  <span class="ring-pct" id="ringPct">—</span>
                   <span class="ring-sub">Overall</span>
                 </div>
               </div>
@@ -1369,28 +1369,28 @@
                     <svg viewBox="0 0 10 10" width="10" height="10"><circle cx="5" cy="5" r="4" fill="none" stroke="#06b6d4" stroke-width="2"/></svg>
                   </div>
                   <span class="stat-label">Overall</span>
-                  <span class="stat-val">72%</span>
+                  <span class="stat-val" id="statOverall">—</span>
                 </div>
                 <div class="stat-row">
                   <div class="stat-icon" style="background:rgba(34,197,94,.12)">
                     <svg viewBox="0 0 10 10" width="10" height="10"><circle cx="5" cy="5" r="4" fill="none" stroke="#22c55e" stroke-width="2"/></svg>
                   </div>
                   <span class="stat-label">Quizzes passed</span>
-                  <span class="stat-val">48/67</span>
+                  <span class="stat-val" id="statQuizzes">—</span>
                 </div>
                 <div class="stat-row">
                   <div class="stat-icon" style="background:rgba(249,115,22,.12)">
                     <svg viewBox="0 0 10 10" width="10" height="10"><circle cx="5" cy="5" r="4" fill="none" stroke="#f97316" stroke-width="2"/></svg>
                   </div>
                   <span class="stat-label">Topics started</span>
-                  <span class="stat-val">6/8</span>
+                  <span class="stat-val" id="statTopics">—</span>
                 </div>
                 <div class="stat-row" style="margin-top:4px;padding-top:8px;border-top:1px solid var(--border)">
                   <div class="stat-icon streak" style="background:rgba(249,115,22,.12)">
                     <svg viewBox="0 0 24 24" fill="#f97316" stroke="none"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>
                   </div>
                   <span class="stat-label">Day streak</span>
-                  <span class="stat-val" style="color:var(--danger)">12 🔥</span>
+                  <span class="stat-val" id="statStreak" style="color:var(--danger)">— 🔥</span>
                 </div>
               </div>
             </div>
@@ -1535,16 +1535,15 @@
 <script>
   document.getElementById('footerYear').textContent = new Date().getFullYear();
 
-  // ── PROFILE — populate name from logged-in user ──────────────
+  // ── INIT — profile + subject progress ───────────────────
+  const SUBJECT_ID = 2;
+  const _supa = supabase.createClient('https://ygtsrdwoikqnrbexjrtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo');
   (async () => {
     try {
-      const supa = supabase.createClient(
-        'https://ygtsrdwoikqnrbexjrtl.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo'
-      );
-      const { data: { user } } = await supa.auth.getUser();
+      const { data: { user } } = await _supa.auth.getUser();
       if (!user) return;
-      const { data: profile } = await supa.from('profiles')
+      // Profile
+      const { data: profile } = await _supa.from('profiles')
         .select('first_name,full_name').eq('id', user.id).single();
       const firstName = profile?.first_name
         || (profile?.full_name ? profile.full_name.split(' ')[0] : null)
@@ -1559,7 +1558,59 @@
       if (avatarInitial) avatarInitial.textContent = initial;
       const avatarImg = document.getElementById('studentAvatarImg');
       if (avatarImg) avatarImg.alt = firstName;
-    } catch (_) {}
+      // Subject progress
+      const { data: subjectTopics } = await _supa.from('topics').select('id').eq('subject_id', SUBJECT_ID);
+      const topicIds = subjectTopics?.map(t => t.id) || [];
+      const [
+        { data: topicProgress },
+        { data: subjectQuizzes },
+        { data: streakRow },
+      ] = await Promise.all([
+        topicIds.length
+          ? _supa.from('topic_progress').select('best_score,mastery_level').eq('student_id', user.id).in('topic_id', topicIds)
+          : Promise.resolve({ data: [] }),
+        topicIds.length
+          ? _supa.from('quizzes').select('id').in('topic_id', topicIds)
+          : Promise.resolve({ data: [] }),
+        _supa.from('streaks').select('current_streak').eq('student_id', user.id).single(),
+      ]);
+      const quizIds = subjectQuizzes?.map(q => q.id) || [];
+      const { data: attempts } = quizIds.length
+        ? await _supa.from('quiz_attempts').select('passed').eq('student_id', user.id).in('quiz_id', quizIds).not('completed_at', 'is', null)
+        : { data: [] };
+      const allProgress   = topicProgress || [];
+      const allAttempts   = attempts || [];
+      const streak        = streakRow?.current_streak ?? 0;
+      const topicsTotal   = topicIds.length || 8;
+      const topicsStarted = allProgress.filter(p =>
+        (parseFloat(p.best_score) > 0) || (p.mastery_level && p.mastery_level !== 'not_started')
+      ).length;
+      const quizzesPassed = allAttempts.filter(a => a.passed).length;
+      const quizzesTotal  = allAttempts.length;
+      const avgScore      = allProgress.length
+        ? allProgress.reduce((s, p) => s + (parseFloat(p.best_score) || 0), 0) / allProgress.length
+        : 0;
+      const overallPct = Math.round(Math.min(avgScore, 100));
+      const $el = id => document.getElementById(id);
+      if ($el('ringPct'))     $el('ringPct').textContent     = overallPct + '%';
+      if ($el('statOverall')) $el('statOverall').textContent  = overallPct + '%';
+      if ($el('statQuizzes')) $el('statQuizzes').textContent  = quizzesPassed + '/' + quizzesTotal;
+      if ($el('statTopics'))  $el('statTopics').textContent   = topicsStarted + '/' + topicsTotal;
+      if ($el('statStreak'))  $el('statStreak').textContent   = streak + ' 🔥';
+      if ($el('streakCount')) $el('streakCount').textContent  = streak;
+      _animateRings([
+        { id: 'ring1', dot: 'dot1', circ: 364.42, pct: Math.min(overallPct / 100, 1),                   r: 58, delay: 0   },
+        { id: 'ring2', dot: 'dot2', circ: 289.03, pct: quizzesTotal ? quizzesPassed / quizzesTotal : 0,  r: 46, delay: 180 },
+        { id: 'ring3', dot: 'dot3', circ: 213.63, pct: topicsTotal  ? topicsStarted  / topicsTotal  : 0, r: 34, delay: 320 },
+      ]);
+    } catch (e) {
+      console.warn('Subject init failed:', e);
+      _animateRings([
+        { id: 'ring1', dot: 'dot1', circ: 364.42, pct: 0, r: 58, delay: 0   },
+        { id: 'ring2', dot: 'dot2', circ: 289.03, pct: 0, r: 46, delay: 180 },
+        { id: 'ring3', dot: 'dot3', circ: 213.63, pct: 0, r: 34, delay: 320 },
+      ]);
+    }
   })();
   // ── THEME ────────────────────────────────────────────────────
   const html = document.documentElement;
@@ -1593,47 +1644,31 @@
   const topicsWrap = document.querySelector('.topics-scroll-wrap');
   if (topicsWrap) topicsWrap.scrollTop = 0;
 
-  // ── PROGRESS RINGS — Apple Watch face ───────────────────────
-  window.addEventListener('load', () => {
-    // ring1: overall 72%  — circ 364.42
-    // ring2: quizzes 71.6% — circ 289.03
-    // ring3: topics  75%  — circ 213.63
-    const rings = [
-      { id: 'ring1', dot: 'dot1', circ: 364.42, pct: 0.72, r: 58, delay: 0   },
-      { id: 'ring2', dot: 'dot2', circ: 289.03, pct: 0.716, r: 46, delay: 180 },
-      { id: 'ring3', dot: 'dot3', circ: 213.63, pct: 0.75,  r: 34, delay: 320 },
-    ];
+  // ── PROGRESS RINGS ───────────────────────────────────────────
+  function _animateRings(rings) {
     const cx = 64, cy = 64;
-
     rings.forEach(({ id, dot: dotId, circ, pct, r, delay }) => {
       const ring = document.getElementById(id);
       const dot  = document.getElementById(dotId);
       if (!ring) return;
-
       const offset = circ * (1 - pct);
       const angle  = pct * 360;
-
       setTimeout(() => {
-        // Arc draw — spring easing
         ring.animate(
           [{ strokeDashoffset: circ }, { strokeDashoffset: offset }],
           { duration: 1200, easing: 'cubic-bezier(.34,1.1,.64,1)', fill: 'forwards' }
         );
-
-        // Leading dot travel
         if (dot) {
           const totalFrames = 72;
           let frame = 0;
           const tick = () => {
             if (frame > totalFrames) return;
-            const p      = frame / totalFrames;
-            // cubic ease-out with slight overshoot
-            const eased  = p < 1
+            const p     = frame / totalFrames;
+            const eased = p < 1
               ? 1 - Math.pow(1 - p, 3) + Math.sin(p * Math.PI) * 0.06
               : 1;
-            const clamped = Math.min(eased, 1);
-            const deg    = -90 + angle * clamped;
-            const rad    = deg * Math.PI / 180;
+            const deg   = -90 + angle * Math.min(eased, 1);
+            const rad   = deg * Math.PI / 180;
             dot.setAttribute('cx', (cx + r * Math.cos(rad)).toFixed(2));
             dot.setAttribute('cy', (cy + r * Math.sin(rad)).toFixed(2));
             frame++;
@@ -1643,7 +1678,7 @@
         }
       }, delay);
     });
-  });
+  }
 
   // ── NAV ACTIVE ───────────────────────────────────────────────
   document.querySelectorAll('.nav-link').forEach(link => {
