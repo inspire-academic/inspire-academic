@@ -492,7 +492,7 @@
     
     .topics-section { margin-bottom: 20px }
     .topics-scroll-wrap {
-      max-height: 620px;
+      max-height: 680px;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: rgba(37,99,235,.35) transparent;
@@ -508,7 +508,9 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0,1fr));
       gap: 14px; padding: 18px;
+      justify-items: start;
     }
+    .topic-card { width: 100% }
     .topic-card {
       border-radius: 16px;
       border: 1px solid var(--border);
@@ -1559,6 +1561,10 @@
     };
   }
   // Example: setStudentAvatar('/assets/kwame.jpg');
+
+  // Scroll topics container to top on every page load
+  const topicsWrap = document.querySelector('.topics-scroll-wrap');
+  if (topicsWrap) topicsWrap.scrollTop = 0;
 
   // ── PROGRESS RINGS — Apple Watch face ───────────────────────
   window.addEventListener('load', () => {
