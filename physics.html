@@ -4,19 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inspire Academic | GCSE Physics</title>
+  <meta name="description" content="GCSE Physics revision hub — master topics, lessons, quizzes, past-paper practice and required practicals for Edexcel students.">
+  <link rel="icon" href="assets/images/shared/inspire-logo.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/images/physics/hero/hero-bg.webp" fetchpriority="high">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
   <style>
-    /* ── TOKENS ─────────────────────────────────────────────────── */
+    
     :root {
       --sidebar: 256px;
       --radius: 20px;
       --radius-sm: 12px;
       --transition: .2s cubic-bezier(.4,0,.2,1);
-      --blue: #1d4ed8;        /* richer, deeper blue */
+      --blue: #1d4ed8;        
       --blue-mid: #2563eb;
-      --cyan: #0891b2;        /* deeper cyan for light mode pop */
+      --cyan: #0891b2;        
       --cyan-bright: #06b6d4;
       --gold: #c9a84c;
       --danger: #f97316;
@@ -26,7 +30,7 @@
       --grad-gold: linear-gradient(135deg, #c9a84c, #e8c96a);
     }
 
-    /* ── DARK THEME ──────────────────────────────────────────────── */
+    
     [data-theme="dark"] {
       --bg:              #0b1628;
       --bg-deep:         #07101e;
@@ -37,7 +41,7 @@
       --border-strong:   rgba(255,255,255,.16);
       --text:            #f0f6ff;
       --text-muted:      rgba(240,246,255,.58);
-      --text-soft:       rgba(240,246,255,.36);
+      --text-soft:       rgba(240,246,255,.55);
       --sidebar-bg:      #060e1b;
       --sidebar-border:  rgba(255,255,255,.07);
       --progress-track:  rgba(255,255,255,.08);
@@ -48,7 +52,7 @@
       --card-3d-bottom:  rgba(0,0,0,.25);
     }
 
-    /* ── LIGHT THEME ─────────────────────────────────────────────── */
+    
     [data-theme="light"] {
       --bg:              #eef2f9;
       --bg-deep:         #e4eaf5;
@@ -70,7 +74,7 @@
       --card-3d-bottom:  rgba(29,78,216,.06);
     }
 
-    /* ── RESET ───────────────────────────────────────────────────── */
+    
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
     html { scroll-behavior: smooth }
     body {
@@ -84,16 +88,14 @@
     a { color: inherit; text-decoration: none }
     button, input { font: inherit }
 
-    /* ── APP LAYOUT ──────────────────────────────────────────────── */
+    
     .app {
       display: grid;
       grid-template-columns: var(--sidebar) minmax(0,1fr);
       min-height: 100vh;
     }
 
-    /* ══════════════════════════════════════════════════════════════
-       SIDEBAR
-    ══════════════════════════════════════════════════════════════ */
+    
     .sidebar {
       position: fixed;
       inset: 0 auto 0 0;
@@ -103,7 +105,7 @@
       z-index: 50;
       overflow-y: auto;
       transition: background var(--transition), border-color var(--transition);
-      /* ── Apple liquid glass ── */
+      
       backdrop-filter: blur(28px) saturate(180%);
       -webkit-backdrop-filter: blur(28px) saturate(180%);
       border-right: 1px solid rgba(255,255,255,.1);
@@ -131,7 +133,7 @@
       background: var(--grad-physics-vivid);
       display: grid; place-items: center;
       flex-shrink: 0;
-      /* 3D effect on brand icon */
+      
       box-shadow:
         0 1px 0 rgba(255,255,255,.25) inset,
         0 -1px 0 rgba(0,0,0,.2) inset,
@@ -198,7 +200,7 @@
       background: var(--grad-physics-vivid);
     }
 
-    /* ── ASK AI — star-themed button ────────────────────────────── */
+    
     .ask-ai {
       margin: 12px 16px 8px;
       padding: 10px 12px 11px;
@@ -208,7 +210,7 @@
       position: relative;
       overflow: hidden;
     }
-    /* subtle star sparkles behind the card */
+    
     .ask-ai::before {
       content: '✦';
       position: absolute;
@@ -254,7 +256,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      /* 3D press effect */
+      
       box-shadow:
         0 1px 0 rgba(255,255,255,.18) inset,
         0 -2px 0 rgba(0,0,0,.2) inset,
@@ -265,7 +267,7 @@
     .ask-ai-btn:active { transform: translateY(1px); box-shadow: 0 2px 8px rgba(29,78,216,.3) }
     .ask-ai-btn-star { font-size: 14px }
 
-    /* ── SIDEBAR FOOTER — profile pic + theme toggle ─────────────── */
+    
     .sidebar-footer {
       padding: 14px 20px;
       border-top: 1px solid var(--border);
@@ -274,7 +276,7 @@
       justify-content: space-between;
     }
     .student-info { display: flex; align-items: center; gap: 9px }
-    /* Profile picture container — accepts real img or fallback initial */
+    
     .student-avatar {
       width: 36px; height: 36px; border-radius: 50%;
       background: var(--grad-physics-vivid);
@@ -282,7 +284,7 @@
       font-size: 13px; font-weight: 800; color: #fff;
       flex-shrink: 0;
       overflow: hidden;
-      /* 3D ring around avatar */
+      
       box-shadow:
         0 0 0 2px var(--bg),
         0 0 0 3.5px var(--blue-mid),
@@ -315,12 +317,10 @@
     [data-theme="light"] .icon-sun  { display: block }
     [data-theme="light"] .icon-moon { display: none }
 
-    /* ══════════════════════════════════════════════════════════════
-       MAIN
-    ══════════════════════════════════════════════════════════════ */
+    
     .main { grid-column: 2; padding: 28px 28px 40px; min-width: 0 }
 
-    /* ── HERO ────────────────────────────────────────────────────── */
+    
     .hero {
       border-radius: var(--radius);
       border: 1px solid var(--border);
@@ -332,7 +332,7 @@
       display: flex;
       align-items: center;
       box-shadow: var(--shadow);
-      /* 3D lift */
+      
       transform: translateZ(0);
     }
     [data-theme="dark"] .hero {
@@ -345,7 +345,7 @@
       border-color: rgba(29,78,216,.15);
       box-shadow: 0 -1px 0 rgba(29,78,216,.08) inset, var(--shadow);
     }
-    /* Force white text in hero for both themes — dark overlay covers the image */
+    
     [data-theme="light"] .hero h1 { color: #f0f6ff }
     [data-theme="light"] .hero-tagline { color: rgba(240,246,255,.75) }
     [data-theme="light"] .chip { border-color: rgba(255,255,255,.2); color: rgba(240,246,255,.85); background: rgba(255,255,255,.08) }
@@ -441,14 +441,14 @@
       font-size: 12px; font-weight: 800; color: var(--danger);
     }
 
-    /* ── DASHBOARD GRID ──────────────────────────────────────────── */
+    
     .dashboard-grid {
       display: grid;
       grid-template-columns: minmax(0,1fr) 320px;
       gap: 20px; align-items: start;
     }
 
-    /* ── PANEL ───────────────────────────────────────────────────── */
+    
     .panel {
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -456,7 +456,7 @@
       backdrop-filter: blur(8px);
       box-shadow: var(--shadow-card);
       transition: background var(--transition), border-color var(--transition);
-      /* Subtle 3D — top highlight, bottom shadow inset */
+      
       position: relative;
     }
     [data-theme="dark"] .panel {
@@ -489,7 +489,7 @@
     [data-theme="light"] .panel-link { color: var(--blue-mid) }
     .panel-link:hover { text-decoration: underline }
 
-    /* ── TOPIC CARDS ─────────────────────────────────────────────── */
+    
     .topics-section { margin-bottom: 20px }
     .topics-scroll-wrap {
       max-height: 620px;
@@ -515,7 +515,7 @@
       overflow: hidden;
       transition: all var(--transition);
       cursor: pointer;
-      /* 3D card effect */
+      
     }
     [data-theme="dark"] .topic-card {
       background: rgba(255,255,255,.04);
@@ -591,7 +591,7 @@
     .progress-fill {
       height: 100%; border-radius: inherit;
       background: var(--grad-physics-vivid);
-      /* Light mode — vivid filled bar */
+      
     }
     [data-theme="light"] .progress-fill {
       background: linear-gradient(90deg, #1d4ed8, #0891b2);
@@ -623,13 +623,13 @@
     .status-dot.complete::before { background: var(--success) }
     .topic-pct { color: var(--text-muted); font-weight: 800 }
 
-    /* ── RIGHT COLUMN ────────────────────────────────────────────── */
+    
     .right-col { display: grid; gap: 16px }
 
-    /* ── PROGRESS CARD — futuristic ring ─────────────────────────── */
+    
     .progress-card { padding: 20px 20px 0 }
 
-    /* The ring outer wrapper adds 3D depth */
+    
     .ring-3d-wrap {
       position: relative;
       width: 112px; height: 112px;
@@ -653,7 +653,7 @@
       font-size: 9px; font-weight: 800; text-transform: uppercase;
       letter-spacing: .12em; color: var(--text-soft); margin-top: 3px;
     }
-    /* Outer decorative ring tick marks via SVG-in-HTML */
+    
     .ring-ticks {
       position: absolute; inset: -6px;
       border-radius: 50%;
@@ -714,7 +714,7 @@
     .grade-box.target .grade-val { color: var(--gold) }
     .grade-desc { font-size: 10px; color: var(--text-soft); font-weight: 600; margin-top: 3px }
 
-    /* ── CONTINUE LESSON ─────────────────────────────────────────── */
+    
     .lesson-card { padding: 18px }
     .lesson-next-tag {
       display: inline-flex; align-items: center; gap: 5px;
@@ -762,7 +762,7 @@
       background: var(--grad-physics-vivid);
       color: #fff; padding: 13px 16px;
       font-weight: 800; font-size: 13px; cursor: pointer;
-      /* 3D button */
+      
       box-shadow:
         0 1px 0 rgba(255,255,255,.18) inset,
         0 -2px 0 rgba(0,0,0,.18) inset,
@@ -783,7 +783,7 @@
     }
     .lesson-spacer { height: 18px }
 
-    /* ── SKILLS LAB — 2 rows × 3 cols ───────────────────────────── */
+    
     .skills-card { padding: 18px 18px 20px }
     .skills-grid {
       display: grid;
@@ -850,7 +850,7 @@
     }
     [data-theme="light"] .skills-view-all { color: var(--blue-mid) }
 
-    /* ── QUOTE ───────────────────────────────────────────────────── */
+    
     .quote-card { padding: 20px; position: relative; overflow: hidden }
     .quote-mark {
       font-family: 'Fraunces', serif; font-size: 80px; line-height: 1;
@@ -866,7 +866,7 @@
       text-transform: uppercase; color: var(--gold);
     }
 
-    /* ── SCROLL CONTROLS ─────────────────────────────────────────── */
+    
     .scroll-controls { display: flex; gap: 6px }
     .scroll-btn {
       width: 30px; height: 30px; border-radius: 8px;
@@ -877,7 +877,7 @@
     }
     .scroll-btn:hover { color: var(--text); border-color: var(--border-strong) }
 
-    /* ── QUICK ACCESS ────────────────────────────────────────────── */
+    
     .quick-access {
       margin-top: 20px;
       display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
@@ -916,16 +916,15 @@
       box-shadow: 0 2px 8px rgba(201,168,76,.15);
     }
     .quick-icon svg { width: 18px; height: 18px; stroke-width: 1.8 }
-    .quick-card h3 { font-size: 13px; font-weight: 800; margin-bottom: 4px }
+    .quick-card h2 { font-size: 13px; font-weight: 800; margin-bottom: 4px }
     .quick-card p { font-size: 11px; color: var(--text-muted); line-height: 1.45; margin-bottom: 6px }
     .quick-link { font-size: 11px; font-weight: 800; color: var(--gold) }
 
-    /* ── Item 5: Spring physics interactions ─────────────────────── */
-    /* All interactive surfaces use a spring-like cubic-bezier that
-       slightly overshoots on lift and settles on release */
+    
+    
     :root {
-      --spring-out: cubic-bezier(.34,1.56,.64,1);   /* overshoot up   */
-      --spring-in:  cubic-bezier(.36,0,.66,-.56);   /* micro-squish   */
+      --spring-out: cubic-bezier(.34,1.56,.64,1);   
+      --spring-in:  cubic-bezier(.36,0,.66,-.56);   
     }
 
     .topic-card {
@@ -989,7 +988,7 @@
     .nav-link:active { transform: translateX(1px) }
     .nav-link.active { transform: none }
 
-    /* ── Item 8: Hero entrance animations ───────────────────────── */
+    
     @keyframes heroEntrance {
       from { opacity: 0; transform: translateY(18px) }
       to   { opacity: 1; transform: translateY(0) }
@@ -1042,7 +1041,7 @@
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-icon">
-        <img src="assets/images/shared/inspire-logo.jpg" alt="Inspire Academic" style="width:100%;height:100%;object-fit:contain;border-radius:inherit;">
+        <img src="assets/images/shared/inspire-logo.webp" alt="Inspire Academic" style="width:100%;height:100%;object-fit:contain;border-radius:inherit;">
       </div>
       <div>
         <div class="brand-kicker">Inspire</div>
@@ -1141,7 +1140,8 @@
       <!-- Hero banner image — placeholder, replace src with real asset -->
       <div class="hero-art" aria-hidden="true">
         <div class="hero-img-placeholder">
-          <img src="/assets/images/physics/hero/hero-bg.jpg" alt="Physics hero" class="hero-img" id="heroBannerImg"
+          <img src="/assets/images/physics/hero/hero-bg.webp" alt="Physics hero" class="hero-img" id="heroBannerImg"
+               fetchpriority="high" loading="eager"
                style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease"
                onload="this.style.opacity=1">
         </div>
@@ -1198,7 +1198,7 @@
           <div class="topics-grid">
 
             <article class="topic-card">
-              <div class="topic-art topic-art-1"><img src="/assets/images/physics/journey/energy.jpg" alt="Energy" class="topic-img" data-topic="1" style="width:100%;height:100%;object-fit:cover;object-position:center 60%;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-1"><img src="/assets/images/physics/journey/energy.webp" alt="Energy" class="topic-img" loading="lazy" data-topic="1" style="width:100%;height:100%;object-fit:cover;object-position:center 60%;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 01</div>
                 <div class="topic-name">Energy</div>
@@ -1209,7 +1209,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-2"><img src="/assets/images/physics/journey/electricity.jpg" alt="Electricity" class="topic-img" data-topic="2" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-2"><img src="/assets/images/physics/journey/electricity.webp" alt="Electricity" class="topic-img" loading="lazy" data-topic="2" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 02</div>
                 <div class="topic-name">Electricity</div>
@@ -1220,7 +1220,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-3"><img src="/assets/images/physics/journey/particle-model.jpg" alt="Particle Model of Matter" class="topic-img" data-topic="3" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-3"><img src="/assets/images/physics/journey/particle-model.webp" alt="Particle Model of Matter" class="topic-img" loading="lazy" data-topic="3" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 03</div>
                 <div class="topic-name">Particle Model</div>
@@ -1231,7 +1231,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-4"><img src="/assets/images/physics/journey/atomic-structure.jpg" alt="Atomic Structure and Radiation" class="topic-img" data-topic="4" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-4"><img src="/assets/images/physics/journey/atomic-structure.webp" alt="Atomic Structure and Radiation" class="topic-img" loading="lazy" data-topic="4" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 04</div>
                 <div class="topic-name">Atomic Structure</div>
@@ -1242,7 +1242,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-5"><img src="/assets/images/physics/journey/forces.jpg" alt="Forces" class="topic-img" data-topic="5" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-5"><img src="/assets/images/physics/journey/forces.webp" alt="Forces" class="topic-img" loading="lazy" data-topic="5" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 05</div>
                 <div class="topic-name">Forces</div>
@@ -1253,7 +1253,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-6"><img src="/assets/images/physics/journey/waves.jpg" alt="Waves" class="topic-img" data-topic="6" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-6"><img src="/assets/images/physics/journey/waves.webp" alt="Waves" class="topic-img" loading="lazy" data-topic="6" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 06</div>
                 <div class="topic-name">Waves</div>
@@ -1264,7 +1264,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-7"><img src="/assets/images/physics/journey/magnetism.jpg" alt="Magnetism and Electromagnetism" class="topic-img" data-topic="7" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-7"><img src="/assets/images/physics/journey/magnetism.webp" alt="Magnetism and Electromagnetism" class="topic-img" loading="lazy" data-topic="7" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 07</div>
                 <div class="topic-name">Magnetism &amp; EM</div>
@@ -1275,7 +1275,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-8"><img src="/assets/images/physics/journey/space-physics.jpg" alt="Space Physics" class="topic-img" data-topic="8" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-8"><img src="/assets/images/physics/journey/space-physics.webp" alt="Space Physics" class="topic-img" loading="lazy" data-topic="8" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 08</div>
                 <div class="topic-name">Space Physics</div>
@@ -1506,19 +1506,19 @@
     <section class="quick-access" aria-label="Quick access">
       <article class="quick-card">
         <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg></div>
-        <div><h3>Exam Practice</h3><p>Past-paper questions by topic and mark scheme.</p><span class="quick-link">Start practice →</span></div>
+        <div><h2>Exam Practice</h2><p>Past-paper questions by topic and mark scheme.</p><span class="quick-link">Start practice →</span></div>
       </article>
       <article class="quick-card">
         <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/></svg></div>
-        <div><h3>Quiz of the Day</h3><p>Five focused questions to keep memory sharp.</p><span class="quick-link">Take today's quiz →</span></div>
+        <div><h2>Quiz of the Day</h2><p>Five focused questions to keep memory sharp.</p><span class="quick-link">Take today's quiz →</span></div>
       </article>
       <article class="quick-card">
         <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 2v7.5L4.5 19A2 2 0 0 0 6.2 22h11.6a2 2 0 0 0 1.7-3L14 9.5V2"/><path d="M8 2h8"/></svg></div>
-        <div><h3>Required Practicals</h3><p>Methods, variables, graphs and evaluation skills.</p><span class="quick-link">View practicals →</span></div>
+        <div><h2>Required Practicals</h2><p>Methods, variables, graphs and evaluation skills.</p><span class="quick-link">View practicals →</span></div>
       </article>
       <article class="quick-card">
         <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/></svg></div>
-        <div><h3>Achievements</h3><p>Track mastery milestones and exam-readiness badges.</p><span class="quick-link">View awards →</span></div>
+        <div><h2>Achievements</h2><p>Track mastery milestones and exam-readiness badges.</p><span class="quick-link">View awards →</span></div>
       </article>
     </section>
 
