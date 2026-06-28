@@ -258,6 +258,20 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
 
 .results-actions{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;}
 
+/* QUIZ SELECT screen */
+.quiz-pick-grid{display:grid;gap:.85rem;}
+.quiz-pick-card{
+  background:var(--navy2);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:1.1rem 1.3rem;cursor:pointer;transition:border-color .18s,transform .15s;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;
+  text-align:left;width:100%;color:var(--white);font-family:inherit;
+}
+.quiz-pick-card:hover{border-color:var(--gold);transform:translateY(-1px);}
+.qpc-title{font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:.2rem;}
+.qpc-sub{font-size:.8rem;color:var(--muted);}
+.qpc-desc{font-size:.83rem;color:var(--muted);margin-top:.35rem;line-height:1.45;}
+.qpc-badges{display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;flex-shrink:0;}
+
 @media(max-width:768px){
   .topnav{padding:.7rem 1rem;gap:.6rem;}
   .quiz-meta .quiz-subtitle{display:none;}
@@ -322,6 +336,18 @@ main{max-width:760px;margin:0 auto;padding:2rem 1.5rem;}
 </div>
 
 <main>
+  <!-- SELECT (shown when no ?id= in URL) -->
+  <div class="screen" id="screen-select">
+    <div style="text-align:center;padding:2rem 0 1.5rem;">
+      <div style="font-family:var(--font-mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;">Ready to be tested?</div>
+      <h1 id="select-heading" style="font-family:var(--font-display);font-size:2rem;font-weight:800;margin-bottom:.4rem;">Choose a Quiz</h1>
+      <p id="select-sub" style="color:var(--muted);font-size:.9rem;">Select a topic quiz below to begin</p>
+    </div>
+    <div id="quiz-pick-list" class="quiz-pick-grid">
+      <p style="text-align:center;color:var(--muted);padding:2rem;">Loading quizzes…</p>
+    </div>
+  </div>
+
   <!-- INTRO -->
   <div class="screen active" id="screen-intro">
     <div class="intro-hero fade-in">
@@ -473,9 +499,64 @@ function masteryLabel(m){
 <script>
 let quizData=null, questions=[], currentQ=0, answers=[], startTime=null, timerInterval=null, attemptId=null;
 const params=new URLSearchParams(window.location.search);
-const quizId=parseInt(params.get('id'))||1;
+const quizId=params.get('id') ? parseInt(params.get('id')) : null;
+const subjectParam=params.get('subject');
 
+// ── Quiz picker (no ?id=) ───────────────────────────────────────────
+async function initPicker(){
+  document.getElementById('screen-intro').classList.remove('active');
+  document.getElementById('screen-select').classList.add('active');
+  document.getElementById('timer').style.display='none';
+  document.getElementById('nav-quiz-title').textContent='Quizzes';
+
+  const {user} = await requireAuth() || {};
+  if(!user) return;
+
+  let query = supa.from('quizzes').select('*,topics(id,name,subjects(id,name))');
+  const {data:all} = await query;
+  const quizzes = subjectParam
+    ? (all||[]).filter(q=>String(q.topics?.subjects?.id)===String(subjectParam))
+    : (all||[]);
+
+  const subjectName = quizzes[0]?.topics?.subjects?.name || '';
+  if(subjectName){
+    document.getElementById('nav-quiz-sub').textContent=subjectName+' · All topics';
+    document.getElementById('select-heading').textContent=subjectName+' Quizzes';
+  }
+
+  const listEl=document.getElementById('quiz-pick-list');
+  if(!quizzes.length){
+    listEl.innerHTML='<p style="text-align:center;color:var(--muted);padding:2rem;">No quizzes available yet — check back soon!</p>';
+    return;
+  }
+
+  const DIFF={foundation:'Found.',medium:'Medium',higher:'Higher',challenge:'Challenge'};
+  const DIFF_BADGE={foundation:'badge-orange',medium:'badge-green',higher:'badge-blue',challenge:'badge-gold'};
+
+  listEl.innerHTML=quizzes.map(q=>`
+    <button class="quiz-pick-card" onclick="goToQuiz(${q.id})">
+      <div>
+        <div class="qpc-title">${q.title}</div>
+        <div class="qpc-sub">${q.topics?.name||''}</div>
+        ${q.description?`<div class="qpc-desc">${q.description}</div>`:''}
+      </div>
+      <div class="qpc-badges">
+        ${q.difficulty?`<span class="badge ${DIFF_BADGE[q.difficulty]||'badge-gold'}">${DIFF[q.difficulty]||q.difficulty}</span>`:''}
+        ${q.time_limit?`<span class="badge badge-gold">${Math.ceil(q.time_limit/60)} min</span>`:''}
+        ${q.pass_mark?`<span class="badge" style="background:rgba(122,143,166,.12);color:var(--muted);">Pass ${q.pass_mark}%</span>`:''}
+      </div>
+    </button>`).join('');
+}
+
+function goToQuiz(id){
+  const ref=params.get('ref');
+  window.location.href='quiz.html?id='+id+(ref?'&ref='+ref:'')+(subjectParam?'&subject='+subjectParam:'');
+}
+
+// ── Single quiz mode ────────────────────────────────────────────────
 (async()=>{
+  if(!quizId){ initPicker(); return; }
+
   const timeoutHandle = setTimeout(() => showTimeoutError(() => location.reload()), 8000);
   perfStart('quiz-load');
 
@@ -750,5 +831,6 @@ function showResults(cor, wrong, pct, passed, elapsed){
         navigator.serviceWorker.register("/sw.js");
       }
     </script>
+<script src="assets/js/subject-back.js"></script>
 </body>
 </html>
