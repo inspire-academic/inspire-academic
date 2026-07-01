@@ -951,8 +951,9 @@ const currentSubject = urlParams.get('subject') || 'physics';
 // Store for Phase 3 Supabase wiring
 sessionStorage.setItem('currentSubject', currentSubject);
 
-// Subject-aware gate — Chemistry/Biology practicals content pending upload (Phase 2)
-const PENDING_SUBJECTS = { chemistry: 'Chemistry', biology: 'Biology' };
+// Subject-aware gate — Biology practicals content pending upload (Phase 2)
+// Chemistry has its own dedicated page: student/chemistry-required-practicals.html
+const PENDING_SUBJECTS = { biology: 'Biology' };
 if (PENDING_SUBJECTS[currentSubject]) {
   document.getElementById('view-home').classList.remove('active');
   document.getElementById('view-coming-soon').classList.add('active');
