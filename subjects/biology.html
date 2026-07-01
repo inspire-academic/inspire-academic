@@ -802,6 +802,17 @@
       background: #eef3ff;
       box-shadow: 0 6px 20px rgba(22,101,52,.12);
     }
+    .skill-item.coming-soon { position: relative; }
+    .skill-badge-soon {
+      position: absolute; top: 6px; right: 6px;
+      font-size: 9px; font-weight: 800;
+      background: rgba(201,168,76,.15);
+      color: #c9a84c;
+      border: 1px solid rgba(201,168,76,.3);
+      border-radius: 999px;
+      padding: 2px 7px;
+      letter-spacing: .08em;
+    }
     .skill-mark {
       width: 34px; height: 34px; border-radius: 10px;
       background: rgba(22,101,52,.1);
@@ -1071,7 +1082,7 @@
       <a class="nav-link" href="/student/required-practicals.html?subject=biology&ref=biology">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 2v7.5L4.5 19A2 2 0 0 0 6.2 22h11.6a2 2 0 0 0 1.7-3L14 9.5V2"/><path d="M8 2h8"/></svg>Required Practicals
       </a>
-      <a class="nav-link" href="/student/revision.html?subject=biology&ref=biology">
+      <a class="nav-link" href="/student/revision-notes.html?subject=biology&ref=biology">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Revision Notes
       </a>
       <a class="nav-link" href="/student/assessment.html?subject=biology&ref=biology">
@@ -1429,7 +1440,7 @@
                 <div class="lesson-stars">★★☆</div>
               </div>
             </div>
-            <button class="lesson-btn" type="button">Continue Lesson →</button>
+            <a class="lesson-btn" href="/student/lessons.html?subject=4&ref=biology">Continue Lesson →</a>
             <div class="lesson-progress-line">Lesson 2 of 12 in Organisation</div>
           </div>
           <div class="lesson-spacer"></div>
@@ -1445,37 +1456,40 @@
             <a class="skills-view-all" href="#">View all</a>
           </div>
           <div class="skills-grid">
-            <a class="skill-item" href="#">
+            <a class="skill-item" href="/tools/equation-sheet.html?subject=4&ref=biology">
               <div class="skill-mark">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16"/><path d="M7 4v16"/><path d="m10 16 4-8 4 8"/></svg>
               </div>
               <div class="skill-name">Rearranging Equations</div>
             </a>
-            <a class="skill-item" href="#">
+            <a class="skill-item" href="/tools/graph-skills.html?subject=4&ref=biology">
               <div class="skill-mark">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-5 3 3 5-7"/></svg>
               </div>
               <div class="skill-name">Graph Interpretation</div>
             </a>
-            <a class="skill-item" href="#">
+            <a class="skill-item" href="/tools/calculator.html?subject=4&ref=biology">
               <div class="skill-mark">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10v10H7z"/><path d="M3 12h4"/><path d="M17 12h4"/></svg>
               </div>
               <div class="skill-name">Unit Conversions</div>
             </a>
-            <a class="skill-item" href="#">
+            <a class="skill-item coming-soon" href="#" title="Coming soon — Skills Lab launching in Phase 2">
+              <span class="skill-badge-soon">Soon</span>
               <div class="skill-mark">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 20V10"/><path d="M12 20V4"/><path d="M18 20v-7"/></svg>
               </div>
               <div class="skill-name">Data Analysis</div>
             </a>
-            <a class="skill-item" href="#">
+            <a class="skill-item coming-soon" href="#" title="Coming soon — Skills Lab launching in Phase 2">
+              <span class="skill-badge-soon">Soon</span>
               <div class="skill-mark">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="M12 4v16"/></svg>
               </div>
               <div class="skill-name">Scientific Notation</div>
             </a>
-            <a class="skill-item" href="#">
+            <a class="skill-item coming-soon" href="#" title="Coming soon — Skills Lab launching in Phase 2">
+              <span class="skill-badge-soon">Soon</span>
               <div class="skill-mark">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
               </div>
@@ -1496,22 +1510,22 @@
 
     <!-- QUICK ACCESS -->
     <section class="quick-access" aria-label="Quick access">
-      <article class="quick-card">
+      <a class="quick-card" href="/student/assessment.html?subject=4&ref=biology">
         <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg></div>
         <div><h2>Exam Practice</h2><p>Past-paper questions by topic and mark scheme.</p><span class="quick-link">Start practice →</span></div>
-      </article>
-      <article class="quick-card">
+      </a>
+      <a class="quick-card" href="/student/quiz.html?subject=4&ref=biology">
         <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/></svg></div>
         <div><h2>Quiz of the Day</h2><p>Five focused questions to keep memory sharp.</p><span class="quick-link">Take today's quiz →</span></div>
-      </article>
-      <article class="quick-card">
+      </a>
+      <a class="quick-card" href="/student/required-practicals.html?subject=biology&ref=biology">
         <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 2v7.5L4.5 19A2 2 0 0 0 6.2 22h11.6a2 2 0 0 0 1.7-3L14 9.5V2"/><path d="M8 2h8"/></svg></div>
         <div><h2>Required Practicals</h2><p>Methods, variables, graphs and evaluation skills.</p><span class="quick-link">View practicals →</span></div>
-      </article>
-      <article class="quick-card">
+      </a>
+      <a class="quick-card" href="/dashboard.html#achievements">
         <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/></svg></div>
         <div><h2>Achievements</h2><p>Track mastery milestones and exam-readiness badges.</p><span class="quick-link">View awards →</span></div>
-      </article>
+      </a>
     </section>
 
   </main>

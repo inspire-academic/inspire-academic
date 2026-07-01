@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Revision Notes — Inspire Academic</title>
+<meta name="description" content="Subject revision notes — key definitions, equations, concepts, misconceptions and exam tips by topic.">
+<link rel="icon" href="/assets/images/shared/inspire-logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+
+:root {
+  --sidebar: 256px;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --transition: .2s cubic-bezier(.4,0,.2,1);
+  --spring-out: cubic-bezier(.34,1.56,.64,1);
+  --gold: #c9a84c;
+  --amber: #d97706;
+  --amber-bg: rgba(217,119,6,.14);
+  --amber-border: rgba(217,119,6,.32);
+}
+
+[data-theme="dark"] {
+  --bg:              #0b1628;
+  --bg-deep:         #07101e;
+  --bg-panel:        rgba(13,28,56,.75);
+  --bg-card:         rgba(255,255,255,.045);
+  --bg-hover:        rgba(255,255,255,.07);
+  --border:          rgba(255,255,255,.09);
+  --border-strong:   rgba(255,255,255,.16);
+  --text:            #f0f6ff;
+  --text-muted:      rgba(240,246,255,.58);
+  --text-soft:       rgba(240,246,255,.55);
+  --sidebar-bg:      #060e1b;
+  --search-bg:       rgba(255,255,255,.06);
+  --shadow:          0 20px 60px rgba(0,0,0,.45);
+  --shadow-card:     0 6px 28px rgba(0,0,0,.3);
+}
+
+[data-theme="light"] {
+  --bg:              #eef2f9;
+  --bg-deep:         #e4eaf5;
+  --bg-panel:        #ffffff;
+  --bg-card:         #ffffff;
+  --bg-hover:        rgba(29,78,216,.06);
+  --border:          rgba(29,78,216,.12);
+  --border-strong:   rgba(29,78,216,.22);
+  --text:            #0d1929;
+  --text-muted:      rgba(13,25,41,.65);
+  --text-soft:       rgba(13,25,41,.38);
+  --sidebar-bg:      #ffffff;
+  --search-bg:       #ffffff;
+  --shadow:          0 20px 60px rgba(29,78,216,.12);
+  --shadow-card:     0 4px 20px rgba(29,78,216,.09);
+}
+
+/* Subject accent — set via [data-subject] on <html>, values from CLAUDE.md design system */
+[data-subject="physics"]   { --accent: #1d4ed8; --accent2: #06b6d4; --grad-subject: linear-gradient(135deg,#1d4ed8,#06b6d4); --accent-glow: rgba(29,78,216,.18); }
+[data-subject="chemistry"] { --accent: #059669; --accent2: #34d399; --grad-subject: linear-gradient(135deg,#059669,#34d399); --accent-glow: rgba(5,150,105,.18); }
+[data-subject="biology"]   { --accent: #7c3aed; --accent2: #a78bfa; --grad-subject: linear-gradient(135deg,#7c3aed,#a78bfa); --accent-glow: rgba(124,58,237,.18); }
+[data-subject="maths"]     { --accent: #d97706; --accent2: #fbbf24; --grad-subject: linear-gradient(135deg,#d97706,#fbbf24); --accent-glow: rgba(217,119,6,.18); }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+html { scroll-behavior: smooth }
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background var(--transition), color var(--transition);
+}
+a { color: inherit; text-decoration: none }
+button, input { font: inherit }
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif }
+
+.app { display: block; min-height: 100vh; }
+
+/* ── SIDEBAR — liquid glass, matching subject pages ─────────────── */
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  overflow-y: auto;
+  transition: background var(--transition), border-color var(--transition);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-right: 1px solid rgba(255,255,255,.1);
+  box-shadow: 1px 0 0 rgba(255,255,255,.06) inset, 4px 0 32px rgba(0,0,0,.28);
+}
+[data-theme="dark"]  .sidebar { background: rgba(6,10,22,.72) }
+[data-theme="light"] .sidebar {
+  background: rgba(255,255,255,.78);
+  border-right-color: rgba(29,78,216,.1);
+  box-shadow: 1px 0 0 rgba(255,255,255,.9) inset, 4px 0 32px rgba(29,78,216,.07);
+}
+.brand { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.brand-icon {
+  width: 44px; height: 44px; border-radius: 14px;
+  background: var(--grad-subject);
+  display: grid; place-items: center; flex-shrink: 0;
+  box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 -1px 0 rgba(0,0,0,.2) inset, 0 8px 24px var(--accent-glow);
+}
+.brand-icon svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2 }
+.brand-kicker { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); font-weight: 800; margin-bottom: 2px; }
+.brand-name { font-size: 17px; font-weight: 900; line-height: 1; letter-spacing: -.02em; }
+.brand-sub { font-size: 10px; color: var(--text-soft); font-weight: 600; margin-top: 3px }
+
+.subject-badge {
+  margin: 16px 20px 8px; padding: 8px 12px; border-radius: var(--radius-sm);
+  background: var(--accent-glow); border: 1px solid var(--accent-glow);
+  display: flex; align-items: center; gap: 8px;
+}
+.subject-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--grad-subject); flex-shrink: 0; }
+.subject-label { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--accent2); }
+[data-theme="light"] .subject-label { color: var(--accent); }
+
+.nav { padding: 8px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px }
+.nav-section-title { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); font-weight: 800; padding: 14px 8px 6px; }
+.nav-link {
+  display: flex; align-items: center; gap: 10px; padding: 10px 10px;
+  border-radius: var(--radius-sm); color: var(--text-muted);
+  font-size: 13px; font-weight: 700; transition: all var(--transition); position: relative;
+}
+.nav-link svg { width: 18px; height: 18px; stroke-width: 2.2; flex-shrink: 0 }
+.nav-link:hover { color: var(--text); background: var(--bg-hover) }
+.nav-link.active { color: var(--text); background: var(--accent-glow); font-weight: 700; }
+.nav-link.active::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: var(--grad-subject); }
+
+.sidebar-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.student-info { display: flex; align-items: center; gap: 9px }
+.student-avatar {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--grad-subject);
+  display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--accent), 0 4px 12px var(--accent-glow);
+}
+.student-name { font-size: 12px; font-weight: 700 }
+.student-year { font-size: 10px; color: var(--text-soft); font-weight: 600 }
+.theme-toggle {
+  width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text-soft); cursor: pointer; display: grid; place-items: center;
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--border-strong) }
+.theme-toggle svg { width: 14px; height: 14px }
+.icon-sun { display: none }
+[data-theme="light"] .icon-moon { display: none }
+[data-theme="light"] .icon-sun { display: block }
+
+/* ── MAIN ─────────────────────────────────────────────────────── */
+.main { margin-left: var(--sidebar); padding: 28px 28px 60px; min-width: 0; }
+
+.page-header { margin-bottom: 20px; }
+.back-to-subject {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 800; color: var(--accent2);
+  background: var(--accent-glow); border: 1px solid var(--accent-glow);
+  border-radius: 999px; padding: 6px 14px; margin-bottom: 14px;
+  transition: var(--transition);
+}
+[data-theme="light"] .back-to-subject { color: var(--accent); }
+.back-to-subject:hover { border-color: var(--accent); }
+.page-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -.01em; }
+.page-header .subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: .08em; }
+
+.search-wrap { margin: 22px 0; position: relative; }
+.search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; stroke: var(--text-soft); pointer-events: none; }
+#searchInput {
+  width: 100%; height: 46px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--search-bg); color: var(--text);
+  padding: 0 16px 0 42px; font-size: 14px; transition: var(--transition);
+}
+#searchInput:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+#searchInput::placeholder { color: var(--text-soft); }
+
+.no-results { display: none; padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 14px; }
+.no-results.show { display: block; }
+
+/* Topic accordion — native <details> for accessibility */
+.topic-acc {
+  background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow-card);
+}
+.topic-acc-header {
+  list-style: none; cursor: pointer; padding: 16px 18px; display: flex; align-items: center; gap: 12px;
+  font-weight: 800; font-size: 15px; user-select: none;
+}
+.topic-acc-header::-webkit-details-marker { display: none }
+.topic-acc-header .chev { margin-left: auto; width: 18px; height: 18px; stroke: var(--text-soft); transition: transform var(--transition); flex-shrink: 0; }
+.topic-acc[open] .chev { transform: rotate(180deg); }
+.topic-acc-header .topic-num {
+  width: 28px; height: 28px; border-radius: 8px; background: var(--grad-subject); color: #fff;
+  display: grid; place-items: center; font-size: 12px; font-weight: 800; flex-shrink: 0;
+}
+.topic-acc-body { padding: 4px 18px 22px; border-top: 1px solid var(--border); }
+.topic-acc-section { margin-top: 18px; }
+.topic-acc-section h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--text-soft); margin-bottom: 10px; }
+
+/* Flip cards — definitions */
+.def-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 10px; }
+.def-card { perspective: 900px; height: 100px; background: none; border: none; padding: 0; cursor: pointer; text-align: left; }
+.def-card-inner { position: relative; width: 100%; height: 100%; transition: transform .6s var(--spring-out); transform-style: preserve-3d; }
+.def-card.flipped .def-card-inner { transform: rotateY(180deg); }
+.def-card-front, .def-card-back {
+  position: absolute; inset: 0; backface-visibility: hidden;
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px; font-size: 13px;
+}
+.def-card-front { background: var(--bg-card); font-weight: 800; }
+.def-card-back { background: var(--accent-glow); transform: rotateY(180deg); font-size: 12px; color: var(--text-muted); }
+
+/* Equations / processes / concepts */
+.eq-list, .concept-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.eq-list li {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px;
+}
+.concept-list li { font-size: 13px; color: var(--text-muted); padding-left: 18px; position: relative; line-height: 1.5; }
+.concept-list li::before { content: '—'; position: absolute; left: 0; color: var(--accent2); }
+
+.misconceptions, .exam-tips { border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; line-height: 1.5; }
+.misconceptions { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--text); }
+.exam-tips { background: var(--accent-glow); border: 1px solid var(--accent-glow); color: var(--text); }
+.misconceptions strong, .exam-tips strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+.misconceptions strong { color: var(--amber); }
+.exam-tips strong { color: var(--accent2); }
+[data-theme="light"] .exam-tips strong { color: var(--accent); }
+
+.topic-print-btn {
+  margin-top: 18px; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 800; color: var(--text-muted);
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 999px;
+  padding: 8px 14px; cursor: pointer; transition: var(--transition);
+}
+.topic-print-btn:hover { color: var(--text); border-color: var(--border-strong) }
+.topic-print-btn svg { width: 14px; height: 14px }
+
+#print-area { display: none; }
+
+@media (max-width: 900px) {
+  .sidebar { display: none }
+  .main { margin-left: 0; padding: 16px }
+}
+@media (prefers-reduced-motion: reduce) {
+  .def-card-inner, .chev { transition-duration: .01ms !important }
+}
+
+@media print {
+  body * { visibility: hidden; }
+  #print-area, #print-area * { visibility: visible; }
+  #print-area { display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 20px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <a class="brand" href="/dashboard.html" title="Go to dashboard">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/></svg>
+      </div>
+      <div>
+        <div class="brand-kicker">Inspire</div>
+        <div class="brand-name">Academic</div>
+        <div class="brand-sub">GCSE Science</div>
+      </div>
+    </a>
+    <div class="subject-badge">
+      <div class="subject-dot"></div>
+      <span class="subject-label" id="subjectBadgeLabel">GCSE · Subject</span>
+    </div>
+
+    <nav class="nav" id="sidebarNav">
+      <!-- populated by JS to match subject pages' nav exactly -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="student-info">
+        <div class="student-avatar"><span style="display:grid;place-items:center;width:100%;height:100%;">K</span></div>
+        <div>
+          <div class="student-name">Kwame</div>
+          <div class="student-year">Year 10</div>
+        </div>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light / dark">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <a class="back-to-subject" id="backToSubject" href="/subjects/physics.html">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to <span id="backToSubjectName">Physics</span>
+      </a>
+      <h1 id="subjectTitle">Physics</h1>
+      <div class="subtitle">Revision Notes</div>
+    </header>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" id="searchInput" placeholder="Search topics, terms, definitions…" aria-label="Search revision notes">
+    </div>
+
+    <div class="no-results" id="noResults">No topics match your search.</div>
+    <div id="topicsContainer" class="topics-container"></div>
+  </main>
+
+</div>
+
+<div id="print-area" aria-hidden="true"><div id="print-body"></div></div>
+
+<script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/subject-back.js"></script>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const currentSubject = urlParams.get('subject') || 'physics';
+// Store for Phase 3 Supabase wiring
+sessionStorage.setItem('currentSubject', currentSubject);
+
+const SUBJECT_IDS = { maths: 1, physics: 2, chemistry: 3, biology: 4 };
+const SUBJECT_LABELS = { maths: 'Maths', physics: 'Physics', chemistry: 'Chemistry', biology: 'Biology' };
+const TOPICS = {
+  physics: ['Energy','Electricity','Particle Model of Matter','Atomic Structure and Radiation','Forces','Waves','Magnetism and Electromagnetism','Space Physics'],
+  chemistry: ['Atomic Structure','Bonding & Structure','Chemical Analysis','Chemical Changes','Energy Changes','Organic Chemistry','Quantitative Chemistry','Rates & Equilibrium'],
+  biology: ['Cell Biology','Organisation','Infection & Response','Bioenergetics','Homeostasis','Inheritance, Variation & Evolution','Ecology','Key Concepts in Biology'],
+  maths: ['Number','Algebra','Ratio, Proportion & Rates of Change','Geometry & Measures','Probability','Statistics','Sequences','Trigonometry'],
+};
+
+const subject = SUBJECT_IDS[currentSubject] ? currentSubject : 'physics';
+const subjectId = SUBJECT_IDS[subject];
+const subjectLabel = SUBJECT_LABELS[subject];
+const isBiology = subject === 'biology';
+
+document.documentElement.setAttribute('data-subject', subject);
+document.getElementById('subjectBadgeLabel').textContent = 'GCSE · ' + subjectLabel;
+document.getElementById('subjectTitle').textContent = subjectLabel;
+document.getElementById('backToSubject').href = `/subjects/${subject}.html`;
+document.getElementById('backToSubjectName').textContent = subjectLabel;
+document.title = subjectLabel + ' Revision Notes — Inspire Academic';
+
+// ── Sidebar nav — same 11 links as the subject pages, subject-aware ──
+const NAV = [
+  { label: 'Home', href: `/subjects/${subject}.html`, section: 'Study',
+    icon: '<path d="M3 10.5l9-7 9 7"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/>' },
+  { label: 'My Progress', href: `/student/progress.html`,
+    icon: '<path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 3 5-7"/>' },
+  { label: 'Topics', href: `/subjects/${subject}.html#topics`,
+    icon: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>' },
+  { label: 'Lessons', href: `/student/lessons.html?subject=${subjectId}&ref=${subject}`,
+    icon: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/>' },
+  { label: 'Quizzes', href: `/student/quiz.html?subject=${subjectId}&ref=${subject}`,
+    icon: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/>' },
+  { label: 'Exam Practice', href: `/student/assessment.html?subject=${subject}&ref=${subject}`, section: 'Practice',
+    icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/>' },
+  { label: 'Required Practicals', href: `/student/required-practicals.html?subject=${subject}&ref=${subject}`,
+    icon: '<path d="M10 2v7.5L4.5 19A2 2 0 0 0 6.2 22h11.6a2 2 0 0 0 1.7-3L14 9.5V2"/><path d="M8 2h8"/>' },
+  { label: 'Revision Notes', href: `/student/revision-notes.html?subject=${subject}&ref=${subject}`, active: true,
+    icon: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>' },
+  { label: 'Mock Exams', href: `/student/assessment.html?subject=${subject}&ref=${subject}`,
+    icon: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>' },
+  { label: 'Flashcards', href: `/student/flashcards.html?subject=${subject}&ref=${subject}`,
+    icon: '<rect x="4" y="5" width="16" height="12" rx="2"/><path d="M8 9h8"/><path d="M8 13h5"/>' },
+  { label: 'Achievements', href: `/dashboard.html#achievements`,
+    icon: '<path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/>' },
+];
+document.getElementById('sidebarNav').innerHTML = NAV.map(item => `
+  ${item.section ? `<div class="nav-section-title">${item.section}</div>` : ''}
+  <a class="nav-link${item.active ? ' active' : ''}" href="${item.href}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">${item.icon}</svg>${item.label}
+  </a>`).join('');
+
+// ── Placeholder content generator — Phase 3 will replace with Supabase data ──
+function placeholderTopic(name, i) {
+  const defs = [1,2,3].map(n => ({
+    term: `[Term ${n} to be added]`,
+    def: `[Definition to be added — Phase 3 Supabase wiring]`,
+  }));
+  const equationsOrProcesses = [1,2].map(n =>
+    isBiology ? `[Process ${n} to be added]` : `[Equation ${n} to be added]`
+  );
+  const concepts = [1,2,3,4].map(n => `[Content to be added — Phase 3 Supabase wiring]`);
+  return { name, defs, equationsOrProcesses, concepts };
+}
+
+const topicsContainer = document.getElementById('topicsContainer');
+const topicList = TOPICS[subject].map(placeholderTopic);
+
+topicsContainer.innerHTML = topicList.map((t, i) => `
+  <details class="topic-acc" data-topic-index="${i}">
+    <summary class="topic-acc-header">
+      <span class="topic-num">${i + 1}</span>
+      <span class="topic-name">${t.name}</span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+    </summary>
+    <div class="topic-acc-body">
+      <div class="topic-acc-section">
+        <h3>Key Definitions</h3>
+        <div class="def-grid">
+          ${t.defs.map(d => `
+            <button type="button" class="def-card" aria-label="Flip to reveal definition of ${d.term}">
+              <div class="def-card-inner">
+                <div class="def-card-front">${d.term}</div>
+                <div class="def-card-back">${d.def}</div>
+              </div>
+            </button>`).join('')}
+        </div>
+      </div>
+      <div class="topic-acc-section">
+        <h3>${isBiology ? 'Key Processes' : 'Key Equations'}</h3>
+        <ul class="eq-list">${t.equationsOrProcesses.map(e => `<li>${e}</li>`).join('')}</ul>
+      </div>
+      <div class="topic-acc-section">
+        <h3>Key Concepts</h3>
+        <ul class="concept-list">${t.concepts.map(c => `<li>${c}</li>`).join('')}</ul>
+      </div>
+      <div class="topic-acc-section">
+        <div class="misconceptions"><strong>Common Misconception</strong>[Content to be added — Phase 3 Supabase wiring]</div>
+      </div>
+      <div class="topic-acc-section">
+        <div class="exam-tips"><strong>Exam Tip</strong>[Content to be added — Phase 3 Supabase wiring]</div>
+      </div>
+      <button type="button" class="topic-print-btn" data-print-index="${i}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+        Print this topic
+      </button>
+    </div>
+  </details>
+`).join('');
+
+// ── Flip cards ──
+topicsContainer.addEventListener('click', (e) => {
+  const card = e.target.closest('.def-card');
+  if (card) card.classList.toggle('flipped');
+
+  const printBtn = e.target.closest('.topic-print-btn');
+  if (printBtn) {
+    const idx = printBtn.dataset.printIndex;
+    const acc = topicsContainer.querySelector(`.topic-acc[data-topic-index="${idx}"]`);
+    document.getElementById('print-body').innerHTML =
+      `<h1>${subjectLabel} — ${topicList[idx].name}</h1>` + acc.querySelector('.topic-acc-body').innerHTML;
+    window.print();
+  }
+});
+
+// ── Live search — filters topic accordions, no page reload ──
+const searchInput = document.getElementById('searchInput');
+const noResults = document.getElementById('noResults');
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  let visibleCount = 0;
+  topicsContainer.querySelectorAll('.topic-acc').forEach(acc => {
+    const match = !q || acc.textContent.toLowerCase().includes(q);
+    acc.style.display = match ? '' : 'none';
+    if (match) visibleCount++;
+  });
+  noResults.classList.toggle('show', visibleCount === 0);
+});
+
+// ── THEME ──
+const htmlEl = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('ia-theme');
+if (savedTheme) htmlEl.setAttribute('data-theme', savedTheme);
+themeBtn.addEventListener('click', () => {
+  const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  htmlEl.setAttribute('data-theme', next);
+  localStorage.setItem('ia-theme', next);
+});
+</script>
+</body>
+</html>

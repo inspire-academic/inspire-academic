@@ -666,6 +666,21 @@
 <body>
 
 <!-- ═══════════════════════════════════
+     COMING SOON VIEW — Chemistry/Biology content pending upload (Phase 2)
+════════════════════════════════════ -->
+<div id="view-coming-soon" class="view">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="logo-emboss" title="Inspire Academic">
+        <img src="/assets/images/shared/inspire-logo.webp" alt="Inspire Academic" style="height:62px;width:auto;display:block;">
+      </div>
+      <h1 style="font-size:1.5rem;margin-top:.75rem;">Required Practicals</h1>
+      <p id="coming-soon-message" style="color:var(--muted);margin-top:.75rem;font-size:1.05rem;max-width:420px;"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
      HOME VIEW
 ════════════════════════════════════ -->
 <div id="view-home" class="view active">
@@ -935,6 +950,15 @@ const urlParams = new URLSearchParams(window.location.search);
 const currentSubject = urlParams.get('subject') || 'physics';
 // Store for Phase 3 Supabase wiring
 sessionStorage.setItem('currentSubject', currentSubject);
+
+// Subject-aware gate — Chemistry/Biology practicals content pending upload (Phase 2)
+const PENDING_SUBJECTS = { chemistry: 'Chemistry', biology: 'Biology' };
+if (PENDING_SUBJECTS[currentSubject]) {
+  document.getElementById('view-home').classList.remove('active');
+  document.getElementById('view-coming-soon').classList.add('active');
+  document.getElementById('coming-soon-message').textContent =
+    PENDING_SUBJECTS[currentSubject] + ' Required Practicals coming soon — check back shortly.';
+}
 
 /* Lesson accent colours — vivid but work on white */
 const COLOURS = [
