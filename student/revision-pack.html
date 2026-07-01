@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revision Session — Inspire Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+:root {
+  --navy:    #0a0f1e;
+  --navy2:   #111827;
+  --card:    #161f30;
+  --border:  #1e2d45;
+  --gold:    #c9a84c;
+  --gold2:   #e8c96a;
+  --text:    #e8eaf0;
+  --muted:   #6b7f99;
+  --subtle:  #2a3a55;
+  --green:   #22c55e;
+  --red:     #ef4444;
+  --blue:    #3b82f6;
+  --radius:  12px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body {
+  font-family:var(--font-body);
+  background:var(--navy);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── TOP NAV ── */
+#top-nav {
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,15,30,0.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.nav-left {
+  display:flex;align-items:center;gap:12px;
+}
+#back-btn {
+  display:flex;align-items:center;gap:6px;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:0.82rem;
+  font-family:var(--font-mono);
+  transition:color 0.15s;
+}
+#back-btn:hover{color:var(--gold);}
+#pack-title-nav {
+  font-family:var(--font-display);
+  font-size:0.95rem;
+  font-weight:600;
+  color:var(--text);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:320px;
+}
+.nav-right {
+  display:flex;align-items:center;gap:12px;
+  flex-shrink:0;
+}
+#nav-progress-wrap {
+  display:flex;align-items:center;gap:8px;
+}
+#nav-prog-label {
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  color:var(--muted);
+  white-space:nowrap;
+}
+#nav-prog-bar {
+  width:100px;height:4px;
+  background:var(--border);
+  border-radius:4px;overflow:hidden;
+}
+#nav-prog-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  border-radius:4px;
+  transition:width 0.4s ease;
+  width:0%;
+}
+#timer-display {
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  color:var(--muted);
+  border:1px solid var(--border);
+  padding:4px 10px;
+  border-radius:20px;
+}
+
+/* ── LOADING / ERROR STATES ── */
+#loading-state, #error-state {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:60vh;
+  gap:16px;
+  text-align:center;
+  padding:40px;
+}
+.spinner {
+  width:36px;height:36px;
+  border:2px solid var(--border);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+#loading-state p, #error-state p {
+  color:var(--muted);
+  font-size:0.9rem;
+}
+#error-state h2 {
+  color:var(--red);
+  font-family:var(--font-display);
+}
+
+/* ── HERO ── */
+#pack-hero {
+  max-width:860px;
+  margin:0 auto;
+  padding:48px 24px 32px;
+  border-bottom:1px solid var(--border);
+}
+.hero-meta {
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+}
+.meta-badge {
+  font-family:var(--font-mono);
+  font-size:0.65rem;
+  font-weight:500;
+  padding:4px 10px;
+  border-radius:20px;
+  border:1px solid;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+}
+.badge-subject { color:var(--gold);border-color:rgba(201,168,76,0.4);background:rgba(201,168,76,0.08); }
+.badge-board   { color:#60a5fa;border-color:rgba(96,165,250,0.3);background:rgba(96,165,250,0.08); }
+.badge-tier    { color:#a78bfa;border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.08); }
+.badge-due     { color:var(--muted);border-color:var(--border);background:transparent; }
+
+#pack-hero h1 {
+  font-family:var(--font-display);
+  font-size:clamp(1.6rem,4vw,2.4rem);
+  font-weight:700;
+  line-height:1.2;
+  color:var(--text);
+  margin-bottom:12px;
+}
+.hero-topics {
+  display:flex;flex-wrap:wrap;gap:6px;
+  margin-bottom:24px;
+}
+.topic-chip {
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  padding:4px 10px;
+  border:1px solid var(--subtle);
+  border-radius:20px;
+  color:var(--muted);
+}
+.hero-message {
+  background:rgba(201,168,76,0.06);
+  border:1px solid rgba(201,168,76,0.2);
+  border-left:3px solid var(--gold);
+  border-radius:0 8px 8px 0;
+  padding:12px 16px;
+  margin-bottom:24px;
+  font-size:0.88rem;
+  color:#c8d4e8;
+  font-style:italic;
+}
+.hero-message span {
+  display:block;
+  font-size:0.72rem;
+  font-family:var(--font-mono);
+  color:var(--gold);
+  margin-bottom:4px;
+  font-style:normal;
+}
+
+/* overall progress bar */
+.hero-progress-wrap {
+  display:flex;align-items:center;gap:12px;
+}
+.hero-prog-label {
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  color:var(--muted);
+  white-space:nowrap;
+}
+.hero-prog-track {
+  flex:1;height:6px;
+  background:var(--border);
+  border-radius:6px;overflow:hidden;
+}
+.hero-prog-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  border-radius:6px;
+  transition:width 0.5s ease;
+  width:0%;
+}
+#hero-prog-pct {
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  color:var(--gold);
+  min-width:32px;
+  text-align:right;
+}
+
+/* ── SECTION NAV PILLS ── */
+#section-nav {
+  max-width:860px;
+  margin:0 auto;
+  padding:20px 24px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  border-bottom:1px solid var(--border);
+}
+.sec-pill {
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  padding:5px 12px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  cursor:pointer;
+  color:var(--muted);
+  background:transparent;
+  transition:all 0.15s;
+  display:flex;align-items:center;gap:6px;
+}
+.sec-pill:hover { border-color:var(--gold);color:var(--gold); }
+.sec-pill.done  { border-color:rgba(34,197,94,0.4);color:var(--green);background:rgba(34,197,94,0.05); }
+.sec-pill.active{ border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08); }
+.sec-pill-dot {
+  width:6px;height:6px;
+  border-radius:50%;
+  background:currentColor;
+  opacity:0.6;
+}
+
+/* ── MAIN CONTENT ── */
+#sections-container {
+  max-width:860px;
+  margin:0 auto;
+  padding:0 24px 80px;
+}
+
+/* ── SECTION WRAPPER ── */
+.section-block {
+  padding:48px 0 0;
+  scroll-margin-top:70px;
+}
+.section-header {
+  display:flex;align-items:flex-start;gap:14px;
+  margin-bottom:28px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--border);
+}
+.section-num {
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  color:var(--gold);
+  background:rgba(201,168,76,0.1);
+  border:1px solid rgba(201,168,76,0.25);
+  border-radius:6px;
+  padding:5px 9px;
+  white-space:nowrap;
+  margin-top:3px;
+  flex-shrink:0;
+}
+.section-type-icon {
+  font-size:0.72rem;
+  font-family:var(--font-mono);
+  padding:4px 8px;
+  border-radius:6px;
+  margin-top:3px;
+  flex-shrink:0;
+}
+.type-content  { background:rgba(59,130,246,0.1);color:#60a5fa;border:1px solid rgba(59,130,246,0.2); }
+.type-mcq      { background:rgba(167,139,250,0.1);color:#a78bfa;border:1px solid rgba(167,139,250,0.2); }
+.type-exam     { background:rgba(201,168,76,0.1);color:var(--gold);border:1px solid rgba(201,168,76,0.2); }
+
+.section-header-text h2 {
+  font-family:var(--font-display);
+  font-size:1.3rem;
+  font-weight:600;
+  line-height:1.3;
+  color:var(--text);
+}
+.section-header-text p {
+  font-size:0.82rem;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+/* ── CONTENT CARDS ── */
+.content-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  margin-bottom:16px;
+  transition:border-color 0.2s;
+}
+.content-card:hover { border-color:var(--subtle); }
+.content-card h3 {
+  font-family:var(--font-body);
+  font-size:0.95rem;
+  font-weight:500;
+  color:var(--gold2);
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.content-card h3::before {
+  content:'';
+  width:3px;height:14px;
+  background:var(--gold);
+  border-radius:2px;
+  flex-shrink:0;
+}
+.content-card p, .content-card li {
+  font-size:0.9rem;
+  color:#b8c8dc;
+  line-height:1.8;
+}
+.content-card ul {
+  padding-left:18px;
+  margin-top:8px;
+}
+.content-card li { margin-bottom:5px; }
+
+.key-points-box {
+  background:rgba(59,130,246,0.05);
+  border:1px solid rgba(59,130,246,0.15);
+  border-radius:8px;
+  padding:16px 20px;
+  margin-top:14px;
+}
+.key-points-box h4 {
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  font-weight:500;
+  color:#60a5fa;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  margin-bottom:10px;
+}
+.key-points-box li { color:#9bb8d8 !important;font-size:0.87rem !important; }
+
+.formula-box {
+  background:#0d1520;
+  border:1px solid rgba(201,168,76,0.2);
+  border-left:3px solid var(--gold);
+  border-radius:8px;
+  padding:14px 18px;
+  margin-top:14px;
+  font-family:var(--font-mono);
+}
+.formula-label {
+  font-size:0.63rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  margin-bottom:6px;
+}
+.formula-main {
+  font-size:1rem;
+  font-weight:500;
+  color:var(--gold2);
+}
+.formula-units {
+  font-size:0.7rem;
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.diagram-wrap {
+  background:#0a1220;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:20px;
+  margin-top:16px;
+  overflow:hidden;
+}
+.diagram-wrap svg { max-width:100%;height:auto;display:block;margin:0 auto; }
+
+/* ── MCQ ── */
+.mcq-container {
+  background:var(--navy2);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:28px;
+}
+.mcq-intro {
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  color:var(--muted);
+  margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.mcq-item {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:18px;
+  margin-bottom:14px;
+  transition:border-color 0.2s;
+}
+.mcq-stem {
+  font-size:0.9rem;
+  color:var(--text);
+  line-height:1.65;
+  margin-bottom:12px;
+}
+.mcq-stem .q-num {
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  color:#a78bfa;
+  margin-right:6px;
+}
+.mcq-options { display:grid;gap:7px; }
+.mcq-opt {
+  font-size:0.85rem;
+  padding:9px 13px;
+  border:1px solid var(--border);
+  border-radius:7px;
+  cursor:pointer;
+  text-align:left;
+  color:var(--text);
+  background:transparent;
+  font-family:var(--font-body);
+  transition:all 0.12s;
+  width:100%;
+}
+.mcq-opt:hover:not(:disabled) { border-color:#a78bfa;background:rgba(167,139,250,0.07); }
+.mcq-opt.correct  { border-color:var(--green);background:rgba(34,197,94,0.1);color:var(--green); }
+.mcq-opt.wrong    { border-color:var(--red);background:rgba(239,68,68,0.08);color:var(--red); }
+.mcq-opt.show-correct { border-color:var(--green);background:rgba(34,197,94,0.06);color:var(--green); }
+.mcq-feedback {
+  font-size:0.78rem;
+  margin-top:8px;
+  padding:9px 12px;
+  border-radius:6px;
+  line-height:1.6;
+  display:none;
+}
+.mcq-feedback.show { display:block; }
+.fb-correct { background:rgba(34,197,94,0.08);color:#86efac;border:1px solid rgba(34,197,94,0.2); }
+.fb-wrong   { background:rgba(239,68,68,0.08);color:#fca5a5;border:1px solid rgba(239,68,68,0.2); }
+.mcq-score-bar {
+  font-family:var(--font-mono);
+  font-size:0.75rem;
+  color:var(--muted);
+  padding-top:16px;
+  margin-top:8px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.mcq-score-bar span { color:var(--gold);font-weight:500; }
+
+/* ── EXAM QUESTION ── */
+.exam-q-container {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.exam-q-header {
+  background:rgba(201,168,76,0.06);
+  border-bottom:1px solid var(--border);
+  padding:16px 22px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.exam-q-label {
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+}
+.marks-badge {
+  font-family:var(--font-mono);
+  font-size:0.65rem;
+  color:var(--gold);
+  border:1px solid rgba(201,168,76,0.3);
+  border-radius:20px;
+  padding:3px 10px;
+}
+.exam-q-body { padding:22px; }
+.exam-q-stem {
+  font-size:0.92rem;
+  line-height:1.75;
+  color:var(--text);
+  margin-bottom:18px;
+}
+.exam-textarea {
+  width:100%;
+  min-height:140px;
+  background:#0a1220;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:14px 16px;
+  font-family:var(--font-body);
+  font-size:0.88rem;
+  color:var(--text);
+  resize:vertical;
+  transition:border-color 0.2s;
+  line-height:1.7;
+}
+.exam-textarea:focus { outline:none;border-color:var(--gold); }
+.exam-textarea:disabled { opacity:0.7;cursor:not-allowed; }
+.exam-submit-btn {
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:12px;
+  padding:10px 22px;
+  background:var(--gold);
+  color:#0a0f1e;
+  border:none;
+  border-radius:8px;
+  font-family:var(--font-mono);
+  font-size:0.78rem;
+  font-weight:500;
+  cursor:pointer;
+  letter-spacing:0.04em;
+  transition:opacity 0.15s,transform 0.1s;
+}
+.exam-submit-btn:hover:not(:disabled) { opacity:0.9;transform:translateY(-1px); }
+.exam-submit-btn:disabled { opacity:0.5;cursor:not-allowed;transform:none; }
+
+/* marking states */
+.marking-state {
+  display:none;
+  margin-top:16px;
+  padding:16px;
+  border-radius:8px;
+  font-size:0.85rem;
+  line-height:1.7;
+}
+.marking-state.marking {
+  display:flex;align-items:center;gap:10px;
+  background:rgba(59,130,246,0.06);
+  border:1px solid rgba(59,130,246,0.2);
+  color:#93c5fd;
+}
+.marking-state.marked {
+  display:block;
+  background:rgba(34,197,94,0.06);
+  border:1px solid rgba(34,197,94,0.2);
+}
+.marking-state.marking .spinner {
+  width:18px;height:18px;
+  border-width:1.5px;
+  flex-shrink:0;
+}
+.mark-result-header {
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:12px;
+}
+.mark-score {
+  font-family:var(--font-mono);
+  font-size:1.1rem;
+  font-weight:500;
+  color:var(--green);
+}
+.mark-label {
+  font-size:0.78rem;
+  color:var(--muted);
+}
+.mark-points-list {
+  margin:10px 0;
+  padding-left:16px;
+}
+.mark-points-list li {
+  font-size:0.82rem;
+  color:#86efac;
+  margin-bottom:4px;
+  line-height:1.5;
+}
+.mark-feedback {
+  font-size:0.85rem;
+  color:#b8c8dc;
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid rgba(34,197,94,0.15);
+}
+.mark-examiner-note {
+  font-size:0.78rem;
+  color:var(--gold);
+  margin-top:8px;
+  font-style:italic;
+}
+.teacher-override-note {
+  display:none;
+  margin-top:8px;
+  padding:8px 12px;
+  background:rgba(201,168,76,0.08);
+  border:1px solid rgba(201,168,76,0.2);
+  border-radius:6px;
+  font-size:0.78rem;
+  color:var(--gold);
+}
+
+/* ── COMPLETION BANNER ── */
+#completion-banner {
+  display:none;
+  max-width:860px;
+  margin:40px auto;
+  padding:0 24px;
+}
+.completion-card {
+  background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(34,197,94,0.06));
+  border:1px solid rgba(201,168,76,0.3);
+  border-radius:16px;
+  padding:36px;
+  text-align:center;
+}
+.completion-card h2 {
+  font-family:var(--font-display);
+  font-size:1.8rem;
+  color:var(--gold2);
+  margin-bottom:8px;
+}
+.completion-card p {
+  color:var(--muted);
+  font-size:0.9rem;
+  margin-bottom:24px;
+}
+.completion-stats {
+  display:flex;justify-content:center;gap:32px;
+  flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.c-stat {
+  text-align:center;
+}
+.c-stat-val {
+  font-family:var(--font-display);
+  font-size:2rem;
+  font-weight:600;
+  color:var(--gold);
+  display:block;
+}
+.c-stat-label {
+  font-family:var(--font-mono);
+  font-size:0.65rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+}
+.back-to-revision-btn {
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;
+  background:var(--gold);
+  color:#0a0f1e;
+  border:none;
+  border-radius:8px;
+  font-family:var(--font-mono);
+  font-size:0.8rem;
+  font-weight:500;
+  cursor:pointer;
+  letter-spacing:0.04em;
+  text-decoration:none;
+  transition:opacity 0.15s;
+}
+.back-to-revision-btn:hover { opacity:0.88; }
+
+/* ── SCROLL TO TOP ── */
+#btt {
+  position:fixed;bottom:24px;right:24px;z-index:200;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:50%;width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--gold);font-size:1rem;
+  transition:all 0.2s;opacity:0;pointer-events:none;
+}
+#btt.visible { opacity:1;pointer-events:all; }
+#btt:hover { border-color:var(--gold); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(12px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.section-block { animation:fadeUp 0.4s ease both; }
+
+[id^="section-"] { scroll-margin-top:72px; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav id="top-nav">
+  <div class="nav-left">
+    <a href="/student/revision.html" id="back-btn">← My Revision</a>
+    <span style="color:var(--border)">|</span>
+    <span id="pack-title-nav">Loading…</span>
+  </div>
+  <div class="nav-right">
+    <div id="nav-progress-wrap">
+      <span id="nav-prog-label">0%</span>
+      <div id="nav-prog-bar"><div id="nav-prog-fill"></div></div>
+    </div>
+    <span id="timer-display">00:00</span>
+  </div>
+</nav>
+
+<!-- LOADING -->
+<div id="loading-state">
+  <div class="spinner"></div>
+  <p>Loading your revision session…</p>
+</div>
+
+<!-- ERROR -->
+<div id="error-state" style="display:none;">
+  <h2>Something went wrong</h2>
+  <p id="error-msg">Could not load this revision pack.</p>
+  <a href="/student/revision.html" style="color:var(--gold);margin-top:8px;font-size:0.85rem;">← Back to My Revision</a>
+</div>
+
+<!-- MAIN (hidden until loaded) -->
+<main id="main-content" style="display:none;">
+
+  <!-- HERO -->
+  <div id="pack-hero">
+    <div class="hero-meta" id="hero-meta"></div>
+    <h1 id="hero-title"></h1>
+    <div class="hero-topics" id="hero-topics"></div>
+    <div class="hero-message" id="hero-message" style="display:none;"></div>
+    <div class="hero-progress-wrap">
+      <span class="hero-prog-label">Session progress</span>
+      <div class="hero-prog-track"><div class="hero-prog-fill" id="hero-prog-fill"></div></div>
+      <span id="hero-prog-pct">0%</span>
+    </div>
+  </div>
+
+  <!-- SECTION NAVIGATION PILLS -->
+  <nav id="section-nav"></nav>
+
+  <!-- RENDERED SECTIONS -->
+  <div id="sections-container"></div>
+
+  <!-- COMPLETION BANNER -->
+  <div id="completion-banner">
+    <div class="completion-card">
+      <h2>Session Complete</h2>
+      <p id="completion-subtitle">Well done — you've worked through every section of this revision pack.</p>
+      <div class="completion-stats" id="completion-stats"></div>
+      <a href="/student/revision.html" class="back-to-revision-btn">← Back to My Revision</a>
+    </div>
+  </div>
+
+</main>
+
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── STATE ────────────────────────────────────────────────────
+let packData        = null;
+let assignmentData  = null;
+let attemptId       = null;
+let sessionSeconds  = 0;
+let studentName     = '';
+let heartbeatTimer  = null;
+let clockTimer      = null;
+let sectionsTotal   = 0;
+let sectionsDone    = new Set();
+let mcqScores       = {};   // { sectionId: { correct: 0, total: 0 } }
+let examResponses   = {};   // mirrors attempt.exam_responses
+
+// ── INIT ─────────────────────────────────────────────────────
+(async () => {
+  const params       = new URLSearchParams(location.search);
+  const assignmentId = params.get('assignment_id');
+
+  if (!assignmentId) return showError('No assignment ID provided.');
+
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { location.href = '/index.html'; return; }
+
+  // Fetch student's first name for personalised feedback
+  const { data: profile } = await sb
+    .from('profiles')
+    .select('first_name, full_name')
+    .eq('id', user.id)
+    .single();
+  // Use first_name if available, fall back to splitting full_name
+  studentName = profile?.first_name || profile?.full_name?.split(' ')[0] || '';
+
+  // Load assignment + pack in one query
+  const { data: assignment, error: aErr } = await sb
+    .from('revision_assignments')
+    .select(`
+      id, pack_id, due_date, message, status,
+      revision_packs (
+        id, title, subject, exam_board, difficulty_tier,
+        topic_list, sections
+      )
+    `)
+    .eq('id', assignmentId)
+    .eq('assigned_to', user.id)
+    .single();
+
+  if (aErr || !assignment) return showError('Assignment not found or access denied.');
+
+  assignmentData = assignment;
+  packData       = assignment.revision_packs;
+
+  // Load or create attempt
+  const { data: existingAttempt } = await sb
+    .from('revision_attempts')
+    .select('*')
+    .eq('assignment_id', assignmentId)
+    .eq('student_id', user.id)
+    .order('last_active', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (existingAttempt && !existingAttempt.completed_at) {
+    // Continue existing attempt
+    attemptId      = existingAttempt.id;
+    sessionSeconds = existingAttempt.time_spent_seconds || 0;
+    sectionsDone   = new Set(existingAttempt.sections_completed || []);
+    mcqScores      = existingAttempt.mcq_results ? rebuildMcqScores(existingAttempt.mcq_results) : {};
+    examResponses  = existingAttempt.exam_responses || {};
+  } else {
+    // Create new attempt
+    const { data: newAttempt, error: nErr } = await sb
+      .from('revision_attempts')
+      .insert({
+        assignment_id: assignmentId,
+        student_id:    user.id,
+        pack_id:       packData.id
+      })
+      .select()
+      .single();
+
+    if (nErr || !newAttempt) return showError('Could not start session.');
+    attemptId = newAttempt.id;
+  }
+
+  // Mark assignment in_progress
+  if (assignment.status === 'pending') {
+    await sb.from('revision_assignments')
+      .update({ status: 'in_progress' })
+      .eq('id', assignmentId);
+  }
+
+  renderPage();
+  startTimers();
+
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('main-content').style.display  = 'block';
+})();
+
+// ── RENDER PAGE ──────────────────────────────────────────────
+function renderPage() {
+  const pack       = packData;
+  const assignment = assignmentData;
+
+  // Nav title
+  document.getElementById('pack-title-nav').textContent = pack.title;
+  document.title = pack.title + ' — Inspire Science';
+
+  // Hero meta badges
+  const metaEl = document.getElementById('hero-meta');
+  metaEl.innerHTML = `
+    <span class="meta-badge badge-subject">${pack.subject}</span>
+    <span class="meta-badge badge-board">${pack.exam_board.toUpperCase()}</span>
+    <span class="meta-badge badge-tier">${pack.difficulty_tier}</span>
+    ${assignment.due_date ? `<span class="meta-badge badge-due">Due ${formatDate(assignment.due_date)}</span>` : ''}
+  `;
+
+  // Hero title
+  document.getElementById('hero-title').textContent = pack.title;
+
+  // Topic chips
+  const topicsEl = document.getElementById('hero-topics');
+  (pack.topic_list || []).forEach(t => {
+    const chip = document.createElement('span');
+    chip.className = 'topic-chip';
+    chip.textContent = t;
+    topicsEl.appendChild(chip);
+  });
+
+  // Teacher message
+  if (assignment.message) {
+    const msgEl = document.getElementById('hero-message');
+    msgEl.style.display = 'block';
+    msgEl.innerHTML = `<span>Message from your teacher</span>${escHtml(assignment.message)}`;
+  }
+
+  // Sections
+  const sections = pack.sections || [];
+  sectionsTotal  = sections.length;
+  const navEl    = document.getElementById('section-nav');
+  const contEl   = document.getElementById('sections-container');
+
+  sections.forEach((sec, i) => {
+    const secId = sec.id || `section-${i}`;
+
+    // Nav pill
+    const pill = document.createElement('button');
+    pill.className = 'sec-pill' + (sectionsDone.has(secId) ? ' done' : '');
+    pill.id        = `pill-${secId}`;
+    pill.innerHTML = `<span class="sec-pill-dot"></span>${sec.title}`;
+    pill.onclick   = () => document.getElementById(secId)?.scrollIntoView({ behavior:'smooth' });
+    navEl.appendChild(pill);
+
+    // Section block
+    const block = document.createElement('div');
+    block.className = 'section-block';
+    block.id        = secId;
+
+    const typeLabel = { content:'Content', mcq:'Quick Check', exam_question:'Exam Question' }[sec.type] || sec.type;
+    const typeClass = { content:'type-content', mcq:'type-mcq', exam_question:'type-exam' }[sec.type] || 'type-content';
+
+    block.innerHTML = `
+      <div class="section-header">
+        <span class="section-num">${String(i + 1).padStart(2,'0')}</span>
+        <span class="section-type-icon ${typeClass}">${typeLabel}</span>
+        <div class="section-header-text">
+          <h2>${escHtml(sec.title)}</h2>
+          ${sec.subtitle ? `<p>${escHtml(sec.subtitle)}</p>` : ''}
+        </div>
+      </div>
+      <div class="section-body" id="body-${secId}"></div>
+    `;
+    contEl.appendChild(block);
+
+    // Render section body by type
+    const bodyEl = document.getElementById(`body-${secId}`);
+    if (sec.type === 'content')        renderContent(bodyEl, sec, secId);
+    else if (sec.type === 'mcq')       renderMCQ(bodyEl, sec, secId);
+    else if (sec.type === 'exam_question') renderExamQ(bodyEl, sec, secId);
+
+    // Intersection observer — mark section visited
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          markSectionVisited(secId);
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe(block);
+  });
+
+  updateProgress();
+}
+
+// ── RENDER: CONTENT ─────────────────────────────────────────
+function renderContent(el, sec, secId) {
+  // SVG diagram (if present)
+  if (sec.diagram_svg) {
+    el.insertAdjacentHTML('beforeend',
+      `<div class="diagram-wrap">${sec.diagram_svg}</div>`);
+  }
+
+  // Cards
+  (sec.cards || []).forEach(card => {
+    const div = document.createElement('div');
+    div.className = 'content-card';
+
+    let html = card.heading ? `<h3>${escHtml(card.heading)}</h3>` : '';
+
+    if (card.body) html += `<p>${escHtml(card.body)}</p>`;
+
+    if (card.key_points?.length) {
+      html += `<div class="key-points-box"><h4>Key Points</h4><ul>`;
+      card.key_points.forEach(kp => { html += `<li>${escHtml(kp)}</li>`; });
+      html += `</ul></div>`;
+    }
+
+    if (card.formula) {
+      html += `
+        <div class="formula-box">
+          ${card.formula_label ? `<div class="formula-label">${escHtml(card.formula_label)}</div>` : ''}
+          <div class="formula-main">${escHtml(card.formula)}</div>
+          ${card.formula_units ? `<div class="formula-units">${escHtml(card.formula_units)}</div>` : ''}
+        </div>`;
+    }
+
+    div.innerHTML = html;
+    el.appendChild(div);
+  });
+
+  // Content sections are "done" after viewing (IntersectionObserver handles this)
+}
+
+// ── RENDER: MCQ ──────────────────────────────────────────────
+function renderMCQ(el, sec, secId) {
+  if (!mcqScores[secId]) mcqScores[secId] = { correct:0, total:0 };
+
+  const wrap = document.createElement('div');
+  wrap.className = 'mcq-container';
+
+  const totalQs = sec.questions?.length || 0;
+  wrap.innerHTML = `
+    <div class="mcq-intro">
+      <span>${totalQs} question${totalQs !== 1 ? 's' : ''} — select the best answer for each</span>
+      <span id="mcq-score-${secId}">Score: <span>0/${totalQs}</span></span>
+    </div>
+    <div id="mcq-items-${secId}"></div>
+    <div class="mcq-score-bar">
+      Score: <span id="mcq-final-${secId}">0 / ${totalQs}</span>
+    </div>
+  `;
+  el.appendChild(wrap);
+
+  const itemsEl = document.getElementById(`mcq-items-${secId}`);
+  const savedResults = getSavedMcqResults(secId);
+
+  (sec.questions || []).forEach((q, qi) => {
+    const qId   = q.id || `q${qi}`;
+    const saved = savedResults[qId];
+
+    const item = document.createElement('div');
+    item.className = 'mcq-item';
+    item.innerHTML = `
+      <div class="mcq-stem"><span class="q-num">Q${qi + 1}.</span>${escHtml(q.stem)}</div>
+      <div class="mcq-options" id="opts-${secId}-${qId}"></div>
+      <div class="mcq-feedback" id="fb-${secId}-${qId}"></div>
+    `;
+    itemsEl.appendChild(item);
+
+    const optsEl = document.getElementById(`opts-${secId}-${qId}`);
+    q.options.forEach((opt, oi) => {
+      const btn = document.createElement('button');
+      btn.className = 'mcq-opt';
+      btn.textContent = String.fromCharCode(65 + oi) + '. ' + opt;
+      btn.dataset.optIndex = oi;
+
+      if (saved) {
+        btn.disabled = true;
+        if (oi === q.correct_index)         btn.classList.add('show-correct');
+        if (oi === saved.selected && !saved.correct) btn.classList.add('wrong');
+        if (oi === saved.selected && saved.correct)  btn.classList.add('correct');
+      } else {
+        btn.onclick = () => handleMCQ(btn, sec, secId, qId, oi, q);
+      }
+      optsEl.appendChild(btn);
+    });
+
+    // Restore feedback if already answered
+    if (saved) {
+      const fbEl = document.getElementById(`fb-${secId}-${qId}`);
+      fbEl.className = 'mcq-feedback show ' + (saved.correct ? 'fb-correct' : 'fb-wrong');
+      fbEl.textContent = (saved.correct ? '✓ Correct. ' : '✗ Not quite. ') + (q.explanation || '');
+      if (saved.correct) mcqScores[secId].correct++;
+      mcqScores[secId].total++;
+    }
+  });
+
+  updateMcqScoreDisplay(secId, sec.questions?.length || 0);
+}
+
+function handleMCQ(btn, sec, secId, qId, optIndex, q) {
+  const allOpts = btn.closest('.mcq-options').querySelectorAll('.mcq-opt');
+  allOpts.forEach(b => b.disabled = true);
+
+  const correct = optIndex === q.correct_index;
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) allOpts[q.correct_index]?.classList.add('show-correct');
+
+  const fbEl = document.getElementById(`fb-${secId}-${qId}`);
+  fbEl.className = 'mcq-feedback show ' + (correct ? 'fb-correct' : 'fb-wrong');
+  fbEl.textContent = (correct ? '✓ Correct. ' : '✗ Not quite. ') + (q.explanation || '');
+
+  // Update scores
+  if (!mcqScores[secId]) mcqScores[secId] = { correct:0, total:0 };
+  if (correct) mcqScores[secId].correct++;
+  mcqScores[secId].total++;
+
+  updateMcqScoreDisplay(secId, sec.questions?.length || 0);
+  saveMcqResult(secId, qId, optIndex, correct);
+  checkMcqComplete(sec, secId);
+}
+
+function updateMcqScoreDisplay(secId, total) {
+  const s = mcqScores[secId] || { correct:0, total:0 };
+  const el = document.getElementById(`mcq-final-${secId}`);
+  if (el) el.textContent = `${s.correct} / ${total}`;
+}
+
+function checkMcqComplete(sec, secId) {
+  const answered = mcqScores[secId]?.total || 0;
+  const total    = sec.questions?.length || 0;
+  if (answered >= total) markSectionDone(secId);
+}
+
+// ── RENDER: EXAM QUESTION ────────────────────────────────────
+function renderExamQ(el, sec, secId) {
+  const qId    = sec.id || secId;
+  const saved  = examResponses[qId];
+  const marked = saved?.ai_marking_complete;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'exam-q-container';
+  wrap.innerHTML = `
+    <div class="exam-q-header">
+      <span class="exam-q-label">${sec.label || 'Exam-style question'}</span>
+      <span class="marks-badge">${sec.marks} mark${sec.marks !== 1 ? 's' : ''}</span>
+    </div>
+    <div class="exam-q-body">
+      <div class="exam-q-stem">${escHtml(sec.stem)}</div>
+      <textarea
+        class="exam-textarea"
+        id="textarea-${qId}"
+        placeholder="Write your answer here…"
+        ${marked ? 'disabled' : ''}
+      >${saved?.response ? escHtml(saved.response) : ''}</textarea>
+      <button
+        class="exam-submit-btn"
+        id="submit-${qId}"
+        onclick="submitExamQ('${qId}', '${secId}')"
+        ${marked ? 'disabled style="display:none"' : ''}
+      >
+        Submit for marking →
+      </button>
+      <div class="marking-state" id="marking-state-${qId}">
+        <div class="spinner"></div>
+        <span>Inspire System is checking your answer…</span>
+      </div>
+      <div class="marking-state marked" id="mark-result-${qId}" style="display:none;"></div>
+      <div class="teacher-override-note" id="override-${qId}"></div>
+    </div>
+  `;
+  el.appendChild(wrap);
+
+  // Restore saved marking if it exists
+  if (marked) restoreMarkingResult(qId, saved, sec.marks);
+}
+
+async function submitExamQ(qId, secId) {
+  const textarea = document.getElementById(`textarea-${qId}`);
+  const response = textarea.value.trim();
+  if (!response) { textarea.focus(); return; }
+
+  // Disable UI
+  textarea.disabled = true;
+  document.getElementById(`submit-${qId}`).style.display = 'none';
+
+  // Show marking spinner
+  const markingEl = document.getElementById(`marking-state-${qId}`);
+  markingEl.className = 'marking-state marking';
+
+  // Save response immediately
+  examResponses[qId] = { response, submitted_at: new Date().toISOString(), ai_marking_complete: false };
+  await saveAttempt();
+
+  // Call Netlify Function for AI marking (keeps API key server-side)
+  try {
+    const sec = packData.sections.find(s => (s.id || s.title) === qId || s.id === secId);
+    const result = await callAIMarking({
+      subject:      packData.subject,
+      exam_board:   packData.exam_board,
+      stem:         sec?.stem || '',
+      marks:        sec?.marks || 0,
+      mark_points:  sec?.mark_points || [],
+      model_answer: sec?.model_answer || '',
+      student_name: studentName,
+      response
+    });
+
+    examResponses[qId] = {
+      ...examResponses[qId],
+      ai_marks_awarded:       result.marks_awarded,
+      ai_mark_points_credited: result.mark_points_awarded,
+      ai_feedback:            result.feedback,
+      ai_examiner_note:       result.examiner_note,
+      ai_marking_complete:    true
+    };
+
+    await saveAttempt();
+    markingEl.className = 'marking-state';
+    displayMarkingResult(qId, examResponses[qId], sec?.marks);
+    markSectionDone(secId);
+
+  } catch (err) {
+    markingEl.className = 'marking-state';
+    markingEl.innerHTML = '';
+    // Graceful fallback — show response saved, marking pending
+    const resultEl = document.getElementById(`mark-result-${qId}`);
+    resultEl.style.display = 'block';
+    resultEl.innerHTML = `
+      <div style="color:var(--gold);font-size:0.85rem;">
+        ✓ Response saved. Your teacher will mark this shortly.
+      </div>`;
+    markSectionDone(secId);
+  }
+}
+
+function displayMarkingResult(qId, data, totalMarks) {
+  const el = document.getElementById(`mark-result-${qId}`);
+  el.style.display = 'block';
+
+  const creditedPoints = (data.ai_mark_points_credited || [])
+    .map(p => `<li>✓ ${escHtml(p)}</li>`).join('');
+
+  const overrideMarks = data.teacher_override_marks;
+  const displayMarks  = overrideMarks != null ? overrideMarks : data.ai_marks_awarded;
+
+  el.innerHTML = `
+    <div class="mark-result-header">
+      <span class="mark-score">${displayMarks} / ${totalMarks}</span>
+      <span class="mark-label">${overrideMarks != null ? 'Teacher marked' : 'Inspire System marked'}</span>
+    </div>
+    ${creditedPoints ? `<ul class="mark-points-list">${creditedPoints}</ul>` : ''}
+    ${data.ai_feedback ? `<div class="mark-feedback">${escHtml(data.ai_feedback)}</div>` : ''}
+    ${data.ai_examiner_note ? `<div class="mark-examiner-note">📝 ${escHtml(data.ai_examiner_note)}</div>` : ''}
+  `;
+
+  if (overrideMarks != null && data.teacher_override_comment) {
+    const overrideEl = document.getElementById(`override-${qId}`);
+    overrideEl.style.display = 'block';
+    overrideEl.textContent   = `Teacher note: ${data.teacher_override_comment}`;
+  }
+}
+
+function restoreMarkingResult(qId, data, totalMarks) {
+  if (data?.ai_marking_complete) {
+    displayMarkingResult(qId, data, totalMarks);
+  } else if (data?.response) {
+    const el = document.getElementById(`mark-result-${qId}`);
+    el.style.display = 'block';
+    el.innerHTML = `<div style="color:var(--gold);font-size:0.85rem;">✓ Response saved. Marking in progress…</div>`;
+  }
+}
+
+// ── AI MARKING — via Netlify Function ────────────────────────
+async function callAIMarking(payload) {
+  const res = await fetch('/.netlify/functions/mark-exam-response', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error('Marking function failed');
+  return res.json();
+}
+
+// ── PROGRESS ─────────────────────────────────────────────────
+function markSectionVisited(secId) {
+  // Just update the pill to active while in view — full "done" requires completing the section
+  document.getElementById(`pill-${secId}`)?.classList.add('active');
+}
+
+function markSectionDone(secId) {
+  sectionsDone.add(secId);
+  const pill = document.getElementById(`pill-${secId}`);
+  if (pill) { pill.classList.remove('active'); pill.classList.add('done'); }
+  updateProgress();
+  saveAttempt();
+  checkCompletion();
+}
+
+function updateProgress() {
+  const pct = sectionsTotal > 0
+    ? Math.round((sectionsDone.size / sectionsTotal) * 100) : 0;
+
+  document.getElementById('nav-prog-fill').style.width  = pct + '%';
+  document.getElementById('nav-prog-label').textContent = pct + '%';
+  document.getElementById('hero-prog-fill').style.width = pct + '%';
+  document.getElementById('hero-prog-pct').textContent  = pct + '%';
+}
+
+function checkCompletion() {
+  if (sectionsDone.size < sectionsTotal) return;
+
+  // Mark attempt and assignment complete
+  sb.from('revision_attempts')
+    .update({
+      completed_at:   new Date().toISOString(),
+      overall_score:  computeOverallScore()
+    })
+    .eq('id', attemptId);
+
+  sb.from('revision_assignments')
+    .update({ status: 'completed' })
+    .eq('id', assignmentData.id);
+
+  showCompletionBanner();
+}
+
+function computeOverallScore() {
+  // Average of all MCQ scores across sections
+  const allSecs = Object.values(mcqScores);
+  if (!allSecs.length) return null;
+  const totalCorrect = allSecs.reduce((a,b) => a + b.correct, 0);
+  const totalQs      = allSecs.reduce((a,b) => a + b.total,   0);
+  return totalQs > 0 ? Math.round((totalCorrect / totalQs) * 100) : null;
+}
+
+function showCompletionBanner() {
+  const banner = document.getElementById('completion-banner');
+  banner.style.display = 'block';
+  banner.scrollIntoView({ behavior:'smooth' });
+
+  const score = computeOverallScore();
+  const mins  = Math.round(sessionSeconds / 60);
+
+  document.getElementById('completion-stats').innerHTML = `
+    ${score != null ? `
+    <div class="c-stat">
+      <span class="c-stat-val">${score}%</span>
+      <span class="c-stat-label">MCQ Score</span>
+    </div>` : ''}
+    <div class="c-stat">
+      <span class="c-stat-val">${mins}</span>
+      <span class="c-stat-label">Minutes</span>
+    </div>
+    <div class="c-stat">
+      <span class="c-stat-val">${sectionsDone.size}</span>
+      <span class="c-stat-label">Sections done</span>
+    </div>
+  `;
+}
+
+// ── TIMERS ───────────────────────────────────────────────────
+function startTimers() {
+  // Session clock display
+  clockTimer = setInterval(() => {
+    sessionSeconds++;
+    document.getElementById('timer-display').textContent = formatTime(sessionSeconds);
+  }, 1000);
+
+  // Heartbeat — saves every 30s
+  heartbeatTimer = setInterval(saveAttempt, 30000);
+}
+
+// ── SAVE ATTEMPT ─────────────────────────────────────────────
+async function saveAttempt() {
+  if (!attemptId) return;
+  await sb.from('revision_attempts')
+    .update({
+      last_active:        new Date().toISOString(),
+      time_spent_seconds: sessionSeconds,
+      sections_completed: [...sectionsDone],
+      mcq_results:        buildMcqResultsJson(),
+      exam_responses:     examResponses
+    })
+    .eq('id', attemptId);
+}
+
+// ── MCQ RESULT HELPERS ───────────────────────────────────────
+function buildMcqResultsJson() {
+  // Reconstruct from DOM state — keyed by question id
+  const results = {};
+  document.querySelectorAll('.mcq-opt.correct, .mcq-opt.wrong').forEach(btn => {
+    const optsWrap = btn.closest('.mcq-options');
+    const fbId     = optsWrap?.nextElementSibling?.id; // mcq-feedback id
+    if (!fbId) return;
+    // parse secId and qId from feedback element id: fb-{secId}-{qId}
+    const parts = fbId.replace('fb-','').split('-');
+    const qId   = parts[parts.length - 1];
+    results[qId] = {
+      selected: parseInt(btn.dataset.optIndex),
+      correct:  btn.classList.contains('correct')
+    };
+  });
+  return results;
+}
+
+function getSavedMcqResults(secId) {
+  // Returns { qId: { selected, correct } } for this section from examResponses / attempt
+  return {};  // Populated from existing attempt data on load via rebuildMcqScores
+}
+
+function rebuildMcqScores(mcqResults) {
+  // Compute per-section scores from saved mcq_results JSONB
+  const scores = {};
+  Object.entries(mcqResults).forEach(([qId, data]) => {
+    // section id is embedded in the question id prefix if using sec.id_q0 format
+    // For simplicity, track globally — teacher dashboard aggregates properly
+    if (!scores['_global']) scores['_global'] = { correct:0, total:0 };
+    scores['_global'].total++;
+    if (data.correct) scores['_global'].correct++;
+  });
+  return scores;
+}
+
+// ── UTILITIES ────────────────────────────────────────────────
+function formatTime(secs) {
+  const m = String(Math.floor(secs / 60)).padStart(2,'0');
+  const s = String(secs % 60).padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-GB',
+    { day:'numeric', month:'short', year:'numeric' });
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function showError(msg) {
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('error-state').style.display   = 'flex';
+  document.getElementById('error-msg').textContent       = msg;
+}
+
+// Back to top button
+window.addEventListener('scroll', () => {
+  document.getElementById('btt').classList.toggle('visible', window.scrollY > 500);
+});
+
+// Save on tab close
+window.addEventListener('beforeunload', saveAttempt);
+</script>
+</body>
+</html>

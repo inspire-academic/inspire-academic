@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personalised Learning — Inspire Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+/* ── DESIGN TOKENS — matches existing platform ── */
+:root {
+  --navy:   #0b1628;
+  --navy2:  #112240;
+  --navy3:  #1a3a5c;
+  --gold:   #c9a84c;
+  --gold2:  #e8c96a;
+  --white:  #e8eaf0;
+  --muted:  #6b7f99;
+  --border: #1e2d45;
+  --r:      10px;
+  --green:  #22c55e;
+  --red:    #ef4444;
+  --amber:  #f59e0b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body {
+  font-family:var(--font-body);
+  background:var(--navy);
+  color:var(--white);
+  min-height:100vh;
+  line-height:1.6;
+}
+
+/* ── TOPNAV — identical to dashboard ── */
+.topnav {
+  background:var(--navy2);
+  border-bottom:1px solid var(--border);
+  padding:.8rem 1.5rem;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  position:sticky;top:0;z-index:100;
+}
+.topnav-logo img{height:36px;width:auto;border-radius:8px;}
+.topnav-title {
+  font-family:var(--font-display);
+  font-size:1rem;
+  font-weight:600;
+  color:var(--gold);
+  margin-right:.5rem;
+}
+.nav-links{display:flex;gap:.3rem;}
+.nav-link {
+  background:none;
+  border:none;
+  color:var(--muted);
+  padding:.45rem .9rem;
+  border-radius:6px;
+  font-size:.85rem;
+  font-family:var(--font-body);
+  cursor:pointer;
+  transition:all .15s;
+}
+.nav-link:hover,.nav-link.active{background:var(--navy3);color:var(--white);}
+.nav-user {
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  cursor:pointer;
+  padding:.4rem .8rem;
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  transition:border-color .2s;
+}
+.nav-user:hover{border-color:var(--gold);}
+.avatar {
+  width:32px;height:32px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;font-weight:600;
+}
+
+/* ── PAGE ── */
+main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
+
+/* ── HERO ── */
+.page-hero {
+  margin-bottom:2.5rem;
+}
+.page-hero h1 {
+  font-family:var(--font-display);
+  font-size:clamp(1.6rem,4vw,2.2rem);
+  font-weight:700;
+  color:var(--white);
+  margin-bottom:.4rem;
+}
+.page-hero p {
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+/* ── STATS ROW ── */
+.stats-row {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:1rem;
+  margin-bottom:2.5rem;
+}
+.stat-card {
+  background:var(--navy2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:1.2rem;
+}
+.stat-label {
+  font-family:var(--font-mono);
+  font-size:.65rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:.4rem;
+}
+.stat-val {
+  font-family:var(--font-display);
+  font-size:1.8rem;
+  font-weight:600;
+  color:var(--gold);
+}
+.stat-sub {
+  font-size:.75rem;
+  color:var(--muted);
+  margin-top:.1rem;
+}
+
+/* ── SECTION HEADER ── */
+.section-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:1rem;
+}
+.section-title {
+  font-family:var(--font-display);
+  font-size:1.1rem;
+  font-weight:600;
+}
+.section-count {
+  font-family:var(--font-mono);
+  font-size:.7rem;
+  color:var(--muted);
+}
+
+/* ── FILTERS ── */
+.filters {
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+  margin-bottom:1.5rem;
+}
+.filter-btn {
+  font-family:var(--font-mono);
+  font-size:.68rem;
+  padding:.35rem .9rem;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  transition:all .15s;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.filter-btn:hover { border-color:var(--gold);color:var(--gold); }
+.filter-btn.active { border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08); }
+
+/* ── PACK CARDS ── */
+.packs-grid {
+  display:grid;
+  gap:1rem;
+}
+
+.pack-card {
+  background:var(--navy2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:1.4rem 1.6rem;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:1rem;
+  align-items:center;
+  transition:border-color .2s,transform .15s;
+  cursor:pointer;
+  text-decoration:none;
+  color:inherit;
+}
+.pack-card:hover { border-color:var(--gold);transform:translateY(-1px); }
+.pack-card.completed { border-color:rgba(34,197,94,.3); }
+.pack-card.overdue   { border-color:rgba(239,68,68,.3); }
+
+.pack-left { min-width:0; }
+
+.pack-meta {
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  flex-wrap:wrap;
+  margin-bottom:.5rem;
+}
+.pack-badge {
+  font-family:var(--font-mono);
+  font-size:.6rem;
+  padding:.25rem .7rem;
+  border-radius:20px;
+  border:1px solid;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.badge-physics  { color:#60a5fa;border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.07); }
+.badge-biology  { color:#4ade80;border-color:rgba(74,222,128,.3);background:rgba(74,222,128,.07); }
+.badge-chemistry{ color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.07); }
+.badge-maths    { color:#fb923c;border-color:rgba(251,146,60,.3);background:rgba(251,146,60,.07); }
+.badge-aqa      { color:var(--gold);border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.07); }
+.badge-edexcel  { color:#a78bfa;border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.07); }
+.badge-ocr      { color:#22d3ee;border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.07); }
+.badge-higher   { color:#a78bfa;border-color:rgba(167,139,250,.25);background:rgba(167,139,250,.06); }
+.badge-foundation{ color:#94a3b8;border-color:rgba(148,163,184,.25);background:rgba(148,163,184,.06); }
+
+.pack-title {
+  font-family:var(--font-display);
+  font-size:1rem;
+  font-weight:600;
+  color:var(--white);
+  margin-bottom:.35rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.pack-topics {
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem;
+  margin-bottom:.6rem;
+}
+.topic-chip {
+  font-family:var(--font-mono);
+  font-size:.6rem;
+  padding:.2rem .6rem;
+  border:1px solid var(--border);
+  border-radius:20px;
+  color:var(--muted);
+}
+
+.pack-footer {
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+.due-label {
+  font-family:var(--font-mono);
+  font-size:.68rem;
+}
+.due-ok     { color:var(--muted); }
+.due-soon   { color:var(--amber); }
+.due-overdue{ color:var(--red); }
+
+/* progress bar */
+.pack-progress-wrap {
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  min-width:120px;
+}
+.pack-prog-track {
+  flex:1;height:4px;
+  background:var(--border);
+  border-radius:4px;overflow:hidden;
+}
+.pack-prog-fill {
+  height:100%;
+  border-radius:4px;
+  transition:width .4s ease;
+}
+.fill-pending    { background:var(--border); }
+.fill-inprogress { background:linear-gradient(90deg,var(--gold),var(--gold2)); }
+.fill-completed  { background:var(--green); }
+
+.pack-prog-pct {
+  font-family:var(--font-mono);
+  font-size:.68rem;
+  min-width:28px;
+  text-align:right;
+}
+
+/* ── DOCUMENTS ── */
+.pack-documents {
+  margin-top:.75rem;
+  padding-top:.75rem;
+  border-top:1px solid var(--border);
+}
+.pack-documents-label {
+  font-family:var(--font-mono);
+  font-size:.6rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  margin-bottom:.5rem;
+}
+
+.doc-item-wrapper {
+  margin-bottom:.6rem;
+}
+
+.doc-item {
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  padding:.6rem .8rem;
+  background:var(--navy3);
+  border:1px solid var(--border);
+  border-radius:6px;
+  text-decoration:none;
+  color:inherit;
+  transition:all .15s;
+  cursor:pointer;
+  margin-bottom:.4rem;
+}
+.doc-item:hover {
+  border-color:var(--gold);
+  background:rgba(201,168,76,.08);
+}
+
+.doc-icon {
+  font-size:1rem;
+  flex-shrink:0;
+}
+
+.doc-info {
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:.15rem;
+}
+
+.doc-name {
+  font-size:.8rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  font-weight:500;
+}
+
+.doc-size {
+  font-family:var(--font-mono);
+  font-size:.68rem;
+  color:var(--muted);
+}
+
+.doc-action-btn {
+  width:100%;
+  padding:.5rem .9rem;
+  border-radius:6px;
+  font-size:.75rem;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .15s;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-family:var(--font-body);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.35rem;
+}
+
+.doc-action-btn:hover {
+  border-color:var(--gold);
+  color:var(--gold);
+  background:rgba(201,168,76,.05);
+}
+
+.doc-action-btn-primary {
+  background:var(--gold);
+  color:var(--navy);
+  border-color:var(--gold);
+}
+
+.doc-action-btn-primary:hover {
+  background:var(--gold2);
+  border-color:var(--gold2);
+  color:var(--navy);
+}
+
+.doc-actions-row {
+  display:flex;
+  gap:.5rem;
+  width:100%;
+}
+
+.doc-action-btn-kami {
+  background:rgba(139,92,246,.1);
+  border-color:rgba(139,92,246,.3);
+  color:#a78bfa;
+}
+
+.doc-action-btn-kami:hover {
+  background:rgba(139,92,246,.2);
+  border-color:#a78bfa;
+  color:#c4b5fd;
+}
+
+/* ── MODALS ── */
+.modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(11,22,40,.92);
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+  padding:1rem;
+}
+.modal.open { display:flex; }
+.modal-content {
+  background:var(--navy2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  width:100%;
+  max-height:90vh;
+  overflow-y:auto;
+}
+.modal-header {
+  padding:1.5rem;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.modal-header h3 {
+  font-family:var(--font-display);
+  font-size:1.3rem;
+  font-weight:600;
+}
+.modal-close {
+  background:transparent;
+  border:none;
+  color:var(--muted);
+  font-size:1.5rem;
+  cursor:pointer;
+  padding:0;
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:4px;
+  transition:all .15s;
+}
+.modal-close:hover {
+  background:var(--navy3);
+  color:var(--white);
+}
+.modal-body {
+  padding:1.5rem;
+}
+
+/* Form elements */
+.form-label {
+  display:block;
+  font-family:var(--font-mono);
+  font-size:.68rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--muted);
+  margin-bottom:.4rem;
+}
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.4rem;
+  padding:.6rem 1.2rem;
+  border-radius:var(--r);
+  font-size:.85rem;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .15s;
+  border:none;
+  font-family:var(--font-body);
+}
+.btn-gold {
+  background:var(--gold);
+  color:var(--navy);
+}
+.btn-gold:hover {
+  background:var(--gold2);
+}
+.btn-gold:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+.btn-outline {
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--muted);
+}
+.btn-outline:hover {
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+/* Submission file list */
+.submission-file-item {
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.6rem .8rem;
+  background:var(--navy3);
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-bottom:.4rem;
+}
+.submission-file-icon {
+  font-size:1rem;
+  flex-shrink:0;
+}
+.submission-file-name {
+  flex:1;
+  font-size:.8rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.submission-file-size {
+  font-family:var(--font-mono);
+  font-size:.7rem;
+  color:var(--muted);
+  flex-shrink:0;
+}
+.submission-file-remove {
+  background:transparent;
+  border:none;
+  color:var(--red);
+  cursor:pointer;
+  padding:.2rem .4rem;
+  font-size:.9rem;
+  border-radius:4px;
+  transition:background .15s;
+}
+.submission-file-remove:hover {
+  background:rgba(239,68,68,.1);
+}
+
+/* ── RIGHT SIDE CTA ── */
+.pack-right {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:.6rem;
+  flex-shrink:0;
+}
+.status-badge {
+  font-family:var(--font-mono);
+  font-size:.62rem;
+  padding:.3rem .8rem;
+  border-radius:20px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.status-pending    { color:var(--muted);border:1px solid var(--border); }
+.status-in_progress{ color:var(--gold);border:1px solid rgba(201,168,76,.4);background:rgba(201,168,76,.06); }
+.status-completed  { color:var(--green);border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.06); }
+
+.cta-btn {
+  font-family:var(--font-mono);
+  font-size:.72rem;
+  padding:.55rem 1.2rem;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:500;
+  letter-spacing:.04em;
+  transition:opacity .15s,transform .1s;
+  white-space:nowrap;
+  text-decoration:none;
+  display:inline-block;
+  text-align:center;
+}
+.cta-btn:hover { opacity:.88;transform:translateY(-1px); }
+.cta-start    { background:var(--gold);color:var(--navy); }
+.cta-continue { background:var(--navy3);color:var(--gold);border:1px solid rgba(201,168,76,.3); }
+.cta-review   { background:transparent;color:var(--muted);border:1px solid var(--border); }
+
+/* ── TEACHER MESSAGE ── */
+.teacher-msg {
+  background:rgba(201,168,76,.05);
+  border:1px solid rgba(201,168,76,.2);
+  border-left:3px solid var(--gold);
+  border-radius:0 6px 6px 0;
+  padding:.6rem .9rem;
+  margin-top:.5rem;
+  font-size:.8rem;
+  color:#c8d4e8;
+  font-style:italic;
+}
+.teacher-msg-label {
+  font-family:var(--font-mono);
+  font-size:.6rem;
+  color:var(--gold);
+  font-style:normal;
+  display:block;
+  margin-bottom:.2rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align:center;
+  padding:4rem 2rem;
+  color:var(--muted);
+}
+.empty-state h3 {
+  font-family:var(--font-display);
+  font-size:1.2rem;
+  color:var(--white);
+  margin-bottom:.5rem;
+}
+.empty-state p { font-size:.88rem;line-height:1.7; }
+
+/* ── LOADING ── */
+.loading-state {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:40vh;
+  gap:1rem;
+  color:var(--muted);
+  font-size:.9rem;
+}
+.spinner {
+  width:32px;height:32px;
+  border:2px solid var(--border);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── TOAST ── */
+#toast {
+  position:fixed;bottom:2rem;right:2rem;
+  background:var(--navy2);border:1px solid var(--border);
+  padding:.8rem 1.2rem;border-radius:var(--r);
+  font-size:.85rem;transform:translateY(100px);
+  opacity:0;transition:all .3s;z-index:9999;max-width:320px;
+}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:var(--green);color:var(--green);}
+#toast.error{border-color:var(--red);color:var(--red);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .pack-card { grid-template-columns:1fr; }
+  .pack-right { flex-direction:row;align-items:center; }
+  .topnav { padding:.8rem 1rem; }
+  main { padding:1.5rem 1rem 3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a href="/dashboard.html" style="text-decoration:none;color:inherit;">
+    <div class="topnav-logo">
+      <img src="/icons/icon-192.png" alt="Inspire Science" style="height:36px;width:auto;">
+    </div>
+  </a>
+  <div class="topnav-title">Student Portal</div>
+  <div class="nav-links">
+    <button class="nav-link" onclick="location.href='/dashboard.html'">Dashboard</button>
+    <button class="nav-link" onclick="location.href='/subjects.html'">Subjects</button>
+    <button class="nav-link" onclick="location.href='/student/progress.html'">My Progress</button>
+    <button class="nav-link active">Personalised Learning</button>
+  </div>
+  <div class="nav-user" id="nav-user" onclick="signOut()">
+    <div class="avatar" id="nav-avatar" style="background:var(--gold);color:var(--navy);">?</div>
+    <span id="nav-name">Loading…</span>
+    <span style="color:var(--muted);font-size:.75rem;">Sign out</span>
+  </div>
+</nav>
+
+<main>
+
+  <!-- LOADING -->
+  <div class="loading-state" id="loading-state">
+    <div class="spinner"></div>
+    <span>Loading your revision packs…</span>
+  </div>
+
+  <!-- CONTENT (hidden until loaded) -->
+  <div id="page-content" style="display:none;">
+
+    <!-- HERO -->
+    <div class="page-hero">
+      <h1 id="page-heading">Your Personalised Learning</h1>
+      <p id="page-sub">Revision packs assigned by your teacher, tailored to your topics.</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Assigned</div>
+        <div class="stat-val" id="stat-total">0</div>
+        <div class="stat-sub">revision packs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Completed</div>
+        <div class="stat-val" id="stat-completed">0</div>
+        <div class="stat-sub">packs finished</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">In Progress</div>
+        <div class="stat-val" id="stat-inprogress">0</div>
+        <div class="stat-sub">packs started</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg MCQ Score</div>
+        <div class="stat-val" id="stat-score">—</div>
+        <div class="stat-sub">across all packs</div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">All</button>
+      <button class="filter-btn" data-filter="pending" onclick="setFilter('pending',this)">Pending</button>
+      <button class="filter-btn" data-filter="in_progress" onclick="setFilter('in_progress',this)">In Progress</button>
+      <button class="filter-btn" data-filter="completed" onclick="setFilter('completed',this)">Completed</button>
+    </div>
+
+    <!-- PACKS LIST -->
+    <div class="section-header">
+      <span class="section-title">Your Revision Packs</span>
+      <span class="section-count" id="packs-count"></span>
+    </div>
+
+    <div class="packs-grid" id="packs-grid"></div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <h3>No packs here yet</h3>
+      <p>Your teacher will assign personalised revision packs to you here.<br>Check back after your next session.</p>
+    </div>
+
+    <!-- ASSESSMENTS CTA -->
+    <div style="
+      margin-top: 2.5rem;
+      background: linear-gradient(135deg, var(--navy2) 0%, #112a44 100%);
+      border: 1px solid rgba(212,160,23,0.35);
+      border-radius: 10px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      cursor: pointer;
+      transition: all .2s;
+    " onclick="location.href='/student/assessment.html'"
+       onmouseover="this.style.borderColor='var(--gold)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,.3)'"
+       onmouseout="this.style.borderColor='rgba(212,160,23,0.35)';this.style.transform='';this.style.boxShadow=''">
+      <div>
+        <div style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;">📋 Formal Assessments</div>
+        <div style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:.3rem;">Take a Timed Assessment</div>
+        <div style="font-size:.85rem;color:var(--muted);">Exam-style tests with marking, instant feedback and progress tracking — mapped to your spec.</div>
+      </div>
+      <button class="btn btn-gold" onclick="event.stopPropagation();location.href='/student/assessment.html'" style="white-space:nowrap;">
+        Go to Assessments →
+      </button>
+    </div>
+
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const currentSubject = urlParams.get('subject') || 'physics';
+// Store for Phase 3 Supabase wiring
+sessionStorage.setItem('currentSubject', currentSubject);
+
+const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let allAssignments = [];
+let currentFilter  = 'all';
+let allSubmissions = [];
+let selectedFiles = [];
+let currentSubmissionContext = {
+  assignmentId: null,
+  documentId: null,
+  documentName: null,
+  existingSubmissionNumber: 0
+};
+
+(async () => {
+  // Auth check
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { location.href = '/index.html'; return; }
+  const user = session.user;
+
+  // Load profile
+  const { data: profile } = await sb
+    .from('profiles')
+    .select('first_name, full_name, avatar_color')
+    .eq('id', user.id)
+    .single();
+
+  const firstName = profile?.first_name
+    || profile?.full_name?.split(' ')[0]
+    || user.email?.split('@')[0]
+    || 'Student';
+
+  const initials = firstName.charAt(0).toUpperCase();
+  const avatarColor = profile?.avatar_color || '#c9a84c';
+
+  document.getElementById('nav-name').textContent   = firstName;
+  document.getElementById('nav-avatar').textContent = initials;
+  document.getElementById('nav-avatar').style.background = avatarColor;
+  document.getElementById('nav-avatar').style.color = '#0b1628';
+
+  document.getElementById('page-heading').textContent =
+    `${firstName}'s Personalised Learning`;
+
+  // Load assignments with pack data and latest attempt
+  const { data: assignments, error } = await sb
+    .from('revision_assignments')
+    .select(`
+      id, pack_id, due_date, message, status, assigned_at,
+      revision_packs (
+        id, title, subject, exam_board, difficulty_tier, topic_list, sections
+      )
+    `)
+    .eq('assigned_to', user.id)
+    .order('assigned_at', { ascending: false });
+
+  if (error) { showToast('Could not load revision packs', 'error'); }
+
+  // Load documents for all packs
+  const packIds = (assignments || []).map(a => a.pack_id).filter(Boolean);
+  let allDocuments = [];
+  if (packIds.length) {
+    const { data: docData } = await sb
+      .from('revision_pack_documents')
+      .select('*')
+      .in('pack_id', packIds)
+      .order('uploaded_at', { ascending: false });
+    allDocuments = docData || [];
+  }
+
+  // Map documents by pack_id (only show released documents)
+  const documentsMap = {};
+  allDocuments.forEach(doc => {
+    const shouldShow = !doc.release_date || new Date(doc.release_date) <= new Date();
+    if (shouldShow) {
+      if (!documentsMap[doc.pack_id]) documentsMap[doc.pack_id] = [];
+      documentsMap[doc.pack_id].push(doc);
+    }
+  });
+
+  // Load latest attempt for each assignment
+  const assignmentIds = (assignments || []).map(a => a.id);
+  let attempts = [];
+  if (assignmentIds.length) {
+    const { data: attemptData } = await sb
+      .from('revision_attempts')
+      .select('assignment_id, sections_completed, mcq_results, overall_score, completed_at, last_active')
+      .in('assignment_id', assignmentIds)
+      .order('last_active', { ascending: false });
+    attempts = attemptData || [];
+  }
+
+  // Map latest attempt per assignment
+  const attemptMap = {};
+  attempts.forEach(a => {
+    if (!attemptMap[a.assignment_id]) attemptMap[a.assignment_id] = a;
+  });
+
+  allAssignments = (assignments || []).map(a => ({
+    ...a,
+    attempt: attemptMap[a.id] || null,
+    documents: documentsMap[a.pack_id] || []
+  }));
+
+  // Load submissions
+  await loadSubmissions();
+
+  renderStats();
+  renderPacks(currentFilter);
+
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('page-content').style.display  = 'block';
+})();
+
+function renderStats() {
+  const total       = allAssignments.length;
+  const completed   = allAssignments.filter(a => a.status === 'completed').length;
+  const inProgress  = allAssignments.filter(a => a.status === 'in_progress').length;
+
+  // Average MCQ score across all attempts
+  const scores = allAssignments
+    .map(a => a.attempt?.overall_score)
+    .filter(s => s != null && s > 0);
+  const avgScore = scores.length
+    ? Math.round(scores.reduce((a,b) => a + b, 0) / scores.length)
+    : null;
+
+  document.getElementById('stat-total').textContent      = total;
+  document.getElementById('stat-completed').textContent  = completed;
+  document.getElementById('stat-inprogress').textContent = inProgress;
+  document.getElementById('stat-score').textContent      = avgScore != null ? avgScore + '%' : '—';
+}
+
+function renderPacks(filter) {
+  const grid  = document.getElementById('packs-grid');
+  const empty = document.getElementById('empty-state');
+  const count = document.getElementById('packs-count');
+  grid.innerHTML = '';
+
+  const filtered = filter === 'all'
+    ? allAssignments
+    : allAssignments.filter(a => a.status === filter);
+
+  count.textContent = filtered.length + ' pack' + (filtered.length !== 1 ? 's' : '');
+
+  if (!filtered.length) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  filtered.forEach(a => {
+    const pack    = a.revision_packs;
+    const attempt = a.attempt;
+    if (!pack) return;
+
+    const totalSections = pack.sections?.length || 0;
+    const doneSections  = attempt?.sections_completed?.length || 0;
+    const pct           = totalSections > 0
+      ? Math.round((doneSections / totalSections) * 100) : 0;
+
+    const dueInfo   = getDueInfo(a.due_date);
+    const statusCls = 'status-' + a.status;
+    const cardCls   = a.status === 'completed' ? 'completed'
+                    : dueInfo.overdue ? 'overdue' : '';
+
+    const fillCls = a.status === 'completed' ? 'fill-completed'
+                  : a.status === 'in_progress' ? 'fill-inprogress'
+                  : 'fill-pending';
+
+    const ctaText = a.status === 'completed' ? 'Review'
+                  : a.status === 'in_progress' ? 'Continue →'
+                  : 'Start →';
+    const ctaCls  = a.status === 'completed' ? 'cta-review'
+                  : a.status === 'in_progress' ? 'cta-continue'
+                  : 'cta-start';
+
+    const topicsHtml = (pack.topic_list || []).slice(0, 4).map(t =>
+      `<span class="topic-chip">${escHtml(t)}</span>`
+    ).join('') + (pack.topic_list?.length > 4
+      ? `<span class="topic-chip">+${pack.topic_list.length - 4} more</span>` : '');
+
+    const msgHtml = a.message
+      ? `<div class="teacher-msg">
+           <span class="teacher-msg-label">From your teacher</span>
+           ${escHtml(a.message)}
+         </div>` : '';
+
+    const documentsHtml = a.documents?.length
+      ? `<div class="pack-documents">
+           <div class="pack-documents-label">📎 Attached Documents</div>
+           ${a.documents.map(doc => {
+             const icon = doc.file_type === 'pdf' ? '📄' : doc.file_type.includes('doc') ? '📝' : '🖼️';
+             const sizeKB = Math.round(doc.file_size / 1024);
+             
+             const submission = getSubmissionStatus(a.id, doc.id);
+             
+             let statusBadge = '';
+             let actionButton = '';
+             
+             if (submission) {
+               if (submission.status === 'reviewed') {
+                 const scoreColor = submission.score >= 70 ? 'var(--green)' 
+                                  : submission.score >= 50 ? 'var(--amber)' 
+                                  : 'var(--red)';
+                 statusBadge = `<span style="font-size:.7rem;color:${scoreColor};font-weight:500;">✅ ${submission.score}%</span>`;
+                 actionButton = `<button class="doc-action-btn" onclick="viewFeedback('${a.id}', '${doc.id}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();">
+                   📋 View Feedback
+                 </button>`;
+               } else {
+                 statusBadge = `<span style="font-size:.7rem;color:var(--amber);font-weight:500;">📤 Submitted (v${submission.submission_number})</span>`;
+                 actionButton = `<button class="doc-action-btn" onclick="openSubmitModal('${a.id}', '${doc.id}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();">
+                   🔄 Resubmit
+                 </button>`;
+               }
+             } else {
+               statusBadge = `<span style="font-size:.7rem;color:var(--muted);">Not submitted</span>`;
+               actionButton = `<button class="doc-action-btn doc-action-btn-primary" onclick="openSubmitModal('${a.id}', '${doc.id}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();">
+                 📤 Submit Work
+               </button>`;
+             }
+             
+             // Annotator button (only for PDFs)
+             const kamiButton = doc.file_type === 'pdf' 
+               ? `<button class="doc-action-btn doc-action-btn-kami" onclick="openInKami('${doc.file_path}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();" title="Annotate this PDF with our built-in editor">
+                    ✏️ Annotate PDF
+                  </button>`
+               : '';
+             
+             return `
+               <div class="doc-item-wrapper">
+                 <div class="doc-item" onclick="downloadDocument('${doc.file_path}', '${escHtml(doc.file_name)}'); event.preventDefault(); event.stopPropagation();">
+                   <span class="doc-icon">${icon}</span>
+                   <div class="doc-info">
+                     <span class="doc-name">${escHtml(doc.file_name)}</span>
+                     <span class="doc-size">${sizeKB} KB</span>
+                   </div>
+                   ${statusBadge}
+                 </div>
+                 <div class="doc-actions-row">
+                   ${kamiButton}
+                   ${actionButton}
+                 </div>
+               </div>
+             `;
+           }).join('')}
+         </div>` 
+      : '';
+
+    const url = `/student/revision-pack.html?assignment_id=${a.id}`;
+
+    const card = document.createElement('a');
+    card.href      = url;
+    card.className = `pack-card ${cardCls}`;
+    card.innerHTML = `
+      <div class="pack-left">
+        <div class="pack-meta">
+          <span class="pack-badge badge-${pack.subject}">${cap(pack.subject)}</span>
+          <span class="pack-badge badge-${pack.exam_board}">${pack.exam_board.toUpperCase()}</span>
+          <span class="pack-badge badge-${pack.difficulty_tier}">${cap(pack.difficulty_tier)}</span>
+        </div>
+        <div class="pack-title">${escHtml(pack.title)}</div>
+        <div class="pack-topics">${topicsHtml}</div>
+        ${msgHtml}
+        ${documentsHtml}
+        <div class="pack-footer">
+          <span class="due-label ${dueInfo.cls}">${dueInfo.label}</span>
+          <div class="pack-progress-wrap">
+            <div class="pack-prog-track">
+              <div class="pack-prog-fill ${fillCls}" style="width:${pct}%"></div>
+            </div>
+            <span class="pack-prog-pct" style="color:${a.status === 'completed' ? 'var(--green)' : 'var(--muted)'}">${pct}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="pack-right">
+        <span class="status-badge ${statusCls}">${statusLabel(a.status)}</span>
+        <span class="cta-btn ${ctaCls}">${ctaText}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPacks(filter);
+}
+
+function getDueInfo(dueDateStr) {
+  if (!dueDateStr) return { label: 'No due date', cls: 'due-ok', overdue: false };
+  const due   = new Date(dueDateStr);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  due.setHours(0,0,0,0);
+  const diff  = Math.round((due - today) / (1000 * 60 * 60 * 24));
+
+  if (diff < 0)  return { label: `Overdue by ${Math.abs(diff)} day${Math.abs(diff)!==1?'s':''}`, cls:'due-overdue', overdue:true };
+  if (diff === 0) return { label: 'Due today', cls:'due-soon', overdue:false };
+  if (diff <= 3)  return { label: `Due in ${diff} day${diff!==1?'s':''}`, cls:'due-soon', overdue:false };
+  return { label: `Due ${formatDate(dueDateStr)}`, cls:'due-ok', overdue:false };
+}
+
+function statusLabel(s) {
+  return s === 'pending' ? 'Not started'
+       : s === 'in_progress' ? 'In progress'
+       : 'Completed';
+}
+
+function formatDate(str) {
+  return new Date(str).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function cap(str) {
+  return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  location.href = '/index.html';
+}
+
+// ── Open in PDF Annotator ──
+async function openInKami(filePath, fileName) {
+  try {
+    showToast('Opening annotator...', '');
+    
+    // Generate signed URL (2 hours expiry)
+    const { data, error } = await sb.storage
+      .from('revision-documents')
+      .createSignedUrl(filePath, 7200);
+    
+    if (error) {
+      console.error('URL error:', error);
+      showToast('Failed to open annotator', 'error');
+      return;
+    }
+    
+    // Open custom PDF annotator
+    const annotatorUrl = `/tools/pdf-annotator.html?url=${encodeURIComponent(data.signedUrl)}&name=${encodeURIComponent(fileName)}`;
+    
+    // Open in new tab
+    window.open(annotatorUrl, '_blank', 'noopener,noreferrer');
+    showToast('Opened annotator ✓', 'success');
+    
+  } catch (err) {
+    console.error('Annotator error:', err);
+    showToast('Error opening annotator', 'error');
+  }
+}
+
+async function downloadDocument(filePath, fileName) {
+  try {
+    showToast('Downloading...', '');
+    
+    const { data, error } = await sb.storage
+      .from('revision-documents')
+      .download(filePath);
+
+    if (error) {
+      showToast('Download failed: ' + error.message, 'error');
+      return;
+    }
+
+    // Create download link
+    const url = URL.createObjectURL(data);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('Downloaded ✓', 'success');
+  } catch (err) {
+    showToast('Download error', 'error');
+    console.error('Download error:', err);
+  }
+}
+
+// ── Submission Functions ──
+async function loadSubmissions() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return;
+
+  const { data, error } = await sb
+    .from('revision_pack_submissions')
+    .select(`
+      *,
+      revision_submission_files (*)
+    `)
+    .eq('student_id', session.user.id)
+    .order('submitted_at', { ascending: false });
+
+  if (error) {
+    console.error('Error loading submissions:', error);
+    return;
+  }
+
+  allSubmissions = data || [];
+}
+
+function getSubmissionStatus(assignmentId, documentId) {
+  const submissions = allSubmissions.filter(s => 
+    s.assignment_id === assignmentId && s.document_id === documentId
+  );
+
+  if (!submissions.length) return null;
+
+  const latest = submissions.sort((a, b) => 
+    new Date(b.submitted_at) - new Date(a.submitted_at)
+  )[0];
+
+  return {
+    ...latest,
+    fileCount: latest.revision_submission_files?.length || 0
+  };
+}
+
+function openSubmitModal(assignmentId, documentId, documentName) {
+  currentSubmissionContext = {
+    assignmentId,
+    documentId,
+    documentName,
+    existingSubmissionNumber: 0
+  };
+
+  const existing = getSubmissionStatus(assignmentId, documentId);
+  if (existing) {
+    currentSubmissionContext.existingSubmissionNumber = existing.submission_number;
+    document.getElementById('resubmit-warning').style.display = 'block';
+    document.getElementById('submission-version-number').textContent = existing.submission_number + 1;
+  } else {
+    document.getElementById('resubmit-warning').style.display = 'none';
+  }
+
+  document.getElementById('submit-doc-name').textContent = documentName;
+  selectedFiles = [];
+  renderSelectedFiles();
+  document.getElementById('submit-modal').classList.add('open');
+}
+
+function closeSubmitModal() {
+  document.getElementById('submit-modal').classList.remove('open');
+  selectedFiles = [];
+  renderSelectedFiles();
+  document.getElementById('submission-files-input').value = '';
+}
+
+function handleSubmissionFiles(event) {
+  const files = Array.from(event.target.files);
+  const maxSize = 20 * 1024 * 1024;
+
+  for (const file of files) {
+    if (file.size > maxSize) {
+      showToast(`File too large: ${file.name}. Max 20MB`, 'error');
+      continue;
+    }
+
+    const allowedTypes = [
+      'application/pdf',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/msword',
+      'image/png', 'image/jpeg', 'image/jpg', 'image/webp'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      showToast(`Invalid file type: ${file.name}`, 'error');
+      continue;
+    }
+
+    selectedFiles.push(file);
+  }
+
+  renderSelectedFiles();
+  event.target.value = '';
+}
+
+function removeSelectedFile(index) {
+  selectedFiles.splice(index, 1);
+  renderSelectedFiles();
+}
+
+function renderSelectedFiles() {
+  const container = document.getElementById('submission-files-list');
+  const submitBtn = document.getElementById('submit-btn');
+
+  if (!selectedFiles.length) {
+    container.innerHTML = '<div style="color:var(--muted);font-size:.8rem;padding:.5rem 0;">No files selected</div>';
+    submitBtn.disabled = true;
+    return;
+  }
+
+  submitBtn.disabled = false;
+
+  container.innerHTML = selectedFiles.map((file, idx) => {
+    const icon = file.type.includes('pdf') ? '📄' 
+               : file.type.includes('word') || file.type.includes('doc') ? '📝' 
+               : '🖼️';
+    const sizeKB = Math.round(file.size / 1024);
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+    const sizeText = file.size > 1024 * 1024 ? `${sizeMB} MB` : `${sizeKB} KB`;
+
+    return `
+      <div class="submission-file-item">
+        <span class="submission-file-icon">${icon}</span>
+        <span class="submission-file-name">${escHtml(file.name)}</span>
+        <span class="submission-file-size">${sizeText}</span>
+        <button class="submission-file-remove" onclick="removeSelectedFile(${idx})">✕</button>
+      </div>
+    `;
+  }).join('');
+}
+
+async function submitWork() {
+  if (!selectedFiles.length) {
+    showToast('Please select at least one file', 'error');
+    return;
+  }
+
+  const submitBtn = document.getElementById('submit-btn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Uploading...';
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+      showToast('Not authenticated', 'error');
+      return;
+    }
+
+    const uploadedFiles = [];
+    for (const file of selectedFiles) {
+      const timestamp = Date.now();
+      const sanitized = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const filePath = `${session.user.id}/${timestamp}_${sanitized}`;
+
+      const { data: uploadData, error: uploadError } = await sb.storage
+        .from('revision-submissions')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        showToast('Upload failed: ' + uploadError.message, 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = '📤 Submit Work';
+        return;
+      }
+
+      uploadedFiles.push({
+        file_name: file.name,
+        file_path: filePath,
+        file_type: file.type.split('/')[1] || 'unknown',
+        file_size: file.size
+      });
+    }
+
+    const submissionNumber = currentSubmissionContext.existingSubmissionNumber + 1;
+    
+    const { data: submission, error: submissionError } = await sb
+      .from('revision_pack_submissions')
+      .insert([{
+        assignment_id: currentSubmissionContext.assignmentId,
+        student_id: session.user.id,
+        document_id: currentSubmissionContext.documentId,
+        submission_number: submissionNumber,
+        status: 'submitted'
+      }])
+      .select()
+      .single();
+
+    if (submissionError) {
+      console.error('Submission error:', submissionError);
+      showToast('Failed to create submission: ' + submissionError.message, 'error');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '📤 Submit Work';
+      return;
+    }
+
+    const fileRecords = uploadedFiles.map(f => ({
+      submission_id: submission.id,
+      ...f
+    }));
+
+    const { error: filesError } = await sb
+      .from('revision_submission_files')
+      .insert(fileRecords);
+
+    if (filesError) {
+      console.error('Files linking error:', filesError);
+      showToast('Submission created but files failed to link', 'error');
+    }
+
+    showToast('Work submitted successfully ✓', 'success');
+    closeSubmitModal();
+    await loadSubmissions();
+    
+    setTimeout(() => location.reload(), 1500);
+
+  } catch (err) {
+    console.error('Submit error:', err);
+    showToast('An error occurred', 'error');
+    submitBtn.disabled = false;
+    submitBtn.textContent = '📤 Submit Work';
+  }
+}
+
+function viewFeedback(assignmentId, documentId, documentName) {
+  const submission = getSubmissionStatus(assignmentId, documentId);
+  if (!submission || submission.status !== 'reviewed') {
+    showToast('No feedback available yet', 'error');
+    return;
+  }
+
+  document.getElementById('feedback-doc-name').textContent = documentName;
+  document.getElementById('feedback-score').textContent = submission.score !== null ? submission.score + '%' : 'N/A';
+  document.getElementById('feedback-status').textContent = '✅ Reviewed';
+  document.getElementById('feedback-text').textContent = submission.feedback || 'No comments provided.';
+  
+  const reviewedDate = new Date(submission.reviewed_at).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  document.getElementById('feedback-date').textContent = reviewedDate;
+
+  document.getElementById('feedback-modal').classList.add('open');
+}
+
+function closeFeedbackModal() {
+  document.getElementById('feedback-modal').classList.remove('open');
+}
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  setTimeout(() => { t.className = ''; }, 3000);
+}
+</script>
+<!-- SUBMISSION UPLOAD MODAL -->
+<div id="submit-modal" class="modal">
+  <div class="modal-content" style="max-width:540px;">
+    <div class="modal-header">
+      <h3>📤 Submit Your Work</h3>
+      <button class="modal-close" onclick="closeSubmitModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1.5rem;">
+        <div style="font-size:.85rem;font-weight:500;margin-bottom:.3rem;">Document:</div>
+        <div id="submit-doc-name" style="font-size:.8rem;color:var(--muted);"></div>
+      </div>
+
+      <div style="margin-bottom:1.5rem;">
+        <label class="form-label">Upload Your Completed Work</label>
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem;">
+          You can upload multiple files (max 20MB each). Accepted: PDF, Word, images.
+        </div>
+        <input type="file" id="submission-files-input" multiple accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.webp" style="display:none;" onchange="handleSubmissionFiles(event)">
+        <button type="button" class="btn btn-outline" onclick="document.getElementById('submission-files-input').click()" style="width:100%;">
+          📎 Choose Files
+        </button>
+        <div id="submission-files-list" style="margin-top:.75rem;"></div>
+      </div>
+
+      <div id="resubmit-warning" style="display:none;background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:8px;padding:1rem;margin-bottom:1.5rem;">
+        <div style="font-size:.85rem;font-weight:500;color:var(--amber);margin-bottom:.3rem;">⚠️ Resubmission</div>
+        <div style="font-size:.78rem;color:var(--muted);">
+          You're about to submit version <span id="submission-version-number"></span>. This will replace your previous submission.
+        </div>
+      </div>
+
+      <div style="display:flex;gap:.75rem;justify-content:flex-end;">
+        <button class="btn btn-outline" onclick="closeSubmitModal()">Cancel</button>
+        <button class="btn btn-gold" id="submit-btn" onclick="submitWork()" disabled>
+          📤 Submit Work
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW FEEDBACK MODAL -->
+<div id="feedback-modal" class="modal">
+  <div class="modal-content" style="max-width:600px;">
+    <div class="modal-header">
+      <h3>📋 Teacher Feedback</h3>
+      <button class="modal-close" onclick="closeFeedbackModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1.5rem;">
+        <div style="font-size:.85rem;font-weight:500;margin-bottom:.3rem;">Document:</div>
+        <div id="feedback-doc-name" style="font-size:.8rem;color:var(--muted);"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+        <div>
+          <label class="form-label">Score</label>
+          <div id="feedback-score" style="font-family:var(--font-display);font-size:2rem;font-weight:600;color:var(--gold);"></div>
+        </div>
+        <div>
+          <label class="form-label">Status</label>
+          <div id="feedback-status" style="font-size:.9rem;margin-top:.3rem;"></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:1.5rem;">
+        <label class="form-label">Teacher Comments</label>
+        <div id="feedback-text" style="background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:1rem;font-size:.85rem;line-height:1.6;min-height:100px;white-space:pre-wrap;"></div>
+      </div>
+
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:1.5rem;">
+        Reviewed <span id="feedback-date"></span>
+      </div>
+
+      <button class="btn btn-gold" onclick="closeFeedbackModal()" style="width:100%;">Close</button>
+    </div>
+  </div>
+</div>
+<script src="/assets/js/subject-back.js"></script>
+</body>
+</html>

@@ -87,3 +87,199 @@ function = "mark-exam-response"
   to = "/.netlify/functions/protege-ai"
   status = 200
   force = true
+
+# Phase 1 restructure — 301s so old bookmarked/indexed root URLs still resolve
+[[redirects]]
+  from = "/physics.html"
+  to = "/subjects/physics.html"
+  status = 301
+
+[[redirects]]
+  from = "/chemistry.html"
+  to = "/subjects/chemistry.html"
+  status = 301
+
+[[redirects]]
+  from = "/biology.html"
+  to = "/subjects/biology.html"
+  status = 301
+
+[[redirects]]
+  from = "/maths.html"
+  to = "/subjects/maths.html"
+  status = 301
+
+[[redirects]]
+  from = "/assessment.html"
+  to = "/student/assessment.html"
+  status = 301
+
+[[redirects]]
+  from = "/flashcards.html"
+  to = "/student/flashcards.html"
+  status = 301
+
+[[redirects]]
+  from = "/quiz.html"
+  to = "/student/quiz.html"
+  status = 301
+
+[[redirects]]
+  from = "/revision.html"
+  to = "/student/revision.html"
+  status = 301
+
+[[redirects]]
+  from = "/revision-pack.html"
+  to = "/student/revision-pack.html"
+  status = 301
+
+[[redirects]]
+  from = "/required-practicals.html"
+  to = "/student/required-practicals.html"
+  status = 301
+
+[[redirects]]
+  from = "/progress.html"
+  to = "/student/progress.html"
+  status = 301
+
+[[redirects]]
+  from = "/lessons.html"
+  to = "/student/lessons.html"
+  status = 301
+
+[[redirects]]
+  from = "/topic.html"
+  to = "/student/topic.html"
+  status = 301
+
+[[redirects]]
+  from = "/lesson-viewer.html"
+  to = "/student/lesson-viewer.html"
+  status = 301
+
+[[redirects]]
+  from = "/teacher.html"
+  to = "/teacher/teacher.html"
+  status = 301
+
+[[redirects]]
+  from = "/teaching-cockpit.html"
+  to = "/teacher/teaching-cockpit.html"
+  status = 301
+
+[[redirects]]
+  from = "/teacher-assessment-create.html"
+  to = "/teacher/teacher-assessment-create.html"
+  status = 301
+
+[[redirects]]
+  from = "/teacher-revision.html"
+  to = "/teacher/teacher-revision.html"
+  status = 301
+
+[[redirects]]
+  from = "/admin-teacher-mgmt.html"
+  to = "/teacher/admin-teacher-mgmt.html"
+  status = 301
+
+[[redirects]]
+  from = "/teaching-biology.html"
+  to = "/teacher/teaching-biology.html"
+  status = 301
+
+[[redirects]]
+  from = "/teaching-chemistry.html"
+  to = "/teacher/teaching-chemistry.html"
+  status = 301
+
+[[redirects]]
+  from = "/teaching-maths.html"
+  to = "/teacher/teaching-maths.html"
+  status = 301
+
+[[redirects]]
+  from = "/teaching-physics.html"
+  to = "/teacher/teaching-physics.html"
+  status = 301
+
+[[redirects]]
+  from = "/lesson-admin.html"
+  to = "/teacher/lesson-admin.html"
+  status = 301
+
+[[redirects]]
+  from = "/parent-dashboard.html"
+  to = "/parent/parent-dashboard.html"
+  status = 301
+
+[[redirects]]
+  from = "/parent-login.html"
+  to = "/parent/parent-login.html"
+  status = 301
+
+[[redirects]]
+  from = "/parent-child-details.html"
+  to = "/parent/parent-child-details.html"
+  status = 301
+
+[[redirects]]
+  from = "/tools.html"
+  to = "/tools/tools.html"
+  status = 301
+
+[[redirects]]
+  from = "/atom-builder.html"
+  to = "/tools/atom-builder.html"
+  status = 301
+
+[[redirects]]
+  from = "/calculator.html"
+  to = "/tools/calculator.html"
+  status = 301
+
+[[redirects]]
+  from = "/equation-sheet.html"
+  to = "/tools/equation-sheet.html"
+  status = 301
+
+[[redirects]]
+  from = "/graph-skills.html"
+  to = "/tools/graph-skills.html"
+  status = 301
+
+[[redirects]]
+  from = "/periodic-table.html"
+  to = "/tools/periodic-table.html"
+  status = 301
+
+[[redirects]]
+  from = "/pdf-annotator.html"
+  to = "/tools/pdf-annotator.html"
+  status = 301
+
+[[redirects]]
+  from = "/protege.html"
+  to = "/tools/protege.html"
+  status = 301
+
+[[redirects]]
+  from = "/math-genius-academy.html"
+  to = "/tools/math-genius-academy.html"
+  status = 301
+
+[[redirects]]
+  from = "/year6-dashboard.html"
+  to = "/year6/year6-dashboard.html"
+  status = 301
+
+[[redirects]]
+  from = "/year6-project.html"
+  to = "/year6/year6-project.html"
+  status = 301
+
+[[redirects]]
+  from = "/year6-pdf-preview.html"
+  to = "/year6/year6-pdf-preview.html"
+  status = 301

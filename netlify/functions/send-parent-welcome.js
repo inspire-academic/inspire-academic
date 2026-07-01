@@ -59,7 +59,7 @@ exports.handler = async (event) => {
       </div>
       
       <center>
-        <a href="https://inspireacademic.org/parent-dashboard.html" class="btn">View ${studentName}'s Progress →</a>
+        <a href="https://inspireacademic.org/parent/parent-dashboard.html" class="btn">View ${studentName}'s Progress →</a>
       </center>
       
       <p><small>Note: You'll need to set up your password on first login. Check your email for a password setup link.</small></p>

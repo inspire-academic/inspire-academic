@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lessons — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;--gold:#d4a017;--gold2:#f0c040;--orange:#e8620a;--white:#ffffff;--border:#1e3a5f;--muted:#7a8fa6;--green:#16803c;--red:#b92b1a;--r:6px;}
+*{box-sizing:border-box;margin:0;padding:0;} html{overflow-x:hidden;}
+body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--font-body);}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--navy2);}::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
+
+/* ── NAV ── */
+.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
+.topnav-logo{display:flex;align-items:center;gap:.6rem;}
+.topnav-logo img{height:36px;width:auto;}
+.logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
+.nav-links{display:flex;gap:.3rem;flex:1;}
+.nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;border:none;transition:all .2s;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:.4rem;}
+.nav-link:hover,.nav-link.active{background:var(--navy3);color:var(--white);}
+.nav-user{display:flex;align-items:center;gap:.75rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
+.nav-user:hover{border-color:var(--gold);}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;}
+
+/* ── PAGE HEADER ── */
+.page-hero{padding:2.5rem 2rem 0;max-width:1280px;margin:0 auto;}
+.page-hero h1{font-family:var(--font-display);font-size:1.9rem;font-weight:800;margin-bottom:.35rem;}
+.page-hero h1 span{color:var(--gold);}
+.page-hero p{color:var(--muted);font-size:.92rem;max-width:560px;}
+
+/* ── FILTER BAR ── */
+.filter-bar{padding:1.5rem 2rem .75rem;max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:.75rem;position:sticky;top:57px;background:var(--navy);z-index:50;border-bottom:1px solid var(--border);}
+.subject-tabs{display:flex;gap:.4rem;flex-wrap:wrap;}
+.subject-tab{background:var(--navy2);border:1.5px solid var(--border);color:var(--muted);padding:.45rem 1rem;border-radius:20px;font-size:.82rem;font-weight:600;transition:all .2s;}
+.subject-tab:hover{border-color:rgba(212,160,23,.4);color:var(--white);}
+.subject-tab.active{border-color:var(--gold);color:var(--gold);background:rgba(212,160,23,.08);}
+.subject-tab[data-subject="physics"].active   {border-color:#818cf8;color:#818cf8;background:rgba(129,140,248,.1);}
+.subject-tab[data-subject="chemistry"].active {border-color:#fb923c;color:#fb923c;background:rgba(251,146,60,.1);}
+.subject-tab[data-subject="biology"].active   {border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,.1);}
+.subject-tab[data-subject="maths"].active     {border-color:#60a5fa;color:#60a5fa;background:rgba(96,165,250,.1);}
+
+.filter-row{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.filter-group{display:flex;align-items:center;gap:.5rem;}
+.filter-label{font-size:.72rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+.filter-pills{display:flex;gap:.35rem;}
+.filter-pill{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.28rem .75rem;border-radius:20px;font-size:.75rem;font-weight:600;transition:all .2s;}
+.filter-pill:hover{border-color:rgba(212,160,23,.4);color:var(--white);}
+.filter-pill.active{border-color:var(--gold);color:var(--gold);background:rgba(212,160,23,.08);}
+.results-count{margin-left:auto;font-size:.78rem;font-family:var(--font-mono);color:var(--muted);}
+
+/* ── MAIN ── */
+main{max-width:1280px;margin:0 auto;padding:2rem;}
+
+/* ── SUBJECT GROUPS ── */
+.subject-section{margin-bottom:3rem;}
+.subject-section-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;}
+.subject-section-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.subject-section-name{font-family:var(--font-display);font-size:1.15rem;font-weight:700;}
+.subject-section-count{font-size:.78rem;font-family:var(--font-mono);color:var(--muted);}
+
+/* ── TOPIC GROUPS ── */
+.topic-group{margin-bottom:1.75rem;}
+.topic-group-header{font-size:.72rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);}
+
+/* ── LESSON GRID ── */
+.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+@media(max-width:1100px){.lesson-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.lesson-grid{grid-template-columns:1fr;}}
+
+/* ── LESSON CARD ── */
+.lesson-card{
+  background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
+  padding:1.1rem 1.1rem 0;cursor:pointer;transition:all .22s;
+  display:flex;flex-direction:column;gap:.6rem;position:relative;overflow:hidden;
+}
+.lesson-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--card-accent,var(--gold));border-radius:3px 0 0 3px;
+  transition:width .2s;
+}
+.lesson-card:hover{border-color:var(--card-accent,var(--gold));transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.25);}
+.lesson-card:hover::before{width:4px;}
+
+.card-top{display:flex;align-items:flex-start;gap:.6rem;}
+.card-type-icon{font-size:1.5rem;flex-shrink:0;line-height:1;}
+.card-title-wrap{flex:1;min-width:0;}
+.card-title{font-size:.9rem;font-weight:700;line-height:1.35;margin-bottom:.25rem;}
+.card-topic{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.card-badges{display:flex;gap:.35rem;flex-wrap:wrap;}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:.18rem .5rem;border-radius:3px;}
+.badge-board  {background:rgba(96,165,250,.12);color:#60a5fa;}
+.badge-tier   {background:rgba(167,139,250,.12);color:#a78bfa;}
+.badge-type   {background:rgba(212,160,23,.1);color:var(--gold);}
+.badge-dur    {background:rgba(122,143,166,.1);color:var(--muted);}
+
+/* ── PROGRESS STRIP (bottom of card) ── */
+.progress-strip{
+  margin:0 -1.1rem;padding:.55rem 1.1rem;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:.5rem;
+  font-size:.75rem;font-weight:600;margin-top:auto;
+}
+.progress-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.progress-not-started .progress-dot{background:var(--muted);}
+.progress-not-started .progress-label{color:var(--muted);}
+.progress-started .progress-dot{background:#fbbf24;}
+.progress-started .progress-label{color:#fbbf24;}
+.progress-completed .progress-dot{background:#4ade80;}
+.progress-completed .progress-label{color:#4ade80;}
+
+/* ── LOADING ── */
+.skeleton-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+@media(max-width:1100px){.skeleton-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.skeleton-grid{grid-template-columns:1fr;}}
+.skeleton-card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;height:150px;animation:shimmer 1.4s ease infinite;}
+@keyframes shimmer{0%,100%{opacity:1;}50%{opacity:.55;}}
+
+.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:3rem auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── EMPTY STATE ── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 2rem;gap:1rem;color:var(--muted);}
+.empty-icon{font-size:3rem;}
+.empty-title{font-family:var(--font-display);font-size:1.2rem;color:var(--white);}
+.empty-sub{font-size:.88rem;max-width:360px;text-align:center;}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:var(--green);}
+#toast.error{border-color:var(--red);}
+.back-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:600;color:var(--muted);background:var(--navy2);border:1px solid var(--border);padding:.35rem .85rem;border-radius:var(--r);transition:all .2s;margin-bottom:1rem;text-decoration:none;}
+.back-link:hover{border-color:var(--gold);color:var(--gold);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="topnav-logo">
+    <div class="logo-text">Inspire Academic</div>
+  </div>
+  <div class="nav-links">
+    <a href="/dashboard.html" class="nav-link">🏠 Dashboard</a>
+    <a href="/subjects.html" class="nav-link">📚 Subjects</a>
+    <a href="/student/lessons.html" class="nav-link active">⚡ Lessons</a>
+    <a href="/student/revision.html" class="nav-link">🔁 Revision</a>
+  </div>
+  <div class="nav-user" id="nav-user">
+    <div class="avatar" id="nav-avatar">?</div>
+    <span id="nav-name" style="font-size:.82rem;"></span>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <a id="back-btn" class="back-link" href="#" style="display:none;">← Back</a>
+  <h1 id="hero-title">Lesson <span>Library</span></h1>
+  <p id="hero-sub">Interactive masterclasses, video lessons, and revision resources — all in one place.</p>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="subject-tabs" id="subject-tabs">
+    <button class="subject-tab active" data-subject="all" onclick="setSubjectFilter(this)">All Subjects</button>
+    <button class="subject-tab" data-subject="physics"   onclick="setSubjectFilter(this)">⚡ Physics</button>
+    <button class="subject-tab" data-subject="chemistry" onclick="setSubjectFilter(this)">⚗️ Chemistry</button>
+    <button class="subject-tab" data-subject="biology"   onclick="setSubjectFilter(this)">🧬 Biology</button>
+    <button class="subject-tab" data-subject="maths"     onclick="setSubjectFilter(this)">📐 Maths</button>
+  </div>
+  <div class="filter-row">
+    <div class="filter-group">
+      <span class="filter-label">Exam board</span>
+      <div class="filter-pills">
+        <button class="filter-pill active" data-board="all"     onclick="setBoardFilter(this)">All</button>
+        <button class="filter-pill"        data-board="AQA"     onclick="setBoardFilter(this)">AQA</button>
+        <button class="filter-pill"        data-board="Edexcel" onclick="setBoardFilter(this)">Edexcel</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Tier</span>
+      <div class="filter-pills">
+        <button class="filter-pill active" data-tier="all"        onclick="setTierFilter(this)">All</button>
+        <button class="filter-pill"        data-tier="Higher"     onclick="setTierFilter(this)">Higher</button>
+        <button class="filter-pill"        data-tier="Foundation" onclick="setTierFilter(this)">Foundation</button>
+      </div>
+    </div>
+    <div class="results-count" id="results-count"></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+  <div class="skeleton-grid">
+    ${Array(6).fill('<div class="skeleton-card"></div>').join('')}
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+const urlParams = new URLSearchParams(window.location.search);
+const paramSubjectId = urlParams.get('subject'); // e.g. '2'
+const paramTopic     = urlParams.get('topic');   // e.g. 'energy'
+
+// Map subject_id → { href, label, slug } for back button and tab pre-selection
+const SUBJECT_MAP = {
+  '1': { href:'/subjects/maths.html', label:'Maths', slug:'maths' },
+  '2': { href:'/subjects/physics.html', label:'Physics', slug:'physics' },
+  '3': { href:'/subjects/chemistry.html', label:'Chemistry', slug:'chemistry' },
+  '4': { href:'/subjects/biology.html', label:'Biology', slug:'biology' },
+};
+
+let allLessons = [];
+let progressMap = {}; // lesson_id → { started_at, completed_at }
+let currentUser = null;
+let filters = { subject: 'all', board: 'all', tier: 'all', topic: null };
+
+const TYPE_ICON  = { html:'⚡', video:'🎬', pdf:'📋', doc:'📝' };
+const TYPE_LABEL = { html:'Interactive', video:'Video', pdf:'PDF', doc:'Word' };
+
+const SUBJECT_META = {
+  physics:   { accent:'#818cf8', dot:'#818cf8', bg:'rgba(129,140,248,.1)' },
+  chemistry: { accent:'#fb923c', dot:'#fb923c', bg:'rgba(251,146,60,.1)'  },
+  biology:   { accent:'#4ade80', dot:'#4ade80', bg:'rgba(74,222,128,.1)'  },
+  maths:     { accent:'#60a5fa', dot:'#60a5fa', bg:'rgba(96,165,250,.1)'  },
+};
+
+function subjectMeta(name){
+  const key = Object.keys(SUBJECT_META).find(k => (name||'').toLowerCase().includes(k));
+  return SUBJECT_META[key] || { accent:'#d4a017', dot:'#d4a017', bg:'rgba(212,160,23,.1)' };
+}
+
+function progressState(lessonId){
+  const p = progressMap[lessonId];
+  if(!p) return 'not-started';
+  if(p.completed_at) return 'completed';
+  return 'started';
+}
+
+function progressLabel(state){
+  return { 'not-started':'Not Started', started:'In Progress', completed:'Completed' }[state];
+}
+
+function toast(msg, type='success'){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show ' + type;
+  setTimeout(() => t.className = '', 3000);
+}
+
+// ── Filters ──
+function setSubjectFilter(btn){
+  document.querySelectorAll('.subject-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filters.subject = btn.dataset.subject;
+  renderGrid();
+}
+function setBoardFilter(btn){
+  document.querySelectorAll('[data-board]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filters.board = btn.dataset.board;
+  renderGrid();
+}
+function setTierFilter(btn){
+  document.querySelectorAll('[data-tier]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filters.tier = btn.dataset.tier;
+  renderGrid();
+}
+
+function applyFilters(){
+  return allLessons.filter(l => {
+    const subjectName = (l.subjects?.name || '').toLowerCase();
+    if(filters.subject !== 'all' && !subjectName.includes(filters.subject)) return false;
+    if(filters.board !== 'all' && l.exam_board !== filters.board && l.exam_board !== 'Both') return false;
+    if(filters.tier !== 'all' && l.tier !== filters.tier && l.tier !== 'Both') return false;
+    if(filters.topic && l.topics?.slug !== filters.topic) return false;
+    return true;
+  });
+}
+
+// ── Render ──
+function renderCard(lesson){
+  const subj = lesson.subjects?.name || '';
+  const meta = subjectMeta(subj);
+  const topic = lesson.topics?.name || '';
+  const typeIcon = TYPE_ICON[lesson.lesson_type] || '📄';
+  const typeLabel = TYPE_LABEL[lesson.lesson_type] || lesson.lesson_type;
+  const state = progressState(lesson.id);
+
+  return `
+    <div class="lesson-card"
+         style="--card-accent:${meta.accent}"
+         onclick="window.location.href='/student/lesson-viewer.html?id=${lesson.id}'">
+      <div class="card-top">
+        <div class="card-type-icon">${typeIcon}</div>
+        <div class="card-title-wrap">
+          <div class="card-title">${lesson.title}</div>
+          ${topic ? `<div class="card-topic">${topic}</div>` : ''}
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge badge-type">${typeLabel}</span>
+        ${lesson.exam_board ? `<span class="badge badge-board">${lesson.exam_board}</span>` : ''}
+        ${lesson.tier ? `<span class="badge badge-tier">${lesson.tier}</span>` : ''}
+        ${lesson.duration_minutes ? `<span class="badge badge-dur">~${lesson.duration_minutes}m</span>` : ''}
+      </div>
+      <div class="progress-strip progress-${state}">
+        <div class="progress-dot"></div>
+        <span class="progress-label">${progressLabel(state)}</span>
+      </div>
+    </div>`;
+}
+
+function renderGrid(){
+  const filtered = applyFilters();
+  const main = document.getElementById('main-content');
+  const countEl = document.getElementById('results-count');
+  countEl.textContent = `${filtered.length} lesson${filtered.length === 1 ? '' : 's'}`;
+
+  if(!filtered.length){
+    main.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔭</div>
+        <div class="empty-title">No lessons found</div>
+        <div class="empty-sub">Try adjusting your filters. More lessons are added regularly.</div>
+      </div>`;
+    return;
+  }
+
+  // Group by subject, then topic
+  const subjects = {};
+  filtered.forEach(l => {
+    const subj = l.subjects?.name || 'Other';
+    const topic = l.topics?.name || 'General';
+    if(!subjects[subj]) subjects[subj] = {};
+    if(!subjects[subj][topic]) subjects[subj][topic] = [];
+    subjects[subj][topic].push(l);
+  });
+
+  main.innerHTML = Object.entries(subjects).map(([subj, topics]) => {
+    const meta = subjectMeta(subj);
+    const totalLessons = Object.values(topics).flat().length;
+    return `
+      <div class="subject-section">
+        <div class="subject-section-header">
+          <div class="subject-section-dot" style="background:${meta.dot}"></div>
+          <div class="subject-section-name">${subj}</div>
+          <div class="subject-section-count">${totalLessons} lesson${totalLessons===1?'':'s'}</div>
+        </div>
+        ${Object.entries(topics).map(([topic, lessons]) => `
+          <div class="topic-group">
+            ${Object.keys(topics).length > 1 ? `<div class="topic-group-header">${topic}</div>` : ''}
+            <div class="lesson-grid">
+              ${lessons.map(l => renderCard(l)).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>`;
+  }).join('');
+}
+
+// ── Data Loading ──
+async function loadProgress(userId){
+  const { data } = await supa.from('lesson_progress')
+    .select('lesson_id, started_at, completed_at')
+    .eq('student_id', userId);
+  if(data) data.forEach(p => { progressMap[p.lesson_id] = p; });
+}
+
+async function loadLessons(){
+  let query = supa
+    .from('lessons')
+    .select('*, subjects(id, name), topics(id, name, slug)')
+    .eq('is_published', true);
+
+  if(paramSubjectId) query = query.eq('subject_id', paramSubjectId);
+
+  const { data, error } = await query.order('order_number', { ascending: true });
+
+  if(error){
+    document.getElementById('main-content').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠️</div>
+        <div class="empty-title">Could not load lessons</div>
+        <div class="empty-sub">${error.message}</div>
+      </div>`;
+    return;
+  }
+
+  allLessons = data || [];
+  renderGrid();
+}
+
+async function init(){
+  const { data:{ user } } = await supa.auth.getUser();
+  if(!user){ window.location.href = '/index.html'; return; }
+  currentUser = user;
+
+  const { data: profile } = await supa.from('profiles').select('first_name, full_name').eq('id', user.id).single();
+  const name = profile?.first_name || profile?.full_name?.split(' ')[0] || '';
+  document.getElementById('nav-name').textContent = name;
+  document.getElementById('nav-avatar').textContent = (name[0] || '?').toUpperCase();
+
+  // Apply URL param filters before loading so renderGrid is correct on first call
+  applyUrlParams();
+
+  await Promise.all([
+    loadProgress(user.id),
+    loadLessons()
+  ]);
+
+  // Update hero title after lessons are loaded (so we have topic names)
+  updateHeroFromParams();
+}
+
+function applyUrlParams(){
+  if(!paramSubjectId && !paramTopic) return;
+
+  const subjectInfo = SUBJECT_MAP[paramSubjectId];
+
+  // Back button
+  if(subjectInfo){
+    const btn = document.getElementById('back-btn');
+    btn.href  = subjectInfo.href;
+    btn.textContent = `← Back to ${subjectInfo.label}`;
+    btn.style.display = 'inline-flex';
+  }
+
+  // Pre-select subject tab
+  if(subjectInfo){
+    document.querySelectorAll('.subject-tab').forEach(b => b.classList.remove('active'));
+    const tab = document.querySelector(`.subject-tab[data-subject="${subjectInfo.slug}"]`);
+    if(tab) tab.classList.add('active');
+    filters.subject = subjectInfo.slug;
+  }
+
+  // Pre-set topic filter
+  if(paramTopic) filters.topic = paramTopic;
+}
+
+function updateHeroFromParams(){
+  if(!paramSubjectId && !paramTopic) return;
+  const titleEl = document.getElementById('hero-title');
+  const subEl   = document.getElementById('hero-sub');
+  const subjectInfo = SUBJECT_MAP[paramSubjectId];
+
+  if(paramTopic){
+    const topicLesson = allLessons.find(l => l.topics?.slug === paramTopic);
+    const topicName   = topicLesson?.topics?.name || paramTopic.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    titleEl.innerHTML = `${topicName} <span>Lessons</span>`;
+    subEl.textContent = subjectInfo ? `${subjectInfo.label} · all lessons for this topic.` : 'All lessons for this topic.';
+  } else if(subjectInfo){
+    titleEl.innerHTML = `${subjectInfo.label} <span>Lessons</span>`;
+    subEl.textContent = `All masterclasses and resources for ${subjectInfo.label}.`;
+  }
+}
+
+init();
+</script>
+<script src="/assets/js/subject-back.js"></script>
+</body>
+</html>
