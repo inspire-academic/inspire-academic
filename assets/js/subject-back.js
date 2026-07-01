@@ -1,17 +1,42 @@
-/* Injected by subject dashboard pages via ?ref= URL param.
-   Inserts a "← Subject" back button into the page's existing topnav/topbar.
-   Falls back to a fixed floating pill for pages with no standard nav. */
+/* Injected by student pages to show a "← Subject" back button.
+   Resolves which subject in priority order: ?ref= param, then numeric
+   or named ?subject= param, then sessionStorage('currentSubject'),
+   then falls back to a generic "← Back to Subjects" button.
+   Inserts into the page's existing topnav/topbar, or falls back to a
+   fixed floating pill for pages with no standard nav. */
 (function () {
   const params = new URLSearchParams(window.location.search);
-  const ref = params.get('ref');
+  const SUBJECT_IDS = { '1': 'maths', '2': 'physics', '3': 'chemistry', '4': 'biology' };
   const REFS = {
     physics:   { label: '← Physics',   href: '/subjects/physics.html',   bg: 'rgba(37,99,235,.18)',  border: 'rgba(37,99,235,.4)',  borderHover: 'rgba(37,99,235,.75)'  },
     chemistry: { label: '← Chemistry', href: '/subjects/chemistry.html', bg: 'rgba(16,185,129,.18)', border: 'rgba(16,185,129,.4)', borderHover: 'rgba(16,185,129,.75)' },
     biology:   { label: '← Biology',   href: '/subjects/biology.html',   bg: 'rgba(22,163,74,.18)',  border: 'rgba(22,163,74,.4)',  borderHover: 'rgba(22,163,74,.75)'  },
     maths:     { label: '← Maths',     href: '/subjects/maths.html',     bg: 'rgba(59,130,246,.18)', border: 'rgba(59,130,246,.4)', borderHover: 'rgba(59,130,246,.75)' },
   };
-  const src = REFS[ref];
-  if (!src) return;
+  const FALLBACK = {
+    label: '← Back to Subjects', href: '/subjects.html',
+    bg: 'rgba(201,168,76,.18)', border: 'rgba(201,168,76,.4)', borderHover: 'rgba(201,168,76,.75)',
+  };
+
+  function resolveSubjectKey() {
+    const ref = params.get('ref');
+    if (ref && REFS[ref]) return ref;
+
+    const subjectParam = params.get('subject');
+    if (subjectParam) {
+      if (REFS[subjectParam]) return subjectParam;
+      if (SUBJECT_IDS[subjectParam]) return SUBJECT_IDS[subjectParam];
+    }
+
+    let stored = null;
+    try { stored = sessionStorage.getItem('currentSubject'); } catch (e) { /* storage may be unavailable */ }
+    if (stored && REFS[stored]) return stored;
+
+    return null;
+  }
+
+  const subjectKey = resolveSubjectKey();
+  const src = subjectKey ? REFS[subjectKey] : FALLBACK;
 
   function makeBtn(extra) {
     const btn = document.createElement('a');
