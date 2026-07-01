@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data Analysis — Inspire Academic</title>
+<meta name="description" content="Interactive data analysis tool — tables, graphing, uncertainty, conclusions and exam tips.">
+<link rel="icon" href="/assets/images/shared/inspire-logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+:root {
+  --sidebar: 256px; --radius: 20px; --radius-sm: 12px;
+  --transition: .2s cubic-bezier(.4,0,.2,1);
+  --spring-out: cubic-bezier(.34,1.56,.64,1);
+  --gold: #c9a84c; --amber: #d97706; --amber-bg: rgba(217,119,6,.14); --amber-border: rgba(217,119,6,.32);
+}
+[data-theme="dark"] {
+  --bg:#0b1628; --bg-deep:#07101e; --bg-panel:rgba(13,28,56,.75); --bg-card:rgba(255,255,255,.045);
+  --bg-hover:rgba(255,255,255,.07); --border:rgba(255,255,255,.09); --border-strong:rgba(255,255,255,.16);
+  --text:#f0f6ff; --text-muted:rgba(240,246,255,.58); --text-soft:rgba(240,246,255,.55);
+  --search-bg:rgba(255,255,255,.06); --shadow-card:0 6px 28px rgba(0,0,0,.3);
+}
+[data-theme="light"] {
+  --bg:#eef2f9; --bg-deep:#e4eaf5; --bg-panel:#ffffff; --bg-card:#ffffff;
+  --bg-hover:rgba(29,78,216,.06); --border:rgba(29,78,216,.12); --border-strong:rgba(29,78,216,.22);
+  --text:#0d1929; --text-muted:rgba(13,25,41,.65); --text-soft:rgba(13,25,41,.38);
+  --search-bg:#ffffff; --shadow-card:0 4px 20px rgba(29,78,216,.09);
+}
+[data-subject="physics"]   { --accent:#1d4ed8; --accent2:#06b6d4; --grad-subject:linear-gradient(135deg,#1d4ed8,#06b6d4); --accent-glow:rgba(29,78,216,.18); }
+[data-subject="chemistry"] { --accent:#059669; --accent2:#34d399; --grad-subject:linear-gradient(135deg,#059669,#34d399); --accent-glow:rgba(5,150,105,.18); }
+[data-subject="biology"]   { --accent:#7c3aed; --accent2:#a78bfa; --grad-subject:linear-gradient(135deg,#7c3aed,#a78bfa); --accent-glow:rgba(124,58,237,.18); }
+[data-subject="maths"]     { --accent:#d97706; --accent2:#fbbf24; --grad-subject:linear-gradient(135deg,#d97706,#fbbf24); --accent-glow:rgba(217,119,6,.18); }
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior: smooth }
+body { font-family:'Plus Jakarta Sans',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; transition:background var(--transition),color var(--transition); }
+a { color:inherit; text-decoration:none }
+button, input, select, textarea { font:inherit; color:inherit }
+h1,h2,h3 { font-family:'Fraunces',Georgia,serif }
+
+.app { display:block; min-height:100vh; }
+.sidebar {
+  position:fixed; inset:0 auto 0 0; width:var(--sidebar); display:flex; flex-direction:column; z-index:50;
+  overflow-y:auto; backdrop-filter:blur(28px) saturate(180%); -webkit-backdrop-filter:blur(28px) saturate(180%);
+  border-right:1px solid rgba(255,255,255,.1); box-shadow:1px 0 0 rgba(255,255,255,.06) inset, 4px 0 32px rgba(0,0,0,.28);
+}
+[data-theme="dark"] .sidebar { background:rgba(6,10,22,.72) }
+[data-theme="light"] .sidebar { background:rgba(255,255,255,.78); border-right-color:rgba(29,78,216,.1); box-shadow:1px 0 0 rgba(255,255,255,.9) inset, 4px 0 32px rgba(29,78,216,.07); }
+.brand { padding:24px 20px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+.brand-icon { width:44px; height:44px; border-radius:14px; background:var(--grad-subject); display:grid; place-items:center; flex-shrink:0; box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.2) inset,0 8px 24px var(--accent-glow); }
+.brand-icon svg { width:22px; height:22px; fill:none; stroke:#fff; stroke-width:2 }
+.brand-kicker { font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:2px; }
+.brand-name { font-size:17px; font-weight:900; line-height:1; letter-spacing:-.02em; }
+.brand-sub { font-size:10px; color:var(--text-soft); font-weight:600; margin-top:3px }
+.subject-badge { margin:16px 20px 8px; padding:8px 12px; border-radius:var(--radius-sm); background:var(--accent-glow); border:1px solid var(--accent-glow); display:flex; align-items:center; gap:8px; }
+.subject-dot { width:8px; height:8px; border-radius:50%; background:var(--grad-subject); flex-shrink:0; }
+.subject-label { font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); }
+[data-theme="light"] .subject-label { color:var(--accent); }
+.nav { padding:8px 12px; flex:1; display:flex; flex-direction:column; gap:2px }
+.nav-section-title { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--text-soft); font-weight:800; padding:14px 8px 6px; }
+.nav-link { display:flex; align-items:center; gap:10px; padding:10px 10px; border-radius:var(--radius-sm); color:var(--text-muted); font-size:13px; font-weight:700; transition:all var(--transition); position:relative; }
+.nav-link svg { width:18px; height:18px; stroke-width:2.2; flex-shrink:0 }
+.nav-link:hover { color:var(--text); background:var(--bg-hover) }
+.nav-link.active { color:var(--text); background:var(--accent-glow); font-weight:700; }
+.nav-link.active::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:3px; border-radius:0 3px 3px 0; background:var(--grad-subject); }
+.sidebar-footer { padding:14px 20px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.student-info { display:flex; align-items:center; gap:9px }
+.student-avatar { width:36px; height:36px; border-radius:50%; background:var(--grad-subject); display:grid; place-items:center; font-size:13px; font-weight:800; color:#fff; flex-shrink:0; box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--accent),0 4px 12px var(--accent-glow); }
+.student-name { font-size:12px; font-weight:700 }
+.student-year { font-size:10px; color:var(--text-soft); font-weight:600 }
+.theme-toggle { width:30px; height:30px; border-radius:8px; border:1px solid var(--border); background:var(--bg-card); color:var(--text-soft); cursor:pointer; display:grid; place-items:center; }
+.theme-toggle:hover { color:var(--text); border-color:var(--border-strong) }
+.theme-toggle svg { width:14px; height:14px }
+.icon-sun { display:none }
+[data-theme="light"] .icon-moon { display:none }
+[data-theme="light"] .icon-sun { display:block }
+
+.main { margin-left:var(--sidebar); padding:28px 28px 60px; min-width:0; }
+.page-header { margin-bottom:20px; }
+.back-to-subject { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; color:var(--accent2); background:var(--accent-glow); border:1px solid var(--accent-glow); border-radius:999px; padding:6px 14px; margin-bottom:14px; transition:var(--transition); }
+[data-theme="light"] .back-to-subject { color:var(--accent); }
+.back-to-subject:hover { border-color:var(--accent); }
+.page-header h1 { font-size:28px; font-weight:800; letter-spacing:-.01em; }
+.page-header .subtitle { font-size:13px; color:var(--text-muted); font-weight:600; margin-top:2px; }
+
+.tool-section { background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:14px; overflow:hidden; box-shadow:var(--shadow-card); }
+.tool-section-header { list-style:none; cursor:pointer; padding:16px 18px; display:flex; align-items:center; gap:12px; font-weight:800; font-size:15px; user-select:none; }
+.tool-section-header::-webkit-details-marker { display:none }
+.tool-section-header .chev { margin-left:auto; width:18px; height:18px; stroke:var(--text-soft); transition:transform var(--transition); flex-shrink:0; }
+.tool-section[open] .chev { transform:rotate(180deg); }
+.tool-section-header .sec-icon { width:30px; height:30px; border-radius:9px; background:var(--grad-subject); color:#fff; display:grid; place-items:center; flex-shrink:0; }
+.tool-section-header .sec-icon svg { width:16px; height:16px; stroke:#fff; }
+.tool-section-body { padding:6px 18px 24px; border-top:1px solid var(--border); }
+.tool-section-body p.desc { font-size:13px; color:var(--text-muted); margin:14px 0; line-height:1.5; }
+
+.btn { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; border-radius:999px; padding:9px 16px; cursor:pointer; border:1px solid var(--border); background:var(--bg-card); color:var(--text); transition:var(--transition); }
+.btn:hover { border-color:var(--border-strong); transform:translateY(-1px); }
+.btn-primary { background:var(--grad-subject); color:#fff; border:none; box-shadow:0 4px 16px var(--accent-glow); }
+.btn-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+
+/* A) Table builder */
+#dataTable { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+#dataTable th, #dataTable td { border:1px solid var(--border); padding:6px; text-align:center; }
+#dataTable th input { width:100%; background:none; border:none; text-align:center; font-weight:800; }
+#dataTable td input { width:100%; background:none; border:none; text-align:center; }
+#dataTable td input:focus, #dataTable th input:focus { outline:2px solid var(--accent); border-radius:4px; }
+#dataTable td.anomaly { background:var(--amber-bg); }
+.table-stats { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
+.stat-pill { font-size:12px; font-weight:700; background:var(--bg-card); border:1px solid var(--border); border-radius:999px; padding:6px 12px; }
+
+/* B) Graph plotter */
+.graph-layout { display:grid; grid-template-columns:1fr; gap:16px; }
+@media (min-width:768px) { .graph-layout { grid-template-columns: 220px 1fr; } }
+.point-list { display:flex; flex-direction:column; gap:6px; max-height:280px; overflow-y:auto; }
+.point-row { display:flex; gap:6px; align-items:center; }
+.point-row input { width:100%; background:var(--search-bg); border:1px solid var(--border); border-radius:6px; padding:6px; font-size:12px; }
+.point-row button { flex-shrink:0; background:none; border:none; color:var(--text-soft); cursor:pointer; font-size:16px; }
+#graphCanvas { width:100%; max-width:100%; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); touch-action:manipulation; }
+.graph-controls { display:flex; flex-wrap:wrap; gap:14px; margin:10px 0; font-size:12px; }
+.graph-controls label { display:flex; align-items:center; gap:6px; }
+.gradient-readout { font-size:12px; font-weight:700; margin-top:8px; color:var(--accent2); }
+[data-theme="light"] .gradient-readout { color:var(--accent); }
+
+/* C) Uncertainty */
+.measurement-list { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+.measurement-list input { width:80px; background:var(--search-bg); border:1px solid var(--border); border-radius:6px; padding:8px; text-align:center; font-size:13px; }
+.working-steps { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.working-steps li { font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; }
+.level-tabs { display:flex; gap:8px; margin:14px 0 10px; }
+.level-tab { font-size:12px; font-weight:800; padding:7px 14px; border-radius:999px; border:1px solid var(--border); background:var(--bg-card); cursor:pointer; }
+.level-tab.active { background:var(--grad-subject); color:#fff; border:none; }
+.q-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; margin-bottom:10px; }
+.q-card .q-text { font-size:13px; font-weight:700; margin-bottom:8px; }
+.q-card .q-answer { display:none; font-size:12px; color:var(--text-muted); border-top:1px dashed var(--border); padding-top:8px; margin-top:8px; }
+.q-card .q-answer.show { display:block; }
+
+/* D) Conclusions */
+.blank-input { width:100%; background:var(--search-bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; font-size:13px; margin:6px 0 14px; }
+textarea.blank-input { resize:vertical; min-height:52px; }
+.conclusion-output { background:var(--accent-glow); border:1px solid var(--accent-glow); border-radius:var(--radius-sm); padding:14px; font-size:13px; line-height:1.6; margin-top:12px; }
+.example-box { background:var(--bg-card); border:1px dashed var(--border-strong); border-radius:var(--radius-sm); padding:12px; font-size:12px; color:var(--text-muted); margin-top:12px; }
+
+/* E) Exam tips */
+.tip-grid { display:grid; grid-template-columns:1fr; gap:10px; margin-top:10px; }
+@media (min-width:600px) { .tip-grid { grid-template-columns:1fr 1fr; } }
+.tip-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; }
+.tip-card h4 { font-size:13px; margin-bottom:4px; color:var(--accent2); }
+[data-theme="light"] .tip-card h4 { color:var(--accent); }
+.tip-card p { font-size:12px; color:var(--text-muted); line-height:1.5; }
+.mistake-box { background:var(--amber-bg); border:1px solid var(--amber-border); border-radius:var(--radius-sm); padding:12px 14px; margin-top:10px; font-size:12px; }
+.mistake-box strong { color:var(--amber); display:block; margin-bottom:4px; font-size:11px; text-transform:uppercase; letter-spacing:.06em; }
+
+footer.site-footer { margin-left:var(--sidebar); padding:20px 28px 40px; font-size:11px; color:var(--text-soft); }
+
+@media (max-width:900px) {
+  .sidebar { display:none }
+  .main, footer.site-footer { margin-left:0; padding-left:16px; padding-right:16px }
+}
+@media (prefers-reduced-motion:reduce) { * { transition-duration:.01ms !important } }
+@media print {
+  body * { visibility:hidden; }
+  #print-area, #print-area * { visibility:visible; }
+  #print-area { display:block; position:absolute; top:0; left:0; width:100%; padding:20px; }
+}
+#print-area { display:none; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <a class="brand" href="/dashboard.html" title="Go to dashboard">
+      <div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/></svg></div>
+      <div><div class="brand-kicker">Inspire</div><div class="brand-name">Academic</div><div class="brand-sub">GCSE Science</div></div>
+    </a>
+    <div class="subject-badge"><div class="subject-dot"></div><span class="subject-label" id="subjectBadgeLabel">GCSE · Subject</span></div>
+    <nav class="nav" id="sidebarNav"></nav>
+    <div class="sidebar-footer">
+      <div class="student-info">
+        <div class="student-avatar"><span style="display:grid;place-items:center;width:100%;height:100%;">K</span></div>
+        <div><div class="student-name">Kwame</div><div class="student-year">Year 10</div></div>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light / dark">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <a class="back-to-subject" id="backToSubject" href="/subjects/physics.html">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to <span id="backToSubjectName">Physics</span>
+      </a>
+      <h1>Data Analysis</h1>
+      <div class="subtitle">Sharpen your analytical skills</div>
+    </header>
+
+    <!-- A) TABLES & RECORDING -->
+    <details class="tool-section" open>
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg></span>
+        Tables &amp; Recording
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Build a results table, add your readings, and the tool will calculate the mean and range for you — flagging anomalous results in amber.</p>
+        <div class="btn-row">
+          <button class="btn" type="button" id="addRowBtn">+ Add row</button>
+          <button class="btn" type="button" id="addColBtn">+ Add column</button>
+          <button class="btn" type="button" id="printTableBtn">Print table</button>
+        </div>
+        <div style="overflow-x:auto"><table id="dataTable"></table></div>
+        <div class="table-stats" id="tableStats"></div>
+      </div>
+    </details>
+
+    <!-- B) GRAPH PLOTTER -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-5 3 3 5-7"/></svg></span>
+        Graph Plotter
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Enter your x/y data pairs to plot a graph. Select two points to see the gradient between them, or toggle a line of best fit.</p>
+        <div class="btn-row" style="margin-bottom:0">
+          <input class="blank-input" style="margin:0;width:140px" id="graphTitle" placeholder="Graph title" value="My Graph">
+          <input class="blank-input" style="margin:0;width:110px" id="xAxisLabel" placeholder="X-axis label" value="x">
+          <input class="blank-input" style="margin:0;width:110px" id="yAxisLabel" placeholder="Y-axis label" value="y">
+        </div>
+        <div class="graph-controls">
+          <label><input type="checkbox" id="bestFitToggle"> Line of best fit</label>
+          <label><input type="checkbox" id="errorBarsToggle"> Error bars (±<input type="number" id="errorBarValue" value="1" step="0.1" style="width:48px;background:var(--search-bg);border:1px solid var(--border);border-radius:4px;text-align:center">)</label>
+        </div>
+        <div class="graph-layout">
+          <div>
+            <div class="point-list" id="pointList"></div>
+            <div class="btn-row"><button class="btn" type="button" id="addPointBtn">+ Add point</button></div>
+            <div class="gradient-readout" id="gradientReadout">Select two rows to calculate gradient</div>
+          </div>
+          <div>
+            <canvas id="graphCanvas" width="640" height="360"></canvas>
+            <div class="btn-row"><button class="btn" type="button" id="printGraphBtn">Print / save graph</button></div>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- C) UNCERTAINTY & ERROR -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+        Uncertainty &amp; Error
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Enter a set of repeated measurements to calculate the mean, range and uncertainty, with full working shown.</p>
+        <div class="measurement-list" id="measurementList"></div>
+        <div class="btn-row"><button class="btn" type="button" id="addMeasurementBtn">+ Add measurement</button><button class="btn btn-primary" type="button" id="calcUncertaintyBtn">Calculate</button></div>
+        <ul class="working-steps" id="uncertaintyWorking"></ul>
+
+        <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-soft);margin-top:20px;">Practice Questions</h3>
+        <div class="level-tabs" id="uncertaintyLevelTabs">
+          <button class="level-tab active" data-level="foundation">Foundation</button>
+          <button class="level-tab" data-level="higher">Higher</button>
+          <button class="level-tab" data-level="challenge">Challenge</button>
+        </div>
+        <div id="uncertaintyQuestions"></div>
+      </div>
+    </details>
+
+    <!-- D) CONCLUSIONS BUILDER -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>
+        Conclusions Builder
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Fill in the blanks below and the tool will assemble an exam-quality conclusion paragraph for you.</p>
+        <label style="font-size:11px;color:var(--text-soft);text-transform:uppercase;letter-spacing:.06em;">Hypothesis</label>
+        <input class="blank-input" id="concHypothesis" placeholder="e.g. Increasing the length of a wire increases its resistance">
+        <label style="font-size:11px;color:var(--text-soft);text-transform:uppercase;letter-spacing:.06em;">What the data shows</label>
+        <textarea class="blank-input" id="concEvidence" placeholder="e.g. resistance increased from 2Ω to 8Ω as length increased from 10cm to 40cm"></textarea>
+        <label style="font-size:11px;color:var(--text-soft);text-transform:uppercase;letter-spacing:.06em;">Supports or contradicts?</label>
+        <select class="blank-input" id="concSupport"><option value="supports">Supports</option><option value="contradicts">Contradicts</option></select>
+        <div class="btn-row"><button class="btn btn-primary" type="button" id="buildConclusionBtn">Build conclusion</button></div>
+        <div class="conclusion-output" id="conclusionOutput" style="display:none"></div>
+        <div class="example-box"><strong>Example:</strong> "The data shows that as the independent variable increased, the dependent variable also increased consistently across all repeats. This supports the hypothesis that [hypothesis], because the trend observed matches the predicted relationship with no significant anomalies."</div>
+      </div>
+    </details>
+
+    <!-- E) EXAM TIPS -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
+        Exam Tips
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <div class="tip-grid" id="examTipsGrid"></div>
+        <div class="mistake-box"><strong>Common mistakes</strong>Describing a pattern instead of explaining it with a mechanism; forgetting to reference actual data values; rounding answers before the final step; ignoring units in graph axes and table headers.</div>
+      </div>
+    </details>
+
+  </main>
+  <footer class="site-footer">© 2026 Inspire Science™ · Inspire Vision™</footer>
+</div>
+
+<div id="print-area" aria-hidden="true"><div id="print-body"></div></div>
+
+<script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/subject-back.js"></script>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const currentSubject = urlParams.get('subject') || 'physics';
+sessionStorage.setItem('currentSubject', currentSubject);
+
+const SUBJECT_IDS = { maths: 1, physics: 2, chemistry: 3, biology: 4 };
+const SUBJECT_LABELS = { maths: 'Maths', physics: 'Physics', chemistry: 'Chemistry', biology: 'Biology' };
+const subject = SUBJECT_IDS[currentSubject] ? currentSubject : 'physics';
+const subjectId = SUBJECT_IDS[subject];
+const subjectLabel = SUBJECT_LABELS[subject];
+
+document.documentElement.setAttribute('data-subject', subject);
+document.getElementById('subjectBadgeLabel').textContent = 'GCSE · ' + subjectLabel;
+document.title = 'Data Analysis — ' + subjectLabel + ' — Inspire Academic';
+
+// Back button reads from sessionStorage per spec (already set above for this load)
+const backSubject = sessionStorage.getItem('currentSubject') || 'physics';
+document.getElementById('backToSubject').href = `/subjects/${backSubject}.html`;
+document.getElementById('backToSubjectName').textContent = SUBJECT_LABELS[backSubject] || 'Physics';
+
+const NAV = [
+  { label: 'Home', href: `/subjects/${subject}.html`, section: 'Study',
+    icon: '<path d="M3 10.5l9-7 9 7"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/>' },
+  { label: 'My Progress', href: `/student/progress.html`,
+    icon: '<path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 3 5-7"/>' },
+  { label: 'Topics', href: `/subjects/${subject}.html#topics`,
+    icon: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>' },
+  { label: 'Lessons', href: `/student/lessons.html?subject=${subjectId}&ref=${subject}`,
+    icon: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/>' },
+  { label: 'Quizzes', href: `/student/quiz.html?subject=${subjectId}&ref=${subject}`,
+    icon: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/>' },
+  { label: 'Exam Practice', href: `/student/assessment.html?subject=${subject}&ref=${subject}`, section: 'Practice',
+    icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/>' },
+  { label: 'Required Practicals', href: `/student/required-practicals.html?subject=${subject}&ref=${subject}`,
+    icon: '<path d="M10 2v7.5L4.5 19A2 2 0 0 0 6.2 22h11.6a2 2 0 0 0 1.7-3L14 9.5V2"/><path d="M8 2h8"/>' },
+  { label: 'Revision Notes', href: `/student/revision-notes.html?subject=${subject}&ref=${subject}`,
+    icon: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>' },
+  { label: 'Mock Exams', href: `/student/assessment.html?subject=${subject}&ref=${subject}`,
+    icon: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>' },
+  { label: 'Flashcards', href: `/student/flashcards.html?subject=${subject}&ref=${subject}`,
+    icon: '<rect x="4" y="5" width="16" height="12" rx="2"/><path d="M8 9h8"/><path d="M8 13h5"/>' },
+  { label: 'Achievements', href: `/dashboard.html#achievements`,
+    icon: '<path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/>' },
+];
+document.getElementById('sidebarNav').innerHTML = NAV.map(item => `
+  ${item.section ? `<div class="nav-section-title">${item.section}</div>` : ''}
+  <a class="nav-link" href="${item.href}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor">${item.icon}</svg>${item.label}</a>`).join('');
+
+// ── THEME ──
+const htmlEl = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('ia-theme');
+if (savedTheme) htmlEl.setAttribute('data-theme', savedTheme);
+themeBtn.addEventListener('click', () => {
+  const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  htmlEl.setAttribute('data-theme', next);
+  localStorage.setItem('ia-theme', next);
+});
+
+// ══════════════════════════════════════════════════════════
+// A) TABLES & RECORDING
+// ══════════════════════════════════════════════════════════
+let tableCols = ['Reading 1', 'Reading 2'];
+let tableRows = [ ['4.2', '4.5'], ['4.4', '4.3'], ['4.1', '9.8'], ['4.3', '4.4'] ];
+
+function renderTable() {
+  const table = document.getElementById('dataTable');
+  const thead = `<thead><tr>${tableCols.map((c, ci) => `<th><input value="${c}" data-col="${ci}" class="colHeaderInput"></th>`).join('')}</tr></thead>`;
+  const tbody = `<tbody>${tableRows.map((row, ri) => `<tr>${row.map((val, ci) => `<td data-row="${ri}" data-col="${ci}"><input value="${val}" class="cellInput" data-row="${ri}" data-col="${ci}"></td>`).join('')}</tr>`).join('')}</tbody>`;
+  table.innerHTML = thead + tbody;
+
+  table.querySelectorAll('.colHeaderInput').forEach(inp => inp.addEventListener('input', e => {
+    tableCols[+e.target.dataset.col] = e.target.value;
+  }));
+  table.querySelectorAll('.cellInput').forEach(inp => inp.addEventListener('input', e => {
+    tableRows[+e.target.dataset.row][+e.target.dataset.col] = e.target.value;
+    computeTableStats();
+  }));
+  computeTableStats();
+}
+
+function computeTableStats() {
+  const stats = [];
+  tableCols.forEach((col, ci) => {
+    const nums = tableRows.map(r => parseFloat(r[ci])).filter(n => !isNaN(n));
+    if (nums.length < 2) return;
+    const mean = nums.reduce((a, b) => a + b, 0) / nums.length;
+    const range = Math.max(...nums) - Math.min(...nums);
+    stats.push(`${col}: mean ${mean.toFixed(2)}, range ${range.toFixed(2)}`);
+    // Flag anomalies: values deviating from mean by more than half the range
+    document.querySelectorAll(`td[data-col="${ci}"]`).forEach(td => {
+      const ri = +td.dataset.row;
+      const v = parseFloat(tableRows[ri][ci]);
+      td.classList.toggle('anomaly', !isNaN(v) && Math.abs(v - mean) > range * 0.5 && range > 0);
+    });
+  });
+  document.getElementById('tableStats').innerHTML = stats.map(s => `<span class="stat-pill">${s}</span>`).join('');
+}
+
+document.getElementById('addRowBtn').addEventListener('click', () => { tableRows.push(tableCols.map(() => '')); renderTable(); });
+document.getElementById('addColBtn').addEventListener('click', () => { tableCols.push(`Reading ${tableCols.length + 1}`); tableRows.forEach(r => r.push('')); renderTable(); });
+document.getElementById('printTableBtn').addEventListener('click', () => {
+  document.getElementById('print-body').innerHTML = `<h1>${subjectLabel} — Data Table</h1>` + document.getElementById('dataTable').outerHTML;
+  window.print();
+});
+renderTable();
+
+// ══════════════════════════════════════════════════════════
+// B) GRAPH PLOTTER
+// ══════════════════════════════════════════════════════════
+let points = [ {x:1,y:2}, {x:2,y:4.1}, {x:3,y:5.9}, {x:4,y:8.2}, {x:5,y:10.1} ];
+let selectedPoints = [];
+
+function renderPointList() {
+  const list = document.getElementById('pointList');
+  list.innerHTML = points.map((p, i) => `
+    <div class="point-row">
+      <input type="checkbox" class="pointSelect" data-i="${i}">
+      <input type="number" step="any" class="pointX" data-i="${i}" value="${p.x}" placeholder="x">
+      <input type="number" step="any" class="pointY" data-i="${i}" value="${p.y}" placeholder="y">
+      <button type="button" class="removePoint" data-i="${i}" aria-label="Remove point">×</button>
+    </div>`).join('');
+  list.querySelectorAll('.pointX').forEach(el => el.addEventListener('input', e => { points[+e.target.dataset.i].x = parseFloat(e.target.value) || 0; drawGraph(); }));
+  list.querySelectorAll('.pointY').forEach(el => el.addEventListener('input', e => { points[+e.target.dataset.i].y = parseFloat(e.target.value) || 0; drawGraph(); }));
+  list.querySelectorAll('.removePoint').forEach(el => el.addEventListener('click', e => { points.splice(+e.target.dataset.i, 1); renderPointList(); drawGraph(); }));
+  list.querySelectorAll('.pointSelect').forEach(el => el.addEventListener('change', e => {
+    const i = +e.target.dataset.i;
+    if (e.target.checked) selectedPoints.push(i); else selectedPoints = selectedPoints.filter(x => x !== i);
+    if (selectedPoints.length > 2) { const removed = selectedPoints.shift(); list.querySelector(`.pointSelect[data-i="${removed}"]`).checked = false; }
+    updateGradient();
+  }));
+}
+
+function updateGradient() {
+  const readout = document.getElementById('gradientReadout');
+  if (selectedPoints.length !== 2) { readout.textContent = 'Select two rows to calculate gradient'; return; }
+  const [a, b] = selectedPoints.map(i => points[i]);
+  const dx = b.x - a.x, dy = b.y - a.y;
+  if (dx === 0) { readout.textContent = 'Gradient: undefined (Δx = 0)'; return; }
+  readout.textContent = `Gradient = Δy/Δx = (${dy.toFixed(2)})/(${dx.toFixed(2)}) = ${(dy/dx).toFixed(2)}`;
+}
+
+function linearRegression(pts) {
+  const n = pts.length;
+  const sx = pts.reduce((a,p)=>a+p.x,0), sy = pts.reduce((a,p)=>a+p.y,0);
+  const sxy = pts.reduce((a,p)=>a+p.x*p.y,0), sxx = pts.reduce((a,p)=>a+p.x*p.x,0);
+  const m = (n*sxy - sx*sy) / (n*sxx - sx*sx);
+  const c = (sy - m*sx) / n;
+  return { m, c };
+}
+
+function drawGraph() {
+  const canvas = document.getElementById('graphCanvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return; // canvas unsupported — fail gracefully rather than break later sections
+  const W = canvas.width, H = canvas.height, pad = 40;
+  const style = getComputedStyle(document.documentElement);
+  const borderColor = style.getPropertyValue('--border').trim() || '#888';
+  const textColor = style.getPropertyValue('--text').trim() || '#000';
+  const accent = style.getPropertyValue('--accent').trim() || '#1d4ed8';
+
+  ctx.clearRect(0, 0, W, H);
+  if (!points.length) return;
+  const xs = points.map(p=>p.x), ys = points.map(p=>p.y);
+  const xMin = Math.min(0,...xs), xMax = Math.max(...xs) || 1;
+  const yMin = Math.min(0,...ys), yMax = Math.max(...ys) || 1;
+  const xScale = (W - 2*pad) / (xMax - xMin || 1);
+  const yScale = (H - 2*pad) / (yMax - yMin || 1);
+  const toPx = (x,y) => [pad + (x-xMin)*xScale, H - pad - (y-yMin)*yScale];
+
+  ctx.strokeStyle = borderColor; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad,H-pad); ctx.lineTo(W-pad,H-pad); ctx.moveTo(pad,pad); ctx.lineTo(pad,H-pad); ctx.stroke();
+
+  ctx.fillStyle = textColor; ctx.font = '12px Plus Jakarta Sans';
+  ctx.textAlign = 'center';
+  ctx.fillText(document.getElementById('xAxisLabel').value || 'x', W/2, H-8);
+  ctx.save(); ctx.translate(12, H/2); ctx.rotate(-Math.PI/2); ctx.fillText(document.getElementById('yAxisLabel').value || 'y', 0, 0); ctx.restore();
+  ctx.font = 'bold 13px Fraunces'; ctx.fillText(document.getElementById('graphTitle').value || '', W/2, 20);
+
+  // error bars
+  if (document.getElementById('errorBarsToggle').checked) {
+    const err = parseFloat(document.getElementById('errorBarValue').value) || 0;
+    ctx.strokeStyle = accent; ctx.lineWidth = 1.5;
+    points.forEach(p => {
+      const [px,py1] = toPx(p.x, p.y+err), [,py2] = toPx(p.x, p.y-err);
+      ctx.beginPath(); ctx.moveTo(px,py1); ctx.lineTo(px,py2); ctx.stroke();
+    });
+  }
+
+  // best fit
+  if (document.getElementById('bestFitToggle').checked && points.length >= 2) {
+    const { m, c } = linearRegression(points);
+    const [x1,y1] = toPx(xMin, m*xMin + c), [x2,y2] = toPx(xMax, m*xMax + c);
+    ctx.strokeStyle = accent; ctx.setLineDash([6,4]); ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // points
+  points.forEach((p, i) => {
+    const [px,py] = toPx(p.x,p.y);
+    ctx.fillStyle = selectedPoints.includes(i) ? '#d97706' : accent;
+    ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2); ctx.fill();
+  });
+}
+['graphTitle','xAxisLabel','yAxisLabel','bestFitToggle','errorBarsToggle','errorBarValue'].forEach(id =>
+  document.getElementById(id).addEventListener('input', drawGraph));
+document.getElementById('addPointBtn').addEventListener('click', () => { points.push({x:0,y:0}); renderPointList(); drawGraph(); });
+document.getElementById('printGraphBtn').addEventListener('click', () => {
+  const dataUrl = document.getElementById('graphCanvas').toDataURL('image/png');
+  document.getElementById('print-body').innerHTML = `<h1>${subjectLabel} — ${document.getElementById('graphTitle').value}</h1><img src="${dataUrl}" style="max-width:100%">`;
+  window.print();
+});
+renderPointList();
+drawGraph();
+
+// ══════════════════════════════════════════════════════════
+// C) UNCERTAINTY & ERROR
+// ══════════════════════════════════════════════════════════
+let measurements = ['12.1', '12.4', '11.9', '12.3'];
+function renderMeasurements() {
+  document.getElementById('measurementList').innerHTML = measurements.map((v,i) =>
+    `<input type="number" step="any" class="measurementInput" data-i="${i}" value="${v}">`).join('');
+  document.querySelectorAll('.measurementInput').forEach(el => el.addEventListener('input', e => { measurements[+e.target.dataset.i] = e.target.value; }));
+}
+document.getElementById('addMeasurementBtn').addEventListener('click', () => { measurements.push(''); renderMeasurements(); });
+document.getElementById('calcUncertaintyBtn').addEventListener('click', () => {
+  const nums = measurements.map(parseFloat).filter(n => !isNaN(n));
+  if (nums.length < 2) { document.getElementById('uncertaintyWorking').innerHTML = '<li>Enter at least two measurements.</li>'; return; }
+  const mean = nums.reduce((a,b)=>a+b,0) / nums.length;
+  const range = Math.max(...nums) - Math.min(...nums);
+  const uncertainty = range / 2;
+  const pct = (uncertainty / mean) * 100;
+  document.getElementById('uncertaintyWorking').innerHTML = `
+    <li>Mean = (${nums.join(' + ')}) ÷ ${nums.length} = ${mean.toFixed(3)}</li>
+    <li>Range = ${Math.max(...nums)} − ${Math.min(...nums)} = ${range.toFixed(3)}</li>
+    <li>Absolute uncertainty = ± range/2 = ± ${uncertainty.toFixed(3)}</li>
+    <li>Percentage uncertainty = (uncertainty ÷ mean) × 100 = ${pct.toFixed(2)}%</li>
+    <li>Result: ${mean.toFixed(3)} ± ${uncertainty.toFixed(3)} (±${pct.toFixed(2)}%)</li>`;
+});
+renderMeasurements();
+
+const UNCERTAINTY_QUESTIONS = {
+  foundation: [
+    { q: 'A student measures a length 3 times: 10.1cm, 9.9cm, 10.0cm. Calculate the mean and the uncertainty.', a: 'Mean = (10.1+9.9+10.0)/3 = 10.0cm. Range = 10.1−9.9 = 0.2cm. Uncertainty = ±0.1cm.' },
+    { q: 'Why do scientists repeat measurements?', a: 'To identify anomalies, calculate a more reliable mean, and estimate the uncertainty in the result.' },
+  ],
+  higher: [
+    { q: 'A voltage reads 6.2V ± 0.3V. Calculate the percentage uncertainty.', a: '(0.3/6.2) × 100 = 4.8% (1 d.p.)' },
+    { q: 'Three time readings: 2.1s, 2.3s, 2.0s. Express the result with absolute uncertainty.', a: 'Mean = 2.13s, range = 0.3s, uncertainty = ±0.15s → 2.13 ± 0.15s' },
+  ],
+  challenge: [
+    { q: 'A current of 1.20A ± 2% is used to calculate power with a fixed voltage. What happens to the percentage uncertainty in power (P=IV)?', a: 'Since only current has an uncertainty here, the percentage uncertainty in power equals the percentage uncertainty in current: ±2%.' },
+  ],
+};
+function renderUncertaintyQuestions(level) {
+  document.getElementById('uncertaintyQuestions').innerHTML = UNCERTAINTY_QUESTIONS[level].map((item,i) => `
+    <div class="q-card">
+      <div class="q-text">${i+1}. ${item.q}</div>
+      <button class="btn" type="button" data-toggle-answer="${level}-${i}">Show answer</button>
+      <div class="q-answer" id="ans-${level}-${i}">${item.a}</div>
+    </div>`).join('');
+  document.querySelectorAll('[data-toggle-answer]').forEach(btn => btn.addEventListener('click', e => {
+    document.getElementById('ans-' + e.target.dataset.toggleAnswer).classList.toggle('show');
+  }));
+}
+document.querySelectorAll('#uncertaintyLevelTabs .level-tab').forEach(tab => tab.addEventListener('click', e => {
+  document.querySelectorAll('#uncertaintyLevelTabs .level-tab').forEach(t => t.classList.remove('active'));
+  e.target.classList.add('active');
+  renderUncertaintyQuestions(e.target.dataset.level);
+}));
+renderUncertaintyQuestions('foundation');
+
+// ══════════════════════════════════════════════════════════
+// D) CONCLUSIONS BUILDER
+// ══════════════════════════════════════════════════════════
+document.getElementById('buildConclusionBtn').addEventListener('click', () => {
+  const hyp = document.getElementById('concHypothesis').value.trim() || '[your hypothesis]';
+  const evidence = document.getElementById('concEvidence').value.trim() || '[what the data showed]';
+  const support = document.getElementById('concSupport').value;
+  const out = document.getElementById('conclusionOutput');
+  out.style.display = 'block';
+  out.textContent = `The data shows that ${evidence}. This ${support} the hypothesis that ${hyp}. The trend observed across the results is consistent, and the pattern in the data provides evidence to justify this conclusion.`;
+});
+
+// ══════════════════════════════════════════════════════════
+// E) EXAM TIPS
+// ══════════════════════════════════════════════════════════
+const EXAM_TIPS = [
+  { word: 'Describe', tip: 'State what the data shows — the pattern or trend — using actual values. No explanation needed.' },
+  { word: 'Explain', tip: 'Say why it happens, using scientific reasoning to link cause and effect.' },
+  { word: 'Evaluate', tip: 'Weigh up strengths and weaknesses of the method or data, and reach a judgement.' },
+  { word: 'Compare', tip: 'Identify both similarities and differences between two data sets or results.' },
+  { word: 'Justify', tip: 'Use evidence from the data to support a conclusion or decision.' },
+];
+document.getElementById('examTipsGrid').innerHTML = EXAM_TIPS.map(t => `<div class="tip-card"><h4>${t.word}</h4><p>${t.tip}</p></div>`).join('');
+</script>
+</body>
+</html>
