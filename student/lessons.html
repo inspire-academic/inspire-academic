@@ -215,9 +215,11 @@ const paramSubjectId = urlParams.get('subject'); // e.g. '2'
 const paramTopic     = urlParams.get('topic');   // e.g. 'energy'
 
 // Map subject_id → { href, label, slug } for back button and tab pre-selection
-// Only add entries here once a subject dashboard page exists
 const SUBJECT_MAP = {
+  '1': { href:'/subjects/maths.html', label:'Maths', slug:'maths' },
   '2': { href:'/subjects/physics.html', label:'Physics', slug:'physics' },
+  '3': { href:'/subjects/chemistry.html', label:'Chemistry', slug:'chemistry' },
+  '4': { href:'/subjects/biology.html', label:'Biology', slug:'biology' },
 };
 
 let allLessons = [];

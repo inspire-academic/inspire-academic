@@ -796,6 +796,11 @@ main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
 <div id="toast"></div>
 
 <script>
+const urlParams = new URLSearchParams(window.location.search);
+const currentSubject = urlParams.get('subject') || 'physics';
+// Store for Phase 3 Supabase wiring
+sessionStorage.setItem('currentSubject', currentSubject);
+
 const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 

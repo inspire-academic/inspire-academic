@@ -1095,6 +1095,10 @@ html, body {
 <div class="toast" id="toast"></div>
 
 <script>
+const urlParams = new URLSearchParams(window.location.search);
+const currentSubject = urlParams.get('subject') || 'physics';
+// Store for Phase 3 Supabase wiring
+sessionStorage.setItem('currentSubject', currentSubject);
 
 // Global error catcher — exposes silent iOS Safari failures
 window.onerror = function(msg, src, line, col, err) {
