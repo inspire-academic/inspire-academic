@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0a1f">
+<title>Protégé — Inspire Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+:root {
+  --navy:#0b1628; --navy2:#112240; --navy3:#1a3a5c;
+  --gold:#d4a017; --gold2:#f0c040;
+  --white:#ffffff; --border:#1e3a5f; --muted:#7a8fa6;
+  --p-dark:#06060f; --p-mid:#0e0820;
+  --p-purple:#7c2fff; --p-violet:#b46cff;
+  --p-glow:rgba(124,47,255,0.25);
+  --p-border:rgba(180,108,255,0.25);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{overflow-x:hidden;}
+body{font-family:var(--font-body);background:var(--p-dark);color:var(--white);min-height:100vh;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--font-body);}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--p-dark);}
+::-webkit-scrollbar-thumb{background:rgba(124,47,255,.4);border-radius:3px;}
+
+/* STARS */
+#stars-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 20% 30%,rgba(124,47,255,.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 70%,rgba(60,20,120,.12) 0%,transparent 60%),
+             var(--p-dark);}
+.star{position:absolute;border-radius:50%;background:white;opacity:0;
+  animation:twinkle var(--d) var(--dl) infinite ease-in-out;}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(1)}50%{opacity:var(--op);transform:scale(1.3)}}
+
+/* LOADING */
+.loading-screen{position:fixed;inset:0;background:var(--p-dark);
+  display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px;}
+.loading-logo{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--p-violet);}
+.spinner{width:32px;height:32px;border:2px solid rgba(180,108,255,.2);
+  border-top-color:var(--p-violet);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NAV */
+.topnav{background:rgba(11,22,40,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);padding:.9rem 2rem;
+  display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
+.topnav-logo img{height:36px;width:auto;border-radius:8px;max-width:120px;}
+.topnav-title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--gold);flex:1;}
+.nav-links{display:flex;gap:.3rem;}
+.nav-link{padding:.45rem .9rem;border-radius:6px;font-size:.82rem;font-weight:500;
+  color:var(--muted);background:none;border:none;transition:all .2s;}
+.nav-link:hover{background:var(--navy3);color:var(--white);}
+.nav-link.active{background:rgba(124,47,255,.15);color:var(--p-violet);}
+.nav-user{display:flex;align-items:center;gap:.75rem;padding:.4rem .8rem;
+  border:1px solid var(--border);border-radius:6px;font-size:.82rem;cursor:pointer;transition:all .2s;}
+.nav-user:hover{border-color:var(--p-violet);}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;}
+
+/* HERO */
+.hero{position:relative;z-index:1;min-height:calc(100vh - 58px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:3rem 1.5rem;}
+.hero-welcome-wrap{margin-bottom:1.8rem;display:none;flex-direction:column;align-items:center;gap:.4rem;}
+.hero-welcome-pre{font-family:var(--font-mono);font-size:1rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--p-violet);opacity:.85;}
+.hero-welcome-name{font-family:var(--font-display);
+  font-size:clamp(48px,9vw,90px);font-weight:800;line-height:1;
+  background:linear-gradient(135deg,#ffffff 0%,var(--p-violet) 60%,#7c2fff 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:-.02em;animation:name-glow 3s ease-in-out infinite alternate;}
+@keyframes name-glow{
+  from{filter:drop-shadow(0 0 20px rgba(180,108,255,.3))}
+  to{filter:drop-shadow(0 0 40px rgba(180,108,255,.7))}}
+.hero-welcome-sub{font-size:1rem;color:var(--muted);font-weight:400;letter-spacing:.02em;}
+
+/* HERO STATS ROW */
+.hero-stats{display:flex;gap:1.5rem;align-items:center;justify-content:center;
+  margin-bottom:1.8rem;flex-wrap:wrap;}
+.hstat{display:flex;flex-direction:column;align-items:center;gap:.2rem;
+  background:rgba(255,255,255,.04);border:1px solid var(--p-border);
+  border-radius:12px;padding:.7rem 1.4rem;min-width:90px;}
+.hstat-val{font-family:var(--font-display);font-size:1.6rem;font-weight:700;
+  color:var(--p-violet);line-height:1;}
+.hstat-val.gold{color:var(--gold);}
+.hstat-lbl{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);}
+.streak-flame{font-size:1.1rem;}
+
+.hero-eyebrow{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--p-violet);opacity:.8;margin-bottom:1.2rem;
+  display:flex;align-items:center;gap:10px;}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;
+  width:32px;height:1px;background:var(--p-violet);opacity:.4;}
+.hero-title{font-family:var(--font-display);
+  font-size:clamp(30px,6vw,58px);font-weight:800;line-height:1.05;
+  margin-bottom:1rem;letter-spacing:-.02em;}
+.hero-title .line1{color:var(--white);display:block;}
+.hero-title .line2{color:var(--p-violet);font-style:italic;display:block;}
+.hero-sub{font-size:clamp(14px,2vw,16px);color:var(--muted);max-width:500px;
+  line-height:1.7;margin-bottom:2rem;}
+
+/* BUTTONS */
+.hero-launch{display:inline-flex;align-items:center;gap:.7rem;
+  background:linear-gradient(135deg,var(--p-purple),var(--p-violet));
+  color:white;border:none;padding:1rem 2.4rem;border-radius:50px;
+  font-size:1.05rem;font-weight:700;box-shadow:0 8px 32px var(--p-glow);
+  transition:all .22s cubic-bezier(.34,1.2,.64,1);letter-spacing:.02em;
+  animation:hero-pulse 3s ease-in-out infinite;}
+.hero-launch:hover{transform:scale(1.06) translateY(-2px);box-shadow:0 14px 48px rgba(124,47,255,.5);}
+@keyframes hero-pulse{0%,100%{box-shadow:0 8px 32px var(--p-glow)}50%{box-shadow:0 8px 48px rgba(124,47,255,.5)}}
+.hero-secondary{display:inline-flex;align-items:center;gap:.5rem;
+  background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--muted);
+  padding:.9rem 2rem;border-radius:50px;font-size:.95rem;font-weight:500;
+  transition:all .2s;margin-left:.75rem;}
+.hero-secondary:hover{border-color:rgba(255,255,255,.3);color:var(--white);}
+
+/* SECTION LABEL */
+.section-label{position:relative;z-index:1;max-width:1100px;margin:0 auto 1rem;
+  padding:0 1.5rem;display:flex;align-items:center;gap:12px;}
+.section-label-line{flex:1;height:1px;background:rgba(255,255,255,.07);}
+.section-label-text{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+
+/* ── MASTERY MAP ── */
+.mastery-section{position:relative;z-index:1;max-width:1100px;margin:0 auto 3rem;padding:0 1.5rem;}
+.mastery-card{background:rgba(255,255,255,.03);border:1px solid var(--p-border);
+  border-radius:20px;padding:2rem;overflow:hidden;position:relative;}
+.mastery-card-header{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.mastery-card-title{font-family:var(--font-display);font-size:1.3rem;font-weight:700;}
+.mastery-legend{display:flex;gap:1rem;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:.4rem;font-size:.72rem;
+  color:var(--muted);font-family:var(--font-mono);letter-spacing:.05em;}
+.legend-dot{width:8px;height:8px;border-radius:50%;}
+.legend-dot.locked{background:rgba(255,255,255,.12);}
+.legend-dot.introduced{background:#3b4a6b;}
+.legend-dot.practising{background:var(--p-purple);}
+.legend-dot.mastered{background:var(--gold);}
+
+/* Star constellation grid */
+.constellation{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:1rem;}
+.topic-star{
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:1rem .8rem;text-align:center;
+  cursor:default;transition:all .3s;position:relative;overflow:hidden;}
+.topic-star.introduced{border-color:rgba(59,74,107,.6);background:rgba(59,74,107,.1);}
+.topic-star.practising{border-color:rgba(124,47,255,.5);background:rgba(124,47,255,.1);cursor:pointer;}
+.topic-star.mastered{
+  border-color:rgba(212,160,23,.6);background:rgba(212,160,23,.1);
+  box-shadow:0 0 20px rgba(212,160,23,.15);cursor:pointer;}
+.topic-star.mastered::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 30%,rgba(212,160,23,.08) 0%,transparent 70%);}
+.topic-star-img{width:44px;height:44px;border-radius:10px;object-fit:cover;
+  margin:0 auto .5rem;display:block;
+  filter:grayscale(1) brightness(.4);transition:filter .3s;}
+.topic-star.introduced .topic-star-img{filter:grayscale(1) brightness(.35);}
+.topic-star.practising .topic-star-img{filter:grayscale(.3) brightness(.7);}
+.topic-star.mastered   .topic-star-img{filter:grayscale(0) brightness(1);}
+.topic-star-label{font-size:.72rem;font-weight:600;color:var(--muted);
+  line-height:1.3;margin-bottom:.4rem;transition:color .3s;}
+.topic-star.practising .topic-star-label{color:rgba(255,255,255,.7);}
+.topic-star.mastered   .topic-star-label{color:var(--white);}
+.topic-stars-row{display:flex;justify-content:center;gap:2px;}
+.ts{font-size:.75rem;opacity:.2;transition:opacity .3s;}
+.topic-star.mastered   .ts.lit{opacity:1;}
+.topic-star.practising .ts.lit{opacity:.7;}
+.lock-icon{font-size:1rem;color:rgba(255,255,255,.15);margin-bottom:.3rem;}
+
+/* XP PROGRESS RING */
+.xp-ring-wrap{display:flex;align-items:center;gap:1.5rem;
+  background:rgba(255,255,255,.03);border:1px solid var(--p-border);
+  border-radius:16px;padding:1.2rem 1.5rem;margin-bottom:1.5rem;}
+.xp-ring{position:relative;width:72px;height:72px;flex-shrink:0;}
+.xp-ring svg{transform:rotate(-90deg);}
+.xp-ring-bg{fill:none;stroke:rgba(180,108,255,.15);stroke-width:6;}
+.xp-ring-fill{fill:none;stroke:var(--p-violet);stroke-width:6;stroke-linecap:round;
+  stroke-dasharray:188;stroke-dashoffset:188;transition:stroke-dashoffset 1s ease;}
+.xp-ring-label{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;}
+.xp-ring-level{font-family:var(--font-display);font-size:1.2rem;
+  font-weight:800;color:var(--p-violet);line-height:1;}
+.xp-ring-sub{font-size:.5rem;color:var(--muted);font-family:var(--font-mono);
+  letter-spacing:.05em;text-transform:uppercase;}
+.xp-info{flex:1;}
+.xp-info-title{font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:.2rem;}
+.xp-info-sub{font-size:.75rem;color:var(--muted);}
+.xp-bar-wrap{margin-top:.6rem;}
+.xp-bar-track{height:6px;background:rgba(255,255,255,.08);border-radius:50px;overflow:hidden;}
+.xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--p-purple),var(--p-violet));
+  border-radius:50px;transition:width 1s ease;width:0%;}
+.xp-bar-label{display:flex;justify-content:space-between;margin-top:.3rem;}
+.xp-bar-label span{font-size:.65rem;color:var(--muted);font-family:var(--font-mono);}
+
+/* SUBJECT CARDS */
+.subjects-row{position:relative;z-index:1;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:1.2rem;max-width:1100px;margin:0 auto;padding:0 1.5rem 5rem;}
+.subject-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;overflow:hidden;cursor:pointer;
+  transition:all .25s cubic-bezier(.34,1.2,.64,1);position:relative;}
+.subject-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.5);}
+.subject-card.active{border-color:var(--p-border);box-shadow:0 0 0 1px rgba(180,108,255,.15);}
+.subject-card.active:hover{border-color:var(--p-violet);box-shadow:0 16px 48px var(--p-glow),0 0 0 1px var(--p-border);}
+.subject-card.locked{opacity:.5;cursor:default;}
+.subject-card.locked:hover{transform:none;box-shadow:none;}
+.sc-banner{height:160px;width:100%;object-fit:cover;display:block;
+  filter:brightness(.75) saturate(.9);transition:filter .3s;}
+.subject-card:hover .sc-banner{filter:brightness(.9) saturate(1.1);}
+.subject-card.locked .sc-banner{filter:brightness(.4) saturate(0);}
+.sc-accent{height:3px;width:100%;}
+.sc-body{padding:1.4rem;}
+.sc-badge{display:inline-block;font-family:var(--font-mono);font-size:.58rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;margin-bottom:.65rem;}
+.sc-name{font-family:var(--font-display);font-size:1.15rem;font-weight:700;margin-bottom:.3rem;line-height:1.2;}
+.sc-desc{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+.sc-footer{display:flex;align-items:center;justify-content:space-between;
+  padding-top:.9rem;border-top:1px solid rgba(255,255,255,.06);}
+.sc-meta{font-size:.72rem;color:var(--muted);font-family:var(--font-mono);}
+.sc-btn{background:rgba(124,47,255,.2);border:1px solid rgba(180,108,255,.35);color:var(--p-violet);
+  padding:.45rem 1.1rem;border-radius:6px;font-size:.82rem;font-weight:700;
+  transition:all .2s;font-family:var(--font-body);}
+.sc-btn:hover{background:var(--p-purple);color:white;}
+.sc-btn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy);box-shadow:0 4px 18px rgba(212,160,23,.35);}
+.sc-btn.gold:hover{background:var(--gold2);}
+.sc-btn.dim{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08);color:var(--muted);cursor:default;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;
+  display:none;align-items:flex-start;justify-content:center;
+  padding:.75rem;backdrop-filter:blur(6px);}
+.modal-overlay.open{display:flex;}
+.modal-frame{background:#06060f;border:1px solid var(--p-border);border-radius:14px;
+  width:100%;max-width:1280px;height:calc(100vh - 1.5rem);
+  display:flex;flex-direction:column;overflow:hidden;animation:modalIn .25s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.97) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-topbar{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;
+  background:rgba(255,255,255,.03);border-bottom:1px solid var(--p-border);flex-shrink:0;}
+.modal-name{font-family:var(--font-display);font-size:.95rem;font-weight:700;flex:1;color:var(--p-violet);}
+.modal-close{background:none;border:1px solid rgba(255,255,255,.1);color:var(--muted);
+  width:32px;height:32px;border-radius:6px;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.modal-close:hover{border-color:var(--p-violet);color:var(--white);}
+.modal-iframe-wrap{flex:1;position:relative;overflow:hidden;}
+.modal-iframe-wrap iframe{width:100%;height:100%;border:none;display:block;}
+.iframe-loading{position:absolute;inset:0;background:var(--p-dark);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;}
+.iframe-loading p{font-size:.82rem;color:var(--muted);font-family:var(--font-mono);}
+
+/* VOICE SETTINGS PANEL */
+.voice-panel{position:relative;z-index:1;max-width:1100px;margin:0 auto 2rem;padding:0 1.5rem;}
+.voice-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:1.2rem 1.5rem;
+  display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.voice-title{font-size:.85rem;font-weight:600;color:var(--white);flex:1;min-width:160px;}
+.voice-title span{color:var(--muted);font-size:.75rem;font-weight:400;display:block;margin-top:.1rem;}
+.voice-controls{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;}
+.voice-toggle{display:flex;align-items:center;gap:.5rem;}
+.toggle-switch{position:relative;width:40px;height:22px;}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.1);
+  border-radius:50px;cursor:pointer;transition:.3s;border:1px solid rgba(255,255,255,.1);}
+.toggle-slider::before{content:'';position:absolute;height:16px;width:16px;
+  left:3px;bottom:2px;background:var(--muted);border-radius:50%;transition:.3s;}
+.toggle-switch input:checked + .toggle-slider{background:var(--p-purple);border-color:var(--p-violet);}
+.toggle-switch input:checked + .toggle-slider::before{transform:translateX(18px);background:white;}
+.toggle-label{font-size:.8rem;color:var(--muted);}
+.speed-btns{display:flex;gap:.3rem;}
+.speed-btn{padding:.3rem .7rem;border-radius:6px;font-size:.72rem;font-weight:600;
+  border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--muted);
+  transition:all .2s;font-family:var(--font-mono);letter-spacing:.05em;}
+.speed-btn.active,.speed-btn:hover{background:rgba(124,47,255,.2);border-color:var(--p-violet);color:var(--p-violet);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .topnav{padding:.75rem 1rem;}
+  .hero{padding:2rem 1rem;}
+  .subjects-row{padding:0 1rem 5rem;grid-template-columns:1fr 1fr;}
+  .hero-secondary{display:none;}
+  .hero-welcome-name{font-size:clamp(36px,12vw,60px);}
+  .constellation{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));}
+}
+@media(max-width:480px){
+  .subjects-row{grid-template-columns:1fr;}
+  .hero-stats{gap:.8rem;}
+  .hstat{padding:.6rem 1rem;min-width:75px;}
+}
+</style>
+</head>
+<body>
+<div id="stars-bg"></div>
+
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-logo">Protégé</div>
+  <div class="spinner"></div>
+</div>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="/dashboard.html">
+    <div class="topnav-logo">
+      <img src="/icons/icon-192.png" alt="Inspire Science" onerror="this.style.display='none'">
+    </div>
+  </a>
+  <span class="topnav-title">Student Portal</span>
+  <div class="nav-links">
+    <button class="nav-link" onclick="location.href='/dashboard.html'">Dashboard</button>
+    <button class="nav-link" onclick="location.href='/subjects.html'">Subjects</button>
+    <button class="nav-link" onclick="location.href='/student/progress.html'">My Progress</button>
+    <button class="nav-link" onclick="location.href='/student/revision.html'">Personalised Learning</button>
+    <button class="nav-link" onclick="location.href='/tools/tools.html'">Tools</button>
+    <button class="nav-link active">Protégé</button>
+  </div>
+  <div class="nav-user" onclick="location.href='/dashboard.html'">
+    <div class="avatar" id="nav-avatar" style="background:var(--p-purple);color:white;">?</div>
+    <span id="nav-name">Student</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-welcome-wrap" id="hero-welcome-wrap">
+    <div class="hero-welcome-pre">Welcome back</div>
+    <div class="hero-welcome-name" id="hero-welcome-name">Champion</div>
+    <div class="hero-welcome-sub">Your journey continues today</div>
+  </div>
+
+  <!-- Live stats under the name -->
+  <div class="hero-stats" id="hero-stats" style="display:none">
+    <div class="hstat">
+      <div class="hstat-val" id="stat-level">1</div>
+      <div class="hstat-lbl">Level</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val gold" id="stat-xp">0</div>
+      <div class="hstat-lbl">Total XP</div>
+    </div>
+    <div class="hstat">
+      <span class="streak-flame">&#128293;</span>
+      <div class="hstat-val" id="stat-streak">0</div>
+      <div class="hstat-lbl">Day Streak</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val" id="stat-mastered">0</div>
+      <div class="hstat-lbl">Topics Mastered</div>
+    </div>
+  </div>
+
+  <div class="hero-eyebrow">Inspire Protégé Programme</div>
+  <h1 class="hero-title">
+    <span class="line1">Become a</span>
+    <span class="line2">Science &amp; Maths Superstar</span>
+  </h1>
+  <p class="hero-sub">
+    A deliberately designed world that builds extraordinary young minds — through adaptive challenges, a personal AI tutor, and a journey that makes learning feel like a superpower.
+  </p>
+  <div>
+    <button class="hero-launch" onclick="launchGame('mathgenius')">
+      &#9654;&nbsp; Launch MathGenius Academy
+    </button>
+    <button class="hero-secondary" onclick="document.querySelector('.mastery-section').scrollIntoView({behavior:'smooth'})">
+      View mastery map &darr;
+    </button>
+  </div>
+</section>
+
+<!-- MASTERY MAP -->
+<div class="section-label">
+  <div class="section-label-line"></div>
+  <div class="section-label-text">Your Mastery Map</div>
+  <div class="section-label-line"></div>
+</div>
+
+<div class="mastery-section">
+  <!-- XP Ring -->
+  <div class="xp-ring-wrap" id="xp-ring-wrap">
+    <div class="xp-ring">
+      <svg width="72" height="72" viewBox="0 0 72 72">
+        <circle class="xp-ring-bg" cx="36" cy="36" r="30"/>
+        <circle class="xp-ring-fill" id="xp-ring-fill" cx="36" cy="36" r="30"/>
+      </svg>
+      <div class="xp-ring-label">
+        <div class="xp-ring-level" id="ring-level">1</div>
+        <div class="xp-ring-sub">Level</div>
+      </div>
+    </div>
+    <div class="xp-info">
+      <div class="xp-info-title" id="xp-info-title">MathGenius Academy</div>
+      <div class="xp-info-sub" id="xp-info-sub">Begin your journey — earn XP to level up</div>
+      <div class="xp-bar-wrap">
+        <div class="xp-bar-track"><div class="xp-bar-fill" id="xp-bar-fill"></div></div>
+        <div class="xp-bar-label">
+          <span id="xp-current">0 XP</span>
+          <span id="xp-next">500 XP to Level 2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Constellation -->
+  <div class="mastery-card">
+    <div class="mastery-card-header">
+      <div class="mastery-card-title">Maths Constellation</div>
+      <div class="mastery-legend">
+        <div class="legend-item"><div class="legend-dot locked"></div>Locked</div>
+        <div class="legend-item"><div class="legend-dot introduced"></div>Introduced</div>
+        <div class="legend-item"><div class="legend-dot practising"></div>Practising</div>
+        <div class="legend-item"><div class="legend-dot mastered"></div>Mastered</div>
+      </div>
+    </div>
+    <div class="constellation" id="constellation"></div>
+  </div>
+</div>
+
+<!-- VOICE SETTINGS -->
+<div class="voice-panel">
+  <div class="voice-card">
+    <div class="voice-title">
+      Voice &amp; Accessibility
+      <span>Questions and feedback can be read aloud — helpful for all learners</span>
+    </div>
+    <div class="voice-controls">
+      <div class="voice-toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" id="voice-toggle" onchange="saveVoiceSettings()">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-label">Voice on</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.3rem;">
+        <div style="font-size:.7rem;color:var(--muted);font-family:var(--font-mono);letter-spacing:.05em;">SPEED</div>
+        <div class="speed-btns">
+          <button class="speed-btn" data-speed="slow" onclick="setSpeed(this)">Slow</button>
+          <button class="speed-btn active" data-speed="normal" onclick="setSpeed(this)">Normal</button>
+          <button class="speed-btn" data-speed="fast" onclick="setSpeed(this)">Fast</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.3rem;">
+        <div style="font-size:.7rem;color:var(--muted);font-family:var(--font-mono);letter-spacing:.05em;">AUTO-READ</div>
+        <div class="voice-toggle">
+          <label class="toggle-switch">
+            <input type="checkbox" id="auto-read-toggle" onchange="saveVoiceSettings()">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Read questions automatically</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULES -->
+<div class="section-label">
+  <div class="section-label-line"></div>
+  <div class="section-label-text">Learning Modules</div>
+  <div class="section-label-line"></div>
+</div>
+
+<div class="subjects-row">
+  <div class="subject-card active" onclick="launchGame('mathgenius')">
+    <img class="sc-banner" src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80&fit=crop" alt="Mathematics">
+    <div class="sc-accent" style="background:linear-gradient(90deg,#7c2fff,#b46cff)"></div>
+    <div class="sc-body">
+      <span class="sc-badge" style="background:rgba(124,47,255,.2);color:#b46cff;">Live Now</span>
+      <div class="sc-name">MathGenius Academy</div>
+      <div class="sc-desc">Adaptive maths challenges with a personal AI tutor. Combo streaks, dynamic difficulty, and friend battles. Every question makes you sharper.</div>
+      <div class="sc-footer">
+        <span class="sc-meta">Maths · Science · Space · Logic</span>
+        <button class="sc-btn gold" onclick="event.stopPropagation();launchGame('mathgenius')">Play &rarr;</button>
+      </div>
+    </div>
+  </div>
+  <div class="subject-card locked">
+    <img class="sc-banner" src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80&fit=crop" alt="Science lab">
+    <div class="sc-accent" style="background:linear-gradient(90deg,#16803c,#4ade80)"></div>
+    <div class="sc-body">
+      <span class="sc-badge" style="background:rgba(122,143,166,.1);color:var(--muted);border:1px solid rgba(255,255,255,.08);">Coming Soon</span>
+      <div class="sc-name">Science Explorer</div>
+      <div class="sc-desc">Biology, Chemistry and Physics brought to life. Build molecules, conduct virtual experiments, and explore the natural world with precision.</div>
+      <div class="sc-footer">
+        <span class="sc-meta">All Sciences · Yr 5–9</span>
+        <button class="sc-btn dim">Soon</button>
+      </div>
+    </div>
+  </div>
+  <div class="subject-card locked">
+    <img class="sc-banner" src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=80&fit=crop" alt="Space">
+    <div class="sc-accent" style="background:linear-gradient(90deg,#1c4f8a,#3b82f6)"></div>
+    <div class="sc-body">
+      <span class="sc-badge" style="background:rgba(122,143,166,.1);color:var(--muted);border:1px solid rgba(255,255,255,.08);">Coming Soon</span>
+      <div class="sc-name">Space Command</div>
+      <div class="sc-desc">Navigate the solar system, study orbital mechanics, and answer astrophysics challenges to unlock new missions across the cosmos.</div>
+      <div class="sc-footer">
+        <span class="sc-meta">Astronomy · Physics · Maths</span>
+        <button class="sc-btn dim">Soon</button>
+      </div>
+    </div>
+  </div>
+  <div class="subject-card locked">
+    <img class="sc-banner" src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600&q=80&fit=crop" alt="Chess strategy">
+    <div class="sc-accent" style="background:linear-gradient(90deg,#b45309,#f59e0b)"></div>
+    <div class="sc-body">
+      <span class="sc-badge" style="background:rgba(122,143,166,.1);color:var(--muted);border:1px solid rgba(255,255,255,.08);">Coming Soon</span>
+      <div class="sc-name">Logic Labyrinth</div>
+      <div class="sc-desc">Structured puzzles, pattern recognition, and problem-solving designed to build the mathematical thinking that distinguishes exceptional minds.</div>
+      <div class="sc-footer">
+        <span class="sc-meta">Logic · Problem Solving</span>
+        <button class="sc-btn dim">Soon</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="gameModal">
+  <div class="modal-frame">
+    <div class="modal-topbar">
+      <span class="modal-name" id="modal-name">MathGenius Academy</span>
+      <button class="modal-close" onclick="closeModal()" title="Close">&times;</button>
+    </div>
+    <div class="modal-iframe-wrap">
+      <div class="iframe-loading" id="iframe-loading">
+        <div class="spinner"></div>
+        <p>Loading Protégé module...</p>
+      </div>
+      <iframe id="game-iframe" src="" onload="iframeLoaded()" title="Protégé Game" allow="autoplay"></iframe>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────
+const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo'
+
+// Hard timeout — loading screen always hides after 6 seconds no matter what
+setTimeout(() => {
+  const ls = document.getElementById('loadingScreen')
+  if (ls) ls.style.display = 'none'
+}, 6000)
+
+let supa
+try {
+  supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+} catch(e) {
+  console.error('[Protégé] Supabase failed to init:', e)
+  document.getElementById('loadingScreen').style.display = 'none'
+}
+
+const XP_PER_LEVEL = 500
+
+// Full topic map — what the mastery constellation shows
+const TOPIC_CATALOGUE = [
+  { key:'addition',        label:'Addition',         subject:'maths', img:'https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?w=120&q=70&fit=crop' },
+  { key:'subtraction',     label:'Subtraction',      subject:'maths', img:'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=120&q=70&fit=crop' },
+  { key:'multiplication',  label:'Multiplication',   subject:'maths', img:'https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=120&q=70&fit=crop' },
+  { key:'division',        label:'Division',         subject:'maths', img:'https://images.unsplash.com/photo-1453733190371-0a9bedd82893?w=120&q=70&fit=crop' },
+  { key:'place_value',     label:'Place Value',      subject:'maths', img:'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=120&q=70&fit=crop' },
+  { key:'fractions',       label:'Fractions',        subject:'maths', img:'https://images.unsplash.com/photo-1588421357574-87938a86fa28?w=120&q=70&fit=crop' },
+  { key:'word_problems',   label:'Word Problems',    subject:'maths', img:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=120&q=70&fit=crop' },
+  { key:'times_tables',    label:'Times Tables',     subject:'maths', img:'https://images.unsplash.com/photo-1494122353634-c310f45a6d3c?w=120&q=70&fit=crop' },
+  { key:'planets',         label:'Planets',          subject:'space', img:'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=120&q=70&fit=crop' },
+  { key:'cells',           label:'Cells',            subject:'science',img:'https://images.unsplash.com/photo-1576086213369-97a306d36557?w=120&q=70&fit=crop' },
+]
+
+// Map question types in the game → topic_key
+const Q_TYPE_TO_TOPIC = {
+  add:   'addition', sub: 'subtraction', mul: 'multiplication',
+  div:   'division', word: 'word_problems', science: 'cells',
+  space: 'planets'
+}
+
+// ── STATE ─────────────────────────────────────────────────────────
+let STATE = {
+  userId: null, userName: 'Champion',
+  progress: null,   // protege_progress row
+  mastery: [],      // protege_topic_mastery rows
+  settings: null,   // protege_settings row
+  streak: null      // streaks row
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+async function init() {
+  if (!supa) {
+    document.getElementById('loadingScreen').style.display = 'none'
+    return
+  }
+  try {
+    const { data: { session } } = await supa.auth.getSession()
+    if (!session) { window.location.href = '/index.html'; return }
+    STATE.userId = session.user.id
+
+    // Try sessionStorage cache first (set by /dashboard.html via /assets/js/perf-utils.js)
+    let profile = null
+    try {
+      const raw = sessionStorage.getItem('ia_profile_cache')
+      if (raw) {
+        const { profile: cached, ts } = JSON.parse(raw)
+        if (Date.now() - ts < 15 * 60 * 1000) profile = cached
+      }
+    } catch(e) {}
+
+    // Fall back to fresh DB fetch if no cache
+    if (!profile) {
+      const { data } = await supa.from('profiles').select('*').eq('id', STATE.userId).single().catch(()=>({data:null}))
+      profile = data
+    }
+
+    // Use getUser() for user_metadata fallback
+    const { data: { user } } = await supa.auth.getUser().catch(()=>({data:{user:session.user}}))
+
+    // Full fallback chain — mirrors /dashboard.html line 640
+    STATE.userName = profile?.first_name
+      || (profile?.full_name ? profile.full_name.split(' ')[0] : null)
+      || user?.user_metadata?.first_name
+      || user?.user_metadata?.full_name?.split(' ')[0]
+      || user?.email?.split('@')[0]
+      || 'Student'
+
+    // Parallel fetch Protégé-specific data
+    const [progressRes, masteryRes, settingsRes, streakRes] = await Promise.all([
+      supa.from('protege_progress').select('*').eq('student_id', STATE.userId).eq('module','mathgenius').maybeSingle().catch(()=>({data:null})),
+      supa.from('protege_topic_mastery').select('*').eq('student_id', STATE.userId).catch(()=>({data:[]})),
+      supa.from('protege_settings').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null})),
+      supa.from('streaks').select('*').eq('student_id', STATE.userId).maybeSingle().catch(()=>({data:null}))
+    ])
+    STATE.progress  = progressRes.data
+    STATE.mastery   = masteryRes.data || []
+    STATE.settings  = settingsRes.data
+    STATE.streak    = streakRes.data
+
+    // Create default settings if missing — but don't block on failure
+    if (!STATE.settings) {
+      try {
+        const { data } = await supa.from('protege_settings')
+          .insert({ student_id: STATE.userId }).select().single()
+        STATE.settings = data
+      } catch(e) {}
+      if (!STATE.settings) STATE.settings = { voice_enabled: true, voice_speed: 'normal', auto_read_questions: false }
+    }
+
+    renderUI()
+  } catch(e) {
+    console.error('[Protégé] init error:', e)
+    // Still show the page — don't leave the user on the loading screen
+    renderUI()
+  } finally {
+    document.getElementById('loadingScreen').style.display = 'none'
+    initStars()
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function renderUI() {
+  const n = STATE.userName
+  // Nav
+  document.getElementById('nav-name').textContent   = n
+  document.getElementById('nav-avatar').textContent = n[0]?.toUpperCase() || '?'
+  // Hero welcome
+  document.getElementById('hero-welcome-name').textContent = n
+  document.getElementById('hero-welcome-wrap').style.display = 'flex'
+
+  // Stats
+  const p = STATE.progress
+  const level  = p?.level  || 1
+  const xp     = p?.xp     || 0
+  const streak = STATE.streak?.current_streak || 0
+  const mastered = STATE.mastery.filter(m => m.mastery_level === 'mastered').length
+
+  document.getElementById('stat-level').textContent   = level
+  document.getElementById('stat-xp').textContent      = xp.toLocaleString()
+  document.getElementById('stat-streak').textContent  = streak
+  document.getElementById('stat-mastered').textContent= mastered
+  document.getElementById('hero-stats').style.display = 'flex'
+
+  // XP ring
+  const xpInLevel   = xp % XP_PER_LEVEL
+  const pct         = xpInLevel / XP_PER_LEVEL
+  const circumference = 188
+  document.getElementById('xp-ring-fill').style.strokeDashoffset = circumference - (pct * circumference)
+  document.getElementById('ring-level').textContent  = level
+  document.getElementById('xp-current').textContent  = xpInLevel + ' XP'
+  document.getElementById('xp-next').textContent     = `${XP_PER_LEVEL - xpInLevel} XP to Level ${level+1}`
+  document.getElementById('xp-bar-fill').style.width = (pct * 100) + '%'
+  document.getElementById('xp-info-sub').textContent = p
+    ? `${p.questions_answered} questions answered · ${p.sessions_played} sessions`
+    : 'Begin your journey — earn XP to level up'
+
+  // Voice settings
+  document.getElementById('voice-toggle').checked    = STATE.settings?.voice_enabled !== false
+  document.getElementById('auto-read-toggle').checked= STATE.settings?.auto_read_questions === true
+  const speed = STATE.settings?.voice_speed || 'normal'
+  document.querySelectorAll('.speed-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.speed === speed)
+  })
+
+  // Mastery constellation
+  renderConstellation()
+}
+
+function renderConstellation() {
+  const grid = document.getElementById('constellation')
+  const masteryMap = {}
+  STATE.mastery.forEach(m => { masteryMap[m.topic_key] = m })
+
+  grid.innerHTML = TOPIC_CATALOGUE.map(topic => {
+    const m = masteryMap[topic.key]
+    const level = m?.mastery_level || 'locked'
+    const stars = m?.stars || 0
+    const starsHtml = [1,2,3].map(i =>
+      `<span class="ts${i <= stars ? ' lit' : ''}">&#9733;</span>`
+    ).join('')
+
+    return `<div class="topic-star ${level}" title="${topic.label}">
+      <img class="topic-star-img" src="${topic.img}" alt="${topic.label}" loading="lazy"
+           onerror="this.style.display='none'">
+      <div class="topic-star-label">${topic.label}</div>
+      <div class="topic-stars-row">${starsHtml}</div>
+    </div>`
+  }).join('')
+}
+
+// ── VOICE SETTINGS ────────────────────────────────────────────────
+async function saveVoiceSettings() {
+  if (!STATE.userId) return
+  const voice_enabled         = document.getElementById('voice-toggle').checked
+  const auto_read_questions   = document.getElementById('auto-read-toggle').checked
+  const speed = document.querySelector('.speed-btn.active')?.dataset.speed || 'normal'
+
+  STATE.settings = { ...STATE.settings, voice_enabled, auto_read_questions, voice_speed: speed }
+  await supa.from('protege_settings').update({
+    voice_enabled, auto_read_questions, voice_speed: speed
+  }).eq('student_id', STATE.userId)
+
+  // Push settings into game iframe if open
+  const iframe = document.getElementById('game-iframe')
+  if (iframe.src && iframe.src !== 'about:blank') {
+    iframe.contentWindow?.postMessage({
+      type: 'PROTEGE_SETTINGS',
+      voice_enabled, auto_read_questions, voice_speed: speed
+    }, '*')
+  }
+}
+
+function setSpeed(btn) {
+  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  saveVoiceSettings()
+}
+
+// ── GAME LAUNCHER ─────────────────────────────────────────────────
+function launchGame(gameId) {
+  const files = { mathgenius: '/tools/math-genius-academy.html' }
+  const names = { mathgenius: 'MathGenius Academy' }
+  const src = files[gameId]; if (!src) return
+
+  // Build URL with user context + voice settings
+  const params = new URLSearchParams()
+  params.set('name', STATE.userName)
+  if (STATE.settings?.voice_enabled !== false) params.set('voice', '1')
+  if (STATE.settings?.auto_read_questions)     params.set('autoread', '1')
+  params.set('speed', STATE.settings?.voice_speed || 'normal')
+
+  document.getElementById('modal-name').textContent        = names[gameId]
+  document.getElementById('iframe-loading').style.display  = 'flex'
+  document.getElementById('game-iframe').style.opacity     = '0'
+  document.getElementById('game-iframe').src               = `${src}?${params}`
+  document.getElementById('gameModal').classList.add('open')
+  document.body.style.overflow = 'hidden'
+  history.pushState({ game: gameId }, '', `?game=${gameId}`)
+}
+
+function iframeLoaded() {
+  document.getElementById('iframe-loading').style.display = 'none'
+  const f = document.getElementById('game-iframe')
+  f.style.opacity = '1'; f.style.transition = 'opacity .3s ease'
+}
+
+function closeModal() {
+  document.getElementById('gameModal').classList.remove('open')
+  document.body.style.overflow = ''
+  setTimeout(() => { document.getElementById('game-iframe').src = '' }, 300)
+  history.pushState({}, '', window.location.pathname)
+}
+
+document.getElementById('gameModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal()
+})
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal() })
+
+// ── XP & MASTERY SYNC (from game iframe postMessage) ──────────────
+window.addEventListener('message', async (e) => {
+  if (!e.data?.type) return
+
+  // Game session ended — save progress
+  if (e.data.type === 'MATHGENIUS_SESSION_END') {
+    const { xpEarned, questionsAnswered, correctAnswers, maxCombo, topicsPlayed } = e.data
+    if (!STATE.userId || !xpEarned) return
+    await saveProgress(xpEarned, questionsAnswered, correctAnswers, maxCombo)
+    if (topicsPlayed?.length) await saveMastery(topicsPlayed)
+    // Refresh UI
+    const [progressRes, masteryRes, streakRes] = await Promise.all([
+      supa.from('protege_progress').select('*').eq('student_id',STATE.userId).eq('module','mathgenius').maybeSingle(),
+      supa.from('protege_topic_mastery').select('*').eq('student_id',STATE.userId),
+      supa.from('streaks').select('*').eq('student_id',STATE.userId).maybeSingle()
+    ])
+    STATE.progress = progressRes.data
+    STATE.mastery  = masteryRes.data || []
+    STATE.streak   = streakRes.data
+    renderUI()
+  }
+})
+
+async function saveProgress(xpEarned, questions, correct, combo) {
+  const existing = STATE.progress
+  if (!existing) {
+    const level = Math.floor(xpEarned / XP_PER_LEVEL) + 1
+    const { data } = await supa.from('protege_progress').insert({
+      student_id: STATE.userId, module: 'mathgenius',
+      level, xp: xpEarned, xp_this_week: xpEarned,
+      questions_answered: questions, correct_answers: correct,
+      sessions_played: 1, best_combo: combo,
+      last_session: new Date().toISOString()
+    }).select().single()
+    STATE.progress = data
+  } else {
+    const newXp    = existing.xp + xpEarned
+    const newLevel = Math.floor(newXp / XP_PER_LEVEL) + 1
+    await supa.from('protege_progress').update({
+      xp: newXp, level: newLevel,
+      xp_this_week: existing.xp_this_week + xpEarned,
+      questions_answered: existing.questions_answered + questions,
+      correct_answers: existing.correct_answers + correct,
+      sessions_played: existing.sessions_played + 1,
+      best_combo: Math.max(existing.best_combo, combo),
+      last_session: new Date().toISOString()
+    }).eq('student_id', STATE.userId).eq('module','mathgenius')
+  }
+}
+
+async function saveMastery(topicsPlayed) {
+  // topicsPlayed: [{ type, correct, total }]
+  for (const t of topicsPlayed) {
+    const topicKey  = Q_TYPE_TO_TOPIC[t.type] || t.type
+    const catalogue = TOPIC_CATALOGUE.find(c => c.key === topicKey)
+    if (!catalogue) continue
+
+    const accuracy = t.total > 0 ? t.correct / t.total : 0
+    const existing = STATE.mastery.find(m => m.topic_key === topicKey)
+
+    let newLevel, newStars
+    const totalAttempts = (existing?.attempts || 0) + t.total
+    const totalCorrect  = (existing?.correct  || 0) + t.correct
+    const totalAccuracy = totalAttempts > 0 ? totalCorrect / totalAttempts : 0
+
+    if (totalAttempts >= 10 && totalAccuracy >= 0.85)     { newLevel = 'mastered';     newStars = 3 }
+    else if (totalAttempts >= 5 && totalAccuracy >= 0.65) { newLevel = 'practising';   newStars = 2 }
+    else if (totalAttempts >= 1)                           { newLevel = 'introduced';   newStars = 1 }
+    else                                                   { newLevel = 'introduced';   newStars = 0 }
+
+    if (!existing) {
+      await supa.from('protege_topic_mastery').insert({
+        student_id: STATE.userId, subject: catalogue.subject,
+        topic_key: topicKey, topic_label: catalogue.label,
+        mastery_level: newLevel, stars: newStars,
+        attempts: t.total, correct: t.correct
+      })
+    } else {
+      await supa.from('protege_topic_mastery').update({
+        mastery_level: newLevel, stars: newStars,
+        attempts: totalAttempts, correct: totalCorrect,
+        last_seen: new Date().toISOString()
+      }).eq('student_id', STATE.userId).eq('topic_key', topicKey)
+    }
+  }
+}
+
+// Auto-launch from URL
+const gp = new URLSearchParams(location.search).get('game')
+if (gp) supa.auth.getSession().then(({data:{session}}) => { if(session) launchGame(gp) })
+
+// STARS
+function initStars() {
+  const bg = document.getElementById('stars-bg')
+  for (let i = 0; i < 140; i++) {
+    const s = document.createElement('div'); s.className = 'star'
+    const sz = Math.random()*2.5+.5
+    s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*5}s;--dl:${Math.random()*6}s;--op:${.3+Math.random()*.7};`
+    bg.appendChild(s)
+  }
+}
+
+init()
+</script>
+</body>
+</html>

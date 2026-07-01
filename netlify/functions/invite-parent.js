@@ -24,7 +24,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         email: parentEmail,
         data: { role: 'parent', full_name: parentName },
-        redirect_to: 'https://inspireacademic.org/parent-login.html'
+        redirect_to: 'https://inspireacademic.org/parent/parent-login.html'
       })
     });
 

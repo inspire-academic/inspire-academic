@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atom Builder — Inspire Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+:root {
+  --bg:#04080f; --bg2:#0d1525; --bg3:#162035;
+  --gold:#f0c040; --teal:#00d4c8; --purple:#a855f7;
+  --blue:#3b82f6; --green:#22c55e; --red:#ef4444;
+  --orange:#f97316; --white:#f0f4ff; --muted:#4a6280;
+  --border:#1a2a45; --proton:#ef4444; --neutron:#64748b; --electron:#3b82f6;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--white);
+  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+
+/* ── HEADER ── */
+.hdr{display:flex;align-items:center;gap:.8rem;padding:.6rem 1.2rem;
+  background:rgba(13,21,37,.95);border-bottom:1px solid var(--border);flex-shrink:0;z-index:10}
+.hdr-logo{font-family:'Space Mono',monospace;font-size:.85rem;color:var(--gold);letter-spacing:.1em}
+.hdr-title{font-size:.78rem;color:var(--muted)}
+.hdr-right{margin-left:auto;display:flex;gap:.4rem}
+.lvl-btn{padding:.2rem .7rem;border-radius:99px;font-size:.65rem;font-weight:700;
+  font-family:'Space Mono',monospace;cursor:pointer;transition:all .15s;border:1px solid}
+.lvl-btn.gcse{border-color:rgba(240,192,64,.4);color:var(--gold);background:rgba(240,192,64,.08)}
+.lvl-btn.gcse.on{background:rgba(240,192,64,.25)}
+.lvl-btn.alv{border-color:rgba(168,85,247,.4);color:var(--purple);background:rgba(168,85,247,.08)}
+.lvl-btn.alv.on{background:rgba(168,85,247,.25)}
+
+/* ── MAIN LAYOUT ── */
+.main{display:flex;flex:1;min-height:0;overflow:hidden}
+
+/* ── LEFT PANEL ── */
+.left{width:240px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);
+  overflow-y:auto;padding:.8rem;display:flex;flex-direction:column;gap:.8rem}
+.sec-lbl{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;
+  border-bottom:1px solid var(--border);padding-bottom:.25rem}
+
+/* Search */
+.el-search{width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;color:var(--white);font-family:'Space Mono',monospace;
+  font-size:.75rem;padding:.4rem .7rem;outline:none}
+.el-search:focus{border-color:var(--gold)}
+.el-search::placeholder{color:var(--muted)}
+
+/* Quick select */
+.qgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.qbtn{background:var(--bg3);border:1px solid var(--border);border-radius:5px;
+  color:var(--white);font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;
+  cursor:pointer;padding:.3rem .1rem;text-align:center;transition:all .12s;line-height:1.2}
+.qbtn:hover{border-color:var(--teal);color:var(--teal);transform:scale(1.05)}
+.qbtn.sel{background:rgba(0,212,200,.15);border-color:var(--teal);color:var(--teal)}
+.qbtn .qn{display:block;font-size:.5rem;color:var(--muted);font-weight:400}
+
+/* Sliders */
+.pc-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.pc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pc-lbl{font-size:.68rem;min-width:60px}
+.pc-sl{flex:1;accent-color:var(--teal);cursor:pointer}
+.pc-val{font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;
+  color:var(--gold);min-width:22px;text-align:right}
+.pc-adj{display:flex;gap:2px}
+.pc-adj button{width:18px;height:18px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:3px;color:var(--white);font-size:.75rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+  transition:all .1s;padding:0}
+.pc-adj button:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Nucleus mode */
+.nmode{display:flex;gap:3px}
+.nmbtn{flex:1;padding:.3rem;background:var(--bg3);border:1px solid var(--border);
+  border-radius:5px;color:var(--muted);font-size:.68rem;font-weight:600;
+  cursor:pointer;text-align:center;transition:all .15s;font-family:'Space Grotesk',sans-serif}
+.nmbtn.on{background:rgba(0,212,200,.12);border-color:var(--teal);color:var(--teal)}
+
+/* Stability */
+.stab-bar{height:5px;border-radius:3px;background:var(--bg3);overflow:hidden;margin-top:.3rem}
+.stab-fill{height:100%;border-radius:3px;transition:width .4s,background .4s}
+.stab-txt{font-size:.68rem;color:var(--muted);margin-bottom:.2rem}
+
+/* Ion */
+.ion-row{display:flex;align-items:center;gap:.4rem}
+.ion-btn{padding:.25rem .6rem;background:var(--bg3);border:1px solid var(--border);
+  border-radius:5px;color:var(--white);font-size:.7rem;font-weight:700;
+  cursor:pointer;transition:all .15s;font-family:'Space Mono',monospace}
+.ion-btn:hover{border-color:var(--purple);color:var(--purple)}
+.ion-lbl{font-family:'Space Mono',monospace;font-size:.9rem;font-weight:700;
+  color:var(--gold);flex:1;text-align:center}
+.ion-info{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);
+  text-align:center;margin-top:.2rem}
+
+/* ── CANVAS ── */
+.centre{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg);position:relative}
+.vtabs{position:absolute;top:.7rem;left:50%;transform:translateX(-50%);z-index:5;
+  display:flex;gap:.25rem;background:rgba(13,21,37,.85);border:1px solid var(--border);
+  border-radius:99px;padding:.2rem;backdrop-filter:blur(6px)}
+.vtab{padding:.25rem .75rem;border-radius:99px;font-size:.68rem;font-weight:700;
+  cursor:pointer;border:none;background:none;color:var(--muted);
+  font-family:'Space Grotesk',sans-serif;transition:all .15s}
+.vtab.on{background:var(--teal);color:var(--bg)}
+.spd{position:absolute;bottom:.7rem;right:.8rem;z-index:5;
+  display:flex;align-items:center;gap:.4rem;
+  background:rgba(13,21,37,.85);border:1px solid var(--border);
+  border-radius:6px;padding:.3rem .6rem;font-size:.62rem;color:var(--muted);
+  font-family:'Space Mono',monospace;backdrop-filter:blur(6px)}
+.spd input{width:70px;accent-color:var(--teal)}
+#atom-canvas{display:block;width:100%;height:100%}
+
+/* ── RIGHT PANEL ── */
+.right{width:240px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);
+  overflow-y:auto;padding:.8rem;display:flex;flex-direction:column;gap:.8rem}
+
+/* Element card */
+.elcard{background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:.8rem;text-align:center;position:relative;overflow:hidden}
+.elcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--purple))}
+.el-z{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted)}
+.el-sym{font-family:'Space Mono',monospace;font-size:2.5rem;font-weight:700;
+  color:var(--white);line-height:1}
+.el-name{font-size:.85rem;font-weight:700;color:var(--gold);margin:.15rem 0}
+.el-mass{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted)}
+.el-cfg{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--teal);
+  margin-top:.3rem;word-break:break-all}
+
+/* Info rows */
+.irow{display:flex;justify-content:space-between;align-items:baseline;
+  padding:.3rem 0;border-bottom:1px solid rgba(26,42,69,.5);font-size:.75rem}
+.irow:last-child{border-bottom:none}
+.ik{color:var(--muted);font-size:.65rem;font-family:'Space Mono',monospace}
+.iv{font-weight:600;font-family:'Space Mono',monospace;font-size:.72rem}
+.iv.g{color:var(--gold)}.iv.t{color:var(--teal)}.iv.p{color:var(--purple)}
+
+/* Notation */
+.notation{background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:.6rem;text-align:center;font-family:'Space Mono',monospace;
+  font-size:1.1rem;color:var(--white);letter-spacing:.05em}
+.iso-note{font-size:.62rem;color:var(--muted);text-align:center;margin-top:.3rem;
+  font-family:'Space Mono',monospace}
+
+/* Quiz */
+.qcard{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem}
+.qq{font-size:.78rem;line-height:1.5;margin-bottom:.6rem}
+.qopts{display:flex;flex-direction:column;gap:.3rem}
+.qopt{background:var(--bg);border:1px solid var(--border);border-radius:5px;
+  padding:.4rem .6rem;font-size:.72rem;cursor:pointer;
+  text-align:left;color:var(--white);width:100%;
+  font-family:'Space Grotesk',sans-serif;transition:all .12s}
+.qopt:hover{border-color:var(--teal)}
+.qopt.correct{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
+.qopt.wrong{background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)}
+.qfb{font-size:.72rem;margin-top:.5rem;line-height:1.5;display:none}
+.qnxt{width:100%;margin-top:.5rem;padding:.4rem;background:var(--teal);border:none;
+  border-radius:5px;color:var(--bg);font-weight:700;font-size:.72rem;cursor:pointer;
+  font-family:'Space Grotesk',sans-serif}
+.qnxt:hover{background:#00f0e0}
+
+/* Toast */
+#toast{position:fixed;bottom:1rem;left:50%;
+  transform:translateX(-50%) translateY(50px);
+  background:var(--bg2);border:1px solid var(--gold);
+  padding:.4rem 1rem;border-radius:6px;font-size:.75rem;
+  z-index:999;opacity:0;transition:all .3s;white-space:nowrap;
+  font-family:'Space Mono',monospace}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">INSPIRE</div>
+  <div class="hdr-title">⚛ Atom Builder</div>
+  <div class="hdr-right">
+    <button class="lvl-btn gcse on" id="btn-gcse" onclick="setLevel('gcse',this)">GCSE</button>
+    <button class="lvl-btn alv"     id="btn-alv"  onclick="setLevel('alevel',this)">A-Level</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- LEFT -->
+  <div class="left">
+    <div>
+      <div class="sec-lbl">Search Element</div>
+      <input class="el-search" id="el-search" type="text"
+        placeholder="Name, symbol or number…"
+        onkeydown="if(event.key==='Enter')doSearch(this.value)"
+        oninput="doSearch(this.value)">
+    </div>
+
+    <div>
+      <div class="sec-lbl">Quick Select — Period 1–4</div>
+      <div class="qgrid" id="qgrid"></div>
+    </div>
+
+    <div>
+      <div class="sec-lbl">Build Manually</div>
+      <div class="pc-row">
+        <div class="pc-dot" style="background:#ef4444;box-shadow:0 0 5px rgba(239,68,68,.5)"></div>
+        <span class="pc-lbl" style="color:#ef4444">Protons</span>
+        <input class="pc-sl" id="sl-p" type="range" min="1" max="118" value="1" oninput="onSlider()">
+        <span class="pc-val" id="v-p">1</span>
+        <div class="pc-adj">
+          <button onclick="adj('p',-1)">−</button>
+          <button onclick="adj('p',1)">+</button>
+        </div>
+      </div>
+      <div class="pc-row">
+        <div class="pc-dot" style="background:#64748b"></div>
+        <span class="pc-lbl" style="color:#94a3b8">Neutrons</span>
+        <input class="pc-sl" id="sl-n" type="range" min="0" max="176" value="0" oninput="onSlider()">
+        <span class="pc-val" id="v-n">0</span>
+        <div class="pc-adj">
+          <button onclick="adj('n',-1)">−</button>
+          <button onclick="adj('n',1)">+</button>
+        </div>
+      </div>
+      <div class="pc-row">
+        <div class="pc-dot" style="background:#3b82f6;box-shadow:0 0 5px rgba(59,130,246,.5)"></div>
+        <span class="pc-lbl" style="color:#3b82f6">Electrons</span>
+        <input class="pc-sl" id="sl-e" type="range" min="0" max="118" value="1" oninput="onSlider()">
+        <span class="pc-val" id="v-e">1</span>
+        <div class="pc-adj">
+          <button onclick="adj('e',-1)">−</button>
+          <button onclick="adj('e',1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-lbl">Nucleus View</div>
+      <div class="nmode">
+        <button class="nmbtn on" onclick="setNucMode('shell',this)">Shell</button>
+        <button class="nmbtn"    onclick="setNucMode('cluster',this)">Cluster</button>
+        <button class="nmbtn"    onclick="setNucMode('simple',this)">Simple</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-lbl">Nuclear Stability</div>
+      <div class="stab-txt" id="stab-txt">—</div>
+      <div class="stab-bar"><div class="stab-fill" id="stab-fill" style="width:0%"></div></div>
+    </div>
+
+    <div>
+      <div class="sec-lbl">Ion Builder</div>
+      <div class="ion-row">
+        <button class="ion-btn" onclick="adjustIon(-1)">− e⁻</button>
+        <div class="ion-lbl" id="ion-lbl">neutral</div>
+        <button class="ion-btn" onclick="adjustIon(1)">+ e⁻</button>
+      </div>
+      <div class="ion-info" id="ion-info">Neutral atom</div>
+    </div>
+  </div>
+
+  <!-- CANVAS -->
+  <div class="centre" id="centre">
+    <div class="vtabs">
+      <button class="vtab on" onclick="setView('atom',this)">Atom</button>
+      <button class="vtab"    onclick="setView('nucleus',this)">Nucleus</button>
+      <button class="vtab"    onclick="setView('electrons',this)">Electrons</button>
+      <button class="vtab"    onclick="setView('isotopes',this)">Isotopes</button>
+    </div>
+    <canvas id="atom-canvas"></canvas>
+    <div class="spd">
+      Speed <input type="range" min="0.1" max="3" step="0.1" value="1" id="spd-sl">
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div>
+      <div class="sec-lbl">Element Data</div>
+      <div class="elcard">
+        <div class="el-z"  id="el-z">Z = 1</div>
+        <div class="el-sym" id="el-sym">H</div>
+        <div class="el-name" id="el-name">Hydrogen</div>
+        <div class="el-mass" id="el-mass">A = 1 | Ar = 1.008</div>
+        <div class="el-cfg"  id="el-cfg">1</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-lbl">Properties</div>
+      <div class="irow"><span class="ik">Protons (Z)</span><span class="iv g" id="i-p">1</span></div>
+      <div class="irow"><span class="ik">Neutrons (N)</span><span class="iv"   id="i-n">0</span></div>
+      <div class="irow"><span class="ik">Electrons</span><span class="iv t"    id="i-e">1</span></div>
+      <div class="irow"><span class="ik">Mass number (A)</span><span class="iv" id="i-a">1</span></div>
+      <div class="irow"><span class="ik">Charge</span><span class="iv p"       id="i-q">0</span></div>
+      <div class="irow"><span class="ik" id="lbl-sh">Shell config</span><span class="iv t" id="i-sh">1</span></div>
+      <div class="irow"><span class="ik">Group</span><span class="iv"          id="i-grp">1</span></div>
+      <div class="irow"><span class="ik">Period</span><span class="iv"         id="i-per">1</span></div>
+      <div class="irow"><span class="ik">Bonding</span><span class="iv"        id="i-bond">Covalent</span></div>
+    </div>
+
+    <div>
+      <div class="sec-lbl">Notation</div>
+      <div class="notation" id="notation"></div>
+      <div class="iso-note" id="iso-note"></div>
+    </div>
+
+    <div>
+      <div class="sec-lbl">Quick Quiz</div>
+      <div class="qcard">
+        <div class="qq"   id="qq">Loading…</div>
+        <div class="qopts" id="qopts"></div>
+        <div class="qfb"  id="qfb"></div>
+        <button class="qnxt" onclick="nextQ()">Next question →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div id="toast"></div>
+
+<script>
+'use strict';
+// ─── ELEMENT DATA ───────────────────────────────────────────
+const EL = {
+  1: {sym:'H', name:'Hydrogen',   mass:1.008, shells:[1],        group:1,  period:1, bonding:'Covalent'},
+  2: {sym:'He',name:'Helium',     mass:4.003, shells:[2],        group:18, period:1, bonding:'None'},
+  3: {sym:'Li',name:'Lithium',    mass:6.941, shells:[2,1],      group:1,  period:2, bonding:'Metallic'},
+  4: {sym:'Be',name:'Beryllium',  mass:9.012, shells:[2,2],      group:2,  period:2, bonding:'Metallic'},
+  5: {sym:'B', name:'Boron',      mass:10.81, shells:[2,3],      group:13, period:2, bonding:'Covalent'},
+  6: {sym:'C', name:'Carbon',     mass:12.01, shells:[2,4],      group:14, period:2, bonding:'Covalent'},
+  7: {sym:'N', name:'Nitrogen',   mass:14.01, shells:[2,5],      group:15, period:2, bonding:'Covalent'},
+  8: {sym:'O', name:'Oxygen',     mass:16.00, shells:[2,6],      group:16, period:2, bonding:'Covalent'},
+  9: {sym:'F', name:'Fluorine',   mass:19.00, shells:[2,7],      group:17, period:2, bonding:'Covalent'},
+  10:{sym:'Ne',name:'Neon',       mass:20.18, shells:[2,8],      group:18, period:2, bonding:'None'},
+  11:{sym:'Na',name:'Sodium',     mass:22.99, shells:[2,8,1],    group:1,  period:3, bonding:'Metallic'},
+  12:{sym:'Mg',name:'Magnesium',  mass:24.31, shells:[2,8,2],    group:2,  period:3, bonding:'Metallic'},
+  13:{sym:'Al',name:'Aluminium',  mass:26.98, shells:[2,8,3],    group:13, period:3, bonding:'Metallic'},
+  14:{sym:'Si',name:'Silicon',    mass:28.09, shells:[2,8,4],    group:14, period:3, bonding:'Covalent'},
+  15:{sym:'P', name:'Phosphorus', mass:30.97, shells:[2,8,5],    group:15, period:3, bonding:'Covalent'},
+  16:{sym:'S', name:'Sulfur',     mass:32.07, shells:[2,8,6],    group:16, period:3, bonding:'Covalent'},
+  17:{sym:'Cl',name:'Chlorine',   mass:35.45, shells:[2,8,7],    group:17, period:3, bonding:'Covalent'},
+  18:{sym:'Ar',name:'Argon',      mass:39.95, shells:[2,8,8],    group:18, period:3, bonding:'None'},
+  19:{sym:'K', name:'Potassium',  mass:39.10, shells:[2,8,8,1],  group:1,  period:4, bonding:'Metallic'},
+  20:{sym:'Ca',name:'Calcium',    mass:40.08, shells:[2,8,8,2],  group:2,  period:4, bonding:'Metallic'},
+  26:{sym:'Fe',name:'Iron',       mass:55.85, shells:[2,8,14,2], group:8,  period:4, bonding:'Metallic'},
+  29:{sym:'Cu',name:'Copper',     mass:63.55, shells:[2,8,18,1], group:11, period:4, bonding:'Metallic'},
+  30:{sym:'Zn',name:'Zinc',       mass:65.38, shells:[2,8,18,2], group:12, period:4, bonding:'Metallic'},
+  35:{sym:'Br',name:'Bromine',    mass:79.90, shells:[2,8,18,7], group:17, period:4, bonding:'Covalent'},
+  36:{sym:'Kr',name:'Krypton',    mass:83.80, shells:[2,8,18,8], group:18, period:4, bonding:'None'},
+  47:{sym:'Ag',name:'Silver',     mass:107.87,shells:[2,8,18,18,1],group:11,period:5,bonding:'Metallic'},
+  79:{sym:'Au',name:'Gold',       mass:196.97,shells:[2,8,18,32,18,1],group:11,period:6,bonding:'Metallic'},
+  82:{sym:'Pb',name:'Lead',       mass:207.2, shells:[2,8,18,32,18,4],group:14,period:6,bonding:'Metallic'},
+  92:{sym:'U', name:'Uranium',    mass:238.03,shells:[2,8,18,32,21,9,2],group:3,period:7,bonding:'Metallic'},
+};
+const QUICK = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,26,29,35,36,92];
+const STABLE_N = {1:0,2:2,3:4,4:5,5:6,6:6,7:7,8:8,9:10,10:10,
+  11:12,12:12,13:14,14:14,15:16,16:16,17:18,18:22,19:20,20:20,
+  26:30,29:34,30:35,35:45,36:48,47:60,79:118,82:126,92:146};
+
+function getEl(z) {
+  if (EL[z]) return EL[z];
+  const shells = [];let r=z;
+  for(const c of [2,8,18,32,50]){if(r<=0)break;shells.push(Math.min(r,c));r-=Math.min(r,c);}
+  return {sym:'El',name:'Element '+z,mass:z*2,shells,group:'?',period:'?',bonding:'Unknown'};
+}
+
+// ─── STATE ──────────────────────────────────────────────────
+const S = {p:1, n:0, e:1, view:'atom', nucMode:'shell', speed:1,
+           ionOff:0, level:'gcse', t:0, raf:null};
+
+// ─── CANVAS ─────────────────────────────────────────────────
+let cv, cx2d;
+
+function initCanvas() {
+  cv = document.getElementById('atom-canvas');
+  cx2d = cv.getContext('2d');
+  fitCanvas();
+}
+
+function fitCanvas() {
+  if(!cv) return;
+  const wrap = document.getElementById('centre');
+  const W = wrap.clientWidth, H = wrap.clientHeight;
+  if(W === 0 || H === 0) return;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width  = W * dpr;
+  cv.height = H * dpr;
+  cv.style.width  = W+'px';
+  cv.style.height = H+'px';
+  cx2d.setTransform(dpr,0,0,dpr,0,0);
+}
+
+// ─── ANIMATION LOOP ─────────────────────────────────────────
+function startLoop() {
+  if(S.raf) cancelAnimationFrame(S.raf);
+  function tick() {
+    S.t += 0.016 * S.speed;
+    render();
+    S.raf = requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+// ─── RENDER DISPATCHER ──────────────────────────────────────
+function render() {
+  if(!cv || !cx2d) return;
+  const W = cv.clientWidth, H = cv.clientHeight;
+  if(W===0||H===0) return;
+  const cx=W/2, cy=H/2;
+  cx2d.clearRect(0,0,W,H);
+
+  // Starfield
+  cx2d.fillStyle='rgba(255,255,255,0.15)';
+  for(let i=0;i<40;i++){
+    const x=(((i*137.5)%100)/100)*W, y=(((i*97.3)%100)/100)*H;
+    const r=Math.sin(S.t*0.3+i)*0.5+0.8;
+    cx2d.beginPath();cx2d.arc(x,y,r,0,Math.PI*2);cx2d.fill();
+  }
+
+  if(S.view==='atom')      drawAtom(cx,cy,W,H);
+  else if(S.view==='nucleus')   drawNucleus(cx,cy,W,H);
+  else if(S.view==='electrons') drawElectrons(cx,cy,W,H);
+  else if(S.view==='isotopes')  drawIsotopes(cx,cy,W,H);
+}
+
+// ─── ATOM VIEW ──────────────────────────────────────────────
+function drawAtom(cx,cy,W,H) {
+  const el = getEl(S.p);
+  const shells = el.shells;
+  const maxR = Math.min(W,H)*0.42;
+
+  // Assign electrons to shells based on current electron count
+  let remaining = S.e;
+  const eCounts = shells.map(cap => {
+    const placed = Math.min(remaining, cap);
+    remaining -= placed;
+    return placed;
+  });
+
+  shells.forEach((cap, si) => {
+    const r = (maxR/(shells.length+0.5))*(si+1);
+
+    // Orbit ring
+    cx2d.beginPath();cx2d.arc(cx,cy,r,0,Math.PI*2);
+    cx2d.strokeStyle=`rgba(0,212,200,${0.18+si*0.04})`;
+    cx2d.lineWidth=1;cx2d.setLineDash([4,6]);cx2d.stroke();cx2d.setLineDash([]);
+
+    // Shell label
+    const labels=['K','L','M','N','O','P','Q'];
+    cx2d.font='bold 10px Space Mono, monospace';
+    cx2d.fillStyle='rgba(0,212,200,0.55)';cx2d.textAlign='left';
+    cx2d.fillText(labels[si]||'', cx+r+4, cy-3);
+
+    // Electrons
+    const eCount = eCounts[si] || 0;
+    for(let i=0;i<eCount;i++){
+      const base=(i/cap)*Math.PI*2;
+      const angle=base+S.t*(0.55/(si+1));
+      const ex=cx+Math.cos(angle)*r, ey=cy+Math.sin(angle)*r;
+
+      // Glow
+      const g=cx2d.createRadialGradient(ex,ey,0,ex,ey,7);
+      g.addColorStop(0,'rgba(59,130,246,0.5)');g.addColorStop(1,'transparent');
+      cx2d.fillStyle=g;cx2d.beginPath();cx2d.arc(ex,ey,7,0,Math.PI*2);cx2d.fill();
+
+      // Dot
+      cx2d.beginPath();cx2d.arc(ex,ey,3.5,0,Math.PI*2);
+      cx2d.fillStyle='#60a5fa';cx2d.fill();
+      cx2d.strokeStyle='#93c5fd';cx2d.lineWidth=0.8;cx2d.stroke();
+    }
+  });
+
+  // Nucleus
+  const nr=Math.min(maxR*0.13,20);
+  const ng=cx2d.createRadialGradient(cx-nr*.3,cy-nr*.3,0,cx,cy,nr);
+  ng.addColorStop(0,'#fca5a5');ng.addColorStop(0.5,'#ef4444');ng.addColorStop(1,'#7f1d1d');
+  cx2d.beginPath();cx2d.arc(cx,cy,nr,0,Math.PI*2);
+  cx2d.fillStyle=ng;cx2d.fill();
+  cx2d.strokeStyle='rgba(239,68,68,0.6)';cx2d.lineWidth=1.2;cx2d.stroke();
+
+  // Symbol in nucleus
+  cx2d.font=`bold ${Math.max(8,Math.round(nr*0.8))}px Space Mono, monospace`;
+  cx2d.fillStyle='rgba(255,255,255,0.9)';
+  cx2d.textAlign='center';cx2d.textBaseline='middle';
+  cx2d.fillText(el.sym,cx,cy);
+  cx2d.textBaseline='alphabetic';
+}
+
+// ─── NUCLEUS VIEW ────────────────────────────────────────────
+function drawNucleus(cx,cy,W,H) {
+  const p=S.p, n=S.n, total=p+n;
+  if(total===0) return;
+
+  if(S.nucMode==='simple') {
+    const r=Math.min(W,H)*0.2;
+    const g=cx2d.createRadialGradient(cx,cy,0,cx,cy,r);
+    g.addColorStop(0,'#ef4444');g.addColorStop(1,'#7f1d1d');
+    cx2d.beginPath();cx2d.arc(cx,cy,r,0,Math.PI*2);
+    cx2d.fillStyle=g;cx2d.fill();
+    cx2d.font='bold 18px Space Mono, monospace';
+    cx2d.fillStyle='#fff';cx2d.textAlign='center';cx2d.textBaseline='middle';
+    cx2d.fillText(`${p}p⁺  ${n}n⁰`,cx,cy);cx2d.textBaseline='alphabetic';
+    return;
+  }
+
+  const pr=Math.max(8,Math.min(22,160/Math.sqrt(total+1)));
+  const cols=Math.ceil(Math.sqrt(total));
+  const sp=pr*2.5;
+  const parts=[];
+  for(let i=0;i<p;i++) parts.push('p');
+  for(let i=0;i<n;i++) parts.push('n');
+  // Shuffle for visual mix
+  for(let i=parts.length-1;i>0;i--){const j=Math.floor(Math.random()*0.3+i*0.7);[parts[i],parts[j]]=[parts[j],parts[i]];}
+
+  parts.forEach((type,i)=>{
+    const row=Math.floor(i/cols), col=i%cols;
+    const totalRows=Math.ceil(total/cols);
+    const ox=(col-cols/2+0.5)*sp, oy=(row-totalRows/2+0.5)*sp;
+    const osc=Math.sin(S.t*1.5+i*0.7)*1.2;
+    const px=cx+ox+osc, py=cy+oy+osc;
+    const g=cx2d.createRadialGradient(px-pr*.3,py-pr*.3,0,px,py,pr);
+    if(type==='p'){
+      g.addColorStop(0,'#fca5a5');g.addColorStop(1,'#ef4444');
+    } else {
+      g.addColorStop(0,'#cbd5e1');g.addColorStop(1,'#475569');
+    }
+    cx2d.beginPath();cx2d.arc(px,py,pr,0,Math.PI*2);
+    cx2d.fillStyle=g;cx2d.fill();
+    cx2d.strokeStyle=type==='p'?'rgba(239,68,68,0.4)':'rgba(100,116,139,0.3)';
+    cx2d.lineWidth=0.8;cx2d.stroke();
+    if(pr>8){
+      cx2d.font=`bold ${Math.round(pr*.65)}px Space Mono, monospace`;
+      cx2d.fillStyle='rgba(255,255,255,0.9)';cx2d.textAlign='center';cx2d.textBaseline='middle';
+      cx2d.fillText(type==='p'?'p⁺':'n⁰',px,py);cx2d.textBaseline='alphabetic';
+    }
+  });
+}
+
+// ─── ELECTRON CONFIG VIEW ────────────────────────────────────
+function drawElectrons(cx,cy,W,H) {
+  const el=getEl(S.p);
+  const shells=el.shells;
+  const maxR=Math.min(W,H)*0.43;
+  let eLeft=S.e;
+
+  shells.forEach((cap,si)=>{
+    const r=(maxR/(shells.length+0.5))*(si+1);
+    const filled=Math.min(eLeft,cap);
+    eLeft-=filled;
+    const capacity=[2,8,18,32,50][si]||50;
+
+    // Ring
+    cx2d.beginPath();cx2d.arc(cx,cy,r,0,Math.PI*2);
+    cx2d.strokeStyle=`rgba(0,212,200,${0.35-si*0.03})`;
+    cx2d.lineWidth=si===0?2:1;cx2d.setLineDash([]);cx2d.stroke();
+
+    // Slots
+    for(let i=0;i<capacity;i++){
+      const angle=(i/capacity)*Math.PI*2-Math.PI/2;
+      const px=cx+Math.cos(angle)*r, py=cy+Math.sin(angle)*r;
+      const isFilled=i<filled;
+      cx2d.beginPath();cx2d.arc(px,py,isFilled?4.5:2.5,0,Math.PI*2);
+      cx2d.fillStyle=isFilled?'#3b82f6':'rgba(59,130,246,0.12)';cx2d.fill();
+      if(isFilled){cx2d.strokeStyle='#93c5fd';cx2d.lineWidth=0.8;cx2d.stroke();}
+    }
+
+    // Fill count label
+    const la=(0.4)*Math.PI;
+    const lx=cx+Math.cos(la)*r, ly=cy+Math.sin(la)*r;
+    cx2d.font='bold 9px Space Mono, monospace';
+    cx2d.fillStyle='#00d4c8';cx2d.textAlign='center';cx2d.textBaseline='middle';
+    cx2d.fillText(`${filled}/${capacity}`,lx,ly);cx2d.textBaseline='alphabetic';
+  });
+
+  // Nucleus
+  cx2d.beginPath();cx2d.arc(cx,cy,14,0,Math.PI*2);
+  const ng=cx2d.createRadialGradient(cx,cy,0,cx,cy,14);
+  ng.addColorStop(0,'#ef4444');ng.addColorStop(1,'#7f1d1d');
+  cx2d.fillStyle=ng;cx2d.fill();
+
+  // Config text
+  const el2=getEl(S.p);
+  const configStr=S.level==='alevel'?buildSubshell(S.p):el2.shells.join(', ');
+  cx2d.font='13px Space Mono, monospace';
+  cx2d.fillStyle='rgba(255,255,255,0.75)';cx2d.textAlign='center';
+  cx2d.fillText(`${el2.sym}: ${el2.shells.join(',')}`, cx, H-30);
+  if(S.level==='alevel'){
+    cx2d.font='10px Space Mono, monospace';cx2d.fillStyle='rgba(0,212,200,0.8)';
+    cx2d.fillText(configStr, cx, H-14);
+  }
+}
+
+// ─── ISOTOPE VIEW ────────────────────────────────────────────
+function drawIsotopes(cx,cy,W,H) {
+  const z=S.p, el=getEl(z);
+  const sN=STABLE_N[z]!==undefined?STABLE_N[z]:Math.round(z*1.2);
+  const range=5;
+  const bW=Math.min(65,(W-40)/(range*2+1));
+  cx2d.font='12px Space Mono, monospace';
+  cx2d.fillStyle='rgba(255,255,255,0.6)';cx2d.textAlign='center';
+  cx2d.fillText(`Isotopes of ${el.name} (Z=${z})`, cx, 30);
+
+  for(let i=-range;i<=range;i++){
+    const nC=sN+i; if(nC<0) continue;
+    const A=z+nC;
+    const x=cx+i*(bW+5);
+    const isCur=nC===S.n, isSta=i===0;
+    const bH=70+Math.abs(i)*4;
+    const by=cy-bH/2;
+
+    cx2d.fillStyle=isCur?'rgba(0,212,200,0.2)':isSta?'rgba(34,197,94,0.12)':'rgba(22,32,53,0.7)';
+    cx2d.strokeStyle=isCur?'#00d4c8':isSta?'#22c55e':'#1a2a45';
+    cx2d.lineWidth=isCur?2:1;
+    cx2d.beginPath();
+    if(cx2d.roundRect) cx2d.roundRect(x-bW/2,by,bW,bH,5);
+    else cx2d.rect(x-bW/2,by,bW,bH);
+    cx2d.fill();cx2d.stroke();
+
+    cx2d.textAlign='center';
+    cx2d.font=`bold 14px Space Mono, monospace`;
+    cx2d.fillStyle=isCur?'#00d4c8':'#fff';
+    cx2d.fillText(A, x, by+20);
+    cx2d.font=`bold 12px Space Mono, monospace`;
+    cx2d.fillStyle=isCur?'#00d4c8':'rgba(255,255,255,0.65)';
+    cx2d.fillText(el.sym, x, by+36);
+    cx2d.font=`9px Space Mono, monospace`;
+    cx2d.fillStyle=isSta?'#22c55e':'rgba(255,255,255,0.4)';
+    cx2d.fillText(`n=${nC}`, x, by+50);
+    cx2d.fillStyle=isSta?'#22c55e':Math.abs(i)<3?'#f97316':'#ef4444';
+    cx2d.fillText(isSta?'stable':Math.abs(i)<3?'β decay':'unstable', x, by+63);
+  }
+
+  // Current marker
+  const di=S.n-sN;
+  if(Math.abs(di)<=range){
+    const ax=cx+di*(bW+5);
+    cx2d.fillStyle='#00d4c8';
+    cx2d.beginPath();cx2d.moveTo(ax-5,cy+50);cx2d.lineTo(ax+5,cy+50);cx2d.lineTo(ax,cy+42);cx2d.fill();
+    cx2d.font='10px Space Mono, monospace';cx2d.textAlign='center';cx2d.fillStyle='#00d4c8';
+    cx2d.fillText('current',ax,cy+62);
+  }
+}
+
+// ─── SUBSHELL NOTATION ──────────────────────────────────────
+function buildSubshell(z) {
+  const order=['1s','2s','2p','3s','3p','4s','3d','4p','5s','4d','5p','6s','4f','5d','6p','7s','5f','6d','7p'];
+  const caps={s:2,p:6,d:10,f:14};
+  const sup={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','10':'¹⁰'};
+  let rem=z, out='';
+  for(const s of order){
+    if(rem<=0) break;
+    const t=s.slice(-1), c=caps[t], f=Math.min(rem,c);
+    out+=s+(sup[String(f)]||f)+' ';
+    rem-=f;
+  }
+  return out.trim();
+}
+
+// ─── UI UPDATE ──────────────────────────────────────────────
+function updateUI() {
+  const z=S.p, n=S.n, e=S.e, A=z+n, charge=z-e;
+  const el=getEl(z);
+
+  // Sliders
+  document.getElementById('sl-p').value=z;
+  document.getElementById('sl-n').value=n;
+  document.getElementById('sl-e').value=e;
+  document.getElementById('v-p').textContent=z;
+  document.getElementById('v-n').textContent=n;
+  document.getElementById('v-e').textContent=e;
+
+  // Element card
+  document.getElementById('el-z').textContent=`Z = ${z}`;
+  document.getElementById('el-sym').textContent=el.sym;
+  document.getElementById('el-name').textContent=el.name;
+  document.getElementById('el-mass').textContent=`A = ${A}  |  Ar ≈ ${el.mass}`;
+  document.getElementById('el-cfg').textContent=S.level==='alevel'?buildSubshell(z):el.shells.join(',');
+
+  // Properties
+  document.getElementById('i-p').textContent=z;
+  document.getElementById('i-n').textContent=n;
+  document.getElementById('i-e').textContent=e;
+  document.getElementById('i-a').textContent=A;
+  const qStr=charge===0?'0 (neutral)':charge>0?`+${charge} (cation)`:`${charge} (anion)`;
+  document.getElementById('i-q').textContent=qStr;
+  document.getElementById('lbl-sh').textContent=S.level==='alevel'?'Subshells':'Shells';
+  document.getElementById('i-sh').textContent=S.level==='alevel'?buildSubshell(z):el.shells.join(', ');
+  document.getElementById('i-grp').textContent=el.group;
+  document.getElementById('i-per').textContent=el.period;
+  document.getElementById('i-bond').textContent=el.bonding;
+
+  // Notation
+  const ion=charge===0?'':`<sup>${Math.abs(charge)>1?Math.abs(charge):''}${charge>0?'+':'−'}</sup>`;
+  document.getElementById('notation').innerHTML=`<sup>${A}</sup><sub>${z}</sub>${el.sym}${ion}`;
+  const sN=STABLE_N[z]!==undefined?STABLE_N[z]:Math.round(z*1.2);
+  const isotopeLbl=n===sN?'Most stable isotope':n<sN?'Neutron-deficient (β⁺ decay likely)':'Neutron-rich (β⁻ decay likely)';
+  document.getElementById('iso-note').textContent=isotopeLbl;
+
+  // Ion
+  const ionSym=charge===0?'neutral':charge>0?`${el.sym}${charge>1?charge:''}⁺`:`${el.sym}${Math.abs(charge)>1?Math.abs(charge):''}⁻`;
+  document.getElementById('ion-lbl').textContent=ionSym;
+  document.getElementById('ion-info').textContent=charge===0?'Neutral atom — equal protons & electrons':
+    charge>0?`Cation: lost ${charge} electron${charge>1?'s':''}`:
+    `Anion: gained ${Math.abs(charge)} electron${Math.abs(charge)>1?'s':''}`;
+
+  // Stability
+  const diff=Math.abs(n-sN), maxD=Math.max(sN*0.5,5);
+  const stab=Math.max(0,100-(diff/maxD)*100);
+  document.getElementById('stab-fill').style.width=stab+'%';
+  document.getElementById('stab-fill').style.background=stab>70?'#22c55e':stab>40?'#f97316':'#ef4444';
+  document.getElementById('stab-txt').textContent=stab>80?'✓ Stable nucleus':stab>50?'⚠ Marginally stable':'✗ Unstable — likely radioactive';
+
+  // Quick-select highlight
+  document.querySelectorAll('.qbtn').forEach(b=>b.classList.remove('sel'));
+  const qb=document.getElementById('qbtn-'+z);
+  if(qb) qb.classList.add('sel');
+}
+
+// ─── LOAD ELEMENT ───────────────────────────────────────────
+function loadEl(z) {
+  z=parseInt(z);
+  const sN=STABLE_N[z]!==undefined?STABLE_N[z]:Math.round(z*1.2);
+  S.p=z; S.n=sN; S.e=z; S.ionOff=0;
+  updateUI();
+}
+
+// ─── SLIDER / ADJUST ────────────────────────────────────────
+function onSlider() {
+  S.p=parseInt(document.getElementById('sl-p').value);
+  S.n=parseInt(document.getElementById('sl-n').value);
+  S.e=parseInt(document.getElementById('sl-e').value);
+  updateUI();
+}
+
+function adj(type, delta) {
+  const id={p:'sl-p',n:'sl-n',e:'sl-e'}[type];
+  const el=document.getElementById(id);
+  el.value=Math.max(parseInt(el.min),Math.min(parseInt(el.max),parseInt(el.value)+delta));
+  onSlider();
+}
+
+function adjustIon(d) {
+  S.ionOff+=d;
+  S.e=Math.max(0,S.p+S.ionOff);
+  document.getElementById('sl-e').value=S.e;
+  onSlider();
+}
+
+// ─── SEARCH ─────────────────────────────────────────────────
+function doSearch(q) {
+  q=q.trim().toLowerCase();
+  if(!q) return;
+  const m=Object.entries(EL).find(([z,el])=>
+    el.sym.toLowerCase()===q||
+    el.name.toLowerCase().startsWith(q)||
+    String(z)===q
+  );
+  if(m){loadEl(parseInt(m[0]));toast('Loaded: '+m[1].name);}
+}
+
+// ─── VIEW / MODE SWITCHES ────────────────────────────────────
+function setView(v,btn) {
+  S.view=v;
+  document.querySelectorAll('.vtab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function setNucMode(m,btn) {
+  S.nucMode=m;
+  document.querySelectorAll('.nmbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function setLevel(lv,btn) {
+  S.level=lv;
+  document.querySelectorAll('.lvl-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  updateUI();
+  toast(lv==='alevel'?'🎓 A-Level: subshell notation enabled':'📚 GCSE: shell notation 2,8,8,2');
+}
+
+// ─── BUILD QUICK GRID ────────────────────────────────────────
+function buildGrid() {
+  const wrap=document.getElementById('qgrid');
+  wrap.innerHTML=QUICK.map(z=>{
+    const el=EL[z];
+    return `<button class="qbtn" id="qbtn-${z}" onclick="loadEl(${z})">
+      <span class="qn">${z}</span>${el.sym}
+    </button>`;
+  }).join('');
+}
+
+// ─── QUIZ ────────────────────────────────────────────────────
+const QS = [
+  {q:'What determines which element an atom is?',
+   o:['Number of neutrons','Number of electrons','Number of protons','Mass number'],
+   a:2,ex:'The atomic number Z (proton count) defines the element. Isotopes share the same Z.'},
+  {q:'In a neutral atom, how many electrons equal the number of protons?',
+   o:['Always','Never','Only for metals','Only for noble gases'],
+   a:0,ex:'Neutral atoms have equal protons and electrons. Ions have gained or lost electrons.'},
+  {q:'What is the mass number of an atom?',
+   o:['Protons only','Electrons + protons','Protons + neutrons','Neutrons only'],
+   a:2,ex:'Mass number A = protons + neutrons (nucleons). Electrons have negligible mass.'},
+  {q:'Two atoms are isotopes if they have the same number of…',
+   o:['Neutrons','Protons','Electrons and neutrons','Mass number'],
+   a:1,ex:'Isotopes have the same Z (protons) but different numbers of neutrons.'},
+  {q:'An ion has 11 protons and 10 electrons. Its charge is…',
+   o:['+1','-1','+2','0'],
+   a:0,ex:'Charge = protons − electrons = 11 − 10 = +1. This is Na⁺.'},
+  {q:'Sodium (Na) has atomic number 11. Its electron configuration is…',
+   o:['2,8,1','2,8,2','2,7','2,8,8'],
+   a:0,ex:'Na fills K(2), L(8), M(1) — three shells, with one outer electron.'},
+  {q:'The maximum electrons in the second shell (L) is…',
+   o:['2','6','8','18'],
+   a:2,ex:'2nd shell capacity = 2n² = 2×4 = 8 electrons.'},
+  {q:'A neutron-rich isotope is most likely to undergo…',
+   o:['Alpha decay','Beta-minus (β⁻) decay','Beta-plus (β⁺) decay','Gamma emission only'],
+   a:1,ex:'β⁻ decay converts a neutron → proton, reducing the neutron excess.'},
+];
+let qIdx=-1, qAnswered=false;
+
+function nextQ() {
+  qAnswered=false;
+  qIdx=(qIdx+1)%QS.length;
+  const q=QS[qIdx];
+  document.getElementById('qq').textContent=q.q;
+  document.getElementById('qfb').style.display='none';
+  document.getElementById('qfb').textContent='';
+  document.getElementById('qopts').innerHTML=q.o.map((o,i)=>
+    `<button class="qopt" onclick="checkQ(this,${i})">${o}</button>`
+  ).join('');
+}
+
+function checkQ(btn,idx) {
+  if(qAnswered) return;
+  qAnswered=true;
+  const q=QS[qIdx];
+  const ok=idx===q.a;
+  btn.classList.add(ok?'correct':'wrong');
+  if(!ok) document.querySelectorAll('.qopt')[q.a].classList.add('correct');
+  const fb=document.getElementById('qfb');
+  fb.textContent=(ok?'✓ ':'✗ ')+q.ex;
+  fb.style.color=ok?'#22c55e':'#f87171';
+  fb.style.display='block';
+}
+
+// ─── TOAST ──────────────────────────────────────────────────
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='show';
+  clearTimeout(el._t);el._t=setTimeout(()=>el.className='',2500);
+}
+
+// ─── INIT ───────────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  buildGrid();
+  initCanvas();
+  loadEl(1);
+  nextQ();
+  document.getElementById('spd-sl').addEventListener('input',e=>S.speed=parseFloat(e.target.value));
+  startLoop();
+});
+
+window.addEventListener('resize',()=>{
+  fitCanvas();
+});
+</script>
+</body>
+</html>

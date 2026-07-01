@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Progress — Inspire Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+:root{
+  --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
+  --gold:#d4a017;--gold2:#f0c040;
+  --orange:#e8620a;
+  --white:#ffffff;
+  --border:#1e3a5f;
+  --muted:#7a8fa6;
+  --green:#16803c;--red:#b92b1a;
+  --r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;} html{overflow-x:hidden;}
+body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
+button{cursor:pointer;font-family:var(--font-body);border:none;}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--navy2);}
+::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.fade-in{animation:fadeIn .4s ease both;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
+#toast.show{transform:translateY(0);opacity:1;}
+
+/* ── NAV ── */
+.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
+.topnav-logo{display:flex;align-items:center;gap:.6rem;}
+.topnav-logo img{height:36px;width:auto;background:#fff;border-radius:6px;padding:2px 6px;}
+.logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
+.nav-links{display:flex;gap:.3rem;flex:1;}
+.nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;transition:all .2s;}
+.nav-link:hover{background:var(--navy3);color:var(--white);}
+.nav-link.active{background:var(--navy3);color:var(--white);}
+.nav-user{display:flex;align-items:center;gap:.6rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
+.nav-user:hover{border-color:var(--gold);}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;background:var(--gold);color:var(--navy);}
+
+/* ── LAYOUT ── */
+main{max-width:960px;margin:0 auto;padding:2rem 1.5rem;}
+
+/* ── PAGE HEADER ── */
+.page-header{margin-bottom:2rem;}
+.page-title{font-family:var(--font-display);font-size:1.8rem;font-weight:800;margin-bottom:.2rem;}
+.page-sub{font-size:.88rem;color:var(--muted);}
+
+/* ── HERO STATS ── */
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+.hero-stat{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem 1.4rem;text-align:center;}
+.hero-val{font-family:var(--font-display);font-size:2.2rem;font-weight:800;line-height:1;color:var(--gold);margin-bottom:.3rem;}
+.hero-lbl{font-size:.72rem;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;}
+.hero-sub{font-size:.78rem;color:var(--muted);margin-top:.2rem;}
+
+/* ── SECTION TITLE ── */
+.section-title{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;display:flex;align-items:center;gap:.6rem;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── SUBJECT CARDS ── */
+.subject-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;}
+.subject-card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem 1.4rem;position:relative;overflow:hidden;}
+.subject-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0;}
+.subject-maths::before{background:linear-gradient(90deg,#1c4f8a,#3b82f6);}
+.subject-physics::before{background:linear-gradient(90deg,#7c3aed,#a78bfa);}
+.subject-chemistry::before{background:linear-gradient(90deg,#0b6e6d,#2dd4bf);}
+.subject-biology::before{background:linear-gradient(90deg,#16803c,#4ade80);}
+.subject-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
+.subject-name-row{display:flex;align-items:center;gap:.6rem;}
+.subject-icon-sm{font-size:1.2rem;}
+.subject-name{font-weight:700;font-size:.95rem;}
+.subject-pct{font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--gold);}
+.progress-bar-bg{height:6px;background:var(--navy3);border-radius:3px;overflow:hidden;margin-bottom:.8rem;}
+.progress-bar-fill{height:100%;border-radius:3px;transition:width .8s ease;}
+.subject-stats-row{display:flex;gap:1rem;flex-wrap:wrap;}
+.subject-stat-item{font-size:.75rem;color:var(--muted);}
+.subject-stat-item strong{color:var(--white);}
+
+/* ── MASTERY TABLE ── */
+.mastery-subject{margin-bottom:1.5rem;}
+.mastery-subject-title{font-size:.82rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.mastery-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.4rem;font-size:.8rem;}
+.mastery-topic-name{flex:1;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mastery-bar-wrap{width:120px;height:5px;background:var(--navy3);border-radius:3px;overflow:hidden;flex-shrink:0;}
+.mastery-bar-fill{height:100%;border-radius:3px;}
+.mastery-pill-sm{font-family:var(--font-mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;padding:.15rem .4rem;border-radius:3px;flex-shrink:0;width:76px;text-align:center;}
+.mastery-not_started .mastery-pill-sm{background:var(--navy3);color:var(--muted);}
+.mastery-learning .mastery-pill-sm{background:#b92b1a22;color:#f87171;}
+.mastery-developing .mastery-pill-sm{background:#e8620a22;color:#fb923c;}
+.mastery-secure .mastery-pill-sm{background:#d4a01722;color:#facc15;}
+.mastery-mastered .mastery-pill-sm{background:#16803c22;color:#4ade80;}
+.mastery-score{font-family:var(--font-mono);font-size:.72rem;width:36px;text-align:right;flex-shrink:0;}
+
+/* ── QUIZ HISTORY ── */
+.history-list{display:flex;flex-direction:column;gap:.5rem;margin-bottom:2rem;}
+.history-item{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1.1rem;display:flex;align-items:center;gap:1rem;}
+.history-score-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.78rem;font-weight:700;flex-shrink:0;border:2px solid;}
+.history-info{flex:1;min-width:0;}
+.history-quiz-title{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.history-meta{font-size:.73rem;color:var(--muted);margin-top:.1rem;display:flex;gap:.6rem;flex-wrap:wrap;}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .5rem;border-radius:3px;}
+.badge-green{background:#16803c22;color:#4ade80;}
+.badge-red{background:#b92b1a22;color:#f87171;}
+.badge-gold{background:#d4a01722;color:var(--gold);}
+.badge-muted{background:var(--navy3);color:var(--muted);}
+
+/* ── ACHIEVEMENT BADGES ── */
+.achievements-grid{display:flex;flex-wrap:wrap;gap:.7rem;margin-bottom:2rem;}
+.achievement{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:.7rem 1rem;display:flex;align-items:center;gap:.7rem;font-size:.82rem;}
+.achievement.unlocked{border-color:var(--gold);}
+.achievement.locked{opacity:.4;}
+.ach-icon{font-size:1.4rem;}
+.ach-name{font-weight:600;font-size:.8rem;}
+.ach-desc{font-size:.7rem;color:var(--muted);}
+
+/* ── EMPTY ── */
+.empty-state{text-align:center;padding:2.5rem;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);}
+.empty-state .ei{font-size:2rem;margin-bottom:.5rem;}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .hero-stats{grid-template-columns:1fr 1fr;}
+  .subject-grid{grid-template-columns:1fr;}
+  .topnav{padding:.75rem 1rem;gap:.75rem;}
+  .nav-links{display:none;}
+  .nav-user span:last-child{display:none;}
+  main{padding:1.2rem 1rem 6rem;}
+  .mastery-bar-wrap{display:none;}
+  .page-title{font-size:1.4rem;}
+  .history-quiz-title{font-size:.82rem;}
+}
+@media(max-width:480px){
+  .hero-stats{grid-template-columns:1fr 1fr;}
+  .hero-val{font-size:1.8rem;}
+  .history-item{gap:.6rem;padding:.7rem .8rem;}
+  .history-score-circle{width:38px;height:38px;font-size:.7rem;}
+}
+
+/* ── Mobile Bottom Navigation ──────────────────────────────────── */
+.mobile-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:var(--navy2);border-top:1px solid var(--border);
+  padding:.5rem 0 env(safe-area-inset-bottom,.5rem);
+}
+.mobile-nav-inner{
+  display:flex;justify-content:space-around;align-items:center;
+  max-width:600px;margin:0 auto;
+}
+.mob-nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:.2rem;
+  background:none;border:none;color:var(--muted);
+  font-size:.62rem;font-family:var(--font-body);font-weight:600;
+  padding:.5rem .75rem;border-radius:8px;cursor:pointer;transition:color .2s;
+  min-width:44px;min-height:44px;justify-content:center;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.mob-nav-btn .mob-icon{font-size:1.25rem;line-height:1;}
+.mob-nav-btn.active{color:var(--gold);}
+.mob-nav-btn:hover{color:var(--white);}
+@media(max-width:768px){
+  .mobile-nav{display:block;}
+}
+</style>
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#c9a84c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Inspire Science">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+<a href="/index.html" style="text-decoration:none;color:inherit;"><div class="topnav-logo">
+    <img src="/assets/images/shared/1775416612494_image.png" alt="Inspire Science" onerror="this.style.display='none'">
+    <span class="logo-text">Inspire Science</span>
+  </div></a>
+  
+  <div class="nav-links">
+    <button class="nav-link" onclick="location.href='/dashboard.html'">Dashboard</button>
+    <button class="nav-link" onclick="location.href='/subjects.html'">Subjects</button>
+    <button class="nav-link active">My Progress</button>
+    <button class="nav-link" onclick="location.href='/student/revision.html'">Personalised Learning</button>
+  </div>
+  <div class="nav-user" onclick="signOut()">
+    <div class="avatar" id="nav-avatar">?</div>
+    <span id="nav-name">Loading…</span>
+  </div>
+</nav>
+
+<main>
+
+  <!-- Page header -->
+  <div class="page-header fade-in">
+    <h1 class="page-title">My Progress Report</h1>
+    <p class="page-sub" id="page-sub">Loading your data…</p>
+  </div>
+
+  <!-- Hero stats -->
+  <div class="hero-stats fade-in">
+    <div class="hero-stat">
+      <div class="hero-val" id="stat-quizzes">—</div>
+      <div class="hero-lbl">Quizzes Done</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-val" id="stat-avg">—</div>
+      <div class="hero-lbl">Average Score</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-val" id="stat-mastered">—</div>
+      <div class="hero-lbl">Topics Mastered</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-val" id="stat-streak">—</div>
+      <div class="hero-lbl">Day Streak 🔥</div>
+      <div class="hero-sub" id="stat-streak-best"></div>
+    </div>
+  </div>
+
+  <!-- Subject breakdown -->
+  <div class="fade-in">
+    <div class="section-title">📊 Subject Breakdown</div>
+    <div class="subject-grid" id="subject-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);"><span class="spinner"></span></div>
+    </div>
+  </div>
+
+  <!-- Topic mastery -->
+  <div class="fade-in">
+    <div class="section-title">🎯 Topic Mastery</div>
+    <div id="mastery-wrap">
+      <div class="empty-state"><div class="ei">📋</div><p>Take some quizzes to see your mastery levels.</p></div>
+    </div>
+  </div>
+
+  <!-- Achievements -->
+  <div class="fade-in">
+    <div class="section-title">🏆 Achievements</div>
+    <div class="achievements-grid" id="achievements-grid">
+      <div style="color:var(--muted);font-size:.85rem;">Loading…</div>
+    </div>
+  </div>
+
+  <!-- Quiz history -->
+  <div class="fade-in">
+    <div class="section-title">📝 Quiz History</div>
+    <div class="history-list" id="history-list">
+      <div style="text-align:center;padding:2rem;color:var(--muted);"><span class="spinner"></span></div>
+    </div>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/perf-utils.js"></script>
+<script>
+const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+const subjectMeta={
+  1:{name:'Maths',icon:'📐',cls:'maths',color:'#3b82f6'},
+  2:{name:'Physics',icon:'⚡',cls:'physics',color:'#a78bfa'},
+  3:{name:'Chemistry',icon:'🧪',cls:'chemistry',color:'#2dd4bf'},
+  4:{name:'Biology',icon:'🧬',cls:'biology',color:'#4ade80'},
+};
+
+const masteryOrder={not_started:0,learning:1,developing:2,secure:3,mastered:4};
+const masteryLabels={not_started:'Not Started',learning:'Learning',developing:'Developing',secure:'Secure',mastered:'Mastered'};
+const masteryColors={not_started:'var(--muted)',learning:'#f87171',developing:'#fb923c',secure:'#facc15',mastered:'#4ade80'};
+const masteryBarPct={not_started:0,learning:25,developing:50,secure:75,mastered:100};
+
+function scoreColor(pct){
+  if(pct>=70) return '#4ade80';
+  if(pct>=50) return '#facc15';
+  return '#f87171';
+}
+
+function timeSince(dateStr){
+  if(!dateStr) return '';
+  const diff=Date.now()-new Date(dateStr).getTime();
+  const days=Math.floor(diff/86400000);
+  const hours=Math.floor(diff/3600000);
+  const mins=Math.floor(diff/60000);
+  if(mins<60) return `${mins}m ago`;
+  if(hours<24) return `${hours}h ago`;
+  if(days<7) return `${days}d ago`;
+  return new Date(dateStr).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+}
+
+async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window.location.href='/index.html'; }
+
+// ── MAIN ──
+(async()=>{
+  const timeoutHandle = setTimeout(() => showTimeoutError(() => location.reload()), 8000);
+  perfStart('progress-load');
+
+  // Auth — use cached session + profile
+  perfStart('auth-session');
+  const {data:{user}}=await supa.auth.getUser();
+  perfEnd('auth-session');
+  if(!user){ clearTimeout(timeoutHandle); window.location.href='/index.html'; return; }
+
+  // Profile from cache if available
+  let profile = getCachedProfile();
+  if(!profile || profile.id !== user.id){
+    perfStart('profile-fetch');
+    const {data:pd}=await supa.from('profiles').select('*').eq('id',user.id).single();
+    perfEnd('profile-fetch');
+    profile = pd;
+    if(profile) setCachedProfile(profile);
+  } else {
+    console.debug('⚡ [Inspire] profile: cache hit');
+  }
+
+  // Render shell immediately
+  document.getElementById('nav-name').textContent=profile?.full_name?.split(' ')[0]||'Student';
+  const av=document.getElementById('nav-avatar');
+  av.textContent=(profile?.full_name||'S')[0].toUpperCase();
+  document.getElementById('page-sub').textContent=
+    `${profile?.full_name||'Student'} · ${profile?.year_group||''} · ${profile?.tier||''} · ${(profile?.exam_board||'AQA').toUpperCase()}`;
+function calcAchievements(attempts, progress, streak){
+  const completedAtts = attempts.filter(a=>a.completed_at&&a.percentage!=null);
+  const scores = completedAtts.map(a=>parseFloat(a.percentage));
+  const masteredCount = progress.filter(p=>p.mastery_level==='mastered').length;
+  const passedCount = completedAtts.filter(a=>a.passed).length;
+  const bestScore = scores.length ? Math.max(...scores) : 0;
+  const subjectsDone = new Set(completedAtts.map(a=>a.quizzes?.topics?.subject_id).filter(Boolean)).size;
+
+  return [
+    {icon:'🎯',name:'First Quiz',desc:'Complete your first quiz',unlocked:completedAtts.length>=1},
+    {icon:'🔟',name:'Ten Done',desc:'Complete 10 quizzes',unlocked:completedAtts.length>=10},
+    {icon:'💯',name:'Century',desc:'Complete 100 quizzes',unlocked:completedAtts.length>=100},
+    {icon:'⭐',name:'Gold Standard',desc:'Score 80% or more on any quiz',unlocked:bestScore>=80},
+    {icon:'🏆',name:'Perfect Score',desc:'Score 100% on any quiz',unlocked:bestScore>=100},
+    {icon:'✅',name:'First Pass',desc:'Pass your first quiz',unlocked:passedCount>=1},
+    {icon:'🔥',name:'On Fire',desc:'Reach a 3-day streak',unlocked:(streak?.current_streak||0)>=3},
+    {icon:'📅',name:'Week Warrior',desc:'Reach a 7-day streak',unlocked:(streak?.current_streak||0)>=7},
+    {icon:'🎓',name:'First Mastery',desc:'Master your first topic',unlocked:masteredCount>=1},
+    {icon:'🌟',name:'Subject Star',desc:'Complete quizzes in all 4 subjects',unlocked:subjectsDone>=4},
+    {icon:'📚',name:'All Rounder',desc:'Master 10 topics',unlocked:masteredCount>=10},
+    {icon:'🧠',name:'Scholar',desc:'Score 80%+ on 5 quizzes',unlocked:scores.filter(s=>s>=80).length>=5},
+  ];
+}
+
+  // Load all data in parallel
+  const [attemptsRes, progressRes, streakRes, subjectsRes, topicsRes]=await Promise.all([
+    supa.from('quiz_attempts')
+      .select('*,quizzes(title,topic_id,topics(name,subject_id))')
+      .eq('student_id',user.id)
+      .not('completed_at','is',null)
+      .order('completed_at',{ascending:false}),
+    supa.from('topic_progress')
+      .select('*,topics(id,name,subject_id)')
+      .eq('student_id',user.id),
+    supa.from('streaks').select('*').eq('student_id',user.id).single(),
+    supa.from('subjects').select('*').order('order_idx'),
+    supa.from('topics').select('*').order('order_idx'),
+  ]);
+
+  const attempts=attemptsRes.data||[];
+  const progress=progressRes.data||[];
+  const streak=streakRes.data;
+  const subjects=subjectsRes.data||[];
+  const topics=topicsRes.data||[];
+
+  // ── HERO STATS ──
+  const scores=attempts.map(a=>parseFloat(a.percentage)).filter(Boolean);
+  const avgScore=scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):null;
+  const masteredCount=progress.filter(p=>p.mastery_level==='mastered').length;
+
+  document.getElementById('stat-quizzes').textContent=attempts.length;
+  document.getElementById('stat-avg').textContent=avgScore?avgScore+'%':'—';
+  document.getElementById('stat-mastered').textContent=masteredCount;
+  document.getElementById('stat-streak').textContent=streak?.current_streak||0;
+  document.getElementById('stat-streak-best').textContent=
+    streak?.longest_streak?`Best: ${streak.longest_streak}`:'';
+
+  // ── SUBJECT BREAKDOWN ──
+  const grid=document.getElementById('subject-grid');
+  if(subjects.length===0){
+    grid.innerHTML='<div class="empty-state"><div class="ei">📚</div><p>No subjects found.</p></div>';
+  } else {
+    grid.innerHTML=subjects.map(s=>{
+      const meta=subjectMeta[s.id]||{name:s.name,icon:'📖',cls:'maths',color:'var(--gold)'};
+      const subjectTopics=topics.filter(t=>t.subject_id===s.id);
+      const subjectProgress=progress.filter(p=>p.topics?.subject_id===s.id);
+      const subjectAttempts=attempts.filter(a=>a.quizzes?.topics?.subject_id===s.id);
+      const subjectScores=subjectAttempts.map(a=>parseFloat(a.percentage)).filter(Boolean);
+      const subjectAvg=subjectScores.length?(subjectScores.reduce((x,y)=>x+y,0)/subjectScores.length).toFixed(1):null;
+      const subjectMastered=subjectProgress.filter(p=>p.mastery_level==='mastered').length;
+      const subjectSecure=subjectProgress.filter(p=>p.mastery_level==='secure'||p.mastery_level==='mastered').length;
+      const topicsAttempted=new Set(subjectProgress.map(p=>p.topic_id)).size;
+      const pct=subjectTopics.length?Math.round((subjectSecure/subjectTopics.length)*100):0;
+
+      return `
+      <div class="subject-card subject-${meta.cls}">
+        <div class="subject-header">
+          <div class="subject-name-row">
+            <span class="subject-icon-sm">${meta.icon}</span>
+            <span class="subject-name">${meta.name}</span>
+          </div>
+          <span class="subject-pct">${subjectAvg?subjectAvg+'%':'—'}</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:${pct}%;background:${meta.color};"></div>
+        </div>
+        <div class="subject-stats-row">
+          <span class="subject-stat-item"><strong>${subjectAttempts.length}</strong> quizzes</span>
+          <span class="subject-stat-item"><strong>${topicsAttempted}</strong>/${subjectTopics.length} topics</span>
+          <span class="subject-stat-item"><strong>${subjectMastered}</strong> mastered</span>
+          <span class="subject-stat-item"><strong>${pct}%</strong> secure+</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── TOPIC MASTERY ──
+  const masteryWrap=document.getElementById('mastery-wrap');
+  if(progress.length===0){
+    masteryWrap.innerHTML='<div class="empty-state"><div class="ei">📋</div><p>Take some quizzes to see your topic mastery levels.</p></div>';
+  } else {
+    // Group by subject
+    const bySubject={};
+    progress.forEach(p=>{
+      const sid=p.topics?.subject_id;
+      if(!sid) return;
+      if(!bySubject[sid]) bySubject[sid]=[];
+      bySubject[sid].push(p);
+    });
+
+    masteryWrap.innerHTML=Object.keys(bySubject).map(sid=>{
+      const meta=subjectMeta[sid]||{name:'Subject',icon:'📖',color:'var(--gold)'};
+      const items=bySubject[sid].sort((a,b)=>
+        (masteryOrder[b.mastery_level]||0)-(masteryOrder[a.mastery_level]||0));
+      return `
+      <div class="mastery-subject">
+        <div class="mastery-subject-title" style="color:${meta.color}">${meta.icon} ${meta.name}</div>
+        ${items.map(p=>{
+          const m=p.mastery_level||'not_started';
+          const score=p.best_score?parseFloat(p.best_score).toFixed(0):null;
+          return `
+          <div class="mastery-row ${`mastery-${m}`}">
+            <div class="mastery-topic-name">${p.topics?.name||'Unknown topic'}</div>
+            <div class="mastery-bar-wrap">
+              <div class="mastery-bar-fill" style="width:${masteryBarPct[m]}%;background:${masteryColors[m]};"></div>
+            </div>
+            <div class="mastery-pill-sm">${masteryLabels[m]||'—'}</div>
+            <div class="mastery-score" style="color:${masteryColors[m]}">${score?score+'%':'—'}</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }).join('');
+  }
+
+  // ── ACHIEVEMENTS ──
+  const achs=calcAchievements(attempts, progress, streak);
+  document.getElementById('achievements-grid').innerHTML=achs.map(a=>`
+    <div class="achievement ${a.unlocked?'unlocked':'locked'}">
+      <div class="ach-icon">${a.icon}</div>
+      <div>
+        <div class="ach-name">${a.name}</div>
+        <div class="ach-desc">${a.desc}</div>
+      </div>
+    </div>`).join('');
+
+  // ── QUIZ HISTORY ──
+  const histList=document.getElementById('history-list');
+  if(attempts.length===0){
+    histList.innerHTML='<div class="empty-state"><div class="ei">📝</div><p>No completed quizzes yet — take your first quiz!</p></div>';
+  } else {
+    histList.innerHTML=attempts.slice(0,30).map(a=>{
+      const pct=a.percentage!=null?Math.round(parseFloat(a.percentage)):null;
+      const color=scoreColor(pct||0);
+      const subjectId=a.quizzes?.topics?.subject_id;
+      const meta=subjectMeta[subjectId]||{icon:'📖'};
+      const timeTaken=a.time_taken?`${Math.floor(a.time_taken/60)}m ${a.time_taken%60}s`:'';
+      return `
+      <div class="history-item">
+        <div class="history-score-circle" style="color:${color};border-color:${color};">
+          ${pct!==null?pct+'%':'—'}
+        </div>
+        <div class="history-info">
+          <div class="history-quiz-title">${meta.icon} ${a.quizzes?.title||'Quiz'}</div>
+          <div class="history-meta">
+            <span class="badge ${a.passed?'badge-green':'badge-red'}">${a.passed?'Passed':'Failed'}</span>
+            ${a.quizzes?.topics?.name?`<span>${a.quizzes.topics.name}</span>`:''}
+            ${timeTaken?`<span>⏱ ${timeTaken}</span>`:''}
+            <span>${timeSince(a.completed_at)}</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  clearTimeout(timeoutHandle);
+  perfEnd('progress-load');
+})();
+</script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+      }
+    </script>
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mob-nav-btn" onclick="location.href='/dashboard.html'">
+      <span class="mob-icon">🏠</span>Home
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/subjects.html'">
+      <span class="mob-icon">📚</span>Subjects
+    </button>
+    <button class="mob-nav-btn active" onclick="location.href='/student/progress.html'">
+      <span class="mob-icon">📈</span>Progress
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/student/assessment.html'">
+      <span class="mob-icon">📋</span>Tests
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/tools/tools.html'">
+      <span class="mob-icon">🔧</span>Tools
+    </button>
+  </div>
+</nav>
+<script src="/assets/js/subject-back.js"></script>
+</body>
+</html>

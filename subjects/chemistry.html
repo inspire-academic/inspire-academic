@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inspire Academic | GCSE Chemistry</title>
+  <meta name="description" content="GCSE Chemistry dashboard — AQA and Edexcel. Master atomic structure, bonding, quantitative chemistry and more with Inspire Academic.">
+  <link rel="icon" href="/assets/images/shared/inspire-logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="image" href="/assets/images/chemistry/hero/hero-bg.png" fetchpriority="high">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+  <style>
+    
+    :root {
+      --sidebar: 256px;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --transition: .2s cubic-bezier(.4,0,.2,1);
+      --blue: #059669;        
+      --blue-mid: #10b981;
+      --cyan: #047857;        
+      --cyan-bright: #34d399;
+      --gold: #c9a84c;
+      --danger: #f97316;
+      --success: #22c55e;
+      --grad-physics: linear-gradient(135deg, #059669, #34d399);
+      --grad-physics-vivid: linear-gradient(135deg, #10b981 0%, #047857 50%, #34d399 100%);
+      --grad-gold: linear-gradient(135deg, #c9a84c, #e8c96a);
+    }
+
+    
+    [data-theme="dark"] {
+      --bg:              #0b1628;
+      --bg-deep:         #07101e;
+      --bg-panel:        rgba(13,28,56,.75);
+      --bg-card:         rgba(255,255,255,.045);
+      --bg-hover:        rgba(255,255,255,.07);
+      --border:          rgba(255,255,255,.09);
+      --border-strong:   rgba(255,255,255,.16);
+      --text:            #f0f6ff;
+      --text-muted:      rgba(240,246,255,.58);
+      --text-soft:       rgba(240,246,255,.55);
+      --sidebar-bg:      #060e1b;
+      --sidebar-border:  rgba(255,255,255,.07);
+      --progress-track:  rgba(255,255,255,.08);
+      --search-bg:       rgba(255,255,255,.06);
+      --shadow:          0 20px 60px rgba(0,0,0,.45);
+      --shadow-card:     0 6px 28px rgba(0,0,0,.3);
+      --card-3d-top:     rgba(255,255,255,.06);
+      --card-3d-bottom:  rgba(0,0,0,.25);
+    }
+
+    
+    [data-theme="light"] {
+      --bg:              #eef2f9;
+      --bg-deep:         #e4eaf5;
+      --bg-panel:        #ffffff;
+      --bg-card:         #ffffff;
+      --bg-hover:        rgba(5,150,105,.06);
+      --border:          rgba(5,150,105,.12);
+      --border-strong:   rgba(5,150,105,.22);
+      --text:            #0d1929;
+      --text-muted:      rgba(13,25,41,.65);
+      --text-soft:       rgba(13,25,41,.38);
+      --sidebar-bg:      #ffffff;
+      --sidebar-border:  rgba(0,0,0,.07);
+      --progress-track:  rgba(5,150,105,.1);
+      --search-bg:       #ffffff;
+      --shadow:          0 20px 60px rgba(5,150,105,.12);
+      --shadow-card:     0 4px 20px rgba(5,150,105,.09);
+      --card-3d-top:     rgba(255,255,255,.9);
+      --card-3d-bottom:  rgba(5,150,105,.06);
+    }
+
+    
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+    html { scroll-behavior: smooth }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background var(--transition), color var(--transition);
+    }
+    a { color: inherit; text-decoration: none }
+    button, input { font: inherit }
+
+    
+    .app {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0,1fr);
+      min-height: 100vh;
+    }
+
+    
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: var(--sidebar);
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      overflow-y: auto;
+      transition: background var(--transition), border-color var(--transition);
+      
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border-right: 1px solid rgba(255,255,255,.1);
+      box-shadow:
+        1px 0 0 rgba(255,255,255,.06) inset,
+        4px 0 32px rgba(0,0,0,.28);
+    }
+    [data-theme="dark"]  .sidebar { background: rgba(6,10,22,.72) }
+    [data-theme="light"] .sidebar {
+      background: rgba(255,255,255,.78);
+      border-right-color: rgba(5,150,105,.1);
+      box-shadow: 1px 0 0 rgba(255,255,255,.9) inset, 4px 0 32px rgba(5,150,105,.07);
+    }
+
+    .brand {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      background: var(--grad-physics-vivid);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+      
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.25) inset,
+        0 -1px 0 rgba(0,0,0,.2) inset,
+        0 8px 24px rgba(16,185,129,.4);
+    }
+    .brand-icon svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2 }
+    .brand-kicker {
+      font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); font-weight: 800; margin-bottom: 2px;
+    }
+    .brand-name {
+      font-family: 'Fraunces', serif;
+      font-size: 17px; font-weight: 900; line-height: 1; letter-spacing: -.02em;
+    }
+    .brand-sub { font-size: 10px; color: var(--text-soft); font-weight: 600; margin-top: 3px }
+
+    .subject-badge {
+      margin: 16px 20px 8px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      background: rgba(5,150,105,.12);
+      border: 1px solid rgba(5,150,105,.24);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .subject-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--grad-physics); flex-shrink: 0;
+    }
+    .subject-label {
+      font-size: 11px; font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--cyan-bright);
+    }
+    [data-theme="light"] .subject-label { color: var(--blue-mid) }
+
+    .nav { padding: 8px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px }
+    .nav-section-title {
+      font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--text-soft); font-weight: 800; padding: 14px 8px 6px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 10px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 13px; font-weight: 700;
+      transition: all var(--transition);
+      position: relative;
+    }
+    .nav-link svg { width: 18px; height: 18px; opacity: 1; stroke-width: 2.2; flex-shrink: 0 }
+    .nav-link:hover { color: var(--text); background: var(--bg-hover) }
+    .nav-link.active {
+      color: var(--text);
+      background: rgba(5,150,105,.14);
+      font-weight: 700;
+    }
+    [data-theme="dark"] .nav-link.active { background: rgba(16,185,129,.18) }
+    [data-theme="light"] .nav-link.active { background: rgba(5,150,105,.08); color: var(--blue-mid) }
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 8px; bottom: 8px;
+      width: 3px; border-radius: 0 3px 3px 0;
+      background: var(--grad-physics-vivid);
+    }
+
+    
+    .ask-ai {
+      margin: 12px 16px 8px;
+      padding: 10px 12px 11px;
+      border-radius: 14px;
+      border: 1px solid rgba(5,150,105,.3);
+      background: linear-gradient(135deg, rgba(5,150,105,.15), rgba(52,211,153,.07));
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ask-ai::before {
+      content: '✦';
+      position: absolute;
+      right: 10px; top: 6px;
+      font-size: 20px;
+      color: rgba(201,168,76,.35);
+      pointer-events: none;
+    }
+    .ask-ai::after {
+      content: '✦';
+      position: absolute;
+      right: 28px; top: 20px;
+      font-size: 10px;
+      color: rgba(52,211,153,.3);
+      pointer-events: none;
+    }
+    .ask-ai-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    }
+    .ask-ai-star {
+      font-size: 14px;
+      color: var(--gold);
+      animation: starPulse 2.4s ease-in-out infinite;
+      line-height: 1;
+    }
+    @keyframes starPulse {
+      0%,100% { transform: scale(1) rotate(0deg); opacity:1 }
+      50%      { transform: scale(1.25) rotate(15deg); opacity:.7 }
+    }
+    .ask-ai-title { font-size: 12px; font-weight: 800 }
+    .ask-ai p { display: none }
+    .ask-ai-btn {
+      width: 100%;
+      border: none;
+      border-radius: 11px;
+      background: var(--grad-physics-vivid);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 10px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.18) inset,
+        0 -2px 0 rgba(0,0,0,.2) inset,
+        0 6px 20px rgba(5,150,105,.38);
+      transition: all var(--transition);
+    }
+    .ask-ai-btn:hover { opacity: .92; transform: translateY(-1px) }
+    .ask-ai-btn:active { transform: translateY(1px); box-shadow: 0 2px 8px rgba(5,150,105,.3) }
+    .ask-ai-btn-star { font-size: 14px }
+
+    
+    .sidebar-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .student-info { display: flex; align-items: center; gap: 9px }
+    
+    .student-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--grad-physics-vivid);
+      display: grid; place-items: center;
+      font-size: 13px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+      overflow: hidden;
+      
+      box-shadow:
+        0 0 0 2px var(--bg),
+        0 0 0 3.5px var(--blue-mid),
+        0 4px 12px rgba(5,150,105,.3);
+      position: relative;
+    }
+    .student-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .student-name { font-size: 12px; font-weight: 700 }
+    .student-year { font-size: 10px; color: var(--text-soft); font-weight: 600 }
+
+    .theme-toggle {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-soft);
+      cursor: pointer;
+      display: grid; place-items: center;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover { color: var(--text); border-color: var(--border-strong) }
+    .theme-toggle svg { width: 14px; height: 14px }
+    .icon-sun  { display: none }
+    .icon-moon { display: block }
+    [data-theme="light"] .icon-sun  { display: block }
+    [data-theme="light"] .icon-moon { display: none }
+
+    
+    .main { grid-column: 2; padding: 28px 28px 40px; min-width: 0 }
+
+    
+    .hero {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 24px;
+      position: relative;
+      padding: 40px 44px;
+      min-height: 260px;
+      display: flex;
+      align-items: center;
+      box-shadow: var(--shadow);
+      
+      transform: translateZ(0);
+    }
+    [data-theme="dark"] .hero {
+      background: #07101e;
+      border-color: rgba(255,255,255,.1);
+      box-shadow: 0 2px 0 rgba(255,255,255,.05) inset, 0 -2px 0 rgba(0,0,0,.3) inset, var(--shadow);
+    }
+    [data-theme="light"] .hero {
+      background: #07101e;
+      border-color: rgba(5,150,105,.15);
+      box-shadow: 0 -1px 0 rgba(5,150,105,.08) inset, var(--shadow);
+    }
+    
+    [data-theme="light"] .hero h1 { color: #f0f6ff }
+    [data-theme="light"] .hero-tagline { color: rgba(240,246,255,.75) }
+    [data-theme="light"] .chip { border-color: rgba(255,255,255,.2); color: rgba(240,246,255,.85); background: rgba(255,255,255,.08) }
+    [data-theme="light"] .hero-eyebrow-text { color: var(--cyan-bright) }
+    [data-theme="light"] .hero-welcome .welcome-name { color: #f0f6ff }
+    [data-theme="light"] .hero-welcome .welcome-greeting { color: rgba(240,246,255,.6) }
+
+    .hero-art {
+      position: absolute; inset: 0; width: 100%;
+      pointer-events: none; overflow: hidden;
+    }
+    .hero-art::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(7,16,30,.92) 0%, rgba(7,16,30,.55) 55%, rgba(7,16,30,.3) 100%);
+    }
+    .hero-img-placeholder {
+      width: 100%; height: 100%;
+      background: #07101e;
+    }
+    .hero-img { display: block }
+
+    .hero-content { position: relative; z-index: 2; max-width: 560px }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .hero-eyebrow-line {
+      width: 28px; height: 2px;
+      background: var(--grad-physics-vivid); border-radius: 2px;
+    }
+    .hero-eyebrow-text {
+      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--cyan-bright); font-weight: 800;
+    }
+    [data-theme="light"] .hero-eyebrow-text { color: var(--blue-mid) }
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(52px,5.5vw,88px);
+      font-weight: 900; line-height: .88;
+      letter-spacing: -.055em; margin-bottom: 14px;
+    }
+    [data-theme="dark"]  .hero h1 { color: #f0f6ff }
+    [data-theme="light"] .hero h1 { color: #ffffff; text-shadow: 0 2px 12px rgba(0,0,0,.45) }
+    .hero-tagline {
+      font-size: 16px; font-weight: 600;
+      color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;
+    }
+    .hero-tagline strong { color: var(--gold); font-weight: 800 }
+    .hero-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px }
+    .chip {
+      padding: 6px 12px; border-radius: 999px;
+      font-size: 11px; font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--bg-card); color: var(--text-muted);
+    }
+    [data-theme="dark"]  .chip { background: rgba(255,255,255,.06) }
+    [data-theme="light"] .chip { border-color: rgba(5,150,105,.15); color: var(--blue-mid) }
+
+    .search-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--search-bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 14px; padding: 12px 16px; max-width: 460px;
+    }
+    [data-theme="light"] .search-bar {
+      box-shadow: 0 2px 12px rgba(5,150,105,.08);
+    }
+    .search-bar svg { width: 17px; height: 17px; color: var(--text-soft); flex-shrink: 0 }
+    .search-bar input {
+      flex: 1; border: none; outline: none;
+      background: transparent; color: var(--text);
+      font-size: 13px; font-weight: 500;
+    }
+    .search-bar input::placeholder { color: var(--text-soft) }
+
+    .hero-welcome {
+      position: absolute; right: 44px; top: 36px;
+      z-index: 2; text-align: right;
+    }
+    .welcome-greeting {
+      font-size: 12px; font-weight: 700; color: var(--text-soft);
+      letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .welcome-name {
+      font-family: 'Fraunces', serif;
+      font-size: 26px; font-weight: 900;
+      letter-spacing: -.02em; color: var(--text);
+      line-height: 1; margin-bottom: 10px;
+    }
+    .welcome-streak {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 999px;
+      background: rgba(249,115,22,.12); border: 1px solid rgba(249,115,22,.28);
+      font-size: 12px; font-weight: 800; color: var(--danger);
+    }
+
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 320px;
+      gap: 20px; align-items: start;
+    }
+
+    
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-panel);
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-card);
+      transition: background var(--transition), border-color var(--transition);
+      
+      position: relative;
+    }
+    [data-theme="dark"] .panel {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.06) inset,
+        0 -1px 0 rgba(0,0,0,.2) inset,
+        var(--shadow-card);
+    }
+    [data-theme="light"] .panel {
+      background: #ffffff;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.95) inset,
+        0 -1px 0 rgba(5,150,105,.05) inset,
+        var(--shadow-card);
+    }
+    .panel-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px; padding: 22px 22px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-title {
+      font-family: 'Fraunces', serif;
+      font-size: 22px; font-weight: 750; letter-spacing: -.03em;
+    }
+    .panel-subtitle { font-size: 12px; color: var(--text-soft); font-weight: 600; margin-top: 3px }
+    .panel-link {
+      font-size: 12px; font-weight: 800; color: var(--cyan-bright);
+      white-space: nowrap; margin-top: 4px;
+    }
+    [data-theme="light"] .panel-link { color: var(--blue-mid) }
+    .panel-link:hover { text-decoration: underline }
+
+    
+    .topics-section { margin-bottom: 20px }
+    .topics-scroll-wrap {
+      max-height: 680px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(16,185,129,.35) transparent;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .topics-scroll-wrap::-webkit-scrollbar { width: 5px }
+    .topics-scroll-wrap::-webkit-scrollbar-track { background: transparent }
+    .topics-scroll-wrap::-webkit-scrollbar-thumb {
+      background: rgba(16,185,129,.3);
+      border-radius: 99px;
+    }
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 14px; padding: 18px;
+      justify-items: start;
+    }
+    .topic-card { width: 100% }
+    .topic-card {
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: all var(--transition);
+      cursor: pointer;
+      
+    }
+    [data-theme="dark"] .topic-card {
+      background: rgba(255,255,255,.04);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.07) inset,
+        0 -1px 0 rgba(0,0,0,.3) inset,
+        0 4px 16px rgba(0,0,0,.22);
+    }
+    [data-theme="light"] .topic-card {
+      background: #ffffff;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 -1px 0 rgba(5,150,105,.06) inset,
+        0 4px 16px rgba(5,150,105,.07);
+    }
+    .topic-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      border-color: rgba(52,211,153,.4);
+    }
+    [data-theme="dark"] .topic-card:hover {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.1) inset,
+        0 -1px 0 rgba(0,0,0,.3) inset,
+        0 18px 48px rgba(52,211,153,.15);
+    }
+    [data-theme="light"] .topic-card:hover {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 -1px 0 rgba(5,150,105,.06) inset,
+        0 16px 40px rgba(5,150,105,.14);
+    }
+
+    .topic-art { height: 140px; position: relative; overflow: hidden }
+    .topic-art svg { width: 100%; height: 100% }
+
+    .topic-art-1 { background: linear-gradient(135deg,#071a0c,#0d3018) }
+    .topic-art-2 { background: linear-gradient(135deg,#071230,#0c1e50) }
+    .topic-art-3 { background: linear-gradient(135deg,#100626,#1a0c3a) }
+    .topic-art-4 { background: linear-gradient(135deg,#180800,#2e1004) }
+    .topic-art-5 { background: linear-gradient(135deg,#071620,#0c2230) }
+    .topic-art-6 { background: linear-gradient(135deg,#040b1e,#081230) }
+    .topic-art-7 { background: linear-gradient(135deg,#16081e,#220d32) }
+    .topic-art-8 { background: linear-gradient(135deg,#040c1e,#071426) }
+
+    [data-theme="light"] .topic-art-1 { background: linear-gradient(135deg,#c8f0d8,#9ee0bc) }
+    [data-theme="light"] .topic-art-2 { background: linear-gradient(135deg,#c8dcff,#9cc0f8) }
+    [data-theme="light"] .topic-art-3 { background: linear-gradient(135deg,#e4c8ff,#cca0f8) }
+    [data-theme="light"] .topic-art-4 { background: linear-gradient(135deg,#fde0cc,#fab898) }
+    [data-theme="light"] .topic-art-5 { background: linear-gradient(135deg,#c4ecf8,#98d8f0) }
+    [data-theme="light"] .topic-art-6 { background: linear-gradient(135deg,#c8d8ff,#a0b8f8) }
+    [data-theme="light"] .topic-art-7 { background: linear-gradient(135deg,#e4ccf8,#ceaaee) }
+    [data-theme="light"] .topic-art-8 { background: linear-gradient(135deg,#ccdcf8,#a0c0f0) }
+
+    .topic-body { padding: 14px }
+    .topic-num {
+      font-size: 9px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--cyan-bright); font-weight: 800; margin-bottom: 6px;
+    }
+    [data-theme="light"] .topic-num { color: var(--blue-mid) }
+    .topic-name {
+      font-family: 'Fraunces', serif;
+      font-size: 17px; font-weight: 750; letter-spacing: -.025em;
+      line-height: 1.1; margin-bottom: 6px;
+    }
+    .topic-desc {
+      font-size: 11px; color: var(--text-muted); line-height: 1.5;
+      margin-bottom: 11px; min-height: 33px;
+    }
+    .progress-bar {
+      height: 5px; border-radius: 99px;
+      background: var(--progress-track); overflow: hidden; margin-bottom: 8px;
+    }
+    .progress-fill {
+      height: 100%; border-radius: inherit;
+      background: var(--grad-physics-vivid);
+      
+    }
+    [data-theme="light"] .progress-fill {
+      background: linear-gradient(90deg, #059669, #047857);
+      box-shadow: 0 0 6px rgba(5,150,105,.4);
+    }
+    .topic-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; font-weight: 700;
+    }
+    .status-dot {
+      display: inline-flex; align-items: center; gap: 5px;
+      color: var(--text-soft);
+    }
+    .status-dot::before {
+      content: ''; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--text-soft);
+    }
+    .status-dot.active { color: var(--cyan-bright) }
+    .status-dot.active::before {
+      background: var(--cyan-bright);
+      box-shadow: 0 0 8px var(--cyan-bright);
+    }
+    [data-theme="light"] .status-dot.active { color: var(--blue-mid) }
+    [data-theme="light"] .status-dot.active::before {
+      background: var(--blue-mid);
+      box-shadow: 0 0 6px rgba(5,150,105,.4);
+    }
+    .status-dot.complete { color: var(--success) }
+    .status-dot.complete::before { background: var(--success) }
+    .topic-pct { color: var(--text-muted); font-weight: 800 }
+
+    
+    .right-col { display: grid; gap: 16px }
+
+    
+    .progress-card { padding: 20px 20px 0 }
+
+    
+    .ring-3d-wrap {
+      position: relative;
+      width: 112px; height: 112px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 8px 18px rgba(16,185,129,.35));
+    }
+    [data-theme="light"] .ring-3d-wrap {
+      filter: drop-shadow(0 6px 16px rgba(5,150,105,.3));
+    }
+    .ring-3d-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg) }
+    .ring-label {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+    }
+    .ring-pct {
+      font-family: 'Fraunces', serif;
+      font-size: 29px; font-weight: 900; line-height: 1;
+    }
+    .ring-sub {
+      font-size: 9px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .12em; color: var(--text-soft); margin-top: 3px;
+    }
+    
+    .ring-ticks {
+      position: absolute; inset: -6px;
+      border-radius: 50%;
+      border: 1px dashed rgba(16,185,129,.2);
+    }
+    [data-theme="light"] .ring-ticks { border-color: rgba(5,150,105,.18) }
+
+    .progress-ring-area {
+      display: flex; gap: 16px; align-items: center; margin-bottom: 16px;
+    }
+    .progress-stats { flex: 1; display: grid; gap: 8px }
+    .stat-row { display: flex; align-items: center; gap: 8px; font-size: 12px }
+    .stat-icon {
+      width: 26px; height: 26px; border-radius: 8px;
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .stat-icon svg { width: 13px; height: 13px }
+    .stat-icon.quizzes { background: rgba(34,197,94,.12);  color: var(--success) }
+    .stat-icon.topics  { background: rgba(52,211,153,.12);  color: var(--cyan-bright) }
+    .stat-icon.streak  { background: rgba(249,115,22,.12); color: var(--danger) }
+    [data-theme="light"] .stat-icon.topics { background: rgba(5,150,105,.1); color: var(--blue-mid) }
+    .stat-label { color: var(--text-muted); flex: 1; font-size: 11px }
+    .stat-val { font-weight: 800; color: var(--text); font-size: 12px }
+
+    .grades-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      margin: 0 0 18px;
+    }
+    .grade-box {
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px; text-align: center;
+    }
+    [data-theme="dark"] .grade-box {
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 1px 0 rgba(255,255,255,.06) inset;
+    }
+    [data-theme="light"] .grade-box {
+      background: #f6f9ff;
+      box-shadow: 0 2px 8px rgba(5,150,105,.07);
+    }
+    .grade-box.target {
+      border-color: rgba(201,168,76,.32);
+      background: rgba(201,168,76,.07);
+    }
+    [data-theme="light"] .grade-box.target {
+      background: rgba(201,168,76,.06);
+      box-shadow: 0 2px 8px rgba(201,168,76,.12);
+    }
+    .grade-label {
+      font-size: 9px; text-transform: uppercase;
+      letter-spacing: .14em; color: var(--text-soft);
+      font-weight: 800; margin-bottom: 6px;
+    }
+    .grade-val {
+      font-family: 'Fraunces', serif;
+      font-size: 36px; font-weight: 900; line-height: 1;
+    }
+    .grade-box.target .grade-val { color: var(--gold) }
+    .grade-desc { font-size: 10px; color: var(--text-soft); font-weight: 600; margin-top: 3px }
+
+    
+    .lesson-card { padding: 18px }
+    .lesson-next-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 9px; border-radius: 999px;
+      background: rgba(5,150,105,.14); border: 1px solid rgba(5,150,105,.28);
+      color: var(--blue-mid);
+      font-size: 10px; font-weight: 800;
+      letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    [data-theme="dark"] .lesson-next-tag {
+      background: rgba(16,185,129,.2); border-color: rgba(16,185,129,.35);
+      color: var(--cyan-bright);
+    }
+    .lesson-info img { flex-shrink: 0 }
+    .lesson-info { display: flex; align-items: center; gap: 14px; margin-bottom: 14px }
+    .lesson-title {
+      font-family: 'Fraunces', serif;
+      font-size: 19px; font-weight: 750; letter-spacing: -.025em;
+      line-height: 1.1; margin-bottom: 4px;
+    }
+    .lesson-meta { font-size: 11px; color: var(--text-soft); font-weight: 600; margin-bottom: 5px }
+    .lesson-stars { color: var(--gold); font-size: 12px; letter-spacing: 1px }
+    .lesson-btn {
+      width: 100%; border: none; border-radius: 12px;
+      background: var(--grad-physics-vivid);
+      color: #fff; padding: 13px 16px;
+      font-weight: 800; font-size: 13px; cursor: pointer;
+      
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.18) inset,
+        0 -2px 0 rgba(0,0,0,.18) inset,
+        0 6px 20px rgba(5,150,105,.4);
+      transition: all var(--transition);
+    }
+    [data-theme="light"] .lesson-btn {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.18) inset,
+        0 -2px 0 rgba(0,0,0,.15) inset,
+        0 6px 24px rgba(5,150,105,.35);
+    }
+    .lesson-btn:hover { opacity:.92; transform:translateY(-1px) }
+    .lesson-btn:active { transform:translateY(1px) }
+    .lesson-progress-line {
+      font-size: 11px; color: var(--text-soft);
+      text-align: center; margin-top: 9px; font-weight: 600;
+    }
+    .lesson-spacer { height: 18px }
+
+    
+    .skills-card { padding: 18px 18px 20px }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .skill-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 7px; padding: 12px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      text-align: center;
+      transition: all var(--transition);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    [data-theme="dark"] .skill-item {
+      background: rgba(255,255,255,.035);
+      box-shadow: 0 1px 0 rgba(255,255,255,.06) inset;
+    }
+    [data-theme="light"] .skill-item {
+      background: #f6f9ff;
+      box-shadow: 0 2px 6px rgba(5,150,105,.07);
+    }
+    .skill-item:hover {
+      border-color: rgba(5,150,105,.4);
+      transform: translateY(-2px);
+    }
+    [data-theme="dark"] .skill-item:hover {
+      background: rgba(16,185,129,.1);
+      box-shadow: 0 1px 0 rgba(255,255,255,.08) inset, 0 8px 20px rgba(16,185,129,.12);
+    }
+    [data-theme="light"] .skill-item:hover {
+      background: #eef3ff;
+      box-shadow: 0 6px 20px rgba(5,150,105,.12);
+    }
+    .skill-mark {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: rgba(5,150,105,.1);
+      border: 1px solid rgba(5,150,105,.2);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    [data-theme="light"] .skill-mark {
+      background: rgba(5,150,105,.08);
+      border-color: rgba(5,150,105,.2);
+      box-shadow: 0 2px 6px rgba(5,150,105,.1);
+    }
+    .skill-mark svg { width: 16px; height: 16px; color: var(--cyan-bright) }
+    [data-theme="light"] .skill-mark svg { color: var(--blue-mid) }
+    .skill-name { font-size: 11px; font-weight: 700; line-height: 1.2 }
+    .skills-section-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .skills-title {
+      font-family: 'Fraunces', serif;
+      font-size: 18px; font-weight: 750; letter-spacing: -.025em;
+    }
+    .skills-subtitle { font-size: 11px; color: var(--text-soft); font-weight: 600; margin-top: 2px }
+    .skills-view-all {
+      font-size: 11px; font-weight: 800;
+      color: var(--cyan-bright); white-space: nowrap; margin-top: 4px;
+    }
+    [data-theme="light"] .skills-view-all { color: var(--blue-mid) }
+
+    
+    .quote-card {
+      padding: 20px; position: relative; overflow: hidden;
+      background-image: url('/assets/images/chemistry/journey/chemical-analysis.png');
+      background-size: cover; background-position: center;
+    }
+    .quote-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(7,16,30,.72); border-radius: inherit; z-index: 0;
+    }
+    .quote-mark {
+      font-family: 'Fraunces', serif; font-size: 80px; line-height: 1;
+      position: absolute; right: 14px; top: -8px;
+      color: rgba(201,168,76,.28); pointer-events: none;
+      z-index: 1;
+    }
+    .quote-text {
+      font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.45;
+      font-weight: 650; letter-spacing: -.02em; margin-bottom: 12px;
+      position: relative; z-index: 1; color: #f0f6ff;
+    }
+    .quote-author {
+      font-size: 11px; font-weight: 800; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--gold);
+      position: relative; z-index: 1;
+    }
+
+    
+    .scroll-controls { display: flex; gap: 6px }
+    .scroll-btn {
+      width: 30px; height: 30px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--bg-card);
+      color: var(--text-muted); cursor: pointer;
+      display: grid; place-items: center;
+      transition: all var(--transition); font-size: 13px;
+    }
+    .scroll-btn:hover { color: var(--text); border-color: var(--border-strong) }
+
+    
+    .quick-access {
+      margin-top: 20px;
+      display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 14px;
+    }
+    .quick-card {
+      padding: 18px; border-radius: var(--radius);
+      border: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: flex-start;
+      transition: all var(--transition); cursor: pointer;
+    }
+    [data-theme="dark"] .quick-card {
+      background: rgba(13,28,56,.65);
+      box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, var(--shadow-card);
+    }
+    [data-theme="light"] .quick-card {
+      background: #ffffff;
+      box-shadow: 0 1px 0 rgba(255,255,255,.95) inset, var(--shadow-card);
+    }
+    .quick-card:hover {
+      border-color: rgba(201,168,76,.35);
+      transform: translateY(-2px);
+    }
+    [data-theme="dark"] .quick-card:hover {
+      box-shadow: 0 1px 0 rgba(255,255,255,.07) inset, 0 12px 32px rgba(201,168,76,.08);
+    }
+    [data-theme="light"] .quick-card:hover {
+      box-shadow: 0 1px 0 rgba(255,255,255,1) inset, 0 10px 28px rgba(5,150,105,.12);
+    }
+    .quick-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: rgba(201,168,76,.08); border: 1px solid rgba(201,168,76,.2);
+      display: grid; place-items: center; color: var(--gold); flex-shrink: 0;
+    }
+    [data-theme="light"] .quick-icon {
+      box-shadow: 0 2px 8px rgba(201,168,76,.15);
+    }
+    .quick-icon svg { width: 18px; height: 18px; stroke-width: 1.8 }
+    .quick-card h2 { font-size: 13px; font-weight: 800; margin-bottom: 4px }
+    .quick-card p { font-size: 11px; color: var(--text-muted); line-height: 1.45; margin-bottom: 6px }
+    .quick-link { font-size: 11px; font-weight: 800; color: var(--gold) }
+
+    
+    
+    :root {
+      --spring-out: cubic-bezier(.34,1.56,.64,1);   
+      --spring-in:  cubic-bezier(.36,0,.66,-.56);   
+    }
+
+    .topic-card {
+      transition:
+        transform .38s var(--spring-out),
+        border-color .2s ease,
+        box-shadow .38s var(--spring-out);
+    }
+    .topic-card:hover  { transform: translateY(-6px) scale(1.015) }
+    .topic-card:active { transform: translateY(-1px) scale(.985);
+                         transition-duration: .12s; transition-timing-function: var(--spring-in) }
+
+    .lesson-btn {
+      transition:
+        transform .32s var(--spring-out),
+        box-shadow .32s var(--spring-out),
+        opacity .2s ease;
+    }
+    .lesson-btn:hover  { transform: translateY(-2px) scale(1.012); opacity: 1 }
+    .lesson-btn:active { transform: scale(.97) translateY(1px);
+                         transition-duration: .1s; transition-timing-function: var(--spring-in) }
+
+    .quick-card {
+      transition:
+        transform .38s var(--spring-out),
+        border-color .2s ease,
+        box-shadow .38s var(--spring-out);
+    }
+    .quick-card:hover  { transform: translateY(-4px) }
+    .quick-card:active { transform: scale(.97);
+                         transition-duration: .1s; transition-timing-function: var(--spring-in) }
+
+    .skill-item {
+      transition:
+        transform .32s var(--spring-out),
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .32s var(--spring-out);
+    }
+    .skill-item:hover  { transform: translateY(-3px) scale(1.02) }
+    .skill-item:active { transform: scale(.96);
+                         transition-duration: .1s; transition-timing-function: var(--spring-in) }
+
+    .ask-ai-btn {
+      transition:
+        transform .3s var(--spring-out),
+        box-shadow .3s var(--spring-out),
+        opacity .2s ease;
+    }
+    .ask-ai-btn:hover  { transform: translateY(-2px) scale(1.02); opacity: 1 }
+    .ask-ai-btn:active { transform: scale(.96) translateY(1px);
+                         transition-duration: .1s; transition-timing-function: var(--spring-in) }
+
+    .nav-link {
+      transition:
+        color .18s ease,
+        background .18s ease,
+        transform .28s var(--spring-out);
+    }
+    .nav-link:hover  { transform: translateX(3px) }
+    .nav-link:active { transform: translateX(1px) }
+    .nav-link.active { transform: none }
+
+    
+    @keyframes heroEntrance {
+      from { opacity: 0; transform: translateY(18px) }
+      to   { opacity: 1; transform: translateY(0) }
+    }
+    .hero-content { animation: heroEntrance .9s cubic-bezier(.2,.8,.2,1) both }
+    .hero-eyebrow { animation: heroEntrance .7s cubic-bezier(.2,.8,.2,1) .1s both }
+    .hero-tagline { animation: heroEntrance .7s cubic-bezier(.2,.8,.2,1) .22s both }
+    .hero-chips   { animation: heroEntrance .7s cubic-bezier(.2,.8,.2,1) .32s both }
+    .search-bar   { animation: heroEntrance .7s cubic-bezier(.2,.8,.2,1) .4s both }
+    .hero-welcome { animation: heroEntrance .8s cubic-bezier(.2,.8,.2,1) .5s both }
+    @media (max-width:1200px) {
+      :root { --sidebar: 220px }
+      .dashboard-grid { grid-template-columns: 1fr }
+      .right-col { grid-template-columns: repeat(2,1fr) }
+      .quick-access { grid-template-columns: repeat(2,1fr) }
+    }
+    @media (max-width:900px) {
+      .app { grid-template-columns: 1fr }
+      .sidebar { display: none }
+      .main { padding: 16px }
+      .hero { padding: 28px 24px; min-height: auto }
+      .hero-welcome { display: none }
+      .topics-grid { grid-template-columns: repeat(2,1fr) }
+      .right-col { grid-template-columns: 1fr }
+      .quick-access { grid-template-columns: repeat(2,1fr) }
+    }
+    @media (max-width:600px) {
+      .topics-grid { grid-template-columns: 1fr }
+      .quick-access { grid-template-columns: 1fr }
+      .hero h1 { font-size: 48px }
+      .skills-grid { grid-template-columns: repeat(3,1fr) }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after {
+        transition-duration: 0ms !important;
+        animation-duration:  0ms !important;
+        animation-delay:     0ms !important;
+      }
+      .hero-content, .hero-eyebrow, .hero-tagline,
+      .hero-chips, .search-bar, .hero-welcome {
+        opacity: 1 !important; transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ══ SIDEBAR ══════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <a class="brand" href="/dashboard.html" title="Go to dashboard">
+      <div class="brand-icon">
+        <img src="/assets/images/shared/inspire-logo.webp" alt="Inspire Academic" style="width:100%;height:100%;object-fit:contain;border-radius:inherit;">
+      </div>
+      <div>
+        <div class="brand-kicker">Inspire</div>
+        <div class="brand-name">Academic</div>
+        <div class="brand-sub">GCSE Science</div>
+      </div>
+    </a>
+    <div class="subject-badge">
+      <div class="subject-dot"></div>
+      <span class="subject-label">GCSE · Chemistry</span>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-section-title">Study</div>
+      <a class="nav-link active" href="/subjects/chemistry.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10.5l9-7 9 7"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/></svg>Home
+      </a>
+      <a class="nav-link" href="/student/progress.html?ref=chemistry">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 3 5-7"/></svg>My Progress
+      </a>
+      <a class="nav-link" href="/subjects/chemistry.html#topics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Topics
+      </a>
+      <a class="nav-link" href="/student/lessons.html?subject=2&ref=chemistry">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/></svg>Lessons
+      </a>
+      <a class="nav-link" href="/student/quiz.html?subject=2&ref=chemistry">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/></svg>Quizzes
+      </a>
+      <div class="nav-section-title">Practice</div>
+      <a class="nav-link" href="/student/assessment.html?ref=chemistry">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>Exam Practice
+      </a>
+      <a class="nav-link" href="/student/required-practicals.html?ref=chemistry">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 2v7.5L4.5 19A2 2 0 0 0 6.2 22h11.6a2 2 0 0 0 1.7-3L14 9.5V2"/><path d="M8 2h8"/></svg>Required Practicals
+      </a>
+      <a class="nav-link" href="/student/revision.html?ref=chemistry">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Revision Notes
+      </a>
+      <a class="nav-link" href="/student/assessment.html?ref=chemistry">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>Mock Exams
+      </a>
+      <a class="nav-link" href="/student/flashcards.html?ref=chemistry">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="5" width="16" height="12" rx="2"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>Flashcards
+      </a>
+      <a class="nav-link" href="/dashboard.html?ref=chemistry">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/></svg>Achievements
+      </a>
+    </nav>
+
+    <!-- Ask AI — star themed -->
+    <div class="ask-ai">
+      <div class="ask-ai-header">
+        <span class="ask-ai-star">✦</span>
+        <span class="ask-ai-title">Ask Inspire AI</span>
+      </div>
+      <p>Stuck on a question? Get a guided hint — not just the answer.</p>
+      <button class="ask-ai-btn" type="button">
+        <span class="ask-ai-btn-star">✦</span>
+        Ask a question
+      </button>
+    </div>
+
+    <!-- Footer: avatar + theme toggle -->
+    <div class="sidebar-footer">
+      <div class="student-info">
+        <!-- Profile picture: swap src to real image URL; fallback shows initial -->
+        <div class="student-avatar" id="studentAvatar">
+          <img id="studentAvatarImg" src="" alt="Kwame"
+               onerror="this.style.display='none'; document.getElementById('studentInitial').style.display='grid'"
+               style="display:none">
+          <span id="studentInitial" style="display:grid;place-items:center;width:100%;height:100%;font-size:13px;font-weight:800;color:#fff">K</span>
+        </div>
+        <div>
+          <div class="student-name">Kwame</div>
+          <div class="student-year">Year 10</div>
+        </div>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light / dark">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ═════════════════════════════════════════════════════ -->
+  <main class="main">
+
+    <!-- HERO -->
+    <section class="hero">
+      <!-- Hero banner image — placeholder, replace src with real asset -->
+      <div class="hero-art" aria-hidden="true">
+        <div class="hero-img-placeholder">
+          <img src="/assets/images/chemistry/hero/hero-bg.png" alt="Chemistry hero" class="hero-img" id="heroBannerImg"
+               fetchpriority="high" loading="eager"
+               style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease"
+               onload="this.style.opacity=1">
+        </div>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-line"></div>
+          <span class="hero-eyebrow-text">GCSE · AQA &amp; Edexcel</span>
+        </div>
+        <h1>Chemistry</h1>
+        <p class="hero-tagline"><strong>Master Chemistry.</strong> Understand the Elements.</p>
+        <div class="hero-chips">
+          <span class="chip">Grades 1–9</span>
+          <span class="chip">AQA · Higher</span>
+          <span class="chip">Edexcel</span>
+        </div>
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Search topics, lessons, questions…" aria-label="Search">
+        </div>
+      </div>
+
+      <div class="hero-welcome">
+        <div class="welcome-greeting">Welcome back</div>
+        <div class="welcome-name">Kwame</div>
+        <div class="welcome-streak">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>
+          <span id="streakCount">—</span> day streak
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD GRID -->
+    <div class="dashboard-grid">
+
+      <!-- LEFT: Topics -->
+      <div>
+        <section class="panel topics-section">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">Your Chemistry Journey</div>
+              <div class="panel-subtitle">8 topics · AQA Higher</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <a class="panel-link" href="#">View all</a>
+              <div class="scroll-controls">
+                <button class="scroll-btn" aria-label="Previous">‹</button>
+                <button class="scroll-btn" aria-label="Next">›</button>
+              </div>
+            </div>
+          </div>
+          <div class="topics-scroll-wrap">
+          <div class="topics-grid">
+
+            <article class="topic-card">
+              <div class="topic-art topic-art-1"><img src="/assets/images/chemistry/journey/atomic-structure.png" alt="Atomic Structure &amp; Periodic Table" class="topic-img" loading="lazy" data-topic="1" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-body">
+                <div class="topic-num">Topic 01</div>
+                <div class="topic-name">Atomic Structure &amp; Periodic Table</div>
+                <div class="topic-desc">Atomic models, electronic structure and the periodic table.</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
+                <div class="topic-footer"><span class="status-dot active">In Progress</span><span class="topic-pct">78%</span></div>
+              </div>
+            </article>
+
+            <article class="topic-card">
+              <div class="topic-art topic-art-2"><img src="/assets/images/chemistry/journey/bonding-structure.png" alt="Bonding &amp; Structure" class="topic-img" loading="lazy" data-topic="2" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-body">
+                <div class="topic-num">Topic 02</div>
+                <div class="topic-name">Bonding &amp; Structure</div>
+                <div class="topic-desc">Ionic, covalent and metallic bonding and their properties.</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+                <div class="topic-footer"><span class="status-dot active">In Progress</span><span class="topic-pct">65%</span></div>
+              </div>
+            </article>
+
+            <article class="topic-card">
+              <div class="topic-art topic-art-3"><img src="/assets/images/chemistry/journey/quantitative.png" alt="Quantitative Chemistry" class="topic-img" loading="lazy" data-topic="3" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-body">
+                <div class="topic-num">Topic 03</div>
+                <div class="topic-name">Quantitative Chemistry</div>
+                <div class="topic-desc">Moles, masses, concentrations and percentage yields.</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+                <div class="topic-footer"><span class="status-dot active">In Progress</span><span class="topic-pct">60%</span></div>
+              </div>
+            </article>
+
+            <article class="topic-card">
+              <div class="topic-art topic-art-4"><img src="/assets/images/chemistry/journey/chemical-changes.png" alt="Chemical Changes" class="topic-img" loading="lazy" data-topic="4" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-body">
+                <div class="topic-num">Topic 04</div>
+                <div class="topic-name">Chemical Changes</div>
+                <div class="topic-desc">Acids, bases, electrolysis and reactivity series.</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+                <div class="topic-footer"><span class="status-dot">Not Started</span><span class="topic-pct">55%</span></div>
+              </div>
+            </article>
+
+            <article class="topic-card">
+              <div class="topic-art topic-art-5"><img src="/assets/images/chemistry/journey/energy-changes.png" alt="Energy Changes" class="topic-img" loading="lazy" data-topic="5" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-body">
+                <div class="topic-num">Topic 05</div>
+                <div class="topic-name">Energy Changes</div>
+                <div class="topic-desc">Exothermic, endothermic reactions and energy profiles.</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+                <div class="topic-footer"><span class="status-dot active">In Progress</span><span class="topic-pct">40%</span></div>
+              </div>
+            </article>
+
+            <article class="topic-card">
+              <div class="topic-art topic-art-6"><img src="/assets/images/chemistry/journey/rates-equilibrium.png" alt="Rates &amp; Equilibrium" class="topic-img" loading="lazy" data-topic="6" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-body">
+                <div class="topic-num">Topic 06</div>
+                <div class="topic-name">Rates &amp; Equilibrium</div>
+                <div class="topic-desc">Factors affecting reaction rates and dynamic equilibrium.</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div>
+                <div class="topic-footer"><span class="status-dot active">In Progress</span><span class="topic-pct">30%</span></div>
+              </div>
+            </article>
+
+            <article class="topic-card">
+              <div class="topic-art topic-art-7"><img src="/assets/images/chemistry/journey/organic-chemistry.png" alt="Organic Chemistry" class="topic-img" loading="lazy" data-topic="7" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-body">
+                <div class="topic-num">Topic 07</div>
+                <div class="topic-name">Organic Chemistry</div>
+                <div class="topic-desc">Hydrocarbons, alcohols, polymers and their reactions.</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:15%"></div></div>
+                <div class="topic-footer"><span class="status-dot">Not Started</span><span class="topic-pct">15%</span></div>
+              </div>
+            </article>
+
+            <article class="topic-card">
+              <div class="topic-art topic-art-8"><img src="/assets/images/chemistry/journey/chemical-analysis.png" alt="Chemical Analysis" class="topic-img" loading="lazy" data-topic="8" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-body">
+                <div class="topic-num">Topic 08</div>
+                <div class="topic-name">Chemical Analysis</div>
+                <div class="topic-desc">Purity, chromatography, gas tests and spectroscopy.</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+                <div class="topic-footer"><span class="status-dot">Not Started</span><span class="topic-pct">0%</span></div>
+              </div>
+            </article>
+
+          </div><!-- /topics-grid -->
+          </div><!-- /topics-scroll-wrap -->
+        </section>
+      </div>
+
+      <!-- RIGHT COL -->
+      <aside class="right-col">
+
+        <!-- Progress — Apple Watch face ring -->
+        <section class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Your Progress</div>
+            <a class="panel-link" href="#">View full →</a>
+          </div>
+          <div style="padding:18px 20px 0">
+            <div class="progress-ring-area">
+              <div class="ring-3d-wrap" style="width:128px;height:128px">
+                <svg viewBox="0 0 128 128" style="transform:rotate(-90deg);width:100%;height:100%">
+                  <defs>
+                    <linearGradient id="ringGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%"   stop-color="#059669"/>
+                      <stop offset="100%" stop-color="#34d399"/>
+                    </linearGradient>
+                    <linearGradient id="ringGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%"   stop-color="#22c55e"/>
+                      <stop offset="100%" stop-color="#86efac"/>
+                    </linearGradient>
+                    <linearGradient id="ringGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%"   stop-color="#f97316"/>
+                      <stop offset="100%" stop-color="#fbbf24"/>
+                    </linearGradient>
+                    <filter id="glowBlue"  x="-30%" y="-30%" width="160%" height="160%">
+                      <feGaussianBlur stdDeviation="2.5" result="b"/>
+                      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <filter id="glowGreen" x="-30%" y="-30%" width="160%" height="160%">
+                      <feGaussianBlur stdDeviation="2" result="b"/>
+                      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <filter id="glowOrange" x="-30%" y="-30%" width="160%" height="160%">
+                      <feGaussianBlur stdDeviation="2" result="b"/>
+                      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                  </defs>
+
+                  <!-- ── Outer ring: Overall progress 72% ── r=58, circ=364.42 -->
+                  <circle cx="64" cy="64" r="58" stroke="rgba(255,255,255,.07)" stroke-width="8" fill="none"/>
+                  <circle cx="64" cy="64" r="58"
+                    stroke="url(#ringGrad1)" stroke-width="8" fill="none"
+                    stroke-dasharray="364.42" stroke-dashoffset="364.42"
+                    stroke-linecap="round"
+                    id="ring1"
+                    filter="url(#glowBlue)"/>
+                  <!-- leading dot outer -->
+                  <circle id="dot1" cx="64" cy="6" r="5" fill="#34d399"
+                    style="filter:drop-shadow(0 0 5px #34d399)"/>
+
+                  <!-- ── Middle ring: Quizzes 48/67 = 71.6% ── r=46, circ=289.03 -->
+                  <circle cx="64" cy="64" r="46" stroke="rgba(255,255,255,.07)" stroke-width="7" fill="none"/>
+                  <circle cx="64" cy="64" r="46"
+                    stroke="url(#ringGrad2)" stroke-width="7" fill="none"
+                    stroke-dasharray="289.03" stroke-dashoffset="289.03"
+                    stroke-linecap="round"
+                    id="ring2"
+                    filter="url(#glowGreen)"/>
+                  <circle id="dot2" cx="64" cy="18" r="4" fill="#22c55e"
+                    style="filter:drop-shadow(0 0 4px #22c55e)"/>
+
+                  <!-- ── Inner ring: Topics 6/8 = 75% ── r=34, circ=213.63 -->
+                  <circle cx="64" cy="64" r="34" stroke="rgba(255,255,255,.07)" stroke-width="6" fill="none"/>
+                  <circle cx="64" cy="64" r="34"
+                    stroke="url(#ringGrad3)" stroke-width="6" fill="none"
+                    stroke-dasharray="213.63" stroke-dashoffset="213.63"
+                    stroke-linecap="round"
+                    id="ring3"
+                    filter="url(#glowOrange)"/>
+                  <circle id="dot3" cx="64" cy="30" r="3.5" fill="#f97316"
+                    style="filter:drop-shadow(0 0 4px #f97316)"/>
+                </svg>
+                <div class="ring-label">
+                  <span class="ring-pct" id="ringPct">—</span>
+                  <span class="ring-sub">Overall</span>
+                </div>
+              </div>
+
+              <!-- Legend replaces old stat rows -->
+              <div class="progress-stats">
+                <div class="stat-row">
+                  <div class="stat-icon" style="background:rgba(16,185,129,.12)">
+                    <svg viewBox="0 0 10 10" width="10" height="10"><circle cx="5" cy="5" r="4" fill="none" stroke="#34d399" stroke-width="2"/></svg>
+                  </div>
+                  <span class="stat-label">Overall</span>
+                  <span class="stat-val" id="statOverall">—</span>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-icon" style="background:rgba(34,197,94,.12)">
+                    <svg viewBox="0 0 10 10" width="10" height="10"><circle cx="5" cy="5" r="4" fill="none" stroke="#22c55e" stroke-width="2"/></svg>
+                  </div>
+                  <span class="stat-label">Quizzes passed</span>
+                  <span class="stat-val" id="statQuizzes">—</span>
+                </div>
+                <div class="stat-row">
+                  <div class="stat-icon" style="background:rgba(249,115,22,.12)">
+                    <svg viewBox="0 0 10 10" width="10" height="10"><circle cx="5" cy="5" r="4" fill="none" stroke="#f97316" stroke-width="2"/></svg>
+                  </div>
+                  <span class="stat-label">Topics started</span>
+                  <span class="stat-val" id="statTopics">—</span>
+                </div>
+                <div class="stat-row" style="margin-top:4px;padding-top:8px;border-top:1px solid var(--border)">
+                  <div class="stat-icon streak" style="background:rgba(249,115,22,.12)">
+                    <svg viewBox="0 0 24 24" fill="#f97316" stroke="none"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>
+                  </div>
+                  <span class="stat-label">Day streak</span>
+                  <span class="stat-val" id="statStreak" style="color:var(--danger)">— 🔥</span>
+                </div>
+              </div>
+            </div>
+            <div class="grades-row">
+              <div class="grade-box">
+                <div class="grade-label">Current</div>
+                <div class="grade-val">6</div>
+                <div class="grade-desc">Good</div>
+              </div>
+              <div class="grade-box target">
+                <div class="grade-label">Target</div>
+                <div class="grade-val">9</div>
+                <div class="grade-desc">Aim High</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Continue lesson -->
+        <section class="panel lesson-card">
+          <div class="panel-header" style="border-bottom:1px solid var(--border);padding-bottom:14px">
+            <div class="panel-title" style="font-size:18px">Continue Your Journey</div>
+          </div>
+          <div style="padding:14px 18px 0">
+            <div class="lesson-next-tag">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="8" height="8"><circle cx="12" cy="12" r="10"/></svg>
+              Next Lesson
+            </div>
+          </div>
+          <div style="padding:0 18px">
+            <div class="lesson-info">
+              <img src="/assets/images/chemistry/journey/bonding-structure.png" alt="Ionic Bonding" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid rgba(16,185,129,.4)">
+              <div>
+                <div class="lesson-title">Ionic Bonding</div>
+                <div class="lesson-meta">Topic 2 · Bonding · 20 min</div>
+                <div class="lesson-stars">★★☆</div>
+              </div>
+            </div>
+            <button class="lesson-btn" type="button">Continue Lesson →</button>
+            <div class="lesson-progress-line">Lesson 1 of 10 in Bonding</div>
+          </div>
+          <div class="lesson-spacer"></div>
+        </section>
+
+        <!-- Skills Lab — 2 rows × 3 cols -->
+        <section class="panel" style="padding:18px 18px 20px">
+          <div class="skills-section-header">
+            <div>
+              <div class="skills-title">Skills Lab</div>
+              <div class="skills-subtitle">Sharpen the tools that make you unstoppable</div>
+            </div>
+            <a class="skills-view-all" href="#">View all</a>
+          </div>
+          <div class="skills-grid">
+            <a class="skill-item" href="#">
+              <div class="skill-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16"/><path d="M7 4v16"/><path d="m10 16 4-8 4 8"/></svg>
+              </div>
+              <div class="skill-name">Rearranging Equations</div>
+            </a>
+            <a class="skill-item" href="#">
+              <div class="skill-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-5 3 3 5-7"/></svg>
+              </div>
+              <div class="skill-name">Graph Interpretation</div>
+            </a>
+            <a class="skill-item" href="#">
+              <div class="skill-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10v10H7z"/><path d="M3 12h4"/><path d="M17 12h4"/></svg>
+              </div>
+              <div class="skill-name">Unit Conversions</div>
+            </a>
+            <a class="skill-item" href="#">
+              <div class="skill-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 20V10"/><path d="M12 20V4"/><path d="M18 20v-7"/></svg>
+              </div>
+              <div class="skill-name">Data Analysis</div>
+            </a>
+            <a class="skill-item" href="#">
+              <div class="skill-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16"/><path d="M12 4v16"/></svg>
+              </div>
+              <div class="skill-name">Scientific Notation</div>
+            </a>
+            <a class="skill-item" href="#">
+              <div class="skill-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+              </div>
+              <div class="skill-name">Sig. Figures</div>
+            </a>
+          </div>
+        </section>
+
+        <!-- Quote -->
+        <section class="panel quote-card">
+          <div class="quote-mark">"</div>
+          <div class="quote-text">In chemistry, there are no waste products, only raw materials we haven't found a use for yet.</div>
+          <div class="quote-author">— Unknown</div>
+        </section>
+
+      </aside>
+    </div>
+
+    <!-- QUICK ACCESS -->
+    <section class="quick-access" aria-label="Quick access">
+      <article class="quick-card">
+        <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg></div>
+        <div><h2>Exam Practice</h2><p>Past-paper questions by topic and mark scheme.</p><span class="quick-link">Start practice →</span></div>
+      </article>
+      <article class="quick-card">
+        <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/></svg></div>
+        <div><h2>Quiz of the Day</h2><p>Five focused questions to keep memory sharp.</p><span class="quick-link">Take today's quiz →</span></div>
+      </article>
+      <article class="quick-card">
+        <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 2v7.5L4.5 19A2 2 0 0 0 6.2 22h11.6a2 2 0 0 0 1.7-3L14 9.5V2"/><path d="M8 2h8"/></svg></div>
+        <div><h2>Required Practicals</h2><p>Methods, variables, graphs and evaluation skills.</p><span class="quick-link">View practicals →</span></div>
+      </article>
+      <article class="quick-card">
+        <div class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/></svg></div>
+        <div><h2>Achievements</h2><p>Track mastery milestones and exam-readiness badges.</p><span class="quick-link">View awards →</span></div>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<footer style="
+  margin-left: var(--sidebar);
+  text-align: center;
+  padding: 16px 28px 22px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-soft);
+  border-top: 1px solid var(--border);
+  letter-spacing: .04em;
+  transition: color var(--transition), border-color var(--transition);
+">
+  © <span id="footerYear"></span> Inspire Science™ · Inspire Vision™ · All rights reserved.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  // ── INIT — profile + subject progress ───────────────────
+  const SUBJECT_ID = 3;
+  const _supa = supabase.createClient('https://ygtsrdwoikqnrbexjrtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo');
+  (async () => {
+    try {
+      const { data: { user } } = await _supa.auth.getUser();
+      if (!user) return;
+      // Profile
+      const { data: profile } = await _supa.from('profiles')
+        .select('first_name,full_name').eq('id', user.id).single();
+      const firstName = profile?.first_name
+        || (profile?.full_name ? profile.full_name.split(' ')[0] : null)
+        || user.email?.split('@')[0]
+        || 'Student';
+      const initial = firstName[0]?.toUpperCase() || '?';
+      const sidebarName = document.querySelector('.student-name');
+      if (sidebarName) sidebarName.textContent = firstName;
+      const heroName = document.querySelector('.welcome-name');
+      if (heroName) heroName.textContent = firstName;
+      const avatarInitial = document.getElementById('studentInitial');
+      if (avatarInitial) avatarInitial.textContent = initial;
+      const avatarImg = document.getElementById('studentAvatarImg');
+      if (avatarImg) avatarImg.alt = firstName;
+      // Subject progress
+      const { data: subjectTopics } = await _supa.from('topics').select('id').eq('subject_id', SUBJECT_ID);
+      const topicIds = subjectTopics?.map(t => t.id) || [];
+      const [
+        { data: topicProgress },
+        { data: subjectQuizzes },
+        { data: streakRow },
+      ] = await Promise.all([
+        topicIds.length
+          ? _supa.from('topic_progress').select('best_score,mastery_level').eq('student_id', user.id).in('topic_id', topicIds)
+          : Promise.resolve({ data: [] }),
+        topicIds.length
+          ? _supa.from('quizzes').select('id').in('topic_id', topicIds)
+          : Promise.resolve({ data: [] }),
+        _supa.from('streaks').select('current_streak').eq('student_id', user.id).single(),
+      ]);
+      const quizIds = subjectQuizzes?.map(q => q.id) || [];
+      const { data: attempts } = quizIds.length
+        ? await _supa.from('quiz_attempts').select('passed').eq('student_id', user.id).in('quiz_id', quizIds).not('completed_at', 'is', null)
+        : { data: [] };
+      const allProgress   = topicProgress || [];
+      const allAttempts   = attempts || [];
+      const streak        = streakRow?.current_streak ?? 0;
+      const topicsTotal   = topicIds.length || 8;
+      const topicsStarted = allProgress.filter(p =>
+        (parseFloat(p.best_score) > 0) || (p.mastery_level && p.mastery_level !== 'not_started')
+      ).length;
+      const quizzesPassed = allAttempts.filter(a => a.passed).length;
+      const quizzesTotal  = allAttempts.length;
+      const avgScore      = allProgress.length
+        ? allProgress.reduce((s, p) => s + (parseFloat(p.best_score) || 0), 0) / allProgress.length
+        : 0;
+      const overallPct = Math.round(Math.min(avgScore, 100));
+      const $el = id => document.getElementById(id);
+      if ($el('ringPct'))     $el('ringPct').textContent     = overallPct + '%';
+      if ($el('statOverall')) $el('statOverall').textContent  = overallPct + '%';
+      if ($el('statQuizzes')) $el('statQuizzes').textContent  = quizzesPassed + '/' + quizzesTotal;
+      if ($el('statTopics'))  $el('statTopics').textContent   = topicsStarted + '/' + topicsTotal;
+      if ($el('statStreak'))  $el('statStreak').textContent   = streak + ' 🔥';
+      if ($el('streakCount')) $el('streakCount').textContent  = streak;
+      _animateRings([
+        { id: 'ring1', dot: 'dot1', circ: 364.42, pct: Math.min(overallPct / 100, 1),                   r: 58, delay: 0   },
+        { id: 'ring2', dot: 'dot2', circ: 289.03, pct: quizzesTotal ? quizzesPassed / quizzesTotal : 0,  r: 46, delay: 180 },
+        { id: 'ring3', dot: 'dot3', circ: 213.63, pct: topicsTotal  ? topicsStarted  / topicsTotal  : 0, r: 34, delay: 320 },
+      ]);
+    } catch (e) {
+      console.warn('Subject init failed:', e);
+      _animateRings([
+        { id: 'ring1', dot: 'dot1', circ: 364.42, pct: 0, r: 58, delay: 0   },
+        { id: 'ring2', dot: 'dot2', circ: 289.03, pct: 0, r: 46, delay: 180 },
+        { id: 'ring3', dot: 'dot3', circ: 213.63, pct: 0, r: 34, delay: 320 },
+      ]);
+    }
+  })();
+  // ── THEME ────────────────────────────────────────────────────
+  const html = document.documentElement;
+  const btn  = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('ia-theme');
+  if (saved) html.setAttribute('data-theme', saved);
+
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('ia-theme', next);
+  });
+
+  // ── PROFILE PICTURE ──────────────────────────────────────────
+  // To set a real profile pic, call: setStudentAvatar('https://your-image-url.jpg')
+  function setStudentAvatar(src) {
+    const img     = document.getElementById('studentAvatarImg');
+    const initial = document.getElementById('studentInitial');
+    if (!src) return;
+    img.src = src;
+    img.style.display = 'block';
+    initial.style.display = 'none';
+    img.onerror = () => {
+      img.style.display = 'none';
+      initial.style.display = 'grid';
+    };
+  }
+  // Example: setStudentAvatar('/assets/kwame.jpg');
+
+  // Scroll topics container to top on every page load
+  const topicsWrap = document.querySelector('.topics-scroll-wrap');
+  if (topicsWrap) topicsWrap.scrollTop = 0;
+
+  // ── PROGRESS RINGS ───────────────────────────────────────────
+  function _animateRings(rings) {
+    const cx = 64, cy = 64;
+    rings.forEach(({ id, dot: dotId, circ, pct, r, delay }) => {
+      const ring = document.getElementById(id);
+      const dot  = document.getElementById(dotId);
+      if (!ring) return;
+      const offset = circ * (1 - pct);
+      const angle  = pct * 360;
+      setTimeout(() => {
+        ring.animate(
+          [{ strokeDashoffset: circ }, { strokeDashoffset: offset }],
+          { duration: 1200, easing: 'cubic-bezier(.34,1.1,.64,1)', fill: 'forwards' }
+        );
+        if (dot) {
+          const totalFrames = 72;
+          let frame = 0;
+          const tick = () => {
+            if (frame > totalFrames) return;
+            const p     = frame / totalFrames;
+            const eased = p < 1
+              ? 1 - Math.pow(1 - p, 3) + Math.sin(p * Math.PI) * 0.06
+              : 1;
+            const deg   = -90 + angle * Math.min(eased, 1);
+            const rad   = deg * Math.PI / 180;
+            dot.setAttribute('cx', (cx + r * Math.cos(rad)).toFixed(2));
+            dot.setAttribute('cy', (cy + r * Math.sin(rad)).toFixed(2));
+            frame++;
+            requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      }, delay);
+    });
+  }
+
+  // ── NAV ACTIVE ───────────────────────────────────────────────
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  // ── TOPIC CARD NAVIGATION ────────────────────────────────────
+  const TOPIC_SLUGS = {
+    '1':'atomic-structure','2':'bonding-structure','3':'quantitative',
+    '4':'chemical-changes','5':'energy-changes','6':'rates-equilibrium',
+    '7':'organic-chemistry','8':'chemical-analysis'
+  };
+  document.querySelectorAll('.topic-card').forEach(card => {
+    const img  = card.querySelector('[data-topic]');
+    const slug = TOPIC_SLUGS[img?.dataset.topic];
+    if (slug) {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', () => {
+        window.location.href = '/student/lessons.html?subject=2&topic=' + slug;
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

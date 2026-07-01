@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
-<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
 <style>
 :root{
   --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
@@ -172,7 +172,7 @@ input,select{font-family:var(--font-body),sans-serif;}
   <div class="left-panel">
     <div class="left-content">
       <div class="logo-wrap">
-        <img src="1775416612494_image.png" alt="Inspire Science" onerror="this.style.display='none'">
+        <img src="/assets/images/shared/1775416612494_image.png" alt="Inspire Science" onerror="this.style.display='none'">
       </div>
       <h1 class="left-title">Master your <em>GCSEs</em> with confidence</h1>
       <p class="left-sub">Personalised quizzes, instant feedback and progress tracking.</p>
@@ -312,7 +312,7 @@ input,select{font-family:var(--font-body),sans-serif;}
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<script src="perf-utils.js" defer></script>
+<script src="/assets/js/perf-utils.js" defer></script>
 <script defer>
 window.addEventListener('DOMContentLoaded', () => {
 
@@ -394,7 +394,7 @@ async function doLogin(){
 
   const params=new URLSearchParams(window.location.search);
   const redirect=params.get('redirect');
-  if(redirect==='flashcards'){window.location.href='flashcards.html';return;}
+  if(redirect==='flashcards'){window.location.href='/student/flashcards.html';return;}
 
   // Safe next-page redirect (only allow plain .html filenames, no paths or external URLs)
   const next=params.get('next');
@@ -405,7 +405,7 @@ async function doLogin(){
   perfEnd('profile-fetch');
   if(profile) setCachedProfile(profile);
 
-  const r=profile?.role; window.location.href=(r==='teacher'||r==='teacher_manager'||r==='admin'||r==='super_admin')?'teacher.html':'dashboard.html';
+  const r=profile?.role; window.location.href=(r==='teacher'||r==='teacher_manager'||r==='admin'||r==='super_admin')?'/teacher/teacher.html':'/dashboard.html';
 }
 
 async function doSignup(){
@@ -441,7 +441,7 @@ async function doSignup(){
     await supa.from('profiles').upsert(profileData);
     if(data.session){
       setCachedProfile(profileData);
-      window.location.href='dashboard.html';
+      window.location.href='/dashboard.html';
     } else {
       btn.disabled=false;btn.textContent='Account created ✓';
       toast('Check your email to confirm your account, then sign in.','success');
@@ -480,10 +480,10 @@ const checkSession = async () => {
   const {data:{session}}=await supa.auth.getSession();
   if(session){
     const params=new URLSearchParams(window.location.search);
-    if(params.get('redirect')==='flashcards'){window.location.href='flashcards.html';return;}
+    if(params.get('redirect')==='flashcards'){window.location.href='/student/flashcards.html';return;}
     const next=params.get('next');
     if(next&&/^[a-zA-Z0-9_-]+\.html$/.test(next)){window.location.href=next;return;}
-    window.location.href='dashboard.html';
+    window.location.href='/dashboard.html';
   }
 };
 

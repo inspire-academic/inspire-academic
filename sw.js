@@ -14,7 +14,7 @@ const STATIC_ASSETS = [
   '/dashboard.html',
   '/subjects.html',
   '/manifest.json',
-  '/1775416612494_image.png',
+  '/assets/images/shared/1775416612494_image.png',
   // Supabase bundle — biggest win, 180kb served from cache instantly
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
   // Google Fonts CSS

@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Progress Report - Inspire Academic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+    :root {
+      --navy: #0b1628;
+      --gold: #c9a84c;
+      --gold-light: #f5e9c8;
+      --bg: #f8f9fa;
+      --border: rgba(11,22,40,.1);
+      --green: #2e7d32;
+      --green-light: #e8f5e9;
+      --amber: #e65100;
+      --amber-light: #fff3e0;
+      --red: #c62828;
+      --red-light: #ffebee;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family:var(--font-body);
+      background: var(--bg);
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--navy);
+      color: white;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left { display:flex; align-items:center; gap:1.5rem; }
+
+    .back-btn {
+      display:flex; align-items:center; gap:.5rem;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      color: white;
+      padding: .45rem .9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family:var(--font-body);
+      font-size: .875rem;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,.18); }
+
+    .logo {
+      font-family:var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+    .logo .gold { color: var(--gold); }
+
+    .logout-btn {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      color: white;
+      padding: .45rem .9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family:var(--font-body);
+      font-size: .875rem;
+      transition: background .2s;
+    }
+    .logout-btn:hover { background: rgba(255,255,255,.18); }
+
+    /* ── HERO BANNER ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #1a2f4e 100%);
+      color: white;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(201,168,76,.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .student-identity { position:relative; }
+    .student-label {
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .5rem;
+      font-weight: 600;
+    }
+    .student-name {
+      font-family:var(--font-display);
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+    .student-meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .meta-tag {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      padding: .3rem .75rem;
+      border-radius: 20px;
+      font-size: .8rem;
+      font-weight: 500;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat-value {
+      font-family:var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: .75rem;
+      color: rgba(255,255,255,.65);
+      margin-top: .3rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.25rem;
+    }
+    .section-icon {
+      width: 36px; height: 36px;
+      background: var(--navy);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family:var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    /* ── SUMMARY CARDS ── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .summary-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .summary-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.08); }
+    .summary-card-icon { font-size: 1.5rem; margin-bottom: .75rem; }
+    .summary-card-value {
+      font-family:var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .summary-card-label {
+      font-size: .8rem;
+      color: #666;
+      margin-top: .35rem;
+      font-weight: 500;
+    }
+    .summary-card.highlight { background: var(--navy); color: white; }
+    .summary-card.highlight .summary-card-value { color: var(--gold); }
+    .summary-card.highlight .summary-card-label { color: rgba(255,255,255,.65); }
+
+    /* ── TWO COLUMN LAYOUT ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media(max-width:768px){ .two-col{ grid-template-columns:1fr; } }
+
+    /* ── CARD ── */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    }
+
+    /* ── SUBJECT PROGRESS ── */
+    .subject-list { display:flex; flex-direction:column; gap:.9rem; }
+    .subject-row { display:flex; flex-direction:column; gap:.4rem; }
+    .subject-row-top {
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .subject-name { font-weight: 600; font-size: .9rem; }
+    .subject-score { font-weight: 700; font-size: .9rem; color: var(--navy); }
+    .subject-bar-bg {
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .subject-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width .8s ease;
+    }
+    .subject-quizzes { font-size: .75rem; color: #888; }
+
+    /* ── STRENGTHS / WEAKNESSES ── */
+    .sw-list { display:flex; flex-direction:column; gap:.6rem; }
+    .sw-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .65rem .9rem;
+      border-radius: 8px;
+      font-size: .875rem;
+    }
+    .sw-item.strength { background: var(--green-light); }
+    .sw-item.weakness { background: var(--amber-light); }
+    .sw-rank {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size: .7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .strength .sw-rank { background: var(--green); color:white; }
+    .weakness .sw-rank { background: var(--amber); color:white; }
+    .sw-topic { flex:1; font-weight:500; }
+    .sw-score { font-weight: 700; }
+    .strength .sw-score { color: var(--green); }
+    .weakness .sw-score { color: var(--amber); }
+
+    /* ── RECENT ACTIVITY ── */
+    .activity-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .875rem;
+    }
+    .activity-table th {
+      text-align: left;
+      padding: .6rem .75rem;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #888;
+      border-bottom: 2px solid var(--border);
+      font-weight: 600;
+    }
+    .activity-table td {
+      padding: .75rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .activity-table tr:last-child td { border-bottom: none; }
+    .activity-table tr:hover td { background: #fafafa; }
+    .pass-badge {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: 4px;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .pass-badge.pass { background: var(--green-light); color: var(--green); }
+    .pass-badge.fail { background: var(--red-light); color: var(--red); }
+    .score-cell { font-weight: 700; }
+    .score-high { color: var(--green); }
+    .score-mid { color: var(--amber); }
+    .score-low { color: var(--red); }
+
+    /* ── INSIGHTS PANEL ── */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .insight-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.25rem;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    }
+    .insight-card.positive { border-left-color: var(--green); }
+    .insight-card.warning { border-left-color: var(--amber); }
+    .insight-title {
+      font-weight: 700;
+      font-size: .875rem;
+      margin-bottom: .4rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .insight-body { font-size: .825rem; color: #555; line-height: 1.5; }
+
+    /* ── REPORT FOOTER ── */
+    .report-footer {
+      background: var(--navy);
+      color: white;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+    .report-footer p { font-size: .8rem; color: rgba(255,255,255,.6); }
+    .report-footer .gold { color: var(--gold); }
+
+    /* ── LOADING / ERROR ── */
+    .loading-state {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding: 5rem 2rem;
+      gap: 1rem;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── PRINT ── */
+    @media print {
+      .header, .back-btn, .logout-btn { display:none; }
+      .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .card, .summary-card, .insight-card { box-shadow: none; border: 1px solid #ddd; }
+      body { background: white; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:600px) {
+      .hero { padding: 1.5rem 1rem; }
+      .student-name { font-size: 1.6rem; }
+      .container { padding: 1rem; }
+      .summary-grid { grid-template-columns: 1fr 1fr; }
+      .activity-table th:nth-child(3),
+      .activity-table td:nth-child(3) { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <a href="/parent/parent-dashboard.html" class="back-btn">← Back</a>
+      <div class="logo">Inspire <span class="gold">Academic</span></div>
+    </div>
+    <button class="logout-btn" onclick="signOut()">Sign Out</button>
+  </header>
+
+  <!-- LOADING STATE -->
+  <div class="loading-state" id="loading-state">
+    <div class="spinner"></div>
+    <p style="color:#666;">Loading progress report…</p>
+  </div>
+
+  <!-- PAGE CONTENT (hidden until loaded) -->
+  <div id="page-content" style="display:none;">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="student-identity">
+          <div class="student-label">Progress Report</div>
+          <div class="student-name" id="hero-name">—</div>
+          <div class="student-meta">
+            <span class="meta-tag" id="hero-year">—</span>
+            <span class="meta-tag" id="hero-board">—</span>
+            <span class="meta-tag" id="hero-streak">🔥 0 day streak</span>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-value" id="hero-quizzes">—</div>
+            <div class="hero-stat-label">Quizzes Taken</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value" id="hero-accuracy">—</div>
+            <div class="hero-stat-label">Avg Accuracy</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value" id="hero-mastered">—</div>
+            <div class="hero-stat-label">Topics Mastered</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-value" id="hero-best">—</div>
+            <div class="hero-stat-label">Best Score</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- SUMMARY CARDS -->
+      <div class="summary-grid" id="summary-grid">
+        <div class="summary-card highlight">
+          <div class="summary-card-icon">🏆</div>
+          <div class="summary-card-value" id="sum-passed">—</div>
+          <div class="summary-card-label">Quizzes Passed</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card-icon">📊</div>
+          <div class="summary-card-value" id="sum-pass-rate">—</div>
+          <div class="summary-card-label">Pass Rate</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card-icon">🔥</div>
+          <div class="summary-card-value" id="sum-streak">—</div>
+          <div class="summary-card-label">Day Streak</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-card-icon">📅</div>
+          <div class="summary-card-value" id="sum-last-active">—</div>
+          <div class="summary-card-label">Last Active</div>
+        </div>
+      </div>
+
+      <!-- INSIGHTS -->
+      <div class="section-header">
+        <div class="section-icon">💡</div>
+        <div class="section-title">Key Insights</div>
+      </div>
+      <div class="insights-grid" id="insights-grid"></div>
+
+      <!-- SUBJECT PROGRESS + STRENGTHS/WEAKNESSES -->
+      <div class="two-col">
+
+        <div class="card">
+          <div class="section-header">
+            <div class="section-icon">📚</div>
+            <div class="section-title">Subject Performance</div>
+          </div>
+          <div class="subject-list" id="subject-list">
+            <p style="color:#888;font-size:.875rem;">No subject data yet.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-header">
+            <div class="section-icon">⚡</div>
+            <div class="section-title">Strengths & Weaknesses</div>
+          </div>
+
+          <p style="font-size:.8rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;">Top Strengths</p>
+          <div class="sw-list" id="strengths-list" style="margin-bottom:1.25rem;">
+            <p style="color:#888;font-size:.875rem;">Not enough data yet.</p>
+          </div>
+
+          <p style="font-size:.8rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;">Needs Attention</p>
+          <div class="sw-list" id="weaknesses-list">
+            <p style="color:#888;font-size:.875rem;">Not enough data yet.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RECENT ACTIVITY -->
+      <div class="card" style="margin-bottom:2rem;">
+        <div class="section-header">
+          <div class="section-icon">🕐</div>
+          <div class="section-title">Recent Quiz Activity</div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="activity-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Quiz</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody id="activity-tbody">
+              <tr><td colspan="5" style="color:#888;text-align:center;padding:2rem;">No activity yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /container -->
+
+    <!-- FOOTER -->
+    <div class="report-footer">
+      <p>Generated by <span class="gold">Inspire Academic</span> · Report date: <span id="report-date"></span></p>
+      <p style="margin-top:.3rem;">Inspiring the next generation of Science &amp; Maths superstars</p>
+    </div>
+
+  </div><!-- /page-content -->
+
+<script>
+const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM3MDI3NzksImV4cCI6MjA1OTI3ODc3OX0.tWAkNwpzyfHVBHFHlHMAaAYKVhOB8PCUJ6j1GUfnXPE';
+const supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Get student ID from URL
+const params = new URLSearchParams(window.location.search);
+const studentId = params.get('student');
+
+document.getElementById('report-date').textContent = new Date().toLocaleDateString('en-GB', {
+  day:'numeric', month:'long', year:'numeric'
+});
+
+async function init() {
+  // Auth check
+  const { data: { user } } = await supa.auth.getUser();
+  if (!user) { window.location.href = '/parent/parent-login.html'; return; }
+
+  // Verify parent owns this student
+  const { data: parentProfile } = await supa
+    .from('parent_profiles')
+    .select('id, first_name, last_name')
+    .eq('user_id', user.id)
+    .single();
+
+  if (!parentProfile) { window.location.href = '/parent/parent-login.html'; return; }
+
+  if (!studentId) { window.location.href = '/parent/parent-dashboard.html'; return; }
+
+  // Verify this student belongs to this parent
+  const { data: link } = await supa
+    .from('student_parent_links')
+    .select('student_id')
+    .eq('parent_id', parentProfile.id)
+    .eq('student_id', studentId)
+    .single();
+
+  if (!link) { window.location.href = '/parent/parent-dashboard.html'; return; }
+
+  // Load all data in parallel
+  const [profileRes, attemptsRes, progressRes, streakRes] = await Promise.all([
+    supa.from('profiles').select('first_name, full_name, year_group, exam_board').eq('id', studentId).single(),
+    supa.from('quiz_attempts')
+      .select('percentage, passed, completed_at, correct_answers, total_questions, quizzes(title, topics(name, subjects(name)))')
+      .eq('user_id', studentId)
+      .not('completed_at', 'is', null)
+      .order('completed_at', { ascending: false })
+      .limit(50),
+    supa.from('topic_progress')
+      .select('mastery_level, best_score, topic_id, topics(name, subjects(name))')
+      .eq('user_id', studentId),
+    supa.from('streaks').select('current_streak, longest_streak').eq('user_id', studentId).single()
+  ]);
+
+  const profile = profileRes.data || {};
+  const attempts = attemptsRes.data || [];
+  const progress = progressRes.data || [];
+  const streak = streakRes.data || { current_streak: 0, longest_streak: 0 };
+
+  renderPage(profile, attempts, progress, streak);
+}
+
+function renderPage(profile, attempts, progress, streak) {
+  const name = profile.first_name || (profile.full_name ? profile.full_name.split(' ')[0] : 'Student');
+  const totalQuizzes = attempts.length;
+  const passed = attempts.filter(a => a.passed).length;
+  const passRate = totalQuizzes > 0 ? Math.round((passed / totalQuizzes) * 100) : 0;
+  const avgAccuracy = totalQuizzes > 0
+    ? Math.round(attempts.reduce((sum, a) => sum + (a.percentage || 0), 0) / totalQuizzes)
+    : 0;
+  const bestScore = attempts.length > 0 ? Math.max(...attempts.map(a => a.percentage || 0)) : 0;
+  const mastered = progress.filter(p => p.mastery_level === 'mastered').length;
+  const lastActive = attempts.length > 0
+    ? new Date(attempts[0].completed_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' })
+    : 'Never';
+
+  // Hero
+  document.getElementById('hero-name').textContent = name;
+  document.getElementById('hero-year').textContent = profile.year_group || 'Year —';
+  document.getElementById('hero-board').textContent = profile.exam_board || '—';
+  document.getElementById('hero-streak').textContent = `🔥 ${streak.current_streak} day streak`;
+  document.getElementById('hero-quizzes').textContent = totalQuizzes;
+  document.getElementById('hero-accuracy').textContent = avgAccuracy + '%';
+  document.getElementById('hero-mastered').textContent = mastered;
+  document.getElementById('hero-best').textContent = bestScore + '%';
+
+  // Summary cards
+  document.getElementById('sum-passed').textContent = passed;
+  document.getElementById('sum-pass-rate').textContent = passRate + '%';
+  document.getElementById('sum-streak').textContent = streak.current_streak;
+  document.getElementById('sum-last-active').textContent = lastActive;
+
+  // Subject breakdown
+  renderSubjects(attempts);
+
+  // Strengths & weaknesses
+  renderStrengthsWeaknesses(progress);
+
+  // Recent activity
+  renderActivity(attempts.slice(0, 15));
+
+  // Insights
+  renderInsights(name, totalQuizzes, avgAccuracy, passRate, streak, mastered, attempts);
+
+  // Show page
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('page-content').style.display = 'block';
+}
+
+function renderSubjects(attempts) {
+  const subjectMap = {};
+  attempts.forEach(a => {
+    const subj = a.quizzes?.topics?.subjects?.name;
+    if (!subj) return;
+    if (!subjectMap[subj]) subjectMap[subj] = { total: 0, scoreSum: 0, count: 0 };
+    subjectMap[subj].total++;
+    subjectMap[subj].scoreSum += (a.percentage || 0);
+    subjectMap[subj].count++;
+  });
+
+  const subjects = Object.entries(subjectMap)
+    .map(([name, d]) => ({ name, avg: Math.round(d.scoreSum / d.count), quizzes: d.total }))
+    .sort((a, b) => b.avg - a.avg);
+
+  if (subjects.length === 0) return;
+
+  const colours = {
+    'Biology': '#2e7d32', 'Chemistry': '#1565c0', 'Physics': '#6a1b9a',
+    'Mathematics': '#e65100', 'Maths': '#e65100'
+  };
+
+  const html = subjects.map(s => {
+    const colour = colours[s.name] || '#0b1628';
+    return `
+      <div class="subject-row">
+        <div class="subject-row-top">
+          <span class="subject-name">${s.name}</span>
+          <span class="subject-score">${s.avg}%</span>
+        </div>
+        <div class="subject-bar-bg">
+          <div class="subject-bar-fill" style="width:${s.avg}%;background:${colour};"></div>
+        </div>
+        <div class="subject-quizzes">${s.quizzes} quiz${s.quizzes !== 1 ? 'zes' : ''} completed</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('subject-list').innerHTML = html;
+}
+
+function renderStrengthsWeaknesses(progress) {
+  const withScores = progress.filter(p => p.best_score !== null && p.best_score !== undefined);
+  if (withScores.length < 2) return;
+
+  const sorted = [...withScores].sort((a, b) => b.best_score - a.best_score);
+  const strengths = sorted.slice(0, 3);
+  const weaknesses = sorted.slice(-3).reverse();
+
+  const makeItem = (item, rank, type) => `
+    <div class="sw-item ${type}">
+      <div class="sw-rank">${rank}</div>
+      <div class="sw-topic">${item.topics?.name || 'Topic'}</div>
+      <div class="sw-score">${Math.round(item.best_score)}%</div>
+    </div>`;
+
+  document.getElementById('strengths-list').innerHTML =
+    strengths.map((s, i) => makeItem(s, i + 1, 'strength')).join('');
+
+  document.getElementById('weaknesses-list').innerHTML =
+    weaknesses.map((w, i) => makeItem(w, i + 1, 'weakness')).join('');
+}
+
+function renderActivity(attempts) {
+  if (attempts.length === 0) return;
+
+  const rows = attempts.map(a => {
+    const date = new Date(a.completed_at).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+    const title = a.quizzes?.title || 'Quiz';
+    const subject = a.quizzes?.topics?.subjects?.name || '—';
+    const pct = Math.round(a.percentage || 0);
+    const scoreClass = pct >= 70 ? 'score-high' : pct >= 50 ? 'score-mid' : 'score-low';
+    const badge = a.passed
+      ? '<span class="pass-badge pass">Pass</span>'
+      : '<span class="pass-badge fail">Fail</span>';
+
+    return `<tr>
+      <td style="color:#666;white-space:nowrap;">${date}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${title}</td>
+      <td style="color:#666;">${subject}</td>
+      <td class="score-cell ${scoreClass}">${pct}%</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('activity-tbody').innerHTML = rows;
+}
+
+function renderInsights(name, total, avg, passRate, streak, mastered, attempts) {
+  const insights = [];
+
+  if (total === 0) {
+    insights.push({ type:'warning', icon:'📋', title:'Getting Started', body:`${name} hasn't completed any quizzes yet. Encourage them to log in and take their first quiz today!` });
+  } else {
+    // Streak insight
+    if (streak.current_streak >= 7) {
+      insights.push({ type:'positive', icon:'🔥', title:'On a Roll!', body:`${name} is on a ${streak.current_streak}-day streak — consistent daily practice is one of the strongest predictors of exam success.` });
+    } else if (streak.current_streak === 0) {
+      insights.push({ type:'warning', icon:'⏰', title:'Streak Broken', body:`${name}'s daily streak has reset. A quick 10-minute quiz today will restart the momentum. Consistency beats intensity!` });
+    }
+
+    // Accuracy insight
+    if (avg >= 80) {
+      insights.push({ type:'positive', icon:'⭐', title:'Excellent Accuracy', body:`${name} is averaging ${avg}% across all quizzes — well above the pass threshold. They have a strong command of the material.` });
+    } else if (avg >= 60) {
+      insights.push({ type:'', icon:'📈', title:'Good Progress', body:`${name} is averaging ${avg}%. With focused practice on weaker topics, they can push above 80% before exams.` });
+    } else {
+      insights.push({ type:'warning', icon:'💪', title:'Room to Grow', body:`${name} is averaging ${avg}%. This is early-stage learning — repeated quiz practice will build confidence and accuracy significantly.` });
+    }
+
+    // Topics mastered
+    if (mastered >= 5) {
+      insights.push({ type:'positive', icon:'🎯', title:`${mastered} Topics Mastered`, body:`${name} has achieved mastery in ${mastered} topics. Each mastered topic is a chunk of the syllabus they can approach exams with confidence.` });
+    } else if (mastered > 0) {
+      insights.push({ type:'', icon:'🎯', title:`${mastered} Topic${mastered>1?'s':''} Mastered`, body:`${name} has mastered ${mastered} topic${mastered>1?'s':''}. Mastery requires scoring 70%+ consistently — keep practising!` });
+    }
+
+    // Pass rate
+    if (passRate >= 70) {
+      insights.push({ type:'positive', icon:'✅', title:'Strong Pass Rate', body:`${name} is passing ${passRate}% of quizzes. This reflects solid understanding across subjects.` });
+    }
+  }
+
+  const html = insights.map(i => `
+    <div class="insight-card ${i.type}">
+      <div class="insight-title">${i.icon} ${i.title}</div>
+      <div class="insight-body">${i.body}</div>
+    </div>`).join('');
+
+  document.getElementById('insights-grid').innerHTML = html || '<div class="insight-card"><div class="insight-body">Keep checking back as your child completes more quizzes.</div></div>';
+}
+
+async function signOut() {
+  await supa.auth.signOut();
+  window.location.href = '/parent/parent-login.html';
+}
+
+init().catch(err => {
+  console.error(err);
+  document.getElementById('loading-state').innerHTML = '<p style="color:#c62828;padding:2rem;">Error loading report. Please go back and try again.</p>';
+});
+</script>
+</body>
+</html>

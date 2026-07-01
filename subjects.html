@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/tokens.css">
 <style>
 /* ── TOKENS (matches dashboard exactly) ── */
 :root{
@@ -283,19 +283,19 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 
 <!-- ══════════ NAV ══════════ -->
 <nav class="topnav">
-<a href="index.html" style="text-decoration:none;color:inherit;"><div class="topnav-logo">
-    <img src="1775416612494_image.png" alt="Inspire Science"
+<a href="/index.html" style="text-decoration:none;color:inherit;"><div class="topnav-logo">
+    <img src="/assets/images/shared/1775416612494_image.png" alt="Inspire Science"
          style="background:#fff;border-radius:6px;padding:2px 6px;"
          onerror="this.style.display='none'">
     <span class="logo-text">Inspire Science</span>
   </div></a>
   
   <div class="nav-links">
-    <button class="nav-link" onclick="location.href='dashboard.html'">Dashboard</button>
+    <button class="nav-link" onclick="location.href='/dashboard.html'">Dashboard</button>
     <button class="nav-link active">Subjects</button>
-    <button class="nav-link" onclick="location.href='progress.html'">My Progress</button>
-    <button class="nav-link" onclick="location.href='revision.html'">Personalised Learning</button>
-    <button class="nav-link" onclick="location.href='quiz.html'">Quick Quiz</button>
+    <button class="nav-link" onclick="location.href='/student/progress.html'">My Progress</button>
+    <button class="nav-link" onclick="location.href='/student/revision.html'">Personalised Learning</button>
+    <button class="nav-link" onclick="location.href='/student/quiz.html'">Quick Quiz</button>
   </div>
   <div class="nav-user" onclick="toggleUserMenu()">
     <div class="avatar" id="nav-avatar" style="background:var(--gold);color:var(--navy);">?</div>
@@ -309,7 +309,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
   <!-- Page header -->
   <div class="page-header fade-in">
     <div class="breadcrumb">
-      <a href="dashboard.html">Dashboard</a>
+      <a href="/dashboard.html">Dashboard</a>
       <span>›</span>
       <span style="color:var(--white)">Subjects</span>
     </div>
@@ -369,7 +369,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 
 <!-- ══════════ SCRIPTS ══════════ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="perf-utils-v2.js"></script>
+<script src="/assets/js/perf-utils-v2.js"></script>
 <script>
 const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -385,7 +385,7 @@ async function getProfile(uid){
   if(data) setCachedProfile(data);
   return data;
 }
-async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window.location.href='index.html'; }
+async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window.location.href='/index.html'; }
 function toast(msg,type='success'){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.className='show '+type;setTimeout(()=>t.className='',3000);}
 function timeAgo(ts){if(!ts)return'Never';const d=new Date(ts),now=new Date(),diff=Math.floor((now-d)/1000);if(diff<60)return'Just now';if(diff<3600)return Math.floor(diff/60)+'m ago';if(diff<86400)return Math.floor(diff/3600)+'h ago';return Math.floor(diff/86400)+'d ago';}
 function masteryLabel(m){return{not_started:'Not Started',learning:'Learning',developing:'Developing',secure:'Secure',mastered:'Mastered'}[m]||'Not Started';}
@@ -404,7 +404,7 @@ async function loadLessonsForSubject(subjectSlug){
   if(!data||data.length===0) return;
   section.style.display='block';
   grid.innerHTML=data.map((l,i)=>`
-    <div class="lesson-card-small" onclick="window.location.href='lessons.html?lesson=${l.id}'">
+    <div class="lesson-card-small" onclick="window.location.href='/student/lessons.html?lesson=${l.id}'">
       <div class="lc-num">Lesson ${l.order_index||i+1}</div>
       <div class="lc-title">${l.title}</div>
       <div class="lc-play">▶ Watch now</div>
@@ -436,7 +436,7 @@ let activeFilter='all';
 
   // Auth — profile served from cache on return visits
   const user=await getUser();
-  if(!user){ clearTimeout(timeoutHandle); window.location.href='index.html'; return; }
+  if(!user){ clearTimeout(timeoutHandle); window.location.href='/index.html'; return; }
   const profile=await getProfile(user.id);
 
   // Render shell immediately
@@ -558,7 +558,7 @@ function renderHero(){
           ${masteredCount>0?`<span class="badge badge-green">${masteredCount} Mastered</span>`:''}
         </div>
         ${s.slug==='physics'?`
-        <a href="physics.html" style="
+        <a href="/subjects/physics.html" style="
           display:inline-flex;align-items:center;gap:.5rem;
           margin-top:1rem;padding:.5rem 1.1rem;
           background:linear-gradient(135deg,#2563eb,#06b6d4);
@@ -568,7 +568,7 @@ function renderHero(){
           ✨ Open Physics Dashboard
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>`:s.slug==='chemistry'?`
-        <a href="chemistry.html" style="
+        <a href="/subjects/chemistry.html" style="
           display:inline-flex;align-items:center;gap:.5rem;
           margin-top:1rem;padding:.5rem 1.1rem;
           background:linear-gradient(135deg,#059669,#34d399);
@@ -578,7 +578,7 @@ function renderHero(){
           ⚗️ Open Chemistry Dashboard
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>`:s.slug==='biology'?`
-        <a href="biology.html" style="
+        <a href="/subjects/biology.html" style="
           display:inline-flex;align-items:center;gap:.5rem;
           margin-top:1rem;padding:.5rem 1.1rem;
           background:linear-gradient(135deg,#166534,#4ade80);
@@ -588,7 +588,7 @@ function renderHero(){
           🧬 Open Biology Dashboard
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>`:s.slug==='maths'?`
-        <a href="maths.html" style="
+        <a href="/subjects/maths.html" style="
           display:inline-flex;align-items:center;gap:.5rem;
           margin-top:1rem;padding:.5rem 1.1rem;
           background:linear-gradient(135deg,#1c4f8a,#3b82f6);
@@ -763,7 +763,7 @@ function goToTopic(topicId, topicName){
   // Check if quiz exists for this topic
   const quiz=allQuizzes.find(q=>q.topic_id===topicId);
   if(quiz){
-    window.location.href=`quiz.html?id=${quiz.id}`;
+    window.location.href=`/student/quiz.html?id=${quiz.id}`;
   } else {
     toast(`No quiz available for "${decodeURIComponent(topicName)}" yet — coming soon!`,'error');
   }
@@ -786,19 +786,19 @@ function masteryLabel(m){
 <!-- Mobile Bottom Navigation -->
 <nav class="mobile-nav">
   <div class="mobile-nav-inner">
-    <button class="mob-nav-btn" onclick="location.href='dashboard.html'">
+    <button class="mob-nav-btn" onclick="location.href='/dashboard.html'">
       <span class="mob-icon">🏠</span>Home
     </button>
-    <button class="mob-nav-btn active" onclick="location.href='subjects.html'">
+    <button class="mob-nav-btn active" onclick="location.href='/subjects.html'">
       <span class="mob-icon">📚</span>Subjects
     </button>
-    <button class="mob-nav-btn" onclick="location.href='progress.html'">
+    <button class="mob-nav-btn" onclick="location.href='/student/progress.html'">
       <span class="mob-icon">📈</span>Progress
     </button>
-    <button class="mob-nav-btn" onclick="location.href='assessment.html'">
+    <button class="mob-nav-btn" onclick="location.href='/student/assessment.html'">
       <span class="mob-icon">📋</span>Tests
     </button>
-    <button class="mob-nav-btn" onclick="location.href='tools.html'">
+    <button class="mob-nav-btn" onclick="location.href='/tools/tools.html'">
       <span class="mob-icon">🔧</span>Tools
     </button>
   </div>
