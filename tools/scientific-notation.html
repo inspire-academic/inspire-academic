@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scientific Notation — Inspire Academic</title>
+<meta name="description" content="Interactive scientific notation tool — converter, scale explorer, calculator, SI prefix trainer and practice questions.">
+<link rel="icon" href="/assets/images/shared/inspire-logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+:root {
+  --sidebar: 256px; --radius: 20px; --radius-sm: 12px;
+  --transition: .2s cubic-bezier(.4,0,.2,1);
+  --spring-out: cubic-bezier(.34,1.56,.64,1);
+  --gold: #c9a84c; --amber: #d97706; --amber-bg: rgba(217,119,6,.14); --amber-border: rgba(217,119,6,.32);
+}
+[data-theme="dark"] {
+  --bg:#0b1628; --bg-deep:#07101e; --bg-panel:rgba(13,28,56,.75); --bg-card:rgba(255,255,255,.045);
+  --bg-hover:rgba(255,255,255,.07); --border:rgba(255,255,255,.09); --border-strong:rgba(255,255,255,.16);
+  --text:#f0f6ff; --text-muted:rgba(240,246,255,.58); --text-soft:rgba(240,246,255,.55);
+  --search-bg:rgba(255,255,255,.06); --shadow-card:0 6px 28px rgba(0,0,0,.3);
+}
+[data-theme="light"] {
+  --bg:#eef2f9; --bg-deep:#e4eaf5; --bg-panel:#ffffff; --bg-card:#ffffff;
+  --bg-hover:rgba(29,78,216,.06); --border:rgba(29,78,216,.12); --border-strong:rgba(29,78,216,.22);
+  --text:#0d1929; --text-muted:rgba(13,25,41,.65); --text-soft:rgba(13,25,41,.38);
+  --search-bg:#ffffff; --shadow-card:0 4px 20px rgba(29,78,216,.09);
+}
+[data-subject="physics"]   { --accent:#1d4ed8; --accent2:#06b6d4; --grad-subject:linear-gradient(135deg,#1d4ed8,#06b6d4); --accent-glow:rgba(29,78,216,.18); }
+[data-subject="chemistry"] { --accent:#059669; --accent2:#34d399; --grad-subject:linear-gradient(135deg,#059669,#34d399); --accent-glow:rgba(5,150,105,.18); }
+[data-subject="biology"]   { --accent:#7c3aed; --accent2:#a78bfa; --grad-subject:linear-gradient(135deg,#7c3aed,#a78bfa); --accent-glow:rgba(124,58,237,.18); }
+[data-subject="maths"]     { --accent:#d97706; --accent2:#fbbf24; --grad-subject:linear-gradient(135deg,#d97706,#fbbf24); --accent-glow:rgba(217,119,6,.18); }
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior: smooth }
+body { font-family:'Plus Jakarta Sans',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; transition:background var(--transition),color var(--transition); }
+a { color:inherit; text-decoration:none }
+button, input, select, textarea { font:inherit; color:inherit }
+h1,h2,h3 { font-family:'Fraunces',Georgia,serif }
+
+.app { display:block; min-height:100vh; }
+.sidebar {
+  position:fixed; inset:0 auto 0 0; width:var(--sidebar); display:flex; flex-direction:column; z-index:50;
+  overflow-y:auto; backdrop-filter:blur(28px) saturate(180%); -webkit-backdrop-filter:blur(28px) saturate(180%);
+  border-right:1px solid rgba(255,255,255,.1); box-shadow:1px 0 0 rgba(255,255,255,.06) inset, 4px 0 32px rgba(0,0,0,.28);
+}
+[data-theme="dark"] .sidebar { background:rgba(6,10,22,.72) }
+[data-theme="light"] .sidebar { background:rgba(255,255,255,.78); border-right-color:rgba(29,78,216,.1); box-shadow:1px 0 0 rgba(255,255,255,.9) inset, 4px 0 32px rgba(29,78,216,.07); }
+.brand { padding:24px 20px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+.brand-icon { width:44px; height:44px; border-radius:14px; background:var(--grad-subject); display:grid; place-items:center; flex-shrink:0; box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.2) inset,0 8px 24px var(--accent-glow); }
+.brand-icon svg { width:22px; height:22px; fill:none; stroke:#fff; stroke-width:2 }
+.brand-kicker { font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:2px; }
+.brand-name { font-size:17px; font-weight:900; line-height:1; letter-spacing:-.02em; }
+.brand-sub { font-size:10px; color:var(--text-soft); font-weight:600; margin-top:3px }
+.subject-badge { margin:16px 20px 8px; padding:8px 12px; border-radius:var(--radius-sm); background:var(--accent-glow); border:1px solid var(--accent-glow); display:flex; align-items:center; gap:8px; }
+.subject-dot { width:8px; height:8px; border-radius:50%; background:var(--grad-subject); flex-shrink:0; }
+.subject-label { font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); }
+[data-theme="light"] .subject-label { color:var(--accent); }
+.nav { padding:8px 12px; flex:1; display:flex; flex-direction:column; gap:2px }
+.nav-section-title { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--text-soft); font-weight:800; padding:14px 8px 6px; }
+.nav-link { display:flex; align-items:center; gap:10px; padding:10px 10px; border-radius:var(--radius-sm); color:var(--text-muted); font-size:13px; font-weight:700; transition:all var(--transition); position:relative; }
+.nav-link svg { width:18px; height:18px; stroke-width:2.2; flex-shrink:0 }
+.nav-link:hover { color:var(--text); background:var(--bg-hover) }
+.nav-link.active { color:var(--text); background:var(--accent-glow); font-weight:700; }
+.nav-link.active::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:3px; border-radius:0 3px 3px 0; background:var(--grad-subject); }
+.sidebar-footer { padding:14px 20px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.student-info { display:flex; align-items:center; gap:9px }
+.student-avatar { width:36px; height:36px; border-radius:50%; background:var(--grad-subject); display:grid; place-items:center; font-size:13px; font-weight:800; color:#fff; flex-shrink:0; box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--accent),0 4px 12px var(--accent-glow); }
+.student-name { font-size:12px; font-weight:700 }
+.student-year { font-size:10px; color:var(--text-soft); font-weight:600 }
+.theme-toggle { width:30px; height:30px; border-radius:8px; border:1px solid var(--border); background:var(--bg-card); color:var(--text-soft); cursor:pointer; display:grid; place-items:center; }
+.theme-toggle:hover { color:var(--text); border-color:var(--border-strong) }
+.theme-toggle svg { width:14px; height:14px }
+.icon-sun { display:none }
+[data-theme="light"] .icon-moon { display:none }
+[data-theme="light"] .icon-sun { display:block }
+
+.main { margin-left:var(--sidebar); padding:28px 28px 60px; min-width:0; }
+.page-header { margin-bottom:20px; }
+.back-to-subject { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; color:var(--accent2); background:var(--accent-glow); border:1px solid var(--accent-glow); border-radius:999px; padding:6px 14px; margin-bottom:14px; transition:var(--transition); }
+[data-theme="light"] .back-to-subject { color:var(--accent); }
+.back-to-subject:hover { border-color:var(--accent); }
+.page-header h1 { font-size:28px; font-weight:800; letter-spacing:-.01em; }
+.page-header .subtitle { font-size:13px; color:var(--text-muted); font-weight:600; margin-top:2px; }
+
+.tool-section { background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:14px; overflow:hidden; box-shadow:var(--shadow-card); }
+.tool-section-header { list-style:none; cursor:pointer; padding:16px 18px; display:flex; align-items:center; gap:12px; font-weight:800; font-size:15px; user-select:none; }
+.tool-section-header::-webkit-details-marker { display:none }
+.tool-section-header .chev { margin-left:auto; width:18px; height:18px; stroke:var(--text-soft); transition:transform var(--transition); flex-shrink:0; }
+.tool-section[open] .chev { transform:rotate(180deg); }
+.tool-section-header .sec-icon { width:30px; height:30px; border-radius:9px; background:var(--grad-subject); color:#fff; display:grid; place-items:center; flex-shrink:0; }
+.tool-section-header .sec-icon svg { width:16px; height:16px; stroke:#fff; }
+.tool-section-body { padding:6px 18px 24px; border-top:1px solid var(--border); }
+.tool-section-body p.desc { font-size:13px; color:var(--text-muted); margin:14px 0; line-height:1.5; }
+
+.btn { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; border-radius:999px; padding:9px 16px; cursor:pointer; border:1px solid var(--border); background:var(--bg-card); color:var(--text); transition:var(--transition); }
+.btn:hover { border-color:var(--border-strong); transform:translateY(-1px); }
+.btn-primary { background:var(--grad-subject); color:#fff; border:none; box-shadow:0 4px 16px var(--accent-glow); }
+.btn-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+.blank-input { width:100%; background:var(--search-bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; font-size:13px; margin:6px 0 14px; }
+
+/* A) Converter */
+.working-steps { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.working-steps li { font-family:'JetBrains Mono',monospace; font-size:13px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; }
+.result-pair { display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; }
+.result-box { flex:1; min-width:180px; background:var(--accent-glow); border:1px solid var(--accent-glow); border-radius:var(--radius-sm); padding:12px 14px; }
+.result-box .label { font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-soft); margin-bottom:4px; }
+.result-box .value { font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; }
+.example-box { background:var(--bg-card); border:1px dashed var(--border-strong); border-radius:var(--radius-sm); padding:12px; font-size:12px; color:var(--text-muted); margin-top:12px; }
+
+/* B) Scale explorer */
+.scale-track { display:flex; overflow-x:auto; gap:4px; padding:10px 0; }
+.scale-tick { flex-shrink:0; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; border:1px solid var(--border); background:var(--bg-card); border-radius:8px; padding:8px 10px; cursor:pointer; transition:var(--transition); }
+.scale-tick.active { background:var(--grad-subject); color:#fff; border:none; }
+.scale-display { margin-top:16px; padding:22px; border-radius:var(--radius-sm); background:var(--accent-glow); border:1px solid var(--accent-glow); text-align:center; transition:transform .4s var(--spring-out), opacity .3s; }
+.scale-display .power { font-family:'JetBrains Mono',monospace; font-size:28px; font-weight:800; }
+.scale-display .full-number { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-muted); margin-top:6px; word-break:break-all; }
+.scale-display .example { font-size:14px; font-weight:700; margin-top:10px; }
+.scale-display.zooming { transform:scale(1.08); }
+
+/* C) Calculator */
+.calc-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.calc-row input { width:80px; background:var(--search-bg); border:1px solid var(--border); border-radius:6px; padding:8px; text-align:center; font-size:13px; }
+.calc-row select { background:var(--search-bg); border:1px solid var(--border); border-radius:6px; padding:8px; font-size:13px; }
+.form-toggle { display:flex; gap:8px; margin-top:10px; }
+.form-toggle button { flex:1; }
+.form-toggle button.active { background:var(--grad-subject); color:#fff; border:none; }
+
+/* D) SI prefix trainer */
+.flip-card { perspective:900px; height:110px; background:none; border:none; padding:0; cursor:pointer; width:100%; max-width:220px; }
+.flip-card-inner { position:relative; width:100%; height:100%; transition:transform .6s var(--spring-out); transform-style:preserve-3d; }
+.flip-card.flipped .flip-card-inner { transform:rotateY(180deg); }
+.flip-card-front, .flip-card-back { position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--radius-sm); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; text-align:center; padding:10px; font-size:15px; }
+.flip-card-front { background:var(--bg-card); font-weight:800; }
+.flip-card-back { background:var(--accent-glow); transform:rotateY(180deg); font-family:'JetBrains Mono',monospace; font-weight:700; }
+.trainer-controls { display:flex; gap:8px; margin:14px 0; }
+.progress-pill { font-size:12px; font-weight:700; background:var(--bg-card); border:1px solid var(--border); border-radius:999px; padding:6px 12px; }
+
+/* E) Practice questions */
+.level-tabs { display:flex; gap:8px; margin:14px 0 10px; }
+.level-tab { font-size:12px; font-weight:800; padding:7px 14px; border-radius:999px; border:1px solid var(--border); background:var(--bg-card); cursor:pointer; }
+.level-tab.active { background:var(--grad-subject); color:#fff; border:none; }
+.q-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; margin-bottom:10px; }
+.q-card .q-text { font-size:13px; font-weight:700; margin-bottom:8px; }
+.q-card input { background:var(--search-bg); border:1px solid var(--border); border-radius:6px; padding:8px; font-size:13px; width:160px; }
+.q-card .q-feedback { font-size:12px; margin-top:8px; display:none; }
+.q-card .q-feedback.show { display:block; }
+.q-card .q-feedback.correct { color:#22c55e; }
+.q-card .q-feedback.incorrect { color:#f97316; }
+.q-card .q-solution { font-size:12px; color:var(--text-muted); border-top:1px dashed var(--border); padding-top:8px; margin-top:8px; display:none; }
+.q-card .q-solution.show { display:block; }
+
+footer.site-footer { margin-left:var(--sidebar); padding:20px 28px 40px; font-size:11px; color:var(--text-soft); }
+
+@media (max-width:900px) { .sidebar { display:none } .main, footer.site-footer { margin-left:0; padding-left:16px; padding-right:16px } }
+@media (prefers-reduced-motion:reduce) { * { transition-duration:.01ms !important } }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <a class="brand" href="/dashboard.html" title="Go to dashboard">
+      <div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/></svg></div>
+      <div><div class="brand-kicker">Inspire</div><div class="brand-name">Academic</div><div class="brand-sub">GCSE Science</div></div>
+    </a>
+    <div class="subject-badge"><div class="subject-dot"></div><span class="subject-label" id="subjectBadgeLabel">GCSE · Subject</span></div>
+    <nav class="nav" id="sidebarNav"></nav>
+    <div class="sidebar-footer">
+      <div class="student-info">
+        <div class="student-avatar"><span style="display:grid;place-items:center;width:100%;height:100%;">K</span></div>
+        <div><div class="student-name">Kwame</div><div class="student-year">Year 10</div></div>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light / dark">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <a class="back-to-subject" id="backToSubject" href="/subjects/physics.html">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to <span id="backToSubjectName">Physics</span>
+      </a>
+      <h1>Scientific Notation</h1>
+      <div class="subtitle">Master the language of scale</div>
+    </header>
+
+    <!-- A) CONVERTER -->
+    <details class="tool-section" open>
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span>
+        Converter
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Enter a number in standard or scientific notation — it converts instantly both ways, with full working shown.</p>
+        <input class="blank-input" id="converterInput" placeholder="e.g. 384400000 or 3.844e8" value="384400000">
+        <div class="btn-row"><button class="btn btn-primary" type="button" id="convertBtn">Convert</button></div>
+        <div class="result-pair" id="converterResults"></div>
+        <ul class="working-steps" id="converterWorking"></ul>
+        <div class="example-box" id="converterExample"></div>
+      </div>
+    </details>
+
+    <!-- B) VISUAL SCALE EXPLORER -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 0 0 20"/><path d="M12 2a15.3 15.3 0 0 1 0 20"/><path d="M2 12h20"/></svg></span>
+        Visual Scale Explorer
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Click any power of 10 to see what actually exists at that scale — from the smallest particles to the observable universe.</p>
+        <div class="scale-track" id="scaleTrack"></div>
+        <div class="scale-display" id="scaleDisplay"></div>
+      </div>
+    </details>
+
+    <!-- C) CALCULATOR -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></span>
+        Calculator
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Calculate with two numbers in scientific notation (coefficient × 10ⁿ) and see the full working.</p>
+        <div class="calc-row">
+          <input type="number" step="any" id="calcCoeff1" value="2.4"> × 10^ <input type="number" id="calcExp1" value="5">
+          <select id="calcOp"><option value="×">×</option><option value="÷">÷</option><option value="+">+</option><option value="−">−</option></select>
+          <input type="number" step="any" id="calcCoeff2" value="3"> × 10^ <input type="number" id="calcExp2" value="3">
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" type="button" id="calcRunBtn">Calculate</button></div>
+        <ul class="working-steps" id="calcWorking"></ul>
+        <div class="form-toggle" id="calcFormToggle" style="display:none">
+          <button class="btn active" data-form="sci">Scientific notation</button>
+          <button class="btn" data-form="std">Standard form</button>
+        </div>
+        <div class="result-pair" id="calcResult"></div>
+      </div>
+    </details>
+
+    <!-- D) SI PREFIX TRAINER -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="12" rx="2"/><path d="M8 9h8"/><path d="M8 13h5"/></svg></span>
+        SI Prefix Trainer
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Flip the cards to test yourself on SI prefixes both ways, then try converting real units.</p>
+        <div class="trainer-controls">
+          <span class="progress-pill" id="masteredPill">Mastered: 0</span>
+          <span class="progress-pill" id="practicePill">Needs practice: 0</span>
+        </div>
+        <div class="skills-grid" id="prefixCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;"></div>
+
+        <h3 style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-soft);margin-top:22px;">Conversion Practice</h3>
+        <p class="desc" style="margin-top:6px" id="prefixPracticeQ"></p>
+        <div class="btn-row" style="margin-top:0">
+          <input class="blank-input" style="margin:0;width:160px" id="prefixPracticeInput" placeholder="Your answer">
+          <button class="btn btn-primary" type="button" id="prefixPracticeCheck">Check</button>
+          <button class="btn" type="button" id="prefixPracticeNext">New question</button>
+        </div>
+        <div id="prefixPracticeFeedback" style="font-size:12px;margin-top:6px"></div>
+      </div>
+    </details>
+
+    <!-- E) PRACTICE QUESTIONS -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/></svg></span>
+        Practice Questions
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">10 randomised questions per session. Pick a difficulty to begin.</p>
+        <div class="level-tabs" id="practiceLevelTabs">
+          <button class="level-tab active" data-level="foundation">Foundation</button>
+          <button class="level-tab" data-level="higher">Higher</button>
+          <button class="level-tab" data-level="challenge">Challenge</button>
+        </div>
+        <div class="btn-row"><button class="btn" type="button" id="regenerateBtn">New set of 10</button></div>
+        <div id="practiceQuestions"></div>
+      </div>
+    </details>
+
+  </main>
+  <footer class="site-footer">© 2026 Inspire Science™ · Inspire Vision™</footer>
+</div>
+
+<script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/subject-back.js"></script>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const currentSubject = urlParams.get('subject') || 'physics';
+sessionStorage.setItem('currentSubject', currentSubject);
+
+const SUBJECT_IDS = { maths: 1, physics: 2, chemistry: 3, biology: 4 };
+const SUBJECT_LABELS = { maths: 'Maths', physics: 'Physics', chemistry: 'Chemistry', biology: 'Biology' };
+const subject = SUBJECT_IDS[currentSubject] ? currentSubject : 'physics';
+const subjectId = SUBJECT_IDS[subject];
+const subjectLabel = SUBJECT_LABELS[subject];
+
+document.documentElement.setAttribute('data-subject', subject);
+document.getElementById('subjectBadgeLabel').textContent = 'GCSE · ' + subjectLabel;
+document.title = 'Scientific Notation — ' + subjectLabel + ' — Inspire Academic';
+
+const backSubject = sessionStorage.getItem('currentSubject') || 'physics';
+document.getElementById('backToSubject').href = `/subjects/${backSubject}.html`;
+document.getElementById('backToSubjectName').textContent = SUBJECT_LABELS[backSubject] || 'Physics';
+
+const NAV = [
+  { label: 'Home', href: `/subjects/${subject}.html`, section: 'Study',
+    icon: '<path d="M3 10.5l9-7 9 7"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/>' },
+  { label: 'My Progress', href: `/student/progress.html`,
+    icon: '<path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 3 5-7"/>' },
+  { label: 'Topics', href: `/subjects/${subject}.html#topics`,
+    icon: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>' },
+  { label: 'Lessons', href: `/student/lessons.html?subject=${subjectId}&ref=${subject}`,
+    icon: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/>' },
+  { label: 'Quizzes', href: `/student/quiz.html?subject=${subjectId}&ref=${subject}`,
+    icon: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/>' },
+  { label: 'Exam Practice', href: `/student/assessment.html?subject=${subject}&ref=${subject}`, section: 'Practice',
+    icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/>' },
+  { label: 'Required Practicals', href: `/student/required-practicals.html?subject=${subject}&ref=${subject}`,
+    icon: '<path d="M10 2v7.5L4.5 19A2 2 0 0 0 6.2 22h11.6a2 2 0 0 0 1.7-3L14 9.5V2"/><path d="M8 2h8"/>' },
+  { label: 'Revision Notes', href: `/student/revision-notes.html?subject=${subject}&ref=${subject}`,
+    icon: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>' },
+  { label: 'Mock Exams', href: `/student/assessment.html?subject=${subject}&ref=${subject}`,
+    icon: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>' },
+  { label: 'Flashcards', href: `/student/flashcards.html?subject=${subject}&ref=${subject}`,
+    icon: '<rect x="4" y="5" width="16" height="12" rx="2"/><path d="M8 9h8"/><path d="M8 13h5"/>' },
+  { label: 'Achievements', href: `/dashboard.html#achievements`,
+    icon: '<path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/>' },
+];
+document.getElementById('sidebarNav').innerHTML = NAV.map(item => `
+  ${item.section ? `<div class="nav-section-title">${item.section}</div>` : ''}
+  <a class="nav-link" href="${item.href}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor">${item.icon}</svg>${item.label}</a>`).join('');
+
+const htmlEl = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('ia-theme');
+if (savedTheme) htmlEl.setAttribute('data-theme', savedTheme);
+themeBtn.addEventListener('click', () => {
+  const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  htmlEl.setAttribute('data-theme', next);
+  localStorage.setItem('ia-theme', next);
+});
+
+// ══════════════════════════════════════════════════════════
+// A) CONVERTER
+// ══════════════════════════════════════════════════════════
+function supExp(n) {
+  const digits = String(Math.abs(n)).split('').map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('');
+  return (n < 0 ? '⁻' : '') + digits;
+}
+function parseFlexibleNumber(str) {
+  str = str.trim().replace(/\s+/g, '').replace(/×/g, 'x').replace(/\^/g, '');
+  // handle "3.844x10E8" / "3.844x10^8" style already stripped of ^; try common patterns
+  const sciMatch = str.match(/^(-?\d*\.?\d+)[eEx]\+?10?\^?(-?\d+)$/) || str.match(/^(-?\d*\.?\d+)e(-?\d+)$/i);
+  if (sciMatch) return parseFloat(sciMatch[1]) * Math.pow(10, parseInt(sciMatch[2]));
+  const n = parseFloat(str.replace(/x10/i, 'e'));
+  return isNaN(n) ? null : n;
+}
+function toScientific(n) {
+  if (n === 0) return { coeff: 0, exp: 0 };
+  const exp = Math.floor(Math.log10(Math.abs(n)));
+  let coeff = n / Math.pow(10, exp);
+  // guard rounding edge cases (e.g. 9.999999 -> 10)
+  if (Math.abs(coeff) >= 10) { coeff /= 10; return { coeff: +coeff.toFixed(6), exp: exp + 1 }; }
+  return { coeff: +coeff.toFixed(6), exp };
+}
+function realWorldExample(exp) {
+  if (exp >= 22) return 'similar to the number of stars in the observable universe';
+  if (exp >= 12) return 'similar to national debt or distances in light-years';
+  if (exp >= 8) return 'similar to the distance from the Earth to the Moon (in metres)';
+  if (exp >= 3) return 'everyday large quantities — populations, budgets';
+  if (exp >= 0) return 'everyday counting numbers';
+  if (exp >= -6) return 'similar to the width of a human hair or a bacterium (in metres)';
+  if (exp >= -10) return 'similar to the size of an atom (in metres)';
+  return 'similar to the scale of a nucleus or subatomic particle';
+}
+document.getElementById('convertBtn').addEventListener('click', () => {
+  const raw = document.getElementById('converterInput').value;
+  const n = parseFlexibleNumber(raw);
+  if (n === null) {
+    document.getElementById('converterWorking').innerHTML = '<li>Could not read that number — try e.g. 384400000 or 3.844e8</li>';
+    document.getElementById('converterResults').innerHTML = '';
+    document.getElementById('converterExample').textContent = '';
+    return;
+  }
+  const { coeff, exp } = toScientific(n);
+  document.getElementById('converterResults').innerHTML = `
+    <div class="result-box"><div class="label">Standard form</div><div class="value">${n.toLocaleString('en-GB', {maximumFractionDigits:10})}</div></div>
+    <div class="result-box"><div class="label">Scientific notation</div><div class="value">${coeff} × 10${supExp(exp)}</div></div>`;
+  document.getElementById('converterWorking').innerHTML = `
+    <li>Move the decimal point ${Math.abs(exp)} place${Math.abs(exp)===1?'':'s'} ${exp>=0?'left':'right'} → × 10${supExp(exp)}</li>
+    <li>Coefficient after moving: ${coeff}</li>
+    <li>Result: ${coeff} × 10^${exp}</li>`;
+  document.getElementById('converterExample').innerHTML = `<strong>Real-world scale:</strong> a number around 10^${exp} is ${realWorldExample(exp)}.`;
+});
+document.getElementById('convertBtn').click();
+
+// ══════════════════════════════════════════════════════════
+// B) VISUAL SCALE EXPLORER
+// ══════════════════════════════════════════════════════════
+const SCALE_EXAMPLES = {
+  26: 'Observable universe (diameter, m)', 21: 'Milky Way galaxy (diameter, m)', 16: 'One light-year (m)',
+  12: 'Diameter of the Solar System (m)', 9: 'Distance Earth–Sun (m)', 7: 'Diameter of Earth (m)',
+  6: 'Distance London–Paris (m)', 3: 'Height of a mountain (m)', 0: 'Height of a person (m)',
+  '-3': 'Width of a grain of sand (m)', '-6': 'Diameter of a human hair (m)', '-7': 'Size of a bacterium (m)',
+  '-9': 'Diameter of a virus (m)', '-10': 'Size of a large atom (m)', '-15': 'Diameter of a proton (m)',
+};
+function nearestExampleExp(exp) {
+  const keys = Object.keys(SCALE_EXAMPLES).map(Number);
+  return keys.reduce((best,k) => Math.abs(k-exp) < Math.abs(best-exp) ? k : best, keys[0]);
+}
+const scaleTrack = document.getElementById('scaleTrack');
+for (let p = -15; p <= 26; p++) {
+  const btn = document.createElement('button');
+  btn.className = 'scale-tick'; btn.type = 'button'; btn.dataset.power = p;
+  btn.textContent = `10${supExp(p)}`;
+  scaleTrack.appendChild(btn);
+}
+function showScale(power) {
+  scaleTrack.querySelectorAll('.scale-tick').forEach(t => t.classList.toggle('active', +t.dataset.power === power));
+  const display = document.getElementById('scaleDisplay');
+  display.classList.add('zooming');
+  setTimeout(() => display.classList.remove('zooming'), 350);
+  const full = Math.pow(10, power);
+  const example = SCALE_EXAMPLES[nearestExampleExp(power)];
+  display.innerHTML = `
+    <div class="power">10${supExp(power)}</div>
+    <div class="full-number">${power >= 0 ? full.toLocaleString('en-GB', {maximumFractionDigits:0}) : full.toExponential(3)}</div>
+    <div class="example">${example}</div>`;
+}
+scaleTrack.addEventListener('click', e => { const t = e.target.closest('.scale-tick'); if (t) showScale(+t.dataset.power); });
+showScale(0);
+
+// ══════════════════════════════════════════════════════════
+// C) CALCULATOR
+// ══════════════════════════════════════════════════════════
+let lastCalcAnswer = null;
+document.getElementById('calcRunBtn').addEventListener('click', () => {
+  const c1 = parseFloat(document.getElementById('calcCoeff1').value), e1 = parseInt(document.getElementById('calcExp1').value);
+  const c2 = parseFloat(document.getElementById('calcCoeff2').value), e2 = parseInt(document.getElementById('calcExp2').value);
+  const op = document.getElementById('calcOp').value;
+  const n1 = c1 * Math.pow(10, e1), n2 = c2 * Math.pow(10, e2);
+  let answer, working = [];
+  if (op === '×') {
+    answer = n1 * n2;
+    working.push(`Multiply coefficients: ${c1} × ${c2} = ${(c1*c2).toFixed(4)}`);
+    working.push(`Add exponents: 10^${e1} × 10^${e2} = 10^${e1+e2}`);
+    working.push(`<strong>Common error:</strong> do NOT multiply the exponents — always add them when multiplying.`);
+  } else if (op === '÷') {
+    answer = n1 / n2;
+    working.push(`Divide coefficients: ${c1} ÷ ${c2} = ${(c1/c2).toFixed(4)}`);
+    working.push(`Subtract exponents: 10^${e1} ÷ 10^${e2} = 10^${e1-e2}`);
+  } else if (op === '+') {
+    answer = n1 + n2;
+    working.push(`Convert both to the same power of 10 first, then add the coefficients.`);
+    working.push(`${n1.toExponential(3)} + ${n2.toExponential(3)} = ${answer.toExponential(3)}`);
+    working.push(`<strong>Common error:</strong> you cannot add the coefficients directly unless the exponents already match.`);
+  } else {
+    answer = n1 - n2;
+    working.push(`Convert both to the same power of 10 first, then subtract the coefficients.`);
+    working.push(`${n1.toExponential(3)} − ${n2.toExponential(3)} = ${answer.toExponential(3)}`);
+  }
+  lastCalcAnswer = answer;
+  document.getElementById('calcWorking').innerHTML = working.map(w => `<li>${w}</li>`).join('');
+  document.getElementById('calcFormToggle').style.display = 'flex';
+  document.getElementById('calcFormToggle').querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.form === 'sci'));
+  renderCalcResult('sci');
+});
+function renderCalcResult(form) {
+  if (lastCalcAnswer === null) return;
+  const val = form === 'sci' ? lastCalcAnswer.toExponential(4) : lastCalcAnswer.toLocaleString('en-GB', {maximumFractionDigits:6});
+  document.getElementById('calcResult').innerHTML = `<div class="result-box"><div class="label">Answer</div><div class="value">${val}</div></div>`;
+}
+document.getElementById('calcFormToggle').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-form]'); if (!btn) return;
+  document.getElementById('calcFormToggle').querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCalcResult(btn.dataset.form);
+});
+
+// ══════════════════════════════════════════════════════════
+// D) SI PREFIX TRAINER
+// ══════════════════════════════════════════════════════════
+const SI_PREFIXES = [
+  { name: 'nano', symbol: 'n', power: -9 }, { name: 'micro', symbol: 'µ', power: -6 },
+  { name: 'milli', symbol: 'm', power: -3 }, { name: 'kilo', symbol: 'k', power: 3 },
+  { name: 'mega', symbol: 'M', power: 6 }, { name: 'giga', symbol: 'G', power: 9 },
+];
+let mastered = new Set(), needsPractice = new Set();
+function renderPrefixCards() {
+  document.getElementById('prefixCards').innerHTML = SI_PREFIXES.map((p, i) => `
+    <button type="button" class="flip-card" data-i="${i}" aria-label="Flip ${p.name}">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">${p.name}</div>
+        <div class="flip-card-back">10${supExp(p.power)} (${p.symbol})</div>
+      </div>
+    </button>`).join('');
+  document.getElementById('prefixCards').addEventListener('click', e => {
+    const card = e.target.closest('.flip-card'); if (!card) return;
+    card.classList.toggle('flipped');
+    const i = +card.dataset.i;
+    if (card.classList.contains('flipped')) { mastered.add(i); needsPractice.delete(i); }
+    else { needsPractice.add(i); }
+    updateProgressPills();
+  }, { once: true });
+}
+function updateProgressPills() {
+  document.getElementById('masteredPill').textContent = `Mastered: ${mastered.size}`;
+  document.getElementById('practicePill').textContent = `Needs practice: ${needsPractice.size}`;
+}
+renderPrefixCards();
+
+let currentPrefixQ = null;
+function newPrefixPractice() {
+  const p = SI_PREFIXES[Math.floor(Math.random() * SI_PREFIXES.length)];
+  const val = (Math.random() * 9 + 1).toFixed(1);
+  currentPrefixQ = { value: parseFloat(val), prefix: p, answer: parseFloat(val) * Math.pow(10, p.power) };
+  document.getElementById('prefixPracticeQ').textContent = `Convert: ${val}${p.symbol} → base unit`;
+  document.getElementById('prefixPracticeInput').value = '';
+  document.getElementById('prefixPracticeFeedback').textContent = '';
+}
+document.getElementById('prefixPracticeCheck').addEventListener('click', () => {
+  const given = parseFloat(document.getElementById('prefixPracticeInput').value);
+  const fb = document.getElementById('prefixPracticeFeedback');
+  if (!currentPrefixQ) return;
+  const correct = Math.abs(given - currentPrefixQ.answer) < Math.abs(currentPrefixQ.answer) * 0.01 + 1e-12;
+  fb.textContent = correct ? 'Correct!' : `Not quite — the answer is ${currentPrefixQ.answer.toExponential(3)}`;
+  fb.style.color = correct ? '#22c55e' : '#f97316';
+});
+document.getElementById('prefixPracticeNext').addEventListener('click', newPrefixPractice);
+newPrefixPractice();
+
+// ══════════════════════════════════════════════════════════
+// E) PRACTICE QUESTIONS
+// ══════════════════════════════════════════════════════════
+function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function generateQuestion(level) {
+  if (level === 'foundation') {
+    const n = randInt(2,9) * Math.pow(10, randInt(3,9));
+    return { text: `Write ${n.toLocaleString('en-GB')} in scientific notation.`, check: (ans) => {
+      const { coeff, exp } = toScientific(n);
+      return Math.abs(parseFloat(ans) - coeff) < 0.05;
+    }, solution: () => { const {coeff,exp} = toScientific(n); return `${coeff} × 10^${exp}`; } };
+  }
+  if (level === 'higher') {
+    const c1 = randInt(1,9), e1 = randInt(2,6), c2 = randInt(1,9), e2 = randInt(1,5);
+    const answer = c1 * c2 * Math.pow(10, e1+e2);
+    return { text: `Calculate (${c1} × 10^${e1}) × (${c2} × 10^${e2}). Give your answer in scientific notation.`,
+      check: (ans) => Math.abs(parseFloat(ans) - answer) / answer < 0.02,
+      solution: () => `${toScientific(answer).coeff} × 10^${toScientific(answer).exp}` };
+  }
+  const p = SI_PREFIXES[randInt(0, SI_PREFIXES.length-1)];
+  const val = randInt(1,9);
+  const answer = val * Math.pow(10, p.power);
+  return { text: `Convert ${val}${p.symbol} to its value in standard form (base unit).`,
+    check: (ans) => Math.abs(parseFloat(ans) - answer) / Math.abs(answer) < 0.02,
+    solution: () => answer.toExponential(3) };
+}
+function renderPracticeQuestions(level) {
+  const qs = Array.from({length:10}, () => generateQuestion(level));
+  document.getElementById('practiceQuestions').innerHTML = qs.map((q,i) => `
+    <div class="q-card" data-i="${i}">
+      <div class="q-text">${i+1}. ${q.text}</div>
+      <input type="text" placeholder="Your answer">
+      <button class="btn" type="button" data-check="${i}">Check</button>
+      <div class="q-feedback" id="qf-${i}"></div>
+      <div class="q-solution" id="qs-${i}">Worked solution: ${q.solution()}</div>
+    </div>`).join('');
+  document.getElementById('practiceQuestions').querySelectorAll('[data-check]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = +btn.dataset.check;
+      const input = btn.parentElement.querySelector('input').value;
+      const correct = qs[i].check(input);
+      const fb = document.getElementById(`qf-${i}`);
+      fb.textContent = correct ? 'Correct!' : 'Not quite — see the worked solution below.';
+      fb.className = 'q-feedback show ' + (correct ? 'correct' : 'incorrect');
+      document.getElementById(`qs-${i}`).classList.add('show');
+    });
+  });
+}
+document.querySelectorAll('#practiceLevelTabs .level-tab').forEach(tab => tab.addEventListener('click', e => {
+  document.querySelectorAll('#practiceLevelTabs .level-tab').forEach(t => t.classList.remove('active'));
+  e.target.classList.add('active');
+  renderPracticeQuestions(e.target.dataset.level);
+}));
+document.getElementById('regenerateBtn').addEventListener('click', () => {
+  const activeLevel = document.querySelector('#practiceLevelTabs .level-tab.active').dataset.level;
+  renderPracticeQuestions(activeLevel);
+});
+renderPracticeQuestions('foundation');
+</script>
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Significant Figures — Inspire Academic</title>
+<meta name="description" content="Interactive significant figures tool — identifier, rounding, calculations, common mistakes and practice questions.">
+<link rel="icon" href="/assets/images/shared/inspire-logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+:root {
+  --sidebar: 256px; --radius: 20px; --radius-sm: 12px;
+  --transition: .2s cubic-bezier(.4,0,.2,1);
+  --spring-out: cubic-bezier(.34,1.56,.64,1);
+  --gold: #c9a84c; --amber: #d97706; --amber-bg: rgba(217,119,6,.14); --amber-border: rgba(217,119,6,.32);
+  --green: #22c55e; --grey: #8c8579;
+}
+[data-theme="dark"] {
+  --bg:#0b1628; --bg-deep:#07101e; --bg-panel:rgba(13,28,56,.75); --bg-card:rgba(255,255,255,.045);
+  --bg-hover:rgba(255,255,255,.07); --border:rgba(255,255,255,.09); --border-strong:rgba(255,255,255,.16);
+  --text:#f0f6ff; --text-muted:rgba(240,246,255,.58); --text-soft:rgba(240,246,255,.55);
+  --search-bg:rgba(255,255,255,.06); --shadow-card:0 6px 28px rgba(0,0,0,.3);
+}
+[data-theme="light"] {
+  --bg:#eef2f9; --bg-deep:#e4eaf5; --bg-panel:#ffffff; --bg-card:#ffffff;
+  --bg-hover:rgba(29,78,216,.06); --border:rgba(29,78,216,.12); --border-strong:rgba(29,78,216,.22);
+  --text:#0d1929; --text-muted:rgba(13,25,41,.65); --text-soft:rgba(13,25,41,.38);
+  --search-bg:#ffffff; --shadow-card:0 4px 20px rgba(29,78,216,.09);
+}
+[data-subject="physics"]   { --accent:#1d4ed8; --accent2:#06b6d4; --grad-subject:linear-gradient(135deg,#1d4ed8,#06b6d4); --accent-glow:rgba(29,78,216,.18); }
+[data-subject="chemistry"] { --accent:#059669; --accent2:#34d399; --grad-subject:linear-gradient(135deg,#059669,#34d399); --accent-glow:rgba(5,150,105,.18); }
+[data-subject="biology"]   { --accent:#7c3aed; --accent2:#a78bfa; --grad-subject:linear-gradient(135deg,#7c3aed,#a78bfa); --accent-glow:rgba(124,58,237,.18); }
+[data-subject="maths"]     { --accent:#d97706; --accent2:#fbbf24; --grad-subject:linear-gradient(135deg,#d97706,#fbbf24); --accent-glow:rgba(217,119,6,.18); }
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior: smooth }
+body { font-family:'Plus Jakarta Sans',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; transition:background var(--transition),color var(--transition); }
+a { color:inherit; text-decoration:none }
+button, input, select, textarea { font:inherit; color:inherit }
+h1,h2,h3 { font-family:'Fraunces',Georgia,serif }
+
+.app { display:block; min-height:100vh; }
+.sidebar {
+  position:fixed; inset:0 auto 0 0; width:var(--sidebar); display:flex; flex-direction:column; z-index:50;
+  overflow-y:auto; backdrop-filter:blur(28px) saturate(180%); -webkit-backdrop-filter:blur(28px) saturate(180%);
+  border-right:1px solid rgba(255,255,255,.1); box-shadow:1px 0 0 rgba(255,255,255,.06) inset, 4px 0 32px rgba(0,0,0,.28);
+}
+[data-theme="dark"] .sidebar { background:rgba(6,10,22,.72) }
+[data-theme="light"] .sidebar { background:rgba(255,255,255,.78); border-right-color:rgba(29,78,216,.1); box-shadow:1px 0 0 rgba(255,255,255,.9) inset, 4px 0 32px rgba(29,78,216,.07); }
+.brand { padding:24px 20px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+.brand-icon { width:44px; height:44px; border-radius:14px; background:var(--grad-subject); display:grid; place-items:center; flex-shrink:0; box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.2) inset,0 8px 24px var(--accent-glow); }
+.brand-icon svg { width:22px; height:22px; fill:none; stroke:#fff; stroke-width:2 }
+.brand-kicker { font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:2px; }
+.brand-name { font-size:17px; font-weight:900; line-height:1; letter-spacing:-.02em; }
+.brand-sub { font-size:10px; color:var(--text-soft); font-weight:600; margin-top:3px }
+.subject-badge { margin:16px 20px 8px; padding:8px 12px; border-radius:var(--radius-sm); background:var(--accent-glow); border:1px solid var(--accent-glow); display:flex; align-items:center; gap:8px; }
+.subject-dot { width:8px; height:8px; border-radius:50%; background:var(--grad-subject); flex-shrink:0; }
+.subject-label { font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); }
+[data-theme="light"] .subject-label { color:var(--accent); }
+.nav { padding:8px 12px; flex:1; display:flex; flex-direction:column; gap:2px }
+.nav-section-title { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--text-soft); font-weight:800; padding:14px 8px 6px; }
+.nav-link { display:flex; align-items:center; gap:10px; padding:10px 10px; border-radius:var(--radius-sm); color:var(--text-muted); font-size:13px; font-weight:700; transition:all var(--transition); position:relative; }
+.nav-link svg { width:18px; height:18px; stroke-width:2.2; flex-shrink:0 }
+.nav-link:hover { color:var(--text); background:var(--bg-hover) }
+.nav-link.active { color:var(--text); background:var(--accent-glow); font-weight:700; }
+.nav-link.active::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:3px; border-radius:0 3px 3px 0; background:var(--grad-subject); }
+.sidebar-footer { padding:14px 20px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.student-info { display:flex; align-items:center; gap:9px }
+.student-avatar { width:36px; height:36px; border-radius:50%; background:var(--grad-subject); display:grid; place-items:center; font-size:13px; font-weight:800; color:#fff; flex-shrink:0; box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--accent),0 4px 12px var(--accent-glow); }
+.student-name { font-size:12px; font-weight:700 }
+.student-year { font-size:10px; color:var(--text-soft); font-weight:600 }
+.theme-toggle { width:30px; height:30px; border-radius:8px; border:1px solid var(--border); background:var(--bg-card); color:var(--text-soft); cursor:pointer; display:grid; place-items:center; }
+.theme-toggle:hover { color:var(--text); border-color:var(--border-strong) }
+.theme-toggle svg { width:14px; height:14px }
+.icon-sun { display:none }
+[data-theme="light"] .icon-moon { display:none }
+[data-theme="light"] .icon-sun { display:block }
+
+.main { margin-left:var(--sidebar); padding:28px 28px 60px; min-width:0; }
+.page-header { margin-bottom:20px; }
+.back-to-subject { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; color:var(--accent2); background:var(--accent-glow); border:1px solid var(--accent-glow); border-radius:999px; padding:6px 14px; margin-bottom:14px; transition:var(--transition); }
+[data-theme="light"] .back-to-subject { color:var(--accent); }
+.back-to-subject:hover { border-color:var(--accent); }
+.page-header h1 { font-size:28px; font-weight:800; letter-spacing:-.01em; }
+.page-header .subtitle { font-size:13px; color:var(--text-muted); font-weight:600; margin-top:2px; }
+
+.tool-section { background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:14px; overflow:hidden; box-shadow:var(--shadow-card); }
+.tool-section-header { list-style:none; cursor:pointer; padding:16px 18px; display:flex; align-items:center; gap:12px; font-weight:800; font-size:15px; user-select:none; }
+.tool-section-header::-webkit-details-marker { display:none }
+.tool-section-header .chev { margin-left:auto; width:18px; height:18px; stroke:var(--text-soft); transition:transform var(--transition); flex-shrink:0; }
+.tool-section[open] .chev { transform:rotate(180deg); }
+.tool-section-header .sec-icon { width:30px; height:30px; border-radius:9px; background:var(--grad-subject); color:#fff; display:grid; place-items:center; flex-shrink:0; }
+.tool-section-header .sec-icon svg { width:16px; height:16px; stroke:#fff; }
+.tool-section-body { padding:6px 18px 24px; border-top:1px solid var(--border); }
+.tool-section-body p.desc { font-size:13px; color:var(--text-muted); margin:14px 0; line-height:1.5; }
+
+.btn { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; border-radius:999px; padding:9px 16px; cursor:pointer; border:1px solid var(--border); background:var(--bg-card); color:var(--text); transition:var(--transition); }
+.btn:hover { border-color:var(--border-strong); transform:translateY(-1px); }
+.btn-primary { background:var(--grad-subject); color:#fff; border:none; box-shadow:0 4px 16px var(--accent-glow); }
+.btn-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+.blank-input { width:100%; background:var(--search-bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px; font-size:13px; margin:6px 0 14px; }
+
+/* A) Identifier */
+.digit-display { font-family:'JetBrains Mono',monospace; font-size:28px; font-weight:700; letter-spacing:2px; margin:14px 0; word-break:break-all; }
+.digit-display span.sig { color:var(--green); }
+.digit-display span.notsig { color:var(--grey); }
+.digit-display span.ambiguous { color:var(--amber); background:var(--amber-bg); border-radius:4px; }
+.legend { display:flex; flex-wrap:wrap; gap:14px; font-size:11px; margin-top:6px; }
+.legend span { display:inline-flex; align-items:center; gap:5px; }
+.legend .dot { width:9px; height:9px; border-radius:50%; display:inline-block; }
+.working-steps { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.working-steps li { font-size:13px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; }
+.sf-count { font-size:15px; font-weight:800; margin-top:10px; color:var(--accent2); }
+[data-theme="light"] .sf-count { color:var(--accent); }
+
+/* B/C shared */
+.calc-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.calc-row input, .calc-row select { background:var(--search-bg); border:1px solid var(--border); border-radius:6px; padding:8px; font-size:13px; }
+.calc-row input { width:110px; }
+.result-box { background:var(--accent-glow); border:1px solid var(--accent-glow); border-radius:var(--radius-sm); padding:12px 14px; margin-top:12px; }
+.result-box .label { font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-soft); margin-bottom:4px; }
+.result-box .value { font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; }
+
+/* D) Mistakes cards */
+.mistake-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:10px; overflow:hidden; }
+.mistake-card summary { padding:12px 14px; cursor:pointer; font-size:13px; font-weight:700; list-style:none; }
+.mistake-card summary::-webkit-details-marker { display:none }
+.mistake-card .mistake-body { padding:0 14px 14px; font-size:12px; color:var(--text-muted); line-height:1.6; }
+.mistake-card .wrong { color:#f97316; font-weight:700; }
+.mistake-card .right { color:var(--green); font-weight:700; }
+
+/* E) Practice */
+.mode-tabs, .level-tabs { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 10px; }
+.mode-tab, .level-tab { font-size:12px; font-weight:800; padding:7px 14px; border-radius:999px; border:1px solid var(--border); background:var(--bg-card); cursor:pointer; }
+.mode-tab.active, .level-tab.active { background:var(--grad-subject); color:#fff; border:none; }
+.q-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; margin-bottom:10px; }
+.q-card .q-text { font-size:13px; font-weight:700; margin-bottom:8px; }
+.q-card input { background:var(--search-bg); border:1px solid var(--border); border-radius:6px; padding:8px; font-size:13px; width:160px; }
+.q-card .q-feedback { font-size:12px; margin-top:8px; display:none; }
+.q-card .q-feedback.show { display:block; }
+.q-card .q-feedback.correct { color:#22c55e; }
+.q-card .q-feedback.incorrect { color:#f97316; }
+.q-card .q-solution { font-size:12px; color:var(--text-muted); border-top:1px dashed var(--border); padding-top:8px; margin-top:8px; display:none; }
+.q-card .q-solution.show { display:block; }
+.score-tracker { font-size:13px; font-weight:800; background:var(--bg-card); border:1px solid var(--border); border-radius:999px; padding:8px 16px; display:inline-block; margin-bottom:10px; }
+.encouragement { font-size:12px; color:var(--accent2); margin-top:6px; }
+[data-theme="light"] .encouragement { color:var(--accent); }
+
+footer.site-footer { margin-left:var(--sidebar); padding:20px 28px 40px; font-size:11px; color:var(--text-soft); }
+
+@media (max-width:900px) { .sidebar { display:none } .main, footer.site-footer { margin-left:0; padding-left:16px; padding-right:16px } }
+@media (prefers-reduced-motion:reduce) { * { transition-duration:.01ms !important } }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <a class="brand" href="/dashboard.html" title="Go to dashboard">
+      <div class="brand-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/></svg></div>
+      <div><div class="brand-kicker">Inspire</div><div class="brand-name">Academic</div><div class="brand-sub">GCSE Science</div></div>
+    </a>
+    <div class="subject-badge"><div class="subject-dot"></div><span class="subject-label" id="subjectBadgeLabel">GCSE · Subject</span></div>
+    <nav class="nav" id="sidebarNav"></nav>
+    <div class="sidebar-footer">
+      <div class="student-info">
+        <div class="student-avatar"><span style="display:grid;place-items:center;width:100%;height:100%;">K</span></div>
+        <div><div class="student-name">Kwame</div><div class="student-year">Year 10</div></div>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light / dark">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="page-header">
+      <a class="back-to-subject" id="backToSubject" href="/subjects/physics.html">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to <span id="backToSubjectName">Physics</span>
+      </a>
+      <h1>Significant Figures</h1>
+      <div class="subtitle">Precision that earns marks</div>
+    </header>
+
+    <!-- A) SIG FIG IDENTIFIER -->
+    <details class="tool-section" open>
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>
+        Sig Fig Identifier
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Enter any number and each digit is colour-coded to show whether it's significant.</p>
+        <input class="blank-input" id="identifierInput" placeholder="e.g. 1200 or 0.0025" value="1200">
+        <div class="btn-row"><button class="btn btn-primary" type="button" id="identifyBtn">Identify</button></div>
+        <div class="digit-display" id="digitDisplay"></div>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--green)"></span> Significant</span>
+          <span><span class="dot" style="background:var(--grey)"></span> Not significant (placeholder)</span>
+          <span><span class="dot" style="background:var(--amber)"></span> Ambiguous (trailing zero)</span>
+        </div>
+        <div class="sf-count" id="sfCount"></div>
+        <ul class="working-steps" id="identifierWorking"></ul>
+      </div>
+    </details>
+
+    <!-- B) ROUNDING TOOL -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3.4-7"/><path d="M21 4v5h-5"/></svg></span>
+        Rounding Tool
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Round any number to a chosen number of significant figures, with the decision explained.</p>
+        <div class="calc-row">
+          <input type="text" id="roundInput" value="3.14159" placeholder="number">
+          to <input type="number" id="roundSF" value="3" min="1" placeholder="sig figs">
+          sig figs
+          <button class="btn btn-primary" type="button" id="roundBtn">Round</button>
+        </div>
+        <ul class="working-steps" id="roundWorking"></ul>
+        <div class="result-box" id="roundResult" style="display:none"></div>
+      </div>
+    </details>
+
+    <!-- C) CALCULATIONS WITH SIG FIGS -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01"/></svg></span>
+        Calculations with Sig Figs
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Enter a calculation — the tool identifies the limiting precision and applies the correct rule for the operation.</p>
+        <div class="calc-row">
+          <input type="text" id="sfCalcA" value="12.5">
+          <select id="sfCalcOp"><option value="×">× (multiply)</option><option value="÷">÷ (divide)</option><option value="+">+ (add)</option><option value="−">− (subtract)</option></select>
+          <input type="text" id="sfCalcB" value="3.2">
+          <button class="btn btn-primary" type="button" id="sfCalcBtn">Calculate</button>
+        </div>
+        <ul class="working-steps" id="sfCalcWorking"></ul>
+        <div class="result-box" id="sfCalcResult" style="display:none"></div>
+      </div>
+    </details>
+
+    <!-- D) COMMON MISTAKES -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></span>
+        Common Mistakes
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Click each card to see the mistake, why it happens, and the correct approach.</p>
+        <div id="mistakesContainer"></div>
+      </div>
+    </details>
+
+    <!-- E) PRACTICE QUESTIONS -->
+    <details class="tool-section">
+      <summary class="tool-section-header">
+        <span class="sec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/></svg></span>
+        Practice Questions
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="tool-section-body">
+        <p class="desc">Choose a mode and difficulty — 10 randomised questions per session.</p>
+        <div class="mode-tabs" id="modeTabs">
+          <button class="mode-tab active" data-mode="identify">Identify sig figs</button>
+          <button class="mode-tab" data-mode="round">Round to sig figs</button>
+          <button class="mode-tab" data-mode="calculate">Calculate with sig figs</button>
+        </div>
+        <div class="level-tabs" id="practiceLevelTabs">
+          <button class="level-tab active" data-level="foundation">Foundation</button>
+          <button class="level-tab" data-level="higher">Higher</button>
+          <button class="level-tab" data-level="challenge">Challenge</button>
+        </div>
+        <div class="score-tracker" id="scoreTracker">Score: 0 / 0</div>
+        <div class="encouragement" id="encouragement"></div>
+        <div class="btn-row"><button class="btn" type="button" id="regenerateBtn">New set of 10</button></div>
+        <div id="practiceQuestions"></div>
+      </div>
+    </details>
+
+  </main>
+  <footer class="site-footer">© 2026 Inspire Science™ · Inspire Vision™</footer>
+</div>
+
+<script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/subject-back.js"></script>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const currentSubject = urlParams.get('subject') || 'physics';
+sessionStorage.setItem('currentSubject', currentSubject);
+
+const SUBJECT_IDS = { maths: 1, physics: 2, chemistry: 3, biology: 4 };
+const SUBJECT_LABELS = { maths: 'Maths', physics: 'Physics', chemistry: 'Chemistry', biology: 'Biology' };
+const subject = SUBJECT_IDS[currentSubject] ? currentSubject : 'physics';
+const subjectId = SUBJECT_IDS[subject];
+const subjectLabel = SUBJECT_LABELS[subject];
+
+document.documentElement.setAttribute('data-subject', subject);
+document.getElementById('subjectBadgeLabel').textContent = 'GCSE · ' + subjectLabel;
+document.title = 'Significant Figures — ' + subjectLabel + ' — Inspire Academic';
+
+const backSubject = sessionStorage.getItem('currentSubject') || 'physics';
+document.getElementById('backToSubject').href = `/subjects/${backSubject}.html`;
+document.getElementById('backToSubjectName').textContent = SUBJECT_LABELS[backSubject] || 'Physics';
+
+const NAV = [
+  { label: 'Home', href: `/subjects/${subject}.html`, section: 'Study',
+    icon: '<path d="M3 10.5l9-7 9 7"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/>' },
+  { label: 'My Progress', href: `/student/progress.html`,
+    icon: '<path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 3 5-7"/>' },
+  { label: 'Topics', href: `/subjects/${subject}.html#topics`,
+    icon: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>' },
+  { label: 'Lessons', href: `/student/lessons.html?subject=${subjectId}&ref=${subject}`,
+    icon: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/>' },
+  { label: 'Quizzes', href: `/student/quiz.html?subject=${subjectId}&ref=${subject}`,
+    icon: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.6 2.6 0 0 1 5 1c0 2-2.5 2.1-2.5 4"/><path d="M12 17h.01"/>' },
+  { label: 'Exam Practice', href: `/student/assessment.html?subject=${subject}&ref=${subject}`, section: 'Practice',
+    icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/>' },
+  { label: 'Required Practicals', href: `/student/required-practicals.html?subject=${subject}&ref=${subject}`,
+    icon: '<path d="M10 2v7.5L4.5 19A2 2 0 0 0 6.2 22h11.6a2 2 0 0 0 1.7-3L14 9.5V2"/><path d="M8 2h8"/>' },
+  { label: 'Revision Notes', href: `/student/revision-notes.html?subject=${subject}&ref=${subject}`,
+    icon: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>' },
+  { label: 'Mock Exams', href: `/student/assessment.html?subject=${subject}&ref=${subject}`,
+    icon: '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>' },
+  { label: 'Flashcards', href: `/student/flashcards.html?subject=${subject}&ref=${subject}`,
+    icon: '<rect x="4" y="5" width="16" height="12" rx="2"/><path d="M8 9h8"/><path d="M8 13h5"/>' },
+  { label: 'Achievements', href: `/dashboard.html#achievements`,
+    icon: '<path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/>' },
+];
+document.getElementById('sidebarNav').innerHTML = NAV.map(item => `
+  ${item.section ? `<div class="nav-section-title">${item.section}</div>` : ''}
+  <a class="nav-link" href="${item.href}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor">${item.icon}</svg>${item.label}</a>`).join('');
+
+const htmlEl = document.documentElement;
+const themeBtn = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('ia-theme');
+if (savedTheme) htmlEl.setAttribute('data-theme', savedTheme);
+themeBtn.addEventListener('click', () => {
+  const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  htmlEl.setAttribute('data-theme', next);
+  localStorage.setItem('ia-theme', next);
+});
+
+// ══════════════════════════════════════════════════════════
+// Shared sig-fig classification logic
+// ══════════════════════════════════════════════════════════
+function classifySigFigs(str) {
+  str = String(str).trim();
+  const hasDecimal = str.includes('.');
+  const chars = str.split('');
+  const digitPositions = chars.map((c,i)=>({c,i})).filter(o => /\d/.test(o.c));
+  if (!digitPositions.length) return { chars, classes: [] };
+
+  const firstNonZero = digitPositions.findIndex(o => o.c !== '0');
+  let lastNonZero = -1;
+  for (let k = digitPositions.length-1; k >= 0; k--) { if (digitPositions[k].c !== '0') { lastNonZero = k; break; } }
+
+  const classes = chars.map(() => null);
+  digitPositions.forEach((o, k) => {
+    let type;
+    if (o.c !== '0') type = 'sig';
+    else if (firstNonZero === -1) type = 'notsig';
+    else if (k < firstNonZero) type = 'notsig';
+    else if (k > lastNonZero) type = hasDecimal ? 'sig' : 'ambiguous';
+    else type = 'sig';
+    classes[o.i] = type;
+  });
+  return { chars, classes };
+}
+function countSigFigs(str) {
+  const { classes } = classifySigFigs(str);
+  return classes.filter(c => c === 'sig').length;
+}
+
+// ══════════════════════════════════════════════════════════
+// A) SIG FIG IDENTIFIER
+// ══════════════════════════════════════════════════════════
+document.getElementById('identifyBtn').addEventListener('click', () => {
+  const val = document.getElementById('identifierInput').value;
+  const { chars, classes } = classifySigFigs(val);
+  document.getElementById('digitDisplay').innerHTML = chars.map((c,i) =>
+    classes[i] ? `<span class="${classes[i]}">${c}</span>` : `<span>${c}</span>`).join('');
+  const sig = classes.filter(c => c==='sig').length;
+  const ambiguous = classes.filter(c => c==='ambiguous').length;
+  document.getElementById('sfCount').textContent = ambiguous
+    ? `${sig} definite significant figures (+ ${ambiguous} ambiguous trailing zero${ambiguous>1?'s':''})`
+    : `${sig} significant figure${sig===1?'':'s'}`;
+  const notes = [];
+  if (classes.includes('notsig')) notes.push('Leading zeros are placeholders — they only show the size of the number and are never significant.');
+  if (classes.includes('sig') && val.includes('0') && classes.some((c,i)=>c==='sig' && chars[i]==='0')) notes.push('Zeros written between two non-zero digits are always significant.');
+  if (ambiguous) notes.push('Trailing zeros with no decimal point are ambiguous — write in scientific notation to be precise about how many are significant.');
+  if (val.includes('.') && classes[classes.length-1] === 'sig' && chars[chars.length-1] === '0') notes.push('Trailing zeros AFTER a decimal point are always significant — they show the measurement was precise to that place.');
+  document.getElementById('identifierWorking').innerHTML = notes.map(n => `<li>${n}</li>`).join('') || '<li>Every digit here is a non-zero significant figure.</li>';
+});
+document.getElementById('identifyBtn').click();
+
+// ══════════════════════════════════════════════════════════
+// B) ROUNDING TOOL
+// ══════════════════════════════════════════════════════════
+function roundToSigFigs(num, sf) {
+  if (num === 0) return 0;
+  const d = Math.ceil(Math.log10(Math.abs(num)));
+  const power = sf - d;
+  const factor = Math.pow(10, power);
+  return Math.round(num * factor) / factor;
+}
+document.getElementById('roundBtn').addEventListener('click', () => {
+  const num = parseFloat(document.getElementById('roundInput').value);
+  const sf = parseInt(document.getElementById('roundSF').value);
+  if (isNaN(num) || isNaN(sf) || sf < 1) return;
+  const rounded = roundToSigFigs(num, sf);
+  const str = String(Math.abs(num)).replace('.', '');
+  const digitsOnly = str.replace(/^0+/, '') || '0';
+  const roundingDigit = digitsOnly[sf-1] ?? '0';
+  const nextDigit = digitsOnly[sf] ?? '0';
+  document.getElementById('roundWorking').innerHTML = `
+    <li>Count to the ${sf}${sf===1?'st':sf===2?'nd':sf===3?'rd':'th'} significant figure: that digit is <strong>${roundingDigit}</strong></li>
+    <li>Look at the next digit: <strong>${nextDigit}</strong> — ${+nextDigit >= 5 ? 'round up' : 'round down (keep as is)'}</li>
+    <li>${num} rounded to ${sf} sig fig${sf===1?'':'s'} = <strong>${rounded}</strong></li>`;
+  document.getElementById('roundResult').style.display = 'block';
+  document.getElementById('roundResult').innerHTML = `<div class="label">Rounded answer</div><div class="value">${rounded}</div>`;
+});
+document.getElementById('roundBtn').click();
+
+// ══════════════════════════════════════════════════════════
+// C) CALCULATIONS WITH SIG FIGS
+// ══════════════════════════════════════════════════════════
+function decimalPlaces(str) {
+  const s = String(str);
+  return s.includes('.') ? s.split('.')[1].length : 0;
+}
+document.getElementById('sfCalcBtn').addEventListener('click', () => {
+  const aStr = document.getElementById('sfCalcA').value, bStr = document.getElementById('sfCalcB').value;
+  const a = parseFloat(aStr), b = parseFloat(bStr), op = document.getElementById('sfCalcOp').value;
+  let raw, working = [], final;
+  if (op === '×') { raw = a * b; } else if (op === '÷') { raw = a / b; } else if (op === '+') { raw = a + b; } else { raw = a - b; }
+
+  if (op === '×' || op === '÷') {
+    const limitingSF = Math.min(countSigFigs(aStr), countSigFigs(bStr));
+    final = roundToSigFigs(raw, limitingSF);
+    working.push(`For multiplication/division, the answer is limited by the FEWEST significant figures in the inputs.`);
+    working.push(`${aStr} has ${countSigFigs(aStr)} sig fig${countSigFigs(aStr)===1?'':'s'}; ${bStr} has ${countSigFigs(bStr)} sig fig${countSigFigs(bStr)===1?'':'s'} → limit = ${limitingSF}`);
+    working.push(`Unrounded answer: ${raw}`);
+    working.push(`Final answer to ${limitingSF} sig fig${limitingSF===1?'':'s'}: <strong>${final}</strong>`);
+  } else {
+    const limitingDP = Math.min(decimalPlaces(aStr), decimalPlaces(bStr));
+    final = +raw.toFixed(limitingDP);
+    working.push(`For addition/subtraction, the answer is limited by the FEWEST decimal places in the inputs (not sig figs!).`);
+    working.push(`${aStr} has ${decimalPlaces(aStr)} d.p.; ${bStr} has ${decimalPlaces(bStr)} d.p. → limit = ${limitingDP} d.p.`);
+    working.push(`Unrounded answer: ${raw}`);
+    working.push(`Final answer to ${limitingDP} d.p.: <strong>${final}</strong>`);
+  }
+  document.getElementById('sfCalcWorking').innerHTML = working.map(w => `<li>${w}</li>`).join('');
+  document.getElementById('sfCalcResult').style.display = 'block';
+  document.getElementById('sfCalcResult').innerHTML = `<div class="label">Final answer</div><div class="value">${final}</div>`;
+});
+document.getElementById('sfCalcBtn').click();
+
+// ══════════════════════════════════════════════════════════
+// D) COMMON MISTAKES
+// ══════════════════════════════════════════════════════════
+const MISTAKES = [
+  { title: 'Counting leading zeros as significant', wrong: '"0.003 has 4 sig figs"', why: 'Leading zeros only mark the position of the decimal point — they carry no precision information.', right: '0.003 has only 1 significant figure (the 3).' },
+  { title: 'Forgetting trailing zeros after a decimal point', wrong: '"3.500 has 2 sig figs, same as 3.5"', why: 'Zeros written after a decimal point were deliberately measured and recorded — they show real precision.', right: '3.500 has 4 sig figs; 3.5 has only 2. They are not the same precision.' },
+  { title: 'Using sig fig rules for addition/subtraction', wrong: '"12.1 + 3.24 → answer needs 3 sig figs because 12.1 has 3"', why: 'Addition and subtraction are governed by decimal places, not significant figures.', right: '12.1 (1 d.p.) + 3.24 (2 d.p.) → answer rounded to 1 d.p.: 15.3' },
+  { title: 'Rounding too early in multi-step calculations', wrong: 'Rounding the result of step 1 before using it in step 2.', why: 'Early rounding introduces compounding errors that can change the final answer.', right: 'Keep full precision through every intermediate step, and only round the very final answer.' },
+  { title: 'Confusing sig figs with decimal places', wrong: '"2 sig figs means 2 decimal places"', why: 'Significant figures count all meaningful digits; decimal places only count digits after the point.', right: '120 has 2 sig figs and 0 decimal places. 0.12 has 2 sig figs and 2 decimal places. They are different concepts.' },
+];
+document.getElementById('mistakesContainer').innerHTML = MISTAKES.map(m => `
+  <details class="mistake-card">
+    <summary>${m.title}</summary>
+    <div class="mistake-body">
+      <div class="wrong">✗ ${m.wrong}</div>
+      <div style="margin:6px 0">${m.why}</div>
+      <div class="right">✓ ${m.right}</div>
+    </div>
+  </details>`).join('');
+
+// ══════════════════════════════════════════════════════════
+// E) PRACTICE QUESTIONS
+// ══════════════════════════════════════════════════════════
+let score = { correct: 0, total: 0 };
+function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function randomNumberString(level) {
+  if (level === 'foundation') return `${randInt(1,9)}${'0'.repeat(randInt(0,2))}`;
+  if (level === 'higher') return `${randInt(1,9)}.${randInt(0,9)}${randInt(0,9)}`;
+  return `0.0${randInt(0,9)}${randInt(1,9)}${randInt(0,9)}`;
+}
+function generateQuestion(mode, level) {
+  if (mode === 'identify') {
+    const n = randomNumberString(level);
+    return { text: `How many significant figures does ${n} have?`, check: (ans) => parseInt(ans) === countSigFigs(n), solution: () => `${countSigFigs(n)} significant figures` };
+  }
+  if (mode === 'round') {
+    const n = (Math.random() * 900 + 1).toFixed(randInt(2,4));
+    const sf = level === 'foundation' ? 2 : level === 'higher' ? 3 : randInt(1,2);
+    return { text: `Round ${n} to ${sf} significant figure${sf===1?'':'s'}.`, check: (ans) => Math.abs(parseFloat(ans) - roundToSigFigs(parseFloat(n), sf)) < 1e-9,
+      solution: () => roundToSigFigs(parseFloat(n), sf) };
+  }
+  const a = (Math.random()*20+1).toFixed(randInt(1,2)), b = (Math.random()*10+1).toFixed(randInt(1,2));
+  const op = level === 'challenge' ? (Math.random()<0.5?'+':'×') : '×';
+  const raw = op === '×' ? parseFloat(a)*parseFloat(b) : parseFloat(a)+parseFloat(b);
+  const answer = op === '×' ? roundToSigFigs(raw, Math.min(countSigFigs(a),countSigFigs(b))) : +raw.toFixed(Math.min(decimalPlaces(a),decimalPlaces(b)));
+  return { text: `Calculate ${a} ${op} ${b}, giving your answer to the correct precision.`, check: (ans) => Math.abs(parseFloat(ans)-answer) < 1e-9, solution: () => answer };
+}
+function renderPracticeQuestions() {
+  const mode = document.querySelector('#modeTabs .mode-tab.active').dataset.mode;
+  const level = document.querySelector('#practiceLevelTabs .level-tab.active').dataset.level;
+  const qs = Array.from({length:10}, () => generateQuestion(mode, level));
+  document.getElementById('practiceQuestions').innerHTML = qs.map((q,i) => `
+    <div class="q-card" data-i="${i}">
+      <div class="q-text">${i+1}. ${q.text}</div>
+      <input type="text" placeholder="Your answer">
+      <button class="btn" type="button" data-check="${i}">Check</button>
+      <div class="q-feedback" id="qf-${i}"></div>
+      <div class="q-solution" id="qs-${i}">Worked solution: ${q.solution()}</div>
+    </div>`).join('');
+  document.getElementById('practiceQuestions').querySelectorAll('[data-check]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = +btn.dataset.check;
+      if (btn.dataset.answered) return;
+      btn.dataset.answered = '1';
+      const input = btn.parentElement.querySelector('input').value;
+      const correct = qs[i].check(input);
+      score.total++; if (correct) score.correct++;
+      updateScore();
+      const fb = document.getElementById(`qf-${i}`);
+      fb.textContent = correct ? 'Correct!' : 'Not quite — see the worked solution below.';
+      fb.className = 'q-feedback show ' + (correct ? 'correct' : 'incorrect');
+      document.getElementById(`qs-${i}`).classList.add('show');
+    });
+  });
+}
+function updateScore() {
+  document.getElementById('scoreTracker').textContent = `Score: ${score.correct} / ${score.total}`;
+  const enc = document.getElementById('encouragement');
+  if (score.total === 0) { enc.textContent = ''; return; }
+  const pct = score.correct / score.total;
+  enc.textContent = pct === 1 ? 'Perfect run — brilliant work!' : pct >= 0.7 ? 'Strong work, keep it up!' : pct >= 0.4 ? 'Good effort — a bit more practice will get you there.' : 'Keep going — check the worked solutions closely, you\'ve got this.';
+}
+document.getElementById('modeTabs').addEventListener('click', e => {
+  const btn = e.target.closest('.mode-tab'); if (!btn) return;
+  document.querySelectorAll('#modeTabs .mode-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderPracticeQuestions();
+});
+document.getElementById('practiceLevelTabs').addEventListener('click', e => {
+  const btn = e.target.closest('.level-tab'); if (!btn) return;
+  document.querySelectorAll('#practiceLevelTabs .level-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderPracticeQuestions();
+});
+document.getElementById('regenerateBtn').addEventListener('click', renderPracticeQuestions);
+renderPracticeQuestions();
+</script>
+</body>
+</html>
