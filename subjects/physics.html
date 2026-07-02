@@ -551,6 +551,15 @@
     }
 
     .topic-art { height: 140px; position: relative; overflow: hidden }
+    .topic-img-loading {
+      background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-hover) 50%, var(--bg-card) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0 }
+      100% { background-position: -200% 0 }
+    }
     .topic-art svg { width: 100%; height: 100% }
 
     .topic-art-1 { background: linear-gradient(135deg,#071a0c,#0d3018) }
@@ -846,7 +855,7 @@
     
     .quote-card {
       padding: 20px; position: relative; overflow: hidden;
-      background-image: url('/assets/images/physics/journey/working-scientifically.jpg');
+      background-image: url('/assets/images/physics/journey/working-scientifically.webp');
       background-size: cover; background-position: center;
     }
     .quote-card::before {
@@ -1143,10 +1152,10 @@
       <!-- Hero banner image — placeholder, replace src with real asset -->
       <div class="hero-art" aria-hidden="true">
         <div class="hero-img-placeholder">
-          <img src="/assets/images/physics/hero/hero-bg.webp" alt="Physics hero" class="hero-img" id="heroBannerImg"
+          <img src="/assets/images/physics/hero/hero-bg.webp" alt="Physics hero" class="hero-img" id="heroBannerImg" width="1400" height="320"
                fetchpriority="high" loading="eager"
                style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease"
-               onload="this.style.opacity=1">
+               onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')">
         </div>
       </div>
 
@@ -1201,7 +1210,7 @@
           <div class="topics-grid">
 
             <article class="topic-card">
-              <div class="topic-art topic-art-1"><img src="/assets/images/physics/journey/energy.webp" alt="Energy" class="topic-img" loading="lazy" data-topic="1" style="width:100%;height:100%;object-fit:cover;object-position:center 60%;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-1 topic-img-loading"><img src="/assets/images/physics/journey/energy.webp" alt="Energy" class="topic-img" width="600" height="140" loading="lazy" data-topic="1" style="width:100%;height:100%;object-fit:cover;object-position:center 60%;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 01</div>
                 <div class="topic-name">Energy</div>
@@ -1212,7 +1221,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-2"><img src="/assets/images/physics/journey/electricity.webp" alt="Electricity" class="topic-img" loading="lazy" data-topic="2" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-2 topic-img-loading"><img src="/assets/images/physics/journey/electricity.webp" alt="Electricity" class="topic-img" width="600" height="140" loading="lazy" data-topic="2" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 02</div>
                 <div class="topic-name">Electricity</div>
@@ -1223,7 +1232,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-3"><img src="/assets/images/physics/journey/particle-model.webp" alt="Particle Model of Matter" class="topic-img" loading="lazy" data-topic="3" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-3 topic-img-loading"><img src="/assets/images/physics/journey/particle-model.webp" alt="Particle Model of Matter" class="topic-img" width="600" height="140" loading="lazy" data-topic="3" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 03</div>
                 <div class="topic-name">Particle Model</div>
@@ -1234,7 +1243,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-4"><img src="/assets/images/physics/journey/atomic-structure.webp" alt="Atomic Structure and Radiation" class="topic-img" loading="lazy" data-topic="4" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-4 topic-img-loading"><img src="/assets/images/physics/journey/atomic-structure.webp" alt="Atomic Structure and Radiation" class="topic-img" width="600" height="140" loading="lazy" data-topic="4" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 04</div>
                 <div class="topic-name">Atomic Structure</div>
@@ -1245,7 +1254,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-5"><img src="/assets/images/physics/journey/forces.webp" alt="Forces" class="topic-img" loading="lazy" data-topic="5" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-5 topic-img-loading"><img src="/assets/images/physics/journey/forces.webp" alt="Forces" class="topic-img" width="600" height="140" loading="lazy" data-topic="5" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 05</div>
                 <div class="topic-name">Forces</div>
@@ -1256,7 +1265,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-6"><img src="/assets/images/physics/journey/waves.webp" alt="Waves" class="topic-img" loading="lazy" data-topic="6" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-6 topic-img-loading"><img src="/assets/images/physics/journey/waves.webp" alt="Waves" class="topic-img" width="600" height="140" loading="lazy" data-topic="6" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 06</div>
                 <div class="topic-name">Waves</div>
@@ -1267,7 +1276,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-7"><img src="/assets/images/physics/journey/magnetism.webp" alt="Magnetism and Electromagnetism" class="topic-img" loading="lazy" data-topic="7" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-7 topic-img-loading"><img src="/assets/images/physics/journey/magnetism.webp" alt="Magnetism and Electromagnetism" class="topic-img" width="600" height="140" loading="lazy" data-topic="7" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 07</div>
                 <div class="topic-name">Magnetism &amp; EM</div>
@@ -1278,7 +1287,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-8"><img src="/assets/images/physics/journey/space-physics.webp" alt="Space Physics" class="topic-img" loading="lazy" data-topic="8" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-8 topic-img-loading"><img src="/assets/images/physics/journey/space-physics.webp" alt="Space Physics" class="topic-img" width="600" height="140" loading="lazy" data-topic="8" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 08</div>
                 <div class="topic-name">Space Physics</div>
@@ -1433,7 +1442,7 @@
           </div>
           <div style="padding:0 18px">
             <div class="lesson-info">
-              <img src="/assets/images/physics/journey/electricity.jpg" alt="Series Circuits" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid rgba(37,99,235,.4)">
+              <img src="/assets/images/physics/journey/electricity.webp" alt="Series Circuits" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid rgba(37,99,235,.4)">
               <div>
                 <div class="lesson-title">Series Circuits</div>
                 <div class="lesson-meta">Topic 2 · Electricity · 18 min</div>

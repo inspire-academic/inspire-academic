@@ -8,7 +8,7 @@
   <link rel="icon" href="/assets/images/shared/inspire-logo.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="image" href="/assets/images/mathematics/hero/hero-bg.png" fetchpriority="high">
+  <link rel="preload" as="image" href="/assets/images/mathematics/hero/hero-bg.webp" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
   <style>
@@ -551,6 +551,15 @@
     }
 
     .topic-art { height: 140px; position: relative; overflow: hidden }
+    .topic-img-loading {
+      background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-hover) 50%, var(--bg-card) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0 }
+      100% { background-position: -200% 0 }
+    }
     .topic-art svg { width: 100%; height: 100% }
 
     .topic-art-1 { background: linear-gradient(135deg,#071a0c,#0d3018) }
@@ -846,7 +855,7 @@
     
     .quote-card {
       padding: 20px; position: relative; overflow: hidden;
-      background-image: url('/assets/images/mathematics/journey/geometry.png');
+      background-image: url('/assets/images/mathematics/journey/geometry.webp');
       background-size: cover; background-position: center;
     }
     .quote-card::before {
@@ -1143,10 +1152,10 @@
       <!-- Hero banner image — placeholder, replace src with real asset -->
       <div class="hero-art" aria-hidden="true">
         <div class="hero-img-placeholder">
-          <img src="/assets/images/mathematics/hero/hero-bg.png" alt="Maths hero" class="hero-img" id="heroBannerImg"
+          <img src="/assets/images/mathematics/hero/hero-bg.webp" alt="Maths hero" class="hero-img" id="heroBannerImg" width="1400" height="320"
                fetchpriority="high" loading="eager"
                style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease"
-               onload="this.style.opacity=1">
+               onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')">
         </div>
       </div>
 
@@ -1201,7 +1210,7 @@
           <div class="topics-grid">
 
             <article class="topic-card">
-              <div class="topic-art topic-art-1"><img src="/assets/images/mathematics/journey/number.png" alt="Number" class="topic-img" loading="lazy" data-topic="1" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-1 topic-img-loading"><img src="/assets/images/mathematics/journey/number.webp" alt="Number" class="topic-img" width="600" height="140" loading="lazy" data-topic="1" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 01</div>
                 <div class="topic-name">Number</div>
@@ -1212,7 +1221,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-2"><img src="/assets/images/mathematics/journey/algebra.png" alt="Algebra" class="topic-img" loading="lazy" data-topic="2" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-2 topic-img-loading"><img src="/assets/images/mathematics/journey/algebra.webp" alt="Algebra" class="topic-img" width="600" height="140" loading="lazy" data-topic="2" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 02</div>
                 <div class="topic-name">Algebra</div>
@@ -1223,7 +1232,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-3"><img src="/assets/images/mathematics/journey/sequences.png" alt="Sequences" class="topic-img" loading="lazy" data-topic="3" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-3 topic-img-loading"><img src="/assets/images/mathematics/journey/sequences.webp" alt="Sequences" class="topic-img" width="600" height="140" loading="lazy" data-topic="3" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 03</div>
                 <div class="topic-name">Sequences</div>
@@ -1234,7 +1243,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-4"><img src="/assets/images/mathematics/journey/ratio-proportion.png" alt="Ratio &amp; Proportion" class="topic-img" loading="lazy" data-topic="4" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-4 topic-img-loading"><img src="/assets/images/mathematics/journey/ratio-proportion.webp" alt="Ratio &amp; Proportion" class="topic-img" width="600" height="140" loading="lazy" data-topic="4" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 04</div>
                 <div class="topic-name">Ratio &amp; Proportion</div>
@@ -1245,7 +1254,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-5"><img src="/assets/images/mathematics/journey/geometry.png" alt="Geometry &amp; Measures" class="topic-img" loading="lazy" data-topic="5" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-5 topic-img-loading"><img src="/assets/images/mathematics/journey/geometry.webp" alt="Geometry &amp; Measures" class="topic-img" width="600" height="140" loading="lazy" data-topic="5" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 05</div>
                 <div class="topic-name">Geometry &amp; Measures</div>
@@ -1256,7 +1265,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-6"><img src="/assets/images/mathematics/journey/trigonometry.png" alt="Trigonometry" class="topic-img" loading="lazy" data-topic="6" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-6 topic-img-loading"><img src="/assets/images/mathematics/journey/trigonometry.webp" alt="Trigonometry" class="topic-img" width="600" height="140" loading="lazy" data-topic="6" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 06</div>
                 <div class="topic-name">Trigonometry</div>
@@ -1267,7 +1276,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-7"><img src="/assets/images/mathematics/journey/probability.png" alt="Probability" class="topic-img" loading="lazy" data-topic="7" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-7 topic-img-loading"><img src="/assets/images/mathematics/journey/probability.webp" alt="Probability" class="topic-img" width="600" height="140" loading="lazy" data-topic="7" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 07</div>
                 <div class="topic-name">Probability</div>
@@ -1278,7 +1287,7 @@
             </article>
 
             <article class="topic-card">
-              <div class="topic-art topic-art-8"><img src="/assets/images/mathematics/journey/statistics.png" alt="Statistics" class="topic-img" loading="lazy" data-topic="8" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1"></div>
+              <div class="topic-art topic-art-8 topic-img-loading"><img src="/assets/images/mathematics/journey/statistics.webp" alt="Statistics" class="topic-img" width="600" height="140" loading="lazy" data-topic="8" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('topic-img-loading')"></div>
               <div class="topic-body">
                 <div class="topic-num">Topic 08</div>
                 <div class="topic-name">Statistics</div>
@@ -1433,7 +1442,7 @@
           </div>
           <div style="padding:0 18px">
             <div class="lesson-info">
-              <img src="/assets/images/mathematics/journey/algebra.png" alt="Linear Equations" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid rgba(59,130,246,.4)">
+              <img src="/assets/images/mathematics/journey/algebra.webp" alt="Linear Equations" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid rgba(59,130,246,.4)">
               <div>
                 <div class="lesson-title">Linear Equations</div>
                 <div class="lesson-meta">Topic 2 · Algebra · 20 min</div>
