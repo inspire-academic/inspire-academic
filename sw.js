@@ -14,11 +14,12 @@ const STATIC_ASSETS = [
   '/dashboard.html',
   '/subjects.html',
   '/manifest.json',
-  '/assets/images/shared/1775416612494_image.png',
+  '/assets/css/tokens.css',
+  '/assets/images/shared/1775416612494_image.webp',
   // Supabase bundle — biggest win, 180kb served from cache instantly
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
-  // Google Fonts CSS
-  'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap',
+  // Google Fonts CSS — Fraunces + Plus Jakarta Sans + JetBrains Mono (current brand fonts)
+  'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap',
 ];
 
 // ─── INSTALL ──────────────────────────────────────────────────────────────────
