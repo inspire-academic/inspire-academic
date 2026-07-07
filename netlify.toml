@@ -283,3 +283,22 @@ function = "mark-exam-response"
   from = "/year6-pdf-preview.html"
   to = "/year6/year6-pdf-preview.html"
   status = 301
+
+# ── Phase 2A — Programme Recruitment Platform (Year 6 Science Bridging) ──
+# Short URL: never printed/QR'd as the long canonical path. 302 (temporary)
+# during the launch window; flip to 301 once the landing page URL is
+# confirmed stable. Query params (?source=&campaign=) pass through
+# automatically since no query string is set on the "to" target.
+[[redirects]]
+  from = "/bridge"
+  to = "/programmes/year-6-science-bridge"
+  status = 302
+
+# API-first route for lead capture, following the /api/v1/resource/action
+# convention (CLAUDE.md principle 3) — kept separate from the older,
+# unversioned /api/* functions above.
+[[redirects]]
+  from = "/api/v1/leads/create"
+  to = "/.netlify/functions/leads-create"
+  status = 200
+  force = true
