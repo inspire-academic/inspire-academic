@@ -57,9 +57,12 @@ p strong{color:var(--text);}
 .pillar p{font-size:.9rem;margin-bottom:0;}
 
 /* projects */
-.project-list{display:flex;flex-direction:column;gap:.9rem;margin-top:1.6rem;}
-.project{display:flex;gap:1.2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.5rem;align-items:flex-start;}
-.project .num{font-family:var(--font-mono);color:var(--bridge-light);font-size:1.1rem;font-weight:700;flex-shrink:0;width:2ch;}
+.project-list{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem;margin-top:1.6rem;}
+.project{display:flex;flex-direction:column;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.project-img-wrap{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg-panel);}
+.project-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.project-num{position:absolute;top:.7rem;left:.7rem;background:rgba(11,22,40,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:var(--bridge-light);font-family:var(--font-mono);font-weight:700;font-size:.85rem;width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.project-body{padding:1.2rem 1.3rem 1.4rem;}
 .project h3{font-family:var(--font-body);font-weight:700;font-size:1.02rem;margin-bottom:.35rem;}
 .project p{font-size:.92rem;margin-bottom:0;}
 
@@ -82,7 +85,7 @@ footer a{color:var(--bridge-light);}
 
 @media(max-width:640px){
   .pillars{grid-template-columns:1fr;}
-  .project{flex-direction:column;gap:.4rem;}
+  .project-list{grid-template-columns:1fr;}
   section{padding:2.2rem 0;}
 }
 </style>
@@ -143,29 +146,41 @@ footer a{color:var(--bridge-light);}
     <p>Each project builds a different way of thinking scientifically — together, they form a complete foundation for secondary school science.</p>
     <div class="project-list">
       <div class="project">
-        <span class="num">01</span>
-        <div>
+        <div class="project-img-wrap">
+          <img src="/assets/images/physics/journey/working-scientifically.webp" alt="A periodic table display, atomic models, and laboratory glassware set up for investigation" loading="lazy" decoding="async" width="600" height="375">
+          <span class="project-num">01</span>
+        </div>
+        <div class="project-body">
           <h3>Great Science Investigator</h3>
           <p>Builds the core of scientific thinking — asking good questions, designing a fair test, and drawing a real conclusion from evidence.</p>
         </div>
       </div>
       <div class="project">
-        <span class="num">02</span>
-        <div>
+        <div class="project-img-wrap">
+          <img src="/assets/images/chemistry/journey/chemical-changes.webp" alt="A dramatic chemical reaction with flame and rising smoke in a laboratory beaker, surrounded by colourful reagents" loading="lazy" decoding="async" width="600" height="375">
+          <span class="project-num">02</span>
+        </div>
+        <div class="project-body">
           <h3>Kitchen Chemistry</h3>
           <p>Chemistry through the everyday — familiar materials become the starting point for understanding reactions and change.</p>
         </div>
       </div>
       <div class="project">
-        <span class="num">03</span>
-        <div>
+        <div class="project-img-wrap">
+          <img src="/assets/images/physics/journey/electricity.webp" alt="A glowing lightbulb connected by streams of electric energy, with power lines and a city skyline at dusk" loading="lazy" decoding="async" width="600" height="375">
+          <span class="project-num">03</span>
+        </div>
+        <div class="project-body">
           <h3>Invisible Worlds — Electricity, Energy, Systems &amp; Connections</h3>
           <p>Physics as systems thinking — how energy moves, how circuits connect, and how the invisible parts of the world fit together.</p>
         </div>
       </div>
       <div class="project">
-        <span class="num">04</span>
-        <div>
+        <div class="project-img-wrap">
+          <img src="/assets/images/biology/journey/organisation.webp" alt="A student examining a specimen under a microscope beside a chart showing levels of biological organisation from atom to organism" loading="lazy" decoding="async" width="600" height="375">
+          <span class="project-num">04</span>
+        </div>
+        <div class="project-body">
           <h3>Living Systems</h3>
           <p>Biology from the cell to the ecosystem — how living things are organised, and how they depend on one another.</p>
         </div>
