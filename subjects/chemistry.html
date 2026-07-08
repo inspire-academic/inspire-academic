@@ -401,12 +401,12 @@
             <div class="grades-row">
               <div class="grade-box">
                 <div class="grade-label">Current</div>
-                <div class="grade-val">6</div>
-                <div class="grade-desc">Good</div>
+                <div class="grade-val" id="gradeCurrentVal">—</div>
+                <div class="grade-desc" id="gradeCurrentDesc">Take an assessment</div>
               </div>
               <div class="grade-box target">
                 <div class="grade-label">Target</div>
-                <div class="grade-val">9</div>
+                <div class="grade-val" id="gradeTargetVal">—</div>
                 <div class="grade-desc">Aim High</div>
               </div>
             </div>
@@ -419,22 +419,22 @@
             <div class="panel-title" style="font-size:18px">Continue Your Journey</div>
           </div>
           <div style="padding:14px 18px 0">
-            <div class="lesson-next-tag">
+            <div class="lesson-next-tag" id="lessonNextTag">
               <svg viewBox="0 0 24 24" fill="currentColor" width="8" height="8"><circle cx="12" cy="12" r="10"/></svg>
               Next Lesson
             </div>
           </div>
           <div style="padding:0 18px">
             <div class="lesson-info">
-              <img src="/assets/images/chemistry/journey/bonding-structure.webp" alt="Ionic Bonding" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid rgba(16,185,129,.4)">
+              <img id="lessonThumb" src="/assets/images/chemistry/journey/bonding-structure.webp" alt="" style="width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center;border:2px solid rgba(16,185,129,.4)">
               <div>
-                <div class="lesson-title">Ionic Bonding</div>
-                <div class="lesson-meta">Topic 2 · Bonding · 20 min</div>
+                <div class="lesson-title" id="lessonTitle">—</div>
+                <div class="lesson-meta" id="lessonMeta">Loading…</div>
                 <div class="lesson-stars">★★☆</div>
               </div>
             </div>
-            <a class="lesson-btn" href="/student/lessons.html?subject=3&ref=chemistry">Continue Lesson →</a>
-            <div class="lesson-progress-line">Lesson 1 of 10 in Bonding</div>
+            <a class="lesson-btn" id="lessonBtn" href="/student/lessons.html?subject=3&ref=chemistry">Continue Lesson →</a>
+            <div class="lesson-progress-line" id="lessonProgressLine"></div>
           </div>
           <div class="lesson-spacer"></div>
         </section>
@@ -536,23 +536,47 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/supabase.js"></script>
 <script>
   document.getElementById('footerYear').textContent = new Date().getFullYear();
 
   // ── INIT — profile + subject progress ───────────────────
   const SUBJECT_ID = 3;
-  const _supa = supabase.createClient('https://ygtsrdwoikqnrbexjrtl.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo');
+  const SUBJECT_NAME = 'Chemistry';
+  // Index (matches each topic-card's data-topic attribute) -> card slug
+  const TOPIC_SLUGS = {
+    '1':'atomic-structure','2':'bonding-structure','3':'quantitative',
+    '4':'chemical-changes','5':'energy-changes','6':'rates-equilibrium',
+    '7':'organic-chemistry','8':'chemical-analysis'
+  };
+  // Card slug -> actual topics.slug in Supabase (dashboard copy predates the DB naming)
+  const DB_SLUG_MAP = {
+    'atomic-structure':'atomic-structure-c','bonding-structure':'bonding','quantitative':'quantitative',
+    'chemical-changes':'chemical-changes','energy-changes':'energy-changes','rates-equilibrium':'rates-reaction',
+    'organic-chemistry':'organic','chemical-analysis':'analysis'
+  };
+
+  function gradeDesc(g) {
+    if (g >= 8) return 'Outstanding';
+    if (g >= 6) return 'Good';
+    if (g >= 4) return 'Standard Pass';
+    return 'Building Skills';
+  }
+
   (async () => {
+    const $el = id => document.getElementById(id);
     try {
-      const { data: { user } } = await _supa.auth.getUser();
-      if (!user) return;
+      const { data: { user } } = await supa.auth.getUser();
+      if (!user) {
+        if ($el('lessonTitle')) $el('lessonTitle').textContent = 'Sign in to continue';
+        if ($el('lessonMeta'))  $el('lessonMeta').textContent  = '';
+        return;
+      }
       // Profile
-      const { data: profile } = await _supa.from('profiles')
+      const { data: profile } = await supa.from('profiles')
         .select('first_name,full_name').eq('id', user.id).single();
-      const firstName = profile?.first_name
-        || (profile?.full_name ? profile.full_name.split(' ')[0] : null)
-        || user.email?.split('@')[0]
-        || 'Student';
+      const firstName = getDisplayName(user, profile);
       const initial = firstName[0]?.toUpperCase() || '?';
       const sidebarName = document.querySelector('.student-name');
       if (sidebarName) sidebarName.textContent = firstName;
@@ -562,27 +586,35 @@
       if (avatarInitial) avatarInitial.textContent = initial;
       const avatarImg = document.getElementById('studentAvatarImg');
       if (avatarImg) avatarImg.alt = firstName;
-      // Subject progress
-      const { data: subjectTopics } = await _supa.from('topics').select('id').eq('subject_id', SUBJECT_ID);
-      const topicIds = subjectTopics?.map(t => t.id) || [];
+
+      // Subject progress — restrict to core (AQA) topics, excluding the supplementary edx-* set
+      const { data: subjectTopics } = await supa.from('topics')
+        .select('id,slug').eq('subject_id', SUBJECT_ID).not('slug', 'like', 'edx-%');
+      const topicIds  = subjectTopics?.map(t => t.id) || [];
+      const slugToId  = {};
+      (subjectTopics || []).forEach(t => { slugToId[t.slug] = t.id; });
+
       const [
         { data: topicProgress },
         { data: subjectQuizzes },
         { data: streakRow },
       ] = await Promise.all([
         topicIds.length
-          ? _supa.from('topic_progress').select('best_score,mastery_level').eq('student_id', user.id).in('topic_id', topicIds)
+          ? supa.from('topic_progress').select('topic_id,best_score,mastery_level').eq('student_id', user.id).in('topic_id', topicIds)
           : Promise.resolve({ data: [] }),
         topicIds.length
-          ? _supa.from('quizzes').select('id').in('topic_id', topicIds)
+          ? supa.from('quizzes').select('id').in('topic_id', topicIds)
           : Promise.resolve({ data: [] }),
-        _supa.from('streaks').select('current_streak').eq('student_id', user.id).single(),
+        supa.from('streaks').select('current_streak').eq('student_id', user.id).single(),
       ]);
       const quizIds = subjectQuizzes?.map(q => q.id) || [];
       const { data: attempts } = quizIds.length
-        ? await _supa.from('quiz_attempts').select('passed').eq('student_id', user.id).in('quiz_id', quizIds).not('completed_at', 'is', null)
+        ? await supa.from('quiz_attempts').select('passed').eq('student_id', user.id).in('quiz_id', quizIds).not('completed_at', 'is', null)
         : { data: [] };
-      const allProgress   = topicProgress || [];
+      const allProgress = topicProgress || [];
+      const progressByTopicId = {};
+      allProgress.forEach(p => { progressByTopicId[p.topic_id] = p; });
+
       const allAttempts   = attempts || [];
       const streak        = streakRow?.current_streak ?? 0;
       const topicsTotal   = topicIds.length || 8;
@@ -595,7 +627,6 @@
         ? allProgress.reduce((s, p) => s + (parseFloat(p.best_score) || 0), 0) / allProgress.length
         : 0;
       const overallPct = Math.round(Math.min(avgScore, 100));
-      const $el = id => document.getElementById(id);
       if ($el('ringPct'))     $el('ringPct').textContent     = overallPct + '%';
       if ($el('statOverall')) $el('statOverall').textContent  = overallPct + '%';
       if ($el('statQuizzes')) $el('statQuizzes').textContent  = quizzesPassed + '/' + quizzesTotal;
@@ -607,6 +638,111 @@
         { id: 'ring2', dot: 'dot2', circ: 289.03, pct: quizzesTotal ? quizzesPassed / quizzesTotal : 0,  r: 46, delay: 180 },
         { id: 'ring3', dot: 'dot3', circ: 213.63, pct: topicsTotal  ? topicsStarted  / topicsTotal  : 0, r: 34, delay: 320 },
       ]);
+
+      // Topic cards — per-topic progress bar, % and status
+      document.querySelectorAll('.topic-card').forEach(card => {
+        const img  = card.querySelector('[data-topic]');
+        const cardSlug = TOPIC_SLUGS[img?.dataset.topic];
+        const dbSlug   = cardSlug ? DB_SLUG_MAP[cardSlug] : null;
+        const topicId  = dbSlug ? slugToId[dbSlug] : null;
+        const p = topicId != null ? progressByTopicId[topicId] : null;
+        const pct = Math.round(Math.min(parseFloat(p?.best_score) || 0, 100));
+        const fill   = card.querySelector('.progress-fill');
+        const pctEl  = card.querySelector('.topic-pct');
+        const dotEl  = card.querySelector('.status-dot');
+        if (fill)  fill.style.width = pct + '%';
+        if (pctEl) pctEl.textContent = pct + '%';
+        if (dotEl) {
+          const level = p?.mastery_level;
+          if (level && level !== 'not_started') {
+            dotEl.classList.add('active');
+            dotEl.textContent = { learning:'Learning', developing:'Developing', secure:'Secure', mastered:'Mastered' }[level] || 'In Progress';
+          } else if (pct > 0) {
+            dotEl.classList.add('active');
+            dotEl.textContent = 'In Progress';
+          } else {
+            dotEl.classList.remove('active');
+            dotEl.textContent = 'Not Started';
+          }
+        }
+      });
+
+      // Current/target grade — most recent diagnostic assessment for this subject
+      try {
+        const { data: diagRows } = await supa.from('diagnostic_attempts')
+          .select('current_grade,target_grade,created_at')
+          .eq('student_id', user.id).eq('subject', SUBJECT_NAME)
+          .order('created_at', { ascending: false }).limit(1);
+        const diag = diagRows?.[0];
+        if (diag?.current_grade != null) {
+          if ($el('gradeCurrentVal'))  $el('gradeCurrentVal').textContent  = diag.current_grade;
+          if ($el('gradeCurrentDesc')) $el('gradeCurrentDesc').textContent = gradeDesc(diag.current_grade);
+        }
+        if (diag?.target_grade != null && $el('gradeTargetVal')) {
+          $el('gradeTargetVal').textContent = diag.target_grade;
+        }
+      } catch (e) {
+        console.warn('Grade fetch failed:', e);
+      }
+
+      // Next lesson — first not-yet-completed published lesson, in subject order
+      try {
+        const [{ data: lessons }, { data: lessonProgressRows }] = await Promise.all([
+          supa.from('lessons')
+            .select('id,title,duration_minutes,order_number,topic_id,topics(name,slug)')
+            .eq('subject_id', SUBJECT_ID).eq('is_published', true)
+            .order('order_number', { ascending: true }),
+          supa.from('lesson_progress').select('lesson_id,completed_at').eq('student_id', user.id),
+        ]);
+        const completedIds = new Set((lessonProgressRows || []).filter(r => r.completed_at).map(r => r.lesson_id));
+        const allLessons = lessons || [];
+        const nextLesson = allLessons.find(l => !completedIds.has(l.id));
+
+        const slugToImg = {};
+        document.querySelectorAll('.topic-art img[data-topic]').forEach(im => {
+          const s = TOPIC_SLUGS[im.dataset.topic];
+          if (s) slugToImg[s] = im.getAttribute('src');
+        });
+
+        if (!allLessons.length) {
+          if ($el('lessonTitle')) $el('lessonTitle').textContent = 'No lessons yet';
+          if ($el('lessonMeta'))  $el('lessonMeta').textContent  = 'Check back soon';
+          if ($el('lessonBtn'))   $el('lessonBtn').style.display = 'none';
+        } else if (!nextLesson) {
+          if ($el('lessonNextTag')) $el('lessonNextTag').lastChild.textContent = ' All Caught Up';
+          if ($el('lessonTitle'))   $el('lessonTitle').textContent = 'All lessons complete!';
+          if ($el('lessonMeta'))    $el('lessonMeta').textContent  = 'Great work — check back for new content';
+          if ($el('lessonBtn')) {
+            $el('lessonBtn').href = '/student/lessons.html?subject=' + SUBJECT_ID + '&ref=chemistry';
+            $el('lessonBtn').textContent = 'Browse Lessons →';
+          }
+          if ($el('lessonProgressLine')) $el('lessonProgressLine').textContent = allLessons.length + ' of ' + allLessons.length + ' lessons complete';
+        } else {
+          const topicName = nextLesson.topics?.name || '—';
+          const topicSlug = nextLesson.topics?.slug;
+          const cardSlug  = Object.keys(DB_SLUG_MAP).find(k => DB_SLUG_MAP[k] === topicSlug);
+          const topicIndex = cardSlug ? Object.keys(TOPIC_SLUGS).find(k => TOPIC_SLUGS[k] === cardSlug) : null;
+          const siblings = allLessons.filter(l => l.topic_id === nextLesson.topic_id);
+          const position = siblings.findIndex(l => l.id === nextLesson.id) + 1;
+          if ($el('lessonThumb') && cardSlug && slugToImg[cardSlug]) {
+            $el('lessonThumb').src = slugToImg[cardSlug];
+            $el('lessonThumb').alt = nextLesson.title;
+          }
+          if ($el('lessonTitle')) $el('lessonTitle').textContent = nextLesson.title;
+          if ($el('lessonMeta'))  $el('lessonMeta').textContent  =
+            (topicIndex ? 'Topic ' + topicIndex + ' · ' : '') + topicName + (nextLesson.duration_minutes ? ' · ' + nextLesson.duration_minutes + ' min' : '');
+          if ($el('lessonBtn'))   $el('lessonBtn').href = '/student/lesson-viewer.html?id=' + nextLesson.id;
+          if ($el('lessonProgressLine')) {
+            $el('lessonProgressLine').textContent = position && siblings.length
+              ? 'Lesson ' + position + ' of ' + siblings.length + ' in ' + topicName
+              : '';
+          }
+        }
+      } catch (e) {
+        console.warn('Next lesson fetch failed:', e);
+        if ($el('lessonTitle')) $el('lessonTitle').textContent = '—';
+        if ($el('lessonMeta'))  $el('lessonMeta').textContent  = '';
+      }
     } catch (e) {
       console.warn('Subject init failed:', e);
       _animateRings([
@@ -692,19 +828,15 @@
     });
   });
 
-  // ── TOPIC CARD NAVIGATION ────────────────────────────────────
-  const TOPIC_SLUGS = {
-    '1':'atomic-structure','2':'bonding-structure','3':'quantitative',
-    '4':'chemical-changes','5':'energy-changes','6':'rates-equilibrium',
-    '7':'organic-chemistry','8':'chemical-analysis'
-  };
+  // ── TOPIC CARD NAVIGATION (TOPIC_SLUGS declared above) ────────
   document.querySelectorAll('.topic-card').forEach(card => {
     const img  = card.querySelector('[data-topic]');
-    const slug = TOPIC_SLUGS[img?.dataset.topic];
-    if (slug) {
+    const cardSlug = TOPIC_SLUGS[img?.dataset.topic];
+    const dbSlug   = cardSlug ? DB_SLUG_MAP[cardSlug] : null;
+    if (dbSlug) {
       card.style.cursor = 'pointer';
       card.addEventListener('click', () => {
-        window.location.href = '/student/lessons.html?subject=3&ref=chemistry&topic=' + slug;
+        window.location.href = '/student/lessons.html?subject=3&ref=chemistry&topic=' + dbSlug;
       });
     }
   });
