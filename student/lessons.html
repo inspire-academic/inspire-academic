@@ -214,6 +214,8 @@ const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 const urlParams = new URLSearchParams(window.location.search);
 const paramSubjectId = urlParams.get('subject'); // e.g. '2'
 const paramTopic     = urlParams.get('topic');   // e.g. 'energy'
+const paramTopics    = urlParams.get('topics');  // comma-separated slugs, for cards spanning multiple DB topics
+const paramLabel     = urlParams.get('label');   // display name to use when paramTopics is set
 
 // Map subject_id → { href, label, slug } for back button and tab pre-selection
 const SUBJECT_MAP = {
@@ -226,7 +228,7 @@ const SUBJECT_MAP = {
 let allLessons = [];
 let progressMap = {}; // lesson_id → { started_at, completed_at }
 let currentUser = null;
-let filters = { subject: 'all', board: 'all', tier: 'all', topic: null };
+let filters = { subject: 'all', board: 'all', tier: 'all', topic: null, topicsList: null };
 
 const TYPE_ICON  = { html:'⚡', video:'🎬', pdf:'📋', doc:'📝' };
 const TYPE_LABEL = { html:'Interactive', video:'Video', pdf:'PDF', doc:'Word' };
@@ -287,6 +289,7 @@ function applyFilters(){
     if(filters.board !== 'all' && l.exam_board !== filters.board && l.exam_board !== 'Both') return false;
     if(filters.tier !== 'all' && l.tier !== filters.tier && l.tier !== 'Both') return false;
     if(filters.topic && l.topics?.slug !== filters.topic) return false;
+    if(filters.topicsList && filters.topicsList.length && !filters.topicsList.includes(l.topics?.slug)) return false;
     return true;
   });
 }
@@ -427,7 +430,7 @@ async function init(){
 }
 
 function applyUrlParams(){
-  if(!paramSubjectId && !paramTopic) return;
+  if(!paramSubjectId && !paramTopic && !paramTopics) return;
 
   const subjectInfo = SUBJECT_MAP[paramSubjectId];
 
@@ -447,17 +450,22 @@ function applyUrlParams(){
     filters.subject = subjectInfo.slug;
   }
 
-  // Pre-set topic filter
+  // Pre-set topic filter — single slug, or a comma-separated group (dashboard cards that
+  // aggregate several DB topics, e.g. Biology's "Cell Biology")
   if(paramTopic) filters.topic = paramTopic;
+  if(paramTopics) filters.topicsList = paramTopics.split(',').map(s => s.trim()).filter(Boolean);
 }
 
 function updateHeroFromParams(){
-  if(!paramSubjectId && !paramTopic) return;
+  if(!paramSubjectId && !paramTopic && !paramTopics) return;
   const titleEl = document.getElementById('hero-title');
   const subEl   = document.getElementById('hero-sub');
   const subjectInfo = SUBJECT_MAP[paramSubjectId];
 
-  if(paramTopic){
+  if(paramLabel){
+    titleEl.innerHTML = `${paramLabel} <span>Lessons</span>`;
+    subEl.textContent = subjectInfo ? `${subjectInfo.label} · all lessons for this topic.` : 'All lessons for this topic.';
+  } else if(paramTopic){
     const topicLesson = allLessons.find(l => l.topics?.slug === paramTopic);
     const topicName   = topicLesson?.topics?.name || paramTopic.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     titleEl.innerHTML = `${topicName} <span>Lessons</span>`;

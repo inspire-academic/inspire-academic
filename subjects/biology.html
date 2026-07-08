@@ -831,16 +831,19 @@
   });
 
   // ── TOPIC CARD NAVIGATION (TOPIC_SLUGS, GROUP_SLUG_MAP declared above) ──
-  // Each card spans multiple AQA topics, so it links to the subject's full lesson
-  // list rather than a single-topic filter that would hide the group's other topics.
+  // Each card spans multiple AQA topics, so it links to the subject's lesson list
+  // pre-filtered to that group's DB topics (lessons.html's ?topics= param).
   document.querySelectorAll('.topic-card').forEach(card => {
     const img  = card.querySelector('[data-topic]');
     const cardSlug = TOPIC_SLUGS[img?.dataset.topic];
-    const hasTopics = cardSlug && (GROUP_SLUG_MAP[cardSlug] || []).length > 0;
-    if (hasTopics) {
+    const dbSlugs  = cardSlug ? (GROUP_SLUG_MAP[cardSlug] || []) : [];
+    if (dbSlugs.length) {
       card.style.cursor = 'pointer';
       card.addEventListener('click', () => {
-        window.location.href = '/student/lessons.html?subject=4&ref=biology';
+        const label = card.querySelector('.topic-name')?.textContent || '';
+        window.location.href = '/student/lessons.html?subject=4&ref=biology'
+          + '&topics=' + encodeURIComponent(dbSlugs.join(','))
+          + '&label=' + encodeURIComponent(label);
       });
     }
   });
