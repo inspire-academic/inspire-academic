@@ -1,0 +1,35 @@
+/* ================================================================
+   global.css — reset, base elements, theme transition
+   Phase 2 extraction, source of truth: subjects/physics.html
+   Imports tokens.css, so pages only need to link this file plus
+   components.css and utilities.css.
+   ================================================================ */
+
+@import url("tokens.css");
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+html { scroll-behavior: smooth }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background var(--transition), color var(--transition);
+}
+
+a { color: inherit; text-decoration: none }
+button, input { font: inherit }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0ms !important;
+    animation-duration:  0ms !important;
+    animation-delay:     0ms !important;
+  }
+  .hero-content, .hero-eyebrow, .hero-tagline,
+  .hero-chips, .search-bar, .hero-welcome {
+    opacity: 1 !important; transform: none !important;
+  }
+}
