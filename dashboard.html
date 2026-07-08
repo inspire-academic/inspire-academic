@@ -548,46 +548,8 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/supabase.js"></script>
 <script>
-const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
-const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
-
-// ── Auth helpers (cache-aware) ──
-async function getUser(){
-  perfStart('auth-session');
-  const {data:{user}} = await supa.auth.getUser();
-  perfEnd('auth-session');
-  return user;
-}
-async function getProfile(uid){
-  // Try cache first — avoids a full DB round-trip on every page visit
-  const cached = getCachedProfile();
-  if(cached && cached.id === uid){
-    console.debug('⚡ [Inspire] profile: served from cache');
-    return cached;
-  }
-  perfStart('profile-fetch');
-  const {data} = await supa.from('profiles').select('*').eq('id',uid).single();
-  perfEnd('profile-fetch');
-  if(data) setCachedProfile(data);
-  return data;
-}
-async function requireAuth(role=null){
-  const user = await getUser();
-  if(!user){ window.location.href='/index.html'; return null; }
-  const profile = await getProfile(user.id);
-  if(role && profile?.role !== role && profile?.role !== 'admin'){
-    window.location.href='/dashboard.html'; return null;
-  }
-  return {user,profile};
-}
-async function signOut(){
-  clearProfileCache();
-  await supa.auth.signOut();
-  window.location.href='/index.html';
-}
-
 // ── Toast ──
 function toast(msg, type='success'){
   const t=document.getElementById('toast');
