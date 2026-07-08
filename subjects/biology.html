@@ -544,12 +544,24 @@
   // ── INIT — profile + subject progress ───────────────────
   const SUBJECT_ID = 4;
   const SUBJECT_NAME = 'Biology';
-  // NOTE: the 8 topic-cards below (Cell Biology, Organisation, ...) are broad curriculum
-  // groupings that don't correspond 1:1 with Supabase's 25 granular `topics` rows for this
-  // subject (e.g. Cell Biology alone spans ~5 DB topics: cell structure, microscopy, mitosis...).
-  // Wiring per-card progress would need a real content-curated group->topic-ids mapping that
-  // doesn't exist yet, so the per-card progress bars/% below are intentionally left as static
-  // placeholders rather than guessed. Everything else (rings, stats, grade, next lesson) is live.
+  // Index (matches each topic-card's data-topic attribute) -> card slug
+  const TOPIC_SLUGS = {
+    '1':'cell-biology','2':'organisation','3':'infection-response',
+    '4':'bioenergetics','5':'homeostasis','6':'inheritance',
+    '7':'evolution-ecology','8':'key-concepts'
+  };
+  // Card slug -> the AQA-core DB topics it aggregates (curriculum-grounded mapping,
+  // approved 2026-07-08). 'key-concepts' has no matching AQA topic — left empty on purpose.
+  const GROUP_SLUG_MAP = {
+    'cell-biology': ['bio-cell-structure','bio-microscopy','bio-culturing-micro','bio-mitosis','bio-stem-cells','bio-diffusion','bio-osmosis','bio-active-transport'],
+    'organisation': ['bio-organisation','bio-digestive-enzymes','bio-heart','bio-blood','bio-chd','bio-health-disease','bio-plant-transport'],
+    'infection-response': ['bio-communicable','bio-defence-vaccination','bio-antibiotics-drugs','bio-monoclonal-antibodies','bio-plant-disease'],
+    'bioenergetics': ['bio-photosynthesis','bio-respiration','bio-exercise-metabolism'],
+    'homeostasis': ['bio-homeostasis','bio-nervous-system','bio-brain-eye','bio-thermoregulation','bio-hormones-diabetes','bio-kidneys','bio-plant-hormones','bio-reproduction'],
+    'inheritance': ['bio-meiosis','bio-dna-genome','bio-genetic-inheritance','bio-sex-determination'],
+    'evolution-ecology': ['bio-variation-evolution','bio-selective-gm','bio-cloning-biotech','bio-genetics-history','bio-ecosystems','bio-trophic-levels','bio-carbon-cycle','bio-human-impact','bio-food-security'],
+    'key-concepts': [],
+  };
 
   function gradeDesc(g) {
     if (g >= 8) return 'Outstanding';
@@ -570,10 +582,7 @@
       // Profile
       const { data: profile } = await supa.from('profiles')
         .select('first_name,full_name').eq('id', user.id).single();
-      const firstName = profile?.first_name
-        || (profile?.full_name ? profile.full_name.split(' ')[0] : null)
-        || user.email?.split('@')[0]
-        || 'Student';
+      const firstName = getDisplayName(user, profile);
       const initial = firstName[0]?.toUpperCase() || '?';
       const sidebarName = document.querySelector('.student-name');
       if (sidebarName) sidebarName.textContent = firstName;
@@ -588,6 +597,8 @@
       const { data: subjectTopics } = await supa.from('topics')
         .select('id,slug').eq('subject_id', SUBJECT_ID).not('slug', 'like', 'edx-%');
       const topicIds = subjectTopics?.map(t => t.id) || [];
+      const slugToId = {};
+      (subjectTopics || []).forEach(t => { slugToId[t.slug] = t.id; });
 
       const [
         { data: topicProgress },
@@ -606,7 +617,10 @@
       const { data: attempts } = quizIds.length
         ? await supa.from('quiz_attempts').select('passed').eq('student_id', user.id).in('quiz_id', quizIds).not('completed_at', 'is', null)
         : { data: [] };
-      const allProgress   = topicProgress || [];
+      const allProgress = topicProgress || [];
+      const progressByTopicId = {};
+      allProgress.forEach(p => { progressByTopicId[p.topic_id] = p; });
+
       const allAttempts   = attempts || [];
       const streak        = streakRow?.current_streak ?? 0;
       const topicsTotal   = topicIds.length || 8;
@@ -630,6 +644,43 @@
         { id: 'ring2', dot: 'dot2', circ: 289.03, pct: quizzesTotal ? quizzesPassed / quizzesTotal : 0,  r: 46, delay: 180 },
         { id: 'ring3', dot: 'dot3', circ: 213.63, pct: topicsTotal  ? topicsStarted  / topicsTotal  : 0, r: 34, delay: 320 },
       ]);
+
+      // Topic cards — each card aggregates several AQA topics (see GROUP_SLUG_MAP)
+      document.querySelectorAll('.topic-card').forEach(card => {
+        const img  = card.querySelector('[data-topic]');
+        const cardSlug = TOPIC_SLUGS[img?.dataset.topic];
+        const dbSlugs  = cardSlug ? (GROUP_SLUG_MAP[cardSlug] || []) : [];
+        const groupProgress = dbSlugs
+          .map(s => slugToId[s]).filter(id => id != null)
+          .map(id => progressByTopicId[id]).filter(Boolean);
+        const fill   = card.querySelector('.progress-fill');
+        const pctEl  = card.querySelector('.topic-pct');
+        const dotEl  = card.querySelector('.status-dot');
+        if (!dbSlugs.length) {
+          // No AQA topic maps to this card yet (e.g. Key Concepts)
+          if (fill)  fill.style.width = '0%';
+          if (pctEl) pctEl.textContent = '—';
+          if (dotEl) { dotEl.classList.remove('active'); dotEl.textContent = 'Not yet tracked'; }
+          return;
+        }
+        const pct = groupProgress.length
+          ? Math.round(Math.min(groupProgress.reduce((s, p) => s + (parseFloat(p.best_score) || 0), 0) / groupProgress.length, 100))
+          : 0;
+        if (fill)  fill.style.width = pct + '%';
+        if (pctEl) pctEl.textContent = pct + '%';
+        if (dotEl) {
+          if (!groupProgress.length) {
+            dotEl.classList.remove('active');
+            dotEl.textContent = 'Not Started';
+          } else if (groupProgress.every(p => p.mastery_level === 'mastered')) {
+            dotEl.classList.add('active');
+            dotEl.textContent = 'Mastered';
+          } else {
+            dotEl.classList.add('active');
+            dotEl.textContent = 'In Progress';
+          }
+        }
+      });
 
       // Current/target grade — most recent diagnostic assessment for this subject
       try {
@@ -779,19 +830,17 @@
     });
   });
 
-  // ── TOPIC CARD NAVIGATION ────────────────────────────────────
-  const TOPIC_SLUGS = {
-    '1':'cell-biology','2':'organisation','3':'infection-response',
-    '4':'bioenergetics','5':'homeostasis','6':'inheritance',
-    '7':'evolution-ecology','8':'key-concepts'
-  };
+  // ── TOPIC CARD NAVIGATION (TOPIC_SLUGS, GROUP_SLUG_MAP declared above) ──
+  // Each card spans multiple AQA topics, so it links to the subject's full lesson
+  // list rather than a single-topic filter that would hide the group's other topics.
   document.querySelectorAll('.topic-card').forEach(card => {
     const img  = card.querySelector('[data-topic]');
-    const slug = TOPIC_SLUGS[img?.dataset.topic];
-    if (slug) {
+    const cardSlug = TOPIC_SLUGS[img?.dataset.topic];
+    const hasTopics = cardSlug && (GROUP_SLUG_MAP[cardSlug] || []).length > 0;
+    if (hasTopics) {
       card.style.cursor = 'pointer';
       card.addEventListener('click', () => {
-        window.location.href = '/student/lessons.html?subject=4&ref=biology&topic=' + slug;
+        window.location.href = '/student/lessons.html?subject=4&ref=biology';
       });
     }
   });

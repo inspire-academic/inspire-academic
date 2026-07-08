@@ -41,3 +41,15 @@ async function signOut(){
   await supa.auth.signOut();
   window.location.href='/index.html';
 }
+
+// Never show an email address (or any part of one) as a student's name.
+// Order: auth provider metadata -> profiles table -> generic fallback.
+// (profiles has no display_name column — first_name/full_name serve that role.)
+function getDisplayName(user, profile){
+  const firstWord = s => (s || '').trim().split(/\s+/)[0] || '';
+  return firstWord(user?.user_metadata?.full_name)
+      || firstWord(user?.user_metadata?.name)
+      || firstWord(profile?.first_name)
+      || firstWord(profile?.full_name)
+      || 'Student';
+}

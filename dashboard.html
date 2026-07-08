@@ -602,7 +602,7 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
   // 2. Render shell immediately — student sees their name before data loads
   const hr=new Date().getHours();
   document.getElementById('greeting-time').textContent=hr<12?'morning':hr<17?'afternoon':'evening';
-  const firstName = profile?.first_name || (profile?.full_name ? profile.full_name.split(' ')[0] : (user.email?.split('@')[0] || 'Student'));
+  const firstName = getDisplayName(user, profile);
   const avatarLetter = firstName[0]?.toUpperCase() || '?';
   document.getElementById('student-name').textContent=firstName;
   document.getElementById('nav-name').textContent=firstName;

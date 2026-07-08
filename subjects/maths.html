@@ -544,13 +544,25 @@
   // ── INIT — profile + subject progress ───────────────────
   const SUBJECT_ID = 1;
   const SUBJECT_NAME = 'Mathematics';
-  // NOTE: the 8 topic-cards below (Number, Algebra, Sequences, ...) don't correspond 1:1 with
-  // Supabase's 7 `topics` rows for this subject (circle-theorems, quadratics, trigonometry,
-  // algebra-proof, statistics, probability, vectors) — several cards (Number, Sequences,
-  // Ratio & Proportion, Geometry & Measures) have no matching DB topic at all. Wiring per-card
-  // progress would mean guessing a mapping that isn't actually there, so the per-card progress
-  // bars/% below are intentionally left as static placeholders. Everything else (rings, stats,
-  // grade, next lesson) is live.
+  // Index (matches each topic-card's data-topic attribute) -> card slug
+  const TOPIC_SLUGS = {
+    '1':'number','2':'algebra','3':'sequences',
+    '4':'ratio-proportion','5':'geometry','6':'trigonometry',
+    '7':'probability','8':'statistics'
+  };
+  // Card slug -> DB topics it maps to (approved 2026-07-08). Only 7 DB topics exist for
+  // this subject against 8 cards — Number, Sequences and Ratio & Proportion have no
+  // matching DB content yet and are left empty on purpose ("Not yet tracked").
+  const GROUP_SLUG_MAP = {
+    'number': [],
+    'algebra': ['algebra-proof','quadratics'],
+    'sequences': [],
+    'ratio-proportion': [],
+    'geometry': ['circle-theorems','vectors'],
+    'trigonometry': ['trigonometry'],
+    'probability': ['probability'],
+    'statistics': ['statistics'],
+  };
 
   function gradeDesc(g) {
     if (g >= 8) return 'Outstanding';
@@ -571,10 +583,7 @@
       // Profile
       const { data: profile } = await supa.from('profiles')
         .select('first_name,full_name').eq('id', user.id).single();
-      const firstName = profile?.first_name
-        || (profile?.full_name ? profile.full_name.split(' ')[0] : null)
-        || user.email?.split('@')[0]
-        || 'Student';
+      const firstName = getDisplayName(user, profile);
       const initial = firstName[0]?.toUpperCase() || '?';
       const sidebarName = document.querySelector('.student-name');
       if (sidebarName) sidebarName.textContent = firstName;
@@ -589,6 +598,8 @@
       const { data: subjectTopics } = await supa.from('topics')
         .select('id,slug').eq('subject_id', SUBJECT_ID).not('slug', 'like', 'edx-%');
       const topicIds = subjectTopics?.map(t => t.id) || [];
+      const slugToId = {};
+      (subjectTopics || []).forEach(t => { slugToId[t.slug] = t.id; });
 
       const [
         { data: topicProgress },
@@ -607,7 +618,10 @@
       const { data: attempts } = quizIds.length
         ? await supa.from('quiz_attempts').select('passed').eq('student_id', user.id).in('quiz_id', quizIds).not('completed_at', 'is', null)
         : { data: [] };
-      const allProgress   = topicProgress || [];
+      const allProgress = topicProgress || [];
+      const progressByTopicId = {};
+      allProgress.forEach(p => { progressByTopicId[p.topic_id] = p; });
+
       const allAttempts   = attempts || [];
       const streak        = streakRow?.current_streak ?? 0;
       const topicsTotal   = topicIds.length || 8;
@@ -631,6 +645,43 @@
         { id: 'ring2', dot: 'dot2', circ: 289.03, pct: quizzesTotal ? quizzesPassed / quizzesTotal : 0,  r: 46, delay: 180 },
         { id: 'ring3', dot: 'dot3', circ: 213.63, pct: topicsTotal  ? topicsStarted  / topicsTotal  : 0, r: 34, delay: 320 },
       ]);
+
+      // Topic cards — each card maps to zero or more DB topics (see GROUP_SLUG_MAP)
+      document.querySelectorAll('.topic-card').forEach(card => {
+        const img  = card.querySelector('[data-topic]');
+        const cardSlug = TOPIC_SLUGS[img?.dataset.topic];
+        const dbSlugs  = cardSlug ? (GROUP_SLUG_MAP[cardSlug] || []) : [];
+        const groupProgress = dbSlugs
+          .map(s => slugToId[s]).filter(id => id != null)
+          .map(id => progressByTopicId[id]).filter(Boolean);
+        const fill   = card.querySelector('.progress-fill');
+        const pctEl  = card.querySelector('.topic-pct');
+        const dotEl  = card.querySelector('.status-dot');
+        if (!dbSlugs.length) {
+          // No DB topic maps to this card yet (Number, Sequences, Ratio & Proportion)
+          if (fill)  fill.style.width = '0%';
+          if (pctEl) pctEl.textContent = '—';
+          if (dotEl) { dotEl.classList.remove('active'); dotEl.textContent = 'Not yet tracked'; }
+          return;
+        }
+        const pct = groupProgress.length
+          ? Math.round(Math.min(groupProgress.reduce((s, p) => s + (parseFloat(p.best_score) || 0), 0) / groupProgress.length, 100))
+          : 0;
+        if (fill)  fill.style.width = pct + '%';
+        if (pctEl) pctEl.textContent = pct + '%';
+        if (dotEl) {
+          if (!groupProgress.length) {
+            dotEl.classList.remove('active');
+            dotEl.textContent = 'Not Started';
+          } else if (groupProgress.every(p => p.mastery_level === 'mastered')) {
+            dotEl.classList.add('active');
+            dotEl.textContent = 'Mastered';
+          } else {
+            dotEl.classList.add('active');
+            dotEl.textContent = 'In Progress';
+          }
+        }
+      });
 
       // Current/target grade — most recent diagnostic assessment for this subject
       try {
@@ -780,19 +831,15 @@
     });
   });
 
-  // ── TOPIC CARD NAVIGATION ────────────────────────────────────
-  const TOPIC_SLUGS = {
-    '1':'number','2':'algebra','3':'sequences',
-    '4':'ratio-proportion','5':'geometry','6':'trigonometry',
-    '7':'probability','8':'statistics'
-  };
+  // ── TOPIC CARD NAVIGATION (TOPIC_SLUGS, GROUP_SLUG_MAP declared above) ──
   document.querySelectorAll('.topic-card').forEach(card => {
     const img  = card.querySelector('[data-topic]');
-    const slug = TOPIC_SLUGS[img?.dataset.topic];
-    if (slug) {
+    const cardSlug = TOPIC_SLUGS[img?.dataset.topic];
+    const hasTopics = cardSlug && (GROUP_SLUG_MAP[cardSlug] || []).length > 0;
+    if (hasTopics) {
       card.style.cursor = 'pointer';
       card.addEventListener('click', () => {
-        window.location.href = '/student/lessons.html?subject=1&ref=maths&topic=' + slug;
+        window.location.href = '/student/lessons.html?subject=1&ref=maths';
       });
     }
   });
