@@ -18,11 +18,14 @@ button{cursor:pointer;font-family:var(--font-body);}
 ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--navy2);}::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
 
 /* ── NAV ── */
-.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
+/* Mobile-first: base is the phone layout (nav-links hidden,
+   bottom tab bar takes over); min-width:769px restores the
+   full top nav — see the responsive block near the end. */
+.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100;}
 .topnav-logo{display:flex;align-items:center;gap:.6rem;}
 .topnav-logo img{height:36px;width:auto;}
 .logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
-.nav-links{display:flex;gap:.3rem;flex:1;}
+.nav-links{display:none;gap:.3rem;flex:1;}
 .nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;border:none;transition:all .2s;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:.4rem;}
 .nav-link:hover,.nav-link.active{background:var(--navy3);color:var(--white);}
 .nav-user{display:flex;align-items:center;gap:.75rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
@@ -56,7 +59,7 @@ button{cursor:pointer;font-family:var(--font-body);}
 .results-count{margin-left:auto;font-size:.78rem;font-family:var(--font-mono);color:var(--muted);}
 
 /* ── MAIN ── */
-main{max-width:1280px;margin:0 auto;padding:2rem;}
+main{max-width:1280px;margin:0 auto;padding:1rem 1rem 6rem;}
 
 /* ── SUBJECT GROUPS ── */
 .subject-section{margin-bottom:3rem;}
@@ -70,9 +73,7 @@ main{max-width:1280px;margin:0 auto;padding:2rem;}
 .topic-group-header{font-size:.72rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);}
 
 /* ── LESSON GRID ── */
-.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
-@media(max-width:1100px){.lesson-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:640px){.lesson-grid{grid-template-columns:1fr;}}
+.lesson-grid{display:grid;grid-template-columns:1fr;gap:1rem;}
 
 /* ── LESSON CARD ── */
 .lesson-card{
@@ -117,9 +118,7 @@ main{max-width:1280px;margin:0 auto;padding:2rem;}
 .progress-completed .progress-label{color:#4ade80;}
 
 /* ── LOADING ── */
-.skeleton-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
-@media(max-width:1100px){.skeleton-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:640px){.skeleton-grid{grid-template-columns:1fr;}}
+.skeleton-grid{display:grid;grid-template-columns:1fr;gap:1rem;}
 .skeleton-card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;height:150px;animation:shimmer 1.4s ease infinite;}
 @keyframes shimmer{0%,100%{opacity:1;}50%{opacity:.55;}}
 
@@ -139,6 +138,46 @@ main{max-width:1280px;margin:0 auto;padding:2rem;}
 #toast.error{border-color:var(--red);}
 .back-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:600;color:var(--muted);background:var(--navy2);border:1px solid var(--border);padding:.35rem .85rem;border-radius:var(--r);transition:all .2s;margin-bottom:1rem;text-decoration:none;}
 .back-link:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── Mobile Bottom Navigation ──────────────────────────────────── */
+.mobile-nav{
+  display:block;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:var(--navy2);border-top:1px solid var(--border);
+  padding:.5rem 0 env(safe-area-inset-bottom,.5rem);
+}
+.mobile-nav-inner{
+  display:flex;justify-content:space-around;align-items:center;
+  max-width:600px;margin:0 auto;
+}
+.mob-nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:.2rem;
+  background:none;border:none;color:var(--muted);
+  font-size:.62rem;font-family:var(--font-body);font-weight:600;
+  padding:.5rem .75rem;border-radius:8px;cursor:pointer;transition:color .2s;
+  min-width:44px;min-height:44px;justify-content:center;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.mob-nav-btn .mob-icon{font-size:1.25rem;line-height:1;}
+.mob-nav-btn.active{color:var(--gold);}
+.mob-nav-btn:hover{color:var(--white);}
+
+/* ── Mobile-first: base above is the phone layout; restore
+   the desktop top nav and multi-column grids here. ── */
+@media(min-width:641px){
+  .lesson-grid{grid-template-columns:repeat(2,1fr);}
+  .skeleton-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(min-width:769px){
+  .topnav{padding:.9rem 2rem;gap:1.5rem;}
+  .nav-links{display:flex;}
+  main{padding:2rem;}
+  .mobile-nav{display:none;}
+}
+@media(min-width:1101px){
+  .lesson-grid{grid-template-columns:repeat(3,1fr);}
+  .skeleton-grid{grid-template-columns:repeat(3,1fr);}
+}
 </style>
 </head>
 <body>
@@ -205,6 +244,27 @@ main{max-width:1280px;margin:0 auto;padding:2rem;}
 </main>
 
 <div id="toast"></div>
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mob-nav-btn" onclick="location.href='/dashboard.html'">
+      <span class="mob-icon">🏠</span>Home
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/subjects.html'">
+      <span class="mob-icon">📚</span>Subjects
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/student/progress.html'">
+      <span class="mob-icon">📈</span>Progress
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/tools/protege.html'">
+      <span class="mob-icon">✦</span>Protégé
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/tools/tools.html'">
+      <span class="mob-icon">🔧</span>Tools
+    </button>
+  </div>
+</nav>
 
 <script>
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';

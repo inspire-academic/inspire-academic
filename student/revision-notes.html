@@ -81,27 +81,61 @@ h1, h2, h3 { font-family: 'Fraunces', Georgia, serif }
 
 .app { display: block; min-height: 100vh; }
 
-/* ── SIDEBAR — liquid glass, matching subject pages ─────────────── */
+/* ── SIDEBAR — liquid glass, matching subject pages ───────────────
+   Mobile-first: below 901px the sidebar is an off-canvas drawer
+   (see .mobile-topbar / .sidebar-backdrop and the min-width:901
+   block near the end), not display:none — a phone user keeps
+   full navigation via the hamburger trigger. ── */
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
-  width: var(--sidebar);
+  width: min(300px, 85vw);
   display: flex;
   flex-direction: column;
-  z-index: 50;
+  z-index: 70;
   overflow-y: auto;
-  transition: background var(--transition), border-color var(--transition);
+  transform: translateX(-100%);
+  transition: transform .32s var(--spring-out), background var(--transition), border-color var(--transition);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border-right: 1px solid rgba(255,255,255,.1);
   box-shadow: 1px 0 0 rgba(255,255,255,.06) inset, 4px 0 32px rgba(0,0,0,.28);
 }
+.sidebar.open { transform: translateX(0) }
 [data-theme="dark"]  .sidebar { background: rgba(6,10,22,.72) }
 [data-theme="light"] .sidebar {
   background: rgba(255,255,255,.78);
   border-right-color: rgba(29,78,216,.1);
   box-shadow: 1px 0 0 rgba(255,255,255,.9) inset, 4px 0 32px rgba(29,78,216,.07);
 }
+
+/* Hamburger trigger + compact brand bar, mobile only */
+.mobile-topbar {
+  display: flex; align-items: center; gap: 12px; padding: 0 16px; height: 56px;
+  position: sticky; top: 0; z-index: 60;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  transition: background var(--transition), border-color var(--transition);
+}
+[data-theme="dark"]  .mobile-topbar { background: rgba(6,10,22,.82) }
+[data-theme="light"] .mobile-topbar { background: rgba(255,255,255,.85) }
+.hamburger-btn {
+  width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text); cursor: pointer;
+  display: grid; place-items: center; flex-shrink: 0; transition: all var(--transition);
+}
+.hamburger-btn:hover { border-color: var(--border-strong) }
+.hamburger-btn svg { width: 18px; height: 18px }
+.mobile-topbar-brand { display: flex; align-items: center; gap: 8px; min-width: 0 }
+.mobile-topbar-logo { width: 26px; height: 26px; border-radius: 7px; object-fit: contain; background: #fff; padding: 3px; flex-shrink: 0; }
+.mobile-topbar-subject { font-size: 15px; font-weight: 800; letter-spacing: -.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.sidebar-backdrop {
+  position: fixed; inset: 0; background: rgba(4,8,16,.6); z-index: 65;
+  opacity: 0; pointer-events: none; transition: opacity .25s ease;
+}
+.sidebar-backdrop.open { opacity: 1; pointer-events: auto }
 .brand { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
 .brand-icon {
   width: 44px; height: 44px; border-radius: 14px;
@@ -155,7 +189,7 @@ h1, h2, h3 { font-family: 'Fraunces', Georgia, serif }
 [data-theme="light"] .icon-sun { display: block }
 
 /* ── MAIN ─────────────────────────────────────────────────────── */
-.main { margin-left: var(--sidebar); padding: 28px 28px 60px; min-width: 0; }
+.main { margin-left: 0; padding: 16px; min-width: 0; }
 
 .page-header { margin-bottom: 20px; }
 .back-to-subject {
@@ -244,9 +278,12 @@ h1, h2, h3 { font-family: 'Fraunces', Georgia, serif }
 
 #print-area { display: none; }
 
-@media (max-width: 900px) {
-  .sidebar { display: none }
-  .main { margin-left: 0; padding: 16px }
+/* Mobile-first: base above is the phone layout; this restores
+   the persistent desktop sidebar and hides the drawer chrome. */
+@media (min-width: 901px) {
+  .sidebar { width: var(--sidebar); transform: none }
+  .mobile-topbar, .sidebar-backdrop { display: none }
+  .main { margin-left: var(--sidebar); padding: 28px 28px 60px }
 }
 @media (prefers-reduced-motion: reduce) {
   .def-card-inner, .chev { transition-duration: .01ms !important }
@@ -260,9 +297,22 @@ h1, h2, h3 { font-family: 'Fraunces', Georgia, serif }
 </style>
 </head>
 <body>
+
+<!-- ══ MOBILE TOPBAR (hidden ≥901px) ═══════════════════════════════ -->
+<div class="mobile-topbar">
+  <button class="hamburger-btn" id="sidebarToggle" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <div class="mobile-topbar-brand">
+    <img src="/assets/images/shared/inspire-logo.webp" alt="" class="mobile-topbar-logo">
+    <span class="mobile-topbar-subject" id="mobileTopbarSubject">Revision Notes</span>
+  </div>
+</div>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
 <div class="app">
 
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <a class="brand" href="/dashboard.html" title="Go to dashboard">
       <div class="brand-icon">
         <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/></svg>
@@ -322,6 +372,7 @@ h1, h2, h3 { font-family: 'Fraunces', Georgia, serif }
 
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/subject-back.js"></script>
+<script src="/assets/js/subject-nav.js"></script>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 const currentSubject = urlParams.get('subject') || 'physics';

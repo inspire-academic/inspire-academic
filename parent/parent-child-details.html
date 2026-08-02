@@ -89,7 +89,7 @@
     .hero {
       background: linear-gradient(135deg, var(--navy) 0%, #1a2f4e 100%);
       color: white;
-      padding: 2.5rem 2rem;
+      padding: 1.5rem 1rem;
       position: relative;
       overflow: hidden;
     }
@@ -121,7 +121,7 @@
     }
     .student-name {
       font-family:var(--font-display);
-      font-size: 2.25rem;
+      font-size: 1.6rem;
       font-weight: 700;
       margin-bottom: .5rem;
     }
@@ -165,7 +165,7 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 1rem;
     }
 
     /* ── SECTION HEADER ── */
@@ -192,7 +192,7 @@
     /* ── SUMMARY CARDS ── */
     .summary-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 1rem;
       margin-bottom: 2rem;
     }
@@ -224,13 +224,14 @@
     .summary-card.highlight .summary-card-label { color: rgba(255,255,255,.65); }
 
     /* ── TWO COLUMN LAYOUT ── */
+    /* Mobile-first: base is 1 column; min-width:769px (near the
+       end of this stylesheet) restores the 2-column layout. */
     .two-col {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 1.5rem;
       margin-bottom: 2rem;
     }
-    @media(max-width:768px){ .two-col{ grid-template-columns:1fr; } }
 
     /* ── CARD ── */
     .card {
@@ -312,6 +313,8 @@
     }
     .activity-table tr:last-child td { border-bottom: none; }
     .activity-table tr:hover td { background: #fafafa; }
+    .activity-table th:nth-child(3),
+    .activity-table td:nth-child(3) { display:none; }
     .pass-badge {
       display: inline-block;
       padding: .2rem .55rem;
@@ -389,14 +392,19 @@
       body { background: white; }
     }
 
-    /* ── RESPONSIVE ── */
-    @media(max-width:600px) {
-      .hero { padding: 1.5rem 1rem; }
-      .student-name { font-size: 1.6rem; }
-      .container { padding: 1rem; }
-      .summary-grid { grid-template-columns: 1fr 1fr; }
+    /* ── RESPONSIVE ──
+       Mobile-first: base above is the phone layout; these steps
+       restore desktop spacing, type sizes and table columns. ── */
+    @media(min-width:601px) {
+      .hero { padding: 2.5rem 2rem; }
+      .student-name { font-size: 2.25rem; }
+      .container { padding: 2rem; }
+      .summary-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
       .activity-table th:nth-child(3),
-      .activity-table td:nth-child(3) { display:none; }
+      .activity-table td:nth-child(3) { display:table-cell; }
+    }
+    @media(min-width:769px) {
+      .two-col { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>

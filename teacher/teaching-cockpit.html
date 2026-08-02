@@ -33,22 +33,26 @@ body {
   overflow-x: hidden;
 }
 
+/* Mobile-first: base below stacks the sidebar as a full-width
+   block above the content (nothing squeezed into a narrow rail);
+   min-width:769px restores the persistent side-by-side layout. */
 .app {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
 
 /* ── SIDEBAR ── */
 .sidebar {
-  width: 240px;
+  width: 100%;
   background: var(--navy2);
-  border-right: 1px solid var(--border);
+  border-right: none;
+  border-bottom: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
+  position: static;
+  height: auto;
+  overflow-y: visible;
 }
 
 .sidebar-logo {
@@ -143,7 +147,7 @@ body {
 /* ── MAIN CONTENT ── */
 .main-content {
   flex: 1;
-  padding: 2.5rem 3rem;
+  padding: 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
@@ -155,7 +159,7 @@ body {
 
 .page-title {
   font-family:var(--font-display);
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 600;
   margin-bottom: .5rem;
 }
@@ -169,8 +173,8 @@ body {
 /* ── SUBJECT CARDS GRID ── */
 .subjects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   max-width: 1100px;
 }
 
@@ -258,11 +262,18 @@ body {
   font-family:var(--font-mono);
 }
 
-@media (max-width: 768px) {
-  .sidebar { width: 200px; }
-  .main-content { padding: 1.5rem; }
-  .subjects-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .page-title { font-size: 2rem; }
+/* Mobile-first: base above is the phone layout (stacked
+   sidebar); restore the persistent side-by-side desktop
+   layout here. */
+@media (min-width: 769px) {
+  .app { flex-direction: row; }
+  .sidebar {
+    width: 240px; border-right: 1px solid var(--border); border-bottom: none;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .main-content { padding: 2.5rem 3rem; }
+  .subjects-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+  .page-title { font-size: 2.5rem; }
 }
 </style>
 </head>

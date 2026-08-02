@@ -44,6 +44,12 @@ body{font-family:var(--font-body);background:var(--navy);color:var(--white);}
 .badge-dur  {background:rgba(122,143,166,.1);color:var(--muted);}
 .badge-started  {background:rgba(251,191,36,.12);color:#fbbf24;}
 .badge-complete {background:rgba(74,222,128,.15);color:#4ade80;}
+/* Mobile-first: the header is a tight single row (back + title +
+   badges + complete button) with no wrap, so on narrow screens the
+   least essential pieces give way first to keep the lesson title
+   readable — restored once there's room, see min-width below. */
+.badge-dur{display:none;}
+.complete-btn-text{display:none;}
 
 /* ── MARK COMPLETE BUTTON ── */
 .complete-btn{
@@ -104,6 +110,11 @@ body{font-family:var(--font-body);background:var(--navy);color:var(--white);}
 #toast.show{transform:translateY(0);opacity:1;}
 #toast.success{border-color:var(--green);}
 #toast.error{border-color:var(--red);}
+
+@media (min-width: 480px) {
+  .badge-dur{display:inline-block;}
+  .complete-btn-text{display:inline;}
+}
 </style>
 </head>
 <body>
@@ -114,7 +125,7 @@ body{font-family:var(--font-body);background:var(--navy);color:var(--white);}
   <div class="header-title" id="header-title">Loading…</div>
   <div class="header-badges" id="header-badges"></div>
   <button class="complete-btn" id="complete-btn" onclick="markComplete()" style="display:none;">
-    ✓ Mark Complete
+    ✓ <span class="complete-btn-text">Mark Complete</span>
   </button>
 </header>
 

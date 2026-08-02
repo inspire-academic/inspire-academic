@@ -54,11 +54,14 @@ button{cursor:pointer;font-family:var(--font-body);border:none;}
 .mastery-mastered{color:#4ade80;}
 
 /* ── NAV ── */
-.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;}
+/* Mobile-first: base is the phone layout (nav-links hidden,
+   bottom tab bar takes over); min-width:769px restores the
+   full top nav — see the responsive block near the end. */
+.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.8rem 1rem;display:flex;align-items:center;gap:.8rem;position:sticky;top:0;z-index:100;}
 .topnav-logo{display:flex;align-items:center;gap:.6rem;}
 .topnav-logo img{height:36px;width:auto;background:#fff;border-radius:6px;padding:2px 6px;}
 .logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
-.nav-links{display:flex;gap:.3rem;flex:1;}
+.nav-links{display:none;gap:.3rem;flex:1;}
 .nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;transition:all .2s;cursor:pointer;}
 .nav-link:hover{background:var(--navy3);color:var(--white);}
 .nav-user{display:flex;align-items:center;gap:.75rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
@@ -66,7 +69,7 @@ button{cursor:pointer;font-family:var(--font-body);border:none;}
 .avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;}
 
 /* ── MAIN ── */
-main{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
+main{max-width:860px;margin:0 auto;padding:1.2rem 1rem 6rem;}
 
 /* ── BREADCRUMB ── */
 .breadcrumb{font-size:.78rem;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
@@ -77,7 +80,7 @@ main{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
 /* ── TOPIC HEADER ── */
 .topic-header{
   background:var(--navy2);border:1px solid var(--border);
-  border-radius:var(--r);padding:1.8rem 2rem;margin-bottom:1.5rem;
+  border-radius:var(--r);padding:1.2rem 1rem;margin-bottom:1.5rem;
   position:relative;overflow:hidden;
 }
 .topic-header::before{
@@ -90,7 +93,7 @@ main{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
 .subject-biology .topic-header::before{background:linear-gradient(90deg,#16803c,#4ade80);}
 
 .topic-header-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;}
-.topic-name{font-family:var(--font-display);font-size:1.7rem;font-weight:800;margin-bottom:.4rem;}
+.topic-name{font-family:var(--font-display);font-size:1.3rem;font-weight:800;margin-bottom:.4rem;}
 .topic-desc-text{font-size:.88rem;color:var(--muted);max-width:500px;line-height:1.6;}
 .topic-meta-row{display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap;align-items:center;}
 
@@ -101,7 +104,7 @@ main{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
 }
 .mastery-dot-sm{width:8px;height:8px;border-radius:50%;}
 
-.topic-stats{display:flex;flex-direction:column;gap:.4rem;align-items:flex-end;flex-shrink:0;}
+.topic-stats{display:none;flex-direction:column;gap:.4rem;align-items:flex-end;flex-shrink:0;}
 .stat-item{text-align:right;}
 .stat-val{font-family:var(--font-display);font-size:1.6rem;font-weight:700;line-height:1;color:var(--gold);}
 .stat-lbl{font-size:.68rem;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.08em;}
@@ -159,7 +162,7 @@ main{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
 .quiz-cta{
   background:var(--navy2);border:1px solid var(--border);
   border-radius:var(--r);padding:1.8rem 2rem;
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;
   gap:1.5rem;flex-wrap:wrap;
   margin-top:2rem;
 }
@@ -169,11 +172,12 @@ main{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
 .quiz-cta-meta{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap;}
 
 .btn-start{
-  display:inline-flex;align-items:center;gap:.5rem;
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
   background:var(--gold);color:var(--navy);
   padding:.85rem 2rem;border-radius:var(--r);
   font-size:1rem;font-weight:700;transition:all .2s;
   white-space:nowrap;flex-shrink:0;
+  width:100%;
 }
 .btn-start:hover{background:var(--gold2);transform:translateY(-1px);}
 
@@ -195,16 +199,41 @@ main{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
 .skeleton{background:linear-gradient(90deg,var(--navy2) 25%,var(--navy3) 50%,var(--navy2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:var(--r);}
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 
-/* ── MOBILE ── */
-@media(max-width:768px){
-  .topnav{padding:.8rem 1rem;gap:.8rem;}
-  .nav-links{display:none;}
-  main{padding:1.2rem 1rem;}
-  .topic-header{padding:1.2rem 1rem;}
-  .topic-name{font-size:1.3rem;}
-  .topic-stats{display:none;}
-  .quiz-cta{flex-direction:column;align-items:flex-start;}
-  .btn-start{width:100%;justify-content:center;}
+/* ── Mobile Bottom Navigation ──────────────────────────────────── */
+.mobile-nav{
+  display:block;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:var(--navy2);border-top:1px solid var(--border);
+  padding:.5rem 0 env(safe-area-inset-bottom,.5rem);
+}
+.mobile-nav-inner{
+  display:flex;justify-content:space-around;align-items:center;
+  max-width:600px;margin:0 auto;
+}
+.mob-nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:.2rem;
+  background:none;border:none;color:var(--muted);
+  font-size:.62rem;font-family:var(--font-body);font-weight:600;
+  padding:.5rem .75rem;border-radius:8px;cursor:pointer;transition:color .2s;
+  min-width:44px;min-height:44px;justify-content:center;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.mob-nav-btn .mob-icon{font-size:1.25rem;line-height:1;}
+.mob-nav-btn.active{color:var(--gold);}
+.mob-nav-btn:hover{color:var(--white);}
+
+/* ── Mobile-first: base above is the phone layout; restore
+   the desktop top nav and roomier spacing here. ── */
+@media(min-width:769px){
+  .topnav{padding:.9rem 2rem;gap:1.5rem;}
+  .nav-links{display:flex;}
+  main{padding:2rem 1.5rem;}
+  .topic-header{padding:1.8rem 2rem;}
+  .topic-name{font-size:1.7rem;}
+  .topic-stats{display:flex;}
+  .quiz-cta{flex-direction:row;align-items:center;}
+  .btn-start{width:auto;}
+  .mobile-nav{display:none;}
 }
 </style>
     <!-- PWA -->
@@ -266,6 +295,27 @@ main{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
 </main>
 
 <div id="toast"></div>
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mob-nav-btn" onclick="location.href='/dashboard.html'">
+      <span class="mob-icon">🏠</span>Home
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/subjects.html'">
+      <span class="mob-icon">📚</span>Subjects
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/student/progress.html'">
+      <span class="mob-icon">📈</span>Progress
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/tools/protege.html'">
+      <span class="mob-icon">✦</span>Protégé
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/tools/tools.html'">
+      <span class="mob-icon">🔧</span>Tools
+    </button>
+  </div>
+</nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>

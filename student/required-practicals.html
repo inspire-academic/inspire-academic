@@ -313,7 +313,7 @@
   }
   .lesson-sticky-inner {
     max-width: 900px; margin: 0 auto;
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
   }
   .btn-back {
     background: var(--bg3); border: 1px solid var(--border2); color: var(--muted);
@@ -346,10 +346,10 @@
   .activate-panel li { font-size: 13px; line-height: 1.65; color: var(--text); }
 
   /* ── SECTION TABS ── */
-  .section-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .section-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 16px; }
   .tab-btn {
-    padding: 7px 14px; border-radius: 4px; cursor: pointer;
-    font-family: monospace; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    padding: 6px 10px; border-radius: 4px; cursor: pointer;
+    font-family: monospace; font-size: 10px; font-weight: 700; letter-spacing: 1px;
     border: 1px solid var(--border2); background: var(--bg2); color: var(--muted);
     transition: all 0.15s;
   }
@@ -361,7 +361,7 @@
   .section-panel.active { display: block; }
 
   /* ── QUESTION PANEL ── */
-  .q-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .q-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
   .q-panel-label { font-family: monospace; font-size: 10px; letter-spacing: 3px; margin-bottom: 10px; font-weight: 800; }
   .q-meta { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
   .q-marks { color: #fff; font-family: monospace; font-size: 11px; font-weight:800; padding: 3px 10px; border-radius: 3px; }
@@ -380,7 +380,7 @@
   .q-tip span { font-family: monospace; font-size: 11px; color: var(--yellow); font-weight: 800; }
 
   /* ── ANSWER PANEL ── */
-  .a-panel { background: #F3FBF6; border: 1.5px solid #A8DCBC; border-radius: 8px; padding: 20px 24px; }
+  .a-panel { background: #F3FBF6; border: 1.5px solid #A8DCBC; border-radius: 8px; padding: 14px 14px; }
   .a-label { font-family: monospace; font-size: 10px; color: var(--green); letter-spacing: 3px; margin-bottom: 6px; font-weight: 800; }
   .a-sub { font-family: monospace; font-size: 11px; color: #4A8A64; margin-bottom: 16px; }
   .a-box {
@@ -390,7 +390,7 @@
   }
 
   /* ── MARK SCHEME PANEL ── */
-  .ms-panel { background: #F6F4FD; border: 1.5px solid #C0B0EE; border-radius: 8px; padding: 20px 24px; }
+  .ms-panel { background: #F6F4FD; border: 1.5px solid #C0B0EE; border-radius: 8px; padding: 14px 14px; }
   .ms-label { font-family: monospace; font-size: 10px; color: var(--purple); letter-spacing: 3px; margin-bottom: 16px; font-weight: 800; }
   .ms-items { display: flex; flex-direction: column; gap: 10px; }
   .ms-item {
@@ -407,7 +407,7 @@
   .ms-commentary { font-family: monospace; font-size: 11px; color: #7A6AAA; line-height: 1.5; }
 
   /* ── MISTAKES PANEL ── */
-  .err-panel { background: #FDF4F4; border: 1.5px solid #EABAB8; border-radius: 8px; padding: 20px 24px; }
+  .err-panel { background: #FDF4F4; border: 1.5px solid #EABAB8; border-radius: 8px; padding: 14px 14px; }
   .err-label { font-family: monospace; font-size: 10px; color: #B03030; letter-spacing: 3px; margin-bottom: 16px; font-weight: 800; }
   .err-items { display: flex; flex-direction: column; gap: 10px; }
   .err-item {
@@ -421,7 +421,7 @@
   .err-consequence { padding-left: 24px; font-family: monospace; font-size: 11px; color: #8A5050; line-height: 1.5; }
 
   /* ── STRATEGY PANEL ── */
-  .strat-panel { background: #F3F7FD; border: 1.5px solid #A8C4E8; border-radius: 8px; padding: 20px 24px; }
+  .strat-panel { background: #F3F7FD; border: 1.5px solid #A8C4E8; border-radius: 8px; padding: 14px 14px; }
   .strat-label { font-family: monospace; font-size: 10px; color: var(--blue); letter-spacing: 3px; margin-bottom: 16px; font-weight: 800; }
   .strat-items { display: flex; flex-direction: column; gap: 10px; }
   .strat-item {
@@ -655,11 +655,13 @@
   .muted { color: var(--muted); }
   .muted2 { color: var(--muted2); }
 
-  @media (max-width: 500px) {
-    .lesson-sticky-inner { gap: 6px; }
-    .q-panel, .a-panel, .ms-panel, .err-panel, .strat-panel { padding: 14px 14px; }
-    .section-tabs { gap: 4px; }
-    .tab-btn { padding: 6px 10px; font-size: 10px; }
+  /* Mobile-first: base above is the phone layout; restore
+     the roomier desktop spacing here. */
+  @media (min-width: 501px) {
+    .lesson-sticky-inner { gap: 10px; }
+    .q-panel, .a-panel, .ms-panel, .err-panel, .strat-panel { padding: 20px 24px; }
+    .section-tabs { gap: 6px; }
+    .tab-btn { padding: 7px 14px; font-size: 11px; }
   }
 </style>
 </head>
