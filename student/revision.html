@@ -38,13 +38,16 @@ body {
 }
 
 /* ── TOPNAV — identical to dashboard ── */
+/* Mobile-first: base is the phone layout (nav-links hidden,
+   bottom tab bar takes over); min-width:769px restores the
+   full top nav — see the responsive block near the end. */
 .topnav {
   background:var(--navy2);
   border-bottom:1px solid var(--border);
-  padding:.8rem 1.5rem;
+  padding:.8rem 1rem;
   display:flex;
   align-items:center;
-  gap:1rem;
+  gap:.6rem;
   position:sticky;top:0;z-index:100;
 }
 .topnav-logo img{height:36px;width:auto;border-radius:8px;}
@@ -55,7 +58,7 @@ body {
   color:var(--gold);
   margin-right:.5rem;
 }
-.nav-links{display:flex;gap:.3rem;}
+.nav-links{display:none;gap:.3rem;}
 .nav-link {
   background:none;
   border:none;
@@ -80,6 +83,7 @@ body {
   transition:border-color .2s;
 }
 .nav-user:hover{border-color:var(--gold);}
+.nav-user span:last-child{display:none;} /* "Sign out" text — mobile hides it */
 .avatar {
   width:32px;height:32px;
   border-radius:50%;
@@ -88,7 +92,7 @@ body {
 }
 
 /* ── PAGE ── */
-main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
+main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
 
 /* ── HERO ── */
 .page-hero {
@@ -192,7 +196,7 @@ main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
   border-radius:var(--r);
   padding:1.4rem 1.6rem;
   display:grid;
-  grid-template-columns:1fr auto;
+  grid-template-columns:1fr;
   gap:1rem;
   align-items:center;
   transition:border-color .2s,transform .15s;
@@ -562,8 +566,8 @@ main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
 /* ── RIGHT SIDE CTA ── */
 .pack-right {
   display:flex;
-  flex-direction:column;
-  align-items:flex-end;
+  flex-direction:row;
+  align-items:center;
   gap:.6rem;
   flex-shrink:0;
 }
@@ -668,12 +672,41 @@ main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
 #toast.success{border-color:var(--green);color:var(--green);}
 #toast.error{border-color:var(--red);color:var(--red);}
 
-/* ── RESPONSIVE ── */
-@media(max-width:640px){
-  .pack-card { grid-template-columns:1fr; }
-  .pack-right { flex-direction:row;align-items:center; }
-  .topnav { padding:.8rem 1rem; }
-  main { padding:1.5rem 1rem 3rem; }
+/* ── Mobile Bottom Navigation ──────────────────────────────────── */
+.mobile-nav{
+  display:block;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:var(--navy2);border-top:1px solid var(--border);
+  padding:.5rem 0 env(safe-area-inset-bottom,.5rem);
+}
+.mobile-nav-inner{
+  display:flex;justify-content:space-around;align-items:center;
+  max-width:600px;margin:0 auto;
+}
+.mob-nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:.2rem;
+  background:none;border:none;color:var(--muted);
+  font-size:.62rem;font-family:var(--font-body);font-weight:600;
+  padding:.5rem .75rem;border-radius:8px;cursor:pointer;transition:color .2s;
+  min-width:44px;min-height:44px;justify-content:center;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.mob-nav-btn .mob-icon{font-size:1.25rem;line-height:1;}
+.mob-nav-btn.active{color:var(--gold);}
+.mob-nav-btn:hover{color:var(--white);}
+
+/* ── RESPONSIVE: base above is the phone layout; restore the
+   desktop top nav and 2-column pack cards here. ── */
+@media(min-width:641px){
+  .pack-card { grid-template-columns:1fr auto; }
+  .pack-right { flex-direction:column;align-items:flex-end; }
+}
+@media(min-width:769px){
+  .topnav { padding:.8rem 1.5rem;gap:1rem; }
+  .nav-links{display:flex;}
+  .nav-user span:last-child{display:inline;}
+  main { padding:2rem 1.5rem 4rem; }
+  .mobile-nav{display:none;}
 }
 </style>
 </head>
@@ -795,6 +828,27 @@ main { max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem; }
 </main>
 
 <div id="toast"></div>
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mob-nav-btn" onclick="location.href='/dashboard.html'">
+      <span class="mob-icon">🏠</span>Home
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/subjects.html'">
+      <span class="mob-icon">📚</span>Subjects
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/student/progress.html'">
+      <span class="mob-icon">📈</span>Progress
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/tools/protege.html'">
+      <span class="mob-icon">✦</span>Protégé
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/tools/tools.html'">
+      <span class="mob-icon">🔧</span>Tools
+    </button>
+  </div>
+</nav>
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);

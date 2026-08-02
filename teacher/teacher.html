@@ -55,14 +55,17 @@ body {
 .app { display: flex; min-height: 100vh; }
 
 /* ── Sidebar ── */
+/* Mobile-first: base is the collapsed icon-only rail; the
+   min-width:901px block below restores the full labeled sidebar. */
 .sidebar {
-  width: 220px; flex-shrink: 0;
+  width: 60px; flex-shrink: 0;
   background: var(--navy2);
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
   padding: 1.5rem 0;
   position: sticky; top: 0; height: 100vh;
 }
+.sidebar-logo, .sidebar-footer { display: none; }
 .sidebar-logo {
   padding: 0 1.5rem 1.5rem;
   border-bottom: 1px solid var(--border);
@@ -73,8 +76,8 @@ body {
 .sidebar-logo .badge { font-family:var(--font-mono); font-size: .6rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: .2rem; }
 
 .nav-item {
-  display: flex; align-items: center; gap: .75rem;
-  padding: .65rem 1.5rem;
+  display: flex; align-items: center; justify-content: center; gap: .75rem;
+  padding: .65rem 0;
   cursor: pointer; font-size: .9rem;
   color: var(--muted); transition: all .15s;
   border-left: 3px solid transparent;
@@ -82,6 +85,7 @@ body {
 .nav-item:hover { color: var(--white); background: rgba(255,255,255,.04); }
 .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(212,160,23,.06); }
 .nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+.nav-item span:not(.icon) { display: none; } /* label — icon-only rail on mobile */
 
 .sidebar-footer {
   margin-top: auto;
@@ -173,7 +177,7 @@ body {
 .view.active { display: block; }
 
 /* ── Stat cards row ── */
-.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.stat-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
 .stat-card {
   background: var(--navy2); border: 1px solid var(--border);
   border-radius: var(--r); padding: 1.25rem 1.5rem;
@@ -185,7 +189,7 @@ body {
 /* ── Table ── */
 .table-card {
   background: var(--navy2); border: 1px solid var(--border);
-  border-radius: var(--r); overflow: hidden; margin-bottom: 1.5rem;
+  border-radius: var(--r); overflow-x: auto; margin-bottom: 1.5rem;
 }
 .table-header {
   padding: 1rem 1.5rem;
@@ -305,11 +309,14 @@ tr:hover td { background: rgba(255,255,255,.025); }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-/* ── Responsive ── */
-@media (max-width: 900px) {
-  .sidebar { width: 60px; }
-  .sidebar-logo, .sidebar-footer, .nav-item span { display: none; }
-  .stat-row { grid-template-columns: repeat(2, 1fr); }
+/* ── Responsive: base above is the mobile icon-rail layout;
+   this restores the full desktop sidebar and 4-up stats. ── */
+@media (min-width: 901px) {
+  .sidebar { width: 220px; }
+  .sidebar-logo, .sidebar-footer { display: block; }
+  .nav-item { justify-content: flex-start; padding: .65rem 1.5rem; }
+  .nav-item span:not(.icon) { display: inline; }
+  .stat-row { grid-template-columns: repeat(4, 1fr); }
 }
 </style>
     <!-- PWA -->
