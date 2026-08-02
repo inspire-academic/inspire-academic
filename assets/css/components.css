@@ -9,9 +9,12 @@
    ================================================================ */
 
 /* ── App shell ─────────────────────────────────────────────── */
+/* Mobile-first: sidebar is an off-canvas drawer below 901px, so
+   .app is a single column and reserves no gutter for it. */
+:root { --sidebar-width: 220px }
 .app {
   display: grid;
-  grid-template-columns: var(--sidebar-width) minmax(0,1fr);
+  grid-template-columns: 1fr;
   min-height: 100vh;
 }
 
@@ -19,12 +22,13 @@
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
-  width: var(--sidebar-width);
+  width: min(300px, 85vw);
   display: flex;
   flex-direction: column;
-  z-index: 50;
+  z-index: 70;
   overflow-y: auto;
-  transition: background var(--transition), border-color var(--transition);
+  transform: translateX(-100%);
+  transition: transform .32s var(--spring-out), background var(--transition), border-color var(--transition);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border-right: 1px solid rgba(255,255,255,.1);
@@ -32,6 +36,58 @@
     1px 0 0 rgba(255,255,255,.06) inset,
     4px 0 32px rgba(0,0,0,.28);
 }
+.sidebar.open { transform: translateX(0) }
+
+/* Hamburger trigger + compact brand bar, mobile only */
+.mobile-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  transition: background var(--transition), border-color var(--transition);
+}
+[data-theme="dark"]  .mobile-topbar { background: rgba(6,10,22,.82) }
+[data-theme="light"] .mobile-topbar { background: rgba(255,255,255,.85) }
+.hamburger-btn {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  cursor: pointer;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+.hamburger-btn:hover { border-color: var(--border-strong) }
+.hamburger-btn svg { width: 18px; height: 18px }
+.mobile-topbar-brand { display: flex; align-items: center; gap: 8px; min-width: 0 }
+.mobile-topbar-logo {
+  width: 26px; height: 26px; border-radius: 7px;
+  object-fit: contain; background: #fff; padding: 3px; flex-shrink: 0;
+}
+.mobile-topbar-subject {
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 800; letter-spacing: -.02em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.sidebar-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(4,8,16,.6);
+  z-index: 65;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.sidebar-backdrop.open { opacity: 1; pointer-events: auto }
 [data-theme="dark"]  .sidebar { background: rgba(6,10,22,.72) }
 [data-theme="light"] .sidebar {
   background: rgba(255,255,255,.78);
@@ -230,7 +286,7 @@
 [data-theme="light"] .icon-moon { display: none }
 
 /* ── Main content ───────────────────────────────────────────── */
-.main { grid-column: 2; padding: 28px 28px 40px; min-width: 0 }
+.main { grid-column: 1; padding: 16px; min-width: 0 }
 
 /* ── Hero ───────────────────────────────────────────────────── */
 .hero {
@@ -239,8 +295,8 @@
   overflow: hidden;
   margin-bottom: 24px;
   position: relative;
-  padding: 40px 44px;
-  min-height: 260px;
+  padding: 28px 24px;
+  min-height: auto;
   display: flex;
   align-items: center;
   box-shadow: var(--shadow);
@@ -292,7 +348,7 @@
 [data-theme="light"] .hero-eyebrow-text { color: var(--blue-mid) }
 .hero h1 {
   font-family: var(--font-display);
-  font-size: clamp(52px,5.5vw,88px);
+  font-size: 48px;
   font-weight: 900; line-height: .88;
   letter-spacing: -.055em; margin-bottom: 14px;
 }
@@ -331,6 +387,7 @@
 .search-bar input::placeholder { color: var(--text-soft) }
 
 .hero-welcome {
+  display: none;
   position: absolute; right: 44px; top: 36px;
   z-index: 2; text-align: right;
 }
@@ -354,7 +411,7 @@
 /* ── Dashboard grid & panels ────────────────────────────────── */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: minmax(0,1fr) 320px;
+  grid-template-columns: 1fr;
   gap: 20px; align-items: start;
 }
 
@@ -414,7 +471,7 @@
 }
 .topics-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
+  grid-template-columns: 1fr;
   gap: 14px; padding: 18px;
   justify-items: start;
 }
@@ -794,7 +851,7 @@
 
 .quick-access {
   margin-top: 20px;
-  display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
+  display: grid; grid-template-columns: 1fr;
   gap: 14px;
 }
 .quick-card {
@@ -908,26 +965,27 @@
 .search-bar   { animation: heroEntrance .7s cubic-bezier(.2,.8,.2,1) .4s both }
 .hero-welcome { animation: heroEntrance .8s cubic-bezier(.2,.8,.2,1) .5s both }
 
-/* ── Responsive breakpoints ───────────────────────────────────── */
-@media (max-width:1200px) {
-  :root { --sidebar-width: 220px }
-  .dashboard-grid { grid-template-columns: 1fr }
+/* ── Responsive breakpoints (mobile-first: base above is the
+   phone layout; each min-width step adds room as it becomes
+   available) ─────────────────────────────────────────────── */
+@media (min-width:601px) {
+  .topics-grid { grid-template-columns: repeat(2, minmax(0,1fr)) }
+  .quick-access { grid-template-columns: repeat(2, minmax(0,1fr)) }
+  .hero h1 { font-size: clamp(52px,5.5vw,88px) }
+}
+@media (min-width:901px) {
+  .app { grid-template-columns: var(--sidebar-width) minmax(0,1fr) }
+  .sidebar { width: var(--sidebar-width); transform: none }
+  .mobile-topbar, .sidebar-backdrop { display: none }
+  .main { grid-column: 2; padding: 28px 28px 40px }
+  .hero { padding: 40px 44px; min-height: 260px }
+  .hero-welcome { display: block }
+  .topics-grid { grid-template-columns: repeat(3, minmax(0,1fr)) }
   .right-col { grid-template-columns: repeat(2,1fr) }
-  .quick-access { grid-template-columns: repeat(2,1fr) }
 }
-@media (max-width:900px) {
-  .app { grid-template-columns: 1fr }
-  .sidebar { display: none }
-  .main { padding: 16px }
-  .hero { padding: 28px 24px; min-height: auto }
-  .hero-welcome { display: none }
-  .topics-grid { grid-template-columns: repeat(2,1fr) }
+@media (min-width:1201px) {
+  :root { --sidebar-width: 256px }
+  .dashboard-grid { grid-template-columns: minmax(0,1fr) 320px }
   .right-col { grid-template-columns: 1fr }
-  .quick-access { grid-template-columns: repeat(2,1fr) }
-}
-@media (max-width:600px) {
-  .topics-grid { grid-template-columns: 1fr }
-  .quick-access { grid-template-columns: 1fr }
-  .hero h1 { font-size: 48px }
-  .skills-grid { grid-template-columns: repeat(3,1fr) }
+  .quick-access { grid-template-columns: repeat(4, minmax(0,1fr)) }
 }

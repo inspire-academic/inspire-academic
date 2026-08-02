@@ -32,10 +32,23 @@
   </style>
 </head>
 <body>
+
+<!-- ══ MOBILE TOPBAR (hidden ≥901px) ═══════════════════════════════ -->
+<div class="mobile-topbar">
+  <button class="hamburger-btn" id="sidebarToggle" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+  </button>
+  <div class="mobile-topbar-brand">
+    <img src="/assets/images/shared/inspire-logo.webp" alt="" class="mobile-topbar-logo">
+    <span class="mobile-topbar-subject">Physics</span>
+  </div>
+</div>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
 <div class="app">
 
   <!-- ══ SIDEBAR ══════════════════════════════════════════════════ -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <a class="brand" href="/dashboard.html" title="Go to dashboard">
       <div class="brand-icon">
         <img src="/assets/images/shared/inspire-logo.webp" alt="Inspire Academic" style="width:100%;height:100%;object-fit:contain;border-radius:inherit;">
@@ -538,6 +551,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/subject-nav.js"></script>
 <script>
   document.getElementById('footerYear').textContent = new Date().getFullYear();
 
