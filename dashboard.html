@@ -145,15 +145,15 @@ body{background:var(--navy);}
 /* top nav */
 .topnav{
   background:var(--navy2);border-bottom:1px solid var(--border);
-  padding:.9rem 2rem;display:flex;align-items:center;gap:1.5rem;
+  padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;
   position:sticky;top:0;z-index:100;
 }
 .topnav-logo img{height:36px;width:auto;border-radius:8px;max-width:120px;}
 .topnav-title{
-  font-family:var(--font-display);font-size:1.1rem;font-weight:700;
+  font-family:var(--font-display);font-size:.95rem;font-weight:700;
   color:var(--gold);flex:1;
 }
-.nav-links{display:flex;gap:.3rem;}
+.nav-links{display:none;gap:.3rem;}
 .nav-link{
   padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;
   color:var(--muted);background:none;border:none;transition:all .2s;
@@ -165,21 +165,22 @@ body{background:var(--navy);}
   font-size:.82rem;cursor:pointer;transition:all .2s;
 }
 .nav-user:hover{border-color:var(--gold);}
+.nav-user span:last-child{display:none;} /* "Sign out" text — mobile hides it */
 .avatar{
   width:30px;height:30px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   font-weight:700;font-size:.82rem;flex-shrink:0;
 }
 
-main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
+main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 
 /* welcome bar */
 .welcome{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:2rem;flex-wrap:wrap;gap:1rem;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;
+  margin-bottom:2rem;flex-wrap:wrap;gap:.75rem;
 }
 .welcome-text h2{
-  font-family:var(--font-display);font-size:1.8rem;font-weight:700;
+  font-family:var(--font-display);font-size:1.25rem;font-weight:700;
 }
 .welcome-text h2 span{color:var(--gold);}
 .welcome-text p{color:var(--muted);font-size:.9rem;margin-top:.2rem;}
@@ -188,6 +189,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 .streak-widget{
   background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
   padding:.9rem 1.4rem;display:flex;align-items:center;gap:1rem;
+  width:100%;justify-content:flex-start;
 }
 .streak-fire{font-size:2rem;line-height:1;}
 .streak-num{
@@ -198,7 +200,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 
 /* stats row */
 .stats-row{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;
+  display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:2rem;
 }
 .stat-card{
   background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
@@ -209,7 +211,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
   text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;
 }
 .stat-card .s-value{
-  font-family:var(--font-display);font-size:2rem;font-weight:700;line-height:1;
+  font-family:var(--font-display);font-size:1.6rem;font-weight:700;line-height:1;
 }
 .stat-card .s-sub{font-size:.78rem;color:var(--muted);margin-top:.3rem;}
 
@@ -222,7 +224,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 }
 
 .subjects-grid{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:2rem;
+  display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:2rem;
 }
 .subject-card{
   background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
@@ -269,8 +271,9 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
   background:linear-gradient(135deg,var(--navy2) 0%,#112a4a 100%);
   border:1px solid var(--gold);border-radius:var(--r);
   padding:1.5rem;margin-bottom:2rem;
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;
 }
+.today-quiz .btn{width:100%;justify-content:center;}
 .tq-left .tq-label{
   font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;
   text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;
@@ -279,39 +282,11 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 .tq-left p{font-size:.85rem;color:var(--muted);margin-top:.3rem;}
 
 /* two-column layout */
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
-
-@media(max-width:900px){
-  .stats-row{grid-template-columns:repeat(2,1fr);}
-  .subjects-grid{grid-template-columns:1fr;}
-  .two-col{grid-template-columns:1fr;}
-}
-@media(max-width:768px){
-  /* Nav — hide links, show only logo + avatar */
-  .nav-links{display:none;}
-  .topnav{padding:.75rem 1rem;gap:.75rem;}
-  .nav-user span:last-child{display:none;} /* hide "Sign out" text */
-  /* Welcome bar — stack vertically */
-  .welcome{flex-direction:column;align-items:flex-start;gap:.75rem;}
-  .welcome-text h2{font-size:1.4rem;}
-  .streak-widget{width:100%;justify-content:flex-start;}
-  /* Daily challenge card — stack */
-  .today-quiz{flex-direction:column;gap:1rem;align-items:flex-start;}
-  .today-quiz .btn{width:100%;justify-content:center;}
-  /* Stats */
-  .stats-row{grid-template-columns:1fr 1fr;gap:.75rem;}
-  main{padding:1rem 1rem 6rem;} /* bottom padding for mobile nav */
-}
-@media(max-width:480px){
-  .stats-row{grid-template-columns:1fr 1fr;}
-  .stat-card .s-value{font-size:1.6rem;}
-  .welcome-text h2{font-size:1.25rem;}
-  .topnav-title{font-size:.95rem;}
-}
+.two-col{display:grid;grid-template-columns:1fr;gap:1.5rem;}
 
 /* ── Mobile Bottom Navigation ──────────────────────────────────── */
 .mobile-nav{
-  display:none;
+  display:block;
   position:fixed;bottom:0;left:0;right:0;z-index:200;
   background:var(--navy2);border-top:1px solid var(--border);
   padding:.5rem 0 env(safe-area-inset-bottom,.5rem);
@@ -331,8 +306,35 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 .mob-nav-btn .mob-icon{font-size:1.25rem;line-height:1;}
 .mob-nav-btn.active{color:var(--gold);}
 .mob-nav-btn:hover{color:var(--white);}
-@media(max-width:768px){
-  .mobile-nav{display:block;}
+
+/* Mobile-first: base rules above are the phone layout; each
+   min-width step below adds room back as it becomes available.
+   Kept last in the stylesheet so these overrides reliably win
+   over every base rule above, regardless of selector order. */
+@media(min-width:481px){
+  .welcome-text h2{font-size:1.4rem;}
+  .stat-card .s-value{font-size:2rem;}
+  .topnav-title{font-size:1.1rem;}
+}
+@media(min-width:769px){
+  /* Nav — top links + avatar text return; bottom nav hides */
+  .nav-links{display:flex;}
+  .topnav{padding:.9rem 2rem;gap:1.5rem;}
+  .nav-user span:last-child{display:inline;}
+  /* Welcome bar — back to a row */
+  .welcome{flex-direction:row;align-items:center;gap:1rem;}
+  .streak-widget{width:auto;justify-content:flex-start;}
+  /* Daily challenge card — back to a row */
+  .today-quiz{flex-direction:row;align-items:center;}
+  .today-quiz .btn{width:auto;justify-content:flex-start;}
+  .stats-row{gap:1rem;}
+  main{padding:2rem 1.5rem;}
+  .mobile-nav{display:none;}
+}
+@media(min-width:901px){
+  .stats-row{grid-template-columns:repeat(4,1fr);}
+  .subjects-grid{grid-template-columns:repeat(2,1fr);}
+  .two-col{grid-template-columns:1fr 1fr;}
 }
 </style>
     <!-- PWA -->
