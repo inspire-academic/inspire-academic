@@ -166,7 +166,7 @@ async function signOut(){await supa.auth.signOut();window.location.href='/';}
 
 async function loadLeads(){
   const{data,error}=await supa.from('leads')
-    .select('id,child_name,parent_name,parent_email,parent_phone,programme_name,programme_slug,source,campaign,status,submitted_at')
+    .select('id,child_name,parent_name,parent_email,parent_phone,year_group,subjects_interested,programme_name,programme_slug,source,campaign,status,submitted_at')
     .order('submitted_at',{ascending:false});
 
   if(error){
@@ -207,13 +207,15 @@ function render(list){
     return;
   }
   w.innerHTML=`<table><thead><tr>
-    <th>Child</th><th>Parent / Guardian</th><th>Contact</th><th>Programme</th><th>Source</th><th>Status</th><th>Submitted</th>
+    <th>Child</th><th>Year / Subjects</th><th>Parent / Guardian</th><th>Contact</th><th>Programme</th><th>Source</th><th>Status</th><th>Submitted</th>
   </tr></thead><tbody>
     ${list.map(l=>{
       const d=l.submitted_at?new Date(l.submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
       const src=[l.source,l.campaign].filter(Boolean).join(' / ')||'—';
+      const yearSubj=[l.year_group,l.subjects_interested].filter(Boolean).join(' — ')||'—';
       return`<tr>
         <td><strong>${esc(l.child_name)}</strong></td>
+        <td style="color:var(--muted);font-size:.82rem">${esc(yearSubj)}</td>
         <td>${esc(l.parent_name)}</td>
         <td><div>${esc(l.parent_email)}</div><div style="color:var(--muted);font-size:.8rem">${esc(l.parent_phone)}</div></td>
         <td style="color:var(--muted)">${esc(l.programme_name||l.programme_slug)}</td>
