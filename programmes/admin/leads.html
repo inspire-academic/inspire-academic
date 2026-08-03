@@ -74,6 +74,14 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .ei{font-size:2.5rem;margin-bottom:.75rem;}
 .et{font-size:1rem;color:var(--white);margin-bottom:.4rem;}
 
+.link-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;background:var(--navy3);border:1px solid var(--border);border-radius:var(--r);padding:.75rem 1rem;flex-wrap:wrap;}
+.link-info{min-width:0;}
+.link-name{font-size:.85rem;font-weight:600;margin-bottom:.15rem;}
+.link-url{font-family:var(--font-mono);font-size:.82rem;color:var(--gold);word-break:break-all;}
+.link-copy{flex-shrink:0;padding:.5rem 1rem;font-size:.8rem;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--muted);transition:all .15s;}
+.link-copy:hover{border-color:var(--gold);color:var(--gold);}
+.link-copy.copied{border-color:var(--green);color:var(--green);}
+
 /* Mobile-first: base above is the phone layout (stacked
    sidebar, 2-up stats); restore the desktop layout here. */
 @media(min-width:769px){
@@ -110,8 +118,13 @@ tr:hover td{background:rgba(255,255,255,.02);}
     <div class="ph">
       <div>
         <div class="pt">Programme Registrations</div>
-        <div class="ps">Interest registered through public recruitment landing pages (e.g. /bridge)</div>
+        <div class="ps">Interest registered through public recruitment landing pages</div>
       </div>
+    </div>
+
+    <div class="tc" style="margin-bottom:1.5rem;">
+      <div class="th"><div class="tt">Share these links</div></div>
+      <div id="link-list" style="padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.75rem;"></div>
     </div>
 
     <div class="stat-row">
@@ -141,7 +154,56 @@ const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
 
 let _leads=[];
 
+const REG_LINKS=[
+  {name:'Inspire Academic — General Registration',url:'https://www.inspireacademic.org/interest'},
+  {name:'Year 6 Science Bridging Programme',url:'https://www.inspireacademic.org/bridge'},
+];
+
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function renderLinks(){
+  const w=document.getElementById('link-list');
+  w.innerHTML=REG_LINKS.map((l,i)=>`
+    <div class="link-row">
+      <div class="link-info"><div class="link-name">${esc(l.name)}</div><div class="link-url">${esc(l.url)}</div></div>
+      <button class="link-copy" id="copy-${i}" onclick="copyLink('${esc(l.url)}',${i})">📋 Copy Link</button>
+    </div>
+  `).join('');
+}
+
+function flashCopied(btn,ok){
+  const prev=btn.textContent;
+  btn.textContent=ok?'✓ Copied':'Copy failed — select manually';
+  btn.classList.toggle('copied',ok);
+  setTimeout(()=>{btn.textContent=prev;btn.classList.remove('copied');},2000);
+}
+
+function fallbackCopy(url){
+  const ta=document.createElement('textarea');
+  ta.value=url;
+  ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);
+  ta.select();
+  let ok=false;
+  try{ok=document.execCommand('copy');}catch(e){ok=false;}
+  document.body.removeChild(ta);
+  return ok;
+}
+
+function copyLink(url,i){
+  const btn=document.getElementById('copy-'+i);
+  // navigator.clipboard.writeText can hang indefinitely (neither resolve nor
+  // reject) when called without genuine user-activation in some browser/
+  // automation contexts — race it against a short timeout so the button
+  // always gets feedback instead of silently doing nothing.
+  const clipboardAttempt=(navigator.clipboard&&navigator.clipboard.writeText)
+    ? navigator.clipboard.writeText(url)
+    : Promise.reject();
+  const timeout=new Promise((_,reject)=>setTimeout(reject,600));
+  Promise.race([clipboardAttempt,timeout])
+    .then(()=>flashCopied(btn,true))
+    .catch(()=>flashCopied(btn,fallbackCopy(url)));
+}
 
 function chip(status){
   const map={new:['cb','New'],contacted:['ca','Contacted'],enrolled:['cg','Enrolled'],lost:['cr','Lost']};
@@ -158,6 +220,7 @@ async function init(){
 
   document.getElementById('admin-name').textContent=p.full_name||session.user.email;
 
+  renderLinks();
   await loadLeads();
   document.getElementById('loading-overlay').style.display='none';
 }
