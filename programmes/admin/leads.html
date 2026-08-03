@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Programme Registrations — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+:root{
+  --white:#F0EDE6;
+  --border:rgba(212,160,23,.18);--r:10px;
+  --green:#2ECC71;--amber:#F39C12;--red:#E74C3C;--blue:#3498DB;
+}
+button{cursor:pointer;font-family:var(--font-body);border:none;}
+
+#loading-overlay{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:1rem;}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
+
+/* Mobile-first: base below stacks the sidebar as a full-width
+   block above the content; min-width:769px restores the
+   persistent side-by-side layout. */
+.app{display:flex;flex-direction:column;min-height:100vh;}
+.sidebar{width:100%;flex-shrink:0;background:var(--navy2);border-right:none;border-bottom:1px solid var(--border);display:flex;flex-direction:column;padding:1.5rem 0;position:static;height:auto;}
+.sidebar-logo{padding:0 1.5rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
+.inspire{font-family:var(--font-display);font-style:italic;color:var(--gold);font-size:1.1rem;}
+.science{font-weight:700;font-size:1.1rem;}
+.s-badge{font-family:var(--font-mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.65rem 1.5rem;font-size:.9rem;color:var(--muted);transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,.04);}
+.nav-item.here{color:var(--gold);border-left-color:var(--gold);background:rgba(212,160,23,.06);}
+.nav-item .ico{font-size:1rem;width:20px;text-align:center;}
+.sidebar-footer{margin-top:auto;padding:1rem 1.5rem;border-top:1px solid var(--border);}
+.uname{font-size:.8rem;color:var(--muted);}
+.uname strong{display:block;color:var(--white);font-size:.9rem;margin-bottom:.15rem;}
+.sign-out{margin-top:.75rem;width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:.5rem;border-radius:var(--r);font-size:.8rem;transition:all .15s;}
+.sign-out:hover{border-color:var(--red);color:var(--red);}
+
+.main{flex:1;padding:1.25rem;overflow-y:auto;}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.pt{font-family:var(--font-display);font-size:1.8rem;}
+.ps{color:var(--muted);font-size:.9rem;margin-top:.3rem;}
+
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;}
+.sc{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;}
+.sl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.sv{font-family:var(--font-display);font-size:2.2rem;color:var(--gold);margin:.3rem 0 .1rem;line-height:1;}
+.ss{font-size:.8rem;color:var(--muted);}
+
+.tc{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);overflow-x:auto;margin-bottom:1.5rem;}
+.th{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.tt{font-weight:600;font-size:.95rem;}
+.thr{display:flex;gap:.6rem;flex-wrap:wrap;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:.75rem 1.25rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(0,0,0,.15);white-space:nowrap;}
+td{padding:.85rem 1.25rem;font-size:.88rem;border-bottom:1px solid rgba(255,255,255,.04);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.02);}
+
+.sinput,.sselect{padding:.6rem 1rem;border-radius:var(--r);background:var(--navy3);border:1.5px solid var(--border);color:var(--white);font-size:.85rem;outline:none;}
+.sinput:focus,.sselect:focus{border-color:var(--gold);}
+
+.chip{display:inline-block;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;white-space:nowrap;}
+.cg{background:rgba(46,204,113,.15);color:var(--green);}
+.ca{background:rgba(243,156,18,.15);color:var(--amber);}
+.cb{background:rgba(52,152,219,.15);color:var(--blue);}
+.cr{background:rgba(231,76,60,.15);color:var(--red);}
+
+.empty{text-align:center;padding:3rem 1rem;color:var(--muted);}
+.ei{font-size:2.5rem;margin-bottom:.75rem;}
+.et{font-size:1rem;color:var(--white);margin-bottom:.4rem;}
+
+/* Mobile-first: base above is the phone layout (stacked
+   sidebar, 2-up stats); restore the desktop layout here. */
+@media(min-width:769px){
+  .app{flex-direction:row;}
+  .sidebar{width:220px;border-right:1px solid var(--border);border-bottom:none;position:sticky;top:0;height:100vh;}
+  .main{padding:2rem;}
+  .stat-row{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div style="color:var(--muted);font-size:.9rem;margin-top:.5rem;">Loading…</div>
+</div>
+
+<div class="app">
+  <nav class="sidebar">
+    <a href="/index.html"><div class="sidebar-logo">
+      <div><span class="inspire">Inspire</span> <span class="science">Science</span></div>
+      <div class="s-badge">Admin Console</div>
+    </div></a>
+    <a href="/teacher/teacher.html"><div class="nav-item"><span class="ico">📊</span><span>Dashboard</span></div></a>
+    <a href="/teacher/admin-teacher-mgmt.html"><div class="nav-item"><span class="ico">👩‍🏫</span><span>Manage Teachers</span></div></a>
+    <div class="nav-item here"><span class="ico">📋</span><span>Registrations</span></div>
+    <div class="sidebar-footer">
+      <div class="uname"><strong id="admin-name">Admin</strong>Admin Account</div>
+      <button class="sign-out" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="ph">
+      <div>
+        <div class="pt">Programme Registrations</div>
+        <div class="ps">Interest registered through public recruitment landing pages (e.g. /bridge)</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="sc"><div class="sl">Total</div><div class="sv" id="s1">—</div><div class="ss">registrations</div></div>
+      <div class="sc"><div class="sl">New</div><div class="sv" id="s2">—</div><div class="ss">awaiting follow-up</div></div>
+      <div class="sc"><div class="sl">Contacted</div><div class="sv" id="s3">—</div><div class="ss">in progress</div></div>
+      <div class="sc"><div class="sl">Enrolled</div><div class="sv" id="s4">—</div><div class="ss">converted</div></div>
+    </div>
+
+    <div class="tc">
+      <div class="th">
+        <div class="tt">All Registrations</div>
+        <div class="thr">
+          <select class="sselect" id="f-programme" onchange="applyFilters()"><option value="">All programmes</option></select>
+          <input type="text" class="sinput" style="width:220px;" placeholder="Search name or email…" oninput="applyFilters()" id="f-search">
+        </div>
+      </div>
+      <div id="lwrap"><div class="empty"><div class="spinner" style="margin:0 auto;"></div></div></div>
+    </div>
+  </main>
+</div>
+
+<script>
+const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+let _leads=[];
+
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function chip(status){
+  const map={new:['cb','New'],contacted:['ca','Contacted'],enrolled:['cg','Enrolled'],lost:['cr','Lost']};
+  const [cls,label]=map[status]||['cb',status||'—'];
+  return `<span class="chip ${cls}">${label}</span>`;
+}
+
+async function init(){
+  const{data:{session}}=await supa.auth.getSession();
+  if(!session){window.location.href='/';return;}
+
+  const{data:p}=await supa.from('profiles').select('role,full_name').eq('id',session.user.id).maybeSingle();
+  if(!p||!['admin','super_admin'].includes(p.role)){window.location.href='/teacher/teacher.html';return;}
+
+  document.getElementById('admin-name').textContent=p.full_name||session.user.email;
+
+  await loadLeads();
+  document.getElementById('loading-overlay').style.display='none';
+}
+
+async function signOut(){await supa.auth.signOut();window.location.href='/';}
+
+async function loadLeads(){
+  const{data,error}=await supa.from('leads')
+    .select('id,child_name,parent_name,parent_email,parent_phone,programme_name,programme_slug,source,campaign,status,submitted_at')
+    .order('submitted_at',{ascending:false});
+
+  if(error){
+    document.getElementById('lwrap').innerHTML=`<div class="empty"><div class="ei">⚠️</div><div class="et">Could not load registrations</div><div>${esc(error.message)}</div></div>`;
+    return;
+  }
+
+  _leads=data||[];
+
+  document.getElementById('s1').textContent=_leads.length;
+  document.getElementById('s2').textContent=_leads.filter(l=>l.status==='new').length;
+  document.getElementById('s3').textContent=_leads.filter(l=>l.status==='contacted').length;
+  document.getElementById('s4').textContent=_leads.filter(l=>l.status==='enrolled').length;
+
+  const programmes=[...new Set(_leads.map(l=>l.programme_slug).filter(Boolean))];
+  const sel=document.getElementById('f-programme');
+  programmes.forEach(slug=>{
+    const name=(_leads.find(l=>l.programme_slug===slug)||{}).programme_name||slug;
+    sel.insertAdjacentHTML('beforeend',`<option value="${esc(slug)}">${esc(name)}</option>`);
+  });
+
+  render(_leads);
+}
+
+function applyFilters(){
+  const slug=document.getElementById('f-programme').value;
+  const q=document.getElementById('f-search').value.toLowerCase();
+  render(_leads.filter(l=>
+    (!slug||l.programme_slug===slug) &&
+    (!q||(l.child_name||'').toLowerCase().includes(q)||(l.parent_name||'').toLowerCase().includes(q)||(l.parent_email||'').toLowerCase().includes(q))
+  ));
+}
+
+function render(list){
+  const w=document.getElementById('lwrap');
+  if(!list.length){
+    w.innerHTML=`<div class="empty"><div class="ei">📋</div><div class="et">No registrations yet</div><div>Interest submitted through a programme landing page will appear here</div></div>`;
+    return;
+  }
+  w.innerHTML=`<table><thead><tr>
+    <th>Child</th><th>Parent / Guardian</th><th>Contact</th><th>Programme</th><th>Source</th><th>Status</th><th>Submitted</th>
+  </tr></thead><tbody>
+    ${list.map(l=>{
+      const d=l.submitted_at?new Date(l.submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
+      const src=[l.source,l.campaign].filter(Boolean).join(' / ')||'—';
+      return`<tr>
+        <td><strong>${esc(l.child_name)}</strong></td>
+        <td>${esc(l.parent_name)}</td>
+        <td><div>${esc(l.parent_email)}</div><div style="color:var(--muted);font-size:.8rem">${esc(l.parent_phone)}</div></td>
+        <td style="color:var(--muted)">${esc(l.programme_name||l.programme_slug)}</td>
+        <td style="color:var(--muted);font-size:.82rem">${esc(src)}</td>
+        <td>${chip(l.status)}</td>
+        <td style="color:var(--muted);font-size:.8rem">${d}</td>
+      </tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+init();
+</script>
+</body>
+</html>
