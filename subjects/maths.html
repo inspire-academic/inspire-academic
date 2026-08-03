@@ -594,9 +594,29 @@
         if ($el('lessonMeta'))  $el('lessonMeta').textContent  = '';
         return;
       }
-      // Profile
-      const { data: profile } = await supa.from('profiles')
+
+      // Fire every query that doesn't depend on another query's *result*
+      // immediately, in parallel — they resolve in the background while the
+      // topics -> quizzes -> quiz_attempts chain below runs its course.
+      // (Building a supabase-js query starts the request as soon as it's
+      // awaited/`.then()`d anywhere, so declaring these here — rather than
+      // where they're each awaited further down — is what actually moves
+      // the network calls earlier.)
+      const profilePromise = supa.from('profiles')
         .select('first_name,full_name').eq('id', user.id).single();
+      const streakPromise = supa.from('streaks').select('current_streak').eq('student_id', user.id).single();
+      const diagnosticPromise = supa.from('diagnostic_attempts')
+        .select('current_grade,target_grade,created_at')
+        .eq('student_id', user.id).eq('subject', SUBJECT_NAME)
+        .order('created_at', { ascending: false }).limit(1);
+      const lessonsPromise = supa.from('lessons')
+        .select('id,title,duration_minutes,order_number,topic_id,topics(name,slug)')
+        .eq('subject_id', SUBJECT_ID).eq('is_published', true)
+        .order('order_number', { ascending: true });
+      const lessonProgressPromise = supa.from('lesson_progress').select('lesson_id,completed_at').eq('student_id', user.id);
+
+      // Profile
+      const { data: profile } = await profilePromise;
       const firstName = getDisplayName(user, profile);
       const initial = firstName[0]?.toUpperCase() || '?';
       const sidebarName = document.querySelector('.student-name');
@@ -626,7 +646,7 @@
         topicIds.length
           ? supa.from('quizzes').select('id').in('topic_id', topicIds)
           : Promise.resolve({ data: [] }),
-        supa.from('streaks').select('current_streak').eq('student_id', user.id).single(),
+        streakPromise,
       ]);
       const quizIds = subjectQuizzes?.map(q => q.id) || [];
       const { data: attempts } = quizIds.length
@@ -699,10 +719,7 @@
 
       // Current/target grade — most recent diagnostic assessment for this subject
       try {
-        const { data: diagRows } = await supa.from('diagnostic_attempts')
-          .select('current_grade,target_grade,created_at')
-          .eq('student_id', user.id).eq('subject', SUBJECT_NAME)
-          .order('created_at', { ascending: false }).limit(1);
+        const { data: diagRows } = await diagnosticPromise;
         const diag = diagRows?.[0];
         if (diag?.current_grade != null) {
           if ($el('gradeCurrentVal'))  $el('gradeCurrentVal').textContent  = diag.current_grade;
@@ -718,11 +735,8 @@
       // Next lesson — first not-yet-completed published lesson, in subject order
       try {
         const [{ data: lessons }, { data: lessonProgressRows }] = await Promise.all([
-          supa.from('lessons')
-            .select('id,title,duration_minutes,order_number,topic_id,topics(name,slug)')
-            .eq('subject_id', SUBJECT_ID).eq('is_published', true)
-            .order('order_number', { ascending: true }),
-          supa.from('lesson_progress').select('lesson_id,completed_at').eq('student_id', user.id),
+          lessonsPromise,
+          lessonProgressPromise,
         ]);
         const completedIds = new Set((lessonProgressRows || []).filter(r => r.completed_at).map(r => r.lesson_id));
         const allLessons = lessons || [];

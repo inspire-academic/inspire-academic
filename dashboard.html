@@ -601,6 +601,11 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
     return;
   }
 
+  // Populate the profile-edit dropdown and (preview-only) teacher link —
+  // reuses the user/profile already fetched above, no extra round-trips.
+  loadProfileData(user, profile);
+  checkTeacherRole(profile);
+
   // 2. Render shell immediately — student sees their name before data loads
   const hr=new Date().getHours();
   document.getElementById('greeting-time').textContent=hr<12?'morning':hr<17?'afternoon':'evening';
@@ -814,18 +819,13 @@ async function saveProfile(){
   }
 }
 
-// Load profile data when page loads
-async function loadProfileData(){
+// Populate the (hidden-until-opened) profile-edit dropdown fields.
+// Takes the user/profile already fetched by requireAuth() at page load
+// instead of re-authenticating and re-querying from scratch.
+function loadProfileData(user, profile){
   try{
-    const{data:{user}}=await supa.auth.getUser();
     if(!user) return;
-    
-    const{data:profile}=await supa
-      .from('profiles')
-      .select('first_name,last_name,year_group,exam_board')
-      .eq('id',user.id)
-      .single();
-    
+
     if(profile){
       document.getElementById('profile-first-name').value=profile.first_name||'';
       document.getElementById('profile-last-name').value=profile.last_name||'';
@@ -849,33 +849,16 @@ async function loadProfileData(){
   }
 }
 
-// Call loadProfileData when dashboard data loads
-(async()=>{
-  await loadProfileData();
-  await checkTeacherRole();
-})();
-
-// Check if user is a teacher and show Teacher Dashboard link
-async function checkTeacherRole(){
-  try{
-    const{data:{user}}=await supa.auth.getUser();
-    if(!user) return;
-    
-    const{data:profile}=await supa
-      .from('profiles')
-      .select('role')
-      .eq('id',user.id)
-      .single();
-    
-    // Show Teacher Dashboard link if user is teacher, admin, etc.
-    if(profile && ['teacher','teacher_manager','admin','super_admin'].includes(profile.role)){
-      const teacherLink=document.getElementById('teacher-dashboard-link');
-      if(teacherLink){
-        teacherLink.style.display='block';
-      }
+// Show the "Teacher Dashboard" link if this profile is staff — only
+// reachable in practice via ?preview=true, since the main flow above
+// already redirects staff roles away from this page otherwise.
+// Takes the profile already fetched by requireAuth() at page load.
+function checkTeacherRole(profile){
+  if(profile && ['teacher','teacher_manager','admin','super_admin'].includes(profile.role)){
+    const teacherLink=document.getElementById('teacher-dashboard-link');
+    if(teacherLink){
+      teacherLink.style.display='block';
     }
-  }catch(e){
-    console.error('Role check error:',e);
   }
 }
 
