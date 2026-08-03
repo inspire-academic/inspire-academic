@@ -10,31 +10,19 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
-/* ── DESIGN TOKENS — matches existing platform ── */
+/* ── DESIGN TOKENS — matches existing platform ──
+   NOTE: --green/--red are kept here (not corrected to the app-shared
+   canonical values) because this page also hardcodes their rgba()
+   equivalents directly in several rules below (see .pack-card.completed,
+   .pack-card.overdue, .status-completed, .submission-file-remove:hover).
+   Deleting the variables alone would desync the var()-based colors from
+   the hardcoded ones and produce visibly mismatched greens/reds. */
 :root {
-  --navy:   #0b1628;
-  --navy2:  #112240;
-  --navy3:  #1a3a5c;
-  --gold:   #c9a84c;
-  --gold2:  #e8c96a;
-  --white:  #e8eaf0;
-  --muted:  #6b7f99;
-  --border: #1e2d45;
-  --r:      10px;
   --green:  #22c55e;
   --red:    #ef4444;
   --amber:  #f59e0b;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body {
-  font-family:var(--font-body);
-  background:var(--navy);
-  color:var(--white);
-  min-height:100vh;
-  line-height:1.6;
 }
 
 /* ── TOPNAV — identical to dashboard ── */
@@ -50,7 +38,6 @@ body {
   gap:.6rem;
   position:sticky;top:0;z-index:100;
 }
-.topnav-logo img{height:36px;width:auto;border-radius:8px;}
 .topnav-title {
   font-family:var(--font-display);
   font-size:1rem;
@@ -58,7 +45,6 @@ body {
   color:var(--gold);
   margin-right:.5rem;
 }
-.nav-links{display:none;gap:.3rem;}
 .nav-link {
   background:none;
   border:none;
@@ -70,7 +56,6 @@ body {
   cursor:pointer;
   transition:all .15s;
 }
-.nav-link:hover,.nav-link.active{background:var(--navy3);color:var(--white);}
 .nav-user {
   margin-left:auto;
   display:flex;
@@ -82,8 +67,6 @@ body {
   border:1px solid var(--border);
   transition:border-color .2s;
 }
-.nav-user:hover{border-color:var(--gold);}
-.nav-user span:last-child{display:none;} /* "Sign out" text — mobile hides it */
 .avatar {
   width:32px;height:32px;
   border-radius:50%;
@@ -421,7 +404,15 @@ main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
   color:#c4b5fd;
 }
 
-/* ── MODALS ── */
+/* ── MODALS ──
+   NOTE: this page names its full-screen backdrop ".modal" and its inner
+   dialog box ".modal-content" — the reverse of app-shared.css, which uses
+   ".modal" for the inner box and ".modal-overlay" for the backdrop. Since
+   both stylesheets now define a ".modal" rule for two different purposes,
+   the app-shared version's max-width/border-radius/border would otherwise
+   leak onto this backdrop (shrinking it into a small rounded box instead
+   of covering the viewport). The three properties below explicitly
+   neutralise that leakage. */
 .modal {
   display:none;
   position:fixed;
@@ -431,6 +422,9 @@ main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
   align-items:center;
   justify-content:center;
   padding:1rem;
+  max-width:none;
+  border-radius:0;
+  border:none;
 }
 .modal.open { display:flex; }
 .modal-content {
@@ -453,6 +447,11 @@ main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
   font-size:1.3rem;
   font-weight:600;
 }
+/* position:static below neutralises app-shared.css's ".modal-close"
+   rule (position:absolute;top:1rem;right:1rem) — that rule targets a
+   different element on the dashboard pilot page; here it would pull
+   this button out of its flex row in .modal-header and pin it to the
+   corner of the full-screen backdrop instead. */
 .modal-close {
   background:transparent;
   border:none;
@@ -467,6 +466,7 @@ main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
   justify-content:center;
   border-radius:4px;
   transition:all .15s;
+  position:static;
 }
 .modal-close:hover {
   background:var(--navy3);
@@ -500,25 +500,9 @@ main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
   border:none;
   font-family:var(--font-body);
 }
-.btn-gold {
-  background:var(--gold);
-  color:var(--navy);
-}
-.btn-gold:hover {
-  background:var(--gold2);
-}
 .btn-gold:disabled {
   opacity:.5;
   cursor:not-allowed;
-}
-.btn-outline {
-  background:transparent;
-  border:1px solid var(--border);
-  color:var(--muted);
-}
-.btn-outline:hover {
-  border-color:var(--gold);
-  color:var(--gold);
 }
 
 /* Submission file list */
@@ -661,14 +645,6 @@ main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
 @keyframes spin{to{transform:rotate(360deg);}}
 
 /* ── TOAST ── */
-#toast {
-  position:fixed;bottom:2rem;right:2rem;
-  background:var(--navy2);border:1px solid var(--border);
-  padding:.8rem 1.2rem;border-radius:var(--r);
-  font-size:.85rem;transform:translateY(100px);
-  opacity:0;transition:all .3s;z-index:9999;max-width:320px;
-}
-#toast.show{transform:translateY(0);opacity:1;}
 #toast.success{border-color:var(--green);color:var(--green);}
 #toast.error{border-color:var(--red);color:var(--red);}
 

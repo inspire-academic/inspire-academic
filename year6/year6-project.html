@@ -8,26 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
-:root{
-  --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
-  --gold:#d4a017;--gold2:#f0c040;
-  --orange:#e8620a;
-  --white:#ffffff;
-  --border:#1e3a5f;
-  --muted:#7a8fa6;
-  --green:#16803c;--red:#b92b1a;
-  --r:6px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
-a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:var(--font-body);}
 input,select,textarea{font-family:var(--font-body);}
-
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:var(--navy2);}
-::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
 
 /* Top nav */
 .topnav{
@@ -179,7 +162,6 @@ input,select,textarea{font-family:var(--font-body);}
   border-top-color:#fff;border-radius:50%;
   animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;
 }
-@keyframes spin{to{transform:rotate(360deg);}}
 
 @media(max-width:1024px){
   .split-container{flex-direction:column;height:auto;}

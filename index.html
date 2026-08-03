@@ -8,21 +8,10 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
-:root{
-  --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
-  --gold:#d4a017;--gold2:#f0c040;
-  --orange:#e8620a;
-  --white:#ffffff;
-  --border:#1e3a5f;
-  --muted:#7a8fa6;
-  --green:#16803c;--red:#b92b1a;
-  --r:8px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--font-body),-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
-a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:var(--font-body),sans-serif;border:none;}
+body{font-family:var(--font-body),-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+button{font-family:var(--font-body),sans-serif;border:none;}
 input,select{font-family:var(--font-body),sans-serif;}
 
 /* Mobile-first base: stacked single column (phones, ~320px+) */
@@ -126,12 +115,7 @@ input,select{font-family:var(--font-body),sans-serif;}
 .tier-name{font-weight:700;font-size:.95rem;margin-bottom:.3rem;}
 .tier-desc{font-size:.75rem;color:var(--muted);line-height:1.5;}
 
-#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
-#toast.show{transform:translateY(0);opacity:1;}
-#toast.success{border-color:var(--green);}
-#toast.error{border-color:var(--red);}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
-@keyframes spin{to{transform:rotate(360deg);}}
 
 /* Larger phones / small tablets: relax the tightest mobile spacing */
 @media(min-width:481px){

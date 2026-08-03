@@ -10,30 +10,16 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
 :root {
-  --navy:   #0B1D3A;
-  --navy2:  #112240;
-  --navy3:  #1A3361;
-  --gold:   #D4A017;
-  --gold2:  #F0C040;
   --white:  #F0EDE6;
-  --muted:  #7A8BA8;
   --border: rgba(212,160,23,.18);
   --r: 10px;
   --green:  #2ECC71;
   --amber:  #F39C12;
   --red:    #E74C3C;
   --blue:   #3498DB;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family:var(--font-body);
-  background: var(--navy);
-  color: var(--white);
-  min-height: 100vh;
 }
 
 /* ── Loading overlay ── */
@@ -49,7 +35,6 @@ body {
   border-radius: 50%;
   animation: spin .8s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Layout ── */
 .app { display: flex; min-height: 100vh; }
@@ -110,46 +95,6 @@ body {
   min-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:1001;
   display:none;
 }
-.profile-dropdown.show{display:block;}
-.profile-dropdown-header{
-  padding:1rem 1.25rem;border-bottom:1px solid var(--border);
-}
-.profile-dropdown-title{font-weight:600;font-size:.9rem;color:var(--gold);}
-.profile-dropdown-body{padding:1.25rem;}
-.profile-form-group{margin-bottom:1rem;}
-.profile-form-group:last-of-type{margin-bottom:0;}
-.profile-label{
-  display:block;font-size:.75rem;text-transform:uppercase;
-  letter-spacing:.08em;color:var(--muted);margin-bottom:.4rem;
-}
-.profile-input,.profile-select{
-  width:100%;background:var(--navy);border:1px solid var(--border);
-  border-radius:var(--r);padding:.65rem .9rem;color:var(--white);
-  font-size:.88rem;transition:border-color .2s;
-}
-.profile-input:focus,.profile-select:focus{
-  outline:none;border-color:var(--gold);
-}
-.profile-input:disabled{
-  background:var(--navy3);color:var(--muted);cursor:not-allowed;
-}
-.profile-actions{
-  display:flex;gap:.6rem;margin-top:1.25rem;padding-top:1.25rem;
-  border-top:1px solid var(--border);
-}
-.profile-save-btn{
-  flex:1;background:var(--gold);color:var(--navy);
-  border:none;padding:.7rem;border-radius:var(--r);
-  font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s;
-}
-.profile-save-btn:hover{background:var(--gold2);}
-.profile-save-btn:disabled{opacity:.5;cursor:not-allowed;}
-.profile-signout-btn{
-  flex:1;background:transparent;border:1px solid var(--red);
-  color:var(--red);padding:.7rem;border-radius:var(--r);
-  font-weight:600;font-size:.88rem;cursor:pointer;transition:all .2s;
-}
-.profile-signout-btn:hover{background:var(--red);color:var(--white);}
 .teacher-name-clickable{cursor:pointer;transition:all .15s;}
 .teacher-name-clickable:hover{color:var(--gold);}
 

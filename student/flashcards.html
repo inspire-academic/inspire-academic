@@ -78,16 +78,14 @@
 })();
 </script>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
 :root {
-  --navy: #0B1D3A;
   --navy-mid: #152D57;
   --navy-light: #1E3D6E;
-  --gold: #C9A84C;
   --gold-light: #E8C96A;
   --gold-pale: #FDF4DC;
   --cream: #FAFAF7;
-  --white: #FFFFFF;
   --text-primary: #0B1D3A;
   --text-secondary: #4A5568;
   --text-muted: #8B96A8;
@@ -867,7 +865,12 @@ html, body {
 .empty-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
 
 /* ── TOAST ── */
-.toast {
+/* Selector matches by #id (not .class) so this stays the same
+   specificity as app-shared.css's #toast rule and wins on source
+   order — the toast element here carries both class="toast" and
+   id="toast", and app-shared's #toast would otherwise out-rank a
+   .toast class selector and reposition this to the wrong corner. */
+#toast {
   position: fixed;
   bottom: 90px; left: 50%; transform: translateX(-50%) translateY(10px);
   background: var(--navy);
@@ -882,7 +885,7 @@ html, body {
   z-index: 200;
   box-shadow: var(--shadow-lg);
 }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp {
