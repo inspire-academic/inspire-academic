@@ -8,44 +8,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
-:root{
-  --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
-  --gold:#d4a017;--gold2:#f0c040;
-  --orange:#e8620a;
-  --white:#ffffff;
-  --border:#1e3a5f;
-  --muted:#7a8fa6;
-  --green:#16803c;--red:#b92b1a;
-  --r:6px;
-}
-*{box-sizing:border-box;margin:0;padding:0;} html{overflow-x:hidden;}
-body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;overflow-x:hidden;}
-button{cursor:pointer;font-family:var(--font-body);border:none;}
-a{text-decoration:none;color:inherit;}
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:var(--navy2);}
-::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
-.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.fade-in{animation:fadeIn .4s ease both;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
-#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
-#toast.show{transform:translateY(0);opacity:1;}
 
 /* ── NAV ── */
 /* Mobile-first: base values below are the phone layout;
    the min-width:769px block near the end restores desktop nav. */
-.topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100;}
 .topnav-logo{display:flex;align-items:center;gap:.6rem;}
 .topnav-logo img{height:36px;width:auto;background:#fff;border-radius:6px;padding:2px 6px;}
 .logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
 .nav-links{display:none;gap:.3rem;flex:1;}
-.nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;transition:all .2s;}
-.nav-link:hover{background:var(--navy3);color:var(--white);}
-.nav-link.active{background:var(--navy3);color:var(--white);}
 .nav-user{display:flex;align-items:center;gap:.6rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
-.nav-user:hover{border-color:var(--gold);}
 .nav-user span:last-child{display:none;}
 .avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;background:var(--gold);color:var(--navy);}
 
@@ -110,9 +84,6 @@ main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 6rem;}
 .history-quiz-title{font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .history-meta{font-size:.73rem;color:var(--muted);margin-top:.1rem;display:flex;gap:.6rem;flex-wrap:wrap;}
 .badge{display:inline-block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .5rem;border-radius:3px;}
-.badge-green{background:#16803c22;color:#4ade80;}
-.badge-red{background:#b92b1a22;color:#f87171;}
-.badge-gold{background:#d4a01722;color:var(--gold);}
 .badge-muted{background:var(--navy3);color:var(--muted);}
 
 /* ── ACHIEVEMENT BADGES ── */

@@ -8,12 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <style>
-:root{--navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;--gold:#d4a017;--gold2:#f0c040;--white:#ffffff;--border:#1e3a5f;--muted:#7a8fa6;--green:#16803c;--red:#b92b1a;--r:6px;}
-*{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:var(--font-body);background:var(--navy);color:var(--white);}
 
 /* ── HEADER (56px fixed) ── */
 .viewer-header{
@@ -104,12 +102,6 @@ body{font-family:var(--font-body);background:var(--navy);color:var(--white);}
 .error-icon{font-size:3rem;}
 .error-title{font-family:var(--font-display);font-size:1.25rem;color:var(--white);}
 .error-sub{font-size:.88rem;max-width:400px;text-align:center;}
-
-/* ── TOAST ── */
-#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
-#toast.show{transform:translateY(0);opacity:1;}
-#toast.success{border-color:var(--green);}
-#toast.error{border-color:var(--red);}
 
 @media (min-width: 480px) {
   .badge-dur{display:inline-block;}

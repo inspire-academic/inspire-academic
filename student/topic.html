@@ -8,50 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
-:root{
-  --navy:#0b1628;--navy2:#112240;--navy3:#1a3a5c;
-  --gold:#d4a017;--gold2:#f0c040;
-  --orange:#e8620a;
-  --white:#ffffff;
-  --border:#1e3a5f;
-  --muted:#7a8fa6;
-  --green:#16803c;--red:#b92b1a;
-  --r:6px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;line-height:1.6;}
-a{text-decoration:none;color:inherit;}
+/* button reset kept here (not in app-shared.css): this page's buttons
+   (.nav-link, .mob-nav-btn, breadcrumb buttons, etc.) rely on border:none,
+   which app-shared.css's own `button{}` reset does not set. */
 button{cursor:pointer;font-family:var(--font-body);border:none;}
-
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:var(--navy2);}
-::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:3px;}
-
-.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.fade-in{animation:fadeIn .4s ease both;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-
-#toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:320px;}
-#toast.show{transform:translateY(0);opacity:1;}
-#toast.success{border-color:var(--green);}
-#toast.error{border-color:var(--red);}
-
-.badge{display:inline-block;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
-.badge-gold{background:#d4a01722;color:var(--gold);}
-.badge-green{background:#16803c22;color:#4ade80;}
-.badge-blue{background:#1c4f8a22;color:#60a5fa;}
-.badge-purple{background:#7c3aed22;color:#c4b5fd;}
-.badge-teal{background:#0b6e6d22;color:#5eead4;}
-.badge-orange{background:#e8620a22;color:var(--orange);}
-.badge-red{background:#b92b1a22;color:#f87171;}
-
-.mastery-not_started{color:var(--muted);}
-.mastery-learning{color:#f87171;}
-.mastery-developing{color:#fb923c;}
-.mastery-secure{color:#facc15;}
-.mastery-mastered{color:#4ade80;}
 
 /* ── NAV ── */
 /* Mobile-first: base is the phone layout (nav-links hidden,
@@ -62,11 +24,13 @@ button{cursor:pointer;font-family:var(--font-body);border:none;}
 .topnav-logo img{height:36px;width:auto;background:#fff;border-radius:6px;padding:2px 6px;}
 .logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
 .nav-links{display:none;gap:.3rem;flex:1;}
-.nav-link{padding:.45rem .9rem;border-radius:var(--r);font-size:.82rem;font-weight:500;color:var(--muted);background:none;transition:all .2s;cursor:pointer;}
-.nav-link:hover{background:var(--navy3);color:var(--white);}
-.nav-user{display:flex;align-items:center;gap:.75rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
-.nav-user:hover{border-color:var(--gold);}
-.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;}
+/* NOTE: this page's nav-user has only ONE span (#nav-name, the student's
+   name) — it has no separate "Sign out" trailing label like the pilot
+   dashboard page does. app-shared.css's `.nav-user span:last-child{display:
+   none}` rule (meant to hide that trailing label on mobile) would otherwise
+   match #nav-name as the last-child span and hide the student's name
+   entirely. This override neutralises that collision. */
+.nav-user span:last-child{display:inline;}
 
 /* ── MAIN ── */
 main{max-width:860px;margin:0 auto;padding:1.2rem 1rem 6rem;}

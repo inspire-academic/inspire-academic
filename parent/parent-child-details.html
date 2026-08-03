@@ -10,10 +10,9 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
   <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
     :root {
-      --navy: #0b1628;
-      --gold: #c9a84c;
       --gold-light: #f5e9c8;
       --bg: #f8f9fa;
       --border: rgba(11,22,40,.1);
@@ -24,8 +23,6 @@
       --red: #c62828;
       --red-light: #ffebee;
     }
-
-    * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
       font-family:var(--font-body);
@@ -382,7 +379,6 @@
       border-radius: 50%;
       animation: spin .8s linear infinite;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ── PRINT ── */
     @media print {

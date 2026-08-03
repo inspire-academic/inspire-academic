@@ -9,23 +9,18 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
 :root{
-  --navy:#0B1D3A;--navy2:#112240;--navy3:#1A3361;
-  --gold:#D4A017;--gold2:#F0C040;
-  --white:#F0EDE6;--muted:#7A8BA8;
+  --white:#F0EDE6;
   --border:rgba(212,160,23,.18);--r:10px;
   --green:#2ECC71;--amber:#F39C12;--red:#E74C3C;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;}
 button{cursor:pointer;font-family:var(--font-body);border:none;}
-a{text-decoration:none;color:inherit;}
 
 #loading-overlay{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:1rem;}
 .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
 .spinner-sm{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
-@keyframes spin{to{transform:rotate(360deg);}}
 
 /* Mobile-first: base below stacks the sidebar as a full-width
    block above the content; min-width:769px restores the
@@ -112,7 +107,6 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .et{font-size:1rem;color:var(--white);margin-bottom:.4rem;}
 
 #toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy2);border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.85rem;transform:translateY(100px);opacity:0;transition:all .3s;z-index:9999;max-width:340px;}
-#toast.show{transform:translateY(0);opacity:1;}
 #toast.ok{border-color:var(--green);}
 #toast.err{border-color:var(--red);}
 

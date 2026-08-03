@@ -11,12 +11,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
 :root {
-  --navy: #0b1628;
   --navy2: #152035;
   --navy3: #1f2937;
-  --gold: #c9a84c;
   --red: #ef4444;
   --green: #10b981;
   --muted: #9ca3af;
@@ -280,7 +279,7 @@ body {
   to { transform:rotate(360deg); }
 }
 
-.toast {
+#toast {
   position:fixed;
   top:1rem;
   right:1rem;
@@ -293,11 +292,14 @@ body {
   align-items:center;
   gap:.75rem;
   z-index:1001;
+  transform:none;
+  opacity:1;
+  max-width:none;
 }
 
-.toast.show { display:flex; }
-.toast.success { border-color:var(--green); color:var(--green); }
-.toast.error { border-color:var(--red); color:var(--red); }
+#toast.show { display:flex; }
+#toast.success { border-color:var(--green); color:var(--green); }
+#toast.error { border-color:var(--red); color:var(--red); }
 </style>
 </head>
 <body>
