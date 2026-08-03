@@ -44,20 +44,20 @@ h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5vw,3rem
 .btn-secondary{display:inline-flex;align-items:center;gap:.5rem;background:var(--bg-card);color:var(--text);border:1px solid var(--border);padding:.95rem 1.7rem;border-radius:var(--r);font-weight:600;font-size:.95rem;transition:border-color .2s;}
 .btn-secondary:hover{border-color:var(--bridge-light);}
 
-section{padding:3rem 0;border-top:1px solid var(--border);}
+section{padding:2.2rem 0;border-top:1px solid var(--border);}
 h2{font-family:var(--font-display);font-weight:700;font-size:1.6rem;margin-bottom:1rem;text-wrap:balance;}
 p{line-height:1.7;color:var(--text-muted);margin-bottom:1rem;max-width:66ch;}
 p strong{color:var(--text);}
 
 /* how it works */
-.pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.6rem;}
+.pillars{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1.6rem;}
 .pillar{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.4rem;}
 .pillar .n{font-family:var(--font-mono);color:var(--bridge-light);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.5rem;}
 .pillar h3{font-family:var(--font-body);font-weight:700;font-size:1rem;margin-bottom:.4rem;}
 .pillar p{font-size:.9rem;margin-bottom:0;}
 
 /* projects */
-.project-list{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem;margin-top:1.6rem;}
+.project-list{display:grid;grid-template-columns:1fr;gap:1.1rem;margin-top:1.6rem;}
 .project{display:flex;flex-direction:column;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
 .project-img-wrap{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg-panel);}
 .project-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -83,10 +83,10 @@ p strong{color:var(--text);}
 footer{border-top:1px solid var(--border);padding:2rem 1.4rem 3rem;text-align:center;font-size:.82rem;color:var(--text-muted);}
 footer a{color:var(--bridge-light);}
 
-@media(max-width:640px){
-  .pillars{grid-template-columns:1fr;}
-  .project-list{grid-template-columns:1fr;}
-  section{padding:2.2rem 0;}
+@media(min-width:641px){
+  .pillars{grid-template-columns:repeat(2,1fr);}
+  .project-list{grid-template-columns:repeat(2,1fr);}
+  section{padding:3rem 0;}
 }
 </style>
 </head>
