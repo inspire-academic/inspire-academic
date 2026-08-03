@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Year 6 Science Bridging Programme — Inspire Academic</title>
+<meta name="description" content="A confident, project-based science transition programme for Year 6 pupils preparing for secondary school. Four guided projects, real coaching, February to August.">
+<link rel="canonical" href="https://inspireacademic.org/programmes/year-6-science-bridge">
+<meta property="og:title" content="Year 6 Science Bridging Programme — Inspire Academic">
+<meta property="og:description" content="A confident, project-based science transition programme for Year 6 pupils preparing for secondary school.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/global.css">
+<style>
+:root{
+  --bridge:#0e7c7b; --bridge-light:#2dd4bf; --bridge-rgb:14,124,123;
+  --grad-bridge: linear-gradient(135deg, var(--bridge), var(--bridge-light));
+  --r:12px;
+}
+body{overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--font-body);border:none;}
+.wrap{max-width:920px;margin:0 auto;padding:0 1.4rem;}
+
+/* topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;max-width:920px;margin:0 auto;}
+.brand-link{font-family:var(--font-display);font-weight:700;font-size:1.1rem;}
+.brand-link .gold{color:var(--gold);}
+.theme-toggle{background:var(--bg-card);border:1px solid var(--border);color:var(--text-muted);width:36px;height:36px;border-radius:50%;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;}
+.theme-toggle:hover{border-color:var(--bridge-light);color:var(--bridge-light);}
+
+/* hero */
+.hero{padding:2.4rem 0 3rem;text-align:center;}
+.eyebrow{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--bridge-light);margin-bottom:1.1rem;}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5vw,3rem);line-height:1.15;text-wrap:balance;margin-bottom:1.1rem;}
+.hero-sub{font-size:1.08rem;color:var(--text-muted);max-width:56ch;margin:0 auto 2rem;line-height:1.65;}
+.cta-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;background:var(--grad-bridge);color:#fff;padding:.95rem 1.7rem;border-radius:var(--r);font-weight:700;font-size:.95rem;box-shadow:0 10px 30px rgba(var(--bridge-rgb),.35);transition:transform .2s,box-shadow .2s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(var(--bridge-rgb),.45);}
+.btn-secondary{display:inline-flex;align-items:center;gap:.5rem;background:var(--bg-card);color:var(--text);border:1px solid var(--border);padding:.95rem 1.7rem;border-radius:var(--r);font-weight:600;font-size:.95rem;transition:border-color .2s;}
+.btn-secondary:hover{border-color:var(--bridge-light);}
+
+section{padding:2.2rem 0;border-top:1px solid var(--border);}
+h2{font-family:var(--font-display);font-weight:700;font-size:1.6rem;margin-bottom:1rem;text-wrap:balance;}
+p{line-height:1.7;color:var(--text-muted);margin-bottom:1rem;max-width:66ch;}
+p strong{color:var(--text);}
+
+/* how it works */
+.pillars{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1.6rem;}
+.pillar{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.4rem;}
+.pillar .n{font-family:var(--font-mono);color:var(--bridge-light);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.5rem;}
+.pillar h3{font-family:var(--font-body);font-weight:700;font-size:1rem;margin-bottom:.4rem;}
+.pillar p{font-size:.9rem;margin-bottom:0;}
+
+/* projects */
+.project-list{display:grid;grid-template-columns:1fr;gap:1.1rem;margin-top:1.6rem;}
+.project{display:flex;flex-direction:column;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.project-img-wrap{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg-panel);}
+.project-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.project-num{position:absolute;top:.7rem;left:.7rem;background:rgba(11,22,40,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:var(--bridge-light);font-family:var(--font-mono);font-weight:700;font-size:.85rem;width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.project-body{padding:1.2rem 1.3rem 1.4rem;}
+.project h3{font-family:var(--font-body);font-weight:700;font-size:1.02rem;margin-bottom:.35rem;}
+.project p{font-size:.92rem;margin-bottom:0;}
+
+/* faq */
+.faq-item{border-bottom:1px solid var(--border);padding:1rem 0;}
+.faq-item:last-child{border-bottom:none;}
+.faq-item summary{font-weight:650;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;}
+.faq-item summary::-webkit-details-marker{display:none;}
+.faq-item summary::after{content:"+";font-family:var(--font-mono);color:var(--bridge-light);font-size:1.2rem;flex-shrink:0;}
+.faq-item[open] summary::after{content:"–";}
+.faq-item p{margin-top:.7rem;font-size:.92rem;}
+
+/* final cta */
+.final-cta{text-align:center;}
+.short-url{font-size:.88rem;color:var(--text-muted);margin-top:1rem;}
+.short-url strong{font-family:var(--font-mono);color:var(--bridge-light);font-weight:600;}
+
+footer{border-top:1px solid var(--border);padding:2rem 1.4rem 3rem;text-align:center;font-size:.82rem;color:var(--text-muted);}
+footer a{color:var(--bridge-light);}
+
+@media(min-width:641px){
+  .pillars{grid-template-columns:repeat(2,1fr);}
+  .project-list{grid-template-columns:repeat(2,1fr);}
+  section{padding:3rem 0;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark and light mode">&#9681;</button>
+</header>
+
+<main class="wrap">
+
+  <section class="hero" style="border-top:none;">
+    <div class="eyebrow">Year 6 &middot; Science Bridging Programme &middot; February&ndash;August</div>
+    <h1>A confident bridge into secondary school science.</h1>
+    <p class="hero-sub">Four guided projects. Real coaching. One goal — your child arrives in Year 7 already thinking like a scientist.</p>
+    <div class="cta-row">
+      <a class="btn-primary js-register-cta" href="register/">Register Interest</a>
+      <a class="btn-secondary" href="#projects">See the four projects</a>
+    </div>
+  </section>
+
+  <section class="positioning">
+    <h2>This is not a catch-up programme.</h2>
+    <p>The Year 6 Science Bridging Programme is a serious, forward-looking transition — built for pupils who are ready to go deeper before they arrive, not for pupils who have fallen behind. Its purpose is confidence and curiosity: the difference between a pupil who walks into their first secondary school science lesson uncertain, and one who walks in already comfortable thinking like a scientist.</p>
+    <p><strong>Who it's for:</strong> Year 6 pupils preparing for the move to secondary school science — no prior struggle required. The programme runs from February to August, spanning the run-up to that transition.</p>
+  </section>
+
+  <section class="how">
+    <h2>How the journey works</h2>
+    <div class="pillars">
+      <div class="pillar">
+        <span class="n">01</span>
+        <h3>Project-based learning</h3>
+        <p>Pupils learn by building and investigating, not by memorising — each project is a real piece of scientific work, not a worksheet.</p>
+      </div>
+      <div class="pillar">
+        <span class="n">02</span>
+        <h3>Periodic check-ins</h3>
+        <p>Regular, structured touchpoints across the programme keep progress visible to both pupil and parent.</p>
+      </div>
+      <div class="pillar">
+        <span class="n">03</span>
+        <h3>Coaching</h3>
+        <p>Guidance focused on how to think through a problem, not just what the answer is.</p>
+      </div>
+      <div class="pillar">
+        <span class="n">04</span>
+        <h3>Teaching</h3>
+        <p>Grounded in the science secondary schools expect — introduced early, and properly understood.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="projects">
+    <h2>Four projects. One journey.</h2>
+    <p>Each project builds a different way of thinking scientifically — together, they form a complete foundation for secondary school science.</p>
+    <div class="project-list">
+      <div class="project">
+        <div class="project-img-wrap">
+          <img src="/assets/images/physics/journey/working-scientifically.webp" alt="A periodic table display, atomic models, and laboratory glassware set up for investigation" loading="lazy" decoding="async" width="600" height="375">
+          <span class="project-num">01</span>
+        </div>
+        <div class="project-body">
+          <h3>Great Science Investigator</h3>
+          <p>Builds the core of scientific thinking — asking good questions, designing a fair test, and drawing a real conclusion from evidence.</p>
+        </div>
+      </div>
+      <div class="project">
+        <div class="project-img-wrap">
+          <img src="/assets/images/chemistry/journey/chemical-changes.webp" alt="A dramatic chemical reaction with flame and rising smoke in a laboratory beaker, surrounded by colourful reagents" loading="lazy" decoding="async" width="600" height="375">
+          <span class="project-num">02</span>
+        </div>
+        <div class="project-body">
+          <h3>Kitchen Chemistry</h3>
+          <p>Chemistry through the everyday — familiar materials become the starting point for understanding reactions and change.</p>
+        </div>
+      </div>
+      <div class="project">
+        <div class="project-img-wrap">
+          <img src="/assets/images/physics/journey/electricity.webp" alt="A glowing lightbulb connected by streams of electric energy, with power lines and a city skyline at dusk" loading="lazy" decoding="async" width="600" height="375">
+          <span class="project-num">03</span>
+        </div>
+        <div class="project-body">
+          <h3>Invisible Worlds — Electricity, Energy, Systems &amp; Connections</h3>
+          <p>Physics as systems thinking — how energy moves, how circuits connect, and how the invisible parts of the world fit together.</p>
+        </div>
+      </div>
+      <div class="project">
+        <div class="project-img-wrap">
+          <img src="/assets/images/biology/journey/organisation.webp" alt="A student examining a specimen under a microscope beside a chart showing levels of biological organisation from atom to organism" loading="lazy" decoding="async" width="600" height="375">
+          <span class="project-num">04</span>
+        </div>
+        <div class="project-body">
+          <h3>Living Systems</h3>
+          <p>Biology from the cell to the ecosystem — how living things are organised, and how they depend on one another.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2>Common questions</h2>
+    <details class="faq-item">
+      <summary>Is this a remedial programme?</summary>
+      <p>No. It's built for pupils who are ready to go further, not for pupils who need to catch up. The focus is confidence and depth, not repair.</p>
+    </details>
+    <details class="faq-item">
+      <summary>What is the time commitment?</summary>
+      <p>The programme runs February to August, with periodic check-ins and coaching sessions built around the four projects rather than a single fixed weekly class.</p>
+    </details>
+    <details class="faq-item">
+      <summary>What happens after August?</summary>
+      <p>Pupils move into secondary school science with a genuine head start — comfortable with scientific thinking, not just familiar with the vocabulary.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Who teaches the programme?</summary>
+      <p>Inspire Academic's science coaching team, using the same project-based approach across all four projects.</p>
+    </details>
+  </section>
+
+  <section class="final-cta">
+    <h2>Ready to begin the bridge?</h2>
+    <a class="btn-primary js-register-cta" href="register/">Register Interest</a>
+    <p class="short-url">Or visit <strong>inspireacademic.org/bridge</strong> anytime.</p>
+  </section>
+
+</main>
+
+<footer>
+  <a href="/">&larr; Back to Inspire Academic</a>
+</footer>
+
+<script src="/assets/js/recruitment.js"></script>
+<script>
+  (function(){
+    var html = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var saved = localStorage.getItem('ia-theme');
+    if (saved) html.setAttribute('data-theme', saved);
+    btn.addEventListener('click', function () {
+      var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('ia-theme', next);
+    });
+  })();
+</script>
+</body>
+</html>
