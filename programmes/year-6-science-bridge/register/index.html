@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Register Interest — Year 6 Science Bridging Programme — Inspire Academic</title>
+<meta name="description" content="Register your interest in the Year 6 Science Bridging Programme at Inspire Academic.">
+<link rel="canonical" href="https://inspireacademic.org/programmes/year-6-science-bridge/register">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/global.css">
+<style>
+:root{
+  --bridge:#0e7c7b; --bridge-light:#2dd4bf; --bridge-rgb:14,124,123;
+  --grad-bridge: linear-gradient(135deg, var(--bridge), var(--bridge-light));
+  --r:12px;
+}
+body{min-height:100vh;display:flex;flex-direction:column;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--font-body);}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;max-width:640px;margin:0 auto;width:100%;}
+.brand-link{font-family:var(--font-display);font-weight:700;font-size:1.1rem;}
+.brand-link .gold{color:var(--gold);}
+.back-link{font-size:.85rem;color:var(--text-muted);}
+.back-link:hover{color:var(--bridge-light);}
+
+main{flex:1;max-width:640px;margin:0 auto;width:100%;padding:1rem 1.4rem 3rem;}
+
+.eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bridge-light);margin-bottom:.7rem;}
+h1{font-family:var(--font-display);font-weight:700;font-size:1.5rem;margin-bottom:.5rem;text-wrap:balance;}
+.sub{color:var(--text-muted);margin-bottom:2rem;line-height:1.6;max-width:52ch;}
+
+.field{margin-bottom:1.3rem;}
+.field label{display:block;font-size:.82rem;font-weight:650;color:var(--text-muted);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em;}
+.field .optional{text-transform:none;font-weight:500;letter-spacing:0;color:var(--text-soft);}
+.field input{
+  width:100%;padding:.8rem 1rem;border-radius:var(--r);
+  background:var(--bg-card);border:1.5px solid var(--border);
+  color:var(--text);font-size:.95rem;outline:none;transition:border-color .2s;
+  font-family:var(--font-body);
+}
+.field input:focus{border-color:var(--bridge-light);}
+.field input::placeholder{color:var(--text-soft);}
+
+.row2{display:grid;grid-template-columns:1fr;gap:1rem;}
+
+.submit-btn{
+  width:100%;padding:.95rem;border-radius:var(--r);background:var(--grad-bridge);
+  color:#fff;font-size:.95rem;font-weight:700;transition:transform .2s,box-shadow .2s;
+  box-shadow:0 10px 30px rgba(var(--bridge-rgb),.3);margin-top:.4rem;
+}
+.submit-btn:hover:not(:disabled){transform:translateY(-2px);}
+.submit-btn:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+
+.privacy-note{font-size:.78rem;color:var(--text-soft);margin-top:1rem;line-height:1.6;}
+
+#toast{position:fixed;bottom:1.5rem;left:50%;transform:translate(-50%,100px);background:var(--bg-card);
+  border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.88rem;
+  opacity:0;transition:all .3s;z-index:9999;max-width:90vw;text-align:center;}
+#toast.show{transform:translate(-50%,0);opacity:1;}
+#toast.error{border-color:#f87171;color:#f87171;}
+
+@media(min-width:481px){
+  .row2{grid-template-columns:1fr 1fr;}
+  h1{font-size:1.8rem;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
+  <a href="../" class="back-link">&larr; Programme details</a>
+</header>
+
+<main>
+  <div class="eyebrow">Year 6 &middot; Science Bridging Programme</div>
+  <h1>Register your interest</h1>
+  <p class="sub">Tell us a little about your child and we'll be in touch about the Year 6 Science Bridging Programme.</p>
+
+  <form id="leadForm" novalidate>
+    <div class="field">
+      <label for="child_name">Child's full name</label>
+      <input type="text" id="child_name" name="child_name" required autocomplete="name">
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="parent_name">Parent / guardian name</label>
+        <input type="text" id="parent_name" name="parent_name" required autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="parent_phone">Parent phone</label>
+        <input type="tel" id="parent_phone" name="parent_phone" required autocomplete="tel">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="parent_email">Parent email</label>
+      <input type="email" id="parent_email" name="parent_email" required autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label for="school_name">Child's current school <span class="optional">(optional)</span></label>
+      <input type="text" id="school_name" name="school_name" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label for="heard_about_us">How did you hear about us? <span class="optional">(optional)</span></label>
+      <input type="text" id="heard_about_us" name="heard_about_us" autocomplete="off" placeholder="e.g. school flyer, a friend, WhatsApp">
+    </div>
+
+    <!-- Hidden tracking fields — populated by assets/js/recruitment.js and this page's own script -->
+    <input type="hidden" name="programme_name" value="Year 6 Science Bridging Programme">
+    <input type="hidden" name="programme_slug" value="year-6-science-bridge">
+    <input type="hidden" name="source" value="">
+    <input type="hidden" name="campaign" value="">
+    <input type="hidden" name="page_url" value="">
+    <input type="hidden" name="submitted_at" value="">
+
+    <button type="submit" class="submit-btn">Register Interest</button>
+    <p class="privacy-note">This registers your interest only — it does not create a student account or enrol your child. A member of the Inspire Academic team will follow up by email or phone.</p>
+  </form>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="/assets/js/recruitment.js"></script>
+<script>
+  (function () {
+    var html = document.documentElement;
+    var saved = localStorage.getItem('ia-theme');
+    if (saved) html.setAttribute('data-theme', saved);
+
+    var toastEl = document.getElementById('toast');
+    function showToast(message, isError) {
+      toastEl.textContent = message;
+      toastEl.className = isError ? 'show error' : 'show';
+      setTimeout(function () { toastEl.className = ''; }, 4000);
+    }
+
+    var form = document.getElementById('leadForm');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var submitBtn = form.querySelector('.submit-btn');
+      form.querySelector('[name="submitted_at"]').value = new Date().toISOString();
+
+      var data = Object.fromEntries(new FormData(form).entries());
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      fetch('/api/v1/leads/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+        .then(function (res) { return res.json().then(function (json) { return { ok: res.ok, json: json }; }); })
+        .then(function (result) {
+          if (!result.ok || !result.json.success) {
+            throw new Error((result.json.error && result.json.error.message) || 'Something went wrong. Please try again.');
+          }
+          window.location.href = '../thank-you/' + window.location.search;
+        })
+        .catch(function (err) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Register Interest';
+          showToast(err.message, true);
+        });
+    });
+  })();
+</script>
+</body>
+</html>
