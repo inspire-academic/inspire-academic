@@ -27,6 +27,7 @@ exports.handler = async (event) => {
   const {
     child_name, parent_name, parent_email, parent_phone,
     school_name, heard_about_us,
+    year_group, subjects_interested,
     programme_name, programme_slug,
     source, campaign, page_url, submitted_at
   } = body;
@@ -61,6 +62,8 @@ exports.handler = async (event) => {
         parent_phone,
         school_name: school_name || null,
         heard_about_us: heard_about_us || null,
+        year_group: year_group || null,
+        subjects_interested: subjects_interested || null,
         programme_name: programme_name || null,
         programme_slug,
         source: source || null,
