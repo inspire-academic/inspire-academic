@@ -322,6 +322,7 @@ main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;}
 <!-- ══════════ SCRIPTS ══════════ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/perf-utils-v2.js"></script>
+<script src="/assets/js/core-topics.js"></script>
 <script>
 const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -470,7 +471,13 @@ function renderTabs(){
     const boardTopics=(window._board && window._board!=='AQA')
       ? subjectTopics.filter(t=>allQuizzes.some(q=>q.topic_id===t.id))
       : subjectTopics;
-    const topicCount=boardTopics.length;
+    // Unfiltered (default) view shows the curated topic-card count, not the
+    // raw topics-table row count — see assets/js/core-topics.js. A board
+    // filter answers a genuinely different question ("topics with quizzes
+    // for this board") so that path keeps its own count.
+    const topicCount=(window._board && window._board!=='AQA')
+      ? boardTopics.length
+      : ((window.CORE_TOPICS && window.CORE_TOPICS[s.id]) ? window.CORE_TOPICS[s.id].length : boardTopics.length);
     const btn=document.createElement('button');
     btn.className='subject-tab'+(s.id===activeSubjectId?' active':'');
     btn.innerHTML=`
@@ -495,6 +502,9 @@ function renderHero(){
   const avgScore=progForSubject.length?
     progForSubject.reduce((a,b)=>a+(parseFloat(b.best_score)||0),0)/progForSubject.length:0;
   const quizCount=allQuizzes.filter(q=>topics.some(t=>t.id===q.topic_id)).length;
+  // Curated topic-card count, matching what the subject page itself shows —
+  // see assets/js/core-topics.js.
+  const topicCardCount=(window.CORE_TOPICS && window.CORE_TOPICS[s.id]) ? window.CORE_TOPICS[s.id].length : topics.length;
 
   const hero=document.getElementById('subject-hero');
   hero.className=`subject-hero fade-in hero-${meta.cls}`;
@@ -505,7 +515,7 @@ function renderHero(){
         <div class="hero-name">${s.name}</div>
         <div class="hero-desc">${subjectDesc(s.slug)}</div>
         <div class="hero-meta">
-          <span class="badge ${meta.badge}">${topics.length} Topics</span>
+          <span class="badge ${meta.badge}">${topicCardCount} Topics</span>
           <span class="badge badge-gold">${quizCount} Quizzes</span>
           ${masteredCount>0?`<span class="badge badge-green">${masteredCount} Mastered</span>`:''}
         </div>

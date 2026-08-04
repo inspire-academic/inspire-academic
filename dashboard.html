@@ -360,6 +360,7 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/core-topics.js"></script>
 <script>
 // ── Toast ──
 function toast(msg, type='success'){
@@ -483,11 +484,15 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
         progForSubject.reduce((a,b)=>a+(parseFloat(b.best_score)||0),0)/progForSubject.length:0;
       const cl=subjectClass[s.id]||'maths';
       const barColor=subjectColors[cl]||'var(--gold)';
+      // "Topics available" means the curated topic cards a student can actually
+      // open on the subject page — not the raw topics-table row count, which
+      // also includes granular/exam-board-variant rows with no card of their own.
+      const coreCount=(window.CORE_TOPICS && window.CORE_TOPICS[s.id]) ? window.CORE_TOPICS[s.id].length : sts.length;
       grid.innerHTML+=`
         <div class="subject-card ${cl}" onclick="location.href='/subjects.html?subject=${s.id}'">
           <div class="subject-icon">${s.icon||'📚'}</div>
           <div class="subject-name">${s.name}</div>
-          <div class="subject-topics">${sts.length} topics available</div>
+          <div class="subject-topics">${coreCount} topics available</div>
           <div class="subject-progress">
             <div class="progress-bar-wrap">
               <div class="progress-bar-fill" style="width:${Math.round(avgP)}%;background:${barColor};"></div>
