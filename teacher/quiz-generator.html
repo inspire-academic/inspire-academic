@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Generator — Inspire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+  :root {
+    --navy-mid: #112240;
+    --navy-light: #1a3357;
+    --navy-border: #1e3a5f;
+    --gold-light: #e2c97e;
+    --gold-dim: rgba(201,168,76,0.15);
+    --text-primary: #f0e9d6;
+    --text-secondary: #8fa3bc;
+    --text-muted: #4a6280;
+    --success: #3ecf8e;
+    --success-dim: rgba(62,207,142,0.12);
+    --danger: #e05252;
+    --danger-dim: rgba(224,82,82,0.12);
+    --transition: 0.2s ease;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--navy);
+    color: var(--text-primary);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── AUTH LOADING ── */
+  .auth-loading { position: fixed; inset: 0; background: var(--navy); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
+  .auth-loading-logo { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--gold); }
+  .auth-loading-sub { font-size: 13px; color: var(--text-muted); font-family: var(--mono); }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 56px;
+    background: rgba(11,22,40,0.95);
+    border-bottom: 1px solid var(--navy-border);
+    display: flex; align-items: center; padding: 0 20px; gap: 16px;
+    z-index: 100; backdrop-filter: blur(8px);
+  }
+  .topbar-logo { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 0.02em; text-decoration: none; }
+  .topbar-divider { width: 1px; height: 20px; background: var(--navy-border); }
+  .topbar-title { font-size: 13px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.06em; text-transform: uppercase; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .btn-ghost { background: none; border: 1px solid var(--navy-border); color: var(--text-secondary); padding: 8px 16px; border-radius: 7px; font-family: var(--font-body); font-size: 13px; cursor: pointer; }
+  .btn-ghost:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 88px 20px 64px; }
+
+  h1 { font-family: var(--font-display); font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .subhead { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; }
+
+  .panel {
+    background: var(--navy-mid);
+    border: 1px solid var(--navy-border);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .panel-title { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 700px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+  .form-grid.cols-3 { grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 12px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.03em; }
+  .field select, .field input, .field textarea {
+    background: var(--navy-light);
+    border: 1px solid var(--navy-border);
+    color: var(--text-primary);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 14px;
+  }
+  .field select:focus, .field input:focus, .field textarea:focus { outline: none; border-color: var(--gold); }
+  .field-full { grid-column: 1 / -1; }
+  .field-hint { font-size: 11px; color: var(--text-muted); font-family: var(--mono); }
+
+  .btn-generate {
+    background: var(--gold); border: none; color: var(--navy);
+    padding: 13px 28px; border-radius: 8px;
+    font-family: var(--font-body); font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: all var(--transition); letter-spacing: 0.02em;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-generate:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-generate:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; line-height: 1.5; margin-bottom: 20px; display: none; gap: 10px; }
+  .alert.visible { display: flex; }
+  .alert-danger { background: var(--danger-dim); border: 1px solid rgba(224,82,82,0.3); color: #f59090; }
+  .alert-success { background: var(--success-dim); border: 1px solid rgba(62,207,142,0.3); color: #7de8b8; }
+
+  /* ── GEN STATUS / PROGRESS (reused from teacher-assessment-create.html) ── */
+  .gen-status-bar { display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 10px; margin-bottom: 24px; }
+  .gen-status-icon { font-size: 20px; flex-shrink: 0; }
+  .gen-status-text { flex: 1; }
+  .gen-status-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .gen-status-sub { font-size: 12px; color: var(--text-muted); font-family: var(--mono); margin-top: 2px; }
+  .gen-progress-wrap { height: 4px; background: var(--navy-border); border-radius: 2px; overflow: hidden; margin-top: 8px; }
+  .gen-progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+  .gen-spinner { width: 18px; height: 18px; border: 2px solid var(--navy-border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── REVIEW CARDS (reused from teacher-assessment-create.html) ── */
+  .question-review-card { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 12px; margin-bottom: 16px; overflow: hidden; transition: border-color var(--transition); }
+  .question-review-card.approved { border-color: var(--success); }
+  .question-review-card.rejected { border-color: var(--danger); opacity: 0.5; }
+  .qrc-header { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--navy-border); cursor: pointer; flex-wrap: wrap; }
+  .qrc-num { font-family: var(--mono); font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
+  .qrc-marks { font-size: 11px; color: var(--text-muted); font-family: var(--mono); }
+  .qrc-actions { margin-left: auto; display: flex; gap: 8px; }
+  .btn-approve { background: var(--success-dim); border: 1px solid rgba(62,207,142,0.3); color: var(--success); padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+  .btn-approve.active { background: var(--success); color: var(--navy); }
+  .btn-reject { background: var(--danger-dim); border: 1px solid rgba(224,82,82,0.3); color: var(--danger); padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+  .btn-reject.active { background: var(--danger); color: white; }
+  .qrc-body { padding: 18px 20px; }
+  .qrc-question-text { font-size: 14px; color: var(--text-primary); line-height: 1.7; margin-bottom: 16px; }
+  .qrc-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .qrc-option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 7px; border: 1px solid var(--navy-border); font-size: 13px; color: var(--text-secondary); }
+  .qrc-option.correct { border-color: rgba(62,207,142,0.4); background: var(--success-dim); color: var(--success); }
+  .qrc-option-label { font-family: var(--mono); font-size: 11px; flex-shrink: 0; padding-top: 1px; }
+  .qrc-ms { font-size: 11px; color: var(--text-muted); font-family: var(--mono); border-top: 1px solid var(--navy-border); padding-top: 12px; margin-top: 4px; }
+  .qrc-ms-title { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+  .qrc-ms-point { display: flex; gap: 8px; margin-bottom: 4px; font-size: 12px; color: var(--text-secondary); }
+  .qrc-ms-point::before { content: '•'; color: var(--gold); flex-shrink: 0; }
+
+  .gen-summary { background: var(--navy-light); border: 1px solid var(--navy-border); border-radius: 10px; padding: 16px 20px; display: flex; gap: 24px; margin-bottom: 20px; flex-wrap: wrap; }
+  .gen-summary-item { text-align: center; }
+  .gen-summary-val { font-family: var(--font-display); font-size: 26px; font-weight: 700; line-height: 1; }
+  .gen-summary-lbl { font-size: 11px; color: var(--text-muted); font-family: var(--mono); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .btn-approve-all { background: var(--success); border: none; color: var(--navy); padding: 11px 20px; border-radius: 7px; font-family: var(--font-body); font-size: 13px; font-weight: 700; cursor: pointer; }
+  .btn-save-quiz { background: var(--gold); border: none; color: var(--navy); padding: 11px 24px; border-radius: 7px; font-family: var(--font-body); font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btn-save-quiz:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- AUTH LOADING SCREEN -->
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying access...</div>
+</div>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
+  <div class="topbar-divider"></div>
+  <span class="topbar-title">Quiz Generator</span>
+  <div class="topbar-right">
+    <span class="topbar-user" id="topbar-user"></span>
+    <button class="btn-ghost" onclick="window.location.href='/teacher/teacher.html'">← Back to dashboard</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>AI Quiz Generator</h1>
+  <p class="subhead">Generate exam-board-aware questions straight into the live quiz bank that powers each subject page — the same question generator used by Create Assessment, now feeding student self-serve quizzes.</p>
+
+  <div class="alert alert-danger" id="alert-config"></div>
+
+  <!-- CONFIG PANEL -->
+  <div class="panel" id="config-panel">
+    <div class="panel-title">1 · Configure</div>
+    <div class="form-grid cols-3">
+      <div class="field">
+        <label>Subject</label>
+        <select id="f-subject" onchange="onSubjectOrBoardChange()">
+          <option value="">Select…</option>
+          <option value="Physics">Physics</option>
+          <option value="Chemistry">Chemistry</option>
+          <option value="Biology">Biology</option>
+          <option value="Maths">Maths</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Exam board</label>
+        <select id="f-board" onchange="onSubjectOrBoardChange()">
+          <option value="">Select…</option>
+          <option value="AQA">AQA</option>
+          <option value="Edexcel">Edexcel</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Tier</label>
+        <select id="f-tier" onchange="onSubjectOrBoardChange()">
+          <option value="Higher">Higher</option>
+          <option value="Foundation">Foundation</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-grid" style="margin-top:16px;">
+      <div class="field">
+        <label>Spec topic (sets question content)</label>
+        <select id="f-spec-topic" onchange="onSpecTopicChange()">
+          <option value="">Select subject/board first…</option>
+        </select>
+        <span class="field-hint" id="spec-topic-hint"></span>
+      </div>
+      <div class="field">
+        <label>Attach to existing quiz topic</label>
+        <select id="f-db-topic">
+          <option value="">Select subject first…</option>
+        </select>
+        <span class="field-hint">This is the topic students already see on the subject page — the new quiz will appear under it.</span>
+      </div>
+    </div>
+
+    <div class="form-grid cols-3" style="margin-top:16px;">
+      <div class="field field-full">
+        <label>Quiz title</label>
+        <input type="text" id="f-title" placeholder="e.g. Forces &amp; Motion — AQA Higher">
+      </div>
+    </div>
+    <div class="form-grid cols-3" style="margin-top:16px;">
+      <div class="field">
+        <label>Difficulty band</label>
+        <select id="f-difficulty">
+          <option value="foundation">Foundation</option>
+          <option value="medium">Medium</option>
+          <option value="higher" selected>Higher</option>
+          <option value="challenge">Challenge</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Question mix</label>
+        <select id="f-question-mix">
+          <option value="mixed" selected>Mixed</option>
+          <option value="recall">Recall</option>
+          <option value="standard">Standard application</option>
+          <option value="application">Multi-step application</option>
+          <option value="analysis">Analysis / evaluation</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Number of questions</label>
+        <input type="number" id="f-count" value="8" min="1" max="15">
+      </div>
+    </div>
+    <div class="form-grid cols-3" style="margin-top:16px;">
+      <div class="field">
+        <label>Marks per question</label>
+        <input type="number" id="f-marks" value="2" min="1" max="6">
+      </div>
+      <div class="field">
+        <label>Time limit (minutes, 0 = untimed)</label>
+        <input type="number" id="f-time" value="12" min="0" max="60">
+      </div>
+      <div class="field">
+        <label>Pass mark (%)</label>
+        <input type="number" id="f-pass" value="60" min="0" max="100">
+      </div>
+    </div>
+    <div class="form-grid" style="margin-top:16px;">
+      <div class="field field-full">
+        <label>Quiz description (shown to students)</label>
+        <textarea id="f-desc" rows="2" placeholder="e.g. Newton's laws, momentum, and equations of motion"></textarea>
+      </div>
+    </div>
+
+    <div style="margin-top:22px;">
+      <button class="btn-generate" id="btn-generate" onclick="generateQuestions()">✦ Generate questions</button>
+    </div>
+  </div>
+
+  <!-- GENERATION STATUS -->
+  <div class="gen-status-bar" id="gen-status-bar" style="display:none;">
+    <span class="gen-spinner" id="gen-spinner"></span>
+    <span class="gen-status-icon" id="gen-status-icon" style="display:none;">✅</span>
+    <div class="gen-status-text">
+      <div class="gen-status-title" id="gen-status-title">Generating...</div>
+      <div class="gen-status-sub" id="gen-status-sub"></div>
+      <div class="gen-progress-wrap"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- REVIEW -->
+  <div id="review-section" style="display:none;">
+    <div class="panel-title" style="margin-bottom:14px;">2 · Review and approve</div>
+    <div class="gen-summary" id="gen-summary">
+      <div class="gen-summary-item"><div class="gen-summary-val" id="sum-total">0</div><div class="gen-summary-lbl">Generated</div></div>
+      <div class="gen-summary-item"><div class="gen-summary-val" id="sum-approved" style="color:var(--success);">0</div><div class="gen-summary-lbl">Approved</div></div>
+      <div class="gen-summary-item"><div class="gen-summary-val" id="sum-rejected" style="color:var(--danger);">0</div><div class="gen-summary-lbl">Rejected</div></div>
+      <div class="gen-summary-item"><div class="gen-summary-val" id="sum-marks">0</div><div class="gen-summary-lbl">Marks</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-approve-all" onclick="approveAll()">✓ Approve all</button>
+      <button class="btn-save-quiz" id="btn-save-quiz" onclick="saveQuiz()" disabled>Save quiz to live bank →</button>
+    </div>
+    <div class="alert alert-danger" id="alert-save"></div>
+    <div class="alert alert-success" id="alert-save-success"></div>
+    <div id="question-review-list"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/spec-map.js"></script>
+<script>
+// ─────────────────────────────────────────────
+// SUPABASE CLIENT
+// ─────────────────────────────────────────────
+const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+const SUBJECT_NAME_TO_ID = { Maths: 1, Physics: 2, Chemistry: 3, Biology: 4 }
+
+let dbTopicsCache = []       // topics rows for the currently selected subject
+let generatedQuestions = []  // { question, status: 'approved'|'rejected'|'error' }
+let selectedSpecTopic = null
+
+// ─────────────────────────────────────────────
+// AUTH GUARD — teacher only
+// ─────────────────────────────────────────────
+async function checkAuth() {
+  const { data: { session } } = await supa.auth.getSession()
+  if (!session) { window.location.href = '/index.html'; return }
+
+  const { data: profile, error } = await supa
+    .from('profiles').select('role, full_name').eq('id', session.user.id).single()
+
+  if (error || !profile || !['teacher','admin'].includes(profile.role)) {
+    window.location.href = '/dashboard.html'
+    return
+  }
+
+  if (profile.full_name) document.getElementById('topbar-user').textContent = profile.full_name
+  document.getElementById('authLoading').style.display = 'none'
+}
+checkAuth()
+
+// ─────────────────────────────────────────────
+// TOPIC PICKERS
+// ─────────────────────────────────────────────
+async function onSubjectOrBoardChange() {
+  const subject = document.getElementById('f-subject').value
+  const board   = document.getElementById('f-board').value
+  const tier    = document.getElementById('f-tier').value
+
+  // Spec topic dropdown — sourced from SPEC_MAP (curriculum content for the AI prompt)
+  const specSelect = document.getElementById('f-spec-topic')
+  if (!subject || !board) {
+    specSelect.innerHTML = '<option value="">Select subject and board first…</option>'
+  } else {
+    const topics = (window.SPEC_MAP[subject]?.[board] || [])
+      .filter(t => !(tier === 'Foundation' && t.tier === 'Higher'))
+    specSelect.innerHTML = topics.length
+      ? topics.map(t => `<option value="${t.slug}">${t.name}</option>`).join('')
+      : '<option value="">No topics found for this selection</option>'
+    onSpecTopicChange()
+  }
+
+  // DB topic dropdown — the existing topics(id) row this quiz will attach to
+  const dbSelect = document.getElementById('f-db-topic')
+  if (!subject) {
+    dbSelect.innerHTML = '<option value="">Select subject first…</option>'
+    dbTopicsCache = []
+    return
+  }
+  dbSelect.innerHTML = '<option value="">Loading…</option>'
+  const subjectId = SUBJECT_NAME_TO_ID[subject]
+  const { data, error } = await supa.from('topics').select('id,name').eq('subject_id', subjectId).order('name')
+  if (error) {
+    dbSelect.innerHTML = '<option value="">Error loading topics</option>'
+    return
+  }
+  dbTopicsCache = data || []
+  dbSelect.innerHTML = dbTopicsCache.length
+    ? dbTopicsCache.map(t => `<option value="${t.id}">${t.name}</option>`).join('')
+    : '<option value="">No existing topics for this subject</option>'
+}
+window.onSubjectOrBoardChange = onSubjectOrBoardChange
+
+function onSpecTopicChange() {
+  const subject = document.getElementById('f-subject').value
+  const board   = document.getElementById('f-board').value
+  const slug    = document.getElementById('f-spec-topic').value
+  const topics  = window.SPEC_MAP[subject]?.[board] || []
+  selectedSpecTopic = topics.find(t => t.slug === slug) || null
+
+  document.getElementById('spec-topic-hint').textContent = selectedSpecTopic
+    ? (selectedSpecTopic.subtopics || []).slice(0,4).join(' · ')
+    : ''
+
+  if (selectedSpecTopic && !document.getElementById('f-title').value) {
+    document.getElementById('f-title').value = `${selectedSpecTopic.name} — ${board} ${document.getElementById('f-tier').value}`
+  }
+  if (selectedSpecTopic && !document.getElementById('f-desc').value) {
+    document.getElementById('f-desc').value = (selectedSpecTopic.subtopics || []).slice(0,3).join(', ')
+  }
+}
+window.onSpecTopicChange = onSpecTopicChange
+
+// ─────────────────────────────────────────────
+// GENERATE QUESTIONS — calls the same /api/generate-question
+// function already used by Create Assessment (Path A)
+// ─────────────────────────────────────────────
+async function generateQuestions() {
+  const subject = document.getElementById('f-subject').value
+  const board   = document.getElementById('f-board').value
+  const tier    = document.getElementById('f-tier').value
+  const dbTopicId = document.getElementById('f-db-topic').value
+  const count   = parseInt(document.getElementById('f-count').value) || 1
+  const marks   = parseInt(document.getElementById('f-marks').value) || 2
+  const mix     = document.getElementById('f-question-mix').value
+
+  const alertEl = document.getElementById('alert-config')
+  alertEl.classList.remove('visible')
+
+  if (!subject || !board || !selectedSpecTopic) {
+    alertEl.textContent = 'Please select a subject, board and spec topic.'
+    alertEl.classList.add('visible')
+    return
+  }
+  if (!dbTopicId) {
+    alertEl.textContent = 'Please select which existing quiz topic to attach this quiz to.'
+    alertEl.classList.add('visible')
+    return
+  }
+  if (!document.getElementById('f-title').value.trim()) {
+    alertEl.textContent = 'Please enter a quiz title.'
+    alertEl.classList.add('visible')
+    return
+  }
+
+  const btn = document.getElementById('btn-generate')
+  btn.disabled = true
+  btn.textContent = 'Generating…'
+
+  const statusBar = document.getElementById('gen-status-bar')
+  statusBar.style.display = 'flex'
+  document.getElementById('gen-spinner').style.display = 'inline-block'
+  document.getElementById('gen-status-icon').style.display = 'none'
+  document.getElementById('review-section').style.display = 'none'
+  generatedQuestions = []
+
+  for (let i = 0; i < count; i++) {
+    document.getElementById('gen-status-title').textContent = `Generating question ${i + 1} of ${count}`
+    document.getElementById('gen-status-sub').textContent = `${selectedSpecTopic.name} · ${board} · ${tier}`
+    document.getElementById('gen-progress-fill').style.width = ((i / count) * 100) + '%'
+
+    try {
+      const response = await fetch('/api/generate-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topic: { name: selectedSpecTopic.name, subtopics: selectedSpecTopic.subtopics, marks, difficulty: mix },
+          board, subject, tier
+        })
+      })
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}))
+        throw new Error(err.error || 'Generation failed')
+      }
+      const data = await response.json()
+      generatedQuestions.push({ question: data.question, marks, status: 'approved' })
+    } catch (err) {
+      console.error('generate-question error:', err)
+      generatedQuestions.push({ question: null, marks, status: 'error', errorMsg: err.message })
+    }
+
+    document.getElementById('gen-progress-fill').style.width = (((i + 1) / count) * 100) + '%'
+  }
+
+  document.getElementById('gen-spinner').style.display = 'none'
+  document.getElementById('gen-status-icon').style.display = 'inline'
+  const okCount = generatedQuestions.filter(q => q.question).length
+  document.getElementById('gen-status-title').textContent = 'Generation complete'
+  document.getElementById('gen-status-sub').textContent = `${okCount} of ${count} questions ready for review`
+
+  btn.disabled = false
+  btn.textContent = '✦ Generate questions'
+
+  document.getElementById('review-section').style.display = 'block'
+  renderReview()
+}
+window.generateQuestions = generateQuestions
+
+// ─────────────────────────────────────────────
+// REVIEW UI
+// ─────────────────────────────────────────────
+function renderReview() {
+  const container = document.getElementById('question-review-list')
+  container.innerHTML = generatedQuestions.map((item, idx) => {
+    if (item.status === 'error' || !item.question) {
+      return `
+        <div class="question-review-card rejected">
+          <div class="qrc-header">
+            <span class="qrc-num">Q${idx + 1}</span>
+            <span style="font-size:12px;color:var(--danger);">Generation failed — ${escHtml(item.errorMsg || 'unknown error')}</span>
+          </div>
+        </div>`
+    }
+    const q = item.question
+    const isApproved = item.status === 'approved'
+    const isRejected = item.status === 'rejected'
+    return `
+      <div class="question-review-card ${isApproved ? 'approved' : isRejected ? 'rejected' : ''}" id="qrc-${idx}">
+        <div class="qrc-header" onclick="toggleQRC(${idx})">
+          <span class="qrc-num">Q${idx + 1}</span>
+          <span class="qrc-marks">${item.marks}m</span>
+          <div class="qrc-actions" onclick="event.stopPropagation()">
+            <button class="btn-approve ${isApproved ? 'active' : ''}" onclick="setQStatus(${idx},'approved')">✓ Approve</button>
+            <button class="btn-reject ${isRejected ? 'active' : ''}" onclick="setQStatus(${idx},'rejected')">✗ Reject</button>
+          </div>
+        </div>
+        <div class="qrc-body" id="qrc-body-${idx}">
+          <div class="qrc-question-text">${escHtml(q.question_text)}</div>
+          <div class="qrc-options">
+            ${(q.options || []).map(o => `
+              <div class="qrc-option ${o.is_correct ? 'correct' : ''}">
+                <span class="qrc-option-label">${o.label}</span>
+                <span>${escHtml(o.text)}</span>
+                ${o.is_correct ? '<span style="margin-left:auto;font-size:11px;color:var(--success);">✓ correct</span>' : ''}
+              </div>`).join('')}
+          </div>
+          <div class="qrc-ms">
+            <div class="qrc-ms-title">Mark scheme</div>
+            ${(q.mark_scheme_points || []).map(p => `<div class="qrc-ms-point">${escHtml(p.point)} [${p.marks}m]</div>`).join('')}
+            ${q.difficulty_justification ? `<div style="margin-top:8px;font-style:italic;">${escHtml(q.difficulty_justification)}</div>` : ''}
+          </div>
+        </div>
+      </div>`
+  }).join('')
+  updateSummary()
+}
+
+function toggleQRC(idx) {
+  const body = document.getElementById('qrc-body-' + idx)
+  if (body) body.style.display = body.style.display === 'none' ? 'block' : 'none'
+}
+window.toggleQRC = toggleQRC
+
+function setQStatus(idx, status) {
+  generatedQuestions[idx].status = status
+  const card = document.getElementById('qrc-' + idx)
+  if (card) card.className = 'question-review-card ' + (status === 'approved' ? 'approved' : 'rejected')
+  const approveBtn = card?.querySelector('.btn-approve')
+  const rejectBtn  = card?.querySelector('.btn-reject')
+  if (approveBtn) approveBtn.classList.toggle('active', status === 'approved')
+  if (rejectBtn)  rejectBtn.classList.toggle('active', status === 'rejected')
+  updateSummary()
+}
+window.setQStatus = setQStatus
+
+function approveAll() {
+  generatedQuestions.forEach((q, idx) => { if (q.question) setQStatus(idx, 'approved') })
+}
+window.approveAll = approveAll
+
+function updateSummary() {
+  const valid    = generatedQuestions.filter(q => q.question)
+  const approved = valid.filter(q => q.status === 'approved')
+  const rejected = valid.filter(q => q.status === 'rejected')
+  const marks    = approved.reduce((s, q) => s + (q.marks || 0), 0)
+  document.getElementById('sum-total').textContent    = valid.length
+  document.getElementById('sum-approved').textContent = approved.length
+  document.getElementById('sum-rejected').textContent = rejected.length
+  document.getElementById('sum-marks').textContent    = marks
+  document.getElementById('btn-save-quiz').disabled = approved.length === 0
+}
+
+// ─────────────────────────────────────────────
+// SAVE — creates a quizzes row, then inserts approved
+// questions into the questions table (quiz_id FK).
+// This is the same live quiz bank subjects/*.html and
+// student/quiz.html read from.
+// ─────────────────────────────────────────────
+async function saveQuiz() {
+  const approved = generatedQuestions.filter(q => q.question && q.status === 'approved')
+  if (!approved.length) return
+
+  const saveErrEl = document.getElementById('alert-save')
+  const saveOkEl  = document.getElementById('alert-save-success')
+  saveErrEl.classList.remove('visible')
+  saveOkEl.classList.remove('visible')
+
+  const btn = document.getElementById('btn-save-quiz')
+  btn.disabled = true
+  btn.textContent = 'Saving…'
+
+  const topicId  = parseInt(document.getElementById('f-db-topic').value)
+  const timeMins = parseInt(document.getElementById('f-time').value) || 0
+  const difficulty = document.getElementById('f-difficulty').value
+
+  const { data: quizRow, error: quizErr } = await supa
+    .from('quizzes')
+    .insert({
+      title:       document.getElementById('f-title').value.trim(),
+      description: document.getElementById('f-desc').value.trim(),
+      topic_id:    topicId,
+      difficulty,
+      time_limit:  timeMins * 60,
+      pass_mark:   parseInt(document.getElementById('f-pass').value) || 60
+    })
+    .select()
+    .single()
+
+  if (quizErr) {
+    saveErrEl.textContent = 'Could not create quiz: ' + quizErr.message
+    saveErrEl.classList.add('visible')
+    btn.disabled = false
+    btn.textContent = 'Save quiz to live bank →'
+    return
+  }
+
+  const rows = approved.map((item, idx) => {
+    const q = item.question
+    const byLabel = {}
+    ;(q.options || []).forEach(o => { byLabel[o.label] = o.text })
+    const explanation = (q.mark_scheme_points || []).map(p => p.point).join(' ')
+    return {
+      quiz_id:        quizRow.id,
+      order_idx:      idx + 1,
+      question_text:  q.question_text,
+      option_a:       byLabel.A || '',
+      option_b:       byLabel.B || '',
+      option_c:       byLabel.C || '',
+      option_d:       byLabel.D || '',
+      correct_answer: q.correct_answer,
+      explanation,
+      marks:          item.marks
+    }
+  })
+
+  const { error: qErr } = await supa.from('questions').insert(rows)
+
+  if (qErr) {
+    saveErrEl.textContent = 'Quiz created but questions failed to save: ' + qErr.message
+    saveErrEl.classList.add('visible')
+    btn.disabled = false
+    btn.textContent = 'Save quiz to live bank →'
+    return
+  }
+
+  saveOkEl.textContent = `"${quizRow.title}" saved with ${rows.length} questions — live now for students.`
+  saveOkEl.classList.add('visible')
+  btn.textContent = '✓ Saved'
+}
+window.saveQuiz = saveQuiz
+
+function escHtml(str) {
+  if (!str) return ''
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+</script>
+</body>
+</html>
