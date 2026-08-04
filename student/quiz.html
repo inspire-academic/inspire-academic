@@ -112,6 +112,37 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
 .option.wrong .opt-letter{background:#f87171;color:var(--navy);border-color:#f87171;}
 .opt-text{font-size:.92rem;color:var(--white);}
 
+/* free-response question */
+.fr-textarea{
+  width:100%;min-height:140px;
+  background:var(--navy);border:1px solid var(--border);border-radius:var(--r);
+  padding:.85rem .9rem;font-family:var(--font-body);font-size:.9rem;color:var(--white);
+  resize:vertical;line-height:1.65;transition:border-color .2s;
+}
+.fr-textarea:focus{outline:none;border-color:var(--gold);}
+.fr-textarea:disabled{opacity:.7;cursor:not-allowed;}
+.fr-marking{
+  display:flex;align-items:center;gap:.6rem;margin-top:1rem;
+  padding:.9rem 1rem;border-radius:var(--r);font-size:.85rem;
+  background:#1d4ed822;border:1px solid #1d4ed844;color:#93c5fd;
+}
+.fr-spinner{
+  width:16px;height:16px;flex-shrink:0;
+  border:2px solid var(--border);border-top-color:var(--gold);
+  border-radius:50%;animation:spin .8s linear infinite;
+}
+.fr-result{
+  margin-top:1rem;padding:1rem 1.2rem;border-radius:var(--r);font-size:.88rem;line-height:1.6;
+  background:#16803c1a;border:1px solid #4ade8044;
+}
+.fr-result-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;}
+.fr-result-score{font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:#4ade80;}
+.fr-result-label{font-size:.78rem;color:var(--muted);}
+.fr-result-points{margin:.5rem 0;padding-left:1.1rem;}
+.fr-result-points li{font-size:.82rem;color:#86efac;margin-bottom:.25rem;}
+.fr-result-feedback{margin-top:.6rem;padding-top:.6rem;border-top:1px solid #4ade8033;color:var(--white);}
+.fr-result-note{margin-top:.5rem;font-size:.8rem;color:var(--gold);font-style:italic;}
+
 /* explanation */
 .explanation{
   border-radius:var(--r);padding:1rem 1.2rem;margin-top:1rem;
@@ -298,6 +329,14 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
       </div>
       <div class="q-text" id="q-text"></div>
       <div class="options" id="options-wrap"></div>
+      <div class="free-response-wrap" id="free-response-wrap" style="display:none;">
+        <textarea class="fr-textarea" id="fr-textarea" placeholder="Write your answer here — show your working where relevant."></textarea>
+        <button class="btn btn-gold" id="fr-submit" onclick="submitFreeResponse()">Submit for marking →</button>
+        <div class="fr-marking" id="fr-marking" style="display:none;">
+          <span class="fr-spinner"></span> Inspire System is checking your answer…
+        </div>
+        <div class="fr-result" id="fr-result" style="display:none;"></div>
+      </div>
       <div class="explanation" id="explanation">
         <span class="exp-label" id="exp-label">Explanation</span>
         <div id="exp-text"></div>
@@ -552,6 +591,20 @@ function renderQuestion(){
   document.getElementById('btn-next').style.display='none';
   document.getElementById('btn-finish').style.display='none';
 
+  if(q.question_type==='free_response'){
+    document.getElementById('options-wrap').style.display='none';
+    document.getElementById('free-response-wrap').style.display='block';
+    const ta=document.getElementById('fr-textarea');
+    ta.value='';
+    ta.disabled=false;
+    document.getElementById('fr-submit').style.display='inline-flex';
+    document.getElementById('fr-marking').style.display='none';
+    document.getElementById('fr-result').style.display='none';
+    return;
+  }
+  document.getElementById('options-wrap').style.display='flex';
+  document.getElementById('free-response-wrap').style.display='none';
+
   const opts=document.getElementById('options-wrap');
   const letters=['A','B','C','D'];
   const optTexts=[q.option_a,q.option_b,q.option_c,q.option_d].filter(Boolean);
@@ -609,6 +662,80 @@ async function selectAnswer(letter, idx){
     document.getElementById('btn-finish').style.display='inline-flex';
   }
 }
+
+function escHtml(str){
+  if(!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function submitFreeResponse(){
+  const q=questions[currentQ];
+  const ta=document.getElementById('fr-textarea');
+  const response=ta.value.trim();
+  if(!response){ ta.focus(); return; }
+
+  ta.disabled=true;
+  document.getElementById('fr-submit').style.display='none';
+  document.getElementById('fr-marking').style.display='flex';
+
+  let marksAwarded=0, feedback='', examinerNote='', pointsAwarded=[];
+  try{
+    const res=await fetch('/api/mark-exam-response',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        subject:      quizData.topics?.subjects?.name || '',
+        exam_board:   quizData.exam_board || 'AQA',
+        stem:         q.question_text,
+        marks:        q.marks,
+        mark_points:  (q.mark_scheme_points||[]).map(p=>p.point||p),
+        model_answer: q.model_answer || '',
+        student_name: window._profile?.full_name || window._profile?.first_name || '',
+        response
+      })
+    });
+    if(!res.ok) throw new Error('Marking failed');
+    const data=await res.json();
+    marksAwarded=data.marks_awarded ?? 0;
+    feedback=data.feedback || '';
+    examinerNote=data.examiner_note || '';
+    pointsAwarded=data.mark_points_awarded || [];
+  }catch(e){
+    console.warn('AI marking failed:',e);
+    feedback='Your answer was saved, but could not be auto-marked right now — your teacher will review it.';
+  }
+
+  const isCorrect=marksAwarded>=q.marks;
+  answers.push({question_id:q.id,answer:response,correct:isCorrect,marks:marksAwarded,feedback});
+
+  if(attemptId){
+    await supa.from('question_answers').insert({
+      attempt_id:attemptId, question_id:q.id,
+      answer_given:response, is_correct:isCorrect,
+      marks_awarded:marksAwarded, ai_feedback:feedback
+    });
+  }
+
+  document.getElementById('fr-marking').style.display='none';
+  const resultEl=document.getElementById('fr-result');
+  resultEl.style.display='block';
+  resultEl.innerHTML=`
+    <div class="fr-result-header">
+      <span class="fr-result-score">${marksAwarded} / ${q.marks}</span>
+      <span class="fr-result-label">Inspire System marked</span>
+    </div>
+    ${pointsAwarded.length?`<ul class="fr-result-points">${pointsAwarded.map(p=>`<li>✓ ${escHtml(p)}</li>`).join('')}</ul>`:''}
+    ${feedback?`<div class="fr-result-feedback">${escHtml(feedback)}</div>`:''}
+    ${examinerNote?`<div class="fr-result-note">📝 ${escHtml(examinerNote)}</div>`:''}
+  `;
+
+  if(currentQ<questions.length-1){
+    document.getElementById('btn-next').style.display='inline-flex';
+  } else {
+    document.getElementById('btn-finish').style.display='inline-flex';
+  }
+}
+window.submitFreeResponse=submitFreeResponse;
 
 function nextQuestion(){
   currentQ++;
@@ -725,12 +852,27 @@ function showResults(cor, wrong, pct, passed, elapsed){
     questions.map((q,i)=>{
       const a=answers[i];
       const isC=a&&a.correct;
+      const earned=a?a.marks:0;
+
+      if(q.question_type==='free_response'){
+        const preview=a?.answer?(a.answer.substring(0,120)+(a.answer.length>120?'…':'')):'—';
+        return `<div class="ar-item">
+          <div class="ar-icon">${earned>=q.marks?'✅':earned>0?'🟡':'❌'}</div>
+          <div>
+            <div class="ar-q">${escHtml(q.question_text.substring(0,80))}${q.question_text.length>80?'…':''}</div>
+            <div class="ar-ans">Your answer: <strong>${escHtml(preview)}</strong></div>
+            ${a?.feedback?`<div style="font-size:.78rem;color:var(--muted);margin-top:.3rem;font-style:italic;">${escHtml(a.feedback)}</div>`:''}
+          </div>
+          <div class="ar-result ${earned>=q.marks?'ar-correct':earned>0?'':'ar-wrong'}" style="${earned>0&&earned<q.marks?'background:#d4a01722;color:#facc15;':''}">${earned}/${q.marks}m</div>
+        </div>`;
+      }
+
       return `<div class="ar-item">
         <div class="ar-icon">${isC?'✅':'❌'}</div>
         <div>
           <div class="ar-q">${q.question_text.substring(0,80)}${q.question_text.length>80?'…':''}</div>
           <div class="ar-ans">
-            Your answer: <strong>${a?a.answer:'—'}</strong> · 
+            Your answer: <strong>${a?a.answer:'—'}</strong> ·
             Correct: <strong>${q._shuffledCorrect || q.correct_answer}</strong>
           </div>
           ${!isC?`<div style="font-size:.78rem;color:var(--muted);margin-top:.3rem;font-style:italic;">${q.explanation||''}</div>`:''}

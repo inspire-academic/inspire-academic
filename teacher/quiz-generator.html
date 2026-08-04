@@ -238,6 +238,14 @@
     </div>
     <div class="form-grid cols-3" style="margin-top:16px;">
       <div class="field">
+        <label>Question type</label>
+        <select id="f-question-type">
+          <option value="mcq" selected>Multiple choice</option>
+          <option value="free_response">Free response (AI-marked)</option>
+        </select>
+        <span class="field-hint">Free response requires students to write and show working — marked by AI against a mark scheme, like a real exam.</span>
+      </div>
+      <div class="field">
         <label>Difficulty band</label>
         <select id="f-difficulty">
           <option value="foundation">Foundation</option>
@@ -256,6 +264,8 @@
           <option value="analysis">Analysis / evaluation</option>
         </select>
       </div>
+    </div>
+    <div class="form-grid cols-3" style="margin-top:16px;">
       <div class="field">
         <label>Number of questions</label>
         <input type="number" id="f-count" value="8" min="1" max="15">
@@ -427,6 +437,7 @@ async function generateQuestions() {
   const count   = parseInt(document.getElementById('f-count').value) || 1
   const marks   = parseInt(document.getElementById('f-marks').value) || 2
   const mix     = document.getElementById('f-question-mix').value
+  const questionType = document.getElementById('f-question-type').value
 
   const alertEl = document.getElementById('alert-config')
   alertEl.classList.remove('visible')
@@ -469,7 +480,7 @@ async function generateQuestions() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           topic: { name: selectedSpecTopic.name, subtopics: selectedSpecTopic.subtopics, marks, difficulty: mix },
-          board, subject, tier
+          board, subject, tier, questionType
         })
       })
       if (!response.ok) {
@@ -477,7 +488,7 @@ async function generateQuestions() {
         throw new Error(err.error || 'Generation failed')
       }
       const data = await response.json()
-      generatedQuestions.push({ question: data.question, marks, status: 'approved' })
+      generatedQuestions.push({ question: data.question, marks, questionType, status: 'approved' })
     } catch (err) {
       console.error('generate-question error:', err)
       generatedQuestions.push({ question: null, marks, status: 'error', errorMsg: err.message })
@@ -530,14 +541,19 @@ function renderReview() {
         </div>
         <div class="qrc-body" id="qrc-body-${idx}">
           <div class="qrc-question-text">${escHtml(q.question_text)}</div>
-          <div class="qrc-options">
-            ${(q.options || []).map(o => `
-              <div class="qrc-option ${o.is_correct ? 'correct' : ''}">
-                <span class="qrc-option-label">${o.label}</span>
-                <span>${escHtml(o.text)}</span>
-                ${o.is_correct ? '<span style="margin-left:auto;font-size:11px;color:var(--success);">✓ correct</span>' : ''}
-              </div>`).join('')}
-          </div>
+          ${item.questionType === 'free_response' ? `
+            <div class="qrc-ms" style="border-top:none;padding-top:0;margin-bottom:14px;">
+              <div class="qrc-ms-title">Model answer</div>
+              <div style="font-size:12px;color:var(--text-secondary);white-space:pre-wrap;">${escHtml(q.model_answer || '')}</div>
+            </div>` : `
+            <div class="qrc-options">
+              ${(q.options || []).map(o => `
+                <div class="qrc-option ${o.is_correct ? 'correct' : ''}">
+                  <span class="qrc-option-label">${o.label}</span>
+                  <span>${escHtml(o.text)}</span>
+                  ${o.is_correct ? '<span style="margin-left:auto;font-size:11px;color:var(--success);">✓ correct</span>' : ''}
+                </div>`).join('')}
+            </div>`}
           <div class="qrc-ms">
             <div class="qrc-ms-title">Mark scheme</div>
             ${(q.mark_scheme_points || []).map(p => `<div class="qrc-ms-point">${escHtml(p.point)} [${p.marks}m]</div>`).join('')}
@@ -606,6 +622,7 @@ async function saveQuiz() {
   const topicId  = parseInt(document.getElementById('f-db-topic').value)
   const timeMins = parseInt(document.getElementById('f-time').value) || 0
   const difficulty = document.getElementById('f-difficulty').value
+  const board = document.getElementById('f-board').value
 
   const { data: quizRow, error: quizErr } = await supa
     .from('quizzes')
@@ -614,6 +631,7 @@ async function saveQuiz() {
       description: document.getElementById('f-desc').value.trim(),
       topic_id:    topicId,
       difficulty,
+      exam_board:  board,
       time_limit:  timeMins * 60,
       pass_mark:   parseInt(document.getElementById('f-pass').value) || 60
     })
@@ -630,12 +648,24 @@ async function saveQuiz() {
 
   const rows = approved.map((item, idx) => {
     const q = item.question
+    if (item.questionType === 'free_response') {
+      return {
+        quiz_id:            quizRow.id,
+        order_idx:          idx + 1,
+        question_type:      'free_response',
+        question_text:      q.question_text,
+        model_answer:       q.model_answer || '',
+        mark_scheme_points: q.mark_scheme_points || [],
+        marks:              item.marks
+      }
+    }
     const byLabel = {}
     ;(q.options || []).forEach(o => { byLabel[o.label] = o.text })
     const explanation = (q.mark_scheme_points || []).map(p => p.point).join(' ')
     return {
       quiz_id:        quizRow.id,
       order_idx:      idx + 1,
+      question_type:  'mcq',
       question_text:  q.question_text,
       option_a:       byLabel.A || '',
       option_b:       byLabel.B || '',

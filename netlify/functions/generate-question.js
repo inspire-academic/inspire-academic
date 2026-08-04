@@ -59,10 +59,11 @@ exports.handler = async function(event) {
   try { body = JSON.parse(event.body) }
   catch (e) { return { statusCode: 400, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Invalid JSON body' }) } }
 
-  const { topic, board, subject, tier } = body
+  const { topic, board, subject, tier, questionType } = body
   if (!topic || !board || !subject || !tier) {
     return { statusCode: 400, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Missing required fields' }) }
   }
+  const isFreeResponse = questionType === 'free_response'
 
   const boardStyle = BOARD_STYLE[board] || BOARD_STYLE.AQA
   const tierRules  = TIER_RULES[tier]   || TIER_RULES.Higher
@@ -86,15 +87,28 @@ ${tierRules}
 
 UNIVERSAL QUESTION QUALITY RULES:
 - Every question must be answerable from the ${board} ${subject} specification alone
-- The correct answer must be unambiguously correct
-- Wrong options must target REAL documented student misconceptions
 - Never use "all of the above" or "none of the above"
 - Question stem must be self-contained — no reference to diagrams or figures
 - Units must be correct and consistent throughout
+${isFreeResponse ? '' : '- The correct answer must be unambiguously correct\n- Wrong options must target REAL documented student misconceptions'}
 
 You MUST respond with valid JSON only — no preamble, no markdown fences.`
 
-  const userPrompt = `Generate one ${board} GCSE ${subject} ${tier} tier multiple-choice question.
+  const userPrompt = isFreeResponse ? `Generate one ${board} GCSE ${subject} ${tier} tier free-response (written-answer) question that requires the student to show their working, not just select an option — exactly as it would appear on a real exam paper.
+
+TOPIC: "${topic.name}"
+SPECIFICATION CONTENT: ${subtopicList}
+DIFFICULTY: ${difficulty} — ${diffGuide[difficulty] || diffGuide.mixed}
+MARKS: ${topic.marks}
+
+Respond with this exact JSON structure:
+{
+  "question_text": "The full question stem, including command word (e.g. Calculate, Explain, Describe)",
+  "model_answer": "A full worked model answer showing every step, in the form a top-band student would write it",
+  "mark_scheme_points": [{"point": "Exact wording or working step that earns the mark", "marks": 1}],
+  "difficulty_justification": "One sentence explaining difficulty match"
+}
+The mark_scheme_points marks must sum to exactly ${topic.marks}.` : `Generate one ${board} GCSE ${subject} ${tier} tier multiple-choice question.
 
 TOPIC: "${topic.name}"
 SPECIFICATION CONTENT: ${subtopicList}
