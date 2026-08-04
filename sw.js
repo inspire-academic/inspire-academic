@@ -2,9 +2,9 @@
 // Strategy: Cache-first for assets, network-first for HTML pages
 // This makes the app feel instant after first load
 
-const CACHE_VERSION = 'inspire-v2';
-const CACHE_STATIC = 'inspire-static-v2';   // long-lived assets
-const CACHE_PAGES  = 'inspire-pages-v2';    // HTML pages
+const CACHE_VERSION = 'inspire-v3';
+const CACHE_STATIC = 'inspire-static-v3';   // long-lived assets
+const CACHE_PAGES  = 'inspire-pages-v3';    // HTML pages
 
 // Assets that never change between deploys (or rarely do)
 // These are served from cache instantly — network updates in background
@@ -13,6 +13,10 @@ const STATIC_ASSETS = [
   '/index.html',
   '/dashboard.html',
   '/subjects.html',
+  '/subjects/physics.html',
+  '/subjects/chemistry.html',
+  '/subjects/biology.html',
+  '/subjects/maths.html',
   '/manifest.json',
   '/assets/css/tokens.css',
   '/assets/images/shared/1775416612494_image.webp',
@@ -50,13 +54,16 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  // Don't cache Supabase API calls, auth requests, or POST requests
+  // Don't cache Supabase API/auth calls or POST requests — always live.
+  // Exception: public storage objects (published lesson content, e.g.
+  // /storage/v1/object/public/lesson-content/...) are static once
+  // uploaded, so they fall through to the normal cache-first handling
+  // below instead — that's what lets an opened lesson work offline.
+  const isSupabase = url.hostname.includes('supabase.co');
+  const isPublicStorageObject = isSupabase && url.pathname.includes('/storage/v1/object/public/');
   if (
     e.request.method !== 'GET' ||
-    url.hostname.includes('supabase.co') ||
-    url.pathname.includes('/auth/') ||
-    url.pathname.includes('/rest/') ||
-    url.pathname.includes('/storage/')
+    (isSupabase && !isPublicStorageObject)
   ) {
     e.respondWith(fetch(e.request));
     return;
