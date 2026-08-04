@@ -2956,9 +2956,11 @@ window.CONTENT = CONTENT_AQA; // fallback until profile loads
 //  CLOUD SYNC — write-through localStorage cache → Supabase
 // ═══════════════════════════════════════════════════════
 const CloudSync = {
-  _queue: {},       // cardId → data pending upsert
+  _queue: {},         // cardId → data pending upsert
+  _pendingStats: null, // stats object pending upsert, or null
   _flushTimer: null,
-  _synced: false,   // true once initial pull is done
+  _retryDelay: 3000,  // backs off on repeated failure, resets on success
+  _synced: false,     // true once initial pull is done
 
   // Pull all card data for this user from Supabase into localStorage
   async pull() {
@@ -2995,9 +2997,16 @@ const CloudSync = {
   // Queue a card upsert — batched flush every 3 s
   push(cardId, data) {
     this._queue[cardId] = data;
-    if (!this._flushTimer) {
-      this._flushTimer = setTimeout(() => this.flush(), 3000);
-    }
+    this._scheduleFlush();
+  },
+
+  // Queue a stats upsert on the same debounced flush as card data, so
+  // progress survives a session that never reaches endSession() (tab
+  // closed, navigated away mid-review, etc). Session-end still also
+  // calls pushStats() directly for an immediate write.
+  queueStats(statsObj) {
+    this._pendingStats = { ...statsObj, weakCards: undefined };
+    this._scheduleFlush();
   },
 
   // Push stats immediately (called at session end)
@@ -3013,26 +3022,92 @@ const CloudSync = {
     } catch(e) { console.warn('CloudSync.pushStats failed', e); }
   },
 
+  _scheduleFlush() {
+    if (!this._flushTimer) {
+      this._flushTimer = setTimeout(() => this.flush(), 3000);
+    }
+  },
+
+  // Used when a flush attempt fails — backs off geometrically (capped at
+  // 60 s) so a persistent outage doesn't hammer Supabase every 3 s for
+  // as long as the tab stays open. Resets to 3 s on the next success.
+  _scheduleRetry() {
+    if (!this._flushTimer) {
+      this._flushTimer = setTimeout(() => this.flush(), this._retryDelay);
+      this._retryDelay = Math.min(this._retryDelay * 2, 60000);
+    }
+  },
+
+  // Force an out-of-band flush attempt right now — used when the tab is
+  // about to be hidden/closed, so the last few seconds of a session
+  // (still sitting in the 3 s debounce window) aren't lost.
+  flushNow() {
+    if (this._flushTimer) { clearTimeout(this._flushTimer); this._flushTimer = null; }
+    return this.flush();
+  },
+
   async flush() {
     this._flushTimer = null;
-    const batch = { ...this._queue };
-    this._queue = {};
     const uid = window._currentUser && window._currentUser.id;
-    if (!uid || !window._supa || Object.keys(batch).length === 0) return;
-    try {
-      const rows = Object.entries(batch).map(([card_id, data]) => ({
-        user_id: uid,
-        card_id,
-        data,
-        updated_at: new Date().toISOString()
-      }));
-      const { error } = await window._supa
-        .from('srs_cards')
-        .upsert(rows, { onConflict: 'user_id,card_id' });
-      if (error) console.warn('CloudSync.flush error', error.message);
-    } catch(e) { console.warn('CloudSync.flush failed', e); }
+    if (!uid || !window._supa) { this._queue = {}; this._pendingStats = null; return; }
+
+    const batch = this._queue;
+    const statsBatch = this._pendingStats;
+    this._queue = {};
+    this._pendingStats = null;
+    let failed = false;
+
+    if (Object.keys(batch).length > 0) {
+      try {
+        const rows = Object.entries(batch).map(([card_id, data]) => ({
+          user_id: uid,
+          card_id,
+          data,
+          updated_at: new Date().toISOString()
+        }));
+        const { error } = await window._supa
+          .from('srs_cards')
+          .upsert(rows, { onConflict: 'user_id,card_id' });
+        if (error) throw error;
+      } catch(e) {
+        console.warn('CloudSync.flush (cards) failed, will retry:', e.message || e);
+        // Don't drop it — merge the failed batch back in (any newer
+        // local edits queued meanwhile take priority) and retry.
+        this._queue = { ...batch, ...this._queue };
+        failed = true;
+      }
+    }
+
+    if (statsBatch) {
+      try {
+        const { error } = await window._supa.from('srs_stats').upsert({
+          user_id: uid,
+          data: statsBatch,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'user_id' });
+        if (error) throw error;
+      } catch(e) {
+        console.warn('CloudSync.flush (stats) failed, will retry:', e.message || e);
+        if (!this._pendingStats) this._pendingStats = statsBatch;
+        failed = true;
+      }
+    }
+
+    if (failed) {
+      this._scheduleRetry();
+    } else {
+      this._retryDelay = 3000;
+      if (Object.keys(this._queue).length > 0 || this._pendingStats) this._scheduleFlush();
+    }
   }
 };
+
+// Best-effort flush when the tab is backgrounded or closed — catches
+// progress from a session abandoned mid-review, before the 3 s debounce
+// would otherwise have synced it.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') CloudSync.flushNow();
+});
 
 const SRS = {
   intervals: { again: 1, hard: 3, good: 7, easy: 21 },
@@ -3084,6 +3159,9 @@ const SRS = {
     if (isCorrect) stats.totalCorrect++;
     stats.lastStudied = Date.now();
     localStorage.setItem('inspire_stats', JSON.stringify({ ...stats, weakCards: undefined }));
+    // Queue stats for cloud sync too — don't rely solely on reaching
+    // endSession() for this to reach Supabase.
+    CloudSync.queueStats(stats);
     return d;
   },
 
