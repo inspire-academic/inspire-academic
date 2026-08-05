@@ -236,11 +236,21 @@ Dark/light theme toggle is present on all subject pages.
   Auth: Supabase Auth (email + Google OAuth)
   Storage: "avatars" bucket for profile photos
 
-  Key tables (current):
-    students, teachers, parents — user profiles
-    subject_progress — per-student per-topic completion
-    quiz_results — assessment history
-    teach_lessons — lesson content with video_url, order_index
+  Schema is NOT fully version-controlled. Only lessons/lesson_progress
+  (supabase/academic_schema.sql) and leads (supabase/leads_schema*.sql)
+  have tracked migrations — everything else was created directly in the
+  Supabase dashboard, so it can drift out from under any list written
+  here. Before assuming a table's columns or relationships, grep the
+  codebase for `.from('table_name')` to see how it's actually used —
+  that's the only thing that can't go stale the way this list did.
+
+  A sample of tables nearly everything touches, illustrative only —
+  not the full schema, and not authoritative on exact columns:
+    profiles         — unified user row (role: student/teacher/parent/admin)
+    subjects, topics, quizzes, questions — content + question bank
+    quiz_attempts, topic_progress, streaks — student progress/mastery
+    srs_cards, srs_stats — flashcard spaced-repetition state
+    parent_profiles, student_parent_links — parent-child account linking
 
   Tables to add (Phase 2):
     learning_events   — every interaction timestamped
