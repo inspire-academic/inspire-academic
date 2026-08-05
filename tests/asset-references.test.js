@@ -15,18 +15,7 @@ const { REPO_ROOT, allHtmlFiles, relPath } = require('./helpers');
 // that actually carry local asset paths in this codebase.
 const ATTR_RE = /\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
 
-// Known-missing references tracked as real gaps, not silently ignored —
-// see the task notes for why each is excepted rather than fixed here.
-const KNOWN_MISSING = new Set([
-  // register.html's required consent checkbox links to these — genuine
-  // legal pages, not stubs a test suite should fabricate. Tracked as an
-  // open item; excepted here so CI stays meaningful for everything else.
-  '/terms.html',
-  '/privacy.html'
-]);
-
 function isCheckable(url) {
-  if (KNOWN_MISSING.has(url)) return false;
   if (!url) return false;
   if (url.startsWith('http://') || url.startsWith('https://')) return false;
   if (url.startsWith('data:')) return false;
