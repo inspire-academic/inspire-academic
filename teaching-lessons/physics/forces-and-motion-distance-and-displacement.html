@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distance and Displacement | Inspire Academic</title>
+<meta name="description" content="GCSE Physics: Distance and Displacement — Inspire Learning Experience benchmark lesson, AQA and Edexcel, Higher and Foundation tier.">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+
+<link rel="stylesheet" href="/assets/css/tokens.css">
+
+<style>
+  /* Inspire Learning Experience — benchmark lesson.
+     Fresh "ile-" namespace; absolute paths only (served from a blob:
+     URL by student/lesson-viewer.html — see
+     docs/benchmark/existing-lesson-pipeline-review.md). Self-sufficient
+     full-bleed layout; does not depend on the viewer's injected
+     .app/.main override. */
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body.ile-lesson{
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    transition: background .25s var(--transition), color .25s var(--transition);
+  }
+  .ile-lesson h1, .ile-lesson h2, .ile-lesson h3 { font-family: var(--font-display); }
+  a { color: inherit; }
+
+  .ile-skip-link{
+    position:absolute; left:12px; top:-48px; z-index:200;
+    background: var(--gold); color:#1a1200; padding:10px 16px;
+    border-radius: var(--radius-sm); font-weight:700;
+    transition: top .2s var(--spring-out);
+  }
+  .ile-skip-link:focus{ top:12px; }
+
+  .ile-shell{ display:grid; grid-template-columns:1fr; min-height:100vh; }
+  @media (min-width:960px){ .ile-shell{ grid-template-columns: var(--sidebar-width) 1fr; } }
+
+  .ile-sidebar{
+    background: var(--sidebar-bg); border-right:1px solid var(--sidebar-border);
+    padding:20px 14px 24px; position:fixed; inset:0 auto 0 0;
+    width:min(84vw,300px); transform:translateX(-100%);
+    transition: transform .3s var(--spring-out); z-index:90; overflow-y:auto;
+  }
+  .ile-sidebar.ile-open{ transform:translateX(0); }
+  @media (min-width:960px){ .ile-sidebar{ position:sticky; top:0; height:100vh; transform:none; width:auto; } }
+
+  .ile-sidebar-backdrop{ position:fixed; inset:0; background:rgba(4,8,16,.55); z-index:80; opacity:0; pointer-events:none; transition:opacity .25s; }
+  .ile-sidebar-backdrop.ile-open{ opacity:1; pointer-events:auto; }
+  @media (min-width:960px){ .ile-sidebar-backdrop{ display:none; } }
+
+  .ile-brand{ padding:6px 10px 18px; }
+  .ile-brand-mark{ font-family: var(--font-display); font-weight:700; font-size:1rem; letter-spacing:.05em; color: var(--gold); }
+  .ile-brand-sub{ display:block; font-size:.58rem; letter-spacing:.22em; color: var(--text-muted); font-weight:700; margin-top:2px; }
+
+  .ile-back-link{
+    display:flex; align-items:center; gap:8px; font-size:.78rem; font-weight:700;
+    color: var(--text-muted); padding:8px 10px; margin-bottom:10px; border-radius: var(--radius-sm);
+  }
+  .ile-back-link:hover{ background: var(--bg-hover); color: var(--text); }
+  .ile-back-link svg{ width:14px; height:14px; }
+
+  .ile-nav{ display:flex; flex-direction:column; gap:2px; }
+  .ile-nav a{
+    display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius: var(--radius-sm);
+    font-size:.82rem; font-weight:600; color: var(--text-muted);
+  }
+  .ile-nav a:hover{ background: var(--bg-hover); color: var(--text); }
+  .ile-nav span.ile-nav-num{
+    width:18px; height:18px; border-radius:50%; background: var(--bg-hover); color: var(--text-soft);
+    font-size:.62rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+
+  .ile-main{ width:100%; min-width:0; }
+
+  .ile-topbar{
+    display:flex; align-items:center; gap:10px; padding:14px 16px;
+    border-bottom:1px solid var(--border); position:sticky; top:0; background: var(--bg); z-index:40;
+    flex-wrap: wrap;
+  }
+  @media (min-width:960px){ .ile-topbar{ padding:16px 32px; } }
+
+  .ile-menu-btn{
+    display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px;
+    border-radius: var(--radius-sm); background: var(--bg-card); border:1px solid var(--border);
+    color: var(--text); cursor:pointer; flex-shrink:0;
+  }
+  @media (min-width:960px){ .ile-menu-btn{ display:none; } }
+
+  .ile-topbar-title{ font-size:.86rem; font-weight:700; margin-right:auto; }
+
+  .ile-tier-toggle{ display:inline-flex; background: var(--bg-card); border:1px solid var(--border); border-radius:99px; padding:3px; }
+  .ile-tier-btn{ padding:7px 14px; border-radius:99px; border:none; background:none; font-family:inherit; font-weight:700; font-size:.76rem; color: var(--text-muted); cursor:pointer; }
+  .ile-tier-btn[aria-pressed="true"]{ background: var(--blue); color:#fff; }
+
+  .ile-theme-toggle{ display:inline-flex; background: var(--bg-card); border:1px solid var(--border); border-radius:99px; padding:3px; gap:2px; }
+  .ile-theme-btn{ padding:7px 12px; border-radius:99px; border:none; background:none; font-family:inherit; font-weight:700; font-size:.72rem; color: var(--text-muted); cursor:pointer; }
+  .ile-theme-btn[aria-pressed="true"]{ background: var(--gold); color:#1a1200; }
+
+  .ile-content{ padding:20px 16px 72px; max-width:880px; margin:0 auto; }
+  @media (min-width:960px){ .ile-content{ padding:32px 40px 96px; } }
+
+  .ile-section{ margin-bottom:40px; scroll-margin-top:90px; }
+  .ile-section h2{ font-size:1.35rem; margin-bottom:6px; display:flex; align-items:center; gap:10px; }
+  .ile-section-num{
+    width:30px; height:30px; border-radius:50%; background: var(--grad-gold); color:#1a1200;
+    font-size:.82rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .ile-section-sub{ font-size:.86rem; color: var(--text-muted); margin-bottom:16px; max-width:64ch; line-height:1.5; }
+
+  .ile-card{ background: var(--bg-panel); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card); padding:18px; }
+
+  .ile-hero-title{ font-size: clamp(1.6rem,4.6vw,2.3rem); line-height:1.1; margin-bottom:10px; }
+  .ile-hero-meta{ display:flex; flex-wrap:wrap; gap:14px; font-size:.78rem; color: var(--text-muted); margin-bottom:16px; }
+  .ile-hero-meta strong{ color: var(--text); }
+  .ile-objectives-list{ list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+  .ile-objectives-list li{ display:flex; gap:8px; font-size:.86rem; color: var(--text-muted); line-height:1.4; }
+  .ile-objectives-list li::before{ content:'✓'; color: var(--success); font-weight:800; flex-shrink:0; }
+
+  .ile-video-card{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    padding:40px 20px; text-align:center; border:1px dashed var(--border-strong); border-radius: var(--radius);
+    background: var(--bg-card);
+  }
+  .ile-video-card svg{ width:40px; height:40px; color: var(--gold); }
+  .ile-video-card strong{ font-size:1rem; }
+  .ile-video-card p{ font-size:.82rem; color: var(--text-muted); max-width:44ch; }
+
+  .ile-q-card{ background: var(--bg-card); border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; margin-bottom:12px; }
+  .ile-q-stem{ font-size:.9rem; font-weight:600; margin-bottom:10px; }
+  .ile-q-options{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+  .ile-q-option{
+    text-align:left; padding:9px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); font-family:inherit; font-size:.84rem; color: var(--text); cursor:pointer;
+  }
+  .ile-q-option:hover{ border-color: var(--border-strong); }
+  .ile-q-option.ile-correct{ border-color: var(--success); background: rgba(34,197,94,.12); }
+  .ile-q-option.ile-incorrect{ border-color: var(--danger); background: rgba(249,115,22,.12); }
+  .ile-q-feedback{ font-size:.8rem; padding:8px 10px; border-radius: var(--radius-sm); background: var(--bg-hover); display:none; }
+  .ile-q-feedback.ile-show{ display:block; }
+
+  .ile-input-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
+  .ile-q-input{
+    padding:9px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); color: var(--text); font-family:inherit; font-size:.84rem; width:140px;
+  }
+  .ile-check-btn{
+    padding:9px 16px; border-radius: var(--radius-sm); border:none; background: var(--blue); color:#fff;
+    font-family:inherit; font-weight:700; font-size:.8rem; cursor:pointer;
+  }
+
+  .ile-diagram-figure{ background: var(--bg-card); border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; text-align:center; margin-bottom:16px; }
+  .ile-diagram-figure svg{ width:100%; height:auto; max-width:420px; }
+  .ile-diagram-figure figcaption{ font-size:.82rem; color: var(--text-muted); margin-top:10px; line-height:1.5; max-width:56ch; margin-left:auto; margin-right:auto; }
+
+  .ile-worked{ border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; margin-bottom:14px; background: var(--bg-card); }
+  .ile-worked h3{ font-size:.98rem; margin-bottom:8px; }
+  .ile-worked dl{ font-size:.85rem; line-height:1.7; }
+  .ile-worked dt{ font-weight:700; color: var(--text); margin-top:8px; }
+  .ile-worked dt:first-child{ margin-top:0; }
+  .ile-worked dd{ color: var(--text-muted); margin-left:0; }
+  .ile-worked .ile-answer{ color: var(--success); font-weight:700; }
+  .ile-worked .ile-wrong-method{ border-left:3px solid var(--danger); padding-left:10px; margin-top:10px; color: var(--text-muted); font-size:.82rem; }
+
+  details.ile-hint{ margin-top:8px; }
+  details.ile-hint summary{
+    cursor:pointer; font-size:.82rem; font-weight:700; color: var(--gold); padding:6px 2px; list-style:none;
+  }
+  details.ile-hint summary::-webkit-details-marker{ display:none; }
+  details.ile-hint summary::before{ content:'▸ '; }
+  details.ile-hint[open] summary::before{ content:'▾ '; }
+  details.ile-hint .ile-hint-body{ font-size:.82rem; color: var(--text-muted); padding:6px 4px 4px 14px; line-height:1.5; }
+
+  .ile-misc-card{ border:1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-card); margin-bottom:10px; overflow:hidden; }
+  .ile-misc-card summary{
+    list-style:none; cursor:pointer; padding:12px 16px; display:flex; gap:10px; align-items:flex-start;
+    font-size:.86rem; font-weight:700;
+  }
+  .ile-misc-card summary::-webkit-details-marker{ display:none; }
+  .ile-misc-card summary .ile-misc-icon{ color: var(--danger); flex-shrink:0; }
+  .ile-misc-body{ padding:0 16px 14px 42px; font-size:.84rem; color: var(--text-muted); line-height:1.6; }
+  .ile-misc-body strong{ color: var(--success); }
+
+  .ile-tier-higher-only{ }
+  body.ile-foundation .ile-tier-higher-only{ display:none; }
+  body.ile-foundation.ile-show-extensions .ile-tier-higher-only{ display:block; }
+  .ile-tier-badge{
+    display:inline-block; font-size:.6rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+    padding:2px 8px; border-radius:99px; margin-left:8px; vertical-align:middle;
+  }
+  .ile-tier-badge.ile-badge-higher{ background: rgba(124,58,237,.18); color:#a78bfa; }
+  .ile-tier-badge.ile-badge-foundation{ background: rgba(5,150,105,.18); color:#34d399; }
+
+  .ile-extensions-toggle{
+    display:none; margin:10px 0; padding:10px 14px; border-radius: var(--radius-sm);
+    background: var(--bg-hover); border:1px dashed var(--border-strong); font-size:.8rem;
+    font-weight:700; color: var(--gold); cursor:pointer; font-family:inherit;
+  }
+  body.ile-foundation .ile-extensions-toggle{ display:inline-block; }
+
+  .ile-exam-q{ border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; margin-bottom:14px; background: var(--bg-card); }
+  .ile-exam-q-head{ display:flex; justify-content:space-between; gap:10px; font-size:.76rem; color: var(--text-muted); margin-bottom:8px; font-weight:700; }
+  .ile-exam-stem{ font-size:.9rem; margin-bottom:10px; }
+  .ile-ms-table{ width:100%; border-collapse:collapse; font-size:.8rem; margin-top:8px; }
+  .ile-ms-table td{ border-top:1px solid var(--border); padding:6px 4px; vertical-align:top; }
+  .ile-ms-table td:last-child{ text-align:right; white-space:nowrap; font-weight:700; }
+
+  .ile-confidence-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .ile-confidence-btn{
+    padding:9px 14px; border-radius: var(--radius-sm); border:1px solid var(--border); background: var(--bg-panel);
+    font-family:inherit; font-size:.8rem; cursor:pointer; color: var(--text);
+  }
+  .ile-confidence-btn[aria-pressed="true"]{ background: var(--gold); color:#1a1200; border-color: var(--gold); }
+  .ile-confidence-note{ font-size:.76rem; color: var(--text-soft); margin-top:8px; display:none; }
+  .ile-confidence-note.ile-show{ display:block; }
+
+  .ile-next-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; }
+  .ile-next-card{
+    flex:1; min-width:220px; border:1px solid var(--border); border-radius: var(--radius-sm);
+    padding:16px; background: var(--bg-panel);
+  }
+  .ile-next-card strong{ display:block; margin-bottom:4px; }
+  .ile-next-card span{ font-size:.8rem; color: var(--text-muted); }
+  .ile-next-card a.ile-next-link{ display:inline-block; margin-top:8px; font-size:.8rem; font-weight:700; color: var(--gold); }
+
+  @media print{
+    .ile-sidebar, .ile-topbar, .ile-check-btn, .ile-confidence-row{ display:none !important; }
+    .ile-shell{ display:block; }
+    body.ile-lesson{ background:#fff; color:#111; }
+    details.ile-hint, .ile-misc-card{ }
+  }
+</style>
+</head>
+<body class="ile-lesson" data-theme="dark">
+<a class="ile-skip-link" href="#ile-main-content">Skip to content</a>
+
+<div class="ile-shell">
+  <div class="ile-sidebar-backdrop" id="ileSidebarBackdrop"></div>
+
+  <aside class="ile-sidebar" id="ileSidebar" aria-label="Lesson sections">
+    <div class="ile-brand">
+      <span class="ile-brand-mark">INSPIRE ACADEMIC<span class="ile-brand-sub">LEARNING EXPERIENCE — PREVIEW</span></span>
+    </div>
+    <a class="ile-back-link" href="/subjects/physics/forces-and-motion.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Forces and Motion hub
+    </a>
+    <nav class="ile-nav">
+      <a href="#ile-orientation"><span class="ile-nav-num">1</span>Orientation</a>
+      <a href="#ile-video"><span class="ile-nav-num">2</span>Video Lesson</a>
+      <a href="#ile-diagnostic"><span class="ile-nav-num">3</span>Retrieval Diagnostic</a>
+      <a href="#ile-learn"><span class="ile-nav-num">4</span>Core Teaching</a>
+      <a href="#ile-diagrams"><span class="ile-nav-num">5</span>Diagrams</a>
+      <a href="#ile-worked"><span class="ile-nav-num">6</span>Worked Examples</a>
+      <a href="#ile-guided"><span class="ile-nav-num">7</span>Guided Practice</a>
+      <a href="#ile-misconceptions"><span class="ile-nav-num">8</span>Misconception Clinic</a>
+      <a href="#ile-independent"><span class="ile-nav-num">9</span>Independent Practice</a>
+      <a href="#ile-exam"><span class="ile-nav-num">10</span>Exam Practice</a>
+      <a href="#ile-close"><span class="ile-nav-num">11</span>Lesson Close</a>
+    </nav>
+  </aside>
+
+  <div class="ile-main">
+    <header class="ile-topbar">
+      <button class="ile-menu-btn" id="ileMenuBtn" aria-label="Open lesson sections" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <span class="ile-topbar-title">Distance and Displacement</span>
+      <div class="ile-tier-toggle" role="group" aria-label="Choose tier">
+        <button class="ile-tier-btn" id="ileTierHigher" aria-pressed="true">Higher</button>
+        <button class="ile-tier-btn" id="ileTierFoundation" aria-pressed="false">Foundation</button>
+      </div>
+      <div class="ile-theme-toggle" role="group" aria-label="Choose theme">
+        <button class="ile-theme-btn" id="ileThemeDark" aria-pressed="true">Dark</button>
+        <button class="ile-theme-btn" id="ileThemeLight" aria-pressed="false">Light</button>
+      </div>
+    </header>
+
+    <main class="ile-content" id="ile-main-content">
+
+      <button class="ile-extensions-toggle" id="ileExtensionsToggle" type="button" aria-pressed="false">Show Higher extensions</button>
+
+      <!-- 1. ORIENTATION -->
+      <section class="ile-section" id="ile-orientation">
+        <h1 class="ile-hero-title">Distance and Displacement</h1>
+        <div class="ile-hero-meta">
+          <span><strong>GCSE Physics</strong> · Forces and Motion, Lesson 1 of 8</span>
+          <span>AQA · Edexcel</span>
+          <span>Estimated time: <strong>35–40 min</strong></span>
+        </div>
+        <div class="ile-card">
+          <p style="font-size:.9rem; color:var(--text-muted); line-height:1.6;">By the end of this lesson you will be able to describe an object's motion using distance and displacement, and explain why these two quantities are not always the same number.</p>
+          <ul class="ile-objectives-list">
+            <li>Define distance as a scalar quantity and displacement as a vector quantity.</li>
+            <li>Explain why a round trip can have a large distance but zero displacement.</li>
+            <li>Read and construct simple displacement diagrams on a straight line and in two dimensions.</li>
+            <li class="ile-tier-higher-only" data-tier-block="1"><span class="ile-tier-badge ile-badge-higher">Higher</span> Combine signed 1D displacements along a single axis and use Pythagoras' theorem for a right-angle path.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 2. VIDEO -->
+      <section class="ile-section" id="ile-video">
+        <h2><span class="ile-section-num">2</span>Video Lesson</h2>
+        <div class="ile-video-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>
+          <strong>Video lesson coming soon</strong>
+          <p>This benchmark lesson doesn't have a recorded video yet. Everything you need is in the written lesson below.</p>
+        </div>
+      </section>
+
+      <!-- 3. RETRIEVAL DIAGNOSTIC -->
+      <section class="ile-section" id="ile-diagnostic">
+        <h2><span class="ile-section-num">3</span>Retrieval Diagnostic</h2>
+        <p class="ile-section-sub">Four quick checks on things you should already know. Don't worry if you're unsure — that's exactly what today's lesson builds on.</p>
+        <div id="ileDiagnosticQs"></div>
+      </section>
+
+      <!-- 4. CORE TEACHING -->
+      <section class="ile-section" id="ile-learn">
+        <h2><span class="ile-section-num">4</span>Core Teaching</h2>
+        <div class="ile-card">
+          <h3 style="font-size:1.02rem; margin-bottom:8px;">Position and reference point</h3>
+          <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">Before you can describe how something has moved, you need a fixed <strong>reference point</strong> — a starting position everything else is measured from. In a classroom, that might be the door; on a number line, it's usually zero. Every distance and every displacement in this lesson is measured relative to a stated reference point.</p>
+
+          <h3 style="font-size:1.02rem; margin-bottom:8px;">Distance — a scalar quantity</h3>
+          <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;"><strong>Distance</strong> is the total length of the path an object has travelled, measured in metres (m). It only has size (<strong>magnitude</strong>) — it doesn't care which way you were facing or which direction you ended up. Quantities like this, with magnitude only, are called <strong>scalar</strong> quantities.</p>
+
+          <h3 style="font-size:1.02rem; margin-bottom:8px;">Displacement — a vector quantity</h3>
+          <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;"><strong>Displacement</strong> is the straight-line distance from an object's starting position to its finishing position, <strong>together with the direction</strong> of that straight line. Because it needs both a size and a direction, displacement is a <strong>vector</strong> quantity. A displacement of "500 m" is an incomplete answer — "500 m east" is a complete one.</p>
+
+          <h3 style="font-size:1.02rem; margin-bottom:8px;">Why a round trip breaks people's intuition</h3>
+          <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">If you walk 250 m to a shop and then walk the same 250 m back home, you have travelled a <strong>distance</strong> of 500 m — your legs did real work and your shoes wore down by that much. But your <strong>displacement</strong> is 0 m, because your finishing position is identical to your starting position. Distance only grows; displacement depends only on where you end up.</p>
+
+          <h3 class="ile-tier-higher-only" data-tier-block="2" style="font-size:1.02rem; margin-bottom:8px;">Signed displacement <span class="ile-tier-badge ile-badge-higher">Higher</span></h3>
+          <p class="ile-tier-higher-only" data-tier-block="2" style="font-size:.87rem; color:var(--text-muted); line-height:1.65;">On a single straight line, it's common to assign one direction as positive and the opposite as negative — for example, "east" as positive and "west" as negative. A displacement of +8 m means 8 m in the positive direction; a displacement of &minus;3 m means 3 m in the negative direction. Signed displacements can be added directly: a walk of +8 m followed by &minus;3 m gives a net displacement of +5 m, even though the total distance walked was 11 m.</p>
+        </div>
+      </section>
+
+      <!-- 5. DIAGRAMS -->
+      <section class="ile-section" id="ile-diagrams">
+        <h2><span class="ile-section-num">5</span>Diagrams</h2>
+        <p class="ile-section-sub">Four ways of seeing the same idea. Notice how the distance path (the dotted trail) and the displacement arrow (the straight gold line) only match when the journey itself is a straight line.</p>
+
+        <figure class="ile-diagram-figure">
+          <svg viewBox="0 0 360 140" role="img" aria-labelledby="ile-d1-title">
+            <title id="ile-d1-title">Direct journey from A to B in a straight line</title>
+            <circle cx="40" cy="80" r="5" fill="var(--cyan-bright)"/><text x="30" y="105" font-size="12" fill="var(--text-muted)">A (start)</text>
+            <circle cx="320" cy="80" r="5" fill="var(--gold)"/><text x="290" y="105" font-size="12" fill="var(--text-muted)">B (finish)</text>
+            <line x1="40" y1="80" x2="320" y2="80" stroke="var(--gold)" stroke-width="3" marker-end="url(#ileD1Arrow)"/>
+            <text x="150" y="65" font-size="12" fill="var(--gold)" font-weight="700">displacement = distance = 300 m east</text>
+            <defs><marker id="ileD1Arrow" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--gold)"/></marker></defs>
+          </svg>
+          <figcaption><strong>1. Direct journey.</strong> When the path is a single straight line in one direction, distance and displacement have the same magnitude.</figcaption>
+        </figure>
+
+        <figure class="ile-diagram-figure">
+          <svg viewBox="0 0 360 200" role="img" aria-labelledby="ile-d2-title">
+            <title id="ile-d2-title">Detour journey from A to C via B, distance greater than displacement</title>
+            <circle cx="40" cy="160" r="5" fill="var(--cyan-bright)"/><text x="20" y="182" font-size="12" fill="var(--text-muted)">A (start)</text>
+            <circle cx="40" cy="40" r="5" fill="var(--text-muted)"/><text x="50" y="35" font-size="12" fill="var(--text-muted)">B</text>
+            <circle cx="280" cy="40" r="5" fill="var(--gold)"/><text x="290" y="35" font-size="12" fill="var(--text-muted)">C (finish)</text>
+            <path d="M40,160 L40,40 L280,40" fill="none" stroke="var(--cyan-bright)" stroke-width="2.5" stroke-dasharray="6 4"/>
+            <line x1="40" y1="160" x2="280" y2="40" stroke="var(--gold)" stroke-width="3" marker-end="url(#ileD2Arrow)"/>
+            <text x="130" y="115" font-size="12" fill="var(--gold)" font-weight="700">displacement (straight line, A→C)</text>
+            <defs><marker id="ileD2Arrow" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--gold)"/></marker></defs>
+          </svg>
+          <figcaption><strong>2. Detour journey.</strong> Distance = length of the dotted path actually walked (A→B→C). Displacement = the single straight gold arrow from A to C, with its own direction — always shorter than or equal to the distance.</figcaption>
+        </figure>
+
+        <figure class="ile-diagram-figure">
+          <svg viewBox="0 0 360 120" role="img" aria-labelledby="ile-d3-title">
+            <title id="ile-d3-title">Round trip journey, distance 500 metres, displacement zero</title>
+            <circle cx="40" cy="60" r="6" fill="var(--gold)"/><text x="15" y="90" font-size="12" fill="var(--text-muted)">Start = Finish</text>
+            <path d="M40,60 C 140,10 220,10 320,60" fill="none" stroke="var(--cyan-bright)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ileD3ArrowA)"/>
+            <path d="M320,60 C 220,110 140,110 40,60" fill="none" stroke="var(--cyan-bright)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ileD3ArrowB)"/>
+            <text x="115" y="25" font-size="12" fill="var(--text-muted)">250 m out</text>
+            <text x="115" y="118" font-size="12" fill="var(--text-muted)">250 m back</text>
+            <defs>
+              <marker id="ileD3ArrowA" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--cyan-bright)"/></marker>
+              <marker id="ileD3ArrowB" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--cyan-bright)"/></marker>
+            </defs>
+          </svg>
+          <figcaption><strong>3. Round trip.</strong> Distance = 250 m + 250 m = 500 m. Displacement = 0 m, because the start and finish positions are the same point — there is no straight-line arrow to draw.</figcaption>
+        </figure>
+
+        <figure class="ile-diagram-figure ile-tier-higher-only" data-tier-block="3">
+          <svg viewBox="0 0 360 90" role="img" aria-labelledby="ile-d4-title">
+            <title id="ile-d4-title">Signed displacement on a number line: plus 8 metres then minus 3 metres, net plus 5 metres</title>
+            <line x1="20" y1="55" x2="340" y2="55" stroke="var(--border-strong)" stroke-width="2"/>
+            <text x="16" y="75" font-size="11" fill="var(--text-soft)">−10</text>
+            <text x="176" y="75" font-size="11" fill="var(--text-soft)">0</text>
+            <text x="332" y="75" font-size="11" fill="var(--text-soft)">+10</text>
+            <circle cx="180" cy="55" r="4" fill="var(--text-muted)"/>
+            <line x1="180" y1="40" x2="300" y2="40" stroke="#3b82f6" stroke-width="3" marker-end="url(#ileD4A)"/>
+            <text x="205" y="30" font-size="11" fill="#3b82f6" font-weight="700">+8 m</text>
+            <line x1="300" y1="25" x2="264" y2="25" stroke="#ef4444" stroke-width="3" marker-end="url(#ileD4B)"/>
+            <text x="255" y="16" font-size="11" fill="#ef4444" font-weight="700">−3 m</text>
+            <circle cx="264" cy="55" r="4" fill="var(--gold)"/>
+            <defs>
+              <marker id="ileD4A" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#3b82f6"/></marker>
+              <marker id="ileD4B" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#ef4444"/></marker>
+            </defs>
+          </svg>
+          <figcaption><span class="ile-tier-badge ile-badge-higher">Higher</span> <strong>4. Signed 1D displacement.</strong> +8 m then −3 m gives a net displacement of +5 m (gold dot) — but a total distance of 11 m, since distance ignores the sign.</figcaption>
+        </figure>
+      </section>
+
+      <!-- 6. WORKED EXAMPLES -->
+      <section class="ile-section" id="ile-worked">
+        <h2><span class="ile-section-num">6</span>Worked Examples</h2>
+
+        <div class="ile-worked">
+          <h3>Example 1 — Straight-line walk</h3>
+          <dl>
+            <dt>Problem</dt><dd>Amaka walks 300 m due east along a straight road. Find her distance travelled and her displacement.</dd>
+            <dt>Reasoning</dt><dd>The path is a single straight line in one direction, so distance and displacement have the same magnitude — only displacement also needs a direction stated.</dd>
+            <dt>Answer</dt><dd class="ile-answer">Distance = 300 m. Displacement = 300 m east.</dd>
+          </dl>
+        </div>
+
+        <div class="ile-worked">
+          <h3>Example 2 — Right-angle detour</h3>
+          <dl>
+            <dt>Problem</dt><dd>Tunde walks 400 m north, then turns and walks 300 m east. Find the total distance travelled and the magnitude of his displacement.</dd>
+            <dt>Known</dt><dd>Leg 1 = 400 m north. Leg 2 = 300 m east. The two legs are at right angles.</dd>
+            <dt>Distance</dt><dd class="ile-answer">400 m + 300 m = 700 m.</dd>
+            <dt>Displacement magnitude</dt><dd>The displacement is the straight line from the start to the finish — the hypotenuse of a right-angled triangle with sides 400 m and 300 m:<br>s = √(400² + 300²) = √(160000 + 90000) = √250000 <span class="ile-answer">= 500 m</span></dd>
+            <dt class="ile-tier-higher-only" data-tier-block="4">Direction <span class="ile-tier-badge ile-badge-higher">Higher</span></dt>
+            <dd class="ile-tier-higher-only" data-tier-block="4">The angle θ from north, measured toward east: tan θ = 300 / 400, so θ = tan⁻¹(0.75) ≈ 36.9°. <span class="ile-answer">Displacement ≈ 500 m at 037° (N36.9°E).</span></dd>
+          </dl>
+          <div class="ile-wrong-method">Common wrong method: adding 400 m + 300 m and calling that the displacement (700 m). This finds the distance, not the displacement — it ignores that the two legs point in different directions and don't lie on the same line.</div>
+        </div>
+
+        <div class="ile-worked">
+          <h3>Example 3 — Round trip</h3>
+          <dl>
+            <dt>Problem</dt><dd>A cyclist rides 1.2 km from home to school, then rides the same route back home. Find the total distance and the displacement.</dd>
+            <dt>Reasoning</dt><dd>The outward and return legs cover the same 1.2 km, so the total distance is the sum of both legs. The finishing position is identical to the starting position, so the straight-line separation between start and finish is zero.</dd>
+            <dt>Answer</dt><dd class="ile-answer">Distance = 1.2 km + 1.2 km = 2.4 km. Displacement = 0 km.</dd>
+          </dl>
+        </div>
+
+        <div class="ile-worked ile-tier-higher-only" data-tier-block="5">
+          <h3>Example 4 — Signed 1D displacement <span class="ile-tier-badge ile-badge-higher">Higher</span></h3>
+          <dl>
+            <dt>Problem</dt><dd>A lift starts at the ground floor. It travels up 12 m, then down 5 m. Taking "up" as positive, find the distance travelled and the net displacement.</dd>
+            <dt>Distance</dt><dd class="ile-answer">12 m + 5 m = 17 m (distance ignores sign — both legs add).</dd>
+            <dt>Displacement</dt><dd class="ile-answer">(+12 m) + (−5 m) = +7 m, i.e. 7 m above the ground floor.</dd>
+          </dl>
+        </div>
+      </section>
+
+      <!-- 7. GUIDED PRACTICE -->
+      <section class="ile-section" id="ile-guided">
+        <h2><span class="ile-section-num">7</span>Guided Practice</h2>
+        <p class="ile-section-sub">Try each question yourself first. Open a hint only if you're stuck, one step at a time.</p>
+
+        <div class="ile-q-card">
+          <div class="ile-q-stem">1. A runner completes one lap of a 400 m circular track, finishing at the exact point she started. State her distance travelled and her displacement.</div>
+          <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">Distance is simply the length of track covered — you don't need to know anything about the shape of the track for this part.</div></details>
+          <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">For displacement, compare her starting position to her finishing position. Are they the same point?</div></details>
+          <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Distance = 400 m (the full lap). Displacement = 0 m, because start and finish are the same point on the track.</div></details>
+        </div>
+
+        <div class="ile-q-card">
+          <div class="ile-q-stem">2. A hiker walks 6 km south, then 8 km east. Find the distance travelled and the magnitude of the displacement.</div>
+          <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">Distance: just add the two legs together — direction doesn't matter for distance.</div></details>
+          <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">Displacement: the two legs are at right angles, so use Pythagoras' theorem: s = √(a² + b²).</div></details>
+          <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Distance = 6 km + 8 km = 14 km. Displacement = √(6² + 8²) = √(36 + 64) = √100 = 10 km.</div></details>
+        </div>
+
+        <div class="ile-q-card ile-tier-higher-only" data-tier-block="6">
+          <div class="ile-q-stem"><span class="ile-tier-badge ile-badge-higher">Higher</span> 3. On a straight test track, taking "forward" as positive, a car travels +150 m, then −40 m, then +25 m. Find the total distance travelled and the net displacement.</div>
+          <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">For distance, ignore the signs — add the size of every leg.</div></details>
+          <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">For displacement, keep the signs and add them algebraically.</div></details>
+          <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Distance = 150 + 40 + 25 = 215 m. Displacement = (+150) + (−40) + (+25) = +135 m, i.e. 135 m forward of the start.</div></details>
+        </div>
+      </section>
+
+      <!-- 8. MISCONCEPTION CLINIC -->
+      <section class="ile-section" id="ile-misconceptions">
+        <h2><span class="ile-section-num">8</span>Misconception Clinic</h2>
+        <p class="ile-section-sub">Eight things students commonly get wrong about this topic. Open each one and check whether you've thought this yourself.</p>
+
+        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"Distance and displacement are always the same thing."</summary><div class="ile-misc-body">They're only equal in size when the journey is a single straight line in one direction. As soon as a path bends, doubles back, or changes direction, distance (the path length) becomes larger than the displacement (the straight-line separation). <strong>Check the shape of the path before assuming they match.</strong></div></details>
+
+        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"If you end up back where you started, you haven't travelled any distance."</summary><div class="ile-misc-body">Your legs (or wheels, or wings) still covered real ground — that's the distance, and it's never negative and never resets to zero just because you looped back. It's only the <strong>displacement</strong> that becomes zero on a round trip, because displacement only cares about your final position relative to your start.</div></details>
+
+        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"Displacement is just a fancier word for distance."</summary><div class="ile-misc-body">Displacement isn't a synonym — it's a different kind of quantity. Distance is a scalar (size only); displacement is a vector (size <strong>and direction</strong>). A correct displacement answer without a direction is an incomplete answer in an exam.</div></details>
+
+        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"A negative displacement means the object didn't really move."</summary><div class="ile-misc-body">A negative sign just tells you the direction relative to whichever direction was chosen as positive — it says nothing about whether movement happened. −5 m means "5 m in the negative direction," which is just as real a movement as +5 m.</div></details>
+
+        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"You can add distances and displacements the same way."</summary><div class="ile-misc-body">Distances add by simple arithmetic — every leg makes the total bigger. Displacements add as vectors: two displacements in opposite directions can partly or fully cancel out, which is exactly why a round trip can have 500 m of distance and 0 m of displacement.</div></details>
+
+        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"Displacement can never equal distance."</summary><div class="ile-misc-body">This overcorrects the first misconception. When a journey is a single straight line in one consistent direction (Diagram 1), the displacement magnitude and the distance <strong>are</strong> equal — displacement is always less than or equal to distance, not always strictly less.</div></details>
+
+        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"You can give a displacement as just a number, without a direction."</summary><div class="ile-misc-body">A magnitude alone (e.g. "500 m") describes the size but leaves out half of what makes it a vector. A complete displacement answer states both the size and the direction — "500 m east," or, on a signed line, a value with the correct + or − sign.</div></details>
+
+        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"Speed and velocity are just other names for distance and displacement."</summary><div class="ile-misc-body">They're related but not the same kind of quantity. Distance and displacement describe <strong>how far</strong> something has moved; speed and velocity describe <strong>how fast</strong> it moved (distance or displacement <em>per unit time</em>). Speed pairs with distance (both scalars); velocity pairs with displacement (both vectors) — you'll meet this properly in Lesson 2.</div></details>
+      </section>
+
+      <!-- 9. INDEPENDENT PRACTICE -->
+      <section class="ile-section" id="ile-independent">
+        <h2><span class="ile-section-num">9</span>Independent Practice</h2>
+        <p class="ile-section-sub">No hints this time. Work through each question, then reveal the answer to self-mark.</p>
+        <div id="ileIndependentQs"></div>
+      </section>
+
+      <!-- 10. EXAM PRACTICE -->
+      <section class="ile-section" id="ile-exam">
+        <h2><span class="ile-section-num">10</span>Exam Practice</h2>
+        <p class="ile-section-sub">Original, board-style questions with full mark schemes — not taken from any real past paper. See <a href="/docs/benchmark/question-and-mark-scheme-format.md" style="text-decoration:underline;">question-and-mark-scheme-format.md</a> for the format these follow.</p>
+
+        <div class="ile-exam-q">
+          <div class="ile-exam-q-head"><span>Q1 · Calculate · 2 marks</span><span>CORE_ALL_TIERS</span></div>
+          <div class="ile-exam-stem">A delivery drone flies 120 m due north from its base, then 90 m due east to a customer's house. Calculate the magnitude of the drone's displacement from its base.</div>
+          <table class="ile-ms-table">
+            <tr><td>Uses Pythagoras' theorem: s = √(120² + 90²)</td><td>1</td></tr>
+            <tr><td>s = √(14400 + 8100) = √22500 = 150 m</td><td>1</td></tr>
+          </table>
+          <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: 150 m. Examiner note: full marks require the correct method shown (Pythagoras) even if a student makes a small arithmetic slip in the final line — award the method mark independently of the answer mark. A common error is adding 120 + 90 = 210 m, which finds the distance, not the displacement (0 marks for that route unless the distance figure is also correctly labelled as such, which does not answer the question asked).</div></details>
+        </div>
+
+        <div class="ile-exam-q">
+          <div class="ile-exam-q-head"><span>Q2 · Describe · 2 marks</span><span>CORE_ALL_TIERS</span></div>
+          <div class="ile-exam-stem">A student says: "The athlete ran 400 m, so her displacement was 400 m." Describe why this statement is not necessarily correct.</div>
+          <table class="ile-ms-table">
+            <tr><td>Recognises 400 m is the distance run (length of path), not automatically the displacement</td><td>1</td></tr>
+            <tr><td>States displacement depends on the straight-line separation between start and finish (and direction) — e.g. if it's one lap of a track, displacement would be 0 m</td><td>1</td></tr>
+          </table>
+          <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: "400 m is the distance travelled, i.e. the length of the path taken. Displacement depends only on the straight-line distance from the start point to the finish point, plus its direction. If the athlete ran one lap of a 400 m track and finished where she started, her displacement would actually be 0 m." Examiner note: reward any answer that correctly identifies distance vs. displacement as the issue, even without the specific track example.</div></details>
+        </div>
+
+        <div class="ile-exam-q ile-tier-higher-only" data-tier-block="7">
+          <div class="ile-exam-q-head"><span><span class="ile-tier-badge ile-badge-higher">Higher</span> Q3 · Calculate · 4 marks</span><span>HIGHER_ASSESSED_ONLY</span></div>
+          <div class="ile-exam-stem">A remote-control boat on a straight canal, taking "east" as positive, moves +85 m, then −30 m, then +15 m. Calculate (a) the total distance travelled and (b) the net displacement, including direction.</div>
+          <table class="ile-ms-table">
+            <tr><td>(a) Distance = 85 + 30 + 15 (signs ignored)</td><td>1</td></tr>
+            <tr><td>(a) Distance = 130 m</td><td>1</td></tr>
+            <tr><td>(b) Displacement = (+85) + (−30) + (+15) = +70 m</td><td>1</td></tr>
+            <tr><td>(b) States direction: 70 m east</td><td>1</td></tr>
+          </table>
+          <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: (a) 130 m. (b) 70 m east. Examiner note: part (b) loses a mark for a correct number with no stated direction — this is the single most common way students drop marks on vector questions at this level.</div></details>
+        </div>
+      </section>
+
+      <!-- 11. LESSON CLOSE -->
+      <section class="ile-section" id="ile-close">
+        <h2><span class="ile-section-num">11</span>Lesson Close</h2>
+
+        <div class="ile-card" style="margin-bottom:14px;">
+          <h3 style="font-size:1rem; margin-bottom:10px;">Retrieval exit check</h3>
+          <div id="ileExitQs"></div>
+        </div>
+
+        <div class="ile-card" style="margin-bottom:14px;">
+          <h3 style="font-size:1rem; margin-bottom:6px;">How confident do you feel about distance vs. displacement?</h3>
+          <p style="font-size:.78rem; color:var(--text-soft);">This is just for you — it isn't saved anywhere.</p>
+          <div class="ile-confidence-row" role="group" aria-label="Confidence rating">
+            <button class="ile-confidence-btn" data-conf="1">1 — Still shaky</button>
+            <button class="ile-confidence-btn" data-conf="2">2</button>
+            <button class="ile-confidence-btn" data-conf="3">3 — Getting there</button>
+            <button class="ile-confidence-btn" data-conf="4">4</button>
+            <button class="ile-confidence-btn" data-conf="5">5 — Confident</button>
+          </div>
+          <p class="ile-confidence-note" id="ileConfidenceNote"></p>
+        </div>
+
+        <div class="ile-next-row">
+          <div class="ile-next-card">
+            <strong>Lesson 2 — Speed &amp; Velocity</strong>
+            <span>Coming soon. Builds directly on the scalar/vector distinction from this lesson.</span>
+          </div>
+          <div class="ile-next-card">
+            <strong>Back to the topic hub</strong>
+            <span>See the full Forces and Motion sequence and study pathway.</span>
+            <a class="ile-next-link" href="/subjects/physics/forces-and-motion.html">Open topic hub →</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var PREF_NS = 'ile:physics:forces-and-motion';
+
+  function getPref(key, fallback){ try { return localStorage.getItem(PREF_NS + ':' + key) || fallback; } catch(e){ return fallback; } }
+  function setPref(key, val){ try { localStorage.setItem(PREF_NS + ':' + key, val); } catch(e){} }
+
+  function applyTheme(theme){
+    document.body.setAttribute('data-theme', theme);
+    document.getElementById('ileThemeDark').setAttribute('aria-pressed', String(theme === 'dark'));
+    document.getElementById('ileThemeLight').setAttribute('aria-pressed', String(theme === 'light'));
+    setPref('theme', theme);
+  }
+  document.getElementById('ileThemeDark').addEventListener('click', function(){ applyTheme('dark'); });
+  document.getElementById('ileThemeLight').addEventListener('click', function(){ applyTheme('light'); });
+  applyTheme(getPref('theme', 'dark'));
+
+  function applyTier(tier){
+    document.body.classList.toggle('ile-foundation', tier === 'foundation');
+    document.getElementById('ileTierHigher').setAttribute('aria-pressed', String(tier === 'higher'));
+    document.getElementById('ileTierFoundation').setAttribute('aria-pressed', String(tier === 'foundation'));
+    setPref('tier', tier);
+  }
+  document.getElementById('ileTierHigher').addEventListener('click', function(){ applyTier('higher'); });
+  document.getElementById('ileTierFoundation').addEventListener('click', function(){ applyTier('foundation'); });
+  applyTier(getPref('tier', 'higher'));
+
+  var extToggle = document.getElementById('ileExtensionsToggle');
+  extToggle.addEventListener('click', function(){
+    var showing = document.body.classList.toggle('ile-show-extensions');
+    extToggle.setAttribute('aria-pressed', String(showing));
+    extToggle.textContent = showing ? 'Hide Higher extensions' : 'Show Higher extensions';
+  });
+
+  // sidebar (mobile)
+  var sidebar = document.getElementById('ileSidebar');
+  var backdrop = document.getElementById('ileSidebarBackdrop');
+  var menuBtn = document.getElementById('ileMenuBtn');
+  function openSidebar(){ sidebar.classList.add('ile-open'); backdrop.classList.add('ile-open'); menuBtn.setAttribute('aria-expanded','true'); }
+  function closeSidebar(){ sidebar.classList.remove('ile-open'); backdrop.classList.remove('ile-open'); menuBtn.setAttribute('aria-expanded','false'); }
+  menuBtn.addEventListener('click', function(){ sidebar.classList.contains('ile-open') ? closeSidebar() : openSidebar(); });
+  backdrop.addEventListener('click', closeSidebar);
+  document.querySelectorAll('.ile-nav a').forEach(function(a){ a.addEventListener('click', function(){ if (window.innerWidth < 960) closeSidebar(); }); });
+
+  // ---- MCQ renderer ----
+  function renderMCQ(containerId, questions){
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = questions.map(function(q, qi){
+      var opts = q.options.map(function(opt, oi){
+        return '<button class="ile-q-option" data-qi="' + qi + '" data-oi="' + oi + '">' + opt + '</button>';
+      }).join('');
+      return '<div class="ile-q-card" data-container="' + containerId + '">' +
+        '<div class="ile-q-stem">' + (qi + 1) + '. ' + q.stem + '</div>' +
+        '<div class="ile-q-options">' + opts + '</div>' +
+        '<div class="ile-q-feedback" id="' + containerId + '-fb-' + qi + '"></div>' +
+        '</div>';
+    }).join('');
+
+    el.querySelectorAll('.ile-q-option').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var qi = Number(btn.getAttribute('data-qi'));
+        var oi = Number(btn.getAttribute('data-oi'));
+        var q = questions[qi];
+        var card = btn.closest('.ile-q-card');
+        card.querySelectorAll('.ile-q-option').forEach(function(b){ b.classList.remove('ile-correct','ile-incorrect'); b.disabled = true; });
+        var fb = document.getElementById(containerId + '-fb-' + qi);
+        if (oi === q.answer){
+          btn.classList.add('ile-correct');
+          fb.textContent = 'Correct — ' + q.explain;
+        } else {
+          btn.classList.add('ile-incorrect');
+          card.querySelectorAll('.ile-q-option')[q.answer].classList.add('ile-correct');
+          fb.textContent = 'Not quite — ' + q.explain;
+        }
+        fb.classList.add('ile-show');
+      });
+    });
+  }
+
+  renderMCQ('ileDiagnosticQs', [
+    { stem: 'What is the SI unit of length?', options: ['Kilogram','Metre','Second','Newton'], answer: 1, explain: 'the metre (m) is the SI base unit of length, and it\'s the unit both distance and displacement are measured in.' },
+    { stem: 'If you walk 5 m north and then 5 m south, what total distance have you walked?', options: ['0 m','5 m','10 m','25 m'], answer: 2, explain: 'distance simply adds up every metre you actually walked: 5 m + 5 m = 10 m, regardless of direction.' },
+    { stem: 'Which of these best describes a "vector" quantity?', options: ['A quantity with size only','A quantity with size and direction','A quantity that can only be positive','A quantity measured in seconds'], answer: 1, explain: 'a vector needs both a magnitude (size) and a direction to be fully described.' },
+    { stem: 'A straight road runs directly from Town A to Town B. What do you already expect about the distance and displacement between them?', options: ['Displacement will be larger than distance','They will be equal in size','Distance will always be zero','There isn\'t enough information'], answer: 1, explain: 'on a single straight path in one direction, the path length and the straight-line separation are the same — you\'ll prove this properly in this lesson.' }
+  ]);
+
+  renderMCQ('ileIndependentQs', [
+    { stem: 'A ferry sails 2 km due east, then 2 km due west back to its start. State the distance and displacement.', options: ['Distance 0 km, displacement 4 km','Distance 4 km, displacement 0 km','Distance 2 km, displacement 2 km','Distance 4 km, displacement 4 km'], answer: 1, explain: 'distance adds both legs (2 + 2 = 4 km); displacement is 0 km because the ferry returns to its starting point.' },
+    { stem: 'A hiker walks 3 km north then 4 km east. What is the magnitude of her displacement?', options: ['7 km','5 km','1 km','12 km'], answer: 1, explain: 'Pythagoras: √(3² + 4²) = √25 = 5 km — the classic 3-4-5 right triangle.' },
+    { stem: 'Which statement is correct?', options: ['Distance can be negative if you walk backwards','Displacement is always positive','Distance is a vector quantity','Displacement always needs a direction stated to be a complete answer'], answer: 3, explain: 'displacement is a vector — a size without a stated direction is an incomplete answer.' },
+    { stem: 'A student walks 100 m east, then 40 m west. What is her displacement?', options: ['140 m east','60 m east','60 m west','140 m west'], answer: 1, explain: 'east minus west along the same line: 100 m − 40 m = 60 m east.' }
+  ]);
+
+  renderMCQ('ileExitQs', [
+    { stem: 'Which quantity — distance or displacement — is a vector?', options: ['Distance','Displacement','Both','Neither'], answer: 1, explain: 'displacement needs a direction, which is what makes it a vector; distance is a scalar.' },
+    { stem: 'A cyclist rides a complete loop and returns to the exact start point. What is her displacement?', options: ['Equal to the length of the loop','Impossible to know','0 m','Negative'], answer: 2, explain: 'start and finish are the same point, so the straight-line separation — the displacement — is 0 m.' }
+  ]);
+
+  // confidence rating (local only, not persisted)
+  var confBtns = document.querySelectorAll('.ile-confidence-btn');
+  var confNote = document.getElementById('ileConfidenceNote');
+  var CONF_MSG = {
+    1: 'That\'s alright — re-read the Misconception Clinic above, it clears up the most common sticking points.',
+    2: 'Worth another pass through the worked examples before moving on.',
+    3: 'Good progress — try the Independent Practice questions again without looking at the hints.',
+    4: 'Nearly there — the Exam Practice section is a good next step.',
+    5: 'Great — you\'re ready for the Exam Practice questions and Lesson 2 when it\'s published.'
+  };
+  confBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      confBtns.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      confNote.textContent = CONF_MSG[btn.getAttribute('data-conf')] || '';
+      confNote.classList.add('ile-show');
+    });
+  });
+})();
+</script>
+</body>
+</html>
