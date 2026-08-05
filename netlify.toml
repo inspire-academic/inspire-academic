@@ -301,6 +301,15 @@ function = "mark-exam-response"
   to = "/programmes/inspire-academic"
   status = 302
 
+# Free AI diagnostic assessment — marketing-campaign entry point. Works
+# fully as a guest (no login required, see assessment-engine.html's
+# "Guest mode" fallback); logged-in students who reach it get their
+# attempt saved. Same short-URL/302 rationale as /bridge above.
+[[redirects]]
+  from = "/diagnostic"
+  to = "/assessment-engine/assessment-engine.html"
+  status = 302
+
 # API-first route for lead capture, following the /api/v1/resource/action
 # convention (CLAUDE.md principle 3) — kept separate from the older,
 # unversioned /api/* functions above.

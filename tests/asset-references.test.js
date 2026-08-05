@@ -15,8 +15,18 @@ const { REPO_ROOT, allHtmlFiles, relPath } = require('./helpers');
 // that actually carry local asset paths in this codebase.
 const ATTR_RE = /\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
 
+// Paths like /diagnostic or /bridge aren't real files — they only
+// resolve via a Netlify redirect ([[redirects]] from = "..." in
+// netlify.toml). Load those so linking to a clean marketing/short URL
+// doesn't look like a broken reference.
+const NETLIFY_TOML = fs.readFileSync(path.join(REPO_ROOT, 'netlify.toml'), 'utf8');
+const REDIRECT_SOURCES = new Set(
+  [...NETLIFY_TOML.matchAll(/^\s*from\s*=\s*"([^"]+)"/gm)].map(m => m[1])
+);
+
 function isCheckable(url) {
   if (!url) return false;
+  if (REDIRECT_SOURCES.has(url.split(/[?#]/)[0])) return false;
   if (url.startsWith('http://') || url.startsWith('https://')) return false;
   if (url.startsWith('data:')) return false;
   if (url.startsWith('mailto:') || url.startsWith('tel:')) return false;
