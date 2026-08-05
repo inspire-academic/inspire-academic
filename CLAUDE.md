@@ -342,6 +342,40 @@ Dark/light theme toggle is present on all subject pages.
 
 ---
 
+## SCIENCE LESSON FACTORY — PLANNED WORK
+
+  A detailed brief for a much larger lesson-authoring/production system
+  was received from the team on 2026-08-05 — see
+  docs/reference/science-lesson-factory-brief.md (full text, preserved
+  verbatim) and docs/reference/inspire-physics-topic-hub.png (companion
+  design reference — light-themed mockup; re-skin to this doc's dark
+  navy/gold DESIGN SYSTEM for consistency, don't adopt the mockup's
+  literal visual style).
+
+  The brief's pedagogical model is genuinely excellent and should guide
+  any lesson work: one canonical lesson source rendered through adaptive
+  Higher (default) and Foundation pathways, not separate pages; lesson
+  structure of retrieval diagnostic -> core teaching -> worked examples
+  -> guided practice -> misconception clinic -> independent practice ->
+  exam practice -> retrieval exit check; no invented curriculum
+  references; no AI agent may mark content institutionally approved.
+
+  The brief's technical prescription (TypeScript/MDX/Zod content
+  pipeline, six permanent Claude Code subagents, a five-awarding-body
+  curriculum crosswalk) does not match this repo — zero build step,
+  vanilla HTML/CSS/JS throughout, AQA/Edexcel only (no OCR anywhere on
+  the live site) — and doesn't reconcile with the lesson system that
+  already exists and is already live: the `lessons`/`lesson_progress`
+  tables, teacher/lesson-admin.html (upload), student/lesson-viewer.html
+  (iframe render + progress tracking), and teaching-lessons/*.html as
+  the actual content format (Physics already has 10 of 11 topics
+  published this way — check teacher/content-coverage.html for current
+  per-subject counts). Before building anything from the brief, resolve
+  whether new lesson work extends that existing pipeline or replaces it
+  — the brief doesn't address this, and it's the load-bearing question.
+
+---
+
 ## MIGRATION ROADMAP
 
   Phase 1 — Foundation & Restructure (CURRENT)
