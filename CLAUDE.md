@@ -253,8 +253,14 @@ Dark/light theme toggle is present on all subject pages.
   Teachers read only their assigned students data.
   Admins have full access within their cardinal.
 
-  Non-negotiable: African learner data stays in Africa.
-  Supabase region: Cape Town primary.
+  Current reality: one shared Supabase project, hosted in London
+  (eu-west-2), serves all learners — UK and African alike. UK data
+  therefore stays in the UK; African learner data is transferred to
+  and stored in the UK under appropriate legal safeguards.
+  Regional storage for African learners (e.g. a Cape Town region)
+  is a future goal, not yet built — treat it as a real infrastructure
+  project (new project + data migration + cutover) if it's picked up,
+  not a quick config change.
 
 ---
 
