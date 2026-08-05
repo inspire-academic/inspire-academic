@@ -546,6 +546,17 @@
         </div>
       </div>
 
+      <!-- FLASHCARD PRACTICE -->
+      <div class="card" style="margin-bottom:2rem;">
+        <div class="section-header">
+          <div class="section-icon">🗂️</div>
+          <div class="section-title">Flashcard Practice</div>
+        </div>
+        <div id="flashcards-section">
+          <p style="color:#888;font-size:.875rem;">Loading…</p>
+        </div>
+      </div>
+
     </div><!-- /container -->
 
     <!-- FOOTER -->
@@ -596,29 +607,36 @@ async function init() {
   if (!link) { window.location.href = '/parent/parent-dashboard.html'; return; }
 
   // Load all data in parallel
-  const [profileRes, attemptsRes, progressRes, streakRes] = await Promise.all([
+  const [profileRes, attemptsRes, progressRes, streakRes, srsStatsRes, srsCardsRes] = await Promise.all([
     supa.from('profiles').select('first_name, full_name, year_group, exam_board').eq('id', studentId).single(),
     supa.from('quiz_attempts')
       .select('percentage, passed, completed_at, correct_answers, total_questions, quizzes(title, topics(name, subjects(name)))')
-      .eq('user_id', studentId)
+      .eq('student_id', studentId)
       .not('completed_at', 'is', null)
       .order('completed_at', { ascending: false })
       .limit(50),
     supa.from('topic_progress')
       .select('mastery_level, best_score, topic_id, topics(name, subjects(name))')
-      .eq('user_id', studentId),
-    supa.from('streaks').select('current_streak, longest_streak').eq('user_id', studentId).single()
+      .eq('student_id', studentId),
+    supa.from('streaks').select('current_streak, longest_streak').eq('student_id', studentId).single(),
+    // Flashcard practice — srs_cards/srs_stats are keyed by user_id
+    // (the auth user id, same value as profiles.id here), not
+    // student_id like the tables above.
+    supa.from('srs_stats').select('data').eq('user_id', studentId).maybeSingle(),
+    supa.from('srs_cards').select('data').eq('user_id', studentId)
   ]);
 
   const profile = profileRes.data || {};
   const attempts = attemptsRes.data || [];
   const progress = progressRes.data || [];
   const streak = streakRes.data || { current_streak: 0, longest_streak: 0 };
+  const srsStats = srsStatsRes.data?.data || null;
+  const srsCards = (srsCardsRes.data || []).map(r => r.data);
 
-  renderPage(profile, attempts, progress, streak);
+  renderPage(profile, attempts, progress, streak, srsStats, srsCards);
 }
 
-function renderPage(profile, attempts, progress, streak) {
+function renderPage(profile, attempts, progress, streak, srsStats, srsCards) {
   const name = profile.first_name || (profile.full_name ? profile.full_name.split(' ')[0] : 'Student');
   const totalQuizzes = attempts.length;
   const passed = attempts.filter(a => a.passed).length;
@@ -656,6 +674,9 @@ function renderPage(profile, attempts, progress, streak) {
 
   // Recent activity
   renderActivity(attempts.slice(0, 15));
+
+  // Flashcard practice
+  renderFlashcards(srsStats, srsCards);
 
   // Insights
   renderInsights(name, totalQuizzes, avgAccuracy, passRate, streak, mastered, attempts);
@@ -750,6 +771,66 @@ function renderActivity(attempts) {
   }).join('');
 
   document.getElementById('activity-tbody').innerHTML = rows;
+}
+
+function renderFlashcards(srsStats, srsCards) {
+  const section = document.getElementById('flashcards-section');
+  if (!srsStats && srsCards.length === 0) {
+    section.innerHTML = '<p style="color:#888;font-size:.875rem;">No flashcard practice yet.</p>';
+    return;
+  }
+
+  const reviewed = srsStats?.totalReviewed || 0;
+  const correct = srsStats?.totalCorrect || 0;
+  const accuracy = reviewed > 0 ? Math.round((correct / reviewed) * 100) : 0;
+  const fcStreak = srsStats?.streak || 0;
+
+  const byMastery = { new: 0, learning: 0, review: 0, mastered: 0 };
+  srsCards.forEach(c => { byMastery[c.mastery || 'new'] = (byMastery[c.mastery || 'new'] || 0) + 1; });
+  const totalCards = srsCards.length;
+
+  section.innerHTML = `
+    <div class="summary-grid" style="margin-bottom:1.25rem;">
+      <div class="summary-card">
+        <div class="summary-card-icon">🗂️</div>
+        <div class="summary-card-value">${reviewed}</div>
+        <div class="summary-card-label">Cards Reviewed</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-icon">🎯</div>
+        <div class="summary-card-value">${accuracy}%</div>
+        <div class="summary-card-label">Recall Accuracy</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-icon">🔥</div>
+        <div class="summary-card-value">${fcStreak}</div>
+        <div class="summary-card-label">Flashcard Streak</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-icon">✅</div>
+        <div class="summary-card-value">${byMastery.mastered}</div>
+        <div class="summary-card-label">Cards Mastered</div>
+      </div>
+    </div>
+    ${totalCards > 0 ? `
+    <div class="subject-list">
+      ${[
+        { label: 'Mastered', key: 'mastered', colour: 'var(--green)' },
+        { label: 'Review', key: 'review', colour: '#1565c0' },
+        { label: 'Learning', key: 'learning', colour: 'var(--amber)' },
+        { label: 'New', key: 'new', colour: '#999' }
+      ].map(s => `
+        <div class="subject-row">
+          <div class="subject-row-top">
+            <span class="subject-name">${s.label}</span>
+            <span class="subject-score">${byMastery[s.key]} card${byMastery[s.key] !== 1 ? 's' : ''}</span>
+          </div>
+          <div class="subject-bar-bg">
+            <div class="subject-bar-fill" style="width:${totalCards ? (byMastery[s.key]/totalCards*100) : 0}%;background:${s.colour};"></div>
+          </div>
+        </div>`).join('')}
+    </div>` : ''}
+  `;
 }
 
 function renderInsights(name, total, avg, passRate, streak, mastered, attempts) {

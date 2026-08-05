@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Coverage — Inspire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+  :root {
+    --navy-mid: #112240;
+    --navy-light: #1a3357;
+    --navy-border: #1e3a5f;
+    --text-primary: #f0e9d6;
+    --text-secondary: #8fa3bc;
+    --text-muted: #4a6280;
+    --success: #3ecf8e;
+    --success-dim: rgba(62,207,142,0.12);
+    --warning: #f0a84c;
+    --warning-dim: rgba(240,168,76,0.12);
+    --danger: #e05252;
+    --danger-dim: rgba(224,82,82,0.12);
+    --mono: 'JetBrains Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--navy); color: var(--text-primary); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+  .auth-loading { position: fixed; inset: 0; background: var(--navy); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
+  .auth-loading-logo { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--gold); }
+  .auth-loading-sub { font-size: 13px; color: var(--text-muted); font-family: var(--mono); }
+
+  .topbar { position: fixed; top: 0; left: 0; right: 0; height: 56px; background: rgba(11,22,40,0.95); border-bottom: 1px solid var(--navy-border); display: flex; align-items: center; padding: 0 20px; gap: 16px; z-index: 100; backdrop-filter: blur(8px); }
+  .topbar-logo { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 0.02em; text-decoration: none; }
+  .topbar-divider { width: 1px; height: 20px; background: var(--navy-border); }
+  .topbar-title { font-size: 13px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.06em; text-transform: uppercase; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .btn-ghost { background: none; border: 1px solid var(--navy-border); color: var(--text-secondary); padding: 8px 16px; border-radius: 7px; font-family: var(--font-body); font-size: 13px; cursor: pointer; }
+  .btn-ghost:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 88px 20px 64px; }
+  h1 { font-family: var(--font-display); font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  .subhead { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; }
+
+  .loading-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); font-family: var(--mono); padding: 20px 0; }
+  .spinner { width: 16px; height: 16px; border: 2px solid var(--navy-border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .subject-cards { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 32px; }
+  @media (min-width: 700px) { .subject-cards { grid-template-columns: 1fr 1fr; } }
+
+  .subj-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 14px; padding: 20px 22px; cursor: pointer; transition: border-color .15s; }
+  .subj-card:hover { border-color: var(--gold); }
+  .subj-card.expanded { border-color: var(--gold); }
+  .subj-card-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+  .subj-name { font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+  .subj-toggle { font-size: 12px; color: var(--text-muted); font-family: var(--mono); }
+
+  .subj-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+  .stat-cell { text-align: center; }
+  .stat-val { font-family: var(--font-display); font-size: 20px; font-weight: 700; line-height: 1; }
+  .stat-lbl { font-size: 10px; color: var(--text-muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; }
+  .stat-val.ok { color: var(--success); }
+  .stat-val.warn { color: var(--warning); }
+  .stat-val.bad { color: var(--danger); }
+
+  .topic-table-wrap { display: none; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--navy-border); overflow-x: auto; }
+  .subj-card.expanded .topic-table-wrap { display: block; }
+  table.topic-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.topic-table th { text-align: left; padding: 6px 8px; font-size: 10px; color: var(--text-muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--navy-border); }
+  table.topic-table td { padding: 8px; border-bottom: 1px solid var(--navy-border); }
+  table.topic-table tr:last-child td { border-bottom: none; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-family: var(--mono); }
+  .pill-ok { background: var(--success-dim); color: var(--success); }
+  .pill-warn { background: var(--warning-dim); color: var(--warning); }
+  .pill-bad { background: var(--danger-dim); color: var(--danger); }
+
+  .legend { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; display: flex; gap: 18px; flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .note-box { background: var(--navy-mid); border: 1px solid var(--navy-border); border-left: 3px solid var(--gold); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
+</style>
+</head>
+<body>
+
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying access...</div>
+</div>
+
+<header class="topbar">
+  <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
+  <div class="topbar-divider"></div>
+  <span class="topbar-title">Content Coverage</span>
+  <div class="topbar-right">
+    <span class="topbar-user" id="topbar-user"></span>
+    <button class="btn-ghost" onclick="window.location.href='/teacher/teacher.html'">← Back to dashboard</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Content Coverage Tracker</h1>
+  <p class="subhead">Full AQA/Edexcel spec topic counts against what's actually live — the number the dashboard's "topics available" count doesn't give you.</p>
+
+  <div class="note-box">
+    <strong>Spec topics</strong> comes from the curriculum map (<code>assets/js/spec-map.js</code>) — the full AQA + Edexcel GCSE syllabus. <strong>DB topics</strong>, <strong>Quizzes</strong>, <strong>Questions</strong> and <strong>Lessons</strong> are live counts from Supabase. A subject with far fewer quizzes/lessons than spec topics is where the content sprint should focus next — use <a href="/teacher/quiz-generator.html" style="color:var(--gold);">Quiz Generator</a> to close question-bank gaps.
+  </div>
+
+  <div class="legend">
+    <span><span class="legend-dot" style="background:var(--success);"></span> Good coverage</span>
+    <span><span class="legend-dot" style="background:var(--warning);"></span> Partial — some quizzes/lessons exist</span>
+    <span><span class="legend-dot" style="background:var(--danger);"></span> Empty — no quiz or lesson yet</span>
+  </div>
+
+  <div class="loading-row" id="loading-row"><span class="spinner"></span> Loading live coverage data…</div>
+  <div class="subject-cards" id="subject-cards" style="display:none;"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/spec-map.js"></script>
+<script>
+const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+async function checkAuth() {
+  const { data: { session } } = await supa.auth.getSession()
+  if (!session) { window.location.href = '/index.html'; return false }
+  const { data: profile, error } = await supa.from('profiles').select('role, full_name').eq('id', session.user.id).single()
+  if (error || !profile || !['teacher','admin'].includes(profile.role)) {
+    window.location.href = '/dashboard.html'
+    return false
+  }
+  if (profile.full_name) document.getElementById('topbar-user').textContent = profile.full_name
+  document.getElementById('authLoading').style.display = 'none'
+  return true
+}
+
+function specTopicCount(subjectName) {
+  const boards = window.SPEC_MAP[subjectName] || {}
+  return Object.values(boards).reduce((s, arr) => s + arr.length, 0)
+}
+
+function coverageClass(have, want) {
+  if (want === 0) return have > 0 ? 'ok' : 'bad'
+  const ratio = have / want
+  if (ratio === 0) return 'bad'
+  if (ratio < 0.6) return 'warn'
+  return 'ok'
+}
+
+async function loadCoverage() {
+  const [{ data: subjects }, { data: topics }, { data: quizzes }, { data: questions }, { data: lessons }] = await Promise.all([
+    supa.from('subjects').select('id,name').order('id'),
+    supa.from('topics').select('id,name,subject_id'),
+    supa.from('quizzes').select('id,topic_id,exam_board'),
+    supa.from('questions').select('id,quiz_id,question_type'),
+    supa.from('lessons').select('id,subject_id,topic_id,is_published')
+  ])
+
+  document.getElementById('loading-row').style.display = 'none'
+  const container = document.getElementById('subject-cards')
+  container.style.display = 'grid'
+
+  if (!subjects) {
+    container.innerHTML = '<div style="color:var(--danger);">Could not load subjects — check Supabase connection.</div>'
+    return
+  }
+
+  // quiz_id -> question counts by type
+  const qCountByQuiz = {}
+  ;(questions || []).forEach(q => {
+    if (!qCountByQuiz[q.quiz_id]) qCountByQuiz[q.quiz_id] = { mcq: 0, free_response: 0 }
+    const type = q.question_type === 'free_response' ? 'free_response' : 'mcq'
+    qCountByQuiz[q.quiz_id][type]++
+  })
+
+  // topic_id -> quizzes[]
+  const quizzesByTopic = {}
+  ;(quizzes || []).forEach(qz => {
+    if (!quizzesByTopic[qz.topic_id]) quizzesByTopic[qz.topic_id] = []
+    quizzesByTopic[qz.topic_id].push(qz)
+  })
+
+  // topic_id -> lessons[]
+  const lessonsByTopic = {}
+  ;(lessons || []).forEach(l => {
+    if (!lessonsByTopic[l.topic_id]) lessonsByTopic[l.topic_id] = []
+    lessonsByTopic[l.topic_id].push(l)
+  })
+
+  container.innerHTML = subjects.map(subj => {
+    const subjTopics = (topics || []).filter(t => t.subject_id === subj.id)
+    const specCount  = specTopicCount(subj.name)
+
+    let quizCount = 0, questionCount = 0, publishedLessons = 0, totalLessons = 0
+    subjTopics.forEach(t => {
+      const qz = quizzesByTopic[t.id] || []
+      quizCount += qz.length
+      qz.forEach(z => {
+        const c = qCountByQuiz[z.id] || { mcq: 0, free_response: 0 }
+        questionCount += c.mcq + c.free_response
+      })
+      const les = lessonsByTopic[t.id] || []
+      totalLessons += les.length
+      publishedLessons += les.filter(l => l.is_published).length
+    })
+
+    const rows = subjTopics.map(t => {
+      const qz = quizzesByTopic[t.id] || []
+      const qCount = qz.reduce((s, z) => { const c = qCountByQuiz[z.id] || {mcq:0,free_response:0}; return s + c.mcq + c.free_response }, 0)
+      const frCount = qz.reduce((s, z) => { const c = qCountByQuiz[z.id] || {mcq:0,free_response:0}; return s + c.free_response }, 0)
+      const les = lessonsByTopic[t.id] || []
+      const pubLes = les.filter(l => l.is_published).length
+      const quizPill = qz.length === 0 ? 'pill-bad' : qz.length < 3 ? 'pill-warn' : 'pill-ok'
+      const lesPill  = pubLes === 0 ? 'pill-bad' : 'pill-ok'
+      return `<tr>
+        <td>${escHtml(t.name)}</td>
+        <td><span class="pill ${quizPill}">${qz.length} quiz${qz.length!==1?'zes':''}</span></td>
+        <td>${qCount} <span style="color:var(--text-muted);">(${frCount} free-resp)</span></td>
+        <td><span class="pill ${lesPill}">${pubLes}/${les.length} published</span></td>
+      </tr>`
+    }).join('') || `<tr><td colspan="4" style="color:var(--text-muted);text-align:center;padding:20px;">No topics in the database for this subject yet.</td></tr>`
+
+    return `
+    <div class="subj-card" onclick="this.classList.toggle('expanded')">
+      <div class="subj-card-head">
+        <span class="subj-name">${escHtml(subj.name)}</span>
+        <span class="subj-toggle">▾ topics</span>
+      </div>
+      <div class="subj-stats">
+        <div class="stat-cell">
+          <div class="stat-val">${specCount}</div>
+          <div class="stat-lbl">Spec topics</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val">${subjTopics.length}</div>
+          <div class="stat-lbl">DB topics</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val ${coverageClass(quizCount, specCount)}">${quizCount}</div>
+          <div class="stat-lbl">Quizzes</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-val ${coverageClass(publishedLessons, specCount)}">${publishedLessons}/${totalLessons}</div>
+          <div class="stat-lbl">Lessons pub.</div>
+        </div>
+      </div>
+      <div class="topic-table-wrap" onclick="event.stopPropagation()">
+        <table class="topic-table">
+          <thead><tr><th>Topic</th><th>Quizzes</th><th>Questions</th><th>Lessons</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`
+  }).join('')
+}
+
+function escHtml(str) {
+  if (!str) return ''
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
+;(async () => {
+  const ok = await checkAuth()
+  if (ok) loadCoverage()
+})()
+</script>
+</body>
+</html>

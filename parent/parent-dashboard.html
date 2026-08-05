@@ -321,7 +321,7 @@ async function init() {
     document.getElementById('parent-name').textContent = `${parentProfile.first_name} ${parentProfile.last_name}`;
     
     // Load children
-    await loadChildren(user.id);
+    await loadChildren(parentProfile.id);
     
   } catch (error) {
     console.error('Init error:', error);
@@ -329,35 +329,74 @@ async function init() {
   }
 }
 
-async function loadChildren(parentUserId) {
+async function loadChildren(parentProfileId) {
   try {
-    // Call Supabase function to get children stats
-    const { data, error } = await supa.rpc('get_parent_children_stats', {
-      parent_user_id: parentUserId
-    });
-    
-    if (error) throw error;
-    
+    const { data: links, error: linksError } = await supa
+      .from('student_parent_links')
+      .select('student_id')
+      .eq('parent_id', parentProfileId);
+
+    if (linksError) throw linksError;
+
     document.getElementById('loading').style.display = 'none';
-    
-    if (!data || data.length === 0) {
+
+    if (!links || links.length === 0) {
       document.getElementById('empty-state').style.display = 'block';
       return;
     }
-    
-    // Display children
+
+    // Fetch and aggregate each child's stats directly — same tables and
+    // column names (student_id) proven correct across the rest of the
+    // platform, rather than depending on an opaque RPC function that
+    // isn't defined anywhere in this repo.
+    const children = await Promise.all(links.map(l => loadChildStats(l.student_id)));
+
     const container = document.getElementById('children-container');
     container.style.display = 'grid';
-    
-    data.forEach(child => {
+
+    children.filter(Boolean).forEach(child => {
       const card = createChildCard(child);
       container.appendChild(card);
     });
-    
+
   } catch (error) {
     console.error('Load children error:', error);
     document.getElementById('loading').innerHTML = '<p style="color:#c62828;">Error loading children. Please refresh the page.</p>';
   }
+}
+
+async function loadChildStats(studentId) {
+  const [profileRes, attemptsRes, progressRes, streakRes] = await Promise.all([
+    supa.from('profiles').select('first_name, full_name, year_group, exam_board').eq('id', studentId).single(),
+    supa.from('quiz_attempts').select('percentage, passed, completed_at').eq('student_id', studentId).not('completed_at', 'is', null),
+    supa.from('topic_progress').select('mastery_level').eq('student_id', studentId),
+    supa.from('streaks').select('current_streak').eq('student_id', studentId).single()
+  ]);
+
+  const profile = profileRes.data;
+  if (!profile) return null;
+  const attempts = attemptsRes.data || [];
+  const progress = progressRes.data || [];
+  const streak = streakRes.data || { current_streak: 0 };
+
+  const avgAccuracy = attempts.length
+    ? attempts.reduce((s, a) => s + (a.percentage || 0), 0) / attempts.length
+    : 0;
+  const lastActive = attempts.length
+    ? attempts.reduce((latest, a) => a.completed_at > latest ? a.completed_at : latest, attempts[0].completed_at)
+    : null;
+
+  return {
+    student_id: studentId,
+    student_name: profile.first_name || (profile.full_name ? profile.full_name.split(' ')[0] : 'Student'),
+    year_group: profile.year_group,
+    exam_board: profile.exam_board,
+    current_streak: streak.current_streak || 0,
+    total_quizzes: attempts.length,
+    avg_accuracy: avgAccuracy,
+    topics_mastered: progress.filter(p => p.mastery_level === 'mastered').length,
+    last_active: lastActive
+  };
 }
 
 function createChildCard(child) {

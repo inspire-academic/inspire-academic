@@ -111,9 +111,15 @@ inspire-academic/
 │
 ├── index.html                  ← Homepage / landing
 ├── dashboard.html              ← Student dashboard (post-login)
-├── manifest.json               ← PWA manifest
-├── sw.js                       ← Service worker
-├── CLAUDE.md                   ← This file
+├── subjects.html                ← Subject-picker hub (all subjects, one page)
+├── register.html                ← Student sign-up
+├── reset-password.html          ← Password reset flow
+├── terms.html                   ← Terms of Service — DRAFT, not legally final,
+│                                   needs solicitor review + [PLACEHOLDER] fills
+├── privacy.html                  ← Privacy Policy — same draft status
+├── manifest.json                ← PWA manifest
+├── sw.js                        ← Service worker
+├── CLAUDE.md                    ← This file
 ├── netlify.toml
 │
 ├── subjects/                   ← Subject dashboard pages
@@ -137,7 +143,10 @@ inspire-academic/
 │   ├── teaching-cockpit.html
 │   ├── teacher-assessment-create.html
 │   ├── teacher-revision.html
-│   └── admin-teacher-mgmt.html
+│   ├── admin-teacher-mgmt.html
+│   ├── lesson-admin.html        ← Lesson content upload/publish
+│   ├── quiz-generator.html      ← AI question generation into the live quiz bank
+│   └── content-coverage.html    ← Spec-vs-live content coverage tracker
 │
 ├── parent/                     ← Parent-facing pages
 │   ├── parent-dashboard.html
@@ -145,6 +154,25 @@ inspire-academic/
 │   └── parent-child-details.html
 │
 ├── tools/                      ← Standalone learning tools
+│
+├── assessment-engine/           ← Standalone AI diagnostic assessment tool.
+│   └── assessment-engine.html     Fully functional but not currently linked
+│                                   from any nav — confirm intended entry
+│                                   point (own onboarding flow? wire into
+│                                   student nav?) before treating as done.
+│
+├── programmes/                  ← Registration/recruitment landing pages
+│   ├── inspire-academic/          (general registration of interest, /interest)
+│   ├── year-6-science-bridge/     (Year 6 bridging programme registration)
+│   └── admin/leads.html           (leads admin — shareable registration links)
+│
+├── year6/                       ← Year 6 Science Bridging programme (live at /bridge)
+│   ├── year6-dashboard.html       Student-facing programme dashboard
+│   ├── year6-project.html
+│   └── year6-pdf-preview.html
+│
+├── projects/                    ← Downloadable project booklets (PDFs + hero
+│                                   images) used by year6/year6-dashboard.html
 │
 ├── icons/                      ← PWA icons
 │   ├── icon-192.png
@@ -161,7 +189,12 @@ inspire-academic/
 │   ├── js/
 │   │   ├── app.js
 │   │   ├── supabase.js
-│   │   └── perf-utils.js
+│   │   ├── perf-utils.js
+│   │   ├── spec-map.js         ← Shared AQA/Edexcel curriculum map (single
+│   │   │                          source of truth — quiz-generator.html and
+│   │   │                          teacher-assessment-create.html both load it)
+│   │   └── core-topics.js      ← Curated per-subject topic-card count, used
+│   │                              wherever a "topics available" figure is shown
 │   └── images/
 │       ├── physics/
 │       ├── chemistry/
@@ -172,8 +205,18 @@ inspire-academic/
 │   ├── edge-functions/
 │   └── functions/
 │
-└── supabase/
-    └── academic_schema.sql
+├── supabase/
+│   ├── academic_schema.sql
+│   ├── leads_schema.sql
+│   ├── leads_schema_v2_academic_fields.sql
+│   └── free_response_questions_migration.sql
+│
+├── tests/                       ← Automated test suite (node:test, zero deps)
+│                                   Run with `npm test`. Not part of the
+│                                   deployed site.
+│
+└── .github/workflows/ci.yml     ← Runs the test suite on every push/PR to
+                                    staging and main
 
 Files to leave in place temporarily (do not move yet):
   property/     — will move to separate private repo later
@@ -236,11 +279,21 @@ Dark/light theme toggle is present on all subject pages.
   Auth: Supabase Auth (email + Google OAuth)
   Storage: "avatars" bucket for profile photos
 
-  Key tables (current):
-    students, teachers, parents — user profiles
-    subject_progress — per-student per-topic completion
-    quiz_results — assessment history
-    teach_lessons — lesson content with video_url, order_index
+  Schema is NOT fully version-controlled. Only lessons/lesson_progress
+  (supabase/academic_schema.sql) and leads (supabase/leads_schema*.sql)
+  have tracked migrations — everything else was created directly in the
+  Supabase dashboard, so it can drift out from under any list written
+  here. Before assuming a table's columns or relationships, grep the
+  codebase for `.from('table_name')` to see how it's actually used —
+  that's the only thing that can't go stale the way this list did.
+
+  A sample of tables nearly everything touches, illustrative only —
+  not the full schema, and not authoritative on exact columns:
+    profiles         — unified user row (role: student/teacher/parent/admin)
+    subjects, topics, quizzes, questions — content + question bank
+    quiz_attempts, topic_progress, streaks — student progress/mastery
+    srs_cards, srs_stats — flashcard spaced-repetition state
+    parent_profiles, student_parent_links — parent-child account linking
 
   Tables to add (Phase 2):
     learning_events   — every interaction timestamped
@@ -253,8 +306,14 @@ Dark/light theme toggle is present on all subject pages.
   Teachers read only their assigned students data.
   Admins have full access within their cardinal.
 
-  Non-negotiable: African learner data stays in Africa.
-  Supabase region: Cape Town primary.
+  Current reality: one shared Supabase project, hosted in London
+  (eu-west-2), serves all learners — UK and African alike. UK data
+  therefore stays in the UK; African learner data is transferred to
+  and stored in the UK under appropriate legal safeguards.
+  Regional storage for African learners (e.g. a Cape Town region)
+  is a future goal, not yet built — treat it as a real infrastructure
+  project (new project + data migration + cutover) if it's picked up,
+  not a quick config change.
 
 ---
 

@@ -893,7 +893,11 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/spec-map.js"></script>
 <script>
+// SPEC_MAP is defined in /assets/js/spec-map.js (shared with teacher/quiz-generator.html)
+const SPEC_MAP = window.SPEC_MAP
+
 // ─────────────────────────────────────────────
 // SUPABASE CLIENT
 // ─────────────────────────────────────────────
@@ -938,140 +942,6 @@ async function checkAuth() {
 
 checkAuth()
 
-// ─────────────────────────────────────────────
-// SPEC MAP
-// ─────────────────────────────────────────────
-const SPEC_MAP = {
-  Physics: {
-    AQA: [
-      { slug:'aqa-ph-fh-forces-intro', name:'Forces and their interactions', paper:1, tier:'Both', subtopics:['Scalar and vector quantities','Contact and non-contact forces','Gravity and weight','Resultant forces','Free body diagrams'] },
-      { slug:'aqa-ph-fh-forces-motion', name:'Forces and motion', paper:1, tier:'Both', subtopics:['Speed, distance, time','Velocity','Distance-time graphs','Velocity-time graphs','Acceleration','Newton\'s laws','Stopping distances'] },
-      { slug:'aqa-ph-fh-forces-momentum', name:'Momentum', paper:1, tier:'Both', subtopics:['p = mv','Conservation of momentum','Changes in momentum','Safety features'] },
-      { slug:'aqa-ph-fh-forces-work-energy', name:'Work, energy and power', paper:1, tier:'Both', subtopics:['Work done','Energy transfer','Power','GPE','KE','Elastic PE'] },
-      { slug:'aqa-ph-fh-forces-pressure', name:'Pressure in fluids', paper:1, tier:'Both', subtopics:['Pressure in a fluid','Pressure at depth','Atmospheric pressure','Upthrust'] },
-      { slug:'aqa-ph-h-forces-levers-gears', name:'Levers, gears and hydraulics', paper:1, tier:'Higher', subtopics:['Moments and levers','Gears','Hydraulic systems'] },
-      { slug:'aqa-ph-fh-energy-stores-transfers', name:'Energy stores and transfers', paper:1, tier:'Both', subtopics:['Energy stores','Energy transfers','Conservation of energy','Dissipation'] },
-      { slug:'aqa-ph-fh-energy-efficiency', name:'Energy efficiency and power', paper:1, tier:'Both', subtopics:['Efficiency calculation','Reducing unwanted energy transfers','Power'] },
-      { slug:'aqa-ph-fh-energy-resources', name:'Energy resources', paper:1, tier:'Both', subtopics:['Renewable and non-renewable','Fossil fuels','Nuclear','Wind, solar, hydroelectric, tidal'] },
-      { slug:'aqa-ph-fh-waves-properties', name:'Wave properties', paper:1, tier:'Both', subtopics:['Transverse and longitudinal waves','Amplitude, wavelength, frequency','Wave speed','Reflection and refraction'] },
-      { slug:'aqa-ph-fh-waves-electromagnetic', name:'Electromagnetic spectrum', paper:1, tier:'Both', subtopics:['Properties of EM waves','Radio, microwave, IR, visible, UV, X-ray, gamma','Uses and hazards'] },
-      { slug:'aqa-ph-fh-waves-sound', name:'Sound waves', paper:1, tier:'Both', subtopics:['Sound as longitudinal wave','Frequency and pitch','Speed of sound','Ultrasound','Seismic waves'] },
-      { slug:'aqa-ph-h-waves-light', name:'Light and lenses', paper:1, tier:'Higher', subtopics:['Reflection and refraction','Total internal reflection','Converging and diverging lenses','Ray diagrams'] },
-      { slug:'aqa-ph-fh-electricity-circuits', name:'Electric circuits', paper:2, tier:'Both', subtopics:['Circuit symbols','Series and parallel','V = IR','I-V characteristics','LDR and thermistor'] },
-      { slug:'aqa-ph-fh-electricity-domestic', name:'Domestic electricity and mains', paper:2, tier:'Both', subtopics:['AC and DC','UK mains (230V 50Hz)','Three-pin plug','Fuses and earthing','Power in appliances'] },
-      { slug:'aqa-ph-fh-electricity-static', name:'Static electricity', paper:2, tier:'Both', subtopics:['Charging by friction','Electric fields','Attraction and repulsion'] },
-      { slug:'aqa-ph-fh-magnetism-fields', name:'Magnetism and magnetic fields', paper:2, tier:'Both', subtopics:['Permanent and induced magnets','Magnetic field patterns','Electromagnets'] },
-      { slug:'aqa-ph-fh-magnetism-motor-effect', name:'The motor effect', paper:2, tier:'Both', subtopics:['Force on a conductor','Fleming\'s left-hand rule','Electric motors'] },
-      { slug:'aqa-ph-fh-magnetism-induction', name:'Electromagnetic induction', paper:2, tier:'Both', subtopics:['Induced pd','Generators','Transformers','National Grid'] },
-      { slug:'aqa-ph-fh-atomic-structure', name:'Atomic structure and radioactivity', paper:2, tier:'Both', subtopics:['Atomic model','Isotopes','Alpha, beta, gamma','Half-life','Fission and fusion'] },
-      { slug:'aqa-ph-h-space', name:'Space physics', paper:2, tier:'Higher', subtopics:['Solar system','Life cycle of stars','Red-shift','Big Bang evidence'] },
-    ],
-    Edexcel: [
-      { slug:'edx-ph-fh-key-concepts', name:'Key concepts of physics', paper:1, tier:'Both', subtopics:['Units and measurements','Scalars and vectors','Equations of motion'] },
-      { slug:'edx-ph-fh-motion-forces', name:'Motion and forces', paper:1, tier:'Both', subtopics:['Speed, velocity, acceleration','Distance-time and velocity-time graphs','Newton\'s three laws','Momentum and impulse'] },
-      { slug:'edx-ph-fh-conservation-energy', name:'Conservation of energy', paper:1, tier:'Both', subtopics:['Energy stores and transfers','Work done','GPE, KE','Power and efficiency'] },
-      { slug:'edx-ph-fh-waves', name:'Waves', paper:1, tier:'Both', subtopics:['Wave properties','Reflection and refraction','Sound and ultrasound','Seismic waves'] },
-      { slug:'edx-ph-fh-light-em', name:'Light and the EM spectrum', paper:1, tier:'Both', subtopics:['Reflection and refraction','Total internal reflection','EM spectrum — uses and hazards'] },
-      { slug:'edx-ph-fh-radioactivity', name:'Radioactivity', paper:2, tier:'Both', subtopics:['Atomic and nuclear structure','Isotopes','Alpha, beta, gamma','Half-life','Fission and fusion'] },
-      { slug:'edx-ph-fh-astronomy', name:'Astronomy', paper:2, tier:'Both', subtopics:['Solar system','Life cycle of stars','Big Bang and red-shift'] },
-      { slug:'edx-ph-fh-energy-resources', name:'Energy resources', paper:2, tier:'Both', subtopics:['Renewable and non-renewable','Environmental considerations'] },
-      { slug:'edx-ph-fh-electricity-circuits', name:'Electric circuits', paper:2, tier:'Both', subtopics:['Charge, current, pd, resistance','Ohm\'s law','Series and parallel','I-V characteristics'] },
-      { slug:'edx-ph-fh-electricity-mains', name:'Electricity in the home', paper:2, tier:'Both', subtopics:['AC and DC','Mains electricity','Three-pin plug','Fuses and earthing'] },
-      { slug:'edx-ph-fh-magnetism', name:'Magnetism and electromagnetism', paper:2, tier:'Both', subtopics:['Magnets and magnetic fields','Motor effect','Generators','Transformers and National Grid'] },
-      { slug:'edx-ph-h-space-beyond', name:'Space — beyond the Solar System', paper:2, tier:'Higher', subtopics:['Galaxies','Dark matter and dark energy','Expanding universe'] },
-    ]
-  },
-  Chemistry: {
-    AQA: [
-      { slug:'aqa-ch-fh-atomic-structure', name:'Atomic structure and the periodic table', paper:1, tier:'Both', subtopics:['History of atomic models','Current atomic model','Electronic structure','Groups and periods','Group 0, 1, 7, Transition metals'] },
-      { slug:'aqa-ch-fh-bonding', name:'Bonding, structure and properties', paper:1, tier:'Both', subtopics:['Ionic bonding','Covalent bonding','Simple molecules','Giant covalent structures','Metallic bonding','Alloys','Nanoparticles'] },
-      { slug:'aqa-ch-h-bonding-advanced', name:'Bonding — Higher only', paper:1, tier:'Higher', subtopics:['Dot and cross diagrams','Intermolecular forces','Polymer structures'] },
-      { slug:'aqa-ch-fh-quantitative', name:'Quantitative chemistry', paper:1, tier:'Both', subtopics:['Relative formula mass','Moles','Reacting masses','Limiting reagents','Percentage yield','Atom economy'] },
-      { slug:'aqa-ch-h-quantitative-advanced', name:'Quantitative — Higher only', paper:1, tier:'Higher', subtopics:['Molar volume of gases','Moles in solution','Titration calculations'] },
-      { slug:'aqa-ch-fh-chemical-changes', name:'Chemical changes', paper:1, tier:'Both', subtopics:['Reactivity series','Reactions of metals','Extraction of metals','Acids and alkalis','Neutralisation','Electrolysis'] },
-      { slug:'aqa-ch-fh-energy-changes', name:'Energy changes', paper:1, tier:'Both', subtopics:['Exothermic and endothermic','Bond energies','Reaction profiles','Activation energy','Catalysts'] },
-      { slug:'aqa-ch-fh-rates-equilibrium', name:'Rate of reaction and equilibrium', paper:2, tier:'Both', subtopics:['Factors affecting rate','Collision theory','Reversible reactions','Dynamic equilibrium','Le Chatelier\'s principle','Haber process'] },
-      { slug:'aqa-ch-fh-organic', name:'Organic chemistry', paper:2, tier:'Both', subtopics:['Crude oil','Alkanes','Combustion','Cracking','Alkenes','Polymers','Alcohols','Carboxylic acids'] },
-      { slug:'aqa-ch-fh-analysis', name:'Chemical analysis', paper:2, tier:'Both', subtopics:['Chromatography — Rf values','Identification of gases','Flame tests','Precipitation tests for ions'] },
-      { slug:'aqa-ch-fh-atmosphere', name:'Chemistry of the atmosphere', paper:2, tier:'Both', subtopics:['Composition of atmosphere','How atmosphere developed','Greenhouse gases','Carbon footprint','Atmospheric pollutants'] },
-      { slug:'aqa-ch-fh-resources', name:'Using resources', paper:2, tier:'Both', subtopics:['Finite and renewable resources','Water treatment','Corrosion','Life cycle assessments','Recycling'] },
-    ],
-    Edexcel: [
-      { slug:'edx-ch-fh-key-concepts', name:'Key concepts in chemistry', paper:1, tier:'Both', subtopics:['Atomic structure','Electronic structure','Relative formula mass','Moles','Reacting masses'] },
-      { slug:'edx-ch-fh-bonding', name:'States of matter and mixtures', paper:1, tier:'Both', subtopics:['States of matter','Purity and separation','Chromatography'] },
-      { slug:'edx-ch-fh-chemical-bonding', name:'Chemical bonding', paper:1, tier:'Both', subtopics:['Ionic bonding','Covalent bonding','Metallic bonding','Alloys','Nanoparticles'] },
-      { slug:'edx-ch-fh-periodic-table', name:'The periodic table', paper:1, tier:'Both', subtopics:['Development of the periodic table','Group 1, 7, 0, Transition metals'] },
-      { slug:'edx-ch-fh-ionic-equations', name:'Ionic equations and electrolysis', paper:1, tier:'Both', subtopics:['Ionic equations','Electrolysis principles','Industrial electrolysis'] },
-      { slug:'edx-ch-fh-acids-bases', name:'Acids, alkalis and salts', paper:1, tier:'Both', subtopics:['pH scale','Strong and weak acids','Making salts','Neutralisation'] },
-      { slug:'edx-ch-fh-quantitative', name:'Quantitative analysis', paper:1, tier:'Both', subtopics:['Moles and reacting masses','Percentage yield','Atom economy'] },
-      { slug:'edx-ch-fh-energy-reactions', name:'Energy changes in chemistry', paper:2, tier:'Both', subtopics:['Exothermic and endothermic','Activation energy','Bond energies'] },
-      { slug:'edx-ch-fh-rates', name:'Rate of reaction', paper:2, tier:'Both', subtopics:['Factors affecting rate','Collision theory','Catalysts'] },
-      { slug:'edx-ch-fh-equilibrium', name:'Reversible reactions and equilibrium', paper:2, tier:'Both', subtopics:['Dynamic equilibrium','Le Chatelier\'s principle','Haber process'] },
-      { slug:'edx-ch-fh-organic', name:'Organic chemistry', paper:2, tier:'Both', subtopics:['Crude oil','Alkanes','Cracking','Alkenes','Alcohols','Carboxylic acids'] },
-      { slug:'edx-ch-fh-chemical-analysis', name:'Chemical analysis', paper:2, tier:'Both', subtopics:['Flame tests','Ion tests','Gas tests','Instrumental analysis'] },
-      { slug:'edx-ch-fh-earth-atmosphere', name:'Earth and atmospheric science', paper:2, tier:'Both', subtopics:['Plate tectonics','Evolution of atmosphere','Greenhouse effect','Pollutants'] },
-    ]
-  },
-  Biology: {
-    AQA: [
-      { slug:'aqa-bi-fh-cell-biology', name:'Cell biology', paper:1, tier:'Both', subtopics:['Eukaryotic and prokaryotic cells','Cell specialisation','Microscopy','Mitosis','Stem cells','Diffusion, osmosis, active transport'] },
-      { slug:'aqa-bi-fh-organisation', name:'Organisation', paper:1, tier:'Both', subtopics:['Levels of organisation','Digestive system','Enzymes','Heart and blood vessels','Lung structure','Plant tissues'] },
-      { slug:'aqa-bi-fh-infection-response', name:'Infection and response', paper:1, tier:'Both', subtopics:['Pathogens — bacteria, viruses, fungi, protists','Spread of disease','Vaccination','Antibiotics','Clinical trials'] },
-      { slug:'aqa-bi-fh-bioenergetics', name:'Bioenergetics', paper:1, tier:'Both', subtopics:['Photosynthesis — equation and conditions','Limiting factors','Aerobic respiration','Anaerobic respiration','Response to exercise'] },
-      { slug:'aqa-bi-fh-homeostasis', name:'Homeostasis and response', paper:2, tier:'Both', subtopics:['Nervous system','Reflex arc','Blood glucose control','Diabetes','Menstrual cycle','Contraception'] },
-      { slug:'aqa-bi-fh-inheritance', name:'Inheritance, variation and evolution', paper:2, tier:'Both', subtopics:['Meiosis','DNA structure','Monohybrid crosses','Inherited disorders','Natural selection','Evolution','Classification'] },
-      { slug:'aqa-bi-fh-ecology', name:'Ecology', paper:2, tier:'Both', subtopics:['Habitats and ecosystems','Food chains','Abiotic and biotic factors','Carbon cycle','Biodiversity','Conservation'] },
-    ],
-    Edexcel: [
-      { slug:'edx-bi-fh-key-concepts', name:'Key concepts in biology', paper:1, tier:'Both', subtopics:['Cell structures','Eukaryotic and prokaryotic cells','Microscopy','Mitosis','Stem cells','Diffusion, osmosis, active transport'] },
-      { slug:'edx-bi-fh-cells-control', name:'Cells and control', paper:1, tier:'Both', subtopics:['Mitosis','Nervous system','Reflex arc','Brain structure'] },
-      { slug:'edx-bi-fh-genetics', name:'Genetics', paper:1, tier:'Both', subtopics:['Meiosis','Monohybrid crosses','Inherited disorders','Sex determination','Genetic engineering'] },
-      { slug:'edx-bi-fh-natural-selection', name:'Natural selection and genetic modification', paper:1, tier:'Both', subtopics:['Natural selection','Evidence for evolution','Selective breeding','Cloning','Classification'] },
-      { slug:'edx-bi-fh-health-disease', name:'Health, disease and medicine', paper:1, tier:'Both', subtopics:['Pathogens','Body defences','Vaccination','Antibiotics','Drug development'] },
-      { slug:'edx-bi-fh-plant-biology', name:'Plant biology', paper:1, tier:'Both', subtopics:['Photosynthesis','Limiting factors','Leaf structure','Transpiration','Plant hormones'] },
-      { slug:'edx-bi-fh-animal-coordination', name:'Animal coordination and homeostasis', paper:2, tier:'Both', subtopics:['Endocrine system','Blood glucose control','Diabetes','Kidneys and ADH','Menstrual cycle'] },
-      { slug:'edx-bi-fh-exchange-transport', name:'Exchange and transport', paper:2, tier:'Both', subtopics:['Surface area to volume ratio','Gas exchange','Heart and circulatory system','Digestive system and enzymes'] },
-      { slug:'edx-bi-fh-ecosystems', name:'Ecosystems and material cycles', paper:2, tier:'Both', subtopics:['Ecosystems','Food chains','Carbon and nitrogen cycles','Biodiversity and conservation'] },
-      { slug:'edx-bi-fh-aerobic-anaerobic', name:'Respiration', paper:2, tier:'Both', subtopics:['Aerobic respiration','Anaerobic respiration','Response to exercise','Fermentation'] },
-    ]
-  },
-  Maths: {
-    AQA: [
-      { slug:'aqa-ma-fh-number-basics', name:'Number — basics and operations', paper:1, tier:'Both', subtopics:['Place value','Four operations','BIDMAS','HCF and LCM','Prime factor decomposition'] },
-      { slug:'aqa-ma-fh-fractions-decimals-percentages', name:'Fractions, decimals and percentages', paper:1, tier:'Both', subtopics:['Converting FDP','Operations with fractions','Percentage change','Reverse percentage'] },
-      { slug:'aqa-ma-fh-ratio-proportion', name:'Ratio, proportion and rates of change', paper:1, tier:'Both', subtopics:['Simplifying ratios','Dividing in a ratio','Direct and inverse proportion','Speed, distance, time','Density'] },
-      { slug:'aqa-ma-fh-powers-roots', name:'Powers, roots and standard form', paper:1, tier:'Both', subtopics:['Index laws','Standard form','Surds (Higher)','Fractional indices (Higher)'] },
-      { slug:'aqa-ma-fh-algebra-expressions', name:'Algebra — expressions', paper:1, tier:'Both', subtopics:['Simplifying','Expanding brackets','Factorising','Difference of two squares (Higher)'] },
-      { slug:'aqa-ma-fh-algebra-equations', name:'Equations and inequalities', paper:1, tier:'Both', subtopics:['Solving linear equations','Simultaneous equations','Inequalities','Iteration (Higher)'] },
-      { slug:'aqa-ma-fh-algebra-sequences', name:'Sequences', paper:1, tier:'Both', subtopics:['nth term arithmetic','Quadratic sequences (Higher)','Geometric sequences'] },
-      { slug:'aqa-ma-fh-graphs', name:'Graphs', paper:1, tier:'Both', subtopics:['Straight line graphs — y=mx+c','Quadratic graphs','Cubic and reciprocal (Higher)','Transformations (Higher)'] },
-      { slug:'aqa-ma-h-algebra-advanced', name:'Algebra — Higher only', paper:1, tier:'Higher', subtopics:['Completing the square','Quadratic formula','Functions — composite and inverse','Proof'] },
-      { slug:'aqa-ma-fh-geometry-shapes', name:'Properties of shapes', paper:2, tier:'Both', subtopics:['Properties of polygons','Angles','Circle theorems (Higher)','Congruence and similarity','Transformations'] },
-      { slug:'aqa-ma-fh-geometry-measures', name:'Perimeter, area, volume', paper:2, tier:'Both', subtopics:['Area of 2D shapes','Circumference and area of circle','Arc and sector','Volume of 3D shapes','Surface area'] },
-      { slug:'aqa-ma-fh-geometry-angles', name:'Angles and geometry', paper:2, tier:'Both', subtopics:['Angles on lines and points','Parallel lines','Angles in polygons','Bearings'] },
-      { slug:'aqa-ma-fh-trigonometry', name:'Trigonometry', paper:2, tier:'Both', subtopics:['Pythagoras\' theorem','SOH CAH TOA','Exact trig values','Sine and cosine rule (Higher)'] },
-      { slug:'aqa-ma-fh-vectors', name:'Vectors', paper:2, tier:'Higher', subtopics:['Vector notation','Adding and subtracting vectors','Geometric proof with vectors'] },
-      { slug:'aqa-ma-fh-probability', name:'Probability', paper:2, tier:'Both', subtopics:['Probability scale','Tree diagrams','Venn diagrams','Conditional probability (Higher)'] },
-      { slug:'aqa-ma-fh-statistics', name:'Statistics', paper:2, tier:'Both', subtopics:['Averages and spread','Scatter graphs','Histograms (Higher)','Cumulative frequency (Higher)'] },
-    ],
-    Edexcel: [
-      { slug:'edx-ma-fh-number', name:'Number', paper:1, tier:'Both', subtopics:['Place value, ordering, rounding','Operations','HCF, LCM, primes','FDP conversions','Percentage change','Standard form','Surds (Higher)'] },
-      { slug:'edx-ma-fh-algebra', name:'Algebra', paper:1, tier:'Both', subtopics:['Expressions','Expanding and factorising','Solving equations','Simultaneous equations','Sequences','Quadratic formula (Higher)','Functions (Higher)'] },
-      { slug:'edx-ma-fh-ratio-proportion', name:'Ratio, proportion and rates of change', paper:1, tier:'Both', subtopics:['Ratios','Direct and inverse proportion','Speed, distance, time','Density','Compound interest'] },
-      { slug:'edx-ma-fh-graphs', name:'Graphs', paper:1, tier:'Both', subtopics:['Straight line graphs','Quadratic and cubic graphs','Exponential graphs (Higher)','Transformations (Higher)'] },
-      { slug:'edx-ma-fh-geometry-shapes', name:'Geometry — shapes', paper:2, tier:'Both', subtopics:['Properties of 2D and 3D shapes','Angles','Circle theorems (Higher)','Congruence and similarity','Transformations'] },
-      { slug:'edx-ma-fh-geometry-measures', name:'Geometry — areas and volumes', paper:2, tier:'Both', subtopics:['Area and perimeter','Circles','Arc and sector','Volume and surface area of 3D shapes'] },
-      { slug:'edx-ma-fh-trigonometry', name:'Trigonometry and Pythagoras', paper:2, tier:'Both', subtopics:['Pythagoras\' theorem','SOH CAH TOA','Exact trig values','Sine and cosine rule (Higher)'] },
-      { slug:'edx-ma-h-vectors', name:'Vectors', paper:2, tier:'Higher', subtopics:['Vector notation and arithmetic','Geometric proof'] },
-      { slug:'edx-ma-fh-probability', name:'Probability', paper:2, tier:'Both', subtopics:['Probability notation','Tree diagrams','Venn diagrams','Conditional probability (Higher)'] },
-      { slug:'edx-ma-fh-statistics', name:'Statistics', paper:2, tier:'Both', subtopics:['Averages and spread','Charts and graphs','Scatter graphs','Histograms (Higher)','Cumulative frequency (Higher)'] },
-    ]
-  }
-}
-
-// ─────────────────────────────────────────────
-// STATE
-// ─────────────────────────────────────────────
 const state = {
   currentStep: 1,
   completedSteps: [],
