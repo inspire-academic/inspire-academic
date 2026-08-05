@@ -111,9 +111,15 @@ inspire-academic/
 │
 ├── index.html                  ← Homepage / landing
 ├── dashboard.html              ← Student dashboard (post-login)
-├── manifest.json               ← PWA manifest
-├── sw.js                       ← Service worker
-├── CLAUDE.md                   ← This file
+├── subjects.html                ← Subject-picker hub (all subjects, one page)
+├── register.html                ← Student sign-up
+├── reset-password.html          ← Password reset flow
+├── terms.html                   ← Terms of Service — DRAFT, not legally final,
+│                                   needs solicitor review + [PLACEHOLDER] fills
+├── privacy.html                  ← Privacy Policy — same draft status
+├── manifest.json                ← PWA manifest
+├── sw.js                        ← Service worker
+├── CLAUDE.md                    ← This file
 ├── netlify.toml
 │
 ├── subjects/                   ← Subject dashboard pages
@@ -137,7 +143,10 @@ inspire-academic/
 │   ├── teaching-cockpit.html
 │   ├── teacher-assessment-create.html
 │   ├── teacher-revision.html
-│   └── admin-teacher-mgmt.html
+│   ├── admin-teacher-mgmt.html
+│   ├── lesson-admin.html        ← Lesson content upload/publish
+│   ├── quiz-generator.html      ← AI question generation into the live quiz bank
+│   └── content-coverage.html    ← Spec-vs-live content coverage tracker
 │
 ├── parent/                     ← Parent-facing pages
 │   ├── parent-dashboard.html
@@ -145,6 +154,25 @@ inspire-academic/
 │   └── parent-child-details.html
 │
 ├── tools/                      ← Standalone learning tools
+│
+├── assessment-engine/           ← Standalone AI diagnostic assessment tool.
+│   └── assessment-engine.html     Fully functional but not currently linked
+│                                   from any nav — confirm intended entry
+│                                   point (own onboarding flow? wire into
+│                                   student nav?) before treating as done.
+│
+├── programmes/                  ← Registration/recruitment landing pages
+│   ├── inspire-academic/          (general registration of interest, /interest)
+│   ├── year-6-science-bridge/     (Year 6 bridging programme registration)
+│   └── admin/leads.html           (leads admin — shareable registration links)
+│
+├── year6/                       ← Year 6 Science Bridging programme (live at /bridge)
+│   ├── year6-dashboard.html       Student-facing programme dashboard
+│   ├── year6-project.html
+│   └── year6-pdf-preview.html
+│
+├── projects/                    ← Downloadable project booklets (PDFs + hero
+│                                   images) used by year6/year6-dashboard.html
 │
 ├── icons/                      ← PWA icons
 │   ├── icon-192.png
@@ -161,7 +189,12 @@ inspire-academic/
 │   ├── js/
 │   │   ├── app.js
 │   │   ├── supabase.js
-│   │   └── perf-utils.js
+│   │   ├── perf-utils.js
+│   │   ├── spec-map.js         ← Shared AQA/Edexcel curriculum map (single
+│   │   │                          source of truth — quiz-generator.html and
+│   │   │                          teacher-assessment-create.html both load it)
+│   │   └── core-topics.js      ← Curated per-subject topic-card count, used
+│   │                              wherever a "topics available" figure is shown
 │   └── images/
 │       ├── physics/
 │       ├── chemistry/
@@ -172,8 +205,18 @@ inspire-academic/
 │   ├── edge-functions/
 │   └── functions/
 │
-└── supabase/
-    └── academic_schema.sql
+├── supabase/
+│   ├── academic_schema.sql
+│   ├── leads_schema.sql
+│   ├── leads_schema_v2_academic_fields.sql
+│   └── free_response_questions_migration.sql
+│
+├── tests/                       ← Automated test suite (node:test, zero deps)
+│                                   Run with `npm test`. Not part of the
+│                                   deployed site.
+│
+└── .github/workflows/ci.yml     ← Runs the test suite on every push/PR to
+                                    staging and main
 
 Files to leave in place temporarily (do not move yet):
   property/     — will move to separate private repo later
