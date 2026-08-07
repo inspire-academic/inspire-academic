@@ -273,10 +273,84 @@
   .ile-next-card span{ font-size:.8rem; color: var(--text-muted); }
   .ile-next-card a.ile-next-link{ display:inline-block; margin-top:8px; font-size:.8rem; font-weight:700; color: var(--gold); }
 
+  /* ---- in-lesson progress rail ---- */
+  .ile-progress-rail{
+    position: sticky; top: 0; z-index: 45; height: 3px;
+    background: var(--border); overflow: hidden;
+  }
+  .ile-progress-fill{ height:100%; width:0%; background: var(--grad-gold); }
+  .ile-progress-label{
+    position: sticky; top: 3px; z-index: 45; text-align:right;
+    font-size:.68rem; font-weight:700; letter-spacing:.03em; color: var(--text-soft);
+    padding: 5px 16px 0; background: var(--bg);
+  }
+  @media (min-width:960px){ .ile-progress-label{ padding: 5px 32px 0; } }
+
+  /* ---- scroll reveal (one-time, subtle) ---- */
+  .ile-reveal{ opacity:0; transform: translateY(18px); transition: opacity .55s var(--spring-out), transform .55s var(--spring-out); }
+  .ile-reveal.ile-revealed{ opacity:1; transform:none; }
+
+  /* ---- answer feedback motion ---- */
+  @keyframes ile-pop{ 0%{ transform:scale(1); } 45%{ transform:scale(1.035); } 100%{ transform:scale(1); } }
+  @keyframes ile-shake{ 0%,100%{ transform:translateX(0); } 20%{ transform:translateX(-5px); } 40%{ transform:translateX(4px); } 60%{ transform:translateX(-3px); } 80%{ transform:translateX(2px); } }
+  .ile-q-option.ile-anim-correct{ animation: ile-pop .4s var(--spring-out); }
+  .ile-q-option.ile-anim-incorrect{ animation: ile-shake .4s ease; }
+  .ile-q-option.ile-correct::before{ content:'✓  '; color: var(--success); font-weight:800; }
+  .ile-q-option.ile-incorrect::before{ content:'✕  '; color: var(--danger); font-weight:800; }
+
+  /* ---- numeric-answer question ---- */
+  .ile-numeric-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .ile-numeric-input{
+    padding:9px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); color: var(--text); font-family:inherit; font-size:.9rem; width:120px;
+  }
+  .ile-numeric-input.ile-anim-correct{ border-color: var(--success); animation: ile-pop .4s var(--spring-out); }
+  .ile-numeric-input.ile-anim-incorrect{ border-color: var(--danger); animation: ile-shake .4s ease; }
+  .ile-numeric-unit{ font-size:.82rem; color: var(--text-muted); }
+  .ile-numeric-check{
+    padding:9px 16px; border-radius: var(--radius-sm); border:none; background: var(--blue); color:#fff;
+    font-family:inherit; font-weight:700; font-size:.8rem; cursor:pointer;
+  }
+
+  /* ---- extra badge: visible-to-all "stretch" content (HIGHER_DEPTH) ---- */
+  .ile-tier-badge.ile-badge-stretch{ background: rgba(201,168,76,.18); color: var(--gold); }
+  .ile-tier-badge.ile-badge-support{ background: rgba(6,182,212,.18); color: var(--cyan-bright); }
+
+  /* ---- Foundation-emphasis callout: visible at every tier, genuine scaffolding ---- */
+  .ile-tier-foundation-emphasis{
+    border:1px solid rgba(6,182,212,.35); background: rgba(6,182,212,.08);
+    border-radius: var(--radius-sm); padding:14px 16px; margin:14px 0; display:flex; gap:10px;
+  }
+  .ile-tier-foundation-emphasis .ile-fe-icon{ flex-shrink:0; color: var(--cyan-bright); }
+  .ile-tier-foundation-emphasis strong{ display:block; margin-bottom:4px; font-size:.82rem; color: var(--cyan-bright); }
+  .ile-tier-foundation-emphasis p{ font-size:.85rem; color: var(--text-muted); line-height:1.55; margin:0; }
+
+  /* ---- lesson-close completion celebration ---- */
+  .ile-completion{
+    display:none; text-align:center; padding:32px 20px; border-radius: var(--radius);
+    background: var(--grad-gold); color:#1a1200; margin-bottom:14px;
+  }
+  .ile-completion.ile-show{ display:block; animation: ile-badge-in .5s var(--spring-out); }
+  @keyframes ile-badge-in{ 0%{ opacity:0; transform:scale(.85) translateY(10px); } 100%{ opacity:1; transform:scale(1) translateY(0); } }
+  .ile-completion svg{ width:52px; height:52px; margin-bottom:10px; }
+  .ile-completion-check{ stroke-dasharray:40; stroke-dashoffset:40; animation: ile-draw .6s .15s ease forwards; }
+  @keyframes ile-draw{ to{ stroke-dashoffset:0; } }
+  .ile-completion h3{ font-size:1.15rem; margin-bottom:6px; }
+  .ile-completion p{ font-size:.86rem; max-width:44ch; margin:0 auto; opacity:.85; }
+
+  @media (prefers-reduced-motion: reduce){
+    .ile-reveal{ opacity:1; transform:none; transition:none; }
+    .ile-q-option.ile-anim-correct, .ile-q-option.ile-anim-incorrect,
+    .ile-numeric-input.ile-anim-correct, .ile-numeric-input.ile-anim-incorrect,
+    .ile-completion.ile-show, .ile-completion-check{ animation:none !important; }
+    .ile-completion-check{ stroke-dashoffset:0; }
+  }
+
   @media print{
-    .ile-sidebar, .ile-topbar, .ile-check-btn, .ile-confidence-row{ display:none !important; }
+    .ile-sidebar, .ile-topbar, .ile-check-btn, .ile-confidence-row, .ile-progress-rail, .ile-progress-label{ display:none !important; }
     .ile-shell{ display:block; }
     body.ile-lesson{ background:#fff; color:#111; }
+    .ile-reveal{ opacity:1 !important; transform:none !important; }
     details.ile-hint, .ile-misc-card{ }
   }
 </style>
@@ -325,6 +399,8 @@
         <button class="ile-theme-btn" id="ileThemeLight" aria-pressed="false">Light</button>
       </div>
     </header>
+    <div class="ile-progress-rail"><div class="ile-progress-fill" id="ileProgressFill"></div></div>
+    <div class="ile-progress-label" id="ileProgressLabel"></div>
 
     <main class="ile-content" id="ile-main-content">
 
@@ -338,7 +414,7 @@
           <span>AQA · Edexcel</span>
           <span>Estimated time: <strong>35–40 min</strong></span>
         </div>
-        <div class="ile-card">
+        <div class="ile-card ile-reveal">
           <p style="font-size:.9rem; color:var(--text-muted); line-height:1.6;">By the end of this lesson you will be able to describe an object's motion using distance and displacement, and explain why these two quantities are not always the same number.</p>
           <ul class="ile-objectives-list">
             <li>Define distance as a scalar quantity and displacement as a vector quantity.</li>
@@ -382,6 +458,14 @@
           <h3 style="font-size:1.02rem; margin-bottom:8px;">Why a round trip breaks people's intuition</h3>
           <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">If you walk 250 m to a shop and then walk the same 250 m back home, you have travelled a <strong>distance</strong> of 500 m — your legs did real work and your shoes wore down by that much. But your <strong>displacement</strong> is 0 m, because your finishing position is identical to your starting position. Distance only grows; displacement depends only on where you end up.</p>
 
+          <div class="ile-tier-foundation-emphasis ile-reveal">
+            <svg class="ile-fe-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 2"/></svg>
+            <div>
+              <strong>Picture it this way</strong>
+              <p>Think of walking from your classroom to the school office and back at break time. Your legs cover real ground both ways — that's your <strong>distance</strong>. But when you're back at your desk, you're exactly where you started — your <strong>displacement</strong> is zero. Distance answers "how much ground did I cover?" Displacement answers "how far — and which way — am I from where I began?"</p>
+            </div>
+          </div>
+
           <h3 class="ile-tier-higher-only" data-tier-block="2" style="font-size:1.02rem; margin-bottom:8px;">Signed displacement <span class="ile-tier-badge ile-badge-higher">Higher</span></h3>
           <p class="ile-tier-higher-only" data-tier-block="2" style="font-size:.87rem; color:var(--text-muted); line-height:1.65;">On a single straight line, it's common to assign one direction as positive and the opposite as negative — for example, "east" as positive and "west" as negative. A displacement of +8 m means 8 m in the positive direction; a displacement of &minus;3 m means 3 m in the negative direction. Signed displacements can be added directly: a walk of +8 m followed by &minus;3 m gives a net displacement of +5 m, even though the total distance walked was 11 m.</p>
         </div>
@@ -392,7 +476,7 @@
         <h2><span class="ile-section-num">5</span>Diagrams</h2>
         <p class="ile-section-sub">Four ways of seeing the same idea. Notice how the distance path (the dotted trail) and the displacement arrow (the straight gold line) only match when the journey itself is a straight line.</p>
 
-        <figure class="ile-diagram-figure">
+        <figure class="ile-diagram-figure ile-reveal">
           <svg viewBox="0 0 360 140" role="img" aria-labelledby="ile-d1-title">
             <title id="ile-d1-title">Direct journey from A to B in a straight line</title>
             <circle cx="40" cy="80" r="5" fill="var(--cyan-bright)"/><text x="30" y="105" font-size="12" fill="var(--text-muted)">A (start)</text>
@@ -404,7 +488,7 @@
           <figcaption><strong>1. Direct journey.</strong> When the path is a single straight line in one direction, distance and displacement have the same magnitude.</figcaption>
         </figure>
 
-        <figure class="ile-diagram-figure">
+        <figure class="ile-diagram-figure ile-reveal">
           <svg viewBox="0 0 360 200" role="img" aria-labelledby="ile-d2-title">
             <title id="ile-d2-title">Detour journey from A to C via B, distance greater than displacement</title>
             <circle cx="40" cy="160" r="5" fill="var(--cyan-bright)"/><text x="20" y="182" font-size="12" fill="var(--text-muted)">A (start)</text>
@@ -418,7 +502,7 @@
           <figcaption><strong>2. Detour journey.</strong> Distance = length of the dotted path actually walked (A→B→C). Displacement = the single straight gold arrow from A to C, with its own direction — always shorter than or equal to the distance.</figcaption>
         </figure>
 
-        <figure class="ile-diagram-figure">
+        <figure class="ile-diagram-figure ile-reveal">
           <svg viewBox="0 0 360 120" role="img" aria-labelledby="ile-d3-title">
             <title id="ile-d3-title">Round trip journey, distance 500 metres, displacement zero</title>
             <circle cx="40" cy="60" r="6" fill="var(--gold)"/><text x="15" y="90" font-size="12" fill="var(--text-muted)">Start = Finish</text>
@@ -434,7 +518,7 @@
           <figcaption><strong>3. Round trip.</strong> Distance = 250 m + 250 m = 500 m. Displacement = 0 m, because the start and finish positions are the same point — there is no straight-line arrow to draw.</figcaption>
         </figure>
 
-        <figure class="ile-diagram-figure ile-tier-higher-only" data-tier-block="3">
+        <figure class="ile-diagram-figure ile-tier-higher-only ile-reveal" data-tier-block="3">
           <svg viewBox="0 0 360 90" role="img" aria-labelledby="ile-d4-title">
             <title id="ile-d4-title">Signed displacement on a number line: plus 8 metres then minus 3 metres, net plus 5 metres</title>
             <line x1="20" y1="55" x2="340" y2="55" stroke="var(--border-strong)" stroke-width="2"/>
@@ -460,7 +544,7 @@
       <section class="ile-section" id="ile-worked">
         <h2><span class="ile-section-num">6</span>Worked Examples</h2>
 
-        <div class="ile-worked">
+        <div class="ile-worked ile-reveal">
           <h3>Example 1 — Straight-line walk</h3>
           <dl>
             <dt>Problem</dt><dd>Amaka walks 300 m due east along a straight road. Find her distance travelled and her displacement.</dd>
@@ -469,7 +553,7 @@
           </dl>
         </div>
 
-        <div class="ile-worked">
+        <div class="ile-worked ile-reveal">
           <h3>Example 2 — Right-angle detour</h3>
           <dl>
             <dt>Problem</dt><dd>Tunde walks 400 m north, then turns and walks 300 m east. Find the total distance travelled and the magnitude of his displacement.</dd>
@@ -482,7 +566,7 @@
           <div class="ile-wrong-method">Common wrong method: adding 400 m + 300 m and calling that the displacement (700 m). This finds the distance, not the displacement — it ignores that the two legs point in different directions and don't lie on the same line.</div>
         </div>
 
-        <div class="ile-worked">
+        <div class="ile-worked ile-reveal">
           <h3>Example 3 — Round trip</h3>
           <dl>
             <dt>Problem</dt><dd>A cyclist rides 1.2 km from home to school, then rides the same route back home. Find the total distance and the displacement.</dd>
@@ -491,7 +575,7 @@
           </dl>
         </div>
 
-        <div class="ile-worked ile-tier-higher-only" data-tier-block="5">
+        <div class="ile-worked ile-tier-higher-only ile-reveal" data-tier-block="5">
           <h3>Example 4 — Signed 1D displacement <span class="ile-tier-badge ile-badge-higher">Higher</span></h3>
           <dl>
             <dt>Problem</dt><dd>A lift starts at the ground floor. It travels up 12 m, then down 5 m. Taking "up" as positive, find the distance travelled and the net displacement.</dd>
@@ -506,21 +590,29 @@
         <h2><span class="ile-section-num">7</span>Guided Practice</h2>
         <p class="ile-section-sub">Try each question yourself first. Open a hint only if you're stuck, one step at a time.</p>
 
-        <div class="ile-q-card">
+        <div class="ile-q-card ile-reveal">
+          <div class="ile-q-stem"><span class="ile-tier-badge ile-badge-support">Extra support</span> Warm-up. Ade walks 50 m to the school office, then walks the same 50 m back to class. What is his distance travelled, and what is his displacement?</div>
+          <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">Start by writing down each leg of the journey separately: 50 m one way, then 50 m back.</div></details>
+          <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">Distance: add the two legs together — distance never cares about direction.</div></details>
+          <details class="ile-hint"><summary>Hint 3</summary><div class="ile-hint-body">Displacement: compare Ade's starting seat to where he ends up. Same place?</div></details>
+          <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Distance = 50 m + 50 m = 100 m. Displacement = 0 m, because Ade ends up exactly where he started.</div></details>
+        </div>
+
+        <div class="ile-q-card ile-reveal">
           <div class="ile-q-stem">1. A runner completes one lap of a 400 m circular track, finishing at the exact point she started. State her distance travelled and her displacement.</div>
           <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">Distance is simply the length of track covered — you don't need to know anything about the shape of the track for this part.</div></details>
           <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">For displacement, compare her starting position to her finishing position. Are they the same point?</div></details>
           <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Distance = 400 m (the full lap). Displacement = 0 m, because start and finish are the same point on the track.</div></details>
         </div>
 
-        <div class="ile-q-card">
+        <div class="ile-q-card ile-reveal">
           <div class="ile-q-stem">2. A hiker walks 6 km south, then 8 km east. Find the distance travelled and the magnitude of the displacement.</div>
           <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">Distance: just add the two legs together — direction doesn't matter for distance.</div></details>
           <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">Displacement: the two legs are at right angles, so use Pythagoras' theorem: s = √(a² + b²).</div></details>
           <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Distance = 6 km + 8 km = 14 km. Displacement = √(6² + 8²) = √(36 + 64) = √100 = 10 km.</div></details>
         </div>
 
-        <div class="ile-q-card ile-tier-higher-only" data-tier-block="6">
+        <div class="ile-q-card ile-tier-higher-only ile-reveal" data-tier-block="6">
           <div class="ile-q-stem"><span class="ile-tier-badge ile-badge-higher">Higher</span> 3. On a straight test track, taking "forward" as positive, a car travels +150 m, then −40 m, then +25 m. Find the total distance travelled and the net displacement.</div>
           <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">For distance, ignore the signs — add the size of every leg.</div></details>
           <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">For displacement, keep the signs and add them algebraically.</div></details>
@@ -533,21 +625,21 @@
         <h2><span class="ile-section-num">8</span>Misconception Clinic</h2>
         <p class="ile-section-sub">Eight things students commonly get wrong about this topic. Open each one and check whether you've thought this yourself.</p>
 
-        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"Distance and displacement are always the same thing."</summary><div class="ile-misc-body">They're only equal in size when the journey is a single straight line in one direction. As soon as a path bends, doubles back, or changes direction, distance (the path length) becomes larger than the displacement (the straight-line separation). <strong>Check the shape of the path before assuming they match.</strong></div></details>
+        <details class="ile-misc-card ile-reveal"><summary><span class="ile-misc-icon">✕</span>"Distance and displacement are always the same thing."</summary><div class="ile-misc-body">They're only equal in size when the journey is a single straight line in one direction. As soon as a path bends, doubles back, or changes direction, distance (the path length) becomes larger than the displacement (the straight-line separation). <strong>Check the shape of the path before assuming they match.</strong></div></details>
 
-        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"If you end up back where you started, you haven't travelled any distance."</summary><div class="ile-misc-body">Your legs (or wheels, or wings) still covered real ground — that's the distance, and it's never negative and never resets to zero just because you looped back. It's only the <strong>displacement</strong> that becomes zero on a round trip, because displacement only cares about your final position relative to your start.</div></details>
+        <details class="ile-misc-card ile-reveal"><summary><span class="ile-misc-icon">✕</span>"If you end up back where you started, you haven't travelled any distance."</summary><div class="ile-misc-body">Your legs (or wheels, or wings) still covered real ground — that's the distance, and it's never negative and never resets to zero just because you looped back. It's only the <strong>displacement</strong> that becomes zero on a round trip, because displacement only cares about your final position relative to your start.</div></details>
 
-        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"Displacement is just a fancier word for distance."</summary><div class="ile-misc-body">Displacement isn't a synonym — it's a different kind of quantity. Distance is a scalar (size only); displacement is a vector (size <strong>and direction</strong>). A correct displacement answer without a direction is an incomplete answer in an exam.</div></details>
+        <details class="ile-misc-card ile-reveal"><summary><span class="ile-misc-icon">✕</span>"Displacement is just a fancier word for distance."</summary><div class="ile-misc-body">Displacement isn't a synonym — it's a different kind of quantity. Distance is a scalar (size only); displacement is a vector (size <strong>and direction</strong>). A correct displacement answer without a direction is an incomplete answer in an exam.</div></details>
 
-        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"A negative displacement means the object didn't really move."</summary><div class="ile-misc-body">A negative sign just tells you the direction relative to whichever direction was chosen as positive — it says nothing about whether movement happened. −5 m means "5 m in the negative direction," which is just as real a movement as +5 m.</div></details>
+        <details class="ile-misc-card ile-reveal"><summary><span class="ile-misc-icon">✕</span>"A negative displacement means the object didn't really move."</summary><div class="ile-misc-body">A negative sign just tells you the direction relative to whichever direction was chosen as positive — it says nothing about whether movement happened. −5 m means "5 m in the negative direction," which is just as real a movement as +5 m.</div></details>
 
-        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"You can add distances and displacements the same way."</summary><div class="ile-misc-body">Distances add by simple arithmetic — every leg makes the total bigger. Displacements add as vectors: two displacements in opposite directions can partly or fully cancel out, which is exactly why a round trip can have 500 m of distance and 0 m of displacement.</div></details>
+        <details class="ile-misc-card ile-reveal"><summary><span class="ile-misc-icon">✕</span>"You can add distances and displacements the same way."</summary><div class="ile-misc-body">Distances add by simple arithmetic — every leg makes the total bigger. Displacements add as vectors: two displacements in opposite directions can partly or fully cancel out, which is exactly why a round trip can have 500 m of distance and 0 m of displacement.</div></details>
 
-        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"Displacement can never equal distance."</summary><div class="ile-misc-body">This overcorrects the first misconception. When a journey is a single straight line in one consistent direction (Diagram 1), the displacement magnitude and the distance <strong>are</strong> equal — displacement is always less than or equal to distance, not always strictly less.</div></details>
+        <details class="ile-misc-card ile-reveal"><summary><span class="ile-misc-icon">✕</span>"Displacement can never equal distance."</summary><div class="ile-misc-body">This overcorrects the first misconception. When a journey is a single straight line in one consistent direction (Diagram 1), the displacement magnitude and the distance <strong>are</strong> equal — displacement is always less than or equal to distance, not always strictly less.</div></details>
 
-        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"You can give a displacement as just a number, without a direction."</summary><div class="ile-misc-body">A magnitude alone (e.g. "500 m") describes the size but leaves out half of what makes it a vector. A complete displacement answer states both the size and the direction — "500 m east," or, on a signed line, a value with the correct + or − sign.</div></details>
+        <details class="ile-misc-card ile-reveal"><summary><span class="ile-misc-icon">✕</span>"You can give a displacement as just a number, without a direction."</summary><div class="ile-misc-body">A magnitude alone (e.g. "500 m") describes the size but leaves out half of what makes it a vector. A complete displacement answer states both the size and the direction — "500 m east," or, on a signed line, a value with the correct + or − sign.</div></details>
 
-        <details class="ile-misc-card"><summary><span class="ile-misc-icon">✕</span>"Speed and velocity are just other names for distance and displacement."</summary><div class="ile-misc-body">They're related but not the same kind of quantity. Distance and displacement describe <strong>how far</strong> something has moved; speed and velocity describe <strong>how fast</strong> it moved (distance or displacement <em>per unit time</em>). Speed pairs with distance (both scalars); velocity pairs with displacement (both vectors) — you'll meet this properly in Lesson 2.</div></details>
+        <details class="ile-misc-card ile-reveal"><summary><span class="ile-misc-icon">✕</span>"Speed and velocity are just other names for distance and displacement."</summary><div class="ile-misc-body">They're related but not the same kind of quantity. Distance and displacement describe <strong>how far</strong> something has moved; speed and velocity describe <strong>how fast</strong> it moved (distance or displacement <em>per unit time</em>). Speed pairs with distance (both scalars); velocity pairs with displacement (both vectors) — you'll meet this properly in Lesson 2.</div></details>
       </section>
 
       <!-- 9. INDEPENDENT PRACTICE -->
@@ -555,6 +647,7 @@
         <h2><span class="ile-section-num">9</span>Independent Practice</h2>
         <p class="ile-section-sub">No hints this time. Work through each question, then reveal the answer to self-mark.</p>
         <div id="ileIndependentQs"></div>
+        <div id="ileIndependentNumericQs"></div>
       </section>
 
       <!-- 10. EXAM PRACTICE -->
@@ -562,7 +655,7 @@
         <h2><span class="ile-section-num">10</span>Exam Practice</h2>
         <p class="ile-section-sub">Original, board-style questions with full mark schemes — not taken from any real past paper. See <a href="/docs/benchmark/question-and-mark-scheme-format.md" style="text-decoration:underline;">question-and-mark-scheme-format.md</a> for the format these follow.</p>
 
-        <div class="ile-exam-q">
+        <div class="ile-exam-q ile-reveal">
           <div class="ile-exam-q-head"><span>Q1 · Calculate · 2 marks</span><span>CORE_ALL_TIERS</span></div>
           <div class="ile-exam-stem">A delivery drone flies 120 m due north from its base, then 90 m due east to a customer's house. Calculate the magnitude of the drone's displacement from its base.</div>
           <table class="ile-ms-table">
@@ -572,7 +665,7 @@
           <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: 150 m. Examiner note: full marks require the correct method shown (Pythagoras) even if a student makes a small arithmetic slip in the final line — award the method mark independently of the answer mark. A common error is adding 120 + 90 = 210 m, which finds the distance, not the displacement (0 marks for that route unless the distance figure is also correctly labelled as such, which does not answer the question asked).</div></details>
         </div>
 
-        <div class="ile-exam-q">
+        <div class="ile-exam-q ile-reveal">
           <div class="ile-exam-q-head"><span>Q2 · Describe · 2 marks</span><span>CORE_ALL_TIERS</span></div>
           <div class="ile-exam-stem">A student says: "The athlete ran 400 m, so her displacement was 400 m." Describe why this statement is not necessarily correct.</div>
           <table class="ile-ms-table">
@@ -582,7 +675,7 @@
           <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: "400 m is the distance travelled, i.e. the length of the path taken. Displacement depends only on the straight-line distance from the start point to the finish point, plus its direction. If the athlete ran one lap of a 400 m track and finished where she started, her displacement would actually be 0 m." Examiner note: reward any answer that correctly identifies distance vs. displacement as the issue, even without the specific track example.</div></details>
         </div>
 
-        <div class="ile-exam-q ile-tier-higher-only" data-tier-block="7">
+        <div class="ile-exam-q ile-tier-higher-only ile-reveal" data-tier-block="7">
           <div class="ile-exam-q-head"><span><span class="ile-tier-badge ile-badge-higher">Higher</span> Q3 · Calculate · 4 marks</span><span>HIGHER_ASSESSED_ONLY</span></div>
           <div class="ile-exam-stem">A remote-control boat on a straight canal, taking "east" as positive, moves +85 m, then −30 m, then +15 m. Calculate (a) the total distance travelled and (b) the net displacement, including direction.</div>
           <table class="ile-ms-table">
@@ -593,18 +686,39 @@
           </table>
           <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: (a) 130 m. (b) 70 m east. Examiner note: part (b) loses a mark for a correct number with no stated direction — this is the single most common way students drop marks on vector questions at this level.</div></details>
         </div>
+
+        <div class="ile-exam-q ile-reveal">
+          <div class="ile-exam-q-head"><span>Q4 · Calculate · 3 marks</span><span>CORE_ALL_TIERS</span></div>
+          <div class="ile-exam-stem">A cyclist rides 3 km along a straight cycle path to a park, then rides back home along the same path. Calculate the total distance travelled and state the magnitude of the displacement, giving a reason for your answer.</div>
+          <table class="ile-ms-table">
+            <tr><td>Distance = 3 km + 3 km = 6 km</td><td>1</td></tr>
+            <tr><td>Displacement = 0 km</td><td>1</td></tr>
+            <tr><td>States the finishing position is the same as the starting position</td><td>1</td></tr>
+          </table>
+          <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: distance = 6 km; displacement = 0 km, because the cyclist finishes at the same point they started from. Examiner note: the reasoning mark is easy to drop if students state the correct numbers but never explain why the displacement is zero.</div></details>
+        </div>
+
+        <div class="ile-exam-q ile-reveal">
+          <div class="ile-exam-q-head"><span><span class="ile-tier-badge ile-badge-stretch">Stretch</span> Q5 · Calculate · 2 marks</span><span>HIGHER_DEPTH — visible at every tier, not hidden</span></div>
+          <div class="ile-exam-stem">A hiker sets off from base camp, walks 8 km on one bearing, then turns through a right angle and walks 15 km on a new bearing. Calculate the magnitude of her displacement from base camp.</div>
+          <table class="ile-ms-table">
+            <tr><td>Uses Pythagoras' theorem: s = √(8² + 15²)</td><td>1</td></tr>
+            <tr><td>s = √(64 + 225) = √289 = 17 km</td><td>1</td></tr>
+          </table>
+          <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: 17 km. Examiner note: same method as Worked Example 2 with larger numbers — a good stretch question for any student confident with Pythagoras, not restricted to Higher tier.</div></details>
+        </div>
       </section>
 
       <!-- 11. LESSON CLOSE -->
       <section class="ile-section" id="ile-close">
         <h2><span class="ile-section-num">11</span>Lesson Close</h2>
 
-        <div class="ile-card" style="margin-bottom:14px;">
+        <div class="ile-card ile-reveal" style="margin-bottom:14px;">
           <h3 style="font-size:1rem; margin-bottom:10px;">Retrieval exit check</h3>
           <div id="ileExitQs"></div>
         </div>
 
-        <div class="ile-card" style="margin-bottom:14px;">
+        <div class="ile-card ile-reveal" style="margin-bottom:14px;">
           <h3 style="font-size:1rem; margin-bottom:6px;">How confident do you feel about distance vs. displacement?</h3>
           <p style="font-size:.78rem; color:var(--text-soft);">This is just for you — it isn't saved anywhere.</p>
           <div class="ile-confidence-row" role="group" aria-label="Confidence rating">
@@ -615,6 +729,12 @@
             <button class="ile-confidence-btn" data-conf="5">5 — Confident</button>
           </div>
           <p class="ile-confidence-note" id="ileConfidenceNote"></p>
+        </div>
+
+        <div class="ile-completion" id="ileCompletion" role="status" aria-live="polite">
+          <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="#1a1200" stroke-width="2" opacity=".15"/><path class="ile-completion-check" d="M15 27l8 8 16-18" stroke="#1a1200" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Nice work — lesson complete</h3>
+          <p>You've worked through distance and displacement from first principles to exam-style questions. That's real progress — come back for Lesson 2 when it's ready.</p>
         </div>
 
         <div class="ile-next-row">
@@ -687,8 +807,9 @@
       var opts = q.options.map(function(opt, oi){
         return '<button class="ile-q-option" data-qi="' + qi + '" data-oi="' + oi + '">' + opt + '</button>';
       }).join('');
-      return '<div class="ile-q-card" data-container="' + containerId + '">' +
-        '<div class="ile-q-stem">' + (qi + 1) + '. ' + q.stem + '</div>' +
+      var badge = q.badge ? '<span class="ile-tier-badge ' + q.badge + '">' + q.badgeLabel + '</span> ' : '';
+      return '<div class="ile-q-card ile-reveal" data-container="' + containerId + '">' +
+        '<div class="ile-q-stem">' + badge + (qi + 1) + '. ' + q.stem + '</div>' +
         '<div class="ile-q-options">' + opts + '</div>' +
         '<div class="ile-q-feedback" id="' + containerId + '-fb-' + qi + '"></div>' +
         '</div>';
@@ -700,17 +821,55 @@
         var oi = Number(btn.getAttribute('data-oi'));
         var q = questions[qi];
         var card = btn.closest('.ile-q-card');
-        card.querySelectorAll('.ile-q-option').forEach(function(b){ b.classList.remove('ile-correct','ile-incorrect'); b.disabled = true; });
+        card.querySelectorAll('.ile-q-option').forEach(function(b){ b.classList.remove('ile-correct','ile-incorrect','ile-anim-correct','ile-anim-incorrect'); b.disabled = true; });
         var fb = document.getElementById(containerId + '-fb-' + qi);
         if (oi === q.answer){
-          btn.classList.add('ile-correct');
+          btn.classList.add('ile-correct', 'ile-anim-correct');
           fb.textContent = 'Correct — ' + q.explain;
         } else {
-          btn.classList.add('ile-incorrect');
+          btn.classList.add('ile-incorrect', 'ile-anim-incorrect');
           card.querySelectorAll('.ile-q-option')[q.answer].classList.add('ile-correct');
           fb.textContent = 'Not quite — ' + q.explain;
         }
         fb.classList.add('ile-show');
+        el.dispatchEvent(new CustomEvent('ile:answered', { detail: { qi: qi } }));
+      });
+    });
+  }
+
+  // ---- numeric-answer question renderer ----
+  function renderNumeric(containerId, questions){
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = questions.map(function(q, qi){
+      var badge = q.badge ? '<span class="ile-tier-badge ' + q.badge + '">' + q.badgeLabel + '</span> ' : '';
+      var tierClass = q.hideOnFoundation ? ' ile-tier-higher-only' : '';
+      return '<div class="ile-q-card ile-reveal' + tierClass + '" data-container="' + containerId + '">' +
+        '<div class="ile-q-stem">' + badge + q.stem + '</div>' +
+        '<div class="ile-numeric-row">' +
+          '<input type="text" inputmode="decimal" class="ile-numeric-input" id="' + containerId + '-in-' + qi + '" placeholder="Your answer" aria-label="Your numeric answer">' +
+          (q.unit ? '<span class="ile-numeric-unit">' + q.unit + '</span>' : '') +
+          '<button class="ile-numeric-check" data-qi="' + qi + '" type="button">Check</button>' +
+        '</div>' +
+        '<div class="ile-q-feedback" id="' + containerId + '-fb-' + qi + '"></div>' +
+        '</div>';
+    }).join('');
+
+    el.querySelectorAll('.ile-numeric-check').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var qi = Number(btn.getAttribute('data-qi'));
+        var q = questions[qi];
+        var input = document.getElementById(containerId + '-in-' + qi);
+        var fb = document.getElementById(containerId + '-fb-' + qi);
+        var val = parseFloat(String(input.value || '').trim().replace(/^\+/, ''));
+        var ok = !isNaN(val) && Math.abs(val - q.answer) <= (q.tolerance != null ? q.tolerance : 0.5);
+        input.classList.remove('ile-anim-correct', 'ile-anim-incorrect');
+        void input.offsetWidth;
+        input.classList.add(ok ? 'ile-anim-correct' : 'ile-anim-incorrect');
+        fb.textContent = (ok ? 'Correct — ' : 'Not quite — ') + q.explain;
+        fb.classList.add('ile-show');
+        input.disabled = true; btn.disabled = true;
+        el.dispatchEvent(new CustomEvent('ile:answered', { detail: { qi: qi } }));
       });
     });
   }
@@ -726,7 +885,14 @@
     { stem: 'A ferry sails 2 km due east, then 2 km due west back to its start. State the distance and displacement.', options: ['Distance 0 km, displacement 4 km','Distance 4 km, displacement 0 km','Distance 2 km, displacement 2 km','Distance 4 km, displacement 4 km'], answer: 1, explain: 'distance adds both legs (2 + 2 = 4 km); displacement is 0 km because the ferry returns to its starting point.' },
     { stem: 'A hiker walks 3 km north then 4 km east. What is the magnitude of her displacement?', options: ['7 km','5 km','1 km','12 km'], answer: 1, explain: 'Pythagoras: √(3² + 4²) = √25 = 5 km — the classic 3-4-5 right triangle.' },
     { stem: 'Which statement is correct?', options: ['Distance can be negative if you walk backwards','Displacement is always positive','Distance is a vector quantity','Displacement always needs a direction stated to be a complete answer'], answer: 3, explain: 'displacement is a vector — a size without a stated direction is an incomplete answer.' },
-    { stem: 'A student walks 100 m east, then 40 m west. What is her displacement?', options: ['140 m east','60 m east','60 m west','140 m west'], answer: 1, explain: 'east minus west along the same line: 100 m − 40 m = 60 m east.' }
+    { stem: 'A student walks 100 m east, then 40 m west. What is her displacement?', options: ['140 m east','60 m east','60 m west','140 m west'], answer: 1, explain: 'east minus west along the same line: 100 m − 40 m = 60 m east.' },
+    { stem: 'A plane takes off, flies 500 km east, then flies 500 km west back to its departure airport. What is its displacement?', options: ['1000 km east','1000 km west','0 km','500 km'], answer: 2, explain: 'the plane returns to exactly where it started, so the straight-line separation between start and finish — the displacement — is 0 km, even though it flew 1000 km in total.' },
+    { stem: 'Which of these is a vector quantity?', options: ['Distance','Time','Displacement','Speed'], answer: 2, explain: 'displacement needs a direction as well as a size, which is what makes it a vector — the other three are all scalars.' }
+  ]);
+
+  renderNumeric('ileIndependentNumericQs', [
+    { stem: 'A cyclist rides 90 m north, then rides 40 m south along the same straight path. Calculate the magnitude of her displacement.', unit: 'm', answer: 50, tolerance: 1, explain: 'net displacement = 90 m − 40 m = 50 m (north), since the two legs are on the same line and point in opposite directions.' },
+    { stem: 'On a straight test track, taking "forward" as positive, a car travels +120 m then −45 m. Calculate the net displacement, including its sign.', unit: 'm (use + or −)', answer: 75, tolerance: 1, badge: 'ile-badge-higher', badgeLabel: 'Higher', hideOnFoundation: true, explain: 'net displacement = (+120) + (−45) = +75 m, i.e. 75 m forward of the start.' }
   ]);
 
   renderMCQ('ileExitQs', [
@@ -752,6 +918,61 @@
       confNote.classList.add('ile-show');
     });
   });
+
+  // ---- in-lesson progress rail + active section ----
+  var progressFill = document.getElementById('ileProgressFill');
+  var progressLabel = document.getElementById('ileProgressLabel');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.ile-section'));
+  function updateProgress(){
+    var doc = document.documentElement;
+    var scrollTop = window.scrollY || doc.scrollTop;
+    var scrollable = doc.scrollHeight - window.innerHeight;
+    var pct = scrollable > 0 ? Math.min(100, Math.max(0, (scrollTop / scrollable) * 100)) : 0;
+    if (progressFill) progressFill.style.width = pct + '%';
+    var current = 0;
+    for (var i = 0; i < sections.length; i++){
+      if (sections[i].getBoundingClientRect().top < 140) current = i;
+    }
+    if (progressLabel) progressLabel.textContent = 'Section ' + (current + 1) + ' of ' + sections.length;
+  }
+  var progressTicking = false;
+  window.addEventListener('scroll', function(){
+    if (!progressTicking){
+      window.requestAnimationFrame(function(){ updateProgress(); progressTicking = false; });
+      progressTicking = true;
+    }
+  }, { passive: true });
+  updateProgress();
+
+  // ---- scroll-reveal (one-time; runs after all render*() calls above so
+  // dynamically-inserted question cards are included) ----
+  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReducedMotion && 'IntersectionObserver' in window){
+    var revealObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('ile-revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.ile-reveal').forEach(function(el){ revealObserver.observe(el); });
+  } else {
+    document.querySelectorAll('.ile-reveal').forEach(function(el){ el.classList.add('ile-revealed'); });
+  }
+
+  // ---- lesson-completion celebration: triggers once both exit-check questions are answered ----
+  var exitContainer = document.getElementById('ileExitQs');
+  var completionCard = document.getElementById('ileCompletion');
+  var exitAnswered = {};
+  if (exitContainer && completionCard){
+    exitContainer.addEventListener('ile:answered', function(e){
+      exitAnswered[e.detail.qi] = true;
+      if (Object.keys(exitAnswered).length >= 2 && !completionCard.classList.contains('ile-show')){
+        completionCard.classList.add('ile-show');
+      }
+    });
+  }
 })();
 </script>
 </body>
