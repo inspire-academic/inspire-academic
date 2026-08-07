@@ -1133,7 +1133,7 @@
   document.querySelectorAll('.ile-nav-practice-item').forEach(function(btn){
     btn.addEventListener('click', function(){
       var group = btn.getAttribute('data-group');
-      var idx = allSteps.findIndex(function(s){ return s.getAttribute('data-group') === group; });
+      var idx = visibleSteps.findIndex(function(s){ return s.getAttribute('data-group') === group; });
       if (idx >= 0) goToStep(idx);
       if (window.innerWidth < 960) closeSidebar();
     });
