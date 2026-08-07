@@ -1385,8 +1385,16 @@
       card.classList.add('ile-show-anim');
     }
 
-    var heading = step.querySelector('h1, h2, h3');
-    if (heading){ heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }); }
+    // Milestone/transition steps have a real heading to focus. Individual
+    // question steps (MCQ/numeric/guided/exam) don't -- found live via a
+    // real accessibility pass: without this fallback, focus was stranded
+    // on the Next button after advancing, so a screen reader user heard
+    // "Step X of Y" from the aria-live region but never the question
+    // itself. Falling back to the step container (tabindex=-1) so
+    // keyboard/AT focus actually lands inside the new content.
+    var heading = step.querySelector('h1, h2, h3') || step;
+    heading.setAttribute('tabindex', '-1');
+    heading.focus({ preventScroll: true });
 
     updateReminderVisibility(step);
   }
