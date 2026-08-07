@@ -344,7 +344,17 @@
 
   .ile-tier-higher-only{ }
   body.ile-foundation .ile-tier-higher-only{ display:none; }
-  body.ile-foundation.ile-show-extensions .ile-tier-higher-only{ display:block; }
+  /* :not(.ile-step) is deliberate -- found live during the final approval
+     pass: without it, this rule's specificity (1 element + 3 classes)
+     beats ".ile-step.ile-step-active{display:block}" (2 classes), so a
+     non-active Higher-only Practice step would render stacked on top of
+     whichever step actually is active whenever a Foundation learner had
+     "Show Higher extensions" open. "Show Higher extensions" is a Learn-
+     mode reveal only -- Practice-mode step visibility is already fully
+     and correctly owned by ile-step-active (and Higher-only steps are
+     already excluded from Foundation's visibleSteps in JS), so stepper
+     steps must never be independently toggled visible by this rule. */
+  body.ile-foundation.ile-show-extensions .ile-tier-higher-only:not(.ile-step){ display:block; }
 
   /* Mirror of ile-tier-higher-only: genuinely Foundation-exclusive content
      (not just Foundation-emphasised, which stays visible to everyone).
