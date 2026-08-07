@@ -12,6 +12,15 @@ Run through before a lesson built to this standard is uploaded via
       lesson's own `<style>` block, not linked. See
       `docs/benchmark/existing-lesson-pipeline-review.md` (found live,
       the hard way, on this benchmark).
+- [ ] Every `<a>` linking outside the lesson (e.g. "back to hub") uses
+      a runtime-built absolute URL (`location.origin + '/path'`) and
+      `target="_top"` — **not** a bare root-relative `href`. Found live
+      on this same benchmark: an unfixed one didn't just fail to
+      navigate, it broke the sandboxed iframe to
+      `about:blank#blocked`, wiping the lesson out from under the
+      student. Click-test every outbound link inside the real viewer,
+      not just the standalone file — the standalone file can't
+      reproduce this bug at all.
 - [ ] No `.app`/`.main`/`.page-wrap` class names used.
 - [ ] Theme toggle works in both Inspire Dark and Inspire Light;
       preference persists under its own page-scoped localStorage key.

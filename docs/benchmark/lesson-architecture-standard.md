@@ -11,16 +11,24 @@ revise it once more than one lesson has been built against it.
    or the `lessons` schema to ship a single lesson.** Publish Classic
    and Inspire as two separate `lessons` rows under the same topic.
    See `docs/benchmark/existing-lesson-pipeline-review.md`.
-2. **Fully-qualified `https://...` URLs only for any asset referenced
-   inside lesson HTML — not even root-relative `/assets/...` paths.**
-   The viewer serves lesson HTML from a `blob:` URL, and a
-   root-relative reference does not resolve against a `blob:` base URL
-   the way it does on a normal page — confirmed live: a
-   `<link href="/assets/css/tokens.css">` never even fired as a
-   network request once opened through the real viewer. Inline any
-   CSS custom properties a lesson needs directly in its own `<style>`
-   block rather than linking `tokens.css`. See
-   `docs/benchmark/existing-lesson-pipeline-review.md`.
+2. **Fully-qualified `https://...` URLs only for any asset OR link
+   referenced inside lesson HTML — not even root-relative `/assets/...`
+   or `/subjects/...` paths.** The viewer serves lesson HTML from a
+   `blob:` URL, and a root-relative reference does not resolve against
+   a `blob:` base URL the way it does on a normal page. Confirmed live
+   twice, two different ways: a `<link href="/assets/css/tokens.css">`
+   never even fired as a network request once opened through the real
+   viewer (inline any CSS custom properties a lesson needs directly in
+   its own `<style>` block rather than linking `tokens.css`); and an
+   `<a href="/subjects/...">` "back to hub" link was worse — clicking
+   it navigated the sandboxed iframe to `about:blank#blocked`,
+   destroying the entire lesson with no way back except a full reload.
+   **Any `<a>` linking outside the lesson itself needs both**: an
+   absolute URL built at runtime from `location.origin` (since the
+   origin itself does resolve correctly inside the blob document — only
+   root-relative *resolution* is broken — and hardcoding the host would
+   break in production), and `target="_top"` to escape the sandboxed
+   iframe. See `docs/benchmark/existing-lesson-pipeline-review.md`.
 3. **Fresh CSS class names.** Do not use `.app`, `.main`, or
    `.page-wrap` — these collide with either the viewer's injected
    override CSS or the legacy draft template. Prefix all classes for a
