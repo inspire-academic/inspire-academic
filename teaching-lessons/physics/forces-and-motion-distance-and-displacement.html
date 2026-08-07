@@ -58,23 +58,40 @@
     --border-strong: rgba(255,255,255,.16); --text: #f0f6ff;
     --text-muted: rgba(240,246,255,.68); --text-soft: rgba(240,246,255,.62);
     --sidebar-bg: #060e1b; --sidebar-border: rgba(255,255,255,.07);
-    --shadow-card: 0 6px 28px rgba(0,0,0,.3);
+    --shadow-card: 0 6px 28px rgba(0,0,0,.3); --shadow-elevated: 0 10px 36px rgba(0,0,0,.4);
+    --active-surface: rgba(201,168,76,.12); --accent: var(--cyan-bright);
+    --progress-rail-bg: linear-gradient(180deg, #0a1830, #0e2440);
+    --progress-rail-border: rgba(56,189,248,.4);
+    --progress-fill-grad: linear-gradient(90deg, #1d4ed8 0%, #0891b2 55%, #22d3ee 100%);
+    --progress-puck-grad: radial-gradient(circle at 35% 30%, #e0fbff, #22d3ee 55%, #0e7490 100%);
+    --progress-puck-glow: 0 0 16px rgba(34,211,238,.95), 0 0 0 5px rgba(34,211,238,.22), 0 2px 4px rgba(0,0,0,.4);
+    --progress-label: var(--cyan-bright);
   }
   [data-theme="light"]{
-    --bg: #eef2f9; --bg-panel: #ffffff; --bg-card: #ffffff;
-    --bg-hover: rgba(29,78,216,.06); --border: rgba(29,78,216,.12);
-    --border-strong: rgba(29,78,216,.22); --text: #0d1929;
-    --text-muted: rgba(13,25,41,.72); --text-soft: rgba(13,25,41,.5);
-    --sidebar-bg: #ffffff; --sidebar-border: rgba(0,0,0,.07);
-    --shadow-card: 0 4px 20px rgba(29,78,216,.09);
+    /* Inspire Light — premium icy-blue/navy/gold direction, approved
+       2026-08-07 (see docs/reference/Lesson-colour-ref1.0.png). Deep
+       navy structure + champagne-gold confidence + soft blue
+       atmosphere + white clarity + subtle 3D depth. */
+    --bg: #f2f7fd; --bg-panel: #ffffff; --bg-card: #ffffff; --bg-tinted: #eef5fb;
+    --bg-hover: rgba(11,33,68,.05); --border: #dfe9f4; --border-strong: #c9dbec;
+    --text: #0b2144; --text-muted: rgba(11,33,68,.72); --text-soft: rgba(11,33,68,.55);
+    --sidebar-bg: #ffffff; --sidebar-border: #e8f0f9;
+    --shadow-card: 0 10px 26px rgba(15,42,82,.08); --shadow-elevated: 0 16px 36px rgba(15,42,82,.13);
+    --blue: #0e2c56; --gold-rich: #b98520; --gold-soft: #f2dfa8; --border-warm: #ead9b3;
+    --active-surface: linear-gradient(135deg, #faf1dc 0%, #eef6fd 100%); --accent: var(--gold-rich);
+    --progress-rail-bg: linear-gradient(180deg, #0e2547, #14335f);
+    --progress-rail-border: rgba(201,168,76,.4);
+    --progress-fill-grad: linear-gradient(90deg, #b98520 0%, #d4af53 55%, #f2dfa8 100%);
+    --progress-puck-grad: radial-gradient(circle at 35% 30%, #fffaef, #f2dfa8 55%, #b98520 100%);
+    --progress-puck-glow: 0 0 14px rgba(185,133,32,.5), 0 0 0 5px rgba(185,133,32,.2), 0 2px 4px rgba(15,42,82,.3);
+    --progress-label: var(--gold-rich);
   }
 
-  /* --text-muted / --text-soft above were darkened slightly from the
-     previous pass after a computed-contrast check: at the old alpha
-     values, --text-soft on --bg-card in light mode landed under 4.5:1
-     against WCAG AA for body-sized text. New values checked to clear
-     4.5:1 (muted) / 3:1 (soft, used only for large/label text) in both
-     themes. */
+  /* --text-muted / --text-soft use the same navy base and alpha ratios
+     validated in the previous contrast pass (was #0d1929, now #0b2144 --
+     near-identical luminance, so the previously-checked 4.5:1 (muted) /
+     3:1 (soft, large/label text only) ratios against WCAG AA still hold
+     in both themes without re-deriving new opaque hex values by hand. */
 
   * { margin:0; padding:0; box-sizing:border-box; }
 
@@ -86,6 +103,15 @@
     width: 100%;
     -webkit-font-smoothing: antialiased;
     transition: background .25s var(--transition), color .25s var(--transition);
+  }
+  /* Layered background, light theme only -- deliberately subtle: a
+     student should sense the richness, not notice the gradient itself. */
+  body.ile-lesson[data-theme="light"]{
+    background:
+      radial-gradient(1100px 700px at 12% -8%, rgba(242,223,168,.22), transparent 55%),
+      radial-gradient(1000px 650px at 100% 0%, rgba(219,232,246,.55), transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
   }
   .ile-lesson h1, .ile-lesson h2, .ile-lesson h3 { font-family: var(--font-display); }
   a { color: inherit; }
@@ -115,6 +141,7 @@
     padding:20px 14px 24px; position:fixed; inset:0 auto 0 0;
     width:min(84vw,300px); transform:translateX(-100%);
     transition: transform .3s var(--spring-out); z-index:90; overflow-y:auto;
+    display:flex; flex-direction:column;
   }
   .ile-sidebar.ile-open{ transform:translateX(0); }
   @media (min-width:960px){ .ile-sidebar{ position:sticky; top:0; height:100vh; transform:none; width:auto; } }
@@ -145,9 +172,13 @@
     width:18px; height:18px; border-radius:50%; background: var(--bg-hover); color: var(--text-soft);
     font-size:.62rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;
   }
+  .ile-sidebar-emblem{ margin-top:auto; padding:28px 10px 6px; text-align:center; opacity:.9; }
+  .ile-sidebar-emblem svg{ width:52px; height:52px; }
+
   .ile-nav-group{ display:none; }
   .ile-nav-group.ile-nav-group-active{ display:flex; flex-direction:column; gap:2px; }
-  .ile-nav-practice-item[aria-current="true"]{ background: var(--bg-hover); color: var(--gold); }
+  .ile-nav-practice-item[aria-current="true"]{ background: var(--active-surface); color: var(--gold); box-shadow: inset 0 0 0 1px var(--border-warm, transparent); }
+  .ile-nav-practice-item[aria-current="true"] .ile-nav-num{ background: var(--grad-gold); color:#1a1200; }
   .ile-nav-practice-item .ile-nav-num.ile-nav-done{ background: var(--success); color:#04220f; }
 
   .ile-main{ width:100%; min-width:0; }
@@ -308,9 +339,9 @@
   .ile-tier-badge.ile-badge-support{ background: rgba(6,182,212,.18); color: var(--cyan-bright); }
 
   .ile-extensions-toggle{
-    display:none; margin:10px 0; padding:10px 14px; border-radius: var(--radius-sm);
-    background: var(--bg-hover); border:1px dashed var(--border-strong); font-size:.8rem;
-    font-weight:700; color: var(--gold); cursor:pointer; font-family:inherit; min-height:44px;
+    display:none; margin:0 0 10px; padding:10px 18px; border-radius:99px;
+    background: var(--bg-card); border:1px solid var(--border); box-shadow: var(--shadow-card);
+    font-size:.8rem; font-weight:700; color: var(--gold); cursor:pointer; font-family:inherit; min-height:44px;
   }
   body.ile-foundation .ile-extensions-toggle{ display:inline-block; }
 
@@ -348,26 +379,26 @@
 
   .ile-progress-rail{
     position: absolute; inset: 0; border-radius: 999px; overflow: hidden;
-    background: linear-gradient(180deg, #0a1830, #0e2440);
-    border: 1px solid rgba(56,189,248,.4);
+    background: var(--progress-rail-bg);
+    border: 1px solid var(--progress-rail-border);
     box-shadow: inset 0 2px 5px rgba(0,0,0,.55), inset 0 -1px 0 rgba(255,255,255,.05);
   }
   .ile-progress-fill{
     height:100%; width:0%;
-    background: linear-gradient(90deg, #1d4ed8 0%, #0891b2 55%, #22d3ee 100%);
+    background: var(--progress-fill-grad);
     box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 3px rgba(0,0,0,.25);
     transition: width .25s var(--spring-out);
   }
   .ile-progress-puck{
     position: absolute; top:50%; left:0%; transform:translate(-50%,-50%); z-index:1;
     width:22px; height:22px; border-radius:50%; pointer-events:none;
-    background: radial-gradient(circle at 35% 30%, #e0fbff, #22d3ee 55%, #0e7490 100%);
-    box-shadow: 0 0 16px rgba(34,211,238,.95), 0 0 0 5px rgba(34,211,238,.22), 0 2px 4px rgba(0,0,0,.4);
+    background: var(--progress-puck-grad);
+    box-shadow: var(--progress-puck-glow);
     transition: left .25s var(--spring-out);
   }
   .ile-progress-label{
     position: sticky; top: 18px; z-index: 45; text-align:right;
-    font-size:.78rem; font-weight:800; letter-spacing:.03em; color: var(--cyan-bright);
+    font-size:.78rem; font-weight:800; letter-spacing:.03em; color: var(--progress-label);
     padding: 6px 16px 0; background: var(--bg);
   }
   @media (min-width:960px){ .ile-progress-label{ padding: 5px 32px 0; } }
@@ -430,7 +461,8 @@
   .ile-reminder-bar{ display:flex; justify-content:center; margin-bottom:18px; min-height:44px; }
   .ile-reminder-btn{
     display:inline-flex; align-items:center; gap:8px; padding:9px 18px; border-radius:99px;
-    background: var(--bg-card); border:1px solid rgba(6,182,212,.4); color: var(--cyan-bright);
+    background: var(--bg-card); border:1px solid var(--border); color: var(--accent);
+    box-shadow: var(--shadow-card);
     font-family:inherit; font-weight:700; font-size:.82rem; cursor:pointer; min-height:44px;
     opacity:0; transform:translateY(-6px); pointer-events:none;
     transition: opacity .5s var(--spring-out), transform .5s var(--spring-out);
@@ -476,9 +508,12 @@
 
   .ile-milestone{
     text-align:center; padding:36px 20px; border-radius: var(--radius);
-    background: var(--bg-card); border:1px dashed var(--border-strong);
+    background: var(--bg-card); border:1px solid var(--border); box-shadow: var(--shadow-card);
   }
-  .ile-milestone svg{ width:40px; height:40px; color: var(--cyan-bright); margin-bottom:10px; }
+  .ile-milestone svg{
+    width:40px; height:40px; color: var(--accent); margin-bottom:10px; padding:12px;
+    box-sizing:content-box; border-radius:50%; background: var(--bg-tinted, var(--bg-hover));
+  }
   .ile-milestone h3{ font-size:1.1rem; margin-bottom:8px; }
   .ile-milestone p{ font-size:.86rem; color: var(--text-muted); max-width:44ch; margin:0 auto; }
 
@@ -546,6 +581,19 @@
       <button type="button" class="ile-nav-practice-item" data-group="exam"><span class="ile-nav-num">4</span>Exam Practice</button>
       <button type="button" class="ile-nav-practice-item" data-group="close"><span class="ile-nav-num">5</span>Lesson Close</button>
     </nav>
+
+    <div class="ile-sidebar-emblem" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="19" stroke="var(--gold)" stroke-width="1.4" opacity=".55"/>
+        <text x="32" y="40" text-anchor="middle" font-family="var(--font-display)" font-size="22" font-weight="700" fill="var(--gold)">I</text>
+        <path d="M13 32c-2 8 2 16 10 20" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>
+        <path d="M13 32c-3-1-6 1-7 5" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <path d="M17 24c-4-4-10-4-13 0" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <path d="M51 32c2 8-2 16-10 20" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>
+        <path d="M51 32c3-1 6 1 7 5" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <path d="M47 24c4-4 10-4 13 0" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+      </svg>
+    </div>
   </aside>
 
   <div class="ile-main">
