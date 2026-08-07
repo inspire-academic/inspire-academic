@@ -1427,6 +1427,18 @@
     document.querySelectorAll('.ile-reveal').forEach(function(el){ el.classList.add('ile-revealed'); });
   }
 
+  // Root-relative links (e.g. "/subjects/...") never resolve correctly once
+  // this page is served through student/lesson-viewer.html's blob: iframe --
+  // confirmed live: the browser doesn't even resolve them to this site's
+  // origin, so a click silently breaks the iframe navigation. Rewrite them
+  // to a fully-qualified URL at runtime and send them to the top-level tab,
+  // since target="_top" is also required to escape the sandboxed iframe.
+  // Harmless no-op when this file is opened standalone.
+  document.querySelectorAll('a[href^="/"]').forEach(function(a){
+    a.href = location.origin + a.getAttribute('href');
+    a.target = '_top';
+  });
+
   // ================= "Need a reminder?" drawer (Practice mode) =================
   // Clones Core Lesson + Diagrams from Learn mode into the drawer once at
   // load, rather than hand-duplicating the content in markup -- edits to
