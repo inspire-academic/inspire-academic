@@ -1292,6 +1292,23 @@
     renderStep();
   }
 
+  // Guided/Exam Practice steps are self-marked by opening hints rather than
+  // clicking an MCQ button, so they have no equivalent "answered" event.
+  // Opening a step's final hint (always "Full solution" or "Model answer &
+  // examiner note") is that equivalent — a genuine attempt has happened —
+  // so it unlocks the reminder immediately, same as answering an MCQ,
+  // rather than always waiting out the full delay even once finished.
+  Array.prototype.slice.call(stepper.querySelectorAll('.ile-step')).forEach(function(step){
+    var hints = step.querySelectorAll('.ile-hint');
+    var lastHint = hints[hints.length - 1];
+    if (!lastHint) return;
+    lastHint.addEventListener('toggle', function(){
+      if (!lastHint.open || step.classList.contains('ile-step-reminder-unlocked')) return;
+      step.classList.add('ile-step-reminder-unlocked');
+      if (visibleSteps[currentIndex] === step) renderStep();
+    });
+  });
+
   // "Need a reminder?" visibility: immediate on non-question steps or a
   // step already unlocked this session; otherwise faded in after a delay
   // tuned to roughly how long a genuine first attempt should take, so
@@ -1301,7 +1318,7 @@
   function updateReminderVisibility(step){
     if (reminderRevealTimer){ clearTimeout(reminderRevealTimer); reminderRevealTimer = null; }
     if (!reminderBtn) return;
-    var isQuestion = !!step.querySelector('.ile-q-option, .ile-numeric-check');
+    var isQuestion = !!step.querySelector('.ile-q-option, .ile-numeric-check, .ile-hint');
     if (!isQuestion || step.classList.contains('ile-step-reminder-unlocked')){
       reminderBtn.classList.add('ile-reminder-visible');
       return;
