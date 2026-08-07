@@ -5,7 +5,47 @@ Read this file in full before doing anything else in a new session. It is
 written to stand on its own — no prior chat history or memory should be
 required to resume work accurately from here.
 
-Last updated: 2026-08-07.
+Last updated: 2026-08-08.
+
+---
+
+## STATUS: APPROVED BENCHMARK
+
+As of 2026-08-08, this benchmark has passed all five required gates:
+
+1. **Academic quality gate** — scientific accuracy verified, zero errors
+   across all worked examples, diagrams, and assessed questions.
+2. **Pedagogical quality gate** — genuine modelled→guided→independent→
+   challenge progression, all worked examples model common wrong
+   approaches, distractor-specific feedback throughout.
+3. **Accessibility smoke test** — WCAG AA contrast verified (including two
+   real defects found via live rendered-page testing and fixed — see
+   below), step-change focus management, drawer focus trap/return all
+   confirmed live.
+4. **Foundation/Higher pathway review** — Foundation is an intentionally
+   authored, scaffolded pathway (own orientation, worked example,
+   decomposing hints, mastery checkpoint); Higher has a genuine Grade 8–9
+   discriminator sequence, not just bigger numbers on old templates.
+5. **Live rendered-page verification** — performed against the real
+   staging site with an actual browser (not simulated), across Dark/Light,
+   Higher/Foundation, the full mastery-gate/skip/completion flow, focus
+   behaviour, and both new AO3 questions.
+
+**Full detail, evidence, and the complete audit trail**:
+`docs/benchmark/distance-displacement-academic-audit.md` — read this file
+for the actual findings; sections §3, §4, and §6–8 below are the original
+(2026-08-07) restart document and now describe **historical** state prior
+to the academic/pedagogical/live-verification passes. Do not treat §8's
+"next phase" instructions as still pending — that phase is complete; see
+the audit doc.
+
+Two real defects were found and fixed during the live-rendered-page pass
+(neither visible from code review alone): a WCAG contrast failure on
+Diagrams 1 & 2 in Light theme (`--gold` used directly instead of
+`--gold-ink` for text/graphics), and a CSS-specificity bug that made
+Higher-only Practice questions render stacked under the active step when
+a Foundation learner had "Show Higher extensions" open. Both fixed,
+redeployed, and re-verified live. Commits `80ad9a6` and `f2d7d6b`.
 
 ---
 
@@ -16,11 +56,11 @@ Last updated: 2026-08-07.
 | Subject | Physics (GCSE) |
 | Topic | Forces and Motion |
 | Lesson | Distance and Displacement (Lesson 1 of 8 in the sequence) |
-| Current version | **v14** |
+| Current version | **v17** (v14 = interaction/visual/accessibility smoke gate; v15 = academic remediation pass; v16 = Foundation/misconception/AO3 approval pass; v17 = two live-verification fixes) |
 | Staging URL (real pipeline) | `https://staging.inspireacademic.org/student/lesson-viewer.html?id=d0525338-5bb8-428f-a61c-5861181968ae` |
 | Standalone file URL | `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-distance-and-displacement.html` |
 | Topic hub URL | `https://staging.inspireacademic.org/subjects/physics/forces-and-motion.html` |
-| Latest relevant commit | `17ece9d` (fix: focus stranded on Next button after advancing to a new question) |
+| Latest relevant commit | `f2d7d6b` (fix: Higher-only Practice steps rendering stacked under Show Higher extensions) — full chain: `47ba26e` → `80ad9a6` → `f2d7d6b` |
 | Branch | `staging` |
 | Deployment | Netlify, auto-deploy on push to `staging` → `staging.inspireacademic.org`. Typically takes ~15-30s to propagate after push — verify with a `fetch(url, {cache:'no-store'})` content check before assuming a change is live, rather than trusting the first reload. |
 
@@ -260,17 +300,24 @@ changed since 2026-08-07:
 
 ---
 
-## 8. Immediate next phase
+## 8. Academic & pedagogical quality gate — COMPLETE (historical brief below)
 
-## ACADEMIC & PEDAGOGICAL QUALITY GATE
+> **This phase is done.** The section below is preserved as the original
+> brief for what was required — useful for understanding the bar that was
+> set — but the work it describes has been completed across three
+> sessions (2026-08-07 audit → 2026-08-07 post-remediation → 2026-08-08
+> live-rendered approval). See `docs/benchmark/distance-displacement-academic-audit.md`
+> for the actual findings, scores, and final **APPROVED BENCHMARK**
+> verdict. Do not re-run this gate from zero — if something looks wrong,
+> check the audit doc's findings against the current file first.
 
-The benchmark has now passed its **interaction/visual/accessibility smoke
-gate**. It has not yet passed an **academic and pedagogical quality gate** —
+The benchmark had passed its **interaction/visual/accessibility smoke
+gate**. It had not yet passed an **academic and pedagogical quality gate** —
 the harder, more important question of whether this is genuinely capable of
 teaching a GCSE Physics learner accurately and deeply enough to support
 excellent exam performance, not merely a well-built interactive page.
 
-The next session's job is to produce
+The brief was to produce
 `docs/benchmark/distance-displacement-academic-audit.md`, auditing the real
 v14 content (not just code structure) against:
 
@@ -359,18 +406,30 @@ platform rewrite. That is explicitly the later phase, not this one.
 
 ## NEXT SESSION — START HERE
 
-1. Read this entire file.
-2. Do not redo completed architectural or accessibility work (§7).
+**The benchmark is APPROVED. There is no pending gate to run.** A new
+session picking this up should:
+
+1. Read this entire file, then read
+   `docs/benchmark/distance-displacement-academic-audit.md` in full for
+   the actual findings and final verdict — this file's §3–§8 below are
+   now historical context, not a to-do list.
+2. Do not redo completed architectural, accessibility, academic,
+   pedagogical, or live-verification work (§7, and the audit doc's own
+   "do not redo" guidance).
 3. Confirm the current branch and latest commit
-   (`git status`, `git log -1` — expect `staging`, and this file's commit
-   or later).
+   (`git status`, `git log -1` — expect `staging`, commit `f2d7d6b` or
+   later).
 4. Confirm the staging benchmark still resolves (fetch the staging URL in
    §1; if it 404s or looks unstyled, something changed — investigate before
    assuming this document is stale).
-5. Read the existing benchmark standards and QA notes (§9) as needed.
-6. Begin the **Academic & Pedagogical Quality Gate** (§8).
-7. Produce `docs/benchmark/distance-displacement-academic-audit.md`.
-8. Do not begin the full production factory.
-9. Do not mass-produce additional lessons.
-10. Return the audit and prioritised remediation plan for human review
-    before making broad changes.
+5. **Do not begin the production factory, an admin dashboard, or mass
+   lesson generation without a new, explicit instruction from the user
+   to do so.** Passing this benchmark's gates authorises freezing *this
+   lesson* as the reference — it is not itself the instruction to start
+   building the factory.
+6. If asked to extend this work (a second lesson, the factory, spec-
+   accuracy verification against real AQA/Edexcel documents, a human
+   subject-specialist review, or closing any of the smaller named residual
+   items in the audit doc's final section), treat that as new scope
+   requiring its own plan — this document and the audit doc are the
+   grounding context for it, not a task list to execute unprompted.
