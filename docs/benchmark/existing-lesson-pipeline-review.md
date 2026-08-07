@@ -105,11 +105,38 @@ same way without revisiting this.
 Because the file is served from a `blob:` URL (no real path), any
 `<img src="relative/path.png">`-style reference inside lesson HTML has
 no meaningful base to resolve against. **Lesson HTML must use absolute
-paths** — either full `https://...supabase.co/storage/...` URLs, or
-site-root-absolute paths like `/assets/images/...` (these resolve
-correctly because blob: URLs inherit the parent's origin, not because
-of any relative-path logic). The benchmark page must follow this rule
-throughout.
+paths.**
+
+**Correction, found the hard way while integration-testing the
+benchmark lesson (not caught by this original discovery pass — noted
+here as a correction rather than silently rewritten):** a
+site-root-absolute path like `/assets/css/tokens.css` does **not**
+reliably resolve inside the blob document either. Resolving a
+path-absolute reference against a `blob:` base URL does not produce
+the site's `https://` origin the way it does for a normal page load —
+empirically, the linked stylesheet never even appears as a network
+request once the lesson is actually opened through
+`student/lesson-viewer.html`. A fully-qualified URL with its own
+scheme and host (`https://...supabase.co/storage/...`, or any
+`https://inspireacademic.org/...`) does resolve correctly, confirmed
+by the Google Fonts `<link>` loading fine in the same document while
+the root-relative `tokens.css` link silently didn't.
+
+**Practical implication:** don't `<link>` to `/assets/css/tokens.css`
+(or any other root-relative site asset) from lesson HTML. Either
+inline the specific CSS custom properties the lesson needs directly in
+its own `<style>` block (what the benchmark lesson does after this was
+found), or reference a fully-qualified `https://` URL. The one
+existing published lesson checked locally
+(`Inspire_Physics_Energy_Stores-Transfers_Y10.html`) also links
+`/assets/css/tokens.css` and would have the same dead link — it isn't
+visibly broken only because that lesson's styling is entirely
+self-contained inline CSS with hardcoded colours, so the dead
+stylesheet link is simply inert for it. A lesson that actually
+*depends* on tokens.css loading, like the first version of this
+benchmark lesson did, breaks completely (unstyled, transparent
+backgrounds, default text colour) — confirmed live on staging before
+being fixed.
 
 ### Progress tracking
 

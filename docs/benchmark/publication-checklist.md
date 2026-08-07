@@ -5,9 +5,13 @@ Run through before a lesson built to this standard is uploaded via
 
 - [ ] `npm test` passes (HTML syntax + asset-reference checks pick up
       any new file in the repo automatically).
-- [ ] All asset paths inside the lesson HTML are absolute
-      (`/assets/...` or full `https://...`) — see
-      `docs/benchmark/existing-lesson-pipeline-review.md`.
+- [ ] All asset paths inside the lesson HTML are fully-qualified
+      `https://...` URLs — **not** root-relative `/assets/...` paths,
+      which do not resolve inside the viewer's `blob:` document. Any
+      CSS custom properties from `tokens.css` are copied into the
+      lesson's own `<style>` block, not linked. See
+      `docs/benchmark/existing-lesson-pipeline-review.md` (found live,
+      the hard way, on this benchmark).
 - [ ] No `.app`/`.main`/`.page-wrap` class names used.
 - [ ] Theme toggle works in both Inspire Dark and Inspire Light;
       preference persists under its own page-scoped localStorage key.

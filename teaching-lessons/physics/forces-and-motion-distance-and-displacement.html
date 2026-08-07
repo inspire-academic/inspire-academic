@@ -12,15 +12,54 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 
-<link rel="stylesheet" href="/assets/css/tokens.css">
-
 <style>
   /* Inspire Learning Experience — benchmark lesson.
+     Token values below are copied from assets/css/tokens.css rather
+     than linked with a root-relative stylesheet link, because such a
+     path does not resolve inside the blob: document
+     student/lesson-viewer.html creates — resolving a path-absolute
+     reference against a blob: base URL does not produce the site's
+     https:// origin the way it does for a normal page. Confirmed
+     empirically: the linked stylesheet never even shows up as a
+     network request inside the rendered lesson. See
+     docs/benchmark/existing-lesson-pipeline-review.md.
      Fresh "ile-" namespace; absolute paths only (served from a blob:
      URL by student/lesson-viewer.html — see
      docs/benchmark/existing-lesson-pipeline-review.md). Self-sufficient
      full-bleed layout; does not depend on the viewer's injected
      .app/.main override. */
+
+  :root{
+    --radius: 20px;
+    --radius-sm: 12px;
+    --sidebar-width: 256px;
+    --transition: .2s cubic-bezier(.4,0,.2,1);
+    --spring-out: cubic-bezier(.34,1.56,.64,1);
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --gold: #c9a84c;
+    --grad-gold: linear-gradient(135deg, #c9a84c, #e8c96a);
+    --danger: #f97316;
+    --success: #22c55e;
+    --blue: #1d4ed8;
+    --cyan-bright: #06b6d4;
+  }
+  [data-theme="dark"]{
+    --bg: #0b1628; --bg-panel: rgba(13,28,56,.75); --bg-card: rgba(255,255,255,.045);
+    --bg-hover: rgba(255,255,255,.07); --border: rgba(255,255,255,.09);
+    --border-strong: rgba(255,255,255,.16); --text: #f0f6ff;
+    --text-muted: rgba(240,246,255,.58); --text-soft: rgba(240,246,255,.55);
+    --sidebar-bg: #060e1b; --sidebar-border: rgba(255,255,255,.07);
+    --shadow-card: 0 6px 28px rgba(0,0,0,.3);
+  }
+  [data-theme="light"]{
+    --bg: #eef2f9; --bg-panel: #ffffff; --bg-card: #ffffff;
+    --bg-hover: rgba(29,78,216,.06); --border: rgba(29,78,216,.12);
+    --border-strong: rgba(29,78,216,.22); --text: #0d1929;
+    --text-muted: rgba(13,25,41,.65); --text-soft: rgba(13,25,41,.38);
+    --sidebar-bg: #ffffff; --sidebar-border: rgba(0,0,0,.07);
+    --shadow-card: 0 4px 20px rgba(29,78,216,.09);
+  }
 
   * { margin:0; padding:0; box-sizing:border-box; }
 

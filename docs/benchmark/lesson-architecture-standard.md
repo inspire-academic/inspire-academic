@@ -11,9 +11,16 @@ revise it once more than one lesson has been built against it.
    or the `lessons` schema to ship a single lesson.** Publish Classic
    and Inspire as two separate `lessons` rows under the same topic.
    See `docs/benchmark/existing-lesson-pipeline-review.md`.
-2. **Absolute paths only** for any asset referenced inside lesson HTML
-   (`/assets/...` or full `https://...`). The viewer serves lesson HTML
-   from a `blob:` URL — relative paths have no base to resolve against.
+2. **Fully-qualified `https://...` URLs only for any asset referenced
+   inside lesson HTML — not even root-relative `/assets/...` paths.**
+   The viewer serves lesson HTML from a `blob:` URL, and a
+   root-relative reference does not resolve against a `blob:` base URL
+   the way it does on a normal page — confirmed live: a
+   `<link href="/assets/css/tokens.css">` never even fired as a
+   network request once opened through the real viewer. Inline any
+   CSS custom properties a lesson needs directly in its own `<style>`
+   block rather than linking `tokens.css`. See
+   `docs/benchmark/existing-lesson-pipeline-review.md`.
 3. **Fresh CSS class names.** Do not use `.app`, `.main`, or
    `.page-wrap` — these collide with either the viewer's injected
    override CSS or the legacy draft template. Prefix all classes for a
@@ -31,9 +38,13 @@ revise it once more than one lesson has been built against it.
 ## Theming
 
 Reuse `assets/css/tokens.css`'s existing `[data-theme="dark"]` /
-`[data-theme="light"]` semantic token set as-is
+`[data-theme="light"]` semantic token *values*
 (`--bg`, `--bg-panel`, `--bg-card`, `--text`, `--text-muted`,
-`--border`, `--shadow`, etc.) — do not invent a parallel token system.
+`--border`, `--shadow`, etc.) — do not invent a parallel palette. A
+page served directly (like the topic hub) can `<link>` `tokens.css`
+normally. A lesson page rendered through `student/lesson-viewer.html`
+must **copy the values it actually uses into its own `:root`/
+`[data-theme]` block** rather than link the file — see rule 2 above.
 "Inspire Dark" = the existing navy/gold token values (not a pure-black
 concept). "Inspire Light" = the existing light token values (white/
 cream surfaces, navy text, gold accent).
