@@ -59,7 +59,7 @@
     --text-muted: rgba(240,246,255,.68); --text-soft: rgba(240,246,255,.62);
     --sidebar-bg: #060e1b; --sidebar-border: rgba(255,255,255,.07);
     --shadow-card: 0 6px 28px rgba(0,0,0,.3); --shadow-elevated: 0 10px 36px rgba(0,0,0,.4);
-    --active-surface: rgba(201,168,76,.12); --accent: var(--cyan-bright);
+    --active-surface: rgba(201,168,76,.12); --accent: var(--cyan-bright); --gold-ink: var(--gold);
     --progress-rail-bg: linear-gradient(180deg, #0a1830, #0e2440);
     --progress-rail-border: rgba(56,189,248,.4);
     --progress-fill-grad: linear-gradient(90deg, #1d4ed8 0%, #0891b2 55%, #22d3ee 100%);
@@ -77,7 +77,8 @@
     --text: #0b2144; --text-muted: rgba(11,33,68,.72); --text-soft: rgba(11,33,68,.55);
     --sidebar-bg: #ffffff; --sidebar-border: #e8f0f9;
     --shadow-card: 0 10px 26px rgba(15,42,82,.08); --shadow-elevated: 0 16px 36px rgba(15,42,82,.13);
-    --blue: #0e2c56; --gold-rich: #b98520; --gold-soft: #f2dfa8; --border-warm: #ead9b3;
+    --blue: #0e2c56; --gold-rich: #8f6412; --gold-soft: #f2dfa8; --border-warm: #ead9b3;
+    --gold-ink: #8f6412;
     --active-surface: linear-gradient(135deg, #faf1dc 0%, #eef6fd 100%); --accent: var(--gold-rich);
     --progress-rail-bg: linear-gradient(180deg, #0e2547, #14335f);
     --progress-rail-border: rgba(201,168,76,.4);
@@ -92,6 +93,15 @@
      near-identical luminance, so the previously-checked 4.5:1 (muted) /
      3:1 (soft, large/label text only) ratios against WCAG AA still hold
      in both themes without re-deriving new opaque hex values by hand. */
+
+  /* --gold-ink: a real bug, found live via a programmatic contrast
+     audit -- the original --gold (#c9a84c) was tuned for gold-on-navy
+     (dark theme) and only measures ~2.3:1 as TEXT on a white/pale
+     light-theme surface, well under WCAG AA's 4.5:1. --gold-ink is a
+     darker amber (#8f6412 in light theme, measured 5.25:1 on white)
+     used everywhere gold is a text/icon colour, not a background fill
+     -- background uses of --gold/--gold-rich (buttons, badges, the
+     progress bar's literal hex stops) are untouched and still bright. */
 
   * { margin:0; padding:0; box-sizing:border-box; }
 
@@ -151,7 +161,7 @@
   @media (min-width:960px){ .ile-sidebar-backdrop{ display:none; } }
 
   .ile-brand{ padding:6px 10px 18px; }
-  .ile-brand-mark{ font-family: var(--font-display); font-weight:700; font-size:1rem; letter-spacing:.05em; color: var(--gold); }
+  .ile-brand-mark{ font-family: var(--font-display); font-weight:700; font-size:1rem; letter-spacing:.05em; color: var(--gold-ink); }
   .ile-brand-sub{ display:block; font-size:.58rem; letter-spacing:.22em; color: var(--text-muted); font-weight:700; margin-top:2px; }
 
   .ile-back-link{
@@ -177,7 +187,7 @@
 
   .ile-nav-group{ display:none; }
   .ile-nav-group.ile-nav-group-active{ display:flex; flex-direction:column; gap:2px; }
-  .ile-nav-practice-item[aria-current="true"]{ background: var(--active-surface); color: var(--gold); box-shadow: inset 0 0 0 1px var(--border-warm, transparent); }
+  .ile-nav-practice-item[aria-current="true"]{ background: var(--active-surface); color: var(--gold-ink); box-shadow: inset 0 0 0 1px var(--border-warm, transparent); }
   .ile-nav-practice-item[aria-current="true"] .ile-nav-num{ background: var(--grad-gold); color:#1a1200; }
   .ile-nav-practice-item .ile-nav-num.ile-nav-done{ background: var(--success); color:#04220f; }
 
@@ -252,7 +262,7 @@
     padding:40px 20px; text-align:center; border:1px dashed var(--border-strong); border-radius: var(--radius);
     background: var(--bg-card);
   }
-  .ile-video-card svg{ width:40px; height:40px; color: var(--gold); }
+  .ile-video-card svg{ width:40px; height:40px; color: var(--gold-ink); }
   .ile-video-card strong{ font-size:1rem; }
   .ile-video-card p{ font-size:.82rem; color: var(--text-muted); max-width:44ch; }
 
@@ -308,7 +318,7 @@
 
   details.ile-hint{ margin-top:8px; }
   details.ile-hint summary{
-    cursor:pointer; font-size:.82rem; font-weight:700; color: var(--gold); padding:6px 2px; list-style:none;
+    cursor:pointer; font-size:.82rem; font-weight:700; color: var(--gold-ink); padding:6px 2px; list-style:none;
     min-height:44px; display:flex; align-items:center;
   }
   details.ile-hint summary::-webkit-details-marker{ display:none; }
@@ -335,13 +345,21 @@
   }
   .ile-tier-badge.ile-badge-higher{ background: rgba(124,58,237,.18); color:#a78bfa; }
   .ile-tier-badge.ile-badge-foundation{ background: rgba(5,150,105,.18); color:#34d399; }
-  .ile-tier-badge.ile-badge-stretch{ background: rgba(201,168,76,.18); color: var(--gold); }
+  .ile-tier-badge.ile-badge-stretch{ background: rgba(201,168,76,.18); color: var(--gold-ink, var(--gold)); }
   .ile-tier-badge.ile-badge-support{ background: rgba(6,182,212,.18); color: var(--cyan-bright); }
+  /* Pre-existing gap, found in the same contrast audit: these four
+     badges were only ever verified against a dark background. The
+     same bright colour on its own pale tinted chip measures ~1.5-2.1:1
+     in light theme (needs 4.5:1) even though it measures 5.5-7.6:1 in
+     dark theme -- the tint blends toward white instead of navy. */
+  [data-theme="light"] .ile-tier-badge.ile-badge-higher{ color:#6d28d9; }
+  [data-theme="light"] .ile-tier-badge.ile-badge-foundation{ color:#056b40; }
+  [data-theme="light"] .ile-tier-badge.ile-badge-support{ color:#085a6b; }
 
   .ile-extensions-toggle{
     display:none; margin:0 0 10px; padding:10px 18px; border-radius:99px;
     background: var(--bg-card); border:1px solid var(--border); box-shadow: var(--shadow-card);
-    font-size:.8rem; font-weight:700; color: var(--gold); cursor:pointer; font-family:inherit; min-height:44px;
+    font-size:.8rem; font-weight:700; color: var(--gold-ink, var(--gold)); cursor:pointer; font-family:inherit; min-height:44px;
   }
   body.ile-foundation .ile-extensions-toggle{ display:inline-block; }
 
@@ -368,7 +386,7 @@
   }
   .ile-next-card strong{ display:block; margin-bottom:4px; }
   .ile-next-card span{ font-size:.8rem; color: var(--text-muted); }
-  .ile-next-card a.ile-next-link{ display:inline-block; margin-top:8px; font-size:.8rem; font-weight:700; color: var(--gold); min-height:44px; }
+  .ile-next-card a.ile-next-link{ display:inline-block; margin-top:8px; font-size:.8rem; font-weight:700; color: var(--gold-ink, var(--gold)); min-height:44px; }
 
   /* ---- in-lesson progress rail: rounded capsule, cyan/blue glow, embossed ---- */
   .ile-progress-wrap{
@@ -498,7 +516,7 @@
   .ile-reminder-drawer-body .ile-section h2{ font-size:1.05rem; }
   .ile-reminder-drawer-body .ile-card{ box-shadow:none; }
   .ile-reminder-drawer-foot{ padding:14px 20px; border-top:1px solid var(--border); flex-shrink:0; }
-  .ile-reminder-drawer-foot button{ font-size:.82rem; font-weight:700; color: var(--gold); }
+  .ile-reminder-drawer-foot button{ font-size:.82rem; font-weight:700; color: var(--gold-ink, var(--gold)); }
 
   /* ---- Practice mode: step controller ---- */
   .ile-stepper{ min-height: 50vh; display:flex; flex-direction:column; }
