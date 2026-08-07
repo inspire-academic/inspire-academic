@@ -407,6 +407,44 @@
   .ile-completion h3{ font-size:1.15rem; margin-bottom:6px; }
   .ile-completion p{ font-size:.86rem; max-width:44ch; margin:0 auto; opacity:.85; }
 
+  /* ---- Practice mode: "Need a reminder?" quick-access drawer ---- */
+  .ile-reminder-bar{ display:flex; justify-content:center; margin-bottom:18px; }
+  .ile-reminder-btn{
+    display:inline-flex; align-items:center; gap:8px; padding:9px 18px; border-radius:99px;
+    background: var(--bg-card); border:1px solid rgba(6,182,212,.4); color: var(--cyan-bright);
+    font-family:inherit; font-weight:700; font-size:.82rem; cursor:pointer; min-height:44px;
+  }
+  .ile-reminder-btn:hover{ background: var(--bg-hover); }
+
+  .ile-reminder-backdrop{
+    position:fixed; inset:0; background:rgba(4,8,16,.55); z-index:180;
+    opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  .ile-reminder-backdrop.ile-open{ opacity:1; pointer-events:auto; }
+
+  .ile-reminder-drawer{
+    position:fixed; inset:0 0 0 auto; width:min(92vw, 460px);
+    background: var(--sidebar-bg); border-left:1px solid var(--sidebar-border);
+    z-index:190; transform:translateX(100%); transition: transform .3s var(--spring-out);
+    display:flex; flex-direction:column;
+  }
+  .ile-reminder-drawer.ile-open{ transform:translateX(0); }
+  .ile-reminder-drawer-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 20px; border-bottom:1px solid var(--border); flex-shrink:0;
+  }
+  .ile-reminder-drawer-head h2{ font-size:1.1rem; }
+  .ile-reminder-close{
+    width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+    background: var(--bg-card); color: var(--text); cursor:pointer; flex-shrink:0;
+  }
+  .ile-reminder-drawer-body{ padding:16px 20px; overflow-y:auto; flex:1; }
+  .ile-reminder-drawer-body .ile-section{ margin-bottom:24px; scroll-margin-top:0; }
+  .ile-reminder-drawer-body .ile-section h2{ font-size:1.05rem; }
+  .ile-reminder-drawer-body .ile-card{ box-shadow:none; }
+  .ile-reminder-drawer-foot{ padding:14px 20px; border-top:1px solid var(--border); flex-shrink:0; }
+  .ile-reminder-drawer-foot button{ font-size:.82rem; font-weight:700; color: var(--gold); }
+
   /* ---- Practice mode: step controller ---- */
   .ile-stepper{ min-height: 50vh; display:flex; flex-direction:column; }
   .ile-step{ display:none; }
@@ -472,7 +510,7 @@
     <nav class="ile-nav ile-nav-group ile-nav-group-active" id="ileNavLearn" aria-label="Learn sections">
       <a href="#ile-orientation"><span class="ile-nav-num">1</span>Orientation</a>
       <a href="#ile-video"><span class="ile-nav-num">2</span>Video Lesson</a>
-      <a href="#ile-learn"><span class="ile-nav-num">3</span>Core Teaching</a>
+      <a href="#ile-learn"><span class="ile-nav-num">3</span>Core Lesson</a>
       <a href="#ile-diagrams"><span class="ile-nav-num">4</span>Diagrams</a>
       <a href="#ile-worked"><span class="ile-nav-num">5</span>Worked Examples</a>
       <a href="#ile-misconceptions"><span class="ile-nav-num">6</span>Misconception Clinic</a>
@@ -561,7 +599,7 @@
 
         <!-- 3. CORE TEACHING -->
         <section class="ile-section" id="ile-learn">
-          <h2><span class="ile-section-num">3</span>Core Teaching</h2>
+          <h2><span class="ile-section-num">3</span>Core Lesson</h2>
           <div class="ile-card">
             <h3 style="font-size:1.02rem; margin-bottom:8px;">Position and reference point</h3>
             <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">Before you can describe how something has moved, you need a fixed <strong>reference point</strong> — a starting position everything else is measured from. In a classroom, that might be the door; on a number line, it's usually zero. Every distance and every displacement in this lesson is measured relative to a stated reference point.</p>
@@ -733,6 +771,12 @@
 
       <!-- ========================= PRACTICE MODE ========================= -->
       <div class="ile-mode-panel" id="ileModePractice" hidden>
+        <div class="ile-reminder-bar">
+          <button type="button" class="ile-reminder-btn" id="ileReminderBtn" aria-haspopup="dialog">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Need a reminder?
+          </button>
+        </div>
         <div class="ile-stepper" id="ileStepper">
 
           <!-- group: diagnostic -->
@@ -931,6 +975,22 @@
     </main>
   </div>
 </div>
+
+<div class="ile-reminder-backdrop" id="ileReminderBackdrop"></div>
+<aside class="ile-reminder-drawer" id="ileReminderDrawer" role="dialog" aria-modal="true" aria-labelledby="ileReminderTitle" aria-hidden="true">
+  <div class="ile-reminder-drawer-head">
+    <h2 id="ileReminderTitle">Quick Reminder</h2>
+    <button type="button" class="ile-reminder-close" id="ileReminderClose" aria-label="Close reminder">✕</button>
+  </div>
+  <div class="ile-reminder-drawer-body" id="ileReminderBody">
+    <!-- populated by JS: a live clone of the Core Lesson + Diagrams sections,
+         so this is always the same single source of content as Learn mode,
+         never a hand-duplicated copy that could drift out of sync. -->
+  </div>
+  <div class="ile-reminder-drawer-foot">
+    <button type="button" class="ile-next-link" id="ileReminderOpenLearn" style="background:none;border:none;cursor:pointer;font-family:inherit;">Open full lesson in Learn mode →</button>
+  </div>
+</aside>
 
 <script>
 (function(){
@@ -1262,6 +1322,62 @@
   } else {
     document.querySelectorAll('.ile-reveal').forEach(function(el){ el.classList.add('ile-revealed'); });
   }
+
+  // ================= "Need a reminder?" drawer (Practice mode) =================
+  // Clones Core Lesson + Diagrams from Learn mode into the drawer once at
+  // load, rather than hand-duplicating the content in markup -- edits to
+  // the source sections automatically stay in sync with what the drawer
+  // shows, since it's the same content, not a second copy of it.
+  var reminderBody = document.getElementById('ileReminderBody');
+  var reminderClone = document.createDocumentFragment();
+  ['ile-learn', 'ile-diagrams'].forEach(function(id){
+    var src = document.getElementById(id);
+    if (src) reminderClone.appendChild(src.cloneNode(true));
+  });
+  reminderBody.appendChild(reminderClone);
+  reminderBody.querySelectorAll('.ile-reveal').forEach(function(el){ el.classList.add('ile-revealed'); });
+  reminderBody.querySelectorAll('[id]').forEach(function(el){ el.removeAttribute('id'); }); // avoid duplicate IDs with the Learn-mode originals
+
+  var reminderBtn = document.getElementById('ileReminderBtn');
+  var reminderDrawer = document.getElementById('ileReminderDrawer');
+  var reminderBackdrop = document.getElementById('ileReminderBackdrop');
+  var reminderCloseBtn = document.getElementById('ileReminderClose');
+  var reminderOpenLearnBtn = document.getElementById('ileReminderOpenLearn');
+  var reminderLastFocused = null;
+
+  function openReminder(){
+    reminderLastFocused = document.activeElement;
+    reminderDrawer.classList.add('ile-open');
+    reminderBackdrop.classList.add('ile-open');
+    reminderDrawer.setAttribute('aria-hidden', 'false');
+    reminderCloseBtn.focus();
+    document.addEventListener('keydown', onReminderKeydown);
+  }
+  function closeReminder(){
+    reminderDrawer.classList.remove('ile-open');
+    reminderBackdrop.classList.remove('ile-open');
+    reminderDrawer.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', onReminderKeydown);
+    if (reminderLastFocused && reminderLastFocused.focus) reminderLastFocused.focus();
+  }
+  function onReminderKeydown(e){
+    if (e.key === 'Escape'){ closeReminder(); return; }
+    if (e.key === 'Tab'){
+      var focusable = reminderDrawer.querySelectorAll('a, button, summary');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  }
+  reminderBtn.addEventListener('click', openReminder);
+  reminderCloseBtn.addEventListener('click', closeReminder);
+  reminderBackdrop.addEventListener('click', closeReminder);
+  reminderOpenLearnBtn.addEventListener('click', function(){
+    closeReminder();
+    setMode('learn');
+    document.getElementById('ile-learn').scrollIntoView({ behavior: 'smooth' });
+  });
 
   // ================= INIT (order matters: tier -> mode -> steps) =================
   applyTier(getPref('tier', 'higher'));
