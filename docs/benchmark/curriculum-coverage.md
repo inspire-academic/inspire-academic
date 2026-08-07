@@ -41,10 +41,37 @@ Source: `spec-map.js` slug `edx-ph-fh-motion-forces`, paper 1, tier: Both.
 | Newton's three laws | TO_BE_VERIFIED | Deferred — later lesson |
 | Momentum and impulse | TO_BE_VERIFIED | Deferred — later lesson |
 
+## A note on lesson-count numbers (two different things, not a contradiction)
+
+Two different lesson-count figures appear across this project's documents
+and pages, and they refer to two different things:
+
+- **16** (used below) is the **long-term canonical topic map** — every
+  AQA/Edexcel Forces and Motion subtopic in the tables above (speed/
+  distance/time, velocity, distance-time graphs, velocity-time graphs,
+  acceleration, Newton's three laws, stopping distances, momentum and
+  impulse, etc.), broken into one lesson per subtopic cluster. This is a
+  planning figure for the eventual full topic coverage — most of these 16
+  are not yet built.
+- **8** (used on the live topic hub, `subjects/physics/forces-and-motion.html`,
+  the lesson page's own hero meta, and `BENCHMARK-CURRENT-STATE.md`) is the
+  **current benchmark/live condensed sequence** — the actual Lesson
+  Sequence card students see today, where only Lesson 1 ("Distance and
+  Displacement") is built and slots 2–8 render as locked "Coming soon"
+  placeholders. It groups several of the 16 canonical subtopics into
+  fewer, broader lessons for this benchmark phase.
+
+Both numbers are correct for what they each describe; neither page needs
+to change to match the other. If the condensed 8-lesson sequence is later
+expanded to track the full 16-topic map one-for-one (or some other
+grouping), that is a real product/content-planning decision for a future
+phase — not a documentation fix, and not implied by resolving this note.
+
 ## What this benchmark lesson actually teaches
 
-"Distance and Displacement" (lesson 1 of the planned 16-lesson Forces
-and Motion sequence) covers, precisely:
+"Distance and Displacement" (lesson 1 of the current 8-lesson benchmark
+sequence; see the note above for how that relates to the 16-topic
+long-term canonical map) covers, precisely:
 
 - Position and reference points
 - Distance as a scalar quantity
