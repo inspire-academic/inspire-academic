@@ -30,6 +30,29 @@
     --ile-cyan: var(--cyan-bright);
   }
 
+  /* Inspire Light — premium icy-blue/navy/gold direction, approved
+     2026-08-07 (see docs/reference/Lesson-colour-ref1.0.png). Scoped
+     to this page only via body.ile-hub -- does NOT touch
+     assets/css/tokens.css, so every other page keeps today's sitewide
+     Light theme unchanged. Same token values as the paired lesson
+     file (teaching-lessons/physics/forces-and-motion-distance-and-
+     displacement.html) for a consistent Inspire Learning Experience
+     family. Dark theme is untouched. */
+  body.ile-hub[data-theme="light"]{
+    --bg: #f2f7fd; --bg-panel: #ffffff; --bg-card: #ffffff; --bg-tinted: #eef5fb;
+    --bg-hover: rgba(11,33,68,.05); --border: #dfe9f4; --border-strong: #c9dbec;
+    --text: #0b2144; --text-muted: rgba(11,33,68,.72); --text-soft: rgba(11,33,68,.55);
+    --sidebar-bg: #ffffff; --sidebar-border: #e8f0f9;
+    --shadow-card: 0 10px 26px rgba(15,42,82,.08); --shadow: 0 20px 50px rgba(15,42,82,.12);
+    --blue: #0e2c56; --gold-rich: #b98520; --gold-soft: #f2dfa8; --border-warm: #ead9b3;
+    --active-surface: linear-gradient(135deg, #faf1dc 0%, #eef6fd 100%); --accent: var(--gold-rich);
+    background:
+      radial-gradient(1100px 700px at 12% -8%, rgba(242,223,168,.22), transparent 55%),
+      radial-gradient(1000px 650px at 100% 0%, rgba(219,232,246,.55), transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+
   body.ile-hub{
     font-family: var(--font-body);
     background: var(--bg);
