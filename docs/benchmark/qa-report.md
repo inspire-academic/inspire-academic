@@ -15,10 +15,14 @@ any further than a staging preview.
   implementation plan itself).
 
 Both pages are live on `staging.inspireacademic.org` (pushed as commit
-`a44a5a0` on the `staging` branch). Neither is linked from any live
-navigation, and neither has been uploaded through
-`teacher/lesson-admin.html` — both are direct-URL-only, exactly as
-planned.
+`a44a5a0`, plus a bugfix at `65900b7`, on the `staging` branch).
+Neither is linked from any live navigation. The lesson has since also
+been **uploaded through `teacher/lesson-admin.html` as an unpublished
+draft row** (`lesson_id: ef982a27-a42b-4726-9793-e90a92fdd22e`,
+subject Physics, topic Forces & Motion, exam board Both, tier Both) —
+invisible to real students, viewable only from the admin lesson list —
+so it now renders through the real
+`student/lesson-viewer.html` pipeline, not just as a standalone file.
 
 ## Automated checks
 
@@ -52,6 +56,22 @@ Checked directly in Chrome against the staging URLs:
 - [x] No console errors observed during any of the above interactions.
 - [x] Lesson 1 links from the hub's Lesson Sequence card resolve
       correctly to the standalone lesson file.
+- [x] **Rendering inside the real `student/lesson-viewer.html` iframe**
+      — uploaded via `teacher/lesson-admin.html` and previewed live.
+      **This caught a real bug on the first upload**: the lesson
+      linked `/assets/css/tokens.css` (root-relative), which never
+      resolves inside the `blob:` document the viewer creates — the
+      lesson rendered completely unstyled. Fixed by inlining the
+      needed token values directly in the lesson's own `<style>`
+      block; re-uploaded and confirmed fully styled, theme toggle and
+      Foundation-tier collapse both still work correctly inside the
+      real viewer, no console errors. See
+      `docs/benchmark/existing-lesson-pipeline-review.md` for the
+      corrected technical explanation.
+- [x] Theme/tier preference correctly persists into the real viewer
+      too (opened already in Foundation + Dark from earlier browsing,
+      confirming the shared localStorage namespace works the same way
+      whether the lesson is opened standalone or through the iframe).
 
 ## Not yet verified — flagged honestly, not silently skipped
 
@@ -69,12 +89,15 @@ Checked directly in Chrome against the staging URLs:
       focus-return were implemented and are readable in the
       accessibility tree, but not run through an actual screen reader
       (NVDA/VoiceOver).
-- [ ] **Rendering inside the real `student/lesson-viewer.html` iframe**
-      (fetch → blob → sandboxed iframe). Both pages were checked as
-      directly-served static files, which is how they're reachable
-      today — but the benchmark lesson's *eventual* home is inside
-      that iframe, and that specific path has not been exercised yet.
-      This happens at integration time (see handover doc).
+- [ ] **Clean up the duplicate draft row.** The first (broken,
+      unstyled) upload — `lesson_id: eedbe9f9-8b95-4122-af33-86d5828a4fc5` —
+      is still sitting in `lesson-admin.html`'s list alongside the
+      fixed one. It's harmless (unpublished draft, never seen by
+      students) but should be deleted. The delete button triggers a
+      native browser confirm dialog that didn't reliably complete the
+      deletion across three attempts in this session even after being
+      confirmed — worth a quick manual check in the admin UI directly
+      rather than retrying through automation again.
 - [ ] **Curriculum accuracy sign-off.** Every AQA/Edexcel spec
       reference in `curriculum-coverage.md` is marked `TO_BE_VERIFIED`
       and stays that way until someone checks it against the actual
