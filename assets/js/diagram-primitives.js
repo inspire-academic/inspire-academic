@@ -5,6 +5,50 @@
 // these functions encode, and docs/benchmark/diagram-excellence-audit.md
 // for what happens when diagrams are hand-drawn without them.
 //
+// v1.4 — Force Diagram Family visual-craft refinement (post-Pilot-#3
+// human review: "scientifically strong but visually not yet approved").
+// Five additions, all evidence-driven from the live-rendered critique in
+// docs/pilots/resultant-forces-quality-audit.md's "HUMAN-EYE CRITIQUE"
+// section, none speculative:
+//   1. isolatedObject() is bigger by default (100x64, was 76x46) and
+//      drawn at strokeSecondary, not strokeReference — enough presence
+//      that it no longer reads as a construction line.
+//   2. forceOrigin() — force arrows now originate from the object's
+//      EDGE, in the lane matching their direction (right edge for a
+//      rightward force, top edge for an upward force), not the object's
+//      dead centre. This is the fix for the single worst defect found:
+//      two equal-and-opposite forces originating from the same centre
+//      point are visually indistinguishable from one double-headed line
+//      (Diagram 2's actual defect). Originating from opposite edges
+//      separates them by the object's own width/height, so they read as
+//      two arrows even when collinear. Still object-associated, still
+//      not implying a specific point of application beyond "which side"
+//      (spec §B's original concern) — a refinement of that convention,
+//      not a reversal of it.
+//   3. forceLabelAnchor() — a label now anchors just beyond its own
+//      arrow's tip, continuing in the arrow's own direction, with
+//      text-anchor chosen so the text never grows back over the shaft.
+//      Replaces every hand-picked per-diagram offset. Because each
+//      force's label now sits at that force's own tip rather than
+//      hovering near the shared object, opposite forces' labels end up
+//      visibly separated too — reinforcing point 2 rather than
+//      duplicating it.
+//   4. resultantDivider() — a quiet dashed rule between the component-
+//      force system and the derived-resultant row, making the
+//      four-level hierarchy (forces → labels → resultant → caption)
+//      readable at a glance instead of the resultant reading as "bolted
+//      on below."
+//   5. label() now accepts an optional opts.size override (falls back to
+//      the existing tier-based size when omitted — every pre-existing
+//      caller is unaffected). Force labels use this to render at 13.5px/
+//      weight 500/full-strength ink instead of the generic 12px/400/
+//      muted secondary tier, so they no longer read lighter than the
+//      lesson's own body paragraphs.
+// forceArrowLength/forceArrow/resultantArrow's own contracts are
+// UNCHANGED — every existing call site that computes its own origin
+// still works; forceOrigin() is an additional way to compute that origin,
+// not a required one.
+//
 // v1.3 — Pilot #3 (Resultant Forces & Free-Body Diagrams). Adds the
 // Inspire Force Diagram Family: forceArrowLength, forceArrow,
 // isolatedObject, resultantArrow — see docs/pilots/resultant-forces-
@@ -120,7 +164,15 @@
     // Fixed length for any SCHEMATIC-mode force arrow -- deliberately
     // constant regardless of the labelled magnitude, so a schematic
     // diagram can never be misread as encoding magnitude by length.
-    forceArrowSchematicLength: 70
+    forceArrowSchematicLength: 70,
+
+    // ---- force diagram family, visual-craft refinement (v1.4) ----
+    forceObjectWidth: 100,   // was 76 -- gives the isolated object real presence
+    forceObjectHeight: 64,   // was 46
+    forceLabelGap: 20,       // clear space between an arrow's tip and its label, along the arrow's own direction
+    forceLabelSize: 13.5,    // between labelSecondarySize (12) and labelPrimarySize (15) -- force labels read as comfortably as body text without competing with the primary/resultant tier
+    forceLabelWeight: 500,
+    forceResultantGap: 34    // vertical clearance between the component-force system and the resultant row/divider below it
   };
 
   // ---- token map (Standard "Where these tokens live") ----
@@ -458,7 +510,7 @@
   function label(opts) {
     var tier = opts.tier || 'secondary';
     var isPrimary = tier === 'primary';
-    var size = isPrimary ? DEFAULTS.labelPrimarySize : (tier === 'tiny' ? DEFAULTS.labelTinySize : DEFAULTS.labelSecondarySize);
+    var size = opts.size || (isPrimary ? DEFAULTS.labelPrimarySize : (tier === 'tiny' ? DEFAULTS.labelTinySize : DEFAULTS.labelSecondarySize));
     var colorToken = opts.colorToken || (isPrimary ? TOKENS.gold : TOKENS.inkMuted);
     var weight = isPrimary ? 700 : (opts.weight || 400);
     var anchor = opts.align || 'start';
@@ -505,11 +557,13 @@
   }
 
   // ==================================================================
-  // ---- FORCE DIAGRAM FAMILY (v1.3, Pilot #3) ----
+  // ---- FORCE DIAGRAM FAMILY (v1.3 Pilot #3; refined v1.4) ----
   // See docs/pilots/resultant-forces-force-diagram-family-spec.md.
   // Every force arrow in this family originates from an isolated
-  // object's centre (Standard convention -- see spec §B, avoids
-  // silently implying moments/turning-effect content). These four
+  // object's EDGE, in the lane matching its own direction (v1.4 --
+  // see forceOrigin(); was the object's dead centre in v1.3, revised
+  // after the visual-craft refinement pass found centre-origin made
+  // equal-and-opposite forces collapse into one visual line). These
   // primitives compose vectorArrow()/label() rather than duplicating
   // arrowhead or stroke logic.
   // ==================================================================
@@ -546,14 +600,85 @@
 
   // The neutral rectangle representing an isolated object -- no
   // decorative scene art (Standard §L). opts: {x,y (centre), width,
-  // height, label, colorToken}.
+  // height, label, colorToken}. v1.4: default size increased (was
+  // 76x46) and stroke moved from strokeReference to strokeSecondary --
+  // the refinement pass's own critique found the old defaults read as a
+  // construction line, not the object the whole diagram is about.
   function isolatedObject(opts) {
-    var w = opts.width || 76, h = opts.height || 46;
+    var w = opts.width || DEFAULTS.forceObjectWidth, h = opts.height || DEFAULTS.forceObjectHeight;
     var out = '<rect x="' + round(opts.x - w / 2) + '" y="' + round(opts.y - h / 2) +
-      '" width="' + w + '" height="' + h + '" rx="4" fill="' + v(TOKENS.bgCard) +
-      '" stroke="' + v(opts.colorToken || TOKENS.inkMuted) + '" stroke-width="' + DEFAULTS.strokeReference + '"/>';
+      '" width="' + w + '" height="' + h + '" rx="6" fill="' + v(TOKENS.bgCard) +
+      '" stroke="' + v(opts.colorToken || TOKENS.inkMuted) + '" stroke-width="' + DEFAULTS.strokeSecondary + '"/>';
     if (opts.label) out += label({ x: opts.x, y: opts.y + 4, text: opts.label, tier: 'secondary', align: 'middle' });
     return out;
+  }
+
+  // Same sizing logic as isolatedObject(), returned as numbers instead
+  // of markup -- so forceOrigin() (and any per-diagram layout code) can
+  // compute edge positions from the exact same width/height the object
+  // was actually drawn with, rather than duplicating the defaults.
+  // opts: {x,y (centre), width, height}.
+  function isolatedObjectBounds(opts) {
+    var w = opts.width || DEFAULTS.forceObjectWidth, h = opts.height || DEFAULTS.forceObjectHeight;
+    return { x: opts.x, y: opts.y, width: w, height: h, left: opts.x - w / 2, right: opts.x + w / 2, top: opts.y - h / 2, bottom: opts.y + h / 2 };
+  }
+
+  // Where a force arrow should START, given the object it acts on and
+  // the arrow's own direction -- v1.4's fix for the family's worst
+  // found defect (see the header comment). Only supports the family's
+  // four cardinal directions; the spec (§M) already excludes diagonal
+  // forces, so this deliberately does not generalise beyond that.
+  // Two forces in opposite directions now start from OPPOSITE edges of
+  // the object (separated by its full width/height), rather than from
+  // the same centre point -- the reason equal-and-opposite forces no
+  // longer collapse into a single visual line.
+  function forceOrigin(bounds, angleDeg) {
+    var a = ((angleDeg % 360) + 360) % 360;
+    if (a === 0) return { x: bounds.right, y: bounds.y };
+    if (a === 180) return { x: bounds.left, y: bounds.y };
+    if (a === 90) return { x: bounds.x, y: bounds.top };
+    if (a === 270) return { x: bounds.x, y: bounds.bottom };
+    return { x: bounds.x, y: bounds.y };
+  }
+
+  // Where a force arrow's LABEL should anchor -- just beyond the arrow's
+  // own tip, continuing in the direction the arrow already points, with
+  // a text-anchor chosen so the label's text grows away from the shaft,
+  // never back across it. Replaces the hand-picked per-diagram offsets
+  // Pilot #3's first build used. Returns {x, y, align} -- pass align
+  // straight through to label()'s own opts.align.
+  function forceLabelAnchor(tipX, tipY, angleDeg, gap) {
+    var a = ((angleDeg % 360) + 360) % 360;
+    gap = gap != null ? gap : DEFAULTS.forceLabelGap;
+    if (a === 0) return { x: round(tipX + gap), y: tipY, align: 'start' };
+    if (a === 180) return { x: round(tipX - gap), y: tipY, align: 'end' };
+    if (a === 90) return { x: tipX, y: round(tipY - gap), align: 'middle' };
+    if (a === 270) return { x: tipX, y: round(tipY + gap), align: 'middle' };
+    return { x: tipX, y: round(tipY - gap), align: 'middle' };
+  }
+
+  // A force label at the family's own dedicated size/weight/colour --
+  // full-strength ink, not the generic muted secondary tier, so force
+  // labels read as comfortably as the lesson's own body text (the
+  // critique's own typography finding). Thin wrapper over label() so
+  // every force label in the family shares one definition of "how a
+  // force label looks," not six hand-tuned instances of it.
+  function forceLabel(opts) {
+    return label({
+      x: opts.x, y: opts.y, text: opts.text, align: opts.align || 'start',
+      tier: 'secondary', size: DEFAULTS.forceLabelSize, weight: DEFAULTS.forceLabelWeight,
+      colorToken: opts.colorToken || TOKENS.ink
+    });
+  }
+
+  // A quiet dashed rule separating the component-force system (what's
+  // acting) from the derived resultant row below it (the conclusion) --
+  // the visual-hierarchy fix so a resultant reads as "level 3, derived
+  // from the diagram above," not "a separate graphic bolted on below."
+  // opts: {x (centre), y, width}.
+  function resultantDivider(opts) {
+    return '<line x1="' + round(opts.x - opts.width / 2) + '" y1="' + opts.y + '" x2="' + round(opts.x + opts.width / 2) + '" y2="' + opts.y +
+      '" stroke="' + v(TOKENS.inkMuted) + '" stroke-width="1" stroke-dasharray="2 4" opacity="0.4"/>';
   }
 
   // A forceArrow forced to the primary/gold "this is the answer"
@@ -613,6 +738,12 @@
     forceArrowLength: forceArrowLength,
     forceArrow: forceArrow,
     isolatedObject: isolatedObject,
-    resultantArrow: resultantArrow
+    resultantArrow: resultantArrow,
+    // ---- force diagram family, visual-craft refinement (v1.4) ----
+    isolatedObjectBounds: isolatedObjectBounds,
+    forceOrigin: forceOrigin,
+    forceLabelAnchor: forceLabelAnchor,
+    forceLabel: forceLabel,
+    resultantDivider: resultantDivider
   };
 })(typeof window !== 'undefined' ? window : globalThis);
