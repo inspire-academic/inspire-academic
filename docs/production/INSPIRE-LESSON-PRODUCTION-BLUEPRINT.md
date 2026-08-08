@@ -1,4 +1,4 @@
-# Inspire Lesson Production Blueprint — v1.1
+# Inspire Lesson Production Blueprint — v1.2
 
 Derived entirely from what was actually built, broken, fixed, and verified
 producing the **Distance & Displacement** benchmark (Physics, Forces and
@@ -8,25 +8,38 @@ decision made under that benchmark. Where something is untested, it is
 marked so honestly rather than presented as settled.
 
 **v1.1 update**: stress-tested against **Pilot #2 — Distance–Time
-Graphs**, the first second lesson built through this blueprint. 10 of 15
-sections worked completely as-is; 4 small, evidence-justified changes
-were folded back in (§3, §8, §9 Gate 7, §13's failure-modes table). Full
-evidence trail: `docs/pilots/distance-time-graphs-blueprint-review.md`.
-Verdict: **PRODUCTION BLUEPRINT MOSTLY GENERALISES — ONE MORE PILOT
-RECOMMENDED** before factory design begins.
+Graphs**. 10 of 15 sections worked completely as-is; 4 small,
+evidence-justified changes were folded back in (§3, §8, §9 Gate 7, §13's
+failure-modes table). Full evidence trail:
+`docs/pilots/distance-time-graphs-blueprint-review.md`.
+
+**v1.2 update**: stress-tested against **Pilot #3 — Resultant Forces &
+Free-Body Diagrams**, testing symbolic force representation. 8 of 13
+relevant sections worked completely as-is; one new rule added (§13
+failure mode #16 — text-collision checking alone does not catch
+label-vs-geometry crossings; both checks are needed). Manual
+intervention **narrowed further and shifted from content-completeness
+fixes to tooling extensions** — see the three-pilot comparison in
+`docs/pilots/resultant-forces-blueprint-review.md`. Verdict:
+**PRODUCTION BLUEPRINT GENERALISES — MINIMUM FACTORY DESIGN SHOULD
+BEGIN** (documentation only — see
+`docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`; the factory
+itself remains unauthorised and unbuilt).
 
 **Frozen reference points this blueprint derives from:**
 - Lesson benchmark: commit `fb8e630` — `docs/benchmark/distance-displacement-academic-audit.md` (final verdict: **APPROVED BENCHMARK**)
 - Diagram system benchmark: commit `c766d86` — `docs/benchmark/diagram-excellence-audit.md` (final verdict: **VISUAL DIAGRAM BENCHMARK APPROVED**)
 - Working technical standard: `docs/benchmark/lesson-architecture-standard.md`
 - Diagram standard: `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md` v1.1
-- Pilot #2 stress-test: `docs/pilots/distance-time-graphs-*` (plan, graph-family spec, quality audit, blueprint review) — verdict **PILOT #2 APPROVED WITH CHANGES**
+- Pilot #2 stress-test: `docs/pilots/distance-time-graphs-*` (plan, graph-family spec, quality audit, blueprint review) — verdict **PILOT #2 APPROVED** (human visual review passed)
+- Pilot #3 stress-test: `docs/pilots/resultant-forces-*` (plan, force-diagram-family spec, quality audit, blueprint review) — verdict **PILOT #3 TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING**
 
 **Status of this document**: a practical production standard, now proven
-against two lessons in one subject (Physics — mechanics/vectors and
-graphs). Revise again once a lesson in a second subject (Chemistry or
-Biology) or a denser diagram family (free-body/forces) has been built
-against it.
+against three lessons in one subject (Physics — spatial/vector,
+mathematical graph, and symbolic force representation). Revise again
+once a lesson in a second subject (Chemistry or Biology) has been built
+against it — the one representational class this blueprint has not yet
+tested is a non-Physics one.
 
 **Who this is for**: a teacher/content author, Claude Code, a future AI
 agent, a QA reviewer, or a developer — anyone who needs to answer "how do
@@ -753,6 +766,14 @@ couldn't be mechanically checked.
 - Link/asset-path validation (fully-qualified `https://` only, no
   root-relative — directly checkable, the exact rule that broke the
   benchmark's first upload).
+- Diagram geometry: **both** text-vs-text collision **and** text-vs-line
+  crossing detection (added after Pilot #3 — failure mode #16; collision
+  checking alone left a real gap in diagrams dense enough to have 4+
+  arrows sharing one origin).
+- Force/vector arrow length-ratio verification against declared
+  magnitude ratios (proven live in Pilot #3 — every diagram's rendered
+  arrow lengths were checked against `forceArrowLength()`'s deterministic
+  output and matched exactly).
 
 ### AUTOMATE WITH QA
 - First-draft explanations, worked examples, question generation,
@@ -818,6 +839,7 @@ this blueprint's rules exist, not abstractions.
 | 13 | "Foundation tier" initially meant Higher content with the Higher-only block hidden — no Foundation-specific content existed anywhere, scored 2/5 on independent audit | A tier toggle that visibly changes content (hiding the Higher block) looks like tier differentiation is implemented; the audit's specific test — "trace every occurrence, is anything *added* for Foundation, not just removed" — is what surfaced the gap | Foundation must be independently, additively authored (§2's six-move pattern), verified by the same trace-every-occurrence method, not assumed from the toggle working visually |
 | 14 | The "Higher extension" item was, by its own examiner note, "same method as Worked Example 2 with larger numbers" — not a genuine Grade 8–9 discriminator | Looks like stretch content because it's tagged Higher and has bigger numbers; only mapping every assessed item against every worked-example template by hand revealed 100% template-identity | Every claimed "stretch"/"challenge" item is tested against: could a student who has only seen the worked examples solve this by direct template-matching? |
 | 15 | (Found by Pilot #2, Distance–Time Graphs) Switching tier while still in Learn mode left the sticky progress label showing stale Practice-mode text ("Retrieval Diagnostic — Step 1 of 30") until the next scroll event fired — because `applyTier()` always calls `rebuildSteps(true)` → `renderStep()`, which unconditionally writes a Practice-mode-format string into the shared label regardless of which mode panel is actually visible. Confirmed present in the original Lesson 1 benchmark's own unmodified code, not introduced by Pilot 2 — a latent defect in the shared engine, only surfaced because Pilot 2's QA happened to test the tier toggle while still in Learn mode | The bug is invisible unless a session specifically toggles tier without first switching to Practice mode — an interaction path Lesson 1's own live QA pass didn't happen to exercise | Any shared UI state written by more than one code path (here: `renderStep()` and `updateProgress()` both write `progressLabel.textContent`) must guard against being visible in the wrong mode/context — e.g. mirror `updateProgress()`'s own `!modeLearnPanel.hidden` check, or call `updateProgress()` immediately after any state change made while Learn mode is active. **FIXED, commit `08583b5`**, applied identically to both lessons as a small, explicitly-scoped patch (guarded the write behind `!modePracticePanel.hidden`) — re-verified live on both `forces-and-motion-distance-and-displacement.html` and `forces-and-motion-distance-time-graphs.html`: the label no longer goes stale, and mastery gate, skip, distractor feedback, tier switching, theme switching, step-change focus, and `aria-live` announcements were all re-confirmed undisturbed on both lessons before Pilot #3 began |
+| 16 | (Found by Pilot #3, Resultant Forces & Free-Body Diagrams) A four-arrow diagram (multiple forces sharing one origin point) produced two real, visible label/geometry collisions — a horizontal-force label's text crossing a vertical arrow's line, and a `calloutLeader` passing through a label — that the existing text-collision QA script did not catch at all, because it only ever compared text bounding boxes against other text bounding boxes, never against line geometry | The pre-existing collision script, trusted since Pilot #2 and genuinely correct for what it checks, created false confidence that "collision-checked" meant "fully checked" — it silently had no coverage for label-vs-line crossings, a gap only visible once a diagram dense enough to produce one (4+ arrows from one origin) was attempted | Diagram QA must run **two** distinct geometric checks, not one: text-vs-text collision (existing) and text-vs-line crossing (new, sampling points along every line/path and testing against every label's bounding box). Both are SAFE TO AUTOMATE and cheap; recommend making both a standing part of any diagram-generation workflow, never relying on collision-checking alone to mean "geometrically verified" |
 
 ---
 
