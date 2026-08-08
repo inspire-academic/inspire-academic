@@ -5,6 +5,15 @@
 // these functions encode, and docs/benchmark/diagram-excellence-audit.md
 // for what happens when diagrams are hand-drawn without them.
 //
+// v1.2 — Pilot #2 (Distance–Time Graphs). Adds the Inspire Scientific
+// Graph Family: scaleValueToY, graphFrame, dataPath, gradientTriangle,
+// highlightBand — see docs/pilots/distance-time-graphs-graph-family-
+// spec.md for the full rationale. Everything from v1.1 is unchanged;
+// the motion/vector family this file already proved is not touched by
+// this addition. Five narrow primitives, chosen because they're what
+// this pilot's five graphs actually need — not a general plotting
+// framework.
+//
 // v1.1 — Visual Craft Refinement pass. Every constant and marker shape in
 // this file changed once, here, after the pass's human-eye critique
 // (see diagram-excellence-audit.md) found four recurring problems no
@@ -109,7 +118,13 @@
     vectorPos: '--vector-pos',
     vectorNeg: '--vector-neg',
     gold: '--gold-ink',
-    bgCard: '--bg-card'
+    bgCard: '--bg-card',
+    // Graph family's primary data-line colour (v1.2). Aliases
+    // --diagram-vector (itself --gold-ink) in both themes -- gold keeps
+    // one consistent platform-wide meaning ("the thing this diagram
+    // proves"), rather than a new hue invented for graphs specifically.
+    // See distance-time-graphs-graph-family-spec.md §K.
+    graphLine: '--diagram-graph-line'
   };
 
   function v(token) { return 'var(' + token + ')'; }
@@ -296,6 +311,129 @@
     return out;
   }
 
+  // ==================================================================
+  // ---- GRAPH FAMILY (v1.2, Pilot #2) ----
+  // See docs/pilots/distance-time-graphs-graph-family-spec.md. These five
+  // primitives compose the existing ones above (scaleValueToX, label,
+  // grid) rather than duplicating their logic -- a graph is still built
+  // from the same axis/tick/label vocabulary, just arranged as a frame
+  // with two axes instead of one.
+  // ==================================================================
+
+  // Symmetric counterpart to scaleValueToX. y1 is the pixel Y for
+  // `min`, y2 is the pixel Y for `max` -- callers pass the BOTTOM pixel
+  // coordinate as y1 and the TOP pixel coordinate as y2, so a larger
+  // data value naturally maps to a smaller (higher-up) SVG y, without
+  // every call site having to hand-invert the axis direction itself.
+  function scaleValueToY(value, opts) {
+    var t = (value - opts.min) / (opts.max - opts.min);
+    return round(opts.y1 + t * (opts.y2 - opts.y1));
+  }
+
+  // Draws both axes + origin + ticks + tick labels + axis titles in one
+  // call. opts: {x1,x2 (pixel time-axis range), yTop,yBottom (pixel
+  // distance-axis range), xMin,xMax,yMin,yMax (data range), xTicks,
+  // yTicks (arrays of {value}), xTitle, yTitle, grid (bool), gridStep}.
+  // No arrowhead terminators -- every graph in this family has a known,
+  // bounded range (Standard: never imply an axis continues indefinitely
+  // when the data doesn't). Y-axis title is placed as plain horizontal
+  // text above the frame, not rotated -- avoids the accessibility and
+  // layout complexity of rotated SVG text for a case this pilot doesn't
+  // need to solve (Standard: do not overdesign).
+  function graphFrame(opts) {
+    var out = '';
+    if (opts.grid) {
+      out += grid({ x1: opts.x1, x2: opts.x2, y1: opts.yTop, y2: opts.yBottom, step: opts.gridStep || 20 });
+    }
+    out += '<line x1="' + opts.x1 + '" y1="' + opts.yBottom + '" x2="' + opts.x1 + '" y2="' + opts.yTop +
+      '" stroke="' + v(TOKENS.axis) + '" stroke-width="' + DEFAULTS.strokeReference + '" stroke-linecap="round"/>';
+    out += '<line x1="' + opts.x1 + '" y1="' + opts.yBottom + '" x2="' + opts.x2 + '" y2="' + opts.yBottom +
+      '" stroke="' + v(TOKENS.axis) + '" stroke-width="' + DEFAULTS.strokeReference + '" stroke-linecap="round"/>';
+
+    (opts.xTicks || []).forEach(function (t) {
+      var x = scaleValueToX(t.value, { min: opts.xMin, max: opts.xMax, x1: opts.x1, x2: opts.x2 });
+      out += '<line x1="' + x + '" y1="' + round(opts.yBottom - DEFAULTS.tickLength / 2) + '" x2="' + x + '" y2="' + round(opts.yBottom + DEFAULTS.tickLength / 2) +
+        '" stroke="' + v(TOKENS.axis) + '" stroke-width="' + DEFAULTS.strokeReference + '"/>';
+      out += label({ x: x, y: opts.yBottom + DEFAULTS.tickLength + 12, text: String(t.value), tier: 'tiny', align: 'middle' });
+    });
+    (opts.yTicks || []).forEach(function (t) {
+      var y = scaleValueToY(t.value, { min: opts.yMin, max: opts.yMax, y1: opts.yBottom, y2: opts.yTop });
+      out += '<line x1="' + round(opts.x1 - DEFAULTS.tickLength / 2) + '" y1="' + y + '" x2="' + round(opts.x1 + DEFAULTS.tickLength / 2) + '" y2="' + y +
+        '" stroke="' + v(TOKENS.axis) + '" stroke-width="' + DEFAULTS.strokeReference + '"/>';
+      out += label({ x: round(opts.x1 - DEFAULTS.tickLength - 6), y: y + 4, text: String(t.value), tier: 'tiny', align: 'end' });
+    });
+
+    if (opts.xTitle) {
+      out += label({ x: (opts.x1 + opts.x2) / 2, y: opts.yBottom + DEFAULTS.tickLength + DEFAULTS.labelGap + 18, text: opts.xTitle, tier: 'secondary', align: 'middle' });
+    }
+    if (opts.yTitle) {
+      out += label({ x: opts.x1, y: opts.yTop - 14, text: opts.yTitle, tier: 'secondary', align: 'start' });
+    }
+    return out;
+  }
+
+  // Deterministic polyline through an ordered {t, d} array -- every
+  // vertex computed via scaleValueToX/scaleValueToY, never a hand-drawn
+  // path string. This is the primary content of a graph, so it defaults
+  // to strokePrimary in the graph family's own line colour -- a graph
+  // has no separate "resultant vs working" split the way a vector
+  // diagram does, so its one data line earns the primary weight outright.
+  function dataPath(points, opts) {
+    var colorToken = opts.colorToken || TOKENS.graphLine || TOKENS.vector;
+    var width = opts.strokeWidth || DEFAULTS.strokePrimary;
+    var pts = points.map(function (p) {
+      var x = scaleValueToX(p.t, { min: opts.xMin, max: opts.xMax, x1: opts.x1, x2: opts.x2 });
+      var y = scaleValueToY(p.d, { min: opts.yMin, max: opts.yMax, y1: opts.yBottom, y2: opts.yTop });
+      return round(x) + ',' + round(y);
+    }).join(' ');
+    return '<polyline points="' + pts + '" fill="none" stroke="' + v(colorToken) + '" stroke-width="' + width + '" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+
+  // Lightly tinted rise/run construction triangle under one segment,
+  // with its two legs labelled -- the direct implementation of the
+  // Standard's own §F rule ("where the gradient itself is the teaching
+  // point, shade the relevant triangle lightly rather than just drawing
+  // the line"). Takes PIXEL coordinates of the segment's two endpoints
+  // (the caller already has these from the same scale calls that placed
+  // dataPath's vertices) -- consistent with vectorArrow/dimensionLine,
+  // which also take pixel coordinates rather than re-deriving them.
+  // Right-angle vertex is at (x2,y1). Uses --bg-tinted with a
+  // --bg-hover fallback, since --bg-tinted is only defined in the Light
+  // theme token block today -- the fallback keeps this usable in Dark
+  // without requiring every lesson to add a Dark-theme --bg-tinted
+  // value it doesn't otherwise need.
+  function gradientTriangle(opts) {
+    var pts = opts.x1 + ',' + opts.y1 + ' ' + opts.x2 + ',' + opts.y1 + ' ' + opts.x2 + ',' + opts.y2;
+    var out = '<polygon points="' + pts + '" fill="var(--bg-tinted, var(--bg-hover))" stroke="none"/>';
+    out += '<line x1="' + opts.x1 + '" y1="' + opts.y1 + '" x2="' + opts.x2 + '" y2="' + opts.y1 +
+      '" stroke="' + v(TOKENS.inkMuted) + '" stroke-width="' + DEFAULTS.strokeAnnotation + '" stroke-dasharray="3 3"/>';
+    out += '<line x1="' + opts.x2 + '" y1="' + opts.y1 + '" x2="' + opts.x2 + '" y2="' + opts.y2 +
+      '" stroke="' + v(TOKENS.inkMuted) + '" stroke-width="' + DEFAULTS.strokeAnnotation + '" stroke-dasharray="3 3"/>';
+    // Labels sit INSIDE the shaded triangle, just off its two legs, not
+    // below/beside it -- placing dtLabel below the bottom leg put it at
+    // almost the same height as the graph's own x-axis tick labels and
+    // collided with them (found generating this pilot's Graph 4, the
+    // first real use of this primitive). Kept inside the tint instead,
+    // which also reads as "this label belongs to the construction," not
+    // "this label belongs to the axis."
+    if (opts.dtLabel) out += label({ x: (opts.x1 + opts.x2) / 2, y: opts.y1 - 6, text: opts.dtLabel, tier: 'tiny', align: 'middle' });
+    if (opts.ddLabel) out += label({ x: opts.x2 - 6, y: (opts.y1 + opts.y2) / 2, text: opts.ddLabel, tier: 'tiny', align: 'end' });
+    return out;
+  }
+
+  // Low-opacity vertical band spanning a pixel x-range, for drawing
+  // attention to one stage of a multi-stage journey without a second
+  // colour competing with the data line. Same fallback-token pattern as
+  // gradientTriangle; the two are never both at full strength on the
+  // same figure by construction (Standard: whitespace/restraint).
+  function highlightBand(opts) {
+    var x1 = Math.min(opts.x1, opts.x2), x2 = Math.max(opts.x1, opts.x2);
+    var out = '<rect x="' + x1 + '" y="' + opts.yTop + '" width="' + round(x2 - x1) + '" height="' + round(opts.yBottom - opts.yTop) +
+      '" fill="var(--bg-tinted, var(--bg-hover))"/>';
+    if (opts.label) out += label({ x: (x1 + x2) / 2, y: opts.yTop + 16, text: opts.label, tier: 'secondary', align: 'middle' });
+    return out;
+  }
+
   // ---- label: three-tier typography (Standard §C, refined) ----
   // tier 'primary'   -> the one relationship the diagram proves (bold, gold-ink, 15px)
   // tier 'secondary' -> point names / leg lengths / component values (regular, ink-muted, 12px)
@@ -381,6 +519,12 @@
     calloutLeader: calloutLeader,
     magnitudeBadge: magnitudeBadge,
     legend: legend,
-    wrap: wrap
+    wrap: wrap,
+    // ---- graph family (v1.2) ----
+    scaleValueToY: scaleValueToY,
+    graphFrame: graphFrame,
+    dataPath: dataPath,
+    gradientTriangle: gradientTriangle,
+    highlightBand: highlightBand
   };
 })(typeof window !== 'undefined' ? window : globalThis);
