@@ -583,3 +583,98 @@ diagram in this family, not just these six. What's missing is the same
 thing Gate 7 was missing before the user's own review closed Pilot #3's
 first round: a real eye on the real pixels. The lesson is live on
 `staging` now, ready for that review.
+
+---
+
+## EDITORIAL SCALE & COMPOSITION PASS — 2026-08-08
+
+**Human visual finding (second round)**: the geometry fix above was
+"structurally and scientifically strong, but still too small and too
+timid inside their cards" — collision-free at v1.1, but under-scaled at
+real viewing size. A distinct failure mode from anything the prior two
+passes addressed, and the trigger for this section.
+
+### Root cause found
+
+`.ile-diagram-figure svg{ width:100%; height:auto; max-width:460px; }`
+capped every diagram's rendered width at 460px, independent of the
+card's real available width (~816px on desktop, confirmed live:
+`.ile-content{ max-width:880px }` minus padding). The v1.1 geometry pass
+had **widened several viewBoxes** (up to 760 units) specifically to stop
+label collisions — without realising that a wider viewBox rendered into
+the *same fixed pixel cap* produces a smaller effective on-screen scale
+for everything inside it, type included. Fixing collisions by adding
+canvas had been quietly working against legibility the whole time.
+
+**Related finding, not acted on (out of scope)**: both prior lessons
+carry their own copy of a similarly low cap
+(`forces-and-motion-distance-and-displacement.html`: 420px;
+`forces-and-motion-distance-time-graphs.html`: 460px). Whether their own
+diagrams read small at real viewing size was not checked — flagged for
+a future session, not assumed either way, and explicitly not touched
+this pass per the scope boundary (do not reopen Pilot #1/#2).
+
+### What was changed
+
+1. **CSS**: `.ile-diagram-figure svg` max-width raised 460px → 720px —
+   the single highest-leverage fix, alone worth roughly a 1.5–1.6×
+   on-screen scale increase for every diagram in this lesson.
+2. **Typography**: force-component labels 13.5px → 16px; resultant text
+   introduced at 18px via an explicit per-call `size` override on the
+   shared `label()` primitive — deliberately independent of
+   `labelPrimarySize` (15px), which the motion/vector and graph families
+   still use unchanged.
+3. **Object/arrow scale**: schematic arrow length 70 → 88px; scale
+   factors increased per diagram (e.g. Diagram 3's 0.12 → 0.2) so
+   arrows read with more confident presence, not just longer viewBoxes.
+   Diagram 5's object enlarged specifically (150×96, vs. the family
+   default 100×64) as its named "hero" composition; Diagram 6's object
+   enlarged similarly (130×82) so its sparseness reads as deliberate.
+4. **ViewBox composition**: every diagram's viewBox is now computed
+   automatically from its own actual content bounds plus a small fixed
+   pad (16–22px), replacing v1.1's hand-guessed generous margins — the
+   direct fix for "unused canvas" vs. "premium whitespace."
+5. **Diagram 5 resultant zone simplified**: removed the "Horizontal
+   system"/"Vertical system" micro-header labels (redundant against
+   text the resultant labels already state) and switched from
+   side-by-side zones to two clean stacked rows — simpler, and it also
+   removed a marginal label-collision risk the wider type at the old
+   side-by-side layout would have reintroduced.
+
+### Verification performed (live, staging, commit `52bf203`)
+
+| Check | Result |
+|---|---|
+| Text/text, text/object, text/line, out-of-bounds — all 6 diagrams | **0 issues**, confirmed live via real `getBBox()`/geometry (bounds check itself was corrected this pass to handle the new non-zero-origin viewBoxes) |
+| Arrow-length determinism, all 6 diagrams | **Exact match**, measured from real rendered `<line>` coordinates: D1 88/88, D2 51/51, D3 100/40/60 (100−40=60 ✓), D4 54/54, D5 72/27/60/60/45 (72−27=45 ✓), D6 84 |
+| Rendered on-screen width, all 6 diagrams | **720px** (the new CSS cap, fully used — every diagram's card is wide enough to reach it) |
+| Effective on-screen force-label size, all 6 diagrams | D1 17.6px, D2 18.7px, D3 15.7px, D4 30.5px, D5 16.9px, D6 31.6px — computed live as `font-size × (rendered width ÷ viewBox width)`, i.e. what a learner's eye actually receives, not the SVG source number. All comfortably at or above normal body-text scale; none tiny |
+| Effective on-screen resultant-label size | D1 19.8px, D2 17.5px, D3 17.6px, D4 28.6px, D5 19px — same method |
+
+**Disclosed limitation, again honest, not glossed over**: real pixel
+screenshots still could not be captured this pass. The screenshot tool
+failed with three *different* error signatures across this session's
+three attempts (a deserialize error, a host-permission error, and a
+30-second CDP timeout) — none matching the previously-documented
+scrolled-position issue, none resolved by retrying, a fresh tab, or a
+fresh navigation. This looks like a session-level extension fault, not
+anything about this page or this diagram family. Substituted with the
+live geometry/scale measurements above, which directly quantify the
+exact thing the human finding named (on-screen size), but are still not
+a human or AI eye on the real pixels.
+
+### Revised diagram-family verdict
+
+## FORCE DIAGRAM FAMILY READY FOR HUMAN VISUAL REVIEW
+
+Unchanged from the prior round's verdict label, for the same reason:
+claiming "PASS" requires a real visual inspection this session's tooling
+could not perform, twice now, for different reasons each time. What is
+different this round is the strength of the indirect evidence — the
+effective on-screen type sizes above are measured in the units a
+learner's eye actually receives, computed from the real rendered CSS
+width, not inferred from SVG source alone, and they land in a
+comfortable, legible range across every diagram. The root cause of the
+"too small" finding is identified, fixed, and unlikely to recur silently
+(documented in the spec's new Editorial Scale Rule, §R). The lesson is
+live on `staging`, ready for the next human look.

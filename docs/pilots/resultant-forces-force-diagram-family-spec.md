@@ -1,4 +1,4 @@
-# Inspire Force Diagram Family — Specification (v1.1)
+# Inspire Force Diagram Family — Specification (v1.2)
 
 Written before any diagram markup, per
 `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md` §H and the same
@@ -9,7 +9,15 @@ diagram needs that neither prior family required: object isolation, a
 force-arrow origin/placement convention, and an explicit, enforced
 schematic-vs-scaled distinction for arrow length.
 
-**v1.1 amendment (this revision)**: after Pilot #3's lesson was built to
+**v1.2 amendment**: a second refinement round, after human review found
+the v1.1 geometry fix "structurally and scientifically strong, but still
+too small and too timid inside the cards" — an editorial scale/
+composition pass, §R below, distinct from the geometric defects v1.1
+fixed. Root cause: a CSS `max-width` cap unrelated to the SVG content
+itself. See §R for the rule and `resultant-forces-quality-audit.md`'s
+matching section for the evidence.
+
+**v1.1 amendment**: after Pilot #3's lesson was built to
 v1.0 of this spec and passed human visual review as "scientifically
 strong but visually not yet approved," a dedicated visual-craft
 refinement pass found and fixed a real geometric defect in §B's original
@@ -597,6 +605,47 @@ where the assessed diagram's description never gives away the
 calculation.)
 
 ---
+
+## R. Editorial scale rule (v1.5 — new)
+
+Added after a second human review round found the geometry pass's own
+fix (v1.1) "structurally and scientifically strong, but still too small
+and too timid inside the cards" — a genuinely different failure mode
+from anything §A–§Q addresses, because collision-free is not the same
+as legible.
+
+- **A scientifically correct diagram must also occupy enough of its
+  rendered container for essential labels, values, arrows, and
+  relationships to be comfortably readable at ordinary learner viewing
+  distance. Collision-free but undersized is not visually approved.**
+- **Do not reduce label size to solve a composition problem. Recompose
+  the diagram first** — check the object's size, the arrows' length,
+  the viewBox's own margins, and the rendered container's actual CSS
+  width before shrinking any text.
+- **The rendered CSS width matters as much as the viewBox.** The root
+  cause of this family's "too small" finding was not the SVG content —
+  it was `.ile-diagram-figure svg{ max-width:460px }` capping every
+  diagram at 460px regardless of how wide its card actually was
+  (~816px available). Every viewBox widened in v1.1 to fix label
+  collisions made this *worse*, because a bigger viewBox rendered into
+  the same fixed pixel cap produces a *smaller* effective on-screen
+  scale for everything inside it, type included. Before touching a
+  diagram's own content, check what pixel width it is actually allowed
+  to render at.
+- **Known related finding, not fixed this pass (out of scope — do not
+  reopen Pilot #1/#2)**: both prior lessons carry their own copy of the
+  same capped pattern (`forces-and-motion-distance-and-displacement.html`
+  at 420px, `forces-and-motion-distance-time-graphs.html` at 460px).
+  Whether their own diagrams are similarly under-scaled at real viewing
+  size has not been checked — worth a dedicated look before any future
+  visual-craft pass on either family, not assumed either way here.
+- **Prefer tight, content-fitted viewBoxes over generous hand-guessed
+  margins.** A viewBox padded only enough to clear the actual content
+  bounds (roughly 16–22px in this family, computed from real text/
+  geometry extents, not chosen by eye) keeps the meaningful figure
+  filling most of its own canvas — "premium whitespace" (frames the
+  figure, separates labels) is not the same thing as "unused canvas"
+  (dilutes the figure, forces small type).
 
 ## Revision policy
 
