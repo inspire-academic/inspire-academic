@@ -265,9 +265,90 @@ other token in a blob:-served lesson is copied, per
 vectors specifically (not renamed — they're already correctly scoped and
 already verified for contrast in both themes).
 
+---
+
+## VISUAL CRAFT RULES LEARNED FROM THE FIRST CANONICAL DIAGRAM FAMILY
+
+Added after the Visual Craft Refinement pass (2026-08-08), which took the
+same four diagrams from "technically correct SVG" to art-directed figures
+without changing a single scientific fact. See
+`docs/benchmark/diagram-excellence-audit.md`'s human-eye critique and
+post-redesign sections for the full evidence trail. These are the rules
+worth carrying into every future diagram family, in the order the
+refinement pass actually learned them:
+
+**Arrow proportions.** Size an arrowhead as a multiple of the stroke it
+terminates (`arrowLengthRatio`/`arrowWidthRatio` in the primitives), never
+a fixed absolute size. A thick resultant vector then automatically gets a
+more confident arrowhead than a thin working vector, everywhere, with no
+per-diagram tuning — and critically, set the marker's `refX` to the
+shape's true tip, not its midpoint. Getting this wrong (as the previous
+version did) makes every vector overshoot its nominal endpoint by half an
+arrow-length, which is what caused every answer-marker ring in this
+family to collide with its own arrowhead.
+
+**Stroke hierarchy communicates meaning by itself.** Four named tiers —
+primary (the resultant/answer), secondary (routes, working vectors),
+reference (axes, dimension lines), annotation (leaders) — each a
+consistent, clearly different weight. A reader should be able to tell
+which line is "the answer" from its weight alone, before reading a single
+label or noticing a colour.
+
+**A marker family, not per-diagram dots.** Four roles — given (filled),
+answer (filled + ring), waypoint (outlined, deliberately quieter),
+shared start=finish (given colour + answer ring) — used identically in
+every diagram. The one new shape this pass introduced (the outlined
+waypoint) did more to fix "this feels placed by coordinates" than any
+colour change would have, because it gave an under-designed point an
+actual reason to look the way it looks.
+
+**Labels are checked against their own rendered width, not their anchor
+point.** A centred label's anchor can sit clear of a line while the
+label's actual rendered text still crosses it — this was found live, not
+in source, on Diagram 2's hero label. `estimateTextWidth()` and
+`perpendicularOffset()` exist so this is computed, not eyeballed, from
+here on.
+
+**The answer needs to be the visual conclusion, structurally, not just
+labelled as one.** Diagram 3's "displacement = 0 m" and Diagram 4's net
+resultant were both, in the previous version, small annotations a reader
+could miss entirely. The fix in both cases was the same: give the answer
+its own dominant stroke weight and/or its own composed badge, connected
+back to the geometry it describes with a real leader line — not a label
+floating near the relevant number and hoping to be noticed.
+
+**Route and vector must differ in more than colour.** Dash pattern +
+stroke weight + arrowhead presence, stacked together, not colour alone —
+this was already mostly right in v1.0 and the refinement pass confirmed
+it holds up under the grayscale test: every diagram in this family still
+reads correctly with colour removed, because the *shape* of each line
+already carries its meaning.
+
+**Whitespace and generous margins are a craft decision, not slack.**
+Every viewBox in this family grew (by roughly 10–20%) during the
+refinement pass — not to fit more content, but to give the same content
+room to breathe. A composition that fits exactly, edge to edge, reads as
+mechanical; one with deliberate margin reads as considered.
+
+**Optical alignment beats mathematical alignment.** Several offsets in
+this family (label gaps, marker-to-label distances, row spacing) are now
+expressed as multiples of a handful of named constants
+(`labelGap`, `pointGap`, `rowGap`, `annotationOffset`) rather than
+one-off numbers tuned per diagram — consistent spacing increments read as
+"designed" even when a reader couldn't say exactly why.
+
+**A result drawn in its own dedicated space reads more clearly than a
+result drawn where it's merely convenient.** Diagram 4's resultant vector
+was moved to its own row below the axis specifically so it would never
+compete for visual space with the working above it — separating "the
+steps" from "the answer" into distinct zones did more for clarity than
+any amount of colour or weight tuning applied to a shared, cluttered row
+could have.
+
 ## Revision policy
 
-This is v1.0, proven against exactly one lesson (Distance & Displacement).
+This is v1.1, proven against exactly one lesson (Distance & Displacement),
+now through two passes — structural (v1.0) and art-directed (v1.1).
 Before treating it as final for the wider production factory:
 - Build at least one more Physics diagram set against it (ideally
   including a graph, to exercise §F for real).
@@ -275,3 +356,6 @@ Before treating it as final for the wider production factory:
   the conventions generalise past mechanics.
 - Revisit §D's exact pixel/unit values once a second lesson's geometry
   has stress-tested them.
+- Confirm the marker family (§D) and stroke hierarchy generalise to a
+  diagram type this family never exercised — a graph, a multi-body force
+  diagram, or anything with more than one "answer" in the same figure.
