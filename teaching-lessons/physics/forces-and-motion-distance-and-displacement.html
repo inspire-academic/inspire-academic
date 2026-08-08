@@ -114,7 +114,14 @@
        declared per theme block rather than once in :root. */
     --diagram-ink: var(--text);
     --diagram-ink-muted: var(--text-muted);
-    --diagram-path: var(--cyan-bright);
+    /* --cyan-bright itself (#06b6d4) measures only 2.43:1 against this
+       theme's card background -- found live during the Diagram Excellence
+       Pass's own rendered-page contrast check (properly alpha-composited
+       against the real card colour, not the raw semi-transparent value).
+       This darker blue is dedicated to Light-theme route/path use only;
+       Dark theme's --diagram-path stays --cyan-bright, already verified
+       passing (6.62:1) and unaffected. Verified: 4.10:1 against white. */
+    --diagram-path: #0284c7;
     --diagram-vector: var(--gold-ink);
     --diagram-axis: var(--border-strong);
   }
