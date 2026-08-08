@@ -494,7 +494,161 @@ complete Gate 7 for the already-built Pilot #4 lesson.
 
 ---
 
+## CROSS-SUBJECT PILOT #4 UPDATE — LIVE QA COMPLETE — 2026-08-08 (second session)
+
+The verdict C above named one specific, narrow next action: complete
+Gate 7 for the already-built Pilot #4 lesson. **That has now happened.**
+Full detail: `docs/pilots/chemistry-pilot-quality-audit.md`'s LIVE
+RENDERED QA section and `docs/pilots/chemistry-pilot-blueprint-review.md`'s
+Live QA update. This section reassesses the verdict on that new
+evidence — separating, as instructed, **technical/architectural
+generalisation** from **final human visual approval**, which are
+genuinely different questions.
+
+### Pilot #4 live QA result
+
+Gate 7 ran for real: full click/JS/console/network access against the
+live staging URL. **Two real defects were found**, both **P1**
+(pedagogically/notationally misleading — a genuine comprehension
+barrier — not P0/scientifically wrong, and not P2/cosmetic):
+
+1. A latent **shared-engine** defect (`.ile-objectives-list li{
+   display:flex }` blockifying inline `<sub>` elements mixed with text)
+   that had shipped unnoticed across all three Physics lessons because
+   none of their content ever triggered it. Chemistry's inline
+   "M<sub>r</sub>"/"A<sub>r</sub>" notation was the first content shape
+   to expose it.
+2. A **Chemistry-family-specific** defect (an unwrapped SVG caption
+   silently overflowing its viewBox by ~300 units) — the concrete
+   consequence of the diagram workflow adaptation §5/§6 already
+   predicted (no pre-built text-wrap primitive existed for this new
+   family).
+
+Both were root-caused (not patched blindly), fixed at the correct
+systemic layer, and re-verified live after deployment — the same
+discipline every prior pilot's own Gate 7 fixes followed. Zero defects
+remain open. Contrast was measured live (6 real alpha-composited
+readings, both themes, all clearing WCAG AA) and the Higher
+discriminator formula (Mg(NO₃)₂) was confirmed to render unambiguously.
+Updated Pilot #4 verdict: **PILOT #4 TECHNICALLY APPROVED — HUMAN
+VISUAL REVIEW PENDING** — the same strength of verdict Pilot #3 reached
+before the user's own review closed it.
+
+### Chemistry-specific extensions, now concrete rather than theoretical
+
+The prior update named the diagram-workflow adaptation as theoretical
+("no Physics primitive fit Chemistry's content"). It is no longer
+theoretical: the live pass found a **real, shipped consequence** of
+that gap (defect 2 above). A genuine, narrow Chemistry-specific
+extension is now on record: this representation family needs a
+text-wrapping rule/primitive, folded into
+`docs/pilots/chemistry-pilot-representation-family-spec.md`.
+
+### Universal production rules — one new rule added, not just confirmed
+
+Beyond re-confirming everything the prior update already found
+universal (lesson anatomy, tier model, assessment object model, the
+`ile-learn`/`ile-diagrams` ID coupling, the 8-gate structure), this
+pass produced a **new, genuinely universal rule**, added to the
+blueprint itself as failure mode #17: any shared CSS rule using
+`display:flex`/`grid` on an element that may contain author-supplied
+inline content mixed with plain text must be audited for item
+blockification, not trusted merely because it shipped without incident
+in prior lessons. This rule did not exist before Chemistry's content
+shape exposed it — a genuine improvement to the shared engine's
+reliability that benefits every future lesson, Physics included, not
+just Chemistry. **The identical latent risk still exists, undisturbed,
+in all three Physics lesson files** — disclosed here explicitly, not
+silently fixed everywhere and not silently ignored; no Physics content
+today triggers it, so no Physics file was touched, per the standing
+instruction not to reopen an approved pilot without a visible defect.
+
+### Automation implications
+
+The proposed §12 rule from the prior update (any new representation
+family needs collision/overflow checking built alongside it, not
+deferred) is now backed by a second, independent piece of evidence —
+this pass's overflow defect is exactly the failure mode that rule would
+have caught automatically. It remains **not yet built as permanent,
+reusable tooling** (this pass's overflow check was a one-off live
+script, not a committed asset) — a real, still-open gap, not resolved
+by this update.
+
+### Remaining human-review dependency
+
+Unchanged in kind, narrower in scope: Gate 8 (human visual review of
+the Chemistry representation family) is the one gate live/automated QA
+can never substitute for, exactly as established by all three Physics
+pilots. It is now the **only** outstanding gate for Pilot #4 — Gates
+1–7 are all complete, with real evidence.
+
+### Revised cross-subject factory-readiness verdict
+
+## B. PRODUCTION BLUEPRINT GENERALISES WITH SUBJECT-SPECIFIC EXTENSIONS — FACTORY DESIGN MAY BEGIN WITH EXPLICIT SUBJECT MODULES
+
+**This supersedes verdict C above, on the strength of the live QA
+evidence C itself called for.** Explicitly separating the two questions
+the instruction asks to keep apart:
+
+- **Technical/architectural generalisation**: strong. The lesson
+  anatomy, tier model, and assessment object model transferred to
+  Chemistry with zero mechanism changes, and — new information this
+  update adds — the diagram-production *workflow* and the shared engine
+  itself both survived real live-browser scrutiny, the exact test every
+  prior pilot's strongest evidence came from. One genuinely universal
+  rule was strengthened as a direct result (failure mode #17). This is
+  not a borderline or lucky pass: two real defects were found and are
+  now understood well enough to name a general rule from each.
+- **Final human visual approval**: still outstanding, and deliberately
+  **not** used to justify a more conservative verdict than B, per
+  instruction. Gate 8 has never been something Gates 1–7 could
+  substitute for, in any of the four pilots — its absence here is
+  business-as-usual, not evidence against generalisation.
+
+**Why B, not A**: "Generalises across science, no qualification" would
+understate two concrete, now-confirmed subject-specific extension
+points: (1) the Chemistry representation family genuinely needs its own
+text-wrap rule/primitive, not inherited from Physics: (2) only one
+Chemistry lesson has been tested — enough to confirm the architecture
+transfers, not enough to claim zero further subject-specific tooling
+will ever be needed. "Explicit subject modules" is the honest
+description of what Chemistry needed: narrow, named extensions bolted
+onto an architecture that itself required no changes.
+
+**Why not C**: the reason C was given last time — Gate 7 had not run at
+all — no longer applies. Re-choosing C now would repeat exactly the
+mistake the instruction explicitly warns against: picking C merely
+because Gate 8 (human visual review) is pending. Gate 8 pending is not
+new information; every pilot has had exactly this dependency at this
+exact stage.
+
+**Why not D**: nothing failed. Two defects were found, both narrow,
+both fixed at the systemic layer, both quickly re-verified. This is
+the same manual-intervention *pattern* every pilot has shown — narrowing
+in scope and shifting from content fixes toward tooling/engine
+findings — not a new, worse pattern.
+
+**What this verdict does and does not authorise**: identical to every
+prior verdict in this document — documentation and thinking about
+factory design, not building it. The explicit subject-module framing
+in verdict B is a description of what the evidence supports, not
+authorisation to design or build subject modules now. **No factory
+work follows from this update.** The next legitimate steps — none
+pre-authorised — are: (a) the user's own human visual review of the
+Chemistry representation family (Gate 8, the one remaining gate); (b)
+once that's resolved, a genuine, explicit decision by the user about
+whether to begin factory design work, informed by this verdict but not
+automatically triggered by it.
+
+---
+
 ## What would change this verdict
+
+**Historical note**: the three bullets immediately below were written
+for the original Physics-only verdict (A), before Pilot #4 existed.
+Preserved unedited per instruction; superseded in relevance by the
+Cross-Subject Pilot #4 Update section above, which is where the current
+verdict (B) is actually reasoned from.
 
 - A cross-subject pilot failing to generalise cleanly would move this
   toward verdict B or C for any factory scope wider than Physics.
@@ -507,3 +661,24 @@ complete Gate 7 for the already-built Pilot #4 lesson.
 
 None of these have happened. This verdict reflects the evidence as it
 stands after three pilots, honestly, not a prediction about a fourth.
+
+## What would change the current (B) verdict
+
+- Human visual review of the Chemistry representation family finding a
+  real structural defect (not aesthetic refinement) would be a genuine
+  regression, the same way it would for any Physics family.
+- A future Chemistry lesson needing extensions far beyond a text-wrap
+  rule — e.g. discovering the shared engine itself needs Chemistry-
+  specific branching logic, not just new content and a new
+  representation family — would move this toward C or D.
+- A future Physics lesson finally triggering the disclosed, undisturbed
+  flex-blockification risk (failure mode #17) and finding it harder to
+  fix there than it was for Chemistry would be new information worth
+  folding back in.
+- A second cross-subject pilot (Biology, or a second Chemistry lesson)
+  finding the architecture itself — not just tooling — needs to change
+  would move this toward C or D.
+
+None of these have happened yet. This verdict reflects the evidence as
+it stands after Pilot #4's live QA, honestly, not a prediction about a
+fifth pilot or a factory that hasn't been designed.
