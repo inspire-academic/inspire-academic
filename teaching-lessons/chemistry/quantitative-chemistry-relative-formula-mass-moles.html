@@ -240,8 +240,16 @@
   .ile-hero-meta{ display:flex; flex-wrap:wrap; gap:14px; font-size:.78rem; color: var(--text-muted); margin-bottom:16px; }
   .ile-hero-meta strong{ color: var(--text); }
   .ile-objectives-list{ list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:12px; }
-  .ile-objectives-list li{ display:flex; gap:8px; font-size:.86rem; color: var(--text-muted); line-height:1.4; }
-  .ile-objectives-list li::before{ content:'✓'; color: var(--success); font-weight:800; flex-shrink:0; }
+  /* display:flex here (as in the Physics lessons this engine was copied
+     from) blockifies inline children mixed with text -- harmless for
+     Physics content (plain text + tier badges only) but breaks any
+     inline <sub>/<sup> mixed directly into a bullet's text (e.g. "Mr"),
+     which this Chemistry lesson is the first to use here. Fixed via
+     absolute-positioned ::before instead of flex, so inline content
+     never gets blockified. See docs/pilots/chemistry-pilot-quality-audit.md,
+     LIVE RENDERED QA section. */
+  .ile-objectives-list li{ position:relative; padding-left:24px; font-size:.86rem; color: var(--text-muted); line-height:1.4; }
+  .ile-objectives-list li::before{ content:'✓'; position:absolute; left:0; top:1px; color: var(--success); font-weight:800; }
 
   .ile-video-card{
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
@@ -831,7 +839,7 @@
           </figure>
 
           <figure class="ile-diagram-figure ile-reveal">
-            <svg viewBox="0 0 640 260" role="img" aria-labelledby="ile-c3-title" aria-describedby="ile-c3-desc">
+            <svg viewBox="0 0 640 300" role="img" aria-labelledby="ile-c3-title" aria-describedby="ile-c3-desc">
               <title id="ile-c3-title">Correct and incorrect bracket calculation for calcium hydroxide, Ca(OH)2, compared side by side</title>
               <desc id="ile-c3-desc">Two strips compared. The correct strip multiplies both oxygen and hydrogen inside the bracket by 2, giving relative formula mass 74. The incorrect strip only multiplies oxygen by 2 and forgets to multiply hydrogen, giving the wrong answer 73.</desc>
               <text x="20" y="28" font-family="var(--font-body)" font-size="13" font-weight="800" fill="var(--diagram-chem-result)">CORRECT — bracket multiplies every atom inside it</text>
@@ -843,7 +851,7 @@
               <text x="20" y="174" font-family="var(--font-body)" font-size="13" fill="var(--diagram-ink)">Ca(OH)₂ = Ca(40) + 2×O(16) + H(1) = 40 + 32 + 1</text>
               <rect x="20" y="188" width="180" height="46" rx="10" fill="none" stroke="var(--diagram-chem-wrong)" stroke-width="2.5" stroke-dasharray="6 4"/>
               <text x="110" y="217" text-anchor="middle" font-family="var(--font-body)" font-size="17" font-weight="800" fill="var(--diagram-chem-wrong)">Mr = 73 ✕</text>
-              <text x="230" y="217" font-family="var(--font-body)" font-size="12.5" fill="var(--diagram-ink-muted)">The bracket's subscript (2) was applied to oxygen only — hydrogen must be doubled too, since it's also inside the bracket.</text>
+              <text x="20" y="256" font-family="var(--font-body)" font-size="12.5" fill="var(--diagram-ink-muted)"><tspan x="20" dy="0">The bracket's subscript (2) was applied to oxygen only — hydrogen</tspan><tspan x="20" dy="16">must be doubled too, since it's also inside the bracket.</tspan></text>
             </svg>
             <figcaption><strong>3. The bracket trap.</strong> Ca(OH)<sub>2</sub>'s bracket subscript multiplies <em>every</em> atom inside it — both O and H — not just the first one. Forgetting this is the single most common M<sub>r</sub> error at GCSE.</figcaption>
           </figure>
