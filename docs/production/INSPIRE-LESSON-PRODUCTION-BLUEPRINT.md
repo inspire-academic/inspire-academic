@@ -34,12 +34,35 @@ itself remains unauthorised and unbuilt).
 - Pilot #2 stress-test: `docs/pilots/distance-time-graphs-*` (plan, graph-family spec, quality audit, blueprint review) — verdict **PILOT #2 APPROVED** (human visual review passed)
 - Pilot #3 stress-test: `docs/pilots/resultant-forces-*` (plan, force-diagram-family spec, quality audit, blueprint review) — verdict **PILOT #3 TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING**
 
-**Status of this document**: a practical production standard, now proven
-against three lessons in one subject (Physics — spatial/vector,
-mathematical graph, and symbolic force representation). Revise again
-once a lesson in a second subject (Chemistry or Biology) has been built
-against it — the one representational class this blueprint has not yet
-tested is a non-Physics one.
+**v1.3 update**: stress-tested against **Pilot #4 — Relative Formula
+Mass & Moles**, the first **non-Physics** (GCSE Chemistry) lesson built
+against this blueprint. 11 of 13 relevant sections worked completely
+as-is; §5 and §6 worked with a disclosed, subject-specific adaptation
+(no pre-built diagram-primitive library existed for Chemistry, so the
+workflow's *shape* — spec before markup, four-axis QA — was followed
+using hand-authored SVG instead); one new rule proposed for §12 (a new
+representation family must get automated collision-checking built
+alongside it, not deferred). **Important caveat, not present in the v1.1
+or v1.2 updates above**: this pilot had **no browser access at all**
+this session, so Gate 7 (live rendered-page QA) and the visual/geometry
+axes of Gates 5–6 were not performed — see
+`docs/pilots/chemistry-pilot-quality-audit.md` and
+`docs/pilots/chemistry-pilot-blueprint-review.md`. The evidence this
+version adds is therefore **partial**: strong confirmation that the
+lesson anatomy, tier model, and assessment object model generalise
+across the Physics/Chemistry boundary; **no** confirmation yet that the
+shared engine and a new representation family survive real
+browser-rendered contact outside Physics, since that class of check —
+historically where this project's most serious defects were found —
+could not run.
+
+**Status of this document**: a practical production standard, proven
+against three GCSE Physics lessons (spatial/vector, mathematical graph,
+symbolic force representation) with full live-QA evidence, and
+stress-tested once against a fourth, cross-subject GCSE Chemistry
+lesson with source-level and arithmetic evidence only. Live rendered
+verification of the Chemistry pilot remains outstanding — revise this
+status again once that pass has actually happened, not merely attempted.
 
 **Who this is for**: a teacher/content author, Claude Code, a future AI
 agent, a QA reviewer, or a developer — anyone who needs to answer "how do
@@ -774,6 +797,15 @@ couldn't be mechanically checked.
   magnitude ratios (proven live in Pilot #3 — every diagram's rendered
   arrow lengths were checked against `forceArrowLength()`'s deterministic
   output and matched exactly).
+- **NEW RULE (added after Pilot #4)**: any new representation/diagram
+  family — Physics or otherwise — must have an automated text-vs-text
+  and text-vs-line (or equivalent geometric) collision check built or
+  adapted **before** that family is considered ready for its first live
+  QA pass, not deferred as a future item. Pilot #4 built a new
+  Chemistry representation family without this and disclosed the gap
+  honestly rather than silently skipping it (see
+  `docs/pilots/chemistry-pilot-blueprint-review.md` §12) — named here so
+  the next new family doesn't repeat the same deferral.
 
 ### AUTOMATE WITH QA
 - First-draft explanations, worked examples, question generation,
