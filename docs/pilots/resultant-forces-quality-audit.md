@@ -678,3 +678,57 @@ comfortable, legible range across every diagram. The root cause of the
 "too small" finding is identified, fixed, and unlikely to recur silently
 (documented in the spec's new Editorial Scale Rule, §R). The lesson is
 live on `staging`, ready for the next human look.
+
+---
+
+## HUMAN VISUAL REVIEW — PASS — 2026-08-08
+
+The user personally inspected the post-refinement rendered diagrams live
+(the geometry/collision fix, the label-anchor and edge-origin-arrow
+rework, and the editorial scale & composition pass, all three rounds
+documented above) and gave the final verdict directly:
+
+**HUMAN VISUAL REVIEW: PASS.**
+
+This closes the one gate no automated or tooling-substituted check in
+this document could ever satisfy on its own — Gate 7 named it
+outstanding, and every subsequent round in this file (visual craft
+refinement, editorial scale pass) was working toward this exact human
+judgement, each time disclosing honestly that geometric/contrast/scale
+evidence is not a substitute for a real eye on real pixels. It now has
+one, and the verdict is PASS. No further diagram-family refinement is
+authorised on the strength of this pilot alone — future changes require
+a genuine defect or regression, not further polishing.
+
+This gate closure does not reopen or re-litigate any prior section of
+this document — Gates 1–6, Gate 7, and both visual-craft refinement
+rounds stand as originally recorded, including their disclosed tooling
+limitations. Those limitations are now moot for approval purposes (the
+human review that would have resolved them has happened), but the
+record of what was and wasn't verifiable at each stage is preserved
+as-is, for future pilots' benefit.
+
+### Updated overall verdict
+
+## PILOT #3 APPROVED
+
+All conditions in the Overall Pilot #3 Verdict table above are now
+**MET**, including the one previously withheld pending human visual
+review. Pilot #3 — Resultant Forces & Free-Body Diagrams — is formally
+closed.
+
+## FORCE DIAGRAM FAMILY: CANONICAL v1 — INSPIRE FORCE DIAGRAM FAMILY
+
+The Force Diagram Family (`assets/js/diagram-primitives.js`, the
+`isolatedObject()` / `forceOrigin()` / `forceArrow()` /
+`forceLabelAnchor()` / `forceLabel()` / `resultantDivider()` primitive
+set, and the family rules recorded in
+`docs/pilots/resultant-forces-force-diagram-family-spec.md`) is hereby
+recorded as **production-ready for v1** and canonical for all future
+GCSE Physics force/free-body diagrams. It joins the spatial/vector
+family (Pilot #1) and the scientific graph family (Pilot #2) as an
+approved, reusable Inspire diagram family.
+
+Per explicit instruction: do not reopen this family, this pilot, or the
+shared lesson engine for further polishing. Future work against any of
+them requires a genuine defect or regression, not aesthetic preference.

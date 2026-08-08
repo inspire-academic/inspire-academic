@@ -12,9 +12,15 @@ that design starts from real evidence instead of theory.
 
 | Pilot | Lesson | Representational class | Verdict |
 |---|---|---|---|
-| #1 | Distance & Displacement | Spatial/vector diagrams | **APPROVED BENCHMARK** (`fb8e630`) — the founding pilot; produced the blueprint itself |
-| #2 | Distance–Time Graphs | Mathematically generated graphs | **APPROVED** (human visual review PASS) |
-| #3 | Resultant Forces & Free-Body Diagrams | Symbolic force diagrams | **TECHNICALLY APPROVED — human visual review pending** |
+| #1 | Distance & Displacement | Spatial/vector diagrams | **APPROVED** — canonical spatial/vector diagram family (`fb8e630`) — the founding pilot; produced the blueprint itself |
+| #2 | Distance–Time Graphs | Mathematically generated graphs | **APPROVED** — canonical scientific graph family (human visual review PASS) |
+| #3 | Resultant Forces & Free-Body Diagrams | Symbolic force diagrams | **APPROVED** — canonical force/free-body diagram family, **CANONICAL v1 — INSPIRE FORCE DIAGRAM FAMILY** (human visual review PASS, 2026-08-08) |
+
+**Update, 2026-08-08**: human visual review is now closed on all three
+pilots. All three diagram families are canonical v1. The one
+qualification carried in the original verdict below (Pilot #3's human
+visual review pending) is now resolved — see the "Status update" box
+immediately under the verdict.
 
 Full detail for each: `docs/benchmark/distance-displacement-academic-audit.md`
 + `docs/benchmark/diagram-excellence-audit.md` (#1);
@@ -32,28 +38,62 @@ three, updated as the durable handoff, is
 This verdict is about the **architecture and production method**
 (lesson anatomy, tier model, assessment model, diagram workflow, shared
 engine, quality gates) — not a claim that every individual lesson
-output is fully certified. Two honest, named qualifications apply and
-must not be glossed over when this verdict is acted on:
+output is fully certified. Two honest, named qualifications applied
+originally and must not be glossed over when this verdict is acted on:
 
-1. **Pilot #3's human visual review is still pending.** Its
-   architecture, geometry, and scientific accuracy are fully verified;
-   its diagrams' aesthetic craft is not yet human-approved. A factory
-   design that assumes every pilot's *content* is production-ready
-   would be overstating the evidence — what's proven is that the
-   *method* reliably produces content ready *for* that review, three
-   times running.
+1. ~~**Pilot #3's human visual review is still pending.**~~ **RESOLVED,
+   2026-08-08.** The user personally inspected the post-refinement
+   rendered force diagrams and gave a final verdict of HUMAN VISUAL
+   REVIEW: PASS. Pilot #3 is now APPROVED and the Force Diagram Family
+   is CANONICAL v1. Full record:
+   `docs/pilots/resultant-forces-quality-audit.md` (final section).
+   Human visual review is now closed on **all three** Physics pilots —
+   what's proven is no longer just that the method produces content
+   *ready for* human review, three times running, but that it produced
+   content that *passed* human review, three times running.
 2. **Every pilot so far is GCSE Physics.** No non-Physics subject
    (Chemistry, Biology) has exercised this blueprint even once. The
    evidence supports "this method generalises across representational
    classes within one subject" — it does not yet support "this method
-   generalises across subjects." This is the single largest untested
-   assumption a factory built today would be resting on.
+   generalises across subjects." This is now the single largest
+   untested assumption a factory built today would be resting on, and
+   the reason for the strategic qualification below.
 
-Neither qualification changes the verdict — both are exactly the kind
-of named, unresolved risk a factory *design* document should carry
-forward explicitly, per the brief's own instruction not to let a
+Neither qualification changes the underlying verdict — both are exactly
+the kind of named, unresolved risk a factory *design* document should
+carry forward explicitly, per the brief's own instruction not to let a
 recommendation to begin designing be mistaken for evidence that
 every risk is retired.
+
+### Strategic qualification, added 2026-08-08
+
+## WE WILL RUN ONE CROSS-SUBJECT PILOT BEFORE DETAILED FACTORY IMPLEMENTATION
+
+This is a deliberate evidence-gathering step, not a retreat from factory
+readiness. With qualification 1 now resolved, qualification 2 — cross-
+subject generalisation — is the only remaining major untested
+assumption standing between "the method works for GCSE Physics" and
+"the method is an Inspire Science lesson production method." The cost of
+discovering a Physics-specific assumption now, from one carefully
+selected Chemistry pilot, is small. The cost of discovering the same
+assumption after a factory has mass-produced hundreds of lessons on a
+false premise is not. Pilot #4 (Chemistry) is authorised for exactly
+this purpose — see `docs/pilots/chemistry-pilot-selection.md` and the
+CROSS-SUBJECT PILOT #4 UPDATE section appended at the end of this
+document for its result and the final cross-subject factory-readiness
+verdict.
+
+Also recorded, 2026-08-08:
+- The shared-engine stale-progress-label bug (failure mode #15 —
+  stale progress label when switching tier while in Learn mode,
+  commit `08583b5`) is **fixed and closed**, both prior lessons
+  re-verified live (`569f645`).
+- **No known open shared-engine defects** remain as of Pilot #3's
+  closure.
+- The production blueprint has now generalised successfully across
+  three materially different Physics lesson types (spatial/vector,
+  mathematically-generated graph, symbolic force diagram) with zero
+  shared-engine logic changes beyond that one now-closed fix.
 
 ### Why this verdict, not "one more pilot"
 
