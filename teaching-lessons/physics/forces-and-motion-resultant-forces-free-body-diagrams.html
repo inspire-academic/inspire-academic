@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resultant Forces &amp; Free-Body Diagrams | Inspire Academic</title>
+<meta name="description" content="GCSE Physics: Resultant Forces and Free-Body Diagrams — Inspire Learning Experience production pilot #3, AQA and Edexcel, Higher and Foundation tier.">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+
+<style>
+  /* Inspire Learning Experience — Pilot #3 (Resultant Forces & Free-Body
+     Diagrams). Built from the approved production blueprint v1.1, with
+     the Part B shared-engine fix (stale progress label) already applied
+     from the start. CSS/JS engine REUSED VERBATIM from Pilots #1/#2 —
+     zero changes to any token, component, or tier rule. Only new
+     force-diagram tokens are added, following the exact same per-theme
+     declaration pattern every prior diagram token already uses. */
+
+  html{ font-size: 19px; }
+
+  :root{
+    --radius: 20px;
+    --radius-sm: 12px;
+    --sidebar-width: 256px;
+    --transition: .2s cubic-bezier(.4,0,.2,1);
+    --spring-out: cubic-bezier(.34,1.56,.64,1);
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --gold: #c9a84c;
+    --grad-gold: linear-gradient(135deg, #c9a84c, #e8c96a);
+    --danger: #f97316;
+    --success: #22c55e;
+    --blue: #1d4ed8;
+    --cyan-bright: #06b6d4;
+  }
+  [data-theme="dark"]{
+    --bg: #0b1628; --bg-panel: rgba(13,28,56,.75); --bg-card: rgba(255,255,255,.045);
+    --bg-hover: rgba(255,255,255,.07); --border: rgba(255,255,255,.09);
+    --border-strong: rgba(255,255,255,.16); --text: #f0f6ff;
+    --text-muted: rgba(240,246,255,.68); --text-soft: rgba(240,246,255,.62);
+    --sidebar-bg: #060e1b; --sidebar-border: rgba(255,255,255,.07);
+    --shadow-card: 0 6px 28px rgba(0,0,0,.3); --shadow-elevated: 0 10px 36px rgba(0,0,0,.4);
+    --active-surface: rgba(201,168,76,.12); --accent: var(--cyan-bright); --gold-ink: var(--gold);
+    --progress-rail-bg: linear-gradient(180deg, #0a1830, #0e2440);
+    --progress-rail-border: rgba(56,189,248,.4);
+    --progress-fill-grad: linear-gradient(90deg, #1d4ed8 0%, #0891b2 55%, #22d3ee 100%);
+    --progress-puck-grad: radial-gradient(circle at 35% 30%, #e0fbff, #22d3ee 55%, #0e7490 100%);
+    --progress-puck-glow: 0 0 16px rgba(34,211,238,.95), 0 0 0 5px rgba(34,211,238,.22), 0 2px 4px rgba(0,0,0,.4);
+    --progress-label: var(--cyan-bright);
+    --vector-pos: #38bdf8; --vector-neg: #fb923c;
+    --diagram-ink: var(--text);
+    --diagram-ink-muted: var(--text-muted);
+    --diagram-path: var(--cyan-bright);
+    --diagram-vector: var(--gold-ink);
+    --diagram-axis: #7c8ba1;
+    --diagram-graph-line: var(--diagram-vector);
+    /* Force diagram family (v1.3) — component forces reuse --diagram-ink
+       (structural/default, exactly per Standard §B); the resultant
+       reuses --gold-ink via resultantArrow()'s own internal choice, so
+       no new colour token is actually required this pilot. Declared
+       here only for clarity/documentation, not because a new value is
+       needed. */
+  }
+  [data-theme="light"]{
+    --bg: #f2f7fd; --bg-panel: #ffffff; --bg-card: #ffffff; --bg-tinted: #eef5fb;
+    --bg-hover: rgba(11,33,68,.05); --border: #dfe9f4; --border-strong: #c9dbec;
+    --text: #0b2144; --text-muted: rgba(11,33,68,.72); --text-soft: rgba(11,33,68,.55);
+    --sidebar-bg: #ffffff; --sidebar-border: #e8f0f9;
+    --shadow-card: 0 10px 26px rgba(15,42,82,.08); --shadow-elevated: 0 16px 36px rgba(15,42,82,.13);
+    --blue: #0e2c56; --gold-rich: #8f6412; --gold-soft: #f2dfa8; --border-warm: #ead9b3;
+    --gold-ink: #8f6412;
+    --active-surface: linear-gradient(135deg, #faf1dc 0%, #eef6fd 100%); --accent: var(--gold-rich);
+    --progress-rail-bg: linear-gradient(180deg, #0e2547, #14335f);
+    --progress-rail-border: rgba(201,168,76,.4);
+    --progress-fill-grad: linear-gradient(90deg, #b98520 0%, #d4af53 55%, #f2dfa8 100%);
+    --progress-puck-grad: radial-gradient(circle at 35% 30%, #fffaef, #f2dfa8 55%, #b98520 100%);
+    --progress-puck-glow: 0 0 14px rgba(185,133,32,.5), 0 0 0 5px rgba(185,133,32,.2), 0 2px 4px rgba(15,42,82,.3);
+    --progress-label: var(--gold-rich);
+    --vector-pos: #1d4ed8; --vector-neg: #c2410c;
+    --diagram-ink: var(--text);
+    --diagram-ink-muted: var(--text-muted);
+    --diagram-path: #0284c7;
+    --diagram-vector: var(--gold-ink);
+    --diagram-axis: #7c8ba1;
+    --diagram-graph-line: var(--diagram-vector);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body.ile-lesson{
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    transition: background .25s var(--transition), color .25s var(--transition);
+  }
+  body.ile-lesson[data-theme="light"]{
+    background:
+      radial-gradient(1100px 700px at 12% -8%, rgba(242,223,168,.22), transparent 55%),
+      radial-gradient(1000px 650px at 100% 0%, rgba(219,232,246,.55), transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+  .ile-lesson h1, .ile-lesson h2, .ile-lesson h3 { font-family: var(--font-display); }
+  a { color: inherit; }
+
+  .ile-lesson a:focus-visible,
+  .ile-lesson button:focus-visible,
+  .ile-lesson input:focus-visible,
+  .ile-lesson textarea:focus-visible,
+  .ile-lesson summary:focus-visible{
+    outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px;
+  }
+
+  .ile-skip-link{
+    position:absolute; left:12px; top:-48px; z-index:200;
+    background: var(--gold); color:#1a1200; padding:10px 16px;
+    border-radius: var(--radius-sm); font-weight:700;
+    transition: top .2s var(--spring-out);
+  }
+  .ile-skip-link:focus{ top:12px; }
+
+  .ile-shell{ display:grid; grid-template-columns:1fr; min-height:100vh; }
+  @media (min-width:960px){ .ile-shell{ grid-template-columns: var(--sidebar-width) 1fr; } }
+
+  .ile-sidebar{
+    background: var(--sidebar-bg); border-right:1px solid var(--sidebar-border);
+    padding:20px 14px 24px; position:fixed; inset:0 auto 0 0;
+    width:min(84vw,300px); transform:translateX(-100%);
+    transition: transform .3s var(--spring-out); z-index:90; overflow-y:auto;
+    display:flex; flex-direction:column;
+  }
+  .ile-sidebar.ile-open{ transform:translateX(0); }
+  @media (min-width:960px){ .ile-sidebar{ position:sticky; top:0; height:100vh; transform:none; width:auto; } }
+
+  .ile-sidebar-backdrop{ position:fixed; inset:0; background:rgba(4,8,16,.55); z-index:80; opacity:0; pointer-events:none; transition:opacity .25s; }
+  .ile-sidebar-backdrop.ile-open{ opacity:1; pointer-events:auto; }
+  @media (min-width:960px){ .ile-sidebar-backdrop{ display:none; } }
+
+  .ile-brand{ padding:6px 10px 18px; }
+  .ile-brand-mark{ font-family: var(--font-display); font-weight:700; font-size:1rem; letter-spacing:.05em; color: var(--gold-ink); }
+  .ile-brand-sub{ display:block; font-size:.58rem; letter-spacing:.22em; color: var(--text-muted); font-weight:700; margin-top:2px; }
+
+  .ile-back-link{
+    display:flex; align-items:center; gap:8px; font-size:.78rem; font-weight:700;
+    color: var(--text-muted); padding:8px 10px; margin-bottom:10px; border-radius: var(--radius-sm);
+  }
+  .ile-back-link:hover{ background: var(--bg-hover); color: var(--text); }
+  .ile-back-link svg{ width:14px; height:14px; }
+
+  .ile-nav{ display:flex; flex-direction:column; gap:2px; }
+  .ile-nav a, .ile-nav button{
+    display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius: var(--radius-sm);
+    font-size:.82rem; font-weight:600; color: var(--text-muted);
+    background:none; border:none; width:100%; text-align:left; cursor:pointer; font-family:inherit;
+  }
+  .ile-nav a:hover, .ile-nav button:hover{ background: var(--bg-hover); color: var(--text); }
+  .ile-nav span.ile-nav-num{
+    width:18px; height:18px; border-radius:50%; background: var(--bg-tinted, var(--bg-hover)); color: var(--text-soft);
+    font-size:.62rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .ile-sidebar-emblem{ margin-top:auto; padding:28px 10px 6px; text-align:center; opacity:.9; }
+  .ile-sidebar-emblem svg{ width:52px; height:52px; }
+
+  .ile-nav-group{ display:none; }
+  .ile-nav-group.ile-nav-group-active{ display:flex; flex-direction:column; gap:2px; }
+  .ile-nav-practice-item[aria-current="true"]{ background: var(--active-surface); color: var(--gold-ink); box-shadow: inset 0 0 0 1px var(--border-warm, transparent); }
+  .ile-nav-practice-item[aria-current="true"] .ile-nav-num{ background: var(--grad-gold); color:#1a1200; }
+  .ile-nav-practice-item .ile-nav-num.ile-nav-done{ background: var(--success); color:#04220f; }
+
+  .ile-main{ width:100%; min-width:0; }
+
+  .ile-topbar{
+    display:flex; align-items:center; gap:10px; padding:14px 16px;
+    border-bottom:1px solid var(--border); position:sticky; top:0; background: var(--bg); z-index:40;
+    flex-wrap: wrap;
+  }
+  @media (min-width:960px){ .ile-topbar{ padding:16px 32px; } }
+
+  .ile-menu-btn{
+    display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px;
+    border-radius: var(--radius-sm); background: var(--bg-card); border:1px solid var(--border);
+    color: var(--text); cursor:pointer; flex-shrink:0;
+  }
+  @media (min-width:960px){ .ile-menu-btn{ display:none; } }
+
+  .ile-topbar-title{ font-size:.86rem; font-weight:700; margin-right:auto; }
+
+  .ile-tier-toggle{ display:inline-flex; background: var(--bg-card); border:1px solid var(--border); border-radius:99px; padding:3px; }
+  .ile-tier-btn{ padding:7px 14px; border-radius:99px; border:none; background:none; font-family:inherit; font-weight:700; font-size:.76rem; color: var(--text-muted); cursor:pointer; }
+  .ile-tier-btn[aria-pressed="true"]{ background: var(--blue); color:#fff; }
+
+  .ile-theme-toggle{ display:inline-flex; background: var(--bg-card); border:1px solid var(--border); border-radius:99px; padding:3px; gap:2px; }
+  .ile-theme-btn{ padding:7px 12px; border-radius:99px; border:none; background:none; font-family:inherit; font-weight:700; font-size:.72rem; color: var(--text-muted); cursor:pointer; }
+  .ile-theme-btn[aria-pressed="true"]{ background: var(--gold); color:#1a1200; }
+
+  .ile-mode-bar{ display:flex; justify-content:center; padding:14px 16px 0; background: var(--bg); }
+  @media (min-width:960px){ .ile-mode-bar{ padding:18px 32px 0; } }
+  .ile-mode-switch{
+    display:inline-flex; background: var(--bg-card); border:1px solid var(--border); border-radius:99px; padding:4px; gap:2px;
+    box-shadow: var(--shadow-card);
+  }
+  .ile-mode-btn{
+    padding:10px 22px; border-radius:99px; border:none; background:none; cursor:pointer;
+    font-family: var(--font-display); font-weight:650; font-size:.92rem; color: var(--text-muted);
+    display:flex; align-items:center; gap:8px;
+  }
+  .ile-mode-btn svg{ width:16px; height:16px; }
+  .ile-mode-btn[aria-pressed="true"]{ background: var(--grad-gold); color:#1a1200; }
+
+  .ile-content{ padding:20px 16px 72px; max-width:880px; margin:0 auto; }
+  @media (min-width:960px){ .ile-content{ padding:32px 40px 96px; } }
+
+  .ile-mode-panel{ }
+  .ile-mode-panel[hidden]{ display:none; }
+
+  .ile-section{ margin-bottom:40px; scroll-margin-top:150px; }
+  .ile-section h2{ font-size:1.35rem; margin-bottom:6px; display:flex; align-items:center; gap:10px; }
+  .ile-section-num{
+    width:30px; height:30px; border-radius:50%; background: var(--grad-gold); color:#1a1200;
+    font-size:.82rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .ile-section-sub{ font-size:.86rem; color: var(--text-muted); margin-bottom:16px; max-width:64ch; line-height:1.5; }
+
+  .ile-card{ background: var(--bg-panel); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card); padding:18px; }
+
+  .ile-hero-title{ font-size: clamp(1.6rem,4.6vw,2.3rem); line-height:1.1; margin-bottom:10px; }
+  .ile-hero-meta{ display:flex; flex-wrap:wrap; gap:14px; font-size:.78rem; color: var(--text-muted); margin-bottom:16px; }
+  .ile-hero-meta strong{ color: var(--text); }
+  .ile-objectives-list{ list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+  .ile-objectives-list li{ display:flex; gap:8px; font-size:.86rem; color: var(--text-muted); line-height:1.4; }
+  .ile-objectives-list li::before{ content:'✓'; color: var(--success); font-weight:800; flex-shrink:0; }
+
+  .ile-video-card{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    padding:40px 20px; text-align:center; border:1px dashed var(--border-strong); border-radius: var(--radius);
+    background: var(--bg-card);
+  }
+  .ile-video-card svg{ width:40px; height:40px; color: var(--gold-ink); }
+  .ile-video-card strong{ font-size:1rem; }
+  .ile-video-card p{ font-size:.82rem; color: var(--text-muted); max-width:44ch; }
+
+  .ile-q-card{ background: var(--bg-card); border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; margin-bottom:12px; }
+  .ile-q-stem{ font-size:.9rem; font-weight:600; margin-bottom:10px; }
+  .ile-q-options{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+  .ile-q-option{
+    text-align:left; padding:9px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); font-family:inherit; font-size:.84rem; color: var(--text); cursor:pointer;
+    min-height:44px;
+  }
+  .ile-q-option:hover{ border-color: var(--border-strong); }
+  .ile-q-option.ile-correct{ border-color: var(--success); background: rgba(34,197,94,.12); }
+  .ile-q-option.ile-incorrect{ border-color: var(--danger); background: rgba(249,115,22,.12); }
+  .ile-q-feedback{ font-size:.8rem; padding:8px 10px; border-radius: var(--radius-sm); background: var(--bg-hover); display:none; }
+  .ile-q-feedback.ile-show{ display:block; }
+
+  .ile-input-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
+  .ile-q-input{
+    padding:9px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); color: var(--text); font-family:inherit; font-size:.84rem; width:140px;
+  }
+  .ile-check-btn{
+    padding:9px 16px; border-radius: var(--radius-sm); border:none; background: var(--blue); color:#fff;
+    font-family:inherit; font-weight:700; font-size:.8rem; cursor:pointer; min-height:44px;
+  }
+
+  .ile-self-answer{ margin:2px 0 12px; }
+  .ile-self-answer label{
+    display:block; font-size:.7rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+    color: var(--text-muted); margin-bottom:6px;
+  }
+  .ile-self-answer textarea{
+    width:100%; min-height:64px; padding:10px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); color: var(--text); font-family:inherit; font-size:.85rem; line-height:1.5;
+    resize:vertical;
+  }
+  .ile-self-answer textarea::placeholder{ color: var(--text-soft); }
+  .ile-self-answer p{ font-size:.72rem; color: var(--text-soft); margin-top:5px; }
+
+  .ile-diagram-figure{ background: var(--bg-card); border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; text-align:center; margin-bottom:16px; }
+  .ile-diagram-figure svg{ width:100%; height:auto; max-width:460px; }
+  .ile-diagram-figure figcaption{ font-size:.82rem; color: var(--text-muted); margin-top:10px; line-height:1.5; max-width:56ch; margin-left:auto; margin-right:auto; }
+
+  .ile-worked{ border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; margin-bottom:14px; background: var(--bg-card); }
+  .ile-worked h3{ font-size:.98rem; margin-bottom:8px; }
+  .ile-worked dl{ font-size:.85rem; line-height:1.7; }
+  .ile-worked dt{ font-weight:700; color: var(--text); margin-top:8px; }
+  .ile-worked dt:first-child{ margin-top:0; }
+  .ile-worked dd{ color: var(--text-muted); margin-left:0; }
+  .ile-worked .ile-answer{ color: var(--success); font-weight:700; }
+  .ile-worked .ile-wrong-method{ border-left:3px solid var(--danger); padding-left:10px; margin-top:10px; color: var(--text-muted); font-size:.82rem; }
+
+  details.ile-hint{ margin-top:8px; }
+  details.ile-hint summary{
+    cursor:pointer; font-size:.82rem; font-weight:700; color: var(--gold-ink); padding:6px 2px; list-style:none;
+    min-height:44px; display:flex; align-items:center;
+  }
+  details.ile-hint summary::-webkit-details-marker{ display:none; }
+  details.ile-hint summary::before{ content:'▸ '; }
+  details.ile-hint[open] summary::before{ content:'▾ '; }
+  details.ile-hint .ile-hint-body{ font-size:.82rem; color: var(--text-muted); padding:6px 4px 4px 14px; line-height:1.5; }
+
+  .ile-misc-card{ border:1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-card); margin-bottom:10px; overflow:hidden; }
+  .ile-misc-card summary{
+    list-style:none; cursor:pointer; padding:12px 16px; display:flex; gap:10px; align-items:flex-start;
+    font-size:.86rem; font-weight:700; min-height:44px;
+  }
+  .ile-misc-card summary::-webkit-details-marker{ display:none; }
+  .ile-misc-card summary .ile-misc-icon{ color: var(--danger); flex-shrink:0; }
+  .ile-misc-body{ padding:0 16px 14px 42px; font-size:.84rem; color: var(--text-muted); line-height:1.6; }
+  .ile-misc-body strong{ color: var(--success); }
+
+  .ile-tier-higher-only{ }
+  body.ile-foundation .ile-tier-higher-only{ display:none; }
+  body.ile-foundation.ile-show-extensions .ile-tier-higher-only:not(.ile-step){ display:block; }
+
+  .ile-tier-foundation-only{ display:none; }
+  body.ile-foundation .ile-tier-foundation-only{ display:block; }
+
+  .ile-foundation-orientation{
+    border:1px solid rgba(5,150,105,.32); background: rgba(5,150,105,.08);
+    border-radius: var(--radius-sm); padding:16px 18px; margin-top:14px;
+  }
+  .ile-foundation-orientation strong{ display:block; margin-bottom:6px; font-size:.85rem; color:#34d399; }
+  [data-theme="light"] .ile-foundation-orientation strong{ color:#056b40; }
+  .ile-foundation-orientation p, .ile-foundation-orientation li{ font-size:.86rem; color: var(--text-muted); line-height:1.6; }
+  .ile-foundation-orientation ul{ margin:8px 0 0 18px; }
+
+  .ile-foundation-first-look{
+    border:1px solid rgba(5,150,105,.32); background: rgba(5,150,105,.07);
+    border-radius: var(--radius-sm); padding:16px 18px; margin-bottom:16px;
+  }
+  .ile-foundation-first-look h3{ font-size:1rem; margin-bottom:8px; color:#34d399; }
+  [data-theme="light"] .ile-foundation-first-look h3{ color:#056b40; }
+  .ile-foundation-first-look p{ font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:10px; }
+  .ile-foundation-first-look p:last-child{ margin-bottom:0; }
+
+  .ile-foundation-mastery{
+    border:1px solid rgba(5,150,105,.35); background: rgba(5,150,105,.09);
+    border-radius: var(--radius-sm); padding:16px 18px; margin-bottom:14px;
+  }
+  .ile-foundation-mastery h3{ font-size:.95rem; margin-bottom:8px; color:#34d399; }
+  [data-theme="light"] .ile-foundation-mastery h3{ color:#056b40; }
+  .ile-foundation-mastery ul{ margin:0 0 8px 18px; }
+  .ile-foundation-mastery li, .ile-foundation-mastery p{ font-size:.85rem; color:var(--text-muted); line-height:1.6; }
+  .ile-tier-badge{
+    display:inline-block; font-size:.6rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+    padding:2px 8px; border-radius:99px; margin-left:8px; vertical-align:middle;
+  }
+  .ile-tier-badge.ile-badge-higher{ background: rgba(124,58,237,.18); color:#a78bfa; }
+  .ile-tier-badge.ile-badge-foundation{ background: rgba(5,150,105,.18); color:#34d399; }
+  .ile-tier-badge.ile-badge-stretch{ background: rgba(201,168,76,.18); color: var(--gold-ink, var(--gold)); }
+  .ile-tier-badge.ile-badge-support{ background: rgba(6,182,212,.18); color: var(--cyan-bright); }
+  [data-theme="light"] .ile-tier-badge.ile-badge-higher{ color:#6d28d9; }
+  [data-theme="light"] .ile-tier-badge.ile-badge-foundation{ color:#056b40; }
+  [data-theme="light"] .ile-tier-badge.ile-badge-support{ color:#085a6b; }
+
+  .ile-extensions-toggle{
+    display:none; margin:0 0 10px; padding:10px 18px; border-radius:99px;
+    background: var(--bg-card); border:1px solid var(--border); box-shadow: var(--shadow-card);
+    font-size:.8rem; font-weight:700; color: var(--gold-ink, var(--gold)); cursor:pointer; font-family:inherit; min-height:44px;
+  }
+  body.ile-foundation .ile-extensions-toggle{ display:inline-block; }
+
+  .ile-exam-q{ border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; margin-bottom:14px; background: var(--bg-card); }
+  .ile-exam-q-head{ display:flex; justify-content:space-between; gap:10px; font-size:.76rem; color: var(--text-muted); margin-bottom:8px; font-weight:700; }
+  .ile-exam-stem{ font-size:.9rem; margin-bottom:10px; }
+  .ile-ms-table{ width:100%; border-collapse:collapse; font-size:.8rem; margin-top:8px; }
+  .ile-ms-table td{ border-top:1px solid var(--border); padding:6px 4px; vertical-align:top; }
+  .ile-ms-table td:last-child{ text-align:right; white-space:nowrap; font-weight:700; }
+
+  .ile-confidence-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .ile-confidence-btn{
+    padding:9px 14px; border-radius: var(--radius-sm); border:1px solid var(--border); background: var(--bg-panel);
+    font-family:inherit; font-size:.8rem; cursor:pointer; color: var(--text); min-height:44px;
+  }
+  .ile-confidence-btn[aria-pressed="true"]{ background: var(--gold); color:#1a1200; border-color: var(--gold); }
+  .ile-confidence-note{ font-size:.76rem; color: var(--text-soft); margin-top:8px; display:none; }
+  .ile-confidence-note.ile-show{ display:block; }
+
+  .ile-next-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; }
+  .ile-next-card{
+    flex:1; min-width:220px; border:1px solid var(--border); border-radius: var(--radius-sm);
+    padding:16px; background: var(--bg-panel);
+  }
+  .ile-next-card strong{ display:block; margin-bottom:4px; }
+  .ile-next-card span{ font-size:.8rem; color: var(--text-muted); }
+  .ile-next-card a.ile-next-link{ display:inline-block; margin-top:8px; font-size:.8rem; font-weight:700; color: var(--gold-ink, var(--gold)); min-height:44px; }
+
+  .ile-progress-wrap{
+    position: sticky; top: 0; z-index: 45; height: 18px;
+    margin: 8px 16px 0; background: var(--bg);
+  }
+  @media (min-width:960px){ .ile-progress-wrap{ margin: 8px 32px 0; } }
+
+  .ile-progress-rail{
+    position: absolute; inset: 0; border-radius: 999px; overflow: hidden;
+    background: var(--progress-rail-bg);
+    border: 1px solid var(--progress-rail-border);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,.55), inset 0 -1px 0 rgba(255,255,255,.05);
+  }
+  .ile-progress-fill{
+    height:100%; width:0%;
+    background: var(--progress-fill-grad);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 3px rgba(0,0,0,.25);
+    transition: width .25s var(--spring-out);
+  }
+  .ile-progress-puck{
+    position: absolute; top:50%; left:0%; transform:translate(-50%,-50%); z-index:1;
+    width:22px; height:22px; border-radius:50%; pointer-events:none;
+    background: var(--progress-puck-grad);
+    box-shadow: var(--progress-puck-glow);
+    transition: left .25s var(--spring-out);
+  }
+  .ile-progress-label{
+    position: sticky; top: 18px; z-index: 45; text-align:right;
+    font-size:.78rem; font-weight:800; letter-spacing:.03em; color: var(--progress-label);
+    padding: 6px 16px 0; background: var(--bg);
+  }
+  @media (min-width:960px){ .ile-progress-label{ padding: 5px 32px 0; } }
+
+  .ile-reveal{ opacity:0; transform: translateY(18px); transition: opacity .55s var(--spring-out), transform .55s var(--spring-out); }
+  .ile-reveal.ile-revealed{ opacity:1; transform:none; }
+
+  @keyframes ile-pop{ 0%{ transform:scale(1); } 45%{ transform:scale(1.035); } 100%{ transform:scale(1); } }
+  @keyframes ile-shake{ 0%,100%{ transform:translateX(0); } 20%{ transform:translateX(-5px); } 40%{ transform:translateX(4px); } 60%{ transform:translateX(-3px); } 80%{ transform:translateX(2px); } }
+  .ile-q-option.ile-anim-correct{ animation: ile-pop .4s var(--spring-out); }
+  .ile-q-option.ile-anim-incorrect{ animation: ile-shake .4s ease; }
+  .ile-q-option.ile-correct::before{ content:'✓  '; color: var(--success); font-weight:800; }
+  .ile-q-option.ile-incorrect::before{ content:'✕  '; color: var(--danger); font-weight:800; }
+
+  .ile-numeric-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .ile-numeric-input{
+    padding:9px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); color: var(--text); font-family:inherit; font-size:.9rem; width:120px; min-height:44px;
+  }
+  .ile-numeric-input.ile-anim-correct{ border-color: var(--success); animation: ile-pop .4s var(--spring-out); }
+  .ile-numeric-input.ile-anim-incorrect{ border-color: var(--danger); animation: ile-shake .4s ease; }
+  .ile-numeric-unit{ font-size:.82rem; color: var(--text-muted); }
+  .ile-numeric-check{
+    padding:9px 16px; border-radius: var(--radius-sm); border:none; background: var(--blue); color:#fff;
+    font-family:inherit; font-weight:700; font-size:.8rem; cursor:pointer; min-height:44px;
+  }
+
+  .ile-tier-foundation-emphasis{
+    border:1px solid rgba(6,182,212,.35); background: rgba(6,182,212,.08);
+    border-radius: var(--radius-sm); padding:14px 16px; margin:14px 0; display:flex; gap:10px;
+  }
+  .ile-tier-foundation-emphasis .ile-fe-icon{ flex-shrink:0; color: var(--cyan-bright); }
+  .ile-tier-foundation-emphasis strong{ display:block; margin-bottom:4px; font-size:.82rem; color: var(--cyan-bright); }
+  .ile-tier-foundation-emphasis p{ font-size:.85rem; color: var(--text-muted); line-height:1.55; margin:0; }
+  body.ile-foundation .ile-tier-foundation-emphasis{
+    border-width:1px; border-left-width:4px; border-left-color: var(--cyan-bright);
+    background: rgba(6,182,212,.13); padding:16px 18px;
+  }
+  body.ile-foundation .ile-tier-foundation-emphasis p{ font-size:.87rem; }
+
+  .ile-completion{
+    text-align:center; padding:32px 20px; border-radius: var(--radius);
+    background: var(--grad-gold); color:#1a1200; margin-bottom:14px;
+  }
+  .ile-completion.ile-show-anim{ animation: ile-badge-in .5s var(--spring-out); }
+  @keyframes ile-badge-in{ 0%{ opacity:0; transform:scale(.85) translateY(10px); } 100%{ opacity:1; transform:scale(1) translateY(0); } }
+  .ile-completion svg{ width:52px; height:52px; margin-bottom:10px; }
+  .ile-completion-check{ stroke-dasharray:40; stroke-dashoffset:40; }
+  .ile-completion.ile-show-anim .ile-completion-check{ animation: ile-draw .6s .15s ease forwards; }
+  @keyframes ile-draw{ to{ stroke-dashoffset:0; } }
+  .ile-completion h3{ font-size:1.15rem; margin-bottom:6px; }
+  .ile-completion p{ font-size:.86rem; max-width:44ch; margin:0 auto; opacity:.85; }
+
+  .ile-reminder-bar{ display:flex; justify-content:center; margin-bottom:18px; min-height:44px; }
+  .ile-reminder-btn{
+    display:inline-flex; align-items:center; gap:8px; padding:9px 18px; border-radius:99px;
+    background: var(--bg-card); border:1px solid var(--border); color: var(--accent);
+    box-shadow: var(--shadow-card);
+    font-family:inherit; font-weight:700; font-size:.82rem; cursor:pointer; min-height:44px;
+    opacity:0; transform:translateY(-6px); pointer-events:none;
+    transition: opacity .5s var(--spring-out), transform .5s var(--spring-out);
+  }
+  .ile-reminder-btn.ile-reminder-visible{ opacity:1; transform:none; pointer-events:auto; }
+  .ile-reminder-btn:hover{ background: var(--bg-hover); }
+  @media (prefers-reduced-motion: reduce){ .ile-reminder-btn{ transition:none; } }
+
+  .ile-reminder-backdrop{
+    position:fixed; inset:0; background:rgba(4,8,16,.55); z-index:180;
+    opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  .ile-reminder-backdrop.ile-open{ opacity:1; pointer-events:auto; }
+
+  .ile-reminder-drawer{
+    position:fixed; inset:0 0 0 auto; width:min(92vw, 460px);
+    background: var(--sidebar-bg); border-left:1px solid var(--sidebar-border);
+    z-index:190; transform:translateX(100%); transition: transform .3s var(--spring-out);
+    display:flex; flex-direction:column;
+  }
+  .ile-reminder-drawer.ile-open{ transform:translateX(0); }
+  .ile-reminder-drawer-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 20px; border-bottom:1px solid var(--border); flex-shrink:0;
+  }
+  .ile-reminder-drawer-head h2{ font-size:1.1rem; }
+  .ile-reminder-close{
+    width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+    background: var(--bg-card); color: var(--text); cursor:pointer; flex-shrink:0;
+  }
+  .ile-reminder-drawer-body{ padding:16px 20px; overflow-y:auto; flex:1; }
+  .ile-reminder-drawer-body .ile-section{ margin-bottom:24px; scroll-margin-top:0; }
+  .ile-reminder-drawer-body .ile-section h2{ font-size:1.05rem; }
+  .ile-reminder-drawer-body .ile-card{ box-shadow:none; }
+  .ile-reminder-drawer-foot{ padding:14px 20px; border-top:1px solid var(--border); flex-shrink:0; }
+  .ile-reminder-drawer-foot button{ font-size:.82rem; font-weight:700; color: var(--gold-ink, var(--gold)); }
+
+  .ile-stepper{ min-height: 50vh; display:flex; flex-direction:column; }
+  .ile-step{ display:none; }
+  .ile-step.ile-step-active{ display:block; animation: ile-step-in .35s var(--spring-out); }
+  @keyframes ile-step-in{ 0%{ opacity:0; transform:translateY(10px); } 100%{ opacity:1; transform:translateY(0); } }
+
+  .ile-milestone{
+    text-align:center; padding:36px 20px; border-radius: var(--radius);
+    background: var(--bg-card); border:1px solid var(--border); box-shadow: var(--shadow-card);
+  }
+  .ile-milestone svg{
+    width:40px; height:40px; color: var(--accent); margin-bottom:10px; padding:12px;
+    box-sizing:content-box; border-radius:50%; background: var(--bg-tinted, var(--bg-hover));
+  }
+  .ile-milestone h3{ font-size:1.1rem; margin-bottom:8px; }
+  .ile-milestone p{ font-size:.86rem; color: var(--text-muted); max-width:44ch; margin:0 auto; }
+
+  .ile-step-nav{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    margin-top:24px; padding-top:16px; border-top:1px solid var(--border);
+  }
+  .ile-step-nav-end{ display:flex; align-items:center; gap:10px; margin-left:auto; }
+  .ile-step-btn{
+    padding:12px 20px; border-radius: var(--radius-sm); font-family:inherit; font-weight:700; font-size:.86rem;
+    cursor:pointer; min-height:44px;
+  }
+  .ile-step-prev{ background: var(--bg-card); border:1px solid var(--border); color: var(--text-muted); }
+  .ile-step-prev:disabled{ opacity:.4; cursor:default; }
+
+  .ile-step-next:disabled{ opacity:.45; cursor:not-allowed; }
+  .ile-step-skip{
+    background:none; border:1px solid var(--border); color: var(--text-soft);
+  }
+  .ile-step-skip:hover{ background: var(--bg-hover); color: var(--text-muted); }
+
+  .ile-skip-note{
+    display:flex; align-items:center; gap:8px; font-size:.78rem; font-weight:700;
+    color: var(--vector-neg, var(--danger)); background: rgba(249,115,22,.08);
+    border:1px solid var(--border-warm, var(--border)); border-radius: var(--radius-sm);
+    padding:8px 12px; margin:0 0 12px;
+  }
+
+  .ile-completion-review{
+    text-align:left; background: var(--bg-panel); border:1px solid var(--border-strong);
+    border-radius: var(--radius-sm); padding:16px 18px; margin-bottom:14px;
+  }
+  .ile-completion-review h3{ font-size:.95rem; margin-bottom:4px; color: var(--text); }
+  .ile-completion-review p{ font-size:.82rem; color: var(--text-muted); margin-bottom:10px; }
+  .ile-completion-review ul{ list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .ile-completion-review li button{
+    width:100%; text-align:left; padding:9px 12px; border-radius: var(--radius-sm);
+    border:1px solid var(--border); background: var(--bg-card); color: var(--text);
+    font-family:inherit; font-size:.82rem; font-weight:600; cursor:pointer; min-height:44px;
+  }
+  .ile-completion-review li button:hover{ border-color: var(--border-strong); background: var(--bg-hover); }
+  .ile-step-next{ background: var(--bg-hover); border:1px solid var(--border); color: var(--text-muted); }
+  .ile-step-next.ile-step-next-ready{ background: var(--grad-gold); border:none; color:#1a1200; }
+  .ile-step-live{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+  @media (prefers-reduced-motion: reduce){
+    .ile-reveal{ opacity:1; transform:none; transition:none; }
+    .ile-q-option.ile-anim-correct, .ile-q-option.ile-anim-incorrect,
+    .ile-numeric-input.ile-anim-correct, .ile-numeric-input.ile-anim-incorrect,
+    .ile-completion.ile-show-anim, .ile-completion-check, .ile-step.ile-step-active,
+    .ile-progress-fill, .ile-progress-puck{ animation:none !important; transition:none !important; }
+    .ile-completion-check{ stroke-dashoffset:0; }
+  }
+
+  @media print{
+    .ile-sidebar, .ile-topbar, .ile-mode-bar, .ile-check-btn, .ile-confidence-row, .ile-progress-wrap, .ile-progress-label, .ile-step-nav{ display:none !important; }
+    .ile-shell{ display:block; }
+    body.ile-lesson{ background:#fff; color:#111; }
+    .ile-reveal{ opacity:1 !important; transform:none !important; }
+    .ile-step{ display:block !important; }
+    details.ile-hint, .ile-misc-card{ }
+  }
+</style>
+</head>
+<body class="ile-lesson" data-theme="dark">
+<a class="ile-skip-link" href="#ile-main-content">Skip to content</a>
+
+<div class="ile-shell">
+  <div class="ile-sidebar-backdrop" id="ileSidebarBackdrop"></div>
+
+  <aside class="ile-sidebar" id="ileSidebar" aria-label="Lesson navigation">
+    <div class="ile-brand">
+      <span class="ile-brand-mark">INSPIRE ACADEMIC<span class="ile-brand-sub">LEARNING EXPERIENCE — PILOT #3</span></span>
+    </div>
+    <a class="ile-back-link" href="/subjects/physics/forces-and-motion.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Forces and Motion hub
+    </a>
+
+    <nav class="ile-nav ile-nav-group ile-nav-group-active" id="ileNavLearn" aria-label="Learn sections">
+      <a href="#ile-orientation"><span class="ile-nav-num">1</span>Orientation</a>
+      <a href="#ile-video"><span class="ile-nav-num">2</span>Video Lesson</a>
+      <a href="#ile-learn"><span class="ile-nav-num">3</span>Core Lesson</a>
+      <a href="#ile-diagrams"><span class="ile-nav-num">4</span>Free-Body Diagrams</a>
+      <a href="#ile-worked"><span class="ile-nav-num">5</span>Worked Examples</a>
+      <a href="#ile-misconceptions"><span class="ile-nav-num">6</span>Misconception Clinic</a>
+    </nav>
+
+    <nav class="ile-nav ile-nav-group" id="ileNavPractice" aria-label="Practice groups">
+      <button type="button" class="ile-nav-practice-item" data-group="diagnostic"><span class="ile-nav-num">1</span>Retrieval Diagnostic</button>
+      <button type="button" class="ile-nav-practice-item" data-group="guided"><span class="ile-nav-num">2</span>Guided Practice</button>
+      <button type="button" class="ile-nav-practice-item" data-group="independent"><span class="ile-nav-num">3</span>Independent Practice</button>
+      <button type="button" class="ile-nav-practice-item" data-group="exam"><span class="ile-nav-num">4</span>Exam Practice</button>
+      <button type="button" class="ile-nav-practice-item" data-group="close"><span class="ile-nav-num">5</span>Lesson Close</button>
+    </nav>
+
+    <div class="ile-sidebar-emblem" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="19" stroke="var(--gold)" stroke-width="1.4" opacity=".55"/>
+        <text x="32" y="40" text-anchor="middle" font-family="var(--font-display)" font-size="22" font-weight="700" fill="var(--gold)">I</text>
+        <path d="M13 32c-2 8 2 16 10 20" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>
+        <path d="M13 32c-3-1-6 1-7 5" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <path d="M17 24c-4-4-10-4-13 0" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <path d="M51 32c2 8-2 16-10 20" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>
+        <path d="M51 32c3-1 6 1 7 5" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <path d="M47 24c4-4 10-4 13 0" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+      </svg>
+    </div>
+  </aside>
+
+  <div class="ile-main">
+    <header class="ile-topbar">
+      <button class="ile-menu-btn" id="ileMenuBtn" aria-label="Open lesson navigation" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <span class="ile-topbar-title">Resultant Forces &amp; Free-Body Diagrams</span>
+      <div class="ile-tier-toggle" role="group" aria-label="Choose tier">
+        <button class="ile-tier-btn" id="ileTierHigher" aria-pressed="true">Higher</button>
+        <button class="ile-tier-btn" id="ileTierFoundation" aria-pressed="false">Foundation</button>
+      </div>
+      <div class="ile-theme-toggle" role="group" aria-label="Choose theme">
+        <button class="ile-theme-btn" id="ileThemeDark" aria-pressed="true">Dark</button>
+        <button class="ile-theme-btn" id="ileThemeLight" aria-pressed="false">Light</button>
+      </div>
+    </header>
+
+    <div class="ile-mode-bar">
+      <div class="ile-mode-switch" role="group" aria-label="Choose Learn or Practice mode">
+        <button class="ile-mode-btn" id="ileModeLearnBtn" aria-pressed="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Learn
+        </button>
+        <button class="ile-mode-btn" id="ileModePracticeBtn" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+          Practice
+        </button>
+      </div>
+    </div>
+
+    <div class="ile-progress-wrap">
+      <div class="ile-progress-rail"><div class="ile-progress-fill" id="ileProgressFill"></div></div>
+      <div class="ile-progress-puck" id="ileProgressPuck"></div>
+    </div>
+    <div class="ile-progress-label" id="ileProgressLabel"></div>
+    <div class="ile-step-live" id="ileStepLive" role="status" aria-live="polite"></div>
+
+    <main class="ile-content" id="ile-main-content">
+
+      <button class="ile-extensions-toggle" id="ileExtensionsToggle" type="button" aria-pressed="false">Show Higher extensions</button>
+
+      <!-- ========================= LEARN MODE ========================= -->
+      <div class="ile-mode-panel" id="ileModeLearn">
+
+        <!-- 1. ORIENTATION -->
+        <section class="ile-section" id="ile-orientation">
+          <h1 class="ile-hero-title">Resultant Forces &amp; Free-Body Diagrams</h1>
+          <div class="ile-hero-meta">
+            <span><strong>GCSE Physics</strong> · Forces and Motion · Production Pilot #3</span>
+            <span>AQA · Edexcel</span>
+            <span>Estimated time: <strong>35–45 min</strong></span>
+          </div>
+          <div class="ile-card ile-reveal">
+            <p style="font-size:.9rem; color:var(--text-muted); line-height:1.6;">By the end of this lesson you will be able to read and draw free-body diagrams and calculate the resultant force acting on an object — and answer the question this lesson is built around: <strong>when several forces act on one object, what single force has the same effect as all of them combined?</strong></p>
+            <ul class="ile-objectives-list">
+              <li>Combine forces acting in the same direction, and forces acting in opposite directions, to find a resultant force.</li>
+              <li>Read a free-body diagram: an isolated object with arrows showing every force acting on it.</li>
+              <li>Explain the difference between balanced forces (resultant = 0 N) and unbalanced forces (non-zero resultant).</li>
+              <li class="ile-tier-higher-only" data-tier-block="1"><span class="ile-tier-badge ile-badge-higher">Higher</span> Evaluate a free-body diagram for errors, and explain why balanced forces on one object are never the same thing as a Newton's third-law pair.</li>
+            </ul>
+            <div class="ile-foundation-orientation ile-tier-foundation-only">
+              <strong>Foundation pathway — what you need to master</strong>
+              <p>This lesson has one focus for you: being able to work out the resultant force on an object and read a simple free-body diagram, every time, without mixing up balanced and unbalanced. By the end, you should be confident with:</p>
+              <ul>
+                <li>Adding two forces that act in the same direction.</li>
+                <li>Subtracting two forces that act in opposite directions, and stating the direction of the answer.</li>
+                <li>Saying whether a pair of forces is balanced (resultant = 0 N) or unbalanced.</li>
+                <li>Reading a simple free-body diagram and naming each force shown.</li>
+                <li>Explaining that balanced forces don't have to mean an object is standing still.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. VIDEO -->
+        <section class="ile-section" id="ile-video">
+          <h2><span class="ile-section-num">2</span>Video Lesson</h2>
+          <div class="ile-video-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>
+            <strong>Video lesson coming soon</strong>
+            <p>This pilot lesson doesn't have a recorded video yet. Everything you need is in the written lesson below.</p>
+          </div>
+        </section>
+
+        <!-- 3. CORE TEACHING -->
+        <section class="ile-section" id="ile-learn">
+          <h2><span class="ile-section-num">3</span>Core Lesson</h2>
+          <div class="ile-card">
+            <div class="ile-foundation-first-look ile-tier-foundation-only">
+              <h3>First, a concrete example — before any definitions</h3>
+              <p>Imagine two people pushing the same shopping trolley. One pushes with 40 N, the other with 30 N, both in the same direction. The trolley behaves exactly as if a single, bigger push of 70 N were acting on it — that single equivalent push is called the <strong>resultant force</strong>.</p>
+              <p>Now imagine instead they push from opposite ends, one with 40 N one way and the other with 30 N the other way. The trolley behaves as if a single 10 N push were acting, in the direction of the stronger person. Same two people, same two numbers — a completely different resultant, because direction matters.</p>
+            </div>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Before this lesson: force, briefly recapped</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">A <strong>force</strong> is a push or a pull, measured in <strong>newtons (N)</strong>. Like displacement (Lesson 1), a force is a <strong>vector</strong> — it needs both a size and a direction to be fully described. "500 N" is an incomplete answer; "500 N to the right" is complete.</p>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Stage 1 — Same-direction forces add</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">When two or more forces act on the same object in the <strong>same direction</strong>, the resultant force is simply their sum. Two tugboats both pulling a barge forward, one at 4000 N and one at 2500 N, produce a resultant of 6500 N forward — the barge cannot tell the difference between two pulls and one bigger one.</p>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Stage 2 — Opposing forces subtract; balanced and unbalanced</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">When two forces act in <strong>opposite directions</strong>, the resultant is the difference between them, in the direction of the larger force. If the two forces are exactly equal, the resultant is <strong>0 N</strong> — the forces are <strong>balanced</strong>. If they're unequal, a resultant remains in the direction of the bigger force — the forces are <strong>unbalanced</strong>.</p>
+
+            <div class="ile-tier-foundation-emphasis ile-reveal">
+              <svg class="ile-fe-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 2"/></svg>
+              <div>
+                <strong>Balanced does not mean stationary</strong>
+                <p>Balanced forces (resultant = 0 N) mean the object's motion isn't <em>changing</em> — it could be standing still, or it could be moving at a steady, constant speed in a straight line. Both are consistent with a zero resultant. Only an <strong>unbalanced</strong> force changes how something is moving.</p>
+              </div>
+            </div>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Stage 3 — Free-body diagrams</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">A <strong>free-body diagram</strong> isolates a single object and shows every force acting <em>on</em> it as an arrow — direction shown by the arrow's orientation, and (where the diagram is drawn to scale) magnitude shown by the arrow's length. Common force types you'll meet: <strong>weight</strong> (the pull of gravity, always downward), <strong>normal contact force</strong> (a surface pushing back on an object resting on it), <strong>friction</strong> and <strong>drag</strong> (resisting motion), and <strong>driving force</strong> or <strong>thrust</strong> (pushing an object along).</p>
+
+            <div class="ile-tier-foundation-emphasis ile-reveal">
+              <svg class="ile-fe-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <div>
+                <strong>Key words, in plain terms</strong>
+                <p><strong>Weight</strong> = the pull of gravity on an object, always straight down. <strong>Normal contact force</strong> = a surface pushing back to stop things sinking into it, always at right angles to the surface. <strong>Resultant force</strong> = the one force that has the same overall effect as every real force added together — it is not an extra force alongside the real ones.</p>
+              </div>
+            </div>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Stage 4 — Balanced forces are not a Newton's third-law pair</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">This is the single most important distinction in this lesson. <strong>Balanced forces</strong> act on <strong>one</strong> object and can cancel to a zero resultant — for example, a book's weight and the normal contact force from the table it rests on. A <strong>Newton's third-law pair</strong> is a completely different idea: it's the equal-and-opposite pair of forces that arise whenever <strong>two different objects</strong> interact (the book pushes down on the table exactly as hard as the table pushes up on the book) — always on <strong>two separate objects</strong>, never one. A book's weight and its normal contact force are balanced forces on the same object, not a third-law pair, because weight and normal contact force are two genuinely different <em>types</em> of force, not the two halves of one interaction.</p>
+
+            <h3 class="ile-tier-higher-only" data-tier-block="2" style="font-size:1.02rem; margin-bottom:8px; margin-top:16px;">Stage 5 — Deeper reasoning <span class="ile-tier-badge ile-badge-higher">Higher</span></h3>
+            <p class="ile-tier-higher-only" data-tier-block="2" style="font-size:.87rem; color:var(--text-muted); line-height:1.65;">A real object usually has both horizontal forces (driving force vs. friction/drag) and vertical forces (weight vs. normal contact force) acting at once. Treat the two directions <strong>separately</strong> — find the horizontal resultant and the vertical resultant independently; GCSE Physics at this stage does not combine them into a single diagonal resultant. Being able to evaluate a free-body diagram — spot a force that's missing, mislabelled, or drawn the wrong way — is a genuinely different skill from calculating a resultant from forces you're simply handed, and is where real understanding (rather than pattern-matching a formula) shows up.</p>
+          </div>
+        </section>
+
+        <!-- 4. FREE-BODY DIAGRAMS (Inspire Force Diagram Family v1.3) -->
+        <section class="ile-section" id="ile-diagrams">
+          <h2><span class="ile-section-num">4</span>Free-Body Diagrams</h2>
+          <p class="ile-section-sub">Six diagrams, each earning its place: one force, balanced, unbalanced, vertical forces, a full multi-force diagram, then — for Higher — spot the error yourself.</p>
+
+          <figure class="ile-diagram-figure ile-reveal">
+            <svg viewBox="0 0 320 190" role="img" aria-labelledby="ile-f1-title" aria-describedby="ile-f1-desc"><title id="ile-f1-title">Free-body diagram: a single horizontal driving force</title><desc id="ile-f1-desc">A crate has a single 400 newton driving force acting to the right. Because this is the only force acting, the resultant force is also 400 newtons to the right. Schematic diagram, not to scale.</desc><defs><marker id="ileF1a" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker><marker id="ileF1r" markerWidth="10.5" markerHeight="7.7" refX="10.5" refY="3.85" orient="auto"><path d="M0,0 L10.5,3.85 L0,7.7 z" fill="var(--gold-ink)"/></marker></defs><rect x="82" y="57" width="76" height="46" rx="4" fill="var(--bg-card)" stroke="var(--diagram-ink-muted)" stroke-width="1.25"/><line x1="120" y1="80" x2="190" y2="80" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF1a)"/><text x="155" y="64" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">driving force = 400 N</text><line x1="120" y1="103" x2="120" y2="138" stroke="var(--diagram-ink-muted)" stroke-width="1"/><line x1="120" y1="150" x2="190" y2="150" stroke="var(--gold-ink)" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ileF1r)"/><text x="155" y="172" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--gold-ink)" text-anchor="middle">resultant force = 400 N right</text></svg>
+            <figcaption><strong>1. A single force.</strong> A crate with one 400 N driving force. Nothing to compare yet — the resultant simply equals the one force present.</figcaption>
+          </figure>
+
+          <figure class="ile-diagram-figure ile-reveal">
+            <svg viewBox="0 0 320 175" role="img" aria-labelledby="ile-f2-title" aria-describedby="ile-f2-desc"><title id="ile-f2-title">Free-body diagram: two equal, opposing horizontal forces</title><desc id="ile-f2-desc">A crate has a 300 newton driving force to the right and a 300 newton friction force to the left, drawn as equal-length arrows. The resultant force is 0 newtons — the forces are balanced. Drawn to scale.</desc><defs><marker id="ileF2r" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker><marker id="ileF2l" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker></defs><rect x="122" y="52" width="76" height="46" rx="4" fill="var(--bg-card)" stroke="var(--diagram-ink-muted)" stroke-width="1.25"/><line x1="160" y1="75" x2="196" y2="75" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF2r)"/><line x1="160" y1="75" x2="124" y2="75" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF2l)"/><text x="178" y="59" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">driving force = 300 N</text><text x="142" y="91" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">friction = 300 N</text><line x1="160" y1="98" x2="160" y2="128" stroke="var(--diagram-ink-muted)" stroke-width="1"/><rect x="8" y="134" width="304" height="22" rx="11" fill="var(--bg-card)" stroke="var(--gold-ink)" stroke-width="1.5"/><text x="160" y="150" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--gold-ink)" text-anchor="middle">resultant force = 0 N — balanced</text></svg>
+            <figcaption><strong>2. Balanced forces.</strong> Equal, opposing 300 N forces — drawn as genuinely equal-length arrows. Resultant force is 0 N: balanced does not mean nothing is happening.</figcaption>
+          </figure>
+
+          <figure class="ile-diagram-figure ile-reveal">
+            <svg viewBox="0 0 320 190" role="img" aria-labelledby="ile-f3-title" aria-describedby="ile-f3-desc"><title id="ile-f3-title">Free-body diagram: two unequal, opposing horizontal forces</title><desc id="ile-f3-desc">A crate has a 500 newton driving force to the right and a 200 newton friction force to the left. The resultant force is 300 newtons to the right. Drawn to scale.</desc><defs><marker id="ileF3r" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker><marker id="ileF3l" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker><marker id="ileF3res" markerWidth="10.5" markerHeight="7.7" refX="10.5" refY="3.85" orient="auto"><path d="M0,0 L10.5,3.85 L0,7.7 z" fill="var(--gold-ink)"/></marker></defs><rect x="122" y="52" width="76" height="46" rx="4" fill="var(--bg-card)" stroke="var(--diagram-ink-muted)" stroke-width="1.25"/><line x1="160" y1="75" x2="220" y2="75" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF3r)"/><line x1="160" y1="75" x2="136" y2="75" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF3l)"/><text x="190" y="59" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">driving force = 500 N</text><text x="148" y="91" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">friction = 200 N</text><line x1="160" y1="98" x2="160" y2="128" stroke="var(--diagram-ink-muted)" stroke-width="1"/><line x1="160" y1="150" x2="196" y2="150" stroke="var(--gold-ink)" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ileF3res)"/><text x="178" y="172" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--gold-ink)" text-anchor="middle">resultant force = 300 N right</text></svg>
+            <figcaption><strong>3. Unbalanced forces.</strong> 500 N vs. 200 N, opposing. The resultant, 300 N right, points the same way as the larger force — drawn in its own row below, never alongside the two component arrows.</figcaption>
+          </figure>
+
+          <figure class="ile-diagram-figure ile-reveal">
+            <svg viewBox="0 0 320 204" role="img" aria-labelledby="ile-f4-title" aria-describedby="ile-f4-desc"><title id="ile-f4-title">Free-body diagram: weight and normal contact force on a resting book</title><desc id="ile-f4-desc">A book rests on a table. Its weight, 150 newtons downward, and the normal contact force from the table, 150 newtons upward, are equal and opposite. The resultant force is 0 newtons — the book is in vertical equilibrium. These are balanced forces on one object, not a Newton’s third-law pair, because weight and normal contact force are different types of force. Drawn to scale.</desc><defs><marker id="ileF4u" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker><marker id="ileF4d" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker></defs><line x1="60" y1="135" x2="260" y2="135" stroke="var(--diagram-axis)" stroke-width="1.25" stroke-linecap="round"/><rect x="130" y="70" width="60" height="30" rx="4" fill="var(--bg-card)" stroke="var(--diagram-ink-muted)" stroke-width="1.25"/><line x1="160" y1="85" x2="160" y2="40" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF4u)"/><line x1="160" y1="85" x2="160" y2="130" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF4d)"/><text x="160" y="32" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">normal contact force = 150 N</text><text x="160" y="152" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">weight = 150 N</text><rect x="8" y="167" width="304" height="22" rx="11" fill="var(--bg-card)" stroke="var(--gold-ink)" stroke-width="1.5"/><text x="160" y="183" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--gold-ink)" text-anchor="middle">resultant force = 0 N — balanced</text></svg>
+            <figcaption><strong>4. Weight and normal contact force.</strong> A book resting on a table: two <em>different types</em> of force, equal and opposite, on <em>one</em> object — balanced forces, not a Newton's third-law pair (that would need two objects).</figcaption>
+          </figure>
+
+          <figure class="ile-diagram-figure ile-reveal">
+            <svg viewBox="0 0 440 270" role="img" aria-labelledby="ile-f5-title" aria-describedby="ile-f5-desc"><title id="ile-f5-title">Free-body diagram: a delivery van with four forces acting</title><desc id="ile-f5-desc">A delivery van has four forces acting on it: an 800 newton driving force to the right, a 300 newton drag force to the left, a 1200 newton weight downward, and a 1200 newton normal contact force upward. Horizontally, the resultant force is 500 newtons to the right. Vertically, the resultant force is 0 newtons — the vertical forces are balanced. Drawn to scale, with separate horizontal and vertical scales.</desc><defs><marker id="ileF5r" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker><marker id="ileF5l" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker><marker id="ileF5u" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker><marker id="ileF5d" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker><marker id="ileF5res" markerWidth="10.5" markerHeight="7.7" refX="10.5" refY="3.85" orient="auto"><path d="M0,0 L10.5,3.85 L0,7.7 z" fill="var(--gold-ink)"/></marker></defs><line x1="40" y1="150" x2="400" y2="150" stroke="var(--diagram-axis)" stroke-width="1.25" stroke-linecap="round"/><rect x="168" y="68" width="84" height="44" rx="4" fill="var(--bg-card)" stroke="var(--diagram-ink-muted)" stroke-width="1.25"/><line x1="210" y1="90" x2="258" y2="90" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF5r)"/><line x1="210" y1="90" x2="192" y2="90" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF5l)"/><line x1="210" y1="90" x2="210" y2="60" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF5u)"/><line x1="210" y1="90" x2="210" y2="120" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF5d)"/><text x="266" y="94" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="start">driving force = 800 N</text><text x="184" y="94" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="end">drag = 300 N</text><text x="210" y="52" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">normal contact force = 1200 N</text><text x="210" y="136" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">weight = 1200 N</text><line x1="150" y1="113" x2="150" y2="188" stroke="var(--diagram-ink-muted)" stroke-width="1"/><line x1="210" y1="200" x2="240" y2="200" stroke="var(--gold-ink)" stroke-width="3.5" stroke-linecap="round" marker-end="url(#ileF5res)"/><text x="225" y="222" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--gold-ink)" text-anchor="middle">horizontal resultant = 500 N right</text><rect x="44.5" y="233" width="331" height="22" rx="11" fill="var(--bg-card)" stroke="var(--gold-ink)" stroke-width="1.5"/><text x="210" y="249" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--gold-ink)" text-anchor="middle">vertical resultant = 0 N — balanced</text></svg>
+            <figcaption><strong>5. A full multi-force diagram.</strong> A delivery van: four forces, two independent resultants — horizontal (500 N right) and vertical (0 N, balanced) — deliberately never merged into one diagonal arrow.</figcaption>
+          </figure>
+
+          <figure class="ile-diagram-figure ile-tier-higher-only ile-reveal" data-tier-block="3">
+            <svg viewBox="0 0 320 175" role="img" aria-labelledby="ile-f6-title" aria-describedby="ile-f6-desc"><title id="ile-f6-title">Free-body diagram with an error: a crate resting on a table</title><desc id="ile-f6-desc">A crate rests undisturbed on a table. The diagram shows only one force: a 200 newton weight acting downward. No other force is shown. Drawn to scale.</desc><defs><marker id="ileF6d" markerWidth="6.75" markerHeight="4.95" refX="6.75" refY="2.48" orient="auto"><path d="M0,0 L6.75,2.48 L0,4.95 z" fill="var(--diagram-ink)"/></marker></defs><line x1="60" y1="135" x2="260" y2="135" stroke="var(--diagram-axis)" stroke-width="1.25" stroke-linecap="round"/><rect x="130" y="70" width="60" height="30" rx="4" fill="var(--bg-card)" stroke="var(--diagram-ink-muted)" stroke-width="1.25"/><line x1="160" y1="85" x2="160" y2="145" stroke="var(--diagram-ink)" stroke-width="2.25" stroke-linecap="round" marker-end="url(#ileF6d)"/><text x="160" y="167" font-family="var(--font-body)" font-size="12" font-weight="400" fill="var(--diagram-ink-muted)" text-anchor="middle">weight = 200 N</text></svg>
+            <figcaption><span class="ile-tier-badge ile-badge-higher">Higher</span> <strong>6. Spot the error.</strong> This diagram is deliberately incomplete. Work out what's missing yourself in Exam Practice Q4 — no worked example models this one first.</figcaption>
+          </figure>
+        </section>
+
+        <!-- 5. WORKED EXAMPLES -->
+        <section class="ile-section" id="ile-worked">
+          <h2><span class="ile-section-num">5</span>Worked Examples</h2>
+
+          <div class="ile-worked ile-tier-foundation-only ile-reveal" data-tier-block="4">
+            <h3>Example 0 — the simplest case, one step at a time <span class="ile-tier-badge ile-badge-foundation">Foundation</span></h3>
+            <dl>
+              <dt>Question</dt><dd>A sled is pulled by two ropes in the same direction: one team pulls with 90 N, the other with 60 N. Calculate the resultant force.</dd>
+              <dt>Step 1</dt><dd>Check the directions: both ropes pull the same way.</dd>
+              <dt>Step 2</dt><dd>Same direction means add the two forces together.</dd>
+              <dt>Step 3</dt><dd>90 + 60 = 150.</dd>
+              <dt>Step 4</dt><dd>State the direction too — a force answer is never complete without one.</dd>
+              <dt>Answer</dt><dd class="ile-answer">150 N, in the direction both teams pulled.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> forgetting to state the direction, and writing just "150 N" — an incomplete answer for a vector quantity, the same rule Lesson 1 established for displacement.</p>
+          </div>
+
+          <div class="ile-worked ile-reveal">
+            <h3>Example 1 — Same-direction forces</h3>
+            <dl>
+              <dt>Question</dt><dd>Two tugboats pull a barge in the same direction: 4000 N and 2500 N. Calculate the resultant force.</dd>
+              <dt>What matters</dt><dd>Both forces act in the same direction.</dd>
+              <dt>Reasoning</dt><dd>Same-direction forces add.</dd>
+              <dt>Calculation</dt><dd>4000 + 2500 = 6500</dd>
+              <dt>Answer</dt><dd class="ile-answer">6500 N, in the direction both tugs pulled.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> treating the two tugs as if they were somehow in competition and subtracting one from the other — subtraction is for opposing forces only; forces pulling the same way always add.</p>
+          </div>
+
+          <div class="ile-worked ile-reveal">
+            <h3>Example 2 — Opposing forces</h3>
+            <dl>
+              <dt>Question</dt><dd>In a tug-of-war, Team A pulls with 600 N and Team B pulls with 550 N in the opposite direction. Calculate the resultant force.</dd>
+              <dt>What matters</dt><dd>The two forces act in opposite directions.</dd>
+              <dt>Reasoning</dt><dd>Opposing forces subtract; the answer takes the direction of the larger force.</dd>
+              <dt>Calculation</dt><dd>600 − 550 = 50</dd>
+              <dt>Answer</dt><dd class="ile-answer">50 N, in Team A's direction.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> adding the two forces (1150 N) instead of subtracting — that would be the correct method only if the two teams pulled the same way, which they don't.</p>
+          </div>
+
+          <div class="ile-worked ile-reveal">
+            <h3>Example 3 — Balanced forces at constant velocity</h3>
+            <dl>
+              <dt>Question</dt><dd>A car travels along a motorway at a steady, unchanging speed. Its driving force is 900 N forward; the combined resistive forces (friction and air resistance) are 900 N backward. Calculate the resultant force, and state what this tells you about the car's motion.</dd>
+              <dt>What matters</dt><dd>The two forces are equal and opposite.</dd>
+              <dt>Reasoning</dt><dd>Equal, opposing forces are balanced: resultant = 0 N.</dd>
+              <dt>Calculation</dt><dd>900 − 900 = 0</dd>
+              <dt>Answer</dt><dd class="ile-answer">0 N. The car's motion isn't changing — it continues at the same steady speed in the same direction. Balanced forces do not mean the car has stopped.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> concluding a resultant of 0 N means the car must be stationary — a balanced resultant only means unchanging motion, which includes travelling at a genuine, steady, non-zero speed.</p>
+          </div>
+
+          <div class="ile-worked ile-reveal">
+            <h3>Example 4 — Free-body diagram identification</h3>
+            <dl>
+              <dt>Question</dt><dd>A book rests on a table. Identify the two forces acting on it, state whether they are balanced, and explain why they are not a Newton's third-law pair.</dd>
+              <dt>What matters</dt><dd>Two forces act on the book itself: its weight, and the normal contact force from the table.</dd>
+              <dt>Reasoning</dt><dd>Weight (150 N down) and normal contact force (150 N up) are equal and opposite on the same object, so they are balanced (resultant = 0 N). A Newton's third-law pair would need two different objects, each exerting the same type of force on the other — weight and normal contact force are two different force types on one object, not that.</dd>
+              <dt>Answer</dt><dd class="ile-answer">Weight = 150 N down; normal contact force = 150 N up; balanced (resultant 0 N); not a third-law pair.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> calling weight and normal contact force a "Newton's third-law pair" because they're equal and opposite — equal-and-opposite alone is not the test; a genuine third-law pair must act on two separate objects.</p>
+          </div>
+
+          <div class="ile-worked ile-reveal">
+            <h3>Example 5 — Multi-force object</h3>
+            <dl>
+              <dt>Question</dt><dd>A delivery van has a driving force of 2000 N forward and resistive forces of 600 N backward. Separately, its weight is 12000 N down and the normal contact force from the road is 12000 N up. Calculate the horizontal resultant force and the vertical resultant force.</dd>
+              <dt>What matters</dt><dd>Two independent force systems: horizontal (driving vs. resistive) and vertical (weight vs. normal contact force).</dd>
+              <dt>Reasoning</dt><dd>Treat each direction separately — never combine them into one diagonal resultant at this stage.</dd>
+              <dt>Calculation</dt><dd>Horizontal: 2000 − 600 = 1400. Vertical: 12000 − 12000 = 0.</dd>
+              <dt>Answer</dt><dd class="ile-answer">Horizontal resultant = 1400 N forward. Vertical resultant = 0 N (balanced).</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> mixing the horizontal and vertical numbers together into a single calculation — the two directions are independent and must be resolved separately.</p>
+          </div>
+
+          <div class="ile-worked ile-tier-higher-only ile-reveal" data-tier-block="5">
+            <h3>Example 6 — Spot the error <span class="ile-tier-badge ile-badge-higher">Higher</span></h3>
+            <dl>
+              <dt>Question</dt><dd>A student draws a free-body diagram for a crate resting undisturbed on a table, showing only one force: a 200 N weight acting downward. Identify the error and explain the correct diagram.</dd>
+              <dt>The student's error</dt><dd>The normal contact force from the table has been left out entirely. With only a weight shown, the diagram implies an unbalanced downward resultant force — but the crate is resting undisturbed, so it cannot have an unbalanced force acting on it.</dd>
+              <dt>Correct diagram</dt><dd>A second arrow is needed: a 200 N normal contact force, upward, from the table.</dd>
+              <dt>Reasoning</dt><dd>200 (weight) − 200 (normal contact force) = 0 — balanced, consistent with the crate staying still.</dd>
+              <dt>Answer</dt><dd class="ile-answer">The diagram is missing the normal contact force (200 N up); with it included, the forces are balanced.</dd>
+            </dl>
+          </div>
+        </section>
+
+        <!-- 6. MISCONCEPTION CLINIC -->
+        <section class="ile-section" id="ile-misconceptions">
+          <h2><span class="ile-section-num">6</span>Misconception Clinic</h2>
+          <p class="ile-section-sub">Eight specific wrong beliefs this topic invites — each one named, shown why it's wrong, and tied back to a diagram or worked example above.</p>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"If forces are balanced, the object must be stationary."</summary>
+            <div class="ile-misc-body">Balanced forces mean the object's motion is <strong>not changing</strong> — it could be standing still, or moving at a genuine, steady, constant speed. Only an unbalanced force changes how something is moving. See Worked Example 3, the car at constant velocity.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"A moving object must have a force acting in its direction of motion."</summary>
+            <div class="ile-misc-body">An object moving at a steady speed in a straight line can have <strong>balanced</strong> forces acting on it — resultant force 0 N — and keep moving anyway. A force is needed to <em>change</em> motion, not to sustain it.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"The resultant force is a separate, additional force acting alongside the real ones."</summary>
+            <div class="ile-misc-body">The resultant is <strong>not an extra force</strong> — it is the single force that has the same overall effect as every real force added together. A crate with a 500 N force right and a 200 N force left has exactly <strong>two</strong> real forces acting on it, not three. See Diagram 3, where the resultant is drawn in its own separate row specifically so it's never mistaken for a third arrow acting on the object.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"Equal and opposite arrows on one object always form a Newton's third-law pair."</summary>
+            <div class="ile-misc-body">A Newton's third-law pair always acts on <strong>two different objects</strong> — never one. Equal-and-opposite forces on the <em>same</em> object (like a book's weight and the table's normal contact force) are <strong>balanced forces</strong>, a completely different idea. See Core Lesson Stage 4 and Worked Example 4.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"Weight and normal contact force are always a Newton's third-law pair."</summary>
+            <div class="ile-misc-body">They are not — they act on the <strong>same</strong> object (whatever is resting on the surface) and are two genuinely <em>different types</em> of force. A real third-law pair involves the <em>same</em> type of force acting in both directions between two objects (e.g. the book pushes down on the table exactly as hard as the table pushes up on the book). See Diagram 4.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"Larger or heavier-looking objects always experience a larger resultant force."</summary>
+            <div class="ile-misc-body">The resultant force depends only on the <strong>actual labelled forces</strong> shown in the diagram, not on how big the object looks. Always add/subtract the real numbers given — never estimate a resultant from an object's apparent size.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"Arrow length always means magnitude, even in a schematic diagram."</summary>
+            <div class="ile-misc-body">Only in a diagram explicitly <strong>drawn to scale</strong> does arrow length represent magnitude. A schematic diagram (like Diagram 1) shows direction only — its arrow lengths carry no magnitude information at all, and must never be compared to each other.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"Friction always exactly equals the driving force."</summary>
+            <div class="ile-misc-body">Friction only equals the driving force when the resultant is zero (balanced, constant velocity — see Worked Example 3). When forces are <strong>unbalanced</strong>, friction can be smaller than the driving force, exactly as in Diagram 3 and Worked Example 2 — there is no rule that forces friction to automatically match whatever the driving force happens to be.</div>
+          </details>
+        </section>
+
+      </div>
+      <!-- ===================== END LEARN MODE ===================== -->
+
+      <!-- ========================= PRACTICE MODE ========================= -->
+      <div class="ile-mode-panel" id="ileModePractice" hidden>
+        <div class="ile-reminder-bar">
+          <button type="button" class="ile-reminder-btn" id="ileReminderBtn" aria-haspopup="dialog">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Need a reminder?
+          </button>
+        </div>
+        <div class="ile-stepper" id="ileStepper">
+
+          <!-- group: diagnostic -->
+          <div class="ile-step" data-group="diagnostic">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Retrieval Diagnostic</h3>
+              <p>Four quick checks on things you should already know — what a force is, and simple addition/subtraction. Don't worry if you're unsure — that's exactly what this lesson builds on.</p>
+            </div>
+          </div>
+          <div id="ileDiagnosticQs" data-group="diagnostic"></div>
+
+          <!-- group: guided -->
+          <div class="ile-step" data-group="guided">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Nice — let's build on it</h3>
+              <p>Guided Practice next. Try each question yourself first; open a hint only if you're stuck.</p>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="guided">
+            <div class="ile-q-card">
+              <div class="ile-q-stem"><span class="ile-tier-badge ile-badge-support">Extra support</span> Warm-up. A single 50 N force acts on a box, with nothing else acting on it. What is the resultant force?</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsGuided0">Your answer</label>
+                <textarea id="ileAnsGuided0" rows="2" placeholder="Write your working and answer here first, then check the hints…"></textarea>
+              </div>
+              <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">With only one force acting, there is nothing to add or subtract.</div></details>
+              <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">The resultant equals the one force present: 50 N, in the same direction it was already acting.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="guided">
+            <div class="ile-q-card">
+              <div class="ile-q-stem">1. Two people push a stalled car in the same direction: 120 N and 80 N. Calculate the resultant force.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsGuided1">Your answer</label>
+                <textarea id="ileAnsGuided1" rows="2" placeholder="Write your working and answer here first, then check the hints…"></textarea>
+              </div>
+              <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">Check the directions first — are these two forces acting the same way, or opposite ways?</div></details>
+              <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">Same direction means the forces add.</div></details>
+              <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">120 + 80 = 200 N, in the direction they both pushed.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="guided">
+            <div class="ile-q-card">
+              <div class="ile-q-stem">2. A sled has a 300 N pull forward and 180 N friction backward. Calculate the resultant force.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsGuided2">Your answer</label>
+                <textarea id="ileAnsGuided2" rows="2" placeholder="Write your working and answer here first, then check the hints…"></textarea>
+              </div>
+              <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">These two forces act in opposite directions, so they subtract.</div></details>
+              <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">The answer takes the direction of the larger force.</div></details>
+              <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">300 − 180 = 120 N, in the direction of the pull (the larger force).</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="guided">
+            <div class="ile-q-card">
+              <div class="ile-q-stem">3. A vase sits undisturbed on a shelf. Its weight is 40 N. State the normal contact force from the shelf, and whether the forces on the vase are balanced.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsGuided3">Your answer</label>
+                <textarea id="ileAnsGuided3" rows="2" placeholder="Write your working and answer here first, then check the hints…"></textarea>
+              </div>
+              <details class="ile-hint ile-tier-foundation-only"><summary>Hint 0 <span class="ile-tier-badge ile-badge-foundation">Foundation</span></summary><div class="ile-hint-body">The vase isn't moving at all, so the forces on it must be balanced — that alone tells you the normal contact force has to match the weight exactly.</div></details>
+              <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">The vase isn't accelerating in any direction, so the vertical forces on it must be balanced.</div></details>
+              <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Normal contact force = 40 N upward. The forces are balanced (resultant = 0 N), which is consistent with the vase staying still.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step ile-tier-higher-only" data-group="guided" data-tier-block="6">
+            <div class="ile-q-card">
+              <div class="ile-q-stem"><span class="ile-tier-badge ile-badge-higher">Higher</span> 4. A shopping trolley has a 60 N push force forward and 25 N friction backward. It also has a weight of 80 N and a normal contact force of 80 N. Calculate the horizontal resultant force, and state whether the vertical forces are balanced.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsGuided4">Your answer</label>
+                <textarea id="ileAnsGuided4" rows="3" placeholder="Write your working and answer here first, then check the hints…"></textarea>
+              </div>
+              <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">Treat the horizontal and vertical forces completely separately.</div></details>
+              <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">Horizontal: 60 N forward, 25 N backward. Vertical: 80 N vs. 80 N.</div></details>
+              <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Horizontal resultant = 60 − 25 = 35 N forward. Vertical: 80 N and 80 N are equal and opposite, so the vertical forces are balanced (0 N resultant).</div></details>
+            </div>
+          </div>
+
+          <!-- group: independent -->
+          <div class="ile-step" data-group="independent">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Independent Practice</h3>
+              <p>No hints this time — these questions reduce the support genuinely, not just in name.</p>
+            </div>
+          </div>
+          <div id="ileIndependentQs" data-group="independent"></div>
+          <div id="ileIndependentNumericQs" data-group="independent"></div>
+
+          <!-- group: exam -->
+          <div class="ile-step" data-group="exam">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Exam Practice</h3>
+              <p>Original, board-style questions with full mark schemes. Write a full answer first, then check.</p>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="7">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q1 · Calculate · 2 marks</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">Two forklifts push a shipping container in the same direction: 250 N and 175 N. Calculate the resultant force.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam1">Your answer</label>
+                <textarea id="ileAnsExam1" rows="2" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Recognises same-direction forces add: 250 + 175</td><td>1</td></tr>
+                <tr><td>= 425 N</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: 425 N. Examiner note: full marks need both the correct method and the correctly-unitted final answer.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="8">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q2 · Describe · 3 marks</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">A crate has a 300 N driving force to the right and a 300 N friction force to the left. Describe what this tells you about the forces acting on the crate, and about its motion.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam2">Your answer</label>
+                <textarea id="ileAnsExam2" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Identifies the two forces are equal and opposite</td><td>1</td></tr>
+                <tr><td>States the resultant force is 0 N — the forces are balanced</td><td>1</td></tr>
+                <tr><td>States this means the crate's motion is not changing (could be stationary or constant velocity)</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: the two forces are equal and opposite, so the resultant is 0 N — the forces are balanced. This means the crate's motion isn't changing; it could be stationary, or moving at a steady, constant velocity. Examiner note: full marks require stating both possibilities, not just "it isn't moving."</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="9">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q3 · Calculate · 3 marks</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">A cyclist has a driving force of 480 N forward and resistive forces of 320 N backward. Calculate the resultant force, including its direction.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam3">Your answer</label>
+                <textarea id="ileAnsExam3" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Recognises opposing forces subtract</td><td>1</td></tr>
+                <tr><td>480 − 320 = 160</td><td>1</td></tr>
+                <tr><td>States direction: forward (direction of the larger force)</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: 160 N forward. Examiner note: a numeric answer with no stated direction is an incomplete answer for this vector quantity, exactly as in Lesson 1.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step ile-tier-higher-only" data-group="exam" data-tier-block="10">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span><span class="ile-tier-badge ile-badge-higher">Higher</span> Q4 · Identify and explain · 4 marks</span><span>HIGHER_ASSESSED_ONLY</span></div>
+              <div class="ile-exam-stem">Diagram 6 shows a crate resting undisturbed on a table, with only one force drawn: a 200 N weight acting downward. Identify what is wrong with this free-body diagram, and explain how it should be corrected.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam4">Your answer</label>
+                <textarea id="ileAnsExam4" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Identifies that the normal contact force is missing</td><td>1</td></tr>
+                <tr><td>Explains that a stationary, undisturbed crate cannot have an unbalanced resultant force</td><td>1</td></tr>
+                <tr><td>States the missing force: 200 N, upward, from the table</td><td>1</td></tr>
+                <tr><td>Confirms the corrected diagram gives a resultant of 0 N (balanced)</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: the diagram is missing the normal contact force. Since the crate rests undisturbed, its forces must be balanced, so a 200 N normal contact force must act upward from the table, giving a resultant of 0 N. Examiner note: this question tests evaluation of a diagram, not calculation from given values — exactly the skill Core Lesson Stage 5 names as genuinely different from routine substitution.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="11">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q5 · Evaluate · 3 marks</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">A classmate claims: "A resultant force of 0 N always means an object is standing still." Evaluate this claim.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam5">Your answer</label>
+                <textarea id="ileAnsExam5" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>States a resultant of 0 N means balanced forces / no change in motion</td><td>1</td></tr>
+                <tr><td>Identifies this includes constant, steady velocity, not only rest</td><td>1</td></tr>
+                <tr><td>Correctly concludes the claim is not fully accurate</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: the claim is not fully accurate. A resultant of 0 N means balanced forces, which means the object's motion isn't changing — it could be standing still, but it could equally be moving at a genuine, steady, constant velocity. Examiner note: "Evaluate" expects a judgement with reasoning, not just a restatement of the definition.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="12">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q6 · Identify and explain · 3 marks</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">A student writes: "A book's weight and the normal contact force from the table are a Newton's third-law pair, because they are equal and opposite." Identify the error and explain the correct classification.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam6">Your answer</label>
+                <textarea id="ileAnsExam6" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Identifies the error: being equal and opposite alone does not make a pair a third-law pair</td><td>1</td></tr>
+                <tr><td>Explains a third-law pair must act on two different objects</td><td>1</td></tr>
+                <tr><td>States the correct classification: weight and normal contact force act on the same object, so they are balanced forces</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: the error is assuming "equal and opposite" is enough to make a pair a Newton's third-law pair. A genuine third-law pair must act on two separate objects; weight and normal contact force both act on the same book, so they are balanced forces, not a third-law pair. Examiner note: this is the single most common error this topic produces — directly tests Misconception Clinic cards 4 and 5.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="13">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span><span class="ile-tier-badge ile-badge-stretch">Stretch</span> Q7 · Calculate · 4 marks</span><span>HIGHER_DEPTH — visible at every tier, not hidden</span></div>
+              <div class="ile-exam-stem">A forklift has a driving force of 3200 N forward and resistive forces of 1150 N backward. Separately, its weight is 18000 N and the normal contact force from the ground is 18000 N. Calculate the horizontal resultant force and the vertical resultant force, and state whether the forklift's motion is currently changing.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam7">Your answer</label>
+                <textarea id="ileAnsExam7" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Horizontal: 3200 − 1150 = 2050 N forward</td><td>1</td></tr>
+                <tr><td>Vertical: 18000 − 18000 = 0 N (balanced)</td><td>1</td></tr>
+                <tr><td>States the horizontal resultant is non-zero, so the forklift's motion is changing horizontally</td><td>1</td></tr>
+                <tr><td>States the vertical forces are balanced, so there is no vertical change in motion</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: horizontal resultant = 2050 N forward; vertical resultant = 0 N. The forklift's horizontal motion is changing (unbalanced); its vertical motion is not (balanced). Examiner note: a good stretch question for any confident student, not restricted to Higher tier — treating the two directions independently is the key skill tested.</div></details>
+            </div>
+          </div>
+
+          <!-- group: close -->
+          <div class="ile-step" data-group="close">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Last stretch</h3>
+              <p>Two quick retrieval checks, then a confidence check-in to close the lesson.</p>
+            </div>
+          </div>
+          <div id="ileExitQs" data-group="close"></div>
+
+          <div class="ile-step" data-group="close">
+            <div class="ile-card">
+              <div class="ile-foundation-mastery ile-tier-foundation-only">
+                <h3>Foundation mastery checkpoint</h3>
+                <p>Before you rate your confidence below, check yourself honestly against this list. You should now be able to:</p>
+                <ul>
+                  <li>Add two forces that act in the same direction.</li>
+                  <li>Subtract two forces that act in opposite directions, and state the direction of the answer.</li>
+                  <li>Say whether a pair of forces is balanced (resultant = 0 N) or unbalanced.</li>
+                  <li>Read a simple free-body diagram and name each force shown.</li>
+                  <li>Explain that balanced forces don't have to mean an object is standing still.</li>
+                </ul>
+                <p>If any of those still feel shaky, that's completely normal — go back to the Misconception Clinic or Guided Practice before moving on, rather than pushing ahead. The "Need a reminder?" button in Practice mode has the Core Lesson and Free-Body Diagrams ready whenever you need them.</p>
+              </div>
+              <h3 style="font-size:1rem; margin-bottom:6px;">How confident do you feel about resultant forces and free-body diagrams?</h3>
+              <p style="font-size:.78rem; color:var(--text-soft);">This is just for you — it isn't saved anywhere.</p>
+              <div class="ile-confidence-row" role="group" aria-label="Confidence rating">
+                <button class="ile-confidence-btn" data-conf="1">1 — Still shaky</button>
+                <button class="ile-confidence-btn" data-conf="2">2</button>
+                <button class="ile-confidence-btn" data-conf="3">3 — Getting there</button>
+                <button class="ile-confidence-btn" data-conf="4">4</button>
+                <button class="ile-confidence-btn" data-conf="5">5 — Confident</button>
+              </div>
+              <p class="ile-confidence-note" id="ileConfidenceNote"></p>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="close" id="ileStepCompletion">
+            <div class="ile-completion-review" id="ileCompletionReview" hidden>
+              <h3>Before you finish — a few questions still need a look</h3>
+              <p>You chose "Skip for now" on these earlier rather than answer them. That's fine — but mastery means actually working through them, not just reaching the end. Jump back to any of them, or continue anyway if you're out of time.</p>
+              <ul id="ileCompletionReviewList"></ul>
+            </div>
+            <div class="ile-completion" id="ileCompletion" role="status" aria-live="polite">
+              <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="#1a1200" stroke-width="2" opacity=".15"/><path class="ile-completion-check" d="M15 27l8 8 16-18" stroke="#1a1200" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <h3 id="ileCompletionHeading">Nice work — lesson complete</h3>
+              <p id="ileCompletionBody">You've worked through resultant forces and free-body diagrams, from first principles to exam-style questions. That's real progress.</p>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="close">
+            <div class="ile-next-row">
+              <div class="ile-next-card">
+                <strong>Newton's Laws</strong>
+                <span>Coming soon. Builds directly on the resultant-force idea from this lesson.</span>
+              </div>
+              <div class="ile-next-card">
+                <strong>Back to the topic hub</strong>
+                <span>See the full Forces and Motion sequence and study pathway.</span>
+                <a class="ile-next-link" href="/subjects/physics/forces-and-motion.html">Open topic hub →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="ile-step-nav">
+            <button type="button" class="ile-step-btn ile-step-prev" id="ileStepPrev">← Back</button>
+            <div class="ile-step-nav-end">
+              <button type="button" class="ile-step-btn ile-step-skip" id="ileStepSkip" hidden>Skip for now — I'll come back</button>
+              <button type="button" class="ile-step-btn ile-step-next" id="ileStepNext">Next →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div class="ile-reminder-backdrop" id="ileReminderBackdrop"></div>
+<aside class="ile-reminder-drawer" id="ileReminderDrawer" role="dialog" aria-modal="true" aria-labelledby="ileReminderTitle" aria-hidden="true">
+  <div class="ile-reminder-drawer-head">
+    <h2 id="ileReminderTitle">Quick Reminder</h2>
+    <button type="button" class="ile-reminder-close" id="ileReminderClose" aria-label="Close reminder">✕</button>
+  </div>
+  <div class="ile-reminder-drawer-body" id="ileReminderBody">
+    <!-- populated by JS: a live clone of the Core Lesson + Free-Body
+         Diagrams sections, so this is always the same single source of
+         content as Learn mode, never a hand-duplicated copy that could
+         drift out of sync. -->
+  </div>
+  <div class="ile-reminder-drawer-foot">
+    <button type="button" class="ile-next-link" id="ileReminderOpenLearn" style="background:none;border:none;cursor:pointer;font-family:inherit;">Open full lesson in Learn mode →</button>
+  </div>
+</aside>
+
+<script>
+(function(){
+  'use strict';
+  var PREF_NS = 'ile:physics:resultant-forces-free-body';
+
+  function getPref(key, fallback){ try { return localStorage.getItem(PREF_NS + ':' + key) || fallback; } catch(e){ return fallback; } }
+  function setPref(key, val){ try { localStorage.setItem(PREF_NS + ':' + key, val); } catch(e){} }
+
+  function applyTheme(theme){
+    document.body.setAttribute('data-theme', theme);
+    document.getElementById('ileThemeDark').setAttribute('aria-pressed', String(theme === 'dark'));
+    document.getElementById('ileThemeLight').setAttribute('aria-pressed', String(theme === 'light'));
+    setPref('theme', theme);
+  }
+  document.getElementById('ileThemeDark').addEventListener('click', function(){ applyTheme('dark'); });
+  document.getElementById('ileThemeLight').addEventListener('click', function(){ applyTheme('light'); });
+  applyTheme(getPref('theme', 'dark'));
+
+  function applyTier(tier){
+    document.body.classList.toggle('ile-foundation', tier === 'foundation');
+    document.getElementById('ileTierHigher').setAttribute('aria-pressed', String(tier === 'higher'));
+    document.getElementById('ileTierFoundation').setAttribute('aria-pressed', String(tier === 'foundation'));
+    setPref('tier', tier);
+    if (typeof rebuildSteps === 'function') rebuildSteps(true);
+  }
+  document.getElementById('ileTierHigher').addEventListener('click', function(){ applyTier('higher'); });
+  document.getElementById('ileTierFoundation').addEventListener('click', function(){ applyTier('foundation'); });
+
+  var extToggle = document.getElementById('ileExtensionsToggle');
+  extToggle.addEventListener('click', function(){
+    var showing = document.body.classList.toggle('ile-show-extensions');
+    extToggle.setAttribute('aria-pressed', String(showing));
+    extToggle.textContent = showing ? 'Hide Higher extensions' : 'Show Higher extensions';
+  });
+
+  // sidebar (mobile)
+  var sidebar = document.getElementById('ileSidebar');
+  var backdrop = document.getElementById('ileSidebarBackdrop');
+  var menuBtn = document.getElementById('ileMenuBtn');
+  function openSidebar(){ sidebar.classList.add('ile-open'); backdrop.classList.add('ile-open'); menuBtn.setAttribute('aria-expanded','true'); }
+  function closeSidebar(){ sidebar.classList.remove('ile-open'); backdrop.classList.remove('ile-open'); menuBtn.setAttribute('aria-expanded','false'); }
+  menuBtn.addEventListener('click', function(){ sidebar.classList.contains('ile-open') ? closeSidebar() : openSidebar(); });
+  backdrop.addEventListener('click', closeSidebar);
+  document.querySelectorAll('#ileNavLearn a').forEach(function(a){ a.addEventListener('click', function(){ if (window.innerWidth < 960) closeSidebar(); }); });
+
+  // ---- MCQ renderer ----
+  function renderMCQ(containerId, questions){
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = questions.map(function(q, qi){
+      var opts = q.options.map(function(opt, oi){
+        return '<button class="ile-q-option" data-qi="' + qi + '" data-oi="' + oi + '">' + opt + '</button>';
+      }).join('');
+      var badge = q.badge ? '<span class="ile-tier-badge ' + q.badge + '">' + q.badgeLabel + '</span> ' : '';
+      var tierClass = q.hideOnFoundation ? ' ile-tier-higher-only' : '';
+      return '<div class="ile-step' + tierClass + '" data-group="' + el.getAttribute('data-group') + '">' +
+        '<div class="ile-q-card" data-container="' + containerId + '">' +
+        '<div class="ile-q-stem">' + badge + (qi + 1) + '. ' + q.stem + '</div>' +
+        '<div class="ile-q-options">' + opts + '</div>' +
+        '<div class="ile-q-feedback" id="' + containerId + '-fb-' + qi + '"></div>' +
+        '</div></div>';
+    }).join('');
+
+    el.querySelectorAll('.ile-q-option').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var qi = Number(btn.getAttribute('data-qi'));
+        var oi = Number(btn.getAttribute('data-oi'));
+        var q = questions[qi];
+        var card = btn.closest('.ile-q-card');
+        card.querySelectorAll('.ile-q-option').forEach(function(b){ b.classList.remove('ile-correct','ile-incorrect','ile-anim-correct','ile-anim-incorrect'); b.disabled = true; });
+        var fb = document.getElementById(containerId + '-fb-' + qi);
+        if (oi === q.answer){
+          btn.classList.add('ile-correct', 'ile-anim-correct');
+          fb.textContent = 'Correct — ' + q.explain;
+        } else {
+          btn.classList.add('ile-incorrect', 'ile-anim-incorrect');
+          card.querySelectorAll('.ile-q-option')[q.answer].classList.add('ile-correct');
+          fb.textContent = (q.notes && q.notes[oi]) ? q.notes[oi] : ('Not quite — ' + q.explain);
+        }
+        fb.classList.add('ile-show');
+        card.closest('.ile-step').setAttribute('data-answered', 'true');
+        el.dispatchEvent(new CustomEvent('ile:answered', { detail: { qi: qi } }));
+        if (typeof onStepAnswered === 'function') onStepAnswered();
+      });
+    });
+  }
+
+  // ---- numeric-answer question renderer ----
+  function renderNumeric(containerId, questions){
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = questions.map(function(q, qi){
+      var badge = q.badge ? '<span class="ile-tier-badge ' + q.badge + '">' + q.badgeLabel + '</span> ' : '';
+      var tierClass = q.hideOnFoundation ? ' ile-tier-higher-only' : '';
+      return '<div class="ile-step' + tierClass + '" data-group="' + el.getAttribute('data-group') + '">' +
+        '<div class="ile-q-card" data-container="' + containerId + '">' +
+        '<div class="ile-q-stem">' + badge + q.stem + '</div>' +
+        '<div class="ile-numeric-row">' +
+          '<input type="text" inputmode="decimal" class="ile-numeric-input" id="' + containerId + '-in-' + qi + '" placeholder="Your answer" aria-label="Your numeric answer">' +
+          (q.unit ? '<span class="ile-numeric-unit">' + q.unit + '</span>' : '') +
+          '<button class="ile-numeric-check" data-qi="' + qi + '" type="button">Check</button>' +
+        '</div>' +
+        '<div class="ile-q-feedback" id="' + containerId + '-fb-' + qi + '"></div>' +
+        '</div></div>';
+    }).join('');
+
+    el.querySelectorAll('.ile-numeric-check').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var qi = Number(btn.getAttribute('data-qi'));
+        var q = questions[qi];
+        var input = document.getElementById(containerId + '-in-' + qi);
+        var fb = document.getElementById(containerId + '-fb-' + qi);
+        var val = parseFloat(String(input.value || '').trim().replace(/^\+/, ''));
+        var ok = !isNaN(val) && Math.abs(val - q.answer) <= (q.tolerance != null ? q.tolerance : 0.5);
+        input.classList.remove('ile-anim-correct', 'ile-anim-incorrect');
+        void input.offsetWidth;
+        input.classList.add(ok ? 'ile-anim-correct' : 'ile-anim-incorrect');
+        if (ok){
+          fb.textContent = 'Correct — ' + q.explain;
+        } else {
+          var tol = q.tolerance != null ? q.tolerance : 0.5;
+          var matchedWrong = (!isNaN(val) && q.commonWrong) ? q.commonWrong.filter(function(cw){ return Math.abs(val - cw.value) <= tol; })[0] : null;
+          fb.textContent = matchedWrong ? matchedWrong.note : ('Not quite — ' + q.explain);
+        }
+        fb.classList.add('ile-show');
+        input.disabled = true; btn.disabled = true;
+        btn.closest('.ile-step').setAttribute('data-answered', 'true');
+        el.dispatchEvent(new CustomEvent('ile:answered', { detail: { qi: qi } }));
+        if (typeof onStepAnswered === 'function') onStepAnswered();
+      });
+    });
+  }
+
+  renderMCQ('ileDiagnosticQs', [
+    { stem: 'What is the SI unit of force?', options: ['Metre','Second','Newton','Kilogram'], answer: 2, explain: 'the newton (N) is the SI unit of force.', notes: [
+      'That\'s the unit of distance, not force.',
+      'That\'s the unit of time, not force.',
+      null,
+      'That\'s the unit of mass, not force — you\'ll meet the link between mass and force in a later lesson.'
+    ] },
+    { stem: 'Which of these correctly describes a force?', options: ['It has size only','It has size and direction','It is always positive','It has no direction'], answer: 1, explain: 'a force is a vector — it needs both a size and a direction to be fully described, exactly like displacement in Lesson 1.', notes: [
+      'That\'s the definition of a scalar quantity — a force needs a direction as well as a size.',
+      null,
+      'A force can act in any direction; "positive" only has meaning once a direction is chosen as the reference, and even then the other direction is just as valid a force.',
+      'A force without a direction is an incomplete answer — direction is exactly what makes it a vector.'
+    ] },
+    { stem: 'Two forces, 3 N and 5 N, act on an object in the same direction. What single force has the same effect?', options: ['8 N','2 N','15 N','1.67 N'], answer: 0, explain: 'same-direction forces add: 3 + 5 = 8 N.', notes: [
+      null,
+      'That\'s 5 − 3 — subtraction is for opposing forces, not forces acting the same way.',
+      'That\'s 3 × 5 — multiplying isn\'t the right operation for combining forces.',
+      'That\'s 5 ÷ 3 — dividing isn\'t the right operation for combining forces.'
+    ] },
+    { stem: 'Two forces, 10 N and 4 N, act on an object in opposite directions. What is the resultant force?', options: ['14 N','6 N, in the direction of the 10 N force','40 N','2.5 N'], answer: 1, explain: 'opposing forces subtract: 10 − 4 = 6 N, in the direction of the larger force.', notes: [
+      'That\'s 10 + 4 added — addition is for forces acting in the same direction, not opposing ones.',
+      null,
+      'That\'s 10 × 4 — multiplying isn\'t the right operation for combining forces.',
+      'That\'s 10 ÷ 4 — dividing isn\'t the right operation for combining forces.'
+    ] }
+  ]);
+
+  renderMCQ('ileIndependentQs', [
+    { stem: 'Two forces, 45 N and 30 N, act on an object in the same direction. What is the resultant force?', options: ['75 N','15 N','1350 N','1.5 N'], answer: 0, explain: '45 + 30 = 75 N.', notes: [
+      null,
+      'That\'s 45 − 30 — subtraction is for opposing forces, not forces acting the same way.',
+      'That\'s 45 × 30 — multiplying isn\'t the right operation for combining forces.',
+      'That\'s 45 ÷ 30 — dividing isn\'t the right operation for combining forces.'
+    ] },
+    { stem: 'In a tug-of-war, the left team pulls with 620 N and the right team pulls with 580 N. What is the resultant force?', options: ['1200 N to the left','40 N to the left','40 N to the right','580 N to the right'], answer: 1, explain: '620 − 580 = 40 N, in the direction of the stronger (left) team.', notes: [
+      'That\'s 620 + 580 added — the two teams pull in opposite directions, so their forces subtract, not add.',
+      null,
+      'The size (40 N) is right, but the direction is wrong — the left team pulls harder (620 N vs. 580 N), so the resultant points left, not right.',
+      'That\'s just the right team\'s own force, not the resultant of both teams pulling against each other.'
+    ] },
+    { stem: 'An object has balanced forces acting on it. Which of these is definitely true?', options: ['It is stationary','It is not accelerating (its motion is not changing)','It has zero mass','It has no forces acting on it'], answer: 1, explain: 'balanced forces mean the resultant is 0 N — the object\'s motion isn\'t changing. It could be stationary, or moving at a genuine, steady, constant velocity.', notes: [
+      'Balanced forces don\'t guarantee this — the object could equally be moving at a steady, constant velocity.',
+      null,
+      'Balance is about forces cancelling, not about mass — an object\'s mass has nothing to do with whether its forces happen to be balanced.',
+      'Balanced forces are still real forces that happen to cancel out — "balanced" does not mean "absent."'
+    ] },
+    { stem: 'A box has a 500 N force acting right and a 200 N force acting left. How many individual forces act on the box, and what is the resultant?', options: ['3 forces: 500 N, 200 N, and 300 N; resultant 300 N right','2 forces acting; resultant 300 N right','2 forces acting; resultant 700 N right','3 forces acting; resultant 0 N'], answer: 1, explain: 'exactly two real forces act on the box (500 N and 200 N). Their resultant, 300 N right, is not a third, separate force — it\'s the single force with the same overall effect as the two real ones combined.', notes: [
+      'The resultant is not a third, separate force acting alongside the real two — it\'s a calculated summary of them, not an additional push.',
+      null,
+      'That\'s 500 + 200 added — the two forces oppose each other, so they subtract, not add.',
+      'There are only two real forces here, and their resultant (300 N right) is not zero.'
+    ] },
+    { stem: 'A book rests on a table. Its weight (8 N down) and the normal contact force from the table (8 N up) are equal and opposite. Are these forces a Newton’s third-law pair?', options: ['Yes, always, because they are equal and opposite','No, because they act on the same object and are different types of force','Yes, but only because the book is stationary','Cannot tell without more information'], answer: 1, badge: 'ile-badge-higher', badgeLabel: 'Higher', hideOnFoundation: true, explain: 'a genuine Newton’s third-law pair must act on two different objects. Weight and normal contact force both act on the same book, and are two different types of force, so they are balanced forces, not a third-law pair.', notes: [
+      'Being equal and opposite is not enough on its own — a third-law pair also has to act on two different objects, which these forces don’t.',
+      null,
+      'Whether the book is moving makes no difference to this classification — the reason it isn’t a third-law pair is that both forces act on the same object.',
+      'It can be told from the information given: both forces act on the same object (the book), which alone rules out a third-law pair.'
+    ] },
+    { stem: 'A car accelerates from rest with a driving force of 1000 N. The resistive forces are 400 N. Is the resistive force always equal to the driving force?', options: ['Yes, always','No — it only equals the driving force when the resultant is zero','Yes, but only while the car is moving','No, resistive forces are always zero'], answer: 1, explain: 'resistive forces only exactly match the driving force when the forces are balanced (resultant = 0 N, constant velocity). While accelerating, as here, the driving force is genuinely larger.', notes: [
+      'There’s no such rule — resistive forces only match the driving force in the special balanced case.',
+      null,
+      'Motion alone doesn’t force the two to match — what matters is whether the resultant is zero, not whether the object happens to be moving.',
+      'Resistive forces are real, measurable forces (400 N here) — they’re not always zero.'
+    ] },
+    { stem: 'In a schematic (not-to-scale) free-body diagram, a 500 N arrow is drawn shorter than a 300 N arrow, for clarity. What can you conclude?', options: ['The 300 N force must actually be larger','Nothing about relative magnitude — schematic diagrams don’t encode magnitude in arrow length','The diagram must be wrong','The two forces must actually be equal'], answer: 1, badge: 'ile-badge-higher', badgeLabel: 'Higher', hideOnFoundation: true, explain: 'in a schematic diagram, arrow length carries no magnitude information at all — only a diagram explicitly drawn to scale can be read that way.', notes: [
+      'Arrow length in a schematic diagram tells you nothing about magnitude — trust the labelled numbers, not the lengths.',
+      null,
+      'A schematic diagram with mismatched lengths isn’t wrong — schematic diagrams are never meant to be read for magnitude by length in the first place.',
+      'Nothing here tells you the forces are equal — the diagram simply isn’t making a magnitude claim by length at all.'
+    ] },
+    { stem: 'A free-body diagram for a book resting on a table shows only one force: an 8 N weight acting downward. What is missing?', options: ['Nothing — the diagram is complete','The normal contact force from the table, needed to balance the weight','A friction force','A driving force'], answer: 1, badge: 'ile-badge-higher', badgeLabel: 'Higher', hideOnFoundation: true, explain: 'a book resting undisturbed on a table must have balanced forces, so the missing normal contact force (8 N up) is required to cancel the weight.', notes: [
+      'With only one force shown, the diagram implies an unbalanced resultant on a book that is, in fact, at rest — something is missing.',
+      null,
+      'Friction only matters for forces acting along a surface (sideways) — it has no role in this vertical weight/normal-force situation.',
+      'There’s no driving force in this scenario at all — the book isn’t being pushed or pulled anywhere.'
+    ] }
+  ]);
+
+  renderNumeric('ileIndependentNumericQs', [
+    { stem: 'A crate has a driving force of 350 N and friction of 140 N acting in the opposite direction. Calculate the resultant force.', unit: 'N', answer: 210, tolerance: 1, explain: '350 − 140 = 210 N.', commonWrong: [
+      { value: 490, note: '490 N is 350 + 140 added together — the two forces oppose each other, so they should be subtracted, not added.' },
+      { value: 140, note: '140 N is just the friction force on its own — the resultant compares both forces together, not just one of them.' }
+    ] },
+    { stem: 'A van has a driving force of 1800 N forward and resistive forces of 650 N backward. Calculate the horizontal resultant force.', unit: 'N', answer: 1150, tolerance: 1, badge: 'ile-badge-higher', badgeLabel: 'Higher', hideOnFoundation: true, explain: '1800 − 650 = 1150 N.', commonWrong: [
+      { value: 2450, note: '2450 N is 1800 + 650 added together — the two forces oppose each other, so they should be subtracted, not added.' },
+      { value: 650, note: '650 N is just the resistive force on its own — the resultant compares both forces together, not just one of them.' }
+    ] }
+  ]);
+
+  renderMCQ('ileExitQs', [
+    { stem: 'What does it mean for the forces on an object to be "balanced"?', options: ['The resultant force is 0 N', 'The object must be stationary', 'Only one force is acting', 'The forces are all equal in size to each other'], answer: 0, explain: 'balanced means the resultant force is 0 N — the object’s motion isn’t changing, whether that’s standing still or moving at a steady, constant velocity.', notes: [
+      null,
+      'Balanced doesn’t require standing still — a steady, constant velocity is just as consistent with balanced forces.',
+      'Balance is about forces cancelling out, which needs at least two forces, not just one.',
+      'Balance is about the resultant being zero, not about every individual force being the same size as every other one.'
+    ] },
+    { stem: 'A box has a 500 N force acting right and a 200 N force acting left. Is the resultant force a third, separate force acting on the box alongside the other two?', options: ['Yes, all three forces act on the box at once', 'No — it is the single force with the same effect as the two real forces combined', 'Yes, but only once the box starts moving', 'No, because the resultant is always 0 N'], answer: 1, explain: 'the resultant is a calculated summary of the real forces, never an extra force acting alongside them — this box has exactly two real forces acting on it.', notes: [
+      'Only two real forces act on the box — the resultant isn’t a third force joining them.',
+      null,
+      'The resultant isn’t a physical force that switches on later — it’s always just a way of summarising the real forces present.',
+      'The resultant here is 300 N, not 0 N — the two given forces are unequal.'
+    ] }
+  ]);
+
+  // confidence rating (local only, not persisted)
+  var confBtns = document.querySelectorAll('.ile-confidence-btn');
+  var confNote = document.getElementById('ileConfidenceNote');
+  var CONF_MSG = {
+    1: 'That\'s alright — go back to the Misconception Clinic in Learn mode, it clears up the most common sticking points.',
+    2: 'Worth another pass through the Worked Examples before moving on.',
+    3: 'Good progress — try the Independent Practice questions again without looking at the hints.',
+    4: 'Nearly there — you\'re ready for the next lesson when it\'s published.',
+    5: 'Great — you\'re ready for the next lesson when it\'s published.'
+  };
+  confBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      confBtns.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      confNote.textContent = CONF_MSG[btn.getAttribute('data-conf')] || '';
+      confNote.classList.add('ile-show');
+      btn.closest('.ile-step').setAttribute('data-answered', 'true');
+      if (typeof onStepAnswered === 'function') onStepAnswered();
+    });
+  });
+
+  // ================= MODE SWITCH (Learn / Practice) =================
+  var modeLearnPanel = document.getElementById('ileModeLearn');
+  var modePracticePanel = document.getElementById('ileModePractice');
+  var modeLearnBtn = document.getElementById('ileModeLearnBtn');
+  var modePracticeBtn = document.getElementById('ileModePracticeBtn');
+  var navLearn = document.getElementById('ileNavLearn');
+  var navPractice = document.getElementById('ileNavPractice');
+
+  function setMode(mode){
+    var isPractice = mode === 'practice';
+    modeLearnPanel.hidden = isPractice;
+    modePracticePanel.hidden = !isPractice;
+    modeLearnBtn.setAttribute('aria-pressed', String(!isPractice));
+    modePracticeBtn.setAttribute('aria-pressed', String(isPractice));
+    navLearn.classList.toggle('ile-nav-group-active', !isPractice);
+    navPractice.classList.toggle('ile-nav-group-active', isPractice);
+    setPref('mode', mode);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    if (isPractice) rebuildSteps(false);
+    updateProgress();
+  }
+  modeLearnBtn.addEventListener('click', function(){ setMode('learn'); });
+  modePracticeBtn.addEventListener('click', function(){ setMode('practice'); });
+  document.querySelectorAll('.ile-nav-practice-item').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var group = btn.getAttribute('data-group');
+      var idx = visibleSteps.findIndex(function(s){ return s.getAttribute('data-group') === group; });
+      if (idx >= 0) goToStep(idx);
+      if (window.innerWidth < 960) closeSidebar();
+    });
+  });
+
+  // ================= PRACTICE STEP CONTROLLER =================
+  var stepper = document.getElementById('ileStepper');
+  var allSteps = [];
+  var visibleSteps = [];
+  var currentIndex = 0;
+  var stepPrevBtn = document.getElementById('ileStepPrev');
+  var stepNextBtn = document.getElementById('ileStepNext');
+  var stepSkipBtn = document.getElementById('ileStepSkip');
+  var stepLive = document.getElementById('ileStepLive');
+
+  var GROUP_LABEL = { diagnostic: 'Retrieval Diagnostic', guided: 'Guided Practice', independent: 'Independent Practice', exam: 'Exam Practice', close: 'Lesson Close' };
+
+  // ---- mastery gate: stable step identity + skip-state persistence ----
+  Array.prototype.slice.call(stepper.querySelectorAll('.ile-step')).forEach(function(step, i){
+    step.dataset.stepKey = String(i);
+  });
+  function loadSkipped(){ try { return JSON.parse(getPref('skippedSteps', '[]')) || []; } catch(e){ return []; } }
+  function persistSkipped(){
+    var keys = Array.prototype.slice.call(stepper.querySelectorAll('.ile-step[data-skipped="true"]')).map(function(s){ return s.dataset.stepKey; });
+    setPref('skippedSteps', JSON.stringify(keys));
+  }
+  (function restoreSkipped(){
+    var keys = loadSkipped();
+    if (!keys.length) return;
+    Array.prototype.slice.call(stepper.querySelectorAll('.ile-step')).forEach(function(step){
+      if (keys.indexOf(step.dataset.stepKey) !== -1) step.dataset.skipped = 'true';
+    });
+  })();
+
+  // A step is "assessed" if it carries a real answerable control (MCQ,
+  // numeric, or a self-marked guided/exam question via its hints).
+  function isAssessedStep(step){
+    return !!step.querySelector('.ile-q-option, .ile-numeric-check, .ile-hint');
+  }
+  function isStepComplete(step){
+    if (!isAssessedStep(step)) return true;
+    return step.getAttribute('data-answered') === 'true' || step.dataset.skipped === 'true';
+  }
+
+  function rebuildSteps(preserveGroup){
+    var prevGroup = visibleSteps[currentIndex] ? visibleSteps[currentIndex].getAttribute('data-group') : null;
+    allSteps = Array.prototype.slice.call(stepper.querySelectorAll('.ile-step'));
+    visibleSteps = allSteps.filter(function(s){ return !s.classList.contains('ile-tier-higher-only') || !document.body.classList.contains('ile-foundation'); });
+
+    if (preserveGroup && prevGroup){
+      var newIdx = visibleSteps.findIndex(function(s){ return s.getAttribute('data-group') === prevGroup; });
+      currentIndex = newIdx >= 0 ? newIdx : 0;
+    } else {
+      var saved = parseInt(getPref('practiceStep', '0'), 10);
+      currentIndex = (!isNaN(saved) && saved >= 0 && saved < visibleSteps.length) ? saved : 0;
+    }
+    renderStep();
+  }
+
+  function renderStep(){
+    visibleSteps.forEach(function(s, i){ s.classList.toggle('ile-step-active', i === currentIndex); });
+    var step = visibleSteps[currentIndex];
+    if (!step) return;
+
+    stepPrevBtn.disabled = currentIndex === 0;
+    var complete = isStepComplete(step);
+    stepNextBtn.disabled = !complete;
+    stepNextBtn.classList.toggle('ile-step-next-ready', complete);
+    stepNextBtn.textContent = currentIndex === visibleSteps.length - 1 ? 'Finish' : 'Next →';
+    stepSkipBtn.hidden = !(isAssessedStep(step) && !complete);
+
+    var existingSkipNote = step.querySelector('.ile-skip-note');
+    if (step.dataset.skipped === 'true' && step.getAttribute('data-answered') !== 'true'){
+      if (!existingSkipNote){
+        var skipNote = document.createElement('p');
+        skipNote.className = 'ile-skip-note';
+        skipNote.textContent = 'Skipped — come back to this before you finish the lesson.';
+        step.insertBefore(skipNote, step.firstChild);
+      }
+    } else if (existingSkipNote){
+      existingSkipNote.remove();
+    }
+
+    var group = step.getAttribute('data-group');
+    // Shared cross-mode UI (the sticky progress label/rail and the
+    // aria-live region) is only this function's to write while Practice
+    // mode is actually the visible panel -- renderStep() itself always
+    // runs (e.g. from applyTier()'s rebuildSteps(true), even when the
+    // learner is still in Learn mode), and without this guard it left a
+    // stale "Step X of Y" string in the label until the next scroll
+    // event happened to call updateProgress() and overwrite it. Fixed
+    // for the whole shared engine during Pilot #3's Part B patch; see
+    // INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md §13, failure mode #15.
+    if (!modePracticePanel.hidden){
+      var label = (GROUP_LABEL[group] || 'Practice') + ' — Step ' + (currentIndex + 1) + ' of ' + visibleSteps.length;
+      progressLabel.textContent = label;
+      stepLive.textContent = label;
+
+      var pct = visibleSteps.length > 1 ? (currentIndex / (visibleSteps.length - 1)) * 100 : 0;
+      progressFill.style.width = pct + '%';
+      progressPuck.style.left = pct + '%';
+    }
+
+    document.querySelectorAll('.ile-nav-practice-item').forEach(function(btn){
+      var isCurrent = btn.getAttribute('data-group') === group;
+      btn.setAttribute('aria-current', String(isCurrent));
+      var isPast = GROUP_ORDER.indexOf(btn.getAttribute('data-group')) < GROUP_ORDER.indexOf(group);
+      btn.querySelector('.ile-nav-num').classList.toggle('ile-nav-done', isPast);
+    });
+
+    setPref('practiceStep', String(currentIndex));
+
+    if (step.id === 'ileStepCompletion'){
+      var reviewBox = document.getElementById('ileCompletionReview');
+      var reviewList = document.getElementById('ileCompletionReviewList');
+      var completionHeading = document.getElementById('ileCompletionHeading');
+      var completionBody = document.getElementById('ileCompletionBody');
+      var outstanding = visibleSteps.filter(function(s){
+        return isAssessedStep(s) && s.getAttribute('data-answered') !== 'true';
+      });
+      if (outstanding.length){
+        reviewBox.hidden = false;
+        reviewList.innerHTML = '';
+        outstanding.forEach(function(s){
+          var idx = visibleSteps.indexOf(s);
+          var grp = GROUP_LABEL[s.getAttribute('data-group')] || 'Practice';
+          var stemEl = s.querySelector('.ile-q-stem, .ile-exam-stem');
+          var stemText = stemEl ? stemEl.textContent.trim() : 'Question';
+          if (stemText.length > 70) stemText = stemText.slice(0, 70).trim() + '…';
+          var li = document.createElement('li');
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = grp + ': ' + stemText;
+          btn.addEventListener('click', function(){ goToStep(idx); });
+          li.appendChild(btn);
+          reviewList.appendChild(li);
+        });
+        completionHeading.textContent = 'Nice progress — a few questions still need a look';
+        completionBody.textContent = 'You reached the end, but ' + outstanding.length + ' question' + (outstanding.length > 1 ? 's' : '') + ' above ' + (outstanding.length > 1 ? "weren't" : "wasn't") + ' actually answered. Jump back to finish ' + (outstanding.length > 1 ? 'them' : 'it') + ' for real mastery, or continue on whenever you’re ready.';
+      } else {
+        reviewBox.hidden = true;
+        completionHeading.textContent = 'Nice work — lesson complete';
+        completionBody.textContent = 'You’ve worked through resultant forces and free-body diagrams from first principles to exam-style questions. That’s real progress.';
+      }
+      var card = document.getElementById('ileCompletion');
+      card.classList.remove('ile-show-anim');
+      void card.offsetWidth;
+      card.classList.add('ile-show-anim');
+    }
+
+    // Milestone/transition steps have a real heading to focus. Individual
+    // question steps don't -- fall back to the step container (tabindex=-1)
+    // so keyboard/AT focus always lands inside the new content. See
+    // BENCHMARK-CURRENT-STATE.md §5's standing rule: announce AND focus.
+    var heading = step.querySelector('h1, h2, h3') || step;
+    heading.setAttribute('tabindex', '-1');
+    heading.focus({ preventScroll: true });
+
+    updateReminderVisibility(step);
+  }
+  var GROUP_ORDER = ['diagnostic','guided','independent','exam','close'];
+
+  function goToStep(i){
+    currentIndex = Math.max(0, Math.min(visibleSteps.length - 1, i));
+    renderStep();
+    stepper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  stepPrevBtn.addEventListener('click', function(){ goToStep(currentIndex - 1); });
+  stepNextBtn.addEventListener('click', function(){
+    if (currentIndex < visibleSteps.length - 1) goToStep(currentIndex + 1);
+    else { setMode('learn'); document.getElementById('ile-orientation').scrollIntoView(); }
+  });
+  stepSkipBtn.addEventListener('click', function(){
+    var step = visibleSteps[currentIndex];
+    if (!step) return;
+    step.dataset.skipped = 'true';
+    persistSkipped();
+    renderStep();
+  });
+  function onStepAnswered(){
+    var step = visibleSteps[currentIndex];
+    if (step) step.classList.add('ile-step-reminder-unlocked');
+    renderStep();
+  }
+
+  Array.prototype.slice.call(stepper.querySelectorAll('.ile-step')).forEach(function(step){
+    var hints = step.querySelectorAll('.ile-hint');
+    var lastHint = hints[hints.length - 1];
+    if (!lastHint) return;
+    lastHint.addEventListener('toggle', function(){
+      if (!lastHint.open) return;
+      step.setAttribute('data-answered', 'true');
+      step.classList.add('ile-step-reminder-unlocked');
+      if (visibleSteps[currentIndex] === step) renderStep();
+    });
+  });
+
+  var REMINDER_DELAY_MS = { diagnostic: 8000, independent: 8000, close: 8000, guided: 20000, exam: 20000 };
+  var reminderRevealTimer = null;
+  function updateReminderVisibility(step){
+    if (reminderRevealTimer){ clearTimeout(reminderRevealTimer); reminderRevealTimer = null; }
+    if (!reminderBtn) return;
+    var isQuestion = !!step.querySelector('.ile-q-option, .ile-numeric-check, .ile-hint');
+    if (!isQuestion || step.classList.contains('ile-step-reminder-unlocked')){
+      reminderBtn.classList.add('ile-reminder-visible');
+      return;
+    }
+    reminderBtn.classList.remove('ile-reminder-visible');
+    var delay = REMINDER_DELAY_MS[step.getAttribute('data-group')] || 8000;
+    reminderRevealTimer = setTimeout(function(){
+      step.classList.add('ile-step-reminder-unlocked');
+      reminderBtn.classList.add('ile-reminder-visible');
+    }, delay);
+  }
+
+  // ================= PROGRESS RAIL (dual mode) =================
+  var progressFill = document.getElementById('ileProgressFill');
+  var progressPuck = document.getElementById('ileProgressPuck');
+  var progressLabel = document.getElementById('ileProgressLabel');
+  var learnSections = Array.prototype.slice.call(document.querySelectorAll('#ileModeLearn .ile-section'));
+
+  function updateProgress(){
+    if (!modeLearnPanel.hidden){
+      var doc = document.documentElement;
+      var scrollTop = window.scrollY || doc.scrollTop;
+      var scrollable = doc.scrollHeight - window.innerHeight;
+      var pct = scrollable > 0 ? Math.min(100, Math.max(0, (scrollTop / scrollable) * 100)) : 0;
+      progressFill.style.width = pct + '%';
+      progressPuck.style.left = pct + '%';
+      var current = 0;
+      for (var i = 0; i < learnSections.length; i++){
+        if (learnSections[i].getBoundingClientRect().top < 140) current = i;
+      }
+      progressLabel.textContent = 'Section ' + (current + 1) + ' of ' + learnSections.length;
+    }
+  }
+  var progressTicking = false;
+  window.addEventListener('scroll', function(){
+    if (modeLearnPanel.hidden) return;
+    if (!progressTicking){
+      window.requestAnimationFrame(function(){ updateProgress(); progressTicking = false; });
+      progressTicking = true;
+    }
+  }, { passive: true });
+
+  // ---- scroll-reveal (Learn mode only, one-time) ----
+  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReducedMotion && 'IntersectionObserver' in window){
+    var revealObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('ile-revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.ile-reveal').forEach(function(el){ revealObserver.observe(el); });
+  } else {
+    document.querySelectorAll('.ile-reveal').forEach(function(el){ el.classList.add('ile-revealed'); });
+  }
+
+  // Root-relative links rewritten to fully-qualified + target="_top" --
+  // required inside the blob: iframe pipeline, harmless no-op standalone.
+  document.querySelectorAll('a[href^="/"]').forEach(function(a){
+    a.href = location.origin + a.getAttribute('href');
+    a.target = '_top';
+  });
+
+  // ================= "Need a reminder?" drawer (Practice mode) =================
+  var reminderBody = document.getElementById('ileReminderBody');
+  var reminderClone = document.createDocumentFragment();
+  ['ile-learn', 'ile-diagrams'].forEach(function(id){
+    var src = document.getElementById(id);
+    if (src) reminderClone.appendChild(src.cloneNode(true));
+  });
+  reminderBody.appendChild(reminderClone);
+  reminderBody.querySelectorAll('.ile-reveal').forEach(function(el){ el.classList.add('ile-revealed'); });
+  reminderBody.querySelectorAll('[id]').forEach(function(el){ el.removeAttribute('id'); });
+
+  var reminderBtn = document.getElementById('ileReminderBtn');
+  var reminderDrawer = document.getElementById('ileReminderDrawer');
+  var reminderBackdrop = document.getElementById('ileReminderBackdrop');
+  var reminderCloseBtn = document.getElementById('ileReminderClose');
+  var reminderOpenLearnBtn = document.getElementById('ileReminderOpenLearn');
+  var reminderLastFocused = null;
+
+  function openReminder(){
+    reminderLastFocused = document.activeElement;
+    reminderDrawer.classList.add('ile-open');
+    reminderBackdrop.classList.add('ile-open');
+    reminderDrawer.setAttribute('aria-hidden', 'false');
+    reminderCloseBtn.focus();
+    document.addEventListener('keydown', onReminderKeydown);
+  }
+  function closeReminder(){
+    reminderDrawer.classList.remove('ile-open');
+    reminderBackdrop.classList.remove('ile-open');
+    reminderDrawer.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', onReminderKeydown);
+    if (reminderLastFocused && reminderLastFocused.focus) reminderLastFocused.focus();
+  }
+  function onReminderKeydown(e){
+    if (e.key === 'Escape'){ closeReminder(); return; }
+    if (e.key === 'Tab'){
+      var focusable = reminderDrawer.querySelectorAll('a, button, summary');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  }
+  reminderBtn.addEventListener('click', openReminder);
+  reminderCloseBtn.addEventListener('click', closeReminder);
+  reminderBackdrop.addEventListener('click', closeReminder);
+  reminderOpenLearnBtn.addEventListener('click', function(){
+    closeReminder();
+    setMode('learn');
+    document.getElementById('ile-learn').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // ================= INIT (order matters: tier -> mode -> steps) =================
+  applyTier(getPref('tier', 'higher'));
+  rebuildSteps(false);
+  setMode(getPref('mode', 'learn'));
+})();
+</script>
+</body>
+</html>
