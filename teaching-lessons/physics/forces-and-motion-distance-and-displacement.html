@@ -51,19 +51,6 @@
     --success: #22c55e;
     --blue: #1d4ed8;
     --cyan-bright: #06b6d4;
-
-    /* Inspire Scientific Diagram System tokens -- aliases onto the
-       lesson's existing theme-aware tokens, not new colour values. See
-       docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md. Declared
-       once here (not per [data-theme] block) because var() references
-       resolve against the cascade at the point of use, not the point of
-       declaration -- these correctly pick up whichever theme is active
-       without needing to be redefined per theme. */
-    --diagram-ink: var(--text);
-    --diagram-ink-muted: var(--text-muted);
-    --diagram-path: var(--cyan-bright);
-    --diagram-vector: var(--gold-ink);
-    --diagram-axis: var(--border-strong);
   }
   [data-theme="dark"]{
     --bg: #0b1628; --bg-panel: rgba(13,28,56,.75); --bg-card: rgba(255,255,255,.045);
@@ -83,6 +70,23 @@
        of --danger, which measures 2.80:1 on white and would fail AA in
        Light) -- verified programmatically at 7.51:1 / 7.10:1 here. */
     --vector-pos: #38bdf8; --vector-neg: #fb923c;
+    /* Inspire Scientific Diagram System tokens -- aliases onto this
+       theme's own values, not new colours. Declared per-[data-theme]
+       block, not in :root: --text/--text-muted/--gold-ink/--border-strong
+       don't exist at :root at all (only inside these theme blocks), so a
+       var() reference to them declared at :root resolves to nothing --
+       CSS custom properties are inherited as already-resolved computed
+       values, so an unresolvable reference at :root stays unresolved for
+       every descendant even once the real token becomes defined further
+       down. Found live via the Diagram Excellence Pass's rendered-page
+       check -- the diagrams silently lost several strokes/labels in
+       exactly this way before this fix. See
+       docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md. */
+    --diagram-ink: var(--text);
+    --diagram-ink-muted: var(--text-muted);
+    --diagram-path: var(--cyan-bright);
+    --diagram-vector: var(--gold-ink);
+    --diagram-axis: var(--border-strong);
   }
   [data-theme="light"]{
     /* Inspire Light — premium icy-blue/navy/gold direction, approved
@@ -105,6 +109,14 @@
     --progress-label: var(--gold-rich);
     /* verified programmatically at 6.70:1 / 5.18:1 against white */
     --vector-pos: #1d4ed8; --vector-neg: #c2410c;
+    /* Inspire Scientific Diagram System tokens -- see the matching
+       comment in [data-theme="dark"] above for why these must be
+       declared per theme block rather than once in :root. */
+    --diagram-ink: var(--text);
+    --diagram-ink-muted: var(--text-muted);
+    --diagram-path: var(--cyan-bright);
+    --diagram-vector: var(--gold-ink);
+    --diagram-axis: var(--border-strong);
   }
 
   /* --text-muted / --text-soft use the same navy base and alpha ratios
