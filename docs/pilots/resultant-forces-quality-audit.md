@@ -204,8 +204,103 @@ contrast audits. No new computation was required.
 
 ## Gate 7 — Live Rendered-Page QA
 
-See the dedicated section below, appended after the live browser pass.
+Performed against the real staging site
+(`https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-resultant-forces-free-body-diagrams.html`),
+real browser, real clicks/JS execution, real computed styles. Pushed to
+`staging` as commit `ae914f2` before this pass began.
+
+**Environment limitation, recurred, disclosed honestly (not
+worked around silently)**: exactly as in Pilot #2's own Gate 7,
+screenshots taken at any scrolled position returned a blank frame —
+confirmed this is the same reproducible tooling limitation (not a site
+defect) since `window.scrollY` and all DOM state were independently
+verified correct at the same positions. Screenshots at `scrollY:0`
+(page load) worked and are the source of the one screenshot in this
+section. **This recurrence across two independent pilots is itself
+useful evidence** that this is a stable environment characteristic to
+plan around in future sessions, not a one-off. Per instruction, not
+substituted with source inspection presented as equivalent — every
+check below either used a real screenshot or real live
+DOM/geometry/computed-style verification, named as such.
+
+### What was verified with a real screenshot (scrollY:0)
+
+| Check | Result | Evidence |
+|---|---|---|
+| Page loads, correct title/theme | PASS | Screenshotted; `document.title` correct, Orientation section renders correctly in Dark theme, objectives list and Foundation-tier Higher badge visible |
+
+### What was verified live without a screenshot (real browser DOM/geometry/computed-style — not source inspection)
+
+| Check | Result | Evidence |
+|---|---|---|
+| Console errors | PASS, 0 errors | `read_console_messages`, checked after load and after extensive interaction |
+| Duplicate IDs | PASS, 0 duplicates | Live DOM query, 104 total id-bearing elements |
+| Horizontal overflow | PASS | `scrollWidth` (1125) < `innerWidth` (1148) |
+| All 6 force diagrams: text collisions | PASS, 0 collisions | Real browser `SVGTextElement.getBBox()` — the actual rendering engine's own layout, matching the pre-push Node checks exactly |
+| All 6 force diagrams: out-of-bounds text | PASS, 0 out-of-bounds | Same method |
+| All 6 force diagrams: real rendered arrow lengths | PASS — every length matches the intended magnitude exactly | Measured every `<line>`'s real rendered length via `getBBox()`-equivalent Pythagorean measurement from live `x1/y1/x2/y2` attributes; cross-checked against `forceArrowLength()`'s deterministic output for every force in every diagram (e.g. Diagram 5: 48px/18px/30px/30px/30px measured live, matching 800N/300N/1200N/1200N/500N at their declared scales exactly) |
+| Component-force contrast, Dark | PASS | Real alpha-composited `getComputedStyle`: ink 15.05:1, resultant gold 7.15:1, axis 4.72:1 — all against the true rendered card background |
+| Component-force contrast, Light | PASS | Same method: ink 15.97:1, gold 5.25:1, axis 3.46:1 |
+| Foundation tier renders correctly | PASS | Higher-tagged objective hidden, Foundation orientation box visible, Foundation-only Example 0 visible — all confirmed via `getComputedStyle` |
+| Foundation + "Show Higher extensions" open — the historical stacking bug | **PASS, confirmed not reproduced** | Live query: exactly 1 `.ile-step-active` element, 0 Higher-only Practice steps incorrectly visible |
+| Step count correctness by tier | PASS | Foundation: 30 steps. Higher: 36 steps. The +6 delta exactly matches the 6 Higher-only Practice steps tagged (Guided Q4, Exam Q4, plus 3 Higher-tagged Independent items and 1 Higher-tagged numeric item) |
+| Mastery gate: Next disabled until answered | PASS | Confirmed on a fresh diagnostic MCQ |
+| Distractor-specific feedback | PASS | Wrong-answer click on Diagnostic Q1 produced the exact authored note ("That's the unit of distance, not force.") |
+| Reached Exam Q4 (Higher, flawed-diagram discriminator) via real navigation | PASS | Stem text confirmed live: "Diagram 6 shows a crate resting undisturbed on a table, with only one force drawn: a 200 N..." — exact match to authored content |
+| Reminder drawer: opens, moves focus to close button, contains all 6 diagrams, closes and returns focus to trigger | PASS | All confirmed via `document.activeElement` checks with the trigger explicitly focused first (the correct methodology per Pilot #2's own test-methodology note) |
+| Skip-for-now + completion review | PASS | 27 outstanding items correctly identified after a deliberately partial run-through; "Finish" correctly returned to Learn mode regardless — learner never trapped |
+| Mobile/narrow viewport | **NOT TESTABLE** | Same disclosed environment limitation as both prior pilots |
+
+### Gate 7 result
+
+**PASS**, with the same class of honest, disclosed limits as Pilot #2:
+mobile/narrow-viewport testing and mid-page pixel screenshots were not
+obtainable this session. Substituted with real browser-rendered
+geometry, arrow-length, and contrast verification — for this family
+specifically, the arrow-length check is *more* rigorous than a
+screenshot alone could provide, since it confirms the deterministic
+magnitude-to-length mapping held exactly, pixel-for-pixel, in the real
+rendering engine. Final aesthetic/visual-craft judgement (whitespace,
+composition, "does this look art-directed") could not be certified this
+pass — named honestly in the final verdict below.
+
+**Gate 5 visual-axis update, post-Gate-7**: geometric correctness (0
+collisions, 0 out-of-bounds, exact arrow-length verification) and
+contrast (all key colours, both themes) are now **PASS** for all 6
+diagrams — genuinely verified live. Final aesthetic/visual-craft
+judgement is **NOT CERTIFIED** this pass, for the reason given above —
+a real gap in this pilot's evidence, not a defect in the diagrams
+themselves.
 
 ## Gate 8 — Human Approval
 
 Not run by this document — reserved for the user.
+
+---
+
+## Overall Pilot #3 Verdict
+
+| Condition | Status |
+|---|---|
+| Scientifically correct | **MET** — 30/30 independently re-verified checks, 0 errors; the balanced-vs-third-law-pair distinction verified structurally correct (every diagram isolates exactly one object) |
+| Pedagogically strong | **MET** — full anatomy, 7/7 worked examples with wrong-method callouts, 8 misconception cards, genuine Higher discriminator |
+| Assessment valid | **MET** — mark schemes sum correctly, AO3-weighted appropriately for an evaluation-heavy topic, diagram-validity items present, distractor-specific feedback throughout |
+| Foundation experience | **MET** — all 6 blueprint moves present from the first build (the gap Pilot #2 needed a QA pass to catch is closed here by design) |
+| Higher experience | **MET** — the flawed-diagram discriminator is genuine evaluation, not disguised calculation |
+| Force diagram family — geometric/scientific correctness | **MET** — verified live via real rendered arrow-length measurement, the strongest test either diagram family has had |
+| Force diagram family — visual craft (aesthetic) | **NOT CERTIFIED** — same disclosed screenshot-tooling gap as Pilot #2, recurred |
+| Accessibility gate passed | **MET** — names, focus management, drawer trap/return, colour-independence all confirmed live |
+| No P0/P1 defects open | **MET** — no defects found this pilot (the shared-engine bug found in Pilot #2 was already fixed in Part B, before this lesson was built) |
+| Live rendered QA passed where tooling available | **MET, with disclosed limits** — see Gate 7 |
+| Blueprint stress-test completed | See `docs/pilots/resultant-forces-blueprint-review.md` |
+| No serious architecture failure discovered | **MET** — the entire CSS/JS engine transferred with zero logic changes beyond the already-applied Part B fix; only new content and 4 new force-diagram primitives were needed |
+
+## PILOT #3 TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING
+
+Every condition this session's tooling can verify is met, several with
+stronger evidence than either prior pilot had at the equivalent stage
+(the exact arrow-length verification in particular). Per the brief's own
+instruction, this is **not** awarded unconditional approval while human
+visual review of the six force diagrams remains outstanding — the same
+honest posture Pilot #2 held before the user's own inspection closed it.
+The rendered lesson and its diagram family are ready for that review now.
