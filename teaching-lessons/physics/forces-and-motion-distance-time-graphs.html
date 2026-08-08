@@ -1645,13 +1645,25 @@
     }
 
     var group = step.getAttribute('data-group');
-    var label = (GROUP_LABEL[group] || 'Practice') + ' — Step ' + (currentIndex + 1) + ' of ' + visibleSteps.length;
-    progressLabel.textContent = label;
-    stepLive.textContent = label;
+    // Shared cross-mode UI (the sticky progress label/rail and the
+    // aria-live region) is only this function's to write while Practice
+    // mode is actually the visible panel -- renderStep() itself always
+    // runs (e.g. from applyTier()'s rebuildSteps(true), even when the
+    // learner is still in Learn mode), and without this guard it left a
+    // stale "Step X of Y" string in the label until the next scroll
+    // event happened to call updateProgress() and overwrite it. Found
+    // live during Pilot #2 (Distance-Time Graphs); same unmodified code
+    // in both lessons. See INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md §13,
+    // failure mode #15.
+    if (!modePracticePanel.hidden){
+      var label = (GROUP_LABEL[group] || 'Practice') + ' — Step ' + (currentIndex + 1) + ' of ' + visibleSteps.length;
+      progressLabel.textContent = label;
+      stepLive.textContent = label;
 
-    var pct = visibleSteps.length > 1 ? (currentIndex / (visibleSteps.length - 1)) * 100 : 0;
-    progressFill.style.width = pct + '%';
-    progressPuck.style.left = pct + '%';
+      var pct = visibleSteps.length > 1 ? (currentIndex / (visibleSteps.length - 1)) * 100 : 0;
+      progressFill.style.width = pct + '%';
+      progressPuck.style.left = pct + '%';
+    }
 
     document.querySelectorAll('.ile-nav-practice-item').forEach(function(btn){
       var isCurrent = btn.getAttribute('data-group') === group;
