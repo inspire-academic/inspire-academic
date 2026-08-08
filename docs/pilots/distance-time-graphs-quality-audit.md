@@ -387,3 +387,63 @@ first-draft state (which needed a full remediation pass before
 reaching this level of readiness) — see the blueprint-review doc for
 the direct comparison.
 
+---
+---
+
+# HUMAN VISUAL REVIEW — 2026-08-08
+
+Everything above this line is preserved exactly as originally written —
+the live-tooling limitation, the honest "not fully certifiable this
+pass" language, and the conditional **PILOT #2 APPROVED WITH CHANGES**
+verdict are historical record, not amended. This section records what
+closed the one outstanding item.
+
+The user personally inspected the rendered Distance–Time Graphs lesson
+and its five-graph family live on staging
+(`https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-distance-time-graphs.html`)
+and confirmed it production-worthy.
+
+## HUMAN VISUAL REVIEW: PASS
+
+This closes the single condition that kept the earlier verdict
+conditional (the "Graph family visually ≥4/5" row above, and Gate 7's
+disclosed screenshot-tooling gap). Every other condition in the table
+above was already independently MET before this review — human visual
+approval was the only missing piece, not a re-check of anything else.
+
+**Recorded findings:**
+
+- The scientific graph family (Graphs 1–5: point-reading, stationary-
+  vs-moving, gradient comparison, multi-stage journey, unfamiliar
+  Higher discriminator) has passed human rendered visual review.
+- **Mathematically generated graph geometry is now an approved Inspire
+  production capability** — the second canonical diagram family,
+  alongside the motion/vector family Pilot #1 established.
+- **Distance–Time Graphs is now the second canonical lesson reference**
+  for the Inspire Learning Experience, alongside Distance & Displacement.
+- The Inspire Scientific Graph Family (§L of
+  `docs/pilots/distance-time-graphs-graph-family-spec.md`;
+  `scaleValueToY`/`graphFrame`/`dataPath`/`gradientTriangle`/
+  `highlightBand` in `assets/js/diagram-primitives.js` v1.2) is
+  approved as:
+
+## CANONICAL v1 — INSPIRE SCIENTIFIC GRAPH FAMILY
+
+Production-worthy and consistent with
+`docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md`, on the same
+terms the motion/vector family was frozen under (`c766d86`): a genuine,
+usable v1, not necessarily the permanent artistic ceiling.
+
+**Minor future refinements to annotation density, small-label
+legibility, or visual craft are explicitly NOT blockers** and must not
+reopen this pilot on their own — only a genuinely discovered scientific,
+pedagogical, or accessibility defect does.
+
+## Revised final verdict
+
+## PILOT #2 APPROVED
+
+Superseding the earlier conditional verdict now that human visual review
+has closed its one open condition. All conditions in the table above are
+now **MET** without qualification.
+

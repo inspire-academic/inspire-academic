@@ -9,21 +9,25 @@ Last updated: 2026-08-08.
 
 ---
 
-## STATUS: PILOT #2 COMPLETE — FACTORY-READINESS EVALUATION PHASE
+## STATUS: PILOT #2 CLOSED (APPROVED) — PILOT #3 IN PROGRESS
 
 **The lesson benchmark and the diagram-system benchmark remain formally
 FROZEN as the canonical v1 reference.** Do not reopen either for cosmetic
 polishing — only for a real, discovered defect. **Pilot #2 (Distance–Time
-Graphs) is now also complete**, stress-testing the production blueprint
-extracted from the frozen benchmark. The blueprint has been updated to
-v1.1 with evidence-justified changes from that pilot.
+Graphs) is now formally CLOSED and APPROVED**, following human visual
+review of its graph family. **Pilot #3 (Resultant Forces & Free-Body
+Diagrams) is now authorised and in progress** — see below for its status
+once built; if this line still says "in progress" when you're reading
+this, treat Pilot #3's own docs under `docs/pilots/resultant-forces-*`
+as the authoritative status, not this summary.
 
 | Freeze / pilot point | Commit | Verdict |
 |---|---|---|
 | Lesson benchmark (Distance & Displacement) | `fb8e630` | **APPROVED BENCHMARK** — `docs/benchmark/distance-displacement-academic-audit.md` |
 | Diagram system benchmark | `c766d86` | **VISUAL DIAGRAM BENCHMARK APPROVED** — `docs/benchmark/diagram-excellence-audit.md` |
 | Production blueprint extraction | `34cd612` | `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` v1.0 |
-| Pilot #2 — Distance–Time Graphs | `4801dd3` (+ this session's blueprint-update commit) | **PILOT #2 APPROVED WITH CHANGES** — `docs/pilots/distance-time-graphs-quality-audit.md`. Factory-readiness verdict: **MOSTLY GENERALISES — ONE MORE PILOT RECOMMENDED** |
+| Pilot #2 — Distance–Time Graphs | `4801dd3` → `b44e991` → (this session's human-approval commit) | **PILOT #2 APPROVED** (human visual review PASS) — `docs/pilots/distance-time-graphs-quality-audit.md`. Graph family: **CANONICAL v1 — INSPIRE SCIENTIFIC GRAPH FAMILY** |
+| Pilot #3 — Resultant Forces & Free-Body Diagrams | in progress this session | see `docs/pilots/resultant-forces-*` once built |
 
 **Frozen reference assets** (do not modify without a newly discovered
 defect, not preference-driven polish): the approved lesson architecture;
@@ -32,53 +36,52 @@ model; Higher/Foundation pathway behaviour; Inspire Light/Dark theme
 behaviour; the mastery progression model; accessibility/focus behaviour;
 the assessment structure; the scientific diagram workflow;
 the v1.1 motion/vector portion of `assets/js/diagram-primitives.js`;
+the v1.2 graph portion (now also canonical v1, human-approved);
 `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md`;
-and the Distance & Displacement canonical diagram family.
-**Not frozen, and correctly extended this pass**: `assets/js/
-diagram-primitives.js` gained a new, additive v1.2 section (the graph
-family: `scaleValueToY`, `graphFrame`, `dataPath`, `gradientTriangle`,
-`highlightBand`) — nothing in the existing v1.1 motion/vector API was
-changed, only new functions appended. This was explicit, authorised
-scope for Pilot #2, not a breach of the freeze.
+the Distance & Displacement canonical diagram family; and the
+Distance–Time Graphs canonical diagram family.
+
+**Two canonical diagram families are now approved**:
+1. **Motion/vector family** (v1.1) — Distance & Displacement, frozen `c766d86`.
+2. **Graph family** (v1.2) — Distance–Time Graphs, human-approved this
+   session. Mathematically generated graph geometry is now an approved
+   Inspire production capability.
 
 **The diagram system is approved as the v1 deterministic SVG foundation.**
-The current Distance & Displacement diagrams are **canonical v1** —
-production-worthy, not necessarily the absolute artistic ceiling. Future
-art-direction improvements may evolve the standard; they do not reopen
-this benchmark for its own sake.
+Both canonical families are production-worthy, not necessarily the
+absolute artistic ceiling. Future art-direction improvements may evolve
+the standard; they do not reopen either pilot for its own sake — only a
+genuinely discovered scientific, pedagogical, or accessibility defect
+does.
 
 **Production blueprint**: `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`
 v1.1 — the practical, now twice-proven standard for producing lessons.
 Read it, and `docs/pilots/distance-time-graphs-blueprint-review.md`,
-before proposing or building a third lesson or any factory work.
+before proposing or building a fourth lesson or any factory work.
 
-**Pilot #2 summary**: `teaching-lessons/physics/forces-and-motion-distance-time-graphs.html`
+**Pilot #2 summary (CLOSED)**: `teaching-lessons/physics/forces-and-motion-distance-time-graphs.html`
 built through the blueprint end-to-end (Learn/Practice architecture,
 mastery gate, tier/theme engine reused verbatim; a new Inspire Scientific
 Graph Family of 5 diagrams built and QA'd). Scientific accuracy: 33/33
-independently re-verified arithmetic checks, 0 errors. Live rendered QA:
-performed against real staging with real browser interaction (theme/tier
-toggles, mastery gate, distractor feedback, drawer, completion review all
-confirmed live) — with one disclosed, honest gap: pixel-level screenshot
-capture below the page fold was not obtainable this session (a
-reproducible tooling limitation, not a site defect — see the quality
-audit's Gate 7), so the graph family's final visual-craft *aesthetic*
-score is not yet certified, though its geometry and contrast are.
-One real, minor, pre-existing defect in the **shared engine** (present in
-both lessons, not introduced by Pilot 2) was found live and disclosed,
-not fixed: a stale progress-label bug when switching tier while in Learn
-mode — cosmetic only, recorded as blueprint failure mode #15, a
-candidate small future patch, not urgent.
+independently re-verified arithmetic checks, 0 errors. Live rendered QA
+performed against real staging with real browser interaction. Human
+visual review of the rendered graph family: **PASS**. One real, minor,
+pre-existing defect in the **shared engine** (present in both lessons,
+not introduced by Pilot 2) was found live and disclosed: a stale
+progress-label bug when switching tier while in Learn mode — cosmetic
+only, recorded as blueprint failure mode #15. **Status: being fixed this
+session as an explicitly-scoped shared-engine patch before Pilot #3
+begins — see the patch commit for the applied fix once done.**
 
-**Current phase**: Factory-Readiness Evaluation (Pilot #2 complete,
-blueprint updated to v1.1, this document updated). **Next proposed
-phase**: either (a) a human/future-session visual pixel pass on Pilot
-#2's 5 graphs to close its one open item, or (b) a third pilot — see the
-blueprint-review doc's factory-readiness reasoning for why one more
-pilot is recommended before factory design begins. **The factory is
-still not authorised.** No phase transition happens without the user's
-explicit instruction — see "NEXT SESSION — START HERE" at the bottom of
-this file.
+**Current phase**: Pilot #3 in progress (Resultant Forces & Free-Body
+Diagrams) — the third stress-test of the production blueprint, this time
+against symbolic force representation, testing whether the blueprint and
+diagram system generalise across all three representational classes
+(spatial/vector, mathematical graph, symbolic force) without fundamental
+redesign. **The factory is still not authorised.** No phase transition
+happens without the user's explicit instruction — see
+"NEXT SESSION — START HERE" at the bottom of this file (to be rewritten
+once Pilot #3 concludes this session).
 
 ---
 
