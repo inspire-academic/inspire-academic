@@ -51,6 +51,19 @@
     --success: #22c55e;
     --blue: #1d4ed8;
     --cyan-bright: #06b6d4;
+
+    /* Inspire Scientific Diagram System tokens -- aliases onto the
+       lesson's existing theme-aware tokens, not new colour values. See
+       docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md. Declared
+       once here (not per [data-theme] block) because var() references
+       resolve against the cascade at the point of use, not the point of
+       declaration -- these correctly pick up whichever theme is active
+       without needing to be redefined per theme. */
+    --diagram-ink: var(--text);
+    --diagram-ink-muted: var(--text-muted);
+    --diagram-path: var(--cyan-bright);
+    --diagram-vector: var(--gold-ink);
+    --diagram-axis: var(--border-strong);
   }
   [data-theme="dark"]{
     --bg: #0b1628; --bg-panel: rgba(13,28,56,.75); --bg-card: rgba(255,255,255,.045);
@@ -846,66 +859,86 @@
           <p class="ile-section-sub">Four ways of seeing the same idea. Notice how the distance path (the dotted trail) and the displacement arrow (the straight gold line) only match when the journey itself is a straight line.</p>
 
           <figure class="ile-diagram-figure ile-reveal">
-            <svg viewBox="0 0 360 140" role="img" aria-labelledby="ile-d1-title">
+            <svg viewBox="0 0 360 140" role="img" aria-labelledby="ile-d1-title" aria-describedby="ile-d1-desc">
               <title id="ile-d1-title">Direct journey from A to B in a straight line</title>
-              <circle cx="40" cy="80" r="5" fill="var(--cyan-bright)"/><text x="30" y="105" font-size="12" fill="var(--text-muted)">A (start)</text>
-              <circle cx="320" cy="80" r="5" fill="var(--gold)"/><text x="290" y="105" font-size="12" fill="var(--text-muted)">B (finish)</text>
-              <line x1="40" y1="80" x2="320" y2="80" stroke="var(--gold-ink, var(--gold))" stroke-width="3" marker-end="url(#ileD1Arrow)"/>
-              <text x="70" y="65" font-size="12" fill="var(--gold-ink, var(--gold))" font-weight="700">displacement = distance = 300 m east</text>
-              <defs><marker id="ileD1Arrow" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--gold-ink, var(--gold))"/></marker></defs>
+              <desc id="ile-d1-desc">A straight 300 metre journey east from A to B. The displacement, a gold arrow, is 300 metres east. The distance, shown as a separate measured line beneath it, is also 300 metres, because the path is a single straight line.</desc>
+              <defs><marker id="ileD1Vec" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--gold-ink)"/></marker></defs>
+              <line x1="40" y1="98" x2="320" y2="98" stroke="var(--diagram-ink-muted)" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="40" y1="95" x2="40" y2="101" stroke="var(--diagram-ink-muted)" stroke-width="1.5"/>
+              <line x1="320" y1="95" x2="320" y2="101" stroke="var(--diagram-ink-muted)" stroke-width="1.5"/>
+              <line x1="40" y1="58" x2="320" y2="58" stroke="var(--gold-ink)" stroke-width="3" stroke-linecap="round" marker-end="url(#ileD1Vec)"/>
+              <circle cx="40" cy="58" r="5" fill="var(--diagram-ink)"/>
+              <circle cx="320" cy="58" r="5" fill="var(--gold-ink)"/><circle cx="320" cy="58" r="7" fill="none" stroke="var(--bg-card)" stroke-width="2"/>
+              <text x="40" y="80" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">A (start)</text>
+              <text x="320" y="80" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">B (finish)</text>
+              <text x="180" y="42" font-family="var(--font-body)" font-size="13" font-weight="700" fill="var(--gold-ink)" text-anchor="middle">displacement = 300 m east</text>
+              <text x="180" y="118" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">distance = 300 m</text>
             </svg>
-            <figcaption><strong>1. Direct journey.</strong> When the path is a single straight line in one direction, distance and displacement have the same magnitude.</figcaption>
+            <figcaption><strong>1. Direct journey.</strong> When the path is a single straight line in one direction, distance and displacement have the same magnitude — shown here as two separate measures (a vector arrow and a measured span) that happen to agree.</figcaption>
           </figure>
 
           <figure class="ile-diagram-figure ile-reveal">
-            <svg viewBox="0 0 360 200" role="img" aria-labelledby="ile-d2-title">
+            <svg viewBox="0 0 360 200" role="img" aria-labelledby="ile-d2-title" aria-describedby="ile-d2-desc">
               <title id="ile-d2-title">Detour journey from A to C via B, distance greater than displacement</title>
-              <circle cx="40" cy="160" r="5" fill="var(--cyan-bright)"/><text x="20" y="182" font-size="12" fill="var(--text-muted)">A (start)</text>
-              <circle cx="40" cy="40" r="5" fill="var(--text-muted)"/><text x="50" y="35" font-size="12" fill="var(--text-muted)">B</text>
-              <circle cx="280" cy="40" r="5" fill="var(--gold)"/><text x="290" y="35" font-size="12" fill="var(--text-muted)">C (finish)</text>
-              <path d="M40,160 L40,40 L280,40" fill="none" stroke="var(--cyan-bright)" stroke-width="2.5" stroke-dasharray="6 4"/>
-              <line x1="40" y1="160" x2="280" y2="40" stroke="var(--gold-ink, var(--gold))" stroke-width="3" marker-end="url(#ileD2Arrow)"/>
-              <text x="130" y="115" font-size="12" fill="var(--gold-ink, var(--gold))" font-weight="700">displacement (straight line, A→C)</text>
-              <defs><marker id="ileD2Arrow" markerWidth="9" markerHeight="9" refX="5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--gold-ink, var(--gold))"/></marker></defs>
+              <desc id="ile-d2-desc">A journey from A north to B, then east to C, shown as a dashed path. The displacement is the solid gold arrow running directly from A to C, shorter than the dashed path because it cuts across the corner.</desc>
+              <defs><marker id="ileD2Vec" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--gold-ink)"/></marker></defs>
+              <path d="M40,170 L40,40 L290,40" fill="none" stroke="var(--diagram-path)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 4"/>
+              <line x1="40" y1="170" x2="290" y2="40" stroke="var(--gold-ink)" stroke-width="3" stroke-linecap="round" marker-end="url(#ileD2Vec)"/>
+              <circle cx="40" cy="170" r="5" fill="var(--diagram-ink)"/>
+              <circle cx="40" cy="40" r="4" fill="var(--diagram-ink)"/>
+              <circle cx="290" cy="40" r="5" fill="var(--gold-ink)"/><circle cx="290" cy="40" r="7" fill="none" stroke="var(--bg-card)" stroke-width="2"/>
+              <text x="32" y="190" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">A (start)</text>
+              <text x="62" y="32" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">B</text>
+              <text x="290" y="26" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">C (finish)</text>
+              <text x="150" y="150" font-family="var(--font-body)" font-size="13" font-weight="700" fill="var(--gold-ink)" text-anchor="middle">displacement (straight line, A → C)</text>
             </svg>
-            <figcaption><strong>2. Detour journey.</strong> Distance = length of the dotted path actually walked (A→B→C). Displacement = the single straight gold arrow from A to C, with its own direction — always shorter than or equal to the distance.</figcaption>
+            <figcaption><strong>2. Detour journey.</strong> Distance = length of the dashed path actually walked (A→B→C). Displacement = the single straight gold arrow from A to C, with its own direction — always shorter than or equal to the distance.</figcaption>
           </figure>
 
           <figure class="ile-diagram-figure ile-reveal">
-            <svg viewBox="0 0 360 120" role="img" aria-labelledby="ile-d3-title">
+            <svg viewBox="0 0 460 130" role="img" aria-labelledby="ile-d3-title" aria-describedby="ile-d3-desc">
               <title id="ile-d3-title">Round trip journey, distance 500 metres, displacement zero</title>
-              <circle cx="40" cy="60" r="6" fill="var(--gold)"/><text x="15" y="90" font-size="12" fill="var(--text-muted)">Start = Finish</text>
-              <path d="M40,60 C 140,10 220,10 320,60" fill="none" stroke="var(--cyan-bright)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ileD3ArrowA)"/>
-              <path d="M320,60 C 220,110 140,110 40,60" fill="none" stroke="var(--cyan-bright)" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ileD3ArrowB)"/>
-              <text x="115" y="25" font-size="12" fill="var(--text-muted)">250 m out</text>
-              <text x="115" y="118" font-size="12" fill="var(--text-muted)">250 m back</text>
+              <desc id="ile-d3-desc">A round trip: 250 metres out along a straight road, then 250 metres back along the same road. Total distance 500 metres. Because the start and finish points are identical, the displacement is 0 metres, marked explicitly at that point.</desc>
               <defs>
-                <marker id="ileD3ArrowA" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--cyan-bright)"/></marker>
-                <marker id="ileD3ArrowB" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--cyan-bright)"/></marker>
+                <marker id="ileD3Out" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--diagram-path)"/></marker>
+                <marker id="ileD3Back" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--diagram-path)"/></marker>
               </defs>
+              <line x1="40" y1="38" x2="320" y2="38" stroke="var(--diagram-path)" stroke-width="3" stroke-linecap="round" marker-end="url(#ileD3Out)"/>
+              <line x1="320" y1="82" x2="40" y2="82" stroke="var(--diagram-path)" stroke-width="3" stroke-linecap="round" marker-end="url(#ileD3Back)"/>
+              <circle cx="40" cy="60" r="5" fill="var(--gold-ink)"/><circle cx="40" cy="60" r="7" fill="none" stroke="var(--bg-card)" stroke-width="2"/>
+              <text x="40" y="102" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">Start = Finish</text>
+              <text x="180" y="28" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">250 m out</text>
+              <text x="180" y="100" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">250 m back</text>
+              <rect x="273.5" y="52" width="129" height="16" rx="8" fill="var(--bg-card)" stroke="var(--gold-ink)" stroke-width="1"/>
+              <text x="338" y="64" font-family="var(--font-body)" font-size="13" font-weight="700" fill="var(--gold-ink)" text-anchor="middle">displacement = 0 m</text>
             </svg>
-            <figcaption><strong>3. Round trip.</strong> Distance = 250 m + 250 m = 500 m. Displacement = 0 m, because the start and finish positions are the same point — there is no straight-line arrow to draw.</figcaption>
+            <figcaption><strong>3. Round trip.</strong> The same road, walked both ways: 250 m out, then 250 m back. Distance = 250 m + 250 m = 500 m. Displacement = 0 m, marked explicitly, because the start and finish positions are the same point.</figcaption>
           </figure>
 
           <figure class="ile-diagram-figure ile-tier-higher-only ile-reveal" data-tier-block="3">
-            <svg viewBox="0 0 360 90" role="img" aria-labelledby="ile-d4-title">
+            <svg viewBox="0 0 360 100" role="img" aria-labelledby="ile-d4-title" aria-describedby="ile-d4-desc">
               <title id="ile-d4-title">Signed displacement on a number line: plus 8 metres then minus 3 metres, net plus 5 metres</title>
-              <line x1="20" y1="55" x2="340" y2="55" stroke="var(--border-strong)" stroke-width="2"/>
-              <text x="16" y="75" font-size="11" fill="var(--text-soft)">−10</text>
-              <text x="176" y="75" font-size="11" fill="var(--text-soft)">0</text>
-              <text x="332" y="75" font-size="11" fill="var(--text-soft)">+10</text>
-              <circle cx="180" cy="55" r="4" fill="var(--text-muted)"/>
-              <line x1="180" y1="40" x2="300" y2="40" stroke="var(--vector-pos)" stroke-width="3" marker-end="url(#ileD4A)"/>
-              <text x="205" y="30" font-size="11" fill="var(--vector-pos)" font-weight="700">+8 m</text>
-              <line x1="300" y1="25" x2="264" y2="25" stroke="var(--vector-neg)" stroke-width="3" marker-end="url(#ileD4B)"/>
-              <text x="255" y="16" font-size="11" fill="var(--vector-neg)" font-weight="700">−3 m</text>
-              <circle cx="264" cy="55" r="4" fill="var(--gold)"/>
+              <desc id="ile-d4-desc">A number line from -10 to +10. Starting at 0, a displacement of +8 metres is shown, followed by -3 metres, giving a net displacement of +5 metres, marked on the line. The total distance travelled, 11 metres, ignores the signs.</desc>
               <defs>
-                <marker id="ileD4A" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--vector-pos)"/></marker>
-                <marker id="ileD4B" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--vector-neg)"/></marker>
+                <marker id="ileD4Pos" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--vector-pos)"/></marker>
+                <marker id="ileD4Neg" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="var(--vector-neg)"/></marker>
               </defs>
+              <line x1="20" y1="55" x2="340" y2="55" stroke="var(--diagram-axis)" stroke-width="2" stroke-linecap="round"/>
+              <line x1="20" y1="52" x2="20" y2="58" stroke="var(--diagram-axis)" stroke-width="2"/>
+              <text x="20" y="73" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">−10</text>
+              <line x1="180" y1="52" x2="180" y2="58" stroke="var(--diagram-axis)" stroke-width="2"/>
+              <text x="180" y="73" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">0</text>
+              <line x1="340" y1="52" x2="340" y2="58" stroke="var(--diagram-axis)" stroke-width="2"/>
+              <text x="340" y="73" font-family="var(--font-body)" font-size="11" fill="var(--diagram-ink-muted)" text-anchor="middle">+10</text>
+              <line x1="308" y1="40" x2="308" y2="55" stroke="var(--diagram-ink-muted)" stroke-width="1"/>
+              <line x1="180" y1="40" x2="308" y2="40" stroke="var(--vector-pos)" stroke-width="3" stroke-linecap="round" marker-end="url(#ileD4Pos)"/>
+              <line x1="308" y1="25" x2="260" y2="25" stroke="var(--vector-neg)" stroke-width="3" stroke-linecap="round" marker-end="url(#ileD4Neg)"/>
+              <circle cx="180" cy="55" r="4" fill="var(--diagram-ink)"/>
+              <circle cx="260" cy="55" r="5" fill="var(--gold-ink)"/><circle cx="260" cy="55" r="7" fill="none" stroke="var(--bg-card)" stroke-width="2"/>
+              <text x="244" y="32" font-family="var(--font-body)" font-size="11" fill="var(--vector-pos)" text-anchor="middle">+8 m</text>
+              <text x="284" y="17" font-family="var(--font-body)" font-size="11" fill="var(--vector-neg)" text-anchor="middle">−3 m</text>
             </svg>
-            <figcaption><span class="ile-tier-badge ile-badge-higher">Higher</span> <strong>4. Signed 1D displacement.</strong> +8 m then −3 m gives a net displacement of +5 m (gold dot) — but a total distance of 11 m, since distance ignores the sign.</figcaption>
+            <figcaption><span class="ile-tier-badge ile-badge-higher">Higher</span> <strong>4. Signed 1D displacement.</strong> +8 m then −3 m gives a net displacement of +5 m (ringed gold marker, positioned exactly on the number line's own scale) — but a total distance of 11 m, since distance ignores the sign.</figcaption>
           </figure>
         </section>
 
