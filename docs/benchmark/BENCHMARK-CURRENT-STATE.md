@@ -9,7 +9,48 @@ Last updated: 2026-08-08.
 
 ---
 
-## STATUS: APPROVED BENCHMARK
+## STATUS: BENCHMARK FROZEN — PRODUCTION-SYSTEM EXTRACTION PHASE
+
+**Both the lesson benchmark and the diagram-system benchmark are now
+formally FROZEN as the canonical v1 reference.** Do not reopen either for
+cosmetic polishing — only for a real, discovered defect. The current phase
+is extracting a lean, repeatable production blueprint from what this
+benchmark actually proved; it is not further benchmark work.
+
+| Freeze point | Commit | Verdict |
+|---|---|---|
+| Lesson benchmark (Distance & Displacement) | `fb8e630` | **APPROVED BENCHMARK** — `docs/benchmark/distance-displacement-academic-audit.md` |
+| Diagram system benchmark | `c766d86` | **VISUAL DIAGRAM BENCHMARK APPROVED** — `docs/benchmark/diagram-excellence-audit.md` |
+
+**Frozen reference assets** (do not modify without a newly discovered
+defect, not preference-driven polish): the approved lesson architecture;
+the Inspire Learning Experience layout; the Classic/Inspire coexistence
+model; Higher/Foundation pathway behaviour; Inspire Light/Dark theme
+behaviour; the mastery progression model; accessibility/focus behaviour;
+the assessment structure; the scientific diagram workflow;
+`assets/js/diagram-primitives.js`; `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md`;
+and the Distance & Displacement canonical diagram family.
+
+**The diagram system is approved as the v1 deterministic SVG foundation.**
+The current Distance & Displacement diagrams are **canonical v1** —
+production-worthy, not necessarily the absolute artistic ceiling. Future
+art-direction improvements may evolve the standard; they do not reopen
+this benchmark for its own sake.
+
+**Production blueprint**: `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`
+— the practical, benchmark-derived standard for producing the next lesson.
+Read it before proposing or building any second lesson.
+
+**Current phase**: Production-System Extraction (blueprint written,
+this document updated). **Next proposed phase**: Second-Lesson Pilot
+(Distance–Time Graphs recommended — see the blueprint §15). **The factory
+is not authorised.** Neither phase transition happens without the user's
+explicit instruction — see "NEXT SESSION — START HERE" at the bottom of
+this file.
+
+---
+
+## HISTORICAL STATUS AT FREEZE TIME: APPROVED BENCHMARK
 
 As of 2026-08-08, this benchmark has passed all five required gates:
 
@@ -406,30 +447,41 @@ platform rewrite. That is explicitly the later phase, not this one.
 
 ## NEXT SESSION — START HERE
 
-**The benchmark is APPROVED. There is no pending gate to run.** A new
-session picking this up should:
+**Both the lesson and diagram benchmarks are FROZEN and APPROVED. The
+production blueprint has been extracted. There is no pending gate to run
+and no open benchmark work.** A new session picking this up should:
 
-1. Read this entire file, then read
-   `docs/benchmark/distance-displacement-academic-audit.md` in full for
-   the actual findings and final verdict — this file's §3–§8 below are
-   now historical context, not a to-do list.
-2. Do not redo completed architectural, accessibility, academic,
-   pedagogical, or live-verification work (§7, and the audit doc's own
-   "do not redo" guidance).
-3. Confirm the current branch and latest commit
-   (`git status`, `git log -1` — expect `staging`, commit `f2d7d6b` or
-   later).
-4. Confirm the staging benchmark still resolves (fetch the staging URL in
-   §1; if it 404s or looks unstyled, something changed — investigate before
-   assuming this document is stale).
-5. **Do not begin the production factory, an admin dashboard, or mass
-   lesson generation without a new, explicit instruction from the user
-   to do so.** Passing this benchmark's gates authorises freezing *this
-   lesson* as the reference — it is not itself the instruction to start
-   building the factory.
-6. If asked to extend this work (a second lesson, the factory, spec-
-   accuracy verification against real AQA/Edexcel documents, a human
-   subject-specialist review, or closing any of the smaller named residual
-   items in the audit doc's final section), treat that as new scope
-   requiring its own plan — this document and the audit doc are the
-   grounding context for it, not a task list to execute unprompted.
+1. Read this file in full, then read
+   `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` in full — that
+   is the practical standard for producing the next lesson, derived
+   entirely from this benchmark's real findings, not theory.
+2. **Do not reopen the Distance & Displacement lesson or diagram
+   benchmark without a genuinely discovered defect.** Cosmetic
+   re-polishing of either is explicitly out of scope now — both are
+   frozen v1 canonical references (see freeze table above). If something
+   looks wrong, verify it's a real regression against the specific commit
+   (`fb8e630` lesson / `c766d86` diagrams) before touching either.
+3. **Do not start mass lesson production, the six-agent factory, a new
+   CMS, or an admin dashboard.** The factory is not authorised. Passing
+   this benchmark and extracting its blueprint authorises understanding
+   the production system — it is not itself the instruction to build it.
+4. Confirm the current branch and latest commit (`git status`, `git log
+   -1` — expect `staging`).
+5. Confirm the staging benchmark still resolves (fetch the staging URL in
+   §1 below; if it 404s or looks unstyled, something changed — investigate
+   before assuming this document is stale).
+6. **Present the recommended second-lesson pilot** (Distance–Time Graphs
+   — see the blueprint §15 for the full candidate analysis and why) **and
+   wait for explicit approval before building it.** Do not start writing
+   lesson content, diagrams, or assessment items for it unprompted.
+7. If asked to extend this work in any other direction (spec-accuracy
+   verification against real AQA/Edexcel documents, a human
+   subject-specialist review, building the second lesson, or starting the
+   factory), treat each as new scope requiring its own explicit
+   instruction and its own plan — this document and the blueprint are
+   grounding context, not a task list to execute unprompted.
+8. Historical detail on the frozen benchmark itself (original findings,
+   remediation passes, live-verification evidence) lives in
+   `docs/benchmark/distance-displacement-academic-audit.md` and
+   `docs/benchmark/diagram-excellence-audit.md` — read only as needed,
+   the blueprint is the distilled, actionable version of both.
