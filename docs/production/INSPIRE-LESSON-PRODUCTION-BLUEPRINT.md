@@ -1,4 +1,4 @@
-# Inspire Lesson Production Blueprint — v1.2
+# Inspire Lesson Production Blueprint — v1.4
 
 Derived entirely from what was actually built, broken, fixed, and verified
 producing the **Distance & Displacement** benchmark (Physics, Forces and
@@ -32,7 +32,8 @@ itself remains unauthorised and unbuilt).
 - Working technical standard: `docs/benchmark/lesson-architecture-standard.md`
 - Diagram standard: `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md` v1.1
 - Pilot #2 stress-test: `docs/pilots/distance-time-graphs-*` (plan, graph-family spec, quality audit, blueprint review) — verdict **PILOT #2 APPROVED** (human visual review passed)
-- Pilot #3 stress-test: `docs/pilots/resultant-forces-*` (plan, force-diagram-family spec, quality audit, blueprint review) — verdict **PILOT #3 TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING**
+- Pilot #3 stress-test: `docs/pilots/resultant-forces-*` (plan, force-diagram-family spec, quality audit, blueprint review) — verdict **PILOT #3 APPROVED** (human visual review passed 2026-08-08; Force Diagram Family CANONICAL v1)
+- Pilot #4 stress-test: `docs/pilots/chemistry-pilot-*` (selection, representation-family spec, quality audit, blueprint review) — verdict **PILOT #4 TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING**
 
 **v1.3 update**: stress-tested against **Pilot #4 — Relative Formula
 Mass & Moles**, the first **non-Physics** (GCSE Chemistry) lesson built
@@ -56,13 +57,30 @@ browser-rendered contact outside Physics, since that class of check —
 historically where this project's most serious defects were found —
 could not run.
 
+**v1.4 update**: Pilot #4's live rendered QA (Gate 7) has now actually
+run, completing the evidence the v1.3 update above named as missing.
+Two real defects were found, root-caused, and fixed at the systemic
+layer — one Chemistry-specific (an SVG text-wrap gap, folded into
+`docs/pilots/chemistry-pilot-representation-family-spec.md`), one a
+genuinely cross-subject shared-engine latent defect (flex-item
+blockification of inline content, folded into §13 as failure mode #17).
+Full detail: `docs/pilots/chemistry-pilot-quality-audit.md`'s LIVE
+RENDERED QA section and `docs/pilots/chemistry-pilot-blueprint-review.md`'s
+Live QA update. Verdict: **PILOT #4 TECHNICALLY APPROVED — HUMAN VISUAL
+REVIEW PENDING**, the same strength of verdict Pilot #3 reached before
+human review closed it.
+
 **Status of this document**: a practical production standard, proven
 against three GCSE Physics lessons (spatial/vector, mathematical graph,
-symbolic force representation) with full live-QA evidence, and
-stress-tested once against a fourth, cross-subject GCSE Chemistry
-lesson with source-level and arithmetic evidence only. Live rendered
-verification of the Chemistry pilot remains outstanding — revise this
-status again once that pass has actually happened, not merely attempted.
+symbolic force representation) with full live-QA evidence, and now also
+proven against a fourth, cross-subject GCSE Chemistry lesson with full
+live-QA evidence — the architecture (lesson anatomy, tier model,
+assessment object model) transferred with zero mechanism changes; the
+diagram-production tooling required a narrow, disclosed Chemistry-
+specific extension (no pre-built primitive library, no text-wrap
+helper). One genuinely new cross-subject rule was added to §13 as a
+direct result. Human visual review of the Chemistry pilot's new
+representation family remains the one outstanding gate.
 
 **Who this is for**: a teacher/content author, Claude Code, a future AI
 agent, a QA reviewer, or a developer — anyone who needs to answer "how do
@@ -872,6 +890,7 @@ this blueprint's rules exist, not abstractions.
 | 14 | The "Higher extension" item was, by its own examiner note, "same method as Worked Example 2 with larger numbers" — not a genuine Grade 8–9 discriminator | Looks like stretch content because it's tagged Higher and has bigger numbers; only mapping every assessed item against every worked-example template by hand revealed 100% template-identity | Every claimed "stretch"/"challenge" item is tested against: could a student who has only seen the worked examples solve this by direct template-matching? |
 | 15 | (Found by Pilot #2, Distance–Time Graphs) Switching tier while still in Learn mode left the sticky progress label showing stale Practice-mode text ("Retrieval Diagnostic — Step 1 of 30") until the next scroll event fired — because `applyTier()` always calls `rebuildSteps(true)` → `renderStep()`, which unconditionally writes a Practice-mode-format string into the shared label regardless of which mode panel is actually visible. Confirmed present in the original Lesson 1 benchmark's own unmodified code, not introduced by Pilot 2 — a latent defect in the shared engine, only surfaced because Pilot 2's QA happened to test the tier toggle while still in Learn mode | The bug is invisible unless a session specifically toggles tier without first switching to Practice mode — an interaction path Lesson 1's own live QA pass didn't happen to exercise | Any shared UI state written by more than one code path (here: `renderStep()` and `updateProgress()` both write `progressLabel.textContent`) must guard against being visible in the wrong mode/context — e.g. mirror `updateProgress()`'s own `!modeLearnPanel.hidden` check, or call `updateProgress()` immediately after any state change made while Learn mode is active. **FIXED, commit `08583b5`**, applied identically to both lessons as a small, explicitly-scoped patch (guarded the write behind `!modePracticePanel.hidden`) — re-verified live on both `forces-and-motion-distance-and-displacement.html` and `forces-and-motion-distance-time-graphs.html`: the label no longer goes stale, and mastery gate, skip, distractor feedback, tier switching, theme switching, step-change focus, and `aria-live` announcements were all re-confirmed undisturbed on both lessons before Pilot #3 began |
 | 16 | (Found by Pilot #3, Resultant Forces & Free-Body Diagrams) A four-arrow diagram (multiple forces sharing one origin point) produced two real, visible label/geometry collisions — a horizontal-force label's text crossing a vertical arrow's line, and a `calloutLeader` passing through a label — that the existing text-collision QA script did not catch at all, because it only ever compared text bounding boxes against other text bounding boxes, never against line geometry | The pre-existing collision script, trusted since Pilot #2 and genuinely correct for what it checks, created false confidence that "collision-checked" meant "fully checked" — it silently had no coverage for label-vs-line crossings, a gap only visible once a diagram dense enough to produce one (4+ arrows from one origin) was attempted | Diagram QA must run **two** distinct geometric checks, not one: text-vs-text collision (existing) and text-vs-line crossing (new, sampling points along every line/path and testing against every label's bounding box). Both are SAFE TO AUTOMATE and cheap; recommend making both a standing part of any diagram-generation workflow, never relying on collision-checking alone to mean "geometrically verified" |
+| 17 | (Found by Pilot #4, Relative Formula Mass & Moles — the first cross-subject, live-QA'd pilot) `.ile-objectives-list li{ display:flex; gap:8px; ... }`, shared verbatim across all four lesson files, blockified inline `<sub>` elements mixed with plain text inside an objectives bullet — "M<sub>r</sub>" rendered as "M" with the "r" dropped onto its own barely-visible line. 4 of 111 `<sub>` elements on the page were affected (3 of 5 objectives bullets) | This CSS rule had shipped, unchanged, across all three Physics lessons' objectives lists without ever producing a visible defect — because no Physics objectives bullet ever mixed inline text with another inline element that depends on staying inline (only plain text and, at most, a block-level tier badge). The rule "safe because it shipped three times before" was actually just "safe for the content shapes those three lessons happened to use" | Any shared CSS rule using `display:flex`/`grid` directly on an element that may contain **author-supplied inline content mixed with plain text** (not just a fixed, known set of children) must be checked for flex/grid-item blockification before being trusted as proven by prior lessons alone — a rule shipping without incident N times is evidence about what those N lessons' content contained, not evidence the rule is safe for content shapes none of them used. Fixed for Chemistry (`position:relative` + absolute-positioned `::before`, replacing the flex layout); **the identical latent risk remains, undisturbed, in all three Physics lesson files**, since no Physics content today triggers it — disclosed here, not silently carried forward. See `docs/pilots/chemistry-pilot-blueprint-review.md`'s Live QA update for the full ORIGINAL RULE → CHEMISTRY EVIDENCE → GENERALIZED RULE trace |
 
 ---
 

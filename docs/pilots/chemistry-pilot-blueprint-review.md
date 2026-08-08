@@ -230,6 +230,86 @@ log above should not be read as proof it won't.
 
 ---
 
+## Live QA update — 2026-08-08 (second session)
+
+Gate 7 has now actually run (see
+`docs/pilots/chemistry-pilot-quality-audit.md`'s LIVE RENDERED QA
+section) — the missing evidence this document's original version named
+as the central open item. Two real, related-but-distinct defects were
+found, both root-caused and fixed at the systemic layer, not patched
+one-off. This section updates the affected blueprint-section
+classifications and records one genuinely new cross-subject production
+rule, in the required format.
+
+### §5/§6 reclassified: WORKED WITH SUBJECT-SPECIFIC ADAPTATION → confirmed, with a concrete new gap named
+
+The live pass confirmed the adaptation this document already predicted
+(no pre-built primitive library existed for Chemistry) had a real
+consequence, not just a theoretical one: **Representation 3's caption
+silently overflowed its viewBox by ~300 units**, because the
+hand-authored SVG had no equivalent of the Physics families' `wrap()`
+text-wrapping primitive. This is now confirmed, not hypothetical —
+§5/§6 stay classified WORKED WITH SUBJECT-SPECIFIC ADAPTATION, and the
+representation-family spec has been updated with an explicit rule (see
+`docs/pilots/chemistry-pilot-representation-family-spec.md`).
+
+### New cross-subject production rule — genuinely discovered this pilot, not present in any Physics pilot
+
+```
+ORIGINAL RULE
+Fresh, uniquely prefixed class names (.ile-) prevent CSS collisions
+between a lesson and its parent page (blueprint §13, failure mode #3).
+Beyond that, this engine's shared component CSS (.ile-objectives-list,
+etc.) was treated as a stable, reusable layer — copied verbatim,
+lesson to lesson, with no further scrutiny once it had shipped once
+without a visible defect.
+
+PHYSICS ASSUMPTION DISCOVERED
+`.ile-objectives-list li{ display:flex; gap:8px; ... }` was written,
+and has shipped unchanged, across all three Physics lessons' objectives
+lists — every one of which contains only plain text and, at most, a
+tier badge `<span>` per bullet. Flex-item blockification of inline
+children never had a visible consequence in any Physics lesson, because
+no Physics objectives bullet ever mixed inline text with another
+inline element like `<sub>`/`<sup>` that depends on staying inline to
+render correctly. The rule "this shared CSS is safe, it shipped fine
+three times" was an unexamined assumption specific to what Physics
+objectives happened to contain, not a property of the CSS itself.
+
+CHEMISTRY EVIDENCE
+Chemistry's objectives list needed inline "M<sub>r</sub>"/"A<sub>r</sub>"
+notation directly inside bullet text — exactly the shape of content
+that exposes flex-item blockification. 4 of 111 `<sub>` elements broke
+(3 of 5 objectives bullets), confirmed live via `getComputedStyle()`
+and a controlled `display` override that isolated the cause precisely.
+Fixed by replacing the flex layout with `position:relative` +
+absolute-positioned `::before`, applied to the Chemistry lesson file
+only — the identical latent risk remains, undisturbed, in all three
+Physics lesson files, because no Physics content today triggers it.
+
+GENERALIZED RULE
+Any shared CSS rule using `display:flex` (or `grid`) directly on an
+element that may contain **author-supplied inline content mixed with
+plain text** — not just a fixed, known set of child elements — must be
+audited for flex/grid-item blockification before being trusted as
+"proven" by prior lessons alone. A rule having shipped without incident
+in N prior lessons is evidence about what those N lessons' content
+happened to contain, not evidence the rule is safe for content shapes
+none of them used. This is now the second time in this project a latent
+shared-engine defect was found only because a new lesson's content
+shape was genuinely different from every lesson before it (the first
+was Pilot #2's stale-progress-label bug, failure mode #15) — worth
+treating as a pattern, not a coincidence: **new content shapes, not
+just new subjects, are what actually stress-test a shared engine.**
+```
+
+This rule has been folded into
+`docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` §13 as failure
+mode #17. **The three Physics lesson files were not edited** — per
+instruction, reopening them requires a visible defect or regression,
+and none exists in their current content. The risk is disclosed, not
+silently carried forward unrecorded.
+
 ## What this pilot actually answers, and what it doesn't yet
 
 **Answered, with real evidence**: the lesson anatomy, tier model,
@@ -241,15 +321,23 @@ general. The diagram-production *workflow's shape* also transfers,
 requiring only a subject-appropriate representation family, not a
 process change.
 
-**Not yet answered**: whether the shared engine, the new representation
-family, and this specific lesson's content actually survive contact
-with a real browser and a real rendered page — the exact class of
-defect every prior pilot's most serious findings came from (failure
-modes #1, #2, #3, #8 in the blueprint were all invisible to source
-review and only found live). This pilot cannot claim the same strength
-of "the method generalises" verdict Pilots #2/#3 could, precisely
-because its hardest evidence category is missing. See
-`docs/pilots/chemistry-pilot-quality-audit.md`'s verdict and
+**Now also answered, as of the live QA update above**: yes, and not
+trivially — the shared engine, the new representation family, and this
+lesson's content were tested against a real browser and a real rendered
+page, and it found exactly the class of defect every prior pilot's most
+serious findings came from (failure modes #1, #2, #3, #8, #15, #16 in
+the blueprint were all invisible to source review and only found live;
+this pilot's new failure mode #17 joins that list). Two real defects
+were found, root-caused, fixed at the systemic layer, and re-verified
+live — not zero defects (which would have been weaker, less-tested-
+sounding evidence), but zero *unresolved* defects after genuine
+scrutiny. This pilot can now claim essentially the same strength of "the
+method generalises" evidence Pilots #2/#3 could, with one honest
+remaining gap: no automated collision/overflow-checking script has been
+committed to the repo for this family yet (§12's proposed rule remains
+open, not yet built as permanent tooling — this pass's overflow check
+was a one-off live script, not a reusable asset). See
+`docs/pilots/chemistry-pilot-quality-audit.md`'s updated verdict and
 `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`'s Cross-Subject
 Pilot #4 Update section for how this is carried into the final
 cross-subject factory-readiness verdict.

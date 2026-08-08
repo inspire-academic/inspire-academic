@@ -304,3 +304,284 @@ not downgraded-but-passed. The lesson is live on `staging` and ready for
 that pass — either in a future session with browser access, or via the
 user's own inspection — before this pilot can be given the same
 strength of verdict the three Physics pilots earned.
+
+**Status as of this section: superseded by the LIVE RENDERED QA — PILOT
+#4 section below, run in a later session once browser access became
+available.** Preserved here unedited, per instruction not to overwrite
+prior history.
+
+---
+
+## LIVE RENDERED QA — PILOT #4 — 2026-08-08 (second session)
+
+**Browser environment**: Claude-in-Chrome extension, real Chrome tab,
+full click/JS/console/network access — genuinely available this pass,
+unlike the previous session. Tested against
+`https://staging.inspireacademic.org/teaching-lessons/chemistry/quantitative-chemistry-relative-formula-mass-moles.html`,
+initially at commit `d6583c7`, with two defects found, fixed at commit
+`aa21892`, and re-verified live after a cache-bypassed reload against
+the fixed version.
+
+### Checklist
+
+| Check | Result | Evidence |
+|---|---|---|
+| Page loads correctly | PASS | Real screenshot, full page renders, correct title/theme/layout |
+| No missing assets | PASS | `read_network_requests`: 4 requests (page + 2 Google Fonts files), all `200` |
+| Console errors | PASS, 0 errors | `read_console_messages`, checked after fresh load and after extensive interaction (theme/tier/mode switching, practice flow, drawer, 20+ clicks) |
+| Duplicate IDs | PASS, 0 duplicates | Live DOM query: 83 id-bearing elements at page load, 89 once Practice-mode renderers populate their containers, 0 duplicates at either point |
+| Inspire Dark | PASS | Screenshotted; correct token values |
+| Inspire Light | PASS | Screenshotted; `getComputedStyle` confirms `--bg` resolves to `#f2f7fd` (rgb(242,247,253)) once settled — an initial same-tick read returned a stale value, a timing artifact of reading computed style in the same script frame as the toggle click, not a real defect (a second read after a short delay was correct; the visual render was correct from the first screenshot) |
+| Higher tier | PASS | Default on load, objectives/content correct |
+| Foundation tier | PASS | 0 `.ile-tier-higher-only` elements visible (via `checkVisibility()`), Foundation-only content (orientation box, first-look, Example 0) visible |
+| Learn mode | PASS | Screenshotted, scroll-based progress label correct |
+| Practice mode | PASS | Step controller renders, sidebar nav groups work, direct group-jump via sidebar confirmed |
+| Mastery gate | PASS | Next disabled on an unanswered MCQ and on an unanswered hint-based question; enabled immediately on answering (click or last-hint-open) |
+| Skip-for-now | PASS | Skipping Exam Q4 shows the "Skipped — come back to this" note, Next becomes available, item remains flagged unanswered |
+| Return-to-skipped / completion review | PASS | Reached the completion step with 20 outstanding items (1 explicit skip + 19 steps jumped past via sidebar nav without answering); review list rendered all 20 as clickable buttons with correct truncated stems; clicking one navigated back correctly and updated sidebar `aria-current` |
+| Focus movement after Next | PASS | `document.activeElement` confirmed landing on the new step's heading (milestone steps) or the step container itself (question steps, no heading) — the documented fallback working as specified |
+| `aria-live` announcements | PASS | `#ileStepLive` (`role="status"`, `aria-live="polite"`) text confirmed matching the visible progress label on each step change |
+| Drawer focus/return | PASS | Opening moves focus to the close button (`document.activeElement.id === 'ileReminderClose'`); `Escape` closes the drawer and returns focus to the trigger button (`ileReminderBtn`) — both confirmed via live `document.activeElement` checks, not assumed |
+| All Chemistry representations | PASS after 1 fix | See dedicated section below |
+| All chemical formulae | PASS after 1 fix | H₂O, CO₂, Ca(OH)₂, Mg(NO₃)₂, MgO, Al₂O₃, NaCl, Na₂CO₃, CuSO₄, MgCO₃ all inspected live; one class of formula (the objectives-list bullets) was broken before the fix — see below |
+| All subscripts | PASS after 1 fix | 111 `<sub>` elements total on the page; 4 (inside 3 objectives-list `<li>`s) computed `display:block` due to flex-item blockification before the fix; 107 were correct throughout (prose, worked examples, misconceptions, exam questions, SVG text) |
+| All numeric examples | PASS | Spot-checked live against the Gate 2 arithmetic re-derivation (e.g. Independent Q7: 8.8÷0.2=44→CO₂, confirmed via live click producing the exact authored feedback text) |
+| All exam questions | PASS | Q4 (the Higher discriminator, Mg(NO₃)₂) inspected in full: stem, mark scheme (3 rows summing to 3), and "Model answer & examiner note" all render correctly — see dedicated Higher-discriminator section below |
+| All feedback | PASS | Distractor-specific feedback confirmed live on both a correct answer (Diagnostic Q1, MCQ) and an evaluation item (Independent Q7) — exact authored text returned, not a generic message |
+| Mobile/narrow width | **NOT TESTABLE** | `resize_window` to 390×844 did not change `window.innerWidth` (still reported 2880) or the rendered layout — the same documented tooling limitation Pilot #2's own Gate 7 first identified (`INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` §9), reproduced identically here, not a new finding |
+
+### Chemistry representation family — live QA (four independent axes)
+
+**SCIENTIFIC**: PASS. All three diagrams' formulae, subscripts, and
+numeric relationships inspected live and match the Gate 2
+re-derivation exactly (H₂O=18; the bidirectional n=m÷Mr / m=n×Mr
+relationship; Ca(OH)₂=74 correct / 73 the deliberately-shown error). No
+visual implication contradicts the chemistry — the "wrong" strip is
+clearly marked wrong (dashed border, ✕, red/orange ink), never
+ambiguous about which strip is correct.
+
+**PEDAGOGICAL**: PASS. Each representation visibly teaches the one
+thing it exists to teach: Diagram 1 makes "count every atom present,
+including repeats" impossible to miss (two separate H boxes, not one);
+Diagram 2's two-arrow, two-direction layout makes "neither direction is
+more basic" a visual fact, not just a sentence; Diagram 3's side-by-side
+comparison makes the bracket error's exact mechanism (which atom got
+missed) immediately legible, reinforced by the now-complete, no-longer-
+truncated explanatory caption. Bracket/subscript relationships read as
+unambiguous — confirmed by direct inspection of Ca(OH)₂ and Mg(NO₃)₂ at
+real rendered size.
+
+**VISUAL**: PASS, with one real defect found and fixed (see below).
+Typography is comfortably readable at real rendered size (the 720px
+`.ile-diagram-figure svg` max-width, carried over from the Physics
+families' own editorial-scale lesson, applied correctly here too).
+Formulae feel deliberately typeset (subscripts sized and positioned
+consistently across all three diagrams). Spacing reads as intentional —
+generous box padding, clear gaps between the three diagrams. No label
+collisions found in any of the three diagrams (re-checked live after
+the Representation 3 fix). No excessive empty canvas — each diagram's
+viewBox is close-fit to its content. Visual hierarchy is clear: gold
+= result/correct, muted grey = working, dashed red/orange = incorrect,
+consistent across all three. The family reads as its own thing — box-
+and-equation composition, not a re-skinned force/vector diagram — which
+is itself evidence the deliberate choice not to reuse Physics primitives
+(documented in the representation-family spec) produced a genuinely
+different, subject-appropriate visual language rather than a
+compromise.
+
+**ACCESSIBILITY**: PASS. All three `<title>`/`<desc>` pairs confirmed
+present and correctly wired (`aria-labelledby`/`aria-describedby`).
+Contrast computed live via real alpha-compositing (not estimated) for
+all three new tokens against their actual rendered SVG-figure
+background, both themes:
+
+| Token | Dark | Light |
+|---|---|---|
+| `--diagram-chem-given` (ink) | 15.05:1 | 14.51:1 |
+| `--diagram-chem-result` (gold) | 7.15:1 | 4.77:1 |
+| `--diagram-chem-wrong` (danger) | 5.83:1 | 4.71:1 |
+
+All six values clear WCAG AA's 4.5:1 minimum for normal text; the dark-
+theme ink and gold values match the Physics families' own previously-
+verified readings almost exactly (15.05:1 and 7.15:1 respectively —
+the same tokens, aliased, behaving identically), direct evidence the
+token-aliasing approach generalises cleanly to a new family. Meaning
+survives without colour: Representation 3's correct/incorrect
+distinction is carried by solid-vs-dashed border and explicit
+"CORRECT"/"INCORRECT ✕" text, confirmed by inspecting the markup, not
+just the rendered colour.
+
+**Chemistry representation family technical verdict**:
+
+## CHEMISTRY REPRESENTATION FAMILY READY FOR HUMAN VISUAL REVIEW
+
+Not claiming "PASS" — per instruction, a new representation family
+never self-certifies as canonical. Every axis this session's tooling
+can verify (scientific, pedagogical, visual, accessibility, all four
+independently) is now met, with real live evidence rather than the
+prior session's source-only claims. What remains is the one thing no
+amount of geometry/contrast measurement can substitute for: a human
+eye confirming the composition genuinely reads as premium, Chemistry-
+appropriate craft — the same gate every Physics diagram family passed
+through before being declared canonical.
+
+### Defects found, root-caused, fixed, and re-verified
+
+**Defect 1 (P1 — pedagogically/notationally misleading, not
+scientifically wrong)**: `.ile-objectives-list li{ display:flex; }`,
+copied verbatim from the Physics lessons' shared CSS, blockifies inline
+elements mixed directly with text per standard CSS flex-item
+blockification rules. No Physics lesson's objectives list ever mixed
+plain text with an inline `<sub>`/`<sup>`, so this was a **latent
+defect in the shared engine**, invisible until Chemistry content (which
+needed "M<sub>r</sub>" and "A<sub>r</sub>" inline in bullet text) was
+the first to trigger it. **Effect**: 4 of 111 `<sub>` elements on the
+page (in 3 of the 5 objectives-list bullets) computed `display:block`,
+dropping the subscript onto its own line and making "Mr"/"Ar" render
+as "M"/"A" followed by a barely-visible fragment below — confirmed via
+real `getComputedStyle()` reads, then visually confirmed via zoomed
+screenshot before any fix was applied.
+
+**Root cause, confirmed not assumed**: verified directly by temporarily
+forcing the parent `<li>`'s `display` to `block` via `element.style` and
+re-reading the child `<sub>`'s computed `display`, which flipped from
+`block` to `inline` — isolating the cause to blockification, not to any
+other rule.
+
+**Fix**: replaced `display:flex` on `.ile-objectives-list li` with
+`position:relative; padding-left:24px`, and moved the `::before`
+checkmark to `position:absolute; left:0; top:1px` instead of relying on
+flex layout for the icon/text arrangement. This removes the li's own
+`display:flex` entirely — the parent `<ul>` is still `display:flex;
+flex-direction:column`, which blockifies each `<li>` itself (fine, `li`s
+default to block-level list items anyway) but does **not** cascade
+further to blockify the `<li>`'s own children, since flex blockification
+applies only one level deep. Tested live via an injected override
+`<style>` before touching the source file, confirmed visually correct,
+then applied to the actual source file, pushed, and re-verified after
+a cache-bypassed reload against the real deployed page — the fix holds.
+
+**Fix location**: `assets/js`-adjacent shared CSS is not a separate
+file (this engine's CSS lives inline per-lesson, copied not linked, per
+blueprint §8) — the fix was applied to this lesson's own `<style>`
+block only. **The three Physics lesson files carry the identical
+`display:flex` rule and the identical latent risk**, undisturbed by
+this fix (per instruction, not reopened without a visible defect there
+— none exists today, since no Physics objectives list mixes inline
+elements with text). This is disclosed as an open, cross-subject risk
+in the blueprint review below, not silently left for a future session
+to rediscover.
+
+**Retest evidence**: 0 `.ile-tier-higher-only`/objectives-list `<sub>`
+elements computing `display:block` after the fix (checked via the same
+`getComputedStyle()` sweep); visual re-inspection via zoomed screenshot
+confirms all 5 objectives bullets render "Mr"/"Ar" correctly and
+compactly; console remained clean; no other regression found in a full
+re-pass of the checklist above.
+
+**Defect 2 (P1 — pedagogically significant, a real information loss,
+not scientifically wrong)**: Representation 3's explanatory caption
+("The bracket's subscript (2) was applied to oxygen only — hydrogen
+must be doubled too, since it's also inside the bracket.") was authored
+as a single, unwrapped `<text>` element starting at `x="230"` inside a
+`viewBox` only 640 units wide. **Effect**: the text's real rendered
+right edge extended to `x≈938` — nearly 300 units past the viewBox's
+right edge — silently clipped by SVG's own bounds (unlike HTML, content
+outside an SVG's `viewBox` simply isn't drawn, with no visible overflow
+indicator). Confirmed via a live `getBBox()` sweep across all text
+elements in all 3 diagrams: exactly 1 overflowing element, in exactly
+this diagram, nowhere else.
+
+**Root cause**: this new representation family has no text-wrapping
+primitive (unlike the Physics families' `wrap()` helper in
+`assets/js/diagram-primitives.js`) — a gap already named generically in
+this document's Gate 5 section ("no automated text-vs-text or
+text-vs-line collision script was built for this family") but not, at
+the time, connected to this specific consequence (unwrapped long
+captions silently vanishing past the viewBox edge).
+
+**Fix**: moved the caption below the "Mr = 73 ✕" box (full width
+available, matching the "CORRECT" block's own label-above-box pattern,
+also improving visual consistency between the two strips) and wrapped
+it into two `<tspan>` lines. Grew the diagram's `viewBox` height from
+260 to 300 to fit the two-line caption plus padding. Tested live via
+DOM patching before touching the source file, confirmed 0 overflow,
+then applied to the source file, pushed, and re-verified after a
+cache-bypassed reload.
+
+**Retest evidence**: live `getBBox()` sweep post-fix: 0 overflowing
+text elements across all 3 diagrams (was 1). Screenshot confirms the
+full sentence now reads cleanly on two lines beneath the incorrect box.
+
+**No other defects found.** The rest of the checklist above passed on
+first inspection.
+
+### Numeric/symbolic regression check
+
+Per instruction, since Representation 3's markup was edited during this
+pass: re-verified live that Ca(OH)₂'s correct (74) and incorrect (73)
+values, and the caption's stated reasoning, are unchanged by the visual
+fix — only the caption's *position and line-wrapping* changed, no
+numeric or formula content was touched. Confirmed via the same
+`getBBox()`/text-content sweep used to find the defect. The
+objectives-list fix touched only CSS (`display`/`position`/`padding`),
+no text content at all — no numeric/symbolic re-verification was needed
+for that fix, and none was skipped on the assumption it wasn't needed;
+this was confirmed by inspecting the fix's diff directly (CSS-only).
+
+### Defect classification (per instruction's P0/P1/P2 scale)
+
+Both defects found are **P1** — pedagogically misleading / a real
+information-loss defect, not **P0** (nothing scientifically wrong was
+ever displayed; every number and formula shown was always correct, only
+some text was unreadable or invisible) and not merely **P2** cosmetic
+polish (a student genuinely could not read "Mr" correctly in 3 bullet
+points, or read the bracket-error explanation at all, before the fix —
+a real comprehension barrier, not a minor visual nit).
+
+### Gate 7 result
+
+**PASS**, on real, complete evidence — a materially different and
+stronger position than the previous session's "NOT PERFORMED." Two real
+P1 defects were found, root-caused (not patched blindly), fixed at the
+correct systemic layer (a CSS rule change and an SVG text-wrap fix, not
+one-off inline overrides), and re-verified live after deployment, not
+just in a local DOM patch. Mobile/narrow-viewport testing remains
+genuinely not testable in this automation environment, consistent with
+every prior pilot's own disclosed limitation, not a new gap.
+
+**Gate 5/6 update, post-Gate-7**: the visual, geometry, and contrast
+axes previously marked NOT PERFORMED are now **PASS**, with real
+evidence recorded above.
+
+---
+
+## Updated Overall Pilot #4 Verdict (supersedes the earlier table, per the newly-completed Gate 7)
+
+| Condition | Status |
+|---|---|
+| Scientifically correct | **MET** — unchanged from Gate 2; live inspection found no scientific errors, only presentation defects |
+| Pedagogically strong | **MET** — unchanged from Gate 3, confirmed live |
+| Assessment valid | **MET** — unchanged from Gate 4, confirmed live including the Higher discriminator (Mg(NO₃)₂) rendering and marking correctly |
+| Foundation experience | **MET** — confirmed live (0 Higher-only content visible on Foundation, Foundation-only content present) |
+| Higher experience | **MET** — confirmed live, formula typography unambiguous |
+| New representation family — all 4 axes | **MET**, with 1 defect found and fixed (Representation 3 text overflow) |
+| New representation family — geometry verification | **MET** — live `getBBox()` sweep, 0 collisions, 0 overflow post-fix (still no permanent automated script committed to the repo — see the blueprint review's proposed rule, still open) |
+| New representation family — visual craft | **READY FOR HUMAN VISUAL REVIEW** — real screenshots inspected this session, read as clean and intentional, but final craft judgement is reserved for the user, per standing policy |
+| Accessibility gate | **MET** — live contrast (6 real alpha-composited measurements, both themes), live focus-trap/return, live `aria-live` |
+| Live rendered QA | **MET** — Gate 7 complete, 2 real defects found/fixed/re-verified |
+| No P0 defects open | **MET** — 0 scientific/accessibility-breaking defects found, this pass or the prior one |
+| No P1 defects open | **MET** — 2 found this pass, both fixed and re-verified live |
+| A cross-subject-relevant shared-engine risk disclosed | **DISCLOSED, not silently fixed everywhere** — the flex-blockification defect's root cause exists identically in all three Physics lesson files; not touched, since no visible defect exists there today (no Physics objectives list mixes inline elements with text) — see the blueprint review |
+
+## PILOT #4 TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING
+
+Every condition this session's tooling can verify — now including a
+complete, real Gate 7 pass, not a source-only claim — is met. Two real
+defects were found, root-caused, fixed at the correct systemic layer,
+and re-verified live after deployment. This is the same strength of
+verdict Pilot #3 reached before the user's own review closed it, and it
+is reached the same way: real evidence, defects found and fixed rather
+than assumed absent, honest disclosure of what still depends on a human
+eye. The lesson and its new Chemistry representation family are ready
+for that review now, live on `staging`.

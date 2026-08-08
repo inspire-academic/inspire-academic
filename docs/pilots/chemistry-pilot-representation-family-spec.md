@@ -140,3 +140,45 @@ deterministic, accessible, structurally-verified implementation,
 consistent with the Chemistry pilot's stated purpose (test whether the
 *production method* transfers, not deliver a polished final visual
 system on the first attempt).
+
+---
+
+## Update — Live QA, 2026-08-08 (second session)
+
+Gate 7 has now run for real (see
+`docs/pilots/chemistry-pilot-quality-audit.md`'s LIVE RENDERED QA
+section). One defect was found in this family specifically:
+Representation 3's explanatory caption silently overflowed its viewBox
+by ~300 units, because this family has no text-wrapping mechanism.
+Fixed for that one instance (moved below the box, wrapped into two
+`<tspan>` lines, viewBox height grown 260→300) and re-verified live —
+0 overflowing text elements across all three diagrams after the fix.
+
+### New rule for this family, earned by the defect above
+
+**Any caption or label in this family longer than roughly 55–60
+characters at 12.5px font size must either be pre-wrapped into multiple
+`<tspan>` lines by the author, or — if this family gains a second
+lesson and a second long caption — a small `wrap()`-equivalent helper
+should be extracted (mirroring the Physics families' own
+`assets/js/diagram-primitives.js` `wrap()` function) rather than
+continuing to hand-wrap each instance. This pilot did not build that
+helper (only one lesson, one instance of the problem — not yet enough
+repetition to justify extracting it, per this spec's own stated
+extraction trigger above), but any future caption in this family should
+be checked against this rule before shipping, not discovered live
+again.
+
+### Family status update
+
+All three diagrams now pass live scientific, pedagogical, visual, and
+accessibility inspection (see the quality audit's dedicated section) —
+real contrast measurements, real geometry/overflow checks, real
+screenshots, not source-only claims. Status remains:
+
+## CHEMISTRY REPRESENTATION FAMILY READY FOR HUMAN VISUAL REVIEW
+
+Upgraded from the original session's claim (which had zero live
+verification behind it) to one backed by genuine live evidence — still
+not self-certified as canonical, per standing policy; the final
+craft judgement remains the user's to make.
