@@ -330,6 +330,170 @@ programme was set up to test against real evidence.
 
 ---
 
+## CROSS-SUBJECT PILOT #4 UPDATE — 2026-08-08
+
+Pilot #4 — **Relative Formula Mass & Moles** (GCSE Chemistry,
+Quantitative Chemistry) — is the first lesson built through this
+blueprint outside Physics. Full detail:
+`docs/pilots/chemistry-pilot-selection.md` (candidate comparison),
+`docs/pilots/chemistry-pilot-representation-family-spec.md` (new
+Mass–Mole Relationship Strip family, v1),
+`docs/pilots/chemistry-pilot-quality-audit.md` (8-gate audit),
+`docs/pilots/chemistry-pilot-blueprint-review.md` (full stress-test).
+This section does not repeat that detail — it exists to state the
+factory-readiness consequence of it, honestly, including the one
+respect in which this pilot's evidence is **not** equivalent to the
+three Physics pilots'.
+
+### Physics generalisation result (unchanged, restated for context)
+
+All three Physics pilots remain APPROVED, human visual review PASS on
+all three, Force Diagram Family CANONICAL v1 (closed this session — see
+`docs/pilots/resultant-forces-quality-audit.md`'s final section).
+
+### Chemistry generalisation result
+
+**What transferred with zero mechanism changes** (11 of 13 relevant
+blueprint sections, per the blueprint review's own classification):
+the canonical lesson anatomy, the five-tag tier model and its six-move
+Foundation pattern, the assessment object model (no new
+`question_type`, third confirmation of this finding), the assessment
+quality rules including the sig-fig requirement, the localStorage
+namespace/theme/pathway separation pattern including its exact
+`ile-learn`/`ile-diagrams` ID coupling, the production-role sequencing,
+and the 8-gate structure itself — including that structure's own
+"browser genuinely unavailable" contingency, exercised for real for the
+first time and behaving exactly as written.
+
+**What required subject-specific adaptation, not failure**: the
+diagram/representation production workflow's *shape* (spec before
+markup, four-axis QA) transferred, but its *tooling* did not — no
+Physics primitive fit Chemistry's content, so Pilot #4 built a narrow,
+disclosed, hand-authored SVG family instead of reusing
+`diagram-primitives.js`. This is genuinely useful evidence: it shows the
+blueprint's diagram workflow is a *process*, not secretly a
+Physics-diagram-primitives-shaped process wearing a general name.
+
+**What is honestly, materially incomplete**: **no browser was available
+this session**, at all — not the partial screenshot-only gap Pilots
+#2/#3 each disclosed and worked around, but a complete absence of live
+rendered-page verification. Gate 7 was not performed. The visual and
+geometry axes of Gate 5, and the contrast/focus checks of Gate 6, were
+not performed. This matters specifically because **every prior pilot's
+most serious findings** (the `blob:`-resolution failures, the
+CSS-specificity stacking bug, the arrowhead-overshoot, the D2
+label/vector collision) were **invisible to source review and only
+found live**. Pilot #4's source-level and arithmetic evidence is
+genuinely strong (0 errors found across every independently re-derived
+calculation, clean structural checks, 157/157 tests) — but it is, by
+this project's own repeated experience, exactly the category of
+evidence that has never yet been sufficient on its own to certify a
+lesson.
+
+### Universal production rules (now confirmed a third/fourth time, across a subject boundary)
+
+- Lesson anatomy, tier model, assessment object model: **confirmed
+  universal**, not Physics-specific — this is new, load-bearing evidence
+  this update adds that the prior three-pilot analysis could not have
+  had.
+- The diagram-workflow *process* (spec → primitives-or-equivalent →
+  deterministic build → four-axis QA → live verification → approval):
+  **confirmed universal in shape**; the *primitive-library* half of "use
+  approved primitives" is, correctly, subject-specific tooling that gets
+  built per representational need, not a single shared asset across
+  subjects.
+
+### Subject-specific extensions identified
+
+- A Chemistry-appropriate representation family (Mass–Mole Relationship
+  Strip, v1) — narrow, disclosed, not yet collision-verified or
+  visually reviewed.
+- A candidate new universal rule surfaced *by* building it: "a common
+  substitution/application error, once identified, is worth a
+  comparison diagram, not just a prose warning" — noted as a candidate
+  in the blueprint review, not yet promoted, since it has exactly one
+  data point (the Ca(OH)₂/Mg(NO₃)₂ bracket error) supporting it.
+
+### Automation candidates confirmed or added
+
+- Everything in the existing SAFE TO AUTOMATE list held for Chemistry
+  content with no changes needed.
+- **New rule added to the blueprint itself** (§12): any new
+  representation family must get automated collision-checking built
+  alongside it, not deferred — added directly as a result of Pilot #4
+  disclosing that it had deferred exactly this.
+
+### QA requirements
+
+Gates 1–4 (curriculum mapping, scientific accuracy, pedagogical
+quality, assessment validity) ran to the same standard as every Physics
+pilot and passed. Gates 5–7's live/visual components did not run this
+session — this is the pilot's central, disclosed limitation, not a
+finding that anything is wrong.
+
+### Human approval requirements
+
+Unchanged in kind — Gate 8 remains a single, un-skippable, explicit
+step. For Pilot #4 specifically, human visual review cannot even begin
+until Gate 7 has actually happened (there is nothing rendered yet to
+look at with confidence it reflects the built source), which is itself
+new information: the ordering assumption "Gates 1–7 make Gate 8 fast"
+depends on Gate 7 having actually run, not just being schedulable.
+
+### Remaining risks
+
+1. **Gate 7 for Pilot #4 is entirely outstanding** — the single largest
+   open item from this session, and the one that determines how much
+   the rest of this update's positive findings can actually be trusted.
+2. Everything in the original three-pilot "Remaining risks" list above
+   still applies, now also to Chemistry (no human subject-specialist
+   review, `TO_BE_VERIFIED` spec claims, visual-craft certification
+   depends on tooling not always available).
+3. **New risk, specific to this pilot**: the Mass–Mole Relationship
+   Strip family has no automated geometry verification at all yet (see
+   the new §12 rule above) — a real gap, not a hypothetical one, since
+   it was deferred, not merely untested.
+
+---
+
+## Cross-Subject Factory-Readiness Verdict
+
+## C. ONE MORE CROSS-SUBJECT PILOT RECOMMENDED
+
+**Precise meaning of this verdict, stated exactly because the four
+options don't have room to express a nuance this important**: this is
+**not** a verdict that the architecture failed to generalise — the
+architecture-level evidence (§1–§4, §8, §10, §11 of the blueprint) is
+the strongest, cleanest cross-subject confirmation this programme has
+produced, with zero mechanism changes needed. What "one more" refers to
+is **completing Pilot #4's own evidence with a real live QA pass**
+(Gate 7, plus the visual/geometry axes of Gates 5–6) — not necessarily
+building an entirely new fifth lesson from scratch. If a future session
+runs that pass against the already-built lesson at
+`teaching-lessons/chemistry/quantitative-chemistry-relative-formula-mass-moles.html`
+(already live on `staging`) and it passes cleanly, that would complete
+this exact pilot's evidence to the same standard as Pilots #2/#3, and
+the verdict should very plausibly move to **A** at that point without
+needing a fifth lesson at all. If that live pass instead surfaces real
+defects (the historical pattern in 3 of 4 pilots so far), that is itself
+important evidence about whether "generalises" was premature.
+
+This verdict is deliberately more conservative than the architecture
+evidence alone would justify, because this whole programme's own
+repeated finding is that architecture-level and source-level confidence
+has never yet been sufficient by itself — every pilot that reached a
+genuine "approved" verdict needed a real browser to get there. Skipping
+that step for Chemistry specifically, the one pilot meant to test
+whether the *method* — not just the architecture — travels, would
+undercut the exact question this pilot exists to answer.
+
+**Per instruction, no factory work follows from this update.** No
+agents, no orchestration, no mass production, no Pilot #5, no Biology.
+The next concrete action this verdict implies is narrow and specific:
+complete Gate 7 for the already-built Pilot #4 lesson.
+
+---
+
 ## What would change this verdict
 
 - A cross-subject pilot failing to generalise cleanly would move this

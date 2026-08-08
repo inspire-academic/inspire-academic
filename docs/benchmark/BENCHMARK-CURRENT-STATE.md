@@ -9,22 +9,34 @@ Last updated: 2026-08-08.
 
 ---
 
-## STATUS: THREE PILOTS COMPLETE — FACTORY DESIGN MAY BEGIN (DOCUMENTATION ONLY; FACTORY ITSELF NOT AUTHORISED)
+## STATUS: THREE PHYSICS PILOTS APPROVED. PILOT #4 (CHEMISTRY, CROSS-SUBJECT) BUILT — GATE 7 OUTSTANDING.
 
 **The lesson benchmark and the diagram-system benchmark remain formally
 FROZEN as the canonical v1 reference.** Do not reopen either for cosmetic
 polishing — only for a real, discovered defect. **Pilots #1, #2, and #3
-are all complete.** Pilots #1 and #2 are fully **APPROVED**. Pilot #3 is
-**TECHNICALLY APPROVED — human visual review pending** (its architecture,
-geometry, and scientific accuracy are fully verified; its diagrams
-await the same human-eye pass Pilot #2 already received). The
-three-pilot factory-readiness verdict is
-**PRODUCTION BLUEPRINT GENERALISES — MINIMUM FACTORY DESIGN SHOULD
-BEGIN** — documentation only; see
-`docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` for the full
-reasoning and its two named, still-open qualifications (Pilot #3's
-pending visual review; zero cross-subject testing so far). **The
-factory has not been designed in detail or built.**
+are all APPROVED.** All three received HUMAN VISUAL REVIEW: PASS.
+All three diagram families are **CANONICAL v1**: motion/vector, graph,
+and force diagram. **Do not reopen any of the three Physics pilots, the
+Force Diagram Family, the shared lesson engine, the scientific diagram
+standard, or the production blueprint's proven sections unless a
+genuine regression or factual defect is found.**
+
+**Pilot #4 — Relative Formula Mass & Moles (GCSE Chemistry) — is
+built, pushed to staging, and source/arithmetic-verified, but Gate 7
+(live rendered-page QA) has not been performed at all** — the browser
+automation tool was unavailable this entire session. This is a
+materially different, weaker evidence position than any of the three
+Physics pilots had at the equivalent stage. See "NEXT SESSION" below —
+**completing Gate 7 for the already-built Pilot #4 lesson is the single
+most valuable next action**, not building a fifth lesson.
+
+The cross-subject factory-readiness verdict is
+**C. ONE MORE CROSS-SUBJECT PILOT RECOMMENDED** — precisely meaning
+"complete Pilot #4's own live QA," not "build an entirely new lesson."
+See `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`'s
+Cross-Subject Pilot #4 Update section for the full reasoning. **The
+factory has not been designed in detail or built, and must not be,
+until that verdict changes.**
 
 | Freeze / pilot point | Commit | Verdict |
 |---|---|---|
@@ -33,9 +45,14 @@ factory has not been designed in detail or built.**
 | Production blueprint extraction | `34cd612` | `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` v1.0 |
 | Pilot #2 — Distance–Time Graphs | `4801dd3` → `b44e991` → `d75faba` | **PILOT #2 APPROVED** (human visual review PASS) — `docs/pilots/distance-time-graphs-quality-audit.md`. Graph family: **CANONICAL v1 — INSPIRE SCIENTIFIC GRAPH FAMILY** |
 | Shared-engine bug fix (stale progress label, blueprint failure mode #15) | `08583b5` → `569f645` | **FIXED**, applied to both Pilot #1 and #2 lesson files, re-verified live on both |
-| Pilot #3 — Resultant Forces & Free-Body Diagrams | `dce85e3` → `7e9cf9a` → `ae914f2` → `30b1bb1` | **TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING** — `docs/pilots/resultant-forces-quality-audit.md`. Force diagram family: **v1.0, not yet canonical** (awaiting the same human review Pilot #2's graph family already passed) |
+| Pilot #3 — Resultant Forces & Free-Body Diagrams | `dce85e3` → `7e9cf9a` → `ae914f2` → `30b1bb1` → `5a45c3d`/`5befe3e` (visual refinement) → `52bf203` (editorial scale pass) → `5b550b3` (HUMAN VISUAL REVIEW: PASS) | **PILOT #3 APPROVED** — `docs/pilots/resultant-forces-quality-audit.md`. Force diagram family: **CANONICAL v1 — INSPIRE FORCE DIAGRAM FAMILY** |
 | Blueprint v1.2 + three-pilot comparison | `e5f41a4` | `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`; `docs/pilots/resultant-forces-blueprint-review.md` |
-| Factory-readiness analysis | this session | `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` — **PRODUCTION BLUEPRINT GENERALISES — MINIMUM FACTORY DESIGN SHOULD BEGIN** (documentation only) |
+| Factory-readiness analysis (three Physics pilots) | `5b550b3` | `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` — **PRODUCTION BLUEPRINT GENERALISES — MINIMUM FACTORY DESIGN SHOULD BEGIN** (documentation only), with the strategic qualification that one cross-subject pilot runs before factory design |
+| Pilot #4 — Relative Formula Mass & Moles (Chemistry, cross-subject) selection | `5b550b3` | `docs/pilots/chemistry-pilot-selection.md` — Quantitative Chemistry selected over 2 rejected candidates on repo evidence |
+| Pilot #4 lesson build | `119dd98` | `teaching-lessons/chemistry/quantitative-chemistry-relative-formula-mass-moles.html` — new Chemistry lesson, shared engine reused verbatim |
+| Pilot #4 representation family | `bce3fbc` | `docs/pilots/chemistry-pilot-representation-family-spec.md` — Mass–Mole Relationship Strip family v1, **READY FOR HUMAN VISUAL REVIEW** (not yet reviewed) |
+| Pilot #4 QA audit + blueprint stress-test + blueprint v1.3 | `c469408` | `docs/pilots/chemistry-pilot-quality-audit.md`, `docs/pilots/chemistry-pilot-blueprint-review.md`, `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` v1.3. Gates 1–4 PASS; **Gate 7 NOT PERFORMED — no browser access this session** |
+| Cross-subject factory-readiness verdict | this session | `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`'s Cross-Subject Pilot #4 Update — **C. ONE MORE CROSS-SUBJECT PILOT RECOMMENDED**, meaning: complete Gate 7 on the already-built Pilot #4 lesson |
 
 **Frozen reference assets** (do not modify without a newly discovered
 defect, not preference-driven polish): the approved lesson architecture;
@@ -49,31 +66,46 @@ diagram-primitives.js`; the v1.2 graph portion (canonical v1,
 human-approved); `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md`;
 the Distance & Displacement canonical diagram family; and the
 Distance–Time Graphs canonical diagram family.
-**Not yet frozen**: the v1.3 force diagram portion of
+**Also now frozen**: the v1.3/v1.4 force diagram portion of
 `diagram-primitives.js` and the Resultant Forces & Free-Body Diagrams
-lesson — both are complete and technically verified, but await human
-visual review before being declared canonical, the same gate the graph
-family passed through in the previous session.
+lesson — human visual review PASSED 2026-08-08 (see
+`docs/pilots/resultant-forces-quality-audit.md`'s final section). Do not
+reopen without a genuine regression or factual defect.
 
-**Two canonical diagram families are approved; a third is built and
-awaiting human review**:
+**Not yet frozen / not yet canonical**: the new Chemistry Mass–Mole
+Relationship Strip family (plain SVG, not part of
+`diagram-primitives.js` — see
+`docs/pilots/chemistry-pilot-representation-family-spec.md`) — built
+this session, structurally/arithmetically verified, but has had **no
+live rendered check and no human visual review at all**. Status:
+**READY FOR HUMAN VISUAL REVIEW**, one step earlier in the pipeline than
+Pilot #3 was at its own equivalent point (Pilot #3 had completed live
+QA before reaching "ready for review"; this family has not).
+
+**Three canonical diagram families are approved; a fourth (Chemistry)
+is built and awaiting both live QA and human review**:
 1. **Motion/vector family** (v1.1) — Distance & Displacement, frozen `c766d86`.
 2. **Graph family** (v1.2) — Distance–Time Graphs, human-approved.
    Mathematically generated graph geometry is an approved Inspire
    production capability.
-3. **Force diagram family** (v1.3) — Resultant Forces & Free-Body
-   Diagrams. Geometrically and scientifically verified live (every
-   arrow's rendered length checked against its declared magnitude,
-   exactly); **not yet human-visually approved**. See "NEXT SESSION"
-   below for how to close this out.
+3. **Force diagram family** (CANONICAL v1) — Resultant Forces &
+   Free-Body Diagrams. Geometrically, scientifically, and now
+   human-visually approved (2026-08-08). Do not reopen without a real
+   defect.
+4. **Mass–Mole Relationship Strip family** (v1, Chemistry) — the first
+   non-Physics representation family. Structurally/arithmetically
+   verified; **no live rendered check, no human visual review**. See
+   "NEXT SESSION" below.
 
 **The diagram system is approved as the v1 deterministic SVG
-foundation**, now proven across three representational classes
-(spatial/vector, mathematical graph, symbolic force) without needing
-fundamental redesign — see the three-pilot comparison in
-`docs/pilots/resultant-forces-blueprint-review.md` for the full
-evidence trail. All three families are production-worthy, not
-necessarily the absolute artistic ceiling. Future art-direction
+foundation**, now proven across four representational classes
+(spatial/vector, mathematical graph, symbolic force, and — pending live
+verification — a Chemistry mass/mole relationship) without needing
+fundamental redesign to the underlying approach, though the Chemistry
+family notably did **not** reuse `diagram-primitives.js` at all (see
+the blueprint stress-test, §5) — a disclosed, deliberate scope decision,
+not an oversight. All three canonical families are production-worthy,
+not necessarily the absolute artistic ceiling. Future art-direction
 improvements may evolve the standard; they do not reopen any pilot for
 its own sake — only a genuinely discovered scientific, pedagogical, or
 accessibility defect does.
@@ -509,72 +541,102 @@ platform rewrite. That is explicitly the later phase, not this one.
 
 ## NEXT SESSION — START HERE
 
-**Pilots #1 and #2 are FROZEN/APPROVED. Pilot #3 is TECHNICALLY
-APPROVED with human visual review pending. The production blueprint is
-at v1.2, now stress-tested by three pilots. The factory-readiness
-verdict is "GENERALISES — MINIMUM FACTORY DESIGN SHOULD BEGIN"
-(documentation only — nothing has been built).** A new session picking
-this up should:
+**Pilots #1, #2, and #3 are all APPROVED, human visual review PASS on
+all three, all three diagram families CANONICAL v1. Pilot #4
+(Chemistry, cross-subject) is built and pushed to staging but has had
+NO live rendered QA at all — the browser tool was unavailable this
+entire session. The production blueprint is at v1.3. The cross-subject
+factory-readiness verdict is C — complete Pilot #4's own Gate 7, not
+"build a fifth lesson."** A new session picking this up should:
 
 1. Read this file in full, then
-   `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` v1.2, then
-   `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` — together
-   these are the practical, now three-times-proven standard and its
-   honest limits, not theory.
-2. **Do not reopen Pilot #1 or Pilot #2 for cosmetic polishing without a
-   genuinely discovered defect.** Both are frozen v1 canonical
-   references (see freeze table above). Verify against the specific
-   commits before touching either.
-3. **The one legitimate, narrowly-scoped open item is Pilot #3's human
-   visual review.** Its six force diagrams
-   (`teaching-lessons/physics/forces-and-motion-resultant-forces-free-body-diagrams.html`,
-   Section 4 `#ile-diagrams`) are geometrically and scientifically
-   verified but have not been human-inspected the way Pilot #2's graph
-   family was. If the user has already reviewed them (in chat, or via
-   the staging URL above) and confirms approval, follow Pilot #2's own
-   precedent exactly: append a "HUMAN VISUAL REVIEW: PASS" section to
-   `docs/pilots/resultant-forces-quality-audit.md` (do not rewrite the
-   existing conditional verdict — append, as Pilot #2's own audit doc
-   does), declare the force diagram family **CANONICAL v1**, and update
-   this file's freeze table accordingly. Do not proceed with this
-   unprompted — wait for the user's actual review.
-4. **Do not start mass lesson production, the six-agent factory, a new
-   CMS, or an admin dashboard, and do not write a detailed factory
-   architecture document beyond what
-   `FACTORY-READINESS-AFTER-THREE-PILOTS.md` already contains.** The
-   verdict authorises *thinking about* factory design, not building it,
-   and not even detailing it further, without new explicit instruction.
-5. Confirm the current branch and latest commit (`git status`, `git log
+   `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` v1.3, then
+   `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` (including
+   its Cross-Subject Pilot #4 Update section) — together these are the
+   practical, now four-times-stress-tested standard and its honest
+   limits, not theory.
+2. **Do not reopen Pilots #1, #2, or #3, the Force Diagram Family, the
+   shared lesson engine, the scientific diagram standard, or the
+   production blueprint's proven sections for cosmetic polishing without
+   a genuinely discovered defect or regression.** All three Physics
+   pilots are frozen v1 canonical references (see freeze table above).
+   Verify against the specific commits before touching any of them.
+3. **The single most valuable next action is completing Gate 7 for the
+   already-built Pilot #4 lesson**, first, before anything else in this
+   list:
+   `teaching-lessons/chemistry/quantitative-chemistry-relative-formula-mass-moles.html`,
+   live at
+   `https://staging.inspireacademic.org/teaching-lessons/chemistry/quantitative-chemistry-relative-formula-mass-moles.html`.
+   Check browser tool availability first. If available, run the full
+   Gate 7 checklist from
+   `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` §9 (console
+   errors, duplicate IDs in the live DOM, Foundation/Higher tier
+   switching, mastery-gate enforcement, real alpha-composited contrast
+   for the three new `--diagram-chem-*` tokens, focus-on-step-change,
+   the reminder drawer, and — the still-missing piece from this
+   session — a real screenshot/visual look at the three new
+   Representations diagrams). Record the result in
+   `docs/pilots/chemistry-pilot-quality-audit.md` as a new dated section
+   (append, per the same discipline every other gate-closure in this
+   programme has followed — do not overwrite the "NOT PERFORMED"
+   record, since that's an honest account of what this session could and
+   couldn't do). If it passes cleanly, update the Cross-Subject
+   Pilot #4 verdict in `FACTORY-READINESS-AFTER-THREE-PILOTS.md` from
+   **C** toward **A**, following the exact reasoning already laid out
+   there for what a clean pass would mean. If it surfaces real defects,
+   fix them narrowly (matching the discipline every prior pilot's Gate 7
+   fixes followed) and re-verify.
+4. **Also outstanding from Gate 5 for Pilot #4**: no automated
+   text-vs-text/text-vs-line collision check exists yet for the new
+   Mass–Mole Relationship Strip family (a disclosed gap, and now a
+   standing blueprint rule — §12 of the blueprint, added this session).
+   Building that script is a reasonable thing to pair with the Gate 7
+   pass above, since both require the same kind of "actually look at the
+   rendered geometry" work.
+5. **Do not start mass lesson production, the six-agent factory, a new
+   CMS, an admin dashboard, Pilot #5, or Biology, and do not write a
+   detailed factory architecture document beyond what
+   `FACTORY-READINESS-AFTER-THREE-PILOTS.md` already contains** — the
+   cross-subject verdict is C, not A or B; factory design work is not
+   yet authorised by the evidence, only completing Pilot #4's QA is.
+6. Confirm the current branch and latest commit (`git status`, `git log
    -1` — expect `staging`).
-6. Confirm all three staging lessons still resolve:
+7. Confirm all four staging lessons still resolve:
    `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-distance-and-displacement.html`,
-   `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-distance-time-graphs.html`, and
-   `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-resultant-forces-free-body-diagrams.html`
+   `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-distance-time-graphs.html`,
+   `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-resultant-forces-free-body-diagrams.html`, and
+   `https://staging.inspireacademic.org/teaching-lessons/chemistry/quantitative-chemistry-relative-formula-mass-moles.html`
    — if any 404s or looks unstyled, investigate before assuming this
    document is stale.
-7. **Legitimate next steps, none pre-authorised — present options and
-   wait for the user to choose**: (a) close Pilot #3's human visual
-   review (#3 above); (b) a fourth pilot in a **non-Physics subject**
-   (Chemistry or Biology), the single largest untested assumption named
-   in the factory-readiness doc; (c) begin detailed factory design work,
-   now that the documentation-level verdict supports it, if the user
-   explicitly asks for that specific next step. Do not start any of
-   these unprompted.
-8. The shared-engine stale-progress-label defect (blueprint failure mode
-   #15) is **already fixed** (commit `08583b5`, re-verified live on both
-   Pilot #1 and #2's lesson files, and built correctly from the start
-   into Pilot #3). No outstanding engine defects are known.
-9. If asked to extend this work in any other direction (spec-accuracy
+8. **Legitimate next steps beyond #3/#4 above, none pre-authorised —
+   present options and wait for the user to choose**: (a) complete
+   Pilot #4's Gate 7 and human visual review (the recommended next
+   step); (b) once that's done and the verdict is reassessed, decide
+   whether a fifth pilot, factory design work, or something else is next;
+   (c) if the user wants to inspect the Chemistry lesson's Representations
+   themselves first (mirroring how Pilot #3's human visual review
+   actually happened), that satisfies part of Gate 8 directly. Do not
+   start any of these unprompted.
+9. The shared-engine stale-progress-label defect (blueprint failure mode
+   #15) is **already fixed** (commit `08583b5`, re-verified live on
+   Pilots #1 and #2, and built correctly from the start into Pilots #3
+   and #4). No outstanding engine defects are known — though see the
+   honest caveat in `docs/pilots/chemistry-pilot-blueprint-review.md`
+   §13 about why Pilot #4's "zero defects found" is weaker evidence than
+   Pilot #3's, given no live interaction occurred.
+10. If asked to extend this work in any other direction (spec-accuracy
    verification against real AQA/Edexcel documents, a human
    subject-specialist review, or starting the factory build itself),
    treat each as new scope requiring its own explicit instruction and
    its own plan — this document, the blueprint, and the pilot docs are
    grounding context, not a task list to execute unprompted.
-10. Historical detail: Pilot #1 in
+11. Historical detail: Pilot #1 in
     `docs/benchmark/distance-displacement-academic-audit.md` and
     `docs/benchmark/diagram-excellence-audit.md`; Pilot #2 in
     `docs/pilots/distance-time-graphs-*.md`; Pilot #3 in
     `docs/pilots/resultant-forces-*.md` (pilot plan, force-diagram-family
+    spec, quality audit, blueprint review); Pilot #4 in
+    `docs/pilots/chemistry-pilot-*.md` (selection, representation-family
     spec, quality audit, blueprint review) — read only as needed, the
     blueprint and factory-readiness doc are the distilled, actionable
     version of all three.
