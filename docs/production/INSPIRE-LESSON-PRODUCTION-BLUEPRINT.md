@@ -1,4 +1,4 @@
-# Inspire Lesson Production Blueprint — v1.0
+# Inspire Lesson Production Blueprint — v1.1
 
 Derived entirely from what was actually built, broken, fixed, and verified
 producing the **Distance & Displacement** benchmark (Physics, Forces and
@@ -7,17 +7,26 @@ below traces to a real defect, a real audit finding, or a real design
 decision made under that benchmark. Where something is untested, it is
 marked so honestly rather than presented as settled.
 
+**v1.1 update**: stress-tested against **Pilot #2 — Distance–Time
+Graphs**, the first second lesson built through this blueprint. 10 of 15
+sections worked completely as-is; 4 small, evidence-justified changes
+were folded back in (§3, §8, §9 Gate 7, §13's failure-modes table). Full
+evidence trail: `docs/pilots/distance-time-graphs-blueprint-review.md`.
+Verdict: **PRODUCTION BLUEPRINT MOSTLY GENERALISES — ONE MORE PILOT
+RECOMMENDED** before factory design begins.
+
 **Frozen reference points this blueprint derives from:**
 - Lesson benchmark: commit `fb8e630` — `docs/benchmark/distance-displacement-academic-audit.md` (final verdict: **APPROVED BENCHMARK**)
 - Diagram system benchmark: commit `c766d86` — `docs/benchmark/diagram-excellence-audit.md` (final verdict: **VISUAL DIAGRAM BENCHMARK APPROVED**)
 - Working technical standard: `docs/benchmark/lesson-architecture-standard.md`
 - Diagram standard: `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md` v1.1
+- Pilot #2 stress-test: `docs/pilots/distance-time-graphs-*` (plan, graph-family spec, quality audit, blueprint review) — verdict **PILOT #2 APPROVED WITH CHANGES**
 
-**Status of this document**: a practical production standard for the next
-1–3 lessons, not permanent policy. It has been proven against exactly one
-lesson in one subject. Revise it once a second lesson (ideally one that
-exercises graphs — see §15) has been built against it and the gaps it
-didn't anticipate are known.
+**Status of this document**: a practical production standard, now proven
+against two lessons in one subject (Physics — mechanics/vectors and
+graphs). Revise again once a lesson in a second subject (Chemistry or
+Biology) or a denser diagram family (free-body/forces) has been built
+against it.
 
 **Who this is for**: a teacher/content author, Claude Code, a future AI
 agent, a QA reviewer, or a developer — anyone who needs to answer "how do
@@ -147,6 +156,15 @@ with the fields worth tracking. **This stays inline JS in the lesson HTML
 today — do not build a database table for this from a single lesson's
 evidence.** Revisit only once a second and third lesson show the shape is
 stable and duplication across lesson files becomes a real cost.
+
+**Confirmed by Pilot #2 (Distance–Time Graphs)**: this shape was tested
+against a materially different assessment style — graph-reading and
+graph-interpretation items, not pure calculation — and needed **no new
+`question_type` value**. The existing MCQ/numeric renderers handled
+every item without modification; only the stems, options, and data
+changed. This is stronger evidence the shape generalises than the
+original benchmark alone could show. See
+`docs/pilots/distance-time-graphs-blueprint-review.md`.
 
 ```js
 {
@@ -472,6 +490,17 @@ content to implement any of them**:
   `default_lesson_view`) plus a small `lesson-viewer.html` change. This is
   real, worthwhile, and **explicitly deferred** — not needed for a first
   lesson, not attempted in this blueprint.
+- **The "Need a reminder?" drawer clones content by hardcoded ID**
+  (`document.getElementById('ile-learn')`,
+  `document.getElementById('ile-diagrams')`) — found by Pilot #2, which
+  deliberately kept those exact section IDs for this reason rather than
+  renaming the diagrams section to something more descriptive (e.g.
+  `ile-graphs`). **Any lesson built on this shared engine must keep its
+  two Learn-mode content sections named `ile-learn` and `ile-diagrams`**,
+  or update the reminder-drawer clone logic in the `<script>` block to
+  accept configurable section IDs instead. Not previously documented;
+  a real, undocumented coupling in the shared engine, not a per-lesson
+  choice.
 
 ---
 
@@ -591,6 +620,26 @@ not glossed over.
 genuinely unavailable for a given lesson, that must be stated honestly
 and publication should wait for it, not be waved through on code-level
 verification alone.
+
+**Partial-failure fallback, confirmed by Pilot #2**: browser access can
+be genuinely available (full click/JS/console access) while pixel
+screenshot capture specifically fails — Pilot #2 hit this directly:
+screenshots at any scrolled position returned blank across six distinct
+methods, while `resize_window` also silently failed to change
+`window.innerWidth`, both reproducible and confirmed as tooling
+limitations (not site defects) via DOM/computed-style cross-checks at
+the same positions. In this specific partial-failure case, the required
+minimum substitute is **live, real-browser geometry and computed-style
+verification** — `getBBox()`-based collision/bounds checks, real
+alpha-composited contrast against the actual rendered background,
+`document.activeElement` focus checks — which is genuinely stronger than
+static source review but is **not** the same claim as a human-verified
+pixel image. The final aesthetic/visual-craft judgement specifically
+(not geometry, not contrast — whether a diagram *looks* art-directed)
+must be named as outstanding in this case, never silently scored from
+computed styles alone. See
+`docs/pilots/distance-time-graphs-quality-audit.md` Gate 7 for the full
+worked example of this fallback in practice.
 
 ### Gate 8 — Human Approval
 The final human reviewer (the user, or a designated reviewer) decides
@@ -768,6 +817,7 @@ this blueprint's rules exist, not abstractions.
 | 12 | A `getComputedStyle` colour read at face value as its raw `rgba()` string produced a nonsensical contrast "failure" that wasn't real, because the value was never alpha-composited against its actual rendered ancestor background — this specific mistake was made **twice**, in two different passes, before it became a written rule | Reading a colour value and computing luminance from it "looks" like doing contrast checking correctly; the compositing step is easy to skip without immediately obvious symptoms | Every contrast claim goes through explicit `parseRGBA` → `composite against real ancestor` → `luminance` → `ratio`, never a raw value read at face value |
 | 13 | "Foundation tier" initially meant Higher content with the Higher-only block hidden — no Foundation-specific content existed anywhere, scored 2/5 on independent audit | A tier toggle that visibly changes content (hiding the Higher block) looks like tier differentiation is implemented; the audit's specific test — "trace every occurrence, is anything *added* for Foundation, not just removed" — is what surfaced the gap | Foundation must be independently, additively authored (§2's six-move pattern), verified by the same trace-every-occurrence method, not assumed from the toggle working visually |
 | 14 | The "Higher extension" item was, by its own examiner note, "same method as Worked Example 2 with larger numbers" — not a genuine Grade 8–9 discriminator | Looks like stretch content because it's tagged Higher and has bigger numbers; only mapping every assessed item against every worked-example template by hand revealed 100% template-identity | Every claimed "stretch"/"challenge" item is tested against: could a student who has only seen the worked examples solve this by direct template-matching? |
+| 15 | (Found by Pilot #2, Distance–Time Graphs) Switching tier while still in Learn mode left the sticky progress label showing stale Practice-mode text ("Retrieval Diagnostic — Step 1 of 30") until the next scroll event fired — because `applyTier()` always calls `rebuildSteps(true)` → `renderStep()`, which unconditionally writes a Practice-mode-format string into the shared label regardless of which mode panel is actually visible. Confirmed present in the original Lesson 1 benchmark's own unmodified code, not introduced by Pilot 2 — a latent defect in the shared engine, only surfaced because Pilot 2's QA happened to test the tier toggle while still in Learn mode | The bug is invisible unless a session specifically toggles tier without first switching to Practice mode — an interaction path Lesson 1's own live QA pass didn't happen to exercise | Any shared UI state written by more than one code path (here: `renderStep()` and `updateProgress()` both write `progressLabel.textContent`) must guard against being visible in the wrong mode/context — e.g. mirror `updateProgress()`'s own `!modeLearnPanel.hidden` check, or call `updateProgress()` immediately after any state change made while Learn mode is active. Not yet fixed in either lesson (cosmetic severity, doesn't meet the freeze policy's bar for reopening a frozen lesson on its own) — recorded here as a known, low-priority, explicitly-scoped candidate patch to the shared engine |
 
 ---
 
