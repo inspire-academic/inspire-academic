@@ -367,3 +367,120 @@ environment limitation.
 Per instruction, stopping here. No production factory work, no mass
 diagram generation for other lessons, and no additional lessons were
 started.
+
+---
+---
+
+# VISUAL CRAFT REFINEMENT — HUMAN-EYE CRITIQUE — 2026-08-08
+
+Performed against the real rendered diagrams on staging (Higher tier,
+Light theme, desktop width, zoomed screenshots of each figure — not
+source code). Deliberately not anchored to the previous 5/5 scores: this
+is a fresh look, asking whether an experienced science editor would
+recognise these as premium GCSE Physics figures, not whether they're
+technically correct or accessible (they are, and that's not what's being
+re-judged here).
+
+**Headline finding**: these are competent, correct, well-structured SVG.
+They are not yet art-directed. Every one of the four figures has at least
+one thing an editor would flag on sight, and two have a real, load-bearing
+weakness in exactly the place the audit brief predicted.
+
+## Diagram 1 — Direct journey
+
+- First-glance readability: good — the relationship is clear within
+  about a second.
+- **Real defect, newly found**: the gold "answer" ring around point B
+  sits exactly where the vector's own arrowhead terminates — ring and
+  arrowhead visually collide at the one point in the figure that should
+  read as cleanest.
+- Visual hierarchy: acceptable, but the vector and the dimension line
+  read as similar visual weight rather than "hero, then quiet confirmation."
+- Whitespace: the composition sits close to the card edges — correct
+  mathematically, not generous.
+- Point markers: plain, small, don't feel like a designed family.
+- Arrowhead: a bare filled triangle — reads as an SVG marker default,
+  not a considered shape.
+- Would a science editor recognise this as premium? Not yet — it reads
+  as "correctly drawn," not "designed."
+- Placed-by-coordinates elements: the point labels and the dimension
+  line's end-ticks.
+- Caption dependence: low — the figure mostly stands on its own.
+
+## Diagram 2 — Detour journey
+
+- First-glance readability: strong — this is genuinely the clearest
+  concept of the four.
+- **Real defect, newly found, worse than expected**: zooming into the
+  actual rendered figure shows the vector line visually passing *through
+  the letters* of "displacement" in the hero label — not just
+  mathematically near the line (which is what was checked during the
+  redesign pass), but visibly crossing the rendered text's own bounding
+  box. The earlier check verified the label's anchor point wasn't on the
+  line; it never checked the label's full rendered width against it.
+  This is exactly the class of error §4/§5 of this pass exists to catch.
+- Same arrowhead/answer-ring collision as Diagram 1, at point C.
+- Visual hierarchy: route vs. vector reads correctly as two different
+  kinds of thing — the strongest aspect of this figure.
+- Point B (the waypoint): visually under-designed — a slightly smaller
+  plain dot is not enough differentiation from A and C to read as "a
+  different kind of point" (a corner, not a start or an answer).
+- Would a science editor recognise this as premium? No — the label
+  collision alone would be flagged immediately by anyone looking at the
+  actual rendered figure.
+
+## Diagram 3 — Round trip
+
+- **This is the weakest figure of the four, exactly as anticipated.**
+- First-glance readability: poor for the one thing this diagram most
+  needs to communicate. The eye sees two arrows and a floating badge;
+  it does not immediately conclude "same start and finish, so
+  displacement is zero."
+- **Real defect, newly found**: "Start = Finish" is cramped directly
+  against the return arrow's own line in the rendered figure — the label
+  and the geometry compete for the same visual space instead of the
+  label having its own zone.
+- **The core weakness named in the brief, confirmed on screen**: the
+  "displacement = 0 m" badge sits off to the side of the composition,
+  visually disconnected from the shared start/finish point it's
+  describing. It reads as an afterthought annotation, not as the
+  conclusion the whole figure is building toward. This is the single
+  biggest gap between "correct" and "art-directed" in this entire set.
+- The two arrows don't visually confirm they share endpoints — nothing
+  in the geometry itself (no end-cap, no connector) shows the eye that
+  the outward and return arrows begin and end at the same two points;
+  that has to be taken on faith from the "Start = Finish" text alone.
+- Would a science editor recognise this as premium? No, and this is the
+  figure most likely to be called out first in any review.
+
+## Diagram 4 — Signed 1D displacement
+
+- **Real defect, newly found, structural**: there is no dominant visual
+  answer. The two signed component vectors and the small gold dot marking
+  the net result are all competing at similar visual weight — worse, the
+  gold "answer" marker is a small, unlabelled dot sitting directly on the
+  axis line, easy to miss entirely on a first look. The single most
+  important fact this diagram exists to state — "the net displacement is
+  +5 m" — currently has the *least* visual presence of anything in the
+  figure.
+- The "+8 m" label sits uncomfortably close to the "−3 m" arrow above it
+  — cramped, not zoned.
+- Reading order: nothing in the composition enforces "first +8, then
+  −3, then here's the net" — a viewer has to reconstruct that sequence
+  from the caption, not from the figure.
+- Would a science editor recognise this as premium? No — this is a
+  genuine structural gap (a missing resultant), not a polish issue.
+
+## Re-scored visual craft (from scratch, not anchored to the prior pass)
+
+| Diagram | Visual craft |
+|---|---|
+| 1. Direct journey | **3/5** |
+| 2. Detour journey | **3/5** |
+| 3. Round trip | **2/5** |
+| 4. Signed 1D | **2/5** |
+
+None of these are failing figures — all four are legible, accurate, and
+accessible. None of them yet earn the "little or nothing would need to
+change" bar a 5/5 requires. This is the honest starting point for the
+refinement work that follows.
