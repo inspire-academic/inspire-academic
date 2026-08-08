@@ -5,6 +5,17 @@
 // these functions encode, and docs/benchmark/diagram-excellence-audit.md
 // for what happens when diagrams are hand-drawn without them.
 //
+// v1.3 — Pilot #3 (Resultant Forces & Free-Body Diagrams). Adds the
+// Inspire Force Diagram Family: forceArrowLength, forceArrow,
+// isolatedObject, resultantArrow — see docs/pilots/resultant-forces-
+// force-diagram-family-spec.md for the full rationale. Everything from
+// v1.1/v1.2 is unchanged. Four narrow primitives, built on top of the
+// existing vectorArrow()/label() rather than duplicating them — the
+// one genuinely new rule this family introduces is an explicit,
+// enforced schematic-vs-scaled distinction for arrow length (never
+// eyeballed; forceArrowLength() is the single function every arrow's
+// length must go through).
+//
 // v1.2 — Pilot #2 (Distance–Time Graphs). Adds the Inspire Scientific
 // Graph Family: scaleValueToY, graphFrame, dataPath, gradientTriangle,
 // highlightBand — see docs/pilots/distance-time-graphs-graph-family-
@@ -103,7 +114,13 @@
     pointGap: 16,         // minimum gap between a point marker and its own label
     annotationOffset: 10,
     diagramPadding: 20,
-    rowGap: 24
+    rowGap: 24,
+
+    // ---- force diagram family (v1.3) ----
+    // Fixed length for any SCHEMATIC-mode force arrow -- deliberately
+    // constant regardless of the labelled magnitude, so a schematic
+    // diagram can never be misread as encoding magnitude by length.
+    forceArrowSchematicLength: 70
   };
 
   // ---- token map (Standard "Where these tokens live") ----
@@ -487,6 +504,72 @@
     return out;
   }
 
+  // ==================================================================
+  // ---- FORCE DIAGRAM FAMILY (v1.3, Pilot #3) ----
+  // See docs/pilots/resultant-forces-force-diagram-family-spec.md.
+  // Every force arrow in this family originates from an isolated
+  // object's centre (Standard convention -- see spec §B, avoids
+  // silently implying moments/turning-effect content). These four
+  // primitives compose vectorArrow()/label() rather than duplicating
+  // arrowhead or stroke logic.
+  // ==================================================================
+
+  // The one function every force-arrow LENGTH must go through --
+  // schematic mode is a fixed length regardless of magnitude; scaled
+  // mode is magnitude * scale, always. Never hand-pick a length.
+  // scaleOpts: {mode:'schematic', schematicLength} | {mode:'scaled', scale}
+  function forceArrowLength(magnitude, scaleOpts) {
+    if (scaleOpts && scaleOpts.mode === 'scaled') {
+      return round(magnitude * scaleOpts.scale);
+    }
+    return (scaleOpts && scaleOpts.schematicLength) || DEFAULTS.forceArrowSchematicLength;
+  }
+
+  // A force arrow from an object's centre (opts.x, opts.y), at
+  // opts.angleDeg (0=right, 90=up, 180=left, 270=down -- standard
+  // mathematical convention, SVG y-axis inversion handled internally
+  // so callers never hand-flip signs), with a length derived from
+  // opts.magnitude via forceArrowLength -- never an independent x2/y2.
+  // opts: {x,y,angleDeg,magnitude,scaleOpts,colorToken,tier,strokeWidth,markerId}
+  function forceArrow(opts) {
+    var len = forceArrowLength(opts.magnitude, opts.scaleOpts);
+    var rad = opts.angleDeg * Math.PI / 180;
+    var x2 = round(opts.x + Math.cos(rad) * len);
+    var y2 = round(opts.y - Math.sin(rad) * len);
+    var vec = vectorArrow({
+      x1: opts.x, y1: opts.y, x2: x2, y2: y2,
+      markerId: opts.markerId, colorToken: opts.colorToken || TOKENS.ink,
+      tier: opts.tier, strokeWidth: opts.strokeWidth
+    });
+    return { defs: vec.defs, line: vec.line, x2: x2, y2: y2, len: len };
+  }
+
+  // The neutral rectangle representing an isolated object -- no
+  // decorative scene art (Standard §L). opts: {x,y (centre), width,
+  // height, label, colorToken}.
+  function isolatedObject(opts) {
+    var w = opts.width || 76, h = opts.height || 46;
+    var out = '<rect x="' + round(opts.x - w / 2) + '" y="' + round(opts.y - h / 2) +
+      '" width="' + w + '" height="' + h + '" rx="4" fill="' + v(TOKENS.bgCard) +
+      '" stroke="' + v(opts.colorToken || TOKENS.inkMuted) + '" stroke-width="' + DEFAULTS.strokeReference + '"/>';
+    if (opts.label) out += label({ x: opts.x, y: opts.y + 4, text: opts.label, tier: 'secondary', align: 'middle' });
+    return out;
+  }
+
+  // A forceArrow forced to the primary/gold "this is the answer"
+  // treatment -- the resultant must always be visually unmistakable
+  // from a component force. Always draw in its own dedicated row,
+  // never overlapping the component-force arrows (spec §H) -- this
+  // primitive only supplies the visual weight, not the layout, since
+  // layout is a per-diagram decision the primitive can't make safely.
+  function resultantArrow(opts) {
+    return forceArrow({
+      x: opts.x, y: opts.y, angleDeg: opts.angleDeg, magnitude: opts.magnitude,
+      scaleOpts: opts.scaleOpts, colorToken: TOKENS.gold, tier: 'primary',
+      markerId: opts.markerId, strokeWidth: opts.strokeWidth
+    });
+  }
+
   // ---- accessible SVG wrapper: title + optional desc, viewBox-scaled ----
   function wrap(opts) {
     var titleId = opts.titleId;
@@ -525,6 +608,11 @@
     graphFrame: graphFrame,
     dataPath: dataPath,
     gradientTriangle: gradientTriangle,
-    highlightBand: highlightBand
+    highlightBand: highlightBand,
+    // ---- force diagram family (v1.3) ----
+    forceArrowLength: forceArrowLength,
+    forceArrow: forceArrow,
+    isolatedObject: isolatedObject,
+    resultantArrow: resultantArrow
   };
 })(typeof window !== 'undefined' ? window : globalThis);
