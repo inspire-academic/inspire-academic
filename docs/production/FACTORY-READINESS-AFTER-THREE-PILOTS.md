@@ -682,3 +682,78 @@ stands after three pilots, honestly, not a prediction about a fourth.
 None of these have happened yet. This verdict reflects the evidence as
 it stands after Pilot #4's live QA, honestly, not a prediction about a
 fifth pilot or a factory that hasn't been designed.
+
+---
+
+## PILOT PHASE COMPLETE — ALL FOUR PILOTS APPROVED — 2026-08-08 (third session)
+
+The user personally inspected Pilot #4's Chemistry representations live
+and gave a final verdict of HUMAN VISUAL REVIEW: PASS. Full record:
+`docs/pilots/chemistry-pilot-quality-audit.md`'s final section. This
+closes the one gate every "What would change this verdict" list above
+named as the remaining open dependency. All four pilots this programme
+set out to run are now complete:
+
+| Pilot | Lesson | Verdict | Canonical family |
+|---|---|---|---|
+| #1 | Distance & Displacement | **APPROVED** | Canonical spatial/vector representation family |
+| #2 | Distance–Time Graphs | **APPROVED** | Canonical scientific graph family |
+| #3 | Resultant Forces & Free-Body Diagrams | **APPROVED** | Canonical force/free-body representation family |
+| #4 | Relative Formula Mass & Moles | **APPROVED** | Canonical quantitative Chemistry representation family (Mass–Mole Relationship Strip v1) |
+
+### Final evidence-based readiness verdict
+
+## PRODUCTION BLUEPRINT GENERALISES WITH SUBJECT-SPECIFIC EXTENSIONS — FACTORY DESIGN MAY BEGIN WITH EXPLICIT SUBJECT MODULES
+
+Unchanged from the Cross-Subject Pilot #4 Update section above — that
+verdict was already reasoned from Gate 7's completion, not from human
+visual review, per the explicit instruction to keep those two questions
+separate. Human visual review passing does not itself strengthen the
+*technical* verdict (it was already B on technical grounds); it closes
+the one *dependent* gate (Gate 8) that was always going to remain open
+regardless of the technical verdict, for any pilot, in any subject.
+What it does change is that **Pilot #4 now has nothing outstanding at
+all** — the same complete state Pilots #1–#3 each reached before this
+document's original three-pilot verdict was written.
+
+### The repeated pilot phase is now considered COMPLETE
+
+Four pilots, two representational classes proven within Physics beyond
+the founding one (graphs, forces) plus one full cross-subject test
+(Chemistry), each with a real live-QA pass and real human visual
+review, is enough evidence for the question this whole phase existed to
+answer: does the Inspire Lesson Production Blueprint work as a genuine
+production method, or was Pilot #1 a one-off? It works, repeatably,
+across representational classes and across a subject boundary, with a
+declining and increasingly narrow (tooling-level, not content-level)
+intervention burden each time. **This phase does not automatically
+continue into a Pilot #5.** Per instruction:
+
+## Do not recommend Pilot #5 by default
+
+Any further pilot should be justified by a **specific new uncertainty
+worth testing** — not run merely to add another data point to an
+already-answered question. Candidates that would meet that bar (not
+authorised, not recommended, named only so a future session doesn't
+have to rediscover them): a second cross-subject test in a genuinely
+different subject (Biology — different representational demands again,
+e.g. process/cycle diagrams, not covered by any of the four families so
+far); a lesson dense enough to need **two** representation families at
+once (untested in all four pilots so far — §4 of
+`docs/pilots/resultant-forces-blueprint-review.md`'s original risk list
+named this as unknown, and it still is); or a lesson that specifically
+stress-tests the now-disclosed flex-blockification risk in the Physics
+files (failure mode #17) to see whether it's as narrow a fix there as
+it was for Chemistry. None of these are being proposed now — they are
+recorded so that if a fifth pilot is later requested, its justification
+can be checked against "is this actually a new uncertainty" rather than
+"it's the next number."
+
+### What this section does not authorise
+
+Identical to every prior section of this document: **no factory work
+follows from this closure.** All four pilots being approved is the
+evidence a factory-design conversation would rest on, not authorisation
+to start that conversation, and not the conversation itself. See
+`docs/benchmark/BENCHMARK-CURRENT-STATE.md`'s NEXT SESSION section for
+the specific, narrow thing the next session should actually do.

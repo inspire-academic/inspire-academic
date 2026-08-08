@@ -1,4 +1,4 @@
-# Inspire Lesson Production Blueprint — v1.4
+# Inspire Lesson Production Blueprint — v1.4.1
 
 Derived entirely from what was actually built, broken, fixed, and verified
 producing the **Distance & Displacement** benchmark (Physics, Forces and
@@ -33,7 +33,7 @@ itself remains unauthorised and unbuilt).
 - Diagram standard: `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md` v1.1
 - Pilot #2 stress-test: `docs/pilots/distance-time-graphs-*` (plan, graph-family spec, quality audit, blueprint review) — verdict **PILOT #2 APPROVED** (human visual review passed)
 - Pilot #3 stress-test: `docs/pilots/resultant-forces-*` (plan, force-diagram-family spec, quality audit, blueprint review) — verdict **PILOT #3 APPROVED** (human visual review passed 2026-08-08; Force Diagram Family CANONICAL v1)
-- Pilot #4 stress-test: `docs/pilots/chemistry-pilot-*` (selection, representation-family spec, quality audit, blueprint review) — verdict **PILOT #4 TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING**
+- Pilot #4 stress-test: `docs/pilots/chemistry-pilot-*` (selection, representation-family spec, quality audit, blueprint review) — verdict **PILOT #4 APPROVED** (human visual review passed 2026-08-08; Mass–Mole Relationship Strip family CANONICAL v1)
 
 **v1.3 update**: stress-tested against **Pilot #4 — Relative Formula
 Mass & Moles**, the first **non-Physics** (GCSE Chemistry) lesson built
@@ -70,17 +70,40 @@ Live QA update. Verdict: **PILOT #4 TECHNICALLY APPROVED — HUMAN VISUAL
 REVIEW PENDING**, the same strength of verdict Pilot #3 reached before
 human review closed it.
 
+**v1.4.1 update**: Pilot #4's human visual review has now passed (the
+user personally inspected the rendered Chemistry representations —
+HUMAN VISUAL REVIEW: PASS). **All four pilots this programme ran are
+now APPROVED, with nothing outstanding.** See
+`docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`'s PILOT PHASE
+COMPLETE section. This blueprint is now a **cross-subject-proven
+standard**, exercised successfully across: multiple Physics
+representation types (spatial/vector, mathematical graph, symbolic
+force); quantitative Chemistry; Higher/Foundation adaptation (six-move
+pattern, confirmed to transfer with zero adaptation across subjects);
+the assessment object model (zero new fields/`question_type` values
+across four materially different assessment styles); accessibility
+(structure, focus, contrast, live announcement — all confirmed live in
+both Physics and Chemistry); deterministic SVG generation; and
+mathematically generated graphs. **Subject-specific extensions remain
+legitimate and expected** — Chemistry needed a narrow, disclosed
+text-wrap rule for its own representation family, and needing that kind
+of narrow extension per new representational shape is not a blueprint
+weakness, it's the expected texture of "generalises with subject
+modules," per the current cross-subject verdict (B).
+
 **Status of this document**: a practical production standard, proven
 against three GCSE Physics lessons (spatial/vector, mathematical graph,
 symbolic force representation) with full live-QA evidence, and now also
 proven against a fourth, cross-subject GCSE Chemistry lesson with full
-live-QA evidence — the architecture (lesson anatomy, tier model,
-assessment object model) transferred with zero mechanism changes; the
-diagram-production tooling required a narrow, disclosed Chemistry-
-specific extension (no pre-built primitive library, no text-wrap
-helper). One genuinely new cross-subject rule was added to §13 as a
-direct result. Human visual review of the Chemistry pilot's new
-representation family remains the one outstanding gate.
+live-QA evidence and human visual review — the architecture (lesson
+anatomy, tier model, assessment object model) transferred with zero
+mechanism changes; the diagram-production tooling required a narrow,
+disclosed Chemistry-specific extension (no pre-built primitive library,
+no text-wrap helper). One genuinely new cross-subject rule was added to
+§13 as a direct result. **No gate remains outstanding for any of the
+four pilots.** The repeated pilot phase is complete; a fifth pilot is
+not recommended by default — see the factory-readiness document's
+PILOT PHASE COMPLETE section for what would justify one.
 
 **Who this is for**: a teacher/content author, Claude Code, a future AI
 agent, a QA reviewer, or a developer — anyone who needs to answer "how do

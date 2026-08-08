@@ -585,3 +585,78 @@ is reached the same way: real evidence, defects found and fixed rather
 than assumed absent, honest disclosure of what still depends on a human
 eye. The lesson and its new Chemistry representation family are ready
 for that review now, live on `staging`.
+
+---
+
+## HUMAN VISUAL REVIEW — PASS — 2026-08-08 (third session)
+
+The user personally inspected the rendered Chemistry representations
+live on staging — all three diagrams in the Representations section
+(`#ile-diagrams`, Section 4 in the Learn-mode sidebar):
+
+1. H₂O relative formula mass breakdown
+2. Mass ↔ moles relationship
+3. Ca(OH)₂ bracket/subscript misconception comparison
+
+Verdict given directly: **HUMAN VISUAL REVIEW: PASS.** Visual quality
+is production-worthy. No visual defect remains that blocks canonical
+use.
+
+This closes the one gate no live/automated check in this document could
+ever satisfy on its own — every section above (the original technical
+audit, the live rendered QA pass, the two defects found and fixed) was
+working toward exactly this human judgement, each time disclosing
+honestly what still depended on it. It now has an answer, and the
+answer is PASS.
+
+**Minor future editorial refinement is explicitly permitted without
+reopening this pilot or its documentation.** Per the user's own
+instruction: this pilot, the Mass–Mole Relationship Strip family, and
+the lesson itself should not be reopened for cosmetic polishing —
+only for a genuinely discovered scientific, accessibility, interaction,
+or rendering defect. This mirrors the exact standing rule already
+applied to Pilots #1–#3 after their own human visual review passed.
+
+This gate closure does not reopen or re-litigate any prior section of
+this document — the original technical audit, the live rendered QA
+pass, and both defect records stand as originally written.
+
+### Updated overall verdict
+
+## PILOT #4 APPROVED
+
+All conditions in the Updated Overall Pilot #4 Verdict table above are
+now **MET**, including the one previously reserved for the user. Pilot
+#4 — Relative Formula Mass & Moles — is formally closed.
+
+## MASS–MOLE RELATIONSHIP STRIP FAMILY: CANONICAL v1 — INSPIRE QUANTITATIVE CHEMISTRY REPRESENTATION FAMILY
+
+The Mass–Mole Relationship Strip family (plain SVG, per
+`docs/pilots/chemistry-pilot-representation-family-spec.md`) is hereby
+recorded as **production-ready for v1** and canonical as the Inspire
+platform's first Quantitative Chemistry representation family — the
+established technical name (Mass–Mole Relationship Strip) is preserved
+per instruction not to rename established artifacts; "Inspire
+Quantitative Chemistry Representation Family" is its category label
+within the platform's growing set of canonical families, alongside the
+motion/vector, graph, and force diagram families.
+
+This family currently proves:
+
+- formula decomposition (Representation 1 — H₂O built up atom by atom);
+- atom-count/subscript interpretation (every diagram's use of A<sub>r</sub>/M<sub>r</sub> subscript notation, including the objectives-list fix that makes this reliable);
+- relative formula mass construction (Representation 1);
+- mass ↔ mole relationship representation, bidirectional (Representation 2);
+- bracket/subscript misconception comparison (Representation 3, correct vs. incorrect side by side);
+- Chemistry-specific scientific notation (formulae, subscripts, coefficients — deliberately not borrowed from any Physics visual convention, per the representation-family spec's own reasoning);
+- responsive and accessible symbolic representations (live-verified `<title>`/`<desc>` pairs, 6 real alpha-composited contrast measurements clearing WCAG AA in both themes, colour-independent correct/incorrect distinction).
+
+It joins the spatial/vector family (Pilot #1), the scientific graph
+family (Pilot #2), and the force diagram family (Pilot #3) as an
+approved, reusable Inspire diagram family — the first outside Physics.
+
+**This is canonical v1, not necessarily the artistic ceiling** — the
+same standing qualification every prior family carries. Per explicit
+instruction: do not reopen this family, this pilot, the lesson, or the
+shared lesson engine for further polishing. Future work against any of
+them requires a genuine defect or regression, not aesthetic preference.
