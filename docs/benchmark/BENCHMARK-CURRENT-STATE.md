@@ -9,79 +9,106 @@ Last updated: 2026-08-08.
 
 ---
 
-## STATUS: PILOT #2 CLOSED (APPROVED) — PILOT #3 IN PROGRESS
+## STATUS: THREE PILOTS COMPLETE — FACTORY DESIGN MAY BEGIN (DOCUMENTATION ONLY; FACTORY ITSELF NOT AUTHORISED)
 
 **The lesson benchmark and the diagram-system benchmark remain formally
 FROZEN as the canonical v1 reference.** Do not reopen either for cosmetic
-polishing — only for a real, discovered defect. **Pilot #2 (Distance–Time
-Graphs) is now formally CLOSED and APPROVED**, following human visual
-review of its graph family. **Pilot #3 (Resultant Forces & Free-Body
-Diagrams) is now authorised and in progress** — see below for its status
-once built; if this line still says "in progress" when you're reading
-this, treat Pilot #3's own docs under `docs/pilots/resultant-forces-*`
-as the authoritative status, not this summary.
+polishing — only for a real, discovered defect. **Pilots #1, #2, and #3
+are all complete.** Pilots #1 and #2 are fully **APPROVED**. Pilot #3 is
+**TECHNICALLY APPROVED — human visual review pending** (its architecture,
+geometry, and scientific accuracy are fully verified; its diagrams
+await the same human-eye pass Pilot #2 already received). The
+three-pilot factory-readiness verdict is
+**PRODUCTION BLUEPRINT GENERALISES — MINIMUM FACTORY DESIGN SHOULD
+BEGIN** — documentation only; see
+`docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` for the full
+reasoning and its two named, still-open qualifications (Pilot #3's
+pending visual review; zero cross-subject testing so far). **The
+factory has not been designed in detail or built.**
 
 | Freeze / pilot point | Commit | Verdict |
 |---|---|---|
 | Lesson benchmark (Distance & Displacement) | `fb8e630` | **APPROVED BENCHMARK** — `docs/benchmark/distance-displacement-academic-audit.md` |
 | Diagram system benchmark | `c766d86` | **VISUAL DIAGRAM BENCHMARK APPROVED** — `docs/benchmark/diagram-excellence-audit.md` |
 | Production blueprint extraction | `34cd612` | `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` v1.0 |
-| Pilot #2 — Distance–Time Graphs | `4801dd3` → `b44e991` → (this session's human-approval commit) | **PILOT #2 APPROVED** (human visual review PASS) — `docs/pilots/distance-time-graphs-quality-audit.md`. Graph family: **CANONICAL v1 — INSPIRE SCIENTIFIC GRAPH FAMILY** |
-| Pilot #3 — Resultant Forces & Free-Body Diagrams | in progress this session | see `docs/pilots/resultant-forces-*` once built |
+| Pilot #2 — Distance–Time Graphs | `4801dd3` → `b44e991` → `d75faba` | **PILOT #2 APPROVED** (human visual review PASS) — `docs/pilots/distance-time-graphs-quality-audit.md`. Graph family: **CANONICAL v1 — INSPIRE SCIENTIFIC GRAPH FAMILY** |
+| Shared-engine bug fix (stale progress label, blueprint failure mode #15) | `08583b5` → `569f645` | **FIXED**, applied to both Pilot #1 and #2 lesson files, re-verified live on both |
+| Pilot #3 — Resultant Forces & Free-Body Diagrams | `dce85e3` → `7e9cf9a` → `ae914f2` → `30b1bb1` | **TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING** — `docs/pilots/resultant-forces-quality-audit.md`. Force diagram family: **v1.0, not yet canonical** (awaiting the same human review Pilot #2's graph family already passed) |
+| Blueprint v1.2 + three-pilot comparison | `e5f41a4` | `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`; `docs/pilots/resultant-forces-blueprint-review.md` |
+| Factory-readiness analysis | this session | `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` — **PRODUCTION BLUEPRINT GENERALISES — MINIMUM FACTORY DESIGN SHOULD BEGIN** (documentation only) |
 
 **Frozen reference assets** (do not modify without a newly discovered
 defect, not preference-driven polish): the approved lesson architecture;
 the Inspire Learning Experience layout; the Classic/Inspire coexistence
 model; Higher/Foundation pathway behaviour; Inspire Light/Dark theme
-behaviour; the mastery progression model; accessibility/focus behaviour;
-the assessment structure; the scientific diagram workflow;
-the v1.1 motion/vector portion of `assets/js/diagram-primitives.js`;
-the v1.2 graph portion (now also canonical v1, human-approved);
-`docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md`;
+behaviour; the mastery progression model (including the Part B focus/
+progress-label fix, now part of the frozen shared engine);
+accessibility/focus behaviour; the assessment structure; the scientific
+diagram workflow; the v1.1 motion/vector portion of `assets/js/
+diagram-primitives.js`; the v1.2 graph portion (canonical v1,
+human-approved); `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md`;
 the Distance & Displacement canonical diagram family; and the
 Distance–Time Graphs canonical diagram family.
+**Not yet frozen**: the v1.3 force diagram portion of
+`diagram-primitives.js` and the Resultant Forces & Free-Body Diagrams
+lesson — both are complete and technically verified, but await human
+visual review before being declared canonical, the same gate the graph
+family passed through in the previous session.
 
-**Two canonical diagram families are now approved**:
+**Two canonical diagram families are approved; a third is built and
+awaiting human review**:
 1. **Motion/vector family** (v1.1) — Distance & Displacement, frozen `c766d86`.
-2. **Graph family** (v1.2) — Distance–Time Graphs, human-approved this
-   session. Mathematically generated graph geometry is now an approved
-   Inspire production capability.
+2. **Graph family** (v1.2) — Distance–Time Graphs, human-approved.
+   Mathematically generated graph geometry is an approved Inspire
+   production capability.
+3. **Force diagram family** (v1.3) — Resultant Forces & Free-Body
+   Diagrams. Geometrically and scientifically verified live (every
+   arrow's rendered length checked against its declared magnitude,
+   exactly); **not yet human-visually approved**. See "NEXT SESSION"
+   below for how to close this out.
 
-**The diagram system is approved as the v1 deterministic SVG foundation.**
-Both canonical families are production-worthy, not necessarily the
-absolute artistic ceiling. Future art-direction improvements may evolve
-the standard; they do not reopen either pilot for its own sake — only a
-genuinely discovered scientific, pedagogical, or accessibility defect
-does.
+**The diagram system is approved as the v1 deterministic SVG
+foundation**, now proven across three representational classes
+(spatial/vector, mathematical graph, symbolic force) without needing
+fundamental redesign — see the three-pilot comparison in
+`docs/pilots/resultant-forces-blueprint-review.md` for the full
+evidence trail. All three families are production-worthy, not
+necessarily the absolute artistic ceiling. Future art-direction
+improvements may evolve the standard; they do not reopen any pilot for
+its own sake — only a genuinely discovered scientific, pedagogical, or
+accessibility defect does.
 
 **Production blueprint**: `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`
-v1.1 — the practical, now twice-proven standard for producing lessons.
-Read it, and `docs/pilots/distance-time-graphs-blueprint-review.md`,
-before proposing or building a fourth lesson or any factory work.
+v1.2 — the practical, now three-times-proven standard for producing
+lessons. Read it, `docs/pilots/resultant-forces-blueprint-review.md`,
+and `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` before
+proposing or building a fourth lesson or any factory work.
 
-**Pilot #2 summary (CLOSED)**: `teaching-lessons/physics/forces-and-motion-distance-time-graphs.html`
-built through the blueprint end-to-end (Learn/Practice architecture,
-mastery gate, tier/theme engine reused verbatim; a new Inspire Scientific
-Graph Family of 5 diagrams built and QA'd). Scientific accuracy: 33/33
-independently re-verified arithmetic checks, 0 errors. Live rendered QA
-performed against real staging with real browser interaction. Human
-visual review of the rendered graph family: **PASS**. One real, minor,
-pre-existing defect in the **shared engine** (present in both lessons,
-not introduced by Pilot 2) was found live and disclosed: a stale
-progress-label bug when switching tier while in Learn mode — cosmetic
-only, recorded as blueprint failure mode #15. **Status: being fixed this
-session as an explicitly-scoped shared-engine patch before Pilot #3
-begins — see the patch commit for the applied fix once done.**
+**Pilot #2 summary (CLOSED, APPROVED)**: `teaching-lessons/physics/forces-and-motion-distance-time-graphs.html`.
+Scientific accuracy: 33/33 independently re-verified checks, 0 errors.
+Human visual review of the rendered graph family: **PASS**.
 
-**Current phase**: Pilot #3 in progress (Resultant Forces & Free-Body
-Diagrams) — the third stress-test of the production blueprint, this time
-against symbolic force representation, testing whether the blueprint and
-diagram system generalise across all three representational classes
-(spatial/vector, mathematical graph, symbolic force) without fundamental
-redesign. **The factory is still not authorised.** No phase transition
-happens without the user's explicit instruction — see
-"NEXT SESSION — START HERE" at the bottom of this file (to be rewritten
-once Pilot #3 concludes this session).
+**Pilot #3 summary (TECHNICALLY APPROVED, visual review pending)**:
+`teaching-lessons/physics/forces-and-motion-resultant-forces-free-body-diagrams.html`.
+Scientific accuracy: 30/30 independently re-verified checks, 0 errors.
+Six canonical free-body diagrams; every arrow's rendered length verified
+live against its declared magnitude via the real browser's own
+rendering engine — the strongest geometric verification either diagram
+family has had. Structurally prevents the balanced-forces/Newton's-
+third-law-pair confusion by construction (every diagram isolates
+exactly one object). All 6 Foundation-adaptation moves present from the
+first build — the completeness gap Pilot #2 needed a QA pass to catch
+was correctly applied from the start this time. Zero new shared-engine
+defects found. **Staging URL**:
+`https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-resultant-forces-free-body-diagrams.html`
+
+**Current phase**: Factory-readiness documentation complete after three
+pilots. **The factory is still not authorised** — this phase produced a
+design *analysis*, not a build, and not even a detailed factory
+*design* (per explicit instruction, §37/38 of the brief that authorised
+this pass). No phase transition happens without the user's explicit
+instruction — see "NEXT SESSION — START HERE" at the bottom of this
+file.
 
 ---
 
@@ -482,70 +509,72 @@ platform rewrite. That is explicitly the later phase, not this one.
 
 ## NEXT SESSION — START HERE
 
-**The lesson and diagram benchmarks remain FROZEN and APPROVED. Pilot #2
-(Distance–Time Graphs) is complete and APPROVED WITH CHANGES. The
-production blueprint is at v1.1. There is no pending gate to run and no
-open benchmark work.** A new session picking this up should:
+**Pilots #1 and #2 are FROZEN/APPROVED. Pilot #3 is TECHNICALLY
+APPROVED with human visual review pending. The production blueprint is
+at v1.2, now stress-tested by three pilots. The factory-readiness
+verdict is "GENERALISES — MINIMUM FACTORY DESIGN SHOULD BEGIN"
+(documentation only — nothing has been built).** A new session picking
+this up should:
 
 1. Read this file in full, then
-   `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` v1.1, then
-   `docs/pilots/distance-time-graphs-blueprint-review.md` for the
-   factory-readiness reasoning — together these are the practical,
-   now twice-proven standard, not theory.
-2. **Do not reopen the Distance & Displacement lesson or diagram
-   benchmark without a genuinely discovered defect.** Cosmetic
-   re-polishing of either is explicitly out of scope — both are frozen
-   v1 canonical references (see freeze table above). Verify against the
-   specific commit (`fb8e630` lesson / `c766d86` diagrams) before
-   touching either.
-3. **Do not reopen Pilot #2's lesson file for cosmetic polishing
-   either**, with one specific, legitimate exception: it has one
-   honestly-disclosed open item — a real pixel-level visual pass on its
-   5 graphs (Section 4, `#ile-diagrams`), which this session's browser
-   tooling could not obtain (screenshots below the page fold returned
-   blank across six distinct methods — see the quality audit's Gate 7).
-   If browser tooling in a future session can actually capture scrolled
-   screenshots, completing that one check is legitimate, narrowly-scoped
-   work, not scope creep — everything else about Pilot #2 is done.
+   `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` v1.2, then
+   `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` — together
+   these are the practical, now three-times-proven standard and its
+   honest limits, not theory.
+2. **Do not reopen Pilot #1 or Pilot #2 for cosmetic polishing without a
+   genuinely discovered defect.** Both are frozen v1 canonical
+   references (see freeze table above). Verify against the specific
+   commits before touching either.
+3. **The one legitimate, narrowly-scoped open item is Pilot #3's human
+   visual review.** Its six force diagrams
+   (`teaching-lessons/physics/forces-and-motion-resultant-forces-free-body-diagrams.html`,
+   Section 4 `#ile-diagrams`) are geometrically and scientifically
+   verified but have not been human-inspected the way Pilot #2's graph
+   family was. If the user has already reviewed them (in chat, or via
+   the staging URL above) and confirms approval, follow Pilot #2's own
+   precedent exactly: append a "HUMAN VISUAL REVIEW: PASS" section to
+   `docs/pilots/resultant-forces-quality-audit.md` (do not rewrite the
+   existing conditional verdict — append, as Pilot #2's own audit doc
+   does), declare the force diagram family **CANONICAL v1**, and update
+   this file's freeze table accordingly. Do not proceed with this
+   unprompted — wait for the user's actual review.
 4. **Do not start mass lesson production, the six-agent factory, a new
-   CMS, or an admin dashboard.** The factory is explicitly **not
-   authorised** — the current factory-readiness verdict is "MOSTLY
-   GENERALISES — ONE MORE PILOT RECOMMENDED," not a green light.
+   CMS, or an admin dashboard, and do not write a detailed factory
+   architecture document beyond what
+   `FACTORY-READINESS-AFTER-THREE-PILOTS.md` already contains.** The
+   verdict authorises *thinking about* factory design, not building it,
+   and not even detailing it further, without new explicit instruction.
 5. Confirm the current branch and latest commit (`git status`, `git log
    -1` — expect `staging`).
-6. Confirm both staging lessons still resolve:
-   `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-distance-and-displacement.html`
-   and
-   `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-distance-time-graphs.html`
-   — if either 404s or looks unstyled, investigate before assuming this
+6. Confirm all three staging lessons still resolve:
+   `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-distance-and-displacement.html`,
+   `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-distance-time-graphs.html`, and
+   `https://staging.inspireacademic.org/teaching-lessons/physics/forces-and-motion-resultant-forces-free-body-diagrams.html`
+   — if any 404s or looks unstyled, investigate before assuming this
    document is stale.
-7. **Two legitimate next steps are open, neither pre-authorised —
-   present both and wait for the user to choose:**
-   (a) close Pilot #2's one open item (the visual pixel pass, #3 above),
-   or (b) propose and build a **third pilot** to strengthen the
-   factory-readiness evidence — the blueprint-review doc suggests either
-   completing (a) first, or attempting a higher-risk diagram family
-   (Resultant Forces/Free-Body Diagrams, per blueprint §15 Candidate B)
-   as the strongest next test. Do not start building a third lesson
-   unprompted.
-8. A real, minor, low-priority defect in the **shared lesson engine**
-   (affecting both lessons) was found live and documented but not
-   fixed: a stale progress-label bug when switching tier while still in
-   Learn mode (blueprint §13, failure mode #15). Cosmetic only, not
-   blocking. If asked to fix it, treat it as a small, explicitly-scoped
-   patch to the shared engine pattern — not a reason to reopen either
-   lesson's full QA.
+7. **Legitimate next steps, none pre-authorised — present options and
+   wait for the user to choose**: (a) close Pilot #3's human visual
+   review (#3 above); (b) a fourth pilot in a **non-Physics subject**
+   (Chemistry or Biology), the single largest untested assumption named
+   in the factory-readiness doc; (c) begin detailed factory design work,
+   now that the documentation-level verdict supports it, if the user
+   explicitly asks for that specific next step. Do not start any of
+   these unprompted.
+8. The shared-engine stale-progress-label defect (blueprint failure mode
+   #15) is **already fixed** (commit `08583b5`, re-verified live on both
+   Pilot #1 and #2's lesson files, and built correctly from the start
+   into Pilot #3). No outstanding engine defects are known.
 9. If asked to extend this work in any other direction (spec-accuracy
    verification against real AQA/Edexcel documents, a human
-   subject-specialist review, or starting the factory), treat each as
-   new scope requiring its own explicit instruction and its own plan —
-   this document, the blueprint, and the pilot docs are grounding
-   context, not a task list to execute unprompted.
-10. Historical detail on the frozen benchmark itself (original findings,
-    remediation passes, live-verification evidence) lives in
+   subject-specialist review, or starting the factory build itself),
+   treat each as new scope requiring its own explicit instruction and
+   its own plan — this document, the blueprint, and the pilot docs are
+   grounding context, not a task list to execute unprompted.
+10. Historical detail: Pilot #1 in
     `docs/benchmark/distance-displacement-academic-audit.md` and
-    `docs/benchmark/diagram-excellence-audit.md`; Pilot #2's full detail
-    lives in `docs/pilots/distance-time-graphs-*.md` (pilot plan,
-    graph-family spec, quality audit, blueprint review) — read only as
-    needed, the blueprint is the distilled, actionable version of all of
-    it.
+    `docs/benchmark/diagram-excellence-audit.md`; Pilot #2 in
+    `docs/pilots/distance-time-graphs-*.md`; Pilot #3 in
+    `docs/pilots/resultant-forces-*.md` (pilot plan, force-diagram-family
+    spec, quality audit, blueprint review) — read only as needed, the
+    blueprint and factory-readiness doc are the distilled, actionable
+    version of all three.
