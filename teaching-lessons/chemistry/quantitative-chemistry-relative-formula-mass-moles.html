@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relative Formula Mass &amp; Moles | Inspire Academic</title>
+<meta name="description" content="GCSE Chemistry: Relative Formula Mass and Moles — Inspire Learning Experience production Pilot #4 (cross-subject), AQA and Edexcel, Higher and Foundation tier.">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+
+<style>
+  /* Inspire Learning Experience — Pilot #4 (Relative Formula Mass & Moles).
+     First CROSS-SUBJECT pilot: GCSE Chemistry, not Physics. Built against
+     docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md — the shared
+     CSS/JS engine below is REUSED VERBATIM from the three approved
+     Physics pilots (per blueprint §10), zero changes to any token,
+     component, or tier rule. Only new Chemistry-specific tokens
+     (--diagram-chem-*) are added, following the exact per-theme
+     declaration pattern the Physics diagram tokens already use — see
+     docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md §13, failure
+     mode #4, for why these must never be declared once at :root. Token
+     values copied from assets/css/tokens.css, not linked — a
+     root-relative stylesheet link does not resolve inside the blob:
+     document student/lesson-viewer.html creates. Fresh "ile-" namespace;
+     absolute paths only; self-sufficient full-bleed layout. */
+
+  html{ font-size: 19px; }
+
+  :root{
+    --radius: 20px;
+    --radius-sm: 12px;
+    --sidebar-width: 256px;
+    --transition: .2s cubic-bezier(.4,0,.2,1);
+    --spring-out: cubic-bezier(.34,1.56,.64,1);
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --gold: #c9a84c;
+    --grad-gold: linear-gradient(135deg, #c9a84c, #e8c96a);
+    --danger: #f97316;
+    --success: #22c55e;
+    --blue: #1d4ed8;
+    --cyan-bright: #06b6d4;
+  }
+  [data-theme="dark"]{
+    --bg: #0b1628; --bg-panel: rgba(13,28,56,.75); --bg-card: rgba(255,255,255,.045);
+    --bg-hover: rgba(255,255,255,.07); --border: rgba(255,255,255,.09);
+    --border-strong: rgba(255,255,255,.16); --text: #f0f6ff;
+    --text-muted: rgba(240,246,255,.68); --text-soft: rgba(240,246,255,.62);
+    --sidebar-bg: #060e1b; --sidebar-border: rgba(255,255,255,.07);
+    --shadow-card: 0 6px 28px rgba(0,0,0,.3); --shadow-elevated: 0 10px 36px rgba(0,0,0,.4);
+    --active-surface: rgba(201,168,76,.12); --accent: var(--cyan-bright); --gold-ink: var(--gold);
+    --progress-rail-bg: linear-gradient(180deg, #0a1830, #0e2440);
+    --progress-rail-border: rgba(56,189,248,.4);
+    --progress-fill-grad: linear-gradient(90deg, #1d4ed8 0%, #0891b2 55%, #22d3ee 100%);
+    --progress-puck-grad: radial-gradient(circle at 35% 30%, #e0fbff, #22d3ee 55%, #0e7490 100%);
+    --progress-puck-glow: 0 0 16px rgba(34,211,238,.95), 0 0 0 5px rgba(34,211,238,.22), 0 2px 4px rgba(0,0,0,.4);
+    --progress-label: var(--cyan-bright);
+    --diagram-ink: var(--text);
+    --diagram-ink-muted: var(--text-muted);
+    --diagram-axis: #7c8ba1;
+    /* Mass–Mole Relationship Strip family (v1, this pilot) — aliases
+       --gold-ink for the "derived/result" box, same platform-wide
+       meaning as every other diagram family. Declared per-theme, not at
+       :root (blueprint §13 failure mode #4). */
+    --diagram-chem-given: var(--diagram-ink);
+    --diagram-chem-result: var(--gold-ink);
+    --diagram-chem-wrong: var(--danger);
+    --diagram-chem-box: var(--bg-card);
+  }
+  [data-theme="light"]{
+    --bg: #f2f7fd; --bg-panel: #ffffff; --bg-card: #ffffff; --bg-tinted: #eef5fb;
+    --bg-hover: rgba(11,33,68,.05); --border: #dfe9f4; --border-strong: #c9dbec;
+    --text: #0b2144; --text-muted: rgba(11,33,68,.72); --text-soft: rgba(11,33,68,.55);
+    --sidebar-bg: #ffffff; --sidebar-border: #e8f0f9;
+    --shadow-card: 0 10px 26px rgba(15,42,82,.08); --shadow-elevated: 0 16px 36px rgba(15,42,82,.13);
+    --blue: #0e2c56; --gold-rich: #8f6412; --gold-soft: #f2dfa8; --border-warm: #ead9b3;
+    --gold-ink: #8f6412;
+    --active-surface: linear-gradient(135deg, #faf1dc 0%, #eef6fd 100%); --accent: var(--gold-rich);
+    --progress-rail-bg: linear-gradient(180deg, #0e2547, #14335f);
+    --progress-rail-border: rgba(201,168,76,.4);
+    --progress-fill-grad: linear-gradient(90deg, #b98520 0%, #d4af53 55%, #f2dfa8 100%);
+    --progress-puck-grad: radial-gradient(circle at 35% 30%, #fffaef, #f2dfa8 55%, #b98520 100%);
+    --progress-puck-glow: 0 0 14px rgba(185,133,32,.5), 0 0 0 5px rgba(185,133,32,.2), 0 2px 4px rgba(15,42,82,.3);
+    --progress-label: var(--gold-rich);
+    --diagram-ink: var(--text);
+    --diagram-ink-muted: var(--text-muted);
+    --diagram-axis: #7c8ba1;
+    --diagram-chem-given: var(--diagram-ink);
+    --diagram-chem-result: var(--gold-ink);
+    --diagram-chem-wrong: #c2410c;
+    --diagram-chem-box: var(--bg-tinted);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body.ile-lesson{
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    transition: background .25s var(--transition), color .25s var(--transition);
+  }
+  body.ile-lesson[data-theme="light"]{
+    background:
+      radial-gradient(1100px 700px at 12% -8%, rgba(242,223,168,.22), transparent 55%),
+      radial-gradient(1000px 650px at 100% 0%, rgba(219,232,246,.55), transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+  .ile-lesson h1, .ile-lesson h2, .ile-lesson h3 { font-family: var(--font-display); }
+  a { color: inherit; }
+
+  .ile-lesson a:focus-visible,
+  .ile-lesson button:focus-visible,
+  .ile-lesson input:focus-visible,
+  .ile-lesson textarea:focus-visible,
+  .ile-lesson summary:focus-visible{
+    outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px;
+  }
+
+  .ile-skip-link{
+    position:absolute; left:12px; top:-48px; z-index:200;
+    background: var(--gold); color:#1a1200; padding:10px 16px;
+    border-radius: var(--radius-sm); font-weight:700;
+    transition: top .2s var(--spring-out);
+  }
+  .ile-skip-link:focus{ top:12px; }
+
+  .ile-shell{ display:grid; grid-template-columns:1fr; min-height:100vh; }
+  @media (min-width:960px){ .ile-shell{ grid-template-columns: var(--sidebar-width) 1fr; } }
+
+  .ile-sidebar{
+    background: var(--sidebar-bg); border-right:1px solid var(--sidebar-border);
+    padding:20px 14px 24px; position:fixed; inset:0 auto 0 0;
+    width:min(84vw,300px); transform:translateX(-100%);
+    transition: transform .3s var(--spring-out); z-index:90; overflow-y:auto;
+    display:flex; flex-direction:column;
+  }
+  .ile-sidebar.ile-open{ transform:translateX(0); }
+  @media (min-width:960px){ .ile-sidebar{ position:sticky; top:0; height:100vh; transform:none; width:auto; } }
+
+  .ile-sidebar-backdrop{ position:fixed; inset:0; background:rgba(4,8,16,.55); z-index:80; opacity:0; pointer-events:none; transition:opacity .25s; }
+  .ile-sidebar-backdrop.ile-open{ opacity:1; pointer-events:auto; }
+  @media (min-width:960px){ .ile-sidebar-backdrop{ display:none; } }
+
+  .ile-brand{ padding:6px 10px 18px; }
+  .ile-brand-mark{ font-family: var(--font-display); font-weight:700; font-size:1rem; letter-spacing:.05em; color: var(--gold-ink); }
+  .ile-brand-sub{ display:block; font-size:.58rem; letter-spacing:.22em; color: var(--text-muted); font-weight:700; margin-top:2px; }
+
+  .ile-back-link{
+    display:flex; align-items:center; gap:8px; font-size:.78rem; font-weight:700;
+    color: var(--text-muted); padding:8px 10px; margin-bottom:10px; border-radius: var(--radius-sm);
+  }
+  .ile-back-link:hover{ background: var(--bg-hover); color: var(--text); }
+  .ile-back-link svg{ width:14px; height:14px; }
+
+  .ile-nav{ display:flex; flex-direction:column; gap:2px; }
+  .ile-nav a, .ile-nav button{
+    display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius: var(--radius-sm);
+    font-size:.82rem; font-weight:600; color: var(--text-muted);
+    background:none; border:none; width:100%; text-align:left; cursor:pointer; font-family:inherit;
+  }
+  .ile-nav a:hover, .ile-nav button:hover{ background: var(--bg-hover); color: var(--text); }
+  .ile-nav span.ile-nav-num{
+    width:18px; height:18px; border-radius:50%; background: var(--bg-tinted, var(--bg-hover)); color: var(--text-soft);
+    font-size:.62rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .ile-sidebar-emblem{ margin-top:auto; padding:28px 10px 6px; text-align:center; opacity:.9; }
+  .ile-sidebar-emblem svg{ width:52px; height:52px; }
+
+  .ile-nav-group{ display:none; }
+  .ile-nav-group.ile-nav-group-active{ display:flex; flex-direction:column; gap:2px; }
+  .ile-nav-practice-item[aria-current="true"]{ background: var(--active-surface); color: var(--gold-ink); box-shadow: inset 0 0 0 1px var(--border-warm, transparent); }
+  .ile-nav-practice-item[aria-current="true"] .ile-nav-num{ background: var(--grad-gold); color:#1a1200; }
+  .ile-nav-practice-item .ile-nav-num.ile-nav-done{ background: var(--success); color:#04220f; }
+
+  .ile-main{ width:100%; min-width:0; }
+
+  .ile-topbar{
+    display:flex; align-items:center; gap:10px; padding:14px 16px;
+    border-bottom:1px solid var(--border); position:sticky; top:0; background: var(--bg); z-index:40;
+    flex-wrap: wrap;
+  }
+  @media (min-width:960px){ .ile-topbar{ padding:16px 32px; } }
+
+  .ile-menu-btn{
+    display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px;
+    border-radius: var(--radius-sm); background: var(--bg-card); border:1px solid var(--border);
+    color: var(--text); cursor:pointer; flex-shrink:0;
+  }
+  @media (min-width:960px){ .ile-menu-btn{ display:none; } }
+
+  .ile-topbar-title{ font-size:.86rem; font-weight:700; margin-right:auto; }
+
+  .ile-tier-toggle{ display:inline-flex; background: var(--bg-card); border:1px solid var(--border); border-radius:99px; padding:3px; }
+  .ile-tier-btn{ padding:7px 14px; border-radius:99px; border:none; background:none; font-family:inherit; font-weight:700; font-size:.76rem; color: var(--text-muted); cursor:pointer; }
+  .ile-tier-btn[aria-pressed="true"]{ background: var(--blue); color:#fff; }
+
+  .ile-theme-toggle{ display:inline-flex; background: var(--bg-card); border:1px solid var(--border); border-radius:99px; padding:3px; gap:2px; }
+  .ile-theme-btn{ padding:7px 12px; border-radius:99px; border:none; background:none; font-family:inherit; font-weight:700; font-size:.72rem; color: var(--text-muted); cursor:pointer; }
+  .ile-theme-btn[aria-pressed="true"]{ background: var(--gold); color:#1a1200; }
+
+  .ile-mode-bar{ display:flex; justify-content:center; padding:14px 16px 0; background: var(--bg); }
+  @media (min-width:960px){ .ile-mode-bar{ padding:18px 32px 0; } }
+  .ile-mode-switch{
+    display:inline-flex; background: var(--bg-card); border:1px solid var(--border); border-radius:99px; padding:4px; gap:2px;
+    box-shadow: var(--shadow-card);
+  }
+  .ile-mode-btn{
+    padding:10px 22px; border-radius:99px; border:none; background:none; cursor:pointer;
+    font-family: var(--font-display); font-weight:650; font-size:.92rem; color: var(--text-muted);
+    display:flex; align-items:center; gap:8px;
+  }
+  .ile-mode-btn svg{ width:16px; height:16px; }
+  .ile-mode-btn[aria-pressed="true"]{ background: var(--grad-gold); color:#1a1200; }
+
+  .ile-content{ padding:20px 16px 72px; max-width:880px; margin:0 auto; }
+  @media (min-width:960px){ .ile-content{ padding:32px 40px 96px; } }
+
+  .ile-mode-panel{ }
+  .ile-mode-panel[hidden]{ display:none; }
+
+  .ile-section{ margin-bottom:40px; scroll-margin-top:150px; }
+  .ile-section h2{ font-size:1.35rem; margin-bottom:6px; display:flex; align-items:center; gap:10px; }
+  .ile-section-num{
+    width:30px; height:30px; border-radius:50%; background: var(--grad-gold); color:#1a1200;
+    font-size:.82rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .ile-section-sub{ font-size:.86rem; color: var(--text-muted); margin-bottom:16px; max-width:64ch; line-height:1.5; }
+
+  .ile-card{ background: var(--bg-panel); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card); padding:18px; }
+
+  .ile-hero-title{ font-size: clamp(1.6rem,4.6vw,2.3rem); line-height:1.1; margin-bottom:10px; }
+  .ile-hero-meta{ display:flex; flex-wrap:wrap; gap:14px; font-size:.78rem; color: var(--text-muted); margin-bottom:16px; }
+  .ile-hero-meta strong{ color: var(--text); }
+  .ile-objectives-list{ list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+  .ile-objectives-list li{ display:flex; gap:8px; font-size:.86rem; color: var(--text-muted); line-height:1.4; }
+  .ile-objectives-list li::before{ content:'✓'; color: var(--success); font-weight:800; flex-shrink:0; }
+
+  .ile-video-card{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    padding:40px 20px; text-align:center; border:1px dashed var(--border-strong); border-radius: var(--radius);
+    background: var(--bg-card);
+  }
+  .ile-video-card svg{ width:40px; height:40px; color: var(--gold-ink); }
+  .ile-video-card strong{ font-size:1rem; }
+  .ile-video-card p{ font-size:.82rem; color: var(--text-muted); max-width:44ch; }
+
+  .ile-q-card{ background: var(--bg-card); border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; margin-bottom:12px; }
+  .ile-q-stem{ font-size:.9rem; font-weight:600; margin-bottom:10px; }
+  .ile-q-options{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+  .ile-q-option{
+    text-align:left; padding:9px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); font-family:inherit; font-size:.84rem; color: var(--text); cursor:pointer;
+    min-height:44px;
+  }
+  .ile-q-option:hover{ border-color: var(--border-strong); }
+  .ile-q-option.ile-correct{ border-color: var(--success); background: rgba(34,197,94,.12); }
+  .ile-q-option.ile-incorrect{ border-color: var(--danger); background: rgba(249,115,22,.12); }
+  .ile-q-feedback{ font-size:.8rem; padding:8px 10px; border-radius: var(--radius-sm); background: var(--bg-hover); display:none; }
+  .ile-q-feedback.ile-show{ display:block; }
+
+  .ile-input-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
+  .ile-q-input{
+    padding:9px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); color: var(--text); font-family:inherit; font-size:.84rem; width:140px;
+  }
+  .ile-check-btn{
+    padding:9px 16px; border-radius: var(--radius-sm); border:none; background: var(--blue); color:#fff;
+    font-family:inherit; font-weight:700; font-size:.8rem; cursor:pointer; min-height:44px;
+  }
+
+  .ile-self-answer{ margin:2px 0 12px; }
+  .ile-self-answer label{
+    display:block; font-size:.7rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+    color: var(--text-muted); margin-bottom:6px;
+  }
+  .ile-self-answer textarea{
+    width:100%; min-height:64px; padding:10px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); color: var(--text); font-family:inherit; font-size:.85rem; line-height:1.5;
+    resize:vertical;
+  }
+  .ile-self-answer textarea::placeholder{ color: var(--text-soft); }
+  .ile-self-answer p{ font-size:.72rem; color: var(--text-soft); margin-top:5px; }
+
+  .ile-diagram-figure{ background: var(--bg-card); border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; text-align:center; margin-bottom:16px; }
+  .ile-diagram-figure svg{ width:100%; height:auto; max-width:720px; }
+  .ile-diagram-figure figcaption{ font-size:.82rem; color: var(--text-muted); margin-top:10px; line-height:1.5; max-width:56ch; margin-left:auto; margin-right:auto; }
+
+  .ile-worked{ border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; margin-bottom:14px; background: var(--bg-card); }
+  .ile-worked h3{ font-size:.98rem; margin-bottom:8px; }
+  .ile-worked dl{ font-size:.85rem; line-height:1.7; }
+  .ile-worked dt{ font-weight:700; color: var(--text); margin-top:8px; }
+  .ile-worked dt:first-child{ margin-top:0; }
+  .ile-worked dd{ color: var(--text-muted); margin-left:0; }
+  .ile-worked .ile-answer{ color: var(--success); font-weight:700; }
+  .ile-worked .ile-wrong-method{ border-left:3px solid var(--danger); padding-left:10px; margin-top:10px; color: var(--text-muted); font-size:.82rem; }
+
+  details.ile-hint{ margin-top:8px; }
+  details.ile-hint summary{
+    cursor:pointer; font-size:.82rem; font-weight:700; color: var(--gold-ink); padding:6px 2px; list-style:none;
+    min-height:44px; display:flex; align-items:center;
+  }
+  details.ile-hint summary::-webkit-details-marker{ display:none; }
+  details.ile-hint summary::before{ content:'▸ '; }
+  details.ile-hint[open] summary::before{ content:'▾ '; }
+  details.ile-hint .ile-hint-body{ font-size:.82rem; color: var(--text-muted); padding:6px 4px 4px 14px; line-height:1.5; }
+
+  .ile-misc-card{ border:1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-card); margin-bottom:10px; overflow:hidden; }
+  .ile-misc-card summary{
+    list-style:none; cursor:pointer; padding:12px 16px; display:flex; gap:10px; align-items:flex-start;
+    font-size:.86rem; font-weight:700; min-height:44px;
+  }
+  .ile-misc-card summary::-webkit-details-marker{ display:none; }
+  .ile-misc-card summary .ile-misc-icon{ color: var(--danger); flex-shrink:0; }
+  .ile-misc-body{ padding:0 16px 14px 42px; font-size:.84rem; color: var(--text-muted); line-height:1.6; }
+  .ile-misc-body strong{ color: var(--success); }
+
+  .ile-tier-higher-only{ }
+  body.ile-foundation .ile-tier-higher-only{ display:none; }
+  body.ile-foundation.ile-show-extensions .ile-tier-higher-only:not(.ile-step){ display:block; }
+
+  .ile-tier-foundation-only{ display:none; }
+  body.ile-foundation .ile-tier-foundation-only{ display:block; }
+
+  .ile-foundation-orientation{
+    border:1px solid rgba(5,150,105,.32); background: rgba(5,150,105,.08);
+    border-radius: var(--radius-sm); padding:16px 18px; margin-top:14px;
+  }
+  .ile-foundation-orientation strong{ display:block; margin-bottom:6px; font-size:.85rem; color:#34d399; }
+  [data-theme="light"] .ile-foundation-orientation strong{ color:#056b40; }
+  .ile-foundation-orientation p, .ile-foundation-orientation li{ font-size:.86rem; color: var(--text-muted); line-height:1.6; }
+  .ile-foundation-orientation ul{ margin:8px 0 0 18px; }
+
+  .ile-foundation-first-look{
+    border:1px solid rgba(5,150,105,.32); background: rgba(5,150,105,.07);
+    border-radius: var(--radius-sm); padding:16px 18px; margin-bottom:16px;
+  }
+  .ile-foundation-first-look h3{ font-size:1rem; margin-bottom:8px; color:#34d399; }
+  [data-theme="light"] .ile-foundation-first-look h3{ color:#056b40; }
+  .ile-foundation-first-look p{ font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:10px; }
+  .ile-foundation-first-look p:last-child{ margin-bottom:0; }
+
+  .ile-foundation-mastery{
+    border:1px solid rgba(5,150,105,.35); background: rgba(5,150,105,.09);
+    border-radius: var(--radius-sm); padding:16px 18px; margin-bottom:14px;
+  }
+  .ile-foundation-mastery h3{ font-size:.95rem; margin-bottom:8px; color:#34d399; }
+  [data-theme="light"] .ile-foundation-mastery h3{ color:#056b40; }
+  .ile-foundation-mastery ul{ margin:0 0 8px 18px; }
+  .ile-foundation-mastery li, .ile-foundation-mastery p{ font-size:.85rem; color:var(--text-muted); line-height:1.6; }
+  .ile-tier-badge{
+    display:inline-block; font-size:.6rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+    padding:2px 8px; border-radius:99px; margin-left:8px; vertical-align:middle;
+  }
+  .ile-tier-badge.ile-badge-higher{ background: rgba(124,58,237,.18); color:#a78bfa; }
+  .ile-tier-badge.ile-badge-foundation{ background: rgba(5,150,105,.18); color:#34d399; }
+  .ile-tier-badge.ile-badge-stretch{ background: rgba(201,168,76,.18); color: var(--gold-ink, var(--gold)); }
+  .ile-tier-badge.ile-badge-support{ background: rgba(6,182,212,.18); color: var(--cyan-bright); }
+  [data-theme="light"] .ile-tier-badge.ile-badge-higher{ color:#6d28d9; }
+  [data-theme="light"] .ile-tier-badge.ile-badge-foundation{ color:#056b40; }
+  [data-theme="light"] .ile-tier-badge.ile-badge-support{ color:#085a6b; }
+
+  .ile-extensions-toggle{
+    display:none; margin:0 0 10px; padding:10px 18px; border-radius:99px;
+    background: var(--bg-card); border:1px solid var(--border); box-shadow: var(--shadow-card);
+    font-size:.8rem; font-weight:700; color: var(--gold-ink, var(--gold)); cursor:pointer; font-family:inherit; min-height:44px;
+  }
+  body.ile-foundation .ile-extensions-toggle{ display:inline-block; }
+
+  .ile-exam-q{ border:1px solid var(--border); border-radius: var(--radius-sm); padding:16px; margin-bottom:14px; background: var(--bg-card); }
+  .ile-exam-q-head{ display:flex; justify-content:space-between; gap:10px; font-size:.76rem; color: var(--text-muted); margin-bottom:8px; font-weight:700; }
+  .ile-exam-stem{ font-size:.9rem; margin-bottom:10px; }
+  .ile-ms-table{ width:100%; border-collapse:collapse; font-size:.8rem; margin-top:8px; }
+  .ile-ms-table td{ border-top:1px solid var(--border); padding:6px 4px; vertical-align:top; }
+  .ile-ms-table td:last-child{ text-align:right; white-space:nowrap; font-weight:700; }
+
+  .ile-confidence-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .ile-confidence-btn{
+    padding:9px 14px; border-radius: var(--radius-sm); border:1px solid var(--border); background: var(--bg-panel);
+    font-family:inherit; font-size:.8rem; cursor:pointer; color: var(--text); min-height:44px;
+  }
+  .ile-confidence-btn[aria-pressed="true"]{ background: var(--gold); color:#1a1200; border-color: var(--gold); }
+  .ile-confidence-note{ font-size:.76rem; color: var(--text-soft); margin-top:8px; display:none; }
+  .ile-confidence-note.ile-show{ display:block; }
+
+  .ile-next-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; }
+  .ile-next-card{
+    flex:1; min-width:220px; border:1px solid var(--border); border-radius: var(--radius-sm);
+    padding:16px; background: var(--bg-panel);
+  }
+  .ile-next-card strong{ display:block; margin-bottom:4px; }
+  .ile-next-card span{ font-size:.8rem; color: var(--text-muted); }
+  .ile-next-card a.ile-next-link{ display:inline-block; margin-top:8px; font-size:.8rem; font-weight:700; color: var(--gold-ink, var(--gold)); min-height:44px; }
+
+  .ile-progress-wrap{
+    position: sticky; top: 0; z-index: 45; height: 18px;
+    margin: 8px 16px 0; background: var(--bg);
+  }
+  @media (min-width:960px){ .ile-progress-wrap{ margin: 8px 32px 0; } }
+
+  .ile-progress-rail{
+    position: absolute; inset: 0; border-radius: 999px; overflow: hidden;
+    background: var(--progress-rail-bg);
+    border: 1px solid var(--progress-rail-border);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,.55), inset 0 -1px 0 rgba(255,255,255,.05);
+  }
+  .ile-progress-fill{
+    height:100%; width:0%;
+    background: var(--progress-fill-grad);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 3px rgba(0,0,0,.25);
+    transition: width .25s var(--spring-out);
+  }
+  .ile-progress-puck{
+    position: absolute; top:50%; left:0%; transform:translate(-50%,-50%); z-index:1;
+    width:22px; height:22px; border-radius:50%; pointer-events:none;
+    background: var(--progress-puck-grad);
+    box-shadow: var(--progress-puck-glow);
+    transition: left .25s var(--spring-out);
+  }
+  .ile-progress-label{
+    position: sticky; top: 18px; z-index: 45; text-align:right;
+    font-size:.78rem; font-weight:800; letter-spacing:.03em; color: var(--progress-label);
+    padding: 6px 16px 0; background: var(--bg);
+  }
+  @media (min-width:960px){ .ile-progress-label{ padding: 5px 32px 0; } }
+
+  .ile-reveal{ opacity:0; transform: translateY(18px); transition: opacity .55s var(--spring-out), transform .55s var(--spring-out); }
+  .ile-reveal.ile-revealed{ opacity:1; transform:none; }
+
+  @keyframes ile-pop{ 0%{ transform:scale(1); } 45%{ transform:scale(1.035); } 100%{ transform:scale(1); } }
+  @keyframes ile-shake{ 0%,100%{ transform:translateX(0); } 20%{ transform:translateX(-5px); } 40%{ transform:translateX(4px); } 60%{ transform:translateX(-3px); } 80%{ transform:translateX(2px); } }
+  .ile-q-option.ile-anim-correct{ animation: ile-pop .4s var(--spring-out); }
+  .ile-q-option.ile-anim-incorrect{ animation: ile-shake .4s ease; }
+  .ile-q-option.ile-correct::before{ content:'✓  '; color: var(--success); font-weight:800; }
+  .ile-q-option.ile-incorrect::before{ content:'✕  '; color: var(--danger); font-weight:800; }
+
+  .ile-numeric-row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .ile-numeric-input{
+    padding:9px 12px; border-radius: var(--radius-sm); border:1px solid var(--border);
+    background: var(--bg-panel); color: var(--text); font-family:inherit; font-size:.9rem; width:120px; min-height:44px;
+  }
+  .ile-numeric-input.ile-anim-correct{ border-color: var(--success); animation: ile-pop .4s var(--spring-out); }
+  .ile-numeric-input.ile-anim-incorrect{ border-color: var(--danger); animation: ile-shake .4s ease; }
+  .ile-numeric-unit{ font-size:.82rem; color: var(--text-muted); }
+  .ile-numeric-check{
+    padding:9px 16px; border-radius: var(--radius-sm); border:none; background: var(--blue); color:#fff;
+    font-family:inherit; font-weight:700; font-size:.8rem; cursor:pointer; min-height:44px;
+  }
+
+  .ile-tier-foundation-emphasis{
+    border:1px solid rgba(6,182,212,.35); background: rgba(6,182,212,.08);
+    border-radius: var(--radius-sm); padding:14px 16px; margin:14px 0; display:flex; gap:10px;
+  }
+  .ile-tier-foundation-emphasis .ile-fe-icon{ flex-shrink:0; color: var(--cyan-bright); }
+  .ile-tier-foundation-emphasis strong{ display:block; margin-bottom:4px; font-size:.82rem; color: var(--cyan-bright); }
+  .ile-tier-foundation-emphasis p{ font-size:.85rem; color: var(--text-muted); line-height:1.55; margin:0; }
+  body.ile-foundation .ile-tier-foundation-emphasis{
+    border-width:1px; border-left-width:4px; border-left-color: var(--cyan-bright);
+    background: rgba(6,182,212,.13); padding:16px 18px;
+  }
+  body.ile-foundation .ile-tier-foundation-emphasis p{ font-size:.87rem; }
+
+  .ile-completion{
+    text-align:center; padding:32px 20px; border-radius: var(--radius);
+    background: var(--grad-gold); color:#1a1200; margin-bottom:14px;
+  }
+  .ile-completion.ile-show-anim{ animation: ile-badge-in .5s var(--spring-out); }
+  @keyframes ile-badge-in{ 0%{ opacity:0; transform:scale(.85) translateY(10px); } 100%{ opacity:1; transform:scale(1) translateY(0); } }
+  .ile-completion svg{ width:52px; height:52px; margin-bottom:10px; }
+  .ile-completion-check{ stroke-dasharray:40; stroke-dashoffset:40; }
+  .ile-completion.ile-show-anim .ile-completion-check{ animation: ile-draw .6s .15s ease forwards; }
+  @keyframes ile-draw{ to{ stroke-dashoffset:0; } }
+  .ile-completion h3{ font-size:1.15rem; margin-bottom:6px; }
+  .ile-completion p{ font-size:.86rem; max-width:44ch; margin:0 auto; opacity:.85; }
+
+  .ile-reminder-bar{ display:flex; justify-content:center; margin-bottom:18px; min-height:44px; }
+  .ile-reminder-btn{
+    display:inline-flex; align-items:center; gap:8px; padding:9px 18px; border-radius:99px;
+    background: var(--bg-card); border:1px solid var(--border); color: var(--accent);
+    box-shadow: var(--shadow-card);
+    font-family:inherit; font-weight:700; font-size:.82rem; cursor:pointer; min-height:44px;
+    opacity:0; transform:translateY(-6px); pointer-events:none;
+    transition: opacity .5s var(--spring-out), transform .5s var(--spring-out);
+  }
+  .ile-reminder-btn.ile-reminder-visible{ opacity:1; transform:none; pointer-events:auto; }
+  .ile-reminder-btn:hover{ background: var(--bg-hover); }
+  @media (prefers-reduced-motion: reduce){ .ile-reminder-btn{ transition:none; } }
+
+  .ile-reminder-backdrop{
+    position:fixed; inset:0; background:rgba(4,8,16,.55); z-index:180;
+    opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  .ile-reminder-backdrop.ile-open{ opacity:1; pointer-events:auto; }
+
+  .ile-reminder-drawer{
+    position:fixed; inset:0 0 0 auto; width:min(92vw, 460px);
+    background: var(--sidebar-bg); border-left:1px solid var(--sidebar-border);
+    z-index:190; transform:translateX(100%); transition: transform .3s var(--spring-out);
+    display:flex; flex-direction:column;
+  }
+  .ile-reminder-drawer.ile-open{ transform:translateX(0); }
+  .ile-reminder-drawer-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 20px; border-bottom:1px solid var(--border); flex-shrink:0;
+  }
+  .ile-reminder-drawer-head h2{ font-size:1.1rem; }
+  .ile-reminder-close{
+    width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
+    background: var(--bg-card); color: var(--text); cursor:pointer; flex-shrink:0;
+  }
+  .ile-reminder-drawer-body{ padding:16px 20px; overflow-y:auto; flex:1; }
+  .ile-reminder-drawer-body .ile-section{ margin-bottom:24px; scroll-margin-top:0; }
+  .ile-reminder-drawer-body .ile-section h2{ font-size:1.05rem; }
+  .ile-reminder-drawer-body .ile-card{ box-shadow:none; }
+  .ile-reminder-drawer-foot{ padding:14px 20px; border-top:1px solid var(--border); flex-shrink:0; }
+  .ile-reminder-drawer-foot button{ font-size:.82rem; font-weight:700; color: var(--gold-ink, var(--gold)); }
+
+  .ile-stepper{ min-height: 50vh; display:flex; flex-direction:column; }
+  .ile-step{ display:none; }
+  .ile-step.ile-step-active{ display:block; animation: ile-step-in .35s var(--spring-out); }
+  @keyframes ile-step-in{ 0%{ opacity:0; transform:translateY(10px); } 100%{ opacity:1; transform:translateY(0); } }
+
+  .ile-milestone{
+    text-align:center; padding:36px 20px; border-radius: var(--radius);
+    background: var(--bg-card); border:1px solid var(--border); box-shadow: var(--shadow-card);
+  }
+  .ile-milestone svg{
+    width:40px; height:40px; color: var(--accent); margin-bottom:10px; padding:12px;
+    box-sizing:content-box; border-radius:50%; background: var(--bg-tinted, var(--bg-hover));
+  }
+  .ile-milestone h3{ font-size:1.1rem; margin-bottom:8px; }
+  .ile-milestone p{ font-size:.86rem; color: var(--text-muted); max-width:44ch; margin:0 auto; }
+
+  .ile-step-nav{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    margin-top:24px; padding-top:16px; border-top:1px solid var(--border);
+  }
+  .ile-step-nav-end{ display:flex; align-items:center; gap:10px; margin-left:auto; }
+  .ile-step-btn{
+    padding:12px 20px; border-radius: var(--radius-sm); font-family:inherit; font-weight:700; font-size:.86rem;
+    cursor:pointer; min-height:44px;
+  }
+  .ile-step-prev{ background: var(--bg-card); border:1px solid var(--border); color: var(--text-muted); }
+  .ile-step-prev:disabled{ opacity:.4; cursor:default; }
+
+  .ile-step-next:disabled{ opacity:.45; cursor:not-allowed; }
+  .ile-step-skip{
+    background:none; border:1px solid var(--border); color: var(--text-soft);
+  }
+  .ile-step-skip:hover{ background: var(--bg-hover); color: var(--text-muted); }
+
+  .ile-skip-note{
+    display:flex; align-items:center; gap:8px; font-size:.78rem; font-weight:700;
+    color: var(--danger); background: rgba(249,115,22,.08);
+    border:1px solid var(--border-warm, var(--border)); border-radius: var(--radius-sm);
+    padding:8px 12px; margin:0 0 12px;
+  }
+
+  .ile-completion-review{
+    text-align:left; background: var(--bg-panel); border:1px solid var(--border-strong);
+    border-radius: var(--radius-sm); padding:16px 18px; margin-bottom:14px;
+  }
+  .ile-completion-review h3{ font-size:.95rem; margin-bottom:4px; color: var(--text); }
+  .ile-completion-review p{ font-size:.82rem; color: var(--text-muted); margin-bottom:10px; }
+  .ile-completion-review ul{ list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .ile-completion-review li button{
+    width:100%; text-align:left; padding:9px 12px; border-radius: var(--radius-sm);
+    border:1px solid var(--border); background: var(--bg-card); color: var(--text);
+    font-family:inherit; font-size:.82rem; font-weight:600; cursor:pointer; min-height:44px;
+  }
+  .ile-completion-review li button:hover{ border-color: var(--border-strong); background: var(--bg-hover); }
+  .ile-step-next{ background: var(--bg-hover); border:1px solid var(--border); color: var(--text-muted); }
+  .ile-step-next.ile-step-next-ready{ background: var(--grad-gold); border:none; color:#1a1200; }
+  .ile-step-live{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+  /* Mass–Mole Relationship Strip family (v1, this pilot) — plain SVG
+     boxes/text/lines, no imported Physics primitives (force-arrow/graph
+     conventions deliberately not reused here — see
+     docs/pilots/chemistry-pilot-representation-family-spec.md). */
+  .ile-chem-box-label{ font-family: var(--font-body); font-size:15px; font-weight:700; fill: var(--diagram-ink); }
+  .ile-chem-box-sub{ font-family: var(--font-body); font-size:12px; font-weight:500; fill: var(--diagram-ink-muted); }
+
+  @media (prefers-reduced-motion: reduce){
+    .ile-reveal{ opacity:1; transform:none; transition:none; }
+    .ile-q-option.ile-anim-correct, .ile-q-option.ile-anim-incorrect,
+    .ile-numeric-input.ile-anim-correct, .ile-numeric-input.ile-anim-incorrect,
+    .ile-completion.ile-show-anim, .ile-completion-check, .ile-step.ile-step-active,
+    .ile-progress-fill, .ile-progress-puck{ animation:none !important; transition:none !important; }
+    .ile-completion-check{ stroke-dashoffset:0; }
+  }
+
+  @media print{
+    .ile-sidebar, .ile-topbar, .ile-mode-bar, .ile-check-btn, .ile-confidence-row, .ile-progress-wrap, .ile-progress-label, .ile-step-nav{ display:none !important; }
+    .ile-shell{ display:block; }
+    body.ile-lesson{ background:#fff; color:#111; }
+    .ile-reveal{ opacity:1 !important; transform:none !important; }
+    .ile-step{ display:block !important; }
+    details.ile-hint, .ile-misc-card{ }
+  }
+</style>
+</head>
+<body class="ile-lesson" data-theme="dark">
+<a class="ile-skip-link" href="#ile-main-content">Skip to content</a>
+
+<div class="ile-shell">
+  <div class="ile-sidebar-backdrop" id="ileSidebarBackdrop"></div>
+
+  <aside class="ile-sidebar" id="ileSidebar" aria-label="Lesson navigation">
+    <div class="ile-brand">
+      <span class="ile-brand-mark">INSPIRE ACADEMIC<span class="ile-brand-sub">LEARNING EXPERIENCE — PILOT #4</span></span>
+    </div>
+    <a class="ile-back-link" href="/subjects/chemistry.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Chemistry hub
+    </a>
+
+    <nav class="ile-nav ile-nav-group ile-nav-group-active" id="ileNavLearn" aria-label="Learn sections">
+      <a href="#ile-orientation"><span class="ile-nav-num">1</span>Orientation</a>
+      <a href="#ile-video"><span class="ile-nav-num">2</span>Video Lesson</a>
+      <a href="#ile-learn"><span class="ile-nav-num">3</span>Core Lesson</a>
+      <a href="#ile-diagrams"><span class="ile-nav-num">4</span>Representations</a>
+      <a href="#ile-worked"><span class="ile-nav-num">5</span>Worked Examples</a>
+      <a href="#ile-misconceptions"><span class="ile-nav-num">6</span>Misconception Clinic</a>
+    </nav>
+
+    <nav class="ile-nav ile-nav-group" id="ileNavPractice" aria-label="Practice groups">
+      <button type="button" class="ile-nav-practice-item" data-group="diagnostic"><span class="ile-nav-num">1</span>Retrieval Diagnostic</button>
+      <button type="button" class="ile-nav-practice-item" data-group="guided"><span class="ile-nav-num">2</span>Guided Practice</button>
+      <button type="button" class="ile-nav-practice-item" data-group="independent"><span class="ile-nav-num">3</span>Independent Practice</button>
+      <button type="button" class="ile-nav-practice-item" data-group="exam"><span class="ile-nav-num">4</span>Exam Practice</button>
+      <button type="button" class="ile-nav-practice-item" data-group="close"><span class="ile-nav-num">5</span>Lesson Close</button>
+    </nav>
+
+    <div class="ile-sidebar-emblem" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="19" stroke="var(--gold)" stroke-width="1.4" opacity=".55"/>
+        <text x="32" y="40" text-anchor="middle" font-family="var(--font-display)" font-size="22" font-weight="700" fill="var(--gold)">I</text>
+        <path d="M13 32c-2 8 2 16 10 20" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>
+        <path d="M13 32c-3-1-6 1-7 5" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <path d="M17 24c-4-4-10-4-13 0" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <path d="M51 32c2 8-2 16-10 20" stroke="var(--gold)" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>
+        <path d="M51 32c3-1 6 1 7 5" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+        <path d="M47 24c4-4 10-4 13 0" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>
+      </svg>
+    </div>
+  </aside>
+
+  <div class="ile-main">
+    <header class="ile-topbar">
+      <button class="ile-menu-btn" id="ileMenuBtn" aria-label="Open lesson navigation" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <span class="ile-topbar-title">Relative Formula Mass &amp; Moles</span>
+      <div class="ile-tier-toggle" role="group" aria-label="Choose tier">
+        <button class="ile-tier-btn" id="ileTierHigher" aria-pressed="true">Higher</button>
+        <button class="ile-tier-btn" id="ileTierFoundation" aria-pressed="false">Foundation</button>
+      </div>
+      <div class="ile-theme-toggle" role="group" aria-label="Choose theme">
+        <button class="ile-theme-btn" id="ileThemeDark" aria-pressed="true">Dark</button>
+        <button class="ile-theme-btn" id="ileThemeLight" aria-pressed="false">Light</button>
+      </div>
+    </header>
+
+    <div class="ile-mode-bar">
+      <div class="ile-mode-switch" role="group" aria-label="Choose Learn or Practice mode">
+        <button class="ile-mode-btn" id="ileModeLearnBtn" aria-pressed="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Learn
+        </button>
+        <button class="ile-mode-btn" id="ileModePracticeBtn" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+          Practice
+        </button>
+      </div>
+    </div>
+
+    <div class="ile-progress-wrap">
+      <div class="ile-progress-rail"><div class="ile-progress-fill" id="ileProgressFill"></div></div>
+      <div class="ile-progress-puck" id="ileProgressPuck"></div>
+    </div>
+    <div class="ile-progress-label" id="ileProgressLabel"></div>
+    <div class="ile-step-live" id="ileStepLive" role="status" aria-live="polite"></div>
+
+    <main class="ile-content" id="ile-main-content">
+
+      <button class="ile-extensions-toggle" id="ileExtensionsToggle" type="button" aria-pressed="false">Show Higher extensions</button>
+
+      <!-- ========================= LEARN MODE ========================= -->
+      <div class="ile-mode-panel" id="ileModeLearn">
+
+        <!-- 1. ORIENTATION -->
+        <section class="ile-section" id="ile-orientation">
+          <h1 class="ile-hero-title">Relative Formula Mass &amp; Moles</h1>
+          <div class="ile-hero-meta">
+            <span><strong>GCSE Chemistry</strong> · Quantitative Chemistry · Production Pilot #4 (cross-subject)</span>
+            <span>AQA · Edexcel</span>
+            <span>Estimated time: <strong>35–45 min</strong></span>
+          </div>
+          <div class="ile-card ile-reveal">
+            <p style="font-size:.9rem; color:var(--text-muted); line-height:1.6;">By the end of this lesson you will be able to calculate a relative formula mass from a chemical formula, and use it to convert between mass and moles — answering the question this lesson is built around: <strong>if you can weigh a substance, how do you know how many particles you actually have?</strong></p>
+            <ul class="ile-objectives-list">
+              <li>Calculate the relative formula mass (M<sub>r</sub>) of a compound by adding the relative atomic masses (A<sub>r</sub>) of every atom in its formula.</li>
+              <li>Explain what a mole is, as a counting unit for very large numbers of particles.</li>
+              <li>Use the relationship <strong>moles = mass ÷ M<sub>r</sub></strong> to calculate the number of moles in a given mass of a substance.</li>
+              <li>Rearrange the same relationship to calculate mass from moles, or M<sub>r</sub> from mass and moles.</li>
+              <li class="ile-tier-higher-only" data-tier-block="1"><span class="ile-tier-badge ile-badge-higher">Higher</span> Use a calculated M<sub>r</sub> to identify an unknown substance from a short list of candidates — genuine evaluation, not just calculation.</li>
+            </ul>
+            <div class="ile-foundation-orientation ile-tier-foundation-only">
+              <strong>Foundation pathway — what you need to master</strong>
+              <p>This lesson has one focus for you: being able to work out M<sub>r</sub> from a formula, and use it to move between mass and moles, confidently and correctly every time. By the end, you should be confident with:</p>
+              <ul>
+                <li>Adding up relative atomic masses correctly, including formulae with brackets like Ca(OH)<sub>2</sub>.</li>
+                <li>Saying, in your own words, roughly what a "mole" is.</li>
+                <li>Using moles = mass ÷ M<sub>r</sub> to find moles when you're given a mass.</li>
+                <li>Rearranging the same relationship to find a mass when you're given moles.</li>
+                <li>Knowing that M<sub>r</sub> itself has no units — it's a ratio, not a mass in grams.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. VIDEO -->
+        <section class="ile-section" id="ile-video">
+          <h2><span class="ile-section-num">2</span>Video Lesson</h2>
+          <div class="ile-video-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>
+            <strong>Video lesson coming soon</strong>
+            <p>This pilot lesson doesn't have a recorded video yet. Everything you need is in the written lesson below.</p>
+          </div>
+        </section>
+
+        <!-- 3. CORE TEACHING -->
+        <section class="ile-section" id="ile-learn">
+          <h2><span class="ile-section-num">3</span>Core Lesson</h2>
+          <div class="ile-card">
+            <div class="ile-foundation-first-look ile-tier-foundation-only">
+              <h3>First, a concrete example — before any definitions</h3>
+              <p>A water molecule, H<sub>2</sub>O, is made of 2 hydrogen atoms and 1 oxygen atom. On the periodic table, hydrogen's relative atomic mass is 1, and oxygen's is 16. Add up every atom's mass number: 1 + 1 + 16 = 18.</p>
+              <p>That's it — that's a <strong>relative formula mass</strong>. It's just adding up the mass numbers of every atom actually written in the formula. Everything else in this lesson builds on that one idea.</p>
+            </div>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Before this lesson: relative atomic mass, briefly recapped</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">Every element has a <strong>relative atomic mass (A<sub>r</sub>)</strong>, found on the periodic table — a number comparing the mass of that element's atoms to other atoms, not a mass in grams by itself. This lesson doesn't re-teach where A<sub>r</sub> comes from — it teaches you to <em>use</em> A<sub>r</sub> values to work with whole compounds and real masses. The values used throughout this lesson: H = 1, C = 12, N = 14, O = 16, Na = 23, Mg = 24, Al = 27, S = 32, Cl = 35.5, Ca = 40. <span style="font-size:.78rem; color:var(--text-soft);">(Standard GCSE-rounded values; the exact periodic table supplied in a real exam is <strong>TO_BE_VERIFIED</strong> against each board's own data sheet.)</span></p>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Stage 1 — What relative formula mass (M<sub>r</sub>) means</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">The <strong>relative formula mass (M<sub>r</sub>)</strong> of a compound is the sum of the relative atomic masses of every atom shown in its formula. For CO<sub>2</sub>: one carbon (12) plus two oxygens (16 + 16 = 32), giving M<sub>r</sub> = 12 + 32 = 44. A subscript after an element symbol tells you how many atoms of <em>that element</em> are present — it must be counted that many times, not just added once.</p>
+
+            <div class="ile-tier-foundation-emphasis ile-reveal">
+              <svg class="ile-fe-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              <div>
+                <strong>Key words, in plain terms</strong>
+                <p>A <strong>bracket with a subscript</strong>, like Ca(OH)<sub>2</sub>, means "multiply everything inside the bracket by that number." Ca(OH)<sub>2</sub> has 1 calcium, but <em>2</em> oxygens and <em>2</em> hydrogens, because the bracket's own subscript multiplies every atom inside it. A quick check for any formula: identify every distinct element first, then count how many atoms of each one are actually present, before adding any mass numbers.</p>
+              </div>
+            </div>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Stage 2 — The mole: a counting unit</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">Atoms and molecules are far too small and far too numerous to count one at a time. A <strong>mole</strong> is simply a counting unit for particles — the same idea as "a dozen" meaning 12 of something, except a mole means a vastly larger number of particles <span class="ile-tier-higher-only" data-tier-block="2"> (6.02 × 10<sup>23</sup>, known as the <strong>Avogadro constant</strong>)</span>. The genuinely useful fact for this lesson isn't the huge number itself — it's this: <strong>the mass, in grams, of one mole of any substance is numerically equal to its M<sub>r</sub></strong>. One mole of water (M<sub>r</sub> = 18) has a mass of 18 g; one mole of CO<sub>2</sub> (M<sub>r</sub> = 44) has a mass of 44 g.</p>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Stage 3 — From concept to relationship</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">Because one mole's mass in grams always equals M<sub>r</sub>, the number of moles in <em>any</em> mass of a substance follows directly: the more grams you have, the more moles — in direct, simple proportion to M<sub>r</sub>. In words: <strong>the number of moles equals the mass you have, divided by the mass of one mole (M<sub>r</sub>)</strong>.</p>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Stage 4 — The symbolic form</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65; margin-bottom:16px;">Written as a formula: <strong>n = m ÷ M<sub>r</sub></strong>, where <em>n</em> is the number of moles, <em>m</em> is the mass in grams, and M<sub>r</sub> is the relative formula mass. This is exactly the same relationship as Stage 3, just written symbolically — nothing new is being claimed, only a shorter way to write it down.</p>
+
+            <h3 style="font-size:1.02rem; margin-bottom:8px;">Stage 5 — Rearranging the relationship</h3>
+            <p style="font-size:.87rem; color:var(--text-muted); line-height:1.65;">The same relationship rearranges two other ways, depending on what you're asked to find: <strong>mass = moles × M<sub>r</sub></strong> (when you know moles and want mass), and <strong>M<sub>r</sub> = mass ÷ moles</strong> (when you know both mass and moles, and want to work out — or check — what the substance actually is).</p>
+
+            <h3 class="ile-tier-higher-only" data-tier-block="3" style="font-size:1.02rem; margin-bottom:8px; margin-top:16px;">Stage 6 — Using M<sub>r</sub> to identify a substance <span class="ile-tier-badge ile-badge-higher">Higher</span></h3>
+            <p class="ile-tier-higher-only" data-tier-block="3" style="font-size:.87rem; color:var(--text-muted); line-height:1.65;">If you're given a real mass and a real number of moles — from an experiment, say — you can calculate M<sub>r</sub> = mass ÷ moles, then compare that number against the M<sub>r</sub> of known candidate substances to work out which one you actually have. This is genuine evaluation, not just calculation: the arithmetic only gets you a number; deciding what that number <em>means</em>, by comparing it against real candidates, is the harder step.</p>
+          </div>
+        </section>
+
+        <!-- 4. REPRESENTATIONS (Inspire Mass–Mole Relationship Strip family v1) -->
+        <section class="ile-section" id="ile-diagrams">
+          <h2><span class="ile-section-num">4</span>Representations</h2>
+          <p class="ile-section-sub">Three strips, each earning its place: build up an M<sub>r</sub> value atom by atom, see the mass ↔ moles relationship both ways at once, then compare a correct bracket calculation against the common wrong one, side by side.</p>
+
+          <figure class="ile-diagram-figure ile-reveal">
+            <svg viewBox="0 0 640 200" role="img" aria-labelledby="ile-c1-title" aria-describedby="ile-c1-desc">
+              <title id="ile-c1-title">Building up the relative formula mass of water, H2O, atom by atom</title>
+              <desc id="ile-c1-desc">Three atom boxes — hydrogen mass 1, hydrogen mass 1, oxygen mass 16 — connected by plus signs, leading to a result box showing relative formula mass 18.</desc>
+              <rect x="20" y="60" width="90" height="80" rx="10" fill="var(--diagram-chem-box)" stroke="var(--diagram-chem-given)" stroke-width="1.5"/>
+              <text x="65" y="98" text-anchor="middle" class="ile-chem-box-label">H</text>
+              <text x="65" y="120" text-anchor="middle" class="ile-chem-box-sub">Ar = 1</text>
+              <text x="128" y="107" text-anchor="middle" font-family="var(--font-display)" font-size="22" font-weight="700" fill="var(--diagram-ink-muted)">+</text>
+              <rect x="146" y="60" width="90" height="80" rx="10" fill="var(--diagram-chem-box)" stroke="var(--diagram-chem-given)" stroke-width="1.5"/>
+              <text x="191" y="98" text-anchor="middle" class="ile-chem-box-label">H</text>
+              <text x="191" y="120" text-anchor="middle" class="ile-chem-box-sub">Ar = 1</text>
+              <text x="254" y="107" text-anchor="middle" font-family="var(--font-display)" font-size="22" font-weight="700" fill="var(--diagram-ink-muted)">+</text>
+              <rect x="272" y="60" width="90" height="80" rx="10" fill="var(--diagram-chem-box)" stroke="var(--diagram-chem-given)" stroke-width="1.5"/>
+              <text x="317" y="98" text-anchor="middle" class="ile-chem-box-label">O</text>
+              <text x="317" y="120" text-anchor="middle" class="ile-chem-box-sub">Ar = 16</text>
+              <text x="400" y="107" text-anchor="middle" font-family="var(--font-display)" font-size="22" font-weight="700" fill="var(--diagram-ink-muted)">=</text>
+              <rect x="420" y="50" width="200" height="100" rx="12" fill="none" stroke="var(--diagram-chem-result)" stroke-width="2.5"/>
+              <text x="520" y="90" text-anchor="middle" font-family="var(--font-body)" font-size="16" font-weight="700" fill="var(--diagram-chem-result)">H₂O</text>
+              <text x="520" y="118" text-anchor="middle" font-family="var(--font-body)" font-size="18" font-weight="800" fill="var(--diagram-chem-result)">Mr = 18</text>
+              <text x="128" y="30" text-anchor="middle" class="ile-chem-box-sub">2 × hydrogen</text>
+              <text x="317" y="30" text-anchor="middle" class="ile-chem-box-sub">1 × oxygen</text>
+            </svg>
+            <figcaption><strong>1. Building an M<sub>r</sub> value.</strong> Every atom actually present in the formula is added once each — H<sub>2</sub>O has two separate hydrogen atoms, so A<sub>r</sub> = 1 is counted twice, not once, giving M<sub>r</sub> = 1 + 1 + 16 = 18.</figcaption>
+          </figure>
+
+          <figure class="ile-diagram-figure ile-reveal">
+            <svg viewBox="0 0 640 220" role="img" aria-labelledby="ile-c2-title" aria-describedby="ile-c2-desc">
+              <title id="ile-c2-title">The mass to moles relationship, shown in both directions</title>
+              <desc id="ile-c2-desc">A mass box on the left connects to a moles box on the right by two arrows: a forward arrow labelled divide by Mr, and a return arrow labelled multiply by Mr.</desc>
+              <rect x="30" y="70" width="170" height="90" rx="12" fill="var(--diagram-chem-box)" stroke="var(--diagram-chem-given)" stroke-width="1.5"/>
+              <text x="115" y="108" text-anchor="middle" class="ile-chem-box-label">mass (m)</text>
+              <text x="115" y="130" text-anchor="middle" class="ile-chem-box-sub">grams</text>
+              <rect x="440" y="70" width="170" height="90" rx="12" fill="none" stroke="var(--diagram-chem-result)" stroke-width="2.5"/>
+              <text x="525" y="108" text-anchor="middle" font-family="var(--font-body)" font-size="15" font-weight="700" fill="var(--diagram-chem-result)">moles (n)</text>
+              <text x="525" y="130" text-anchor="middle" class="ile-chem-box-sub">mol</text>
+              <line x1="200" y1="95" x2="440" y2="95" stroke="var(--diagram-chem-result)" stroke-width="2.5" marker-end="url(#ile-c2-arrow-fwd)"/>
+              <text x="320" y="83" text-anchor="middle" font-family="var(--font-body)" font-size="13" font-weight="700" fill="var(--diagram-chem-result)">÷ Mr</text>
+              <line x1="440" y1="135" x2="200" y2="135" stroke="var(--diagram-ink-muted)" stroke-width="2" marker-end="url(#ile-c2-arrow-rev)"/>
+              <text x="320" y="153" text-anchor="middle" font-family="var(--font-body)" font-size="13" font-weight="700" fill="var(--diagram-ink-muted)">× Mr</text>
+              <defs>
+                <marker id="ile-c2-arrow-fwd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--diagram-chem-result)"/></marker>
+                <marker id="ile-c2-arrow-rev" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="var(--diagram-ink-muted)"/></marker>
+              </defs>
+              <text x="320" y="200" text-anchor="middle" class="ile-chem-box-sub">n = m ÷ Mr, and equally, m = n × Mr — the same relationship, read in either direction.</text>
+            </svg>
+            <figcaption><strong>2. The mass ↔ moles relationship.</strong> One relationship, two directions: divide by M<sub>r</sub> to go from mass to moles; multiply by M<sub>r</sub> to go the other way. Neither direction is more "basic" than the other.</figcaption>
+          </figure>
+
+          <figure class="ile-diagram-figure ile-reveal">
+            <svg viewBox="0 0 640 260" role="img" aria-labelledby="ile-c3-title" aria-describedby="ile-c3-desc">
+              <title id="ile-c3-title">Correct and incorrect bracket calculation for calcium hydroxide, Ca(OH)2, compared side by side</title>
+              <desc id="ile-c3-desc">Two strips compared. The correct strip multiplies both oxygen and hydrogen inside the bracket by 2, giving relative formula mass 74. The incorrect strip only multiplies oxygen by 2 and forgets to multiply hydrogen, giving the wrong answer 73.</desc>
+              <text x="20" y="28" font-family="var(--font-body)" font-size="13" font-weight="800" fill="var(--diagram-chem-result)">CORRECT — bracket multiplies every atom inside it</text>
+              <text x="20" y="52" font-family="var(--font-body)" font-size="13" fill="var(--diagram-ink)">Ca(OH)₂ = Ca(40) + 2×[O(16) + H(1)] = 40 + 2×17 = 40 + 34</text>
+              <rect x="20" y="66" width="180" height="46" rx="10" fill="none" stroke="var(--diagram-chem-result)" stroke-width="2.5"/>
+              <text x="110" y="95" text-anchor="middle" font-family="var(--font-body)" font-size="17" font-weight="800" fill="var(--diagram-chem-result)">Mr = 74</text>
+
+              <text x="20" y="150" font-family="var(--font-body)" font-size="13" font-weight="800" fill="var(--diagram-chem-wrong)">INCORRECT — a common error: only O is doubled, H is forgotten</text>
+              <text x="20" y="174" font-family="var(--font-body)" font-size="13" fill="var(--diagram-ink)">Ca(OH)₂ = Ca(40) + 2×O(16) + H(1) = 40 + 32 + 1</text>
+              <rect x="20" y="188" width="180" height="46" rx="10" fill="none" stroke="var(--diagram-chem-wrong)" stroke-width="2.5" stroke-dasharray="6 4"/>
+              <text x="110" y="217" text-anchor="middle" font-family="var(--font-body)" font-size="17" font-weight="800" fill="var(--diagram-chem-wrong)">Mr = 73 ✕</text>
+              <text x="230" y="217" font-family="var(--font-body)" font-size="12.5" fill="var(--diagram-ink-muted)">The bracket's subscript (2) was applied to oxygen only — hydrogen must be doubled too, since it's also inside the bracket.</text>
+            </svg>
+            <figcaption><strong>3. The bracket trap.</strong> Ca(OH)<sub>2</sub>'s bracket subscript multiplies <em>every</em> atom inside it — both O and H — not just the first one. Forgetting this is the single most common M<sub>r</sub> error at GCSE.</figcaption>
+          </figure>
+        </section>
+
+        <!-- 5. WORKED EXAMPLES -->
+        <section class="ile-section" id="ile-worked">
+          <h2><span class="ile-section-num">5</span>Worked Examples</h2>
+
+          <div class="ile-worked ile-tier-foundation-only ile-reveal" data-tier-block="8">
+            <h3>Example 0 — the simplest case, one step at a time <span class="ile-tier-badge ile-badge-foundation">Foundation</span></h3>
+            <dl>
+              <dt>Question</dt><dd>Calculate the relative formula mass of water, H<sub>2</sub>O.</dd>
+              <dt>Step 1</dt><dd>List every element in the formula: hydrogen (H) and oxygen (O).</dd>
+              <dt>Step 2</dt><dd>Count how many atoms of each: 2 hydrogens (from the subscript "2"), 1 oxygen.</dd>
+              <dt>Step 3</dt><dd>Look up each A<sub>r</sub>: H = 1, O = 16.</dd>
+              <dt>Step 4</dt><dd>Add up every atom's mass number, counting repeats: 1 + 1 + 16.</dd>
+              <dt>Answer</dt><dd class="ile-answer">Mr = 18.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> adding each element's A<sub>r</sub> only once, ignoring the subscript (1 + 16 = 17) — always check the subscript first, and count that element's A<sub>r</sub> that many times.</p>
+          </div>
+
+          <div class="ile-worked ile-reveal">
+            <h3>Example 1 — A formula with no brackets</h3>
+            <dl>
+              <dt>Question</dt><dd>Calculate the relative formula mass of carbon dioxide, CO<sub>2</sub>.</dd>
+              <dt>What matters</dt><dd>1 carbon atom, 2 oxygen atoms.</dd>
+              <dt>Reasoning</dt><dd>Mr = Ar(C) + 2 × Ar(O).</dd>
+              <dt>Calculation</dt><dd>12 + (2 × 16) = 12 + 32 = 44</dd>
+              <dt>Answer</dt><dd class="ile-answer">Mr = 44.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> adding 12 + 16 = 28, forgetting the subscript "2" means two separate oxygen atoms, not one.</p>
+          </div>
+
+          <div class="ile-worked ile-reveal">
+            <h3>Example 2 — A formula with a bracket</h3>
+            <dl>
+              <dt>Question</dt><dd>Calculate the relative formula mass of calcium hydroxide, Ca(OH)<sub>2</sub>.</dd>
+              <dt>What matters</dt><dd>The bracket's subscript "2" multiplies <em>everything</em> inside the bracket: both the O and the H.</dd>
+              <dt>Reasoning</dt><dd>Mr = Ar(Ca) + 2 × [Ar(O) + Ar(H)].</dd>
+              <dt>Calculation</dt><dd>40 + 2 × (16 + 1) = 40 + 2 × 17 = 40 + 34 = 74</dd>
+              <dt>Answer</dt><dd class="ile-answer">Mr = 74.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> only doubling the oxygen and forgetting to double the hydrogen too — 40 + 32 + 1 = 73. Representation 3 above shows this exact error side by side with the correct method.</p>
+          </div>
+
+          <div class="ile-worked ile-reveal">
+            <h3>Example 3 — Calculating moles from a mass</h3>
+            <dl>
+              <dt>Question</dt><dd>Calculate the number of moles in 9 g of water, H<sub>2</sub>O (Mr = 18).</dd>
+              <dt>What matters</dt><dd>m = 9 g, Mr = 18.</dd>
+              <dt>Reasoning</dt><dd>n = m ÷ Mr.</dd>
+              <dt>Calculation</dt><dd>9 ÷ 18 = 0.5</dd>
+              <dt>Answer</dt><dd class="ile-answer">0.5 mol.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> dividing Mr by mass instead of mass by Mr (18 ÷ 9 = 2) — always check the relationship reads moles = mass ÷ Mr, never the reverse.</p>
+          </div>
+
+          <div class="ile-worked ile-reveal">
+            <h3>Example 4 — Rearranging to find a mass</h3>
+            <dl>
+              <dt>Question</dt><dd>Calculate the mass of 0.2 mol of carbon dioxide, CO<sub>2</sub> (Mr = 44).</dd>
+              <dt>What matters</dt><dd>n = 0.2 mol, Mr = 44. This time mass, not moles, is unknown, so the relationship must be rearranged.</dd>
+              <dt>Reasoning</dt><dd>mass = moles × Mr.</dd>
+              <dt>Calculation</dt><dd>0.2 × 44 = 8.8</dd>
+              <dt>Answer</dt><dd class="ile-answer">8.8 g.</dd>
+            </dl>
+            <p class="ile-wrong-method"><strong>Common wrong approach:</strong> stating the answer as "44 g" — the Mr value on its own is the mass of <em>one whole mole</em>, not of 0.2 mol; it must still be scaled by the actual number of moles given.</p>
+          </div>
+
+          <div class="ile-worked ile-tier-higher-only ile-reveal" data-tier-block="4">
+            <h3>Example 5 — Identifying an unknown substance <span class="ile-tier-badge ile-badge-higher">Higher</span></h3>
+            <dl>
+              <dt>Question</dt><dd>A 3.2 g sample of an unknown gas contains 0.1 mol. A fictional student, revising the four gases covered this term — O<sub>2</sub> (Mr = 32), CH<sub>4</sub> (Mr = 16), CO<sub>2</sub> (Mr = 44), N<sub>2</sub> (Mr = 28) — writes: "It must be CO<sub>2</sub>, because that's the one we talked about most." Identify the gas correctly.</dd>
+              <dt>The student's error</dt><dd>Guessing from familiarity rather than calculating Mr and comparing it against the actual candidates.</dd>
+              <dt>Correct method</dt><dd>Mr = mass ÷ moles = 3.2 ÷ 0.1.</dd>
+              <dt>Calculation</dt><dd>3.2 ÷ 0.1 = 32</dd>
+              <dt>Answer</dt><dd class="ile-answer">Mr = 32, which matches O<sub>2</sub> — the gas is oxygen, not carbon dioxide.</dd>
+            </dl>
+          </div>
+        </section>
+
+        <!-- 6. MISCONCEPTION CLINIC -->
+        <section class="ile-section" id="ile-misconceptions">
+          <h2><span class="ile-section-num">6</span>Misconception Clinic</h2>
+          <p class="ile-section-sub">Six specific wrong beliefs this topic invites — each one named, shown why it's wrong, and tied back to a representation or worked example above.</p>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"Mr has units of grams."</summary>
+            <div class="ile-misc-body">M<sub>r</sub> is a <strong>ratio</strong> comparing masses — it has no units at all. What has units of grams is the <strong>mass of one mole</strong> of the substance, which happens to be numerically equal to M<sub>r</sub> — see Core Lesson Stage 2. Writing "Mr = 18 g" is a genuine, gradeable error, not just sloppy notation.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"A mole is just another word for one molecule."</summary>
+            <div class="ile-misc-body">A mole is an <strong>amount</strong> — a huge number of particles (6.02 × 10<sup>23</sup>) — not a single particle. "1 mole of water molecules" means that many separate H<sub>2</sub>O molecules, not one especially large one. See Core Lesson Stage 2.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"A bracket's subscript only applies to the atom right next to it, not everything inside the bracket."</summary>
+            <div class="ile-misc-body">A subscript directly after a closing bracket multiplies <strong>every</strong> atom inside that bracket, not just the nearest one. Ca(OH)<sub>2</sub> has 2 oxygens <em>and</em> 2 hydrogens, not 2 oxygens and 1 hydrogen. See Representation 3 and Worked Example 2 for the exact error this produces if missed.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"The coefficient in front of a formula (like the 2 in 2H₂O) is part of the Mr calculation."</summary>
+            <div class="ile-misc-body">A number written <strong>in front of</strong> a whole formula (a coefficient, used later when balancing equations) means "this many separate formula units" — it is never added into the M<sub>r</sub> calculation itself. M<sub>r</sub> only ever comes from the subscripts <em>inside</em> one formula unit. 2H<sub>2</sub>O still has Mr = 18 for each water molecule; the "2" just means there are two of them.</div>
+          </details>
+
+          <details class="ile-misc-card">
+            <summary><svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"Relative formula mass and atomic number are the same thing."</summary>
+            <div class="ile-misc-body">Atomic number is the number of protons in one atom of an element — a completely different quantity found in a different part of the periodic table entry. Relative formula mass is built from relative <strong>atomic mass</strong> (A<sub>r</sub>), summed across a whole formula — never from atomic number.</div>
+          </details>
+
+          <details class="ile-misc-card ile-tier-higher-only" data-tier-block="5">
+            <summary><span class="ile-tier-badge ile-badge-higher">Higher</span> <svg class="ile-misc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>"If a calculated Mr looks close to a familiar substance, that's good enough to identify it."</summary>
+            <div class="ile-misc-body">An M<sub>r</sub> calculated from real experimental mass and mole data should match a candidate substance's M<sub>r</sub> <strong>exactly</strong> (allowing only for genuine rounding), not just approximately. See Worked Example 5 and Guided/Exam Practice's identification questions — guessing from a "similar-sounding" number is exactly the error those questions are designed to catch.</div>
+          </details>
+        </section>
+
+      </div>
+      <!-- ===================== END LEARN MODE ===================== -->
+
+      <!-- ========================= PRACTICE MODE ========================= -->
+      <div class="ile-mode-panel" id="ileModePractice" hidden>
+        <div class="ile-reminder-bar">
+          <button type="button" class="ile-reminder-btn" id="ileReminderBtn" aria-haspopup="dialog">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Need a reminder?
+          </button>
+        </div>
+        <div class="ile-stepper" id="ileStepper">
+
+          <!-- group: diagnostic -->
+          <div class="ile-step" data-group="diagnostic">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Retrieval Diagnostic</h3>
+              <p>Three quick checks on things you should already know — reading formulae and where relative atomic mass comes from. Don't worry if you're unsure — that's exactly what this lesson builds on.</p>
+            </div>
+          </div>
+          <div id="ileDiagnosticQs" data-group="diagnostic"></div>
+
+          <!-- group: guided -->
+          <div class="ile-step" data-group="guided">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Nice — let's build on it</h3>
+              <p>Guided Practice next. Try each question yourself first; open a hint only if you're stuck.</p>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="guided">
+            <div class="ile-q-card">
+              <div class="ile-q-stem"><span class="ile-tier-badge ile-badge-support">Extra support</span> Warm-up. Calculate the relative formula mass of sodium chloride, NaCl (Na = 23, Cl = 35.5).</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsGuided0">Your answer</label>
+                <textarea id="ileAnsGuided0" rows="2" placeholder="Write your working and answer here first, then check the hints…"></textarea>
+              </div>
+              <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">NaCl has one atom of each element — no subscripts to worry about.</div></details>
+              <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">Mr = Ar(Na) + Ar(Cl) = 23 + 35.5.</div></details>
+              <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Mr = 23 + 35.5 = 58.5.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="guided">
+            <div class="ile-q-card">
+              <div class="ile-q-stem">1. Calculate the relative formula mass of sodium carbonate, Na<sub>2</sub>CO<sub>3</sub> (Na = 23, C = 12, O = 16).</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsGuided1">Your answer</label>
+                <textarea id="ileAnsGuided1" rows="2" placeholder="Write your working and answer here first, then check the hints…"></textarea>
+              </div>
+              <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">There are 2 sodium atoms, 1 carbon atom, and 3 oxygen atoms.</div></details>
+              <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">Mr = (2 × 23) + 12 + (3 × 16).</div></details>
+              <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Mr = 46 + 12 + 48 = 106.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="guided">
+            <div class="ile-q-card">
+              <div class="ile-q-stem">2. Calculate the number of moles in 5 g of magnesium oxide, MgO (Mg = 24, O = 16).</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsGuided2">Your answer</label>
+                <textarea id="ileAnsGuided2" rows="2" placeholder="Write your working and answer here first, then check the hints…"></textarea>
+              </div>
+              <details class="ile-hint ile-tier-foundation-only"><summary>Hint 0 <span class="ile-tier-badge ile-badge-foundation">Foundation</span></summary><div class="ile-hint-body">Do this in two separate steps: first find Mr for MgO, then use n = m ÷ Mr with that Mr value — don't try to do both at once.</div></details>
+              <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">First find Mr(MgO) = 24 + 16 = 40.</div></details>
+              <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">n = m ÷ Mr = 5 ÷ 40.</div></details>
+              <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Mr(MgO) = 40. n = 5 ÷ 40 = 0.125 mol.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step ile-tier-higher-only" data-group="guided" data-tier-block="6">
+            <div class="ile-q-card">
+              <div class="ile-q-stem"><span class="ile-tier-badge ile-badge-higher">Higher</span> 3. Calculate the mass of 0.05 mol of aluminium oxide, Al<sub>2</sub>O<sub>3</sub> (Al = 27, O = 16).</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsGuided3">Your answer</label>
+                <textarea id="ileAnsGuided3" rows="3" placeholder="Write your working and answer here first, then check the hints…"></textarea>
+              </div>
+              <details class="ile-hint"><summary>Hint 1</summary><div class="ile-hint-body">First find Mr(Al2O3): there are 2 aluminium atoms and 3 oxygen atoms.</div></details>
+              <details class="ile-hint"><summary>Hint 2</summary><div class="ile-hint-body">Mr = (2 × 27) + (3 × 16) = 54 + 48 = 102. Now use mass = moles × Mr.</div></details>
+              <details class="ile-hint"><summary>Full solution</summary><div class="ile-hint-body">Mr(Al2O3) = 102. Mass = 0.05 × 102 = 5.1 g.</div></details>
+            </div>
+          </div>
+
+          <!-- group: independent -->
+          <div class="ile-step" data-group="independent">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Independent Practice</h3>
+              <p>No hints this time — these questions reduce the support genuinely, not just in name.</p>
+            </div>
+          </div>
+          <div id="ileIndependentQs" data-group="independent"></div>
+          <div id="ileIndependentNumericQs" data-group="independent"></div>
+
+          <!-- group: exam -->
+          <div class="ile-step" data-group="exam">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Exam Practice</h3>
+              <p>Original, board-style questions with full mark schemes. Write a full answer first, then check.</p>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="8">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q1 · State · 1 mark</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">State what the relative formula mass of a compound represents.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam1">Your answer</label>
+                <textarea id="ileAnsExam1" rows="2" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>The sum of the relative atomic masses of all the atoms in the formula (of the compound)</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: the sum of the relative atomic masses of every atom shown in the formula. Examiner note: a common answer that loses the mark is simply "the mass of the compound" — without "relative" and "sum of atomic masses," the definition is too vague for the mark.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="9">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q2 · Calculate · 2 marks</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">Calculate the relative formula mass of magnesium carbonate, MgCO<sub>3</sub> (Mg = 24, C = 12, O = 16).</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam2">Your answer</label>
+                <textarea id="ileAnsExam2" rows="2" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Mr = 24 + 12 + (3 × 16)</td><td>1</td></tr>
+                <tr><td>= 84</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: 84. Examiner note: the method mark is awarded for correctly identifying 3 oxygen atoms (from the subscript), even if the final addition is wrong.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="10">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q3 · Calculate · 3 marks</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">Calculate the number of moles in 21 g of magnesium carbonate, MgCO<sub>3</sub> (Mr = 84).</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam3">Your answer</label>
+                <textarea id="ileAnsExam3" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>n = m ÷ Mr</td><td>1</td></tr>
+                <tr><td>= 21 ÷ 84</td><td>1</td></tr>
+                <tr><td>= 0.25 mol</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: 0.25 mol. Examiner note: marks are available for correctly stating the relationship (n = m ÷ Mr) even if the final division is wrong — always show this line, not just a final number.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step ile-tier-higher-only" data-group="exam" data-tier-block="11">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span><span class="ile-tier-badge ile-badge-higher">Higher</span> Q4 · Identify and explain · 3 marks</span><span>HIGHER_ASSESSED_ONLY</span></div>
+              <div class="ile-exam-stem">A student's working for the relative formula mass of magnesium nitrate, Mg(NO<sub>3</sub>)<sub>2</sub> (Mg = 24, N = 14, O = 16), is shown: "Mr = 24 + 14 + (3 × 16) = 24 + 14 + 48 = 86." Identify the error in this working and give the correct relative formula mass.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam4">Your answer</label>
+                <textarea id="ileAnsExam4" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Identifies the error: the bracket's subscript (2) was applied to oxygen but not to nitrogen — both N and O are inside the bracket and must both be doubled</td><td>1</td></tr>
+                <tr><td>Correct method: Mr = 24 + (2 × 14) + (2 × 3 × 16) = 24 + 28 + 96</td><td>1</td></tr>
+                <tr><td>Correct answer: Mr = 148</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: the error is only doubling the oxygen atoms, not the nitrogen atom, even though both are inside the bracket. Correct Mr = 148. Examiner note: this is the exact bracket error named in the Misconception Clinic and shown side by side for Ca(OH)2 in Representation 3 — recognising the same error pattern in a new formula is the genuine transfer this question tests.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="12">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q5 · Calculate · 3 marks</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">Calculate the mass of 0.15 mol of sodium chloride, NaCl (Mr = 58.5). Give your answer to 3 significant figures.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam5">Your answer</label>
+                <textarea id="ileAnsExam5" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>mass = moles × Mr</td><td>1</td></tr>
+                <tr><td>= 0.15 × 58.5 = 8.775</td><td>1</td></tr>
+                <tr><td>= 8.78 g (3 s.f.)</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: 8.78 g. Examiner note: the raw calculation gives 8.775, which rounds to 8.78 (not 8.77) to 3 significant figures — a genuine, frequently-tested rounding step, not just a formality.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="exam" data-tier-block="13">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span>Q6 · Describe · 2 marks</span><span>CORE_ALL_TIERS</span></div>
+              <div class="ile-exam-stem">Describe the difference between "relative formula mass" and "the mass, in grams, of one mole" of the same substance.</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam6">Your answer</label>
+                <textarea id="ileAnsExam6" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Relative formula mass has no units — it is a ratio/number</td><td>1</td></tr>
+                <tr><td>The mass of one mole is measured in grams, and is numerically equal to Mr, but is a genuine physical mass, not a ratio</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: Mr is a unitless ratio; the mass of one mole is a real mass in grams that happens to share the same number as Mr. Examiner note: directly tests Misconception Clinic card 1 — "Mr has units of grams" is one of the most common losable marks in this topic.</div></details>
+            </div>
+          </div>
+
+          <div class="ile-step ile-tier-higher-only" data-group="exam" data-tier-block="14">
+            <div class="ile-exam-q">
+              <div class="ile-exam-q-head"><span><span class="ile-tier-badge ile-badge-higher">Higher</span> Q7 · Calculate · 4 marks</span><span>HIGHER_ASSESSED_ONLY</span></div>
+              <div class="ile-exam-stem">A 6.4 g sample of a gas contains 0.2 mol. Calculate its relative formula mass, and use your answer to identify which of these gases it is: O<sub>2</sub> (Mr = 32), SO<sub>2</sub> (Mr = 64), CO<sub>2</sub> (Mr = 44), N<sub>2</sub> (Mr = 28).</div>
+              <div class="ile-self-answer">
+                <label for="ileAnsExam7">Your answer</label>
+                <textarea id="ileAnsExam7" rows="3" placeholder="Write your full working and answer here, as you would on the exam paper…"></textarea>
+              </div>
+              <table class="ile-ms-table">
+                <tr><td>Mr = mass ÷ moles</td><td>1</td></tr>
+                <tr><td>= 6.4 ÷ 0.2</td><td>1</td></tr>
+                <tr><td>= 32</td><td>1</td></tr>
+                <tr><td>Correctly identifies the gas as O2, with a matching Mr value stated as the reason</td><td>1</td></tr>
+              </table>
+              <details class="ile-hint"><summary>Model answer &amp; examiner note</summary><div class="ile-hint-body">Model answer: Mr = 32, so the gas is O2. Examiner note: full marks require the identification to be justified by the matching Mr value, not just stated — this is the same genuine-evaluation skill modelled in Worked Example 5.</div></details>
+            </div>
+          </div>
+
+          <!-- group: close -->
+          <div class="ile-step" data-group="close">
+            <div class="ile-milestone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <h3>Last stretch</h3>
+              <p>Two quick retrieval checks, then a confidence check-in to close the lesson.</p>
+            </div>
+          </div>
+          <div id="ileExitQs" data-group="close"></div>
+
+          <div class="ile-step" data-group="close">
+            <div class="ile-card">
+              <div class="ile-foundation-mastery ile-tier-foundation-only">
+                <h3>Foundation mastery checkpoint</h3>
+                <p>Before you rate your confidence below, check yourself honestly against this list. You should now be able to:</p>
+                <ul>
+                  <li>Calculate Mr for a formula with no brackets (e.g. CO2).</li>
+                  <li>Calculate Mr for a formula with a bracket (e.g. Ca(OH)2), remembering to multiply every atom inside the bracket.</li>
+                  <li>Say, in your own words, roughly what a mole is.</li>
+                  <li>Use n = m ÷ Mr to find moles from a given mass.</li>
+                  <li>Rearrange the same relationship to find mass from moles.</li>
+                </ul>
+                <p>If any of those still feel shaky, that's completely normal — go back to the Misconception Clinic or Guided Practice before moving on, rather than pushing ahead. The "Need a reminder?" button in Practice mode has the Core Lesson and Representations ready whenever you need them.</p>
+              </div>
+              <h3 style="font-size:1rem; margin-bottom:6px;">How confident do you feel about relative formula mass and moles?</h3>
+              <p style="font-size:.78rem; color:var(--text-soft);">This is just for you — it isn't saved anywhere.</p>
+              <div class="ile-confidence-row" role="group" aria-label="Confidence rating">
+                <button class="ile-confidence-btn" data-conf="1">1 — Still shaky</button>
+                <button class="ile-confidence-btn" data-conf="2">2</button>
+                <button class="ile-confidence-btn" data-conf="3">3 — Getting there</button>
+                <button class="ile-confidence-btn" data-conf="4">4</button>
+                <button class="ile-confidence-btn" data-conf="5">5 — Confident</button>
+              </div>
+              <p class="ile-confidence-note" id="ileConfidenceNote"></p>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="close" id="ileStepCompletion">
+            <div class="ile-completion-review" id="ileCompletionReview" hidden>
+              <h3>Before you finish — a few questions still need a look</h3>
+              <p>You chose "Skip for now" on these earlier rather than answer them. That's fine — but mastery means actually working through them, not just reaching the end. Jump back to any of them, or continue anyway if you're out of time.</p>
+              <ul id="ileCompletionReviewList"></ul>
+            </div>
+            <div class="ile-completion" id="ileCompletion" role="status" aria-live="polite">
+              <svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="#1a1200" stroke-width="2" opacity=".15"/><path class="ile-completion-check" d="M15 27l8 8 16-18" stroke="#1a1200" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <h3 id="ileCompletionHeading">Nice work — lesson complete</h3>
+              <p id="ileCompletionBody">You've worked through relative formula mass and moles, from first principles to exam-style questions. That's real progress.</p>
+            </div>
+          </div>
+
+          <div class="ile-step" data-group="close">
+            <div class="ile-next-row">
+              <div class="ile-next-card">
+                <strong>Next — Reacting Masses</strong>
+                <span>Coming soon. Builds directly on Mr and moles to work out masses in chemical reactions from a balanced equation.</span>
+              </div>
+              <div class="ile-next-card">
+                <strong>Back to the Chemistry hub</strong>
+                <span>See the full Quantitative Chemistry sequence and study pathway.</span>
+                <a class="ile-next-link" href="/subjects/chemistry.html">Open Chemistry hub →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="ile-step-nav">
+            <button type="button" class="ile-step-btn ile-step-prev" id="ileStepPrev">← Back</button>
+            <div class="ile-step-nav-end">
+              <button type="button" class="ile-step-btn ile-step-skip" id="ileStepSkip" hidden>Skip for now — I'll come back</button>
+              <button type="button" class="ile-step-btn ile-step-next" id="ileStepNext">Next →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div class="ile-reminder-backdrop" id="ileReminderBackdrop"></div>
+<aside class="ile-reminder-drawer" id="ileReminderDrawer" role="dialog" aria-modal="true" aria-labelledby="ileReminderTitle" aria-hidden="true">
+  <div class="ile-reminder-drawer-head">
+    <h2 id="ileReminderTitle">Quick Reminder</h2>
+    <button type="button" class="ile-reminder-close" id="ileReminderClose" aria-label="Close reminder">✕</button>
+  </div>
+  <div class="ile-reminder-drawer-body" id="ileReminderBody">
+    <!-- populated by JS: a live clone of the Core Lesson + Representations
+         sections, so this is always the same single source of content as
+         Learn mode, never a hand-duplicated copy that could drift out of
+         sync. -->
+  </div>
+  <div class="ile-reminder-drawer-foot">
+    <button type="button" class="ile-next-link" id="ileReminderOpenLearn" style="background:none;border:none;cursor:pointer;font-family:inherit;">Open full lesson in Learn mode →</button>
+  </div>
+</aside>
+
+<script>
+(function(){
+  'use strict';
+  var PREF_NS = 'ile:chemistry:relative-formula-mass-moles';
+
+  function getPref(key, fallback){ try { return localStorage.getItem(PREF_NS + ':' + key) || fallback; } catch(e){ return fallback; } }
+  function setPref(key, val){ try { localStorage.setItem(PREF_NS + ':' + key, val); } catch(e){} }
+
+  function applyTheme(theme){
+    document.body.setAttribute('data-theme', theme);
+    document.getElementById('ileThemeDark').setAttribute('aria-pressed', String(theme === 'dark'));
+    document.getElementById('ileThemeLight').setAttribute('aria-pressed', String(theme === 'light'));
+    setPref('theme', theme);
+  }
+  document.getElementById('ileThemeDark').addEventListener('click', function(){ applyTheme('dark'); });
+  document.getElementById('ileThemeLight').addEventListener('click', function(){ applyTheme('light'); });
+  applyTheme(getPref('theme', 'dark'));
+
+  function applyTier(tier){
+    document.body.classList.toggle('ile-foundation', tier === 'foundation');
+    document.getElementById('ileTierHigher').setAttribute('aria-pressed', String(tier === 'higher'));
+    document.getElementById('ileTierFoundation').setAttribute('aria-pressed', String(tier === 'foundation'));
+    setPref('tier', tier);
+    if (typeof rebuildSteps === 'function') rebuildSteps(true);
+  }
+  document.getElementById('ileTierHigher').addEventListener('click', function(){ applyTier('higher'); });
+  document.getElementById('ileTierFoundation').addEventListener('click', function(){ applyTier('foundation'); });
+
+  var extToggle = document.getElementById('ileExtensionsToggle');
+  extToggle.addEventListener('click', function(){
+    var showing = document.body.classList.toggle('ile-show-extensions');
+    extToggle.setAttribute('aria-pressed', String(showing));
+    extToggle.textContent = showing ? 'Hide Higher extensions' : 'Show Higher extensions';
+  });
+
+  // sidebar (mobile)
+  var sidebar = document.getElementById('ileSidebar');
+  var backdrop = document.getElementById('ileSidebarBackdrop');
+  var menuBtn = document.getElementById('ileMenuBtn');
+  function openSidebar(){ sidebar.classList.add('ile-open'); backdrop.classList.add('ile-open'); menuBtn.setAttribute('aria-expanded','true'); }
+  function closeSidebar(){ sidebar.classList.remove('ile-open'); backdrop.classList.remove('ile-open'); menuBtn.setAttribute('aria-expanded','false'); }
+  menuBtn.addEventListener('click', function(){ sidebar.classList.contains('ile-open') ? closeSidebar() : openSidebar(); });
+  backdrop.addEventListener('click', closeSidebar);
+  document.querySelectorAll('#ileNavLearn a').forEach(function(a){ a.addEventListener('click', function(){ if (window.innerWidth < 960) closeSidebar(); }); });
+
+  // ---- MCQ renderer ----
+  function renderMCQ(containerId, questions){
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = questions.map(function(q, qi){
+      var opts = q.options.map(function(opt, oi){
+        return '<button class="ile-q-option" data-qi="' + qi + '" data-oi="' + oi + '">' + opt + '</button>';
+      }).join('');
+      var badge = q.badge ? '<span class="ile-tier-badge ' + q.badge + '">' + q.badgeLabel + '</span> ' : '';
+      var tierClass = q.hideOnFoundation ? ' ile-tier-higher-only' : '';
+      return '<div class="ile-step' + tierClass + '" data-group="' + el.getAttribute('data-group') + '">' +
+        '<div class="ile-q-card" data-container="' + containerId + '">' +
+        '<div class="ile-q-stem">' + badge + (qi + 1) + '. ' + q.stem + '</div>' +
+        '<div class="ile-q-options">' + opts + '</div>' +
+        '<div class="ile-q-feedback" id="' + containerId + '-fb-' + qi + '"></div>' +
+        '</div></div>';
+    }).join('');
+
+    el.querySelectorAll('.ile-q-option').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var qi = Number(btn.getAttribute('data-qi'));
+        var oi = Number(btn.getAttribute('data-oi'));
+        var q = questions[qi];
+        var card = btn.closest('.ile-q-card');
+        card.querySelectorAll('.ile-q-option').forEach(function(b){ b.classList.remove('ile-correct','ile-incorrect','ile-anim-correct','ile-anim-incorrect'); b.disabled = true; });
+        var fb = document.getElementById(containerId + '-fb-' + qi);
+        if (oi === q.answer){
+          btn.classList.add('ile-correct', 'ile-anim-correct');
+          fb.textContent = 'Correct — ' + q.explain;
+        } else {
+          btn.classList.add('ile-incorrect', 'ile-anim-incorrect');
+          card.querySelectorAll('.ile-q-option')[q.answer].classList.add('ile-correct');
+          fb.textContent = (q.notes && q.notes[oi]) ? q.notes[oi] : ('Not quite — ' + q.explain);
+        }
+        fb.classList.add('ile-show');
+        card.closest('.ile-step').setAttribute('data-answered', 'true');
+        el.dispatchEvent(new CustomEvent('ile:answered', { detail: { qi: qi } }));
+        if (typeof onStepAnswered === 'function') onStepAnswered();
+      });
+    });
+  }
+
+  // ---- numeric-answer question renderer ----
+  function renderNumeric(containerId, questions){
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    el.innerHTML = questions.map(function(q, qi){
+      var badge = q.badge ? '<span class="ile-tier-badge ' + q.badge + '">' + q.badgeLabel + '</span> ' : '';
+      var tierClass = q.hideOnFoundation ? ' ile-tier-higher-only' : '';
+      return '<div class="ile-step' + tierClass + '" data-group="' + el.getAttribute('data-group') + '">' +
+        '<div class="ile-q-card" data-container="' + containerId + '">' +
+        '<div class="ile-q-stem">' + badge + q.stem + '</div>' +
+        '<div class="ile-numeric-row">' +
+          '<input type="text" inputmode="decimal" class="ile-numeric-input" id="' + containerId + '-in-' + qi + '" placeholder="Your answer" aria-label="Your numeric answer">' +
+          (q.unit ? '<span class="ile-numeric-unit">' + q.unit + '</span>' : '') +
+          '<button class="ile-numeric-check" data-qi="' + qi + '" type="button">Check</button>' +
+        '</div>' +
+        '<div class="ile-q-feedback" id="' + containerId + '-fb-' + qi + '"></div>' +
+        '</div></div>';
+    }).join('');
+
+    el.querySelectorAll('.ile-numeric-check').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var qi = Number(btn.getAttribute('data-qi'));
+        var q = questions[qi];
+        var input = document.getElementById(containerId + '-in-' + qi);
+        var fb = document.getElementById(containerId + '-fb-' + qi);
+        var val = parseFloat(String(input.value || '').trim().replace(/^\+/, ''));
+        var ok = !isNaN(val) && Math.abs(val - q.answer) <= (q.tolerance != null ? q.tolerance : 0.5);
+        input.classList.remove('ile-anim-correct', 'ile-anim-incorrect');
+        void input.offsetWidth;
+        input.classList.add(ok ? 'ile-anim-correct' : 'ile-anim-incorrect');
+        if (ok){
+          fb.textContent = 'Correct — ' + q.explain;
+        } else {
+          var tol = q.tolerance != null ? q.tolerance : 0.5;
+          var matchedWrong = (!isNaN(val) && q.commonWrong) ? q.commonWrong.filter(function(cw){ return Math.abs(val - cw.value) <= tol; })[0] : null;
+          fb.textContent = matchedWrong ? matchedWrong.note : ('Not quite — ' + q.explain);
+        }
+        fb.classList.add('ile-show');
+        input.disabled = true; btn.disabled = true;
+        btn.closest('.ile-step').setAttribute('data-answered', 'true');
+        el.dispatchEvent(new CustomEvent('ile:answered', { detail: { qi: qi } }));
+        if (typeof onStepAnswered === 'function') onStepAnswered();
+      });
+    });
+  }
+
+  renderMCQ('ileDiagnosticQs', [
+    { stem: 'In the formula H2O, what does the small "2" after the H tell you?', options: ['There are 2 hydrogen atoms in the formula','There are 2 water molecules','The molecule has 2 electrons','The molecule weighs 2 grams'], answer: 0, explain: 'a subscript directly after an element\'s symbol tells you how many atoms of that element are present in one formula unit — here, 2 hydrogen atoms.', notes: [
+      null,
+      'That would be a number written in front of the whole formula (e.g. "2H2O"), which is different from a subscript inside the formula.',
+      'Subscripts in a chemical formula count atoms, not electrons.',
+      'A subscript is a count of atoms, not a mass — you can\'t read a mass directly off a formula this way.'
+    ] },
+    { stem: 'Where does a relative atomic mass (Ar) value come from?', options: ['It is measured fresh in every experiment','It is looked up on the periodic table', 'It is always exactly double the atomic number', 'It is calculated from the formula it appears in'], answer: 1, explain: 'every element has a fixed relative atomic mass shown on the periodic table — it\'s looked up, not derived from the formula you\'re working with.', notes: [
+      null,
+      null,
+      'Atomic number and relative atomic mass are different quantities — doubling one doesn\'t reliably give the other (see Misconception Clinic).',
+      'It\'s the other way round: you look up each Ar first, then use those values to calculate Mr for a formula — Ar doesn\'t come from the formula itself.'
+    ] },
+    { stem: 'In the formula 2NaCl, how many chlorine atoms does this represent in total?', options: ['1', '2', '3', '4'], answer: 1, explain: 'one NaCl formula unit contains 1 chlorine atom; the coefficient "2" in front means two separate formula units, so 2 × 1 = 2 chlorine atoms in total.', notes: [
+      'That would be true for a single NaCl unit — but the "2" in front means there are two of them.',
+      null,
+      'NaCl itself only has 1 chlorine atom per unit — there\'s no way to get 3 from doubling 1.',
+      'That would be true if NaCl itself contained 2 chlorines (like NaCl2) — it doesn\'t; the "2" in front is what doubles the single chlorine already there.'
+    ] }
+  ]);
+
+  renderMCQ('ileIndependentQs', [
+    { stem: 'Calculate the relative formula mass of ammonia, NH3 (N = 14, H = 1).', options: ['17', '15', '42', '14'], answer: 0, explain: '14 + (3 × 1) = 14 + 3 = 17.', notes: [
+      null,
+      'That\'s 14 + 1, forgetting the subscript "3" means three separate hydrogen atoms, not one.',
+      'That\'s 14 × 3, multiplying instead of adding the atoms\' masses together.',
+      'That\'s just nitrogen\'s Ar alone — the three hydrogen atoms haven\'t been added at all.'
+    ] },
+    { stem: 'Calculate the relative formula mass of copper sulfate, CuSO4 (Cu = 64, S = 32, O = 16).', options: ['160', '112', '144', '96'], answer: 0, explain: '64 + 32 + (4 × 16) = 64 + 32 + 64 = 160.', notes: [
+      null,
+      'That looks like the oxygen contribution was only counted once (16) instead of four times (4 × 16 = 64) — check the subscript on O.',
+      'That looks like only 2 oxygens were counted (2 × 16 = 32) instead of 4 — the subscript is 4, not 2.',
+      'That\'s 64 + 32 only, with the oxygen atoms left out completely.'
+    ] },
+    { stem: 'A sample of carbon dioxide, CO2 (Mr = 44), has a mass of 4.4 g. How many moles is this?', options: ['0.1 mol', '10 mol', '1 mol', '0.44 mol'], answer: 0, explain: 'n = m ÷ Mr = 4.4 ÷ 44 = 0.1 mol.', notes: [
+      null,
+      'That\'s Mr ÷ mass (44 ÷ 4.4), the wrong way round — moles = mass ÷ Mr, not Mr ÷ mass.',
+      'That would be the moles in 44 g, not 4.4 g — check the mass value used.',
+      'That looks like 4.4 ÷ 10 or a misplaced decimal point, not 4.4 ÷ 44.'
+    ] },
+    { stem: 'Which statement about the mole is correct?', options: ['A mole is a fixed, very large number of particles', 'A mole is the same thing as one molecule', 'A mole always has a mass of exactly 1 gram', 'A mole only applies to gases'], answer: 0, explain: 'a mole is a counting unit for a fixed, very large number of particles (6.02 × 10^23) — the same idea as "a dozen," just a much bigger number.', notes: [
+      null,
+      'A mole is an amount of particles, not a single particle — see Misconception Clinic card 2.',
+      'The mass of one mole equals the substance\'s own Mr in grams, which is different for every substance — it\'s never a fixed 1 gram.',
+      'The mole applies to any substance — solid, liquid, or gas — not just gases.'
+    ] },
+    { stem: 'Calculate the relative formula mass of aluminium oxide, Al2O3 (Al = 27, O = 16).', options: ['102', '75', '86', '59'], answer: 0, explain: '(2 × 27) + (3 × 16) = 54 + 48 = 102.', notes: [
+      null,
+      'That looks like only 1 aluminium and 3 oxygens were counted (27 + 48 = 75) — the subscript "2" on Al means two aluminium atoms, not one.',
+      'That looks like the oxygen count used 2 instead of 3 (54 + 32 = 86) — check the subscript on O.',
+      'That\'s roughly 27 + 32, missing most of both subscripts\' contributions.'
+    ] },
+    { stem: 'A student calculates Mr for Mg(OH)2 (Mg = 24, O = 16, H = 1) as 24 + 16 + 1 = 41. What has gone wrong?', options: ['The bracket\'s subscript (2) was not applied to the O and H inside it', 'Magnesium\'s Ar was used incorrectly', 'The formula doesn\'t have a valid Mr', 'Nothing — 41 is correct'], answer: 0, explain: 'the bracket\'s subscript "2" multiplies every atom inside the bracket — both O and H must be counted twice, giving Mr = 24 + (2×16) + (2×1) = 24 + 32 + 2 = 58, not 41.', notes: [
+      null,
+      'Mg\'s Ar (24) was used correctly — the error is with the bracket, not with magnesium.',
+      'Every real formula has a calculable Mr — the issue here is a calculation error, not an invalid formula.',
+      '41 is not correct — the bracket\'s subscript was never applied, so both O and H are undercounted.'
+    ] },
+    { stem: 'A sample of an unknown gas has a mass of 8.8 g and contains 0.2 mol. Which of these could it be — CO2 (Mr = 44), NH3 (Mr = 17), O2 (Mr = 32), SO2 (Mr = 64)?', options: ['CO2', 'NH3', 'O2', 'SO2'], answer: 0, badge: 'ile-badge-higher', badgeLabel: 'Higher', hideOnFoundation: true, explain: 'Mr = mass ÷ moles = 8.8 ÷ 0.2 = 44, which matches CO2.', notes: [
+      null,
+      'NH3\'s Mr is 17, not 44 — recalculate mass ÷ moles first, then compare against the candidates.',
+      'O2\'s Mr is 32, not 44 — 8.8 ÷ 0.2 = 44, which doesn\'t match O2.',
+      'SO2\'s Mr is 64, not 44 — check the division 8.8 ÷ 0.2 again.'
+    ] },
+    { stem: 'A worked solution for Ca(OH)2 (Ca = 40, O = 16, H = 1) is shown: "Mr = 40 + (2 × 16) + 1 = 73." What mistake did this student make?', options: ['They doubled the oxygen but forgot to double the hydrogen too', 'They used the wrong Ar for calcium', 'They forgot the calcium atom entirely', 'Nothing — 73 is correct'], answer: 0, badge: 'ile-badge-higher', badgeLabel: 'Higher', hideOnFoundation: true, explain: 'the bracket\'s subscript (2) applies to both atoms inside it — O and H — so the correct working is 40 + (2×16) + (2×1) = 40 + 32 + 2 = 74, not 73.', notes: [
+      null,
+      'Calcium\'s Ar (40) is used correctly in the working shown — the error is with the bracket multiplication, not with Ca.',
+      'Calcium (40) is included in the working shown — it hasn\'t been forgotten.',
+      '73 is not correct — see Representation 3, which shows this exact error and the correct answer (74) side by side.'
+    ] }
+  ]);
+
+  renderNumeric('ileIndependentNumericQs', [
+    { stem: 'A sample of magnesium oxide, MgO (Mr = 40), has a mass of 2 g. Calculate the number of moles.', unit: 'mol', answer: 0.05, tolerance: 0.005, explain: '2 ÷ 40 = 0.05 mol.', commonWrong: [
+      { value: 20, note: 'That\'s Mr ÷ mass the wrong way round (40 ÷ 2) — moles = mass ÷ Mr, not Mr ÷ mass.' },
+      { value: 42, note: 'That\'s 2 + 40 added together — moles comes from dividing mass by Mr, not adding them.' }
+    ] },
+    { stem: 'Calculate the mass, to 3 significant figures, of 0.3 mol of sodium chloride, NaCl (Mr = 58.5).', unit: 'g', answer: 17.6, tolerance: 0.05, badge: 'ile-badge-higher', badgeLabel: 'Higher', hideOnFoundation: true, explain: '0.3 × 58.5 = 17.55, which rounds to 17.6 g to 3 significant figures.', commonWrong: [
+      { value: 58.5, note: 'That\'s the mass of a whole 1 mol, not 0.3 mol — the Mr value still needs to be scaled by the actual number of moles given.' },
+      { value: 195, note: 'That looks like Mr ÷ moles (58.5 ÷ 0.3) — for finding mass from moles, multiply moles by Mr, don\'t divide.' }
+    ] }
+  ]);
+
+  renderMCQ('ileExitQs', [
+    { stem: 'What does the relative formula mass of a compound add together?', options: ['The relative atomic masses of every atom in the formula', 'Only the largest atom\'s mass in the formula', 'The atomic numbers of every atom in the formula', 'The number of elements in the formula'], answer: 0, explain: 'Mr is the sum of the relative atomic masses of every atom actually present in the formula, counting subscripts.', notes: [
+      null,
+      'Every atom contributes, not just the largest one — leaving atoms out under-counts Mr.',
+      'Atomic number is a different quantity from relative atomic mass — Mr is built from Ar, never atomic number.',
+      'That would just count how many different elements are present, not add up any masses at all.'
+    ] },
+    { stem: 'You are given a mass and told to find the number of moles. Which relationship do you use?', options: ['moles = mass ÷ Mr', 'moles = mass × Mr', 'moles = Mr ÷ mass', 'moles = mass + Mr'], answer: 0, explain: 'n = m ÷ Mr — dividing the given mass by the relative formula mass gives the number of moles.', notes: [
+      null,
+      'Multiplying mass by Mr is used to go the other way — from moles to mass, not mass to moles.',
+      'That\'s inverted — Mr ÷ mass is not the relationship that gives moles.',
+      'Moles are found by dividing, not adding, mass and Mr.'
+    ] }
+  ]);
+
+  // confidence rating (local only, not persisted)
+  var confBtns = document.querySelectorAll('.ile-confidence-btn');
+  var confNote = document.getElementById('ileConfidenceNote');
+  var CONF_MSG = {
+    1: 'That\'s alright — go back to the Misconception Clinic in Learn mode, it clears up the most common sticking points.',
+    2: 'Worth another pass through the Worked Examples before moving on.',
+    3: 'Good progress — try the Independent Practice questions again without looking at the hints.',
+    4: 'Nearly there — you\'re ready for the next lesson when it\'s published.',
+    5: 'Great — you\'re ready for the next lesson when it\'s published.'
+  };
+  confBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      confBtns.forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+      btn.setAttribute('aria-pressed','true');
+      confNote.textContent = CONF_MSG[btn.getAttribute('data-conf')] || '';
+      confNote.classList.add('ile-show');
+      btn.closest('.ile-step').setAttribute('data-answered', 'true');
+      if (typeof onStepAnswered === 'function') onStepAnswered();
+    });
+  });
+
+  // ================= MODE SWITCH (Learn / Practice) =================
+  var modeLearnPanel = document.getElementById('ileModeLearn');
+  var modePracticePanel = document.getElementById('ileModePractice');
+  var modeLearnBtn = document.getElementById('ileModeLearnBtn');
+  var modePracticeBtn = document.getElementById('ileModePracticeBtn');
+  var navLearn = document.getElementById('ileNavLearn');
+  var navPractice = document.getElementById('ileNavPractice');
+
+  function setMode(mode){
+    var isPractice = mode === 'practice';
+    modeLearnPanel.hidden = isPractice;
+    modePracticePanel.hidden = !isPractice;
+    modeLearnBtn.setAttribute('aria-pressed', String(!isPractice));
+    modePracticeBtn.setAttribute('aria-pressed', String(isPractice));
+    navLearn.classList.toggle('ile-nav-group-active', !isPractice);
+    navPractice.classList.toggle('ile-nav-group-active', isPractice);
+    setPref('mode', mode);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    if (isPractice) rebuildSteps(false);
+    updateProgress();
+  }
+  modeLearnBtn.addEventListener('click', function(){ setMode('learn'); });
+  modePracticeBtn.addEventListener('click', function(){ setMode('practice'); });
+  document.querySelectorAll('.ile-nav-practice-item').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var group = btn.getAttribute('data-group');
+      var idx = visibleSteps.findIndex(function(s){ return s.getAttribute('data-group') === group; });
+      if (idx >= 0) goToStep(idx);
+      if (window.innerWidth < 960) closeSidebar();
+    });
+  });
+
+  // ================= PRACTICE STEP CONTROLLER =================
+  var stepper = document.getElementById('ileStepper');
+  var allSteps = [];
+  var visibleSteps = [];
+  var currentIndex = 0;
+  var stepPrevBtn = document.getElementById('ileStepPrev');
+  var stepNextBtn = document.getElementById('ileStepNext');
+  var stepSkipBtn = document.getElementById('ileStepSkip');
+  var stepLive = document.getElementById('ileStepLive');
+
+  var GROUP_LABEL = { diagnostic: 'Retrieval Diagnostic', guided: 'Guided Practice', independent: 'Independent Practice', exam: 'Exam Practice', close: 'Lesson Close' };
+
+  // ---- mastery gate: stable step identity + skip-state persistence ----
+  Array.prototype.slice.call(stepper.querySelectorAll('.ile-step')).forEach(function(step, i){
+    step.dataset.stepKey = String(i);
+  });
+  function loadSkipped(){ try { return JSON.parse(getPref('skippedSteps', '[]')) || []; } catch(e){ return []; } }
+  function persistSkipped(){
+    var keys = Array.prototype.slice.call(stepper.querySelectorAll('.ile-step[data-skipped="true"]')).map(function(s){ return s.dataset.stepKey; });
+    setPref('skippedSteps', JSON.stringify(keys));
+  }
+  (function restoreSkipped(){
+    var keys = loadSkipped();
+    if (!keys.length) return;
+    Array.prototype.slice.call(stepper.querySelectorAll('.ile-step')).forEach(function(step){
+      if (keys.indexOf(step.dataset.stepKey) !== -1) step.dataset.skipped = 'true';
+    });
+  })();
+
+  // A step is "assessed" if it carries a real answerable control (MCQ,
+  // numeric, or a self-marked guided/exam question via its hints).
+  function isAssessedStep(step){
+    return !!step.querySelector('.ile-q-option, .ile-numeric-check, .ile-hint');
+  }
+  function isStepComplete(step){
+    if (!isAssessedStep(step)) return true;
+    return step.getAttribute('data-answered') === 'true' || step.dataset.skipped === 'true';
+  }
+
+  function rebuildSteps(preserveGroup){
+    var prevGroup = visibleSteps[currentIndex] ? visibleSteps[currentIndex].getAttribute('data-group') : null;
+    allSteps = Array.prototype.slice.call(stepper.querySelectorAll('.ile-step'));
+    visibleSteps = allSteps.filter(function(s){ return !s.classList.contains('ile-tier-higher-only') || !document.body.classList.contains('ile-foundation'); });
+
+    if (preserveGroup && prevGroup){
+      var newIdx = visibleSteps.findIndex(function(s){ return s.getAttribute('data-group') === prevGroup; });
+      currentIndex = newIdx >= 0 ? newIdx : 0;
+    } else {
+      var saved = parseInt(getPref('practiceStep', '0'), 10);
+      currentIndex = (!isNaN(saved) && saved >= 0 && saved < visibleSteps.length) ? saved : 0;
+    }
+    renderStep();
+  }
+
+  function renderStep(){
+    visibleSteps.forEach(function(s, i){ s.classList.toggle('ile-step-active', i === currentIndex); });
+    var step = visibleSteps[currentIndex];
+    if (!step) return;
+
+    stepPrevBtn.disabled = currentIndex === 0;
+    var complete = isStepComplete(step);
+    stepNextBtn.disabled = !complete;
+    stepNextBtn.classList.toggle('ile-step-next-ready', complete);
+    stepNextBtn.textContent = currentIndex === visibleSteps.length - 1 ? 'Finish' : 'Next →';
+    stepSkipBtn.hidden = !(isAssessedStep(step) && !complete);
+
+    var existingSkipNote = step.querySelector('.ile-skip-note');
+    if (step.dataset.skipped === 'true' && step.getAttribute('data-answered') !== 'true'){
+      if (!existingSkipNote){
+        var skipNote = document.createElement('p');
+        skipNote.className = 'ile-skip-note';
+        skipNote.textContent = 'Skipped — come back to this before you finish the lesson.';
+        step.insertBefore(skipNote, step.firstChild);
+      }
+    } else if (existingSkipNote){
+      existingSkipNote.remove();
+    }
+
+    var group = step.getAttribute('data-group');
+    // Shared cross-mode UI (the sticky progress label/rail and the
+    // aria-live region) is only this function's to write while Practice
+    // mode is actually the visible panel -- guarded per
+    // INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md §13, failure mode #15
+    // (the stale-progress-label bug, fixed at commit 08583b5), applied
+    // here from this lesson's first commit rather than retrofitted.
+    if (!modePracticePanel.hidden){
+      var label = (GROUP_LABEL[group] || 'Practice') + ' — Step ' + (currentIndex + 1) + ' of ' + visibleSteps.length;
+      progressLabel.textContent = label;
+      stepLive.textContent = label;
+
+      var pct = visibleSteps.length > 1 ? (currentIndex / (visibleSteps.length - 1)) * 100 : 0;
+      progressFill.style.width = pct + '%';
+      progressPuck.style.left = pct + '%';
+    }
+
+    document.querySelectorAll('.ile-nav-practice-item').forEach(function(btn){
+      var isCurrent = btn.getAttribute('data-group') === group;
+      btn.setAttribute('aria-current', String(isCurrent));
+      var isPast = GROUP_ORDER.indexOf(btn.getAttribute('data-group')) < GROUP_ORDER.indexOf(group);
+      btn.querySelector('.ile-nav-num').classList.toggle('ile-nav-done', isPast);
+    });
+
+    setPref('practiceStep', String(currentIndex));
+
+    if (step.id === 'ileStepCompletion'){
+      var reviewBox = document.getElementById('ileCompletionReview');
+      var reviewList = document.getElementById('ileCompletionReviewList');
+      var completionHeading = document.getElementById('ileCompletionHeading');
+      var completionBody = document.getElementById('ileCompletionBody');
+      var outstanding = visibleSteps.filter(function(s){
+        return isAssessedStep(s) && s.getAttribute('data-answered') !== 'true';
+      });
+      if (outstanding.length){
+        reviewBox.hidden = false;
+        reviewList.innerHTML = '';
+        outstanding.forEach(function(s){
+          var idx = visibleSteps.indexOf(s);
+          var grp = GROUP_LABEL[s.getAttribute('data-group')] || 'Practice';
+          var stemEl = s.querySelector('.ile-q-stem, .ile-exam-stem');
+          var stemText = stemEl ? stemEl.textContent.trim() : 'Question';
+          if (stemText.length > 70) stemText = stemText.slice(0, 70).trim() + '…';
+          var li = document.createElement('li');
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = grp + ': ' + stemText;
+          btn.addEventListener('click', function(){ goToStep(idx); });
+          li.appendChild(btn);
+          reviewList.appendChild(li);
+        });
+        completionHeading.textContent = 'Nice progress — a few questions still need a look';
+        completionBody.textContent = 'You reached the end, but ' + outstanding.length + ' question' + (outstanding.length > 1 ? 's' : '') + ' above ' + (outstanding.length > 1 ? "weren't" : "wasn't") + ' actually answered. Jump back to finish ' + (outstanding.length > 1 ? 'them' : 'it') + ' for real mastery, or continue on whenever you’re ready.';
+      } else {
+        reviewBox.hidden = true;
+        completionHeading.textContent = 'Nice work — lesson complete';
+        completionBody.textContent = 'You’ve worked through relative formula mass and moles from first principles to exam-style questions. That’s real progress.';
+      }
+      var card = document.getElementById('ileCompletion');
+      card.classList.remove('ile-show-anim');
+      void card.offsetWidth;
+      card.classList.add('ile-show-anim');
+    }
+
+    // Milestone/transition steps have a real heading to focus. Individual
+    // question steps don't -- fall back to the step container (tabindex=-1)
+    // so keyboard/AT focus always lands inside the new content.
+    var heading = step.querySelector('h1, h2, h3') || step;
+    heading.setAttribute('tabindex', '-1');
+    heading.focus({ preventScroll: true });
+
+    updateReminderVisibility(step);
+  }
+  var GROUP_ORDER = ['diagnostic','guided','independent','exam','close'];
+
+  function goToStep(i){
+    currentIndex = Math.max(0, Math.min(visibleSteps.length - 1, i));
+    renderStep();
+    stepper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  stepPrevBtn.addEventListener('click', function(){ goToStep(currentIndex - 1); });
+  stepNextBtn.addEventListener('click', function(){
+    if (currentIndex < visibleSteps.length - 1) goToStep(currentIndex + 1);
+    else { setMode('learn'); document.getElementById('ile-orientation').scrollIntoView(); }
+  });
+  stepSkipBtn.addEventListener('click', function(){
+    var step = visibleSteps[currentIndex];
+    if (!step) return;
+    step.dataset.skipped = 'true';
+    persistSkipped();
+    renderStep();
+  });
+  function onStepAnswered(){
+    var step = visibleSteps[currentIndex];
+    if (step) step.classList.add('ile-step-reminder-unlocked');
+    renderStep();
+  }
+
+  Array.prototype.slice.call(stepper.querySelectorAll('.ile-step')).forEach(function(step){
+    var hints = step.querySelectorAll('.ile-hint');
+    var lastHint = hints[hints.length - 1];
+    if (!lastHint) return;
+    lastHint.addEventListener('toggle', function(){
+      if (!lastHint.open) return;
+      step.setAttribute('data-answered', 'true');
+      step.classList.add('ile-step-reminder-unlocked');
+      if (visibleSteps[currentIndex] === step) renderStep();
+    });
+  });
+
+  var REMINDER_DELAY_MS = { diagnostic: 8000, independent: 8000, close: 8000, guided: 20000, exam: 20000 };
+  var reminderRevealTimer = null;
+  function updateReminderVisibility(step){
+    if (reminderRevealTimer){ clearTimeout(reminderRevealTimer); reminderRevealTimer = null; }
+    if (!reminderBtn) return;
+    var isQuestion = !!step.querySelector('.ile-q-option, .ile-numeric-check, .ile-hint');
+    if (!isQuestion || step.classList.contains('ile-step-reminder-unlocked')){
+      reminderBtn.classList.add('ile-reminder-visible');
+      return;
+    }
+    reminderBtn.classList.remove('ile-reminder-visible');
+    var delay = REMINDER_DELAY_MS[step.getAttribute('data-group')] || 8000;
+    reminderRevealTimer = setTimeout(function(){
+      step.classList.add('ile-step-reminder-unlocked');
+      reminderBtn.classList.add('ile-reminder-visible');
+    }, delay);
+  }
+
+  // ================= PROGRESS RAIL (dual mode) =================
+  var progressFill = document.getElementById('ileProgressFill');
+  var progressPuck = document.getElementById('ileProgressPuck');
+  var progressLabel = document.getElementById('ileProgressLabel');
+  var learnSections = Array.prototype.slice.call(document.querySelectorAll('#ileModeLearn .ile-section'));
+
+  function updateProgress(){
+    if (!modeLearnPanel.hidden){
+      var doc = document.documentElement;
+      var scrollTop = window.scrollY || doc.scrollTop;
+      var scrollable = doc.scrollHeight - window.innerHeight;
+      var pct = scrollable > 0 ? Math.min(100, Math.max(0, (scrollTop / scrollable) * 100)) : 0;
+      progressFill.style.width = pct + '%';
+      progressPuck.style.left = pct + '%';
+      var current = 0;
+      for (var i = 0; i < learnSections.length; i++){
+        if (learnSections[i].getBoundingClientRect().top < 140) current = i;
+      }
+      progressLabel.textContent = 'Section ' + (current + 1) + ' of ' + learnSections.length;
+    }
+  }
+  var progressTicking = false;
+  window.addEventListener('scroll', function(){
+    if (modeLearnPanel.hidden) return;
+    if (!progressTicking){
+      window.requestAnimationFrame(function(){ updateProgress(); progressTicking = false; });
+      progressTicking = true;
+    }
+  }, { passive: true });
+
+  // ---- scroll-reveal (Learn mode only, one-time) ----
+  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReducedMotion && 'IntersectionObserver' in window){
+    var revealObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('ile-revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.ile-reveal').forEach(function(el){ revealObserver.observe(el); });
+  } else {
+    document.querySelectorAll('.ile-reveal').forEach(function(el){ el.classList.add('ile-revealed'); });
+  }
+
+  // Root-relative links rewritten to fully-qualified + target="_top" --
+  // required inside the blob: iframe pipeline, harmless no-op standalone.
+  document.querySelectorAll('a[href^="/"]').forEach(function(a){
+    a.href = location.origin + a.getAttribute('href');
+    a.target = '_top';
+  });
+
+  // ================= "Need a reminder?" drawer (Practice mode) =================
+  var reminderBody = document.getElementById('ileReminderBody');
+  var reminderClone = document.createDocumentFragment();
+  ['ile-learn', 'ile-diagrams'].forEach(function(id){
+    var src = document.getElementById(id);
+    if (src) reminderClone.appendChild(src.cloneNode(true));
+  });
+  reminderBody.appendChild(reminderClone);
+  reminderBody.querySelectorAll('.ile-reveal').forEach(function(el){ el.classList.add('ile-revealed'); });
+  reminderBody.querySelectorAll('[id]').forEach(function(el){ el.removeAttribute('id'); });
+
+  var reminderBtn = document.getElementById('ileReminderBtn');
+  var reminderDrawer = document.getElementById('ileReminderDrawer');
+  var reminderBackdrop = document.getElementById('ileReminderBackdrop');
+  var reminderCloseBtn = document.getElementById('ileReminderClose');
+  var reminderOpenLearnBtn = document.getElementById('ileReminderOpenLearn');
+  var reminderLastFocused = null;
+
+  function openReminder(){
+    reminderLastFocused = document.activeElement;
+    reminderDrawer.classList.add('ile-open');
+    reminderBackdrop.classList.add('ile-open');
+    reminderDrawer.setAttribute('aria-hidden', 'false');
+    reminderCloseBtn.focus();
+    document.addEventListener('keydown', onReminderKeydown);
+  }
+  function closeReminder(){
+    reminderDrawer.classList.remove('ile-open');
+    reminderBackdrop.classList.remove('ile-open');
+    reminderDrawer.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', onReminderKeydown);
+    if (reminderLastFocused && reminderLastFocused.focus) reminderLastFocused.focus();
+  }
+  function onReminderKeydown(e){
+    if (e.key === 'Escape'){ closeReminder(); return; }
+    if (e.key === 'Tab'){
+      var focusable = reminderDrawer.querySelectorAll('a, button, summary');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  }
+  reminderBtn.addEventListener('click', openReminder);
+  reminderCloseBtn.addEventListener('click', closeReminder);
+  reminderBackdrop.addEventListener('click', closeReminder);
+  reminderOpenLearnBtn.addEventListener('click', function(){
+    closeReminder();
+    setMode('learn');
+    document.getElementById('ile-learn').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // ================= INIT (order matters: tier -> mode -> steps) =================
+  applyTier(getPref('tier', 'higher'));
+  rebuildSteps(false);
+  setMode(getPref('mode', 'learn'));
+})();
+</script>
+</body>
+</html>
