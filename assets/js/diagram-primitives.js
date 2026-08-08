@@ -169,10 +169,24 @@
     // ---- force diagram family, visual-craft refinement (v1.4) ----
     forceObjectWidth: 100,   // was 76 -- gives the isolated object real presence
     forceObjectHeight: 64,   // was 46
-    forceLabelGap: 20,       // clear space between an arrow's tip and its label, along the arrow's own direction
-    forceLabelSize: 13.5,    // between labelSecondarySize (12) and labelPrimarySize (15) -- force labels read as comfortably as body text without competing with the primary/resultant tier
+    forceLabelGap: 22,       // clear space between an arrow's tip and its label, along the arrow's own direction
+    forceLabelSize: 13.5,    // superseded per-diagram by the v1.5 editorial-scale pass below where legibility at real rendered size required it; kept as the primitive default
     forceLabelWeight: 500,
-    forceResultantGap: 34    // vertical clearance between the component-force system and the resultant row/divider below it
+    forceResultantGap: 36,   // vertical clearance between the component-force system and the resultant row/divider below it
+
+    // ---- force diagram family, editorial scale pass (v1.5) ----
+    // A collision-free diagram that renders too small to read comfortably
+    // at ordinary viewing distance is not visually approved (see the
+    // "Editorial Scale Rule" in resultant-forces-force-diagram-family-spec.md).
+    // These sizes are what a force diagram actually needs once its
+    // rendered container is wide enough to show them -- see the CSS fix
+    // (.ile-diagram-figure svg max-width) alongside this change.
+    forceLabelSizeLarge: 16,      // component-force labels, this pass's real default
+    forceResultantLabelSize: 18,  // resultant text -- deliberately independent of the
+                                   // shared labelPrimarySize (15) used by the motion/
+                                   // vector and graph families, so this family can be
+                                   // legible without changing either of theirs
+    forceArrowSchematicLengthLarge: 88  // was 70 -- more confident schematic arrow presence
   };
 
   // ---- token map (Standard "Where these tokens live") ----
@@ -666,7 +680,7 @@
   function forceLabel(opts) {
     return label({
       x: opts.x, y: opts.y, text: opts.text, align: opts.align || 'start',
-      tier: 'secondary', size: DEFAULTS.forceLabelSize, weight: DEFAULTS.forceLabelWeight,
+      tier: 'secondary', size: opts.size || DEFAULTS.forceLabelSizeLarge, weight: DEFAULTS.forceLabelWeight,
       colorToken: opts.colorToken || TOKENS.ink
     });
   }
