@@ -472,3 +472,114 @@ refinement pass must clear. The user's 9 named defects are all confirmed
 against real rendered pixels, not disputed. Refinement work proceeds
 against the 6 systemic patterns above, prioritising Diagram 5 and the
 Diagram 2/4 opposite-arrow grammar first, per instruction.
+
+---
+
+## FORCE DIAGRAM VISUAL CRAFT REFINEMENT — WHAT WAS CHANGED
+
+Primitive-level fixes in `assets/js/diagram-primitives.js` (v1.3 → v1.4),
+targeting the 6 systemic patterns above, not per-diagram patches. Full
+rationale for each: `docs/pilots/resultant-forces-force-diagram-family-spec.md`
+§A/§B/§F/§H (v1.1 amendment).
+
+1. **`isolatedObject()` enlarged** (100×64, was 76×46) and drawn at
+   `strokeSecondary` (was `strokeReference`) — real visual presence
+   instead of reading as a construction line.
+2. **`forceOrigin()` — arrows now originate from the object's edge**, in
+   the lane matching their direction, not the object's centre. This is
+   the fix for the family's worst defect: two equal-and-opposite forces
+   from a shared centre point rendered as one double-headed line
+   (Diagram 2). Edge-origin separates them by the object's own width/
+   height, so they read as two arrows even when collinear.
+3. **`forceLabelAnchor()`/`forceLabel()`** — a label now anchors just
+   beyond its own arrow's tip, continuing in the arrow's own direction,
+   replacing six diagrams' worth of hand-picked offsets that collided
+   with the (too-small) v1.0 object. Force labels render at 13.5px/
+   weight 500/full-strength ink, not the generic 12px/400/muted tier.
+4. **`resultantDivider()`** — a quiet dashed rule separating the
+   component-force system from the resultant row, so the resultant
+   reads as a derived conclusion, not a graphic bolted on below.
+5. **Diagram 5's two independent resultants** (horizontal, vertical) now
+   render in separate left/right zones with their own small headers
+   ("Horizontal system" / "Vertical system"), instead of stacked as two
+   consecutive lines — the fix for the diagram named as highest
+   priority, directly addressing "learner has to read both lines to
+   realise there are two separate conclusions."
+6. Several diagrams' `viewBox` dimensions were widened/heightened to
+   give the new edge-anchored labels and the wider, calmer object room
+   to breathe without hitting the frame edge — a direct instance of the
+   brief's "calmer, wider, more breathing room" instruction, not
+   incidental.
+
+All 6 diagrams were regenerated through the refined primitives (not
+hand-patched instance by instance), then re-verified.
+
+### Verification performed
+
+**Live, on the deployed refinement (`staging`, commits `5a45c3d` and
+`5befe3e`)**, real browser, real `getBBox()`/computed-style, not source
+inspection:
+
+| Check | Result |
+|---|---|
+| Text/text collisions, all 6 diagrams | **0**, confirmed live |
+| Text/object collisions, all 6 diagrams | **0**, confirmed live (badges excluded from this check by design — a badge's text is deliberately centred inside its own pill) |
+| Text/line crossings, all 6 diagrams | **0**, confirmed live — one real crossing was found and fixed during this pass itself: the Diagram 5 resultant divider initially passed directly through its own "Horizontal system"/"Vertical system" zone labels (caught by this exact live check, not by the offline generation script's approximate text-metric estimate — the two-tool discipline from blueprint failure mode #16 did its job again) |
+| Out-of-viewBox text, all 6 diagrams | **0**, confirmed live |
+| Arrow-length determinism, all 6 diagrams | **Exact match** to `forceArrowLength()`'s own output, measured from real rendered `<line>` coordinates: D1 70/70 (schematic), D2 42/42, D3 80/32/48 (80−32=48 ✓), D4 45/45, D5 48/18/42/42/30 (48−18=30 horizontal resultant ✓; 42−42=0 vertical, correctly shown as a badge not an arrow), D6 60 |
+| Force-label contrast, Dark | **16.67:1** (full ink, up from Gate 7's original 15.05:1 muted-ink reading — the typography change did not cost contrast) |
+| Resultant-label contrast, Dark | **7.92:1**, consistent with Gate 7's original 7.15:1 |
+| Force-label contrast, Light | **15.97:1** |
+| Resultant-label contrast, Light | **5.25:1**, matching Gate 7's original 5.25:1 exactly |
+
+**Disclosed limitation, honestly, not worked around silently**: real
+pixel screenshots of the refined diagrams could not be captured this
+pass. Screenshots of the *original, pre-fix* diagrams succeeded earlier
+in this same session (via a newly-found `position:fixed` pinning
+technique that reliably worked around the previously-documented
+scrolled-screenshot limitation — see the critique section above) and
+are the basis for the human-eye critique. After the fix was pushed,
+the screenshot tool itself began failing with a distinct, session-level
+error (`Failed to deserialize params.clip.scale`) unrelated to scroll
+position — it failed even at `scrollY:0` and even via the pinning
+technique that had just worked. This is a different failure mode from
+the known scrolled-position issue and was not resolved by retrying,
+navigating fresh, or opening a new tab. Substituted with the live
+geometry/contrast verification above, which is thorough but is **not
+the same as a human or AI eye confirming the composition reads as
+premium** — named honestly, not glossed over, in the verdict below.
+
+### Remaining weaknesses, named honestly
+
+- **No genuine visual (pixel-level) re-inspection of the fix could be
+  performed this pass**, for the tooling reason above. The geometric
+  evidence (0 collisions, 0 crossings, exact arrow-length determinism,
+  strong contrast) is real and directly answers most of the 9 named
+  defects (labels no longer collide with geometry or each other, the
+  object is bigger, Diagram 5's two resultants are structurally
+  separated), but composition quality — whitespace balance, whether the
+  resultant now genuinely *feels* derived rather than just being
+  structurally separated by a divider, whether Diagram 2's balanced pair
+  now genuinely reads as "two arrows" at a glance rather than merely
+  "not colliding" — has not been confirmed against real rendered pixels
+  after the fix.
+- Diagram 3's resultant arrow is now longer in absolute terms (48px at
+  the new 0.16 scale, up from 36px at the old 0.12 scale) specifically
+  to address the "arrowhead dominates a short shaft" systemic pattern,
+  but this was verified by the length-ratio check, not by eye — whether
+  it now looks proportionate rather than merely longer is unconfirmed.
+
+### Revised diagram-family verdict
+
+## FORCE DIAGRAM FAMILY READY FOR HUMAN VISUAL REVIEW
+
+Not claiming "HUMAN VISUAL REVIEW PASS" — that would require the fix
+itself to have been visually confirmed, which this pass's tooling
+failure prevented. Every defect the user named has a structural,
+geometrically-verified fix in place (root cause identified and
+addressed for the worst one, Diagram 2's double-line collapse), and the
+family's primitives now carry these rules forward for any future
+diagram in this family, not just these six. What's missing is the same
+thing Gate 7 was missing before the user's own review closed Pilot #3's
+first round: a real eye on the real pixels. The lesson is live on
+`staging` now, ready for that review.

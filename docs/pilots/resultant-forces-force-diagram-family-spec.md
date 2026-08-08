@@ -1,4 +1,4 @@
-# Inspire Force Diagram Family — Specification (v1.0)
+# Inspire Force Diagram Family — Specification (v1.1)
 
 Written before any diagram markup, per
 `docs/standards/INSPIRE-SCIENTIFIC-DIAGRAM-STANDARD.md` §H and the same
@@ -9,6 +9,17 @@ diagram needs that neither prior family required: object isolation, a
 force-arrow origin/placement convention, and an explicit, enforced
 schematic-vs-scaled distinction for arrow length.
 
+**v1.1 amendment (this revision)**: after Pilot #3's lesson was built to
+v1.0 of this spec and passed human visual review as "scientifically
+strong but visually not yet approved," a dedicated visual-craft
+refinement pass found and fixed a real geometric defect in §B's original
+centre-origin convention, plus under-specified object sizing, label
+placement, and resultant presentation. §A, §B, §F, and §H below are
+updated to the rules this pass actually proved; the reasoning for each
+change is kept alongside the rule, not just the new rule in isolation.
+Full before/after evidence: `docs/pilots/resultant-forces-quality-audit.md`'s
+"FORCE DIAGRAM VISUAL CRAFT REFINEMENT" sections.
+
 ---
 
 ## A. Object representation
@@ -18,26 +29,52 @@ schematic-vs-scaled distinction for arrow length.
   `--bg-hover`/`--bg-card` fill (the same neutral surface used for a
   waypoint marker in the motion/vector family), never a decorative
   illustration. A one-word label may sit inside it ("box," "crate,"
-  "van") only where the worked example's own scenario needs it named.
+  "van") only where the worked example's own scenario needs it named —
+  in practice, no diagram in this lesson ends up using it, because the
+  object's centre is also the point every force arrow radiates from
+  (§B), so any inline label sits exactly where an arrow is guaranteed to
+  cross it. Name the object in the figcaption instead.
 - **No contextual scene art inside the canonical free-body diagram** —
   per the brief's own explicit instruction. Where a worked example's
   prose benefits from a contextual illustration (e.g. "a van driving
   along a road"), that stays in prose/photography outside the diagram,
   never blended into the FBD itself.
+- **v1.1 — sizing**: default 100×64 (was 76×46 in v1.0), stroke
+  `strokeSecondary` (was `strokeReference`). The v1.0 defaults read as a
+  construction line, not the object the whole diagram is about, and
+  were consistently narrower than the force labels sitting next to
+  them, which is what made every v1.0 diagram's label collide with the
+  box by construction, not by individual authoring mistakes. Bigger and
+  slightly bolder gives the object real visual presence without letting
+  it compete with the primary-tier resultant (`strokeSecondary` 2.25 <
+  `strokePrimary` 3.5, preserving the hierarchy).
 
-## B. Object centre / force-origin convention
+## B. Object edge / force-origin convention (revised v1.1)
 
-- **Every force arrow in this family originates from the object's
-  centre point**, regardless of the force's real physical point of
-  application (e.g. weight technically acts through the centre of
-  mass; the normal contact force technically acts at the contact
-  surface). This is the standard GCSE simplification — real point-of-
-  application diagrams belong to moments/turning-effect content, which
-  this lesson does not teach and must not silently imply. Stated once
-  here rather than re-derived per diagram.
-- This also fixes the primitive's API shape: a force arrow needs only
-  an origin point, an angle, and a length — never a second, independent
-  anchor point to place badly.
+- **v1.0 stated**: every force arrow originates from the object's
+  centre point. **v1.1 finding**: this is geometrically correct but
+  visually broken for the exact case this family exists to teach —
+  two equal-and-opposite forces (Diagram 2's balanced pair) both
+  originating from the same centre point, on the same line, render as
+  **one continuous double-headed line**, not two arrows. A learner's
+  first read was "a double-headed arrow," not "two 300 N forces in
+  balance" — confirmed against real rendered pixels during the
+  refinement pass, not a theoretical concern.
+- **v1.1 rule**: every force arrow originates from the object's **edge**,
+  in the lane matching its own direction — the right edge for a
+  rightward force, the left edge for a leftward force, the top edge for
+  an upward force, the bottom edge for a downward force
+  (`forceOrigin(bounds, angleDeg)`). Two opposite forces now start from
+  opposite edges of the object, separated by its own full width or
+  height, so they read as two arrows even when perfectly collinear —
+  the object itself becomes the visual gap between them.
+- This is a refinement of the original convention's intent, not a
+  reversal of it: the arrow still originates from the object as a whole
+  (not a specific, misleadingly-precise contact point), still avoids
+  implying moments/turning-effect content (§B's original concern), and
+  still needs only an object, an angle, and a magnitude to compute —
+  `forceOrigin()` derives the exact edge point from the object's own
+  drawn bounds, so no diagram hand-picks an origin coordinate.
 
 ## C. Force-arrow placement and orientation
 
@@ -87,13 +124,31 @@ existing one, already twice-proven, transfers directly.
 - Preferred vocabulary, used only where the scenario actually calls for
   it (never invented for flavour): weight, normal contact force,
   friction, drag, tension, thrust/driving force.
-- Typography: identical two-tier system to both prior families —
-  `tier:'secondary'` for ordinary component-force labels, `tier:'primary'`
-  reserved for the one thing a diagram concludes with (almost always
-  the resultant — see §K).
-- Label placement: offset from the arrow using `perpendicularOffset()`
-  (already proven in both prior families) — never anchored at a point
-  that risks sitting on the arrow shaft or the object itself.
+- Typography: **v1.1** — component-force labels use a dedicated
+  `forceLabel()` treatment (13.5px, weight 500, full-strength
+  `--diagram-ink`), not the family-generic `tier:'secondary'` style
+  (12px, weight 400, `--diagram-ink-muted`) both prior diagram families
+  use for their own secondary text. Found during the refinement pass:
+  the generic muted-secondary tier reads noticeably lighter than the
+  lesson's own body paragraphs sitting immediately below the figure,
+  which is wrong for text conveying the diagram's actual physics, not
+  a minor annotation. `tier:'primary'` is still reserved for the
+  resultant, unchanged from v1.0.
+- Label placement: **v1.1** — a label anchors just beyond its own
+  arrow's tip, continuing in the arrow's own direction
+  (`forceLabelAnchor(tipX, tipY, angleDeg, gap)`), with a text-anchor
+  chosen so the text grows away from the shaft, never back across it.
+  Replaces v1.0's `perpendicularOffset()`-based placement, which
+  anchored labels near the (too-small, v1.0-sized) object rather than
+  near the force's own tip, and was the direct cause of every v1.0
+  diagram's label/object collision. A useful side effect: because each
+  force's label now sits at that force's own tip rather than hovering
+  near the shared object, opposite forces' labels end up visibly
+  separated too, reinforcing §B's edge-origin fix rather than
+  duplicating it. `perpendicularOffset()` remains correct and in active
+  use in the motion/vector family, where it was proven correct — this
+  is a family-specific refinement of force-label placement only, not a
+  correction to that primitive.
 
 ## G. Contact-force representation
 
@@ -126,6 +181,23 @@ simultaneously alongside the real component forces.**
   family's Diagram 4; graph family's Graph 4 total-distance badge).
   Never in the same row as the component arrows, never touching the
   object itself.
+- **v1.1** — the separation is now marked explicitly with
+  `resultantDivider()`, a quiet dashed rule between the component-force
+  system and the resultant row. In v1.0 this separation existed only as
+  blank vertical space, which the refinement pass's critique found read
+  as "the resultant is bolted on below," not "the resultant is a
+  conclusion the diagram above it builds to." The divider is the
+  minimum addition that fixes this — a plain hierarchy marker, not a
+  decorative element.
+- **v1.1 — a diagram with two independent resultants (Diagram 5) places
+  them in separate left/right zones**, each with its own small
+  `tier:'tiny'` header ("Horizontal system" / "Vertical system"), rather
+  than stacking them as two consecutive lines. v1.0 stacked them; the
+  critique found this read as one two-line conclusion, not two separate
+  ones — a learner had to read both lines fully to realise there were
+  two independent answers, not one two-part answer. This is the
+  standing rule for any future multi-axis resultant in this family:
+  independent resultants get independent zones, never a shared column.
 - Visual weight: `strokePrimary`, `--gold-ink` — the same "gold is the
   answer" convention both prior families established, reused, not
   reinvented.
@@ -268,6 +340,22 @@ All four are added to the **existing** `assets/js/diagram-primitives.js`
 No general-purpose physics-rendering framework is built — four narrow
 primitives, matching exactly what six diagrams (§ per-diagram specs
 below) actually need.
+
+**v1.1 additions** (`assets/js/diagram-primitives.js` v1.4), added by
+the visual-craft refinement pass, same discipline — narrow, evidence-
+driven, no speculative generality:
+
+| Primitive | Purpose |
+|---|---|
+| `isolatedObjectBounds(opts)` | Same sizing logic as `isolatedObject()`, returned as numbers instead of markup, so layout code can compute edge positions from the exact bounds the object was actually drawn with |
+| `forceOrigin(bounds, angleDeg)` | Where a force arrow should start, given the object's bounds and the force's direction — the object's edge, in the matching lane (§B). Only the family's four cardinal directions; not generalised beyond what §M's scope limit allows |
+| `forceLabelAnchor(tipX, tipY, angleDeg, gap)` | Where a force arrow's label should anchor — just beyond the tip, continuing in the arrow's own direction, with a text-anchor chosen so text grows away from the shaft (§F) |
+| `forceLabel(opts)` | Thin wrapper over `label()` at the family's own dedicated size/weight/colour (§F) — one definition of "how a force label looks," not six hand-tuned instances |
+| `resultantDivider(opts)` | A quiet dashed rule separating the component-force system from the resultant row (§H) |
+
+`label()` itself gained an optional `opts.size` override (falls back to
+its existing tier-based default when omitted) so `forceLabel()` could
+use it without changing any pre-existing caller's output.
 
 ---
 
@@ -512,11 +600,15 @@ calculation.)
 
 ## Revision policy
 
-v1.0, proven against exactly one lesson (Resultant Forces & Free-Body
-Diagrams). Per both prior families' own revision policies, should not
-be treated as final until: a two-object Newton's third-law-pair layout
-is deliberately built (testing the boundary this spec currently avoids,
-§J/§M), a diagonal/resolved-force diagram is attempted (testing whether
-the "keep axes separate" scope limit was a genuine scope choice or a
-capability gap), and a non-Physics subject has exercised any symbolic
-(non-spatial, non-graph) diagram convention at all.
+v1.1, proven against exactly one lesson (Resultant Forces & Free-Body
+Diagrams), through two passes: the original build (v1.0) and a visual-
+craft refinement pass after human review (v1.1, this revision). The
+refinement pass changed §A/§B/§F/§H based on real defects found against
+rendered pixels, not speculation — see the amendment note at the top of
+this document. Per both prior families' own revision policies, should
+not be treated as final until: a two-object Newton's third-law-pair
+layout is deliberately built (testing the boundary this spec currently
+avoids, §J/§M), a diagonal/resolved-force diagram is attempted (testing
+whether the "keep axes separate" scope limit was a genuine scope choice
+or a capability gap), and a non-Physics subject has exercised any
+symbolic (non-spatial, non-graph) diagram convention at all.
