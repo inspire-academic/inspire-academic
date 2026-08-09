@@ -1,14 +1,15 @@
-# Inspire Visual Asset Pipeline — Proposal v0.1
+# Inspire Visual Asset Pipeline — Proposal v0.2
 
-**Status: DESIGN PROPOSAL ONLY. Nothing in this document has been
-implemented.** No directories created, no scripts written, no schemas
-adopted, no packages installed, no API calls made, no MCP servers
-introduced, no lesson changed, no change to
-`docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`. This document
-exists to answer the 25 questions the design brief asked, grounded in
-the actual repository as it exists today, not in theory. Where the
-brief's own proposed design and the repo's actual constraints disagree,
-that disagreement is stated explicitly, not smoothed over.
+**Status: DESIGN PROPOSAL, now evidence-revised after POC #1. Nothing
+beyond documentation and the one already-authorised POC lesson has been
+implemented.** No factory, no API automation, no MCP, no new scripts.
+This document originally (v0.1) answered the 25 questions the initial
+design brief asked, grounded in the actual repository, before any real
+visual had been produced. **v0.2 adds a real-evidence update from
+running POC #1 (`PHY-FOR-HYB-001`) end to end** — see the "v0.2 UPDATE"
+section near the end. **The original v0.1 sections below are preserved
+unedited except for small, explicitly-marked pointers** to where v0.2
+supersedes them; nothing has been deleted or silently rewritten.
 
 ---
 
@@ -118,6 +119,18 @@ not as a replacement for Types A/B, and not as a default.
 
 ## 3–6. What stays deterministic, what uses generated visuals, when hybrid, and the routing rule (Q3–Q6)
 
+> **Superseded by real evidence — see the "v0.2 UPDATE" section near the
+> end of this document.** This section's original three-way split
+> (deterministic / generated-context-only / hybrid) is preserved below
+> as-written, since its reasoning about *what must stay deterministic*
+> (§ "Stays deterministic") is still correct and unchanged. What v0.2
+> revises is the **hybrid-by-default assumption for premium contextual
+> figures** — POC #1 showed a fourth mode (a complete, art-directed
+> figure authored as one piece, not layered) is often the better choice
+> for exactly the kind of figure this section originally called "Type
+> D." Read this section for the historical reasoning, then the v0.2
+> section for what actually changed and why.
+
 ### Stays deterministic (Type A/B) — unchanged from the existing diagram standard
 
 Anything where **removing the pixels would lose an assessable scientific
@@ -185,6 +198,14 @@ most lessons will need mostly Type A/B, occasionally D, rarely pure C.
 ---
 
 ## 7. What should the request contract contain? (Q7)
+
+> **Extended, not replaced, by v0.2**: an `authoringMode` field
+> (`deterministic-svg` / `deterministic-graph` / `premium-final-figure`
+> / `hybrid`) is now part of this contract, and Premium Final Figure
+> requests need a few Mode-C-specific fields the original table below
+> didn't anticipate. See the "v0.2 UPDATE" section's "Request contract
+> update" for the exact additions — the table below is preserved as
+> the original v0.1 baseline, still correct for what it covers.
 
 **Smaller than the brief's own draft schema — grounded in this repo's
 own established restraint, not adopted wholesale.**
@@ -418,6 +439,12 @@ or simply added to the existing `tests/*.test.js` suite, since `npm
 test` already walks the repo checking HTML/asset structure — extending
 an existing, proven pattern rather than inventing a parallel one.
 
+**Update, v0.2**: POC #1 already needed exactly this kind of small,
+narrow tool — image format conversion (no WebP encoder existed in this
+environment at all) — and reached for `sharp` as a devDependency rather
+than a raw script. See the v0.2 section's "sharp dependency
+recommendation" below for whether that should stay.
+
 ---
 
 ## 17. Theme strategy (Q17)
@@ -487,7 +514,25 @@ does the job and is already the established pattern.
 
 ## 19. Generated-text risk — which model (A/B/C)? (Q19, brief's "IMPORTANT" section)
 
-## B, as the default. C only as an explicit, justified per-asset exception — never A.
+> **Scope-narrowed by v0.2, not reversed.** Everything below was
+> written when this document only recognised generated-context +
+> deterministic-overlay (what's now called Mode D, "True Hybrid") as
+> the way to combine a premium illustration with scientific content —
+> so "never trust embedded generated text" read as a universal rule.
+> POC #1's evidence introduced a case (Mode C, "Premium Final Figure")
+> where embedded labels/values/arrows are the entire point of the
+> asset, not a risk to route around. **The rule below still applies in
+> full to Mode D** (a hybrid's illustrated base must never carry
+> scientifically load-bearing text, because the deterministic overlay
+> is what's supposed to guarantee correctness). **For Mode C, the same
+> underlying concern — generated text can be wrong — doesn't go away,
+> it just moves from "design the asset to avoid this risk" to
+> "independently verify every embedded scientific claim before
+> approval,"** per the v0.2 section's scientific safety rule. Read on
+> for the original Mode-D-era reasoning, which is still correct for
+> what it actually covers.
+
+## B, as the default for Mode D (True Hybrid). C only as an explicit, justified per-asset exception within Mode D — never A within Mode D. (Mode C has its own rule — see above.)
 
 **Recommend against Model A (all labels embedded in the generated
 image) entirely**, for a reason beyond "image models sometimes misspell
@@ -691,6 +736,226 @@ already correctly names request generation, handoff clarity, exact
 path/naming, human generation+review, repo insertion, Claude discovery,
 integration, alt text, responsive behaviour, provenance, fallback, and
 reuse. Nothing to add.
+
+---
+
+## v0.2 UPDATE — POC #1 EVIDENCE: THE FOUR-MODE REPRESENTATION ROUTER
+
+Everything above (§0–25) is the original v0.1 proposal, written before
+any real visual had been produced — preserved as-is, not rewritten.
+This section records what running POC #1
+(`docs/visual-requests/PHY-FOR-HYB-001.md`) actually taught, and the
+one real policy change that evidence justifies.
+
+### What POC #1 actually showed
+
+The original plan routed this figure to what this document now calls
+**Mode D (True Hybrid)**: ChatGPT/OpenAI generates context only (the
+van, no labels, no arrows), Claude reconstructs every scientific
+element deterministically on top. That workflow **worked** — it's real
+evidence, not a failure:
+
+- proved the repository can act as the handoff contract between the two
+  systems without either needing access to the other;
+- proved asset conversion (PNG→WebP), compression to budget (~60KB),
+  and responsive integration;
+- proved fallback behaviour (the deterministic-only version stayed
+  live and reversible until the hybrid actually passed QA);
+- proved live browser QA catches real defects in this new asset class,
+  the same way it always has for the four canonical diagram families;
+- proved deterministic reconstruction over a generated base is
+  **technically possible**.
+
+But it also surfaced a real, measured cost. Getting from "technically
+integrated" to "reads as one coherent figure" took **three separate
+corrective passes**, each finding a genuine defect no amount of
+planning caught in advance:
+
+1. Arrow origins calibrated to an abstract placeholder box didn't
+   match the illustration's actual footprint (arrows floated near the
+   van rather than touching it) — required measuring the asset's own
+   alpha-channel bounding box and recomputing every coordinate.
+2. The van's facing direction was semantically backwards relative to
+   the (correct) force directions — required flipping the asset and
+   re-anchoring normal force and weight to physically sensible points
+   (tyre contact, body centre) rather than the family's usual
+   "nearest edge" convention.
+3. The re-anchored weight arrow turned out to have a measured contrast
+   ratio of ~1.2:1 against the light van body — effectively invisible
+   — only caught by real alpha-composited pixel measurement, requiring
+   a contrast-halo fix applied after the fact.
+
+None of these were mistakes in execution — each was found, root-caused,
+and fixed with real evidence, the same discipline every gate in this
+project has always used. **The finding is architectural, not a quality
+complaint**: forcing one system (Claude) to reconstruct, from
+measurements, a composition another system (the image generator) had
+already implicitly designed is inherently friction-prone — front/back
+orientation, exact anchor points, and contrast against the specific
+generated pixels are all things the *generating* system could simply
+be told to get right the first time, instead of Claude reverse-engineering
+them afterward.
+
+The user and ChatGPT then tested the alternative directly: asking
+ChatGPT/OpenAI to produce the **complete** figure — illustration,
+orientation, arrows, labels, values, resultants, visual hierarchy — as
+one art-directed composition. The result was materially cleaner and
+more coherent, with none of the three corrective passes needed, because
+nothing was being reconstructed after the fact.
+
+### New principle
+
+**Do not assume "generated visual + Claude deterministic overlay" is
+always the right premium workflow.** Use the best *authoring mode* for
+the representation, chosen per-figure like the original router already
+did, now with a fourth option.
+
+### The four-mode router
+
+| Mode | Who owns the complete rendered representation | Use when |
+|---|---|---|
+| **A — Deterministic SVG** | Claude / code, entirely | Scientific meaning depends on exact geometry the learner could be assessed on, or the representation benefits from programmatic manipulation: ray diagrams, force/vector diagrams, circuits, field geometry, scale/coordinate diagrams, geometric optics, wave measurements, exact symbolic schematics. **Unchanged from v0.1 §3–6** and from the four canonical diagram families already proven across the four lesson pilots. |
+| **B — Deterministic Graph** | Claude / graph engine, entirely | Any mathematically-generated plot: distance-time, velocity-time, I-V, decay curves, experimental data, trend lines. Data → scale → coordinates → graph, never "drawn to look about right." **Unchanged from v0.1.** |
+| **C — Premium Final Figure** *(new, evidence-justified by POC #1)* | ChatGPT/OpenAI, entirely — the complete composition, including any labels/arrows/values/annotations it contains | The figure is primarily explanatory rather than a quantity a learner will be assessed on measuring directly; one coherent art-directed composition communicates the science better than layered pieces; visual hierarchy and scientific annotation genuinely benefit from being designed together; deterministic reconstruction would add integration complexity (as POC #1 demonstrated) without adding scientific rigour a human review can't already confirm. Candidates: contextual force-in-context illustrations, apparatus/explanatory figures, energy-transfer context scenes, annotated biological structures, conceptual Chemistry illustrations, flagship lesson visuals. |
+| **D — True Hybrid** *(retained, narrowed)* | Split: ChatGPT/OpenAI owns the contextual/artistic base; Claude owns a deterministic layer for geometry that **must** remain mathematically exact | Only when there's a genuine, specific reason a layer needs machine-verifiable exactness the generating model can't be trusted with — e.g. a generated eye illustration with exact deterministic optical ray-tracing, a contextual magnet setup with an exact field-vector overlay, a generated apparatus with an exact scale/measurement overlay, a contextual scene where the *geometry itself* (not just the scene) is the assessed quantity. **Hybrid must not be chosen merely because it sounds safer** — POC #1 is now the concrete evidence for why that instinct, applied to a figure that didn't actually need per-layer exactness, produces more integration cost for a worse result than Mode C.
+
+**Worked example, directly from the evidence**: PHY-FOR-HYB-001 (the
+delivery-van force diagram) was routed to Mode D. In hindsight, against
+this router, it doesn't clearly need Mode D — the forces shown (800N/
+300N/1200N/1200N, two resultants) are already fully proven,
+independently-verified content from the canonical Force Diagram Family;
+nothing about *this particular figure* required them to stay
+separately re-verifiable at the pixel level the way, say, an assessed
+ray-diagram angle would. It's a strong candidate for what Mode C would
+have been built for. This isn't a retroactive claim that Mode D
+"failed" — it's the evidence that produced this router in the first
+place.
+
+### Responsibility boundary for Mode C
+
+**ChatGPT/OpenAI owns**: the complete scientific visual — illustration,
+labels, arrows, numerical annotations, scientific hierarchy,
+composition, visual storytelling. Claude does not redraw or
+reconstruct any of this after generation.
+
+**Claude owns**: request specification; lesson and curriculum context;
+target lesson slot; asset path (§9–10, unchanged); format conversion;
+compression; responsive integration; semantic HTML (`<figure>`/
+`<figcaption>`); alt text; a longer accessible description where
+needed; captions outside the image; performance budgeting (§20–22,
+unchanged); theme framing; provenance; asset reuse/discovery (§12,
+unchanged — REUSE BEFORE GENERATE still applies to Mode C exactly as
+to every other mode); versioning; browser QA; accessibility QA;
+canonical asset management.
+
+**Human owns**: final scientific approval, final pedagogical approval,
+final visual approval — Gate 8, unchanged, non-negotiable, for every
+mode.
+
+### Scientific safety rule for Mode C
+
+A complete rendered figure does **not** become unquestioned scientific
+authority merely because the composition is better. Before a Mode C
+asset becomes canonical, its scientific content must be **independently
+checked**, item by item: every label, every value, every direction,
+every force, every formula, every relationship, every implied
+orientation, every implied scientific claim. A generated figure with a
+wrong number, a misspelled unit, a flipped direction, or an incorrect
+relationship must be rejected or regenerated — the same "no invented
+scientific content, no unverified claim treated as fact" discipline
+this entire production programme has applied since Pilot #1, now
+applied to a mode where the risk moved from "the overlay might
+mis-align" to "the whole figure might be quietly wrong and nothing
+downstream will catch it automatically." This makes Claude's
+independent verification pass **more** load-bearing for Mode C than
+for Mode D, not less, precisely because there's no deterministic layer
+to fall back on.
+
+### Accessibility rule for Mode C
+
+Scientific meaning must not exist only in pixels, even when the visual
+already contains embedded labels that are (this time) trustworthy.
+Claude provides accessible real-text equivalents via alt text,
+figcaption, structured surrounding lesson text, and a longer
+description where the figure is complex — the same redundancy-by-design
+principle already proven across all four canonical diagram families
+(blueprint §7: "meaning survives inconsistent screen-reader SVG
+handling"), now applied to raster. **Do not attempt to recreate the
+visible labels as positioned HTML overlays merely for accessibility**
+— that reintroduces exactly the reconstruction-and-alignment cost this
+whole update exists to avoid. Provide a semantic equivalent instead, not
+a pixel-positioned shadow copy.
+
+### Performance rule for Mode C
+
+Unchanged in principle from v0.1 §20–22, restated because it matters
+more once premium figures might become a real production lane, not a
+one-off: convert to WebP, resize to the actual required display
+resolution (not the raw generation size), compress responsibly, lazy-load
+below the fold, report the final file size honestly. The `<100KB
+total page image weight` budget (CLAUDE.md, non-negotiable) doesn't
+relax for Mode C — if a figure can't reasonably fit the budget, that
+is itself evidence to reconsider whether Mode A/B/D serves better for
+that specific figure, not a reason to exceed the budget.
+
+### Request contract update
+
+Add one field, present regardless of mode:
+
+```yaml
+authoringMode: deterministic-svg | deterministic-graph | premium-final-figure | hybrid
+```
+
+For `premium-final-figure` requests specifically, the request (still
+one Markdown file per §7/§8, unchanged location/format) must state, as
+literal instruction text for the generating model:
+
+> "Generate the COMPLETE FINAL EDUCATIONAL FIGURE. Scientific labels
+> and annotations are part of the visual and should NOT be recreated by
+> Claude after generation."
+
+— plus everything §7's original table already required (purpose,
+learner-should-notice, tier, theme, aspect ratio, target path, alt
+text), extended with: exact scientific facts the figure must state
+correctly; exact required labels and values; explicit prohibited
+scientific errors (the Mode-C equivalent of §7's
+`scientificConstraints` field, now covering the whole figure rather
+than just an overlay); desired visual hierarchy; and the caption/
+accessible description Claude will use once the asset is approved.
+
+### sharp dependency recommendation
+
+**Keep it.** POC #1 needed real image-format conversion (WebP encoding)
+and this environment had no encoder available at all — no `cwebp`, no
+ImageMagick, no existing tooling. `sharp` filled that gap once, cleanly
+(one devDependency, `npm audit fix` run immediately after, 0
+vulnerabilities). With Premium Final Figure now a recognised production
+mode, format conversion, resizing to display resolution, and
+compression-to-budget are not one-off POC needs — they're the exact
+recurring job every future Mode C or Mode D asset will need before it
+can be integrated. Removing `sharp` now would mean reinstalling the
+same dependency the next time this exact need recurs, for no benefit.
+**Not** recommending building a script or CLI around it yet (§14/§16
+still stand: that's V2, only after the manual workflow has run enough
+times to prove the contract stable) — just keeping the one tool that
+already proved necessary.
+
+### What this update does not change
+
+- The four canonical diagram families (motion/vector, graph, force,
+  Chemistry mass-mole) remain exactly as approved — Mode A/B, untouched,
+  still the right tool whenever geometry itself carries assessable
+  meaning.
+- REUSE BEFORE GENERATE (§12) is unchanged and applies to Mode C
+  exactly as it always applied to every other mode.
+- The lifecycle model (§11: two states, approval-by-presence), asset
+  paths (§9–10), MCP verdict (§15: still NOT YET — nothing about a
+  fourth authoring mode changes the underlying coordination-problem
+  analysis), security posture (§23), and factory relationship (§24)
+  are all unchanged.
+- **No factory work, no API automation, no MCP, and no new POC follow
+  from this update.** This is a routing-policy correction based on one
+  pilot's real evidence, not authorisation to build anything.
 
 ---
 

@@ -381,3 +381,30 @@ At that point — and **not before** — Claude should:
 
 **None of steps 1–6 are performed by this request file.** This
 document only specifies what's needed; it does not act on it.
+
+---
+
+## POSTSCRIPT — routing lesson learned (recorded after the fact)
+
+This request was authored and executed under **Mode D (True Hybrid)**
+— generated context only, deterministic overlay reconstructed
+afterward by Claude. It worked, but getting from "technically
+integrated" to "reads as one coherent figure" took three separate
+corrective passes (arrow-to-image alignment, van orientation/force-
+anchor semantics, and a contrast-halo fix for the re-anchored weight
+arrow) — see the three fix commits on `staging` after the initial
+integration for the full detail.
+
+**In hindsight, against the four-mode router this POC's own evidence
+produced** (see
+`docs/production/INSPIRE-VISUAL-ASSET-PIPELINE-PROPOSAL.md`'s v0.2
+update), this specific figure is a stronger candidate for **Mode C
+(Premium Final Figure)** than Mode D: the four forces and two
+resultants shown are already fully proven, independently-verified
+content from the canonical Force Diagram Family, and nothing about
+*this particular figure* required per-layer, pixel-exact
+re-verification the way an assessed geometric quantity would. This
+request and its three corrective passes are the concrete evidence that
+produced the new router — not a claim that the approach taken here was
+wrong at the time, since Mode C hadn't been tested yet when this
+request was written.
