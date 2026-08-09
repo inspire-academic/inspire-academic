@@ -31,10 +31,10 @@ tier: Both
 specSlugs:
   - aqa-ch-fh-quantitative
   - edx-ch-fh-quantitative
-qaState: DRAFT
+qaState: QA_COMPLETE
 sourceCommit: 1bef6db
 sourcePilotDoc: docs/pilots/chemistry-pilot-quality-audit.md
-lessonsRowId: null
+lessonsRowId: dc0d6a73-d195-4f79-9541-adab361a250c
 publicationCommit: null
 ```
 
@@ -128,23 +128,50 @@ by this run — not redrawn, not regenerated, not re-integrated.
 ## QA STATE
 
 See `docs/production/factory-runs/FACTORY-V0-RUN-002.md` for the full,
-dated QA record. Summary, updated in place as this run progresses:
+dated QA record. Final summary:
 
 ```
-qaState: DRAFT
+qaState: QA_COMPLETE
+
+Existing committed QA suite (tests/lesson-*.test.js): PASS, unchanged
+  -- 206/206, zero new checks, zero modified checks, zero false
+  positives against any frozen pilot.
+
+Raster asset check: PASS, real assertion path (66.0KB, under the 80KB
+  ceiling) -- the first Factory v0 run to exercise this check against
+  an actual asset.
+
+Gate 7 (live rendered QA):
+  - REAL student/lesson-viewer.html blob-iframe path: PASS. Mode C
+    figure and all three deterministic Chemistry SVG representations
+    verified in both Dark and Light theme; chemical notation (H2O,
+    Ca(OH)2, Ar, Mr, 6.02x10^23) verified rendering correctly via true
+    HTML sub/sup elements; assessment interaction, focus management,
+    aria-live, console, and network all PASS. Full evidence in the run
+    record.
+
+Gate 8 (human approval): OUTSTANDING -- this run record and manifest
+  are the handoff. Not self-approved.
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
 ```
-lessons row:   not yet registered at manifest-authoring time
-is_published:  N/A — no row exists yet
+lessons row:      dc0d6a73-d195-4f79-9541-adab361a250c
+content_url:       https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/
+                    object/public/lesson-content/chemistry/quantitative-chem/
+                    1786285524386-quantitative-chemistry-relative-formula-mass-moles.html
+Gate 8 (human approval of the factory run):   OUTSTANDING
+is_published:                                 false
+Publicly live for students:                   NO
+real viewer:        https://staging.inspireacademic.org/student/lesson-viewer.html?id=dc0d6a73-d195-4f79-9541-adab361a250c
+                     CONFIRMED WORKING -- full live QA PASS
 ```
 
-**This lesson must not be marked PUBLISHED by this manifest or by any
-automated process**, and per this run's explicit instruction, must not
-even be marked HUMAN_APPROVED without the user's own review — this run
-stops at `QA_COMPLETE` and hands off for Gate 8.
+**This lesson has not been marked PUBLISHED and must not be, by this
+manifest or by any automated process** — nor has it been marked
+`HUMAN_APPROVED`; this run stops at `QA_COMPLETE` and hands off for
+Gate 8, exactly as instructed.
 
 ## PROVENANCE
 
