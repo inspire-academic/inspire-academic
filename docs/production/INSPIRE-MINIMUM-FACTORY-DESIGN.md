@@ -1,12 +1,17 @@
 # Inspire Minimum Factory Design (v0)
 
-**STATUS: DESIGN PROPOSAL ONLY — NOT IMPLEMENTED.** Nothing in this
-document has been built. No code, no agents, no admin UI, no schema
-change, no workflow engine, no queue, no API integration, no MCP, and
-no fifth lesson followed from writing it. Every claim about the current
-repository below was checked directly against the live files, not
-assumed — see the "What was inspected" note at the end of each section
-that needed it.
+**STATUS: DESIGN PROPOSAL, WITH ONE AUTHORISED SLICE RUN.** The
+architecture below was not built as a system — no agents, no admin UI,
+no schema change, no workflow engine, no queue, no API integration, no
+MCP. What *has* happened, under explicit, narrowly-scoped authorisation:
+Run #001 (`docs/production/factory-runs/FACTORY-V0-RUN-001.md`) proved
+the manifest, the committed QA suite, and the existing publication path
+— including the real `student/lesson-viewer.html` pipeline — against one
+already-approved pilot, with zero academic content regenerated. No
+second run, no new lesson content, and no expansion of Factory v0
+followed from it. Every claim about the current repository below was
+checked directly against the live files, not assumed — see the "What
+was inspected" note at the end of each section that needed it.
 
 Grounded in: `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`
 v1.4.1, `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`
@@ -1115,12 +1120,28 @@ small, evidence-only refinements, none requiring a re-architecture:
    "picks up new lessons automatically" property this design already
    valued elsewhere.
 
+4. **§14's publication mechanism is confirmed correct, with one
+   factual detail corrected.** Once the user authenticated the required
+   admin session, registration and the full real-pipeline live QA both
+   completed successfully — the one thing Run #001 existed to prove.
+   The correction: §14 assumed `content_url` could be an arbitrary
+   typed-in URL for a `lesson_type: 'html'` row; direct execution shows
+   the existing form only accepts that for `video` — `html` requires a
+   file upload through the existing zone, which is itself how every
+   currently-published lesson already works. The recommended mechanism
+   ("use the existing admin UI, one insert, no new code") is unchanged
+   and is now directly verified, not just reasoned about; only the
+   specific claim about how `content_url` gets its value was too broad.
+   Full evidence: `docs/production/factory-runs/FACTORY-V0-RUN-001.md`
+   §4–§6.
+
 **What this run does not change**: every other section of this design —
 the flow, the manifest shape, the four-mode router placement, the
 non-goals list, the publication mechanism itself — held exactly as
-designed. The one thing the run did not complete (real-pipeline live
-QA, §1 step 10 / §14) failed to complete for a credential reason outside
-this design's scope to solve, not a design defect.
+designed. Run #001 is now complete through Gate 7, with strong positive
+evidence (not just an absence of failure) that the real `blob:`-iframe
+viewer pipeline renders an Inspire Learning Experience lesson correctly
+end to end — the one thing this whole design exists to make repeatable.
 
 ---
 

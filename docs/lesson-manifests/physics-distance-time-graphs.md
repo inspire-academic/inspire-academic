@@ -22,10 +22,10 @@ tier: Both
 specSlugs:
   - aqa-ph-fh-forces-motion
   - edx-ph-fh-motion-forces
-qaState: DRAFT
+qaState: QA_COMPLETE
 sourceCommit: 232b80a
 sourcePilotDoc: docs/pilots/distance-time-graphs-quality-audit.md
-lessonsRowId: null
+lessonsRowId: 4e07e967-da17-4376-b094-174c6299d047
 publicationCommit: null
 ```
 
@@ -113,7 +113,7 @@ See `docs/production/factory-runs/FACTORY-V0-RUN-001.md` for the full,
 dated QA record. Summary, updated in place as this slice progresses:
 
 ```
-qaState: DRAFT
+qaState: QA_COMPLETE
 
 Committed automated QA (Gates 1-6's automatable slice, tests/lesson-*.test.js):
   PASS — 0 failures, run against all four frozen pilots as fixtures,
@@ -121,35 +121,48 @@ Committed automated QA (Gates 1-6's automatable slice, tests/lesson-*.test.js):
 
 Gate 7 (live rendered QA):
   - standalone static file: unchanged/frozen since original pilot
-    approval, not re-run in full for this slice (no content changed
-    that would invalidate the prior approval).
-  - REAL student/lesson-viewer.html blob-iframe path: NOT PERFORMED —
-    blocked, see run record. This is the one gate this slice exists to
-    close and did not close.
+    approval; structure/content spot-checked against the real-pipeline
+    render below, consistent throughout.
+  - REAL student/lesson-viewer.html blob-iframe path: PASS. Full
+    walkthrough completed 2026-08-09 (registration -> real viewer ->
+    Learn/Practice switching -> Higher/Foundation switching ->
+    Dark/Light theme -> all 5 graphs rendered -> MCQ interaction +
+    mastery-gate unlock -> step-change focus + aria-live announcement
+    -> reminder-drawer focus-trap/return -> 0 console errors -> 0
+    failed network requests -> 0 duplicate ids -> 0 horizontal
+    overflow). Full evidence in the run record.
 
-Gate 8 (human approval): NOT STARTED — cannot meaningfully start until
-  Gate 7's real-pipeline portion has run.
+Gate 8 (human approval): OUTSTANDING — this run record and manifest
+  are the handoff for that review. Not yet reviewed by the user.
 
-qaState therefore remains DRAFT, not QA_COMPLETE, per the manifest's
-own three-state model (INSPIRE-MINIMUM-FACTORY-DESIGN.md §12) — the
-committed-test slice passing is necessary but not sufficient to claim
-QA_COMPLETE while Gate 7's live-pipeline portion is still outstanding.
+qaState is QA_COMPLETE, not PUBLISHED: Gates 1-7 have all now passed,
+which is exactly what INSPIRE-MINIMUM-FACTORY-DESIGN.md's three-state
+model (section 12) defines QA_COMPLETE to mean. PUBLISHED requires
+Gate 8 (human approval) and the existing admin Publish toggle being
+switched on -- neither has happened, and this run does not do either
+automatically.
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
 ```
-is_published: NOT YET SET — no lessons row exists for this lesson at
-  the time this manifest was authored (confirmed: this lesson has
-  never been registered in the lessons table, per
-  docs/production/INSPIRE-MINIMUM-FACTORY-DESIGN.md §0.4).
+lessons row:   4e07e967-da17-4376-b094-174c6299d047
+content_url:   https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/
+               object/public/lesson-content/physics/forces--motion/
+               1786278054723-forces-and-motion-distance-time-graphs.html
+               (see run record for why this differs from the
+               teaching-lessons/ static URL originally assumed)
+is_published:  false
+real viewer:   https://staging.inspireacademic.org/student/lesson-viewer.html?id=4e07e967-da17-4376-b094-174c6299d047
+               CONFIRMED WORKING — full live QA PASS, see run record
 ```
 
-**This lesson must not be marked PUBLISHED by this manifest or by any
-automated process.** Publication requires the existing admin-gated
-`teacher/lesson-admin.html` Publish toggle, performed by a human, after
-Gate 8 human approval — see the run record for the exact blocker
-encountered and the exact values prepared for that manual step.
+**This lesson has not been marked PUBLISHED and must not be, by this
+manifest or by any automated process.** Registration and real-viewer
+QA are both now complete (Gates 1–7). Publication requires Gate 8
+(human review of this run's evidence) and then the existing
+admin-gated `teacher/lesson-admin.html` Publish toggle, switched on by
+a human — not performed by this run.
 
 ## PROVENANCE
 
