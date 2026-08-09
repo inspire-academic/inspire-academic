@@ -1,16 +1,74 @@
 # Factory v0 — Run #001
 
-**Status: COMPLETE THROUGH GATE 7. GATE 8 (HUMAN APPROVAL) OUTSTANDING —
-this document is the handoff for it.** This is the first and (per
+## FINAL STATUS: PASS — GATE 8 HUMAN APPROVAL: PASS — FACTORY PROOF STATUS: CANONICAL
+
+**Closed 2026-08-09.** Pilot #2 (Distance–Time Graphs) is the canonical
+Factory v0 proof-of-mechanics run. This is the first and (per
 instruction) only authorised Factory v0 implementation slice, run
 against `docs/production/INSPIRE-MINIMUM-FACTORY-DESIGN.md` and the
 durable state in `docs/benchmark/BENCHMARK-CURRENT-STATE.md`. Nothing
 in this run altered the selected pilot's academic content, and nothing
 beyond the manifest/QA/test files and the one new `lessons` row listed
-below was created. Registration and the real `student/lesson-viewer.html`
-pipeline — the one thing this slice exists to prove — were completed
-2026-08-09, once the user authenticated the admin session this run
-could not (and still cannot, and should not) authenticate itself.
+below was created.
+
+**What Run #001 proved, end to end, with zero integration defects**:
+
+```
+MANIFEST
+  -> COMMITTED QA (tests/lesson-*.test.js)
+  -> EXISTING PUBLICATION / ADMIN PATH (teacher/lesson-admin.html,
+       unmodified)
+  -> REAL student/lesson-viewer.html BLOB/IFRAME RUNTIME
+  -> LIVE RENDERED QA (navigation, tier/theme switching, graphs,
+       assessment interaction, progress tracking, focus management,
+       aria-live, console/network cleanliness, duplicate-id/overflow
+       checks — every item PASS, nothing NOT TESTABLE)
+  -> HUMAN APPROVAL (Gate 8: PASS, 2026-08-09)
+```
+
+with:
+- **zero academic reauthoring** — the lesson's prose, worked examples,
+  graphs, and assessment items are byte-identical to the frozen,
+  previously-approved Pilot #2 (checksum-verified before upload);
+- **zero frozen lesson changes** — `teaching-lessons/physics/
+  forces-and-motion-distance-time-graphs.html` was never edited;
+- **zero new publishing architecture** — registration used
+  `teacher/lesson-admin.html`'s existing "Add Lesson" form exactly as
+  every other already-published lesson in the system does; the real
+  viewer used `student/lesson-viewer.html` exactly as it already
+  exists; no schema change, no new UI, no new endpoint;
+- **zero integration defects** — every live-QA check in §6 passed on
+  first attempt; the only two things investigated (a QA-test false
+  positive, and pre-existing `localStorage` state from earlier testing)
+  were both confirmed as non-defects before being dismissed, per the
+  standing "investigate before assuming the lesson is wrong" rule.
+
+**Gate 8 human approval is a judgement about the factory *process* —
+not a decision to make this lesson publicly live.** See "Publication
+status" below: those are deliberately kept separate.
+
+---
+
+## Publication status (kept distinct from Gate 8, per instruction)
+
+```
+lessons row:      4e07e967-da17-4376-b094-174c6299d047   EXISTS
+Gate 8 (human approval of the factory run):                PASS
+is_published:                                              false
+Publicly live for students:                                NO
+```
+
+**The lesson remains unpublished.** Human approval of Run #001 is
+approval of the *factory process this run exercised* — manifest,
+QA, registration, real-viewer rendering — not a decision to release
+this specific already-approved-elsewhere lesson to students. Those are
+two different decisions, made for different reasons, and this record
+does not conflate them. The production Publish toggle was **not**
+flipped as part of closing this run, and should not be flipped merely
+to tidy up the factory lifecycle — only if public release of this
+lesson is separately, actually desired. If that is ever wanted, it is
+the same one-click action in `teacher/lesson-admin.html` described in
+§4/§10, unchanged.
 
 ---
 
@@ -340,14 +398,15 @@ three are refinements at the level the design already anticipated
 ## 10. Current factory lifecycle state
 
 ```
-qaState: QA_COMPLETE
+lifecycleState: HUMAN_APPROVED
 ```
 
 Row registration: DONE (`4e07e967-da17-4376-b094-174c6299d047`).
 Real-viewer availability: DONE, PASS. Gates 1–7: all complete. **Gate 8
-(human approval): OUTSTANDING — this document is the handoff.**
-`is_published: false` — **not PUBLISHED**, and this run does not set it.
-The distinction, stated explicitly per instruction #5:
+(human approval): PASS, 2026-08-09.** `is_published: false` — the
+lesson is **not publicly published**, and this run does not set it. The
+distinction, stated explicitly per instruction #5 (and reconfirmed on
+closure — see "Publication status" above):
 
 - **Row registration** ≠ publication. The row exists and is queryable
   by the admin session, but is invisible to any student/public read
@@ -356,12 +415,20 @@ The distinction, stated explicitly per instruction #5:
   open and fully exercise the real pipeline right now, precisely
   because RLS grants the admin `FOR ALL` access regardless of publish
   state — this is what let Gate 7 run at all without publishing first.
-- **Final human approval (Gate 8)** ≠ publication either — it's the
-  decision that should precede it. That decision is what this document
-  is handing to the user now.
-- **Production publication** is a single, separate, still-untaken
+- **Final human approval (Gate 8)** ≠ publication either — it is a
+  judgement about the factory process, now PASS, and deliberately does
+  not itself trigger public release.
+- **Production publication** remains a single, separate, still-untaken
   action: switching the existing "Published" toggle on for this row in
-  `teacher/lesson-admin.html`, by a human, after reviewing this record.
+  `teacher/lesson-admin.html`, by a human, only if actually desired —
+  not performed by, or implied by, closing this run.
+
+See the lifecycle-model note in
+`docs/production/INSPIRE-MINIMUM-FACTORY-DESIGN.md`'s addendum for the
+small, evidence-driven correction this run's own outcome (Gate 8 PASS,
+still unpublished — a real case the original three-state model had no
+room for) produced: the model is now four states, `DRAFT -> QA_COMPLETE
+-> HUMAN_APPROVED -> PUBLICLY_PUBLISHED`, not three.
 
 ## 11. Rollback
 
@@ -409,6 +476,35 @@ console/network cleanliness, duplicate-id/overflow checks) passed, with
 nothing needing to be marked NOT TESTABLE.
 
 **What remains genuinely unproven**: nothing about the *mechanics* of
-this one lesson. What remains is Gate 8 itself — the user's own
-judgement on whether this run's evidence is sufficient to flip the
-Publish toggle — which by design only a human can close.
+this one lesson — Gate 8 has now passed (2026-08-09). What remains
+open is only whether *repeatability* holds across a materially
+different lesson, which is a new question, not a gap in this run — see
+"Recommended next run" below.
+
+---
+
+## Recommended next run (NOT AUTHORISED, NOT STARTED)
+
+Named here purely for continuity, exactly as
+`docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md` and
+`docs/benchmark/BENCHMARK-CURRENT-STATE.md` have both already done for
+their own "what's next" candidates — so a future session doesn't have
+to rediscover the reasoning, not as authorisation to act on it.
+
+**Candidate: Pilot #4 — Relative Formula Mass & Moles (Chemistry)**.
+Materially different from Run #001 on every axis that matters for a
+*repeatability* test specifically (not a content-quality test): a
+different subject and curriculum-mapping block entirely
+(`assets/js/spec-map.js`'s `Chemistry` key, not `Physics`); the
+canonical Mass–Mole Relationship Strip representation family (plain
+hand-authored SVG, not `diagram-primitives.js`); one integrated Mode C
+Premium Final Figure (`CHEM-QUANT-PFF-001.webp`) — meaning
+`tests/lesson-raster-asset-budget.test.js` would finally exercise its
+real assertion path instead of passing vacuously (0 assets) as it did
+for Run #001; and chemical notation (subscripts, formulae) genuinely
+different in shape from anything Run #001's committed QA suite was
+proven against live.
+
+**Full assessment, including why this is preferred over Pilot #3, is
+in the accompanying chat response — not duplicated here to avoid this
+closed run record drifting out of sync with a live discussion.**

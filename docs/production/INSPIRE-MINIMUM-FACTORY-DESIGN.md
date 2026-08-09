@@ -1,17 +1,22 @@
 # Inspire Minimum Factory Design (v0)
 
-**STATUS: DESIGN PROPOSAL, WITH ONE AUTHORISED SLICE RUN.** The
+**STATUS: DESIGN PROPOSAL, WITH ONE CANONICAL RUN CLOSED.** The
 architecture below was not built as a system — no agents, no admin UI,
 no schema change, no workflow engine, no queue, no API integration, no
 MCP. What *has* happened, under explicit, narrowly-scoped authorisation:
 Run #001 (`docs/production/factory-runs/FACTORY-V0-RUN-001.md`) proved
 the manifest, the committed QA suite, and the existing publication path
 — including the real `student/lesson-viewer.html` pipeline — against one
-already-approved pilot, with zero academic content regenerated. No
-second run, no new lesson content, and no expansion of Factory v0
-followed from it. Every claim about the current repository below was
-checked directly against the live files, not assumed — see the "What
-was inspected" note at the end of each section that needed it.
+already-approved pilot, with zero academic content regenerated, and has
+now passed Gate 8 human approval (2026-08-09): **PASS, FACTORY PROOF
+STATUS: CANONICAL.** The lesson it registered remains deliberately
+unpublished — approving the factory process and publicly releasing a
+lesson are kept as distinct decisions (§12's now-corrected four-state
+lifecycle model). No second run, no new lesson content, and no
+expansion of Factory v0 has been authorised beyond Run #001. Every
+claim about the current repository below was checked directly against
+the live files, not assumed — see the "What was inspected" note at the
+end of each section that needed it.
 
 Grounded in: `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`
 v1.4.1, `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`
@@ -693,6 +698,15 @@ production:
 
 ## 12. Provenance / State
 
+> **Corrected by Run #001's own evidence — see the "Run #001 closure —
+> lifecycle model correction" note in the addendum at the end of this
+> document.** The three-state model below is preserved as originally
+> reasoned (its logic was sound given the evidence available at the
+> time); Run #001 produced the first real case this section's own
+> stated criterion for a fourth state names ("once a real lesson
+> actually needs to sit in one of those gaps for a meaningful
+> duration") — approved, deliberately not published.
+
 **Three states, tracked as one field in the manifest (§2)'s `qaState`,
 not a five-or-more-state lifecycle**:
 
@@ -1135,13 +1149,54 @@ small, evidence-only refinements, none requiring a re-architecture:
    Full evidence: `docs/production/factory-runs/FACTORY-V0-RUN-001.md`
    §4–§6.
 
+### Run #001 closure — lifecycle model correction
+
+**Run #001 is now CLOSED: PASS. Gate 8 human approval: PASS,
+2026-08-09. Factory proof status: CANONICAL.** Full closure record:
+`docs/production/factory-runs/FACTORY-V0-RUN-001.md`.
+
+One small, evidence-driven correction to §12's three-state model,
+exactly matching the criterion §12 itself already named for adding a
+fourth state ("once a real lesson actually needs to sit in one of
+those gaps for a meaningful duration — not speculatively now"): Run
+#001 produced precisely that case. Gate 8 passed; the lesson remains
+deliberately, intentionally unpublished — approval of the *factory
+process* and public release of *this specific lesson* are genuinely
+different decisions, made at different times, and collapsing them into
+one `PUBLISHED` state can no longer represent reality accurately.
+
+**§12's model is now four states**, the minimal correction that fits
+the real case observed, not a general-purpose workflow engine:
+
+```
+DRAFT              — manifest exists; content/representations/
+                      assessment being authored or under Gates 1–6
+QA_COMPLETE        — Gates 1–7 have all run and passed; ready for
+                      Gate 8
+HUMAN_APPROVED      — Gate 8 passed: the factory run itself is
+                      canonical. Does NOT imply is_published:true.
+PUBLICLY_PUBLISHED  — is_published:true; live for students
+```
+
+The manifest field stays named `qaState` (renaming it would ripple
+into the committed `tests/lesson-manifest.test.js` mandatory-field
+check for no evidence-based reason — the smallest correction is a
+documentation clarification of what its value range now covers, not a
+schema change). No new field, no branching, no ledger — the same
+single, linear, four-value field replacing the old three-value one.
+This is not the start of a bureaucratic status system; it is one state
+added because one real run needed it, exactly as §12's own original
+reasoning said should happen.
+
 **What this run does not change**: every other section of this design —
 the flow, the manifest shape, the four-mode router placement, the
 non-goals list, the publication mechanism itself — held exactly as
-designed. Run #001 is now complete through Gate 7, with strong positive
-evidence (not just an absence of failure) that the real `blob:`-iframe
-viewer pipeline renders an Inspire Learning Experience lesson correctly
-end to end — the one thing this whole design exists to make repeatable.
+designed. Run #001 is now fully closed, with strong positive evidence
+(not just an absence of failure) that the real `blob:`-iframe viewer
+pipeline renders an Inspire Learning Experience lesson correctly end to
+end, and that human approval of a factory run and public publication of
+a lesson are two decisions the system can now represent as genuinely
+separate — the one thing this whole design exists to make repeatable.
 
 ---
 

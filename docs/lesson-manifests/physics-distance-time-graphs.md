@@ -22,7 +22,7 @@ tier: Both
 specSlugs:
   - aqa-ph-fh-forces-motion
   - edx-ph-fh-motion-forces
-qaState: QA_COMPLETE
+qaState: HUMAN_APPROVED
 sourceCommit: 232b80a
 sourcePilotDoc: docs/pilots/distance-time-graphs-quality-audit.md
 lessonsRowId: 4e07e967-da17-4376-b094-174c6299d047
@@ -110,10 +110,13 @@ REPRESENTATION NEEDS above.
 ## QA STATE
 
 See `docs/production/factory-runs/FACTORY-V0-RUN-001.md` for the full,
-dated QA record. Summary, updated in place as this slice progresses:
+dated, now-CLOSED QA record. Final summary:
 
 ```
-qaState: QA_COMPLETE
+qaState: HUMAN_APPROVED   (field name kept for continuity with the
+  original manifest contract; its value range now spans the full
+  approval lifecycle, not only the QA phase -- see the lifecycle-model
+  note in INSPIRE-MINIMUM-FACTORY-DESIGN.md's addendum)
 
 Committed automated QA (Gates 1-6's automatable slice, tests/lesson-*.test.js):
   PASS — 0 failures, run against all four frozen pilots as fixtures,
@@ -132,37 +135,37 @@ Gate 7 (live rendered QA):
     failed network requests -> 0 duplicate ids -> 0 horizontal
     overflow). Full evidence in the run record.
 
-Gate 8 (human approval): OUTSTANDING — this run record and manifest
-  are the handoff for that review. Not yet reviewed by the user.
+Gate 8 (human approval): PASS, 2026-08-09. Factory v0 Run #001 status:
+  PASS. FACTORY PROOF STATUS: CANONICAL.
 
-qaState is QA_COMPLETE, not PUBLISHED: Gates 1-7 have all now passed,
-which is exactly what INSPIRE-MINIMUM-FACTORY-DESIGN.md's three-state
-model (section 12) defines QA_COMPLETE to mean. PUBLISHED requires
-Gate 8 (human approval) and the existing admin Publish toggle being
-switched on -- neither has happened, and this run does not do either
-automatically.
+qaState is HUMAN_APPROVED, not PUBLICLY_PUBLISHED: Gate 8 approves the
+factory process this run exercised, not public release of this
+specific lesson -- those are two different decisions. is_published
+remains false; see APPROVAL / PUBLICATION STATE below.
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
 ```
-lessons row:   4e07e967-da17-4376-b094-174c6299d047
-content_url:   https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/
-               object/public/lesson-content/physics/forces--motion/
-               1786278054723-forces-and-motion-distance-time-graphs.html
-               (see run record for why this differs from the
-               teaching-lessons/ static URL originally assumed)
-is_published:  false
-real viewer:   https://staging.inspireacademic.org/student/lesson-viewer.html?id=4e07e967-da17-4376-b094-174c6299d047
-               CONFIRMED WORKING — full live QA PASS, see run record
+lessons row:      4e07e967-da17-4376-b094-174c6299d047
+content_url:      https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/
+                   object/public/lesson-content/physics/forces--motion/
+                   1786278054723-forces-and-motion-distance-time-graphs.html
+Gate 8 (human approval of the factory run):   PASS, 2026-08-09
+is_published:                                 false
+Publicly live for students:                   NO
+real viewer:       https://staging.inspireacademic.org/student/lesson-viewer.html?id=4e07e967-da17-4376-b094-174c6299d047
+                    CONFIRMED WORKING — full live QA PASS
 ```
 
-**This lesson has not been marked PUBLISHED and must not be, by this
-manifest or by any automated process.** Registration and real-viewer
-QA are both now complete (Gates 1–7). Publication requires Gate 8
-(human review of this run's evidence) and then the existing
-admin-gated `teacher/lesson-admin.html` Publish toggle, switched on by
-a human — not performed by this run.
+**Human approval of Run #001 is not a decision to publish this lesson
+to students — those are kept deliberately distinct.** Gate 8 approves
+the factory *process* (manifest, QA, registration, real-viewer
+rendering) as canonical. The production Publish toggle in
+`teacher/lesson-admin.html` remains off and is not flipped by this
+manifest, this run, or any automated process — only by a human, only
+if public release of this specific lesson is separately, actually
+desired.
 
 ## PROVENANCE
 
