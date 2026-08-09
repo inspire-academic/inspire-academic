@@ -1083,6 +1083,47 @@ Only questions the repo/evidence genuinely does not already answer.
 
 ---
 
+## Addendum — Run #001 evidence
+
+**Factory v0 slice #1 has now run** (Pilot #2, Distance–Time Graphs) —
+full record: `docs/production/factory-runs/FACTORY-V0-RUN-001.md`. Three
+small, evidence-only refinements, none requiring a re-architecture:
+
+1. **§21 Decision 2 is sharper than originally stated.** "Prefer manual
+   for now" undersold it: for an AI operator specifically, the `lessons`
+   RLS policy (§0.3) makes the manual, human-authenticated path the
+   *only* currently available path for both the row insert and viewing
+   an unpublished row through the real pipeline — not a preference among
+   options, a hard boundary. This is the same approval property
+   Principle 4/§0.3 already valued, now directly encountered rather than
+   only reasoned about.
+2. **§7's assessment-production section should note explicitly**: the
+   blueprint §3 object model's literal mark-point-sum-validation check
+   does not apply, as written, to how exam-practice items are actually
+   authored in the four existing pilots — they're static HTML text
+   (`Q{n} · {command word} · {n} marks`), not a structured
+   `mark_scheme` array. §10's committed-test recommendation is narrowed
+   accordingly: sequential Q-numbering + positive mark-count sanity is
+   what's actually automatable today against this authoring shape, not
+   a full mark-scheme sum.
+3. **§9/§16's "use the existing lesson HTML shell as reference" needs
+   one small qualifier**: `teaching-lessons/` also contains non-ILE
+   legacy/draft files (an early template, two older-format lesson
+   files) that must be excluded from any generalised lesson-QA sweep —
+   done via a structural marker (`class="ile-content"`, present in all
+   four real pilots only), not a hardcoded file list, preserving the
+   "picks up new lessons automatically" property this design already
+   valued elsewhere.
+
+**What this run does not change**: every other section of this design —
+the flow, the manifest shape, the four-mode router placement, the
+non-goals list, the publication mechanism itself — held exactly as
+designed. The one thing the run did not complete (real-pipeline live
+QA, §1 step 10 / §14) failed to complete for a credential reason outside
+this design's scope to solve, not a design defect.
+
+---
+
 ## What this document deliberately does not do
 
 - Does not write a single line of factory code, test file, manifest,
