@@ -1,15 +1,20 @@
-# Inspire Visual Asset Pipeline — Proposal v0.2
+# Inspire Visual Asset Pipeline — Proposal v0.3
 
-**Status: DESIGN PROPOSAL, now evidence-revised after POC #1. Nothing
-beyond documentation and the one already-authorised POC lesson has been
-implemented.** No factory, no API automation, no MCP, no new scripts.
-This document originally (v0.1) answered the 25 questions the initial
-design brief asked, grounded in the actual repository, before any real
-visual had been produced. **v0.2 adds a real-evidence update from
-running POC #1 (`PHY-FOR-HYB-001`) end to end** — see the "v0.2 UPDATE"
-section near the end. **The original v0.1 sections below are preserved
-unedited except for small, explicitly-marked pointers** to where v0.2
-supersedes them; nothing has been deleted or silently rewritten.
+**Status: MANUAL POC PHASE CLOSED — SUFFICIENTLY PROVEN.** Both
+authorised manual proofs of concept (Mode D `PHY-FOR-HYB-001` and Mode C
+`CHEM-QUANT-PFF-001`) have run end to end, passed full QA, and been
+formally approved by human review. **This document originally (v0.1)
+answered the 25 questions the initial design brief asked, grounded in
+the actual repository, before any real visual had been produced. v0.2
+added a real-evidence update from running POC #1 end to end and
+introduced the four-mode router. v0.3 adds the closing evidence from
+POC #2 and formally closes the manual POC phase** — see the "v0.3
+UPDATE" section at the end. **The original v0.1 and v0.2 sections below
+are preserved unedited except for small, explicitly-marked pointers**
+to where later updates supersede them; nothing has been deleted or
+silently rewritten. No factory, no API automation, no MCP, no new
+scripts, and no further visual POC follow from this update unless a
+genuinely new representation uncertainty arises.
 
 ---
 
@@ -925,6 +930,12 @@ accessible description Claude will use once the asset is approved.
 
 ### sharp dependency recommendation
 
+> **Reconfirmed by POC #2 — see the "v0.3 UPDATE" section at the end.**
+> The recommendation below (v0.2, made after one POC) stands unchanged;
+> a second real asset going through the identical resize/convert/
+> compress path is the evidence that closes this question rather than
+> reopening it.
+
 **Keep it.** POC #1 needed real image-format conversion (WebP encoding)
 and this environment had no encoder available at all — no `cwebp`, no
 ImageMagick, no existing tooling. `sharp` filled that gap once, cleanly
@@ -1059,7 +1070,12 @@ actually run.
 5. **API-key/cost exposure**, deferred entirely to V2, named not
    solved.
 
-**What we recommend doing NEXT**: run the manual POC (§25, 4 assets),
+> **Superseded by outcome — see the "v0.3 UPDATE" section at the end of
+> this document for the closing recommendation.** This original
+> "what's next" answer is preserved below exactly as it read when only
+> v0.1's analysis existed, before either POC had actually run.
+
+**What we recommend doing NEXT** *(as of v0.1, before either POC ran)*: run the manual POC (§25, 4 assets),
 starting with #1 (the Physics hybrid van scenario) specifically because
 it has the lowest risk and highest existing evidence behind it — real
 lesson, real approved deterministic overlay, nothing new except the
@@ -1067,3 +1083,246 @@ illustrative base and its integration. Do not build V2, do not write
 any script, do not touch `.gitignore` or add an env var, until the
 manual POC has actually run and the request-contract fields in §7 have
 proven themselves stable across at least those 4 real instances.
+
+---
+
+## v0.3 UPDATE — POC #2 EVIDENCE: MODE C PROVEN, MANUAL POC PHASE CLOSED
+
+### CHEM-QUANT-PFF-001 — final approval record
+
+```
+CHEM-QUANT-PFF-001
+MODE C — PREMIUM FINAL FIGURE
+FINAL VERDICT: PASS
+HUMAN VISUAL REVIEW: PASS
+HUMAN PEDAGOGICAL REVIEW: PASS
+HUMAN SCIENTIFIC REVIEW: PASS
+
+source generation: ChatGPT/OpenAI
+authoring mode: Premium Final Figure
+Claude did not redraw or reconstruct any scientific content inside the visual
+Claude performed format conversion, optimisation, integration,
+  accessibility framing and QA only
+
+canonical asset: assets/images/chemistry/diagrams/quantitative/CHEM-QUANT-PFF-001.webp
+dimensions: 960x640
+final size: 66.0KB
+performance budget: PASS
+dark theme: PASS
+light theme: PASS
+network: PASS
+console: PASS
+overflow: PASS
+accessibility layer: PASS
+first-pass integration: PASS
+corrective visual pass after integration: NONE REQUIRED
+integration commit: b0a9803
+```
+
+The figure is approved for canonical use in the lesson
+(`teaching-lessons/chemistry/quantitative-chemistry-relative-formula-mass-moles.html`,
+Core Lesson, Stage 2).
+
+### The Mode C responsibility boundary, proven in a real lesson
+
+This is no longer a proposed boundary — it has now run once, completely,
+against a real approved lesson:
+
+- **Claude** → identified the pedagogical need (Core Lesson Stage 2 had
+  no supporting visual for an inherently abstract concept — a mole as
+  an enormous, unweighable-by-count quantity) → specified the full
+  figure (`docs/visual-requests/CHEM-QUANT-PFF-001.md`: exact facts,
+  exact labels, exact values, notation requirements, prohibited errors,
+  composition, hierarchy, style, aspect ratio, target path,
+  accessibility draft, performance target) → created the request
+  artifact.
+- **ChatGPT/OpenAI** → authored the complete final educational figure —
+  composition, scientific labels, notation, and explanatory hierarchy
+  all in one generation, from the request spec alone.
+- **Human** → reviewed and approved the complete visual, scientifically,
+  pedagogically, and visually, before any integration work began.
+- **Claude** → converted/optimised the asset (PNG 1536×1024/2.77MB →
+  WebP 960×640/66.0KB), integrated it without redrawing any pixel of
+  the approved image, added accessibility semantics (`<figure>`,
+  `alt`, `figcaption` restating the scientific facts as real page
+  text), ran live rendered QA (dark theme, light theme, overflow,
+  console, network, responsive CSS), and passed on first integration.
+
+### Editorial note — internal title hierarchy (non-blocking)
+
+**CHEM-QUANT-PFF-001 is APPROVED AS-IS. This is not a defect and the
+asset must not be modified because of it.**
+
+The approved figure includes its own internal title, "The Mole: A
+Counting Unit," baked into the composition. The lesson's own Core
+Lesson section already carries a visible heading immediately above it
+("Stage 2 — The mole: a counting unit"), so the two titles sit directly
+adjacent and say almost the same thing. This did not block approval —
+it is not a scientific, notational, or accessibility problem — but it
+is worth naming as editorial guidance for future Premium Final Figure
+requests:
+
+> When the surrounding lesson already provides a strong visible section
+> heading, an internal title inside a Premium Final Figure should
+> normally be restrained enough that it supports rather than competes
+> with the lesson hierarchy.
+
+Future Mode C requests should simply consider, at spec-writing time:
+- whether an internal title is needed inside the figure at all;
+- whether a smaller/subordinate internal title is preferable to a
+  full heading-weight one;
+- or whether the figure can rely entirely on the surrounding lesson
+  heading and carry no internal title.
+
+This belongs in the request-writing discipline (§7's contract, when a
+future Mode C request is drafted), not in a rule that rejects otherwise-
+good figures over it.
+
+### What Mode C proved, concretely
+
+Compared against the Mode D experience (POC #1), Mode C substantially
+reduced integration friction. For CHEM-QUANT-PFF-001, none of the
+following were needed:
+
+- image/overlay geometry reconstruction;
+- anchor recalibration;
+- force/label collision repair;
+- orientation correction;
+- generated-background versus deterministic-layer mismatch;
+- a repeated visual reconstruction loop.
+
+The finished educational composition arrived as one approved asset.
+Claude then did what Claude is strongest at: integration, optimisation,
+accessibility, responsive behaviour, provenance, and QA — not
+reconstruction of scientific content another system had already
+correctly authored. This is real evidence supporting the four-mode
+router's core claim (§ "New principle," v0.2): the right question for
+each figure is never "generated or deterministic" in the abstract, but
+"which system should author *this specific* representation."
+
+### Do not overgeneralise this result
+
+The four-mode router is **retained exactly as defined in v0.2**, not
+replaced or narrowed to "Mode C for everything":
+
+| Mode | Owns the complete rendered representation | Right for |
+|---|---|---|
+| **A — Deterministic SVG** | Claude / code | Exact vectors, circuits, ray geometry, scale-sensitive diagrams, exact scientific schematics — anything where geometry itself carries assessable meaning. |
+| **B — Deterministic Graph** | Claude / graph engine | Mathematically generated plots. |
+| **C — Premium Final Figure** | ChatGPT/OpenAI, entirely | Explanatory/contextual scientific figures where composition and annotation genuinely work best as one finished, art-directed visual. |
+| **D — True Hybrid** | Split — generated base + a deterministic layer | Only where a premium contextual base is valuable **and** one specific layer genuinely requires deterministic, machine-verifiable geometry the generating model can't be trusted with. |
+
+The routing principle stays: **use the best authoring mode for the
+scientific job**, decided per figure, not "ChatGPT makes all diagrams"
+and not "deterministic is always safer." POC #1 is the evidence against
+the second assumption; nothing in POC #2 licenses the first one — Mode
+A/B remain untouched and are still the only correct choice for anything
+with assessable geometric or numerical meaning (the four canonical
+diagram families from the lesson pilots are proof of that, and stay
+exactly as they are).
+
+### The two manual POCs, side by side
+
+| | POC #1 — `PHY-FOR-HYB-001` | POC #2 — `CHEM-QUANT-PFF-001` |
+|---|---|---|
+| Mode | D — True Hybrid | C — Premium Final Figure |
+| Handoff | PASS | PASS |
+| Human scientific/visual approval | PASS (after 3 corrective passes) | PASS (first generation approved) |
+| Asset conversion | PASS | PASS |
+| Integration | PASS, but required 3 corrective passes (geometry recalibration, semantic re-anchoring + orientation flip, contrast-halo fix) | PASS on first integration attempt, no corrective pass required |
+| Fallback | Invoked once mid-process, then re-integrated once QA passed cleanly | Not invoked — never needed |
+| Live QA | PASS | PASS |
+| Architecture lesson | True Hybrid should not be the default for figures that are primarily explanatory — reconstructing another system's implicit composition (orientation, anchors, contrast) after the fact is inherently friction-prone. | Premium Final Figure works cleanly for explanatory/contextual figures where the whole composition — labels included — is better authored as one piece than assembled from layers. |
+
+**The architectural conclusion, stated precisely**: the repository/file
+contract (a Markdown request → a human-reviewed generated asset →
+Claude integration) works identically well for both modes. What
+determines the outcome is not the handoff mechanism — it's **who
+authors the scientific visual**, and that decision has to be made
+*before* generation, based on the representation type, not discovered
+through corrective passes afterward. That is precisely what the
+four-mode router now exists to do.
+
+### sharp — reconfirmed
+
+Both POCs required a real generated raster asset to be resized,
+converted to WebP, and compressed to budget before it could be
+integrated. That is now two-for-two, not one-off. `sharp` has earned
+its place as a legitimate, ordinary devDependency for this platform —
+this conclusion is unchanged from v0.2, now with a second real instance
+behind it rather than one. **Still not** building a script or CLI
+around it — that remains V2 territory, gated on the manual workflow
+running enough times to prove the contract stable, which is a separate
+question from whether the tool itself belongs in `package.json`.
+
+### Manual POC phase — status
+
+```
+VISUAL-ASSET PIPELINE MANUAL POC PHASE: SUFFICIENTLY PROVEN — CLOSED
+```
+
+Evidence now in hand, from real assets in real approved lessons:
+
+- deterministic visuals work (four canonical diagram families, Pilots
+  #1–#4);
+- graphs work (Pilot #2's canonical graph family);
+- true hybrid handoff works, end to end, including recovery from real
+  defects (POC #1);
+- Premium Final Figure handoff works, end to end, cleanly, first pass
+  (POC #2);
+- asset optimisation works (`sharp`, proven twice);
+- repository handoff works (both POCs used the identical request-file →
+  generated-asset → integration contract);
+- accessibility wrapping works (alt text + figcaption + real page text,
+  both POCs);
+- performance-budget enforcement works (both assets landed inside
+  budget, honestly measured, not assumed);
+- fallback/QA discipline works (POC #1 proved the revert path; POC #2
+  proved QA can also pass cleanly without ever needing it).
+
+**Do not recommend additional visual POCs merely for confidence-
+building.** Any future visual POC should test a genuinely new
+representation uncertainty this router doesn't already cover — not
+repeat evidence this phase has already produced.
+
+### How this fits the eventual production factory
+
+The visual-production work has produced one concrete, reusable piece
+that belongs inside the eventual factory design, stated as a
+responsibility, not an implementation:
+
+```
+REPRESENTATION SPECIFICATION
+  -> REPRESENTATION ROUTER
+       -> deterministic-svg   (Mode A)
+       -> deterministic-graph (Mode B)
+       -> premium-final-figure (Mode C)
+       -> hybrid               (Mode D)
+  -> LESSON BUILD
+  -> QA
+  -> HUMAN APPROVAL
+```
+
+This is a **responsibility**, not a claim about agent boundaries —
+nothing here asserts these must be five separate agents, five separate
+scripts, or five separate pipeline stages. Whether "Representation
+Router" ends up being a decision a single Lesson Author role makes
+inline, a distinct step in a sequential pipeline, or something else
+entirely is exactly the kind of question the eventual Minimum Factory
+Design discussion should answer — not this document, and not by
+default inheritance from how the manual POCs happened to be run by
+hand.
+
+### What this update does not change
+
+- Everything in v0.2's "What this update does not change" list still
+  applies unchanged: the four canonical diagram families, REUSE BEFORE
+  GENERATE, the lifecycle model, asset paths, the MCP verdict (still
+  NOT YET), security posture, and the factory relationship's *nature*
+  (one decision inside an existing role, not a new architecture) are
+  all untouched.
+- **No factory code, no API automation, no MCP, and no new visual asset
+  follow from this update.** This update closes the manual POC phase
+  and updates durable documentation only.
+
+---

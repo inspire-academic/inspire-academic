@@ -5,11 +5,26 @@ Read this file in full before doing anything else in a new session. It is
 written to stand on its own — no prior chat history or memory should be
 required to resume work accurately from here.
 
-Last updated: 2026-08-08 (third session — Pilot #4 human visual review PASS; all four pilots now closed).
+Last updated: 2026-08-09 (fourth session — visual-asset pipeline manual
+POC phase run to completion and closed: Mode D POC (`PHY-FOR-HYB-001`)
+and Mode C POC (`CHEM-QUANT-PFF-001`) both approved and canonical).
 
 ---
 
-## STATUS: ALL FOUR PILOTS APPROVED. THE REPEATED PILOT PHASE IS COMPLETE. NO FACTORY WORK IS AUTHORISED. NEXT SESSION IS A DESIGN DISCUSSION, NOT IMPLEMENTATION.
+## STATUS: FOUR LESSON PILOTS APPROVED. FOUR-MODE VISUAL ROUTER DEFINED AND PROVEN. VISUAL-ASSET MANUAL POC PHASE CLOSED. NO FACTORY WORK IS AUTHORISED. NEXT SESSION IS A MINIMUM-FACTORY-DESIGN DISCUSSION, NOT IMPLEMENTATION.
+
+```
+FOUR LESSON PILOTS:            APPROVED / FROZEN
+VISUAL ROUTER:                 FOUR MODES DEFINED (A/B/C/D)
+MODE D MANUAL POC:              PROVEN (PHY-FOR-HYB-001)
+MODE C MANUAL POC:              PROVEN (CHEM-QUANT-PFF-001)
+VISUAL-ASSET MANUAL POC PHASE:  CLOSED / SUFFICIENTLY PROVEN
+FACTORY READINESS:              B — PRODUCTION BLUEPRINT GENERALISES
+                                 WITH SUBJECT-SPECIFIC EXTENSIONS
+NEXT DECISION:                  minimum factory design, unless a
+                                 specific unresolved architecture issue
+                                 justifies otherwise
+```
 
 **The lesson benchmark and the diagram-system benchmark remain formally
 FROZEN as the canonical v1 reference.** All four pilots are now frozen
@@ -52,14 +67,34 @@ just the next number. **The factory has not been designed in detail or
 built, and no factory work follows from this closure without further
 explicit instruction.**
 
-**A separate, not-yet-designed opportunity has been flagged by the
-user for the next clean session**: a proposed Inspire visual-asset
-production pipeline combining Claude Code, deterministic scientific/
-SVG representations, ChatGPT/OpenAI premium visual generation, and
-human approval. **This has not been designed, approved, speculated
-into this blueprint, or implemented in any way.** See "NEXT SESSION"
-below — the next session's purpose is to receive and discuss that
-design brief, not to build anything from it.
+**The visual-asset production pipeline opportunity flagged in the
+previous session has now been designed, manually proven, and closed.**
+`docs/production/INSPIRE-VISUAL-ASSET-PIPELINE-PROPOSAL.md` (now v0.3)
+defines a four-mode representation router — A: Deterministic SVG, B:
+Deterministic Graph, C: Premium Final Figure (ChatGPT/OpenAI-authored),
+D: True Hybrid (split generated base + deterministic overlay). Two
+manual proofs of concept have run end to end and reached canonical
+status:
+
+- **`PHY-FOR-HYB-001`** (Mode D, Physics — the delivery-van force
+  diagram in the Resultant Forces & Free-Body Diagrams lesson): PASS,
+  but required three corrective integration passes (geometry
+  recalibration, orientation/anchor correction, contrast fix).
+- **`CHEM-QUANT-PFF-001`** (Mode C, Chemistry — the mole-concept figure
+  in the Relative Formula Mass & Moles lesson, Core Lesson Stage 2):
+  PASS on first integration, no corrective pass required.
+
+The architecture conclusion both POCs together establish: the
+repository/file handoff contract works identically for both modes; what
+matters is deciding **who authors the scientific visual** before
+generation, based on the representation type — that's what the router
+now does. **The manual POC phase is closed as sufficiently proven.**
+Do not run another visual POC unless a genuinely new representation
+uncertainty (not already covered by modes A/B/C/D) needs testing. Full
+evidence, the editorial note on internal figure titles, and the `sharp`
+dependency confirmation are all in the pipeline proposal's "v0.3
+UPDATE" section; `CHEM-QUANT-PFF-001.md` and `PHY-FOR-HYB-001.md` each
+carry their own final-approval record.
 
 | Freeze / pilot point | Commit | Verdict |
 |---|---|---|
@@ -78,7 +113,14 @@ design brief, not to build anything from it.
 | Pilot #4 Gate 7 fixes | `aa21892` | 2 P1 defects found live, fixed at the systemic layer, re-verified after a cache-bypassed reload — see commit message and quality audit for full detail |
 | Pilot #4 Gate 7 documentation + blueprint v1.4 | `c02a44b` | `docs/pilots/chemistry-pilot-quality-audit.md` LIVE RENDERED QA section, `docs/pilots/chemistry-pilot-blueprint-review.md` Live QA update, `docs/pilots/chemistry-pilot-representation-family-spec.md` update, `docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md` v1.4 (failure mode #17). Verdict: **PILOT #4 TECHNICALLY APPROVED — HUMAN VISUAL REVIEW PENDING** |
 | Cross-subject factory-readiness verdict (revised) | `a0af3a8` | `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`'s Cross-Subject Pilot #4 Update — LIVE QA COMPLETE — **B. PRODUCTION BLUEPRINT GENERALISES WITH SUBJECT-SPECIFIC EXTENSIONS — FACTORY DESIGN MAY BEGIN WITH EXPLICIT SUBJECT MODULES** |
-| Pilot #4 — HUMAN VISUAL REVIEW: PASS | this session | `docs/pilots/chemistry-pilot-quality-audit.md` final section — **PILOT #4 APPROVED**. Mass–Mole Relationship Strip family: **CANONICAL v1 — INSPIRE QUANTITATIVE CHEMISTRY REPRESENTATION FAMILY**. All four pilots now closed; repeated pilot phase COMPLETE, no Pilot #5 recommended by default — see `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`'s PILOT PHASE COMPLETE section |
+| Pilot #4 — HUMAN VISUAL REVIEW: PASS | `5b550b3` (prior session) | `docs/pilots/chemistry-pilot-quality-audit.md` final section — **PILOT #4 APPROVED**. Mass–Mole Relationship Strip family: **CANONICAL v1 — INSPIRE QUANTITATIVE CHEMISTRY REPRESENTATION FAMILY**. All four pilots now closed; repeated pilot phase COMPLETE, no Pilot #5 recommended by default — see `docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`'s PILOT PHASE COMPLETE section |
+| Visual-asset pipeline proposal v0.1 | `c906dcc` | `docs/production/INSPIRE-VISUAL-ASSET-PIPELINE-PROPOSAL.md` — 25-question design analysis, no implementation |
+| POC #1 request authorised — `PHY-FOR-HYB-001` (Mode D) | prior session | `docs/visual-requests/PHY-FOR-HYB-001.md` |
+| POC #1 integrated + 3 corrective passes + HUMAN VISUAL REVIEW: PASS | `40a4410` → `9578e14` (revert) → `d6a7ece` → `22988da` → `6aa3467` → `04693c3` | `PHY-FOR-HYB-001` canonical — see the request file's postscript and the pipeline proposal's v0.2 update |
+| Visual-asset pipeline policy v0.2 — four-mode router | `752bf95` | `docs/production/INSPIRE-VISUAL-ASSET-PIPELINE-PROPOSAL.md` v0.2 — Mode C (Premium Final Figure) introduced from POC #1 evidence |
+| POC #2 request authorised — `CHEM-QUANT-PFF-001` (Mode C) | `4cc1297` | `docs/visual-requests/CHEM-QUANT-PFF-001.md` |
+| POC #2 integrated, first-pass PASS, no corrective pass needed | `b0a9803` | `CHEM-QUANT-PFF-001` — 960×640 WebP, 66.0KB, integrated into Chemistry Core Lesson Stage 2 |
+| POC #2 HUMAN REVIEW: PASS + visual-asset pipeline v0.3 — manual POC phase closed | this session | `docs/production/INSPIRE-VISUAL-ASSET-PIPELINE-PROPOSAL.md` v0.3, `docs/visual-requests/CHEM-QUANT-PFF-001.md` final approval section — **`CHEM-QUANT-PFF-001` CANONICAL**. Both manual POCs (Mode D, Mode C) now closed; **MANUAL POC PHASE: SUFFICIENTLY PROVEN — CLOSED** |
 
 **Frozen reference assets** (do not modify without a newly discovered
 defect, not preference-driven polish): the approved lesson architecture;
@@ -570,49 +612,120 @@ platform rewrite. That is explicitly the later phase, not this one.
 
 ## NEXT SESSION — START HERE
 
-**All four pilots are APPROVED. All four canonical representation
-families are CANONICAL v1. The repeated pilot phase is COMPLETE. No
-factory work is authorised. The next session concerns a proposed
-visual-asset production pipeline design discussion, not implementation
-of anything.** A new session picking this up should:
+**All four lesson pilots are APPROVED and FROZEN. The four-mode visual
+representation router is defined (v0.3) and proven by two manual POCs
+(Mode D and Mode C, both canonical). The manual visual-asset POC phase
+is CLOSED — sufficiently proven, not to be reopened for
+confidence-building. No factory work is authorised yet.** The
+accumulated evidence points to one clear next step — **a minimum
+factory design discussion** — not another pilot and not another visual
+POC. A new session picking this up should:
 
 1. **Read this file in full.**
-2. **Confirm all four pilots are frozen and approved** — check the
-   freeze table above and the four-pilot table in the STATUS section;
-   verify against `git log` that the commits cited actually exist on
-   `staging`.
+2. **Confirm the frozen/approved state** — check the freeze table above
+   (four lesson pilots, plus the visual-pipeline v0.1→v0.3 progression
+   and both POCs); verify against `git log` that the commits cited
+   actually exist on `staging`.
 3. **Read the current production blueprint
-   (`docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`, v1.4.1)
-   and factory-readiness document
-   (`docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`, including
-   its PILOT PHASE COMPLETE section)** — together these are the
-   practical, now four-times-proven standard, its honest limits, and
-   the reasoning behind verdict B (generalises with subject-specific
-   extensions).
+   (`docs/production/INSPIRE-LESSON-PRODUCTION-BLUEPRINT.md`, v1.4.1),
+   factory-readiness document
+   (`docs/production/FACTORY-READINESS-AFTER-THREE-PILOTS.md`, PILOT
+   PHASE COMPLETE section), and the visual-asset pipeline proposal
+   (`docs/production/INSPIRE-VISUAL-ASSET-PIPELINE-PROPOSAL.md`, v0.3
+   UPDATE section)** — together these are the practical, now
+   four-times-proven lesson standard, the reasoning behind verdict B,
+   and the proven representation router that should feed into factory
+   design as one input, not a separate system.
 4. **Do not begin another lesson pilot.** The repeated pilot phase is
    complete; a fifth pilot is not recommended by default and needs a
-   specific new uncertainty worth testing (candidates are named, not
-   authorised, in the factory-readiness document's PILOT PHASE COMPLETE
-   section) — do not start one without the user explicitly requesting
-   it.
-5. **Do not begin factory implementation yet.** Verdict B authorises
-   *thinking about* factory design with explicit subject modules, not
-   building it. No agents, no orchestration, no mass production, no new
-   CMS, no admin dashboard, without further explicit instruction.
-6. **The next conversation concerns a proposed Inspire visual-asset
-   production pipeline** combining Claude Code, deterministic scientific
-   representations, ChatGPT/OpenAI premium visual generation,
-   repository-based handoff, and human approval. **This has not been
-   designed, approved, or implemented in any way** — nothing about it
-   has been speculated into this blueprint, the factory-readiness
-   document, or any pilot doc. It exists only as a named intention in
-   this file.
-7. **Wait for the user to provide that design brief.** Do not propose
-   an architecture for it, do not install anything, do not write any
-   code toward it, and do not assume its shape from the name alone.
-8. **Treat it as a design/architecture discussion first — not an
-   implementation instruction** — even once the brief arrives, unless
-   the user explicitly asks for implementation at that point.
+   specific new uncertainty worth testing.
+5. **Do not begin another visual POC.** Both manual POCs (Mode D and
+   Mode C) passed; the phase is closed. A future visual POC needs a
+   genuinely new representation uncertainty the four-mode router doesn't
+   already cover — not repetition of proven evidence.
+6. **Do not begin factory implementation yet.** The recommended next
+   step is a **design discussion**, not a build. No agents, no
+   orchestration, no mass production, no new CMS, no admin dashboard,
+   no factory code, without the user explicitly choosing to proceed
+   after that discussion.
+7. **The recommended scope for the Minimum Factory Design discussion**
+   (grounded in the actual repo and the proven blueprint, not a generic
+   list — treat it as a starting point, not a closed checklist):
+   - **Lesson manifest / production contract** — today a lesson is a
+     hand-authored file in `teaching-lessons/{subject}/*.html`,
+     referenced by a `content_url` the `lessons`/`lesson_progress`
+     tables and `student/lesson-viewer.html` iframe-render around;
+     `teacher/lesson-admin.html` is the existing upload surface. Define
+     what a factory-produced lesson's contract looks like end to end,
+     and whether it extends this existing pipeline or replaces it (the
+     open question CLAUDE.md's own Science Lesson Factory section
+     already flags as unresolved).
+   - **Curriculum mapping** — `assets/js/spec-map.js` and
+     `core-topics.js` are the only curriculum-slug sources of truth;
+     `teacher/content-coverage.html` already tracks per-subject
+     spec-vs-live coverage. How does factory output register against
+     these without drifting out of sync, the way the wider Supabase
+     schema already has?
+   - **Subject-specific modules** — verdict B's own basis: what
+     genuinely varies per subject (e.g. Chemistry's Mass–Mole strip not
+     reusing `diagram-primitives.js` at all) versus what's shared
+     engine, stated as an explicit extension point rather than
+     discovered ad hoc per pilot.
+   - **Authoring responsibilities** — core teaching text, the
+     representation router (now proven), and assessment generation
+     (`netlify/functions/generate-question.js`,
+     `netlify/functions/mark-exam-response.js`,
+     `teacher/quiz-generator.html` already exist and are live) are
+     currently three separately-evolved systems. Does factory design
+     unify how they're invoked, or formalise them as separate stages
+     with a shared contract?
+   - **Representation routing** — the four-mode router
+     (deterministic-svg / deterministic-graph / premium-final-figure /
+     hybrid) is proven; factory design should decide where this
+     decision sits (a Lesson Author's inline judgement, a distinct
+     pipeline stage, something else) — a responsibility, not
+     necessarily a new agent.
+   - **Asset reuse** — REUSE BEFORE GENERATE and the approval-by-presence
+     lifecycle (file existing at its canonical path *is* its approval
+     signal) are proven manually; factory design should decide how this
+     scales past manual `ls`/`Glob` checks.
+   - **Accessibility** — the `<figure>`/`<figcaption>`/alt-text +
+     redundant-real-text pattern has now been proven across four
+     diagram families and two generated-asset modes; factory design
+     should codify this as a QA gate, not a per-pilot judgement call.
+   - **QA gates** — the 8-gate process (curriculum mapping → scientific
+     accuracy → pedagogical quality → assessment validity →
+     representation quality → accessibility → live rendered QA → human
+     approval) has been the standing discipline across all four pilots
+     and both visual POCs; factory design should state which of these
+     are safe to automate (blueprint §12 already has a partial list) and
+     which structurally cannot be.
+   - **Human approval** — Gate 8 has never once been skipped or
+     automated across four pilots and two POCs; factory design must
+     preserve this as a hard checkpoint, not something throughput
+     pressure quietly erodes.
+   - **Publication** — clarify whether factory output flows through the
+     existing `teacher/lesson-admin.html` upload surface or introduces a
+     new one, and what "canonical" means for a factory-produced lesson
+     the way file-presence-at-path already means it for a visual asset.
+   - **Provenance** — asset/lesson provenance (which mode, which model,
+     which pilot/POC, which commit) has been tracked as prose inside
+     pilot docs and request files so far; factory design should decide
+     whether this needs to become structured metadata.
+   - **Failure/retry behaviour** — today, failure recovery is ad hoc and
+     manual: a revert commit (POC #1's fallback), a rejected/regenerated
+     asset (Mode C's stated policy), a Gate 7 defect fixed and
+     re-verified live (Pilot #4). Factory design should state this as an
+     explicit, repeatable contract rather than session-by-session
+     improvisation.
+   - **What's safe to automate vs. what still requires human review** —
+     consolidate the partial answers already scattered across the
+     blueprint (§12), the pipeline proposal (§21–22), and this
+     document, into one authoritative list spanning lesson content,
+     representations, and assessment together.
+8. **Do not assume this scope list is complete or perfectly shaped** —
+   it is a grounded starting point drawn from what actually exists in
+   this repo, not a spec to execute item by item.
 
 ### Housekeeping, if useful before that conversation starts
 
