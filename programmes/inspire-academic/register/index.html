@@ -128,18 +128,20 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .card-row{position:relative;}
 
   /* mobile's overlaid topbar/intro give way to the desktop duplicates below.
-     Image area ≈15% of the width, form ≈85% — the photo is a small, heavily
-     faded, subordinate presence on the far right, not a co-equal panel. */
+     The photo reads as a soft spotlight floating in the right third of the
+     canvas — faded on every edge (left, right, top, bottom), not just a
+     panel with a left-fade — so there is no edge anywhere a viewer could
+     call a boundary. */
   .hero-zone .hero-content{display:none;}
   .hero-zone{
-    position:absolute;top:0;right:0;bottom:0;width:19%;
+    position:absolute;top:0;right:0;bottom:0;width:40%;
     z-index:0;pointer-events:none;
   }
-  .hero-img{object-position:62% 42%;filter:brightness(.8) saturate(.85);}
+  .hero-img{object-position:58% 45%;filter:saturate(.92);}
   .hero-overlay{
     background:
-      linear-gradient(to bottom, var(--bg-deep) 0%, transparent 22%, transparent 62%, var(--bg-deep) 96%),
-      linear-gradient(90deg, var(--bg-deep) 0%, var(--bg-deep) 10%, rgba(7,16,30,.96) 30%, rgba(7,16,30,.85) 50%, rgba(7,16,30,.68) 70%, rgba(7,16,30,.5) 100%);
+      radial-gradient(ellipse 62% 58% at 66% 54%, transparent 0%, transparent 38%, rgba(7,16,30,.35) 60%, rgba(7,16,30,.75) 80%, var(--bg-deep) 100%),
+      linear-gradient(90deg, var(--bg-deep) 0%, var(--bg-deep) 8%, rgba(7,16,30,.5) 22%, transparent 44%);
   }
 
   .d-intro{
