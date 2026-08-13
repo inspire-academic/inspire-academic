@@ -127,28 +127,30 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
   .card-row{position:relative;}
 
-  /* mobile's overlaid topbar/intro give way to the desktop duplicates below */
+  /* mobile's overlaid topbar/intro give way to the desktop duplicates below.
+     Image area ≈15% of the width, form ≈85% — the photo is a small, heavily
+     faded, subordinate presence on the far right, not a co-equal panel. */
   .hero-zone .hero-content{display:none;}
   .hero-zone{
-    position:absolute;top:0;right:0;bottom:0;width:66%;
+    position:absolute;top:0;right:0;bottom:0;width:19%;
     z-index:0;pointer-events:none;
   }
-  .hero-img{object-position:82% 32%;}
+  .hero-img{object-position:62% 42%;filter:brightness(.8) saturate(.85);}
   .hero-overlay{
     background:
-      linear-gradient(to bottom, var(--bg-deep) 0%, transparent 18%, transparent 84%, var(--bg-deep) 100%),
-      linear-gradient(90deg, var(--bg-deep) 0%, var(--bg-deep) 6%, rgba(7,16,30,.92) 22%, rgba(7,16,30,.68) 40%, rgba(7,16,30,.32) 58%, rgba(7,16,30,.08) 74%, transparent 90%);
+      linear-gradient(to bottom, var(--bg-deep) 0%, transparent 22%, transparent 62%, var(--bg-deep) 96%),
+      linear-gradient(90deg, var(--bg-deep) 0%, var(--bg-deep) 10%, rgba(7,16,30,.96) 30%, rgba(7,16,30,.85) 50%, rgba(7,16,30,.68) 70%, rgba(7,16,30,.5) 100%);
   }
 
   .d-intro{
-    position:relative;z-index:2;display:block;max-width:40rem;margin-bottom:2.6rem;
+    position:relative;z-index:2;display:block;max-width:46rem;margin-bottom:2.6rem;
   }
   .d-intro .eyebrow{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
   .d-intro h1{font-size:clamp(2.5rem,3.6vw,3.2rem);line-height:1.12;margin-bottom:.9rem;text-wrap:balance;}
-  .d-intro .sub{color:var(--text-muted);line-height:1.65;max-width:36rem;font-size:1.12rem;margin-bottom:0;}
+  .d-intro .sub{color:var(--text-muted);line-height:1.65;max-width:40rem;font-size:1.12rem;margin-bottom:0;}
 
   .form-main{
-    position:relative;z-index:2;width:auto;max-width:42rem;margin:0;padding:0;
+    position:relative;z-index:2;width:auto;max-width:46rem;margin:0;padding:0;
   }
   .form-main form{max-width:none;}
 
