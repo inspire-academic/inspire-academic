@@ -81,6 +81,13 @@ h1{font-family:var(--font-display);font-weight:700;font-size:clamp(1.7rem,6vw,2r
 .privacy-note{display:flex;gap:.5rem;font-size:.78rem;color:var(--text-soft);margin-top:1.1rem;line-height:1.6;}
 .privacy-note .lock{flex-shrink:0;color:var(--gold);}
 
+/* field-row: no-op below desktop so mobile/tablet field stacking is untouched */
+.field-row{display:contents;}
+
+/* desktop-only topbar + intro duplicates, and the card wrapper — inert until the desktop breakpoint */
+.topbar-desktop{display:none;}
+.d-intro{display:none;}
+
 #toast{position:fixed;bottom:1.5rem;left:50%;transform:translate(-50%,100px);background:var(--bg-card);
   border:1px solid var(--border);padding:.8rem 1.2rem;border-radius:var(--r);font-size:.88rem;
   opacity:0;transition:all .3s;z-index:9999;max-width:90vw;text-align:center;}
@@ -101,50 +108,106 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .topbar{margin-bottom:3.4rem;}
 }
 
-/* ---------- laptop/desktop: wide single column, hero widens instead of a rigid split ---------- */
+/* ---------- desktop (≥960px): contained card, form+image share one surface ----------
+   Mobile's hero-zone (with its topbar/intro overlaid on the photo) is untouched above —
+   at this breakpoint it is simply hidden and replaced by the desktop-only topbar/intro
+   duplicates below, which sit outside/inside the card per the approved desktop reference. */
 @media(min-width:960px){
-  .hero-content{padding:2rem 3rem 5.2rem;}
-  .form-main{padding:0 3rem 5rem;}
-  .topbar{margin-bottom:4rem;}
-  .intro{max-width:34rem;}
-  h1{font-size:clamp(2.1rem,3vw,2.6rem);}
-  .sub{font-size:1.05rem;}
-  .form-main form{max-width:36rem;}
-  .hero-img{object-position:80% 30%;}
+  .page{max-width:1240px;margin:0 auto;padding:2.2rem 2rem 3rem;}
+
+  .topbar-desktop{
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;
+  }
+  .topbar-desktop .brand-link{font-family:var(--font-display);font-weight:700;font-size:1.1rem;}
+  .topbar-desktop .brand-link .gold{color:var(--gold);}
+  .topbar-desktop .back-link{font-size:.85rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:.3rem;transition:color .2s;}
+  .topbar-desktop .back-link:hover{color:var(--gold);}
+
+  .card-row{
+    display:grid;grid-template-columns:4fr 3fr;grid-template-rows:auto auto;
+    background:var(--bg-panel);border:1px solid var(--border);border-radius:28px;
+    overflow:hidden;box-shadow:var(--shadow);
+  }
+
+  /* mobile's overlaid topbar/intro give way to the desktop duplicates below */
+  .hero-zone .hero-content{display:none;}
+  .hero-zone{grid-column:2;grid-row:1/3;height:100%;}
+  .hero-img{object-position:80% 32%;}
+  .hero-overlay{
+    background:
+      linear-gradient(to bottom, var(--bg-deep) 0%, transparent 20%, transparent 78%, var(--bg-deep) 100%),
+      linear-gradient(90deg, var(--bg-deep) 0%, var(--bg-deep) 24%, rgba(7,16,30,.65) 44%, rgba(7,16,30,.2) 68%, transparent 88%);
+  }
+
+  .d-intro{
+    display:block;grid-column:1;grid-row:1;align-self:end;
+    padding:3.4rem 3.5rem 0;
+  }
+  .d-intro .eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;}
+  .d-intro h1{font-size:clamp(2rem,2.6vw,2.5rem);line-height:1.14;margin-bottom:.6rem;text-wrap:balance;}
+  .d-intro .sub{color:var(--text-muted);line-height:1.6;max-width:34rem;font-size:1rem;margin-bottom:0;}
+
+  .form-main{
+    grid-column:1;grid-row:2;width:auto;max-width:none;margin:0;
+    padding:1.6rem 3.5rem 3.2rem;
+  }
+  .form-main form{max-width:none;}
+
+  .field-row{display:flex;gap:1.1rem;}
+  .field-row .field{flex:1;min-width:0;}
+
+  .submit-btn{margin-top:.3rem;}
 }
 
 @media(min-width:1280px){
-  .hero-content{padding:2.4rem 4rem 5.6rem;}
-  .form-main{padding:0 4rem 5.5rem;}
+  .page{padding:2.6rem 2rem 4rem;}
+  .d-intro{padding:3.8rem 4rem 0;}
+  .form-main{padding:1.8rem 4rem 3.6rem;}
 }
 </style>
 </head>
 <body>
 
-<div class="hero-zone">
-  <img class="hero-img"
-    src="/assets/images/programmes/inspire-academic/register-hero-1536.webp"
-    srcset="/assets/images/programmes/inspire-academic/register-hero-900.webp 900w, /assets/images/programmes/inspire-academic/register-hero-1536.webp 1536w"
-    sizes="100vw"
-    alt="" aria-hidden="true"
-    width="1536" height="1024"
-    fetchpriority="high" decoding="async">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <header class="topbar">
-      <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
-      <a href="../" class="back-link">&larr; Back</a>
-    </header>
-    <div class="intro">
+<div class="page">
+
+  <header class="topbar-desktop">
+    <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
+    <a href="../" class="back-link">&larr; Back</a>
+  </header>
+
+  <div class="card-row">
+
+    <div class="hero-zone">
+      <img class="hero-img"
+        src="/assets/images/programmes/inspire-academic/register-hero-1536.webp"
+        srcset="/assets/images/programmes/inspire-academic/register-hero-900.webp 900w, /assets/images/programmes/inspire-academic/register-hero-1536.webp 1536w"
+        sizes="100vw"
+        alt="" aria-hidden="true"
+        width="1536" height="1024"
+        fetchpriority="high" decoding="async">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <header class="topbar">
+          <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
+          <a href="../" class="back-link">&larr; Back</a>
+        </header>
+        <div class="intro">
+          <div class="eyebrow">Inspire Academic</div>
+          <h1>Register your interest</h1>
+          <p class="sub">Tell us a little about your child and we'll be in touch to arrange a free consultation.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-intro">
       <div class="eyebrow">Inspire Academic</div>
       <h1>Register your interest</h1>
       <p class="sub">Tell us a little about your child and we'll be in touch to arrange a free consultation.</p>
     </div>
-  </div>
-</div>
 
-<main class="form-main">
+    <main class="form-main">
     <form id="leadForm" novalidate>
+      <div class="field-row">
       <div class="field">
         <label for="parent_name">Parent full name</label>
         <input type="text" id="parent_name" name="parent_name" required autocomplete="name">
@@ -153,6 +216,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <div class="field">
         <label for="child_name">Child's name</label>
         <input type="text" id="child_name" name="child_name" required autocomplete="name">
+      </div>
       </div>
 
       <div class="field">
@@ -179,6 +243,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         </div>
       </div>
 
+      <div class="field-row">
       <div class="field">
         <label for="parent_phone">Best contact number</label>
         <input type="tel" id="parent_phone" name="parent_phone" required autocomplete="tel">
@@ -188,6 +253,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <div class="field">
         <label for="parent_email">Email address</label>
         <input type="email" id="parent_email" name="parent_email" required autocomplete="email">
+      </div>
       </div>
 
       <!-- Hidden tracking fields — populated by assets/js/recruitment.js and this page's own script -->
@@ -202,7 +268,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <button type="submit" class="submit-btn">Register Interest</button>
       <p class="privacy-note"><span class="lock" aria-hidden="true">&#128274;</span> This registers your interest only — it does not create a student account or enrol your child. A member of the Inspire Academic team will follow up by email or phone.</p>
     </form>
-</main>
+    </main>
+
+  </div>
+
+</div>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
