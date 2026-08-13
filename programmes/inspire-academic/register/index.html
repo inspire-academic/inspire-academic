@@ -144,15 +144,21 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       linear-gradient(90deg, var(--bg-deep) 0%, var(--bg-deep) 8%, rgba(7,16,30,.5) 22%, transparent 44%);
   }
 
+  /* content-col occupies the left column only (clear of the image's 40%
+     territory) and centers the heading/form within that column, so
+     centering never pushes fields into the photo at narrower desktop
+     widths. */
+  .content-col{position:relative;z-index:2;width:62%;}
+
   .d-intro{
-    position:relative;z-index:2;display:block;max-width:46rem;margin-bottom:2.6rem;
+    display:block;max-width:44rem;margin:0 auto 2.6rem;
   }
   .d-intro .eyebrow{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
   .d-intro h1{font-size:clamp(2.5rem,3.6vw,3.2rem);line-height:1.12;margin-bottom:.9rem;text-wrap:balance;}
   .d-intro .sub{color:var(--text-muted);line-height:1.65;max-width:40rem;font-size:1.12rem;margin-bottom:0;}
 
   .form-main{
-    position:relative;z-index:2;width:auto;max-width:46rem;margin:0;padding:0;
+    width:auto;max-width:44rem;margin:0 auto;padding:0;
   }
   .form-main form{max-width:none;}
 
@@ -213,6 +219,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       </div>
     </div>
 
+    <div class="content-col">
     <div class="d-intro">
       <div class="eyebrow">Inspire Academic</div>
       <h1>Register your interest</h1>
@@ -283,6 +290,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <p class="privacy-note"><span class="lock" aria-hidden="true">&#128274;</span> This registers your interest only — it does not create a student account or enrol your child. A member of the Inspire Academic team will follow up by email or phone.</p>
     </form>
     </main>
+    </div>
 
   </div>
 
