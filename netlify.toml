@@ -295,10 +295,13 @@ function = "mark-exam-response"
   status = 302
 
 # General Inspire Academic registration-of-interest, replacing the old
-# Google Form. Same short-URL/302 rationale as /bridge above.
+# Google Form. Same short-URL/302 rationale as /bridge above. Points
+# straight at the form (not the /programmes/inspire-academic landing
+# page) — the landing page's own "Register Interest" CTA was an
+# unnecessary extra click for visitors arriving via this link.
 [[redirects]]
   from = "/interest"
-  to = "/programmes/inspire-academic"
+  to = "/programmes/inspire-academic/register/"
   status = 302
 
 # Free AI diagnostic assessment — marketing-campaign entry point. Works
