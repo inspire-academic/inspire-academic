@@ -67,7 +67,12 @@ h1{font-family:var(--font-display);font-weight:700;font-size:clamp(1.7rem,6vw,2r
 .check-label:has(input:checked){border-color:var(--gold);background:rgba(var(--gold-rgb),.08);}
 .check-label input{accent-color:var(--gold);width:16px;height:16px;flex-shrink:0;}
 .check-label:focus-within{box-shadow:0 0 0 3px rgba(var(--gold-rgb),.25);border-color:var(--gold);}
-.check-ico{font-size:1.05rem;line-height:1;flex-shrink:0;}
+.check-ico{font-size:1.05rem;line-height:1;flex-shrink:0;display:none;}
+/* mobile/tablet subject icons — gold line-icon SVGs replacing emoji below the desktop breakpoint only.
+   The desktop breakpoint below restores .check-ico (emoji) and hides this, leaving desktop's
+   subject cards exactly as they were before this change. */
+.check-ico-svg{display:inline-flex;flex-shrink:0;color:var(--gold);}
+.check-ico-svg svg{width:18px;height:18px;display:block;}
 
 .submit-btn{
   width:100%;padding:1rem;border-radius:var(--r);background:var(--grad-gold);border:none;
@@ -171,7 +176,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
   .check-grid{gap:.8rem;}
   .check-label{padding:.9rem 1rem;font-size:.94rem;}
-  .check-ico{font-size:1.15rem;}
+  .check-ico{font-size:1.15rem;display:inline;}
+  .check-ico-svg{display:none;}
 
   .submit-btn{padding:1.15rem;font-size:1.02rem;margin-top:.4rem;}
   .privacy-note{font-size:.85rem;}
@@ -183,6 +189,25 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
 @media(min-width:1600px){
   .page{max-width:1680px;}
+}
+
+/* mobile/tablet-only subject checkbox restyle — small square, thin outline, gold checked
+   state, replacing native OS checkbox rendering. Desktop (>=960px) is untouched: it keeps
+   the native checkbox appearance it already had. */
+@media(max-width:959px){
+  .check-label input{
+    appearance:none;-webkit-appearance:none;
+    width:20px;height:20px;flex-shrink:0;margin:0;
+    border:1.5px solid var(--border-strong);border-radius:5px;
+    background:transparent;position:relative;
+  }
+  .check-label input:checked{
+    border-color:var(--gold);background:rgba(var(--gold-rgb),.14);
+  }
+  .check-label input:checked::after{
+    content:"";position:absolute;left:6px;top:2px;width:5px;height:9px;
+    border:solid var(--gold);border-width:0 2px 2px 0;transform:rotate(45deg);
+  }
 }
 </style>
 </head>
@@ -257,10 +282,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <div class="field">
         <label id="subjects_label">Subject(s) you are interested in</label>
         <div class="check-grid" role="group" aria-labelledby="subjects_label">
-          <label class="check-label"><input type="checkbox" class="subj-cb" value="Physics"><span class="check-ico" aria-hidden="true">&#9883;</span> Physics</label>
-          <label class="check-label"><input type="checkbox" class="subj-cb" value="Chemistry"><span class="check-ico" aria-hidden="true">&#129514;</span> Chemistry</label>
-          <label class="check-label"><input type="checkbox" class="subj-cb" value="Biology"><span class="check-ico" aria-hidden="true">&#129516;</span> Biology</label>
-          <label class="check-label"><input type="checkbox" class="subj-cb" value="Mathematics"><span class="check-ico" aria-hidden="true">&#128208;</span> Mathematics</label>
+          <label class="check-label"><input type="checkbox" class="subj-cb" value="Physics"><span class="check-ico-svg" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><ellipse cx="12" cy="12" rx="9.5" ry="4"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(-60 12 12)"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></span><span class="check-ico" aria-hidden="true">&#9883;</span> Physics</label>
+          <label class="check-label"><input type="checkbox" class="subj-cb" value="Chemistry"><span class="check-ico-svg" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5h5"/><path d="M10.2 2.5v6.2L4.8 18.3a1.8 1.8 0 0 0 1.55 2.7h11.3a1.8 1.8 0 0 0 1.55-2.7L13.8 8.7V2.5"/><path d="M7.6 14.5h8.8"/></svg></span><span class="check-ico" aria-hidden="true">&#129514;</span> Chemistry</label>
+          <label class="check-label"><input type="checkbox" class="subj-cb" value="Biology"><span class="check-ico-svg" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 4.5C11 5.3 5.5 11 5.5 19c8 0 13.5-5.7 14-14.5Z"/><path d="M5.5 19 13.5 11"/></svg></span><span class="check-ico" aria-hidden="true">&#129516;</span> Biology</label>
+          <label class="check-label"><input type="checkbox" class="subj-cb" value="Mathematics"><span class="check-ico-svg" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.2 6 16.5l3.2-11h11.3"/></svg></span><span class="check-ico" aria-hidden="true">&#128208;</span> Mathematics</label>
         </div>
       </div>
 
