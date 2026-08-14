@@ -616,8 +616,15 @@ async function runDiagnosis() {
     renderDiagnosis();
     toast('Diagnosis complete!', 'success');
   } catch(e) {
-    toast('Error: ' + e.message, 'error');
     console.error(e);
+    document.getElementById('diagnose-content').innerHTML = `
+      <div class="card" style="text-align:center;padding:3rem;">
+        <div style="font-size:2rem;margin-bottom:.75rem;">⚠</div>
+        <p style="font-weight:600;margin-bottom:.5rem;">We couldn't generate your diagnosis</p>
+        <p class="muted" style="margin-bottom:1.5rem;">${e.message || 'Something went wrong. Please try again.'}</p>
+        <button class="btn btn-gold" onclick="runDiagnosis()">Try Again</button>
+      </div>`;
+    toast('Error: ' + e.message, 'error');
   }
 }
 
@@ -809,6 +816,14 @@ async function runPlan() {
     renderPlan();
     toast('Study plan ready!', 'success');
   } catch(e) {
+    console.error(e);
+    document.getElementById('plan-content').innerHTML = `
+      <div class="card" style="text-align:center;padding:3rem;">
+        <div style="font-size:2rem;margin-bottom:.75rem;">⚠</div>
+        <p style="font-weight:600;margin-bottom:.5rem;">We couldn't build your study plan</p>
+        <p class="muted" style="margin-bottom:1.5rem;">${e.message || 'Something went wrong. Please try again.'}</p>
+        <button class="btn btn-gold" onclick="runPlan()">Try Again</button>
+      </div>`;
     toast('Error: ' + e.message, 'error');
   }
 }
