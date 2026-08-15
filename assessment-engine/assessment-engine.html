@@ -75,6 +75,7 @@ input,select,textarea{font-family:var(--font-body);}
 .subject-btn.active{border-color:var(--teal);background:rgba(0,201,167,.08);}
 .subject-icon{font-size:28px;line-height:1;}
 .subject-name{font-size:.8rem;font-weight:600;}
+.subject-saved-badge{font-size:.62rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.03em;}
 
 /* Two col */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
@@ -210,18 +211,22 @@ input,select,textarea{font-family:var(--font-body);}
           <button class="subject-btn" data-subject="Physics" onclick="pickSubject(this)">
             <span class="subject-icon">⚡</span>
             <span class="subject-name">Physics</span>
+            <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
           <button class="subject-btn" data-subject="Chemistry" onclick="pickSubject(this)">
             <span class="subject-icon">⚗️</span>
             <span class="subject-name">Chemistry</span>
+            <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
           <button class="subject-btn" data-subject="Biology" onclick="pickSubject(this)">
             <span class="subject-icon">🧬</span>
             <span class="subject-name">Biology</span>
+            <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
           <button class="subject-btn" data-subject="Mathematics" onclick="pickSubject(this)">
             <span class="subject-icon">∑</span>
             <span class="subject-name">Maths</span>
+            <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
         </div>
       </div>
@@ -243,6 +248,11 @@ input,select,textarea{font-family:var(--font-body);}
             <option value="WJEC">WJEC</option>
           </select>
         </div>
+      </div>
+
+      <div id="saved-plan-banner" style="display:none;margin-bottom:.85rem;padding:.85rem 1rem;border-radius:var(--r);border:1px solid rgba(45,212,191,.35);background:rgba(45,212,191,.08);align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <span style="font-size:.85rem;color:var(--white);" id="saved-plan-text"></span>
+        <button class="btn btn-teal" style="font-size:.82rem;padding:.5rem 1rem;flex-shrink:0;" onclick="viewSavedPlan()">View Saved Plan →</button>
       </div>
 
       <button class="btn btn-gold" id="btn-start" style="width:100%;font-size:1rem;padding:.9rem;" onclick="startAssessment()" disabled>
@@ -349,7 +359,9 @@ const S = {
   selectedOpt: null, // currently selected option
   diagnosis:   null,
   plan:        null,
-  studentId:   null
+  studentId:   null,
+  attemptId:   null,
+  savedPlans:  {}   // { [subject]: {id, level, board, diagnosis, plan} } — this student's existing saved plans
 };
 
 const cost = { calls:[], total:0 };
@@ -369,12 +381,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('inp-name').value = profile.first_name;
         checkSetup();
       }
+      await loadSavedPlans();
     }
   } catch(e) {
     // Not logged in or no profile — continue as guest
     console.log('Guest mode');
   }
 });
+
+// One saved plan per subject — a fresh assessment for a subject the
+// student already has a plan for replaces it (see savePlanToAttempt /
+// saveAttempt, which both write to the same row by id).
+async function loadSavedPlans() {
+  try {
+    const { data, error } = await supa.from('diagnostic_attempts')
+      .select('id,subject,level,exam_board,overall_score,current_grade,target_grade,not_sure_count,total_questions,topic_scores,gaps,student_profile,profile_description,strengths,plan,created_at')
+      .eq('student_id', S.studentId)
+      .not('plan', 'is', null)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+
+    (data || []).forEach(row => {
+      if (S.savedPlans[row.subject]) return; // already have a more recent one
+      S.savedPlans[row.subject] = row;
+    });
+
+    document.querySelectorAll('.subject-btn').forEach(btn => {
+      const badge = btn.querySelector('.subject-saved-badge');
+      if (badge) badge.style.display = S.savedPlans[btn.dataset.subject] ? 'block' : 'none';
+    });
+  } catch(e) {
+    console.warn('Could not load saved plans:', e.message);
+  }
+}
 
 // ═══════════════════════════════════════════════════════════
 // SETUP
@@ -383,6 +422,51 @@ function pickSubject(btn) {
   document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   checkSetup();
+
+  const saved  = S.savedPlans[btn.dataset.subject];
+  const banner = document.getElementById('saved-plan-banner');
+  if (saved) {
+    document.getElementById('saved-plan-text').textContent =
+      `You already have a ${btn.dataset.subject} plan — Grade ${saved.current_grade} → ${saved.target_grade}.`;
+    banner.style.display = 'flex';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+// Loads a previously saved diagnosis + plan straight from Supabase —
+// no AI calls, so revisiting an existing plan is free — and jumps
+// straight to it, same as generating one fresh would.
+function viewSavedPlan() {
+  const sub = document.querySelector('.subject-btn.active')?.dataset.subject;
+  const row = S.savedPlans[sub];
+  if (!row) return;
+
+  S.config = {
+    name:    document.getElementById('inp-name').value.trim() || S.config?.name || 'Student',
+    subject: row.subject,
+    level:   row.level,
+    board:   row.exam_board
+  };
+  S.attemptId = row.id;
+  S.answers   = new Array(row.total_questions || 0); // renderDiagnosis only needs .length, for the "not sure" %
+  S.diagnosis = {
+    overallScore:        row.overall_score,
+    currentGrade:        row.current_grade,
+    targetGrade:          row.target_grade,
+    notSureCount:         row.not_sure_count,
+    topicScores:          row.topic_scores,
+    gaps:                 row.gaps,
+    studentProfile:       row.student_profile,
+    profileDescription:   row.profile_description,
+    strengths:            row.strengths
+  };
+  S.plan = row.plan;
+
+  goTo('diagnose');
+  renderDiagnosis();
+  renderPlan();
+  goTo('plan');
 }
 
 function checkSetup() {
@@ -816,6 +900,7 @@ async function runPlan() {
 
   try {
     S.plan = await claudePlan();
+    await savePlanToAttempt();
     renderPlan();
     toast('Study plan ready!', 'success');
   } catch(e) {
@@ -943,7 +1028,7 @@ function renderPlan() {
 async function saveAttempt() {
   if (!S.studentId) return; // guest — don't save
   try {
-    await supa.from('diagnostic_attempts').insert({
+    const { data, error } = await supa.from('diagnostic_attempts').insert({
       student_id:     S.studentId,
       student_name:   S.config.name,
       subject:        S.config.subject,
@@ -959,11 +1044,32 @@ async function saveAttempt() {
       question_results: S.answers,
       topic_scores:   S.diagnosis.topicScores,
       gaps:           S.diagnosis.gaps,
+      student_profile:      S.diagnosis.studentProfile,
+      profile_description:  S.diagnosis.profileDescription,
+      strengths:            S.diagnosis.strengths,
       completed:      true
-    });
+    }).select('id').single();
+    if (error) throw error;
+    S.attemptId = data.id;
     console.log('Attempt saved to Supabase');
   } catch(e) {
     console.warn('Could not save attempt:', e.message);
+  }
+}
+
+// Called once the study plan itself has been generated — the diagnosis
+// row already exists (saveAttempt runs first, in runDiagnosis), this
+// just attaches the plan to it so a returning student can view it later
+// instead of it only living in this page's memory for one session.
+async function savePlanToAttempt() {
+  if (!S.studentId || !S.attemptId) return; // guest, or diagnosis wasn't saved
+  try {
+    const { error } = await supa.from('diagnostic_attempts')
+      .update({ plan: S.plan }).eq('id', S.attemptId);
+    if (error) throw error;
+    console.log('Plan saved to Supabase');
+  } catch(e) {
+    console.warn('Could not save plan:', e.message);
   }
 }
 
