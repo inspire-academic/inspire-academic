@@ -47,6 +47,9 @@ input,select,textarea{font-family:var(--font-body);}
 .pipe-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted);transition:all .3s;background:var(--navy);}
 .pipe-dot.active{border-color:var(--gold);background:var(--gold);color:var(--navy);font-weight:700;}
 .pipe-dot.done{border-color:var(--teal);background:var(--teal);color:var(--navy);}
+.pipe-step.clickable{cursor:pointer;}
+.pipe-step.clickable:hover .pipe-dot{filter:brightness(1.15);}
+.pipe-step.clickable:hover .pipe-label{color:var(--white);}
 .pipe-label{font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
 .pipe-label.active{color:var(--white);}
 .pipe-line{flex:1;height:2px;background:var(--border);min-width:30px;margin:0 .25rem;margin-bottom:1.2rem;}
@@ -159,27 +162,27 @@ input,select,textarea{font-family:var(--font-body);}
 
   <!-- Pipeline -->
   <div class="pipeline" id="pipeline">
-    <div class="pipe-step">
+    <div class="pipe-step" id="step-0" onclick="pipeGoTo('assess')">
       <div class="pipe-dot active" id="dot-0">1</div>
       <div class="pipe-label active" id="lbl-0">Assess</div>
     </div>
     <div class="pipe-line" id="line-0"></div>
-    <div class="pipe-step">
+    <div class="pipe-step" id="step-1" onclick="pipeGoTo('diagnose')">
       <div class="pipe-dot" id="dot-1">2</div>
       <div class="pipe-label" id="lbl-1">Diagnose</div>
     </div>
     <div class="pipe-line" id="line-1"></div>
-    <div class="pipe-step">
+    <div class="pipe-step" id="step-2" onclick="pipeGoTo('plan')">
       <div class="pipe-dot" id="dot-2">3</div>
       <div class="pipe-label" id="lbl-2">Plan</div>
     </div>
     <div class="pipe-line" id="line-2"></div>
-    <div class="pipe-step">
+    <div class="pipe-step" id="step-3" onclick="pipeGoTo('execute')">
       <div class="pipe-dot" id="dot-3">4</div>
       <div class="pipe-label" id="lbl-3">Execute</div>
     </div>
     <div class="pipe-line" id="line-3"></div>
-    <div class="pipe-step">
+    <div class="pipe-step" id="step-4" onclick="pipeGoTo('track')">
       <div class="pipe-dot" id="dot-4">5</div>
       <div class="pipe-label" id="lbl-4">Track</div>
     </div>
@@ -1057,6 +1060,7 @@ function goTo(stage) {
     const dot  = document.getElementById('dot-'+i);
     const lbl  = document.getElementById('lbl-'+i);
     const line = document.getElementById('line-'+i);
+    const step = document.getElementById('step-'+i);
     dot.classList.remove('active','done');
     lbl.classList.remove('active');
     if (line) line.classList.remove('done');
@@ -1070,8 +1074,21 @@ function goTo(stage) {
     } else {
       dot.innerHTML = i+1;
     }
+    // A stage is revisitable once it's been reached (done or active) —
+    // lets a student jump back to review their Diagnosis or Plan instead
+    // of getting stuck on the Execute/Track placeholder screens with no
+    // way back (see CLAUDE.md principle 7: never build a dead end).
+    if (step) step.classList.toggle('clickable', dot.classList.contains('done') || dot.classList.contains('active'));
   }
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function pipeGoTo(stage) {
+  const idx = STAGES.indexOf(stage);
+  const dot = document.getElementById('dot-'+(idx-1));
+  if (dot && (dot.classList.contains('done') || dot.classList.contains('active'))) {
+    goTo(stage);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
