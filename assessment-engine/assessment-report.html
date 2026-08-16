@@ -155,16 +155,6 @@ try {
   if (raw) PAYLOAD = JSON.parse(raw);
 } catch(e) { console.error('Could not read report payload:', e); }
 
-if (!PAYLOAD || !PAYLOAD.diagnosis || !PAYLOAD.plan) {
-  document.getElementById('empty-state').style.display = 'block';
-  document.querySelector('.toolbar').style.display = 'none';
-} else {
-  renderReport(PAYLOAD);
-  if (new URLSearchParams(location.search).get('focus') === 'email') {
-    toggleEmailPanel(true);
-  }
-}
-
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
 }
@@ -346,6 +336,20 @@ function buildClosing(c, generatedAt) {
         sitting, not an official exam board grade prediction. Confidential — prepared for ${c.name || 'the student'} and their family.
       </div>
     </div>`;
+}
+
+// Runs last, after every function/const above is initialized — the render
+// call needs PROFILE_COLORS/PRIORITY_COLORS/APPROACH_SENTENCES (all const,
+// so unlike the hoisted function declarations, calling this any earlier in
+// the file throws a "before initialization" ReferenceError.
+if (!PAYLOAD || !PAYLOAD.diagnosis || !PAYLOAD.plan) {
+  document.getElementById('empty-state').style.display = 'block';
+  document.querySelector('.toolbar').style.display = 'none';
+} else {
+  renderReport(PAYLOAD);
+  if (new URLSearchParams(location.search).get('focus') === 'email') {
+    toggleEmailPanel(true);
+  }
 }
 
 // ── PDF generation (lazy-loaded, client-side, no server round-trip for download) ──
