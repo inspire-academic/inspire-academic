@@ -463,7 +463,7 @@
         <div class="step-dot" data-n="3"></div>
         <div class="step-info">
           <div class="step-name">Path type</div>
-          <div class="step-sub" id="rail-sub-3">AI or PDF</div>
+          <div class="step-sub" id="rail-sub-3">Auto or PDF</div>
         </div>
       </div>
     </div>
@@ -499,7 +499,7 @@
         <div class="step-dot" data-n="7"></div>
         <div class="step-info">
           <div class="step-name">Generate questions</div>
-          <div class="step-sub" id="rail-sub-7">AI · review · approve</div>
+          <div class="step-sub" id="rail-sub-7">Auto · review · approve</div>
         </div>
       </div>
     </div>
@@ -625,7 +625,7 @@
       <div class="path-cards" style="max-width:700px;">
         <div class="path-card" data-val="ai_generated" onclick="selectPath('ai_generated',this)">
           <div class="path-badge badge-ai">Path A</div>
-          <div class="path-card-title">AI-Generated Diagnostic</div>
+          <div class="path-card-title">Auto-Generated Diagnostic</div>
           <div class="path-card-desc">The system generates specification-aligned questions from your topic blueprint. All questions are board-aware, tier-aware, and validated before delivery.</div>
           <ul class="path-feature-list">
             <li>Blueprint-driven question generation</li>
@@ -637,7 +637,7 @@
         <div class="path-card" data-val="pdf_upload" onclick="selectPath('pdf_upload',this)">
           <div class="path-badge badge-pdf">Path B</div>
           <div class="path-card-title">PDF Upload Assessment</div>
-          <div class="path-card-desc">Upload an existing question paper and mark scheme. Students download or view the paper, complete it, and submit. Marking is manual or AI-assisted.</div>
+          <div class="path-card-desc">Upload an existing question paper and mark scheme. Students download or view the paper, complete it, and submit. Marking is manual or auto-assisted.</div>
           <ul class="path-feature-list">
             <li>Upload question paper PDF</li>
             <li>Upload mark scheme PDF</li>
@@ -776,11 +776,11 @@
         <div class="settings-section">
           <div class="settings-section-title">Marking</div>
           <div class="toggle-field">
-            <div><div class="toggle-field-label">AI-assisted marking</div><div class="toggle-field-sub">AI suggests marks for extended answers</div></div>
+            <div><div class="toggle-field-label">Auto-assisted marking</div><div class="toggle-field-sub">Automatically suggests marks for extended answers</div></div>
             <label class="switch"><input type="checkbox" id="setting-ai-marking" checked><span class="switch-track"></span></label>
           </div>
           <div class="toggle-field">
-            <div><div class="toggle-field-label">Require tutor confirmation</div><div class="toggle-field-sub">AI marks are provisional until tutor approves</div></div>
+            <div><div class="toggle-field-label">Require tutor confirmation</div><div class="toggle-field-sub">Suggested marks are provisional until you approve them</div></div>
             <label class="switch"><input type="checkbox" id="setting-tutor-confirm" checked><span class="switch-track"></span></label>
           </div>
         </div>
@@ -1035,7 +1035,7 @@ function validateStep3() {
     if (!m || parseInt(m) < 1) return showAlert('alert-3', 'Please enter the total marks available.')
     state.pdfTotalMarks = parseInt(m)
   }
-  document.getElementById('rail-sub-3').textContent = state.pathType === 'ai_generated' ? 'Path A — AI' : 'Path B — PDF'
+  document.getElementById('rail-sub-3').textContent = state.pathType === 'ai_generated' ? 'Path A — Auto' : 'Path B — PDF'
   completeStep(3)
   loadTopics()
   goToStep(4)
@@ -1228,7 +1228,7 @@ function buildReview() {
     <div class="review-card"><div class="review-card-label">Assessment title</div><div class="review-card-value">${state.title}</div></div>
     <div class="review-card"><div class="review-card-label">Subject</div><div class="review-card-value"><span class="highlight">${state.subject}</span></div></div>
     <div class="review-card"><div class="review-card-label">Exam profile</div><div class="review-card-value"><span class="highlight">${state.board}</span> · ${state.tier}${route}</div></div>
-    <div class="review-card"><div class="review-card-label">Path type</div><div class="review-card-value">${state.pathType === 'ai_generated' ? 'Path A — AI Generated' : 'Path B — PDF Upload'}</div></div>
+    <div class="review-card"><div class="review-card-label">Path type</div><div class="review-card-value">${state.pathType === 'ai_generated' ? 'Path A — Auto-Generated' : 'Path B — PDF Upload'}</div></div>
     <div class="review-card"><div class="review-card-label">Topics in blueprint</div><div class="review-card-value"><span class="highlight">${included.length}</span> topics · <span class="highlight">${total}</span> total marks</div></div>
     <div class="review-card"><div class="review-card-label">Access mode</div><div class="review-card-value">${document.getElementById('setting-access')?.value || 'open'}</div></div>
   `
