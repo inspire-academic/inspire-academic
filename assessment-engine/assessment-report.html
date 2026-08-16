@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagnostic Assessment Report — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<style>
+:root{ --font-mono:'JetBrains Mono',monospace; --navy:#0b1628; --print-muted:#5a6f86; }
+
+@media screen{
+  body{font-family:var(--font-body);background:#0b1628;color:#fff;padding:2rem 1rem;margin:0;}
+  .toolbar{max-width:900px;margin:0 auto 1rem;padding:1rem;background:#112240;border:1px solid #1e3a5f;border-radius:6px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;}
+  .toolbar h2{font-size:1.05rem;font-weight:600;color:var(--gold);margin:0;}
+  .toolbar-actions{display:flex;gap:.6rem;flex-wrap:wrap;}
+  .btn{padding:.6rem 1.1rem;border-radius:6px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;}
+  .btn-primary{background:var(--gold);color:var(--navy);}
+  .btn-primary:hover{background:#e0bc63;}
+  .btn-primary:disabled{opacity:.5;cursor:not-allowed;}
+  .btn-secondary{background:transparent;border:1px solid #1e3a5f;color:#7a8fa6;}
+  .btn-secondary:hover{border-color:var(--gold);color:var(--gold);}
+  .email-panel{max-width:900px;margin:0 auto 1rem;padding:1rem;background:#112240;border:1px solid #1e3a5f;border-radius:6px;display:none;}
+  .email-panel.open{display:block;}
+  .email-panel label{display:block;font-size:.8rem;color:#9db3cc;margin-bottom:.4rem;font-weight:600;}
+  .email-row{display:flex;gap:.6rem;flex-wrap:wrap;}
+  .email-row input{flex:1;min-width:220px;padding:.65rem .85rem;border-radius:6px;border:1px solid #1e3a5f;background:#0b1628;color:#fff;font-size:.9rem;font-family:var(--font-body);}
+  .email-row input:focus{outline:none;border-color:var(--gold);}
+  .email-status{margin-top:.6rem;font-size:.85rem;}
+  .email-status.ok{color:#4ade80;}
+  .email-status.err{color:#f87171;}
+  .report-container{max-width:900px;margin:0 auto;background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.35);}
+  .empty-state{max-width:900px;margin:4rem auto;text-align:center;padding:3rem 1.5rem;background:#112240;border:1px solid #1e3a5f;border-radius:8px;}
+  .empty-state h2{font-family:var(--font-display);font-size:1.4rem;margin-bottom:.75rem;}
+  .empty-state p{color:#9db3cc;margin-bottom:1.5rem;}
+}
+
+@media print{
+  body{margin:0;padding:0;background:#fff;}
+  .toolbar,.email-panel,.empty-state{display:none;}
+  .report-container{box-shadow:none;}
+}
+
+/* ── Report content — always rendered on a white page, screen or print ── */
+.report-container{background:#fff;color:#1a1a1a;}
+
+.report-page{padding:2.4cm 2.2cm 2.6cm;min-height:26cm;position:relative;page-break-after:always;box-sizing:border-box;}
+.report-section{padding:2.4cm 2.2cm 2.6cm;position:relative;page-break-before:always;box-sizing:border-box;}
+
+.cover-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:25.5cm;background:#fff;color:var(--navy);text-align:center;padding:2.5cm 2cm;border:6px solid var(--navy);position:relative;page-break-after:always;box-sizing:border-box;margin:.5cm auto;width:19cm;}
+.cover-page::before{content:'';position:absolute;top:10px;left:10px;right:10px;bottom:10px;border:2px solid var(--gold);pointer-events:none;}
+.cover-mark{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--gold),#e0bc63);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;color:var(--navy);font-family:var(--font-display);margin-bottom:1.5rem;}
+.cover-badge{display:inline-block;background:rgba(201,168,76,.1);border:2px solid var(--gold);color:var(--navy);font-size:.78rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;padding:.4rem .9rem;border-radius:6px;margin-bottom:1.5rem;font-weight:600;}
+.cover-title{font-family:var(--font-display);font-size:2.6rem;font-weight:800;margin-bottom:.5rem;line-height:1.15;color:var(--navy);}
+.cover-subtitle{font-size:1.3rem;font-weight:300;color:var(--gold);margin-bottom:2rem;}
+.cover-student{font-size:1.25rem;margin-bottom:.3rem;color:var(--navy);font-weight:700;}
+.cover-meta{font-size:1rem;color:var(--print-muted);margin-bottom:2rem;}
+.cover-footer{margin-top:auto;padding-top:1.5rem;border-top:2px solid #e5e7eb;font-size:.85rem;color:var(--print-muted);font-weight:500;max-width:26rem;}
+
+.page-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:.9rem;border-bottom:2px solid var(--gold);margin-bottom:1.75rem;}
+.page-header .brand{font-family:var(--font-mono);font-size:.75rem;color:var(--print-muted);letter-spacing:.05em;}
+.section-title{font-family:var(--font-display);font-size:1.65rem;font-weight:700;color:var(--navy);margin-bottom:.35rem;}
+.section-subtitle{font-size:.92rem;color:var(--print-muted);margin-bottom:1.75rem;line-height:1.6;}
+
+.r-card{background:#f7f6f2;border-radius:8px;border-left:4px solid var(--gold);padding:1.1rem 1.3rem;margin-bottom:1.1rem;page-break-inside:avoid;}
+.r-card h3{font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--navy);margin:0 0 .75rem;}
+
+.score-hero{text-align:center;padding:1.5rem 1rem 1.75rem;margin-bottom:1.5rem;background:#f7f6f2;border-radius:10px;page-break-inside:avoid;}
+.score-hero .num{font-family:var(--font-display);font-size:3.2rem;font-weight:800;line-height:1;}
+.score-hero .grades{margin-top:.6rem;font-size:1.05rem;color:var(--navy);}
+.score-hero .badge-pill{margin-top:.85rem;display:inline-block;padding:.35rem 1.1rem;border-radius:20px;font-weight:700;font-size:.8rem;letter-spacing:.03em;color:#fff;}
+.score-hero .desc{margin-top:.85rem;color:var(--print-muted);font-size:.92rem;max-width:32rem;margin-left:auto;margin-right:auto;}
+.notsure-callout{margin-top:1rem;padding:.75rem 1rem;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.4);border-radius:6px;font-size:.85rem;color:#8a6d1a;max-width:32rem;margin-left:auto;margin-right:auto;}
+
+.assessor-note{background:#eef2f7;border:1px solid #d7e0ea;border-radius:8px;padding:1rem 1.2rem;margin-bottom:1.5rem;page-break-inside:avoid;}
+.assessor-note .label{font-family:var(--font-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--print-muted);margin-bottom:.4rem;}
+.assessor-note p{font-size:.9rem;color:#1a1a1a;line-height:1.6;margin:0;font-style:italic;}
+
+.topic-row{margin-bottom:.9rem;page-break-inside:avoid;}
+.topic-row .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;}
+.topic-row .name{font-size:.88rem;font-weight:600;color:var(--navy);}
+.topic-row .pct{font-size:.85rem;font-weight:700;}
+.topic-row .track{height:7px;background:#e5e7eb;border-radius:4px;overflow:hidden;}
+.topic-row .fill{height:100%;border-radius:4px;}
+.topic-row .note{font-size:.75rem;color:var(--print-muted);margin-top:.2rem;}
+
+.gap-item{border-left:4px solid #ccc;background:#faf9f6;border-radius:6px;padding:.9rem 1.1rem;margin-bottom:.8rem;page-break-inside:avoid;}
+.gap-item .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;gap:.75rem;}
+.gap-item .name{font-size:.92rem;font-weight:700;color:var(--navy);}
+.gap-item .chip{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#fff;padding:.22rem .6rem;border-radius:20px;white-space:nowrap;}
+.gap-item .reason{font-size:.85rem;color:#3a3a3a;line-height:1.55;margin-bottom:.4rem;}
+.gap-item .approach{font-size:.8rem;color:var(--print-muted);font-style:italic;}
+
+.strength-item{font-size:.9rem;color:#1a1a1a;margin-bottom:.4rem;padding-left:1.4rem;position:relative;}
+.strength-item::before{content:'✓';position:absolute;left:0;color:#16a34a;font-weight:700;}
+
+.grade-journey{display:flex;align-items:stretch;gap:.5rem;margin-bottom:1.75rem;page-break-inside:avoid;}
+.gj-box{flex:1;background:#f7f6f2;border-radius:8px;padding:1rem .5rem;text-align:center;}
+.gj-box .val{font-family:var(--font-display);font-size:1.9rem;font-weight:800;color:#0d9488;}
+.gj-box .wk{font-size:.7rem;color:var(--print-muted);text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;}
+.gj-box .desc{font-size:.78rem;color:var(--navy);margin-top:.3rem;font-weight:600;}
+.gj-arrow{display:flex;align-items:center;color:var(--gold);font-size:1.1rem;}
+
+.week-card{background:#f7f6f2;border-radius:8px;padding:1.1rem 1.3rem;margin-bottom:1rem;page-break-inside:avoid;}
+.week-card .head{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+.week-card .num{background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;padding:.2rem .65rem;border-radius:20px;}
+.week-card .title{font-weight:700;color:var(--navy);font-size:1rem;}
+.week-card .focus{font-size:.78rem;color:#0d9488;font-weight:600;margin-bottom:.35rem;}
+.week-card .why{font-size:.84rem;color:#3a3a3a;margin-bottom:.75rem;line-height:1.5;}
+.task-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;}
+.task-cell{background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:.6rem .7rem;}
+.task-cell .t-icon{font-size:.9rem;margin-bottom:.3rem;}
+.task-cell .t-name{font-size:.76rem;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:.25rem;}
+.task-cell .t-mins{font-size:.68rem;color:var(--print-muted);}
+
+.closing-list{margin:0 0 1.75rem;padding-left:1.3rem;}
+.closing-list li{font-size:.92rem;color:#1a1a1a;margin-bottom:.6rem;line-height:1.6;}
+.disclaimer{font-size:.78rem;color:var(--print-muted);line-height:1.6;padding-top:1.5rem;border-top:1px solid #e5e7eb;margin-top:2rem;}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <h2>Diagnostic Assessment Report</h2>
+  <div class="toolbar-actions">
+    <button class="btn btn-secondary" onclick="history.back()">← Back</button>
+    <button class="btn btn-secondary" onclick="toggleEmailPanel()">✉️ Email to Parent</button>
+    <button class="btn btn-primary" id="download-btn" onclick="downloadReport()">📥 Download PDF</button>
+  </div>
+</div>
+
+<div class="email-panel" id="email-panel">
+  <label for="parent-email">Parent / guardian email address</label>
+  <div class="email-row">
+    <input type="email" id="parent-email" placeholder="e.g. parent@example.com">
+    <button class="btn btn-primary" id="send-btn" onclick="emailReport()">Send Report</button>
+  </div>
+  <div class="email-status" id="email-status"></div>
+</div>
+
+<div id="empty-state" class="empty-state" style="display:none;">
+  <h2>No report to show</h2>
+  <p>Go back and generate — or open a saved — study plan first, then come back here.</p>
+  <button class="btn btn-primary" onclick="location.href='/assessment-engine/assessment-engine.html'">← Back to Assessment</button>
+</div>
+
+<div class="report-container" id="report"></div>
+
+<script>
+let PAYLOAD = null;
+try {
+  const raw = sessionStorage.getItem('ia_report_payload');
+  if (raw) PAYLOAD = JSON.parse(raw);
+} catch(e) { console.error('Could not read report payload:', e); }
+
+if (!PAYLOAD || !PAYLOAD.diagnosis || !PAYLOAD.plan) {
+  document.getElementById('empty-state').style.display = 'block';
+  document.querySelector('.toolbar').style.display = 'none';
+} else {
+  renderReport(PAYLOAD);
+  if (new URLSearchParams(location.search).get('focus') === 'email') {
+    toggleEmailPanel(true);
+  }
+}
+
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+}
+
+function scoreColor(pct) {
+  return pct >= 70 ? '#16a34a' : pct >= 50 ? '#ca8a04' : '#dc2626';
+}
+
+const PROFILE_COLORS = { struggling:'#dc2626', developing:'#ca8a04', secure:'#0d9488', strong:'#16a34a' };
+const PRIORITY_COLORS = { critical:'#dc2626', high:'#ea580c', medium:'#ca8a04', low:'#16a34a' };
+const APPROACH_SENTENCES = {
+  reteach_from_scratch: name => `This topic needs to be taught from the beginning — ${name} has not yet secured the foundational concept.`,
+  fix_misconception:    name => `${name} has a specific misconception here that needs to be directly corrected before it compounds.`,
+  consolidate:           name => `The foundation is there, but ${name} needs more practice to fully consolidate this topic.`,
+  extend:                 name => `${name} has secured the basics here and is ready to be stretched further.`
+};
+
+function renderReport(payload) {
+  const c = payload.config || {};
+  const d = payload.diagnosis || {};
+  const p = payload.plan || {};
+  const name = c.name || 'Student';
+
+  let html = buildCover(c, payload.generatedAt);
+  html += buildExecutiveSummary(c, d, name);
+  html += buildBreakdown(c, d);
+  html += buildGapsAndStrengths(c, d, name);
+  html += buildPlan(c, p);
+  html += buildClosing(c, payload.generatedAt);
+
+  document.getElementById('report').innerHTML = html;
+}
+
+function buildCover(c, generatedAt) {
+  return `
+    <div class="cover-page">
+      <div class="cover-mark">IA</div>
+      <div class="cover-badge">Confidential · Diagnostic Assessment</div>
+      <div class="cover-title">Diagnostic Assessment<br>&amp; Study Plan Report</div>
+      <div class="cover-subtitle">${c.subject || ''} · ${c.level || ''} · ${c.board || ''}</div>
+      <div class="cover-student">${c.name || 'Student'}</div>
+      <div class="cover-meta">Prepared ${formatDate(generatedAt)}</div>
+      <div class="cover-footer">
+        Generated by Inspire Academic's AI diagnostic engine from a single assessment sitting —
+        intended to guide revision focus, not as an official exam board grade prediction.
+      </div>
+    </div>`;
+}
+
+function pageHeader(subject) {
+  return `<div class="page-header"><span class="brand">INSPIRE ACADEMIC · ${(subject||'').toUpperCase()}</span><span class="brand">DIAGNOSTIC REPORT</span></div>`;
+}
+
+function buildExecutiveSummary(c, d, name) {
+  const sc = d.overallScore ?? 0;
+  const sColor = scoreColor(sc);
+  const pColor = PROFILE_COLORS[d.studentProfile] || '#ca8a04';
+  const notSurePct = d.totalQuestions ? Math.round((d.notSureCount / d.totalQuestions) * 100) : 0;
+
+  return `
+    <div class="report-section">
+      ${pageHeader(c.subject)}
+      <div class="section-title">Executive Summary</div>
+      <div class="section-subtitle">Where ${name} stands right now, in plain terms.</div>
+
+      <div class="score-hero">
+        <div class="num" style="color:${sColor};">${sc}%</div>
+        <div class="grades">Current grade <strong>${d.currentGrade ?? '—'}</strong> &nbsp;→&nbsp; Target grade <strong style="color:#0d9488;">${d.targetGrade ?? '—'}</strong></div>
+        <div class="badge-pill" style="background:${pColor};">${(d.studentProfile || 'developing').toUpperCase()}</div>
+        <div class="desc">${d.profileDescription || ''}</div>
+        ${notSurePct >= 30 ? `<div class="notsure-callout">${notSurePct}% of questions in this assessment were answered "not sure" — the study plan below is weighted toward building foundational confidence first.</div>` : ''}
+      </div>
+
+      ${d.teacherNote ? `
+      <div class="assessor-note">
+        <div class="label">Assessor's Note</div>
+        <p>${d.teacherNote}</p>
+      </div>` : ''}
+    </div>`;
+}
+
+function buildBreakdown(c, d) {
+  if (!d.topicScores || !d.topicScores.length) return '';
+  const rows = d.topicScores.map(t => {
+    const color = scoreColor(t.score);
+    return `
+      <div class="topic-row">
+        <div class="top"><span class="name">${t.topic}</span><span class="pct" style="color:${color};">${t.score}%</span></div>
+        <div class="track"><div class="fill" style="width:${t.score}%;background:${color};"></div></div>
+        ${t.not_sure > 0 ? `<div class="note">${t.not_sure} "not sure" response${t.not_sure > 1 ? 's' : ''}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="report-section">
+      ${pageHeader(c.subject)}
+      <div class="section-title">Diagnostic Breakdown</div>
+      <div class="section-subtitle">Topic-by-topic performance from this assessment.</div>
+      <div class="r-card">${rows}</div>
+    </div>`;
+}
+
+function buildGapsAndStrengths(c, d, name) {
+  const gaps = d.gaps || [];
+  const strengths = d.strengths || [];
+  if (!gaps.length && !strengths.length) return '';
+
+  const gapHtml = gaps.map(g => {
+    const pc = PRIORITY_COLORS[g.priority] || '#ca8a04';
+    const sentence = (APPROACH_SENTENCES[g.approach] || (n => `This topic needs continued attention for ${n}.`))(name);
+    return `
+      <div class="gap-item" style="border-left-color:${pc};">
+        <div class="top"><span class="name">${g.topic}</span><span class="chip" style="background:${pc};">${g.priority}</span></div>
+        <div class="reason">${g.reason || ''}</div>
+        <div class="approach">${sentence}</div>
+      </div>`;
+  }).join('');
+
+  const strengthHtml = strengths.length ? `
+    <h3 style="font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--navy);margin:1.5rem 0 .75rem;">Strengths</h3>
+    ${strengths.map(s => `<div class="strength-item">${s}</div>`).join('')}
+  ` : '';
+
+  return `
+    <div class="report-section">
+      ${pageHeader(c.subject)}
+      <div class="section-title">Priority Knowledge Gaps</div>
+      <div class="section-subtitle">What the study plan is built to fix first, ordered by priority.</div>
+      ${gapHtml}
+      ${strengthHtml}
+    </div>`;
+}
+
+function buildPlan(c, p) {
+  const journey = (p.gradeJourney || []).map((g, i, arr) => `
+    <div class="gj-box">
+      <div class="val">${g.grade}</div>
+      <div class="wk">Week ${g.week}</div>
+      <div class="desc">${g.description}</div>
+    </div>${i < arr.length - 1 ? `<div class="gj-arrow">→</div>` : ''}
+  `).join('');
+
+  const weeks = (p.weeks || []).map(w => `
+    <div class="week-card">
+      <div class="head"><span class="num">Week ${w.number}</span><span class="title">${w.title}</span></div>
+      ${w.focus ? `<div class="focus">Focus: ${w.focus}</div>` : ''}
+      <div class="why">${w.why || ''}</div>
+      <div class="task-grid">
+        ${(w.tasks || []).map(t => {
+          const icon = t.type === 'video' ? '▶' : t.type === 'drill' ? '◎' : '✓';
+          return `<div class="task-cell"><div class="t-icon">${icon}</div><div class="t-name">${t.label}</div><div class="t-mins">${t.mins} min</div></div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+
+  return `
+    <div class="report-section">
+      ${pageHeader(c.subject)}
+      <div class="section-title">Study Plan</div>
+      <div class="section-subtitle">A structured, spec-aligned path from the current diagnosis to the target grade.</div>
+      <div class="grade-journey">${journey}</div>
+      ${weeks}
+    </div>`;
+}
+
+function buildClosing(c, generatedAt) {
+  return `
+    <div class="report-section">
+      ${pageHeader(c.subject)}
+      <div class="section-title">What Happens Next</div>
+      <ul class="closing-list">
+        <li>Follow the week-by-week plan above — each task is deliberately scoped to 15–30 minutes so it fits around school and other commitments.</li>
+        <li>Retaking the diagnostic after completing the plan will show real movement against these exact topics and priorities.</li>
+        <li>Inspire Academic's tutors are available to walk through this report and plan in more detail — reply to this email or visit inspireacademic.org to get in touch.</li>
+      </ul>
+      <div class="disclaimer">
+        Report generated ${formatDate(generatedAt)} by Inspire Academic's AI diagnostic engine, referenced against the
+        ${c.board || ''} ${c.subject || ''} specification. This is a revision-focus tool based on a single assessment
+        sitting, not an official exam board grade prediction. Confidential — prepared for ${c.name || 'the student'} and their family.
+      </div>
+    </div>`;
+}
+
+// ── PDF generation (lazy-loaded, client-side, no server round-trip for download) ──
+let html2pdfLoaded = null;
+function loadHtml2Pdf() {
+  if (window.html2pdf) return Promise.resolve();
+  if (html2pdfLoaded) return html2pdfLoaded;
+  html2pdfLoaded = new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    s.onload = resolve;
+    s.onerror = () => reject(new Error('Could not load PDF engine — check your connection and try again.'));
+    document.head.appendChild(s);
+  });
+  return html2pdfLoaded;
+}
+
+function reportFilename() {
+  const c = (PAYLOAD && PAYLOAD.config) || {};
+  const name = (c.name || 'Student').replace(/[^a-z0-9]+/gi, '_');
+  const subject = (c.subject || 'Report').replace(/[^a-z0-9]+/gi, '_');
+  return `${name}_${subject}_Diagnostic_Report.pdf`;
+}
+
+function pdfOptions() {
+  return {
+    margin: 0,
+    filename: reportFilename(),
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+}
+
+async function downloadReport() {
+  const btn = document.getElementById('download-btn');
+  const original = btn.textContent;
+  btn.textContent = '⏳ Generating...';
+  btn.disabled = true;
+  try {
+    await loadHtml2Pdf();
+    await html2pdf().set(pdfOptions()).from(document.getElementById('report')).save();
+    btn.textContent = '✓ Downloaded!';
+  } catch(e) {
+    console.error('PDF generation error:', e);
+    btn.textContent = '⚠ Failed — try again';
+  } finally {
+    setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 2000);
+  }
+}
+
+function toggleEmailPanel(forceOpen) {
+  const panel = document.getElementById('email-panel');
+  const open = forceOpen === true ? true : !panel.classList.contains('open');
+  panel.classList.toggle('open', open);
+  if (open) setTimeout(() => document.getElementById('parent-email').focus(), 50);
+}
+
+function isValidEmail(v) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
+
+async function emailReport() {
+  const input  = document.getElementById('parent-email');
+  const status = document.getElementById('email-status');
+  const btn    = document.getElementById('send-btn');
+  const email  = input.value.trim();
+
+  status.className = 'email-status';
+  status.textContent = '';
+
+  if (!isValidEmail(email)) {
+    status.className = 'email-status err';
+    status.textContent = 'Enter a valid email address.';
+    return;
+  }
+
+  const c = (PAYLOAD && PAYLOAD.config) || {};
+  const d = (PAYLOAD && PAYLOAD.diagnosis) || {};
+
+  btn.disabled = true;
+  btn.textContent = 'Preparing PDF...';
+  try {
+    await loadHtml2Pdf();
+    const dataUri = await html2pdf().set(pdfOptions()).from(document.getElementById('report')).toPdf().output('datauristring');
+    const pdfBase64 = dataUri.split('base64,')[1];
+
+    btn.textContent = 'Sending...';
+    const res = await fetch('/api/v1/assessment/report/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        recipientEmail: email,
+        studentName: c.name || 'Student',
+        subject: c.subject || '',
+        level: c.level || '',
+        board: c.board || '',
+        currentGrade: d.currentGrade || '',
+        targetGrade: d.targetGrade || '',
+        pdfBase64,
+        filename: reportFilename()
+      })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) {
+      throw new Error((data.error && data.error.message) || 'Could not send the email — please try again.');
+    }
+    status.className = 'email-status ok';
+    status.textContent = `Sent to ${email}.`;
+    input.value = '';
+  } catch(e) {
+    console.error('Email send error:', e);
+    status.className = 'email-status err';
+    status.textContent = e.message || 'Something went wrong sending the report.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send Report';
+  }
+}
+</script>
+</body>
+</html>
