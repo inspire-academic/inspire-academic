@@ -321,3 +321,11 @@ function = "mark-exam-response"
   to = "/.netlify/functions/leads-create"
   status = 200
   force = true
+
+# Emails the diagnostic assessment report PDF (assessment-report.html) to
+# a parent-supplied address. Same /api/v1/resource/action convention.
+[[redirects]]
+  from = "/api/v1/assessment/report/email"
+  to = "/.netlify/functions/assessment-report-email"
+  status = 200
+  force = true

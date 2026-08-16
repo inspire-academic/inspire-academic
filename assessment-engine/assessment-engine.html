@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadSavedPlans() {
   try {
     const { data, error } = await supa.from('diagnostic_attempts')
-      .select('id,subject,level,exam_board,overall_score,current_grade,target_grade,not_sure_count,total_questions,topic_scores,gaps,student_profile,profile_description,strengths,plan,created_at')
+      .select('id,subject,level,exam_board,overall_score,current_grade,target_grade,not_sure_count,total_questions,topic_scores,gaps,student_profile,profile_description,strengths,teacher_note,plan,created_at')
       .eq('student_id', S.studentId)
       .not('plan', 'is', null)
       .order('created_at', { ascending: false });
@@ -459,7 +459,9 @@ function viewSavedPlan() {
     gaps:                 row.gaps,
     studentProfile:       row.student_profile,
     profileDescription:   row.profile_description,
-    strengths:            row.strengths
+    strengths:            row.strengths,
+    teacherNote:          row.teacher_note,
+    totalQuestions:       row.total_questions
   };
   S.plan = row.plan;
 
@@ -696,6 +698,7 @@ async function runDiagnosis() {
     S.diagnosis.topicScores = topicScores;
     S.diagnosis.overallScore = overallPct;
     S.diagnosis.notSureCount = notSureCount;
+    S.diagnosis.totalQuestions = S.answers.length;
 
     // Save attempt to Supabase
     await saveAttempt();
@@ -1017,9 +1020,33 @@ function renderPlan() {
   html += `
     <button class="btn btn-teal" style="width:100%;font-size:1rem;padding:.9rem;margin-top:1rem;" onclick="goTo('execute')">
       Start Executing →
-    </button>`;
+    </button>
+    <div style="display:flex;gap:.75rem;margin-top:.75rem;flex-wrap:wrap;">
+      <button class="btn btn-outline" style="flex:1;min-width:180px;font-size:.85rem;padding:.75rem;" onclick="openAssessmentReport('download')">
+        📄 Download PDF Report
+      </button>
+      <button class="btn btn-outline" style="flex:1;min-width:180px;font-size:.85rem;padding:.75rem;" onclick="openAssessmentReport('email')">
+        ✉️ Email to Parent
+      </button>
+    </div>`;
 
   document.getElementById('plan-content').innerHTML = html;
+}
+
+// Hands off to the standalone report page via sessionStorage rather than
+// rendering the PDF inline here — html2canvas can't rasterize display:none
+// content, and isolating its ~700KB bundle to its own page keeps it from
+// ever contending with the live assess/diagnose/plan flow on a slow
+// connection. Same-tab navigation (not window.open) because this is an
+// installed PWA, where window.open can kick the user out to the system
+// browser instead of opening a second in-app view.
+function openAssessmentReport(mode) {
+  if (!S.diagnosis || !S.plan) return;
+  sessionStorage.setItem('ia_report_payload', JSON.stringify({
+    config: S.config, diagnosis: S.diagnosis, plan: S.plan,
+    generatedAt: new Date().toISOString()
+  }));
+  location.href = '/assessment-engine/assessment-report.html' + (mode === 'email' ? '?focus=email' : '');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1047,6 +1074,7 @@ async function saveAttempt() {
       student_profile:      S.diagnosis.studentProfile,
       profile_description:  S.diagnosis.profileDescription,
       strengths:            S.diagnosis.strengths,
+      teacher_note:         S.diagnosis.teacherNote,
       completed:      true
     }).select('id').single();
     if (error) throw error;
