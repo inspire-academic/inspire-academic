@@ -76,7 +76,7 @@ exports.handler = async (event) => {
 
     <div class="content">
       <p>Hello,</p>
-      <p><strong>${studentName}</strong> has just completed an AI-powered diagnostic assessment in <strong>${subject}</strong>${level ? ` (${level}${board ? `, ${board}` : ''})` : ''} on Inspire Academic. The full report is attached as a PDF.</p>
+      <p><strong>${studentName}</strong> has just completed Inspire Academic's Advanced Diagnostic Assessment in <strong>${subject}</strong>${level ? ` (${level}${board ? `, ${board}` : ''})` : ''}. The full report is attached as a PDF.</p>
 
       <div class="feature">
         <strong>📋 What's in the report:</strong>
