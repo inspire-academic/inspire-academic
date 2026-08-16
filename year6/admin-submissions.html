@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Programme Registrations — Inspire Academic</title>
+<title>Year 6 Submissions — Inspire Academic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -21,9 +21,6 @@ button{cursor:pointer;font-family:var(--font-body);border:none;}
 #loading-overlay{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:1rem;}
 .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
 
-/* Mobile-first: base below stacks the sidebar as a full-width
-   block above the content; min-width:769px restores the
-   persistent side-by-side layout. */
 .app{display:flex;flex-direction:column;min-height:100vh;}
 .sidebar{width:100%;flex-shrink:0;background:var(--navy2);border-right:none;border-bottom:1px solid var(--border);display:flex;flex-direction:column;padding:1.5rem 0;position:static;height:auto;}
 .sidebar-logo{padding:0 1.5rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
@@ -70,20 +67,13 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .cb{background:rgba(52,152,219,.15);color:var(--blue);}
 .cr{background:rgba(231,76,60,.15);color:var(--red);}
 
+.view-link{display:inline-block;padding:.35rem .8rem;font-size:.78rem;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--muted);transition:all .15s;text-decoration:none;}
+.view-link:hover{border-color:var(--gold);color:var(--gold);}
+
 .empty{text-align:center;padding:3rem 1rem;color:var(--muted);}
 .ei{font-size:2.5rem;margin-bottom:.75rem;}
 .et{font-size:1rem;color:var(--white);margin-bottom:.4rem;}
 
-.link-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;background:var(--navy3);border:1px solid var(--border);border-radius:var(--r);padding:.75rem 1rem;flex-wrap:wrap;}
-.link-info{min-width:0;}
-.link-name{font-size:.85rem;font-weight:600;margin-bottom:.15rem;}
-.link-url{font-family:var(--font-mono);font-size:.82rem;color:var(--gold);word-break:break-all;}
-.link-copy{flex-shrink:0;padding:.5rem 1rem;font-size:.8rem;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--muted);transition:all .15s;}
-.link-copy:hover{border-color:var(--gold);color:var(--gold);}
-.link-copy.copied{border-color:var(--green);color:var(--green);}
-
-/* Mobile-first: base above is the phone layout (stacked
-   sidebar, 2-up stats); restore the desktop layout here. */
 @media(min-width:769px){
   .app{flex-direction:row;}
   .sidebar{width:220px;border-right:1px solid var(--border);border-bottom:none;position:sticky;top:0;height:100vh;}
@@ -107,8 +97,8 @@ tr:hover td{background:rgba(255,255,255,.02);}
     </div></a>
     <a href="/teacher/teacher.html"><div class="nav-item"><span class="ico">📊</span><span>Dashboard</span></div></a>
     <a href="/teacher/admin-teacher-mgmt.html"><div class="nav-item"><span class="ico">👩‍🏫</span><span>Manage Teachers</span></div></a>
-    <div class="nav-item here"><span class="ico">📋</span><span>Registrations</span></div>
-    <a href="/year6/admin-submissions.html"><div class="nav-item"><span class="ico">🧪</span><span>Year 6 Submissions</span></div></a>
+    <a href="/programmes/admin/leads.html"><div class="nav-item"><span class="ico">📋</span><span>Registrations</span></div></a>
+    <div class="nav-item here"><span class="ico">🧪</span><span>Year 6 Submissions</span></div>
     <div class="sidebar-footer">
       <div class="uname"><strong id="admin-name">Admin</strong>Admin Account</div>
       <button class="sign-out" onclick="signOut()">Sign out</button>
@@ -118,32 +108,39 @@ tr:hover td{background:rgba(255,255,255,.02);}
   <main class="main">
     <div class="ph">
       <div>
-        <div class="pt">Programme Registrations</div>
-        <div class="ps">Interest registered through public recruitment landing pages</div>
+        <div class="pt">Year 6 Bridging — Submissions</div>
+        <div class="ps">Lab reports students have started or submitted from their programme module</div>
       </div>
     </div>
 
-    <div class="tc" style="margin-bottom:1.5rem;">
-      <div class="th"><div class="tt">Share these links</div></div>
-      <div id="link-list" style="padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.75rem;"></div>
-    </div>
-
     <div class="stat-row">
-      <div class="sc"><div class="sl">Total</div><div class="sv" id="s1">—</div><div class="ss">registrations</div></div>
-      <div class="sc"><div class="sl">New</div><div class="sv" id="s2">—</div><div class="ss">awaiting follow-up</div></div>
-      <div class="sc"><div class="sl">Contacted</div><div class="sv" id="s3">—</div><div class="ss">in progress</div></div>
-      <div class="sc"><div class="sl">Enrolled</div><div class="sv" id="s4">—</div><div class="ss">converted</div></div>
+      <div class="sc"><div class="sl">Total</div><div class="sv" id="s1">—</div><div class="ss">reports started</div></div>
+      <div class="sc"><div class="sl">Submitted</div><div class="sv" id="s2">—</div><div class="ss">ready for review</div></div>
+      <div class="sc"><div class="sl">Still Drafting</div><div class="sv" id="s3">—</div><div class="ss">not yet submitted</div></div>
+      <div class="sc"><div class="sl">Students</div><div class="sv" id="s4">—</div><div class="ss">with at least one report</div></div>
     </div>
 
     <div class="tc">
       <div class="th">
-        <div class="tt">All Registrations</div>
+        <div class="tt">All Submissions</div>
         <div class="thr">
-          <select class="sselect" id="f-programme" onchange="applyFilters()"><option value="">All programmes</option></select>
-          <input type="text" class="sinput" style="width:220px;" placeholder="Search name or email…" oninput="applyFilters()" id="f-search">
+          <select class="sselect" id="f-project" onchange="applyFilters()"><option value="">All projects</option></select>
+          <select class="sselect" id="f-status" onchange="applyFilters()">
+            <option value="">All statuses</option>
+            <option value="submitted">Submitted</option>
+            <option value="draft">Still drafting</option>
+            <option value="graded">Graded</option>
+          </select>
+          <input type="text" class="sinput" style="width:200px;" placeholder="Search student…" oninput="applyFilters()" id="f-search">
         </div>
       </div>
       <div id="lwrap"><div class="empty"><div class="spinner" style="margin:0 auto;"></div></div></div>
+    </div>
+
+    <div style="color:var(--muted);font-size:.8rem;max-width:640px;">
+      Note: this list only shows students who have opened a project and started a report — programme
+      enrolment isn't tracked separately yet, so a student who hasn't started anything won't appear
+      here at all.
     </div>
   </main>
 </div>
@@ -153,63 +150,13 @@ const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
 
-let _leads=[];
-
-const REG_LINKS=[
-  {name:'Inspire Academic — General Registration',url:'https://www.inspireacademic.org/interest'},
-  {name:'Year 6 Science Bridging Programme',url:'https://www.inspireacademic.org/bridge'},
-  {name:'Free Advanced Diagnostic Assessment',url:'https://www.inspireacademic.org/diagnostic'},
-];
+let _rows=[];
 
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-function renderLinks(){
-  const w=document.getElementById('link-list');
-  w.innerHTML=REG_LINKS.map((l,i)=>`
-    <div class="link-row">
-      <div class="link-info"><div class="link-name">${esc(l.name)}</div><div class="link-url">${esc(l.url)}</div></div>
-      <button class="link-copy" id="copy-${i}" onclick="copyLink('${esc(l.url)}',${i})">📋 Copy Link</button>
-    </div>
-  `).join('');
-}
-
-function flashCopied(btn,ok){
-  const prev=btn.textContent;
-  btn.textContent=ok?'✓ Copied':'Copy failed — select manually';
-  btn.classList.toggle('copied',ok);
-  setTimeout(()=>{btn.textContent=prev;btn.classList.remove('copied');},2000);
-}
-
-function fallbackCopy(url){
-  const ta=document.createElement('textarea');
-  ta.value=url;
-  ta.style.position='fixed';ta.style.opacity='0';
-  document.body.appendChild(ta);
-  ta.select();
-  let ok=false;
-  try{ok=document.execCommand('copy');}catch(e){ok=false;}
-  document.body.removeChild(ta);
-  return ok;
-}
-
-function copyLink(url,i){
-  const btn=document.getElementById('copy-'+i);
-  // navigator.clipboard.writeText can hang indefinitely (neither resolve nor
-  // reject) when called without genuine user-activation in some browser/
-  // automation contexts — race it against a short timeout so the button
-  // always gets feedback instead of silently doing nothing.
-  const clipboardAttempt=(navigator.clipboard&&navigator.clipboard.writeText)
-    ? navigator.clipboard.writeText(url)
-    : Promise.reject();
-  const timeout=new Promise((_,reject)=>setTimeout(reject,600));
-  Promise.race([clipboardAttempt,timeout])
-    .then(()=>flashCopied(btn,true))
-    .catch(()=>flashCopied(btn,fallbackCopy(url)));
-}
-
 function chip(status){
-  const map={new:['cb','New'],contacted:['ca','Contacted'],enrolled:['cg','Enrolled'],lost:['cr','Lost']};
-  const [cls,label]=map[status]||['cb',status||'—'];
+  const map={submitted:['cg','Submitted'],draft:['ca','Drafting'],graded:['cb','Graded']};
+  const [cls,label]=map[status]||['ca',status||'—'];
   return `<span class="chip ${cls}">${label}</span>`;
 }
 
@@ -222,71 +169,91 @@ async function init(){
 
   document.getElementById('admin-name').textContent=p.full_name||session.user.email;
 
-  renderLinks();
-  await loadLeads();
+  await loadSubmissions();
   document.getElementById('loading-overlay').style.display='none';
 }
 
 async function signOut(){await supa.auth.signOut();window.location.href='/';}
 
-async function loadLeads(){
-  const{data,error}=await supa.from('leads')
-    .select('id,child_name,parent_name,parent_email,parent_phone,year_group,subjects_interested,programme_name,programme_slug,source,campaign,status,submitted_at')
-    .order('submitted_at',{ascending:false});
+async function loadSubmissions(){
+  const{data:submissions,error}=await supa.from('student_submissions')
+    .select('id,user_id,project_id,status,submitted_at,created_at')
+    .order('submitted_at',{ascending:false,nullsFirst:false});
 
   if(error){
-    document.getElementById('lwrap').innerHTML=`<div class="empty"><div class="ei">⚠️</div><div class="et">Could not load registrations</div><div>${esc(error.message)}</div></div>`;
+    document.getElementById('lwrap').innerHTML=`<div class="empty"><div class="ei">⚠️</div><div class="et">Could not load submissions</div><div>${esc(error.message)}</div></div>`;
     return;
   }
 
-  _leads=data||[];
+  if(!submissions||!submissions.length){
+    _rows=[];
+    render(_rows);
+    ['s1','s2','s3','s4'].forEach(id=>document.getElementById(id).textContent='0');
+    return;
+  }
 
-  document.getElementById('s1').textContent=_leads.length;
-  document.getElementById('s2').textContent=_leads.filter(l=>l.status==='new').length;
-  document.getElementById('s3').textContent=_leads.filter(l=>l.status==='contacted').length;
-  document.getElementById('s4').textContent=_leads.filter(l=>l.status==='enrolled').length;
+  const userIds=[...new Set(submissions.map(s=>s.user_id).filter(Boolean))];
+  const projectIds=[...new Set(submissions.map(s=>s.project_id).filter(Boolean))];
 
-  const programmes=[...new Set(_leads.map(l=>l.programme_slug).filter(Boolean))];
-  const sel=document.getElementById('f-programme');
-  programmes.forEach(slug=>{
-    const name=(_leads.find(l=>l.programme_slug===slug)||{}).programme_name||slug;
-    sel.insertAdjacentHTML('beforeend',`<option value="${esc(slug)}">${esc(name)}</option>`);
+  const [{data:profiles},{data:projects}]=await Promise.all([
+    userIds.length?supa.from('profiles').select('id,full_name,first_name,year_group').in('id',userIds):Promise.resolve({data:[]}),
+    projectIds.length?supa.from('projects').select('id,title,order_number').in('id',projectIds):Promise.resolve({data:[]})
+  ]);
+
+  const profileById=Object.fromEntries((profiles||[]).map(p=>[p.id,p]));
+  const projectById=Object.fromEntries((projects||[]).map(pr=>[pr.id,pr]));
+
+  _rows=submissions.map(s=>({
+    ...s,
+    studentName:(profileById[s.user_id]||{}).full_name||(profileById[s.user_id]||{}).first_name||'Unknown student',
+    yearGroup:(profileById[s.user_id]||{}).year_group||'',
+    projectTitle:(projectById[s.project_id]||{}).title||`Project ${s.project_id}`
+  }));
+
+  document.getElementById('s1').textContent=_rows.length;
+  document.getElementById('s2').textContent=_rows.filter(r=>r.status==='submitted'||r.status==='graded').length;
+  document.getElementById('s3').textContent=_rows.filter(r=>r.status==='draft').length;
+  document.getElementById('s4').textContent=userIds.length;
+
+  const sel=document.getElementById('f-project');
+  [...projectIds].forEach(id=>{
+    const title=(projectById[id]||{}).title||`Project ${id}`;
+    sel.insertAdjacentHTML('beforeend',`<option value="${esc(id)}">${esc(title)}</option>`);
   });
 
-  render(_leads);
+  render(_rows);
 }
 
 function applyFilters(){
-  const slug=document.getElementById('f-programme').value;
+  const projectId=document.getElementById('f-project').value;
+  const status=document.getElementById('f-status').value;
   const q=document.getElementById('f-search').value.toLowerCase();
-  render(_leads.filter(l=>
-    (!slug||l.programme_slug===slug) &&
-    (!q||(l.child_name||'').toLowerCase().includes(q)||(l.parent_name||'').toLowerCase().includes(q)||(l.parent_email||'').toLowerCase().includes(q))
+  render(_rows.filter(r=>
+    (!projectId||String(r.project_id)===projectId) &&
+    (!status||r.status===status) &&
+    (!q||r.studentName.toLowerCase().includes(q))
   ));
 }
 
 function render(list){
   const w=document.getElementById('lwrap');
   if(!list.length){
-    w.innerHTML=`<div class="empty"><div class="ei">📋</div><div class="et">No registrations yet</div><div>Interest submitted through a programme landing page will appear here</div></div>`;
+    w.innerHTML=`<div class="empty"><div class="ei">🧪</div><div class="et">No submissions yet</div><div>Reports students start on their Year 6 module will appear here</div></div>`;
     return;
   }
   w.innerHTML=`<table><thead><tr>
-    <th>Child</th><th>Year / Subjects</th><th>Parent / Guardian</th><th>Contact</th><th>Programme</th><th>Source</th><th>Status</th><th>Submitted</th>
+    <th>Student</th><th>Project</th><th>Status</th><th>Started</th><th>Submitted</th><th></th>
   </tr></thead><tbody>
-    ${list.map(l=>{
-      const d=l.submitted_at?new Date(l.submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
-      const src=[l.source,l.campaign].filter(Boolean).join(' / ')||'—';
-      const yearSubj=[l.year_group,l.subjects_interested].filter(Boolean).join(' — ')||'—';
+    ${list.map(r=>{
+      const started=r.created_at?new Date(r.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
+      const submitted=r.submitted_at?new Date(r.submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
       return`<tr>
-        <td><strong>${esc(l.child_name)}</strong></td>
-        <td style="color:var(--muted);font-size:.82rem">${esc(yearSubj)}</td>
-        <td>${esc(l.parent_name)}</td>
-        <td><div>${esc(l.parent_email)}</div><div style="color:var(--muted);font-size:.8rem">${esc(l.parent_phone)}</div></td>
-        <td style="color:var(--muted)">${esc(l.programme_name||l.programme_slug)}</td>
-        <td style="color:var(--muted);font-size:.82rem">${esc(src)}</td>
-        <td>${chip(l.status)}</td>
-        <td style="color:var(--muted);font-size:.8rem">${d}</td>
+        <td><strong>${esc(r.studentName)}</strong>${r.yearGroup?`<div style="color:var(--muted);font-size:.78rem">${esc(r.yearGroup)}</div>`:''}</td>
+        <td style="color:var(--muted)">${esc(r.projectTitle)}</td>
+        <td>${chip(r.status)}</td>
+        <td style="color:var(--muted);font-size:.82rem">${started}</td>
+        <td style="color:var(--muted);font-size:.82rem">${submitted}</td>
+        <td><a class="view-link" href="/year6/year6-pdf-preview.html?submission=${esc(r.id)}" target="_blank">View report →</a></td>
       </tr>`;
     }).join('')}
   </tbody></table>`;
