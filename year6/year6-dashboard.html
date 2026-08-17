@@ -102,6 +102,13 @@ main{max-width:1200px;margin:0 auto;padding:2rem;}
 .project-status.in-progress{background:#e8620a22;color:var(--orange);}
 .project-status.locked{background:#1a3a5c;color:var(--muted);}
 
+.project-graded-badge{
+  display:inline-block;font-size:.7rem;font-family:var(--font-mono);
+  text-transform:uppercase;letter-spacing:.06em;padding:.25rem .6rem;
+  border-radius:4px;margin-bottom:.5rem;margin-right:.4rem;
+  background:rgba(212,160,23,.15);color:var(--gold);border:1px solid rgba(212,160,23,.35);
+}
+
 .project-title{font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:.4rem;}
 .project-subtitle{font-size:.85rem;color:var(--gold);margin-bottom:.8rem;}
 .project-description{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:1.2rem;}
@@ -322,14 +329,15 @@ function canAccessProject(project, allProjects, submissions){
 }
 
 // Render project card
-function renderProject(project, status, canAccess){
+function renderProject(project, status, canAccess, submission){
   const statusLabels = {
     'completed': '✓ Completed',
     'in-progress': '🔄 In Progress',
     'locked': '🔒 Locked'
   };
-  
+
   const statusClass = status.replace(' ', '-');
+  const isGraded = submission && submission.status === 'graded';
   
   // Project images - using the workbook cover images for consistency
   const projectImages = {
@@ -352,6 +360,7 @@ function renderProject(project, status, canAccess){
       
       <div class="project-card-content">
         <div class="project-number">P${project.order_number}</div>
+        ${isGraded ? `<div class="project-graded-badge">🏅 Graded</div>` : ''}
         <div class="project-status ${statusClass}">${statusLabels[status]}</div>
         
         <h3 class="project-title">${project.title}</h3>
@@ -420,7 +429,8 @@ function renderProject(project, status, canAccess){
   const projectsHtml = projects.map(project => {
     const status = getProjectStatus(project.id, submissions);
     const canAccess = canAccessProject(project, projects, submissions);
-    return renderProject(project, status, canAccess);
+    const submission = submissions.find(s => s.project_id === project.id);
+    return renderProject(project, status, canAccess, submission);
   }).join('');
   
   document.getElementById('projects-grid').innerHTML = projectsHtml;
