@@ -4,28 +4,24 @@
 --
 -- STATUS: DRAFT TRANSCRIPTION — Questions 1-2 only (20 of 100 marks),
 -- per docs/pasco/INSPIRE-PASCO-DESIGN.md §2 pipeline steps 2-3
--- (transcription + solution-authoring passes). NOT yet spot-checked
--- against the source PDF (step 2's own requirement) and NOT QA'd
--- (step 4) or human-approved (step 5). Do not treat as ready to
--- publish. Run AFTER pasco_schema.sql. Idempotent — safe to re-run.
+-- (transcription + solution-authoring passes). Spot-checked against
+-- rendered source PDF pages (QP p3, MS p7) on 2026-08-21 — see below.
+-- Still NOT QA'd (step 4) or human-approved (step 5). Do not treat as
+-- ready to publish. Run AFTER pasco_schema.sql. Idempotent — safe to
+-- re-run.
 --
--- KNOWN TRANSCRIPTION FLAGS — verify against source PDF pages 3-4, 10:
---   1. Q01.3's Table 1 (energy-storage comparison) came out of
---      pdftotext with rows/columns visibly misaligned. The values
---      below (Method A: 33,600 kJ/100kg, 40% wasted, anywhere;
---      Method B: 490 kJ/100kg, 25% wasted, high mountains) were
---      reconstructed by cross-checking against the mark scheme's
---      indicative-content numbers (20,160/13,440 kJ => 40% wasted,
---      60% efficient; 367.5/122.5 kJ => 25% wasted, 75% efficient),
---      which are internally consistent — but the table's *visual*
---      layout on the source PDF hasn't been visually confirmed.
---   2. Q01.2's mark scheme extra-information column included "allow
---      kinetic / Ek" after the gravitational-potential answer, which
---      doesn't make physical sense for this question (kinetic energy
---      doesn't increase from pumping water uphill at constant speed)
---      — likely column bleed from an adjacent mark-scheme cell during
---      extraction. Omitted from the transcribed mark_scheme below;
---      confirm against the source PDF before treating as resolved.
+-- SPOT-CHECK RESULTS (2026-08-21, rendered via poppler pdftoppm):
+--   1. Q01.3's Table 1 — CONFIRMED CORRECT. pdftotext's plain-text
+--      extraction had visibly misaligned the table's rows/columns,
+--      but the values transcribed below (Method A: 33,600 kJ/100kg,
+--      40% wasted, anywhere; Method B: 490 kJ/100kg, 25% wasted, high
+--      mountains) exactly match the rendered source table on QP p3.
+--   2. Q01.2's mark scheme "allow kinetic / Ek" — CONFIRMED REAL, not
+--      an extraction artifact as first suspected. The official AQA
+--      mark scheme (MS p7) genuinely credits "kinetic / Ek" as an
+--      alternative answer here, alongside the intended gravitational
+--      potential energy answer — an unusual but real examiner
+--      allowance. Now included in the mark_scheme text below.
 -- ═══════════════════════════════════════════════════════════
 
 INSERT INTO past_papers (subject_id, exam_board, tier, year, series, paper_number, total_marks, duration_minutes, is_published)
@@ -47,8 +43,8 @@ WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '01.2', 'aqa-ph-fh-energy-stores-transfers', 1,
 $q$Which energy store increases when water is pumped uphill into a reservoir?$q$,
-$q$Gravitational potential energy store. Allow "Ep" or "GPE". [1 mark] (AO1; spec 4.1.1.1) — TRANSCRIPTION FLAG: source extra-information column also listed "allow kinetic / Ek", likely column bleed from an adjacent cell; omitted here pending source-PDF check.$q$,
-$q$Lifting water to a height stores energy in its gravitational potential energy store — the higher it goes, the more GPE it gains (Ep = mgh). This is the store the reservoir "banks" the turbine's energy in, until it's released by letting the water flow back down through a turbine.$q$,
+$q$Gravitational potential energy store. Allow "Ep" or "GPE". Allow "kinetic" / "Ek" (an unusual additional AQA allowance for this question — confirmed against the official mark scheme, not a transcription error). [1 mark] (AO1; spec 4.1.1.1)$q$,
+$q$Lifting water to a height stores energy in its gravitational potential energy store — the higher it goes, the more GPE it gains (Ep = mgh). This is the store the reservoir "banks" the turbine's energy in, until it's released by letting the water flow back down through a turbine. (The official mark scheme also credits "kinetic energy" here — an unusually generous allowance, since the water isn't meaningfully speeding up as it's pumped uphill. Gravitational potential is the answer that actually demonstrates understanding of the physics; don't rely on the kinetic allowance as your go-to answer.)$q$,
 'AO1', 2
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
