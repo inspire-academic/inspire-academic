@@ -320,31 +320,34 @@ Matching the existing "WHAT WE ARE NOT DOING" discipline
 
 ---
 
-## 8. Open questions — need your decision before implementation
+## 8. Open questions — resolved 2026-08-21
 
-1. **Sub-part granularity**: does `4(b)(ii)` get its own
-   `past_paper_questions` row (cleanest for per-part mastery, more
-   transcription rows) or does the whole of Q4 live in one row with
-   sub-parts as structured content within it (fewer rows, coarser
-   mastery signal)? Recommend per-part rows — it's what makes "you've
-   never gotten a momentum question right" specific enough to act on.
-2. **Where do supplied PDFs land before transcription?** Not
-   committed to the repo as raw PDFs (copyright + repo bloat) — likely
-   a private Supabase Storage bucket, admin-only, deleted after
-   transcription. Needs a decision, not an assumption.
-3. **Exam-board copyright**: past papers are typically
-   freely-republishable once past their embargo window, but this
-   needs an explicit check per board before any paper is marked
-   `is_published: true` — a legal question, not a technical one, and
-   out of scope for this document to answer.
-4. **Genuine diagrams within questions** (a circuit, a real graph the
-   paper printed): does this reuse the Lesson Factory's four-mode
-   representation router (`docs/production/INSPIRE-VISUAL-ASSET-PIPELINE-PROPOSAL.md`)
-   as-is, or does exam-paper-diagram fidelity (must match the original
-   exactly, not be redrawn) need its own rule? Recommend: redraw
-   deterministically only when trivial (a simple circuit); scan the
-   original at high fidelity as a Mode-C-shaped asset otherwise —
-   needs your sign-off before the first pilot paper.
+1. **Sub-part granularity**: **Resolved — per-part rows.** `4(b)(ii)`
+   gets its own `past_paper_questions` row. More transcription rows,
+   but it's what makes "you've never gotten a momentum question right"
+   specific enough to act on, and matches §1's own stated rationale
+   for going per-question at all.
+2. **Where do supplied PDFs land before transcription?** **Resolved —
+   private Supabase Storage bucket, admin-only, retained indefinitely
+   (not auto-deleted after transcription).** Deviates from this
+   document's original recommendation (auto-delete once transcribed):
+   PDFs stay in the bucket as a manual-deletion fallback until the
+   pipeline has proven itself across enough papers to trust QA alone —
+   deletion is then a deliberate admin action per paper, not an
+   automated pipeline step. Revisit once several papers have gone
+   through the pipeline cleanly.
+3. **Exam-board copyright**: **Resolved — manual sign-off per paper,
+   no automated field.** Before any `past_papers` row is set
+   `is_published: true`, the admin (Eric) personally confirms
+   clearance for that specific paper/board/series. This is a human
+   checkpoint folded into the existing Gate 8 human-approval step
+   (§2.5), not a new schema field or QA check — the legal judgment
+   doesn't reduce to a boolean.
+4. **Genuine diagrams within questions**: **Resolved — hybrid, as
+   originally recommended.** Redraw deterministically only when
+   trivial (a simple circuit); scan the original at high fidelity as a
+   Mode-C-shaped asset otherwise, rather than forcing every diagram
+   through the Lesson Factory's four-mode router unchanged.
 
 ---
 
