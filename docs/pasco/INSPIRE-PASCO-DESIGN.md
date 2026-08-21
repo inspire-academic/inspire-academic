@@ -388,6 +388,28 @@ Matching the existing "WHAT WE ARE NOT DOING" discipline
    any paper as publication-track, not just before flipping
    `is_published: true` on one. This is Eric's call to make with AQA
    directly, not something to resolve by adjusting the seed file.
+
+   **Decision, 2026-08-22**: pilot paper #1 stays strictly Eric's
+   personal use (learning/revision prep, via the standalone HTML copy
+   in his Downloads folder) — **not platform-track** — until AQA has
+   actually been contacted and something changes. No PASCO content
+   goes anywhere near `inspireacademic.org`, staging included, before
+   that conversation happens; this pilot paper does not get an
+   admin/student UI, does not get scaffolded further toward
+   `is_published: true`, and isn't the thing to keep polishing.
+   Meanwhile, the PASCO *pipeline itself* (transcription discipline,
+   real-crop diagram sourcing, QA tooling, the review-artifact
+   generator) is proven and reusable — the next work is applying that
+   same template somewhere the copyright question doesn't block
+   publication, not producing more AQA past-paper content for this
+   repo. Candidates worth considering when picking the next
+   application (not yet chosen): a different exam board whose terms
+   may be more permissive (check before assuming — don't repeat the
+   mistake of assuming terms rather than reading them); original
+   Inspire-authored practice questions in the same exam-style format
+   (no third-party copyright at all); or any other structured content
+   type this template's pipeline (source → real assets → QA → human
+   review artifact) generalizes to.
 4. **Genuine diagrams within questions**: **Resolved — hybrid, as
    originally recommended.** Redraw deterministically only when
    trivial (a simple circuit); scan the original at high fidelity as a
