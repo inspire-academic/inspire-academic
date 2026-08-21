@@ -343,6 +343,51 @@ Matching the existing "WHAT WE ARE NOT DOING" discipline
    checkpoint folded into the existing Gate 8 human-approval step
    (§2.5), not a new schema field or QA check — the legal judgment
    doesn't reduce to a boolean.
+
+   **Addendum, 2026-08-22 — AQA's written policy researched, and it
+   conflicts with PASCO's current design on three independent points.**
+   Read directly from AQA's official "Policy on the use of AQA
+   material" (filestore.aqa.org.uk/admin/library/AQA-MAT-USE-POLICY.PDF,
+   v4.0, Feb 2024) and aqa.org.uk's copyright policy/terms pages:
+   - **Websites**: "AQA does not allow the use of its material in any
+     format on any third party website... AQA material including
+     question papers may not be shown or the contents read out." No
+     permission process is even offered for this channel — the entire
+     permission/fee process in the policy is for print books, eBooks,
+     and CD/DVD, not the web.
+   - **Apps**: "AQA does not grant permission for the use of its
+     material in apps" — stated as flatly as the website restriction.
+     Relevant here because Inspire Academic is a PWA (CLAUDE.md
+     principle 5).
+   - **AI-assisted content**: "AQA does not permit the use of any AQA
+     material in any manner or for any purposes in connection with the
+     training of Artificial Intelligence powered tools or technologies.
+     AQA will not allow the use of any AQA material in or on any
+     edition of a third-party work where any part of that work is
+     generated or produced using Artificial Intelligence or similar
+     tools or technologies." PASCO's worked solutions/coaching notes
+     are AI-assisted, which this reads as an independent, separate
+     disqualifier from the website/app restrictions above.
+   - Even in the print/book context this policy actually covers,
+     **complete papers are never permitted** ("AQA does not grant
+     permission for the reproduction of complete examination papers")
+     — only up to 50% of an individual paper's questions, by written
+     request per question, never blanket. Pilot paper #1 is a complete
+     paper (43/43 rows).
+
+   This doesn't mean the pilot is dead — larger commercial ed-tech/
+   tutoring platforms that do offer AQA past-paper content typically
+   operate under bespoke licensing agreements not reflected in this
+   generic public policy document, which is written for authors/
+   publishers of printed revision guides, not web platforms. But it
+   does mean the working assumption behind PASCO's current display
+   convention ("we display an attribution and that's sufficient") is
+   not supported by AQA's own published terms, and the real next step
+   is a direct conversation with AQA (copyright@aqa.org.uk) about
+   whether/how a platform like this can be licensed — before treating
+   any paper as publication-track, not just before flipping
+   `is_published: true` on one. This is Eric's call to make with AQA
+   directly, not something to resolve by adjusting the seed file.
 4. **Genuine diagrams within questions**: **Resolved — hybrid, as
    originally recommended.** Redraw deterministically only when
    trivial (a simple circuit); scan the original at high fidelity as a

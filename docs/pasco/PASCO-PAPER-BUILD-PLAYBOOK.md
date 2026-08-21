@@ -453,6 +453,16 @@ gap above gets closed, not because the process gets skipped.
 - Human approval (§2.5 of the design doc) and AQA's specific reuse
   terms are still Eric's sign-off, not a process step this playbook
   can complete. No paper's `is_published` becomes `true` without both.
+  **This is no longer a formality to wait on** — AQA's own written
+  policy has been read directly (design doc §8 item 3's addendum, 
+  2026-08-22) and it conflicts with this pilot's current design on
+  three separate points (no third-party website use, no app use, no
+  AI-assisted accompanying content), plus a fourth that applies
+  regardless of medium (no complete-paper reproduction, ever). Don't
+  treat a future paper as "just needs Eric's sign-off" without reading
+  that addendum first — the open question now is whether AQA will
+  grant a bespoke licence for a platform like this at all, not whether
+  Eric personally approves the attribution wording.
 - No schema has been applied to a live Supabase instance yet.
 - No student-facing UI exists yet (deliberately — see design doc §9).
   The review artifact in §6 is a stand-in for reviewing content, not a

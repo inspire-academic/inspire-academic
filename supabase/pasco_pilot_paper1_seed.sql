@@ -110,6 +110,21 @@
 -- before is_published: true — it's the display convention that
 -- accompanies that sign-off, not a substitute for it.
 --
+-- COPYRIGHT — UPDATE 2026-08-22: AQA's actual written policy has now
+-- been read directly (not assumed) — see
+-- docs/pasco/INSPIRE-PASCO-DESIGN.md §8 item 3's addendum for the full
+-- findings and sources. Short version: AQA's public policy explicitly
+-- disallows reproducing its material on any third-party website or in
+-- any app, disallows reproducing complete papers under any
+-- circumstance, and separately disallows AQA material appearing in any
+-- third-party work where any part is AI-generated (this file's worked
+-- solutions are). This is not a formality to confirm before
+-- publishing — it is a real conflict between what this pilot currently
+-- does and what AQA's own terms permit, and it needs a direct
+-- conversation with AQA (copyright@aqa.org.uk), not just Eric's
+-- internal sign-off, before this paper (or the display convention
+-- above) can be treated as publication-track.
+--
 -- WORKED_SOLUTION FORMAT — revised 2026-08-21 (user feedback: the
 -- field previously mixed the actual answer together with teaching
 -- commentary, reading as one dense block rather than "here's the
