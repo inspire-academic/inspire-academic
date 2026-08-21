@@ -24,6 +24,9 @@ window.SPEC_MAP = {
       { slug:'aqa-ph-fh-magnetism-motor-effect', name:'The motor effect', paper:2, tier:'Both', subtopics:['Force on a conductor','Fleming\'s left-hand rule','Electric motors'] },
       { slug:'aqa-ph-fh-magnetism-induction', name:'Electromagnetic induction', paper:2, tier:'Both', subtopics:['Induced pd','Generators','Transformers','National Grid'] },
       { slug:'aqa-ph-fh-atomic-structure', name:'Atomic structure and radioactivity', paper:1, tier:'Both', subtopics:['Atomic model','Isotopes','Alpha, beta, gamma','Half-life','Fission and fusion'] },
+      { slug:'aqa-ph-fh-particle-density', name:'Density and changes of state', paper:1, tier:'Both', subtopics:['Density (ρ = m/V)','States of matter and the particle model','Changes of state','Conservation of mass'] },
+      { slug:'aqa-ph-fh-particle-energy', name:'Internal energy and specific heat capacity', paper:1, tier:'Both', subtopics:['Internal energy','Specific heat capacity','Specific latent heat','Temperature changes'] },
+      { slug:'aqa-ph-fh-particle-pressure', name:'Particle motion and pressure in gases', paper:1, tier:'Both', subtopics:['Gas pressure and particle motion','Effect of temperature on pressure at constant volume','Pressure-volume relationship (Higher)'] },
       { slug:'aqa-ph-h-space', name:'Space physics', paper:2, tier:'Higher', subtopics:['Solar system','Life cycle of stars','Red-shift','Big Bang evidence'] },
     ],
     Edexcel: [
