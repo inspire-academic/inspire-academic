@@ -2,26 +2,50 @@
 -- PASCO pilot — AQA GCSE Physics 8463/1H, Higher Tier Paper 1,
 -- June 2024 (source: AQA-84631H-QP/MS/INS-JUN241.pdf)
 --
--- STATUS: DRAFT TRANSCRIPTION — Questions 1-2 only (20 of 100 marks),
--- per docs/pasco/INSPIRE-PASCO-DESIGN.md §2 pipeline steps 2-3
--- (transcription + solution-authoring passes). Spot-checked against
--- rendered source PDF pages (QP p3, MS p7) on 2026-08-21 — see below.
--- Still NOT QA'd (step 4) or human-approved (step 5). Do not treat as
--- ready to publish. Run AFTER pasco_schema.sql. Idempotent — safe to
--- re-run.
+-- STATUS: DRAFT TRANSCRIPTION — Questions 1-4 (39 of 100 marks), per
+-- docs/pasco/INSPIRE-PASCO-DESIGN.md §2 pipeline steps 2-3
+-- (transcription + solution-authoring passes). All rows below have
+-- been checked against rendered source PDF pages (not just pdftotext's
+-- plain-text extraction, which has repeatedly misaligned table/column
+-- content on this paper — see flags below). Still NOT QA'd (step 4)
+-- or human-approved (step 5). Do not treat as ready to publish. Run
+-- AFTER pasco_schema.sql. Idempotent — safe to re-run.
 --
 -- SPOT-CHECK RESULTS (2026-08-21, rendered via poppler pdftoppm):
---   1. Q01.3's Table 1 — CONFIRMED CORRECT. pdftotext's plain-text
---      extraction had visibly misaligned the table's rows/columns,
---      but the values transcribed below (Method A: 33,600 kJ/100kg,
---      40% wasted, anywhere; Method B: 490 kJ/100kg, 25% wasted, high
---      mountains) exactly match the rendered source table on QP p3.
+--   1. Q01.3's Table 1 — CONFIRMED CORRECT despite pdftotext's
+--      misaligned plain-text extraction (QP p3).
 --   2. Q01.2's mark scheme "allow kinetic / Ek" — CONFIRMED REAL, not
---      an extraction artifact as first suspected. The official AQA
---      mark scheme (MS p7) genuinely credits "kinetic / Ek" as an
---      alternative answer here, alongside the intended gravitational
---      potential energy answer — an unusual but real examiner
---      allowance. Now included in the mark_scheme text below.
+--      an extraction artifact as first suspected (MS p7).
+--   3. Q03.3 — pdftotext's extraction showed this as 1 mark; the
+--      rendered mark scheme (MS p12) confirms it's genuinely 2 marks
+--      (1 for "potential difference is low", 1 for the consequence) —
+--      matches the question paper's own "[2 marks]" label. Corrected
+--      below; the total-marks check would have caught this anyway
+--      (6+1+1=8 ≠ Q3's declared 9), but worth noting as a third
+--      instance of the same extraction-tool failure mode.
+--   4. Q03.2's "which graph" MCQ has three simple line-graph options
+--      (not four, as first assumed from the unrendered page) —
+--      confirmed correct answer (straight line through the origin)
+--      against the rendered mark scheme (MS p11).
+--   5. Q4 (all parts) transcribed directly from rendered QP pages
+--      11-14 and MS text (which came out clean for Q4, no jumbling) —
+--      marks sum 3+1+1+4+1=10, matches "Total Question 4" on MS p14.
+--
+-- DIAGRAM ASSETS NEEDED (not yet produced — text-only placeholders
+-- below per §1's "real text, not scanned images" rule; actual asset
+-- production is separate future work, flagged per question):
+--   - Q03.1's Figure 3 is a real annotated photograph of lab apparatus
+--     (switch, ammeter, cell, resistor, crocodile clips, wire on a
+--     ruler) — per the diagram-fidelity hybrid rule (§8.4) this needs
+--     a high-fidelity scanned image, not a redraw.
+--   - Q03.2's three graph options are simple mathematical line/curve
+--     shapes — trivial to redraw deterministically as SVG, per the
+--     same rule.
+--   - Q04.1's Figure 4 (generator schematic: dome, belt, motor) is a
+--     moderately simple labelled illustration — redrawable as SVG.
+--   - Q04.1's Figure 5 (photo of student, hair standing up) and
+--     Q04.4's Figure 6 (photo of dome + earthed conductor) are
+--     genuine photographs — need high-fidelity scanned images.
 -- ═══════════════════════════════════════════════════════════
 
 INSERT INTO past_papers (subject_id, exam_board, tier, year, series, paper_number, total_marks, duration_minutes, is_published)
@@ -127,5 +151,107 @@ $q$Nuclear power stations do not generate electricity every day of the year. One
 $q$number of days = (92 ÷ 100) × 365 [1]; number of days = 335.8 [1]. Allow answers of 335 or 336 (rounding). Allow an answer of 29.2 (days) for 1 mark — this is the error-carried-forward case of calculating the 8% of days NOT generating instead of the 92% that were. (AO2; spec 4.1.3)$q$,
 $q$"92% of a year" means you take 92% of 365 days: (92 ÷ 100) × 365 = 335.8 days. Since a station is either generating or not on a given day, round sensibly to 335 or 336 whole days — either is accepted. A common mistake is accidentally calculating the 8% of days it wasn't generating (29.2 days) instead of the 92% it was — always re-read which quantity the question actually asked for before you round off your final answer.$q$,
 'AO2', 9
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+-- ── Question 3 (9 marks) — Required practical: resistance of a wire (RPA3) ──
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '03.1', 'aqa-ph-fh-electricity-circuits', 6,
+$q$A student investigated how the length of a wire affects the resistance of the wire at constant temperature. Figure 3 shows the circuit used: a cell and switch connected in series to an ammeter, with the wire under test clamped between two crocodile clips positioned along a ruler (so the length between clips can be varied and measured), a voltmeter connected across the wire, and a resistor in the circuit to limit current. [DIAGRAM ASSET NEEDED: Figure 3 — labelled photograph of the apparatus (switch, ammeter, cell, resistor, two crocodile clips clamped to a wire laid along a ruler, voltmeter); needs a high-fidelity scanned image, not a redraw — see file header.] The student plotted a graph of resistance against the length of wire. Describe a method the student could have used to collect the data needed to plot the graph. [6 marks]$q$,
+$q$Level-of-response mark scheme (0-6 marks). Level 3 (5-6): the method would lead to a valid outcome — key steps identified and logically sequenced. Level 2 (3-4): the method would not necessarily lead to a valid outcome — most steps identified, but not fully logically sequenced. Level 1 (1-2): the method would not lead to a valid outcome — some relevant steps identified, links not made clear. 0: no relevant content. Indicative content: measure the length of wire (between the crocodile clips) using the ruler; vary length by moving the crocodile clips; measure current with the ammeter; measure potential difference with the voltmeter; calculate resistance for each length using V = IR; record current and pd for different lengths; repeat readings for each length and calculate mean values; remove anomalous readings; keep current low to minimise heating of the wire; ensure the circuit is disconnected between readings. A Level 2 answer covers at minimum varying the length and the measurements/equipment needed for pd and current. (AO1; spec 4.2.1.3, RPA3)$q$,
+$q$Level-of-response questions like this reward a complete, logically ordered method — not just a list of ideas. Structure your answer as a numbered method:
+
+1. Set up the circuit in Figure 3: cell, switch, ammeter in series with the wire under test, voltmeter connected across the wire, and clip the wire between the two crocodile clips positioned along the ruler.
+2. Measure the length of wire between the crocodile clips using the ruler, and record this as your first length.
+3. Close the switch, and use the ammeter and voltmeter readings to record the current and potential difference for this length.
+4. Calculate the resistance for this length using R = V ÷ I.
+5. Repeat the current/pd readings 2-3 times at this length, and use the mean value to reduce the effect of random error — checking for and discarding any anomalous readings.
+6. Open the switch between readings, so the wire doesn't heat up and change resistance during the investigation (resistance in a wire increases with temperature, which would introduce a systematic error into your results).
+7. Move one crocodile clip to change the length of wire in the circuit, and repeat steps 2-6 for a range of different lengths.
+
+This shape — set up, vary one variable systematically, repeat and average, control the variable you're not testing (temperature, via keeping the current low and disconnecting between readings) — is the pattern examiners look for in any "describe a method" question, not just this one.$q$,
+'AO1', 10
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '03.2', 'aqa-ph-fh-electricity-circuits', 1,
+$q$Which graph shows the relationship between the resistance of a wire at constant temperature and its length? Tick one box. [DIAGRAM ASSET NEEDED — trivial to redraw as SVG, per file header: three Resistance (y-axis) vs Length (x-axis) options — (A) a straight line with negative slope, starting high and decreasing; (B) a curve rising steeply from the origin then levelling off/plateauing; (C) a straight line through the origin with positive slope.] [1 mark]$q$,
+$q$Option (C) — the straight line through the origin with positive slope (resistance directly proportional to length). [1 mark] (AO1; spec 4.2.1.3, 4.2.1.4, RPA3)$q$,
+$q$At constant temperature, resistance is directly proportional to length: R = ρL/A, where ρ (resistivity) and A (cross-sectional area) are constant for a uniform wire at fixed temperature. "Directly proportional" always means a straight line through the origin on a graph — so the correct graph is the straight line starting at (0,0) with a positive, constant gradient. Rule out the other two options by what they'd mean physically: a decreasing line would mean resistance falls as the wire gets longer (wrong — more wire means more resistance); a curve that levels off would mean resistance stops increasing after a certain length (also wrong — there's no physical reason for resistance to "saturate" with length).$q$,
+'AO1', 11
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '03.3', 'aqa-ph-fh-electricity-circuits', 2,
+$q$The student used a cell that had a potential difference of 1.50 V. Explain why the cell was not an electrical hazard to the student in the investigation. [2 marks]$q$,
+$q$Potential difference is (very) low [1]. (So) no risk of electric shock, or (so) no risk of electrocution [1] — allow "less risk of electric shock", allow "so wire won't melt" / "so wire won't get hot" as alternative reasoning for the second mark. (AO1/AO3; spec 4.2.1.3, RPA3)$q$,
+$q$This is a two-step "explain" answer: state the relevant fact, then link it to the outcome the question actually asks about (hazard). Step 1 — state the fact: 1.50 V is a very low potential difference (compare it to UK mains at 230 V). Step 2 — link it to the hazard: a low pd like this cannot drive a dangerous current through a person's body, so there's no risk of electric shock or electrocution. Writing "1.50 V is low" on its own only earns the first mark — you must also state the consequence (no shock risk) to get full marks on an "explain" question.$q$,
+'AO1', 12
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+-- ── Question 4 (10 marks) — Static electricity generator ──
+-- Figure 4 (generator schematic) is a moderately simple labelled
+-- illustration — redrawable as SVG. Figures 5 and 6 are genuine
+-- photographs (student with hair standing up; photographed dome +
+-- earthed conductor) — need high-fidelity scanned image assets, not
+-- redraws, per the diagram-fidelity hybrid rule.
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '04.1', 'aqa-ph-fh-electricity-static', 3,
+$q$Figure 4 shows a static electricity generator: a metal dome connected by a rubber belt to a motor, which turns the belt. [DIAGRAM ASSET NEEDED: Figure 4 — labelled illustration of the generator (metal dome, rubber belt with movement arrows, motor); moderately simple, redrawable as SVG.] The rubber belt is turned by a motor. As the rubber belt moves, charge is transferred from the rubber belt to the metal dome. Figure 5 shows a student touching the metal dome of the static electricity generator. The dome is negatively charged. [DIAGRAM ASSET NEEDED: Figure 5 — genuine photograph of a student touching the dome with her hair standing up; needs a high-fidelity scanned image, not a redraw.] Explain why the student's hair stands up on end. [3 marks]$q$,
+$q$Electrons are transferred to the student [1]. (So) her hair is negatively charged — allow "each hair has the same (negative) charge" [1]. (And) like charges repel — do not accept "student being positively charged" for the first two marking points [1]. (AO1; spec 4.2.5.1)$q$,
+$q$This is a three-step chain, and each step is worth a mark — you need all three linked together, not just the final word "repulsion":
+1. Electrons transfer from the negatively charged dome to the student (touching the dome charges her by direct contact).
+2. Because she's gained extra electrons, every strand of her hair now carries the same negative charge.
+3. Like charges repel each other, so each hair pushes away from its neighbours — since every strand carries the same charge, they all spread apart, making her hair "stand up" and fan out.
+
+A common wrong turn here is saying the student becomes positively charged — she's touching a negatively charged dome, so electrons flow onto her, making her (and her hair) negative, not positive.$q$,
+'AO1', 13
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '04.2', 'aqa-ph-fh-electricity-static', 1,
+$q$The charged metal dome creates an electric field. What is an electric field? [1 mark]$q$,
+$q$The region (around a charged object) where another charged object experiences a force. Allow "space" or "area" for region. Allow "particle" for object. [1 mark] (AO1; spec 4.2.5.2)$q$,
+$q$An electric field is the region of space around a charged object where another charged object would feel a force (a push or pull) due to that charge. This is the same pattern as other "field" definitions in physics (gravitational field, magnetic field) — a field is always "the region where [something] experiences a force", so it's worth learning that sentence structure once and reusing it for every field definition.$q$,
+'AO1', 14
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '04.3', 'aqa-ph-fh-electricity-static', 1,
+$q$How does the electric field strength vary as the distance from the charged metal dome increases? [1 mark]$q$,
+$q$(Electric field strength) decreases. [1 mark] (AO1; spec 4.2.5.2)$q$,
+$q$Field strength always weakens as you move further from the source of the field — the same relationship holds for gravitational fields around a planet. The field is strongest right at the surface of the dome and gets weaker the further away you measure it, which is exactly why a spark can only jump a limited distance before the field becomes too weak to ionise the air and let charge flow across.$q$,
+'AO1', 15
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '04.4', 'aqa-ph-fh-electricity-static', 4,
+$q$Figure 6 shows the negatively charged metal dome and an earthed conductor. [DIAGRAM ASSET NEEDED: Figure 6 — genuine photograph of the dome and a separate small earthed conductor sphere; needs a high-fidelity scanned image, not a redraw.] When the earthed conductor is moved towards the metal dome, there is a spark between the dome and the earthed conductor. The spark transfers 0.60 J of energy, and 2.0 μC of charge is transferred from the dome to the earthed conductor. Calculate the potential difference between the metal dome and the earthed conductor. Use the Physics Equations Sheet. [4 marks]$q$,
+$q$Q = 2 × 10⁻⁶ C (unit conversion from μC) [1]; 0.6 = 2×10⁻⁶ × V (correct substitution into E = QV) [1]; V = 0.6 ÷ (2×10⁻⁶) (correct rearrangement) [1]; V = 300,000 V [1]. Allow a correct substitution/rearrangement/consistent final answer using an unconverted value of Q (error carried forward, partial credit). (AO2; spec 4.2.4.2)$q$,
+$q$This uses E = QV (energy = charge × potential difference), rearranged to find V = E ÷ Q.
+Step 1 — convert units: 2.0 μC = 2.0 × 10⁻⁶ C (micro = ×10⁻⁶). Write this conversion down explicitly — it's worth its own mark.
+Step 2 — substitute into E = QV: 0.6 = 2×10⁻⁶ × V.
+Step 3 — rearrange to make V the subject: V = 0.6 ÷ (2×10⁻⁶).
+Step 4 — calculate: V = 300,000 V.
+
+Even without converting μC to C correctly, you can still pick up marks for substituting and rearranging correctly and carrying your value through consistently — as always, show every step rather than jumping to a final answer.$q$,
+'AO2', 16
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '04.5', 'aqa-ph-fh-electricity-static', 1,
+$q$Which of the following changes would increase the distance a spark can jump between the dome and the earthed conductor? Tick one box: Decreased charge on the metal dome / Decreased electric field strength / Decreased electrical resistance of air / Decreased potential difference. [1 mark]$q$,
+$q$Decreased electrical resistance of air. [1 mark] (AO3; spec 4.2.5.1)$q$,
+$q$A spark is really just current jumping through the air once the electric field is strong enough to ionise the air and let charge flow. Anything that makes it easier for current to flow through the air — i.e. lowers the air's electrical resistance — lets a spark jump a larger gap. The other three options all work against a spark forming: decreasing the charge, the field strength, or the potential difference all make it harder (not easier) for a spark to jump, so a bigger gap needs more of those, not less.$q$,
+'AO3', 17
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
