@@ -360,14 +360,28 @@ see §8), generate a **self-contained, single-file HTML artifact** from
 the seed file and publish it via the Artifact tool, so review needs no
 database, no build step, no deployed anything.
 
-This was built as two scratch scripts in paper #1 (not yet in the
-repo — see §7's efficiency note):
+**This is now a real repo script, not a scratch one** —
+`scripts/pasco/build-review-artifact.js`, promoted from paper #1's two
+scratch scripts (§7's first item, done). Run it against any paper's
+seed file:
 
-1. A parser that regex-extracts `{paper, groups, slugToName, totalRows, totalMarks}` from the seed file, matching its exact SQL template.
-2. A generator that turns that JSON into full HTML/CSS — inlining
-   every referenced image as a base64 data URI (artifacts have no
-   filesystem access to serve alongside their HTML, so `<img src="/assets/...">`
-   must become `<img src="data:image/webp;base64,...">` at build time).
+```bash
+node scripts/pasco/build-review-artifact.js supabase/pasco_pilot_paper1_seed.sql --code "8463/1H"
+# writes to tmp/pasco-review/<seed-file-basename>.html (gitignored — never commit the output)
+```
+
+It parses `{paper, groups, slugToName}` from the seed file (matching
+its exact SQL template), derives the title/heading/attribution from
+the parsed paper metadata (subject, board, tier, paper number, series,
+year, question count — nothing paper-#1-specific is hardcoded), and
+inlines every referenced image as a base64 data URI (artifacts have no
+filesystem access to serve alongside their HTML, so
+`<img src="/assets/...">` becomes `<img src="data:image/webp;base64,...">`
+at build time — the script throws a clear error if a referenced image
+is missing from disk, rather than silently producing broken output).
+The optional `--code` flag supplies the exam board's own qualification
+code (e.g. "8463/1H") for the attribution line, since that's not part
+of the `past_papers` schema and can't be derived from the seed file.
 
 Design conventions the artifact (and eventually the real product)
 should follow, settled through iteration on paper #1:
@@ -405,15 +419,17 @@ whole review cycle.
 
 ## 7. Efficiency recommendations for paper #2 (do these, don't just note them)
 
-Paper #1's review-artifact generator and content-sweep script both
-live only as scratch files in a temp session directory — meaning
-paper #2 either rebuilds them from scratch or (worse) a different
-session doesn't know they exist at all. **Before starting paper #2,
+Paper #1's review-artifact generator and content-sweep script started
+as scratch files in a temp session directory — meaning paper #2 would
+otherwise either rebuild them from scratch or (worse) a different
+session wouldn't know they exist at all. **Before starting paper #2,
 promote these into the repo** as real, reusable tooling:
 
-- `scripts/pasco/build-review-artifact.js` (parser + HTML generator
+- ~~`scripts/pasco/build-review-artifact.js` (parser + HTML generator
   from §6) — parameterize on seed-file path so it works for any paper,
-  not just paper #1.
+  not just paper #1.~~ **Done** — see §6, tested against paper #1's
+  seed file and confirmed pixel-identical output to the scratch
+  version it replaced.
 - `tests/pasco-content-sweep.test.js` — turn §5.2's ad hoc script into
   a permanent test in the existing suite, so `npm test` catches
   missing mark tags and em dashes automatically instead of relying on
