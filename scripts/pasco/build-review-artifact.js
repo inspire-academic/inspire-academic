@@ -19,6 +19,13 @@
 //                       include in the attribution line — not stored in the
 //                       schema, so it isn't derivable from the seed file.
 //   --qualification <string>  Defaults to "GCSE".
+//   --standalone       Wrap the output in a complete <!DOCTYPE html> document
+//                       (explicit <html>/<head>/<body>) instead of the bare
+//                       fragment the Artifact tool expects. Use this for a
+//                       file meant to be opened directly in a browser
+//                       (double-click, file://, emailed, etc.) outside
+//                       Claude's Artifact viewer, which wraps the fragment
+//                       itself at publish time.
 //
 // After building, publish the output file with the Artifact tool (or open
 // it directly) — this script only produces the HTML, it doesn't publish it.
@@ -35,6 +42,7 @@ function parseArgs(argv) {
     if (a === '--out') args.out = argv[++i];
     else if (a === '--code') args.code = argv[++i];
     else if (a === '--qualification') args.qualification = argv[++i];
+    else if (a === '--standalone') args.standalone = true;
     else args._.push(a);
   }
   return args;
@@ -498,7 +506,23 @@ ${groupsHTML}
 // Escaping any "&" not already part of a real entity is safe here because
 // no embedded <img> markup in this template ever contains a literal "&".
 const safeHtml = html.replace(/&(?!amp;|lt;|gt;|quot;|#)/g, '&amp;');
-const finalHtml = inlineImages(safeHtml);
+let finalHtml = inlineImages(safeHtml);
+
+if (args.standalone) {
+  const splitAt = finalHtml.indexOf('<div class="topbar">');
+  const head = finalHtml.slice(0, splitAt);
+  const body = finalHtml.slice(splitAt);
+  finalHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+${head}</head>
+<body>
+${body}</body>
+</html>
+`;
+}
 
 // ── 3. Write output ─────────────────────────────────────────────────────
 
