@@ -2,7 +2,7 @@
 -- PASCO pilot — AQA GCSE Physics 8463/1H, Higher Tier Paper 1,
 -- June 2024 (source: AQA-84631H-QP/MS/INS-JUN241.pdf)
 --
--- STATUS: DRAFT TRANSCRIPTION — Questions 1-6 (61 of 100 marks), per
+-- STATUS: DRAFT TRANSCRIPTION — Questions 1-8 (77 of 100 marks), per
 -- docs/pasco/INSPIRE-PASCO-DESIGN.md §2 pipeline steps 2-3
 -- (transcription + solution-authoring passes). All rows below have
 -- been checked against rendered source PDF pages (not just pdftotext's
@@ -34,6 +34,12 @@
 --      pages 17-20 and MS text (also clean, no jumbling this time) —
 --      marks sum 2+4+1+1+5=13 (Q5) and 1+6+2=9 (Q6), matching "Total
 --      Question 5"/"Total Question 6" on MS p17/p18.
+--   7. Q7 and Q8 needed a spec-map.js gap-fill first (see commit
+--      e8f0aef — "Particle model of matter" had zero AQA Physics
+--      entries at all). Transcribed from rendered QP pages 22, 26-28
+--      and clean MS text — marks sum 1+1+1+1+4=8 (Q7) and 3+1+4=8
+--      (Q8), matching "Total Question 7"/"Total Question 8" on MS
+--      p20/p21.
 --
 -- DIAGRAM ASSETS NEEDED (not yet produced — text-only placeholders
 -- below per §1's "real text, not scanned images" rule; actual asset
@@ -56,6 +62,9 @@
 --     ~600Ω at 10°C down to ~20Ω at 30°C), and Q06.1's Figure 10
 --     (before/after bungee-ride schematic) are all standard
 --     schematic/graph/symbol shapes — redrawable as SVG.
+--   - Q07.1's Figure 11 (labelled measuring cylinder scale) and
+--     Q08.1/08.2's Figures 12-13 (syringe+pressure gauge; fire piston)
+--     are all clean line-illustrations — redrawable as SVG.
 -- ═══════════════════════════════════════════════════════════
 
 INSERT INTO past_papers (subject_id, exam_board, tier, year, series, paper_number, total_marks, duration_minutes, is_published)
@@ -365,5 +374,105 @@ $q$The actual maximum height reached by the pod will be lower than the correct a
 $q$Air resistance (opposes the motion of the pod upwards) [1]. (So) not all of the elastic potential energy will be transferred to gravitational potential energy — allow "the energy transfer is not 100% efficient"; allow "some energy is transferred to the surroundings"; allow "some energy is dissipated"; ignore "energy is wasted"; ignore reference to the mass of the person in the pod [1]. (AO3/AO1; spec 4.1.2.1, 4.1.2.2)$q$,
 $q$Q06.2's calculation assumed a perfect, lossless energy transfer — all of the elastic PE becoming gravitational PE. In reality, that never happens. Two linked ideas earn the two marks here: (1) name the cause — air resistance acts on the pod as it moves upwards, opposing its motion; (2) state the consequence — because some energy is transferred to the surroundings by this air resistance (as heat/sound, dissipated), not all of the elastic PE converts into gravitational PE, so less GPE (and therefore less height) is actually gained than the idealised calculation predicts. Writing "air resistance" alone only earns the first mark — you must also connect it back to the energy transfer being less than 100% efficient.$q$,
 'AO3', 25
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+-- ── Question 7 (8 marks) — Required practical: density of a metal ring (RPA5) ──
+-- Uses the new aqa-ph-fh-particle-density spec_slug added to
+-- spec-map.js this session (see header). Figure 11 (labelled
+-- measuring cylinder scale) is a simple redrawable diagram.
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '07.1', 'aqa-ph-fh-particle-density', 1,
+$q$Figure 11 shows a measuring cylinder containing some water, which a student used to measure the volume of a metal ring. [DIAGRAM ASSET NEEDED: Figure 11 — labelled measuring cylinder scale (0-10 cm³) with the water level marked at 5.0 cm³; simple, redrawable as SVG.] When measuring the volume, the student's eye was in line with the level of the water. Which type of error would have been caused if the student's eye was not in line with the level of the water? Tick one box: Random error / Systematic error / Zero error. [1 mark]$q$,
+$q$Random error. [1 mark] (AO3; spec 4.3.1.1, RPA5)$q$,
+$q$Reading a scale at an angle (not eye-level with the meniscus) is called "parallax error", and it's a classic example of random error — because the size and direction of the error depends on exactly how the student's eye happens to be positioned each time they take a reading, it varies unpredictably from reading to reading, rather than shifting every reading by the same fixed amount (a systematic error) or starting from a non-zero baseline (a zero error, e.g. a scale that doesn't start at 0).$q$,
+'AO3', 26
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '07.2', 'aqa-ph-fh-particle-density', 1,
+$q$The student tied a piece of thick string to the metal ring and lowered the ring into the water. Suggest one reason why the student should have used thin string instead of thick string. [1 mark]$q$,
+$q$Thin string would affect the volume measurement less (than thick string) — allow "thin string would displace less water (than thick string)"; ignore absorption of water by string. [1 mark] (AO3; spec 4.3.1.1, RPA5)$q$,
+$q$Whatever is lowered into the measuring cylinder displaces water and raises the reading — that's the whole principle behind this practical. But the string itself also displaces some water, which isn't part of what you're actually trying to measure (the ring's volume). Thick string displaces more water than thin string, introducing a bigger, unwanted contribution to your volume reading. Using the thinnest string possible minimises this source of error.$q$,
+'AO3', 27
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '07.3', 'aqa-ph-fh-particle-density', 1,
+$q$Table 2 shows the results: Volume of water = 5.0 cm³, Volume of water and ring = 5.4 cm³, Volume of ring = 0.4 cm³. The true volume of the ring was 0.44 cm³. Even without using the string, the measuring cylinder could not give an accurate value for the volume of the ring. Give one reason why. [1 mark]$q$,
+$q$The measuring cylinder could not be used to measure to 2 dp. OR the resolution of the measuring cylinder is 0.2 cm³ — allow "the resolution is 0.1 cm³"; ignore "the resolution is too low". [1 mark] (AO3; spec 4.3.1.1, RPA5)$q$,
+$q$The true volume (0.44 cm³) has two decimal places, but the measuring cylinder's scale only has markings every 0.2 cm³ (its resolution) — so the smallest change it can actually detect and record is 0.2 cm³, not the 0.01 cm³ precision the true value is given to. No amount of careful reading can get a more precise result than the equipment's own resolution allows — this is a limitation of the apparatus itself, separate from anything the student did wrong.$q$,
+'AO3', 28
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '07.4', 'aqa-ph-fh-particle-density', 1,
+$q$The student used a balance to measure the mass of the ring. After the ring was removed from the balance, the reading on the balance was 0.02 g. How could the student use the readings from the balance to determine the correct mass of the ring? [1 mark]$q$,
+$q$Subtract 0.02 g from the measured value. Ignore "zero the balance". [1 mark] (AO3; spec 4.3.1.1, RPA5)$q$,
+$q$A non-zero reading with nothing on the balance (0.02 g) is a zero error — the balance has a small, fixed offset in every reading it takes. Because this offset is the same in every measurement, you correct for it by subtracting it from your result: correct mass = measured mass − 0.02 g. This is exactly why it's good practice to check a balance reads zero with nothing on it before using it — and if it doesn't, you now know how to compensate mathematically instead of discarding the whole measurement.$q$,
+'AO3', 29
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '07.5', 'aqa-ph-fh-particle-density', 4,
+$q$The student determined that the density of the ring was 21,500 kg/m³. The volume of the ring was 0.44 cm³. Calculate the mass of the ring. Use the Physics Equations Sheet. Give your answer in kg. [4 marks] Mass = ___ kg$q$,
+$q$0.44 cm³ = 4.4×10⁻⁷ m³ (unit conversion) [1]; 21,500 = m ÷ (4.4×10⁻⁷) (correct substitution into density = mass/volume) [1]; m = 21,500 × 4.4×10⁻⁷ (correct rearrangement) [1]; m = 0.00946 kg, or 9.46×10⁻³ kg [1]. Allow error-carried-forward with an unconverted value of V. (AO2; spec 4.3.1.1, RPA5)$q$,
+$q$This uses density = mass ÷ volume (ρ = m/V), rearranged to make mass the subject: m = ρ × V.
+Step 1 — convert units: volume must be in m³, not cm³, to match kg/m³. 1 m³ = 1,000,000 cm³ (100³), so 0.44 cm³ = 0.44 ÷ 1,000,000 = 4.4×10⁻⁷ m³. This conversion is worth its own mark — get it wrong and every later step is marked as error-carried-forward instead of full credit.
+Step 2 — substitute into ρ = m/V: 21,500 = m ÷ (4.4×10⁻⁷).
+Step 3 — rearrange: m = 21,500 × 4.4×10⁻⁷.
+Step 4 — calculate: m = 0.00946 kg (or 9.46×10⁻³ kg).
+
+The cm³-to-m³ conversion is the single most common place to lose marks on this style of question — always check both quantities in an equation use consistent SI units before you substitute.$q$,
+'AO2', 30
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+-- ── Question 8 (8 marks) — Gas pressure and specific heat capacity ──
+-- Figures 12 (syringe + pressure gauge) and 13 (fire piston, labelled)
+-- are both clean line-illustrations — redrawable as SVG.
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '08.1', 'aqa-ph-fh-particle-pressure', 3,
+$q$A student investigated how the pressure in a fixed mass of air varies with the volume of the air. Figure 12 shows the equipment used: a syringe connected to a pressure gauge, with a plunger that can be pushed in to reduce the volume of trapped air. [DIAGRAM ASSET NEEDED: Figure 12 — labelled illustration of a syringe with pressure gauge and plunger; redrawable as SVG.] When the plunger was pushed slowly into the syringe, the pressure in the syringe increased. The temperature of the air remained constant. Explain why the pressure increased. [3 marks]$q$,
+$q$(Air) particles are closer together — ignore reference to kinetic energy of particles; ignore reference to concentration of air particles [1]. (So) frequency of collision between air particles and syringe walls increased — do not credit if linked to an increase in kinetic energy [1]. Larger (total) force on a smaller (surface) area — allow "larger force per unit area" [1]. If no other marks score, allow 1 mark for "pressure increases because volume decreases and pV = constant". (AO1; spec 4.3.3.2)$q$,
+$q$This is a three-step particle-model explanation — each link in the chain earns a mark, and the chain must connect cause to effect properly:
+
+1. Pushing the plunger in reduces the volume the same number of air particles occupy, so the particles are closer together (more crowded).
+2. Because they're more crowded, particles collide with the syringe's walls more often — the frequency of collisions increases. (This is about how often particles hit the walls, not how fast they're moving — temperature is constant, so the particles' speed and kinetic energy haven't changed.)
+3. More frequent collisions mean a larger total force is exerted on the walls, and since pressure = force ÷ area, a larger force on the same (or smaller) area means higher pressure.
+
+The trap in this question is linking the increased collision frequency to increased particle speed/kinetic energy — but the question tells you temperature stays constant, so kinetic energy doesn't change. It's purely about particles being packed closer together, not moving faster.$q$,
+'AO1', 31
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '08.2', 'aqa-ph-fh-particle-pressure', 1,
+$q$A fire piston is a special type of syringe that can be used to start fires. Figure 13 shows a fire piston: a plunger, piston, air chamber, and a small piece of cotton wool at the base. [DIAGRAM ASSET NEEDED: Figure 13 — labelled illustration of a fire piston (plunger, piston, air, cotton wool); redrawable as SVG.] The plunger is pushed quickly downwards and compresses the air. When the air is compressed quickly, the temperature of the air increases. How does an increase in temperature affect the air particles inside the piston? Tick one box: The mean kinetic energy of the particles increases. / The mean potential energy of the particles increases. / The mean separation of the particles increases. [1 mark]$q$,
+$q$The mean kinetic energy of the particles increases. [1 mark] (AO1; spec 4.3.3.1)$q$,
+$q$Temperature is a direct measure of the average kinetic energy of a substance's particles — hotter means the particles are moving (or vibrating) faster on average, which is exactly what an increase in mean kinetic energy means. Compressing the air quickly (like in a fire piston, or a bicycle pump that gets warm when you use it) does work on the gas, transferring energy into it and increasing that kinetic energy — which is what raises its temperature enough to ignite the cotton wool. Rule out the other two options: "potential energy" relates to the arrangement/bonding between particles, not their temperature, and separation between gas particles isn't what's changing here — the particles are being pushed closer together, not further apart.$q$,
+'AO1', 32
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '08.3', 'aqa-ph-fh-particle-energy', 4,
+$q$When the air is hot enough, a small piece of cotton wool in the piston catches fire. The energy transferred to the air in the piston is 0.0130 J. The mass of air in the piston is 2.60×10⁻⁸ kg. specific heat capacity of air = 1.01 kJ/kg°C. Calculate the temperature change of the air. Use the Physics Equations Sheet. [4 marks] Temperature change = ___ °C$q$,
+$q$c = 1010 (J/kg°C) — unit conversion from kJ/kg°C (allow full credit for a correct method using E = 0.0000130 kJ instead) [1]; 0.0130 = 2.60×10⁻⁸ × 1010 × Δθ (correct substitution into E = mcΔθ) [1]; Δθ = 0.0130 ÷ (2.60×10⁻⁸ × 1010) (correct rearrangement) [1]; Δθ = 495°C — allow error-carried-forward with an unconverted value of c; allow a correct answer to more than 3 sig figs [1]. (AO2; spec 4.1.1.3, 4.3.2.2)$q$,
+$q$This uses E = mcΔθ (energy = mass × specific heat capacity × temperature change), rearranged to find Δθ.
+
+Step 1 — convert units: specific heat capacity is given in kJ/kg°C, but energy is in J, so convert c to J/kg°C: 1.01 kJ/kg°C = 1010 J/kg°C (kilo = ×1000). (You could instead convert E to kJ — either consistent unit system works, as the mark scheme allows.)
+Step 2 — substitute into E = mcΔθ: 0.0130 = 2.60×10⁻⁸ × 1010 × Δθ.
+Step 3 — rearrange to make Δθ the subject: Δθ = 0.0130 ÷ (2.60×10⁻⁸ × 1010).
+Step 4 — calculate: Δθ = 495°C.
+
+With such a tiny mass of air (2.60×10⁻⁸ kg — a fraction of a milligram) and a specific heat capacity that isn't huge, even a small energy transfer (0.0130 J) produces a large temperature rise — which is exactly the physics of why a fire piston works: rapidly compressing a small amount of air can heat it enough to ignite something flammable.$q$,
+'AO2', 33
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
