@@ -107,4 +107,14 @@ function parseFrontmatter(markdown) {
   return out;
 }
 
-module.exports = { REPO_ROOT, walkFiles, allHtmlFiles, allLessonFiles, ileEngineLessonFiles, extractInlineScripts, stripInlineScripts, parseFrontmatter, relPath };
+// PASCO past-paper seed files — supabase/pasco_*_seed.sql, the
+// per-paper transcription drafts (see docs/pasco/INSPIRE-PASCO-DESIGN.md
+// §2). Matched by filename pattern rather than a fixed list so a
+// second pilot paper's seed file is picked up automatically.
+function pascoSeedFiles() {
+  const dir = path.join(REPO_ROOT, 'supabase');
+  if (!fs.existsSync(dir)) return [];
+  return walkFiles(dir, name => /^pasco_.*_seed\.sql$/i.test(name));
+}
+
+module.exports = { REPO_ROOT, walkFiles, allHtmlFiles, allLessonFiles, ileEngineLessonFiles, pascoSeedFiles, extractInlineScripts, stripInlineScripts, parseFrontmatter, relPath };
