@@ -125,7 +125,7 @@ ON CONFLICT (subject_id, exam_board, tier, year, series, paper_number) DO NOTHIN
 
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '01.1', 'aqa-ph-fh-energy-stores-transfers', 1,
-$q$Wind turbines may generate electricity when the electricity is not needed. Two methods that can be used to store the energy from the turbine are: Method A, heating water to a high temperature; Method B, pumping water uphill into a reservoir. Which energy store increases when water is heated?$q$,
+$q$Figure 1 shows a wind turbine. <img src="/assets/images/physics/pasco/aqa-8463-1h-jun24-fig01.webp" alt="Figure 1: a wind turbine with three blades, photographed against a cloudy sky."> Wind turbines may generate electricity when the electricity is not needed. Two methods that can be used to store the energy from the turbine are: Method A, heating water to a high temperature; Method B, pumping water uphill into a reservoir. Which energy store increases when water is heated?$q$,
 $q$Thermal (or internal) energy store. Accept "kinetic energy of the water particles". Allow "Ek". Ignore "heat" on its own: it names the process of transfer, not the store. [1 mark] (AO1; spec 4.1.1.1, 4.3.2.1)$q$,
 $q$Thermal energy (or internal energy).
 
@@ -181,7 +181,7 @@ WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=
 
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '02.1', 'aqa-ph-fh-atomic-structure', 3,
-$q$The process of nuclear fission is used in nuclear power stations. Complete the sentences using words from the box (electrons, gamma rays, neutrons, nuclei, protons): "In nuclear power stations, energy is released from uranium ___. The uranium splits into two parts and releases three ___. The process of nuclear fission releases electromagnetic radiation in the form of ___." [3 marks, this order only]$q$,
+$q$The process of nuclear fission is used in nuclear power stations. Figure 2 shows the process of nuclear fission. <img src="/assets/images/physics/pasco/aqa-8463-1h-jun24-fig02.webp" alt="Figure 2: a diagram of nuclear fission. One filled circle (a neutron) travels toward a larger circle labelled Uranium. From the Uranium circle, arrows lead outward to two unlabelled outline circles (the two nuclei it splits into) and three filled circles (neutrons released)."> Complete the sentences using words from the box (electrons, gamma rays, neutrons, nuclei, protons): "In nuclear power stations, energy is released from uranium ___. The uranium in Figure 2 splits into two parts and releases three ___. The process of nuclear fission releases electromagnetic radiation in the form of ___." [3 marks, this order only]$q$,
 $q$In this order only: nuclei [1]; neutrons [1]; gamma (rays) [1]. (AO1; spec 4.4.4.1)$q$,
 $q$Nuclei; neutrons; gamma (rays).
 
