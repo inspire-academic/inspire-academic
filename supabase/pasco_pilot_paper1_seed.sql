@@ -2,14 +2,17 @@
 -- PASCO pilot — AQA GCSE Physics 8463/1H, Higher Tier Paper 1,
 -- June 2024 (source: AQA-84631H-QP/MS/INS-JUN241.pdf)
 --
--- STATUS: DRAFT TRANSCRIPTION — Questions 1-8 (77 of 100 marks), per
--- docs/pasco/INSPIRE-PASCO-DESIGN.md §2 pipeline steps 2-3
--- (transcription + solution-authoring passes). All rows below have
--- been checked against rendered source PDF pages (not just pdftotext's
--- plain-text extraction, which has repeatedly misaligned table/column
--- content on this paper — see flags below). Still NOT QA'd (step 4)
--- or human-approved (step 5). Do not treat as ready to publish. Run
--- AFTER pasco_schema.sql. Idempotent — safe to re-run.
+-- STATUS: DRAFT TRANSCRIPTION — COMPLETE. All 10 questions, 100 of
+-- 100 marks, 43 rows, per docs/pasco/INSPIRE-PASCO-DESIGN.md §2
+-- pipeline steps 2-3 (transcription + solution-authoring passes). All
+-- rows below have been checked against rendered source PDF pages (not
+-- just pdftotext's plain-text extraction, which repeatedly misaligned
+-- table/column content on this paper — see flags below). Still NOT
+-- QA'd (step 4, though the marks-sum and spec_slug-resolution checks
+-- below amount to a manual pass of it) or human-approved (step 5) —
+-- per §2.5, a paper reaching this point is not the same as a paper
+-- being ready to publish. Run AFTER pasco_schema.sql. Idempotent —
+-- safe to re-run.
 --
 -- SPOT-CHECK RESULTS (2026-08-21, rendered via poppler pdftoppm):
 --   1. Q01.3's Table 1 — CONFIRMED CORRECT despite pdftotext's
@@ -40,6 +43,13 @@
 --      and clean MS text — marks sum 1+1+1+1+4=8 (Q7) and 3+1+4=8
 --      (Q8), matching "Total Question 7"/"Total Question 8" on MS
 --      p20/p21.
+--   8. Q9 and Q10 (final questions) transcribed from rendered QP
+--      pages 30, 33-34 and clean MS text — marks sum 3+2+1+1+4=11
+--      (Q9) and 1+1+4+4+2=12 (Q10), matching "Total Question 9"/
+--      "Total Question 10" on MS p23/p25. QP explicitly says "END OF
+--      QUESTIONS" after Q10 — confirmed this is the whole paper.
+--      Paper-wide marks check: 10+10+9+10+13+9+8+8+11+12 = 100,
+--      matching the paper's declared total_marks exactly.
 --
 -- DIAGRAM ASSETS NEEDED (not yet produced — text-only placeholders
 -- below per §1's "real text, not scanned images" rule; actual asset
@@ -65,6 +75,13 @@
 --   - Q07.1's Figure 11 (labelled measuring cylinder scale) and
 --     Q08.1/08.2's Figures 12-13 (syringe+pressure gauge; fire piston)
 --     are all clean line-illustrations — redrawable as SVG.
+--   - Q09.1's Figure 14 (detector/source/counter setup) and Q10.2's
+--     Figure 17 (fuse) are clean illustrations — redrawable as SVG.
+--   - Q09.1's Figure 15 (count-rate-vs-distance graph, two curves)
+--     and Q09.5's Figure 16 (decay curve, ×10^23 atoms vs time) are
+--     redrawable but their actual curve DATA must be preserved
+--     exactly, not just their general shape — see inline notes on
+--     each question.
 -- ═══════════════════════════════════════════════════════════
 
 INSERT INTO past_papers (subject_id, exam_board, tier, year, series, paper_number, total_marks, duration_minutes, is_published)
@@ -474,5 +491,125 @@ Step 4 — calculate: Δθ = 495°C.
 
 With such a tiny mass of air (2.60×10⁻⁸ kg — a fraction of a milligram) and a specific heat capacity that isn't huge, even a small energy transfer (0.0130 J) produces a large temperature rise — which is exactly the physics of why a fire piston works: rapidly compressing a small amount of air can heat it enough to ignite something flammable.$q$,
 'AO2', 33
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+-- ── Question 9 (11 marks) — Radioactivity: range, absorption, safety, decay graph ──
+-- Figure 14 (detector/source/counter setup) and Figure 17 (fuse) are
+-- clean illustrations, redrawable as SVG. Figures 15 and 16 are data
+-- graphs — redrawable but the actual curve data must be preserved:
+-- Fig 15 Source A drops from ~350 to background (~20) by ~3-4cm,
+-- Source B still ~100 at 10cm; Fig 16 falls from 6 to ~1.5 (×10^23
+-- atoms) over 0-540s, reading ~2.9×10^23 at t=300s.
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '09.1', 'aqa-ph-fh-atomic-structure', 3,
+$q$A teacher investigated the radiation emitted by two different radioactive sources, A and B. [DIAGRAM ASSET NEEDED: Figure 14 — illustration of a radiation detector connected to a counter, positioned near a radioactive source on a stand, with the distance between them labelled; redrawable as SVG.] The teacher measured the count rate at different distances for each radioactive source. Figure 15 shows the results: a graph of count rate (counts per minute, 0-1500) against distance (0-10+ cm), with Source A (dashed line) falling steeply from ~350 at 1cm to background level (~20) by about 3-4cm and staying flat, and Source B (solid line) falling more gradually from ~1460 at 1cm to still ~100 at 10cm. [DIAGRAM ASSET NEEDED: Figure 15 — this exact graph, redrawable as SVG but the curve data must be preserved.] Explain how Figure 15 shows that Source A only emits alpha radiation. [3 marks]$q$,
+$q$Radiation (from Source A) travels (approximately) 3 cm (in air) [1]; (after which) count rate decreases to background radiation [1]; (because) alpha radiation has a short range (in air) — allow "alpha radiation has (very) low penetrating ability"; allow "beta and gamma radiation have a (much) longer range in air" [1]. (AO1; spec 4.4.2.1, 4.4.3.1)$q$,
+$q$Read Figure 15's dashed Source A line carefully: its count rate falls steeply and reaches the background count rate (the small, roughly constant count rate you'd measure with no source present) at about 3 cm from the detector — and stays flat at that background level for every distance beyond that. Chain the three ideas together for full marks: (1) state the distance where it flattens out (~3 cm), (2) state what it flattens TO (background radiation — essentially no radiation from the source is reaching the detector any more), (3) explain why: alpha particles have a very short range in air (a few centimetres at most) because they're relatively large, slow, and heavily ionising, so they lose all their energy colliding with air molecules within a few centimetres. Since none of Source A's radiation reaches the detector beyond ~3 cm, it must be alpha — beta and gamma both travel much further in air, so if Source A emitted either of those the count rate would still be above background at 10 cm, like Source B's line still is.$q$,
+'AO1', 34
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '09.2', 'aqa-ph-fh-atomic-structure', 2,
+$q$Figure 15 can not be used to determine if Source B emits beta radiation or gamma radiation. Explain how an absorbing material could be used to show which type of radiation is emitted by Source B. [2 marks]$q$,
+$q$Use an aluminium sheet — allow other materials that beta would be stopped by, e.g. brick, sheets of iron/lead; ignore sheet(s) of metal foil unless thickness is given [1]. (Which) beta radiation will not penetrate but gamma will, or (which) only gamma will penetrate — dependent on scoring the first mark [1]. (AO1; spec 4.4.2.1)$q$,
+$q$Since Figure 15 alone can't distinguish beta from gamma (both have a range well beyond 10 cm in air, so the graph shape looks similar for either), you need a test based on penetrating power through a solid material instead of range in air. Place an aluminium sheet between Source B and the detector: beta radiation is stopped (absorbed) by a few millimetres of aluminium, but gamma radiation passes straight through almost unaffected. So if the count rate drops to (near) background with the aluminium sheet in place, Source B is emitting beta; if the count rate barely changes, it's emitting gamma. The two marks are for (1) naming a suitable absorber and (2) correctly stating which radiation it would stop and which it would let through.$q$,
+'AO1', 35
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '09.3', 'aqa-ph-fh-atomic-structure', 1,
+$q$The teacher took safety precautions during the experiment. Suggest one safety precaution the teacher would have taken to reduce the radiation dose the teacher received. [1 mark]$q$,
+$q$Any one from: increase distance between source and teacher; limit exposure time; use tongs/forceps; wear a lead apron; keep source in box unless in use; stand behind a safety screen; point source away from teacher. Allow any reasonable precaution that increases distance between the source and the teacher, or limits exposure time. [1 mark] (AO1; spec 4.4.2.4)$q$,
+$q$"Reducing dose" precautions are all about the three classic radiation-safety levers: distance, time, and shielding. Any answer that increases the distance between the teacher and the source (using tongs, standing further back, pointing the source away), reduces how long the teacher is exposed (limiting the time the source is out of its storage box), or adds shielding between the source and the teacher (a lead apron, a safety screen) earns the mark. Pick whichever is easiest to justify clearly rather than trying to list several — the question only wants one.$q$,
+'AO1', 36
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '09.4', 'aqa-ph-fh-atomic-structure', 1,
+$q$Suggest one safety precaution that the teacher would have taken to avoid becoming contaminated. [1 mark]$q$,
+$q$Wear gloves/apron, or wear a lab coat, or handle source with tongs/forceps — allow "no eating/drinking (while radioactive source is in the lab)"; allow "do not touch the source (with bare hands)"; ignore "wear a mask"; ignore "wear safety glasses"; ignore unqualified "protective clothing"/"PPE"; ignore "wear a hazmat suit". [1 mark] (AO1; spec 4.4.2.4)$q$,
+$q$This question is easy to mix up with 09.3, but it's asking something different: contamination means radioactive material physically getting onto your skin, clothes, or into your body (e.g. by touching the source or breathing in dust from it) — as opposed to irradiation (09.3's dose from radiation passing through you without any material transfer). So contamination precautions are about preventing physical contact and ingestion: never handle the source with bare hands (use tongs/forceps), wear gloves or a lab coat as a barrier, and don't eat or drink near the source. A vague answer like "wear PPE" without saying what kind, or "wear a mask"/"wear safety glasses" (these protect against different hazards), won't earn credit here.$q$,
+'AO1', 37
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '09.5', 'aqa-ph-fh-atomic-structure', 4,
+$q$Figure 16 shows how the number of atoms of a radioactive element in a sample varied with time: a curve falling from 6×10²³ atoms at t=0 to about 1.5×10²³ atoms at t=540s, reading approximately 2.9×10²³ at t=300s. [DIAGRAM ASSET NEEDED: Figure 16 — this exact decay curve, redrawable as SVG but the curve data (including the ×10²³ axis multiplier) must be preserved.] Activity is the rate at which a source of unstable nuclei decays. Determine the activity of the radioactive sample at 300 seconds. Give the unit. [4 marks] Activity = ___ Unit = ___$q$,
+$q$Tangent drawn on the line at 300 s — do not allow a line drawn that crosses the graph line [1]; attempt to calculate the gradient of the tangent — allow a missing power of ten for Δy [1]; activity = 7.1×10²⁰ — allow a value between 6.5 and 7.6×10²⁰ [1]; becquerel or Bq — ignore "decays/second" [1]. (AO1/AO2; spec 4.4.2.1)$q$,
+$q$Activity is defined as the rate of decay — how fast the number of atoms is decreasing — which on a number-of-atoms-vs-time graph is exactly the gradient (slope) of the curve at that instant. Since the curve is curved, not straight, you can't just read two points and divide; you need the gradient AT one specific point (300 s), which means drawing a tangent — a straight line that just touches the curve at t = 300 s without crossing it — and finding that tangent line's gradient.
+
+Step 1: Draw a tangent to the curve at t = 300 s.
+Step 2: Pick two points on your tangent line (as far apart as you reasonably can, for accuracy) and calculate its gradient: Δ(number of atoms) ÷ Δ(time). Remember the y-axis is number of atoms ×10²³, so don't forget to include that ×10²³ multiplier in your calculation.
+Step 3: The magnitude of that gradient (ignore the negative sign — the curve is decreasing, but activity is reported as a positive rate) gives the activity: approximately 7.1×10²⁰ (accepted range 6.5-7.6×10²⁰, since everyone's hand-drawn tangent will differ slightly).
+Step 4: State the correct unit for activity: the becquerel (Bq) — one decay per second.
+
+The two most common ways to lose marks here: drawing a tangent that clips back onto the curve rather than just touching it at one point, and forgetting the ×10²³ multiplier on the y-axis when calculating the gradient.$q$,
+'AO2', 38
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+-- ── Question 10 (12 marks) — Fuses: colour code, symbol, charge, latent heat ──
+-- Figure 17 (fuse illustration) is redrawable as SVG.
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '10.1', 'aqa-ph-fh-electricity-domestic', 1,
+$q$The live wire in a three-core cable is connected to a fuse inside a plug. A fuse contains a wire that is designed to melt when the current gets too great. What colour is the insulation covering the live wire in a three-core cable? [1 mark]$q$,
+$q$Brown. [1 mark] (AO1; spec 4.2.3.2)$q$,
+$q$UK mains wiring colour-coding is a straight recall fact worth memorising exactly: live = brown, neutral = blue, earth = green-and-yellow stripes. Drill all three colours as a set (not just live), since a question can ask about any of the three wires.$q$,
+'AO1', 39
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '10.2', 'aqa-ph-fh-electricity-domestic', 1,
+$q$Figure 17 shows a fuse: a glass tube with metal end caps and a thin fuse wire running through it. [DIAGRAM ASSET NEEDED: Figure 17 — illustration of a fuse; redrawable as SVG.] Draw the circuit symbol for a fuse in the box below. [1 mark]$q$,
+$q$The standard GCSE circuit symbol for a fuse: a rectangle placed directly in the circuit line (in series). [1 mark] (AO1; spec 4.2.1.1)$q$,
+$q$[DIAGRAM ASSET NEEDED — trivial to redraw: the standard fuse symbol is a plain rectangle, drawn in series in the circuit wire — the same rectangle base shape used for the thermistor and LDR symbols (Q05.4), but with no diagonal line, since a fuse doesn't respond to an external condition the way those do.] Component circuit symbols in this spec generally build from a small set of base shapes — the fuse's rectangle is the simplest of the group, since it has no extra markings. Don't confuse it with the thermistor or LDR symbols, which are the same rectangle but with an added diagonal line and label.$q$,
+'AO1', 40
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '10.3', 'aqa-ph-fh-electricity-domestic', 4,
+$q$The fuse wire melts when there is a charge flow of 2.0 C for 400 ms. Calculate the current in the fuse wire. Use the Physics Equations Sheet. [4 marks] Current = ___ A$q$,
+$q$t = 0.400 (s) (unit conversion from ms) [1]; 2.0 = I × 0.400 (correct substitution into Q = It) [1]; I = 2.0 ÷ 0.400 (correct rearrangement) [1]; I = 5.0 A [1]. Allow error-carried-forward with an unconverted value of t. (AO2; spec 4.2.1.2)$q$,
+$q$This uses Q = It (charge = current × time), rearranged to find I.
+Step 1 — convert units: 400 ms = 0.400 s (milli = ×10⁻³). Always convert to seconds before substituting, since the equation needs SI units.
+Step 2 — substitute into Q = It: 2.0 = I × 0.400.
+Step 3 — rearrange: I = 2.0 ÷ 0.400.
+Step 4 — calculate: I = 5.0 A.
+
+This tells you the fuse is rated to melt (and break the circuit) once the current reaches 5.0 A — which is the whole safety purpose of a fuse: if a fault causes the current to exceed this value, the wire heats up, melts, and cuts off the circuit before the excess current can start a fire or damage the appliance.$q$,
+'AO2', 41
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '10.4', 'aqa-ph-fh-particle-energy', 4,
+$q$When the fuse wire is at its melting point, the additional energy needed to melt the wire is 1.02 J. specific latent heat of fuse wire = 60 kJ/kg. Calculate the mass of the fuse wire. Use the Physics Equations Sheet. [4 marks] Mass = ___ kg$q$,
+$q$L = 60,000 (J/kg) (unit conversion from kJ/kg — allow full credit for a correct method using E = 0.00102 kJ instead) [1]; 1.02 = m × 60,000 (correct substitution into E = mL) [1]; m = 1.02 ÷ 60,000 (correct rearrangement) [1]; m = 1.7×10⁻⁵ kg [1]. Allow error-carried-forward with an unconverted value of L. (AO2; spec 4.3.2.3)$q$,
+$q$This uses E = mL (energy = mass × specific latent heat), rearranged to find mass.
+Step 1 — convert units: specific latent heat is given in kJ/kg, but energy is in J, so convert L to J/kg: 60 kJ/kg = 60,000 J/kg (kilo = ×1000). (Or convert E to kJ instead — either consistent unit system works, as the mark scheme allows.)
+Step 2 — substitute into E = mL: 1.02 = m × 60,000.
+Step 3 — rearrange: m = 1.02 ÷ 60,000.
+Step 4 — calculate: m = 1.7×10⁻⁵ kg — an extremely small mass, since fuse wire is very thin, which is exactly why it melts quickly once the current is too high.
+
+Note this question uses specific LATENT heat (energy needed to change state — here, melting — at constant temperature), not specific heat capacity (Q08.3), which is energy needed to change temperature. Mixing up L and c, or their equations (E=mL vs E=mcΔθ), is the most common error linking these two topics.$q$,
+'AO2', 42
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '10.5', 'aqa-ph-fh-particle-energy', 2,
+$q$The calculation in Question 10.4 assumes there is no energy transferred to the surroundings. How would the time taken for the wire to melt be affected if some energy was transferred to the surroundings? Give a reason for your answer. [2 marks] Tick one box: Time taken would decrease / Time taken would stay the same / Time taken would increase. Reason: ___$q$,
+$q$Time taken would increase [1]. More energy would need to be transferred (in total) — dependent on scoring the first mark [1]. (AO1/AO3; spec 4.1.2.1, 4.3.2.3)$q$,
+$q$Q10.4's calculation assumed every joule of energy delivered to the wire goes directly into melting it. In reality, some energy always leaks away to the surroundings (as heat, dissipated into the surrounding air/plug casing) instead of going into the wire. Because some energy is "wasted" this way, more total energy has to be supplied before enough has actually gone into the wire to melt it — which means it takes longer. The two marks are for (1) correctly ticking "increase", and (2) linking it to the correct reason (more total energy needs transferring), not just restating the tick.$q$,
+'AO1', 43
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
