@@ -2,7 +2,7 @@
 -- PASCO pilot — AQA GCSE Physics 8463/1H, Higher Tier Paper 1,
 -- June 2024 (source: AQA-84631H-QP/MS/INS-JUN241.pdf)
 --
--- STATUS: DRAFT TRANSCRIPTION — Questions 1-4 (39 of 100 marks), per
+-- STATUS: DRAFT TRANSCRIPTION — Questions 1-6 (61 of 100 marks), per
 -- docs/pasco/INSPIRE-PASCO-DESIGN.md §2 pipeline steps 2-3
 -- (transcription + solution-authoring passes). All rows below have
 -- been checked against rendered source PDF pages (not just pdftotext's
@@ -30,6 +30,10 @@
 --   5. Q4 (all parts) transcribed directly from rendered QP pages
 --      11-14 and MS text (which came out clean for Q4, no jumbling) —
 --      marks sum 3+1+1+4+1=10, matches "Total Question 4" on MS p14.
+--   6. Q5 (all parts) and Q6 (all parts) transcribed from rendered QP
+--      pages 17-20 and MS text (also clean, no jumbling this time) —
+--      marks sum 2+4+1+1+5=13 (Q5) and 1+6+2=9 (Q6), matching "Total
+--      Question 5"/"Total Question 6" on MS p17/p18.
 --
 -- DIAGRAM ASSETS NEEDED (not yet produced — text-only placeholders
 -- below per §1's "real text, not scanned images" rule; actual asset
@@ -46,6 +50,12 @@
 --   - Q04.1's Figure 5 (photo of student, hair standing up) and
 --     Q04.4's Figure 6 (photo of dome + earthed conductor) are
 --     genuine photographs — need high-fidelity scanned images.
+--   - Q05.4's Figure 8 (circuit: 12V, 400Ω, thermistor, voltmeter)
+--     and the thermistor symbol itself, Q05.5's Figure 9 (resistance-
+--     vs-temperature graph — actual curve data must be preserved:
+--     ~600Ω at 10°C down to ~20Ω at 30°C), and Q06.1's Figure 10
+--     (before/after bungee-ride schematic) are all standard
+--     schematic/graph/symbol shapes — redrawable as SVG.
 -- ═══════════════════════════════════════════════════════════
 
 INSERT INTO past_papers (subject_id, exam_board, tier, year, series, paper_number, total_marks, duration_minutes, is_published)
@@ -253,5 +263,107 @@ $q$Which of the following changes would increase the distance a spark can jump b
 $q$Decreased electrical resistance of air. [1 mark] (AO3; spec 4.2.5.1)$q$,
 $q$A spark is really just current jumping through the air once the electric field is strong enough to ionise the air and let charge flow. Anything that makes it easier for current to flow through the air — i.e. lowers the air's electrical resistance — lets a spark jump a larger gap. The other three options all work against a spark forming: decreasing the charge, the field strength, or the potential difference all make it harder (not easier) for a spark to jump, so a bigger gap needs more of those, not less.$q$,
 'AO3', 17
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+-- ── Question 5 (13 marks) — Vending machine: coin resistance, thermistor circuit ──
+-- Figure 8 (circuit: 12V, 400Ω resistor, thermistor, voltmeter) and
+-- Figure 9 (thermistor resistance-vs-temperature graph) are both
+-- standard schematic/graph shapes — redrawable as SVG, preserving the
+-- graph's actual data (reads ~80 Ω at 20°C, confirmed against the
+-- mark scheme's accepted 70-90 Ω range).
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '05.1', 'aqa-ph-fh-electricity-domestic', 2,
+$q$Figure 7 shows a student putting a coin into a vending machine that sells food. The vending machine is connected to the mains electricity supply. What is the frequency and the potential difference of the mains electricity supply in the UK? [2 marks] Frequency = ___ Hz. Potential difference = ___ V.$q$,
+$q$50 (Hz) [1] — this order only; 230 (V) [1]. (AO1; spec 4.2.3.1)$q$,
+$q$This is a direct recall fact worth memorising exactly: UK mains electricity supply is 50 Hz and 230 V. Note the question asks for frequency first, then potential difference, in that order — make sure you fill in your answer in the same order the question asks, since the mark scheme credits them "in this order only."$q$,
+'AO1', 18
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '05.2', 'aqa-ph-fh-electricity-domestic', 4,
+$q$The vending machine identifies the value of the coin by measuring the resistance of the coin. The power dissipated by the coin is 340 mW when the current in the coin is 0.75 A. Calculate the resistance of the coin. Use the Physics Equations Sheet. [4 marks] Resistance = ___ Ω$q$,
+$q$340 mW = 0.34 W (unit conversion) [1]; 0.34 = 0.75² × R (correct substitution into P = I²R) [1]; R = 0.34 ÷ 0.75² (correct rearrangement) [1]; R = 0.60 Ω [1] — allow a correct answer given to more than 2 sf; allow error-carried-forward using an unconverted value of P. (AO2; spec 4.2.4.1)$q$,
+$q$This uses P = I²R (power = current squared × resistance), rearranged to make R the subject.
+Step 1 — convert units: 340 mW = 0.34 W (milli = ×10⁻³). Always convert to base SI units (watts, amps, ohms) before substituting.
+Step 2 — substitute into P = I²R: 0.34 = 0.75² × R.
+Step 3 — rearrange: R = 0.34 ÷ 0.75².
+Step 4 — calculate: R = 0.60 Ω.
+
+Notice the current is squared, not the resistance — a common slip is to write R = 0.34 ÷ 0.75 instead of 0.34 ÷ 0.75². Always check which quantity the equation squares before you rearrange it.$q$,
+'AO2', 19
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '05.3', 'aqa-ph-fh-electricity-circuits', 1,
+$q$Coins that are dirty are not recognised by the vending machine. Suggest one reason why. [1 mark]$q$,
+$q$The dirt changes the (measured) resistance of the coin. OR the (measured) resistance is different from the expected resistance (of the coin) — allow "the measured resistance does not match the resistance of a known coin"; allow "dirt stops charge flow (through the coin)"; allow "dirt stops the current (in the coin)". [1 mark] (AO3; spec 4.2.1.3)$q$,
+$q$The vending machine works by measuring a coin's resistance and comparing it against known values for real coins. Dirt on the coin's surface changes how well the coin conducts, which changes its measured resistance — so the reading no longer matches the resistance the machine expects for that coin, and it isn't recognised. The key idea to state is that the dirt changes the resistance reading, not just "the coin is dirty" on its own — the question wants the physics link between dirt and the measurement, not just a restatement of the scenario.$q$,
+'AO3', 20
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '05.4', 'aqa-ph-fh-electricity-circuits', 1,
+$q$Figure 8 shows part of a different circuit used to monitor the temperature inside the vending machine: a 12 V supply connected to a 400 Ω fixed resistor in series with a thermistor, with a voltmeter connected across the thermistor. The circuit symbol for a thermistor has not been included. Draw the circuit symbol for a thermistor in the box below. [1 mark]$q$,
+$q$The standard GCSE circuit symbol for a thermistor: a rectangle (resistor symbol) with a diagonal line through it, labelled "t°" next to the diagonal line — the same construction as an LDR symbol, but with "t°" instead of light-arrows. [1 mark] (AO1; spec 4.2.1.1)$q$,
+$q$[DIAGRAM ASSET NEEDED — trivial to redraw: the thermistor symbol is a standard resistor rectangle with a diagonal line through it labelled "t°", placed immediately after Figure 8's fixed 400 Ω resistor in the circuit.] The thermistor symbol follows the same pattern as other GCSE circuit component symbols that respond to an external condition: a rectangle (the resistor base symbol) plus a diagonal line labelled with what it responds to — "t°" for temperature (thermistor), the direct counterpart to the light-arrows used for an LDR. Mixing up this pair of symbols (drawing an LDR's light arrows instead of "t°") is the single most common error on this question.$q$,
+'AO1', 21
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '05.5', 'aqa-ph-fh-electricity-circuits', 5,
+$q$Figure 9 shows how the resistance of the thermistor varies with temperature (a curve falling from about 600 Ω at 10°C to about 20 Ω at 30°C). The cooling system inside the vending machine turns on when the temperature of the thermistor is above 20°C. Determine the potential difference across the thermistor when the temperature is 20°C. Use the Physics Equations Sheet. [5 marks] Potential difference = ___ V$q$,
+$q$RTotal = 400 + 80 (= 480 Ω) — reading the thermistor's resistance at 20°C from Figure 9, RTh in range 70-90 Ω accepted [1]; 12 = I × 480, or I = 12 ÷ 480 (allow a correct substitution/rearrangement with RTotal in range 470-490 Ω) [1]; I = 0.025 A (allow a correct calculation using RTotal in range 470-490 Ω) [1]; V = 0.025 × 80 (allow a correct substitution using their calculated I and RTh in range 70-90 Ω) [1]; V = 2.0 V (allow an answer in the range 1.8-2.2 V) [1]. Equivalent ratio-based route also accepted: total R = 480; ratio (Th:total) = 80:480 = 1:6; V = (1/6) × 12 = 2.0 V. (AO2; spec 4.2.1.3, 4.2.2)$q$,
+$q$Two things need to happen before you can calculate anything: read the thermistor's resistance off Figure 9 at 20°C (≈80 Ω, allow 70-90 Ω), and recognise this is a series circuit (400 Ω resistor + thermistor), so the same current flows through both components.
+
+Step 1 — total resistance: RTotal = 400 + 80 = 480 Ω.
+Step 2 — total current from the 12 V supply: I = V ÷ R = 12 ÷ 480 = 0.025 A.
+Step 3 — potential difference across just the thermistor: V = I × R(thermistor) = 0.025 × 80 = 2.0 V.
+
+The key insight for any "pd across one component in a series circuit" question: find the total current first (using the total resistance and total pd), then apply V = IR again using just the one component's resistance and the current you just found — current is the same everywhere in a series circuit, but pd splits between components in proportion to their resistance.$q$,
+'AO2', 22
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+-- ── Question 6 (9 marks) — Bungee ride: elastic PE and energy dissipation ──
+-- Figure 10 (before/after release schematic: towers, cords, pod) is
+-- a simple line illustration — redrawable as SVG.
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '06.1', 'aqa-ph-fh-energy-stores-transfers', 1,
+$q$In a ride at a theme park, a person is strapped into a pod attached to two stretched bungee cords, which behave like springs. [DIAGRAM ASSET NEEDED: Figure 10 — simple before/after schematic showing two support towers, the stretched bungee cords, and the pod; redrawable as SVG.] Which energy store increases as the bungee cords are stretched? [1 mark]$q$,
+$q$Elastic potential (energy). Allow "Ee" or "EPE". [1 mark] (AO1; spec 4.1.1.2)$q$,
+$q$Stretching (or compressing) any elastic object — a spring, a bungee cord — stores energy in its elastic potential energy store. This is separate from gravitational potential energy (which depends on height) and kinetic energy (which depends on motion) — the bungee cords aren't moving or changing height while being stretched, they're just being deformed, which is exactly what charges the elastic potential energy store.$q$,
+'AO1', 23
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '06.2', 'aqa-ph-fh-energy-stores-transfers', 6,
+$q$When the pod is released, the pod accelerates upwards. Before the pod is released the extension of each of the two bungee cords is 8.0 m. The spring constant of each bungee cord is 735 N/m. The mass of the pod is 240 kg. gravitational field strength = 9.8 N/kg. Calculate the maximum height reached by the pod. Use the Physics Equations Sheet. [6 marks] Maximum height = ___ m$q$,
+$q$Ee = 0.5 × 735 × 8.0² (elastic PE per cord) [1] — allow a correct substitution using k=1470 N/m & e=8m, or k=1470 N/m & e=16m, or k=735 N/m & e=16m (equivalent ways of accounting for two cords); Ee = 23,520 J (per cord — this answer only) [1]; total Ee = 47,040 J (both cords — this answer only) [1]; 47,040 = 240 × 9.8 × h (correct substitution into Ep = mgh using their Ee) [1]; h = 47,040 ÷ (240 × 9.8) (correct rearrangement using their Ee) [1]; h = 20 m (allow an answer consistent with their Ee) [1]. (AO2; spec 4.1.1.2)$q$,
+$q$This question needs two energy-store equations chained together, plus a subtlety: there are TWO bungee cords, not one.
+
+Step 1 — elastic PE stored in ONE cord: Ee = 0.5 × k × e² = 0.5 × 735 × 8.0² = 23,520 J.
+Step 2 — since there are two identical cords, double it: total Ee = 2 × 23,520 = 47,040 J. This is the step students most often forget — always re-read the question for how many identical components are doing the same job.
+Step 3 — assume all of this elastic PE converts to gravitational PE at maximum height (energy conservation): Ep = Ee, so mgh = 47,040.
+Step 4 — rearrange for h: h = 47,040 ÷ (240 × 9.8) = 20 m.
+
+Notice this calculation assumes 100% of the elastic PE converts to GPE — that assumption is exactly what Q06.3 asks you to critique.$q$,
+'AO2', 24
+FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
+WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
+
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+SELECT pp.id, '06.3', 'aqa-ph-fh-energy-stores-transfers', 2,
+$q$The actual maximum height reached by the pod will be lower than the correct answer to Question 06.2. Explain why. [2 marks]$q$,
+$q$Air resistance (opposes the motion of the pod upwards) [1]. (So) not all of the elastic potential energy will be transferred to gravitational potential energy — allow "the energy transfer is not 100% efficient"; allow "some energy is transferred to the surroundings"; allow "some energy is dissipated"; ignore "energy is wasted"; ignore reference to the mass of the person in the pod [1]. (AO3/AO1; spec 4.1.2.1, 4.1.2.2)$q$,
+$q$Q06.2's calculation assumed a perfect, lossless energy transfer — all of the elastic PE becoming gravitational PE. In reality, that never happens. Two linked ideas earn the two marks here: (1) name the cause — air resistance acts on the pod as it moves upwards, opposing its motion; (2) state the consequence — because some energy is transferred to the surroundings by this air resistance (as heat/sound, dissipated), not all of the elastic PE converts into gravitational PE, so less GPE (and therefore less height) is actually gained than the idealised calculation predicts. Writing "air resistance" alone only earns the first mark — you must also connect it back to the energy transfer being less than 100% efficient.$q$,
+'AO3', 25
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
