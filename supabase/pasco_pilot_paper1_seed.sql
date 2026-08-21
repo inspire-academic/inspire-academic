@@ -83,6 +83,18 @@
 --     Any future diagram embedding must apply this same check — a
 --     diagram in question_content must never encode the answer to
 --     that same question.
+--   - FOLLOW-UP AUDIT 2026-08-21: cross-checked every Figure/Table
+--     numeral mentioned anywhere in the source PDF against the assets
+--     actually embedded in this file. Found and fixed three questions
+--     that named a Table/Figure but only described it in prose (Table
+--     1 in 01.3, Table 2 in 07.3, Figure 7 in 05.1), plus two that
+--     were missing their diagram entirely (Figure 1, the Q01 group's
+--     wind-turbine stem photo; Figure 2, the nuclear-fission diagram
+--     in 02.1 — this one is answer-relevant, since 02.1 asks the
+--     student to read the released-neutron count directly off it).
+--     All now have real crops. Every Figure 1-17 and Table 1-2 that
+--     appears in the source paper now has a matching embedded image
+--     — 23 image assets in total (up from the original 18).
 --
 -- COPYRIGHT / ATTRIBUTION — resolved 2026-08-21 (per §8.3, this is
 -- Eric's call, not a technical one): rather than withholding
@@ -294,11 +306,8 @@ FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
 
 -- ── Question 4 (10 marks) — Static electricity generator ──
--- Figure 4 (generator schematic) is a moderately simple labelled
--- illustration — redrawable as SVG. Figures 5 and 6 are genuine
--- photographs (student with hair standing up; photographed dome +
--- earthed conductor) — need high-fidelity scanned image assets, not
--- redraws, per the diagram-fidelity hybrid rule.
+-- Figures 4, 5, and 6 are all real crops from the source PDF (see
+-- DIAGRAM ASSETS note above).
 
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '04.1', 'aqa-ph-fh-electricity-static', 3,
@@ -368,11 +377,9 @@ FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
 
 -- ── Question 5 (13 marks) — Vending machine: coin resistance, thermistor circuit ──
--- Figure 8 (circuit: 12V, 400Ω resistor, thermistor, voltmeter) and
--- Figure 9 (thermistor resistance-vs-temperature graph) are both
--- standard schematic/graph shapes — redrawable as SVG, preserving the
--- graph's actual data (reads ~80 Ω at 20°C, confirmed against the
--- mark scheme's accepted 70-90 Ω range).
+-- Figures 7, 8, and 9 are all real crops from the source PDF (see
+-- DIAGRAM ASSETS note above). Figure 9's graph reads ~80 Ω at 20°C,
+-- confirmed against the mark scheme's accepted 70-90 Ω range.
 
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '05.1', 'aqa-ph-fh-electricity-domestic', 2,
@@ -445,8 +452,8 @@ FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
 
 -- ── Question 6 (9 marks) — Bungee ride: elastic PE and energy dissipation ──
--- Figure 10 (before/after release schematic: towers, cords, pod) is
--- a simple line illustration — redrawable as SVG.
+-- Figure 10 is a real crop from the source PDF (see DIAGRAM ASSETS
+-- note above).
 
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '06.1', 'aqa-ph-fh-energy-stores-transfers', 1,
@@ -491,8 +498,8 @@ WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=
 
 -- ── Question 7 (8 marks) — Required practical: density of a metal ring (RPA5) ──
 -- Uses the new aqa-ph-fh-particle-density spec_slug added to
--- spec-map.js this session (see header). Figure 11 (labelled
--- measuring cylinder scale) is a simple redrawable diagram.
+-- spec-map.js this session (see header). Figure 11 and Table 2 are
+-- both real crops from the source PDF (see DIAGRAM ASSETS note above).
 
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '07.1', 'aqa-ph-fh-particle-density', 1,
@@ -562,8 +569,8 @@ FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
 
 -- ── Question 8 (8 marks) — Gas pressure and specific heat capacity ──
--- Figures 12 (syringe + pressure gauge) and 13 (fire piston, labelled)
--- are both clean line-illustrations — redrawable as SVG.
+-- Figures 12 and 13 are both real crops from the source PDF (see
+-- DIAGRAM ASSETS note above).
 
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '08.1', 'aqa-ph-fh-particle-pressure', 3,
@@ -607,12 +614,11 @@ FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
 
 -- ── Question 9 (11 marks) — Radioactivity: range, absorption, safety, decay graph ──
--- Figure 14 (detector/source/counter setup) and Figure 17 (fuse) are
--- clean illustrations, redrawable as SVG. Figures 15 and 16 are data
--- graphs — redrawable but the actual curve data must be preserved:
--- Fig 15 Source A drops from ~350 to background (~20) by ~3-4cm,
--- Source B still ~100 at 10cm; Fig 16 falls from 6 to ~1.5 (×10^23
--- atoms) over 0-540s, reading ~2.9×10^23 at t=300s.
+-- Figures 14, 15, and 16 are all real crops from the source PDF (see
+-- DIAGRAM ASSETS note above). Fig 15's Source A drops from ~350 to
+-- background (~20) by ~3-4cm, Source B still ~100 at 10cm; Fig 16
+-- falls from 6 to ~1.5 (×10^23 atoms) over 0-540s, reading
+-- ~2.9×10^23 at t=300s.
 
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '09.1', 'aqa-ph-fh-atomic-structure', 3,
@@ -682,7 +688,8 @@ FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=1;
 
 -- ── Question 10 (12 marks) — Fuses: colour code, symbol, charge, latent heat ──
--- Figure 17 (fuse illustration) is redrawable as SVG.
+-- Figure 17 is a real crop from the source PDF (see DIAGRAM ASSETS
+-- note above).
 
 INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
 SELECT pp.id, '10.1', 'aqa-ph-fh-electricity-domestic', 1,
