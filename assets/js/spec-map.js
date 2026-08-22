@@ -20,6 +20,7 @@ window.SPEC_MAP = {
       { slug:'aqa-ph-fh-electricity-circuits', name:'Electric circuits', paper:1, tier:'Both', subtopics:['Circuit symbols','Series and parallel','V = IR','I-V characteristics','LDR and thermistor'] },
       { slug:'aqa-ph-fh-electricity-domestic', name:'Domestic electricity and mains', paper:1, tier:'Both', subtopics:['AC and DC','UK mains (230V 50Hz)','Three-pin plug','Fuses and earthing','Power in appliances'] },
       { slug:'aqa-ph-fh-electricity-static', name:'Static electricity', paper:1, tier:'Both', subtopics:['Charging by friction','Electric fields','Attraction and repulsion'] },
+      { slug:'aqa-ph-fh-electricity-national-grid', name:'The National Grid', paper:1, tier:'Both', subtopics:['Transformers — step-up and step-down','Structure of the National Grid','Why power is transmitted at high voltage, low current','Power loss in transmission cables (P = I²R)'] },
       { slug:'aqa-ph-fh-magnetism-fields', name:'Magnetism and magnetic fields', paper:2, tier:'Both', subtopics:['Permanent and induced magnets','Magnetic field patterns','Electromagnets'] },
       { slug:'aqa-ph-fh-magnetism-motor-effect', name:'The motor effect', paper:2, tier:'Both', subtopics:['Force on a conductor','Fleming\'s left-hand rule','Electric motors'] },
       { slug:'aqa-ph-fh-magnetism-induction', name:'Electromagnetic induction', paper:2, tier:'Both', subtopics:['Induced pd','Generators','Transformers','National Grid'] },
