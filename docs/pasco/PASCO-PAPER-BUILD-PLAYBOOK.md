@@ -384,6 +384,14 @@ field's actual text for:
   single trailing `[N marks]` for the whole list rather than tagging
   each bullet, and have the sweep's bracket-sum check treat that as
   the question's total rather than summing individual bullet tags.
+  **A second, similar exception**: AQA sometimes prints two full
+  alternate solution routes for a calculation question, separated by
+  "OR", each independently worth all the marks (e.g. a 5-mark question
+  with two complete 5-mark methods, `[1]` tags summing to 10 across
+  both). This is correct as printed, not an error — a student only
+  needs one route. Treat a bracket-sum of an exact multiple of the
+  marks column (2×, 3×...) alongside a literal " OR: " or "OR " marker
+  in the text as this case, not a bug to fix.
 
 ### 5.3 Diagram audit (§2.7) — run this as its own pass, not folded into transcription
 
