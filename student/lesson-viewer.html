@@ -246,7 +246,14 @@ body{overflow-x:hidden!important;}
 
   let iframeSrc = lesson.content_url || '';
 
-  if(lesson.lesson_type === 'doc'){
+  if(lesson.lesson_type === 'doc' || lesson.lesson_type === 'pdf'){
+    // Each browser's native in-iframe PDF renderer behaves differently --
+    // Chromium (Android/Windows) is consistent, but Safari/iOS's native
+    // PDF-in-iframe viewer is a well-documented source of broken/blocked
+    // scroll gestures. Route through Google's viewer instead, the same
+    // fix already relied on for 'doc' -- a single JS-rendered scrollable
+    // page, consistent across every browser instead of depending on each
+    // platform's own PDF handling.
     iframeSrc = `https://docs.google.com/viewer?url=${encodeURIComponent(lesson.content_url)}&embedded=true`;
   }
 
