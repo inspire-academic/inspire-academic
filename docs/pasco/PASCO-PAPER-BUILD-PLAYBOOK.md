@@ -242,7 +242,13 @@ Cross-check against `pdftotext -layout <source.pdf> - | grep -oiE "(Figure|Table
 - The `§COACHING§` marker is the literal split point any renderer
   (review tooling now, the real product later) must split on to
   present the two parts as visually distinct blocks: model answer
-  primary/prominent, coaching a quieter aside beneath it.
+  primary/prominent, coaching a quieter aside beneath it. **Copy the
+  marker literally, character for character, in every row — don't
+  paraphrase or summarize it.** Paper #3 typo'd it as a placeholder
+  string across all 43 rows in one drafting pass and only caught it via
+  the final sweep's own marker-count check; a global find-and-replace
+  fixed it, but it's cheaper to get right the first time than to fix
+  44 occurrences after the fact.
 
 ### 3.2 Prose conventions — non-negotiable, checked by the final sweep
 
@@ -370,7 +376,14 @@ field's actual text for:
 - `question_content`'s `[N marks]` tag matches the `marks` column
   (allow trailing qualifier text like `[4 marks, 2 for X, 2 for Y]` —
   match on the leading number, not an exact bracket string)
-- `mark_scheme`'s own `[n]` tags sum to the `marks` column
+- `mark_scheme`'s own `[n]` tags sum to the `marks` column — **except
+  "any N from M options" mark schemes**, where AQA lists more
+  acceptable answers than marks available (e.g. "any three from: ...
+  five bullet points ..."). Per-bullet `[1]` tags on every listed
+  option overcounts against the marks column. Convention: write a
+  single trailing `[N marks]` for the whole list rather than tagging
+  each bullet, and have the sweep's bracket-sum check treat that as
+  the question's total rather than summing individual bullet tags.
 
 ### 5.3 Diagram audit (§2.7) — run this as its own pass, not folded into transcription
 
