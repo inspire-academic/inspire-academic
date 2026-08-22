@@ -497,7 +497,7 @@ ${groupsHTML}
 </main>
 
 <footer>
-  Transcribed from the official ${esc(paper.examBoard)} past paper and mark scheme, with worked solutions authored for Inspire Academic. Every question's spec_slug, marks total, and required fields have passed automated QA (tests/pasco-question-qa.test.js). This review preview exists to support human approval — no content here has been published to students.
+  Inspire Internal Revision/Review/Prep Edition
 </footer>
 `;
 
