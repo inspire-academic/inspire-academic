@@ -68,7 +68,27 @@ pdftotext -layout <paper.pdf> -                  # fine for prose, never for tab
 
 Cross-verify numbers against the mark scheme's indicative content
 whenever a rendered table or figure looks ambiguous — the mark scheme
-usually restates the key values.
+usually restates the key values. **Confirmed a second time on paper
+#2**: `pdftotext -layout` split a table's data across orphan lines
+with one value dropped entirely. Caught the same way — render the
+page, read it, cross-check against the mark scheme's own arithmetic.
+This isn't a one-off paper #1 fluke; treat it as a standing property
+of `pdftotext` on tabular content, not a per-paper coincidence to
+re-discover.
+
+**Watch for non-standard source PDF editions.** Paper #2's supplied
+question paper was AQA's large-print "Modified Question Paper"
+edition (one question-part per page) rather than the standard layout.
+Two things followed from that, worth checking on any new source PDF
+before assuming it behaves like the last one: its "Figure"/"Table"
+captions were in ALL CAPS ("FIGURE 3", not "Figure 3") — a
+case-sensitive grep/regex for the source-side inventory (§2.7) will
+silently return nothing and look like a clean audit when it's actually
+not matching at all; and **individual pages were not uniformly
+oriented** — most rendered upright, but one page needed an explicit
+90° rotation before cropping made sense. Verify each page's own
+orientation and caption casing as you go; don't assume either carries
+over from the previous page or from paper #1's standard-edition PDF.
 
 **One row per sub-part**, not per top-level question (§8 resolution,
 already settled — don't revisit this). `question_number` is `'01.1'`,
@@ -195,7 +215,7 @@ const mentions = [...raw.matchAll(/(Figure|Table)\s+(\d+)/g)];
 // numerals appears in `pdftotext -layout` output of the source PDF
 ```
 
-Cross-check against `pdftotext -layout <source.pdf> - | grep -oE "(Figure|Table) [0-9]+" | sort -u -V` — that's the full source-side inventory to compare the seed file against.
+Cross-check against `pdftotext -layout <source.pdf> - | grep -oiE "(Figure|Table) [0-9]+" | sort -u -V` — that's the full source-side inventory to compare the seed file against. **Use `-i` (case-insensitive)** — at least one AQA edition (the large-print Modified Question Paper) captions figures as "FIGURE 3", not "Figure 3", and a case-sensitive grep returns nothing at all rather than erroring, which looks exactly like a clean audit. Confirmed the hard way: a case-sensitive re-check of paper #2 silently came back empty before switching to `-i` caught the real (matching) inventory.
 
 ---
 
