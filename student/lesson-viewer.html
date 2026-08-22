@@ -64,6 +64,7 @@ html,body{height:100%;overflow:hidden;}
   position:fixed;top:56px;left:0;right:0;bottom:0;
   background:var(--navy);
   overflow:hidden;
+  -webkit-overflow-scrolling:touch; /* iOS Safari sometimes won't hand touch-scroll gestures to a descendant iframe inside a fixed-position ancestor without this hint — same fix already used in flashcards.html */
 }
 
 /* iframe pins to all four edges — avoids height:100% quirks in fixed parents */
@@ -71,6 +72,7 @@ html,body{height:100%;overflow:hidden;}
   position:absolute;top:0;left:0;
   width:100%;height:100%;
   border:none;margin:0;padding:0;
+  -webkit-overflow-scrolling:touch;
 }
 
 /* Video embed (16:9, centred) */
@@ -230,7 +232,14 @@ body{overflow-x:hidden!important;}
     const blobUrl = URL.createObjectURL(blob);
 
     const iframe = document.getElementById('html-iframe');
-    iframe.onload = () => document.getElementById('loading-overlay')?.classList.add('hidden');
+    const hideOverlay = () => document.getElementById('loading-overlay')?.classList.add('hidden');
+    iframe.onload = hideOverlay;
+    // Safari/iOS doesn't always fire `load` reliably for a sandboxed
+    // iframe pointed at a blob: URL (Chromium on Android/Windows does).
+    // If it never fires, the overlay's default pointer-events:auto sits
+    // on top of the iframe forever and blocks all touch input -- looks
+    // exactly like "can't scroll". This fallback guarantees it clears.
+    setTimeout(hideOverlay, 4000);
     iframe.src = blobUrl;
     return;
   }
