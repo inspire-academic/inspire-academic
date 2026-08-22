@@ -460,7 +460,8 @@ a:focus-visible, summary:focus-visible, button:focus-visible {
 .block svg { background: var(--bg-card); border: 1px solid var(--border); padding: 12px; box-sizing: border-box; }
 .block img { border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(13,25,41,.06); }
 footer {
-  max-width: 880px; margin: 0 auto; padding: 0 20px 60px; color: var(--text-soft); font-size: .82rem;
+  max-width: 880px; margin: 0 auto; padding: 0 20px 60px; color: var(--text-soft); font-size: .75rem;
+  text-align: center;
 }
 @media (max-width: 600px) {
   .topbar-inner, .navstrip, main, footer { padding-left: 16px; padding-right: 16px; }
