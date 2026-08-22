@@ -252,7 +252,15 @@ just rotate an icon — a static label with no state feedback is a real
 
 ## 4. SQL seed file conventions
 
-One seed file per paper: `supabase/pasco_pilot_paper<N>_seed.sql`.
+One seed file per paper: `supabase/pasco_pilot_<board>_<subject-code>_<tier-code>_<series><year>_seed.sql`
+(e.g. `pasco_pilot_aqa_ph_1h_jun24_seed.sql`). **Don't use a bare
+incrementing `paperN` suffix** — the paper's own `paper_number` field
+(AQA Physics has a real "Paper 1" and "Paper 2", different content
+entirely) makes a file named `..._paper2_seed.sql` read as "AQA Paper
+2" even when it means "the second paper we've transcribed, which is
+actually AQA Paper 1 from a different year." (`pasco_pilot_paper1_seed.sql`,
+the very first pilot file, predates this rule and keeps its name —
+don't rename it, just don't repeat the ambiguity going forward.)
 Two INSERTs: one `past_papers` row, one `past_paper_questions` row per
 sub-part, using this exact per-row template (dollar-quoted strings to
 avoid escaping apostrophes):
