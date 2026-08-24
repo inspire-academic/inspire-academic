@@ -86,10 +86,10 @@ function stripInlineScripts(html) {
 // manifest format is deliberately flat (INSPIRE-MINIMUM-FACTORY-DESIGN.md
 // §2), so a general parser would be more machinery than the data shape needs.
 function parseFrontmatter(markdown) {
-  const match = markdown.match(/```yaml\n([\s\S]*?)\n```/);
+  const match = markdown.match(/```yaml\r?\n([\s\S]*?)\r?\n```/);
   if (!match) return null;
   const out = {};
-  const lines = match[1].split('\n');
+  const lines = match[1].split(/\r?\n/);
   let currentKey = null;
   for (const line of lines) {
     const listItem = line.match(/^\s+-\s+(.*)$/);
