@@ -1,23 +1,22 @@
 # Chemistry Production Run #001 — Electrolysis
 
-## STATUS: REPRESENTATION REMEDIATION REQUIRED — GATE 5 NOT HUMAN APPROVED
+## STATUS: REPRESENTATION REMEDIATION INTEGRATED — AWAITING HUMAN GATE 5 REVIEW
 
 **Run type:** REAL PRODUCTION LESSON. This is not a Factory v0 pilot,
 rehydration run, or architecture proof.
 
 **Lifecycle:** `DRAFT`. Content/pedagogy is a strong candidate, automated QA
-passes, and standalone QA passes. The lesson must not advance to
-`QA_COMPLETE` or `HUMAN_APPROVED` because the current deterministic SVG set
-does not meet the ratified Premium-First visual standard and the real inner
-blob/iframe lesson has not completed Gate 7 inspection.
+passes, and the remediated representation set passes standalone technical QA.
+The lesson must not advance to `QA_COMPLETE` or `HUMAN_APPROVED` because human
+Gate 5 review and real inner blob/iframe Gate 7 inspection remain outstanding.
 
 ```text
 CONTENT / PEDAGOGY: strong candidate
 AUTOMATED QA: PASS
 STANDALONE QA: PASS
 REPRESENTATION GATE: NOT YET HUMAN APPROVED
-REASON: current SVG diagrams do not meet Inspire's premium/exam-grade visual standard
-NEXT REQUIRED WORK: replace/remediate the representation set under Premium-First
+TECHNICAL STATUS: remediation integrated and ready for human visual review
+NEXT REQUIRED WORK: human Gate 5 inspection, then post-deployment inner-viewer QA
 ```
 
 ## 1. Topic and scope
@@ -91,20 +90,20 @@ marks, mark schemes, model answers, AO classification and original provenance.
 
 ## 6. Representations
 
-Three inline deterministic SVGs currently preserve the intended scientific
-relationships:
+The three temporary SVGs were removed from the lesson representation area:
 
-1. cell, polarity, ion migration and external electron path
-2. molten-versus-aqueous competing-ion comparison
-3. cathode/anode half-equation electron placement
+1. `CHEM-ELEC-PFF-001`: Premium Final Figure for molten PbBr₂ cell, polarity,
+   ion migration, external electron flow, products, redox and half-equations.
+2. `CHEM-ELEC-PFF-002`: Premium Final Figure contrasting compound-only ions in
+   molten NaCl with Na⁺/Cl⁻ plus water-derived H⁺/OH⁻ competitors in aqueous
+   NaCl, without making a product claim.
+3. Fresh router decision: native semantic HTML/typesetting for half-equation
+   electron placement and atom/charge audits. Exact selectable notation is
+   more precise and accessible than a raster figure here.
 
-They are **temporary and non-canonical**. Human review judged them not
-exam-grade and below the Inspire premium visual standard. Under the RATIFIED /
-ACTIVE Premium-First policy, figures 1 and 2 should be replaced by Premium
-Final Figures. Figure 3 requires a fresh medium decision: premium typeset
-reasoning figure, native lesson card, or Premium Final Figure. No generic
-Chemistry diagram framework was created, and none should be extracted from
-these temporary SVGs.
+Both Premium requests and generation/validation records are in
+`docs/visual-requests/`. No generic Chemistry diagram framework or automation
+bridge was created.
 
 ## 7. Scientific and notation verification
 
@@ -159,6 +158,23 @@ Real browser URL:
 | responsive 390 px | PASS — single column; contained diagram scrollers |
 | chemical notation | PASS |
 
+### Premium-figure remediation QA — 2026-08-25
+
+| Check | Result |
+|---|---|
+| Figure 1 source/final | 1536×1024 PNG → 960×640 WebP, 42,906 bytes |
+| Figure 2 source/final | 1536×1024 PNG → 960×640 WebP, 52,886 bytes |
+| Combined raster weight | 95,792 bytes |
+| Dark / Light | PASS |
+| Higher / Foundation + Higher extensions | PASS |
+| Learn / Practice | PASS — representation changes do not alter Practice flow |
+| Desktop | PASS — no horizontal overflow |
+| 390 px viewport | PASS — 375 px client / 375 px scroll width |
+| Mobile image loading | PASS — both 960×640 assets rendered responsively at ~331 px |
+| Alt text / figcaptions | PASS — semantic figures plus real-text equivalents |
+| Figure 3 notation | PASS — real `<sub>`/`<sup>`, atom and charge audits |
+| Full automated suite | 232/232 PASS |
+
 ## 10. Defects found and fixed
 
 1. The new file initially did not carry the exact `class="ile-content"` engine
@@ -171,6 +187,12 @@ Real browser URL:
    visibility guard; combined state now shows exactly one step.
 4. Phone-width diagram scaling made labels too small. Added contained internal
    620 px diagram reading surfaces below 520 px; page overflow remains zero.
+5. Premium Figure 1 generation initially reversed the positive-side external
+   electron arrow; rejected and corrected before integration.
+6. A second Figure 1 render made bromine resemble a metallic deposit; rejected
+   and corrected to red-brown bubbles/vapour.
+7. Premium Figure 2 initially showed unequal Na⁺/Cl⁻ counts in the molten
+   illustration; rejected and corrected to an electrically neutral example.
 
 ## 11. Quality gates
 
@@ -180,7 +202,7 @@ Real browser URL:
 | 2 Scientific accuracy | PASS | Products, polarity, ions and half-equations independently checked. |
 | 3 Pedagogical quality | PASS | Full blueprint sequence; additive Foundation; genuine Higher transfer. |
 | 4 Assessment validity | PASS | Original 21-mark exam bank; AO1/AO2/AO3; specific feedback. |
-| 5 Representation quality | **NOT HUMAN APPROVED** | Scientific/geometry checks pass, but routing appropriateness and visual craft fail the Premium-First standard. Current SVG set requires remediation. |
+| 5 Representation quality | **TECHNICALLY READY FOR HUMAN REVIEW — NOT HUMAN APPROVED** | Premium figures pass scientific, pedagogical, accessibility, routing and standalone visual checks; Figure 3 uses the freshly selected native typeset medium. Human visual judgement remains mandatory. |
 | 6 Accessibility | PASS for programmatic/keyboard smoke test | Semantics, contrast, focus, live region, drawer and 390 px checks pass. No formal WCAG certification claimed. |
 | 7 Live rendered-page QA | **UNVERIFIED for production pipeline** | Standalone real-browser QA PASS; authenticated blob/iframe viewer not yet exercised. |
 | 8 Human approval | NOT STARTED | Human-only. |

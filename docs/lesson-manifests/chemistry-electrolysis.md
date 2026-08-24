@@ -66,12 +66,15 @@ Any platform clause identifier not represented by the verified slugs remains
 
 ## REPRESENTATION NEEDS
 
-- Three temporary deterministic SVGs currently encode cell/circuit and ion
-  migration, molten-versus-aqueous competition, and electron-transfer logic.
-- Human review has not approved their visual standard. Under the ratified
-  Premium-First policy, figures 1–2 require Premium Final Figure replacement;
-  figure 3 requires a fresh choice between premium typesetting, native lesson
-  card, or Premium Final Figure.
+- Figure 1 is the generated and scientifically validated Premium Final Figure
+  `CHEM-ELEC-PFF-001` for molten lead bromide cell/circuit and ion migration.
+- Figure 2 is the generated and scientifically validated Premium Final Figure
+  `CHEM-ELEC-PFF-002` for molten-versus-aqueous competing ions.
+- Figure 3 was freshly routed to native semantic HTML/typesetting because exact
+  electron placement and charge balance benefit from selectable, responsive
+  notation rather than a raster image.
+- All three are integrated and technically validated; human Gate 5 visual
+  approval remains pending, so none is canonical yet.
 
 ## QA STATE
 
@@ -79,8 +82,8 @@ Any platform clause identifier not represented by the verified slugs remains
 qaState: DRAFT
 Automated QA: 232/232 PASS
 Gates 1–4 and 6: PASS
-Gate 5 representation quality: NOT HUMAN APPROVED — current SVGs are
-  scientifically useful but not Inspire premium/exam-grade
+Gate 5 representation quality: TECHNICALLY READY FOR HUMAN REVIEW — Premium
+  remediation integrated; final human visual approval not granted
 Gate 7 standalone browser QA: PASS
 Gate 7 production viewer: wrapper/row opened; inner blob/iframe QA UNVERIFIED
 Gate 8: human-only; not set
