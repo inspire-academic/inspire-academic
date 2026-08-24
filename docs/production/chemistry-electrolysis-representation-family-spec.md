@@ -1,7 +1,7 @@
 # Inspire Electrolysis Cell Representation Family — v1
 
-**Status:** new, narrow Mode A family for the first real Chemistry production
-lesson. Not canonical until live visual QA and human Gate 8 review.
+**Status:** standalone live QA PASS; ready for production-viewer verification
+and human Gate 8 review. Not canonical until those checks close.
 
 The production plan defined the purpose and routing of these representations
 before lesson markup. This document records their exact family contract and QA
@@ -69,4 +69,25 @@ The lesson uses inline authored SVG because only one lesson currently proves
 this geometry. Extract a shared primitive only after a second lesson needs the
 same electrode-pair/vessel/migration composition and live QA shows which parts
 are truly stable. Until then, abstraction would be speculative.
+
+## Standalone live-QA result — 2026-08-24
+
+- Dark and Light themes: PASS.
+- Higher and Foundation, including Foundation + Higher extensions: PASS.
+- Text bounds: 39/39 SVG text nodes inside their SVG bounds.
+- Text-vs-text collisions: 0.
+- Text-vs-line/path collisions: 0 after remediation.
+- Duplicate rendered IDs: 0.
+- Page horizontal overflow: 0 at desktop and 390 px viewport.
+- Mobile: diagrams retain a 620 px internal reading surface inside a contained
+  horizontal scroller; the page itself remains overflow-free.
+- Representative token contrast, Light: 5.35:1 minimum; Dark: 10.31:1
+  minimum across measured text/diagram semantic pairs.
+
+One real geometry defect was found: the cathode/anode labels crossed the
+vertical external wires. Both labels were moved into clear outer label zones
+and the same text-vs-geometry check then returned zero collisions.
+
+Production `student/lesson-viewer.html` blob/iframe verification and human
+visual approval remain outstanding. Family status is therefore not canonical.
 

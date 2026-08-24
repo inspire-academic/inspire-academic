@@ -75,7 +75,11 @@ Any platform clause identifier not represented by the verified slugs remains
 
 ```text
 qaState: DRAFT
-Gates 1–7: pending production and verification
+Automated QA: 232/232 PASS
+Gates 1–6: PASS
+Gate 7 standalone browser QA: PASS
+Gate 7 production lesson-viewer blob/iframe QA: UNVERIFIED — authenticated
+  admin upload has not been authorised or performed
 Gate 8: human-only; not set
 ```
 
@@ -97,4 +101,3 @@ Publicly live: NO
 | Academic content | Original production content |
 | Assessment provenance | Original |
 | Frozen Chemistry benchmark modified? | No |
-
