@@ -1,7 +1,15 @@
 # Inspire Electrolysis Cell Representation Family — v1
 
-**Status:** standalone live QA PASS; ready for production-viewer verification
-and human Gate 8 review. Not canonical until those checks close.
+**Status:** TEMPORARY / NON-CANONICAL. Scientific and standalone geometry QA
+passed, but human review found that the three deterministic SVGs are not
+exam-grade and do not meet the Inspire premium visual standard. Representation
+Gate 5 is therefore not approved. Do not extract or reuse this family.
+
+Under the RATIFIED / ACTIVE **PREMIUM-FIRST SCIENCE REPRESENTATION POLICY**,
+these SVGs remain only as a record of the scientific and pedagogical thinking
+they encode. They are not to be polished into canonical status merely because
+they already exist. Replacement is separately authorised work; this policy
+ratification does not alter the lesson HTML.
 
 The production plan defined the purpose and routing of these representations
 before lesson markup. This document records their exact family contract and QA
@@ -17,7 +25,7 @@ criteria; it does not create a generic Chemistry diagram system.
 - Graph families are irrelevant because no continuous plotted relationship is
   being taught.
 
-## Three approved instances for this lesson
+## Three temporary instances in the current lesson
 
 | Instance | One sentence it must prove |
 |---|---|
@@ -63,12 +71,23 @@ criteria; it does not create a generic Chemistry diagram system.
 - Live checks must cover both themes and a narrow viewport; source inspection
   cannot approve this family.
 
-## Extraction trigger
+## Replacement direction under Premium-First
 
-The lesson uses inline authored SVG because only one lesson currently proves
-this geometry. Extract a shared primitive only after a second lesson needs the
-same electrode-pair/vessel/migration composition and live QA shows which parts
-are truly stable. Until then, abstraction would be speculative.
+1. **Premium rendered electrolysis cell** — preferably the already-produced
+   molten lead bromide reference direction. It must communicate cathode
+   negative, anode positive, cation/anion migration, ionic conduction,
+   external electron movement and electrode products at a glance.
+2. **Premium rendered molten-versus-aqueous comparison** — compound ions only
+   when molten; compound ions plus water-derived competitors when aqueous;
+   discharge reasoning must become visually immediate.
+3. **Half-equation reasoning** — do not automatically commission a third
+   traditional diagram. Decide between a premium typeset reasoning figure, a
+   native lesson card, or a premium rendered figure based on the clearest way
+   to teach electron placement and charge checking.
+
+No deterministic family should be extracted from the current SVGs. A future
+deterministic representation would need a fresh, specific justification that
+its geometry or data is itself instructional or assessed.
 
 ## Standalone live-QA result — 2026-08-24
 
@@ -88,6 +107,7 @@ One real geometry defect was found: the cathode/anode labels crossed the
 vertical external wires. Both labels were moved into clear outer label zones
 and the same text-vs-geometry check then returned zero collisions.
 
-Production `student/lesson-viewer.html` blob/iframe verification and human
-visual approval remain outstanding. Family status is therefore not canonical.
-
+Production `student/lesson-viewer.html` blob/iframe verification remains
+outstanding. More importantly, human representation review has explicitly not
+approved the current visual set. Standalone technical QA does not override that
+Gate 5 judgement.

@@ -91,6 +91,14 @@ of narrow extension per new representational shape is not a blueprint
 weakness, it's the expected texture of "generalises with subject
 modules," per the current cross-subject verdict (B).
 
+**v1.5 representation-policy update**: the **PREMIUM-FIRST SCIENCE
+REPRESENTATION POLICY** is RATIFIED / ACTIVE in
+`docs/production/INSPIRE-VISUAL-ASSET-PIPELINE-PROPOSAL.md`. For all future
+Science production, Premium Final Figure is the default for explanatory
+visuals; deterministic SVG must pass a deterministic-necessity test, graphs
+remain deterministic, and hybrid remains exceptional. This changes routing
+and Gate 5 judgement, not lesson anatomy or Factory v0 architecture.
+
 **Status of this document**: a practical production standard, proven
 against three GCSE Physics lessons (spatial/vector, mathematical graph,
 symbolic force representation) with full live-QA evidence, and now also
@@ -649,19 +657,24 @@ a mechanical check.
 **Blocks publication**: yes, if zero items resist pattern-matching, or if
 any mark scheme doesn't sum correctly.
 
-### Gate 5 — Diagram Quality
-Checked independently across **four axes, never collapsed into one
-score**: scientific / pedagogical / visual / accessibility. Full pipeline
-in §5. **Deterministic test**: contrast computation (alpha-composited,
-programmatic), duplicate-ID check, `<title>`/`aria-labelledby` presence.
-**AI-reviewable**: scientific and pedagogical axes via the written spec
-(§5). **Human judgement required, non-negotiable**: the visual-craft axis
-— proven twice in this benchmark that source-code review missed real
-defects (arrowhead overshoot, label/vector collision) that were only
-visible on an actual rendered, zoomed screenshot. **Blocks publication**:
-yes, any axis below its threshold, or if live rendered QA could not be
-performed at all (in which case the diagram cannot be certified, full
-stop — do not substitute source inspection).
+### Gate 5 — Representation Quality
+Checked independently across **five dimensions, never collapsed into one
+score**: scientific accuracy / pedagogical value / visual craft /
+accessibility / routing appropriateness. Full pipeline in §5 and the
+authoritative Premium-First policy. **Deterministic test**: contrast
+computation (alpha-composited, programmatic), duplicate-ID check,
+`<title>`/`aria-labelledby` presence, plus geometry/data checks where the
+selected medium genuinely requires them. **AI-reviewable**: scientific,
+pedagogical and routing rationale against the written spec. **Human judgement
+required, non-negotiable**: visual craft and final canonical approval.
+
+A scientifically correct SVG does not automatically pass. If a Premium Final
+Figure would materially improve comprehension, hierarchy, realism, learner
+orientation, memory, exam readiness or overall craft, selecting SVG is itself
+a representation-routing defect. **Blocks publication**: yes, if any of the
+five dimensions fails, human visual review is outstanding, or live rendered
+QA could not be performed. Source inspection cannot substitute for rendered
+review.
 
 ### Gate 6 — Accessibility
 **Checks**: names, semantics, focus, keyboard, dynamic-step announcements

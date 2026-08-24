@@ -1,14 +1,24 @@
 # Chemistry Production Run #001 — Electrolysis
 
-## STATUS: STANDALONE QA COMPLETE — PRODUCTION VIEWER QA OUTSTANDING
+## STATUS: REPRESENTATION REMEDIATION REQUIRED — GATE 5 NOT HUMAN APPROVED
 
 **Run type:** REAL PRODUCTION LESSON. This is not a Factory v0 pilot,
 rehydration run, or architecture proof.
 
-**Lifecycle:** `DRAFT`. The lesson is not promoted to `QA_COMPLETE` because
-the real `student/lesson-viewer.html` blob/iframe path has not yet been tested.
-Gate 8 is human-only and has not started. No lesson row exists and nothing is
-published.
+**Lifecycle:** `DRAFT`. Content/pedagogy is a strong candidate, automated QA
+passes, and standalone QA passes. The lesson must not advance to
+`QA_COMPLETE` or `HUMAN_APPROVED` because the current deterministic SVG set
+does not meet the ratified Premium-First visual standard and the real inner
+blob/iframe lesson has not completed Gate 7 inspection.
+
+```text
+CONTENT / PEDAGOGY: strong candidate
+AUTOMATED QA: PASS
+STANDALONE QA: PASS
+REPRESENTATION GATE: NOT YET HUMAN APPROVED
+REASON: current SVG diagrams do not meet Inspire's premium/exam-grade visual standard
+NEXT REQUIRED WORK: replace/remediate the representation set under Premium-First
+```
 
 ## 1. Topic and scope
 
@@ -81,14 +91,20 @@ marks, mark schemes, model answers, AO classification and original provenance.
 
 ## 6. Representations
 
-New narrow Mode A Electrolysis Cell family, inline deterministic SVG:
+Three inline deterministic SVGs currently preserve the intended scientific
+relationships:
 
 1. cell, polarity, ion migration and external electron path
 2. molten-versus-aqueous competing-ion comparison
 3. cathode/anode half-equation electron placement
 
-No graph, raster asset, Premium Final Figure or hybrid overlay was justified.
-No generic Chemistry diagram framework was created.
+They are **temporary and non-canonical**. Human review judged them not
+exam-grade and below the Inspire premium visual standard. Under the RATIFIED /
+ACTIVE Premium-First policy, figures 1 and 2 should be replaced by Premium
+Final Figures. Figure 3 requires a fresh medium decision: premium typeset
+reasoning figure, native lesson card, or Premium Final Figure. No generic
+Chemistry diagram framework was created, and none should be extracted from
+these temporary SVGs.
 
 ## 7. Scientific and notation verification
 
@@ -164,7 +180,7 @@ Real browser URL:
 | 2 Scientific accuracy | PASS | Products, polarity, ions and half-equations independently checked. |
 | 3 Pedagogical quality | PASS | Full blueprint sequence; additive Foundation; genuine Higher transfer. |
 | 4 Assessment validity | PASS | Original 21-mark exam bank; AO1/AO2/AO3; specific feedback. |
-| 5 Representation quality | PASS for standalone | Four-axis standalone inspection and geometry/contrast checks pass. Production viewer still required. |
+| 5 Representation quality | **NOT HUMAN APPROVED** | Scientific/geometry checks pass, but routing appropriateness and visual craft fail the Premium-First standard. Current SVG set requires remediation. |
 | 6 Accessibility | PASS for programmatic/keyboard smoke test | Semantics, contrast, focus, live region, drawer and 390 px checks pass. No formal WCAG certification claimed. |
 | 7 Live rendered-page QA | **UNVERIFIED for production pipeline** | Standalone real-browser QA PASS; authenticated blob/iframe viewer not yet exercised. |
 | 8 Human approval | NOT STARTED | Human-only. |
@@ -172,16 +188,22 @@ Real browser URL:
 ## 12. Approval, publication and rollback
 
 ```text
-lessonsRowId: null
-is_published: false / no row
+lessonsRowId: 82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
+subjectId: 3
+topicId: 71
+lessonType: html
+title: Electrolysis
+is_published: true — explicitly enabled by the human for live testing
 qaState: DRAFT
 Gate 8: NOT STARTED
+content_url: https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/chemical-changes/1787578308857-chemical-changes-electrolysis.html
+viewer_url: https://staging.inspireacademic.org/student/lesson-viewer.html?id=82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
 ```
 
-No authentication was attempted and no credentials or privileged keys were
-used. When explicitly authorised after a human signs in, upload the committed
-HTML through `teacher/lesson-admin.html`, keep it unpublished, and verify the
-real `student/lesson-viewer.html?id=<row-id>` route.
+Authentication was performed independently by the human; no credentials or
+privileged keys were entered, retrieved or exposed by Codex. Publication for
+live testing does not imply `QA_COMPLETE` or `HUMAN_APPROVED`.
 
-Rollback is a normal `git revert` of the additive production commits. No shared
-viewer, admin, schema or frozen lesson was changed.
+Operational rollback is to turn the existing Publish control off for this row.
+Repository rollback remains a normal `git revert` of the additive production
+commits. No shared viewer, admin, schema or frozen lesson was changed.

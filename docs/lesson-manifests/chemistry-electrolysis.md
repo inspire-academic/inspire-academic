@@ -17,7 +17,7 @@ specSlugs:
 qaState: DRAFT
 sourceCommit: 7f52f4a
 sourcePilotDoc: null
-lessonsRowId: null
+lessonsRowId: 82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
 publicationCommit: null
 ```
 
@@ -66,30 +66,34 @@ Any platform clause identifier not represented by the verified slugs remains
 
 ## REPRESENTATION NEEDS
 
-- New narrow **Mode A deterministic Electrolysis Cell family**: cell/circuit
-  and ion migration; molten-versus-aqueous competition; electron-transfer and
-  half-equation relationship.
-- No graph, Premium Final Figure, or hybrid asset is pedagogically justified.
+- Three temporary deterministic SVGs currently encode cell/circuit and ion
+  migration, molten-versus-aqueous competition, and electron-transfer logic.
+- Human review has not approved their visual standard. Under the ratified
+  Premium-First policy, figures 1–2 require Premium Final Figure replacement;
+  figure 3 requires a fresh choice between premium typesetting, native lesson
+  card, or Premium Final Figure.
 
 ## QA STATE
 
 ```text
 qaState: DRAFT
 Automated QA: 232/232 PASS
-Gates 1–6: PASS
+Gates 1–4 and 6: PASS
+Gate 5 representation quality: NOT HUMAN APPROVED — current SVGs are
+  scientifically useful but not Inspire premium/exam-grade
 Gate 7 standalone browser QA: PASS
-Gate 7 production lesson-viewer blob/iframe QA: UNVERIFIED — authenticated
-  admin upload has not been authorised or performed
+Gate 7 production viewer: wrapper/row opened; inner blob/iframe QA UNVERIFIED
 Gate 8: human-only; not set
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
 ```text
-lessons row: null
+lessons row: 82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
+subject/topic IDs: 3 / 71
 Gate 8: NOT STARTED
-is_published: false / no row
-Publicly live: NO
+is_published: true — explicitly enabled by the human for live testing
+Publicly live on staging: YES; this does not imply QA_COMPLETE or HUMAN_APPROVED
 ```
 
 ## PROVENANCE

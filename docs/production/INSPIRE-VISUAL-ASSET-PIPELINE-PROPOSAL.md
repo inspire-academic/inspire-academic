@@ -1,4 +1,128 @@
-# Inspire Visual Asset Pipeline — Proposal v0.3
+# Inspire Visual Asset Pipeline — Policy and Evidence Record v0.4
+
+## PREMIUM-FIRST SCIENCE REPRESENTATION POLICY
+
+**STATUS: RATIFIED / ACTIVE. Effective immediately for all future Inspire
+Science production.** This section is the single authoritative representation
+routing policy. Earlier proposal/POC passages are retained below as historical
+evidence, but this section supersedes any language that treats Modes A–D as
+roughly equal defaults, makes deterministic SVG the presumptive choice, or
+prefers hybrid for ordinary explanatory figures.
+
+### Governing principle
+
+Whenever an Inspire Science lesson requires a scientific visual, the default
+authoring mode is a professionally rendered **Premium Final Figure**.
+Deterministic SVG/code must not be selected merely because the visual can
+technically be drawn using code.
+
+The decision question is:
+
+> Does this representation genuinely require machine-controlled geometry,
+> scale, coordinates, data precision or interaction in order to fulfil its
+> scientific or assessment purpose?
+
+- **No:** commission a Premium Final Figure.
+- **Yes:** use the appropriate deterministic representation.
+- **Uncertain:** choose a Premium Final Figure.
+
+For practical production purposes, approximately 99% of explanatory science
+diagrams should be expected to use Premium Final Figures. This is not a quota;
+it records the presumption. The burden of justification is on deterministic
+SVG, not premium rendering.
+
+### Operational routing sequence
+
+1. **REUSE BEFORE GENERATE.** Search canonical subject assets, canonical
+   representation families and approved figures from previous lessons. Reuse
+   an asset when it satisfies the new need without compromising scientific
+   accuracy or context.
+2. **Apply the deterministic-necessity test.** Numerical graphs, coordinate
+   plots, scale-sensitive constructions, exact ray paths, mathematically
+   constrained relationships, interactive geometry, and visuals whose measured
+   geometry is assessed may justify deterministic production. If exactness is
+   not materially required, use a Premium Final Figure.
+3. **Use True Hybrid only exceptionally**, and only when both a generated
+   contextual figure provides genuine pedagogical value and one specific
+   scientific layer genuinely requires deterministic machine verification.
+
+Graphs remain the major standing deterministic exception: axes, coordinates,
+scale, values, plotting precision and reproducibility matter. Ordinary
+numerical graphs must not be routed into image generation by default.
+
+### What qualifies as a Premium Final Figure
+
+A Premium Final Figure must be scientifically accurate, pedagogically
+intentional, professionally art-directed, exam-appropriate, visually calm,
+clearly hierarchical, immediately readable, correctly labelled and
+notation-accurate. It must be responsive and performance-budget compliant,
+with an accessibility equivalent supplied through surrounding real text, alt
+text and/or a figcaption. Its science must be independently validated before
+canonical approval. It must look like a deliberately published educational
+figure, not an AI-generated sketch and not a code diagram that is merely
+technically correct.
+
+### Premium Final Figure request contract
+
+Use the existing lightweight `docs/visual-requests/{id}.md` convention. Every
+request must state:
+
+- request ID; subject; topic; lesson location; learner level/tier;
+- pedagogical purpose and what the learner should understand within about
+  three seconds;
+- exact scientific scenario, required labels, notation, values, arrow
+  directions and causal relationships;
+- misconceptions to prevent and forbidden or misleading content;
+- representation hierarchy, aspect ratio, Inspire visual direction and
+  background requirements;
+- accessibility equivalent, target asset path, target dimensions and
+  performance budget;
+- scientific verification checklist and human approval status.
+
+Do not convert this contract into a database schema without new evidence.
+
+### Standing instruction for agents and operators
+
+Never begin a new explanatory Science diagram by writing SVG. Perform the
+routing decision first. If deterministic precision is not required, write a
+Premium Final Figure request. The intended future bridge is:
+
+```text
+Codex identifies the representation need
+  -> checks canonical reuse
+  -> applies the deterministic-necessity test
+  -> normally selects Premium Final Figure
+  -> writes the structured scientific visual brief
+  -> OpenAI image generation creates the complete figure
+  -> the asset is saved and optimised
+  -> Codex integrates it
+  -> automated QA
+  -> human scientific and visual approval
+```
+
+This codifies direction only. No API bridge, new script, database or Factory
+architecture is authorised by this policy.
+
+### Gate 5 — routing is part of quality
+
+Gate 5 judges five independent dimensions: **scientific accuracy,
+pedagogical value, visual craft, accessibility, and routing appropriateness**.
+A scientifically correct SVG does not automatically pass. If a Premium Final
+Figure would materially improve comprehension, hierarchy, realism, learner
+orientation, memory, exam readiness or overall craft, choosing SVG is itself a
+routing defect and Gate 5 fails.
+
+### Canonical approval and prospective application
+
+Human review is mandatory before a new premium figure becomes canonical and
+must explicitly judge science, pedagogy, notation, exam appropriateness,
+visual craft and brand standard. Neither the image generator nor Codex
+self-approves.
+
+This policy applies prospectively. Frozen pilots and approved historical
+deterministic figures are not reopened or mass-replaced unless a visible defect
+exists, a reused figure fails this routing/quality test, or human review
+explicitly requests replacement.
 
 **Status: MANUAL POC PHASE CLOSED — SUFFICIENTLY PROVEN.** Both
 authorised manual proofs of concept (Mode D `PHY-FOR-HYB-001` and Mode C
