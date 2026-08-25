@@ -124,6 +124,51 @@ deterministic figures are not reopened or mass-replaced unless a visible defect
 exists, a reused figure fails this routing/quality test, or human review
 explicitly requests replacement.
 
+## VISUAL ASSET BRIDGE V1 — OPERATIONAL
+
+Visual Asset Bridge v1 is the separately authorised, narrow implementation of
+the request-to-asset step. It does not alter the Premium-First policy, the
+request contract, Factory v0, lesson integration, or the requirement for human
+scientific and visual approval.
+
+The operational sequence is: Premium-First routing → request file → Visual
+Asset Bridge → OpenAI image generation → retained source → production WebP →
+Codex lesson integration → automated QA → human Gate 5 approval. Bridge v1
+stops after the production WebP and generation record are written.
+
+Run one request at a time from the repository root:
+
+```powershell
+npm run figure:generate -- docs/visual-requests/<request-id>.md
+```
+
+Set `OPENAI_API_KEY` in the local process environment. Optionally set
+`OPENAI_IMAGE_MODEL` (default `gpt-image-2`) and `OPENAI_IMAGE_QUALITY`
+(default `high`; allowed values `low`, `medium`, `high`, or `auto`). Secrets
+must not be stored in requests, assets, generation records, lesson files, or
+source control. The user is not a transport layer.
+
+The bridge validates the existing fenced-YAML and Markdown-section contract,
+builds one complete-figure prompt, and makes one bounded OpenAI Image API
+generation operation. Transient failures are retried up to three total
+attempts. Authentication, malformed-response, conversion, path, filesystem,
+and budget failures stop with a classified error. It does not batch, invent an
+SVG fallback, overwrite an existing production asset, integrate a lesson, or
+grant human approval.
+
+On success it retains the raw image under the gitignored local directory
+`.generated/visual-assets/<request-id>/`, writes the ID-matched production WebP
+to the request's `assets/images/...` target after Sharp resizing and budgeted
+quality optimisation, and writes a tracked JSON audit record under
+`docs/visual-generation-records/`. That record contains request/model/time,
+the exact generated prompt, API request ID when supplied, source and production
+metadata, technical status, and the unchanged human-approval state—never the
+API key.
+
+The two Electrolysis requests are canonical contract regression fixtures for
+the bridge. Their already-approved assets are not regenerated or modified by
+this implementation.
+
 **Status: MANUAL POC PHASE CLOSED — SUFFICIENTLY PROVEN.** Both
 authorised manual proofs of concept (Mode D `PHY-FOR-HYB-001` and Mode C
 `CHEM-QUANT-PFF-001`) have run end to end, passed full QA, and been

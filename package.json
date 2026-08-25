@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "UK's Premium GCSE Revision Platform",
   "scripts": {
+    "figure:generate": "node scripts/generate-premium-figure.js",
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {
+    "openai": "^7.5.0",
     "resend": "^3.5.0"
   },
   "devDependencies": {
