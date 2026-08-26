@@ -69,7 +69,7 @@ input,select,textarea{font-family:var(--font-body);}
 .form-textarea{resize:vertical;min-height:110px;}
 
 /* Subject grid */
-.subject-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.25rem;}
+.subject-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem;}
 .subject-btn{display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:1.25rem .5rem;border-radius:var(--r);border:1.5px solid var(--border);background:var(--navy);cursor:pointer;transition:all .2s;color:var(--white);}
 .subject-btn:hover{border-color:var(--gold);}
 .subject-btn.active{border-color:var(--teal);background:rgba(0,201,167,.08);}
@@ -221,6 +221,11 @@ input,select,textarea{font-family:var(--font-body);}
           <button class="subject-btn" data-subject="Mathematics" onclick="pickSubject(this)">
             <span class="subject-icon">∑</span>
             <span class="subject-name">Maths</span>
+            <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
+          </button>
+          <button class="subject-btn" data-subject="Combined Science" onclick="pickSubject(this)">
+            <span class="subject-icon">🔬</span>
+            <span class="subject-name">Combined Science</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
         </div>
@@ -497,9 +502,13 @@ async function startAssessment() {
 async function loadQuestionsFromSupabase() {
   const { config } = S;
 
+  if (config.subject === 'Combined Science') {
+    return loadCombinedScienceQuestions();
+  }
+
   // Skip RPC — go straight to direct query (more reliable)
   // The direct query handles everything we need
-  
+
   // Direct query
   const { data, error } = await supa
     .from('diagnostic_questions')
@@ -517,13 +526,68 @@ async function loadQuestionsFromSupabase() {
     console.error('Supabase query error:', error);
     throw new Error('Could not load questions: ' + error.message);
   }
-  
+
   if (!data || data.length === 0) {
     throw new Error('No validated questions found for ' + config.subject);
   }
 
   console.log(`Loaded ${data.length} questions from Supabase`);
   return shuffleByTopic(data);
+}
+
+// Combined Science (Trilogy): 15 questions from each of Physics, Chemistry
+// and Biology — equal thirds, matching how AQA/Edexcel Combined Science
+// actually weights the three sciences across its six exam papers. Each
+// subject's pool goes through the same per-topic capping/shuffling as a
+// single-subject run, then sampleAcrossTopics() takes 15 spread evenly
+// across that subject's topics (not just however Supabase happened to
+// order them), and the three subjects' questions are interleaved so the
+// assessment doesn't run as three back-to-back blocks.
+async function loadCombinedScienceQuestions() {
+  const { config }   = S;
+  const subjects     = ['Physics', 'Chemistry', 'Biology'];
+  const perSubject   = 15;
+
+  const perSubjectResults = await Promise.all(subjects.map(async (subject) => {
+    const { data, error } = await supa
+      .from('diagnostic_questions')
+      .select('*')
+      .eq('subject', subject)
+      .eq('level', config.level)
+      .eq('validated', true)
+      .eq('active', true)
+      .in('exam_board', [config.board, 'Universal'])
+      .in('tier', ['Higher', 'Both'])
+      .order('topic');
+
+    if (error) throw new Error('Could not load ' + subject + ' questions: ' + error.message);
+    if (!data || data.length === 0) throw new Error('No validated questions found for ' + subject + ' yet.');
+
+    return sampleAcrossTopics(shuffleByTopic(data), perSubject);
+  }));
+
+  const combined = perSubjectResults.flat();
+  console.log(`Loaded ${combined.length} Combined Science questions (Physics/Chemistry/Biology)`);
+  return shuffleArray(combined);
+}
+
+// Picks up to n questions from a topic-grouped list, cycling round-robin
+// across topics (in random topic order) so the sample stays spread across
+// the subject rather than clustering in whichever topics sort first.
+function sampleAcrossTopics(questions, n) {
+  const byTopic = {};
+  questions.forEach(q => { if (!byTopic[q.topic]) byTopic[q.topic] = []; byTopic[q.topic].push(q); });
+  const topics = shuffleArray(Object.keys(byTopic));
+  const result = [];
+  for (let round = 0; result.length < n; round++) {
+    let addedThisRound = false;
+    for (const topic of topics) {
+      if (result.length >= n) break;
+      if (byTopic[topic][round]) { result.push(byTopic[topic][round]); addedThisRound = true; }
+    }
+    if (!addedThisRound) break; // every topic exhausted before reaching n
+  }
+  return result;
 }
 
 function shuffleArray(arr) {
@@ -627,6 +691,7 @@ function nextQuestion() {
   // Record answer
   S.answers.push({
     question_id:  q.id,
+    subject:      q.subject,
     topic:        q.topic,
     subtopic:     q.subtopic,
     difficulty:   q.difficulty,
@@ -680,17 +745,23 @@ async function runDiagnosis() {
 }
 
 function computeTopicScores() {
+  // Keyed by subject+topic, not topic alone — Physics and Chemistry both
+  // have a topic literally called "Atomic Structure", and Combined Science
+  // mixes both in one run, so grouping by topic name alone would silently
+  // merge two unrelated subjects' scores into one.
   const topics = {};
   S.answers.forEach(a => {
-    if (!topics[a.topic]) topics[a.topic] = { correct:0, total:0, not_sure:0, misconceptions:[] };
-    topics[a.topic].total++;
-    if (a.correct)      topics[a.topic].correct++;
-    if (a.not_sure)     topics[a.topic].not_sure++;
-    if (a.misconception) topics[a.topic].misconceptions.push(a.misconception);
+    const key = a.subject + '|' + a.topic;
+    if (!topics[key]) topics[key] = { subject: a.subject, topic: a.topic, correct:0, total:0, not_sure:0, misconceptions:[] };
+    topics[key].total++;
+    if (a.correct)      topics[key].correct++;
+    if (a.not_sure)     topics[key].not_sure++;
+    if (a.misconception) topics[key].misconceptions.push(a.misconception);
   });
   // Convert to array with score %
-  return Object.entries(topics).map(([topic, d]) => ({
-    topic,
+  return Object.values(topics).map(d => ({
+    subject:      d.subject,
+    topic:        d.topic,
     score:        Math.round((d.correct / d.total) * 100),
     correct:      d.correct,
     total:        d.total,
@@ -733,23 +804,37 @@ const SUBJECT_NOTES = {
   }
 };
 
+// Combined Science (AQA/Edexcel Trilogy) is a genuine double-award
+// qualification — grades like "7-6", not a single 1-9 grade — so its
+// result is always shown as a paired grade. This pairs the same grade
+// with itself (e.g. "7-7") rather than inventing an uneven split: real
+// Trilogy boundaries aren't published per-topic the way single-award
+// boundaries are, so an uneven pair would be fabricated precision this
+// tool has no data to back up. profileDescription says so explicitly.
+function doubleAward(n) {
+  const g = gradeLabel(n);
+  return g === 'U' ? 'U-U' : `${g}-${g}`;
+}
+
 function computeDiagnosis(topicScores, overallPct, notSureCount) {
   const { subject, board } = S.config;
   const total = S.answers.length;
+  const isCombined = subject === 'Combined Science';
 
   const currentGradeNum = estimateGrade(overallPct, board);
   const targetGradeNum  = Math.min(9, currentGradeNum + 2);
-  const currentGrade    = gradeLabel(currentGradeNum);
-  const targetGrade     = gradeLabel(targetGradeNum);
+  const currentGrade    = isCombined ? doubleAward(currentGradeNum) : gradeLabel(currentGradeNum);
+  const targetGrade     = isCombined ? doubleAward(targetGradeNum)  : gradeLabel(targetGradeNum);
 
   const studentProfile =
     overallPct < 40 ? 'struggling' :
     overallPct < 60 ? 'developing' :
     overallPct < 80 ? 'secure' : 'strong';
 
-  const profileDescription =
-    `Scored ${overallPct}% overall — around Grade ${currentGrade} on typical ${board} ${subject} boundaries, ` +
-    `with a realistic path to Grade ${targetGrade}.`;
+  const profileDescription = isCombined
+    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award on typical ${board} Combined Science boundaries, with a realistic path to ${targetGrade}. (Combined Science boundaries are approximated from single-award data, so the real Trilogy award can land a grade off in either half — treat this as a guide, not an official prediction.)`
+    : `Scored ${overallPct}% overall — around Grade ${currentGrade} on typical ${board} ${subject} boundaries, ` +
+      `with a realistic path to Grade ${targetGrade}.`;
 
   const gaps = topicScores
     .filter(t => t.score < 80)
@@ -773,14 +858,19 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
       } else {
         reason = `Scored ${t.score}% (${t.correct}/${t.total}) — partial understanding, not yet secure enough for exam conditions.`;
       }
-      const subjectNote = SUBJECT_NOTES[board]?.[subject];
+      // Use the gap's own originating subject (t.subject), not S.config.subject —
+      // for Combined Science, config.subject is "Combined Science" itself, which
+      // isn't in SUBJECT_NOTES; each gap's real subject (Physics/Chemistry/Biology)
+      // always is. This also means single-subject mode is unaffected, since there
+      // t.subject and config.subject are always the same value.
+      const subjectNote = SUBJECT_NOTES[board]?.[t.subject];
       if (subjectNote && t.score < 55) reason += ` This is ${subjectNote}.`;
 
-      return { topic: t.topic, score: t.score, priority, reason, approach };
+      return { subject: t.subject, topic: t.topic, score: t.score, priority, reason, approach };
     })
     .sort((a, b) => ({critical:0,high:1,medium:2,low:3}[a.priority]) - ({critical:0,high:1,medium:2,low:3}[b.priority]));
 
-  const strengths = topicScores.filter(t => t.score >= 80).map(t => t.topic);
+  const strengths = topicScores.filter(t => t.score >= 80).map(t => ({ subject: t.subject, topic: t.topic }));
 
   const notSurePct = Math.round((notSureCount / total) * 100);
   const teacherNoteParts = [];
@@ -790,6 +880,20 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
   const repeatedMisconceptionTopics = topicScores.filter(t => t.misconceptions.length >= 2).map(t => t.topic);
   if (repeatedMisconceptionTopics.length) {
     teacherNoteParts.push(`Persistent, repeated misconceptions in: ${repeatedMisconceptionTopics.join(', ')}.`);
+  }
+  if (isCombined) {
+    const bySubject = {};
+    topicScores.forEach(t => {
+      if (!bySubject[t.subject]) bySubject[t.subject] = { correct: 0, total: 0 };
+      bySubject[t.subject].correct += t.correct;
+      bySubject[t.subject].total   += t.total;
+    });
+    const subjectPcts = Object.entries(bySubject).map(([s, d]) => ({ subject: s, pct: Math.round((d.correct / d.total) * 100) }));
+    const weakest   = [...subjectPcts].sort((a, b) => a.pct - b.pct)[0];
+    const strongest = [...subjectPcts].sort((a, b) => b.pct - a.pct)[0];
+    if (weakest && strongest && strongest.subject !== weakest.subject && strongest.pct - weakest.pct >= 20) {
+      teacherNoteParts.push(`Notable imbalance across the three sciences: ${weakest.subject} (${weakest.pct}%) is well behind ${strongest.subject} (${strongest.pct}%) — worth checking whether study time is being split evenly across all three.`);
+    }
   }
   const teacherNote = teacherNoteParts.length
     ? teacherNoteParts.join(' ')
@@ -803,6 +907,11 @@ function renderDiagnosis() {
   const sc = d.overallScore;
   const scColor = sc >= 70 ? '#4ade80' : sc >= 50 ? 'var(--gold)' : '#f87171';
   const notSurePct = Math.round((d.notSureCount / S.answers.length) * 100);
+  // Combined Science mixes topics from 3 subjects, some sharing the same
+  // topic name (e.g. "Atomic Structure" in both Physics and Chemistry) —
+  // prefix with the subject so they're never ambiguous on screen.
+  const isCombined = S.config.subject === 'Combined Science';
+  const topicLabel = t => isCombined ? `${t.subject} — ${t.topic}` : t.topic;
 
   const profileColors = {
     struggling: '#f87171', developing: 'var(--gold)',
@@ -837,7 +946,7 @@ function renderDiagnosis() {
       html += `
         <div style="margin-bottom:.85rem;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;">
-            <span style="font-size:.85rem;font-weight:600;">${t.topic}</span>
+            <span style="font-size:.85rem;font-weight:600;">${topicLabel(t)}</span>
             <span style="font-size:.82rem;color:${color};font-weight:700;">${t.score}%</span>
           </div>
           <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
@@ -865,7 +974,7 @@ function renderDiagnosis() {
       html += `
         <div class="gap-card ${g.priority}" style="margin-bottom:.75rem;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
-            <strong style="font-size:.95rem;">${g.topic}</strong>
+            <strong style="font-size:.95rem;">${topicLabel(g)}</strong>
             <span class="badge badge-${g.priority==='critical'?'red':g.priority==='high'?'orange':g.priority==='medium'?'gold':'green'}">${g.priority}</span>
           </div>
           <p style="font-size:.85rem;color:var(--muted);margin-bottom:.4rem;">${g.reason}</p>
@@ -879,7 +988,7 @@ function renderDiagnosis() {
   if (d.strengths && d.strengths.length > 0) {
     html += `<div class="card" style="margin-bottom:1.25rem;">
       <h3 style="font-size:1rem;font-weight:700;margin-bottom:.75rem;">✓ Strengths</h3>
-      ${d.strengths.map(s => `<div style="font-size:.88rem;color:#4ade80;margin-bottom:.3rem;">✓ ${s}</div>`).join('')}
+      ${d.strengths.map(s => `<div style="font-size:.88rem;color:#4ade80;margin-bottom:.3rem;">✓ ${topicLabel(s)}</div>`).join('')}
     </div>`;
   }
 
@@ -907,6 +1016,7 @@ function computePlan() {
   const profile  = d.studentProfile || 'developing';
   const numWeeks = profile === 'struggling' ? 6 : 3;
   const gaps     = (d.gaps && d.gaps.length) ? d.gaps : [{ topic: 'General revision', priority: 'medium' }];
+  const isCombined = S.config.subject === 'Combined Science';
 
   const phaseFor = (i, n) => i < n/3 ? 'Foundation' : i < 2*n/3 ? 'Skill Development' : 'Exam Technique';
 
@@ -916,7 +1026,7 @@ function computePlan() {
   const weeks = [];
   for (let i = 0; i < numWeeks; i++) {
     const gap   = gaps[i % gaps.length];
-    const topic = gap.topic;
+    const topic = isCombined && gap.subject ? `${gap.subject} — ${gap.topic}` : gap.topic;
     const phase = phaseFor(i, numWeeks);
     weeks.push({
       number: i + 1,
