@@ -238,11 +238,12 @@ function buildExecutiveSummary(c, d, name) {
 
 function buildBreakdown(c, d) {
   if (!d.topicScores || !d.topicScores.length) return '';
+  const isCombined = c.subject === 'Combined Science';
   const rows = d.topicScores.map(t => {
     const color = scoreColor(t.score);
     return `
       <div class="topic-row">
-        <div class="top"><span class="name">${t.topic}</span><span class="pct" style="color:${color};">${t.score}%</span></div>
+        <div class="top"><span class="name">${topicLabel(t, isCombined)}</span><span class="pct" style="color:${color};">${t.score}%</span></div>
         <div class="track"><div class="fill" style="width:${t.score}%;background:${color};"></div></div>
         ${t.not_sure > 0 ? `<div class="note">${t.not_sure} "not sure" response${t.not_sure > 1 ? 's' : ''}</div>` : ''}
       </div>`;
@@ -257,17 +258,28 @@ function buildBreakdown(c, d) {
     </div>`;
 }
 
+// Strengths (and, since the deterministic-engine rebuild, gaps too) carry a
+// {subject, topic} object rather than a plain topic string, so Combined
+// Science reports can tell apart same-named topics like "Atomic Structure"
+// in both Physics and Chemistry. Saved reports from before that rebuild
+// still have plain strings in Supabase, so both shapes are handled here.
+function topicLabel(t, isCombined) {
+  if (typeof t === 'string') return t; // pre-rebuild saved report
+  return isCombined && t.subject ? `${t.subject} — ${t.topic}` : t.topic;
+}
+
 function buildGapsAndStrengths(c, d, name) {
   const gaps = d.gaps || [];
   const strengths = d.strengths || [];
   if (!gaps.length && !strengths.length) return '';
+  const isCombined = c.subject === 'Combined Science';
 
   const gapHtml = gaps.map(g => {
     const pc = PRIORITY_COLORS[g.priority] || '#ca8a04';
     const sentence = (APPROACH_SENTENCES[g.approach] || (n => `This topic needs continued attention for ${n}.`))(name);
     return `
       <div class="gap-item" style="border-left-color:${pc};">
-        <div class="top"><span class="name">${g.topic}</span><span class="chip" style="background:${pc};">${g.priority}</span></div>
+        <div class="top"><span class="name">${topicLabel(g, isCombined)}</span><span class="chip" style="background:${pc};">${g.priority}</span></div>
         <div class="reason">${g.reason || ''}</div>
         <div class="approach">${sentence}</div>
       </div>`;
@@ -275,7 +287,7 @@ function buildGapsAndStrengths(c, d, name) {
 
   const strengthHtml = strengths.length ? `
     <h3 style="font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--navy);margin:1.5rem 0 .75rem;">Strengths</h3>
-    ${strengths.map(s => `<div class="strength-item">${s}</div>`).join('')}
+    ${strengths.map(s => `<div class="strength-item">${topicLabel(s, isCombined)}</div>`).join('')}
   ` : '';
 
   return `
