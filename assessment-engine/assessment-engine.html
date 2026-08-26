@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Assessment Center — Inspire Academic</title>
@@ -13,6 +13,18 @@
 :root{
   --teal:#00c9a7;--teal2:#00d9b5;
   --purple:#c084fc;
+}
+/* app-shared.css's --navy/--navy2/--white/--muted/--border tokens are
+   static (dark-only) — this page is the one place in the site that
+   needs a light counterpart for them, so it's defined locally rather
+   than touching app-shared.css, which many other pages also depend on.
+   Matches the same "ia-theme" localStorage key and [data-theme]
+   attribute the subject pages already use, so a student's theme
+   choice carries over between the dashboard and this tool. */
+[data-theme="light"]{
+  --navy:#eef2f9;--navy2:#ffffff;
+  --white:#0d1929;--muted:#5c6b80;
+  --border:rgba(13,25,41,.14);
 }
 button{cursor:pointer;font-family:var(--font-body);border:none;}
 input,select,textarea{font-family:var(--font-body);}
@@ -107,7 +119,19 @@ input,select,textarea{font-family:var(--font-body);}
 .task-name{font-size:.85rem;font-weight:600;margin-bottom:.4rem;}
 .task-mins{font-size:.75rem;color:var(--muted);}
 
-/* Cost badge */
+/* Theme toggle */
+.theme-toggle{
+  display:flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:50%;
+  background:var(--navy);border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+.theme-toggle:hover{border-color:var(--gold);color:var(--white);}
+.theme-toggle svg{width:16px;height:16px;}
+.theme-toggle .icon-sun{display:none;}
+[data-theme="light"] .theme-toggle .icon-sun{display:block;}
+[data-theme="light"] .theme-toggle .icon-moon{display:none;}
+
 /* Section */
 .section{display:none;}
 .section.active{display:block;animation:fadeIn .35s ease;}
@@ -151,7 +175,17 @@ input,select,textarea{font-family:var(--font-body);}
       <div class="topnav-sub">Assessment Center · Beta</div>
     </div>
   </div>
-  <a href="/dashboard.html" class="btn btn-outline" style="font-size:.82rem;padding:.45rem .9rem;">← Dashboard</a>
+  <div style="display:flex;align-items:center;gap:.6rem;">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light / dark">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+    <a href="/dashboard.html" class="btn btn-outline" style="font-size:.82rem;padding:.45rem .9rem;">← Dashboard</a>
+  </div>
 </div>
 
 <div class="wrap">
@@ -352,6 +386,23 @@ const S = {
 // ═══════════════════════════════════════════════════════════
 // INIT — get logged-in student
 // ═══════════════════════════════════════════════════════════
+// ── THEME ────────────────────────────────────────────────────
+// Same "ia-theme" localStorage key and [data-theme] attribute the
+// subject pages use, so a student's theme choice carries over
+// between the dashboard and this tool.
+(() => {
+  const html  = document.documentElement;
+  const btn   = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('ia-theme');
+  if (saved) html.setAttribute('data-theme', saved);
+
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('ia-theme', next);
+  });
+})();
+
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const { data: { user } } = await supa.auth.getUser();
