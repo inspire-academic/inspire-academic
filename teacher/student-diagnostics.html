@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Student Diagnostics — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+:root{
+  --white:#F0EDE6;
+  --border:rgba(212,160,23,.18);--r:10px;
+  --green:#2ECC71;--amber:#F39C12;--red:#E74C3C;
+}
+button{cursor:pointer;font-family:var(--font-body);border:none;}
+
+#loading-overlay{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:1rem;}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
+.spinner-sm{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;}
+
+/* Mobile-first: base below stacks the sidebar as a full-width
+   block above the content; min-width:769px restores the
+   persistent side-by-side layout. */
+.app{display:flex;flex-direction:column;min-height:100vh;}
+.sidebar{width:100%;flex-shrink:0;background:var(--navy2);border-right:none;border-bottom:1px solid var(--border);display:flex;flex-direction:column;padding:1.5rem 0;position:static;height:auto;}
+.sidebar-logo{padding:0 1.5rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
+.inspire{font-family:var(--font-display);font-style:italic;color:var(--gold);font-size:1.1rem;}
+.science{font-weight:700;font-size:1.1rem;}
+.s-badge{font-family:var(--font-mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.65rem 1.5rem;font-size:.9rem;color:var(--muted);transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,.04);}
+.nav-item.here{color:var(--gold);border-left-color:var(--gold);background:rgba(212,160,23,.06);}
+.nav-item .ico{font-size:1rem;width:20px;text-align:center;}
+.sidebar-footer{margin-top:auto;padding:1rem 1.5rem;border-top:1px solid var(--border);}
+.uname{font-size:.8rem;color:var(--muted);}
+.uname strong{display:block;color:var(--white);font-size:.9rem;margin-bottom:.15rem;}
+.sign-out{margin-top:.75rem;width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:.5rem;border-radius:var(--r);font-size:.8rem;transition:all .15s;}
+.sign-out:hover{border-color:var(--red);color:var(--red);}
+
+.main{flex:1;padding:1.25rem;overflow-y:auto;}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.pt{font-family:var(--font-display);font-size:1.8rem;}
+.ps{color:var(--muted);font-size:.9rem;margin-top:.3rem;}
+
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;}
+.sc{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;}
+.sl{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.sv{font-family:var(--font-display);font-size:2.2rem;color:var(--gold);margin:.3rem 0 .1rem;line-height:1;}
+.ss{font-size:.8rem;color:var(--muted);}
+
+.filter-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.filter-row select,.filter-row input{padding:.6rem .9rem;border-radius:var(--r);background:var(--navy2);border:1.5px solid var(--border);color:var(--white);font-size:.85rem;outline:none;}
+.filter-row select:focus,.filter-row input:focus{border-color:var(--gold);}
+.flag-toggle{display:flex;align-items:center;gap:.5rem;padding:.6rem .9rem;border-radius:var(--r);background:var(--navy2);border:1.5px solid var(--border);font-size:.85rem;cursor:pointer;user-select:none;}
+.flag-toggle input{accent-color:var(--gold);width:15px;height:15px;}
+
+.tc{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);overflow-x:auto;margin-bottom:1.5rem;}
+.th{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.tt{font-weight:600;font-size:.95rem;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:.75rem 1.25rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(0,0,0,.15);}
+td{padding:.85rem 1.25rem;font-size:.88rem;border-bottom:1px solid rgba(255,255,255,.04);}
+tr:last-child td{border-bottom:none;}
+tr.clickable{cursor:pointer;}
+tr.clickable:hover td{background:rgba(255,255,255,.03);}
+
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:7px;font-size:.85rem;font-weight:600;transition:all .2s;border:none;cursor:pointer;}
+.bg{background:var(--gold);color:var(--navy);}.bg:hover{background:var(--gold2);}
+.bo{background:transparent;border:1px solid var(--border);color:var(--muted);}.bo:hover{border-color:var(--gold);color:var(--gold);}
+.bs{padding:.35rem .75rem;font-size:.78rem;}
+
+.chip{display:inline-block;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:3px;}
+.cg{background:rgba(46,204,113,.15);color:var(--green);}
+.ca{background:rgba(243,156,18,.15);color:var(--amber);}
+.cr{background:rgba(231,76,60,.15);color:var(--red);}
+.cb{background:rgba(52,152,219,.15);color:#3498DB;}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.modal{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:2rem;width:100%;max-width:620px;position:relative;max-height:90vh;overflow-y:auto;}
+.mc{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--muted);font-size:1.3rem;line-height:1;cursor:pointer;}
+.mc:hover{color:var(--white);}
+.mt{font-family:var(--font-display);font-size:1.3rem;margin-bottom:.3rem;}
+.ms{color:var(--muted);font-size:.85rem;margin-bottom:1.5rem;line-height:1.5;}
+
+.detail-section{margin-bottom:1.4rem;}
+.detail-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:.5rem;}
+.gap-row{padding:.75rem .9rem;background:var(--navy3);border-radius:8px;border-left:3px solid var(--border);margin-bottom:.5rem;}
+.gap-row.critical{border-left-color:var(--red);}
+.gap-row.high{border-left-color:var(--amber);}
+.gap-row.medium{border-left-color:var(--gold);}
+.gap-row.low{border-left-color:var(--green);}
+.gap-row .gtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;}
+.gap-row .gname{font-weight:600;font-size:.85rem;}
+.gap-row .greason{font-size:.8rem;color:var(--muted);line-height:1.4;}
+.topic-bar-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;font-size:.8rem;}
+.topic-bar-row .tname{width:180px;flex-shrink:0;color:var(--white);}
+.topic-bar-track{flex:1;height:6px;background:var(--navy3);border-radius:3px;overflow:hidden;}
+.topic-bar-fill{height:100%;border-radius:3px;}
+.topic-bar-pct{width:38px;text-align:right;font-weight:600;flex-shrink:0;}
+.note-box{background:rgba(212,160,23,.07);border:1px solid rgba(212,160,23,.2);border-radius:var(--r);padding:.85rem 1rem;font-size:.85rem;color:var(--white);line-height:1.5;}
+.note-box.flagged{background:rgba(231,76,60,.08);border-color:rgba(231,76,60,.3);}
+
+.empty{text-align:center;padding:3rem 1rem;color:var(--muted);}
+.ei{font-size:2.5rem;margin-bottom:.75rem;}
+.et{font-size:1rem;color:var(--white);margin-bottom:.4rem;}
+
+/* Mobile-first: base above is the phone layout (stacked
+   sidebar, 2-up stats); restore the desktop layout here. */
+@media(min-width:769px){
+  .app{flex-direction:row;}
+  .sidebar{width:220px;border-right:1px solid var(--border);border-bottom:none;position:sticky;top:0;height:100vh;}
+  .main{padding:2rem;}
+  .stat-row{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div style="color:var(--muted);font-size:.9rem;margin-top:.5rem;">Loading…</div>
+</div>
+
+<div class="app">
+  <nav class="sidebar">
+    <a href="/index.html"><div class="sidebar-logo">
+      <div><span class="inspire">Inspire</span> <span class="science">Science</span></div>
+      <div class="s-badge" id="console-badge">Teacher Console</div>
+    </div></a>
+    <a href="/teacher/teacher.html"><div class="nav-item"><span class="ico">📊</span><span>Dashboard</span></div></a>
+    <div class="nav-item here"><span class="ico">🩺</span><span>Student Diagnostics</span></div>
+    <a href="/teacher/content-coverage.html"><div class="nav-item"><span class="ico">📈</span><span>Content Coverage</span></div></a>
+    <a href="/teacher/teaching-cockpit.html"><div class="nav-item"><span class="ico">🎯</span><span>Teaching Cockpit</span></div></a>
+    <div class="sidebar-footer">
+      <div class="uname"><strong id="user-name">—</strong>Signed in</div>
+      <button class="sign-out" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="ph">
+      <div>
+        <div class="pt">Student Diagnostics</div>
+        <div class="ps" id="page-sub">Results from the Assessment Center's diagnostic tool.</div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="sc"><div class="sl">Attempts</div><div class="sv" id="s1">—</div><div class="ss">diagnostics completed</div></div>
+      <div class="sc"><div class="sl">Average Score</div><div class="sv" id="s2">—</div><div class="ss">across all attempts</div></div>
+      <div class="sc"><div class="sl">Struggling</div><div class="sv" id="s3">—</div><div class="ss">most recent attempts</div></div>
+      <div class="sc"><div class="sl">Flagged</div><div class="sv" id="s4">—</div><div class="ss">need attention</div></div>
+    </div>
+
+    <div class="filter-row">
+      <select id="f-subject" onchange="applyFilters()">
+        <option value="">All subjects</option>
+        <option value="Physics">Physics</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Biology">Biology</option>
+        <option value="Combined Science">Combined Science</option>
+        <option value="Mathematics">Maths</option>
+      </select>
+      <input type="text" id="f-search" placeholder="Search student name…" oninput="applyFilters()" style="flex:1;min-width:180px;">
+      <label class="flag-toggle"><input type="checkbox" id="f-flagged" onchange="applyFilters()"> Flagged only</label>
+    </div>
+
+    <div class="tc">
+      <div class="th">
+        <div class="tt">All Attempts</div>
+      </div>
+      <div id="twrap"><div class="empty"><div class="spinner" style="margin:0 auto;"></div></div></div>
+    </div>
+  </main>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-bg" id="m-detail" style="display:none;">
+  <div class="modal">
+    <button class="mc" onclick="cm('m-detail')">✕</button>
+    <div id="dc"></div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+const NO_FLAG_TEXT='No major red flags — steady, targeted practice on the gaps above should be enough.';
+
+let _attempts=[],_myRole=null;
+
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const isFlagged=a=>!!a.teacher_note && a.teacher_note.trim()!==NO_FLAG_TEXT;
+const topicLabel=(t,isCombined)=>isCombined && t.subject ? `${t.subject} — ${t.topic}` : t.topic;
+
+function cm(id){document.getElementById(id).style.display='none';}
+
+async function init(){
+  const{data:{session}}=await supa.auth.getSession();
+  if(!session){window.location.href='/';return;}
+
+  const uid=session.user.id;
+  const{data:profile}=await supa.from('profiles').select('role,full_name').eq('id',uid).maybeSingle();
+
+  const validRoles=['teacher','teacher_manager','admin','super_admin'];
+  if(!profile||!validRoles.includes(profile.role)){window.location.href='/dashboard.html';return;}
+
+  document.getElementById('user-name').textContent=profile.full_name||session.user.email;
+  _myRole=profile.role;
+
+  const isAdmin=_myRole==='admin'||_myRole==='super_admin';
+  document.getElementById('console-badge').textContent=isAdmin?'Admin Console':'Teacher Console';
+
+  try{
+    let studentIds=null; // null = no restriction (admin sees everyone)
+
+    if(!isAdmin){
+      const{data:asgn}=await supa.from('teacher_student_assignments')
+        .select('student_id').eq('teacher_id',uid).eq('is_active',true);
+      studentIds=(asgn||[]).map(a=>a.student_id);
+
+      if(studentIds.length===0){
+        document.getElementById('page-sub').textContent='No students are assigned to you yet.';
+        document.getElementById('twrap').innerHTML=`<div class="empty"><div class="ei">🩺</div><div class="et">No students assigned</div><div>Ask an admin to assign students to your account.</div></div>`;
+        ['s1','s2','s3','s4'].forEach(id=>document.getElementById(id).textContent='0');
+        document.getElementById('loading-overlay').style.display='none';
+        return;
+      }
+    }
+
+    let q=supa.from('diagnostic_attempts')
+      .select('id,created_at,student_id,student_name,subject,exam_board,level,overall_score,current_grade,target_grade,total_questions,student_profile,profile_description,gaps,strengths,teacher_note,topic_scores,plan')
+      .order('created_at',{ascending:false});
+    if(studentIds) q=q.in('student_id',studentIds);
+
+    const{data,error}=await q;
+    if(error) throw error;
+
+    _attempts=data||[];
+    renderStats(_attempts);
+    applyFilters();
+  }catch(e){
+    console.error('[Diagnostics] load error:',e);
+    document.getElementById('twrap').innerHTML=`<div class="empty"><div class="ei">⚠</div><div class="et">Couldn't load diagnostics</div><div>${esc(e.message||'Please try again.')}</div></div>`;
+  }finally{
+    document.getElementById('loading-overlay').style.display='none';
+  }
+}
+
+async function signOut(){await supa.auth.signOut();window.location.href='/';}
+
+function renderStats(list){
+  document.getElementById('s1').textContent=list.length;
+
+  const avg=list.length ? Math.round(list.reduce((sum,a)=>sum+(a.overall_score||0),0)/list.length) : 0;
+  document.getElementById('s2').textContent=list.length?avg+'%':'—';
+
+  // "Most recent attempt per student" avoids double-counting a student
+  // who has retaken the same subject — struggling/flagged counts should
+  // reflect where each student stands now, not every historical attempt.
+  const latestPerStudentSubject={};
+  list.forEach(a=>{
+    const key=a.student_id+'|'+a.subject;
+    if(!latestPerStudentSubject[key] || new Date(a.created_at)>new Date(latestPerStudentSubject[key].created_at)){
+      latestPerStudentSubject[key]=a;
+    }
+  });
+  const latest=Object.values(latestPerStudentSubject);
+  document.getElementById('s3').textContent=latest.filter(a=>a.student_profile==='struggling').length;
+  document.getElementById('s4').textContent=list.filter(isFlagged).length;
+}
+
+function applyFilters(){
+  const subject=document.getElementById('f-subject').value;
+  const search=document.getElementById('f-search').value.trim().toLowerCase();
+  const flaggedOnly=document.getElementById('f-flagged').checked;
+
+  let list=_attempts;
+  if(subject) list=list.filter(a=>a.subject===subject);
+  if(search) list=list.filter(a=>(a.student_name||'').toLowerCase().includes(search));
+  if(flaggedOnly) list=list.filter(isFlagged);
+
+  renderTable(list);
+}
+
+function renderTable(list){
+  const w=document.getElementById('twrap');
+  if(!list.length){
+    w.innerHTML=`<div class="empty"><div class="ei">🩺</div><div class="et">No matching attempts</div><div>Try a different filter, or check back once students have completed a diagnostic.</div></div>`;
+    return;
+  }
+
+  const profileChip={
+    struggling:'cr', developing:'ca', secure:'cb', strong:'cg'
+  };
+
+  w.innerHTML=`<table><thead><tr>
+    <th>Student</th><th>Subject</th><th>Date</th><th>Score</th><th>Grade</th><th>Profile</th><th></th>
+  </tr></thead><tbody>
+    ${list.map(a=>{
+      const d=a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
+      const flag=isFlagged(a)?' <span title="Flagged for attention" style="color:var(--red);">⚑</span>':'';
+      return `<tr class="clickable" onclick="openDetail('${a.id}')">
+        <td><strong>${esc(a.student_name||'Unknown')}</strong>${flag}</td>
+        <td style="color:var(--muted);">${esc(a.subject||'—')}</td>
+        <td style="color:var(--muted);font-size:.8rem;">${d}</td>
+        <td>${a.overall_score!=null?a.overall_score+'%':'—'}</td>
+        <td>${esc(a.current_grade||'—')} → ${esc(a.target_grade||'—')}</td>
+        <td><span class="chip ${profileChip[a.student_profile]||'cb'}">${esc(a.student_profile||'—')}</span></td>
+        <td><button class="btn bo bs" onclick="event.stopPropagation();openDetail('${a.id}')">View →</button></td>
+      </tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+function openDetail(id){
+  const a=_attempts.find(x=>x.id===id);
+  if(!a) return;
+
+  const isCombined=a.subject==='Combined Science';
+  const d=a.created_at?new Date(a.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+
+  let html=`<div class="mt">${esc(a.student_name||'Unknown')}</div>
+    <div class="ms">${esc(a.subject||'')} · ${esc(a.exam_board||'')} · ${esc(a.level||'')} · ${d}</div>
+
+    <div class="detail-section">
+      <div class="detail-label">Overview</div>
+      <p style="font-size:.88rem;line-height:1.5;">${esc(a.profile_description||'')}</p>
+      <div style="display:flex;gap:1.5rem;margin-top:.6rem;font-size:.85rem;color:var(--muted);">
+        <span>Score: <strong style="color:var(--white);">${a.overall_score!=null?a.overall_score+'%':'—'}</strong></span>
+        <span>Grade: <strong style="color:var(--white);">${esc(a.current_grade||'—')} → ${esc(a.target_grade||'—')}</strong></span>
+        <span>Questions: <strong style="color:var(--white);">${a.total_questions||'—'}</strong></span>
+      </div>
+    </div>`;
+
+  if(a.teacher_note){
+    html+=`<div class="detail-section">
+      <div class="detail-label">Assessor's Note</div>
+      <div class="note-box ${isFlagged(a)?'flagged':''}">${esc(a.teacher_note)}</div>
+    </div>`;
+  }
+
+  if(a.topic_scores && a.topic_scores.length){
+    html+=`<div class="detail-section">
+      <div class="detail-label">Topic Breakdown</div>
+      ${a.topic_scores.map(t=>{
+        const color=t.score>=75?'var(--green)':t.score>=50?'var(--gold)':'var(--red)';
+        return `<div class="topic-bar-row">
+          <div class="tname">${esc(topicLabel(t,isCombined))}</div>
+          <div class="topic-bar-track"><div class="topic-bar-fill" style="width:${t.score}%;background:${color};"></div></div>
+          <div class="topic-bar-pct" style="color:${color};">${t.score}%</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  if(a.gaps && a.gaps.length){
+    html+=`<div class="detail-section">
+      <div class="detail-label">Priority Gaps</div>
+      ${a.gaps.map(g=>`<div class="gap-row ${g.priority}">
+        <div class="gtop"><span class="gname">${esc(topicLabel(g,isCombined))}</span><span class="chip ${g.priority==='critical'?'cr':g.priority==='high'?'ca':g.priority==='medium'?'cb':'cg'}">${esc(g.priority)}</span></div>
+        <div class="greason">${esc(g.reason||'')}</div>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  if(a.strengths && a.strengths.length){
+    html+=`<div class="detail-section">
+      <div class="detail-label">Strengths</div>
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+        ${a.strengths.map(s=>`<span class="chip cg" style="font-size:.72rem;">${esc(topicLabel(s,isCombined))}</span>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if(a.plan && a.plan.weeks && a.plan.weeks.length){
+    html+=`<div class="detail-section">
+      <div class="detail-label">Study Plan</div>
+      <p style="font-size:.85rem;color:var(--muted);">${a.plan.weeks.length}-week plan generated, focused on: ${esc(a.plan.weeks.map(w=>w.focus).join(', '))}</p>
+    </div>`;
+  }
+
+  document.getElementById('dc').innerHTML=html;
+  document.getElementById('m-detail').style.display='flex';
+}
+
+init();
+</script>
+</body>
+</html>
