@@ -320,7 +320,10 @@ function renderTable(list){
 }
 
 function openDetail(id){
-  const a=_attempts.find(x=>x.id===id);
+  // id arrives as a string from the onclick attribute, but the real
+  // diagnostic_attempts.id column is numeric — String() both sides so
+  // this matches regardless of which type either side actually is.
+  const a=_attempts.find(x=>String(x.id)===String(id));
   if(!a) return;
 
   const isCombined=a.subject==='Combined Science';
