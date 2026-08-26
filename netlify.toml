@@ -36,10 +36,6 @@ path = "/api/generate-question"
 function = "generate-question"
 
 [[edge_functions]]
-path = "/api/assessment-center"
-function = "assessment-center"
-
-[[edge_functions]]
 path = "/api/mileiq-distance"
 function = "mileiq-distance"
 
@@ -67,12 +63,6 @@ function = "mark-exam-response"
 [[redirects]]
   from = "/api/generate-question"
   to = "/.netlify/functions/generate-question"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/assessment-center"
-  to = "/.netlify/functions/assessment-center"
   status = 200
   force = true
 

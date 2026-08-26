@@ -108,11 +108,6 @@ input,select,textarea{font-family:var(--font-body);}
 .task-mins{font-size:.75rem;color:var(--muted);}
 
 /* Cost badge */
-#cost-badge{position:fixed;bottom:1.5rem;left:1.5rem;background:var(--navy2);border:1px solid var(--border);padding:.6rem 1rem;border-radius:var(--r);font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;z-index:100;font-family:var(--font-mono);}
-#cost-badge:hover{border-color:var(--gold);}
-#cost-panel{display:none;position:fixed;bottom:4.5rem;left:1.5rem;background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;max-width:380px;z-index:101;font-size:.8rem;}
-#cost-panel.open{display:block;}
-
 /* Section */
 .section{display:none;}
 .section.active{display:block;animation:fadeIn .35s ease;}
@@ -294,7 +289,7 @@ input,select,textarea{font-family:var(--font-body);}
   <div class="section" id="section-plan">
     <div style="margin-bottom:1.5rem;">
       <h2 class="serif" style="font-size:1.6rem;margin-bottom:.4rem;">Your Study Plan</h2>
-      <p class="muted">3-week personalised roadmap based on your diagnosis.</p>
+      <p class="muted" id="plan-subtitle">Personalised roadmap based on your diagnosis.</p>
     </div>
     <div id="plan-content"></div>
   </div>
@@ -321,13 +316,6 @@ input,select,textarea{font-family:var(--font-body);}
 
 </div><!-- /wrap -->
 
-<!-- Cost Badge -->
-<div id="cost-badge" onclick="toggleCost()">💰 $0.000000</div>
-<div id="cost-panel">
-  <div style="font-weight:700;margin-bottom:.75rem;color:var(--white);">API Cost Breakdown</div>
-  <div id="cost-list" style="color:var(--muted);">No API calls yet.</div>
-</div>
-
 <!-- Toast -->
 <div id="toast"></div>
 
@@ -339,14 +327,6 @@ input,select,textarea{font-family:var(--font-body);}
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
-
-// ═══════════════════════════════════════════════════════════
-// PRICING (for cost tracking)
-// ═══════════════════════════════════════════════════════════
-const PRICING = {
-  haiku:  { input:.80,  output:4.00,  cacheWrite:1.00,  cacheRead:.08  },
-  sonnet: { input:3.00, output:15.00, cacheWrite:3.75,  cacheRead:.30  }
-};
 
 // ═══════════════════════════════════════════════════════════
 // STATE
@@ -363,8 +343,6 @@ const S = {
   attemptId:   null,
   savedPlans:  {}   // { [subject]: {id, level, board, diagnosis, plan} } — this student's existing saved plans
 };
-
-const cost = { calls:[], total:0 };
 
 // ═══════════════════════════════════════════════════════════
 // INIT — get logged-in student
@@ -675,47 +653,30 @@ function getMisconception(q, chosen) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// DIAGNOSE — compute topic scores then call Claude
+// DIAGNOSE — self-contained, deterministic engine built from the question
+// bank's own curated content (per-answer misconceptions, topic tags) plus
+// board-specific grade-boundary tables. No AI call, no network dependency
+// beyond Supabase, no per-run cost, works offline.
 // ═══════════════════════════════════════════════════════════
 async function runDiagnosis() {
   goTo('diagnose');
-  document.getElementById('diagnose-content').innerHTML = `
-    <div class="card" style="text-align:center;padding:3rem;">
-      <div class="spinner" style="width:32px;height:32px;margin:0 auto 1rem;"></div>
-      <p class="muted">Analysing your results across all topics...</p>
-    </div>`;
 
-  try {
-    // Compute topic scores locally (fast, no AI needed)
-    const topicScores = computeTopicScores();
-    const overallPct  = Math.round(
-      (S.answers.filter(a => a.correct).length / S.answers.length) * 100
-    );
-    const notSureCount = S.answers.filter(a => a.not_sure).length;
+  const topicScores  = computeTopicScores();
+  const overallPct   = Math.round(
+    (S.answers.filter(a => a.correct).length / S.answers.length) * 100
+  );
+  const notSureCount = S.answers.filter(a => a.not_sure).length;
 
-    // Call Claude for rich diagnosis and grade prediction
-    S.diagnosis = await claudeDiagnose(topicScores, overallPct, notSureCount);
-    S.diagnosis.topicScores = topicScores;
-    S.diagnosis.overallScore = overallPct;
-    S.diagnosis.notSureCount = notSureCount;
-    S.diagnosis.totalQuestions = S.answers.length;
+  S.diagnosis = computeDiagnosis(topicScores, overallPct, notSureCount);
+  S.diagnosis.topicScores    = topicScores;
+  S.diagnosis.overallScore   = overallPct;
+  S.diagnosis.notSureCount   = notSureCount;
+  S.diagnosis.totalQuestions = S.answers.length;
 
-    // Save attempt to Supabase
-    await saveAttempt();
+  await saveAttempt();
 
-    renderDiagnosis();
-    toast('Diagnosis complete!', 'success');
-  } catch(e) {
-    console.error(e);
-    document.getElementById('diagnose-content').innerHTML = `
-      <div class="card" style="text-align:center;padding:3rem;">
-        <div style="font-size:2rem;margin-bottom:.75rem;">⚠</div>
-        <p style="font-weight:600;margin-bottom:.5rem;">We couldn't generate your diagnosis</p>
-        <p class="muted" style="margin-bottom:1.5rem;">${e.message || 'Something went wrong. Please try again.'}</p>
-        <button class="btn btn-gold" onclick="runDiagnosis()">Try Again</button>
-      </div>`;
-    toast('Error: ' + e.message, 'error');
-  }
+  renderDiagnosis();
+  toast('Diagnosis complete!', 'success');
 }
 
 function computeTopicScores() {
@@ -738,64 +699,103 @@ function computeTopicScores() {
   })).sort((a, b) => a.score - b.score); // worst first
 }
 
-async function claudeDiagnose(topicScores, overallPct, notSureCount) {
-  const { name, subject, level, board } = S.config;
+// Board-specific grade-boundary curves, anchored on the same 3 reference
+// points (G4/G6/G9) this tool always used, interpolated to a full 1–9
+// curve. Approximate by nature — real GCSE boundaries move slightly each
+// year — but no less accurate than an LLM's own "typically ~85%" phrasing,
+// and now transparent and auditable rather than opaque.
+const GRADE_BOUNDARIES = {
+  AQA:     [[9,85],[8,78],[7,72],[6,65],[5,55],[4,45],[3,30],[2,15],[1,5]],
+  Edexcel: [[9,82],[8,75],[7,69],[6,62],[5,52],[4,42],[3,28],[2,15],[1,5]]
+};
+
+function estimateGrade(pct, board) {
+  const table = GRADE_BOUNDARIES[board] || GRADE_BOUNDARIES.AQA;
+  for (const [grade, threshold] of table) if (pct >= threshold) return grade;
+  return 0; // below the grade 1 boundary — ungraded
+}
+
+function gradeLabel(n) { return n <= 0 ? 'U' : String(n); }
+
+// Subject/board-specific common-weakness notes — the same knowledge the
+// old AI system prompt carried, now used directly rather than paraphrased
+// through an LLM.
+const SUBJECT_NOTES = {
+  AQA: {
+    Chemistry: 'a common AQA Chemistry weak spot — moles and quantitative calculations catch most students out here',
+    Biology:   'a common AQA Biology weak spot — required-practical recall is often the gap',
+    Physics:   'a common AQA Physics weak spot — wave equation and transformer calculations catch most students out here'
+  },
+  Edexcel: {
+    Chemistry: 'a common Edexcel Chemistry weak spot — ionic equations are the usual sticking point',
+    Biology:   'a common Edexcel Biology weak spot — evaluating evidence is the usual sticking point',
+    Physics:   'a common Edexcel Physics weak spot — resolving vectors and moments trip most students up'
+  }
+};
+
+function computeDiagnosis(topicScores, overallPct, notSureCount) {
+  const { subject, board } = S.config;
   const total = S.answers.length;
 
-  const boardGuidance = {
-    AQA: `AQA ${subject}: Grade boundaries typically: Grade 4 ~45%, Grade 6 ~65%, Grade 9 ~85%. AQA rewards precise use of command words and scientific terminology. Common weaknesses: students confuse "describe" with "explain"; calculation errors from not showing working; Biology students weak on required practicals; Chemistry students weak on moles calculations; Physics students weak on wave equation and transformer calculations.`,
-    Edexcel: `Edexcel ${subject}: Grade boundaries typically: Grade 4 ~42%, Grade 6 ~62%, Grade 9 ~82%. Edexcel rewards application to novel contexts ("Suggest" questions). Common weaknesses: students struggle with unfamiliar contexts even when underlying knowledge is secure; Biology students weak on evaluating evidence; Chemistry students weak on ionic equations; Physics students weak on resolving vectors and moments.`
+  const currentGradeNum = estimateGrade(overallPct, board);
+  const targetGradeNum  = Math.min(9, currentGradeNum + 2);
+  const currentGrade    = gradeLabel(currentGradeNum);
+  const targetGrade     = gradeLabel(targetGradeNum);
+
+  const studentProfile =
+    overallPct < 40 ? 'struggling' :
+    overallPct < 60 ? 'developing' :
+    overallPct < 80 ? 'secure' : 'strong';
+
+  const profileDescription =
+    `Scored ${overallPct}% overall — around Grade ${currentGrade} on typical ${board} ${subject} boundaries, ` +
+    `with a realistic path to Grade ${targetGrade}.`;
+
+  const gaps = topicScores
+    .filter(t => t.score < 80)
+    .map(t => {
+      const priority =
+        t.score < 40 ? 'critical' :
+        t.score < 55 ? 'high' :
+        t.score < 70 ? 'medium' : 'low';
+
+      const heavyNotSure = t.not_sure >= Math.ceil(t.total / 2);
+      const approach =
+        heavyNotSure                ? 'reteach_from_scratch' :
+        t.misconceptions.length > 0 ? 'fix_misconception' :
+        t.score < 55                ? 'reteach_from_scratch' : 'consolidate';
+
+      let reason;
+      if (heavyNotSure) {
+        reason = `${t.not_sure} of ${t.total} questions marked "Not sure" — this topic likely hasn't been covered yet, or needs a first proper pass.`;
+      } else if (t.misconceptions.length > 0) {
+        reason = t.misconceptions.slice(0, 2).join(' ');
+      } else {
+        reason = `Scored ${t.score}% (${t.correct}/${t.total}) — partial understanding, not yet secure enough for exam conditions.`;
+      }
+      const subjectNote = SUBJECT_NOTES[board]?.[subject];
+      if (subjectNote && t.score < 55) reason += ` This is ${subjectNote}.`;
+
+      return { topic: t.topic, score: t.score, priority, reason, approach };
+    })
+    .sort((a, b) => ({critical:0,high:1,medium:2,low:3}[a.priority]) - ({critical:0,high:1,medium:2,low:3}[b.priority]));
+
+  const strengths = topicScores.filter(t => t.score >= 80).map(t => t.topic);
+
+  const notSurePct = Math.round((notSureCount / total) * 100);
+  const teacherNoteParts = [];
+  if (notSurePct >= 30) {
+    teacherNoteParts.push(`${notSurePct}% of answers were "Not sure" — worth checking whether this reflects genuine content gaps or exam anxiety.`);
   }
-
-  const sys = `You are a senior ${board} GCSE ${subject} examiner and learning diagnostician.
-You analyse student assessment data to produce actionable, specification-accurate diagnoses.
-
-${boardGuidance[board] || boardGuidance.AQA}
-
-Your diagnosis must be:
-- Specific to the ${board} ${subject} specification — reference actual topic names
-- Honest about grade predictions — do not inflate grades
-- Actionable — every gap must have a clear, specific remediation approach
-- Teacher-aware — flag anything that needs human intervention
-
-Return ONLY valid JSON, no markdown:
-{
-  "currentGrade": string,
-  "targetGrade": string,
-  "studentProfile": "struggling"|"developing"|"secure"|"strong",
-  "profileDescription": string (1 sentence describing the student's overall position relative to ${board} grade boundaries),
-  "gaps": [
-    {
-      "topic": string,
-      "score": number,
-      "priority": "critical"|"high"|"medium"|"low",
-      "reason": string (specific to ${board} ${subject} — what exactly is weak and why it matters for the exam),
-      "approach": "reteach_from_scratch"|"fix_misconception"|"consolidate"|"extend"
-    }
-  ],
-  "strengths": [string],
-  "teacherNote": string (flag anything requiring teacher attention — persistent misconceptions, possible exam anxiety shown by high not-sure rate, gaps that need practical demonstration)
-}
-Only include topics with score < 80% in gaps. Order by priority descending.`;
-
-  const topicSummary = topicScores.map(t =>
-    `${t.topic}: ${t.score}% (${t.correct}/${t.total} correct, ${t.not_sure} not sure${t.misconceptions.length ? ', misconceptions: ' + t.misconceptions.slice(0,2).join('; ') : ''})`
-  ).join('\n');
-
-  const msg = `Student: ${name}
-Overall score: ${overallPct}%
-"Not sure" responses: ${notSureCount}/${total} (${Math.round(notSureCount/total*100)}%)
-
-Topic breakdown:
-${topicSummary}`;
-
-  const txt = await callClaude(sys, msg, 'sonnet');
-  try {
-    return JSON.parse(txt.replace(/```json|```/g,'').trim());
-  } catch(e) {
-    console.error('Parse error:', txt);
-    return fallbackDiagnosis(overallPct, topicScores);
+  const repeatedMisconceptionTopics = topicScores.filter(t => t.misconceptions.length >= 2).map(t => t.topic);
+  if (repeatedMisconceptionTopics.length) {
+    teacherNoteParts.push(`Persistent, repeated misconceptions in: ${repeatedMisconceptionTopics.join(', ')}.`);
   }
+  const teacherNote = teacherNoteParts.length
+    ? teacherNoteParts.join(' ')
+    : 'No major red flags — steady, targeted practice on the gaps above should be enough.';
+
+  return { currentGrade, targetGrade, studentProfile, profileDescription, gaps, strengths, teacherNote };
 }
 
 function renderDiagnosis() {
@@ -891,91 +891,63 @@ function renderDiagnosis() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// PLAN
+// PLAN — deterministic, gap-ordered, built directly from the diagnosis.
+// Struggling profiles get a longer 6-week ramp; everyone else gets 3.
 // ═══════════════════════════════════════════════════════════
 async function runPlan() {
   goTo('plan');
-  document.getElementById('plan-content').innerHTML = `
-    <div class="card" style="text-align:center;padding:3rem;">
-      <div class="spinner" style="width:32px;height:32px;margin:0 auto 1rem;"></div>
-      <p class="muted">Building your personalised study plan...</p>
-    </div>`;
-
-  try {
-    S.plan = await claudePlan();
-    await savePlanToAttempt();
-    renderPlan();
-    toast('Study plan ready!', 'success');
-  } catch(e) {
-    console.error(e);
-    document.getElementById('plan-content').innerHTML = `
-      <div class="card" style="text-align:center;padding:3rem;">
-        <div style="font-size:2rem;margin-bottom:.75rem;">⚠</div>
-        <p style="font-weight:600;margin-bottom:.5rem;">We couldn't build your study plan</p>
-        <p class="muted" style="margin-bottom:1.5rem;">${e.message || 'Something went wrong. Please try again.'}</p>
-        <button class="btn btn-gold" onclick="runPlan()">Try Again</button>
-      </div>`;
-    toast('Error: ' + e.message, 'error');
-  }
+  S.plan = computePlan();
+  await savePlanToAttempt();
+  renderPlan();
+  toast('Study plan ready!', 'success');
 }
 
-async function claudePlan() {
-  const { name, subject, level, board } = S.config;
-  const d = S.diagnosis;
-  const profile = d.studentProfile || 'developing';
-  const weeks   = profile === 'struggling' ? 6 : 3;
-  const gapList = (d.gaps||[]).map(g =>
-    `${g.topic} (${g.priority}, approach: ${g.approach})`).join('; ');
+function computePlan() {
+  const d        = S.diagnosis;
+  const profile  = d.studentProfile || 'developing';
+  const numWeeks = profile === 'struggling' ? 6 : 3;
+  const gaps     = (d.gaps && d.gaps.length) ? d.gaps : [{ topic: 'General revision', priority: 'medium' }];
 
-  const sys = `You are an expert ${board} GCSE ${subject} tutor building a precise, specification-aligned study plan.
-The plan must be grounded in the ${board} ${subject} specification — every task must reference real spec content.
-The student's profile is: ${profile}.
+  const phaseFor = (i, n) => i < n/3 ? 'Foundation' : i < 2*n/3 ? 'Skill Development' : 'Exam Technique';
 
-TASK TYPE DEFINITIONS:
-- "video": Watch and take notes on a specific concept (10–15 mins) — specify exactly what to focus on
-- "drill": Practice questions on a specific skill (15–20 mins) — specify the skill and question type
-- "test": Short self-test or past paper questions on a topic (20–30 mins) — specify the topic and question style
+  const currentNum = parseInt(d.currentGrade, 10) || 0;
+  const targetNum  = parseInt(d.targetGrade, 10)  || Math.min(9, currentNum + 2);
 
-${board} CONTEXT: Tasks should reference ${board}-specific exam technique where relevant (e.g. "practise AQA 6-mark explain questions on...").
-
-Return ONLY valid JSON, no markdown:
-{
-  "gradeJourney": [{"week":number,"grade":string,"description":string}],
-  "weeks": [
-    {
-      "number": number,
-      "title": string,
-      "focus": string,
-      "why": string (explain why this week's focus matters for ${board} exam performance),
-      "tasks": [
-        {"id":string,"type":"video"|"drill"|"test","label":string,"mins":number,"topic":string}
+  const weeks = [];
+  for (let i = 0; i < numWeeks; i++) {
+    const gap   = gaps[i % gaps.length];
+    const topic = gap.topic;
+    const phase = phaseFor(i, numWeeks);
+    weeks.push({
+      number: i + 1,
+      title:  phase,
+      focus:  topic,
+      why:    `Targets a diagnosed gap: ${topic}${gap.priority ? ' (' + gap.priority + ' priority)' : ''}.`,
+      tasks: [
+        {id:'w'+(i+1)+'t1',type:'video',label:'Watch: '+topic+' — Core Concept Overview',mins:15,topic},
+        {id:'w'+(i+1)+'t2',type:'drill',label:'Practice: '+topic+' — Key Questions',mins:20,topic},
+        {id:'w'+(i+1)+'t3',type:'test', label:'Check: '+topic+' — Mini Topic Test',mins:15,topic}
       ]
-    }
-  ]
-}
-Each week must have exactly 3 tasks. Match tasks directly to diagnosed gaps.
-For 'reteach_from_scratch' gaps: video → drill → short test.
-For 'fix_misconception' gaps: targeted drill with worked examples → test.
-For 'consolidate' gaps: drill → test.`;
-
-  const msg = `Create a ${weeks}-week plan for ${name}.
-Overall score: ${d.overallScore}%
-Profile: ${profile} — ${d.profileDescription || ''}
-Gaps to address: ${gapList}
-Strengths (don\'t over-focus on these): ${(d.strengths||[]).join(', ')}`;
-
-  const txt = await callClaude(sys, msg, 'sonnet');
-  try {
-    return JSON.parse(txt.replace(/```json|```/g,'').trim());
-  } catch(e) {
-    console.error('Parse error:', txt);
-    return fallbackPlan();
+    });
   }
+
+  const gradeJourney = weeks.map((w, i) => {
+    const grade = i === weeks.length - 1
+      ? targetNum
+      : currentNum + Math.round(((i + 1) * (targetNum - currentNum)) / weeks.length);
+    return { week: i + 1, grade: gradeLabel(grade), description: w.title };
+  });
+
+  return { gradeJourney, weeks };
 }
 
 function renderPlan() {
   const p = S.plan;
   let html = '';
+
+  const weekCount = (p.weeks || []).length;
+  document.getElementById('plan-subtitle').textContent =
+    `${weekCount}-week personalised roadmap based on your diagnosis.`;
 
   if (p.gradeJourney && p.gradeJourney.length) {
     html += `<div class="grade-row">`;
@@ -1102,83 +1074,6 @@ async function savePlanToAttempt() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// CLAUDE API — routes through Netlify edge function
-// ═══════════════════════════════════════════════════════════
-async function callClaude(systemPrompt, userMessage, model='haiku') {
-  const pKey = model === 'sonnet' ? 'sonnet' : 'haiku';
-
-  const res = await fetch('/api/assessment-center', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'claude', systemPrompt, userMessage, model })
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: 'Network error' }));
-    throw new Error(err.error || 'Server error ' + res.status);
-  }
-
-  const data = await res.json();
-  if (data.error) throw new Error(data.error);
-
-  const u = data.usage || {};
-  const p = PRICING[pKey];
-  const c = (
-    (u.input_tokens||0)*p.input +
-    (u.cache_creation_input_tokens||0)*p.cacheWrite +
-    (u.cache_read_input_tokens||0)*p.cacheRead +
-    (u.output_tokens||0)*p.output
-  ) / 1_000_000;
-  cost.calls.push({ model, cost:c, cached:(u.cache_read_input_tokens||0)>0 });
-  cost.total += c;
-  updateCostBadge();
-
-  return data.text || '';
-}
-
-// ═══════════════════════════════════════════════════════════
-// FALLBACKS
-// ═══════════════════════════════════════════════════════════
-function fallbackDiagnosis(score, topicScores) {
-  const grade = score >= 80 ? '7' : score >= 65 ? '6' : score >= 50 ? '5' : score >= 35 ? '4' : '3';
-  const target = String(Math.min(9, parseInt(grade) + 2));
-  const gaps = topicScores
-    .filter(t => t.score < 70)
-    .map(t => ({
-      topic: t.topic,
-      score: t.score,
-      priority: t.score < 40 ? 'critical' : t.score < 55 ? 'high' : 'medium',
-      reason: t.not_sure > 1 ? 'Multiple "not sure" responses suggest topic not covered' : 'Low score indicates gaps in understanding',
-      approach: t.not_sure > 1 ? 'reteach_from_scratch' : 'fix_misconception'
-    }));
-  return {
-    currentGrade: grade, targetGrade: target,
-    studentProfile: score < 40 ? 'struggling' : score < 60 ? 'developing' : 'secure',
-    profileDescription: `Scored ${score}% overall with room to improve.`,
-    gaps, strengths: topicScores.filter(t => t.score >= 75).map(t => t.topic)
-  };
-}
-
-function fallbackPlan() {
-  return {
-    gradeJourney: [
-      {week:1,grade:'5',description:'Foundation building'},
-      {week:2,grade:'6',description:'Skill development'},
-      {week:3,grade:'7',description:'Exam technique'}
-    ],
-    weeks: [{
-      number:1, title:'Foundation', focus:'Core concepts',
-      why:'Build solid understanding of priority topics',
-      tasks:[
-        {id:'t1',type:'video',label:'Watch: Core Concept Overview',mins:15,topic:''},
-        {id:'t2',type:'drill',label:'Practice: Key Questions',mins:20,topic:''},
-        {id:'t3',type:'test',label:'Check: Mini Topic Test',mins:15,topic:''}
-      ]
-    }]
-  };
-}
-
-// ═══════════════════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════════════════
 const STAGES = ['setup','assess','diagnose','plan','execute','track'];
@@ -1228,20 +1123,6 @@ function pipeGoTo(stage) {
 // ═══════════════════════════════════════════════════════════
 // COST TRACKING
 // ═══════════════════════════════════════════════════════════
-function updateCostBadge() {
-  document.getElementById('cost-badge').textContent = '💰 $' + cost.total.toFixed(6);
-  let html = `<div style="margin-bottom:.5rem;"><strong>Session total: $${cost.total.toFixed(6)}</strong></div>`;
-  cost.calls.forEach((c,i) => {
-    const cached = c.cached ? ' ⚡ CACHED' : '';
-    html += `<div style="margin:.3rem 0;color:var(--muted);">Call ${i+1}: ${c.model}${cached} — $${c.cost.toFixed(6)}</div>`;
-  });
-  document.getElementById('cost-list').innerHTML = html;
-}
-
-function toggleCost() {
-  document.getElementById('cost-panel').classList.toggle('open');
-}
-
 function toast(msg, type='info') {
   const t = document.getElementById('toast');
   t.textContent = msg;
