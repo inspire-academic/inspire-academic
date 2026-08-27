@@ -70,6 +70,7 @@
 .score-hero{text-align:center;padding:1.5rem 1rem 1.75rem;margin-bottom:1.5rem;background:#f7f6f2;border-radius:10px;page-break-inside:avoid;}
 .score-hero .num{font-family:var(--font-display);font-size:3.2rem;font-weight:800;line-height:1;}
 .score-hero .grades{margin-top:.6rem;font-size:1.05rem;color:var(--navy);}
+.score-hero .aspiration{margin-top:.35rem;font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.02em;}
 .score-hero .badge-pill{margin-top:.85rem;display:inline-block;padding:.35rem 1.1rem;border-radius:20px;font-weight:700;font-size:.8rem;letter-spacing:.03em;color:#fff;}
 .score-hero .desc{margin-top:.85rem;color:var(--print-muted);font-size:.92rem;max-width:32rem;margin-left:auto;margin-right:auto;}
 .notsure-callout{margin-top:1rem;padding:.75rem 1rem;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.4);border-radius:6px;font-size:.85rem;color:#8a6d1a;max-width:32rem;margin-left:auto;margin-right:auto;}
@@ -188,6 +189,13 @@ function renderReport(payload) {
   document.getElementById('report').innerHTML = html;
 }
 
+// Brand aspiration ceiling — always Grade 9 (9-9 for Combined Science's
+// double award), kept as a separate figure from the realistic near-term
+// target so a 3-6 week plan is never shown as if it reaches it.
+function aspirationGrade(isCombined) {
+  return isCombined ? '9-9' : '9';
+}
+
 function buildCover(c, generatedAt) {
   return `
     <div class="cover-page">
@@ -213,6 +221,7 @@ function buildExecutiveSummary(c, d, name) {
   const sColor = scoreColor(sc);
   const pColor = PROFILE_COLORS[d.studentProfile] || '#ca8a04';
   const notSurePct = d.totalQuestions ? Math.round((d.notSureCount / d.totalQuestions) * 100) : 0;
+  const isCombined = c.subject === 'Combined Science';
 
   return `
     <div class="report-section">
@@ -223,6 +232,7 @@ function buildExecutiveSummary(c, d, name) {
       <div class="score-hero">
         <div class="num" style="color:${sColor};">${sc}%</div>
         <div class="grades">Current grade <strong>${d.currentGrade ?? '—'}</strong> &nbsp;→&nbsp; Target grade <strong style="color:#0d9488;">${d.targetGrade ?? '—'}</strong></div>
+        <div class="aspiration">🎯 Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}</div>
         <div class="badge-pill" style="background:${pColor};">${(d.studentProfile || 'developing').toUpperCase()}</div>
         <div class="desc">${d.profileDescription || ''}</div>
         ${notSurePct >= 30 ? `<div class="notsure-callout">${notSurePct}% of questions in this assessment were answered "not sure" — the study plan below is weighted toward building foundational confidence first.</div>` : ''}
