@@ -36,17 +36,16 @@ create policy "Admins can view all submissions"
   to authenticated
   using (is_admin());
 
--- Optional, not required for the admin page to work — if you also
--- want teachers to see their own assigned students' submissions
--- (not just admins), this reuses the same get_teacher_students()
--- function teacher.html already calls:
---
--- create policy "Teachers can view assigned students' submissions"
---   on student_submissions for select
---   to authenticated
---   using (
---     exists (
---       select 1 from get_teacher_students(auth.uid()) gts
---       where gts.student_id = student_submissions.user_id
---     )
---   );
+-- Lets teachers see their own assigned students' submissions (not
+-- just admins), reusing the same get_teacher_students() function
+-- teacher.html already calls. Applied live in Supabase 2026-08-28
+-- (previously written here but left commented out / never run).
+create policy "Teachers can view assigned students' submissions"
+  on student_submissions for select
+  to authenticated
+  using (
+    exists (
+      select 1 from get_teacher_students(auth.uid()) gts
+      where gts.student_id = student_submissions.user_id
+    )
+  );
