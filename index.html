@@ -392,7 +392,9 @@ async function doLogin(){
   perfEnd('profile-fetch');
   if(profile) setCachedProfile(profile);
 
-  const r=profile?.role; window.location.href=(r==='teacher'||r==='teacher_manager'||r==='admin'||r==='super_admin')?'/teacher/teacher.html':'/dashboard.html';
+  // Always land on the student dashboard, even for teacher/admin accounts —
+  // staff navigate to /teacher/teacher.html themselves via its nav link.
+  window.location.href='/dashboard.html';
 }
 
 async function doSignup(){

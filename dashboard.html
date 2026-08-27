@@ -413,18 +413,7 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
   const {user,profile} = await requireAuth() || {};
   if(!user){ clearTimeout(timeoutHandle); return; }
 
-  // Allow teachers to preview student view if ?preview=true
-  const urlParams = new URLSearchParams(window.location.search);
-  const isPreview = urlParams.get('preview') === 'true';
-
-  // Redirect teachers/admins to their dashboard (unless previewing)
-  const teacherRoles = ['teacher', 'teacher_manager', 'admin', 'super_admin'];
-  if(!isPreview && teacherRoles.includes(profile?.role)){
-    window.location.href = '/teacher/teacher.html';
-    return;
-  }
-
-  // Populate the profile-edit dropdown and (preview-only) teacher link —
+  // Populate the profile-edit dropdown and (staff-only) teacher link —
   // reuses the user/profile already fetched above, no extra round-trips.
   loadProfileData(user, profile);
   checkTeacherRole(profile);
@@ -676,9 +665,9 @@ function loadProfileData(user, profile){
   }
 }
 
-// Show the "Teacher Dashboard" link if this profile is staff — only
-// reachable in practice via ?preview=true, since the main flow above
-// already redirects staff roles away from this page otherwise.
+// Show the "Teacher Dashboard" link if this profile is staff — staff
+// land on this student dashboard by default and navigate to their
+// dashboard themselves via this link, rather than being auto-redirected.
 // Takes the profile already fetched by requireAuth() at page load.
 function checkTeacherRole(profile){
   if(profile && ['teacher','teacher_manager','admin','super_admin'].includes(profile.role)){
