@@ -867,6 +867,15 @@ function doubleAward(n) {
   return g === 'U' ? 'U-U' : `${g}-${g}`;
 }
 
+// Brand aspiration ceiling — always Grade 9 (9-9 for Combined Science's
+// double award), shown as a separate figure from the realistic near-term
+// target computed in computeDiagnosis(). Never conflate the two:
+// "mastery, not time" means the near-term target must stay honest about
+// what a 3-6 week plan can actually deliver.
+function aspirationGrade(isCombined) {
+  return isCombined ? '9-9' : '9';
+}
+
 function computeDiagnosis(topicScores, overallPct, notSureCount) {
   const { subject, board } = S.config;
   const total = S.answers.length;
@@ -976,6 +985,9 @@ function renderDiagnosis() {
       <div style="margin-top:.5rem;font-size:1rem;">
         Current grade: <strong>${d.currentGrade}</strong> &nbsp;→&nbsp;
         Target: <strong style="color:var(--teal);">${d.targetGrade}</strong>
+      </div>
+      <div style="margin-top:.35rem;font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.02em;">
+        🎯 Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}
       </div>
       <div style="margin-top:.75rem;display:inline-block;padding:.35rem 1rem;border-radius:20px;background:${profileColor}22;color:${profileColor};font-weight:700;font-size:.85rem;">
         ${d.studentProfile?.toUpperCase() || 'DEVELOPING'}
