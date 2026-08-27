@@ -729,13 +729,17 @@ async function generateReport(){
 
   // Anyone with a submission ID could previously view this report —
   // no auth check existed at all. Now: must be logged in, and must
-  // either own the submission or be an admin/super_admin.
+  // either own the submission, be an admin/super_admin, or be a
+  // teacher/teacher_manager with this submission's student assigned
+  // to them (mirrors the RLS policy in
+  // supabase/student_submissions_admin_access.sql).
   const {data:{session}} = await supa.auth.getSession();
   if(!session){ window.location.href = '/'; return; }
 
   const {data: viewerProfile} = await supa.from('profiles')
     .select('role').eq('id', session.user.id).maybeSingle();
   const isAdmin = !!viewerProfile && ['admin','super_admin'].includes(viewerProfile.role);
+  const isTeacherRole = !!viewerProfile && ['teacher','teacher_manager'].includes(viewerProfile.role);
 
   // Load submission
   const {data: submission} = await supa.from('student_submissions')
@@ -748,7 +752,15 @@ async function generateReport(){
     return;
   }
 
-  if(!isAdmin && submission.user_id !== session.user.id){
+  let isAssignedTeacher = false;
+  if(isTeacherRole){
+    const {data: asgn} = await supa.from('teacher_student_assignments')
+      .select('student_id').eq('teacher_id', session.user.id)
+      .eq('student_id', submission.user_id).eq('is_active', true).maybeSingle();
+    isAssignedTeacher = !!asgn;
+  }
+
+  if(!isAdmin && !isAssignedTeacher && submission.user_id !== session.user.id){
     window.location.href = '/dashboard.html';
     return;
   }
