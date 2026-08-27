@@ -817,6 +817,9 @@ function renderDiagnosis() {
         Current grade: <strong>${d.currentGrade}</strong> &nbsp;→&nbsp;
         Target: <strong style="color:var(--teal);">${d.targetGrade}</strong>
       </div>
+      <div style="margin-top:.35rem;font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.02em;">
+        🎯 Inspire long-term aspiration: Grade ${aspirationGrade(S.config.subject)}
+      </div>
       <div style="margin-top:.75rem;display:inline-block;padding:.35rem 1rem;border-radius:20px;background:${profileColor}22;color:${profileColor};font-weight:700;font-size:.85rem;">
         ${d.studentProfile?.toUpperCase() || 'DEVELOPING'}
       </div>
@@ -1134,6 +1137,15 @@ async function callClaude(systemPrompt, userMessage, model='haiku') {
   updateCostBadge();
 
   return data.text || '';
+}
+
+// Brand aspiration ceiling — always Grade 9 (9-9 for a future Combined
+// Science double award), shown as a separate figure alongside the
+// realistic near-term target computed by fallbackDiagnosis/claudeDiagnose.
+// Never conflate the two: "mastery, not time" means the near-term target
+// stays honest about what a 3-6 week plan can actually deliver.
+function aspirationGrade(subject) {
+  return subject === 'Combined Science' ? '9-9' : '9';
 }
 
 // ═══════════════════════════════════════════════════════════
