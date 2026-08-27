@@ -192,6 +192,30 @@ const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
 
 const NO_FLAG_TEXT='No major red flags — steady, targeted practice on the gaps above should be enough.';
+const APPROACH_LABELS={
+  reteach_from_scratch:'Reteach from scratch',
+  fix_misconception:'Fix misconception',
+  consolidate:'Consolidate',
+  extend:'Extend'
+};
+
+// Cross-references a gap's topic against the plan's own weekly tasks so
+// the teacher sees not just *what* to prioritise but *when* the AI-built
+// plan already schedules it — topic strings come from two independent
+// generations (diagnosis vs. plan) so match loosely, not exactly.
+function firstWeekForTopic(plan,topic){
+  if(!plan||!plan.weeks||!topic) return null;
+  const needle=topic.toLowerCase();
+  for(const w of plan.weeks){
+    const hit=(w.tasks||[]).some(t=>{
+      if(!t.topic) return false;
+      const hay=t.topic.toLowerCase();
+      return hay.includes(needle)||needle.includes(hay);
+    });
+    if(hit) return w.number;
+  }
+  return null;
+}
 
 let _attempts=[],_myRole=null;
 
@@ -235,7 +259,7 @@ async function init(){
     }
 
     let q=supa.from('diagnostic_attempts')
-      .select('id,created_at,student_id,student_name,subject,exam_board,level,overall_score,current_grade,target_grade,total_questions,student_profile,profile_description,gaps,strengths,teacher_note,topic_scores,plan')
+      .select('id,created_at,student_id,student_name,subject,exam_board,level,overall_score,current_grade,target_grade,total_questions,not_sure_count,student_profile,profile_description,gaps,strengths,teacher_note,topic_scores,plan')
       .order('created_at',{ascending:false});
     if(studentIds) q=q.in('student_id',studentIds);
 
@@ -319,6 +343,29 @@ function renderTable(list){
   </tbody></table>`;
 }
 
+// Reuses the student's own PDF report page unchanged — builds the exact
+// {config,diagnosis,plan} payload shape it reads from sessionStorage
+// (see assessment-report.html / viewSavedPlan() in assessment-engine.html
+// for the same row->payload mapping), so the teacher/admin gets identical
+// View/Download/Email actions from a saved diagnostic_attempts row.
+function openReportForAttempt(id){
+  const a=_attempts.find(x=>String(x.id)===String(id));
+  if(!a) return;
+  const payload={
+    config:{ name:a.student_name, subject:a.subject, level:a.level, board:a.exam_board },
+    diagnosis:{
+      overallScore:a.overall_score, currentGrade:a.current_grade, targetGrade:a.target_grade,
+      notSureCount:a.not_sure_count, topicScores:a.topic_scores, gaps:a.gaps,
+      studentProfile:a.student_profile, profileDescription:a.profile_description,
+      strengths:a.strengths, teacherNote:a.teacher_note, totalQuestions:a.total_questions
+    },
+    plan:a.plan||{},
+    generatedAt:a.created_at
+  };
+  sessionStorage.setItem('ia_report_payload',JSON.stringify(payload));
+  location.href='/assessment-engine/assessment-report.html';
+}
+
 function openDetail(id){
   // id arrives as a string from the onclick attribute, but the real
   // diagnostic_attempts.id column is numeric — String() both sides so
@@ -331,6 +378,10 @@ function openDetail(id){
 
   let html=`<div class="mt">${esc(a.student_name||'Unknown')}</div>
     <div class="ms">${esc(a.subject||'')} · ${esc(a.exam_board||'')} · ${esc(a.level||'')} · ${d}</div>
+
+    <div class="detail-section">
+      <button class="btn bg bs" onclick="openReportForAttempt('${a.id}')">📄 Open Full PDF Report (view · download · email)</button>
+    </div>
 
     <div class="detail-section">
       <div class="detail-label">Overview</div>
@@ -365,11 +416,21 @@ function openDetail(id){
 
   if(a.gaps && a.gaps.length){
     html+=`<div class="detail-section">
-      <div class="detail-label">Priority Gaps</div>
-      ${a.gaps.map(g=>`<div class="gap-row ${g.priority}">
-        <div class="gtop"><span class="gname">${esc(topicLabel(g,isCombined))}</span><span class="chip ${g.priority==='critical'?'cr':g.priority==='high'?'ca':g.priority==='medium'?'cb':'cg'}">${esc(g.priority)}</span></div>
-        <div class="greason">${esc(g.reason||'')}</div>
-      </div>`).join('')}
+      <div class="detail-label">Recommended Focus Order</div>
+      <p style="font-size:.78rem;color:var(--muted);margin:-.2rem 0 .65rem;line-height:1.4;">Already ordered by instructional priority — start at #1. Where the study plan below schedules a topic, its first week is shown.</p>
+      ${a.gaps.map((g,i)=>{
+        const wk=firstWeekForTopic(a.plan,g.topic);
+        return `<div class="gap-row ${g.priority}">
+        <div class="gtop">
+          <span class="gname">${i+1}. ${esc(topicLabel(g,isCombined))}</span>
+          <span style="display:flex;gap:.35rem;align-items:center;">
+            ${wk?`<span class="chip cb">Week ${wk}</span>`:''}
+            <span class="chip ${g.priority==='critical'?'cr':g.priority==='high'?'ca':g.priority==='medium'?'cb':'cg'}">${esc(g.priority)}</span>
+          </span>
+        </div>
+        <div class="greason">${esc(APPROACH_LABELS[g.approach]||g.approach||'')}${g.approach?' — ':''}${esc(g.reason||'')}</div>
+      </div>`;
+      }).join('')}
     </div>`;
   }
 
@@ -383,9 +444,25 @@ function openDetail(id){
   }
 
   if(a.plan && a.plan.weeks && a.plan.weeks.length){
+    const journey=(a.plan.gradeJourney||[]).map((g,i,arr)=>
+      `<span style="font-size:.78rem;color:var(--muted);">Wk${esc(g.week)}: <strong style="color:var(--white);">${esc(g.grade)}</strong></span>${i<arr.length-1?'<span style="color:var(--muted);">→</span>':''}`
+    ).join('');
+    const weeks=a.plan.weeks.map(w=>`
+      <div style="background:var(--navy3);border-radius:8px;padding:.75rem .9rem;margin-bottom:.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.3rem;flex-wrap:wrap;">
+          <strong style="font-size:.85rem;">Week ${esc(w.number)} — ${esc(w.title||'')}</strong>
+          ${w.focus?`<span class="chip cb" style="font-size:.65rem;">${esc(w.focus)}</span>`:''}
+        </div>
+        <div style="font-size:.8rem;color:var(--muted);line-height:1.45;margin-bottom:.45rem;">${esc(w.why||'')}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+          ${(w.tasks||[]).map(t=>`<span style="font-size:.72rem;background:rgba(255,255,255,.05);border-radius:5px;padding:.25rem .55rem;">${t.type==='video'?'▶':t.type==='drill'?'◎':'✓'} ${esc(t.label)}${t.topic?` · ${esc(t.topic)}`:''} · ${esc(t.mins)}min</span>`).join('')}
+        </div>
+      </div>`).join('');
+
     html+=`<div class="detail-section">
-      <div class="detail-label">Study Plan</div>
-      <p style="font-size:.85rem;color:var(--muted);">${a.plan.weeks.length}-week plan generated, focused on: ${esc(a.plan.weeks.map(w=>w.focus).join(', '))}</p>
+      <div class="detail-label">Study Plan (${a.plan.weeks.length} weeks)</div>
+      ${journey?`<div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:.75rem;">${journey}</div>`:''}
+      ${weeks}
     </div>`;
   }
 
