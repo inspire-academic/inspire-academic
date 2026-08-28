@@ -30,11 +30,19 @@ edge_functions = "netlify/edge-functions"
 [context.staging]
   branch = "staging"
 
-# Edge functions kept for reference but routing via [[redirects]] below
-[[edge_functions]]
-path = "/api/generate-question"
-function = "generate-question"
-
+# NOTE (2026-08-28): the three edge_functions entries that used to sit
+# here (generate-question, mark-exam-response x2 paths, protege-ai)
+# were REMOVED, not just "kept for reference" as the old comment
+# claimed — Netlify's edge_functions registrations take precedence
+# over [[redirects]] for a matching path, contrary to that comment's
+# assumption. In production, every one of those three paths was
+# silently being served by the stale netlify/edge-functions/*.js
+# files (last touched 2026-08-13) instead of the actively maintained
+# netlify/functions/*.js versions below — discovered when a fresh
+# auth requirement added to the Node functions had zero effect on the
+# live /api/* endpoints. The stale .js files are left in
+# netlify/edge-functions/ for now (harmless once unregistered) but
+# are dead code — safe to delete in a later cleanup.
 [[edge_functions]]
 path = "/api/mileiq-distance"
 function = "mileiq-distance"
@@ -42,18 +50,6 @@ function = "mileiq-distance"
 [[edge_functions]]
 path = "/api/create-teacher"
 function = "create-teacher"
-
-[[edge_functions]]
-path = "/api/mark-exam-response"
-function = "mark-exam-response"
-
-[[edge_functions]]
-path = "/api/protege-ai"
-function = "protege-ai"
-
-[[edge_functions]]
-path = "/.netlify/functions/mark-exam-response"
-function = "mark-exam-response"
 
 [functions]
   [functions."*"]
