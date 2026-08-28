@@ -1,8 +1,15 @@
 // Netlify Function — mark-exam-response
+const { verifyUser, checkAndLogUsage } = require('./_ai-usage-guard')
+
+// A teacher marking a full class set of free-response submissions can
+// legitimately fire this many times in one sitting — kept generous
+// relative to generate-question for that reason.
+const MAX_PER_HOUR = 60
+
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type'
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 }
 
 exports.handler = async function(event) {
@@ -13,9 +20,20 @@ exports.handler = async function(event) {
   try { body = JSON.parse(event.body) }
   catch (e) { return { statusCode: 400, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Invalid JSON body' }) } }
 
+  const authHeader = (event.headers && (event.headers.authorization || event.headers.Authorization)) || ''
+  const user = await verifyUser(authHeader)
+  if (!user) {
+    return { statusCode: 401, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Please sign in to use this feature.' }) }
+  }
+
   const { subject, exam_board, stem, marks, mark_points, model_answer, student_name, response } = body
   if (!stem || !response || marks === undefined) {
     return { statusCode: 400, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Missing required fields: stem, response, marks' }) }
+  }
+
+  const withinLimit = await checkAndLogUsage(user.id, 'mark-exam-response', MAX_PER_HOUR)
+  if (!withinLimit) {
+    return { statusCode: 429, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: `You've reached the hourly limit for marking (${MAX_PER_HOUR}/hour). Please try again later.` }) }
   }
 
   const board   = (exam_board || 'AQA').toUpperCase()

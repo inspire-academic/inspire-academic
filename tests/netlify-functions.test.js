@@ -1,21 +1,45 @@
 // Unit tests for the Netlify Functions that talk to the Anthropic API.
 // Validation/error paths are tested directly. The success path is
 // tested against a mocked global.fetch — never a live API call, so
-// this suite needs no ANTHROPIC_API_KEY and costs nothing to run in CI.
+// this suite needs no ANTHROPIC_API_KEY/SUPABASE_SERVICE_ROLE_KEY and
+// costs nothing to run in CI.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const generateQuestion = require('../netlify/functions/generate-question.js');
 const markExamResponse = require('../netlify/functions/mark-exam-response.js');
+const protegeAi = require('../netlify/functions/protege-ai.js');
 
-function withMockFetch(responseBody, status, fn) {
+const AUTH_HEADER = { authorization: 'Bearer test-token' };
+const MOCK_USER = { id: 'user-123', email: 'teacher@example.com' };
+
+// Routes the shared mock fetch by URL: Supabase auth verification,
+// the ai_usage_log rate-limit table (GET to count, POST to log), and
+// everything else (the actual Anthropic call) gets `anthropicBody`.
+function withMockFetch({ anthropicBody, anthropicStatus = 200, authOk = true, usageRows = [] }, fn) {
   const original = global.fetch;
-  global.fetch = async () => ({
-    ok: status >= 200 && status < 300,
-    status,
-    json: async () => responseBody
+  process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-key';
+  global.fetch = async (url, opts = {}) => {
+    const u = String(url);
+    if (u.includes('/auth/v1/user')) {
+      return authOk
+        ? { ok: true, status: 200, json: async () => MOCK_USER }
+        : { ok: false, status: 401, json: async () => ({}) };
+    }
+    if (u.includes('/rest/v1/ai_usage_log')) {
+      if ((opts.method || 'GET') === 'POST') return { ok: true, status: 201, json: async () => ({}) };
+      return { ok: true, status: 200, json: async () => usageRows };
+    }
+    return {
+      ok: anthropicStatus >= 200 && anthropicStatus < 300,
+      status: anthropicStatus,
+      json: async () => anthropicBody
+    };
+  };
+  return fn().finally(() => {
+    global.fetch = original;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
   });
-  return fn().finally(() => { global.fetch = original; });
 }
 
 // ── generate-question ───────────────────────────────────────────────
@@ -35,12 +59,50 @@ test('generate-question: invalid JSON body returns 400', async () => {
   assert.equal(res.statusCode, 400);
 });
 
-test('generate-question: missing required fields returns 400', async () => {
-  const res = await generateQuestion.handler({
-    httpMethod: 'POST',
-    body: JSON.stringify({ subject: 'Physics' }) // missing topic, board, tier
+test('generate-question: missing Authorization header returns 401', async () => {
+  await withMockFetch({}, async () => {
+    const res = await generateQuestion.handler({
+      httpMethod: 'POST',
+      body: JSON.stringify({ subject: 'Physics', topic: {}, board: 'AQA', tier: 'Higher' })
+    });
+    assert.equal(res.statusCode, 401);
   });
-  assert.equal(res.statusCode, 400);
+});
+
+test('generate-question: invalid/expired token returns 401', async () => {
+  await withMockFetch({ authOk: false }, async () => {
+    const res = await generateQuestion.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({ subject: 'Physics', topic: {}, board: 'AQA', tier: 'Higher' })
+    });
+    assert.equal(res.statusCode, 401);
+  });
+});
+
+test('generate-question: missing required fields returns 400', async () => {
+  await withMockFetch({}, async () => {
+    const res = await generateQuestion.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({ subject: 'Physics' }) // missing topic, board, tier
+    });
+    assert.equal(res.statusCode, 400);
+  });
+});
+
+test('generate-question: over the hourly limit returns 429', async () => {
+  const usageRows = Array.from({ length: 20 }, (_, i) => ({ id: i })); // == MAX_PER_HOUR
+  await withMockFetch({ usageRows }, async () => {
+    const res = await generateQuestion.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({
+        topic: { name: 'Forces', marks: 2 }, board: 'AQA', subject: 'Physics', tier: 'Higher'
+      })
+    });
+    assert.equal(res.statusCode, 429);
+  });
 });
 
 test('generate-question: valid MCQ request returns the parsed question (mocked API)', async () => {
@@ -57,11 +119,12 @@ test('generate-question: valid MCQ request returns the parsed question (mocked A
     misconception_tags: [],
     difficulty_justification: 'Standard two-step calculation.'
   };
-  const anthropicResponse = { content: [{ text: JSON.stringify(mockQuestion) }] };
+  const anthropicBody = { content: [{ text: JSON.stringify(mockQuestion) }] };
 
-  await withMockFetch(anthropicResponse, 200, async () => {
+  await withMockFetch({ anthropicBody }, async () => {
     const res = await generateQuestion.handler({
       httpMethod: 'POST',
+      headers: AUTH_HEADER,
       body: JSON.stringify({
         topic: { name: 'Forces and motion', subtopics: ['Newton\'s laws'], marks: 2, difficulty: 'standard' },
         board: 'AQA', subject: 'Physics', tier: 'Higher'
@@ -81,11 +144,12 @@ test('generate-question: free-response request omits MCQ options from the prompt
     mark_scheme_points: [{ point: 'a = Δv/t = 3 m/s²', marks: 1 }, { point: 'F = ma = 3600 N', marks: 1 }],
     difficulty_justification: 'Two-step calculation requiring correct equation selection.'
   };
-  const anthropicResponse = { content: [{ text: JSON.stringify(mockQuestion) }] };
+  const anthropicBody = { content: [{ text: JSON.stringify(mockQuestion) }] };
 
-  await withMockFetch(anthropicResponse, 200, async () => {
+  await withMockFetch({ anthropicBody }, async () => {
     const res = await generateQuestion.handler({
       httpMethod: 'POST',
+      headers: AUTH_HEADER,
       body: JSON.stringify({
         topic: { name: 'Forces and motion', subtopics: ['Newton\'s laws'], marks: 2, difficulty: 'standard' },
         board: 'AQA', subject: 'Physics', tier: 'Higher', questionType: 'free_response'
@@ -99,9 +163,10 @@ test('generate-question: free-response request omits MCQ options from the prompt
 });
 
 test('generate-question: upstream API error is passed through with its status', async () => {
-  await withMockFetch({ error: { message: 'Overloaded' } }, 529, async () => {
+  await withMockFetch({ anthropicBody: { error: { message: 'Overloaded' } }, anthropicStatus: 529 }, async () => {
     const res = await generateQuestion.handler({
       httpMethod: 'POST',
+      headers: AUTH_HEADER,
       body: JSON.stringify({
         topic: { name: 'Forces', marks: 2 }, board: 'AQA', subject: 'Physics', tier: 'Higher'
       })
@@ -111,12 +176,37 @@ test('generate-question: upstream API error is passed through with its status', 
 });
 
 // ── mark-exam-response ──────────────────────────────────────────────
-test('mark-exam-response: missing required fields returns 400', async () => {
-  const res = await markExamResponse.handler({
-    httpMethod: 'POST',
-    body: JSON.stringify({ stem: 'Calculate X' }) // missing response, marks
+test('mark-exam-response: missing Authorization header returns 401', async () => {
+  await withMockFetch({}, async () => {
+    const res = await markExamResponse.handler({
+      httpMethod: 'POST',
+      body: JSON.stringify({ stem: 'Calculate X', response: 'F=ma', marks: 2 })
+    });
+    assert.equal(res.statusCode, 401);
   });
-  assert.equal(res.statusCode, 400);
+});
+
+test('mark-exam-response: missing required fields returns 400', async () => {
+  await withMockFetch({}, async () => {
+    const res = await markExamResponse.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({ stem: 'Calculate X' }) // missing response, marks
+    });
+    assert.equal(res.statusCode, 400);
+  });
+});
+
+test('mark-exam-response: over the hourly limit returns 429', async () => {
+  const usageRows = Array.from({ length: 60 }, (_, i) => ({ id: i })); // == MAX_PER_HOUR
+  await withMockFetch({ usageRows }, async () => {
+    const res = await markExamResponse.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({ stem: 'Calculate X', response: 'F=ma', marks: 2 })
+    });
+    assert.equal(res.statusCode, 429);
+  });
 });
 
 test('mark-exam-response: valid request returns clamped marks_awarded (mocked API)', async () => {
@@ -126,11 +216,12 @@ test('mark-exam-response: valid request returns clamped marks_awarded (mocked AP
     feedback: 'Well done, clear working shown.',
     examiner_note: 'Method mark and answer mark both awarded.'
   };
-  const anthropicResponse = { content: [{ text: JSON.stringify(mockResult) }] };
+  const anthropicBody = { content: [{ text: JSON.stringify(mockResult) }] };
 
-  await withMockFetch(anthropicResponse, 200, async () => {
+  await withMockFetch({ anthropicBody }, async () => {
     const res = await markExamResponse.handler({
       httpMethod: 'POST',
+      headers: AUTH_HEADER,
       body: JSON.stringify({
         subject: 'Physics', exam_board: 'AQA',
         stem: 'Calculate the resultant force.', marks: 2,
@@ -141,5 +232,42 @@ test('mark-exam-response: valid request returns clamped marks_awarded (mocked AP
     assert.equal(res.statusCode, 200);
     const body = JSON.parse(res.body);
     assert.equal(body.marks_awarded, 2, 'marks_awarded must be clamped to the question\'s max marks');
+  });
+});
+
+// ── protege-ai ───────────────────────────────────────────────────────
+test('protege-ai: missing Authorization header returns 401', async () => {
+  await withMockFetch({}, async () => {
+    const res = await protegeAi.handler({
+      httpMethod: 'POST',
+      body: JSON.stringify({ mode: 'tutor', userMessage: 'Why is the sky blue?' })
+    });
+    assert.equal(res.statusCode, 401);
+  });
+});
+
+test('protege-ai: over the hourly limit returns 429', async () => {
+  const usageRows = Array.from({ length: 60 }, (_, i) => ({ id: i })); // == MAX_PER_HOUR
+  await withMockFetch({ usageRows }, async () => {
+    const res = await protegeAi.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({ mode: 'tutor', userMessage: 'Why is the sky blue?' })
+    });
+    assert.equal(res.statusCode, 429);
+  });
+});
+
+test('protege-ai: valid tutor request returns the model\'s reply (mocked API)', async () => {
+  const anthropicBody = { content: [{ text: 'Great question! The sky looks blue because of Rayleigh scattering.' }] };
+  await withMockFetch({ anthropicBody }, async () => {
+    const res = await protegeAi.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({ mode: 'tutor', name: 'Ama', grade: 'Year 6', userMessage: 'Why is the sky blue?' })
+    });
+    assert.equal(res.statusCode, 200);
+    const body = JSON.parse(res.body);
+    assert.match(body.text, /Rayleigh/);
   });
 });

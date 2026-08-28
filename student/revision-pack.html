@@ -1255,9 +1255,10 @@ function restoreMarkingResult(qId, data, totalMarks) {
 
 // ── AI MARKING — via Netlify Function ────────────────────────
 async function callAIMarking(payload) {
+  const { data: { session } } = await sb.auth.getSession();
   const res = await fetch('/.netlify/functions/mark-exam-response', {
     method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
     body:    JSON.stringify(payload)
   });
   if (!res.ok) throw new Error('Marking function failed');
