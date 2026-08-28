@@ -1429,9 +1429,10 @@ async function generateQuestions() {
 
 async function generateQuestionForTopic(topic) {
   // Call via /api/ path — redirected to Netlify Function by netlify.toml
+  const { data: { session } } = await supa.auth.getSession()
   const response = await fetch('/api/generate-question', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
     body: JSON.stringify({
       topic,
       board:   state.board,

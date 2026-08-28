@@ -10,6 +10,7 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <style>
 :root {
   --bg:       #06060f;
@@ -1158,6 +1159,25 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
 
 <script>
 // ══════════════════════════════════════
+// LOGIN GATE — decided 2026-08-28: this tool must require a real
+// Inspire Academic account, same as every other AI-calling surface.
+// Previously this page had no Supabase client at all — anyone could
+// use it, including the Professor Cosmo hint/tutor calls, with zero
+// identity attached. Redirects to the homepage (same pattern used
+// elsewhere on the platform) if there's no active session, and
+// stashes the access token for the two protege-ai calls below.
+// ══════════════════════════════════════
+const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const _supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let _authToken = null;
+(async function requireLogin() {
+  const { data: { session } } = await _supa.auth.getSession();
+  if (!session) { window.location.href = '/'; return; }
+  _authToken = session.access_token;
+})();
+
+// ══════════════════════════════════════
 // PLAY MODE STATE — declared first so all functions can reference it
 // ══════════════════════════════════════
 let _pendingStart   = null;
@@ -1760,7 +1780,7 @@ async function getHint() {
   const box=document.getElementById('hint-box');
   box.style.display='block'; box.textContent='Professor Cosmo is thinking...';
   try {
-    const r=await fetch('/api/protege-ai',{method:'POST',headers:{'Content-Type':'application/json'},
+    const r=await fetch('/api/protege-ai',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${_authToken}`},
       body:JSON.stringify({mode:'hint',question:currentQ.q,answer:currentQ.a,hint:currentQ.hint,grade:state.grade,name:state.name})});
     const d=await r.json();
     const h=d.text||currentQ.hint; box.textContent=h;
@@ -1778,7 +1798,7 @@ async function sendTutorMsg() {
   const ld=document.createElement('div'); ld.className='msg ai'; ld.textContent='Professor Cosmo is thinking...'; msgs.appendChild(ld);
   msgs.scrollTop=msgs.scrollHeight;
   try {
-    const r=await fetch('/api/protege-ai',{method:'POST',headers:{'Content-Type':'application/json'},
+    const r=await fetch('/api/protege-ai',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${_authToken}`},
       body:JSON.stringify({mode:'tutor',name:state.name,grade:state.grade,userMessage:msg,history:tutorHistory})});
     const d=await r.json();
     const reply=d.text||'That is a fascinating question. Keep exploring.';

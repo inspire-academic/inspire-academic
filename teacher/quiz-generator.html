@@ -475,9 +475,10 @@ async function generateQuestions() {
     document.getElementById('gen-progress-fill').style.width = ((i / count) * 100) + '%'
 
     try {
+      const { data: { session } } = await supa.auth.getSession()
       const response = await fetch('/api/generate-question', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
         body: JSON.stringify({
           topic: { name: selectedSpecTopic.name, subtopics: selectedSpecTopic.subtopics, marks, difficulty: mix },
           board, subject, tier, questionType
