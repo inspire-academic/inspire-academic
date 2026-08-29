@@ -16,7 +16,7 @@ const MOCK_USER = { id: 'user-123', email: 'teacher@example.com' };
 // Routes the shared mock fetch by URL: Supabase auth verification,
 // the ai_usage_log rate-limit table (GET to count, POST to log), and
 // everything else (the actual Anthropic call) gets `anthropicBody`.
-function withMockFetch({ anthropicBody, anthropicStatus = 200, authOk = true, usageRows = [] }, fn) {
+function withMockFetch({ anthropicBody, anthropicStatus = 200, authOk = true, usageRows = [], onAnthropicRequest }, fn) {
   const original = global.fetch;
   process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-key';
   global.fetch = async (url, opts = {}) => {
@@ -30,6 +30,7 @@ function withMockFetch({ anthropicBody, anthropicStatus = 200, authOk = true, us
       if ((opts.method || 'GET') === 'POST') return { ok: true, status: 201, json: async () => ({}) };
       return { ok: true, status: 200, json: async () => usageRows };
     }
+    if (onAnthropicRequest && opts.body) onAnthropicRequest(JSON.parse(opts.body));
     return {
       ok: anthropicStatus >= 200 && anthropicStatus < 300,
       status: anthropicStatus,
@@ -172,6 +173,55 @@ test('generate-question: upstream API error is passed through with its status', 
       })
     });
     assert.equal(res.statusCode, 529);
+  });
+});
+
+test('generate-question: known spec_slug injects real PASCO calibration evidence into the prompt', async () => {
+  const mockQuestion = {
+    question_text: 'x', model_answer: 'y',
+    mark_scheme_points: [{ point: 'p', marks: 2 }], difficulty_justification: 'z'
+  };
+  let capturedPrompt = null;
+  await withMockFetch({
+    anthropicBody: { content: [{ text: JSON.stringify(mockQuestion) }] },
+    onAnthropicRequest: (body) => { capturedPrompt = body.messages[0].content; }
+  }, async () => {
+    const res = await generateQuestion.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({
+        // A real slug from netlify/functions/_pasco-calibration-stats.json —
+        // update this if that slug is ever removed/renamed.
+        topic: { name: 'Analysis and purification', slug: 'aqa-ch-fh-analysis', subtopics: [], marks: 2, difficulty: 'standard' },
+        board: 'AQA', subject: 'Chemistry', tier: 'Higher', questionType: 'free_response'
+      })
+    });
+    assert.equal(res.statusCode, 200);
+    assert.match(capturedPrompt, /REAL EXAM EVIDENCE/);
+    assert.match(capturedPrompt, /real past-paper questions/);
+  });
+});
+
+test('generate-question: unrecognised/missing spec_slug degrades gracefully, no calibration text', async () => {
+  const mockQuestion = {
+    question_text: 'x', model_answer: 'y',
+    mark_scheme_points: [{ point: 'p', marks: 2 }], difficulty_justification: 'z'
+  };
+  let capturedPrompt = null;
+  await withMockFetch({
+    anthropicBody: { content: [{ text: JSON.stringify(mockQuestion) }] },
+    onAnthropicRequest: (body) => { capturedPrompt = body.messages[0].content; }
+  }, async () => {
+    const res = await generateQuestion.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({
+        topic: { name: 'No Slug Topic', subtopics: [], marks: 3, difficulty: 'standard' },
+        board: 'AQA', subject: 'Physics', tier: 'Higher', questionType: 'free_response'
+      })
+    });
+    assert.equal(res.statusCode, 200);
+    assert.doesNotMatch(capturedPrompt, /REAL EXAM EVIDENCE/);
   });
 });
 

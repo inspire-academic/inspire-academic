@@ -480,7 +480,7 @@ async function generateQuestions() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
         body: JSON.stringify({
-          topic: { name: selectedSpecTopic.name, subtopics: selectedSpecTopic.subtopics, marks, difficulty: mix },
+          topic: { name: selectedSpecTopic.name, slug: selectedSpecTopic.slug, subtopics: selectedSpecTopic.subtopics, marks, difficulty: mix },
           board, subject, tier, questionType
         })
       })

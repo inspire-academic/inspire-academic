@@ -43,6 +43,35 @@ const TIER_RULES = {
 
 const { verifyUser, checkAndLogUsage } = require('./_ai-usage-guard')
 
+// Real-evidence calibration, distilled from PASCO — 25 real, transcribed
+// AQA/Edexcel past papers (1036 questions), reduced to aggregate
+// numbers per spec_slug via scripts/pasco/aggregate-calibration-stats.js
+// in the separate inspire-academic-pastpapers worktree. Deliberately
+// contains ONLY counts, mark values, grade-band numbers, AO tags, and
+// command-word labels — no question/mark-scheme/solution text, so no
+// AQA-copyrighted expression is here, only real evidence reduced to the
+// same category of derived domain knowledge as BOARD_STYLE/TIER_RULES
+// above. See the assessment-engine grade-accuracy roadmap, Phase 2.
+let CALIBRATION_STATS = {}
+try {
+  CALIBRATION_STATS = require('./_pasco-calibration-stats.json')
+} catch (e) {
+  // Missing/unreadable file degrades to no calibration guidance, not a
+  // hard failure — question generation must keep working either way.
+}
+
+function calibrationGuidance(slug) {
+  const s = slug && CALIBRATION_STATS[slug]
+  if (!s || !s.sampleSize) return ''
+  const words = (s.commonCommandWords || []).join('/')
+  return `\nREAL EXAM EVIDENCE for this exact topic (from ${s.sampleSize} real past-paper questions): ` +
+    `marks typically range ${s.markRange?.[0]}-${s.markRange?.[1]} (average ${s.avgMarks}); ` +
+    `most commonly assessed at AO level ${s.dominantAO || 'mixed'}` +
+    (words ? `; common command words: ${words}` : '') +
+    (s.gradeBandRange ? `; real questions on this topic have spanned roughly grade ${s.gradeBandRange[0]}-${s.gradeBandRange[1]}` : '') +
+    '. Use this as a real calibration check on marks and command-word choice — do not copy any specific number here as if it were the mark total for THIS question, which is given separately below.'
+}
+
 // Question-bank generation is a teacher-initiated, per-topic action —
 // bursty in short sessions but not high-frequency. 20/hour comfortably
 // covers building out a full topic's question set in one sitting.
@@ -95,6 +124,7 @@ exports.handler = async function(event) {
 
   const subtopicList = (topic.subtopics || []).slice(0, 6).join(', ')
   const difficulty   = topic.difficulty || 'mixed'
+  const evidence     = calibrationGuidance(topic.slug)
 
   const systemPrompt = `You are a senior ${board} GCSE ${subject} examiner and question writer with 15+ years of experience.
 You have written and moderated hundreds of ${board} exam papers.
@@ -117,7 +147,7 @@ You MUST respond with valid JSON only — no preamble, no markdown fences.`
 TOPIC: "${topic.name}"
 SPECIFICATION CONTENT: ${subtopicList}
 DIFFICULTY: ${difficulty} — ${diffGuide[difficulty] || diffGuide.mixed}
-MARKS: ${topic.marks}
+MARKS: ${topic.marks}${evidence}
 
 Respond with this exact JSON structure:
 {
@@ -131,7 +161,7 @@ The mark_scheme_points marks must sum to exactly ${topic.marks}.` : `Generate on
 TOPIC: "${topic.name}"
 SPECIFICATION CONTENT: ${subtopicList}
 DIFFICULTY: ${difficulty} — ${diffGuide[difficulty] || diffGuide.mixed}
-MARKS: ${topic.marks}
+MARKS: ${topic.marks}${evidence}
 
 Respond with this exact JSON structure:
 {
