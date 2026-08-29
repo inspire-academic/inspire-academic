@@ -31,7 +31,13 @@
 create table if not exists diagnostic_outcomes (
   id                   uuid        primary key default gen_random_uuid(),
   student_id           uuid        not null references profiles(id),
-  linked_attempt_id    uuid        references diagnostic_attempts(id),
+  linked_attempt_id    bigint      references diagnostic_attempts(id),
+  -- diagnostic_attempts.id is bigint, not uuid — confirmed live by this
+  -- FK failing on first run (42804: incompatible types uuid/bigint) when
+  -- it was assumed uuid like every other table's PK in this codebase.
+  -- docs/reference/supabase-schema-audit.md had flagged this exact
+  -- column's type as genuinely uncertain ("id uuid/int?") rather than
+  -- guessed at — this is the real answer.
   subject              text        not null,
   exam_board           text        not null,
   exam_series          text        not null,   -- e.g. 'June 2027'
