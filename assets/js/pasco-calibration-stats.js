@@ -1,4 +1,15 @@
-{
+// Real, non-verbatim calibration evidence distilled from the PASCO
+// corpus (25 real transcribed AQA/Edexcel past papers, 1036 questions)
+// via scripts/pasco/aggregate-calibration-stats.js in the separate
+// inspire-academic-pastpapers worktree. Per spec_slug: sample size,
+// mark range/average, grade-band range/average, dominant AO, and up
+// to 3 common command words — no question/mark-scheme/solution text.
+// See the assessment-engine grade-accuracy roadmap, Phase 2.
+//
+// Isomorphic: works as a Node require() (netlify/functions/generate-
+// question.js) and as a browser <script> tag (assessment-engine.html),
+// so there is exactly one copy of this data, not two that can drift.
+const PASCO_CALIBRATION_STATS = {
   "aqa-ch-fh-analysis": {
     "sampleSize": 40,
     "avgMarks": 2,
@@ -1086,4 +1097,6 @@
       "Give"
     ]
   }
-}
+};
+if (typeof module !== 'undefined' && module.exports) module.exports = PASCO_CALIBRATION_STATS;
+if (typeof window !== 'undefined') window.PASCO_CALIBRATION_STATS = PASCO_CALIBRATION_STATS;

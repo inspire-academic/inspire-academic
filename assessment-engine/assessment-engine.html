@@ -359,6 +359,14 @@ input,select,textarea{font-family:var(--font-body);}
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<!-- Phase 3 (assessment-engine grade-accuracy roadmap): real per-topic
+     exam weighting needs spec-map's topic/slug list and the PASCO
+     calibration evidence to weight against. This repo's spec-map.js is
+     still the single monolithic file defining window.SPEC_MAP directly
+     — the AQA/Edexcel shard (spec-map-aqa.js/spec-map-edexcel.js) only
+     exists in the separate PASCO branch, never merged here. -->
+<script src="/assets/js/spec-map.js"></script>
+<script src="/assets/js/pasco-calibration-stats.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
 // SUPABASE CONFIG — matches your platform
@@ -560,7 +568,11 @@ async function loadQuestionsFromSupabase() {
   // Skip RPC — go straight to direct query (more reliable)
   // The direct query handles everything we need
 
-  // Direct query
+  // No .limit() here (removed 2026-08-29, Phase 3) — the weighted
+  // sampler below needs the FULL real pool per topic to allocate from,
+  // not whatever arbitrary 36 rows the database happened to return
+  // first. The cap to config's real question count happens after
+  // weighting, not before.
   const { data, error } = await supa
     .from('diagnostic_questions')
     .select('*')
@@ -570,8 +582,7 @@ async function loadQuestionsFromSupabase() {
     .eq('active', true)
     .in('exam_board', [config.board, 'Universal'])
     .in('tier', ['Higher', 'Both'])
-    .order('topic')
-    .limit(36);
+    .order('topic');
 
   if (error) {
     console.error('Supabase query error:', error);
@@ -583,17 +594,17 @@ async function loadQuestionsFromSupabase() {
   }
 
   console.log(`Loaded ${data.length} questions from Supabase`);
-  return shuffleByTopic(data);
+  const weights = buildTopicWeights(config.subject, config.board, [...new Set(data.map(q => q.topic))]);
+  return weightedSampleAcrossTopics(data, 36, weights);
 }
 
 // Combined Science (Trilogy): 15 questions from each of Physics, Chemistry
 // and Biology — equal thirds, matching how AQA/Edexcel Combined Science
-// actually weights the three sciences across its six exam papers. Each
-// subject's pool goes through the same per-topic capping/shuffling as a
-// single-subject run, then sampleAcrossTopics() takes 15 spread evenly
-// across that subject's topics (not just however Supabase happened to
-// order them), and the three subjects' questions are interleaved so the
-// assessment doesn't run as three back-to-back blocks.
+// actually weights the three sciences across its six exam papers. WITHIN
+// each subject's 15, topics are now weighted by real exam emphasis (see
+// weightedSampleAcrossTopics below), not spread flat — the three
+// subjects' questions are then interleaved so the assessment doesn't run
+// as three back-to-back blocks.
 async function loadCombinedScienceQuestions() {
   const { config }   = S;
   const subjects     = ['Physics', 'Chemistry', 'Biology'];
@@ -614,31 +625,13 @@ async function loadCombinedScienceQuestions() {
     if (error) throw new Error('Could not load ' + subject + ' questions: ' + error.message);
     if (!data || data.length === 0) throw new Error('No validated questions found for ' + subject + ' yet.');
 
-    return sampleAcrossTopics(shuffleByTopic(data), perSubject);
+    const weights = buildTopicWeights(subject, config.board, [...new Set(data.map(q => q.topic))]);
+    return weightedSampleAcrossTopics(data, perSubject, weights);
   }));
 
   const combined = perSubjectResults.flat();
   console.log(`Loaded ${combined.length} Combined Science questions (Physics/Chemistry/Biology)`);
   return shuffleArray(combined);
-}
-
-// Picks up to n questions from a topic-grouped list, cycling round-robin
-// across topics (in random topic order) so the sample stays spread across
-// the subject rather than clustering in whichever topics sort first.
-function sampleAcrossTopics(questions, n) {
-  const byTopic = {};
-  questions.forEach(q => { if (!byTopic[q.topic]) byTopic[q.topic] = []; byTopic[q.topic].push(q); });
-  const topics = shuffleArray(Object.keys(byTopic));
-  const result = [];
-  for (let round = 0; result.length < n; round++) {
-    let addedThisRound = false;
-    for (const topic of topics) {
-      if (result.length >= n) break;
-      if (byTopic[topic][round]) { result.push(byTopic[topic][round]); addedThisRound = true; }
-    }
-    if (!addedThisRound) break; // every topic exhausted before reaching n
-  }
-  return result;
 }
 
 function shuffleArray(arr) {
@@ -650,19 +643,107 @@ function shuffleArray(arr) {
   return a;
 }
 
-function shuffleByTopic(questions) {
-  // Group by topic, take up to 4 per topic, shuffle within topic
+// ═══════════════════════════════════════════════════════════
+// PHASE 3 — exam-representative topic weighting (2026-08-29)
+//
+// diagnostic_questions.topic is free text, admin-authored directly in
+// Supabase with no tracked schema and no other page in this codebase
+// cross-referencing it — there is no live-DB way to confirm its exact
+// naming convention against spec-map's topic names from here. Matching
+// below is therefore best-effort (normalized exact match, then a
+// substring fallback) and DEFENSIVE: a topic that doesn't match real
+// PASCO evidence still gets sampled at a baseline (median) weight,
+// never dropped or zeroed out — an unmatched topic is a data-quality
+// question worth checking, not a reason to narrow the diagnostic.
+// Mismatches are logged to the console (not shown to the student) so
+// this can actually be checked, and diagnostic_questions.topic values
+// aligned to spec-map names later if that turns out to help.
+// ═══════════════════════════════════════════════════════════
+
+function normTopic(s) {
+  return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+// Builds { topicName -> weight } for a subject/board from real PASCO
+// evidence — weight = total real marks observed for that spec_slug
+// (sampleSize x avgMarks), a proxy for how much of a real exam paper
+// actually goes to this topic. Falls back to the median matched weight
+// for any topic with no calibration match.
+function buildTopicWeights(subject, board, topicNames) {
+  const specTopics = (window.SPEC_MAP?.[subject]?.[board]) || [];
+  const slugByNormName = {};
+  specTopics.forEach(t => { slugByNormName[normTopic(t.name)] = t.slug; });
+
+  const stats = window.PASCO_CALIBRATION_STATS || {};
+  const weights = {};
+  const matchedWeights = [];
+  const unmatched = [];
+
+  for (const name of topicNames) {
+    const norm = normTopic(name);
+    let slug = slugByNormName[norm];
+    if (!slug) {
+      const hit = Object.keys(slugByNormName).find(k => k.includes(norm) || norm.includes(k));
+      if (hit) slug = slugByNormName[hit];
+    }
+    const stat = slug && stats[slug];
+    if (stat && stat.sampleSize) {
+      const w = stat.sampleSize * (stat.avgMarks || 1);
+      weights[name] = w;
+      matchedWeights.push(w);
+    } else {
+      unmatched.push(name);
+    }
+  }
+
+  const sortedMatched = [...matchedWeights].sort((a, b) => a - b);
+  const median = sortedMatched.length ? sortedMatched[Math.floor(sortedMatched.length / 2)] : 1;
+  for (const name of unmatched) weights[name] = median;
+
+  if (unmatched.length) {
+    console.log(`[Phase 3 topic weighting] ${unmatched.length}/${topicNames.length} topic(s) had no PASCO calibration match for ${subject}/${board}, using baseline weight:`, unmatched);
+  }
+
+  return weights;
+}
+
+// Allocates n questions across topics proportional to `weights` (largest-
+// remainder apportionment — exact integer allocations summing to n, not
+// naive rounding drift), respecting each topic's real available pool
+// size, and guaranteeing every topic with at least one real question
+// gets at least 1 slot so diagnostic breadth doesn't collapse just
+// because a topic is lightly weighted.
+function weightedSampleAcrossTopics(questions, n, weights) {
   const byTopic = {};
-  questions.forEach(q => {
-    if (!byTopic[q.topic]) byTopic[q.topic] = [];
-    byTopic[q.topic].push(q);
+  questions.forEach(q => { (byTopic[q.topic] = byTopic[q.topic] || []).push(q); });
+  const topics = Object.keys(byTopic);
+  if (!topics.length) return [];
+
+  const totalWeight = topics.reduce((sum, t) => sum + (weights[t] || 1), 0);
+  const exact = {};
+  topics.forEach(t => { exact[t] = (n * (weights[t] || 1)) / totalWeight; });
+
+  const allocated = {};
+  let used = 0;
+  topics.forEach(t => {
+    const available = byTopic[t].length;
+    const base = Math.min(available, Math.max(available > 0 ? 1 : 0, Math.floor(exact[t])));
+    allocated[t] = base;
+    used += base;
   });
+
+  let remaining = n - used;
+  const byRemainder = topics
+    .map(t => ({ topic: t, remainder: exact[t] - Math.floor(exact[t]) }))
+    .sort((a, b) => b.remainder - a.remainder);
+  for (const r of byRemainder) {
+    if (remaining <= 0) break;
+    if (allocated[r.topic] < byTopic[r.topic].length) { allocated[r.topic]++; remaining--; }
+  }
+
   const result = [];
-  Object.values(byTopic).forEach(topicQs => {
-    const shuffled = shuffleArray(topicQs).slice(0, 4);
-    result.push(...shuffled);
-  });
-  return result;
+  topics.forEach(t => { result.push(...shuffleArray(byTopic[t]).slice(0, allocated[t])); });
+  return shuffleArray(result);
 }
 
 // ═══════════════════════════════════════════════════════════

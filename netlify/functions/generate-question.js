@@ -52,9 +52,14 @@ const { verifyUser, checkAndLogUsage } = require('./_ai-usage-guard')
 // AQA-copyrighted expression is here, only real evidence reduced to the
 // same category of derived domain knowledge as BOARD_STYLE/TIER_RULES
 // above. See the assessment-engine grade-accuracy roadmap, Phase 2.
+//
+// Isomorphic file (assets/js/pasco-calibration-stats.js) — also loaded
+// as a browser <script> by assessment-engine.html for Phase 3's topic
+// weighting, so there is exactly one copy of this data, not two that
+// can drift apart.
 let CALIBRATION_STATS = {}
 try {
-  CALIBRATION_STATS = require('./_pasco-calibration-stats.json')
+  CALIBRATION_STATS = require('../../assets/js/pasco-calibration-stats.js')
 } catch (e) {
   // Missing/unreadable file degrades to no calibration guidance, not a
   // hard failure — question generation must keep working either way.

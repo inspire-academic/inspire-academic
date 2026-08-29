@@ -190,7 +190,7 @@ test('generate-question: known spec_slug injects real PASCO calibration evidence
       httpMethod: 'POST',
       headers: AUTH_HEADER,
       body: JSON.stringify({
-        // A real slug from netlify/functions/_pasco-calibration-stats.json —
+        // A real slug from assets/js/pasco-calibration-stats.js —
         // update this if that slug is ever removed/renamed.
         topic: { name: 'Analysis and purification', slug: 'aqa-ch-fh-analysis', subtopics: [], marks: 2, difficulty: 'standard' },
         board: 'AQA', subject: 'Chemistry', tier: 'Higher', questionType: 'free_response'
