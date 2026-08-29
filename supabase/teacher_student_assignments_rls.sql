@@ -1,6 +1,15 @@
 -- ================================================================
 -- teacher_student_assignments_rls.sql
 --
+-- RESULT (2026-08-29): verified via the pg_policies query below —
+-- this table's write path was already correctly restricted to
+-- admin/super_admin by a pre-existing policy, and SELECT was already
+-- correctly scoped by another. The four policies this file creates
+-- turned out to be redundant with those, not load-bearing. Eric had
+-- them dropped again — see teacher_student_assignments_rls_cleanup.sql.
+-- Left here as the historical record of what was checked and why;
+-- do not re-run this file.
+--
 -- teacher_student_assignments is the authorization ROOT for every
 -- "teacher sees only their assigned students" pattern on this
 -- platform — student_submissions, assessment_attempts,
