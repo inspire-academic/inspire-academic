@@ -821,20 +821,81 @@ function computeTopicScores() {
   })).sort((a, b) => a.score - b.score); // worst first
 }
 
-// Board-specific grade-boundary curves, anchored on the same 3 reference
-// points (G4/G6/G9) this tool always used, interpolated to a full 1–9
-// curve. Approximate by nature — real GCSE boundaries move slightly each
-// year — but no less accurate than an LLM's own "typically ~85%" phrasing,
-// and now transparent and auditable rather than opaque.
-const GRADE_BOUNDARIES = {
-  AQA:     [[9,85],[8,78],[7,72],[6,65],[5,55],[4,45],[3,30],[2,15],[1,5]],
-  Edexcel: [[9,82],[8,75],[7,69],[6,62],[5,52],[4,42],[3,28],[2,15],[1,5]]
+// Real, published raw-mark grade boundaries — AQA "Subject grade
+// boundaries – June 2026 exams" and Edexcel "Grade Boundaries Edexcel
+// GCSE (9-1) June 2026" (both fetched directly from aqa.org.uk /
+// qualifications.pearson.com, cross-checked against a second visual
+// read of each source PDF before being typed in here — not
+// interpolated, not estimated). Replaces the old 3-point-anchored
+// interpolated curve this tool used before 2026-08-29.
+//
+// Higher tier only, matching this tool's current scope — S.diagnosis's
+// saved rows hardcode tier:'Higher' (see the save-attempt code below),
+// so Foundation-tier boundaries aren't wired up yet even though the
+// real data for them was sourced at the same time. Adding a tier
+// selector is a separate, future piece of work, not done here.
+//
+// Boundaries move every series — this table is a snapshot of the real
+// June 2026 series and will need refreshing after each results day,
+// same as any exam board's own published table would.
+const REAL_GRADE_BOUNDARIES = {
+  AQA: {
+    maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
+    // [grade, raw mark boundary], highest grade first, Higher tier (9 down to 3 — AQA doesn't report 2/1 at Higher)
+    Physics:     [[9,157],[8,142],[7,128],[6,107],[5,87],[4,67],[3,57]],
+    Chemistry:   [[9,155],[8,137],[7,120],[6,94],[5,68],[4,43],[3,30]],
+    Biology:     [[9,133],[8,120],[7,107],[6,88],[5,70],[4,52],[3,43]],
+    Mathematics: [[9,219],[8,192],[7,166],[6,131],[5,97],[4,63],[3,46]]
+  },
+  Edexcel: {
+    maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
+    Physics:     [[9,163],[8,148],[7,134],[6,113],[5,92],[4,71],[3,60]],
+    Chemistry:   [[9,165],[8,146],[7,127],[6,103],[5,79],[4,55],[3,43]],
+    Biology:     [[9,170],[8,158],[7,147],[6,126],[5,105],[4,84],[3,73]],
+    Mathematics: [[9,208],[8,177],[7,146],[6,114],[5,82],[4,50],[3,34]]
+  }
 };
 
-function estimateGrade(pct, board) {
-  const table = GRADE_BOUNDARIES[board] || GRADE_BOUNDARIES.AQA;
+// Combined Science (Trilogy for AQA, Combined Science for Edexcel) is a
+// genuine double-award qualification, graded as a pair (e.g. "7-6"),
+// not a single 1-9 grade — real boundaries for every achievable pair,
+// Higher tier, ordered lowest to highest. Source: the same two grade-
+// boundary documents above, "GCSE Double Award" section.
+const REAL_COMBINED_BOUNDARIES = {
+  AQA: {
+    maxMark: 420,
+    pairs: [ // [gradeHigh, gradeLow, raw mark boundary], ascending
+      [4,3,101],[4,4,111],[5,4,130],[5,5,149],[6,5,168],[6,6,188],
+      [7,6,208],[7,7,228],[8,7,245],[8,8,262],[9,8,280],[9,9,298]
+    ]
+  },
+  Edexcel: {
+    maxMark: 360,
+    pairs: [
+      [4,3,99],[4,4,108],[5,4,126],[5,5,145],[6,5,164],[6,6,183],
+      [7,6,202],[7,7,221],[8,7,236],[8,8,251],[9,8,266],[9,9,282]
+    ]
+  }
+};
+
+function estimateGrade(pct, board, subject) {
+  const boardData = REAL_GRADE_BOUNDARIES[board] || REAL_GRADE_BOUNDARIES.AQA;
+  const table = boardData[subject];
+  const maxMark = boardData.maxMark[subject];
+  if (!table || !maxMark) return estimateGradeFallback(pct, board); // safety net for an unmapped subject
+  for (const [grade, raw] of table) if (pct >= (raw / maxMark) * 100) return grade;
+  return 0; // below the grade 3 boundary — ungraded at Higher tier (a real Foundation resit signal, not modelled here yet)
+}
+
+// Only reached if a subject somehow isn't in REAL_GRADE_BOUNDARIES —
+// the old interpolated curve, kept purely as a safety net so an
+// unmapped subject degrades gracefully instead of throwing.
+function estimateGradeFallback(pct, board) {
+  const table = board === 'Edexcel'
+    ? [[9,82],[8,75],[7,69],[6,62],[5,52],[4,42],[3,28],[2,15],[1,5]]
+    : [[9,85],[8,78],[7,72],[6,65],[5,55],[4,45],[3,30],[2,15],[1,5]];
   for (const [grade, threshold] of table) if (pct >= threshold) return grade;
-  return 0; // below the grade 1 boundary — ungraded
+  return 0;
 }
 
 function gradeLabel(n) { return n <= 0 ? 'U' : String(n); }
@@ -855,16 +916,26 @@ const SUBJECT_NOTES = {
   }
 };
 
-// Combined Science (AQA/Edexcel Trilogy) is a genuine double-award
-// qualification — grades like "7-6", not a single 1-9 grade — so its
-// result is always shown as a paired grade. This pairs the same grade
-// with itself (e.g. "7-7") rather than inventing an uneven split: real
-// Trilogy boundaries aren't published per-topic the way single-award
-// boundaries are, so an uneven pair would be fabricated precision this
-// tool has no data to back up. profileDescription says so explicitly.
-function doubleAward(n) {
-  const g = gradeLabel(n);
-  return g === 'U' ? 'U-U' : `${g}-${g}`;
+// Combined Science double-award, now against the real published pair
+// boundaries in REAL_COMBINED_BOUNDARIES — replaces the old
+// doubleAward() approximation, which always paired a grade with itself
+// (e.g. "7-7") because it had no real data to back an uneven split.
+// Real boundaries can and do produce uneven pairs (e.g. "8-7"), which
+// is genuinely how AQA/Edexcel award Combined Science, not an
+// approximation this version is making.
+function combinedPairIndex(pct, board) {
+  const data = REAL_COMBINED_BOUNDARIES[board] || REAL_COMBINED_BOUNDARIES.AQA;
+  const { pairs, maxMark } = data;
+  for (let i = pairs.length - 1; i >= 0; i--) {
+    if (pct >= (pairs[i][2] / maxMark) * 100) return i;
+  }
+  return -1; // below the lowest pair boundary — ungraded at Higher tier
+}
+function combinedPairLabel(index, board) {
+  if (index < 0) return 'U-U';
+  const data = REAL_COMBINED_BOUNDARIES[board] || REAL_COMBINED_BOUNDARIES.AQA;
+  const [high, low] = data.pairs[index];
+  return `${high}-${low}`;
 }
 
 // Brand aspiration ceiling — always Grade 9 (9-9 for Combined Science's
@@ -881,10 +952,19 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
   const total = S.answers.length;
   const isCombined = subject === 'Combined Science';
 
-  const currentGradeNum = estimateGrade(overallPct, board);
-  const targetGradeNum  = Math.min(9, currentGradeNum + 2);
-  const currentGrade    = isCombined ? doubleAward(currentGradeNum) : gradeLabel(currentGradeNum);
-  const targetGrade     = isCombined ? doubleAward(targetGradeNum)  : gradeLabel(targetGradeNum);
+  let currentGrade, targetGrade;
+  if (isCombined) {
+    const currentIdx = combinedPairIndex(overallPct, board);
+    const maxIdx     = REAL_COMBINED_BOUNDARIES[board]?.pairs.length - 1 ?? 11;
+    const targetIdx  = Math.min(maxIdx, currentIdx + 2);
+    currentGrade = combinedPairLabel(currentIdx, board);
+    targetGrade  = combinedPairLabel(targetIdx, board);
+  } else {
+    const currentGradeNum = estimateGrade(overallPct, board, subject);
+    const targetGradeNum  = Math.min(9, currentGradeNum + 2);
+    currentGrade = gradeLabel(currentGradeNum);
+    targetGrade  = gradeLabel(targetGradeNum);
+  }
 
   const studentProfile =
     overallPct < 40 ? 'struggling' :
@@ -892,8 +972,8 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
     overallPct < 80 ? 'secure' : 'strong';
 
   const profileDescription = isCombined
-    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award on typical ${board} Combined Science boundaries, with a realistic path to ${targetGrade}. (Combined Science boundaries are approximated from single-award data, so the real Trilogy award can land a grade off in either half — treat this as a guide, not an official prediction.)`
-    : `Scored ${overallPct}% overall — around Grade ${currentGrade} on typical ${board} ${subject} boundaries, ` +
+    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award on real ${board} Combined Science June 2026 boundaries, with a realistic path to ${targetGrade}.`
+    : `Scored ${overallPct}% overall — around Grade ${currentGrade} on real ${board} ${subject} June 2026 boundaries, ` +
       `with a realistic path to Grade ${targetGrade}.`;
 
   const gaps = topicScores
