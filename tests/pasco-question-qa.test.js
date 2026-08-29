@@ -32,10 +32,14 @@ const { REPO_ROOT, pascoSeedFiles, relPath } = require('./helpers');
 
 // Same sandboxed-execution pattern tests/lesson-manifest.test.js and
 // tests/shared-js.test.js already use to read window.SPEC_MAP without
-// a build step.
-const specMapCode = fs.readFileSync(path.join(REPO_ROOT, 'assets/js/spec-map.js'), 'utf8');
+// a build step. spec-map.js is now a merge of the per-board
+// spec-map-aqa.js/spec-map-edexcel.js files, so all three must be
+// run into the same sandbox in that order.
 const sandbox = { window: {} };
-new Function('window', specMapCode)(sandbox.window);
+for (const f of ['spec-map-aqa.js', 'spec-map-edexcel.js', 'spec-map.js']) {
+  const code = fs.readFileSync(path.join(REPO_ROOT, 'assets/js', f), 'utf8');
+  new Function('window', code)(sandbox.window);
+}
 const SPEC_MAP = sandbox.window.SPEC_MAP;
 
 function allKnownSlugs() {
@@ -50,7 +54,11 @@ function allKnownSlugs() {
 
 const PAPER_RE = /INSERT INTO past_papers[^\n]*\n\s*SELECT id, '([^']+)', '([^']+)', (\d+), '([^']+)', (\d+), (\d+), (\d+), (true|false)\s*\n\s*FROM subjects WHERE name = '([^']+)'/g;
 
-const QUESTION_RE = /INSERT INTO past_paper_questions[^\n]*\n\s*SELECT pp\.id, '([^']+)', '([^']+)', (\d+),\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n'([^']*)', (\d+)\s*\nFROM past_papers pp JOIN subjects s ON s\.id = pp\.subject_id\s*\nWHERE s\.name='([^']+)' AND pp\.exam_board='([^']+)' AND pp\.tier='([^']+)' AND pp\.year=(\d+) AND pp\.series='([^']+)' AND pp\.paper_number=(\d+);/g;
+// The (?:, \d+, [\d.]+)? tail makes grade_band_estimate/
+// grade_band_estimate_raw (added 2026-08-29 by
+// scripts/pasco/estimate-difficulty.js --write) optional to match, so
+// this still parses files whether or not they've been annotated.
+const QUESTION_RE = /INSERT INTO past_paper_questions[^\n]*\n\s*SELECT pp\.id, '([^']+)', '([^']+)', (\d+),\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n'([^']*)', (\d+)(?:, \d+, [\d.]+)?\s*\nFROM past_papers pp JOIN subjects s ON s\.id = pp\.subject_id\s*\nWHERE s\.name='([^']+)' AND pp\.exam_board='([^']+)' AND pp\.tier='([^']+)' AND pp\.year=(\d+) AND pp\.series='([^']+)' AND pp\.paper_number=(\d+);/g;
 
 function paperKey(subject, board, tier, year, series, paperNumber) {
   return `${subject}|${board}|${tier}|${year}|${paperNumber}`.toLowerCase() + `|${series}`;

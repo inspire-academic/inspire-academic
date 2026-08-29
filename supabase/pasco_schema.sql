@@ -49,7 +49,16 @@ CREATE TABLE IF NOT EXISTS past_paper_questions (
   mark_scheme      text        NOT NULL,
   worked_solution  text        NOT NULL,
   difficulty       text,                        -- AO1/AO2/AO3, optional
-  order_index      integer
+  order_index      integer,
+  -- Added 2026-08-29 (assessment-engine grade-accuracy roadmap, Phase
+  -- 2): a real, evidence-grounded ESTIMATE of which grade band this
+  -- question targets, from scripts/pasco/estimate-difficulty.js —
+  -- structural inference (AO tag, spec-map tier, marks, sub-part
+  -- position), explicitly NOT true item-response-theory calibration
+  -- from real student response data, which this platform doesn't have.
+  -- Nullable — most existing rows won't have this until backfilled.
+  grade_band_estimate      integer,               -- 3-9, rounded
+  grade_band_estimate_raw  numeric                 -- unrounded, for future recalibration
 );
 
 ALTER TABLE past_paper_questions ENABLE ROW LEVEL SECURITY;

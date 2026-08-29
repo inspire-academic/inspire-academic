@@ -203,7 +203,7 @@ ON CONFLICT (subject_id, exam_board, tier, year, series, paper_number) DO NOTHIN
 
 -- ── Question 1 (13 marks) -- Refraction of light by a glass block (RPA9) ──
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '01.1', 'aqa-ph-fh-waves-properties', 1,
 $q$A student investigated the refraction of light by a glass block. Figure 1 shows the protractor used to measure the angles of incidence and the angles of refraction. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig01.webp" alt="Figure 1: a semicircular protractor with a double scale, 0 to 180 degrees reading in from each side, marked with radial lines every 10 degrees from the centre point."> What is the resolution of the protractor used to measure the angles? [1 mark] Resolution = ___ °$q$,
 $q$1 (°). [1 mark] (AO3; spec 4.6.1.3, RPA9)$q$,
@@ -212,11 +212,11 @@ $q$1°.
 §COACHING§
 
 Resolution is the smallest change an instrument can actually detect, here the smallest marked division on the scale (every 1°), not the size of the protractor or its largest reading.$q$,
-'AO3', 1
+'AO3', 1, 8, 8.00
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '01.2', 'aqa-ph-fh-waves-properties', 6,
 $q$Table 1 shows the results. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-table01.webp" alt="Table 1: angle of incidence in degrees paired with angle of refraction in degrees. 10 and 6. 20 and 12. 30 and 18. 40 and 23. 50 and 28. 60 and 32."> Describe a method the student could have used to obtain the data in Table 1. You may include a labelled diagram. [6 marks]$q$,
 $q$Level-of-response mark scheme (0-6 marks). Level 3 (5-6 marks): the method would lead to a valid outcome, with key steps identified and logically sequenced. Level 2 (3-4 marks): the method would not necessarily lead to a valid outcome; most steps identified, but not fully logically sequenced. Level 1 (1-2 marks): the method would not lead to a valid outcome; some relevant steps identified, links not made clear. 0 marks: no relevant content. Indicative content (some could be shown within a labelled diagram): place a glass block on a piece of paper; draw around the glass block; use a ray box to shine a ray of light through the glass block; mark the ray of light entering the glass block; mark the ray of light emerging from the glass block; join the points to show the path of the complete ray through the block; draw a normal line at 90 degrees to the surface; use a protractor to measure the angle of incidence; use a protractor to measure the angle of refraction; use a ray box to shine a ray of light at a range of different angles of incidence; increase the angle of incidence in 10 degree intervals, from 10 degrees to 60 degrees. Methods involving mirrors and reflection score zero. (AO1; spec 4.6.1.3, RPA9)$q$,
@@ -229,11 +229,11 @@ $q$1. Place the glass block on a sheet of paper and draw around it, then remove 
 §COACHING§
 
 A method involving mirrors and reflection scores zero here, this question is specifically about refraction. Cover the full range asked for (10° to 60° in 10° steps), since Level 3 needs a complete, logically ordered method, not just isolated correct ideas.$q$,
-'AO1', 2
+'AO1', 2, 5, 5.30
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '01.3', 'aqa-ph-fh-waves-properties', 2,
 $q$Figure 2 shows some of the results. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig02.webp" alt="Figure 2: a graph of angle of refraction in degrees against angle of incidence in degrees, axes 0 to 40 and 0 to 80, with six points plotted from Table 1: (10,6), (20,12), (30,18), (40,23), (50,28), (60,32)."> The student measured the angles of refraction for two additional angles of incidence. Table 2 shows the additional results. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-table02.webp" alt="Table 2: angle of incidence in degrees paired with angle of refraction in degrees. 70 and 35. 80 and 37."> Complete Figure 2. You should: plot the results from Table 2; draw the line of best fit. [2 marks]$q$,
 $q$points plotted correctly (allow tolerance of ± half a small square; allow a line starting at the origin) [1]; curve drawn passing through points [1]. (AO2; spec 4.6.1.3, RPA9)$q$,
@@ -242,11 +242,11 @@ $q$Plot two more points on Figure 2: (70°, 35°) and (80°, 37°). Then draw a 
 §COACHING§
 
 AQA's own mark scheme marks this by eye, points within half a small square of the true value, and a smooth curve through all of them, so there is no single "correct" hand-drawn line to copy exactly. Plot carefully and let the curve level off naturally rather than forcing it straight.$q$,
-'AO2', 3
+'AO2', 3, 7, 6.50
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '01.4', 'aqa-ph-fh-waves-properties', 1,
 $q$How does Figure 2 show that the angle of refraction is not directly proportional to the angle of incidence? [1 mark]$q$,
 $q$the line curves (allow the line is not straight; allow line does not pass through the origin if consistent with the answer to 01.3). [1 mark] (AO3; spec 4.6.1.3, RPA9)$q$,
@@ -255,11 +255,11 @@ $q$The line on the graph curves, it does not stay straight all the way from the 
 §COACHING§
 
 Direct proportionality only ever looks like one thing on a graph: a straight line through the origin. Any curve immediately rules it out.$q$,
-'AO3', 4
+'AO3', 4, 9, 8.90
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '01.5', 'aqa-ph-fh-waves-properties', 2,
 $q$Figure 3 shows a diagram of a car headlight. The headlight has a lamp, a reflective surface and a transparent cover. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig03.webp" alt="Figure 3: a car headlight, a curved reflective surface around a lamp at its focus, with a flat transparent cover across the open front of the reflector."> Figure 4 shows a ray of light incident on the reflective surface. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig04.webp" alt="Figure 4: the curved reflective surface with a single ray of light drawn from the lamp at the focus, travelling outward to strike the surface, with no normal line or reflected ray shown yet."> Complete Figure 4 to show the reflected ray of light. You should include the normal line at the point where the incident ray meets the reflecting surface. [2 marks]$q$,
 $q$normal drawn [1]; ray reflected so i = r (judge by eye) [1]. (AO2; spec 4.6.1.3)$q$,
@@ -268,11 +268,11 @@ $q$Draw a normal line at right angles to the curved reflective surface, at the e
 §COACHING§
 
 The normal is perpendicular to the surface at that one point, not vertical on the page, this matters more on a curved mirror than a flat one. Angle of incidence always equals angle of reflection, measured from the normal, not from the surface itself.$q$,
-'AO2', 5
+'AO2', 5, 7, 7.10
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '01.6', 'aqa-ph-fh-waves-properties', 1,
 $q$Rays of light pass through the transparent cover of the headlight. Which diagram shows how a ray of light passes through the transparent cover? Tick one box. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-q016-refraction-options.webp" alt="Three diagrams, each showing a ray of light meeting a vertical rectangular transparent block at an angle. Top: the ray bends towards the normal entering the block, then bends away from the normal by the same amount leaving, continuing at the original angle. Middle: the ray bends the opposite way at each surface, ending up travelling more steeply downward after the block. Bottom: the ray passes straight through the block with no bend at either surface."> [1 mark]$q$,
 $q$Top diagram: the ray bends towards the normal on entering the transparent cover, then bends away from the normal by the same amount on leaving, so it continues at its original angle. [1 mark] (AO1; spec 4.6.2.2)$q$,
@@ -282,13 +282,13 @@ The top diagram is correct.
 §COACHING§
 
 A ray entering a denser material bends towards the normal; leaving it, it bends away by the same amount, so the exit ray ends up parallel to the original ray, just shifted sideways, not fainter, not reversed, and not undeviated.$q$,
-'AO1', 6
+'AO1', 6, 5, 4.50
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
 -- ── Question 2 (14 marks) -- Baby walker: forces, work done, gears/moments ──
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '02.1', 'aqa-ph-fh-forces-motion', 2,
 $q$Figure 5 shows a young child using a baby walker. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig05.webp" alt="Figure 5: a young child pushing a baby walker with a curved handle and a toy control panel showing coloured dials, gears, and a colour-gradient strip."> The child is standing still. What is the resultant vertical force on the child? Give a reason for your answer. [2 marks] Resultant vertical force = ___ N Reason ___$q$,
 $q$0 (N) [1]; the child isn't accelerating (vertically) (MP2 dependent on MP1), or upwards forces are equal to the downwards forces (allow forces are balanced) [1]. (AO2; spec 4.5.6.2.1)$q$,
@@ -297,11 +297,11 @@ $q$Resultant vertical force = 0 N, because the upward forces (support from the f
 §COACHING§
 
 Standing still means constant (zero) velocity, so by Newton's First Law the resultant force must be zero, whatever the individual forces happen to add up to.$q$,
-'AO2', 7
+'AO2', 7, 6, 5.90
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '02.2', 'aqa-ph-fh-forces-work-energy', 1,
 $q$Use the Physics Equations Sheet to answer questions 02.2 and 02.3. Write down the equation which links distance (s), force (F) and work done (W). [1 mark]$q$,
 $q$work done = force × distance, or W = F × s [1 mark] (AO1; spec 4.5.2)$q$,
@@ -310,11 +310,11 @@ $q$work done = force × distance, or W = F × s
 §COACHING§
 
 A direct recall from the Equations Sheet, worth memorising outright since it appears constantly.$q$,
-'AO1', 8
+'AO1', 8, 3, 3.25
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '02.3', 'aqa-ph-fh-forces-work-energy', 3,
 $q$The child pushed the baby walker 2.8 m across a horizontal floor. The work done by the child was 35 J. Calculate the horizontal force the child applied to the baby walker. [3 marks] Horizontal force = ___ N$q$,
 $q$35 = F × 2.8 [1]; F = 35 ÷ 2.8 [1]; F = 12.5 (N) [1]. Allow 13 (N). (AO2; spec 4.5.2)$q$,
@@ -324,11 +324,11 @@ F = 35 ÷ 2.8 = 12.5 N
 §COACHING§
 
 Rearrange before you calculate: F = W ÷ s. Write the substitution step even if you do the division on a calculator, since that step is where a mark sits.$q$,
-'AO2', 9
+'AO2', 9, 7, 6.80
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '02.4', 'aqa-ph-fh-forces-motion', 2,
 $q$The child pushed the baby walker from a carpet onto a hard floor. The child applied the same horizontal force to the baby walker. Explain why the speed of the baby walker increased. [2 marks]$q$,
 $q$the resistive force has decreased (allow friction (between the wheels and the floor) has decreased) [1]; so the resultant force increases [1]. (AO3; spec 4.5.1.4, 4.5.6.2.1, 4.5.6.2.2)$q$,
@@ -337,11 +337,11 @@ $q$Friction between the wheels and the floor is lower on the hard floor than on 
 §COACHING§
 
 Same applied force, smaller opposing force: it is the resultant force that has changed, and the resultant force is what determines the acceleration.$q$,
-'AO3', 10
+'AO3', 10, 9, 9.15
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '02.5', 'aqa-ph-h-forces-levers-gears', 1,
 $q$There are some toy gears on the front of the baby walker. Figure 6 shows the gears. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig06.webp" alt="Figure 6: two meshed gears, larger Gear A with the pivot marked at its centre and an arrow labelled 7.5 cm from the pivot to a force arrow labelled 2.0 N, and smaller Gear B meshed against it."> The child applies a force to gear A. This causes a moment about the pivot, so gear A rotates. Use the Physics Equations Sheet to answer questions 02.5 and 02.6. Write down the equation which links distance (d), force (F) and moment of a force (M). [1 mark]$q$,
 $q$moment = force × distance, or M = F × d [1 mark] (AO1; spec 4.5.4)$q$,
@@ -350,11 +350,11 @@ $q$moment = force × distance, or M = F × d
 §COACHING§
 
 Another straight Equations Sheet recall. The distance used must be measured perpendicular (normal) to the force's line of action.$q$,
-'AO1', 11
+'AO1', 11, 5, 5.00
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '02.6', 'aqa-ph-h-forces-levers-gears', 3,
 $q$The child applies a force of 2.0 N on gear A. The perpendicular distance between the force and the pivot is 7.5 cm. Calculate the moment of the force about the pivot. [3 marks] Moment of force = ___ N m$q$,
 $q$7.5 cm = 0.075 m [1]; M = 2.0 × 0.075 (allow a correct substitution of an incorrectly / not converted value of d) [1]; M = 0.15 (Nm) (allow an answer consistent with an incorrectly / not converted value of d) [1]. (AO2; spec 4.5.4)$q$,
@@ -364,11 +364,11 @@ M = 2.0 × 0.075 = 0.15 N m
 §COACHING§
 
 The cm-to-m conversion is worth its own mark. Even without it, a correct substitution and calculation still earn partial credit.$q$,
-'AO2', 12
+'AO2', 12, 9, 8.55
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '02.7', 'aqa-ph-h-forces-levers-gears', 2,
 $q$Explain what happens to gear B when the child applies the force to gear A. [2 marks]$q$,
 $q$gear B rotates in the opposite direction (to gear A) (allow gear B rotates clockwise; allow gear B rotates faster than gear A) [1]; (because) gear A exerts a force on gear B (allow (because) gear A causes a moment about the pivot of gear B) [1]. (AO2; spec 4.5.4)$q$,
@@ -377,13 +377,13 @@ $q$Gear B rotates in the opposite direction to gear A (clockwise, if gear A turn
 §COACHING§
 
 Meshed gears always turn opposite ways to each other. Give both the direction and the cause (the force gear A exerts on gear B), a direction alone only earns half the marks.$q$,
-'AO2', 13
+'AO2', 13, 8, 8.40
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
 -- ── Question 3 (16 marks) -- Space physics: solar system, black holes, red-shift, nucleosynthesis ──
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '03.1', 'aqa-ph-h-space', 3,
 $q$The Universe contains many stars. The Sun is the star at the centre of our solar system. Give three other types of object that form our solar system. [3 marks] 1 ___ 2 ___ 3 ___$q$,
 $q$Any three from: planets (allow asteroids / meteors / meteoroids / meteorites; allow comets) [1]; dwarf planets [1]; moons (or natural satellites) [1]. (AO1; spec 4.8.1.1)$q$,
@@ -392,11 +392,11 @@ $q$Planets, dwarf planets, and moons (natural satellites). Comets and asteroids 
 §COACHING§
 
 List three genuinely different object types, not variations on the same one, "planets" and "dwarf planets" both count separately, but a third different type is still needed for full marks.$q$,
-'AO1', 14
+'AO1', 14, 5, 4.80
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '03.2', 'aqa-ph-h-space', 1,
 $q$Some main sequence stars will eventually form black holes. Table 3 gives the mass of four stars. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-table03.webp" alt="Table 3: star and mass in kg. Arcturus, 2.2 times 10 to the 30. Betelgeuse, 2.2 times 10 to the 31. Cygni A, 1.4 times 10 to the 30. The Sun, 2.0 times 10 to the 30."> Which star in Table 3 is most likely to form a black hole? [1 mark]$q$,
 $q$Betelgeuse. [1 mark] (AO3; spec 4.8.1.2)$q$,
@@ -405,11 +405,11 @@ $q$Betelgeuse, since it has by far the greatest mass, 2.2 × 10³¹ kg, roughly 
 §COACHING§
 
 Only the most massive stars end their lives as black holes. Read the table for the largest mass, not just the largest-looking number on the page (10³¹ beats 10³⁰, whatever the digit in front looks like).$q$,
-'AO3', 15
+'AO3', 15, 9, 9.30
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '03.3', 'aqa-ph-h-space', 1,
 $q$The distance from Cygni A to the Earth is 1.1 × 10⁸ gigametres. Which distance is the same as 1.1 × 10⁸ gigametres? Tick one box. 1.1 × 10¹¹ m / 1.1 × 10¹⁴ m / 1.1 × 10¹⁷ m / 1.1 × 10²⁰ m [1 mark]$q$,
 $q$1.1 × 10¹⁷ m. [1 mark] (AO2; spec 4.8.1.2)$q$,
@@ -418,11 +418,11 @@ $q$1.1 × 10¹⁷ m.
 §COACHING§
 
 1 gigametre = 10⁹ m, so add the powers of ten together: 10⁸ × 10⁹ = 10¹⁷.$q$,
-'AO2', 16
+'AO2', 16, 7, 7.10
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '03.4', 'aqa-ph-h-space', 3,
 $q$The light spectrum from every galaxy includes dark lines. The lines have the same pattern. Figure 7 shows the position of dark lines in the visible spectra of light from the Sun and from two distant galaxies. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig07.webp" alt="Figure 7: three horizontal spectrum bars labelled The Sun, Galaxy A, and Galaxy B, each running from Blue on the left to Red on the right, with a pair of dark absorption lines marked on each. The Sun's lines sit close to the blue end. Galaxy A's lines are shifted furthest toward the red end. Galaxy B's lines are shifted toward red but less far than Galaxy A's."> Explain what these light spectra tell us about the velocities of galaxy A and galaxy B. [3 marks]$q$,
 $q$both show red-shift so both are moving away from us, or the wavelength of the (absorption) lines has increased so both are moving away from us [1]; A shows a greater red-shift (than B) [1]; so A is travelling faster (than B) [1]. (AO3; spec 4.8.2)$q$,
@@ -431,11 +431,11 @@ $q$Compared with the Sun's spectrum, both Galaxy A's and Galaxy B's dark lines h
 §COACHING§
 
 Three separate marking points here: state that red-shift means moving away, compare which galaxy shows more of it, then translate that comparison into a speed comparison. All three need to be there.$q$,
-'AO3', 17
+'AO3', 17, 9, 10.70
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '03.5', 'aqa-ph-h-space', 4,
 $q$The distance between Arcturus and the Earth is 3.6 × 10¹⁴ km. speed of light = 3.0 × 10⁸ m/s Calculate the time taken for light from Arcturus to reach the Earth. Use the Physics Equations Sheet. [4 marks] Time taken = ___ s$q$,
 $q$s = 3.6 × 10¹⁷ (m) (unit conversion from km) [1]; 3.6 × 10¹⁷ = 3.0 × 10⁸ × t (allow a correct substitution of an incorrectly / not converted value for s) [1]; t = 3.6 × 10¹⁷ ÷ 3.0 × 10⁸ (allow a correct re-arrangement using an incorrectly / not converted value for s) [1]; t = 1.2 × 10⁹ (s), or t = 1,200,000,000 (s) (allow a correct calculation using an incorrectly / not converted value for s) [1]. (AO2; spec 4.5.6.1.2)$q$,
@@ -445,11 +445,11 @@ s = v × t, so t = s ÷ v = (3.6 × 10¹⁷) ÷ (3.0 × 10⁸) = 1.2 × 10⁹ s.
 §COACHING§
 
 Convert km to m first (× 1000, so the power of ten jumps by 3), that conversion carries its own mark before you even rearrange the equation.$q$,
-'AO2', 18
+'AO2', 18, 9, 8.90
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '03.6', 'aqa-ph-h-space', 4,
 $q$When stars are formed, they contain mostly hydrogen. Describe how stars produce all other naturally occurring elements. [4 marks]$q$,
 $q$Level-of-response mark scheme (0-4 marks). Level 2 (3-4 marks): scientifically relevant facts, events or processes are identified and given in detail to form an accurate account. Level 1 (1-2 marks): facts, events or processes are identified and simply stated but their relevance is not clear. 0 marks: no relevant content. Indicative content: fusion occurs at high temperatures; fusion produces new elements; hydrogen nuclei fuse to form helium nuclei; hydrogen (in the core) begins to run out; helium nuclei fuse to make heavier elements; up to iron; some massive stars become supernovae; creating elements heavier than iron. (AO1; spec 4.8.1.2)$q$,
@@ -458,13 +458,13 @@ $q$Inside a star, fusion happens at very high temperatures: hydrogen nuclei fuse
 §COACHING§
 
 This is Level-of-Response: sequence the whole story (hydrogen to helium, helium to heavier elements up to iron, then supernovae for anything heavier than iron), rather than just naming "fusion" once and stopping.$q$,
-'AO1', 19
+'AO1', 19, 7, 6.70
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
 -- ── Question 4 (14 marks) -- Mariana Trench: pressure with depth, P/S waves, Earth structure ──
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '04.1', 'aqa-ph-fh-forces-pressure', 2,
 $q$The Mariana Trench is the deepest part of the Pacific Ocean. Figure 8 shows a submarine going to the bottom of the Mariana Trench. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig08.webp" alt="Figure 8: a cross-section of the ocean floor showing the Mariana Trench, a deep narrow valley, with a submarine partway down it and a labelled double-headed arrow marking the depth of the submarine below the surface of the sea. Labelled 'Not to scale'."> The depth of the submarine increases. Explain what happens to the pressure on the submarine. [2 marks]$q$,
 $q$the height of the (column of) water above the submarine increases (allow volume / mass for height) [1]; which increases the force / weight (of the water) acting on the submarine so pressure increases (allow p = hρg and ρ and g remain constant so pressure increases) [1]. (AO1; spec 4.5.5.1.2)$q$,
@@ -473,11 +473,11 @@ $q$As the submarine goes deeper, the height of the column of water above it incr
 §COACHING§
 
 p = hρg: density and g don't change, so pressure depends only on the height of water above, and that height is what's increasing here.$q$,
-'AO1', 20
+'AO1', 20, 3, 3.40
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '04.2', 'aqa-ph-fh-forces-pressure', 4,
 $q$The submarine moved from the surface of the water to the bottom of the Mariana Trench. The change in pressure was 110,000 kPa. mean density of sea water = 1026 kg/m³ gravitational field strength = 9.8 N/kg Calculate the depth of the Mariana Trench. Use the Physics Equations Sheet. [4 marks] Depth = ___ m$q$,
 $q$p = 110,000,000 Pa (unit conversion from kPa) [1]; 110,000,000 = 1026 × 9.8 × h (allow a correct substitution of an incorrectly / not converted value for p) [1]; h = 110,000,000 ÷ (1026 × 9.8) (allow a correct re-arrangement using an incorrectly / not converted value for p) [1]; h = 10,940 (m) (allow a correct calculation using an incorrectly / not converted value for p; allow 11,000 (m) if correct working shown) [1]. (AO2; spec 4.5.5.1.2)$q$,
@@ -487,11 +487,11 @@ p = hρg, so h = p ÷ (ρg) = 110,000,000 ÷ (1026 × 9.8) = 10,940 m.
 §COACHING§
 
 kPa to Pa is × 1000, its own mark on its own. Round sensibly only at the end, 11,000 m is accepted if your full working is shown.$q$,
-'AO2', 21
+'AO2', 21, 7, 7.00
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '04.3', 'aqa-ph-fh-waves-sound', 1,
 $q$Earthquakes often occur at the Mariana Trench. P-waves and S-waves are produced by earthquakes. Which statement describes P-waves and S-waves? [1 mark] Tick one box. Both P-waves and S-waves are longitudinal. / Both P-waves and S-waves are transverse. / P-waves are longitudinal and S-waves are transverse. / P-waves are transverse and S-waves are longitudinal.$q$,
 $q$P-waves are longitudinal and S-waves are transverse. [1 mark] (AO1; spec 4.6.1.5)$q$,
@@ -500,11 +500,11 @@ $q$P-waves are longitudinal and S-waves are transverse.
 §COACHING§
 
 P for Primary and Push (longitudinal); S for Secondary and Shake (transverse) is a reliable way to remember which is which.$q$,
-'AO1', 22
+'AO1', 22, 4, 3.60
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '04.4', 'aqa-ph-fh-waves-sound', 2,
 $q$Figure 9 shows the layers inside the Earth. An earthquake occurs at the position shown. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig09.webp" alt="Figure 9: a cross-section of the Earth showing the solid mantle as the largest outer ring, the liquid outer core as a middle ring, and the solid inner core as a small central circle, with the position of an earthquake marked at the top of the circle and points A, B, C, D marked clockwise around the outer edge at roughly the 2, 4, 5 and 6 o'clock positions."> Which letter shows the position where only P-waves will be detected? [2 marks] Give a reason for your answer. Tick one box. A / B / C / D Reason ___$q$,
 $q$D [1]; only P-waves can travel through liquids (allow only P-waves can travel through the outer core; allow S waves cannot travel through liquids / the outer core) (MP2 dependent on MP1) [1]. (AO3; spec 4.6.1.5)$q$,
@@ -514,11 +514,11 @@ The path from the earthquake to D passes through the liquid outer core. S-waves 
 §COACHING§
 
 Work out which letter's path from the earthquake crosses the liquid outer core, any path that does can only carry P-waves, since S-waves are blocked by liquids.$q$,
-'AO3', 23
+'AO3', 23, 9, 9.30
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '04.5', 'aqa-ph-fh-waves-sound', 3,
 $q$An S-wave has a frequency of 3.6 Hz. The S-wave has a speed of 4.5 km/s. Calculate the wavelength of this S-wave. Use the Physics Equations Sheet. [3 marks] Wavelength = ___ m$q$,
 $q$4500 = 3.6 × λ (unit conversion of v from km/s to m/s) (allow a correct substitution of an incorrectly / not converted value for v) [1]; λ = 4500 ÷ 3.6 (allow a correct re-arrangement using an incorrectly / not converted value for v) [1]; λ = 1250 (m) (allow 1300 (m); only allow an answer consistent with a correctly converted value for v) [1]. (AO2; spec 4.6.1.2)$q$,
@@ -528,11 +528,11 @@ v = f × λ, so λ = v ÷ f = 4500 ÷ 3.6 = 1250 m.
 §COACHING§
 
 km/s to m/s is × 1000, that conversion is its own mark, and also the only route to the answer AQA will accept as final.$q$,
-'AO2', 24
+'AO2', 24, 8, 7.50
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '04.6', 'aqa-ph-fh-waves-sound', 2,
 $q$A seismometer is a device that detects earthquakes. P-waves travel at a known speed between an earthquake and a seismometer. S-waves travel at a slower speed than P-waves. A P-wave and an S-wave from the earthquake arrive at the seismometer at different times. Describe the relationship between the distance from the earthquake to the seismometer and the time between the P-wave and the S-wave arriving. [2 marks]$q$,
 $q$the distance is (directly) proportional to the time between the two waves arriving (at the seismometer) (allow they are (directly) proportional) [2]. Allow a greater distance means a greater time for 1 mark; allow there is a positive correlation for 1 mark. (AO3; spec 4.5.6.1.2)$q$,
@@ -541,13 +541,13 @@ $q$The distance from the earthquake to the seismometer is directly proportional 
 §COACHING§
 
 "Directly proportional" is the precise, full-marks phrase if you can use it correctly; "greater distance means greater time" alone only earns partial credit.$q$,
-'AO3', 25
+'AO3', 25, 9, 9.90
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
 -- ── Question 5 (9 marks) -- Trolley/runway investigation of F = ma (RPA7) ──
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '05.1', 'aqa-ph-fh-forces-motion', 1,
 $q$A student investigated how the acceleration of a trolley varies with the resultant force on the trolley. Figure 10 shows some of the equipment used. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig10.webp" alt="Figure 10: a trolley on a horizontal runway on a bench, attached by a string over a pulley at the end of the bench to a hanging mass hanger, with the force F labelled acting through the string in the direction of the trolley's motion."> Figure 10 shows the force F which acts through the string. What name is given to force F? [1 mark]$q$,
 $q$tension [1 mark] (AO2; spec 4.5.1.2)$q$,
@@ -556,11 +556,11 @@ $q$Tension.
 §COACHING§
 
 The force transmitted along a stretched string or wire is always called tension, whatever is producing it.$q$,
-'AO2', 26
+'AO2', 26, 6, 5.50
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '05.2', 'aqa-ph-fh-forces-motion', 1,
 $q$Give one variable that should have been a control variable in this investigation. [1 mark]$q$,
 $q$(combined) mass of trolley and mass hanger (allow mass / weight of trolley / hanger) [1 mark] (AO1; spec 4.5.6.2.2, RPA7)$q$,
@@ -569,11 +569,11 @@ $q$The combined mass of the trolley and the mass hanger, kept the same for every
 §COACHING§
 
 A control variable is something you deliberately keep constant so it can't be an alternative explanation for your results, here, the total mass being accelerated.$q$,
-'AO1', 27
+'AO1', 27, 3, 3.38
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '05.3', 'aqa-ph-fh-forces-motion', 3,
 $q$The student held the trolley stationary and then released it. The trolley moved along the runway with a constant acceleration. The student recorded the time taken for the trolley to travel a measured distance along the runway. Describe how the acceleration of the trolley can be calculated using the time taken and distance travelled by the trolley. [3 marks]$q$,
 $q$divide distance travelled by time taken to give (average / mean) velocity (allow speed for velocity throughout) [1]; double mean velocity (to give maximum velocity) [1]; divide change in velocity by time taken (to give acceleration) (allow divide maximum velocity by time (to give acceleration); allow use of v² = u² + 2as; allow correct use of s = ut + ½at²) [1]. (AO3; spec 4.5.6.1.5, 4.5.6.1.2, 4.5.6.2.2, RPA7)$q$,
@@ -582,11 +582,11 @@ $q$Divide the distance travelled by the time taken to find the mean velocity. Si
 §COACHING§
 
 The "double the mean velocity" step is the one students most often skip. It only works because the trolley starts from rest with constant acceleration, so the mean velocity is exactly half the final velocity.$q$,
-'AO3', 28
+'AO3', 28, 9, 9.55
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '05.4', 'aqa-ph-fh-forces-motion', 2,
 $q$For one set of results, the force acting through the string was 2.0 N. The student released the trolley three times and determined the following values for acceleration: 1.36 m/s², 1.39 m/s², 1.33 m/s² Calculate the uncertainty in the values of acceleration. [2 marks] Uncertainty = ± ___ m/s²$q$,
 $q$(range =) 0.06 (m/s²), or (mean =) 1.36 (m/s²) [1]; uncertainty = ±0.03 (m/s²) [1]. (AO3; spec 4.5.6.2.2, RPA7)$q$,
@@ -596,11 +596,11 @@ Uncertainty = range ÷ 2 = ±0.03 m/s².
 §COACHING§
 
 Uncertainty from a set of repeat readings is half the range (highest minus lowest), not the range itself.$q$,
-'AO3', 29
+'AO3', 29, 9, 9.53
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '05.5', 'aqa-ph-fh-forces-motion', 2,
 $q$The runway was then raised at one end. The force acting through the string remained the same. Figure 11 shows this. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig11.webp" alt="Figure 11: the same trolley and runway apparatus as Figure 10, now with the runway raised at the trolley's end on a wooden block, so the trolley starts higher up and rolls down the slope while still connected by string over the pulley to the hanging mass, with the same force labelled 2.0 N."> Explain how the acceleration was affected by raising the end of the runway. [2 marks]$q$,
 $q$a component of the weight of the trolley acts parallel to runway [1]; (so) resultant force increases so acceleration increases [1]. Allow: work is done (by raising the trolley) so the trolley gains gravitational potential energy (1); gravitational potential energy is transferred to kinetic energy, increasing the final velocity and the acceleration (1). (AO3; spec 4.5.6.2.2)$q$,
@@ -609,13 +609,13 @@ $q$Raising the runway means a component of the trolley's weight now acts down th
 §COACHING§
 
 Only the component of weight parallel to the runway's surface matters here, not the whole weight, that's why it's specifically a "component" of weight, not the full force.$q$,
-'AO3', 30
+'AO3', 30, 9, 9.90
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
 -- ── Question 6 (8 marks) -- Radio waves and gamma rays, EM spectrum ──
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '06.1', 'aqa-ph-fh-waves-electromagnetic', 3,
 $q$Radio waves and gamma rays both transfer energy. Give three other similarities between radio waves and gamma rays. [3 marks] 1 ___ 2 ___ 3 ___$q$,
 $q$Any three from, 1 mark each: they travel at the same speed (in a vacuum / air) (allow they travel at the speed of light); they can travel through a vacuum (allow they do not need a medium (to travel)); they are transverse (waves); they are electromagnetic (waves) (ignore they can be reflected / refracted / absorbed / transmitted / diffracted). [3 marks] (AO1; spec 4.6.2.1)$q$,
@@ -624,11 +624,11 @@ $q$They travel at the same speed (the speed of light) in a vacuum; they can both
 §COACHING§
 
 All of these come from being part of the same electromagnetic spectrum. "They can be reflected / refracted" is true but too generic to count, since that applies to waves in general, not specifically to EM ones.$q$,
-'AO1', 31
+'AO1', 31, 4, 3.80
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '06.2', 'aqa-ph-fh-waves-electromagnetic', 1,
 $q$Both radio waves and gamma rays are used in medicine. Give one medical use of gamma rays. [1 mark]$q$,
 $q$Any one from: (medical) imaging (allow correctly named method e.g. PET scan, tracer, gamma camera; do not accept ultrasound, CT scan, X-rays, MRI scan); (medical) treatments (allow correctly named treatment e.g. radiotherapy, brachiotherapy, gamma knife; allow sterilising medical equipment). [1 mark] (AO1; spec 4.6.2.4)$q$,
@@ -637,11 +637,11 @@ $q$Radiotherapy, to treat cancer (or medical imaging, e.g. a PET scan using a ga
 §COACHING§
 
 Be specific and gamma-based: X-rays, CT, MRI and ultrasound all use different parts of the spectrum, or no EM waves at all, so none of them count as a gamma-ray use here.$q$,
-'AO1', 32
+'AO1', 32, 4, 3.50
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '06.3', 'aqa-ph-fh-waves-electromagnetic', 2,
 $q$Explain why exposure to gamma rays can be harmful but exposure to radio waves is not harmful. [2 marks]$q$,
 $q$gamma rays are (weakly) ionising but radio waves are not (ionising) [1]; (so gamma rays) can cause mutations in genes / DNA (allow can cause cancer; allow damages / kills cells) [1]. (AO1; spec 4.6.2.3)$q$,
@@ -650,11 +650,11 @@ $q$Gamma rays are ionising, but radio waves are not. Because gamma rays are ioni
 §COACHING§
 
 It comes down to ionising versus non-ionising: state that difference first, then the consequence (DNA damage or mutation), rather than jumping straight to "gamma rays are dangerous" without saying why.$q$,
-'AO1', 33
+'AO1', 33, 4, 4.40
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '06.4', 'aqa-ph-fh-waves-electromagnetic', 2,
 $q$Some medical scanners produce radio waves at a specific frequency. Explain how radio waves are produced at a specific frequency. [2 marks]$q$,
 $q$(radio waves are produced by) oscillations in electrical circuits (of the scanner) (allow (radio waves are produced by) alternating current; allow (radio waves are produced by) oscillating electrons (in an aerial)) [1]; the radio waves have the same frequency as the oscillations (MP2 dependent on MP1) [1]. (AO1; spec 4.6.2.3)$q$,
@@ -663,13 +663,13 @@ $q$Radio waves are produced by oscillations in an electrical circuit, an alterna
 §COACHING§
 
 The frequency of the wave is set by the frequency of the oscillating current that creates it: match the two, and you control the radio wave's frequency.$q$,
-'AO1', 34
+'AO1', 34, 5, 4.90
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
 -- ── Question 7 (18 marks) -- Train velocity-time graph, braking, stopping distance ──
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '07.1', 'aqa-ph-fh-forces-motion', 3,
 $q$Figure 12 shows a velocity-time graph for a train travelling between two stations. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig12.webp" alt="Figure 12: a velocity-time graph, velocity in m/s on the y-axis 0 to 60, time in s on the x-axis 0 to 1000. The line rises from (0,0) to (220,56), stays flat at 56 until 600 s, falls steeply to (720,20), then falls more gently to (960,0)."> Determine the distance travelled by the train in the first 600 s of the journey. [3 marks] Distance = ___ m$q$,
 $q$(½ × 56 × 220) = 6160 [1]; (56 × 380) = 21,280 [1]; (6160 + 21,280) = 27,440 (m) (allow a correctly calculated total distance from an incorrectly calculated area of the rectangle and / or the triangle) [1]. (AO2; spec 4.5.6.1.5)$q$,
@@ -680,11 +680,11 @@ Total distance = 6160 + 21,280 = 27,440 m.
 §COACHING§
 
 Distance from a velocity-time graph is the area underneath it. Split the shape into a triangle and a rectangle and add the two areas, don't try to read distance directly off the velocity axis.$q$,
-'AO2', 35
+'AO2', 35, 6, 6.30
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '07.2', 'aqa-ph-fh-forces-motion', 3,
 $q$Explain what happens to the braking force as the train decelerates. Use information from Figure 12. [3 marks]$q$,
 $q$the gradient is less after 720 s (allow the gradient is less after (velocity decreases to) 20 m/s) [1]; so the deceleration is smaller [1]; so the braking force is smaller [1]. (AO3; spec 4.5.6.1.5, 4.5.6.2.2)$q$,
@@ -693,11 +693,11 @@ $q$Between 600 s and 720 s the graph is steep, velocity falls from 56 m/s to 20 
 §COACHING§
 
 The gradient of a velocity-time graph is the acceleration (or deceleration). Find where the line's steepness changes, that's where the braking force itself has changed.$q$,
-'AO3', 36
+'AO3', 36, 9, 9.18
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '07.3', 'aqa-ph-fh-forces-motion', 3,
 $q$Determine the maximum deceleration of the train. [3 marks] Deceleration = ___ m/s²$q$,
 $q$correct section of line identified (judge by values used) [1]; attempt to calculate a gradient using values from the correct section of the graph, e.g. gradient = (-)36/120 (allow use of correct values obtained from the section of the graph after 720 s) [1]; correct calculation using their correct values, e.g. a = (-)0.3 (m/s²) (allow a correct calculation using correct values obtained from the section of the graph after 720 s; if no other marks scored, an answer that rounds to 0.16 (m/s²) scores 1 mark) [1]. (AO2; spec 4.5.6.1.5)$q$,
@@ -708,11 +708,11 @@ Maximum deceleration = 0.3 m/s².
 §COACHING§
 
 Maximum deceleration means the steepest falling section of the graph, here that's 600 s to 720 s, not the shallower section after 720 s. Identify the section by eye first, then calculate its gradient.$q$,
-'AO2', 37
+'AO2', 37, 7, 7.05
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '07.4', 'aqa-ph-fh-forces-motion', 6,
 $q$Another train travels at a speed of 60 m/s. A constant braking force of 270,000 N causes the train to decelerate and stop. mass of train = 240,000 kg Calculate the distance travelled while the braking force is applied. Use the Physics Equations Sheet. [6 marks] Distance travelled = ___ m$q$,
 $q$(-)270,000 = 240,000 × a [1]; a = (-)270,000 ÷ 240,000 [1]; a = (-)1.125 (m/s²) (the equation F = ma must have been used to score subsequent marks) [1]; 0 = 60² + (2 × (-1.125) × s) (allow a correct substitution using their value of deceleration) [1]; s = 3600 ÷ 2.25 (allow a correct re-arrangement using their value of deceleration) [1]; s = 1600 (m) (allow a correct calculation using their value of deceleration) [1]. Equivalent routes via Ek = ½mv² and work done, or via momentum and F = change in momentum ÷ time, are also accepted and give the same s = 1600 (m). (AO2; spec 4.5.6.1.5)$q$,
@@ -723,11 +723,11 @@ s = 3600 ÷ 2.25 = 1600 m.
 §COACHING§
 
 Find the deceleration from F = ma first, then use it in v² = u² + 2as with final velocity v = 0. There are other valid routes (via kinetic energy or via momentum) that all reach the same 1600 m, use whichever equation you're most confident rearranging.$q$,
-'AO2', 38
+'AO2', 38, 9, 8.63
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '07.5', 'aqa-ph-fh-forces-motion', 3,
 $q$It is illegal for train drivers to drink alcohol before driving a train. Explain how drinking alcohol would affect the stopping distance of a train. [3 marks]$q$,
 $q$stopping distance includes both braking distance and thinking distance [1]; alcohol increases driver's reaction time [1]; which will increase the thinking distance so stopping distance increases [1]. (AO1; spec 4.5.6.3.1, 4.5.6.3.2)$q$,
@@ -736,13 +736,13 @@ $q$Stopping distance is made up of thinking distance plus braking distance. Alco
 §COACHING§
 
 Alcohol affects reaction time, not the braking itself, so it's specifically the thinking distance that lengthens. State both halves of stopping distance to show you know the full picture, not just "alcohol is dangerous."$q$,
-'AO1', 39
+'AO1', 39, 5, 5.30
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
 -- ── Question 8 (8 marks) -- Electromagnetic induction demo, moving-coil microphone ──
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '08.1', 'aqa-ph-fh-magnetism-induction', 1,
 $q$Figure 13 shows some apparatus used by a teacher in a demonstration. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig13.webp" alt="Figure 13: two bar magnets, N pole down, positioned one above a horizontal wire and one below it, with the wire connected in a circuit to an ammeter reading from -1.0 to 1.0, needle centred on 0. A label points to the wire held between the magnets."> The teacher moved the wire upwards between the magnets. The needle on the ammeter deflected to a value of +0.4 mA and then returned to zero. What effect did this demonstrate? [1 mark]$q$,
 $q$generator (effect) (allow electromagnetic induction) [1 mark] (AO1; spec 4.7.3.1)$q$,
@@ -751,11 +751,11 @@ $q$The generator effect (electromagnetic induction).
 §COACHING§
 
 A changing magnetic field, or a conductor moving through one, inducing a current is always the generator effect, the reverse process to the motor effect.$q$,
-'AO1', 40
+'AO1', 40, 3, 3.00
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '08.2', 'aqa-ph-fh-magnetism-induction', 3,
 $q$Explain why a current was detected when the wire in Figure 13 was moved upwards. [3 marks]$q$,
 $q$wire cuts through the magnetic field (between the magnets) [1]; a potential difference was induced (across the wire) [1]; as it was part of complete circuit (there was a current in the circuit) [1]. (AO1; spec 4.7.3.1)$q$,
@@ -764,11 +764,11 @@ $q$As the wire moves upwards, it cuts through the magnetic field between the mag
 §COACHING§
 
 Three separate links in the chain: cutting field lines induces a pd, and a pd only drives a current if the circuit is actually complete. State all three to get full marks.$q$,
-'AO1', 41
+'AO1', 41, 4, 4.30
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '08.3', 'aqa-ph-fh-magnetism-induction', 1,
 $q$The teacher reversed the direction of the magnetic field. The teacher replaced the wire in its original position. The teacher moved the wire upwards in the same way as before. What was the deflection of the needle on the ammeter? [1 mark] Tick one box. The needle will deflect to -0.4 mA. / The needle will not move. / The needle will deflect to +0.4 mA.$q$,
 $q$the needle will deflect to -0.4 mA [1 mark] (AO3; spec 4.7.3.1)$q$,
@@ -777,11 +777,11 @@ $q$The needle will deflect to -0.4 mA.
 §COACHING§
 
 Reversing the magnetic field reverses the direction of the induced current, so the deflection flips to the opposite side, same size, opposite sign.$q$,
-'AO3', 42
+'AO3', 42, 9, 9.00
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;
 
-INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)
+INSERT INTO past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)
 SELECT pp.id, '08.4', 'aqa-ph-fh-magnetism-induction', 3,
 $q$Figure 14 shows a sound wave incident on the diaphragm of a moving-coil microphone. The inside of the microphone includes a small coil of wire and a magnet. <img src="/assets/images/physics/pasco/aqa-8463-2h-jun24-fig14.webp" alt="Figure 14: a moving-coil microphone in cross-section. A sound wave travels toward a diaphragm on the left, attached to a coil of wire wound around a cylindrical magnet with S poles at top and bottom and N pole in the centre. Two wires labelled 'to electric circuit' lead out from the coil."> Explain why the sound waves have an effect on the electric circuit. [3 marks]$q$,
 $q$(the pressure variations in) the sound (waves) cause the diaphragm to vibrate (allow air particles collide with diaphragm causing it to vibrate; diaphragm moves is insufficient; do not accept moves the diaphragm up and down) [1]; the diaphragm causes the coil / wire to vibrate (do not accept moves the coil / wire up and down) [1]; (the coil repeatedly changes direction) inducing an alternating current (in the circuit) [1]. If MP1 and MP2 do not score, allow sound (waves) cause the coil / wire to vibrate for 1 mark. (AO1; spec 4.7.3.3)$q$,
@@ -790,6 +790,6 @@ $q$The pressure variations in the sound wave cause the diaphragm to vibrate. Sin
 §COACHING§
 
 Follow the chain all the way through: sound vibrates the diaphragm, the diaphragm vibrates the coil, the moving coil in the magnetic field induces a current, that's the generator effect again, just triggered by sound this time.$q$,
-'AO1', 43
+'AO1', 43, 5, 5.30
 FROM past_papers pp JOIN subjects s ON s.id = pp.subject_id
 WHERE s.name='Physics' AND pp.exam_board='AQA' AND pp.tier='Higher' AND pp.year=2024 AND pp.series='June' AND pp.paper_number=2;

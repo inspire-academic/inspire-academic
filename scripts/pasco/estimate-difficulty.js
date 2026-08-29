@@ -28,18 +28,25 @@
 //      one question — e.g. 4(a) before 4(d) — a real, documented exam
 //      design convention, not an assumption specific to this script).
 //
-// This produces a defensible ESTIMATE, not a fact — output is a report
-// for review, this script does not write to any seed file or database.
+// This produces a defensible ESTIMATE, not a fact.
 //
-// Usage: node scripts/pasco/estimate-difficulty.js <seed-file>
+// Usage:
+//   node scripts/pasco/estimate-difficulty.js <seed-file>            (report only, default)
+//   node scripts/pasco/estimate-difficulty.js <seed-file> --write    (also writes grade_band_estimate
+//                                                                      /grade_band_estimate_raw into the
+//                                                                      seed file's INSERT statements —
+//                                                                      see supabase/past_paper_questions_grade_band.sql
+//                                                                      for the columns this targets)
 
 const fs = require('fs');
 const path = require('path');
 
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const seedFileArg = process.argv[2];
+const args = process.argv.slice(2).filter(a => a !== '--write');
+const writeMode = process.argv.includes('--write');
+const seedFileArg = args[0];
 if (!seedFileArg) {
-  console.error('Usage: node scripts/pasco/estimate-difficulty.js <seed-file>');
+  console.error('Usage: node scripts/pasco/estimate-difficulty.js <seed-file> [--write]');
   process.exit(1);
 }
 const seedFilePath = path.isAbsolute(seedFileArg) ? seedFileArg : path.join(REPO_ROOT, seedFileArg);
@@ -69,7 +76,12 @@ function findSlugTier(slug) {
 // Same parsing regex as build-review-artifact.js, reused for consistency
 // rather than re-deriving a second slightly-different parser for the
 // same file format.
-const QUESTION_RE = /INSERT INTO past_paper_questions[^\n]*\n\s*SELECT pp\.id, '([^']+)', '([^']+)', (\d+),\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n'([^']*)', (\d+)\s*\nFROM past_papers pp JOIN subjects s ON s\.id = pp\.subject_id\s*\nWHERE s\.name='([^']+)' AND pp\.exam_board='([^']+)' AND pp\.tier='([^']+)' AND pp\.year=(\d+) AND pp\.series='([^']+)' AND pp\.paper_number=(\d+);/g;
+// The (?:, \d+, [\d.]+)? tail makes grade_band_estimate/
+// grade_band_estimate_raw optional to match — added 2026-08-29 so this
+// regex (shared with build-review-artifact.js) keeps working on files
+// already annotated by this script's --write mode, not just untouched
+// ones.
+const QUESTION_RE = /INSERT INTO past_paper_questions[^\n]*\n\s*SELECT pp\.id, '([^']+)', '([^']+)', (\d+),\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n\$q\$([\s\S]*?)\$q\$,\s*\n'([^']*)', (\d+)(?:, \d+, [\d.]+)?\s*\nFROM past_papers pp JOIN subjects s ON s\.id = pp\.subject_id\s*\nWHERE s\.name='([^']+)' AND pp\.exam_board='([^']+)' AND pp\.tier='([^']+)' AND pp\.year=(\d+) AND pp\.series='([^']+)' AND pp\.paper_number=(\d+);/g;
 
 const raw = fs.readFileSync(seedFilePath, 'utf8');
 const questions = [];
@@ -78,7 +90,8 @@ while ((m = QUESTION_RE.exec(raw)) !== null) {
   questions.push({
     questionNumber: m[1], specSlug: m[2], marks: parseInt(m[3], 10),
     questionContent: m[4], ao: m[7] || null, orderIndex: parseInt(m[8], 10),
-    subject: m[9], paperTier: m[11]
+    subject: m[9], paperTier: m[11],
+    matchStart: m.index, matchText: m[0], matchOrderIndexValue: m[8]
   });
 }
 if (!questions.length) {
@@ -193,3 +206,34 @@ for (const band of Object.keys(distribution).sort()) {
 const midBandMarks = (marksByBand[4]||0) + (marksByBand[5]||0) + (marksByBand[6]||0);
 const midBandPct = (midBandMarks / totalMarks) * 100;
 console.log(`\nGrade 4-6 share: ${midBandPct.toFixed(1)}% (expect roughly 30-50% for a typical Higher-tier paper — outside that range is worth a second look, not necessarily wrong)`);
+
+// ── Write mode ──────────────────────────────────────────────────────
+// Splices grade_band_estimate/grade_band_estimate_raw into each
+// matched INSERT block, working from the LAST match to the FIRST so
+// earlier match.index values stay valid as later ones are edited.
+// Everything outside a matched block (comments, header, blank lines)
+// is untouched — this never rewrites the whole file, only inserts two
+// values into each already-matched INSERT statement's column list and
+// value list, right after order_index/order_index's value.
+if (writeMode) {
+  let out = raw;
+  const sorted = [...questions].sort((a, b) => b.matchStart - a.matchStart); // last match first
+  for (const q of sorted) {
+    const before = out.slice(0, q.matchStart);
+    const after = out.slice(q.matchStart + q.matchText.length);
+    let block = q.matchText;
+    block = block.replace(
+      'past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index)',
+      'past_paper_questions (paper_id, question_number, spec_slug, marks, question_content, mark_scheme, worked_solution, difficulty, order_index, grade_band_estimate, grade_band_estimate_raw)'
+    );
+    // order_index's own value is the last thing before the FROM clause —
+    // append the two new values right after it, matched precisely via
+    // the exact order_index value text captured during parsing so this
+    // can't accidentally match a different number elsewhere in the block.
+    const orderIndexPattern = new RegExp(`, ${q.matchOrderIndexValue}\\s*\\nFROM past_papers`);
+    block = block.replace(orderIndexPattern, `, ${q.matchOrderIndexValue}, ${q.gradeBand}, ${q.gradeBandRaw.toFixed(2)}\nFROM past_papers`);
+    out = before + block + after;
+  }
+  fs.writeFileSync(seedFilePath, out, 'utf8');
+  console.log(`\nWrote grade_band_estimate/grade_band_estimate_raw into ${questions.length} questions in ${path.basename(seedFilePath)}`);
+}
