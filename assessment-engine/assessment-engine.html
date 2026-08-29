@@ -1440,6 +1440,8 @@ async function saveAttempt() {
       overall_score:  S.diagnosis.overallScore,
       current_grade:  S.diagnosis.currentGrade,
       target_grade:   S.diagnosis.targetGrade,
+      confidence_low_grade:  S.diagnosis.confidence ? S.diagnosis.confidence.lowGrade : null,
+      confidence_high_grade: S.diagnosis.confidence ? S.diagnosis.confidence.highGrade : null,
       total_questions:S.answers.length,
       correct_count:  S.answers.filter(a => a.correct).length,
       not_sure_count: S.answers.filter(a => a.not_sure).length,

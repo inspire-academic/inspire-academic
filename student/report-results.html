@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Report My Results — Inspire Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+/* ── NAV (mirrors student/progress.html) ── */
+.topnav-logo{display:flex;align-items:center;gap:.6rem;}
+.topnav-logo img{height:36px;width:auto;background:#fff;border-radius:6px;padding:2px 6px;}
+.logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
+.nav-links{display:none;gap:.3rem;flex:1;}
+.nav-user{display:flex;align-items:center;gap:.6rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
+.nav-user span:last-child{display:none;}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;background:var(--gold);color:var(--navy);}
+
+main{max-width:760px;margin:0 auto;padding:1.2rem 1rem 6rem;}
+.page-header{margin-bottom:1.5rem;}
+.page-title{font-family:var(--font-display);font-size:1.4rem;font-weight:800;margin-bottom:.2rem;}
+.page-sub{font-size:.88rem;color:var(--muted);line-height:1.5;}
+
+.result-card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem 1.4rem;margin-bottom:1rem;}
+.result-head{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;margin-bottom:.4rem;flex-wrap:wrap;}
+.result-subject{font-weight:700;font-size:1rem;}
+.result-board{font-family:var(--font-mono);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.result-predicted{font-size:.82rem;color:var(--muted);margin-bottom:.9rem;}
+.result-predicted strong{color:var(--gold);}
+
+.report-form{display:flex;flex-direction:column;gap:.7rem;}
+.form-row{display:flex;gap:.6rem;flex-wrap:wrap;}
+.form-field{flex:1;min-width:120px;}
+.form-field label{display:block;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:var(--font-mono);margin-bottom:.3rem;}
+.form-field input,.form-field select{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:8px;padding:.55rem .7rem;color:var(--white);font-size:.88rem;font-family:var(--font-body);}
+.pair-row{display:flex;align-items:center;gap:.4rem;}
+.pair-row select{width:70px;flex:none;}
+.btn-report{background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:.65rem 1rem;font-weight:700;font-size:.85rem;cursor:pointer;align-self:flex-start;}
+.btn-report:disabled{opacity:.5;cursor:default;}
+.btn-edit{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:.4rem .8rem;font-size:.78rem;cursor:pointer;}
+
+.achieved-banner{display:flex;align-items:center;justify-content:space-between;gap:.8rem;background:var(--navy3);border-radius:8px;padding:.7rem .9rem;}
+.achieved-grade-val{font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:var(--gold);}
+.achieved-meta{font-size:.72rem;color:var(--muted);}
+.in-range{color:#4ade80;}
+.out-range{color:#fb923c;}
+
+.empty-state{text-align:center;padding:2.5rem;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);}
+.empty-state .ei{font-size:2rem;margin-bottom:.5rem;}
+.empty-state a{color:var(--gold);}
+
+.toast-msg{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:.7rem 1.2rem;font-size:.85rem;z-index:500;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast-msg.show{opacity:1;}
+
+@media(min-width:769px){
+  .topnav{padding:.9rem 2rem;gap:1.5rem;}
+  .nav-links{display:flex;}
+  .nav-user span:last-child{display:inline;}
+  main{padding:2rem 1.5rem;}
+  .page-title{font-size:1.8rem;}
+}
+</style>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c9a84c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Inspire Science">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+
+<nav class="topnav">
+<a href="/index.html" style="text-decoration:none;color:inherit;"><div class="topnav-logo">
+    <img src="/assets/images/shared/1775416612494_image.webp" alt="Inspire Science" onerror="this.style.display='none'">
+    <span class="logo-text">Inspire Science</span>
+  </div></a>
+  <div class="nav-links">
+    <button class="nav-link" onclick="location.href='/dashboard.html'">Dashboard</button>
+    <button class="nav-link" onclick="location.href='/subjects.html'">Subjects</button>
+    <button class="nav-link" onclick="location.href='/student/progress.html'">My Progress</button>
+    <button class="nav-link active">Report Results</button>
+  </div>
+  <div class="nav-user" onclick="signOut()">
+    <div class="avatar" id="nav-avatar">?</div>
+    <span id="nav-name">Loading…</span>
+  </div>
+</nav>
+
+<main>
+  <div class="page-header fade-in">
+    <h1 class="page-title">Report My Results</h1>
+    <p class="page-sub" id="page-sub">
+      Once your real exam results are out, tell us what you actually achieved.
+      This is how Inspire Academic's grade predictions get more accurate over
+      time — every real result reported here helps calibrate the diagnostic
+      for every student after you.
+    </p>
+  </div>
+
+  <div id="cards-wrap">
+    <div style="text-align:center;padding:2rem;color:var(--muted);"><span class="spinner"></span></div>
+  </div>
+</main>
+
+<div class="toast-msg" id="toast-msg"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/perf-utils.js"></script>
+<script>
+const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+const GRADE_OPTIONS=['9','8','7','6','5','4','3','2','1','U'];
+
+function isCombined(subject){
+  return /combined/i.test(subject||'');
+}
+
+// Suggests the next real June exam series relative to today, so the
+// input starts pre-filled with something plausible rather than blank.
+function nextJuneSeries(){
+  const now=new Date();
+  const y = now.getMonth()>=6 ? now.getFullYear()+1 : now.getFullYear();
+  return `June ${y}`;
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast-msg');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window.location.href='/index.html'; }
+
+function gradeSelectHtml(idPrefix, subject){
+  if(isCombined(subject)){
+    return `
+      <div class="pair-row">
+        <select id="${idPrefix}-a">${GRADE_OPTIONS.map(g=>`<option value="${g}">${g}</option>`).join('')}</select>
+        <span>–</span>
+        <select id="${idPrefix}-b">${GRADE_OPTIONS.map(g=>`<option value="${g}">${g}</option>`).join('')}</select>
+      </div>`;
+  }
+  return `<select id="${idPrefix}-a">${GRADE_OPTIONS.map(g=>`<option value="${g}">${g}</option>`).join('')}</select>`;
+}
+
+function readGradeSelect(idPrefix, subject){
+  const a=document.getElementById(`${idPrefix}-a`).value;
+  if(isCombined(subject)){
+    const b=document.getElementById(`${idPrefix}-b`).value;
+    return `${a}-${b}`;
+  }
+  return a;
+}
+
+async function submitReport(user, attempt, key){
+  const seriesEl=document.getElementById(`series-${key}`);
+  const exam_series=(seriesEl.value||'').trim();
+  if(!exam_series){ showToast('Enter the exam series (e.g. "June 2027") first.'); return; }
+  const achieved_grade=readGradeSelect(`grade-${key}`, attempt.subject);
+
+  const btn=document.getElementById(`submit-${key}`);
+  btn.disabled=true; btn.textContent='Saving…';
+
+  const { error } = await supa.from('diagnostic_outcomes').upsert({
+    student_id: user.id,
+    linked_attempt_id: attempt.id,
+    subject: attempt.subject,
+    exam_board: attempt.exam_board,
+    exam_series,
+    predicted_grade: attempt.current_grade,
+    predicted_low_grade: attempt.confidence_low_grade || null,
+    predicted_high_grade: attempt.confidence_high_grade || null,
+    achieved_grade,
+    reported_by: user.id,
+    source: 'self_reported'
+  }, { onConflict: 'student_id,subject,exam_board,exam_series' });
+
+  if(error){
+    console.error('Could not save result:', error.message);
+    showToast('Could not save — please try again.');
+    btn.disabled=false; btn.textContent='Save my result';
+    return;
+  }
+  showToast('Saved — thank you for helping improve the diagnostic.');
+  renderAll(); // re-render so this group now shows the read-only banner
+}
+
+let STATE=null;
+
+function renderAll(){
+  render(STATE.user, STATE.groups, STATE.outcomesByGroup);
+}
+
+function render(user, groups, outcomesByGroup){
+  const wrap=document.getElementById('cards-wrap');
+  if(groups.length===0){
+    wrap.innerHTML=`
+      <div class="empty-state">
+        <div class="ei">📋</div>
+        <p>No completed diagnostic assessments yet.</p>
+        <p><a href="/assessment-engine/assessment-engine.html">Take a diagnostic assessment</a> first — once you have a predicted grade on record, you'll be able to report your real result here after results day.</p>
+      </div>`;
+    return;
+  }
+
+  wrap.innerHTML=groups.map(({key, attempt})=>{
+    const outcome=outcomesByGroup[key];
+    const predictedLine = attempt.confidence_low_grade && attempt.confidence_high_grade
+      ? `Predicted: <strong>${attempt.current_grade}</strong> (likely range ${attempt.confidence_low_grade}–${attempt.confidence_high_grade})`
+      : `Predicted: <strong>${attempt.current_grade}</strong>`;
+
+    if(outcome){
+      return `
+      <div class="result-card fade-in">
+        <div class="result-head">
+          <span class="result-subject">${attempt.subject}</span>
+          <span class="result-board">${attempt.exam_board}</span>
+        </div>
+        <div class="result-predicted">${predictedLine}</div>
+        <div class="achieved-banner">
+          <div>
+            <div class="achieved-grade-val">${outcome.achieved_grade}</div>
+            <div class="achieved-meta">Reported for ${outcome.exam_series}</div>
+          </div>
+          <button class="btn-edit" onclick="editOutcome('${key}')">Correct this</button>
+        </div>
+      </div>`;
+    }
+
+    return `
+    <div class="result-card fade-in">
+      <div class="result-head">
+        <span class="result-subject">${attempt.subject}</span>
+        <span class="result-board">${attempt.exam_board}</span>
+      </div>
+      <div class="result-predicted">${predictedLine}</div>
+      <div class="report-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Exam series</label>
+            <input type="text" id="series-${key}" value="${nextJuneSeries()}" placeholder="e.g. June 2027">
+          </div>
+          <div class="form-field">
+            <label>Grade achieved</label>
+            ${gradeSelectHtml(`grade-${key}`, attempt.subject)}
+          </div>
+        </div>
+        <button class="btn-report" id="submit-${key}" onclick="submitReport(STATE.user, STATE.attemptByKey['${key}'], '${key}')">Save my result</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function editOutcome(key){
+  // Drop the cached outcome for this group so render() falls back to
+  // the report form, pre-filled to overwrite via the same upsert.
+  delete STATE.outcomesByGroup[key];
+  renderAll();
+}
+
+(async()=>{
+  const timeoutHandle = setTimeout(() => showTimeoutError(() => location.reload()), 8000);
+  perfStart('report-results-load');
+
+  const {data:{user}}=await supa.auth.getUser();
+  if(!user){ clearTimeout(timeoutHandle); window.location.href='/index.html'; return; }
+
+  let profile = getCachedProfile();
+  if(!profile || profile.id !== user.id){
+    const {data:pd}=await supa.from('profiles').select('*').eq('id',user.id).single();
+    profile = pd;
+    if(profile) setCachedProfile(profile);
+  }
+  document.getElementById('nav-name').textContent=profile?.full_name?.split(' ')[0]||'Student';
+  const av=document.getElementById('nav-avatar');
+  av.textContent=(profile?.full_name||'S')[0].toUpperCase();
+
+  const [attemptsRes, outcomesRes] = await Promise.all([
+    supa.from('diagnostic_attempts')
+      .select('id,subject,exam_board,current_grade,confidence_low_grade,confidence_high_grade,created_at')
+      .eq('student_id', user.id)
+      .eq('completed', true)
+      .order('created_at', { ascending: false }),
+    supa.from('diagnostic_outcomes')
+      .select('*')
+      .eq('student_id', user.id)
+      .order('reported_at', { ascending: false })
+  ]);
+
+  const attempts = attemptsRes.data || [];
+  const outcomes = outcomesRes.data || [];
+
+  // Most recent completed attempt per subject+board — that's the
+  // prediction being reported against.
+  const attemptByKey = {};
+  attempts.forEach(a=>{
+    const key = `${a.subject}|${a.exam_board}`;
+    if(!attemptByKey[key]) attemptByKey[key] = a;
+  });
+  const groups = Object.keys(attemptByKey).map(key=>({ key, attempt: attemptByKey[key] }));
+
+  // Most recent reported outcome per subject+board (a student may have
+  // reported multiple exam_series over time; show the latest).
+  const outcomesByGroup = {};
+  outcomes.forEach(o=>{
+    const key = `${o.subject}|${o.exam_board}`;
+    if(!outcomesByGroup[key]) outcomesByGroup[key] = o;
+  });
+
+  STATE = { user, groups, attemptByKey, outcomesByGroup };
+  render(user, groups, outcomesByGroup);
+
+  clearTimeout(timeoutHandle);
+  perfEnd('report-results-load');
+})();
+</script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
+  }
+</script>
+<script src="/assets/js/subject-back.js"></script>
+</body>
+</html>
