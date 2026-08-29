@@ -198,7 +198,7 @@ authorization check; RLS should mirror it exactly.
 ### `diagnostic_attempts`
 | Column | Type | Evidence |
 |---|---|---|
-| id | uuid/int? | PK, referenced throughout |
+| id | **bigint**, PK | confirmed live 2026-08-29 — `diagnostic_outcomes.linked_attempt_id` FK creation failed (`42804: incompatible types uuid and bigint`) when assumed uuid; fixed to `bigint` in `supabase/diagnostic_outcomes.sql`. Not uuid like most other PKs in this schema. |
 | student_id | uuid, FK→profiles.id | `assessment-engine.html:1204` |
 | student_name | text | `:1205` |
 | subject, exam_board, level, tier | text (tier default `'Higher'`) | `:1206-1209` |
