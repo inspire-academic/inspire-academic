@@ -92,7 +92,22 @@ if (!questions.length) {
 // judgement-based part of this script; everything else is arithmetic
 // on real data. Documented here so they're an easy, visible thing to
 // revisit once Phase 6 has real outcome data to check them against.
-const AO_BASE = { AO1: 3.5, AO2: 5.5, AO3: 7.5 };
+//
+// Rebalanced 2026-08-29 after piloting the original anchors (3.5/5.5/7.5)
+// against 6 real papers (Physics x3, Chemistry x2, Maths x1): 5 of 6
+// landed above the ~30-50%-of-marks-in-grade-4-6 smell test, all of them
+// science papers specifically. Diagnosis: every PASCO paper is Higher
+// tier only, so a spec-map tier of 'Both' says nothing about how
+// demanding THIS Higher-tier question actually is — it only means the
+// topic is also examinable on Foundation. Since most science content is
+// tagged 'Both' (not 'Higher'-only), the old tier bonus rarely fired,
+// collapsing most estimates toward the AO-only baseline — which is
+// exactly the grade 4-6 band. Widened the AO spread (the strongest real
+// signal — a human-verified tag, not inferred) and reduced the tier
+// bonus's weight relative to marks/position, which tracked correctly on
+// Maths (the one paper that already had more mark-value/position
+// spread to work with).
+const AO_BASE = { AO1: 3, AO2: 5.5, AO3: 8 };
 
 // Sub-part position: group by the base question number (e.g. '04' from
 // '04.3'), rank each sub-part's position among its siblings.
@@ -112,9 +127,9 @@ for (const base of Object.keys(byBase)) {
 for (const q of questions) {
   const tier = findSlugTier(q.specSlug);
   const aoBase = AO_BASE[q.ao] ?? 5.5; // unrecognised AO tag falls back to the AO2 midpoint
-  const tierBonus = tier === 'Higher' ? 1.5 : 0;
-  const marksBonus = Math.min(1.5, Math.max(0, (q.marks - 2) * 0.3));
-  const positionBonus = q.subPartPosition * 1.0;
+  const tierBonus = tier === 'Higher' ? 1.0 : 0; // reduced from 1.5 — see AO_BASE comment above
+  const marksBonus = Math.min(2.0, Math.max(0, (q.marks - 1) * 0.4)); // widened from a 1.5 cap over (marks-2)*0.3
+  const positionBonus = q.subPartPosition * 1.5; // widened from *1.0
 
   const raw = aoBase + tierBonus + marksBonus + positionBonus;
   q.gradeBandRaw = raw;
