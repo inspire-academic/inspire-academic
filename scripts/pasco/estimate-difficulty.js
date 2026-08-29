@@ -78,7 +78,7 @@ while ((m = QUESTION_RE.exec(raw)) !== null) {
   questions.push({
     questionNumber: m[1], specSlug: m[2], marks: parseInt(m[3], 10),
     questionContent: m[4], ao: m[7] || null, orderIndex: parseInt(m[8], 10),
-    paperTier: m[11]
+    subject: m[9], paperTier: m[11]
   });
 }
 if (!questions.length) {
@@ -124,12 +124,29 @@ for (const base of Object.keys(byBase)) {
   });
 }
 
+// Subject-specific curve for the marks/position bonuses only — AO_BASE
+// and the tier bonus stay shared across every subject, since neither
+// was implicated in Maths' overcorrection (added 2026-08-29, same day
+// as the rebalance above). Mathematics questions naturally carry
+// bigger, more varied mark values throughout a paper (multi-step
+// algebra is common even at grade 4-5), not concentrated at the hard
+// end the way science mark values tend to be — so the widened
+// marks/position bonuses that fixed 5 of 6 science papers pushed
+// Maths (the one paper already in range beforehand) below range
+// instead. Mathematics keeps the original, narrower coefficients;
+// every other subject uses the widened ones.
+const MARKS_POSITION_CURVE = {
+  Maths:   { marksCap: 1.5, marksOffset: 2, marksCoef: 0.3, positionCoef: 1.0 }, // matches subjects.name, not 'Mathematics'
+  default: { marksCap: 2.0, marksOffset: 1, marksCoef: 0.4, positionCoef: 1.5 }
+};
+
 for (const q of questions) {
   const tier = findSlugTier(q.specSlug);
+  const curve = MARKS_POSITION_CURVE[q.subject] || MARKS_POSITION_CURVE.default;
   const aoBase = AO_BASE[q.ao] ?? 5.5; // unrecognised AO tag falls back to the AO2 midpoint
   const tierBonus = tier === 'Higher' ? 1.0 : 0; // reduced from 1.5 — see AO_BASE comment above
-  const marksBonus = Math.min(2.0, Math.max(0, (q.marks - 1) * 0.4)); // widened from a 1.5 cap over (marks-2)*0.3
-  const positionBonus = q.subPartPosition * 1.5; // widened from *1.0
+  const marksBonus = Math.min(curve.marksCap, Math.max(0, (q.marks - curve.marksOffset) * curve.marksCoef));
+  const positionBonus = q.subPartPosition * curve.positionCoef;
 
   const raw = aoBase + tierBonus + marksBonus + positionBonus;
   q.gradeBandRaw = raw;
