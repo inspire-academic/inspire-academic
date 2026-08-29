@@ -1019,6 +1019,54 @@ function combinedPairLabel(index, board) {
   return `${high}-${low}`;
 }
 
+// ═══════════════════════════════════════════════════════════
+// PHASE 5 — confidence-aware output (2026-08-29)
+//
+// A bare "Grade 6" from a 36-question sample overclaims precision the
+// sample doesn't have — the same statistical fact behind why FFT
+// Aspire/ALPS/CEM show a likely range, not a single number. This
+// computes a real one: a Wilson score interval on the raw
+// correct/total count (the standard way to bound a binomial
+// proportion's uncertainty for a finite sample — not a guessed fudge
+// factor), then translates that score range into a grade range using
+// Phase 1's real boundaries, the same way a bare score gets translated
+// to a bare grade elsewhere in this file.
+//
+// Confidence level chosen: 80%, not the more familiar 95%. Documented
+// reasoning, not arbitrary: at n=36 a 95% interval is wide enough to
+// span 3+ grades for many real scores, which would be technically
+// correct but nearly useless as a "likely range" a student or teacher
+// can act on. 80% keeps the range meaningfully tighter while still
+// being an honest, real statistical statement — worth revisiting once
+// Phase 6 has real outcome data to check calibration against, per
+// Phase 0.2's "claims are a live decision, not a one-time gate."
+function wilsonInterval(correct, total, z) {
+  if (!total) return null;
+  const p = correct / total;
+  const denom = 1 + (z * z) / total;
+  const center = (p + (z * z) / (2 * total)) / denom;
+  const margin = (z * Math.sqrt((p * (1 - p)) / total + (z * z) / (4 * total * total))) / denom;
+  return { lower: Math.max(0, center - margin), upper: Math.min(1, center + margin) };
+}
+
+const CONFIDENCE_Z_80 = 1.2816; // z-score for an 80% two-sided interval
+
+function confidenceRangeForScore(correct, total, board, subject, isCombined) {
+  const interval = wilsonInterval(correct, total, CONFIDENCE_Z_80);
+  if (!interval) return null;
+  const lowerPct = interval.lower * 100;
+  const upperPct = interval.upper * 100;
+
+  if (isCombined) {
+    const lowIdx  = combinedPairIndex(lowerPct, board);
+    const highIdx = combinedPairIndex(upperPct, board);
+    return { lowGrade: combinedPairLabel(lowIdx, board), highGrade: combinedPairLabel(highIdx, board), lowerPct, upperPct };
+  }
+  const lowNum  = estimateGrade(lowerPct, board, subject);
+  const highNum = estimateGrade(upperPct, board, subject);
+  return { lowGrade: gradeLabel(lowNum), highGrade: gradeLabel(highNum), lowerPct, upperPct };
+}
+
 // Brand aspiration ceiling — always Grade 9 (9-9 for Combined Science's
 // double award), shown as a separate figure from the realistic near-term
 // target computed in computeDiagnosis(). Never conflate the two:
@@ -1031,6 +1079,7 @@ function aspirationGrade(isCombined) {
 function computeDiagnosis(topicScores, overallPct, notSureCount) {
   const { subject, board } = S.config;
   const total = S.answers.length;
+  const correctCount = S.answers.filter(a => a.correct).length;
   const isCombined = subject === 'Combined Science';
 
   let currentGrade, targetGrade;
@@ -1047,14 +1096,29 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
     targetGrade  = gradeLabel(targetGradeNum);
   }
 
+  // Phase 5 (grade-accuracy roadmap): a calibrated confidence range, not
+  // just a bare point-estimate grade — the same convention real
+  // target-setting systems (FFT Aspire, ALPS, CEM/ALIS) use, and for the
+  // same reason: a single number presented as fact overclaims precision
+  // a 36-question sample genuinely doesn't have. See
+  // confidenceRangeForScore() below for the real statistics behind it
+  // (a Wilson score interval on the raw correct/total count, translated
+  // to a grade range via Phase 1's real boundaries) — not a guessed
+  // fudge factor.
+  const confidence = confidenceRangeForScore(correctCount, total, board, subject, isCombined);
+
   const studentProfile =
     overallPct < 40 ? 'struggling' :
     overallPct < 60 ? 'developing' :
     overallPct < 80 ? 'secure' : 'strong';
 
+  const rangeNote = confidence && confidence.lowGrade !== confidence.highGrade
+    ? ` (likely range ${confidence.lowGrade}–${confidence.highGrade}, based on this being a ${total}-question sample)`
+    : '';
+
   const profileDescription = isCombined
-    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award on real ${board} Combined Science June 2026 boundaries, with a realistic path to ${targetGrade}.`
-    : `Scored ${overallPct}% overall — around Grade ${currentGrade} on real ${board} ${subject} June 2026 boundaries, ` +
+    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award${rangeNote} on real ${board} Combined Science June 2026 boundaries, with a realistic path to ${targetGrade}.`
+    : `Scored ${overallPct}% overall — around Grade ${currentGrade}${rangeNote} on real ${board} ${subject} June 2026 boundaries, ` +
       `with a realistic path to Grade ${targetGrade}.`;
 
   const gaps = topicScores
@@ -1120,7 +1184,7 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
     ? teacherNoteParts.join(' ')
     : 'No major red flags — steady, targeted practice on the gaps above should be enough.';
 
-  return { currentGrade, targetGrade, studentProfile, profileDescription, gaps, strengths, teacherNote };
+  return { currentGrade, targetGrade, studentProfile, profileDescription, gaps, strengths, teacherNote, confidence };
 }
 
 function renderDiagnosis() {
@@ -1147,6 +1211,11 @@ function renderDiagnosis() {
         Current grade: <strong>${d.currentGrade}</strong> &nbsp;→&nbsp;
         Target: <strong style="color:var(--teal);">${d.targetGrade}</strong>
       </div>
+      ${d.confidence && d.confidence.lowGrade !== d.confidence.highGrade ? `
+      <div style="margin-top:.25rem;font-size:.78rem;color:var(--muted);">
+        Likely range: ${d.confidence.lowGrade}–${d.confidence.highGrade}
+        <span title="A ${S.answers.length}-question sample can't pin down a grade exactly — this is the honest range, not a hedge.">ⓘ</span>
+      </div>` : ''}
       <div style="margin-top:.35rem;font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.02em;">
         🎯 Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}
       </div>
