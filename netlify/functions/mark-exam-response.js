@@ -1,10 +1,13 @@
 // Netlify Function — mark-exam-response
 const { verifyUser, checkAndLogUsage } = require('./_ai-usage-guard')
+const { getUserTier } = require('./_billing-guard')
 
 // A teacher marking a full class set of free-response submissions can
 // legitimately fire this many times in one sitting — kept generous
 // relative to generate-question for that reason.
-const MAX_PER_HOUR = 60
+// Paid-tier Phase 1: only 'free' is populated (today's existing value,
+// unchanged) — Phase 2 adds plus/school once those tiers are real.
+const LIMITS = { free: 60 }
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -31,9 +34,11 @@ exports.handler = async function(event) {
     return { statusCode: 400, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Missing required fields: stem, response, marks' }) }
   }
 
-  const withinLimit = await checkAndLogUsage(user.id, 'mark-exam-response', MAX_PER_HOUR)
+  const planTier = await getUserTier(user.id)
+  const maxPerHour = LIMITS[planTier] ?? LIMITS.free
+  const withinLimit = await checkAndLogUsage(user.id, 'mark-exam-response', maxPerHour)
   if (!withinLimit) {
-    return { statusCode: 429, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: `You've reached the hourly limit for marking (${MAX_PER_HOUR}/hour). Please try again later.` }) }
+    return { statusCode: 429, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: `You've reached the hourly limit for marking (${maxPerHour}/hour). Please try again later.` }) }
   }
 
   const board   = (exam_board || 'AQA').toUpperCase()

@@ -36,6 +36,14 @@ async function requireAuth(role=null){
   return {user,profile};
 }
 
+// Paid-tier Phase 1 — plain read, no cache (nothing gates on tier yet,
+// so this isn't a hot path). A profile with no subscriptions row is
+// free tier by definition — see supabase/subscriptions_schema.sql.
+async function getSubscription(uid){
+  const {data} = await supa.from('subscriptions').select('*').eq('profile_id',uid).single();
+  return data || {tier:'free', status:'active', provider:'none'};
+}
+
 async function signOut(){
   if (typeof clearProfileCache === 'function') clearProfileCache();
   await supa.auth.signOut();
