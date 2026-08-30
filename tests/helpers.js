@@ -8,7 +8,11 @@ const REPO_ROOT = path.join(__dirname, '..');
 // Directories that are either not part of the deployed site, or are
 // explicitly called out in CLAUDE.md as staying in place temporarily
 // (property/ moves to its own repo later) — no need to lint their content.
-const SKIP_DIRS = new Set(['node_modules', '.git', '.netlify', '.claude']);
+// www/, android/, ios/ are the Capacitor native-app wrapper — www/ is a
+// generated duplicate of the real site (would double-run every HTML/
+// asset test for no reason), android/ and ios/ are native project
+// source, not web content this suite's checks apply to.
+const SKIP_DIRS = new Set(['node_modules', '.git', '.netlify', '.claude', 'www', 'android', 'ios']);
 
 function walkFiles(dir, matcher, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
