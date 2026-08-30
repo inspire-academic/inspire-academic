@@ -959,6 +959,11 @@ const REAL_COMBINED_BOUNDARIES = {
   }
 };
 
+// UK-only by construction: WAEC (Ghana/WASSCE) publishes no percentage grade
+// boundaries or raw marks, only post-moderation letter grades, so this
+// boundary-lookup approach has no WASSCE equivalent input data — a Ghana
+// grade estimate needs a structurally different (cohort-relative) approach,
+// not another entry in REAL_GRADE_BOUNDARIES.
 function estimateGrade(pct, board, subject) {
   const boardData = REAL_GRADE_BOUNDARIES[board] || REAL_GRADE_BOUNDARIES.AQA;
   const table = boardData[subject];

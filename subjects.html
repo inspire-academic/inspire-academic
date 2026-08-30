@@ -369,12 +369,12 @@ async function loadLessonsForSubject(subjectSlug){
 /* ══════════════════════════════════════
    APP STATE
 ══════════════════════════════════════ */
-const subjectMeta={
-  1:{cls:'maths',   icon:'∑', color:'#3b82f6', badge:'badge-blue'},
-  2:{cls:'physics', icon:'⚡', color:'#a78bfa', badge:'badge-purple'},
-  3:{cls:'chemistry',icon:'⚗',color:'#2dd4bf', badge:'badge-teal'},
-  4:{cls:'biology', icon:'🧬',color:'#4ade80', badge:'badge-green'},
-};
+// Icon/badge are per-page presentation choices, not shared DB data —
+// name-keyed with a default so an unlisted subject still renders instead
+// of breaking. cls/color come from the subjects table (subjectMeta below).
+const SUBJECT_ICONS={Maths:'∑',Physics:'⚡',Chemistry:'⚗',Biology:'🧬'};
+const SUBJECT_BADGES={Maths:'badge-blue',Physics:'badge-purple',Chemistry:'badge-teal',Biology:'badge-green'};
+let subjectMeta={};
 
 let allSubjects=[], allTopics=[], allProgress=[], allQuizzes=[];
 let activeSubjectId=null;
@@ -424,6 +424,12 @@ let activeFilter='all';
   ]);
 
   allSubjects=sRes.data||[];
+  subjectMeta=Object.fromEntries(allSubjects.map(s=>[s.id,{
+    cls:s.cls||'maths',
+    icon:SUBJECT_ICONS[s.name]||'📚',
+    color:s.color||'var(--gold)',
+    badge:SUBJECT_BADGES[s.name]||'badge-gold',
+  }]));
   allTopics=tRes.data||[];
   allProgress=pRes.data||[];
   allQuizzes=(qRes.data||[]).filter(q=>tierDifficulties.includes(q.difficulty));

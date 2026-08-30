@@ -1,7 +1,10 @@
-// spec-map.js — GCSE exam-board specification map (single source of truth)
-// Subject -> Board -> [{ slug, name, paper, tier, subtopics }]
+// spec-map.js — exam-board specification map (single source of truth)
+// CurriculumSystem -> Subject -> Board -> [{ slug, name, paper, tier, subtopics }]
 // Consumed by teacher/teacher-assessment-create.html and teacher/quiz-generator.html
+// 'gcse-uk' is the only curriculum system today; the outer key exists so a
+// future WASSCE/Ghana entry has somewhere to go without a reshape.
 window.SPEC_MAP = {
+ 'gcse-uk': {
   Physics: {
     AQA: [
       { slug:'aqa-ph-fh-forces-intro', name:'Forces and their interactions', paper:1, tier:'Both', subtopics:['Scalar and vector quantities','Contact and non-contact forces','Gravity and weight','Resultant forces','Free body diagrams'] },
@@ -127,4 +130,5 @@ window.SPEC_MAP = {
       { slug:'edx-ma-fh-statistics', name:'Statistics', paper:2, tier:'Both', subtopics:['Averages and spread','Charts and graphs','Scatter graphs','Histograms (Higher)','Cumulative frequency (Higher)'] },
     ]
   }
+ }
 }

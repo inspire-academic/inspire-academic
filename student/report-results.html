@@ -109,12 +109,14 @@ main{max-width:760px;margin:0 auto;padding:1.2rem 1rem 6rem;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/grade-scales.js"></script>
 <script>
 const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
 
-const GRADE_OPTIONS=['9','8','7','6','5','4','3','2','1','U'];
+// Hardcoded until a curriculum-system picker exists (Ghana/WASSCE is a later phase)
+const GRADE_OPTIONS=window.GRADE_SCALES['gcse-uk'].values;
 
 function isCombined(subject){
   return /combined/i.test(subject||'');

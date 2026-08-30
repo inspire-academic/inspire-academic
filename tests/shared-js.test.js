@@ -13,23 +13,41 @@ const path = require('path');
 const SUBJECTS = ['Physics', 'Chemistry', 'Biology', 'Maths'];
 const BOARDS = ['AQA', 'Edexcel'];
 
-test('spec-map.js defines window.SPEC_MAP with all subjects/boards', () => {
+const CURRICULUM_SYSTEM = 'gcse-uk';
+
+test('spec-map.js defines window.SPEC_MAP with all curriculum-systems/subjects/boards', () => {
   const code = fs.readFileSync(path.join(__dirname, '..', 'assets/js/spec-map.js'), 'utf8');
   const sandbox = { window: {} };
   new Function('window', code)(sandbox.window);
 
   assert.ok(sandbox.window.SPEC_MAP, 'window.SPEC_MAP was not defined');
+  const system = sandbox.window.SPEC_MAP[CURRICULUM_SYSTEM];
+  assert.ok(system, `SPEC_MAP missing curriculum system: ${CURRICULUM_SYSTEM}`);
   for (const subject of SUBJECTS) {
-    assert.ok(sandbox.window.SPEC_MAP[subject], `SPEC_MAP missing subject: ${subject}`);
+    assert.ok(system[subject], `SPEC_MAP.${CURRICULUM_SYSTEM} missing subject: ${subject}`);
     for (const board of BOARDS) {
-      const topics = sandbox.window.SPEC_MAP[subject][board];
-      assert.ok(Array.isArray(topics) && topics.length > 0, `SPEC_MAP.${subject}.${board} is empty or missing`);
+      const topics = system[subject][board];
+      assert.ok(Array.isArray(topics) && topics.length > 0, `SPEC_MAP.${CURRICULUM_SYSTEM}.${subject}.${board} is empty or missing`);
       for (const t of topics) {
-        assert.ok(t.slug && t.name, `SPEC_MAP.${subject}.${board} has a topic missing slug/name`);
-        assert.ok(Array.isArray(t.subtopics), `SPEC_MAP.${subject}.${board}.${t.slug} missing subtopics array`);
+        assert.ok(t.slug && t.name, `SPEC_MAP.${CURRICULUM_SYSTEM}.${subject}.${board} has a topic missing slug/name`);
+        assert.ok(Array.isArray(t.subtopics), `SPEC_MAP.${CURRICULUM_SYSTEM}.${subject}.${board}.${t.slug} missing subtopics array`);
       }
     }
   }
+});
+
+test('grade-scales.js defines window.GRADE_SCALES with a valid gcse-uk scale', () => {
+  const code = fs.readFileSync(path.join(__dirname, '..', 'assets/js/grade-scales.js'), 'utf8');
+  const sandbox = { window: {} };
+  new Function('window', code)(sandbox.window);
+
+  assert.ok(sandbox.window.GRADE_SCALES, 'window.GRADE_SCALES was not defined');
+  const scale = sandbox.window.GRADE_SCALES[CURRICULUM_SYSTEM];
+  assert.ok(scale, `GRADE_SCALES missing curriculum system: ${CURRICULUM_SYSTEM}`);
+  assert.deepEqual(scale.values, ['9','8','7','6','5','4','3','2','1','U']);
+  assert.equal(scale.direction, 'higher-better');
+  assert.equal(typeof scale.normReferenced, 'boolean');
+  assert.ok(scale.passGrade, 'scale missing passGrade');
 });
 
 test('core-topics.js defines window.CORE_TOPICS with 8 topics per subject', () => {

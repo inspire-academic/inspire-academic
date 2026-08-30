@@ -290,13 +290,6 @@ const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
 const params=new URLSearchParams(window.location.search);
 const topicId=parseInt(params.get('id'));
 
-const subjectMeta={
-  1:{cls:'maths',   color:'#3b82f6'},
-  2:{cls:'physics', color:'#a78bfa'},
-  3:{cls:'chemistry',color:'#2dd4bf'},
-  4:{cls:'biology', color:'#4ade80'},
-};
-
 const masteryColors={
   not_started:'var(--border)',learning:'#f87171',
   developing:'#fb923c',secure:'#facc15',mastered:'#4ade80'
@@ -371,7 +364,7 @@ const typeClass={
 
   // Load topic + subject + progress + quiz + content in parallel
   const [topicRes,contentRes,progressRes,quizzesRes]=await Promise.all([
-    supa.from('topics').select('*,subjects(id,name,slug,icon,color)').eq('id',topicId).single(),
+    supa.from('topics').select('*,subjects(id,name,slug,icon,color,cls)').eq('id',topicId).single(),
     supa.from('topic_content').select('*').eq('topic_id',topicId).eq('exam_board',studentBoard).order('order_idx'),
     supa.from('topic_progress').select('*').eq('student_id',user.id).eq('topic_id',topicId).single(),
     supa.from('quizzes').select('id,title,description,difficulty,time_limit,pass_mark').eq('topic_id',topicId).eq('is_published',true).limit(1),
@@ -388,7 +381,7 @@ const typeClass={
   }
 
   const subject=topic.subjects;
-  const meta=subjectMeta[subject?.id]||{cls:'biology',color:'#4ade80'};
+  const meta={cls:subject?.cls||'biology',color:subject?.color||'#4ade80'};
   const mastery=progress?.mastery_level||'not_started';
   const bestScore=progress?.best_score?parseFloat(progress.best_score).toFixed(0):null;
   const attempts=progress?.attempts_count||0;
