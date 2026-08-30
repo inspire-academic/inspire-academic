@@ -896,7 +896,9 @@
 <script src="/assets/js/spec-map.js"></script>
 <script>
 // SPEC_MAP is defined in /assets/js/spec-map.js (shared with teacher/quiz-generator.html)
-const SPEC_MAP = window.SPEC_MAP
+// Hardcoded until a curriculum-system picker exists (Ghana/WASSCE is a later phase)
+const CURRICULUM_SYSTEM_ID = 'gcse-uk'
+const SPEC_MAP = window.SPEC_MAP[CURRICULUM_SYSTEM_ID]
 
 // ─────────────────────────────────────────────
 // SUPABASE CLIENT

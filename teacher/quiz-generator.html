@@ -330,6 +330,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/spec-map.js"></script>
 <script>
+// Hardcoded until a curriculum-system picker exists (Ghana/WASSCE is a later phase)
+const CURRICULUM_SYSTEM_ID = 'gcse-uk'
+
 // ─────────────────────────────────────────────
 // SUPABASE CLIENT
 // ─────────────────────────────────────────────
@@ -376,7 +379,7 @@ async function onSubjectOrBoardChange() {
   if (!subject || !board) {
     specSelect.innerHTML = '<option value="">Select subject and board first…</option>'
   } else {
-    const topics = (window.SPEC_MAP[subject]?.[board] || [])
+    const topics = (window.SPEC_MAP[CURRICULUM_SYSTEM_ID]?.[subject]?.[board] || [])
       .filter(t => !(tier === 'Foundation' && t.tier === 'Higher'))
     specSelect.innerHTML = topics.length
       ? topics.map(t => `<option value="${t.slug}">${t.name}</option>`).join('')
@@ -409,7 +412,7 @@ function onSpecTopicChange() {
   const subject = document.getElementById('f-subject').value
   const board   = document.getElementById('f-board').value
   const slug    = document.getElementById('f-spec-topic').value
-  const topics  = window.SPEC_MAP[subject]?.[board] || []
+  const topics  = window.SPEC_MAP[CURRICULUM_SYSTEM_ID]?.[subject]?.[board] || []
   selectedSpecTopic = topics.find(t => t.slug === slug) || null
 
   document.getElementById('spec-topic-hint').textContent = selectedSpecTopic
