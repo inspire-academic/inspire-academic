@@ -369,11 +369,10 @@ async function loadLessonsForSubject(subjectSlug){
 /* ══════════════════════════════════════
    APP STATE
 ══════════════════════════════════════ */
-// Icon/badge are per-page presentation choices, not shared DB data —
-// name-keyed with a default so an unlisted subject still renders instead
-// of breaking. cls/color come from the subjects table (subjectMeta below).
-const SUBJECT_ICONS={Maths:'∑',Physics:'⚡',Chemistry:'⚗',Biology:'🧬'};
-const SUBJECT_BADGES={Maths:'badge-blue',Physics:'badge-purple',Chemistry:'badge-teal',Biology:'badge-green'};
+// Fallback only — subjects.icon in the DB is the real source (used first
+// at s.icon||meta.icon below). badge has no DB column, stays name-keyed.
+const SUBJECT_ICONS={Mathematics:'∑',Physics:'⚡',Chemistry:'⚗',Biology:'🧬'};
+const SUBJECT_BADGES={Mathematics:'badge-blue',Physics:'badge-purple',Chemistry:'badge-teal',Biology:'badge-green'};
 let subjectMeta={};
 
 let allSubjects=[], allTopics=[], allProgress=[], allQuizzes=[];

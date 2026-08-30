@@ -244,9 +244,9 @@ const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
 
-// Icon is a per-page presentation choice, not shared DB data — name-keyed
-// with a default so an unlisted subject still renders instead of breaking.
-const SUBJECT_ICONS={Maths:'📐',Physics:'⚡',Chemistry:'🧪',Biology:'🧬'};
+// Fallback only — subjects.icon in the DB is the real source, matching
+// how subjects.html already prefers s.icon over this kind of local map.
+const SUBJECT_ICONS={Mathematics:'📐',Physics:'⚡',Chemistry:'🧪',Biology:'🧬'};
 
 const masteryOrder={not_started:0,learning:1,developing:2,secure:3,mastered:4};
 const masteryLabels={not_started:'Not Started',learning:'Learning',developing:'Developing',secure:'Secure',mastered:'Mastered'};
@@ -348,7 +348,7 @@ function calcAchievements(attempts, progress, streak){
   const topics=topicsRes.data||[];
   const subjectMeta=Object.fromEntries(subjects.map(s=>[s.id,{
     name:s.name,
-    icon:SUBJECT_ICONS[s.name]||'📖',
+    icon:s.icon||SUBJECT_ICONS[s.name]||'📖',
     cls:s.cls||'maths',
     color:s.color||'var(--gold)',
   }]));
