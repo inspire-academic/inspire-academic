@@ -335,3 +335,18 @@ function = "create-teacher"
   to = "/.netlify/functions/stripe-webhook"
   status = 200
   force = true
+
+# Push notifications — plumbing only, nothing calls these yet (see
+# assets/js/push-notifications.js's header comment). Same
+# /api/v1/resource/action convention.
+[[redirects]]
+  from = "/api/v1/notifications/register-token"
+  to = "/.netlify/functions/register-push-token"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/notifications/send"
+  to = "/.netlify/functions/send-push-notification"
+  status = 200
+  force = true
