@@ -81,9 +81,10 @@ function calibrationGuidance(slug) {
 // Question-bank generation is a teacher-initiated, per-topic action —
 // bursty in short sessions but not high-frequency. 20/hour comfortably
 // covers building out a full topic's question set in one sitting.
-// Paid-tier Phase 1: only 'free' is populated (today's existing value,
-// unchanged) — Phase 2 adds plus/school once those tiers are real.
-const LIMITS = { free: 20 }
+// Paid-tier Phase 2: 'plus' is inert today — nobody can reach it while
+// both billing kill switches (assets/js/billing-flags.js,
+// PLUS_TIER_ENABLED) are off, since no real subscription can exist yet.
+const LIMITS = { free: 20, plus: 200 }
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',

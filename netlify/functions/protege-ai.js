@@ -4,9 +4,10 @@ const { getUserTier } = require('./_billing-guard')
 
 // A conversational tutor naturally produces many small calls per
 // session (one per hint or chat message) — kept generous accordingly.
-// Paid-tier Phase 1: only 'free' is populated (today's existing value,
-// unchanged) — Phase 2 adds plus/school once those tiers are real.
-const LIMITS = { free: 60 }
+// Paid-tier Phase 2: 'plus' is inert today — nobody can reach it while
+// both billing kill switches (assets/js/billing-flags.js,
+// PLUS_TIER_ENABLED) are off, since no real subscription can exist yet.
+const LIMITS = { free: 60, plus: 300 }
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',

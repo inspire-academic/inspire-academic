@@ -200,6 +200,7 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
     <button class="nav-link" onclick="location.href='/tools/protege.html'" style="background:rgba(124,47,255,.12);color:#b46cff;border:1px solid rgba(180,108,255,.25);">✦ Protégé</button>
     <button class="nav-link" onclick="location.href='/tools/tools.html'">Tools</button>
     <button class="nav-link" id="teacher-dashboard-link" onclick="location.href='/teacher/teacher.html'" style="display:none;background:rgba(212,160,23,.1);border:1px solid var(--gold);color:var(--gold);">🎓 Teacher Dashboard</button>
+    <button class="nav-link" id="upgrade-plus-link" onclick="location.href='/student/upgrade.html'" style="display:none;background:rgba(212,160,23,.1);border:1px solid var(--gold);color:var(--gold);">✨ Upgrade</button>
   </div>
   <div class="profile-dropdown-wrapper">
     <div class="nav-user" id="nav-user-btn" onclick="toggleProfileDropdown()">
@@ -375,6 +376,7 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/supabase.js"></script>
 <script src="/assets/js/core-topics.js"></script>
+<script src="/assets/js/billing-flags.js"></script>
 <script>
 // ── Toast ──
 function toast(msg, type='success'){
@@ -418,6 +420,7 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
   // reuses the user/profile already fetched above, no extra round-trips.
   loadProfileData(user, profile);
   checkTeacherRole(profile);
+  checkPlusUpgradeLink();
 
   // 2. Render shell immediately — student sees their name before data loads
   const hr=new Date().getHours();
@@ -675,6 +678,17 @@ function checkTeacherRole(profile){
     const teacherLink=document.getElementById('teacher-dashboard-link');
     if(teacherLink){
       teacherLink.style.display='block';
+    }
+  }
+}
+
+// Paid-tier Phase 2 client-side kill switch — see assets/js/billing-flags.js.
+// While plusTierEnabled is false, this link never appears, full stop.
+function checkPlusUpgradeLink(){
+  if(window.BILLING_FLAGS && window.BILLING_FLAGS.plusTierEnabled){
+    const upgradeLink=document.getElementById('upgrade-plus-link');
+    if(upgradeLink){
+      upgradeLink.style.display='block';
     }
   }
 }
