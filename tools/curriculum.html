@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curriculum — Inspire Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+:root { --transition: 0.2s ease; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family:var(--font-body); background: var(--navy); color: var(--white); min-height: 100vh; line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family:var(--font-body); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--navy2); }
+::-webkit-scrollbar-thumb { background: var(--navy3); border-radius: 3px; }
+
+/* Visible focus states — no sitewide :focus-visible rule exists yet to
+   inherit from, so this page defines its own (Phase 15 requirement). */
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* This page is launched both standalone (direct nav / new tab) and
+   embedded in tools.html's iframe modal, same as every other tool in
+   the TOOLS registry — those never duplicate site chrome (no topnav
+   anywhere in periodic-table.html, required-practicals.html, etc.),
+   relying on the modal's own close/fullscreen controls or the
+   browser's back button. This page follows suit, with one small
+   concession: a lightweight back-link for direct visitors. */
+.back-link {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .82rem; color: var(--muted); font-weight: 600;
+  padding: .9rem 2rem 0;
+  transition: color var(--transition);
+}
+.back-link:hover { color: var(--gold); }
+
+main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1.5rem 5rem; }
+
+/* ── PAGE HEADER ── */
+.page-header { margin-bottom: 2rem; }
+.page-eyebrow {
+  font-family:var(--font-mono);
+  font-size: .7rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: .5rem;
+}
+.page-title {
+  font-family:var(--font-display);
+  font-size: 2.2rem; font-weight:800;
+  margin-bottom: .5rem; line-height: 1.2;
+}
+.page-strapline { font-size: 1.05rem; color: var(--white); font-weight: 600; margin-bottom: .6rem; }
+.page-desc { color: var(--muted); font-size: .95rem; max-width: 640px; line-height: 1.7; margin-bottom: 1.2rem; }
+
+.accuracy-note {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--r);
+  padding: .9rem 1.1rem;
+  max-width: 720px;
+  font-size: .82rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* ── CURRICULUM JOURNEY ── */
+.journey {
+  display: flex; align-items: center; gap: .4rem;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding: 1.4rem 0 .4rem;
+  margin-bottom: .5rem;
+}
+.journey::-webkit-scrollbar { display: none; }
+.journey-pill {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: .68rem; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .5rem .9rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--navy2);
+  color: var(--muted);
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+.journey-pill:hover { border-color: var(--gold); color: var(--white); }
+.journey-pill.gcse { color: var(--gold); border-color: rgba(212,160,23,.4); }
+.journey-arrow { color: var(--border); font-size: .8rem; flex-shrink: 0; }
+
+/* ── FILTER / SEARCH ── */
+.controls {
+  display: flex; align-items: center; gap: .8rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.2rem;
+}
+.filters { display: flex; gap: .5rem; flex-wrap: wrap; flex: 1; }
+.filter-btn {
+  padding: .4rem 1rem; border-radius: 20px;
+  font-size: .82rem; font-weight: 500;
+  border: 1px solid var(--border);
+  background: none; color: var(--muted);
+  transition: all var(--transition);
+}
+.filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+.filter-btn.active {
+  background: var(--gold); border-color: var(--gold);
+  color: var(--navy); font-weight: 600;
+}
+.search-box {
+  display:flex;align-items:center;gap:.5rem;
+  background:var(--navy2);border:1px solid var(--border);
+  border-radius:var(--r);padding:.5rem .9rem;
+  transition:border-color var(--transition);
+  min-width: 220px;
+}
+.search-box:focus-within { border-color: var(--gold); }
+.search-box input { background:none;border:none;outline:none;color:var(--white);font-size:.85rem;width:100%; }
+.search-box input::placeholder { color: var(--muted); }
+
+/* ── SECTIONS ── */
+.section { margin-bottom: 3rem; }
+.section-header { margin-bottom: 1.2rem; }
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem; font-weight: 700;
+  margin-bottom: .3rem;
+}
+.section-sub { font-size: .85rem; color: var(--muted); max-width: 600px; line-height: 1.6; }
+
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── DOCUMENT CARD ── */
+.doc-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all .25s;
+  display: flex; flex-direction: column;
+}
+.doc-card:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.3); }
+.doc-card-accent { height: 3px; width: 100%; }
+.doc-card.inspire .doc-card-accent { background: linear-gradient(90deg,#b45309,#f0c040); }
+.doc-card.dfe .doc-card-accent { background: linear-gradient(90deg,#3b4b63,#7a8fa6); }
+
+.doc-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+
+.doc-badge-row { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; }
+.doc-badge {
+  font-family: var(--font-mono);
+  font-size: .6rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: .22rem .6rem; border-radius: 3px;
+}
+.doc-badge.inspire { background: rgba(212,160,23,.18); color: var(--gold); border: 1px solid rgba(212,160,23,.35); }
+.doc-badge.dfe { background: rgba(122,143,166,.18); color: #cbd5e1; border: 1px solid rgba(122,143,166,.35); }
+.doc-stage {
+  font-family: var(--font-mono);
+  font-size: .65rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .05em;
+}
+
+.doc-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem; font-weight: 700;
+  line-height: 1.35; margin-bottom: .5rem;
+  overflow-wrap: break-word;
+}
+.doc-desc { font-size: .83rem; color: var(--muted); line-height: 1.6; flex: 1; margin-bottom: 1rem; }
+
+.doc-meta {
+  font-size: .74rem; color: var(--muted);
+  display: flex; flex-direction: column; gap: .2rem;
+  margin-bottom: 1.1rem;
+  font-family: var(--font-mono);
+}
+.doc-meta strong { color: var(--white); font-weight: 600; }
+
+.doc-actions {
+  display: flex; gap: .6rem; flex-wrap: wrap;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(30,58,95,.6);
+}
+.doc-action {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .5rem 1rem; border-radius: var(--r);
+  font-size: .8rem; font-weight: 600;
+  transition: all var(--transition);
+}
+.doc-action.primary { background: var(--gold); color: var(--navy); }
+.doc-action.primary:hover { background: var(--gold2); }
+.doc-action.secondary { background: none; border: 1px solid var(--border); color: var(--muted); }
+.doc-action.secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 3rem 2rem; color: var(--muted); }
+.empty-icon { font-size: 2.4rem; margin-bottom: .8rem; }
+
+@media (max-width: 768px) {
+  .back-link { padding: .8rem 1rem 0; }
+  main { padding: 1.2rem 1rem 4rem; }
+  .doc-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 1.7rem; }
+  .search-box { width: 100%; }
+  .controls { flex-direction: column; align-items: stretch; }
+}
+</style>
+</head>
+<body>
+
+<a href="/tools/tools.html" class="back-link">← Back to Tools</a>
+
+<!-- MAIN -->
+<main>
+
+  <div class="page-header">
+    <div class="page-eyebrow">Curriculum Library</div>
+    <h1 class="page-title">Curriculum</h1>
+    <p class="page-strapline">Know what is being learned. Know what comes next.</p>
+    <p class="page-desc">Clear, parent-friendly curriculum guides alongside the official Department for Education curriculum documents on which they are based.</p>
+    <p class="accuracy-note">In England, the national curriculum generally specifies programmes of study by key stage rather than prescribing an identical topic sequence for every individual school year. Schools determine their own curriculum sequence within the statutory framework. Inspire's year guides therefore combine the official curriculum entitlement with a clearly identified year-specific progression lens.</p>
+  </div>
+
+  <!-- CURRICULUM JOURNEY -->
+  <nav class="journey" aria-label="Curriculum year progression">
+    <button class="journey-pill" onclick="setFilter('Year 7')">Year 7</button>
+    <span class="journey-arrow" aria-hidden="true">→</span>
+    <button class="journey-pill" onclick="setFilter('Year 8')">Year 8</button>
+    <span class="journey-arrow" aria-hidden="true">→</span>
+    <button class="journey-pill" onclick="setFilter('Year 9')">Year 9</button>
+    <span class="journey-arrow" aria-hidden="true">→</span>
+    <button class="journey-pill" onclick="setFilter('Year 10')">Year 10</button>
+    <span class="journey-arrow" aria-hidden="true">→</span>
+    <button class="journey-pill" onclick="setFilter('Year 11')">Year 11</button>
+    <span class="journey-arrow" aria-hidden="true">→</span>
+    <button class="journey-pill gcse" onclick="setFilter('GCSE Readiness')">GCSE Ready</button>
+  </nav>
+
+  <!-- FILTER / SEARCH -->
+  <div class="controls">
+    <div class="filters" id="filters" role="group" aria-label="Filter curriculum documents">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">All</button>
+      <button class="filter-btn" data-filter="Year 7" onclick="setFilter('Year 7', this)">Year 7</button>
+      <button class="filter-btn" data-filter="Year 8" onclick="setFilter('Year 8', this)">Year 8</button>
+      <button class="filter-btn" data-filter="Year 9" onclick="setFilter('Year 9', this)">Year 9</button>
+      <button class="filter-btn" data-filter="Year 10" onclick="setFilter('Year 10', this)">Year 10</button>
+      <button class="filter-btn" data-filter="Year 11" onclick="setFilter('Year 11', this)">Year 11</button>
+      <button class="filter-btn" data-filter="GCSE Readiness" onclick="setFilter('GCSE Readiness', this)">GCSE Readiness</button>
+      <button class="filter-btn" data-filter="official-dfe" onclick="setFilter('official-dfe', this)">Official DfE</button>
+    </div>
+    <label class="search-box">
+      <span aria-hidden="true">🔍</span>
+      <input type="search" id="search-input" placeholder="Search year, subject, key stage…" oninput="renderAll()" aria-label="Search curriculum documents">
+    </label>
+  </div>
+
+  <!-- INSPIRE COLLECTION -->
+  <section class="section" id="section-inspire">
+    <div class="section-header">
+      <h2 class="section-title">Maths &amp; Science — Years 7–11</h2>
+      <p class="section-sub">Inspire's year-specific parent and student guides, built from the official curriculum frameworks below.</p>
+    </div>
+    <div class="doc-grid" id="grid-inspire"></div>
+  </section>
+
+  <!-- OFFICIAL DFE -->
+  <section class="section" id="section-dfe">
+    <div class="section-header">
+      <h2 class="section-title">Official Department for Education Curriculum</h2>
+      <p class="section-sub">The original statutory programmes of study published by the Department for Education for schools in England.</p>
+    </div>
+    <div class="doc-grid" id="grid-dfe"></div>
+  </section>
+
+</main>
+
+<script src="/assets/js/curriculum-registry.js"></script>
+<script>
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let currentFilter = 'all'
+
+function setFilter(filter, btn) {
+  currentFilter = filter
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+  const targetBtn = btn || document.querySelector(`.filter-btn[data-filter="${filter}"]`)
+  if (targetBtn) targetBtn.classList.add('active')
+  renderAll()
+}
+
+// ─────────────────────────────────────────────
+// MATCH LOGIC
+// ─────────────────────────────────────────────
+function matchesFilter(doc) {
+  if (currentFilter === 'all') return true
+  if (currentFilter === 'official-dfe') return doc.category === 'official-dfe'
+  return doc.yearGroup === currentFilter
+}
+
+function matchesSearch(doc, term) {
+  if (!term) return true
+  const haystack = [
+    doc.title, doc.description, doc.yearGroup, doc.keyStage,
+    doc.subject, doc.publisher, doc.reference, ...(doc.tags || [])
+  ].filter(Boolean).join(' ').toLowerCase()
+  return haystack.includes(term)
+}
+
+// ─────────────────────────────────────────────
+// CARD RENDERING
+// ─────────────────────────────────────────────
+function cardHtml(doc) {
+  const isInspire = doc.category === 'inspire-guide'
+  const badgeText = isInspire ? 'Inspire Guide' : 'Official DfE'
+  const stageLabel = doc.yearGroup ? `${doc.yearGroup} · ${doc.keyStage}` : doc.keyStage
+
+  const actions = [
+    `<a class="doc-action primary" href="${doc.pdfUrl}" target="_blank" rel="noopener">📄 View PDF</a>`
+  ]
+  if (doc.wordUrl) {
+    actions.push(`<a class="doc-action secondary" href="${doc.wordUrl}" download>⬇ Download Word</a>`)
+  }
+
+  const metaLines = []
+  metaLines.push(`<span><strong>Publisher:</strong> ${doc.publisher}</span>`)
+  if (doc.reference) metaLines.push(`<span><strong>Reference:</strong> ${doc.reference}</span>`)
+
+  return `
+    <article class="doc-card ${isInspire ? 'inspire' : 'dfe'}">
+      <div class="doc-card-accent"></div>
+      <div class="doc-card-body">
+        <div class="doc-badge-row">
+          <span class="doc-badge ${isInspire ? 'inspire' : 'dfe'}">${badgeText}</span>
+          <span class="doc-stage">${stageLabel}</span>
+        </div>
+        <h3 class="doc-title">${doc.title}</h3>
+        <p class="doc-desc">${doc.description}</p>
+        <div class="doc-meta">${metaLines.join('')}</div>
+        <div class="doc-actions">${actions.join('')}</div>
+      </div>
+    </article>`
+}
+
+// ─────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────
+function renderAll() {
+  const term = document.getElementById('search-input').value.trim().toLowerCase()
+  const all = (window.CURRICULUM_REGISTRY || [])
+    .filter(d => d.status === 'published')
+    .filter(d => matchesFilter(d) && matchesSearch(d, term))
+    .sort((a, b) => a.order - b.order)
+
+  const inspire = all.filter(d => d.category === 'inspire-guide')
+  const dfe = all.filter(d => d.category === 'official-dfe')
+
+  document.getElementById('section-inspire').style.display = inspire.length ? '' : 'none'
+  document.getElementById('section-dfe').style.display = dfe.length ? '' : 'none'
+
+  const inspireGrid = document.getElementById('grid-inspire')
+  const dfeGrid = document.getElementById('grid-dfe')
+
+  inspireGrid.innerHTML = inspire.length
+    ? inspire.map(cardHtml).join('')
+    : ''
+  dfeGrid.innerHTML = dfe.length
+    ? dfe.map(cardHtml).join('')
+    : ''
+
+  if (!all.length) {
+    document.getElementById('section-inspire').style.display = ''
+    inspireGrid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-icon">🔍</div>
+        <p>No curriculum documents match your search.</p>
+      </div>`
+  }
+}
+
+// ─────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────
+renderAll()
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+  }
+</script>
+</body>
+</html>

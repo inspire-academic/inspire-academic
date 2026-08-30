@@ -340,6 +340,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
     <button class="filter-btn" data-filter="maths" onclick="filterTools('maths', this)">Maths</button>
     <button class="filter-btn" data-filter="calculator" onclick="filterTools('calculator', this)">Calculators</button>
     <button class="filter-btn" data-filter="practical" onclick="filterTools('practical', this)">Practicals</button>
+    <button class="filter-btn" data-filter="curriculum" onclick="filterTools('curriculum', this)">Curriculum</button>
   </div>
 
   <!-- TOOLS GRID -->
@@ -476,6 +477,21 @@ const TOOLS = [
     subjects: ['Physics', 'Chemistry', 'Biology', 'Maths'],
     tags: ['graphs', 'data', 'analysis', 'skills'],
     category: ['physics', 'chemistry', 'biology', 'maths'],
+    available: true
+  },
+  {
+    id: 'curriculum',
+    name: 'Curriculum Library',
+    icon: '📚',
+    desc: 'Browse Inspire’s Year 7–11 Maths & Science curriculum guides alongside the official Department for Education programmes of study they’re built from.',
+    file: '/tools/curriculum.html',
+    accent: 'linear-gradient(90deg,#b45309,#f0c040)',
+    badge: 'All Subjects',
+    badgeColor: 'rgba(180,83,9,.25)',
+    badgeText: '#f0c040',
+    subjects: ['Physics', 'Chemistry', 'Biology', 'Maths'],
+    tags: ['curriculum', 'DfE', 'key stage', 'GCSE', 'year 7-11'],
+    category: ['curriculum'],
     available: true
   }
 ]
