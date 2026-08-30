@@ -320,3 +320,18 @@ function = "create-teacher"
   to = "/.netlify/functions/assessment-report-email"
   status = 200
   force = true
+
+# Paid-tier Phase 2 (dormant — see create-checkout-session.js/
+# stripe-webhook.js header comments for the kill switches). Same
+# /api/v1/resource/action convention.
+[[redirects]]
+  from = "/api/v1/billing/checkout"
+  to = "/.netlify/functions/create-checkout-session"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/billing/webhook"
+  to = "/.netlify/functions/stripe-webhook"
+  status = 200
+  force = true

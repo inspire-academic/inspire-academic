@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Upgrade to Plus — Inspire Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+.back-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--muted);font-weight:600;padding:.9rem 1.5rem 0;transition:color .2s;}
+.back-link:hover{color:var(--gold);}
+
+main{max-width:640px;margin:0 auto;padding:1.5rem 1.5rem 6rem;}
+.page-eyebrow{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
+.page-title{font-family:var(--font-display);font-size:2rem;font-weight:800;margin-bottom:.5rem;}
+.page-desc{color:var(--muted);font-size:.95rem;line-height:1.7;margin-bottom:2rem;}
+
+.plan-card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.6rem;margin-bottom:1.5rem;}
+.plan-name{font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin-bottom:.3rem;}
+.plan-features{list-style:none;margin:1.2rem 0;display:flex;flex-direction:column;gap:.6rem;}
+.plan-features li{font-size:.88rem;color:var(--white);display:flex;align-items:flex-start;gap:.6rem;line-height:1.5;}
+.plan-features li::before{content:'✓';color:var(--gold);font-weight:700;flex-shrink:0;}
+
+.btn-subscribe{width:100%;padding:.9rem;border-radius:var(--r);border:none;background:var(--gold);color:var(--navy);font-size:.95rem;font-weight:700;transition:background .2s;}
+.btn-subscribe:hover{background:var(--gold2);}
+.btn-subscribe:disabled{opacity:.5;cursor:not-allowed;}
+
+.status-banner{border-radius:var(--r);padding:1rem 1.2rem;margin-bottom:1.5rem;font-size:.88rem;line-height:1.6;}
+.status-banner.info{background:var(--navy2);border:1px solid var(--border);color:var(--muted);}
+.status-banner.success{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.35);color:#4ade80;}
+.status-banner.error{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.35);color:#f87171;}
+
+.current-tier{font-size:.82rem;color:var(--muted);margin-bottom:1.5rem;}
+.current-tier strong{color:var(--white);}
+</style>
+</head>
+<body style="font-family:var(--font-body);background:var(--navy);color:var(--white);min-height:100vh;">
+
+<a href="/dashboard.html" class="back-link">← Back to Dashboard</a>
+
+<main>
+  <div class="page-eyebrow">Inspire Plus</div>
+  <h1 class="page-title">Upgrade to Plus</h1>
+  <p class="page-desc">More AI-powered practice and tutoring, on top of everything already free — the core learning content (subject dashboards, lessons, flashcards, quizzes, mastery tracking) stays free for every student, always.</p>
+
+  <div id="status-banner"></div>
+  <div id="current-tier" class="current-tier"></div>
+
+  <div class="plan-card">
+    <div class="plan-name">Plus</div>
+    <ul class="plan-features">
+      <li>Higher monthly limits on AI-generated practice questions</li>
+      <li>Higher monthly limits on marking &amp; Professor Cosmo tutoring</li>
+      <li>Priority support</li>
+    </ul>
+    <button class="btn-subscribe" id="subscribe-btn" onclick="startCheckout()">Subscribe</button>
+  </div>
+</main>
+
+<script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/billing-flags.js"></script>
+<script>
+function showBanner(type, html){
+  document.getElementById('status-banner').innerHTML = `<div class="status-banner ${type}">${html}</div>`;
+}
+
+async function startCheckout(){
+  const btn = document.getElementById('subscribe-btn');
+  btn.disabled = true;
+  btn.textContent = 'Redirecting…';
+  try {
+    const {data:{session}} = await supa.auth.getSession();
+    if(!session){ window.location.href = '/index.html'; return; }
+    const res = await fetch('/api/v1/billing/checkout', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}` }
+    });
+    const result = await res.json();
+    if(result.success && result.url){
+      window.location.href = result.url;
+      return;
+    }
+    showBanner('error', result.error?.message || 'Could not start checkout. Please try again later.');
+  } catch(e){
+    showBanner('error', 'Could not start checkout. Please try again later.');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Subscribe';
+}
+
+(async () => {
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('status');
+  if(status === 'success'){
+    showBanner('success', "You're subscribed! It may take a moment for your account to update.");
+  } else if(status === 'cancelled'){
+    showBanner('info', 'Checkout was cancelled — no charge was made.');
+  }
+
+  const user = await getUser();
+  if(!user){ window.location.href = '/index.html'; return; }
+
+  const sub = await getSubscription(user.id);
+  document.getElementById('current-tier').innerHTML = `Current plan: <strong>${sub.tier === 'plus' ? 'Plus' : 'Free'}</strong>`;
+
+  const subscribeBtn = document.getElementById('subscribe-btn');
+  if(sub.tier === 'plus'){
+    subscribeBtn.disabled = true;
+    subscribeBtn.textContent = 'Already subscribed';
+  } else if(!window.BILLING_FLAGS || !window.BILLING_FLAGS.plusTierEnabled){
+    subscribeBtn.disabled = true;
+    subscribeBtn.textContent = 'Not available yet';
+    if(status !== 'success' && status !== 'cancelled'){
+      showBanner('info', 'Plus is not available yet — check back soon.');
+    }
+  }
+})();
+</script>
+</body>
+</html>
