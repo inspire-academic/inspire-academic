@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/offline-content.js"></script>
 <style>
 html,body{height:100%;overflow:hidden;}
 
@@ -58,6 +59,17 @@ html,body{height:100%;overflow:hidden;}
 .complete-btn:hover{background:var(--gold2);}
 .complete-btn.done{background:var(--green);color:#fff;}
 .complete-btn.done:hover{opacity:.9;}
+
+/* ── DOWNLOAD BUTTON (native app only — see offline-content.js) ── */
+.download-btn{
+  background:none;color:var(--muted);border:1px solid var(--border);
+  padding:.45rem 1.1rem;border-radius:var(--r);font-size:.82rem;font-weight:700;
+  transition:all .25s;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:.4rem;
+}
+.download-btn:hover{border-color:var(--gold);color:var(--gold);}
+.download-btn.downloaded{border-color:var(--green);color:var(--green);}
+.download-btn:disabled{opacity:.5;cursor:default;}
+.download-btn-text{display:none;}
 
 /* ── CONTENT AREA ── */
 .viewer-content{
@@ -108,6 +120,7 @@ html,body{height:100%;overflow:hidden;}
 @media (min-width: 480px) {
   .badge-dur{display:inline-block;}
   .complete-btn-text{display:inline;}
+  .download-btn-text{display:inline;}
 }
 </style>
 </head>
@@ -118,6 +131,9 @@ html,body{height:100%;overflow:hidden;}
   <button class="back-btn" onclick="history.back()">← Back</button>
   <div class="header-title" id="header-title">Loading…</div>
   <div class="header-badges" id="header-badges"></div>
+  <button class="download-btn" id="download-btn" onclick="toggleDownload()" style="display:none;">
+    ⬇ <span class="download-btn-text">Download</span>
+  </button>
   <button class="complete-btn" id="complete-btn" onclick="markComplete()" style="display:none;">
     ✓ <span class="complete-btn-text">Mark Complete</span>
   </button>
@@ -217,8 +233,17 @@ async function renderContent(lesson){
         allowfullscreen>
       </iframe>`;
 
-    const response = await fetch(lesson.content_url);
-    let html = await response.text();
+    // Real offline mode (native app only, see offline-content.js): a
+    // previously downloaded lesson reads from the device filesystem
+    // instead of the network — the only thing that changes is where
+    // the HTML string comes from, everything below renders it identically.
+    let html = window.OfflineContent && await window.OfflineContent.isLessonDownloaded(lesson.id)
+      ? await window.OfflineContent.readDownloadedLesson(lesson.id)
+      : null;
+    if(html === null){
+      const response = await fetch(lesson.content_url);
+      html = await response.text();
+    }
 
     // Override internal masterclass layout constraints so content fills the iframe
     const overrideStyle = `<style>
@@ -296,6 +321,50 @@ function renderHeader(lesson, progress){
   }
 }
 
+// Real offline mode (native app only) — see offline-content.js.
+// download-btn only ever shows for 'html'-type lessons on the native
+// app; a plain browser tab (or a video/pdf lesson) never sees it at all.
+async function updateDownloadButton(){
+  const btn = document.getElementById('download-btn');
+  if(!window.OfflineContent || !window.OfflineContent.isNativeApp() || currentLesson.lesson_type !== 'html'){
+    btn.style.display = 'none';
+    return;
+  }
+  btn.style.display = 'flex';
+  const downloaded = await window.OfflineContent.isLessonDownloaded(currentLesson.id);
+  renderDownloadButton(downloaded);
+}
+
+function renderDownloadButton(downloaded){
+  const btn = document.getElementById('download-btn');
+  btn.classList.toggle('downloaded', downloaded);
+  btn.querySelector('.download-btn-text').textContent = downloaded ? 'Downloaded' : 'Download';
+  btn.disabled = false;
+}
+
+async function toggleDownload(){
+  const btn = document.getElementById('download-btn');
+  btn.disabled = true;
+  const alreadyDownloaded = btn.classList.contains('downloaded');
+
+  if(alreadyDownloaded){
+    await window.OfflineContent.deleteDownloadedLesson(currentLesson.id);
+    renderDownloadButton(false);
+    toast('Removed from offline downloads');
+    return;
+  }
+
+  btn.querySelector('.download-btn-text').textContent = 'Downloading…';
+  const success = await window.OfflineContent.downloadLesson(currentLesson);
+  if(success){
+    renderDownloadButton(true);
+    toast('Available offline now');
+  } else {
+    renderDownloadButton(false);
+    toast('Could not download — check your connection', 'error');
+  }
+}
+
 async function markComplete(){
   if(!currentUser || !currentLesson) return;
   if(isCompleted){ toast('Already marked complete!'); return; }
@@ -361,6 +430,7 @@ async function init(){
   await trackStart(lessonId);
 
   renderHeader(lesson, progress);
+  await updateDownloadButton();
   await renderContent(lesson);
 }
 
