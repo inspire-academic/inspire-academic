@@ -316,33 +316,46 @@
         </div>
       </div>
       
-      <!-- PARENT INFORMATION (OPTIONAL) -->
+      <!-- PARENT INFORMATION — optional for the general platform;
+           required specifically for Sci-Bridging Y6 (under-13, UK GDPR
+           Article 8) — toggled by JS below, see updateParentRequirement() -->
       <div class="section-title">
         👨‍👩‍👧 Parent/Guardian Information
-        <span class="optional-badge">Optional</span>
+        <span class="optional-badge" id="parent-section-badge">Optional</span>
       </div>
-      
-      <div class="parent-info-box">
+
+      <div class="parent-info-box" id="parent-info-box">
         <strong>💡 Why add parent details?</strong>
         Your parent/guardian can track your progress, see your achievements, and receive weekly updates on your learning journey!
       </div>
-      
+
       <div class="form-row">
         <div class="form-group">
-          <label>Parent First Name</label>
+          <label id="parent-first-name-label">Parent First Name</label>
           <input type="text" id="parent-first-name" placeholder="e.g., Mary">
         </div>
         <div class="form-group">
-          <label>Parent Last Name</label>
+          <label id="parent-last-name-label">Parent Last Name</label>
           <input type="text" id="parent-last-name" placeholder="e.g., Appiah">
         </div>
       </div>
-      
+
       <div class="form-group">
-        <label>Parent Email</label>
+        <label id="parent-email-label">Parent Email</label>
         <input type="email" id="parent-email" placeholder="parent@example.com">
       </div>
-      
+
+      <!-- Sci-Bridging Y6 only — hidden/not required for every other year
+           group. This is the consent gate itself, not just a form field. -->
+      <div class="checkbox-group" id="year6-consent-group" style="display:none;">
+        <label class="checkbox-label">
+          <input type="checkbox" id="year6-parent-consent">
+          <span class="checkbox-text">
+            I am this child's parent or guardian, completing this registration on their behalf, and I consent to their Inspire Academic account being created.
+          </span>
+        </label>
+      </div>
+
       <!-- TERMS -->
       <div class="checkbox-group">
         <label class="checkbox-label">
@@ -374,6 +387,29 @@ const submitBtn = document.getElementById('submit-btn');
 const btnText = document.getElementById('btn-text');
 const errorMsg = document.getElementById('error-message');
 const successMsg = document.getElementById('success-message');
+
+// Sci-Bridging Y6 is the platform's only under-13 self-registration path
+// (UK GDPR digital consent age is 13) — parent details + explicit consent
+// are optional for every other year group, required only for this one.
+// See docs/reference/ (2026-08-30 DPIA draft) for why.
+function isYear6Selected(){
+  return document.getElementById('year-group').value === 'Sci-Bridging Y6';
+}
+
+function updateParentRequirement(){
+  const year6 = isYear6Selected();
+  document.getElementById('parent-section-badge').textContent = year6 ? 'Required' : 'Optional';
+  document.getElementById('parent-info-box').innerHTML = year6
+    ? '<strong>👨‍👩‍👧 Required for this age group</strong> A parent or guardian must complete this section and confirm consent below — Sci-Bridging Y6 is for students under 13.'
+    : '<strong>💡 Why add parent details?</strong> Your parent/guardian can track your progress, see your achievements, and receive weekly updates on your learning journey!';
+  document.getElementById('parent-first-name').required = year6;
+  document.getElementById('parent-last-name').required = year6;
+  document.getElementById('parent-email').required = year6;
+  document.getElementById('year6-consent-group').style.display = year6 ? 'block' : 'none';
+  document.getElementById('year6-parent-consent').required = year6;
+}
+document.getElementById('year-group').addEventListener('change', updateParentRequirement);
+updateParentRequirement();
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
