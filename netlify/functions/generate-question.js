@@ -42,6 +42,7 @@ const TIER_RULES = {
 }
 
 const { verifyUser, checkAndLogUsage } = require('./_ai-usage-guard')
+const { getUserTier } = require('./_billing-guard')
 
 // Real-evidence calibration, distilled from PASCO — 25 real, transcribed
 // AQA/Edexcel past papers (1036 questions), reduced to aggregate
@@ -80,7 +81,9 @@ function calibrationGuidance(slug) {
 // Question-bank generation is a teacher-initiated, per-topic action —
 // bursty in short sessions but not high-frequency. 20/hour comfortably
 // covers building out a full topic's question set in one sitting.
-const MAX_PER_HOUR = 20
+// Paid-tier Phase 1: only 'free' is populated (today's existing value,
+// unchanged) — Phase 2 adds plus/school once those tiers are real.
+const LIMITS = { free: 20 }
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -111,9 +114,12 @@ exports.handler = async function(event) {
     return { statusCode: 400, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Missing required fields' }) }
   }
 
-  const withinLimit = await checkAndLogUsage(user.id, 'generate-question', MAX_PER_HOUR)
+  // Named planTier, not tier — `tier` above is already the exam tier (Higher/Foundation)
+  const planTier = await getUserTier(user.id)
+  const maxPerHour = LIMITS[planTier] ?? LIMITS.free
+  const withinLimit = await checkAndLogUsage(user.id, 'generate-question', maxPerHour)
   if (!withinLimit) {
-    return { statusCode: 429, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: `You've reached the hourly limit for question generation (${MAX_PER_HOUR}/hour). Please try again later.` }) }
+    return { statusCode: 429, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: `You've reached the hourly limit for question generation (${maxPerHour}/hour). Please try again later.` }) }
   }
   const isFreeResponse = questionType === 'free_response'
 

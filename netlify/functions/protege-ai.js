@@ -1,9 +1,12 @@
 // Netlify Function — protege-ai (Professor Cosmo)
 const { verifyUser, checkAndLogUsage } = require('./_ai-usage-guard')
+const { getUserTier } = require('./_billing-guard')
 
 // A conversational tutor naturally produces many small calls per
 // session (one per hint or chat message) — kept generous accordingly.
-const MAX_PER_HOUR = 60
+// Paid-tier Phase 1: only 'free' is populated (today's existing value,
+// unchanged) — Phase 2 adds plus/school once those tiers are real.
+const LIMITS = { free: 60 }
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -24,9 +27,11 @@ exports.handler = async function(event) {
   if (!user) {
     return { statusCode: 401, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Please sign in to chat with Professor Cosmo.' }) }
   }
-  const withinLimit = await checkAndLogUsage(user.id, 'protege-ai', MAX_PER_HOUR)
+  const planTier = await getUserTier(user.id)
+  const maxPerHour = LIMITS[planTier] ?? LIMITS.free
+  const withinLimit = await checkAndLogUsage(user.id, 'protege-ai', maxPerHour)
   if (!withinLimit) {
-    return { statusCode: 429, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: `You've reached the hourly limit for Professor Cosmo (${MAX_PER_HOUR}/hour). Please try again later.` }) }
+    return { statusCode: 429, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: `You've reached the hourly limit for Professor Cosmo (${maxPerHour}/hour). Please try again later.` }) }
   }
 
   const { mode, name, grade, question, answer, hint, userMessage, history } = body
