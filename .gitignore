@@ -3,3 +3,24 @@
 
 # Dependencies
 node_modules/
+
+# Capacitor — www/ is a generated copy of the live site (regenerate via
+# scripts/build-capacitor-www.js), never a second source of truth.
+www/
+
+# Capacitor native-project build output — the project source itself
+# (android/, ios/) is committed; only generated/machine-specific output
+# is excluded. This includes each platform's own copy of the web
+# bundle (`cap add`/`cap sync` copies www/ into both
+# android/.../assets/public and ios/App/App/public) — same "generated,
+# regenerate via scripts/build-capacitor-www.js + cap sync, never a
+# second source of truth" reasoning as www/ itself, and without this
+# both platforms would each commit a duplicate ~42MB copy of the site.
+android/app/build/
+android/.gradle/
+android/local.properties
+android/app/src/main/assets/public/
+ios/App/Pods/
+ios/App/build/
+ios/App/DerivedData/
+ios/App/App/public/
