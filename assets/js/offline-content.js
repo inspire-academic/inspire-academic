@@ -15,11 +15,9 @@
 // present at all, so this file is safe to include on every page,
 // native or not — nothing here ever runs in a plain browser tab.
 
+// isNativeApp() lives in capacitor-utils.js (shared with app-lock.js) —
+// load that file before this one.
 const OFFLINE_LESSON_DIR = 'lessons';
-
-function isNativeApp() {
-  return !!(window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform());
-}
 
 function lessonPath(lessonId) {
   return `${OFFLINE_LESSON_DIR}/${lessonId}.html`;

@@ -250,6 +250,12 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
           <label class="profile-label">Specify Exam Board</label>
           <input type="text" class="profile-input" id="profile-exam-board-custom" placeholder="e.g., OCR, WJEC, Cambridge">
         </div>
+        <div class="profile-form-group" id="app-lock-toggle-group" style="display:none;">
+          <label class="profile-label" style="display:flex;align-items:center;gap:.5rem;cursor:pointer;">
+            <input type="checkbox" id="app-lock-toggle" onchange="toggleAppLock()">
+            Require Face ID / fingerprint to open this app
+          </label>
+        </div>
         <div class="profile-actions">
           <button class="profile-save-btn" id="profile-save-btn" onclick="saveProfile()">
             <span id="profile-save-text">Save Changes</span>
@@ -373,6 +379,8 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/capacitor-utils.js"></script>
+<script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/supabase.js"></script>
 <script src="/assets/js/core-topics.js"></script>
@@ -421,6 +429,7 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
   loadProfileData(user, profile);
   checkTeacherRole(profile);
   checkPlusUpgradeLink();
+  initAppLockToggle();
 
   // 2. Render shell immediately — student sees their name before data loads
   const hr=new Date().getHours();
@@ -680,6 +689,24 @@ function checkTeacherRole(profile){
       teacherLink.style.display='block';
     }
   }
+}
+
+// Biometric app lock — native app only, see assets/js/app-lock.js. The
+// toggle itself is device-local (localStorage), not a profiles column —
+// this protects this device's access to an already-open session, not
+// an account-wide setting.
+function initAppLockToggle(){
+  if(!window.isNativeApp || !window.isNativeApp() || !window.AppLock) return;
+  const group=document.getElementById('app-lock-toggle-group');
+  const checkbox=document.getElementById('app-lock-toggle');
+  if(!group || !checkbox) return;
+  group.style.display='block';
+  checkbox.checked=window.AppLock.isAppLockEnabled();
+}
+
+function toggleAppLock(){
+  const checkbox=document.getElementById('app-lock-toggle');
+  if(window.AppLock) window.AppLock.setAppLockEnabled(checkbox.checked);
 }
 
 // Paid-tier Phase 2 client-side kill switch — see assets/js/billing-flags.js.

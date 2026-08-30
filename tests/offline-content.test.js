@@ -12,7 +12,11 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 
-const CODE = fs.readFileSync(path.join(__dirname, '..', 'assets/js/offline-content.js'), 'utf8');
+// offline-content.js relies on the bare isNativeApp() identifier now
+// defined in capacitor-utils.js (promoted there once app-lock.js also
+// needed it) — real pages load both in sequence, so the sandbox does too.
+const CAPACITOR_UTILS_CODE = fs.readFileSync(path.join(__dirname, '..', 'assets/js/capacitor-utils.js'), 'utf8');
+const CODE = CAPACITOR_UTILS_CODE + '\n' + fs.readFileSync(path.join(__dirname, '..', 'assets/js/offline-content.js'), 'utf8');
 
 // A tiny in-memory fake of the Capacitor Filesystem plugin's relevant
 // surface (stat/writeFile/readFile/deleteFile), enough to exercise
