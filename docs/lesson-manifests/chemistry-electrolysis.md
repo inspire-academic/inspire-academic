@@ -14,11 +14,11 @@ tier: Both
 specSlugs:
   - aqa-ch-fh-chemical-changes
   - edx-ch-fh-ionic-equations
-qaState: DRAFT
-sourceCommit: 7f52f4a
+qaState: HUMAN_APPROVED
+sourceCommit: 4ddaa5c
 sourcePilotDoc: null
-lessonsRowId: 82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
-publicationCommit: null
+lessonsRowId: 032d728e-5eac-4604-9537-ebf218214f54
+publicationCommit: 4f13224
 ```
 
 ## LEARNING OBJECTIVES
@@ -73,30 +73,33 @@ Any platform clause identifier not represented by the verified slugs remains
 - Figure 3 was freshly routed to native semantic HTML/typesetting because exact
   electron placement and charge balance benefit from selectable, responsive
   notation rather than a raster image.
-- All three are integrated and technically validated; human Gate 5 visual
-  approval remains pending, so none is canonical yet.
+- All three are integrated and technically validated. The user approved both
+  premium figures scientifically and visually at Gate 5 on 2026-08-31; the
+  complete representation set is canonical and frozen with the lesson.
 
 ## QA STATE
 
 ```text
-qaState: DRAFT
-Automated QA: 232/232 PASS
+qaState: HUMAN_APPROVED
+Automated QA: 350/350 PASS at Gate 8 integration (4f13224)
 Gates 1–4 and 6: PASS
-Gate 5 representation quality: TECHNICALLY READY FOR HUMAN REVIEW — Premium
-  remediation integrated; final human visual approval not granted
+Gate 5 representation quality: PASS — HUMAN APPROVED 2026-08-31
 Gate 7 standalone browser QA: PASS
-Gate 7 production viewer: wrapper/row opened; inner blob/iframe QA UNVERIFIED
-Gate 8: human-only; not set
+Gate 7 production viewer: PASS — authenticated external Chrome
+Gate 8: PASS — HUMAN APPROVED 2026-08-31
+Freeze: Chemistry production benchmark — see
+  docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
 ```text
-lessons row: 82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
+lessons row: 032d728e-5eac-4604-9537-ebf218214f54
 subject/topic IDs: 3 / 71
-Gate 8: NOT STARTED
-is_published: true — explicitly enabled by the human for live testing
-Publicly live on staging: YES; this does not imply QA_COMPLETE or HUMAN_APPROVED
+Gate 8: PASS — HUMAN APPROVED 2026-08-31
+is_published: true — authorised production row
+Publicly live on staging: YES
+Legacy row 82b58ab3-0246-44a5-bb2c-5c54a4b4efe5: retained unpublished
 ```
 
 ## PROVENANCE
@@ -107,4 +110,4 @@ Publicly live on staging: YES; this does not imply QA_COMPLETE or HUMAN_APPROVED
 | Plan | `docs/production/chemistry-electrolysis-production-plan.md` |
 | Academic content | Original production content |
 | Assessment provenance | Original |
-| Frozen Chemistry benchmark modified? | No |
+| Frozen Chemistry production benchmark | This lesson — declared and checksummed in `docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md` |
