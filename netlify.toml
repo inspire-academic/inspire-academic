@@ -380,6 +380,12 @@ function = "create-teacher"
   force = true
 
 [[redirects]]
+  from = "/api/v1/tutor-academy/assessor-roster"
+  to = "/.netlify/functions/tutor-academy-assessor-roster"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/api/v1/tutor-academy/gate-decision"
   to = "/.netlify/functions/tutor-academy-gate-decision"
   status = 200
