@@ -361,6 +361,12 @@ async function loadProgress() {
 ;(async () => {
   session = await checkAuth()
   if (!session) return
+  if (!STAGE_CONTENT || !Array.isArray(STAGE_CONTENT.sections) || !STAGE_CONTENT.sections.length) {
+    document.getElementById('panels').innerHTML = '<div class="ta-panel ta-active"><h2>Content unavailable</h2><p style="color:var(--muted);">This stage\'s content didn\'t load correctly. Please refresh the page — if this keeps happening, let us know.</p></div>'
+    document.getElementById('nextBtn').style.display = 'none'
+    document.getElementById('prevBtn').style.display = 'none'
+    return
+  }
   document.getElementById('stageTitle').textContent = 'Stage 3 — ' + STAGE_CONTENT.title
   document.getElementById('stageSubtitle').textContent = STAGE_CONTENT.subtitle + ' — ' + STAGE_CONTENT.overview
   await loadProgress()
