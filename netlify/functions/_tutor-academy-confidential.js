@@ -101,11 +101,129 @@ const STAGE_1 = {
   }
 };
 
-// Registry, keyed by stageId. Stages 2-4's confidential content
-// (Pack 03's confidential examiner-school section, Pack 02/04's
-// assessor rubrics) is added here as those stages are built.
+// Source: IBTAEP Pack 03, "CONFIDENTIAL ASSESSOR SECTION" (sections
+// 15-20, following the candidate-facing Week 3 self-evaluation and
+// preceding the general closing "Source & Use Notes"). Pack 03's own
+// header on this block: "Remove or withhold this section if the
+// candidate is completing the formal Week 3 assessment under
+// controlled conditions."
+const STAGE_3 = {
+  'ao-classification-key': {
+    title: 'AO Classification Drill — Suggested Classifications (Section 15)',
+    note: 'Accept a well-reasoned alternative where the complete task plausibly changes the AO emphasis. Command words can be useful clues, but they are not a perfect one-to-one code for assessment objectives.',
+    items: [
+      { q: 1, ao: 'AO1' }, { q: 2, ao: 'AO2' }, { q: 3, ao: 'AO2' }, { q: 4, ao: 'AO3' }, { q: 5, ao: 'AO1' },
+      { q: 6, ao: 'AO2' }, { q: 7, ao: 'AO2' }, { q: 8, ao: 'AO3' }, { q: 9, ao: 'AO1' }, { q: 10, ao: 'AO2' },
+      { q: 11, ao: 'AO3' }, { q: 12, ao: 'AO1' }, { q: 13, ao: 'AO3' }, { q: 14, ao: 'AO2' }, { q: 15, ao: 'AO3' },
+      { q: 16, ao: 'AO1/AO2' }, { q: 17, ao: 'AO3' }, { q: 18, ao: 'AO1' }, { q: 19, ao: 'AO2' }, { q: 20, ao: 'AO2' }
+    ],
+    commandSwitchBenchmark: 'Look for the candidate to articulate response behaviour, not merely repeat definitions: describe = accurate account/pattern; explain = reasons/mechanism; compare = both items; suggest = applied plausible Biology; evaluate = weigh evidence/limitations and judge; justify = support a choice using supplied evidence.'
+  },
+  'suggest-clinic-key': {
+    title: 'Suggest Clinic — Indicative Content (Section 16)',
+    items: [
+      { q: 1, guide: 'Cold conditions reduce membrane fluidity; unsaturated fatty acids contain double bonds that create kinks and prevent tight packing; this helps membranes remain sufficiently fluid/functioning. Award up to 3 for coherent application.' },
+      { q: 2, guide: 'Roadside pollution such as sulfur dioxide/nitrogen pollutants may reduce lichen abundance; accept defensible pollution mechanism at GCSE level.' },
+      { q: 3, guide: 'Stopping early may leave more resistant bacteria alive; survivors reproduce; resistance alleles/traits become more common; future antibiotic treatment becomes less effective.' },
+      { q: 4, guide: 'Variation/mutation produces darker individuals; if dark colour gives camouflage/fitness advantage, darker insects survive/reproduce more; alleles for dark colour are inherited; frequency rises over generations.' },
+      { q: 5, guide: 'Possible enzyme inhibition/product inhibition/another limiting factor or measurement artefact if biologically defensible and linked to observed fall. Do not accept denaturation merely because substrate concentration is high without further justification.' }
+    ],
+    dataSchoolIndicative: {
+      title: 'Data School Indicative Marking',
+      items: [
+        'Enzyme Q1: rate rises from 10 to 40°C, peaks at 40°C in sampled values, then falls sharply to 60°C.',
+        'Q2: increased kinetic energy → more frequent successful collisions/enzyme-substrate complexes up to optimum.',
+        'Q3: high temperature disrupts enzyme structure/active site → fewer successful complexes.',
+        'Q4: data support 40°C as best of temperatures tested, but true optimum could lie between tested values; repeats/range matter.',
+        'Field Q5: Site B, smallest range.',
+        'Q6: similar means can conceal very different spread/variability and sampling consistency.'
+      ]
+    }
+  },
+  'calibration-sets-key': {
+    title: 'Marking Calibration Sets — Assessor Key (Section 17)',
+    setA: {
+      title: 'Set A — vigorous exercise [4]',
+      indicativePoints: 'Muscles require more energy / rate of respiration rises; more oxygen needed for aerobic respiration; more carbon dioxide produced; ventilation increases to supply oxygen/remove carbon dioxide. Equivalent scientifically accurate chains accepted.',
+      students: [
+        { id: 'A', mark: 4, rationale: 'Coherent full chain.' },
+        { id: 'B', mark: 1, rationale: 'Vague but recognises increased body demand; "needs air" lacks precision.' },
+        { id: 'C', mark: '0-1', rationale: 'Contains serious misconception that glucose is made in lungs; only credit any separable valid idea.' },
+        { id: 'D', mark: 4, rationale: 'Short but connected enough if causality is clear.' }
+      ]
+    },
+    setB: {
+      title: 'Set B — plant in darkness [3]',
+      students: [
+        { id: 'E', mark: 3, rationale: 'No photosynthesis + continued respiration + stored organic matter used/mass leaves system.' },
+        { id: 'F', mark: 0, rationale: 'Unsupported/overgeneralised.' },
+        { id: 'G', mark: 2, rationale: 'Core mechanism present; lacks a developed mass-loss consequence.' },
+        { id: 'H', mark: 0, rationale: 'Darkness does not itself justify increased evaporation.' }
+      ]
+    }
+  },
+  'formal-assessment-mark-scheme': {
+    title: 'Week 3 Formal Assessment — Mark Scheme (Section 18)',
+    sectionA: {
+      title: 'Section A — Command and AO literacy [15]',
+      items: [
+        { q: 1, marks: 2, content: 'Both items must be addressed; similarities and/or differences relevant to question.' },
+        { q: 2, marks: 2, content: 'Describe = accurate account; explain = reasons/mechanism.' },
+        { q: 3, marks: 2, content: 'Apply knowledge/understanding to a new or unfamiliar situation.' },
+        { q: 4, marks: 2, content: 'AO3; judging conclusion against evidence.' },
+        { q: 5, marks: 2, content: 'AO1; direct recall.' },
+        { q: 6, marks: 2, content: 'Primarily AO2; applies graph/data and knowledge to decision.' },
+        { q: 7, marks: 3, content: 'AO depends on full task/context; same command can appear in different cognitive settings; command is a clue, not complete classification.' }
+      ]
+    },
+    sectionB: {
+      title: 'Section B — Question anatomy [15]',
+      items: [
+        { q: 8, marks: 5, content: 'Hormone receptor blockade should be linked to failure/reduction of target-cell response. Accept insulin/glucagon reasoning if coherent with stated receptor context. Reward question deconstruction plus accurate model answer.' },
+        { q: 9, marks: 5, content: 'Correlation/design limitations: groups may differ initially; confounders; replication/sample size; measurement; control; random allocation; evidence supports association only if design justifies causality. Require judgement.' },
+        { q: 10, marks: 5, content: 'Habitat fragmentation/loss, disturbance, pollution, mortality, reduced food/nesting, isolated populations, altered abiotic conditions; reward plausible linked explanations.' }
+      ]
+    },
+    sectionC: {
+      title: 'Section C — Marking calibration [15]',
+      items: [
+        { q: '11', marks: 6, content: 'A ≈3/4 depending wording; B ≈1/4; C ≈4/4. Award 3 marks for sensible scoring and 3 for defensible justifications.' },
+        { q: '12', marks: 3, content: 'B is primarily L/E or K depending explanation; intervention should increase biological precision and causal mechanism.' },
+        { q: '13', marks: 6, content: 'Full model should mention reduced absorption/increased water loss and net fall in body water.' }
+      ]
+    },
+    sectionD: {
+      title: 'Section D — Extended response coaching [15]',
+      items: [
+        { q: 14, marks: 15, content: 'Look for misconceptions: need-based mutation/teleology; "getting used to" antibiotic; inaccurate inheritance language; missing pre-existing variation/mutation, selection pressure, differential survival/reproduction, inheritance and change in allele/trait frequency. Coaching plan should include diagnosis, corrected model, worked example, guided practice, independent parallel question and feedback.' }
+      ]
+    }
+  },
+  'examiner-school-observation-rubric': {
+    title: 'Examiner School Observation Rubric (Section 19)',
+    domains: ['Question diagnosis', 'Command teaching', 'Modelling', 'Student thinking', 'Feedback', 'Biological accuracy', 'Efficiency', 'Transfer'],
+    passExpectation: 'Overall average ≥4/5; Biological Accuracy ≥4/5; Question Diagnosis ≥4/5; no domain below 3/5.'
+  },
+  'week3-progression-board': {
+    title: 'Week 3 Progression Board (Section 20)',
+    thresholds: [
+      { evidence: 'Command Word Academy', threshold: '≥90%' },
+      { evidence: 'AO classification', threshold: '≥85%' },
+      { evidence: '100-mark laboratory', threshold: 'Complete' },
+      { evidence: 'Marking calibration', threshold: '≥90% agreement' },
+      { evidence: 'Formal assessment', threshold: '≥80%' },
+      { evidence: 'Microteaching', threshold: '≥4/5' },
+      { evidence: 'Biological accuracy', threshold: 'Critical gate ≥4/5' }
+    ],
+    decisionOptions: ['PASS — proceed to Pack 04: Practical Biology, Mathematics & GCSE Clearance', 'CONDITIONAL PASS — targeted remediation required before Pack 04', 'REPEAT EXAMINER SCHOOL — assessment literacy not yet deployment-ready']
+  }
+};
+
+// Registry, keyed by stageId. Pack 02/04's assessor rubrics (if any)
+// are added here as those stages are built.
 const CONFIDENTIAL_CONTENT = {
-  'biology-gcse-stage-1': STAGE_1
+  'biology-gcse-stage-1': STAGE_1,
+  'biology-gcse-stage-3': STAGE_3
 };
 
 function getConfidentialContent(stageId, key) {

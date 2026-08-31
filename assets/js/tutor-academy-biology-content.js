@@ -503,7 +503,267 @@ const TUTOR_ACADEMY_BIOLOGY = {
       }
     ]
   },
-  'biology-gcse-stage-3': { comingSoon: true, title: 'Examiner School', note: 'Stage 3 content is being built from Pack 03.' },
+  'biology-gcse-stage-3': {
+    title: 'Examiner School',
+    subtitle: 'Question Anatomy, Command Words, AO Thinking, Marking Calibration, Extended Response',
+    overview: 'A strong Biology teacher does not automatically become a strong GCSE examination tutor. This stage trains you to read questions as an examiner reads them, identify the cognitive demand behind the wording, predict mark-scheme logic, diagnose why students lose marks, and teach those skills explicitly.',
+    whyThisMatters: 'Week 3 is the point at which UK curriculum knowledge is converted into examination intelligence. By the end you should be able to teach students how marks are actually won, not merely how Biology is remembered.',
+    learningOutcomes: [
+      'Use AQA science command words accurately and teach them explicitly.',
+      'Identify the biological knowledge a question requires and the additional application step.',
+      'Recognise when a response is biologically true but examination-incomplete.',
+      'Distinguish AO1 recall, AO2 application and AO3 analysis/evaluation.',
+      'Mark student responses consistently and justify each awarded or withheld mark.',
+      'Diagnose errors using the Inspire K-M-A-Q-L-Math-P-E taxonomy.',
+      'Teach six-mark and data-response questions through modelling, guided practice and feedback.'
+    ],
+    sections: [
+      {
+        id: 'four-lens-method',
+        title: 'The Four-Lens Method',
+        type: 'four-lens',
+        mantra: 'Do not ask only: "Does the student know the topic?" Ask: "Can the student recognise what this question is demanding and convert knowledge into mark-worthy evidence?"',
+        lenses: [
+          { lens: 'COMMAND', question: 'What exactly must the student do?', action: 'Translate the command word into the required response behaviour.' },
+          { lens: 'CONTENT', question: 'What Biology must be retrieved?', action: 'Identify the relevant specification knowledge.' },
+          { lens: 'CONTEXT', question: 'What unfamiliar data, organism, graph or scenario changes the task?', action: 'Show the student how to apply known Biology to the new situation.' },
+          { lens: 'MARKS', question: 'How much evidence or reasoning is expected?', action: 'Use the mark allocation as a rough guide to breadth, steps and precision.' }
+        ],
+        workedExample: 'A runner\'s breathing rate remains high for several minutes after a 400m sprint. Explain why. [4] — Command: explain (give biological reasons, connect cause to consequence). Content: respiration, oxygen supply, anaerobic respiration, lactic acid/oxygen debt at GCSE depth. Context: post-exercise recovery, not exercise itself. Marks: likely requires a connected chain rather than four disconnected facts.',
+        task: 'Write a four-mark model answer to the worked example above, then identify two plausible student answers that are biologically relevant but would likely underperform because the reasoning chain is incomplete.'
+      },
+      {
+        id: 'command-word-academy',
+        title: 'Command Word Academy',
+        type: 'command-words',
+        intro: 'AQA defines command words as the words and phrases that tell students how they should answer. Consult the current official AQA GCSE Science command-word resource alongside this training material.',
+        commands: [
+          { word: 'Give / Name / State', meaning: 'Provide a short, precise response.', failure: 'Student wastes time explaining or adds contradictory material.' },
+          { word: 'Describe', meaning: 'Give an accurate account of what is seen, happens or is shown.', failure: 'Student gives reasons instead of describing.' },
+          { word: 'Explain', meaning: 'Make the reason or mechanism clear.', failure: 'Student lists facts without causal links.' },
+          { word: 'Compare', meaning: 'Give relevant similarities and/or differences between both items.', failure: 'Student writes about only one item.' },
+          { word: 'Calculate', meaning: 'Use given numerical information to obtain an answer.', failure: 'No working, wrong units, wrong substitution.' },
+          { word: 'Determine', meaning: 'Use supplied information/data to obtain the answer.', failure: 'Student ignores the provided evidence.' },
+          { word: 'Suggest', meaning: 'Apply Biology to a new or unfamiliar situation.', failure: 'Student panics because the exact example was not memorised.' },
+          { word: 'Evaluate', meaning: 'Use evidence plus knowledge to weigh strengths/limitations and reach a judgement.', failure: 'One-sided description with no judgement.' },
+          { word: 'Justify', meaning: 'Use evidence supplied to support a conclusion/choice.', failure: 'Assertion without evidence.' },
+          { word: 'Predict', meaning: 'Give a biologically plausible outcome.', failure: 'Outcome stated with no link to the pattern/context when reasoning is needed.' },
+          { word: 'Design / Plan', meaning: 'Set out how an investigation should be carried out.', failure: 'Generic method lacking variables, measurements or control.' }
+        ],
+        drill: [
+          { id: 'cs1', stem: 'The graph shows glucose concentration before and after a meal.', commands: 'Describe / Explain' },
+          { id: 'cs2', stem: 'Two plants were grown at different light intensities.', commands: 'Compare / Explain' },
+          { id: 'cs3', stem: 'A new antibiotic reduced bacterial growth in one trial.', commands: 'Suggest / Evaluate' },
+          { id: 'cs4', stem: 'A farmer chooses variety B rather than variety A.', commands: 'Identify / Justify' }
+        ]
+      },
+      {
+        id: 'ao-thinking',
+        title: 'Assessment Objective Thinking',
+        type: 'ao-thinking',
+        intro: 'The candidate must learn to see the difference between knowing, applying and analysing. These labels are training heuristics, not a substitute for the specification or official paper blueprint.',
+        aos: [
+          { ao: 'AO1', shorthand: 'KNOW', desc: 'Recall, select, describe or demonstrate knowledge and understanding.' },
+          { ao: 'AO2', shorthand: 'USE', desc: 'Apply knowledge and understanding to familiar or unfamiliar contexts, including practical and mathematical settings.' },
+          { ao: 'AO3', shorthand: 'JUDGE', desc: 'Analyse information, interpret evidence, draw conclusions, evaluate methods or make judgements.' }
+        ],
+        warning: 'Command words can be useful clues, but they are not a perfect one-to-one code for assessment objectives. Read the entire question, data and context.',
+        drillItems: [
+          'State the function of ribosomes.', 'Explain why a root hair cell has a large surface area.',
+          'Use the graph to determine the optimum temperature.', 'Evaluate the student\'s conclusion from the results.',
+          'Describe what happens to chromosome number during mitosis.', 'Suggest why the patient\'s heart rate increased after the drug.',
+          'Calculate percentage change in mass.', 'Compare the distributions shown in two histograms.',
+          'Give two ways white blood cells defend the body.', 'Explain the results of an unfamiliar osmosis experiment.',
+          'Identify an anomaly in the table.', 'State the word equation for photosynthesis.',
+          'Use evidence to justify which habitat has greater biodiversity.', 'Suggest why a mutation may not change phenotype.',
+          'Describe the trend shown by the line graph.', 'Explain how insulin reduces blood glucose concentration.',
+          'Evaluate whether the sample size is sufficient.', 'Name the vessel carrying blood from heart to lungs.',
+          'Predict the effect of reducing light intensity on photosynthesis.', 'Calculate mean number of organisms per quadrat.'
+        ]
+      },
+      {
+        id: 'question-anatomy-lab',
+        title: 'Question Anatomy Laboratory',
+        type: 'question-lab',
+        instructions: 'Deconstruct each original Inspire question: identify command, content, context, likely AO emphasis, and what a high-quality answer must contain.',
+        questions: [
+          { id: 'qa1', marks: 4, text: 'A student places equal-sized potato cylinders into sucrose solutions of different concentrations. Explain why some cylinders gain mass and others lose mass.' },
+          { id: 'qa2', marks: 4, text: 'A new pesticide kills most insects in a field. Suggest two ways this could affect bird populations in the field.' },
+          { id: 'qa3', marks: 3, text: 'The mean number of stomata per mm² is higher on the lower leaf surface than the upper surface. Suggest an advantage of this distribution.' },
+          { id: 'qa4', marks: 4, text: 'A patient has a narrowing in a coronary artery. Explain how this can increase the risk of damage to heart muscle.' },
+          { id: 'qa5', marks: 4, text: 'Two antibiotics produce inhibition zones of 18mm and 12mm. Evaluate the conclusion that the first antibiotic is always more effective.' },
+          { id: 'qa6', marks: 6, text: 'The population of rabbits rises sharply and then falls. Use ecological principles to suggest reasons for this pattern.' }
+        ]
+      },
+      {
+        id: 'suggest-clinic',
+        title: 'The "Suggest" Clinic',
+        type: 'suggest-clinic',
+        intro: 'AQA uses "suggest" where students must apply knowledge and understanding to a new situation. The unfamiliar surface details are part of the test, not a sign that the content is outside the course.',
+        protocol: [
+          { step: 'S — Strip the story', prompt: 'What is biologically important in the scenario?' },
+          { step: 'C — Connect to known Biology', prompt: 'Which topic or mechanism does this resemble?' },
+          { step: 'O — Offer a plausible mechanism', prompt: 'What could cause the observation?' },
+          { step: 'P — Pin it to evidence', prompt: 'Which detail in the question supports your idea?' },
+          { step: 'E — Express cautiously', prompt: 'Use scientifically defensible language; do not claim more than the evidence allows.' }
+        ],
+        questions: [
+          { id: 'sc1', marks: 3, text: 'A deep-sea fish has unusually high concentrations of unsaturated lipids in its cell membranes. Suggest why this may be advantageous in very cold water.' },
+          { id: 'sc2', marks: 2, text: 'A plant growing beside a road has fewer lichens on its bark than a similar plant in a rural area. Suggest one explanation.' },
+          { id: 'sc3', marks: 4, text: 'A patient taking an antibiotic stops treatment after two days when symptoms improve. Suggest how this behaviour could contribute to antibiotic resistance.' },
+          { id: 'sc4', marks: 5, text: 'A population of insects on a dark volcanic island becomes darker over many generations. Suggest how this change could arise by natural selection.' },
+          { id: 'sc5', marks: 2, text: 'A student finds that enzyme activity falls at very high substrate concentration. Suggest one reason other than shortage of substrate.' }
+        ]
+      },
+      {
+        id: 'data-graph-school',
+        title: 'Data, Graph and Evidence School',
+        type: 'data-school',
+        intro: 'Many GCSE students can recite Biology but lose marks when the same knowledge appears inside a table, graph or unfamiliar investigation. Teach a repeatable reading process.',
+        protocol: ['R — Read axes/headings: identify variables, units and categories.', 'E — Establish pattern: state the overall trend before explaining it.', 'A — Anchor with data: select numerical evidence when the question requires it.', 'D — Detect anomalies: notice exceptions or irregular results.', 'D — Decide what Biology applies: link pattern to mechanism.', 'A — Avoid overclaiming: correlation is not automatically causation.', 'T — Test the conclusion: ask whether evidence genuinely supports it.', 'A — Assess limitations: consider sample size, repeats, controls, range and measurement quality.'],
+        datasets: [
+          {
+            title: 'Mini dataset 1 — Enzyme rate',
+            table: { headers: ['Temperature (°C)', '10', '20', '30', '40', '50', '60'], row: ['Rate (units)', '1.2', '2.1', '3.8', '5.2', '2.7', '0.6'] },
+            questions: [
+              { id: 'ds1', marks: 2, text: 'Describe the pattern in the results.' },
+              { id: 'ds2', marks: 3, text: 'Explain the change in rate between 20°C and 40°C.' },
+              { id: 'ds3', marks: 3, text: 'Explain the change between 40°C and 60°C.' },
+              { id: 'ds4', marks: 3, text: 'A student says "40°C is the optimum temperature for this enzyme." Evaluate this statement.' }
+            ]
+          },
+          {
+            title: 'Mini dataset 2 — Field sampling',
+            table: { headers: ['Site', 'Mean daisies per m²', 'Range'], rows: [['A', '14', '3-25'], ['B', '16', '15-18'], ['C', '6', '0-13']] },
+            questions: [
+              { id: 'ds5', marks: 2, text: 'Which site gives the most consistent results? Justify your answer.' },
+              { id: 'ds6', marks: 2, text: 'Explain why comparing only the means could be misleading.' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'extended-response',
+        title: 'Extended Response and Six-Mark Questions',
+        type: 'extended-response',
+        intro: 'A six-mark response is not "write everything you know." The student must select relevant Biology, organise it logically and respond to the exact context.',
+        chain: [
+          { letter: 'C', label: 'Command', meaning: 'What form must the answer take?' },
+          { letter: 'H', label: 'Headline idea', meaning: 'What is the overall biological explanation or argument?' },
+          { letter: 'A', label: 'Accurate points', meaning: 'Select relevant, precise Biology.' },
+          { letter: 'I', label: 'Interlink', meaning: 'Connect cause → mechanism → consequence rather than listing.' },
+          { letter: 'N', label: 'Nail the context', meaning: 'Refer back to the organism, data, treatment or investigation in the question.' }
+        ],
+        worked: { id: 'er-worked', marks: 6, text: 'Explain how vaccination can reduce the spread of a communicable disease in a population.' },
+        independent: [
+          { id: 'er1', marks: 6, text: 'Explain how the structure of the small intestine is adapted for efficient absorption of digested food molecules.' },
+          { id: 'er2', marks: 6, text: 'A student investigates the effect of light intensity on photosynthesis using pondweed. Evaluate the investigation and suggest improvements.' },
+          { id: 'er3', marks: 6, text: 'Explain how natural selection can lead to the evolution of antibiotic-resistant bacteria.' }
+        ]
+      },
+      {
+        id: 'marking-calibration-lab',
+        title: 'Marking Calibration Laboratory',
+        type: 'calibration-lab',
+        rule: 'Mark the response that was written, not the response you wish the student had written. Do not award marks for inferred knowledge unless the wording genuinely demonstrates it.',
+        sets: [
+          {
+            title: 'Calibration Set A', question: 'Explain why a person breathes faster during vigorous exercise.', maxMarks: 4,
+            students: [
+              { id: 'A', text: 'The muscles need more energy so they respire faster. More oxygen is needed for aerobic respiration and more carbon dioxide is produced, so breathing increases to bring in oxygen and remove carbon dioxide.' },
+              { id: 'B', text: 'Because the body is working harder and needs air.' },
+              { id: 'C', text: 'More glucose is made in the lungs so the muscles can respire.' },
+              { id: 'D', text: 'Muscles contract more. Respiration increases. Oxygen is used faster. Carbon dioxide increases. Breathing rate rises.' }
+            ]
+          },
+          {
+            title: 'Calibration Set B', question: 'Suggest why a plant kept in darkness for several days loses mass.', maxMarks: 3,
+            students: [
+              { id: 'E', text: 'It cannot photosynthesise but it continues respiration, so stored organic molecules are broken down and some products leave the plant.' },
+              { id: 'F', text: 'It dies because there is no light.' },
+              { id: 'G', text: 'No photosynthesis occurs. The plant still respires and uses stored glucose.' },
+              { id: 'H', text: 'Water evaporates because the plant is in darkness.' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'error-taxonomy',
+        title: 'Inspire Error Taxonomy',
+        type: 'error-taxonomy',
+        intro: 'Every lost mark should be diagnosed before remediation. The same score can conceal entirely different learning needs.',
+        drill: [
+          { id: 'et1', case: 'Student defines osmosis as "movement of water from high concentration to low concentration".' },
+          { id: 'et2', case: 'Student knows insulin lowers blood glucose but cannot explain an unfamiliar insulin-pump graph.' },
+          { id: 'et3', case: 'Student answers "describe" by explaining why the trend occurs and never states the trend.' },
+          { id: 'et4', case: 'Student writes 0.4 instead of 40% after correctly calculating a decimal fraction.' },
+          { id: 'et5', case: 'Student says "the results prove fertiliser causes growth" from one small observational dataset.' },
+          { id: 'et6', case: 'Student writes "the heart pumps oxygen around the body" when discussing blood transport.' }
+        ]
+      },
+      {
+        id: 'hundred-mark-lab',
+        title: 'The 100-Mark Examiner Laboratory',
+        type: '100-mark-lab',
+        intro: 'Across this stage, complete 100 marks of carefully selected official past-paper questions or approved Inspire equivalents. The purpose is not score accumulation; it is deliberate analysis.',
+        captureFields: ['Command — exact command word or instruction', 'Content — specification knowledge required', 'Context — what makes the question familiar/unfamiliar', 'AO demand — likely dominant cognitive demand', 'Model answer — concise response that earns available marks', 'Mark-scheme surprise — anything accepted/rejected you did not predict', 'Student trap — most likely way a learner loses marks', 'Teaching move — how you would prevent or repair that error'],
+        reflectionPrompt: 'Identify the three examination patterns that most changed your understanding of GCSE Biology assessment.'
+      },
+      {
+        id: 'examiner-microteaching',
+        title: 'Examiner School Microteaching',
+        type: 'microteaching',
+        intro: 'Deliver a 20-minute tutoring segment to a learner or simulated learner. The objective is not to lecture about exam technique — it is to visibly improve performance on a difficult question.',
+        structure: [
+          { minutes: '0-3', action: 'Diagnostic attempt: student answers an unfamiliar Biology question without help.' },
+          { minutes: '3-6', action: 'Diagnose the dominant error using the Inspire taxonomy.' },
+          { minutes: '6-10', action: 'Model question deconstruction using Command-Content-Context-Marks.' },
+          { minutes: '10-15', action: 'Guided attempt on a parallel question.' },
+          { minutes: '15-18', action: 'Independent attempt on a second parallel question.' },
+          { minutes: '18-20', action: 'Feedback, metacognitive recap and next prescription.' }
+        ],
+        focusOptions: ['Suggest/application question', 'Explain/cause-and-effect question', 'Data/evaluation question', 'Six-mark extended response'],
+        planFields: ['Diagnostic question', 'Likely error', 'Model question', 'Guided question', 'Independent question', 'Success criterion', 'Follow-up prescription']
+      },
+      {
+        id: 'formal-week3-assessment',
+        title: 'Week 3 Formal Assessment',
+        type: 'formal-assessment',
+        instructions: 'Time: 75 minutes. Total: 60 marks. Closed notes unless your assessor specifies otherwise.',
+        sections: [
+          { heading: 'Section A — Command and AO literacy [15]', questions: [
+            { id: 'fa1', marks: 2, text: 'For "compare", state what must appear in a high-quality response.' },
+            { id: 'fa2', marks: 2, text: 'Explain the difference between "describe" and "explain".' },
+            { id: 'fa3', marks: 2, text: 'What does "suggest" usually require a student to do?' },
+            { id: 'fa4', marks: 2, text: 'Classify: "Evaluate whether the conclusion is supported by the data." Give AO and reason.' },
+            { id: 'fa5', marks: 2, text: 'Classify: "State two functions of the liver." Give AO and reason.' },
+            { id: 'fa6', marks: 2, text: 'Classify: "Use the graph to explain why the student chose 35°C." Give AO and reason.' },
+            { id: 'fa7', marks: 3, text: 'Give one reason command words alone cannot always determine AO.' }
+          ]},
+          { heading: 'Section B — Question anatomy [15]', questions: [
+            { id: 'fa8', marks: 5, text: 'A drug blocks receptors for a hormone on liver cells. Suggest how this could affect control of blood glucose concentration. Identify command, content, context and likely reasoning chain, then write a model answer.' },
+            { id: 'fa9', marks: 5, text: 'A student concludes that fertiliser X causes greater plant growth because the treated plants were taller after four weeks. Evaluate the conclusion.' },
+            { id: 'fa10', marks: 5, text: 'A woodland has fewer species after a new road is built through it. Suggest biological reasons for this change.' }
+          ]},
+          { heading: 'Section C — Marking calibration [15]', questions: [
+            { id: 'fa11', marks: 6, text: 'Question: "Explain why a person with severe diarrhoea may become dehydrated. [4]" Student A: "Water is lost in watery faeces faster than it is replaced, reducing body water." Student B: "They go to the toilet a lot so they get dehydrated." Student C: "Less water is absorbed from the intestine and more water leaves the body in faeces, so body water falls." Award marks and justify your decisions.' },
+            { id: 'fa12', marks: 3, text: 'Identify the dominant error code for Student B (above) and propose one tutoring intervention.' },
+            { id: 'fa13', marks: 6, text: 'Write an improved four-mark answer suitable for modelling to a student.' }
+          ]},
+          { heading: 'Section D — Extended response coaching [15]', questions: [
+            { id: 'fa14', marks: 15, text: 'A student writes the response below to a six-mark question about natural selection: "Some bacteria become resistant because they need to survive the antibiotic. They then get used to it and pass resistance to their babies." Diagnose the biological and examination problems, then outline how you would coach the student to produce a high-quality answer.' }
+          ]}
+        ]
+      },
+      {
+        id: 'self-evaluation',
+        title: 'Candidate Self-Evaluation',
+        type: 'self-evaluation',
+        competencies: ['Command-word fluency', 'AO recognition', 'Question deconstruction', 'Application / suggest coaching', 'Data interpretation', 'Marking calibration', 'Extended response coaching', 'Error diagnosis'],
+        prompts: ['My three strongest gains this week', 'My two priority gaps before GCSE clearance', 'One change I will make immediately in my tutoring']
+      }
+    ]
+  },
   'biology-gcse-stage-4': { comingSoon: true, title: 'Practical & Mathematical Biology', note: 'Stage 4 content is being built from Pack 04.' }
 }
 

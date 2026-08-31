@@ -161,13 +161,36 @@ test('assessor-content: admin caller receives the confidential stage content', a
   });
 });
 
-test('assessor-content: unknown stage returns 404 even for an admin', async () => {
+test('assessor-content: Stage 2 has no confidential content (Pack 02 has no confidential section) and returns 404 even for an admin', async () => {
   await withMockFetch({ role: 'admin' }, async () => {
     const res = await assessorContent.handler({
       httpMethod: 'POST', headers: AUTH_HEADER,
       body: JSON.stringify({ stageId: 'biology-gcse-stage-2' })
     });
     assert.equal(res.statusCode, 404);
+  });
+});
+
+test('assessor-content: admin caller receives Stage 3\'s confidential AO classification key', async () => {
+  await withMockFetch({ role: 'admin' }, async () => {
+    const res = await assessorContent.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ stageId: 'biology-gcse-stage-3', key: 'ao-classification-key' })
+    });
+    assert.equal(res.statusCode, 200);
+    const body = JSON.parse(res.body);
+    assert.equal(body.success, true);
+    assert.equal(body.content.items.length, 20);
+  });
+});
+
+test('assessor-content: non-admin caller is refused Stage 3\'s confidential content too', async () => {
+  await withMockFetch({ role: 'teacher' }, async () => {
+    const res = await assessorContent.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ stageId: 'biology-gcse-stage-3', key: 'formal-assessment-mark-scheme' })
+    });
+    assert.equal(res.statusCode, 403);
   });
 });
 
