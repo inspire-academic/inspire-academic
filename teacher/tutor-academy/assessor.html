@@ -92,13 +92,21 @@ async function checkAuth() {
 }
 
 async function loadTutors() {
-  const { data: enrollments } = await supa.from('tutor_academy_enrollments').select('*').eq('programme_id', 'biology-gcse')
+  const response = await fetch('/api/v1/tutor-academy/assessor-roster', {
+    headers: { Authorization: `Bearer ${session.access_token}` }
+  })
+  const payload = await response.json().catch(() => ({}))
+  if (!response.ok || !payload.success) {
+    document.getElementById('tutorList').innerHTML = '<p class="ta-error">The candidate roster could not be loaded. Please retry.</p>'
+    return
+  }
+  const enrollments = payload.enrollments || []
   const ids = (enrollments || []).map(e => e.profile_id)
   if (!ids.length) {
     document.getElementById('tutorList').innerHTML = '<p style="color:var(--muted);">No tutors enrolled yet.</p>'
     return
   }
-  const { data: profiles } = await supa.from('profiles').select('id, full_name, email').in('id', ids)
+  const profiles = payload.profiles || []
   const profileById = {}
   ;(profiles || []).forEach(p => { profileById[p.id] = p })
 
