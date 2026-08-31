@@ -261,7 +261,248 @@ const TUTOR_ACADEMY_BIOLOGY = {
       }
     ]
   },
-  'biology-gcse-stage-2': { comingSoon: true, title: 'Specification Mastery', note: 'Stage 2 content is being built from Pack 02 and will follow the same structure as Stage 1.' },
+  'biology-gcse-stage-2': {
+    title: 'Specification Mastery',
+    subtitle: 'GCSE Biology Specification Mastery & Content Conversion',
+    overview: 'This stage converts your existing Biology expertise into precise AQA GCSE tutoring competence across all seven content domains — controlling specification boundaries, Foundation/Higher pitch, Combined/Separate distinctions, common misconceptions, and practical/mathematical links.',
+    whyThisMatters: 'A subject expert naturally wants to give the fullest scientific explanation. A GCSE tutor needs a second discipline: restraint. By the end of this stage you should be able to map, explain, differentiate and assess all seven AQA GCSE Biology domains, and demonstrably teach to the specification rather than around it.',
+    learningOutcomes: [
+      'Map all seven AQA GCSE Biology domains and their Paper 1/Paper 2 placement.',
+      'Distinguish core content from Higher-tier and Biology-only extensions.',
+      'Identify practical, mathematical and working-scientifically opportunities inside each domain.',
+      'Teach the same concept at Foundation, Higher and Grade 8-9 challenge level.',
+      'Recognise and repair high-frequency misconceptions using a deliberate protocol, not just correction.',
+      'Avoid unnecessary A-level detail while preserving conceptual accuracy.'
+    ],
+    sections: [
+      {
+        id: 'specification-control-method',
+        title: 'Part A/B — The Inspire Specification-Control Method',
+        type: 'method',
+        intro: 'The professional shift this stage asks of you: from "I know this Biology" to "I know exactly what this learner must know, how deeply, what misconceptions are likely, how it will be examined, and how I will know they have mastered it."',
+        sixLens: [
+          'CONTENT — What facts, concepts and processes are explicitly required?',
+          'PERFORMANCE — What does "students should be able to…" require them to do?',
+          'BOUNDARY — Is it Foundation, Higher, Biology-only, Combined-shared or beyond GCSE?',
+          'CONNECTION — Which earlier/later topics does this depend on?',
+          'ASSESSMENT — How could this appear as recall, application, data, practical or extended response?',
+          'MISCONCEPTION — What plausible wrong model might a student hold?'
+        ],
+        boundaryTest: [
+          'Can I identify whether the point is required at GCSE?',
+          'Can I identify whether all students need it or only Higher/Biology-only students?',
+          'Can I explain it without drifting into A-level mechanism?',
+          'Can I write one exam-style question that tests it?',
+          'Can I name one misconception that would produce a wrong answer?'
+        ],
+        antiOverteachTest: 'Before adding detail, ask: does this detail improve conceptual understanding needed for the GCSE, or am I teaching it because I personally know it?'
+      },
+      {
+        id: 'domain-1-cell-biology',
+        title: 'Domain 1 — Cell Biology',
+        type: 'domain',
+        paper: 'Paper 1',
+        scope: 'Cell structure; microscopy; cell specialisation; cell differentiation; chromosomes; mitosis; stem cells; diffusion; osmosis; active transport',
+        conceptFamilies: [
+          { family: 'Cell structure', control: 'Compare eukaryotic and prokaryotic cells; recognise sub-cellular structures and functions.', boundary: 'Do not turn GCSE into ultrastructure or organelle biochemistry.' },
+          { family: 'Microscopy', control: 'Calculate magnification; use standard form where appropriate; interpret images.', boundary: 'Students often confuse image size, actual size and magnification.' },
+          { family: 'Cell division', control: 'Link chromosomes, mitosis, growth and repair.', boundary: 'Avoid implying mitosis creates genetic variation.' },
+          { family: 'Stem cells', control: 'Evaluate potential benefits/risks and ethical issues.', boundary: 'Separate scientific claims from ethical judgement.' },
+          { family: 'Transport', control: 'Differentiate diffusion, osmosis and active transport.', boundary: 'Osmosis concerns water through a partially permeable membrane; active transport requires energy.' }
+        ],
+        misconceptions: ['All cells have a nucleus.', 'Diffusion requires energy.', 'Osmosis is movement of any solute.', 'Mitosis halves chromosome number.', 'Stem cells are all equally potent.'],
+        links: 'Microscopy and osmosis practical links; magnification; surface area-to-volume reasoning.'
+      },
+      {
+        id: 'domain-2-organisation',
+        title: 'Domain 2 — Organisation',
+        type: 'domain',
+        paper: 'Paper 1',
+        scope: 'Levels of organisation; digestive system; enzymes; heart and blood vessels; blood; coronary heart disease; plant tissues; transpiration and translocation',
+        conceptFamilies: [
+          { family: 'Organisation', control: 'Move fluently cell → tissue → organ → organ system.', boundary: 'Students often reverse tissue and organ.' },
+          { family: 'Enzymes', control: 'Explain specificity and effects of temperature/pH at GCSE depth.', boundary: 'Avoid unnecessary induced-fit molecular detail unless clarifying.' },
+          { family: 'Heart/circulation', control: 'Relate structure to pressure, flow and exchange.', boundary: 'Do not let "arteries carry oxygenated blood" become an absolute rule.' },
+          { family: 'Blood', control: 'Link red cells, white cells, platelets and plasma to function.', boundary: 'Distinguish plasma from serum if raised; serum is not normally required.' },
+          { family: 'Plants', control: 'Connect xylem/phloem, transpiration and translocation.', boundary: 'Students commonly swap xylem and phloem.' }
+        ],
+        misconceptions: ['Enzymes die when heated.', 'Veins always carry deoxygenated blood.', 'Food goes through the liver before digestion.', 'Plants get food from the soil.', 'Transpiration and translocation are the same process.'],
+        links: 'Food tests/enzyme practicals; rate calculations; graph interpretation; cardiovascular risk evidence.'
+      },
+      {
+        id: 'domain-3-infection-response',
+        title: 'Domain 3 — Infection and Response',
+        type: 'domain',
+        paper: 'Paper 1',
+        scope: 'Communicable disease; pathogens; viral/bacterial/fungal/protist examples; human defences; vaccination; antibiotics; drug discovery; monoclonal antibodies; plant disease',
+        conceptFamilies: [
+          { family: 'Pathogens', control: 'Differentiate pathogen types and transmission.', boundary: 'Do not define all microorganisms as pathogens.' },
+          { family: 'Defence', control: 'Separate physical barriers, phagocytosis, antibodies and antitoxins.', boundary: 'Avoid saying antibodies "eat" pathogens.' },
+          { family: 'Vaccination', control: 'Explain antigen exposure, memory and faster secondary response at appropriate depth.', boundary: 'Do not say vaccines directly kill pathogens.' },
+          { family: 'Antibiotics', control: 'Explain bacterial specificity and resistance selection.', boundary: 'Antibiotics do not treat viral infections.' },
+          { family: 'Drug development', control: 'Link preclinical/clinical testing to safety, efficacy and dose.', boundary: 'Students may confuse placebo with control variable.' }
+        ],
+        misconceptions: ['All bacteria are harmful.', 'Vaccines give you the disease.', 'Antibiotics kill viruses.', 'Resistance happens because individual bacteria try to adapt.', 'White blood cells are the same as antibodies.'],
+        links: 'Microbiology practical; evaluation of treatments; application to unfamiliar outbreaks and resistance scenarios.'
+      },
+      {
+        id: 'domain-4-bioenergetics',
+        title: 'Domain 4 — Bioenergetics',
+        type: 'domain',
+        paper: 'Paper 1',
+        scope: 'Photosynthesis; limiting factors; uses of glucose; aerobic and anaerobic respiration; exercise; metabolism',
+        conceptFamilies: [
+          { family: 'Photosynthesis', control: 'Balance word/symbol equations and connect rate to limiting factors.', boundary: 'Students often think plants photosynthesise instead of respiring.' },
+          { family: 'Limiting factors', control: 'Interpret graphs and identify changing limiting factor.', boundary: 'Avoid treating one factor as limiting under all conditions.' },
+          { family: 'Respiration', control: 'Distinguish aerobic/anaerobic and relate to energy transfer.', boundary: 'Respiration is not breathing.' },
+          { family: 'Exercise', control: 'Connect increased energy demand to respiration and physiological responses.', boundary: 'Avoid vague "more oxygen because muscles need it" without causal chain.' },
+          { family: 'Metabolism', control: 'Use metabolism as an umbrella for synthesis/breakdown reactions.', boundary: 'Do not reduce metabolism to "how fast you burn calories."' }
+        ],
+        misconceptions: ['Plants only respire at night.', 'Photosynthesis is how plants breathe.', 'Energy is made in respiration.', 'Lactic acid stays permanently in muscles.', 'More light always increases photosynthesis.'],
+        links: 'Photosynthesis practical; rate graphs; extended causal explanations.'
+      },
+      {
+        id: 'domain-5-homeostasis-response',
+        title: 'Domain 5 — Homeostasis and Response',
+        type: 'domain',
+        paper: 'Paper 2',
+        scope: 'Homeostasis; nervous system; reflexes; brain/eye (Biology-only areas); endocrine system; blood glucose; diabetes; reproduction; fertility control; plant hormones; water balance/kidney',
+        conceptFamilies: [
+          { family: 'Homeostasis', control: 'Explain receptor → coordination centre → effector and negative feedback.', boundary: 'Do not define homeostasis as keeping everything constant.' },
+          { family: 'Nervous system', control: 'Trace stimulus-response pathways and reflex arcs.', boundary: 'Students confuse sensory and motor neurones.' },
+          { family: 'Hormones', control: 'Compare nervous and endocrine coordination.', boundary: 'Hormones travel in blood; they are not nerve impulses.' },
+          { family: 'Glucose control', control: 'Explain insulin/glucagon roles at required tier depth.', boundary: 'Avoid saying insulin "turns glucose into insulin."' },
+          { family: 'Reproduction', control: 'Link hormones to menstrual cycle, contraception and fertility treatment.', boundary: 'Keep sequence and feedback relationships clear.' }
+        ],
+        misconceptions: ['Homeostasis keeps conditions perfectly constant.', 'Reflexes always involve the brain first.', 'Hormones travel down nerves.', 'Insulin removes glucose from the body.', 'All contraceptives prevent ovulation.'],
+        links: 'Reaction-time practical; interpreting hormone graphs; evaluating treatments; plant-response practical for Biology-only.',
+        separateBiologyNote: 'The brain/eye content in this domain is Biology-only — confirm your candidate\'s route before teaching it.'
+      },
+      {
+        id: 'domain-6-inheritance-variation-evolution',
+        title: 'Domain 6 — Inheritance, Variation and Evolution',
+        type: 'domain',
+        paper: 'Paper 2',
+        scope: 'Sexual/asexual reproduction; meiosis; DNA/genome; genetic inheritance; inherited disorders; variation; evolution; selective breeding; genetic engineering; cloning; fossils; resistant bacteria; classification',
+        conceptFamilies: [
+          { family: 'Reproduction', control: 'Contrast sexual and asexual reproduction and implications for variation.', boundary: 'Mitosis and meiosis must not be conflated.' },
+          { family: 'DNA/genome', control: 'Connect gene, chromosome and genome at GCSE depth.', boundary: 'Avoid unnecessary transcription/translation detail beyond specification.' },
+          { family: 'Inheritance', control: 'Use genetic diagrams and probability appropriately.', boundary: 'Dominant does not mean common or better.' },
+          { family: 'Evolution', control: 'Explain selection through existing variation and differential survival/reproduction.', boundary: 'Individuals do not evolve because they need to.' },
+          { family: 'Biotechnology', control: 'Evaluate selective breeding/genetic engineering/cloning.', boundary: 'Separate mechanism, benefit, risk and ethical claim.' }
+        ],
+        misconceptions: ['Dominant alleles are always more common.', 'Evolution gives organisms what they need.', 'Meiosis makes identical cells.', 'Genes and chromosomes are the same thing.', 'Antibiotics cause useful resistance mutations.'],
+        links: 'Genetic crosses and probability; evaluating evidence; antibiotic-resistance application; classification evidence.'
+      },
+      {
+        id: 'domain-7-ecology',
+        title: 'Domain 7 — Ecology',
+        type: 'domain',
+        paper: 'Paper 2',
+        scope: 'Communities; abiotic/biotic factors; adaptations; interdependence; competition; sampling; material cycles; decomposition; biodiversity; human impacts; food security',
+        conceptFamilies: [
+          { family: 'Ecosystems', control: 'Connect organism, population, community and ecosystem.', boundary: 'Students often use population/community interchangeably.' },
+          { family: 'Factors', control: 'Distinguish abiotic from biotic and link to distribution.', boundary: 'Lists without causal explanation are weak.' },
+          { family: 'Sampling', control: 'Explain quadrats, transects, random sampling and estimation.', boundary: '"More quadrats makes it fair" needs precision: reliability/representativeness.' },
+          { family: 'Cycles', control: 'Explain water/carbon cycles and decomposer role.', boundary: 'Matter cycles; energy flows.' },
+          { family: 'Biodiversity', control: 'Evaluate human impacts and conservation strategies.', boundary: 'Avoid assuming every intervention has only benefits.' }
+        ],
+        misconceptions: ['Energy is recycled in ecosystems.', 'All competition is between different species.', 'A quadrat measures population exactly.', 'Decomposers only eat dead animals.', 'Biodiversity means the number of animals.'],
+        links: 'Quadrat/transect practical; mean/area estimates; decay practical; graph/data evaluation; human-impact arguments.'
+      },
+      {
+        id: 'cross-domain-synthesis',
+        title: 'Part J — Cross-Domain Synthesis & Tutoring Intelligence',
+        type: 'synthesis',
+        intro: 'Top GCSE performance requires students to retrieve across topics. Teach Biology as one connected system rather than seven isolated chapters.',
+        connections: [
+          { anchor: 'Surface area', links: 'Cells ↔ villi ↔ alveoli ↔ roots ↔ exchange efficiency' },
+          { anchor: 'Enzymes', links: 'Organisation ↔ digestion ↔ respiration/photosynthesis ↔ homeostasis' },
+          { anchor: 'Transport', links: 'Cell membranes ↔ blood ↔ xylem/phloem ↔ kidney' },
+          { anchor: 'Variation', links: 'Meiosis ↔ inheritance ↔ evolution ↔ antibiotic resistance' },
+          { anchor: 'Energy', links: 'Photosynthesis ↔ respiration ↔ food chains ↔ exercise' },
+          { anchor: 'Homeostasis', links: 'Enzymes ↔ nervous/endocrine coordination ↔ kidney ↔ glucose control' },
+          { anchor: 'Evidence', links: 'Practical methods ↔ sampling ↔ drug trials ↔ disease-risk correlations' }
+        ],
+        repairProtocol: ['ELICIT — make the student state or predict.', 'EXPOSE — produce evidence/example the misconception cannot explain.', 'REBUILD — teach the correct causal model.', 'CHECK — ask a near-transfer question.', 'TRANSFER — ask an unfamiliar-context question.'],
+        repairNote: 'Do not correct every misconception by simply telling the student the right sentence. A durable correction requires the learner to notice why the previous mental model fails.'
+      },
+      {
+        id: 'tier-route-drills',
+        title: 'Part K — Route & Tier Conversion Drills',
+        type: 'drills',
+        instructions: 'For each scenario, write what you would teach, what you would deliberately omit, one model question, and one mastery check.',
+        scenarios: [
+          { id: 'k1', label: 'Year 10 Foundation', prompt: 'Osmosis — learner struggles with concentration language.' },
+          { id: 'k2', label: 'Year 11 Higher', prompt: 'Osmosis — learner can recall definition but fails unfamiliar contexts.' },
+          { id: 'k3', label: 'Year 11 Separate Biology Higher', prompt: 'Kidney/water balance — target grade 8.' },
+          { id: 'k4', label: 'Year 10 Combined Science', prompt: 'Monoclonal antibodies are mentioned by a sibling studying Separate Biology.' },
+          { id: 'k5', label: 'Year 11 Higher', prompt: 'Evolution — student says organisms adapt because they need to survive.' },
+          { id: 'k6', label: 'Year 11 Foundation', prompt: 'Ecology — student cannot distinguish population, community and ecosystem.' }
+        ],
+        classificationTable: {
+          instructions: 'Classify each teaching choice: Overteach / Underteach / Just right / Scientifically wrong — with a one-line justification.',
+          items: [
+            'Explain ATP synthase during GCSE respiration.',
+            'Teach that respiration transfers energy rather than "creates energy".',
+            'Ignore active transport because it is difficult for Foundation students.',
+            'Teach every glycolysis intermediate at GCSE.',
+            'Use genetic diagrams and probability for inheritance questions.',
+            'Teach that dominant means "stronger".',
+            'Use "plants make glucose in photosynthesis" then connect uses of glucose.',
+            'Teach antibody specificity when explaining vaccination.'
+          ]
+        }
+      },
+      {
+        id: 'week2-assessment',
+        title: 'Part L — Week 2 Assessment',
+        type: 'week2-assessment',
+        specControl: {
+          heading: 'L1 — Specification Control (30 marks, 35 minutes, no notes)',
+          questions: [
+            { id: 'l1-1', marks: 4, text: 'Name the four subject areas examined on AQA GCSE Biology Paper 1.' },
+            { id: 'l1-2', marks: 3, text: 'Name the three principal subject areas examined on Paper 2.' },
+            { id: 'l1-3', marks: 3, text: 'A Higher student asks for the molecular mechanism of oxidative phosphorylation. Explain how you would handle this without confusing specification depth.' },
+            { id: 'l1-4', marks: 4, text: 'Give two examples of Biology content where a tutor must check Combined/Separate boundaries before teaching.' },
+            { id: 'l1-5', marks: 3, text: 'Explain one way a "students should be able to" statement changes lesson design compared with a pure knowledge statement.' },
+            { id: 'l1-6', marks: 3, text: 'A student says dominant alleles are the most common. Diagnose and correct the misconception.' },
+            { id: 'l1-7', marks: 4, text: 'Write one AO2-style question on photosynthesis and explain why it is AO2.' },
+            { id: 'l1-8', marks: 3, text: 'Write one practical/data question on ecology and identify the skill it tests.' },
+            { id: 'l1-9', marks: 3, text: 'Explain the difference between teaching more detail and teaching greater challenge.' }
+          ]
+        },
+        misconceptionClinic: {
+          heading: 'L2 — Misconception Clinic (20 marks)',
+          instructions: 'For each statement (4 marks each): identify what is wrong, give the corrected model, and write one question that checks whether the misconception is repaired.',
+          items: [
+            { id: 'l2-1', domain: 'Bioenergetics', statement: '"Plants do not respire when they are photosynthesising."' },
+            { id: 'l2-2', domain: 'Infection/Evolution', statement: '"Antibiotics make bacteria mutate so they become resistant."' },
+            { id: 'l2-3', domain: 'Homeostasis', statement: '"Homeostasis means the body keeps everything at exactly the same value."' },
+            { id: 'l2-4', domain: 'Organisation', statement: '"A vein is a vessel carrying deoxygenated blood."' },
+            { id: 'l2-5', domain: 'Cell Biology', statement: '"Osmosis is water moving from high concentration to low concentration."' }
+          ]
+        },
+        microteaching: {
+          heading: 'L3 — 20-Minute Microteaching',
+          brief: 'Teach "How vaccination protects individuals and populations" to a Year 11 Higher student currently working at Grade 6 and targeting Grade 8. The learner can define vaccination but struggles to construct causal explanations in unfamiliar contexts.',
+          requirements: ['A 2-3 minute retrieval/diagnostic opening.', 'A precise explanation at GCSE Higher depth.', 'At least three questions requiring student thinking, not just recall.', 'One misconception check.', 'One AO2 unfamiliar-context question.', 'A final mastery check and explicit next step.']
+        }
+      },
+      {
+        id: 'week2-gate',
+        title: 'Part M — Assessor Rubric & Week 2 Gate',
+        type: 'gate-info',
+        domains: ['Cell Biology', 'Organisation', 'Infection & Response', 'Bioenergetics', 'Homeostasis & Response', 'Inheritance/Variation/Evolution', 'Ecology', 'Tier/route control', 'Misconception diagnosis', 'Exam/application design'],
+        trafficLightRules: [
+          { level: 'Green', desc: 'Domain intelligence sheet complete and accurate; no repeated boundary errors.' },
+          { level: 'Amber', desc: 'Functional but some imprecision or inconsistent boundary control.' },
+          { level: 'Red', desc: 'Material scientific error, or repeated Foundation/Higher or Combined/Separate confusion.' }
+        ],
+        gateNote: 'Decision rule: PASS if all critical gates are met (7 domain sheets complete, Specification Control ≥90%, Misconception Clinic ≥85%, microteaching ≥4/5, no critical scientific-accuracy errors). CONDITIONAL PASS for one remediable non-critical weakness with a written 72-hour remediation task. HOLD for scientific inaccuracy, repeated boundary errors, or below-minimum microteaching. This decision is always made by your assessor, never generated automatically.'
+      }
+    ]
+  },
   'biology-gcse-stage-3': { comingSoon: true, title: 'Examiner School', note: 'Stage 3 content is being built from Pack 03.' },
   'biology-gcse-stage-4': { comingSoon: true, title: 'Practical & Mathematical Biology', note: 'Stage 4 content is being built from Pack 04.' }
 }
