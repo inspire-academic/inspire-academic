@@ -15,7 +15,7 @@ const { getConfidentialContent } = require('../netlify/functions/_tutor-academy-
 const AUTH_HEADER = { authorization: 'Bearer test-token' };
 const MOCK_USER = { id: 'tutor-123', email: 'tutor@example.com' };
 
-function withMockFetch({ authOk = true, role = 'teacher', onWrite } = {}, fn) {
+function withMockFetch({ authOk = true, role = 'teacher', progressRows = [], onWrite } = {}, fn) {
   const original = global.fetch;
   process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-key';
   global.fetch = async (url, opts = {}) => {
@@ -31,7 +31,8 @@ function withMockFetch({ authOk = true, role = 'teacher', onWrite } = {}, fn) {
     }
     if (u.includes('/rest/v1/tutor_academy_')) {
       if (onWrite) onWrite(u, method, opts.body ? JSON.parse(opts.body) : null);
-      return { ok: true, status: method === 'POST' ? 201 : 200, json: async () => ([]) };
+      const rows = method === 'GET' && u.includes('tutor_academy_progress') ? progressRows : [];
+      return { ok: true, status: method === 'POST' ? 201 : 200, json: async () => rows };
     }
     return { ok: true, status: 200, json: async () => ({}) };
   };
@@ -108,6 +109,40 @@ test('progress: in_progress request leaves completed_at null', async () => {
       body: JSON.stringify({ stageId: 'biology-gcse-stage-1', sectionId: 'orientation', status: 'in_progress' })
     });
     assert.equal(capturedBody.completed_at, null);
+  });
+});
+
+test('progress: unknown stage/section pair is rejected before any write', async () => {
+  await withMockFetch({}, async () => {
+    const res = await progress.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ stageId: 'biology-gcse-stage-2', sectionId: 'invented-section', status: 'complete' })
+    });
+    assert.equal(res.statusCode, 400);
+    assert.equal(JSON.parse(res.body).error.code, 'invalid_section');
+  });
+});
+
+test('progress: tutor cannot write Stage 2 before every Stage 1 section is complete', async () => {
+  await withMockFetch({ role: 'teacher', progressRows: [{ section_id: 'orientation' }] }, async () => {
+    const res = await progress.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ stageId: 'biology-gcse-stage-2', sectionId: 'specification-control-method', status: 'complete' })
+    });
+    assert.equal(res.statusCode, 403);
+    assert.equal(JSON.parse(res.body).error.code, 'stage_locked');
+  });
+});
+
+test('progress: admin may inspect and update a later stage without candidate prerequisites', async () => {
+  let capturedBody;
+  await withMockFetch({ role: 'admin', onWrite: (u, m, b) => { if (m === 'POST') capturedBody = b } }, async () => {
+    const res = await progress.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ stageId: 'biology-gcse-stage-4', sectionId: 'deployment-charter', status: 'complete' })
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(capturedBody.section_id, 'deployment-charter');
   });
 });
 

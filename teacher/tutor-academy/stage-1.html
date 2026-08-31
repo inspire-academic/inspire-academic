@@ -56,13 +56,18 @@
     <a class="ta-download-link" href="/resources/tutor-academy/biology-gcse/01_IBTAEP_Pack_01_Entry_Diagnostic_and_Week_1.docx" target="_blank" rel="noopener">⬇ Download original workbook (Pack 01)</a>
   </div>
 
-  <div class="ta-section-nav" id="sectionNav"></div>
+  <div class="ta-section-nav-wrap">
+    <div class="ta-section-nav-label"><span>Stage sections</span><span class="ta-section-nav-hint">Swipe to explore →</span></div>
+    <nav class="ta-section-nav" id="sectionNav" aria-label="Stage 1 sections"></nav>
+  </div>
   <div id="panels"></div>
   <div class="ta-nav-buttons">
     <button class="btn btn-outline" id="prevBtn" onclick="goStep(-1)">← Previous</button>
     <button class="btn btn-gold" id="nextBtn" onclick="completeAndAdvance()">Mark complete &amp; continue →</button>
   </div>
-  <div class="ta-save-note" id="saveNote"></div>
+  <p class="ta-section-note">Completing a section records your progress; it does not constitute assessor approval.</p>
+  <div class="ta-validation-summary" id="validationSummary" role="alert"></div>
+  <div class="ta-save-note" id="saveNote" role="status" aria-live="polite"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
@@ -218,64 +223,87 @@ function onOrientationDeclare(checked) {
   const draft = loadDraft(s.id)
   draft.declared = checked
   saveDraft(s.id, draft)
+  showSaveState(`Saved on this device at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`, 'success')
 }
 
 let pendingSave = null
+function showSaveState(message, tone) {
+  const note = document.getElementById('saveNote')
+  note.textContent = message
+  note.className = `ta-save-note ${tone ? `ta-save-${tone}` : ''}`
+}
 function onFieldInput(sectionId, key, value) {
   const draft = loadDraft(sectionId)
   draft[key] = value
   saveDraft(sectionId, draft)
-  document.getElementById('saveNote').textContent = 'Saved locally…'
+  showSaveState(`Saved on this device at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`, 'success')
   clearTimeout(pendingSave)
-  pendingSave = setTimeout(() => { document.getElementById('saveNote').textContent = '' }, 1500)
 }
 
 function renderNav() {
   document.getElementById('sectionNav').innerHTML = STAGE_CONTENT.sections.map((s, i) => `
-    <div class="ta-section-nav-item ${i === currentIdx ? 'ta-active' : ''} ${completedSections.has(s.id) ? 'ta-done' : ''}" onclick="goToStep(${i})">
+    <button type="button" class="ta-section-nav-item ${i === currentIdx ? 'ta-active' : ''} ${completedSections.has(s.id) ? 'ta-done' : ''}" ${i === currentIdx ? 'aria-current="step"' : ''} onclick="goToStep(${i})">
       ${i + 1}. ${escHtml(s.title.replace(/^Part [A-Z] — /, ''))}
-    </div>`).join('')
+    </button>`).join('')
+  document.querySelector('.ta-section-nav-item.ta-active')?.scrollIntoView({ block: 'nearest', inline: 'center' })
 }
 
 function renderCurrentPanel() {
   const s = STAGE_CONTENT.sections[currentIdx]
   document.getElementById('panels').innerHTML = `
-    <div class="ta-panel ta-active">
-      <h2>${escHtml(s.title)}</h2>
+    <section class="ta-panel ta-active" aria-labelledby="currentSectionTitle">
+      <h2 id="currentSectionTitle" tabindex="-1">${escHtml(s.title)}</h2>
       ${renderSectionBody(s)}
-    </div>`
-  document.getElementById('prevBtn').style.visibility = currentIdx === 0 ? 'hidden' : 'visible'
+    </section>`
+  document.getElementById('prevBtn').hidden = currentIdx === 0
   const isLast = currentIdx === STAGE_CONTENT.sections.length - 1
   document.getElementById('nextBtn').textContent = isLast
     ? (completedSections.has(s.id) ? 'Completed — back to pathway' : 'Mark complete & finish')
     : 'Mark complete & continue →'
   renderNav()
+  U.enhanceStagePanel(document.querySelector('.ta-panel'), s.title)
+  document.getElementById('validationSummary').classList.remove('ta-visible')
 }
 
-function goToStep(i) { currentIdx = i; renderCurrentPanel(); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+function goToStep(i) { currentIdx = i; renderCurrentPanel(); document.getElementById('currentSectionTitle')?.focus(); window.scrollTo({ top: 56, behavior: 'smooth' }) }
 function goStep(delta) { goToStep(Math.max(0, Math.min(STAGE_CONTENT.sections.length - 1, currentIdx + delta))) }
 
 async function completeAndAdvance() {
   const s = STAGE_CONTENT.sections[currentIdx]
   const draft = loadDraft(s.id)
+  const validation = completedSections.has(s.id) ? { valid: true, missing: [] } : U.validateStagePanel(document.querySelector('.ta-panel'))
+  const summary = document.getElementById('validationSummary')
+  if (!validation.valid) {
+    summary.textContent = `Complete ${validation.missing.length} required field${validation.missing.length === 1 ? '' : 's'} before marking this section complete.`
+    summary.classList.add('ta-visible')
+    validation.missing[0].focus()
+    return
+  }
+  summary.classList.remove('ta-visible')
 
-  document.getElementById('saveNote').textContent = 'Saving…'
-  await fetch('/api/v1/tutor-academy/progress', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-    body: JSON.stringify({ stageId: STAGE_ID, sectionId: s.id, status: 'complete' })
-  }).catch(() => {})
-
-  if (Object.keys(draft).length) {
-    await fetch('/api/v1/tutor-academy/evidence', {
+  showSaveState('Saving to your Academy…')
+  try {
+    if (Object.keys(draft).length) {
+      const evidenceResponse = await fetch('/api/v1/tutor-academy/evidence', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+        body: JSON.stringify({ stageId: STAGE_ID, evidenceType: s.type, evidenceKey: s.id, content: JSON.stringify(draft) })
+      })
+      if (!evidenceResponse.ok) throw new Error((await evidenceResponse.json()).error?.message || 'Could not save your evidence.')
+    }
+    const progressResponse = await fetch('/api/v1/tutor-academy/progress', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-      body: JSON.stringify({ stageId: STAGE_ID, evidenceType: s.type, evidenceKey: s.id, content: JSON.stringify(draft) })
-    }).catch(() => {})
+      body: JSON.stringify({ stageId: STAGE_ID, sectionId: s.id, status: 'complete' })
+    })
+    if (!progressResponse.ok) throw new Error((await progressResponse.json()).error?.message || 'Could not save your progress.')
+  } catch (error) {
+    showSaveState(error.message || 'Your progress could not be saved. Please try again.', 'error')
+    return
   }
 
   completedSections.add(s.id)
-  document.getElementById('saveNote').textContent = 'Saved.'
+  showSaveState(`Saved to your Academy at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`, 'success')
 
   if (currentIdx === STAGE_CONTENT.sections.length - 1) {
     window.location.href = '/teacher/tutor-academy/biology-gcse.html'
@@ -288,8 +316,13 @@ async function checkAuth() {
   const { data: { session: s } } = await supa.auth.getSession()
   if (!s) { window.location.href = '/index.html'; return null }
   const { data: profile, error } = await supa.from('profiles').select('role, full_name').eq('id', s.user.id).single()
-  if (error || !profile || !['teacher','admin'].includes(profile.role)) {
+  if (error || !profile || !['teacher','admin','super_admin'].includes(profile.role)) {
     window.location.href = '/dashboard.html'
+    return null
+  }
+  const allowed = await U.tutorCanAccessStage(supa, s.user.id, STAGE_ID, profile.role)
+  if (!allowed) {
+    window.location.replace('/teacher/tutor-academy/biology-gcse.html?locked=' + encodeURIComponent(STAGE_ID))
     return null
   }
   if (profile.full_name) document.getElementById('topbar-user').textContent = profile.full_name
