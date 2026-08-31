@@ -224,7 +224,7 @@ legacy_content_url: https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/p
 legacy_viewer_url: https://staging.inspireacademic.org/student/lesson-viewer.html?id=82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
 
 qaCandidateRowId: 032d728e-5eac-4604-9537-ebf218214f54
-qaCandidateTitle: Electrolysis — QA replacement
+qaCandidateTitle: Electrolysis
 qaCandidate_is_published: true
 qaState: HUMAN_APPROVED
 Gate 8: PASS — 2026-08-31
@@ -262,4 +262,13 @@ viewer in a separate full Chrome window.
   remained contained at narrow width, and page-origin console warnings/errors
   were empty.
 - No formal WCAG certification is claimed. “Mark Complete” was deliberately not
-  activated. The legacy published row was not edited, unpublished or deleted.
+  activated. After Gate 8 approval, the legacy row was unpublished and retained;
+  it was not edited or deleted.
+
+## 14. Production benchmark freeze — 2026-08-31
+
+The user authorised the final student-facing title cleanup and freeze after
+Gate 8. The approved lesson, its two premium WebP figures and its manifest are
+now the frozen Chemistry production benchmark. Exact file hashes, reopening
+rules and live-row identity are recorded in
+`docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md`.
