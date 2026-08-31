@@ -764,7 +764,295 @@ const TUTOR_ACADEMY_BIOLOGY = {
       }
     ]
   },
-  'biology-gcse-stage-4': { comingSoon: true, title: 'Practical & Mathematical Biology', note: 'Stage 4 content is being built from Pack 04.' }
+  'biology-gcse-stage-4': {
+    title: 'Practical & Mathematical Biology',
+    subtitle: 'Required Practicals, Experimental Design, Maths, Data, Evaluation & GCSE Clearance',
+    overview: 'This is the GCSE clearance stage. It integrates practical science, mathematical Biology, data interpretation, experimental design and evaluation, then tests whether you are ready for provisional independent deployment with Inspire GCSE Biology students.',
+    whyThisMatters: 'The standard: move from "I know how this practical works" to "I can teach a pupil to reason through any practical or mathematical Biology question the examiner places in front of them." Clearance is an Inspire internal quality designation — it does not confer Qualified Teacher Status in England.',
+    learningOutcomes: [
+      'Teach all ten AQA GCSE Biology required practical activities through purpose, method, variables, data, evaluation and exam transfer.',
+      'Distinguish independent, dependent and control variables and critique weak experimental designs.',
+      'Teach mathematical requirements: ratios, percentages, means, standard form, significant figures, gradients, rates, sampling, probability and geometry.',
+      'Diagnose whether a pupil\'s difficulty is biological, mathematical, graphical, practical or linguistic.',
+      'Interpret unfamiliar tables, graphs and experimental scenarios without overclaiming.',
+      'Evaluate validity, repeatability, reproducibility, accuracy, precision and uncertainty appropriately.'
+    ],
+    sections: [
+      {
+        id: 'six-lens-practical',
+        title: 'The Inspire Six-Lens Method (Practical Biology)',
+        type: 'six-lens',
+        intro: 'For every required practical, teach beyond memorising a recipe.',
+        lenses: [
+          { lens: 'PURPOSE', question: 'What biological relationship or claim is being investigated?' },
+          { lens: 'DESIGN', question: 'What is changed, measured and controlled?' },
+          { lens: 'METHOD', question: 'What must actually be done, and why?' },
+          { lens: 'DATA', question: 'What should be recorded, processed and displayed?' },
+          { lens: 'EVALUATION', question: 'What limits confidence and how can the design improve?' },
+          { lens: 'TRANSFER', question: 'How might the examiner disguise the same reasoning in an unfamiliar context?' }
+        ],
+        task: 'Choose one practical you already teach confidently. Reframe it using all six lenses. Your final paragraph must explain how you would prevent a student from simply memorising steps.'
+      },
+      {
+        id: 'required-practicals',
+        title: 'The 10 Required Practicals',
+        type: 'practicals-set',
+        note: 'AQA GCSE Biology 8461 specifies ten required practical activities. Practicals 1, 3, 4, 5, 6, 7 and 9 are common with Combined Science; practicals 2, 8 and 10 are Biology-only.',
+        practicals: [
+          { id: 'rp1', number: 1, title: 'Microscopy', purpose: 'Use a light microscope to observe, draw and label plant and animal cells, including a magnification scale.', mathsLink: 'Magnification; scale; biological drawing; estimation.', traps: 'Confusing image size with actual size; missing units; decorative rather than scientific drawings.' },
+          { id: 'rp2', number: 2, title: 'Antiseptics/Antibiotics', biologyOnly: true, purpose: 'Investigate effects on bacterial growth using agar plates and zones of inhibition.', mathsLink: 'Area πr²; aseptic technique; controls; safe culture practice.', traps: 'Assuming largest zone proves "best medicine" without controlling dose/concentration; unsafe discussion of incubation.' },
+          { id: 'rp3', number: 3, title: 'Osmosis', purpose: 'Investigate effects of salt/sugar concentration on mass of plant tissue.', mathsLink: 'Percentage change; means; graph; isotonic point.', traps: 'Using final mass rather than change; uncontrolled tissue dimensions; confusing osmosis with diffusion.' },
+          { id: 'rp4', number: 4, title: 'Food Tests', purpose: 'Use qualitative reagents for sugars, starch and protein; know lipid testing in normal course context.', mathsLink: 'Qualitative observations; controls; safe heating.', traps: 'Naming reagent without expected observation; mixing up Benedict\'s and Biuret.' },
+          { id: 'rp5', number: 5, title: 'Amylase and pH', purpose: 'Investigate effect of pH on rate of amylase digestion using continuous sampling.', mathsLink: 'Rate = 1/time; control temperature; endpoint judgement.', traps: 'Treating time as rate; failing to control temperature; vague "enzyme works better".' },
+          { id: 'rp6', number: 6, title: 'Photosynthesis', purpose: 'Investigate effect of light intensity on rate of photosynthesis.', mathsLink: 'Rate; inverse-square reasoning at HT; repeats; graph.', traps: 'Counting bubbles as volume without qualification; changing distance but not thinking about actual light intensity.' },
+          { id: 'rp7', number: 7, title: 'Reaction Time', purpose: 'Plan and investigate effect of a factor on human reaction time.', mathsLink: 'Means; ethical/safety considerations; control variables.', traps: 'Practice effect; inconsistent release point; too few repeats.' },
+          { id: 'rp8', number: 8, title: 'Plant Responses', biologyOnly: true, purpose: 'Investigate effect of light or gravity on growth of newly germinated seedlings; include measurements and drawings.', mathsLink: 'Length change; orientation; controls; labelled biological drawings.', traps: 'Confounding light and gravity; not using a control orientation.' },
+          { id: 'rp9', number: 9, title: 'Ecology', purpose: 'Measure population size and use sampling to investigate distribution against an environmental factor.', mathsLink: 'Quadrats; transects; means; estimation; random/systematic sampling.', traps: 'Biased placement; inadequate sample size; claiming causation from correlation.' },
+          { id: 'rp10', number: 10, title: 'Decay', biologyOnly: true, purpose: 'Investigate effect of temperature on rate of decay of fresh milk using pH change.', mathsLink: 'Rate; pH; temperature control; microorganisms.', traps: 'Assuming pH itself is rate; inconsistent starting conditions; weak safety reasoning.' }
+        ]
+      },
+      {
+        id: 'experimental-design-clinic',
+        title: 'Experimental Design Clinic',
+        type: 'design-clinic',
+        intro: 'A strong tutor must be able to repair a weak investigation quickly and explain the reason for every change.',
+        terms: [
+          { term: 'Independent variable', def: 'The factor deliberately changed.' },
+          { term: 'Dependent variable', def: 'The response measured.' },
+          { term: 'Control variable', def: 'A factor kept sufficiently constant so the comparison is interpretable.' },
+          { term: 'Control setup', def: 'A comparison condition used to show whether the independent variable is responsible for an effect.' },
+          { term: 'Repeat', def: 'A repeated measurement/observation within the investigation.' },
+          { term: 'Range', def: 'Spread of independent-variable values selected.' },
+          { term: 'Interval', def: 'Difference between neighbouring values.' },
+          { term: 'Sample size', def: 'Number of independent observational units/organisms/areas measured.' }
+        ],
+        repairs: [
+          { id: 'repair1', text: 'A student tests pH on amylase but uses room-temperature solutions one day and refrigerated solutions the next.' },
+          { id: 'repair2', text: 'A student compares two fertilisers using one plant per fertiliser.' },
+          { id: 'repair3', text: 'A student places quadrats only where daisies are visible.' },
+          { id: 'repair4', text: 'A student tests photosynthesis at 10, 20 and 30cm but changes lamp type between trials.' },
+          { id: 'repair5', text: 'A student measures reaction time once before caffeine and once after caffeine.' }
+        ]
+      },
+      {
+        id: 'evaluation-language',
+        title: 'Evaluation Language That Means Something',
+        type: 'evaluation-language',
+        intro: 'Avoid empty evaluation phrases such as "human error" or "make it more accurate". Require a mechanism.',
+        pairs: [
+          { weak: 'Repeat it', strong: 'Repeat measurements, identify anomalies and calculate a mean to reduce the influence of random variation.' },
+          { weak: 'Use better equipment', strong: 'Use equipment with finer resolution if the measurement uncertainty is large relative to the change being measured.' },
+          { weak: 'Control temperature', strong: 'Use a thermostatically controlled water bath because enzyme activity changes with temperature.' },
+          { weak: 'Use more samples', strong: 'Increase sample size to make the estimate less vulnerable to unusual individuals/locations.' },
+          { weak: 'It is not valid', strong: 'Name the uncontrolled/confounding variable and explain how it prevents attributing the outcome to the intended independent variable.' }
+        ],
+        task: 'Rewrite five vague evaluation comments from your own teaching into causal, examination-worthy statements.'
+      },
+      {
+        id: 'measurement-concepts',
+        title: 'Accuracy, Precision, Repeatability, Reproducibility & Uncertainty',
+        type: 'measurement-concepts',
+        intro: 'These terms should be used deliberately. Do not allow students to use them as interchangeable compliments.',
+        concepts: [
+          { idea: 'Accuracy', def: 'How close a result is to the true/accepted value where that is knowable.' },
+          { idea: 'Precision', def: 'How closely repeated measurements agree / the fineness with which values are reported, depending on context.' },
+          { idea: 'Repeatability', def: 'Same person/method/equipment obtains similar results.' },
+          { idea: 'Reproducibility', def: 'Different person/method/equipment obtains similar results.' },
+          { idea: 'Resolution', def: 'Smallest change an instrument can meaningfully distinguish.' },
+          { idea: 'Uncertainty', def: 'Quantified doubt associated with a measurement; must be interpreted relative to scale where appropriate.' }
+        ],
+        vivaPrompts: [
+          'Can a set of results be precise but inaccurate? Give a biological example.',
+          'Why does repeating measurements not automatically remove a systematic error?',
+          'When is a larger sample size more useful than simply measuring more precisely?',
+          'Why is "percentage uncertainty" often more informative than absolute uncertainty when comparing measurements of different sizes?'
+        ]
+      },
+      {
+        id: 'maths-mastery-map',
+        title: 'Mathematical Biology Mastery Map',
+        type: 'maths-map',
+        intro: 'AQA requires mathematical skills appropriate to Biology across arithmetic/numerical computation, data handling, algebra, graphs and geometry. Foundation and Higher papers differ in demand, but the tutor must be fluent across the whole GCSE requirement.',
+        principle: 'Never assume a "maths error" is purely mathematical. The student may know the calculation but misunderstand what quantity the Biology requires. Diagnose both layers.',
+        domains: [
+          { domain: 'Number', teach: 'Decimals, standard form, estimation, order of magnitude' },
+          { domain: 'Ratio & percentage', teach: 'Ratios, fractions, percentage change, percentage gain/loss' },
+          { domain: 'Data', teach: 'Means, median/mode, frequency displays, histograms, sampling, probability, correlation' },
+          { domain: 'Algebra', teach: 'Simple equations; symbols/relationships; rearrangement where needed' },
+          { domain: 'Graphs', teach: 'Plotting, scales, interpolation, slope/gradient, intercept, linear relationships' },
+          { domain: 'Geometry', teach: 'Area, surface area, volume, πr² in biological contexts' },
+          { domain: 'Rates', teach: 'Change/time; reciprocal time where appropriate' },
+          { domain: 'Magnification', teach: 'image size = magnification × actual size; unit conversion' }
+        ]
+      },
+      {
+        id: 'maths-labs',
+        title: 'Mathematical Biology Laboratories A-D',
+        type: 'maths-labs',
+        labs: [
+          { key: 'A', title: 'Magnification, Units and Scale', questions: [
+            { id: 'ma1', text: 'A cell image is 48mm long. The actual cell length is 80µm. Calculate the magnification.' },
+            { id: 'ma2', text: 'A microscope image has magnification ×400. A structure measures 36mm on the image. Calculate actual size in µm.' },
+            { id: 'ma3', text: 'Convert 0.075mm to µm.' },
+            { id: 'ma4', text: 'A scale bar labelled 20µm measures 8mm on a printed image. A cell measures 30mm. Estimate its actual length.' },
+            { id: 'ma5', text: 'Explain two common reasons students lose marks on magnification questions even when they know the equation.' }
+          ]},
+          { key: 'B', title: 'Percentage Change, Ratios and Rates', questions: [
+            { id: 'mb1', text: 'Potato cylinder mass changes from 4.80g to 4.32g. Calculate percentage change and retain the sign.' },
+            { id: 'mb2', text: 'A leaf produces 18 bubbles in 3 minutes. Calculate bubbles per minute.' },
+            { id: 'mb3', text: 'A starch digestion takes 75s. Calculate 1/time as a rate proxy to three significant figures.' },
+            { id: 'mb4', text: 'Red:white flowers occur in a 3:1 ratio. Predict numbers in a sample of 240.' },
+            { id: 'mb5', text: 'A population estimate increases from 320 to 416. Calculate percentage increase.' },
+            { id: 'mb6', text: 'Explain when a ratio is more useful than an absolute difference in Biology.' }
+          ]},
+          { key: 'C', title: 'Means, Sampling and Probability', questions: [
+            { id: 'mc1', text: 'Quadrats contain 4, 7, 0, 5, 9 and 5 daisies. Calculate the mean number per quadrat.' },
+            { id: 'mc2', text: 'A habitat is 120m². Each quadrat is 0.50m². The mean count is 6 plants per quadrat. Estimate the population.' },
+            { id: 'mc3', text: 'Explain why random quadrat placement matters.' },
+            { id: 'mc4', text: 'Explain why a larger sample may improve confidence without guaranteeing accuracy.' },
+            { id: 'mc5', text: 'A heterozygous cross is Aa × Aa. State the probability of aa and explain the difference between expected probability and an actual small family outcome.' }
+          ]},
+          { key: 'D', title: 'Graphs and Gradients', questions: [
+            { id: 'md1', text: 'Light intensity vs oxygen production over 10 minutes — specify graph, axes, units, treatment of repeats, and what the gradient/pattern would mean biologically.' },
+            { id: 'md2', text: 'Sucrose concentration vs percentage change in potato mass — same requirements.' },
+            { id: 'md3', text: 'Distance along a transect vs abundance of a plant species — same requirements.' },
+            { id: 'md4', text: 'Temperature vs milk pH after a fixed period — same requirements.' },
+            { id: 'md5', text: 'Time vs blood glucose concentration after a meal — same requirements.' },
+            { id: 'md6', text: 'Gradient drill: a graph rises from 2.0 units at 10s to 8.0 units at 40s. Calculate the mean gradient between the two points, show units, then state what the gradient means in context.' }
+          ]}
+        ]
+      },
+      {
+        id: 'data-interpretation-school',
+        title: 'Data Interpretation School',
+        type: 'data-interp',
+        intro: 'Coach students to separate what the data show from why the pattern may occur. The Three Sentences: 1) Pattern — what changes? 2) Evidence — quote/select data. 3) Biology — explain mechanism only if the question asks for it.',
+        table: { headers: ['Temperature (°C)', 'Mean reaction rate (arbitrary units)', 'Range'], rows: [['10','1.8','1.5-2.1'],['20','3.7','3.4-4.0'],['30','6.2','5.7-6.8'],['40','5.1','4.2-6.0'],['50','1.0','0.2-1.8']] },
+        questions: [
+          { id: 'di1', text: 'Describe the pattern using quantitative evidence.' },
+          { id: 'di2', text: 'Suggest a biological explanation.' },
+          { id: 'di3', text: 'At which temperatures is variability greatest?' },
+          { id: 'di4', text: 'Can the data prove temperature is the only cause of the pattern? Explain.' },
+          { id: 'di5', text: 'Write one misleading conclusion a student might make and correct it.' }
+        ]
+      },
+      {
+        id: 'correlation-causation',
+        title: 'Correlation, Causation and Biological Claims',
+        type: 'claim-audit',
+        intro: 'Students often overclaim. Actively police the difference between association and causation.',
+        claims: [
+          { id: 'claim1', text: 'Areas with more foxes have fewer rabbits, so foxes caused the rabbit decline.' },
+          { id: 'claim2', text: 'Plants near a road are shorter, proving pollution inhibits growth.' },
+          { id: 'claim3', text: 'People who exercise more have lower resting heart rates, so exercise is the only explanation.' },
+          { id: 'claim4', text: 'A larger inhibition zone proves the antibiotic will be most effective in a patient.' }
+        ]
+      },
+      {
+        id: 'practical-transfer-assessment',
+        title: 'Practical Transfer Assessment',
+        type: 'formal-assessment',
+        instructions: '30 marks, unfamiliar contexts, no notes. Suggested time: 40 minutes.',
+        sections: [{ heading: 'Practical Transfer Assessment', questions: [
+          { id: 'pt1', marks: 4, text: 'A student investigates how salt concentration affects water uptake by radish seedlings. Identify the independent variable, dependent variable and two controls.' },
+          { id: 'pt2', marks: 3, text: 'Explain why percentage change may be preferable to absolute mass change when samples begin at different masses.' },
+          { id: 'pt3', marks: 3, text: 'A student records 2, 3, 3, 14 and 4. Explain how the student should treat these results before calculating a representative value.' },
+          { id: 'pt4', marks: 3, text: 'A bacterial-clear-zone investigation produces diameters. Explain why area may give a more meaningful comparison and give the equation required.' },
+          { id: 'pt5', marks: 4, text: 'A photosynthesis experiment uses lamp distance as a proxy for light intensity. Give two limitations and one improvement.' },
+          { id: 'pt6', marks: 5, text: 'A field study finds a correlation between soil moisture and moss abundance. Evaluate the claim that moisture caused the distribution.' },
+          { id: 'pt7', marks: 8, text: 'Design a short investigation to test whether temperature affects the time taken for an enzyme-controlled colour change. Include repeatability and safety.' }
+        ]}]
+      },
+      {
+        id: 'clearance-microteaching',
+        title: 'Tutor Microteaching Assessment',
+        type: 'clearance-microteaching',
+        intro: 'Deliver a 20-minute online tutoring segment. Your assessor selects one of the prompts below immediately before preparation.',
+        promptOptions: [
+          'Teach a Year 10 Higher student how to reason through an osmosis practical question rather than memorise the method.',
+          'Teach a Foundation student percentage change using a plant-tissue practical.',
+          'Coach a Grade 8/9 student through an unfamiliar ecology sampling/evaluation question.',
+          'Diagnose and repair errors in a magnification calculation.'
+        ],
+        architecture: 'RETRIEVE → DIAGNOSE → MODEL → GUIDED PRACTICE → INDEPENDENT CHECK → FEEDBACK → PRESCRIBE',
+        observationDomains: ['Scientific/practical accuracy', 'Mathematical explanation', 'Diagnostic questioning', 'Exam transfer', 'Student thinking']
+      },
+      {
+        id: 'formal-clearance-exam',
+        title: 'Formal GCSE Clearance Examination',
+        type: 'formal-assessment',
+        instructions: 'Suggested time: 90 minutes. Total: 80 marks. This is an original Inspire assessment administered under controlled conditions.',
+        sections: [
+          { heading: 'Section A — Practical Biology [30]', questions: [
+            { id: 'ce1', marks: 3, text: 'Explain why a coverslip and a thin specimen improve light-microscope observation.' },
+            { id: 'ce2', marks: 3, text: 'In an osmosis investigation, explain why percentage mass change is plotted rather than final mass.' },
+            { id: 'ce3', marks: 4, text: 'Explain two controls needed when comparing antiseptics using bacterial cultures.' },
+            { id: 'ce4', marks: 4, text: 'A student says "repeat three times makes the experiment valid." Evaluate this statement.' },
+            { id: 'ce5', marks: 6, text: 'Describe how quadrats and a transect can be used together to investigate distribution along an environmental gradient.' },
+            { id: 'ce6', marks: 4, text: 'Evaluate a method that tests enzyme activity at different pH values but does not control temperature.' },
+            { id: 'ce7', marks: 3, text: 'Suggest why a reaction-time investigation could show improvement even when the tested factor has no effect.' },
+            { id: 'ce8', marks: 3, text: 'Explain why a negative result in a food test needs an appropriate control/known comparison when reliability is uncertain.' }
+          ]},
+          { heading: 'Section B — Mathematical Biology [25]', questions: [
+            { id: 'ce9', marks: 3, text: 'A cell image is 72mm; actual cell size is 120µm. Calculate magnification.' },
+            { id: 'ce10', marks: 3, text: 'Mass changes from 5.20g to 5.72g. Calculate percentage change.' },
+            { id: 'ce11', marks: 4, text: 'Five counts are 8, 10, 9, 11, 42. Calculate the mean and explain whether you would use it without comment.' },
+            { id: 'ce12', marks: 3, text: 'A quadrat of 0.25m² contains a mean of 5 plants. Estimate the population in 80m².' },
+            { id: 'ce13', marks: 3, text: 'Rate changes from 1.5 to 4.5 units over 60s. Calculate gradient with units.' },
+            { id: 'ce14', marks: 4, text: 'A structure is 0.0045mm. Express in µm and standard form in metres.' },
+            { id: 'ce15', marks: 2, text: 'Explain why using more significant figures than measurement resolution supports is misleading.' },
+            { id: 'ce16', marks: 3, text: 'State one biological context where an inverse relationship may arise and explain it.' }
+          ]},
+          { heading: 'Section C — Data, Evaluation and Tutor Judgement [25]', questions: [
+            { id: 'ce17', marks: 4, text: 'Distinguish repeatability from reproducibility using a Biology example.' },
+            { id: 'ce18', marks: 4, text: 'Explain why correlation between two ecological variables does not by itself establish causation.' },
+            { id: 'ce19', marks: 5, text: 'A student repeatedly writes "human error". Give a 3-step coaching intervention to improve evaluation answers.' },
+            { id: 'ce20', marks: 4, text: 'A Higher student calculates correctly but omits units and does not interpret the answer. Diagnose the error category and state how you would retrain it.' },
+            { id: 'ce21', marks: 8, text: 'Design a 10-minute diagnostic sequence to decide whether a student\'s poor graph question performance is due to Biology, maths or question interpretation.' }
+          ]}
+        ]
+      },
+      {
+        id: 'clearance-board-info',
+        title: 'GCSE Clearance Board',
+        type: 'clearance-board',
+        gates: [
+          { gate: 'GCSE Biology written exam', standard: '≥85%', compensable: 'No' },
+          { gate: 'Specification boundary control', standard: '≥90%', compensable: 'No' },
+          { gate: 'Practical transfer assessment', standard: '≥85%', compensable: 'No' },
+          { gate: 'Marking calibration', standard: '≥90% agreement', compensable: 'No' },
+          { gate: 'Observed Foundation/Higher teaching', standard: '≥4/5', compensable: 'No' },
+          { gate: 'Scientific accuracy', standard: 'PASS / ≥4/5', compensable: 'No' },
+          { gate: 'Safeguarding/professional practice', standard: 'PASS', compensable: 'No' },
+          { gate: 'Overall portfolio', standard: 'Complete + satisfactory', compensable: 'Yes, minor gaps only' }
+        ],
+        decisions: [
+          'CLEAR — GCSE PROVISIONALLY CLEARED: may take approved GCSE students under supported-practice QA.',
+          'CLEAR WITH CONDITIONS: may teach specified student profiles/topics while completing named remediation within a fixed review period.',
+          'REMEDIATE AND REASSESS: not yet independently deployable; targeted retraining required.',
+          'DO NOT CLEAR: serious scientific, safeguarding or professional-practice concern.'
+        ],
+        nonNegotiable: 'No aggregate score can compensate for unsafe practice or materially inaccurate Biology. This decision is always made by a human assessor, never generated automatically from a completion percentage.'
+      },
+      {
+        id: 'deployment-charter',
+        title: 'Candidate GCSE Deployment Charter',
+        type: 'deployment-charter',
+        intro: 'If cleared, you enter supported practice. Clearance is an Inspire internal quality designation; it does not confer Qualified Teacher Status in England or replace any legal employment, safeguarding, identity, qualification or background-check requirements.',
+        commitments: [
+          'Plan from the relevant specification and student tier/route.',
+          'Use diagnostic evidence before prescribing teaching.',
+          'Teach practical and mathematical reasoning, not shortcuts alone.',
+          'Record learning needs, progress and agreed next steps.',
+          'Escalate safeguarding or professional concerns immediately through Inspire procedures.',
+          'Submit to scheduled QA, lesson observation and assessment review.',
+          'Avoid teaching beyond the specification when it obscures what the student actually needs.',
+          'Maintain scientific accuracy and correct mistakes transparently if they occur.'
+        ],
+        standard: 'A cleared tutor should leave a student not only knowing more Biology, but reasoning more scientifically, answering more precisely, and understanding exactly what to do next.'
+      }
+    ]
+  }
 }
 
 if (typeof window !== 'undefined') window.TutorAcademyContent = TUTOR_ACADEMY_BIOLOGY

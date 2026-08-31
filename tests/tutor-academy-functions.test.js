@@ -184,6 +184,29 @@ test('assessor-content: admin caller receives Stage 3\'s confidential AO classif
   });
 });
 
+test('assessor-content: admin caller receives Stage 4\'s confidential clearance-exam marking guide', async () => {
+  await withMockFetch({ role: 'admin' }, async () => {
+    const res = await assessorContent.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ stageId: 'biology-gcse-stage-4', key: 'clearance-exam-marking-guide' })
+    });
+    assert.equal(res.statusCode, 200);
+    const body = JSON.parse(res.body);
+    assert.equal(body.success, true);
+    assert.equal(body.content.items.length, 21);
+  });
+});
+
+test('assessor-content: non-admin caller is refused Stage 4\'s confidential content too', async () => {
+  await withMockFetch({ role: 'teacher' }, async () => {
+    const res = await assessorContent.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ stageId: 'biology-gcse-stage-4', key: 'practical-transfer-marking-guide' })
+    });
+    assert.equal(res.statusCode, 403);
+  });
+});
+
 test('assessor-content: non-admin caller is refused Stage 3\'s confidential content too', async () => {
   await withMockFetch({ role: 'teacher' }, async () => {
     const res = await assessorContent.handler({

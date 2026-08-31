@@ -219,11 +219,61 @@ const STAGE_3 = {
   }
 };
 
-// Registry, keyed by stageId. Pack 02/04's assessor rubrics (if any)
-// are added here as those stages are built.
+// Source: IBTAEP Pack 04, sections 28-29 — "Confidential Assessor
+// Marking Guide — Practical Transfer" and "Confidential Assessor Guide
+// — Clearance Examination". Both explicitly headed CONFIDENTIAL in the
+// source pack, unlike section 30 (the assessor's own observation/
+// decision record template) and section 31 (the post-clearance
+// deployment charter), which are candidate-visible content in
+// tutor-academy-biology-content.js.
+const STAGE_4 = {
+  'practical-transfer-marking-guide': {
+    title: 'Confidential Assessor Marking Guide — Practical Transfer (Section 28)',
+    note: 'Indicative marking points; accept scientifically equivalent wording. Do not reward vague statements when mechanism is required.',
+    items: [
+      { q: 'Q1', points: 'Salt concentration; water uptake/change in mass/length as DV; two relevant controls such as time, temperature, seedling size/species.' },
+      { q: 'Q2', points: 'Normalises change to starting value; permits fair comparison across different initial masses.' },
+      { q: 'Q3', points: 'Recognise 14 as likely anomaly; check method/data; justify exclusion only if evidence supports; use mean/median appropriately.' },
+      { q: 'Q4', points: 'Area reflects two-dimensional zone size; πr²; diameter must be converted to radius.' },
+      { q: 'Q5', points: 'Distance is proxy not direct intensity; ambient light/geometry; use light meter or standardise setup.' },
+      { q: 'Q6', points: 'Correlation supports association; confounders possible; sampling quality; manipulative/controlled follow-up needed for stronger causal inference.' },
+      { q: 'Q7', points: 'Clear IV/DV, controls, range, repeats/mean, measurement endpoint, temperature control, safety and appropriate data treatment.' }
+    ]
+  },
+  'clearance-exam-marking-guide': {
+    title: 'Confidential Assessor Guide — Clearance Examination (Section 29)',
+    note: 'Use professional judgement alongside these anchors. Award marks for equivalent scientifically accurate responses.',
+    items: [
+      { q: 1, idea: 'Thin specimen transmits light; coverslip flattens/protects/keeps specimen stable; improves focus/observation.' },
+      { q: 2, idea: 'Change relative to start enables comparison.' },
+      { q: 3, idea: 'Relevant culture/agar/disc size/concentration/time/temp controls; aseptic/safe method.' },
+      { q: 4, idea: 'Repeats improve reliability/estimate random variation; validity depends on design/control of confounders.' },
+      { q: 5, idea: 'Systematic positions along transect + quadrat counts; repeat/mean; environmental factor measured.' },
+      { q: 6, idea: 'Temperature affects enzyme activity; confounded; use water bath/monitor temp.' },
+      { q: 7, idea: 'Practice/learning effect.' },
+      { q: 8, idea: 'Confirms reagent/procedure works; distinguishes true negative from failed test.' },
+      { q: 9, idea: '600×.' },
+      { q: 10, idea: '10% increase.' },
+      { q: 11, idea: 'Mean 16; 42 likely anomaly/outlier; discuss rather than silently average.' },
+      { q: 12, idea: '1600 plants.' },
+      { q: 13, idea: '0.05 units s⁻¹.' },
+      { q: 14, idea: '4.5µm; 4.5 × 10⁻⁶ m.' },
+      { q: 15, idea: 'Implies precision unsupported by instrument/data.' },
+      { q: 16, idea: 'Any valid inverse biological relationship with explanation.' },
+      { q: 17, idea: 'Same setup/person vs changed operator/setup and similar outcome.' },
+      { q: 18, idea: 'Third variables/reverse direction/chance; controlled evidence needed.' },
+      { q: 19, idea: 'Name specific limitation → explain effect → targeted improvement.' },
+      { q: 20, idea: 'Math/exam communication; units + interpretation routine.' },
+      { q: 21, idea: 'Use one graph task split into: read axes/scale → calculate/extract → explain biological pattern → command-word check; classify breakdown.' }
+    ]
+  }
+};
+
+// Registry, keyed by stageId.
 const CONFIDENTIAL_CONTENT = {
   'biology-gcse-stage-1': STAGE_1,
-  'biology-gcse-stage-3': STAGE_3
+  'biology-gcse-stage-3': STAGE_3,
+  'biology-gcse-stage-4': STAGE_4
 };
 
 function getConfidentialContent(stageId, key) {
