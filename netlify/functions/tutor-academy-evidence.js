@@ -6,6 +6,7 @@
 // teacher reviews" pattern, not a new submission concept.
 
 const { verifyUser } = require('./_ai-usage-guard')
+const { canAccessStage, isKnownSection } = require('./_tutor-academy-access')
 
 const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
 
@@ -38,7 +39,13 @@ exports.handler = async function (event) {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!serviceKey) return fail(503, 'not_configured', 'Not configured')
 
+  if (!isKnownSection(stageId, evidenceKey)) {
+    return fail(400, 'invalid_section', 'This evidence key does not belong to the selected Tutor Academy stage.')
+  }
+
   try {
+    const access = await canAccessStage(user.id, stageId, serviceKey)
+    if (!access.allowed) return fail(403, 'stage_locked', 'Complete the previous stage before submitting evidence.')
     const r = await fetch(`${SUPABASE_URL}/rest/v1/tutor_academy_evidence`, {
       method: 'POST',
       headers: {

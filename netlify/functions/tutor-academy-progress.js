@@ -8,6 +8,7 @@
 // other per-user table this session).
 
 const { verifyUser } = require('./_ai-usage-guard')
+const { canAccessStage, isKnownSection } = require('./_tutor-academy-access')
 
 const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
 
@@ -40,7 +41,13 @@ exports.handler = async function (event) {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!serviceKey) return fail(503, 'not_configured', 'Not configured')
 
+  if (!isKnownSection(stageId, sectionId)) {
+    return fail(400, 'invalid_section', 'This section does not belong to the selected Tutor Academy stage.')
+  }
+
   try {
+    const access = await canAccessStage(user.id, stageId, serviceKey)
+    if (!access.allowed) return fail(403, 'stage_locked', 'Complete the previous stage before continuing.')
     const r = await fetch(`${SUPABASE_URL}/rest/v1/tutor_academy_progress?on_conflict=profile_id,stage_id,section_id`, {
       method: 'POST',
       headers: {

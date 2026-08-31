@@ -29,9 +29,10 @@
   h1 { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: .3rem; }
   .subhead { color: var(--muted); font-size: .88rem; margin-bottom: 1.6rem; }
 
-  .tutor-card { background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r); padding: 1.2rem 1.4rem; margin-bottom: .9rem; cursor: pointer; }
+  .tutor-card { background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r); padding: 1.2rem 1.4rem; margin-bottom: .9rem; }
   .tutor-card:hover { border-color: var(--gold); }
-  .tutor-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .tutor-head { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+  .tutor-head:focus-visible { outline: 3px solid var(--gold); outline-offset: 5px; border-radius: 4px; }
   .tutor-name { font-weight: 700; }
   .tutor-detail { display: none; margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
   .tutor-card.ta-open .tutor-detail { display: block; }
@@ -104,12 +105,12 @@ async function loadTutors() {
   document.getElementById('tutorList').innerHTML = enrollments.map(e => {
     const p = profileById[e.profile_id] || {}
     return `
-    <div class="tutor-card" id="tutor-${e.profile_id}" onclick="toggleTutor('${e.profile_id}', event)">
-      <div class="tutor-head">
+    <div class="tutor-card" id="tutor-${e.profile_id}">
+      <button class="tutor-head" type="button" aria-expanded="false" aria-controls="tutor-detail-${e.profile_id}" onclick="toggleTutor('${e.profile_id}', event)">
         <span class="tutor-name">${escHtml(p.full_name || p.email || e.profile_id)}</span>
         ${U.renderCertificationStatus(e.status)}
-      </div>
-      <div class="tutor-detail" id="tutor-detail-${e.profile_id}" onclick="event.stopPropagation()"></div>
+      </button>
+      <div class="tutor-detail" id="tutor-detail-${e.profile_id}"></div>
     </div>`
   }).join('')
 }
@@ -117,6 +118,8 @@ async function loadTutors() {
 async function toggleTutor(profileId, evt) {
   const card = document.getElementById('tutor-' + profileId)
   card.classList.toggle('ta-open')
+  const button = card.querySelector('.tutor-head')
+  button.setAttribute('aria-expanded', card.classList.contains('ta-open') ? 'true' : 'false')
   if (!card.classList.contains('ta-open')) return
   const detail = document.getElementById('tutor-detail-' + profileId)
   if (detail.dataset.loaded) return
@@ -134,7 +137,8 @@ async function toggleTutor(profileId, evt) {
         ${ev.content ? `<pre>${escHtml(ev.content.slice(0, 1500))}</pre>` : ''}
         ${ev.file_url ? `<a href="${escHtml(ev.file_url)}" target="_blank" style="color:var(--gold);font-size:.8rem;">Open link →</a>` : ''}
       </div>`).join('') || '<p style="color:var(--muted);font-size:.85rem;">No evidence submitted yet.</p>'}
-    <div style="display:flex;gap:.6rem;align-items:center;margin-top:.6rem;">
+    <div style="display:flex;gap:.6rem;align-items:center;margin-top:.6rem;flex-wrap:wrap;">
+      <label for="confidentialStage-${profileId}" style="font-size:.78rem;color:var(--muted);">Marking guide stage</label>
       <select class="ta-boundary-select" id="confidentialStage-${profileId}">
         <option value="biology-gcse-stage-1">Stage 1 — Entry Diagnostic</option>
         <option value="biology-gcse-stage-3">Stage 3 — Examiner School</option>
@@ -146,12 +150,14 @@ async function toggleTutor(profileId, evt) {
     <div id="confidential-${profileId}"></div>
 
     <div class="gate-form">
-      <div style="font-weight:600;margin-bottom:.6rem;">Record gate decision</div>
-      ${U.renderClearanceBoard()}
-      <input type="text" placeholder="Gate type (e.g. week1_gate, final_clearance)" class="ta-evidence-input" id="gateType-${profileId}" style="margin-top:.8rem;">
-      <textarea placeholder="Rationale (required)" id="gateRationale-${profileId}"></textarea>
+      <div style="font-weight:600;margin-bottom:.6rem;" id="gateHeading-${profileId}">Record gate decision</div>
+      ${U.renderClearanceBoard(null, `ta-clearance-decision-${profileId}`)}
+      <label for="gateType-${profileId}" style="display:block;font-size:.78rem;color:var(--muted);margin-top:.8rem;">Gate type</label>
+      <input type="text" placeholder="e.g. week1_gate or final_clearance" class="ta-evidence-input" id="gateType-${profileId}">
+      <label for="gateRationale-${profileId}" style="display:block;font-size:.78rem;color:var(--muted);margin-top:.8rem;">Decision rationale</label>
+      <textarea placeholder="Required" id="gateRationale-${profileId}"></textarea>
       <button class="btn btn-gold" onclick="recordGate('${profileId}')">Record decision</button>
-      <div id="gateNote-${profileId}" style="font-size:.78rem;color:var(--muted);margin-top:.5rem;"></div>
+      <div id="gateNote-${profileId}" role="status" aria-live="polite" style="font-size:.78rem;color:var(--muted);margin-top:.5rem;"></div>
     </div>`
 }
 
@@ -174,7 +180,7 @@ async function loadConfidential(profileId) {
 }
 
 async function recordGate(profileId) {
-  const decision = document.querySelector(`#tutor-detail-${profileId} input[name="ta-clearance-decision"]:checked`)
+  const decision = document.querySelector(`#tutor-detail-${profileId} input[name="ta-clearance-decision-${profileId}"]:checked`)
   const gateType = document.getElementById('gateType-' + profileId).value.trim()
   const rationale = document.getElementById('gateRationale-' + profileId).value.trim()
   const note = document.getElementById('gateNote-' + profileId)

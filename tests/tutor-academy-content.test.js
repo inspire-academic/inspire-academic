@@ -148,6 +148,30 @@ test('tutor-academy-ui.js exposes the render helpers stage-N.html pages call', (
   }
 });
 
+test('pathway stage cards use semantic links and expose locked state accessibly', () => {
+  const ui = loadUi();
+  const open = ui.renderStageCard('biology-gcse-stage-1', 'active', 25);
+  const locked = ui.renderStageCard('biology-gcse-stage-2', 'locked', 0);
+  assert.match(open, /<a class="ta-stage-card/);
+  assert.match(open, /href="stage-1\.html"/);
+  assert.doesNotMatch(open, /onclick=/);
+  assert.match(locked, /aria-disabled="true"/);
+  assert.doesNotMatch(locked, /href=/);
+});
+
+test('all Biology stage pages use semantic section controls, live save feedback and route guards', () => {
+  for (let stage = 1; stage <= 4; stage++) {
+    const html = fs.readFileSync(path.join(REPO_ROOT, 'teacher', 'tutor-academy', `stage-${stage}.html`), 'utf8');
+    assert.match(html, /<nav class="ta-section-nav"/);
+    assert.match(html, /<button type="button" class="ta-section-nav-item/);
+    assert.match(html, /aria-current="step"/);
+    assert.match(html, /role="status" aria-live="polite"/);
+    assert.match(html, /validateStagePanel/);
+    assert.match(html, /tutorCanAccessStage/);
+    assert.match(html, /Response\.ok/);
+  }
+});
+
 test('renderStageCard produces a locked card for the locked status without an onclick handler', () => {
   const ui = loadUi();
   const html = ui.renderStageCard('biology-gcse-stage-2', 'locked', 0);
