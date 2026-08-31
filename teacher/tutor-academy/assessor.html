@@ -134,7 +134,15 @@ async function toggleTutor(profileId, evt) {
         ${ev.content ? `<pre>${escHtml(ev.content.slice(0, 1500))}</pre>` : ''}
         ${ev.file_url ? `<a href="${escHtml(ev.file_url)}" target="_blank" style="color:var(--gold);font-size:.8rem;">Open link →</a>` : ''}
       </div>`).join('') || '<p style="color:var(--muted);font-size:.85rem;">No evidence submitted yet.</p>'}
-    <button class="assessor-content-btn" onclick="loadConfidential('${profileId}')">View confidential marking guide (Stage 1)</button>
+    <div style="display:flex;gap:.6rem;align-items:center;margin-top:.6rem;">
+      <select class="ta-boundary-select" id="confidentialStage-${profileId}">
+        <option value="biology-gcse-stage-1">Stage 1 — Entry Diagnostic</option>
+        <option value="biology-gcse-stage-3">Stage 3 — Examiner School</option>
+        <option value="biology-gcse-stage-4">Stage 4 — Practical &amp; Clearance</option>
+      </select>
+      <button class="assessor-content-btn" onclick="loadConfidential('${profileId}')">View confidential marking guide</button>
+    </div>
+    <p style="font-size:.72rem;color:var(--muted);margin-top:.3rem;">Stage 2 (Specification Mastery) has no confidential section in the source pack.</p>
     <div id="confidential-${profileId}"></div>
 
     <div class="gate-form">
@@ -149,12 +157,13 @@ async function toggleTutor(profileId, evt) {
 
 async function loadConfidential(profileId) {
   const el = document.getElementById('confidential-' + profileId)
+  const stageId = document.getElementById('confidentialStage-' + profileId).value
   el.innerHTML = '<p style="color:var(--muted);font-size:.8rem;">Loading…</p>'
   try {
     const r = await fetch('/api/v1/tutor-academy/assessor-content', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-      body: JSON.stringify({ stageId: 'biology-gcse-stage-1' })
+      body: JSON.stringify({ stageId })
     })
     const json = await r.json()
     if (!json.success) { el.innerHTML = `<p style="color:#f87171;font-size:.8rem;">${escHtml(json.error?.message || 'Could not load.')}</p>`; return }
