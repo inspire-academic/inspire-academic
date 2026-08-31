@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCSE Physics: Forces and Motion | Inspire Academic</title>
+<meta name="description" content="Inspire Learning Experience topic hub for GCSE Physics: Forces and Motion — AQA and Edexcel, Higher and Foundation tier.">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,750;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+
+<link rel="stylesheet" href="/assets/css/tokens.css">
+
+<style>
+  /* ==== Inspire Learning Experience — topic hub ============
+     Fresh "ile-" namespace throughout: see
+     docs/benchmark/lesson-architecture-standard.md — never reuse
+     .app/.main/.page-wrap. This page is self-sufficient for its own
+     full-bleed layout and is not part of the lessons/lesson-viewer
+     pipeline (it is a plain static page, benchmark-scoped). ==== */
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  :root{
+    --ile-blue: var(--blue);
+    --ile-blue-rgb: var(--blue-rgb);
+    --ile-cyan: var(--cyan-bright);
+  }
+
+  /* Inspire Light — premium icy-blue/navy/gold direction, approved
+     2026-08-07 (see docs/reference/Lesson-colour-ref1.0.png). Scoped
+     to this page only via body.ile-hub -- does NOT touch
+     assets/css/tokens.css, so every other page keeps today's sitewide
+     Light theme unchanged. Same token values as the paired lesson
+     file (teaching-lessons/physics/forces-and-motion-distance-and-
+     displacement.html) for a consistent Inspire Learning Experience
+     family. Dark theme is untouched. */
+  body.ile-hub[data-theme="light"]{
+    --bg: #f2f7fd; --bg-panel: #ffffff; --bg-card: #ffffff; --bg-tinted: #eef5fb;
+    --bg-hover: rgba(11,33,68,.05); --border: #dfe9f4; --border-strong: #c9dbec;
+    --text: #0b2144; --text-muted: rgba(11,33,68,.72); --text-soft: rgba(11,33,68,.55);
+    --sidebar-bg: #ffffff; --sidebar-border: #e8f0f9;
+    --shadow-card: 0 10px 26px rgba(15,42,82,.08); --shadow: 0 20px 50px rgba(15,42,82,.12);
+    --blue: #0e2c56; --gold-rich: #8f6412; --gold-soft: #f2dfa8; --border-warm: #ead9b3;
+    --gold-ink: #8f6412;
+    --active-surface: linear-gradient(135deg, #faf1dc 0%, #eef6fd 100%); --accent: var(--gold-rich);
+    background:
+      radial-gradient(1100px 700px at 12% -8%, rgba(242,223,168,.22), transparent 55%),
+      radial-gradient(1000px 650px at 100% 0%, rgba(219,232,246,.55), transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+
+  body.ile-hub{
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    width: 100%;
+    transition: background .25s var(--transition), color .25s var(--transition);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .ile-hub h1, .ile-hub h2, .ile-hub h3 { font-family: var(--font-display); }
+
+  a { color: inherit; text-decoration: none; }
+
+  .ile-visually-hidden{
+    position:absolute; width:1px; height:1px; overflow:hidden;
+    clip:rect(0 0 0 0); white-space:nowrap;
+  }
+
+  .ile-skip-link{
+    position:absolute; left:12px; top:-48px; z-index:200;
+    background: var(--gold); color:#1a1200; padding:10px 16px;
+    border-radius: var(--radius-sm); font-weight:700;
+    transition: top .2s var(--spring-out);
+  }
+  .ile-skip-link:focus{ top:12px; }
+
+  /* ---- shell layout ---- */
+  .ile-shell{
+    display:grid;
+    grid-template-columns: 1fr;
+    min-height:100vh;
+  }
+  @media (min-width:960px){
+    .ile-shell{ grid-template-columns: var(--sidebar-width) 1fr; }
+  }
+
+  /* ---- sidebar ---- */
+  .ile-sidebar{
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+    padding: 20px 14px 24px;
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(84vw, 300px);
+    transform: translateX(-100%);
+    transition: transform .3s var(--spring-out);
+    z-index: 90;
+    overflow-y: auto;
+    display:flex;
+    flex-direction:column;
+  }
+  .ile-sidebar.ile-open{ transform: translateX(0); }
+  @media (min-width:960px){
+    .ile-sidebar{ position: sticky; top:0; height:100vh; transform:none; width:auto; }
+  }
+
+  .ile-sidebar-backdrop{
+    position:fixed; inset:0; background:rgba(4,8,16,.55);
+    z-index:80; opacity:0; pointer-events:none; transition:opacity .25s;
+  }
+  .ile-sidebar-backdrop.ile-open{ opacity:1; pointer-events:auto; }
+  @media (min-width:960px){ .ile-sidebar-backdrop{ display:none; } }
+
+  .ile-brand{
+    display:flex; align-items:center; gap:10px;
+    padding: 6px 10px 20px;
+  }
+  .ile-brand-mark{
+    font-family: var(--font-display); font-weight:700; font-size:1.05rem;
+    letter-spacing:.06em; color: var(--gold-ink, var(--gold));
+  }
+  .ile-brand-sub{
+    display:block; font-size:.6rem; letter-spacing:.24em;
+    color: var(--text-muted); font-weight:700; margin-top:1px;
+  }
+
+  .ile-nav{ display:flex; flex-direction:column; gap:2px; flex:1; }
+  .ile-nav-btn{
+    display:flex; align-items:center; gap:12px;
+    padding:10px 12px; border-radius: var(--radius-sm);
+    font-size:.88rem; font-weight:600; color: var(--text-muted);
+    background:none; border:none; width:100%; text-align:left;
+    cursor:pointer; font-family:inherit;
+    transition: background .15s, color .15s;
+  }
+  .ile-nav-btn:hover, .ile-nav-btn:focus-visible{ background: var(--bg-hover); color: var(--text); }
+  .ile-nav-btn.ile-active{ background: var(--bg-hover); color: var(--gold-ink, var(--gold)); }
+  .ile-nav-btn svg{ width:18px; height:18px; flex-shrink:0; }
+
+  .ile-sidebar-foot{
+    margin-top:16px; padding:16px; border-radius: var(--radius-sm);
+    background: var(--bg-card); border:1px solid var(--border);
+    text-align:center;
+  }
+  .ile-sidebar-foot strong{ display:block; font-size:.82rem; margin-bottom:4px; }
+  .ile-sidebar-foot p{ font-size:.74rem; color: var(--text-muted); line-height:1.4; }
+
+  /* ---- main ---- */
+  .ile-main{ width:100%; min-width:0; }
+
+  .ile-topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px; padding:14px 16px;
+    border-bottom:1px solid var(--border);
+    position: sticky; top:0; background: var(--bg); z-index: 40;
+  }
+  @media (min-width:960px){ .ile-topbar{ padding:16px 32px; } }
+
+  .ile-menu-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border-radius: var(--radius-sm);
+    background: var(--bg-card); border:1px solid var(--border);
+    color: var(--text); cursor:pointer;
+  }
+  @media (min-width:960px){ .ile-menu-btn{ display:none; } }
+
+  .ile-breadcrumb{ font-size:.78rem; color: var(--text-muted); display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .ile-breadcrumb a:hover{ color: var(--gold-ink, var(--gold)); }
+
+  .ile-topbar-actions{ display:flex; align-items:center; gap:8px; margin-left:auto; }
+
+  .ile-icon-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border-radius:50%;
+    background: var(--bg-card); border:1px solid var(--border);
+    color: var(--text); cursor:pointer; transition: background .15s;
+  }
+  .ile-icon-btn:hover{ background: var(--bg-hover); }
+  .ile-icon-btn svg{ width:18px; height:18px; }
+
+  .ile-content{ padding: 20px 16px 64px; max-width:1280px; margin:0 auto; }
+  @media (min-width:960px){ .ile-content{ padding: 32px 32px 80px; } }
+
+  .ile-hero{ margin-bottom:24px; }
+  .ile-hero-top{
+    display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between;
+    align-items:flex-start; margin-bottom:14px;
+  }
+  .ile-h1{ font-size: clamp(1.6rem, 4.4vw, 2.5rem); font-weight:650; line-height:1.1; margin-bottom:8px; }
+  .ile-lede{ color: var(--text-muted); font-size:.98rem; max-width:52ch; line-height:1.5; }
+
+  .ile-progress-box{ text-align:right; min-width:180px; }
+  .ile-progress-label{ font-size:.72rem; color: var(--text-muted); margin-bottom:6px; }
+  .ile-progress-track{
+    height:8px; border-radius:99px; background: var(--progress-track);
+    overflow:hidden; width:180px; margin-left:auto;
+  }
+  .ile-progress-fill{ height:100%; background: var(--grad-gold); border-radius:99px; }
+
+  .ile-pathway-row{ display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-top:16px; }
+  .ile-pathway-label{ font-size:.82rem; font-weight:700; color: var(--text-muted); }
+
+  .ile-tier-toggle{
+    display:inline-flex; background: var(--bg-card); border:1px solid var(--border);
+    border-radius:99px; padding:3px;
+  }
+  .ile-tier-btn{
+    padding:8px 18px; border-radius:99px; border:none; background:none;
+    font-family:inherit; font-weight:700; font-size:.82rem; color: var(--text-muted);
+    cursor:pointer; transition: background .2s var(--spring-out), color .2s;
+  }
+  .ile-tier-btn[aria-pressed="true"]{ background: var(--blue); color:#fff; }
+
+  .ile-theme-toggle{
+    display:inline-flex; background: var(--bg-card); border:1px solid var(--border);
+    border-radius:99px; padding:3px; gap:2px;
+  }
+  .ile-theme-btn{
+    padding:8px 14px; border-radius:99px; border:none; background:none;
+    font-family:inherit; font-weight:700; font-size:.78rem; color: var(--text-muted);
+    cursor:pointer; display:flex; align-items:center; gap:6px;
+  }
+  .ile-theme-btn[aria-pressed="true"]{ background: var(--gold); color:#1a1200; }
+  .ile-theme-btn svg{ width:14px; height:14px; }
+
+  /* ---- cards ---- */
+  .ile-card{
+    background: var(--bg-panel); border:1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow-card);
+    padding:20px;
+  }
+
+  .ile-grid-hero{ display:grid; gap:16px; grid-template-columns:1fr; margin-bottom:16px; }
+  @media (min-width:1100px){ .ile-grid-hero{ grid-template-columns: 2fr 1fr; } }
+
+  .ile-diagram-card{ padding:18px; }
+  .ile-diagram-card h2{ font-size:1.05rem; margin-bottom:12px; }
+  .ile-diagram-pair{ display:grid; gap:14px; grid-template-columns:1fr; }
+  @media (min-width:640px){ .ile-diagram-pair{ grid-template-columns:1fr 1fr; } }
+  .ile-diagram-panel{
+    background: var(--bg-card); border:1px solid var(--border);
+    border-radius: var(--radius-sm); padding:12px; text-align:center;
+  }
+  .ile-diagram-panel svg{ width:100%; height:auto; max-width:280px; }
+  .ile-diagram-panel figcaption{ font-size:.74rem; color: var(--text-muted); margin-top:8px; line-height:1.4; }
+  .ile-eq-label{ font-family: var(--font-display); font-size:1rem; font-weight:650; margin-bottom:6px; }
+
+  .ile-objectives h2{ font-size:1.05rem; display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .ile-objectives-icon{
+    width:34px; height:34px; border-radius:50%; background: var(--grad-gold);
+    display:flex; align-items:center; justify-content:center; color:#1a1200; flex-shrink:0;
+  }
+  .ile-objectives ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .ile-objectives li{ display:flex; gap:10px; font-size:.86rem; line-height:1.4; color: var(--text-muted); }
+  .ile-objectives li svg{ width:16px; height:16px; flex-shrink:0; margin-top:2px; color: var(--gold-ink, var(--gold)); }
+
+  .ile-grid-3{ display:grid; gap:16px; grid-template-columns:1fr; margin-bottom:16px; }
+  @media (min-width:1100px){ .ile-grid-3{ grid-template-columns:1fr 1fr 1fr; } }
+
+  .ile-card-head{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .ile-card-num{
+    width:26px; height:26px; border-radius:50%; background: var(--bg-hover);
+    color: var(--gold-ink, var(--gold)); font-weight:800; font-size:.8rem;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .ile-card-head h3{ font-size:.98rem; }
+
+  .ile-overview-body p{ font-size:.85rem; color: var(--text-muted); line-height:1.55; margin-bottom:14px; }
+  .ile-overview-meta{ display:flex; flex-direction:column; gap:8px; border-top:1px solid var(--border); padding-top:12px; }
+  .ile-overview-meta div{ display:flex; justify-content:space-between; font-size:.78rem; }
+  .ile-overview-meta span:first-child{ color: var(--text-muted); }
+  .ile-overview-meta span:last-child{ font-weight:700; }
+
+  .ile-seq-list{ list-style:none; display:flex; flex-direction:column; gap:2px; }
+  .ile-seq-item{
+    display:flex; align-items:center; gap:10px; padding:9px 6px;
+    border-radius: var(--radius-sm); font-size:.84rem;
+  }
+  .ile-seq-item.ile-seq-ready{ }
+  .ile-seq-num{
+    width:22px; height:22px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:.7rem; font-weight:800; background: var(--bg-hover); color: var(--text-muted);
+  }
+  .ile-seq-item.ile-seq-ready .ile-seq-num{ background: var(--success); color:#04220f; }
+  .ile-seq-item a{ font-weight:600; }
+  .ile-seq-item a:hover{ color: var(--gold-ink, var(--gold)); }
+  .ile-seq-status{ margin-left:auto; font-size:.68rem; color: var(--text-soft); white-space:nowrap; }
+  .ile-seq-item.ile-seq-ready .ile-seq-status{ color: var(--success); font-weight:700; }
+
+  .ile-models-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .ile-model-mini{
+    background: var(--bg-card); border:1px solid var(--border); border-radius: var(--radius-sm);
+    padding:10px; text-align:center;
+  }
+  .ile-model-mini h4{ font-size:.68rem; font-weight:700; color: var(--text-muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:.03em; }
+  .ile-model-mini svg{ width:100%; height:auto; max-height:70px; }
+
+  .ile-practicals{ margin-bottom:16px; }
+  .ile-practicals ul{ list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .ile-practicals li{ display:flex; gap:10px; font-size:.85rem; color: var(--text-muted); line-height:1.4; }
+  .ile-practicals li::before{ content:'⚗'; color: var(--gold-ink, var(--gold)); flex-shrink:0; }
+
+  .ile-mastery-grid{ display:grid; gap:12px; grid-template-columns: 1fr; margin-bottom:16px; }
+  @media (min-width:780px){ .ile-mastery-grid{ grid-template-columns: repeat(4, 1fr); } }
+  .ile-mastery-card{
+    display:flex; flex-direction:column; gap:6px; padding:16px;
+    background: var(--bg-panel); border:1px solid var(--border); border-radius: var(--radius-sm);
+    cursor:pointer; text-align:left; font-family:inherit; color:inherit;
+    transition: transform .2s var(--spring-out), border-color .2s;
+  }
+  .ile-mastery-card:hover{ transform: translateY(-2px); border-color: var(--border-strong); }
+  .ile-mastery-card strong{ font-size:.86rem; }
+  .ile-mastery-card span{ font-size:.74rem; color: var(--text-muted); line-height:1.4; }
+  .ile-mastery-card .ile-tag{
+    font-size:.62rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+    color: var(--success);
+  }
+  .ile-mastery-card.ile-soon .ile-tag{ color: var(--text-soft); }
+
+  .ile-cta-row{ display:grid; gap:14px; grid-template-columns:1fr; margin-bottom:20px; }
+  @media (min-width:780px){ .ile-cta-row{ grid-template-columns:1fr 1fr; } }
+  .ile-cta-card{
+    border-radius: var(--radius); padding:20px; display:flex; flex-direction:column; gap:8px;
+    border:1px solid var(--border); background: var(--bg-panel);
+  }
+  .ile-cta-card strong{ font-family: var(--font-display); font-size:1.02rem; }
+  .ile-cta-card p{ font-size:.82rem; color: var(--text-muted); line-height:1.5; }
+  .ile-cta-btn{
+    align-self:flex-start; margin-top:6px; padding:9px 16px; border-radius: var(--radius-sm);
+    font-size:.8rem; font-weight:700; border:1px solid var(--border-strong);
+    background: var(--bg-card); cursor:pointer; font-family:inherit;
+  }
+  .ile-cta-btn.ile-primary{ background: var(--grad-gold); color:#1a1200; border:none; }
+
+  .ile-quote-bar{
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;
+    padding:16px 20px; border-radius: var(--radius); background: var(--bg-card);
+    border:1px solid var(--border); font-size:.85rem; color: var(--text-muted);
+  }
+  .ile-quote-bar strong{ color: var(--text); }
+
+  /* ---- drawer ---- */
+  .ile-drawer-backdrop{
+    position:fixed; inset:0; background:rgba(4,8,16,.55); z-index:180;
+    opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  .ile-drawer-backdrop.ile-open{ opacity:1; pointer-events:auto; }
+
+  .ile-drawer{
+    position:fixed; inset: 0 0 0 auto; width:min(92vw, 380px);
+    background: var(--sidebar-bg); border-left:1px solid var(--sidebar-border);
+    z-index:190; transform: translateX(100%); transition: transform .3s var(--spring-out);
+    display:flex; flex-direction:column;
+  }
+  .ile-drawer.ile-open{ transform: translateX(0); }
+  .ile-drawer-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 18px; border-bottom:1px solid var(--border);
+  }
+  .ile-drawer-head h2{ font-size:1.02rem; }
+  .ile-drawer-close{
+    width:34px; height:34px; border-radius:50%; border:1px solid var(--border);
+    background: var(--bg-card); color: var(--text); cursor:pointer;
+  }
+  .ile-drawer-body{ padding:16px 18px; overflow-y:auto; flex:1; font-size:.86rem; line-height:1.6; color: var(--text-muted); }
+  .ile-drawer-body dt{ font-weight:700; color: var(--text); margin-top:12px; }
+  .ile-drawer-body dt:first-child{ margin-top:0; }
+  .ile-drawer-body dd{ margin:2px 0 0; }
+  .ile-drawer-body ol, .ile-drawer-body ul{ padding-left:18px; margin-top:8px; }
+  .ile-drawer-body li{ margin-bottom:8px; }
+
+  @media print{
+    .ile-sidebar, .ile-topbar, .ile-drawer, .ile-drawer-backdrop, .ile-sidebar-backdrop, .ile-mastery-card, .ile-cta-row{ display:none !important; }
+    .ile-shell{ display:block; }
+    body.ile-hub{ background:#fff; color:#111; }
+  }
+</style>
+</head>
+<body class="ile-hub" data-theme="dark">
+<a class="ile-skip-link" href="#ile-main-content">Skip to content</a>
+
+<div class="ile-shell">
+  <div class="ile-sidebar-backdrop" id="ileSidebarBackdrop"></div>
+
+  <aside class="ile-sidebar" id="ileSidebar" aria-label="Topic navigation">
+    <div class="ile-brand">
+      <span class="ile-brand-mark">INSPIRE ACADEMIC
+        <span class="ile-brand-sub">LEARNING EXPERIENCE — PREVIEW</span>
+      </span>
+    </div>
+
+    <nav class="ile-nav">
+      <button class="ile-nav-btn ile-active" data-jump="#ile-overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg>
+        Overview
+      </button>
+      <button class="ile-nav-btn" data-jump="#ile-video">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>
+        Video Lesson
+      </button>
+      <button class="ile-nav-btn" data-jump="#ile-sequence">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        Learn
+      </button>
+      <button class="ile-nav-btn" data-drawer="notes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13H6z"/><path d="M14 3v5h5"/></svg>
+        Notes
+      </button>
+      <button class="ile-nav-btn" data-jump="#ile-models">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16M8 15l3-4 3 3 4-6"/></svg>
+        Worked Examples
+      </button>
+      <button class="ile-nav-btn" data-jump="#ile-practicals">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v6l-5 9a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-5-9V3"/><path d="M8 3h8"/></svg>
+        Practical
+      </button>
+      <button class="ile-nav-btn" data-jump="#ile-mastery">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+        Quiz
+      </button>
+      <button class="ile-nav-btn" data-drawer="exam-practice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3h6l3 3v15H6V6z"/><path d="M9 12h6M9 16h6"/></svg>
+        Exam Practice
+      </button>
+      <button class="ile-nav-btn" data-drawer="vocabulary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20c-3 0-7-1-7-4V4c3-1 7-1 7 1"/><path d="M12 20c3 0 7-1 7-4V4c-3-1-7-1-7 1"/></svg>
+        Key Vocabulary
+      </button>
+      <button class="ile-nav-btn" data-drawer="exam-tips">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.5.4.8 1 .8 1.6v.7h6.4v-.7c0-.6.3-1.2.8-1.6A7 7 0 0 0 12 2z"/></svg>
+        Exam Tips
+      </button>
+      <button class="ile-nav-btn" data-drawer="related">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="7" rx="1"/><rect x="3" y="15" width="7" height="7" rx="1"/><rect x="14" y="15" width="7" height="7" rx="1"/></svg>
+        Related Lessons
+      </button>
+      <button class="ile-nav-btn" data-drawer="downloads">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 19h16"/></svg>
+        Downloads
+      </button>
+      <button class="ile-nav-btn" data-drawer="support">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 1 1 16 0v5a2 2 0 0 1-2 2h-1v-7h3M4 12v5a2 2 0 0 0 2 2h1v-7H4"/></svg>
+        Live Support
+      </button>
+    </nav>
+
+    <div class="ile-sidebar-foot">
+      <strong>Benchmark preview</strong>
+      <p>This topic hub previews the Inspire Learning Experience. It is reachable by direct link only and is not yet linked from the live Physics dashboard.</p>
+    </div>
+  </aside>
+
+  <div class="ile-main">
+    <header class="ile-topbar">
+      <button class="ile-menu-btn" id="ileMenuBtn" aria-label="Open topic navigation" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <nav class="ile-breadcrumb" aria-label="Breadcrumb">
+        <a href="/subjects/physics.html">Physics</a><span>›</span>
+        <span>Forces and Motion</span>
+      </nav>
+      <div class="ile-topbar-actions">
+        <a class="ile-icon-btn" href="/subjects/physics.html" aria-label="Back to Physics dashboard" title="Back to Physics dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <main class="ile-content" id="ile-main-content">
+
+      <section class="ile-hero" id="ile-overview">
+        <div class="ile-hero-top">
+          <div>
+            <h1 class="ile-h1">GCSE Physics: Forces and Motion</h1>
+            <p class="ile-lede">Build confidence describing motion with distance and displacement, then move through speed, motion graphs, resultant forces, free-body diagrams and Newton's laws — AQA and Edexcel, Higher and Foundation.</p>
+          </div>
+          <div class="ile-progress-box">
+            <div class="ile-progress-label">1 of 8 lessons built — benchmark preview</div>
+            <div class="ile-progress-track"><div class="ile-progress-fill" style="width:12.5%"></div></div>
+          </div>
+        </div>
+
+        <div class="ile-pathway-row">
+          <span class="ile-pathway-label">Study pathway:</span>
+          <div class="ile-tier-toggle" role="group" aria-label="Choose tier">
+            <button class="ile-tier-btn" id="ileTierHigher" aria-pressed="true">Higher Tier</button>
+            <button class="ile-tier-btn" id="ileTierFoundation" aria-pressed="false">Foundation Tier</button>
+          </div>
+          <div class="ile-theme-toggle" role="group" aria-label="Choose theme">
+            <button class="ile-theme-btn" id="ileThemeDark" aria-pressed="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+              Inspire Dark
+            </button>
+            <button class="ile-theme-btn" id="ileThemeLight" aria-pressed="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+              Inspire Light
+            </button>
+          </div>
+        </div>
+
+        <div class="ile-grid-hero" style="margin-top:20px;">
+          <div class="ile-card ile-diagram-card" id="ile-forces-diagram">
+            <h2>Balanced and unbalanced forces</h2>
+            <div class="ile-diagram-pair">
+              <figure class="ile-diagram-panel">
+                <svg viewBox="0 0 260 140" role="img" aria-labelledby="ile-bal-title">
+                  <title id="ile-bal-title">Balanced forces on a block: 10 newtons left and 10 newtons right, resultant force zero</title>
+                  <rect x="95" y="55" width="70" height="34" rx="4" fill="var(--bg-hover)" stroke="var(--border-strong)"/>
+                  <line x1="95" y1="72" x2="45" y2="72" stroke="#3b82f6" stroke-width="3" marker-end="url(#ileArrowBlue)"/>
+                  <text x="55" y="60" font-size="11" fill="#3b82f6" font-weight="700">10 N</text>
+                  <line x1="165" y1="72" x2="215" y2="72" stroke="#ef4444" stroke-width="3" marker-end="url(#ileArrowRed)"/>
+                  <text x="175" y="60" font-size="11" fill="#ef4444" font-weight="700">10 N</text>
+                  <text x="130" y="118" font-size="12" fill="var(--text-muted)" text-anchor="middle">ΣF = 0</text>
+                  <line x1="20" y1="98" x2="240" y2="98" stroke="var(--border-strong)" stroke-width="2"/>
+                  <defs>
+                    <marker id="ileArrowBlue" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#3b82f6"/></marker>
+                    <marker id="ileArrowRed" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#ef4444"/></marker>
+                  </defs>
+                </svg>
+                <figcaption>Equal, opposite forces cancel — the block stays at rest or keeps a constant velocity.</figcaption>
+              </figure>
+              <figure class="ile-diagram-panel">
+                <svg viewBox="0 0 260 140" role="img" aria-labelledby="ile-unbal-title">
+                  <title id="ile-unbal-title">Unbalanced forces on a block: 5 newtons left and 15 newtons right, resultant force 10 newtons right</title>
+                  <rect x="95" y="55" width="70" height="34" rx="4" fill="var(--bg-hover)" stroke="var(--border-strong)"/>
+                  <line x1="95" y1="72" x2="60" y2="72" stroke="#3b82f6" stroke-width="3" marker-end="url(#ileArrowBlue2)"/>
+                  <text x="60" y="60" font-size="11" fill="#3b82f6" font-weight="700">5 N</text>
+                  <line x1="165" y1="72" x2="230" y2="72" stroke="#ef4444" stroke-width="3" marker-end="url(#ileArrowRed2)"/>
+                  <text x="178" y="60" font-size="11" fill="#ef4444" font-weight="700">15 N</text>
+                  <text x="130" y="118" font-size="12" fill="var(--text-muted)" text-anchor="middle">ΣF = 10 N right</text>
+                  <line x1="20" y1="98" x2="240" y2="98" stroke="var(--border-strong)" stroke-width="2"/>
+                  <defs>
+                    <marker id="ileArrowBlue2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#3b82f6"/></marker>
+                    <marker id="ileArrowRed2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#ef4444"/></marker>
+                  </defs>
+                </svg>
+                <figcaption>A resultant (net) force causes the block to accelerate in the direction of the larger force.</figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <div class="ile-card ile-objectives">
+            <h2><span class="ile-objectives-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.5" fill="currentColor"/></svg></span> Topic Objectives</h2>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Distinguish distance (scalar) from displacement (vector) and explain why a round trip can have zero displacement.</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Describe and analyse motion using speed, velocity and acceleration.</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Understand forces, their effects, and how they combine into a resultant force.</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Apply graphs, diagrams and equations to solve problems and explain real-world scenarios.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="ile-grid-3" id="ile-sequence">
+        <div class="ile-card">
+          <div class="ile-card-head"><span class="ile-card-num">1</span><h3>Topic Overview</h3></div>
+          <div class="ile-overview-body">
+            <p>You'll build a toolkit for describing and predicting motion — starting with the core language of distance and displacement, then moving through speed, motion graphs, forces and Newton's laws.</p>
+          </div>
+          <div class="ile-overview-meta">
+            <div><span>Lessons in sequence</span><span>8</span></div>
+            <div><span>Lesson 1 status</span><span style="color:var(--success)">Ready to preview</span></div>
+            <div><span>Boards covered</span><span>AQA · Edexcel</span></div>
+          </div>
+        </div>
+
+        <div class="ile-card">
+          <div class="ile-card-head"><span class="ile-card-num">2</span><h3>Lesson Sequence</h3></div>
+          <ol class="ile-seq-list" id="ileSeqList"></ol>
+        </div>
+
+        <div class="ile-card" id="ile-models">
+          <div class="ile-card-head"><span class="ile-card-num">3</span><h3>Core Models &amp; Diagrams</h3></div>
+          <div class="ile-models-grid">
+            <div class="ile-model-mini">
+              <h4>Distance vs. time</h4>
+              <svg viewBox="0 0 100 70"><line x1="12" y1="10" x2="12" y2="58" stroke="var(--border-strong)" stroke-width="1.5"/><line x1="12" y1="58" x2="92" y2="58" stroke="var(--border-strong)" stroke-width="1.5"/><line x1="12" y1="58" x2="80" y2="16" stroke="var(--ile-blue)" stroke-width="2.5"/><text x="4" y="12" font-size="7" fill="var(--text-soft)">d</text><text x="82" y="66" font-size="7" fill="var(--text-soft)">t</text></svg>
+            </div>
+            <div class="ile-model-mini">
+              <h4>Displacement</h4>
+              <svg viewBox="0 0 100 70"><line x1="10" y1="40" x2="90" y2="40" stroke="var(--border-strong)" stroke-width="1.5"/><circle cx="20" cy="40" r="3" fill="var(--ile-cyan)"/><circle cx="75" cy="40" r="3" fill="var(--gold)"/><line x1="20" y1="26" x2="75" y2="26" stroke="var(--gold)" stroke-width="2.5" marker-end="url(#ileMiniArrow)"/><text x="35" y="20" font-size="7" fill="var(--text-soft)">s</text><defs><marker id="ileMiniArrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="var(--gold)"/></marker></defs></svg>
+            </div>
+            <div class="ile-model-mini">
+              <h4>Resultant force</h4>
+              <svg viewBox="0 0 100 70"><line x1="30" y1="55" x2="30" y2="25" stroke="#3b82f6" stroke-width="2.5" marker-end="url(#ileMiniArrow2)"/><line x1="30" y1="55" x2="60" y2="55" stroke="#ef4444" stroke-width="2.5" marker-end="url(#ileMiniArrow3)"/><line x1="30" y1="55" x2="62" y2="27" stroke="var(--gold)" stroke-width="2.5" stroke-dasharray="3 2" marker-end="url(#ileMiniArrow4)"/><defs><marker id="ileMiniArrow2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#3b82f6"/></marker><marker id="ileMiniArrow3" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#ef4444"/></marker><marker id="ileMiniArrow4" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="var(--gold)"/></marker></defs></svg>
+            </div>
+            <div class="ile-model-mini">
+              <h4>Key equation</h4>
+              <div style="padding-top:10px;">
+                <div class="ile-eq-label">v = s ÷ t</div>
+                <div style="font-size:.68rem; color:var(--text-muted);">speed (m/s) = distance (m) ÷ time (s)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ile-card ile-practicals" id="ile-practicals">
+        <div class="ile-card-head"><span class="ile-card-num">4</span><h3>Required Practicals &amp; Skills</h3></div>
+        <ul>
+          <li>Investigate the effect of varying force and mass on the acceleration of an object (AQA/Edexcel required practical — verify exact wording against the current specification; see <a href="/docs/benchmark/curriculum-coverage.md" style="text-decoration:underline;">curriculum-coverage.md</a>).</li>
+          <li>Plot and interpret distance-time and velocity-time graphs from experimental data.</li>
+          <li>Use vector diagrams to combine two forces acting on the same object.</li>
+        </ul>
+      </section>
+
+      <section class="ile-mastery-grid" id="ile-mastery" style="margin-top:16px;">
+        <a class="ile-mastery-card" href="/diagnostic">
+          <strong>Quick Diagnostic</strong>
+          <span class="ile-tag">Live</span>
+          <span>Check your starting knowledge with the AI diagnostic assessment.</span>
+        </a>
+        <a class="ile-mastery-card" href="/student/lessons.html?subject=2&amp;topic=forces-motion">
+          <strong>Practice Questions</strong>
+          <span class="ile-tag">Live</span>
+          <span>Browse Forces and Motion lessons and quizzes in the lesson library.</span>
+        </a>
+        <button class="ile-mastery-card ile-soon" type="button" data-drawer="exam-practice">
+          <strong>Exam Practice</strong>
+          <span class="ile-tag">Preview inside Lesson 1</span>
+          <span>Full exam-style questions and mark schemes ship inside each built lesson.</span>
+        </button>
+        <button class="ile-mastery-card ile-soon" type="button" data-drawer="downloads">
+          <strong>End-of-Topic Test</strong>
+          <span class="ile-tag">Coming soon</span>
+          <span>Ships once all 8 lessons in the sequence are built.</span>
+        </button>
+      </section>
+
+      <section class="ile-cta-row">
+        <div class="ile-cta-card">
+          <strong>Notes &amp; worksheets</strong>
+          <p>Downloadable notes and printable worksheets for this topic are planned but not yet built for the benchmark.</p>
+          <button class="ile-cta-btn" type="button" data-drawer="downloads">View status</button>
+        </div>
+        <div class="ile-cta-card">
+          <strong>Need help?</strong>
+          <p>Email the Inspire Academic team directly and we'll get back to you.</p>
+          <a class="ile-cta-btn ile-primary" href="mailto:admin@inspireacademic.org">Email support</a>
+        </div>
+      </section>
+
+      <footer class="ile-quote-bar">
+        <span>“If I have seen further, it is by standing on the shoulders of giants.” <strong>— Isaac Newton</strong></span>
+        <span>Benchmark preview · not yet linked from the live Physics dashboard</span>
+      </footer>
+
+    </main>
+  </div>
+</div>
+
+<div class="ile-drawer-backdrop" id="ileDrawerBackdrop"></div>
+<aside class="ile-drawer" id="ileDrawer" aria-hidden="true" aria-labelledby="ileDrawerTitle">
+  <div class="ile-drawer-head">
+    <h2 id="ileDrawerTitle">Panel</h2>
+    <button class="ile-drawer-close" id="ileDrawerClose" aria-label="Close panel">✕</button>
+  </div>
+  <div class="ile-drawer-body" id="ileDrawerBody"></div>
+</aside>
+
+<script>
+(function(){
+  'use strict';
+  var PREF_NS = 'ile:physics:forces-and-motion';
+
+  var LESSONS = [
+    { title:'Distance &amp; Displacement', ready:true, href:'/teaching-lessons/physics/forces-and-motion-distance-and-displacement.html' },
+    { title:'Speed &amp; Velocity', ready:false },
+    { title:'Motion Graphs', ready:false },
+    { title:'Resultant Forces', ready:false },
+    { title:'Free-Body Diagrams', ready:false },
+    { title:"Newton's Laws", ready:false },
+    { title:'Friction &amp; Drag', ready:false },
+    { title:'Topic Review', ready:false }
+  ];
+
+  function renderSequence(){
+    var list = document.getElementById('ileSeqList');
+    list.innerHTML = LESSONS.map(function(l, i){
+      var n = i + 1;
+      if (l.ready){
+        return '<li class="ile-seq-item ile-seq-ready"><span class="ile-seq-num">' + n + '</span>' +
+          '<a href="' + l.href + '">' + l.title + '</a>' +
+          '<span class="ile-seq-status">Preview</span></li>';
+      }
+      return '<li class="ile-seq-item"><span class="ile-seq-num">' + n + '</span>' +
+        '<span>' + l.title + '</span><span class="ile-seq-status">Coming soon</span></li>';
+    }).join('');
+  }
+  renderSequence();
+
+  // ---- theme + tier persistence (namespaced, independent of sitewide ia-theme) ----
+  function getPref(key, fallback){
+    try { return localStorage.getItem(PREF_NS + ':' + key) || fallback; } catch(e){ return fallback; }
+  }
+  function setPref(key, val){
+    try { localStorage.setItem(PREF_NS + ':' + key, val); } catch(e){}
+  }
+
+  function applyTheme(theme){
+    document.body.setAttribute('data-theme', theme);
+    document.getElementById('ileThemeDark').setAttribute('aria-pressed', String(theme === 'dark'));
+    document.getElementById('ileThemeLight').setAttribute('aria-pressed', String(theme === 'light'));
+    setPref('theme', theme);
+  }
+  document.getElementById('ileThemeDark').addEventListener('click', function(){ applyTheme('dark'); });
+  document.getElementById('ileThemeLight').addEventListener('click', function(){ applyTheme('light'); });
+  applyTheme(getPref('theme', 'dark'));
+
+  function applyTier(tier){
+    document.getElementById('ileTierHigher').setAttribute('aria-pressed', String(tier === 'higher'));
+    document.getElementById('ileTierFoundation').setAttribute('aria-pressed', String(tier === 'foundation'));
+    setPref('tier', tier);
+  }
+  document.getElementById('ileTierHigher').addEventListener('click', function(){ applyTier('higher'); });
+  document.getElementById('ileTierFoundation').addEventListener('click', function(){ applyTier('foundation'); });
+  applyTier(getPref('tier', 'higher'));
+
+  // ---- mobile sidebar ----
+  var sidebar = document.getElementById('ileSidebar');
+  var sidebarBackdrop = document.getElementById('ileSidebarBackdrop');
+  var menuBtn = document.getElementById('ileMenuBtn');
+  function openSidebar(){
+    sidebar.classList.add('ile-open'); sidebarBackdrop.classList.add('ile-open');
+    menuBtn.setAttribute('aria-expanded', 'true');
+  }
+  function closeSidebar(){
+    sidebar.classList.remove('ile-open'); sidebarBackdrop.classList.remove('ile-open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }
+  menuBtn.addEventListener('click', function(){
+    sidebar.classList.contains('ile-open') ? closeSidebar() : openSidebar();
+  });
+  sidebarBackdrop.addEventListener('click', closeSidebar);
+
+  document.querySelectorAll('.ile-nav-btn[data-jump]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = document.querySelector(btn.getAttribute('data-jump'));
+      if (target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+      document.querySelectorAll('.ile-nav-btn').forEach(function(b){ b.classList.remove('ile-active'); });
+      btn.classList.add('ile-active');
+      if (window.innerWidth < 960) closeSidebar();
+    });
+  });
+
+  // ---- drawer ----
+  var DRAWER_CONTENT = {
+    'notes': {
+      title: 'Notes',
+      body: '<p>Downloadable, printable revision notes for each lesson in this sequence are planned but not yet built for this benchmark.</p><p>For now, the full written content lives inside each ready lesson itself — see Lesson 1: Distance &amp; Displacement.</p>'
+    },
+    'exam-practice': {
+      title: 'Exam Practice',
+      body: '<p>A dedicated exam-practice bank across the whole topic ships once more lessons in the sequence are built.</p><p>Lesson 1 (Distance &amp; Displacement) already includes original, board-style exam questions with full mark schemes in its own Exam Practice section — <a href="/teaching-lessons/physics/forces-and-motion-distance-and-displacement.html" style="text-decoration:underline;">open the lesson</a>.</p>'
+    },
+    'vocabulary': {
+      title: 'Key Vocabulary',
+      body: '<dl>' +
+        '<dt>Distance</dt><dd>A scalar quantity — the total length of the path travelled, regardless of direction.</dd>' +
+        '<dt>Displacement</dt><dd>A vector quantity — the straight-line distance from the start point to the finish point, in a stated direction.</dd>' +
+        '<dt>Scalar</dt><dd>A quantity with magnitude (size) only, e.g. distance, speed, time, mass.</dd>' +
+        '<dt>Vector</dt><dd>A quantity with both magnitude and direction, e.g. displacement, velocity, force, acceleration.</dd>' +
+        '<dt>Resultant force</dt><dd>The single force that has the same effect as all the forces acting on an object combined.</dd>' +
+        '<dt>Speed</dt><dd>How fast an object is moving — distance travelled per unit time (scalar).</dd>' +
+        '<dt>Velocity</dt><dd>Speed in a stated direction (vector).</dd>' +
+        '</dl>'
+    },
+    'exam-tips': {
+      title: 'Exam Tips',
+      body: '<ul>' +
+        '<li>State whether a quantity is a scalar or a vector when a question asks you to "explain" the difference — examiners look for this explicitly.</li>' +
+        '<li>Always include the direction when you give a displacement or velocity answer — a magnitude alone will usually only get partial credit.</li>' +
+        '<li>Show your working line by line: quantity, formula, substitution, answer with unit. Method marks are awarded even if the final answer is wrong.</li>' +
+        '<li>Round trips are a classic exam trap — remember distance can be large while displacement is zero.</li>' +
+        '</ul>'
+    },
+    'related': {
+      title: 'Related Lessons',
+      body: '<ol>' + LESSONS.map(function(l, i){
+        return '<li>' + (l.ready ? '<a href="' + l.href + '" style="text-decoration:underline;">' + l.title + '</a> — ready to preview' : l.title + ' — coming soon');
+      }).join('') + '</ol>'
+    },
+    'downloads': {
+      title: 'Downloads',
+      body: '<p>No downloadable files are available yet for this benchmark topic. This panel will list worksheets, revision notes and the end-of-topic test once they exist.</p>'
+    },
+    'support': {
+      title: 'Live Support',
+      body: '<p>Live in-app tutor support is not built yet. In the meantime, email the team directly: <a href="mailto:admin@inspireacademic.org" style="text-decoration:underline;">admin@inspireacademic.org</a>.</p>'
+    }
+  };
+
+  var drawer = document.getElementById('ileDrawer');
+  var drawerBackdrop = document.getElementById('ileDrawerBackdrop');
+  var drawerTitle = document.getElementById('ileDrawerTitle');
+  var drawerBody = document.getElementById('ileDrawerBody');
+  var drawerCloseBtn = document.getElementById('ileDrawerClose');
+  var lastFocused = null;
+
+  function openDrawer(key){
+    var data = DRAWER_CONTENT[key];
+    if (!data) return;
+    lastFocused = document.activeElement;
+    drawerTitle.textContent = data.title;
+    drawerBody.innerHTML = data.body;
+    drawer.classList.add('ile-open');
+    drawerBackdrop.classList.add('ile-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    drawerCloseBtn.focus();
+    document.addEventListener('keydown', onDrawerKeydown);
+  }
+  function closeDrawer(){
+    drawer.classList.remove('ile-open');
+    drawerBackdrop.classList.remove('ile-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.removeEventListener('keydown', onDrawerKeydown);
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+  function onDrawerKeydown(e){
+    if (e.key === 'Escape'){ closeDrawer(); return; }
+    if (e.key === 'Tab'){
+      var focusable = drawer.querySelectorAll('a, button');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  }
+  document.querySelectorAll('[data-drawer]').forEach(function(btn){
+    btn.addEventListener('click', function(){ openDrawer(btn.getAttribute('data-drawer')); });
+  });
+  drawerCloseBtn.addEventListener('click', closeDrawer);
+  drawerBackdrop.addEventListener('click', closeDrawer);
+})();
+</script>
+</body>
+</html>
