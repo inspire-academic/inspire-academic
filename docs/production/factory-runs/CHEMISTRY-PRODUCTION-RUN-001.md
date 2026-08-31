@@ -1,15 +1,14 @@
 # Chemistry Production Run #001 — Electrolysis
 
-## STATUS: QA_COMPLETE — AWAITING HUMAN GATE 8 / PUBLICATION SWAP
+## STATUS: HUMAN_APPROVED — PUBLISHED
 
 **Run type:** REAL PRODUCTION LESSON. This is not a Factory v0 pilot,
 rehydration run, or architecture proof.
 
-**Lifecycle:** `QA_COMPLETE`. Content/pedagogy is a strong candidate, automated
-and standalone QA pass, and the remediated candidate passed authenticated
-external-Chrome Gate 7 inspection in the real staging viewer. This does not
-grant lesson-level `HUMAN_APPROVED`; Gate 8 and the publication swap remain
-human-controlled. The older published staging row remains untouched and stale.
+**Lifecycle:** `HUMAN_APPROVED`. Content/pedagogy, automated QA, standalone QA
+and authenticated external-Chrome Gate 7 inspection passed. The user approved
+the complete lesson at Gate 8 on 2026-08-31 and authorised the publication
+swap. The remediated row is published; the legacy row is retained as a draft.
 
 ```text
 CONTENT / PEDAGOGY: strong candidate
@@ -17,9 +16,11 @@ AUTOMATED QA: PASS — 346/346 on current merged staging
 STANDALONE QA: PASS
 REPRESENTATION GATE: HUMAN APPROVED — 2026-08-31
 TECHNICAL STATUS: representation remediation approved and canonical
-LIVE VIEWER GATE: PASS — authenticated external Chrome, draft QA row
-LIFECYCLE: QA_COMPLETE
-NEXT REQUIRED WORK: human Gate 8 approval and publication-swap decision
+LIVE VIEWER GATE: PASS — authenticated external Chrome, remediated row
+HUMAN GATE 8: PASS — user approved 2026-08-31
+LIFECYCLE: HUMAN_APPROVED
+PUBLICATION: remediated row published; legacy row unpublished and retained
+NEXT REQUIRED WORK: none for Electrolysis production approval
 ```
 
 ## 1. Topic and scope
@@ -208,7 +209,7 @@ Real browser URL:
 | 5 Representation quality | **PASS — HUMAN APPROVED 2026-08-31** | The user explicitly approved both premium figures scientifically and visually. Figure 3 remains native semantic typesetting. The representation set is canonical. |
 | 6 Accessibility | PASS for programmatic/keyboard smoke test | Semantics, contrast, focus, live region, drawer and 390 px checks pass. No formal WCAG certification claimed. |
 | 7 Live rendered-page QA | **PASS — 2026-08-31** | Authenticated external Chrome against the draft staging row: figures, responsive layout, tier/theme state, Practice progression, focus, drawer, persistence and page-origin console checks passed. |
-| 8 Human approval | **AWAITING HUMAN DECISION** | Lesson-level approval and publication swap remain human-only. |
+| 8 Human approval | **PASS — HUMAN APPROVED 2026-08-31** | The user approved the complete Electrolysis lesson and explicitly authorised unpublishing the legacy row and publishing the QA replacement. |
 
 ## 12. Approval, publication and rollback
 
@@ -218,29 +219,29 @@ subjectId: 3
 topicId: 71
 lessonType: html
 title: Electrolysis
-legacy_is_published: true — unchanged; contains the pre-remediation build
+legacy_is_published: false — unpublished after explicit human authorisation
 legacy_content_url: https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/chemical-changes/1787578308857-chemical-changes-electrolysis.html
 legacy_viewer_url: https://staging.inspireacademic.org/student/lesson-viewer.html?id=82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
 
 qaCandidateRowId: 032d728e-5eac-4604-9537-ebf218214f54
 qaCandidateTitle: Electrolysis — QA replacement
-qaCandidate_is_published: false
-qaState: QA_COMPLETE
-Gate 8: AWAITING HUMAN DECISION
+qaCandidate_is_published: true
+qaState: HUMAN_APPROVED
+Gate 8: PASS — 2026-08-31
 deploymentCommit: 996bb11
 qaCandidate_content_url: https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/chemical-changes/1788170386019-chemical-changes-electrolysis.html
 qaCandidate_viewer_url: https://staging.inspireacademic.org/student/lesson-viewer.html?id=032d728e-5eac-4604-9537-ebf218214f54
 ```
 
 Authentication was performed independently by the human; no credentials or
-privileged keys were entered, retrieved or exposed by Codex. The QA candidate
-remains a draft. Its `QA_COMPLETE` state does not imply `HUMAN_APPROVED`.
+privileged keys were entered, retrieved or exposed by Codex. The publication
+swap was performed only after the user's explicit Gate 8 authorisation.
 
-The safe publication swap, if authorised, is to unpublish the legacy row and
-publish the QA candidate; it does not require deleting either row. Operational
-rollback is the inverse pair of Publish toggles. Repository rollback remains a
-normal `git revert` of the additive production commits. No shared viewer,
-admin, schema or frozen lesson was changed.
+The publication swap did not delete either row. Operational rollback is the
+inverse pair of Publish toggles: unpublish the remediated row and republish the
+legacy row. Repository rollback remains a normal `git revert` of the additive
+production commits. No shared viewer, admin, schema or frozen lesson was
+changed.
 
 ## 13. External Chrome Gate 7 QA — 2026-08-31
 
