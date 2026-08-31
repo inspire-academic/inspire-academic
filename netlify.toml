@@ -350,3 +350,37 @@ function = "create-teacher"
   to = "/.netlify/functions/send-push-notification"
   status = 200
   force = true
+
+# Inspire Tutor Academy — tutor onboarding/conversion programme,
+# reachable from teacher/teacher.html. assessor-content is
+# admin/assessor-gated (confidential mark-scheme content); the rest
+# are auth-gated candidate-facing writes.
+[[redirects]]
+  from = "/api/v1/tutor-academy/enroll"
+  to = "/.netlify/functions/tutor-academy-enroll"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/tutor-academy/progress"
+  to = "/.netlify/functions/tutor-academy-progress"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/tutor-academy/evidence"
+  to = "/.netlify/functions/tutor-academy-evidence"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/tutor-academy/assessor-content"
+  to = "/.netlify/functions/get-tutor-academy-assessor-content"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/tutor-academy/gate-decision"
+  to = "/.netlify/functions/tutor-academy-gate-decision"
+  status = 200
+  force = true

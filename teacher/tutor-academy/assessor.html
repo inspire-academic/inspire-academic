@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assessor View — Inspire Tutor Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/tutor-academy.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--navy); color: var(--white); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+  .auth-loading { position: fixed; inset: 0; background: var(--navy); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
+  .auth-loading-logo { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--gold); }
+  .auth-loading-sub { font-size: 13px; color: var(--muted); font-family: var(--font-mono); }
+  .topbar { position: fixed; top: 0; left: 0; right: 0; height: 56px; background: rgba(11,22,40,0.95); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 16px; z-index: 100; backdrop-filter: blur(8px); }
+  .topbar-logo { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 0.02em; text-decoration: none; }
+  .topbar-divider { width: 1px; height: 20px; background: var(--border); }
+  .topbar-title { font-size: 13px; font-weight: 500; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .btn-ghost { background: none; border: 1px solid var(--border); color: var(--muted); padding: 8px 16px; border-radius: 7px; font-family: var(--font-body); font-size: 13px; cursor: pointer; }
+  .btn-ghost:hover { border-color: var(--muted); color: var(--white); }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 88px 20px 64px; }
+  h1 { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: .3rem; }
+  .subhead { color: var(--muted); font-size: .88rem; margin-bottom: 1.6rem; }
+
+  .tutor-card { background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r); padding: 1.2rem 1.4rem; margin-bottom: .9rem; cursor: pointer; }
+  .tutor-card:hover { border-color: var(--gold); }
+  .tutor-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .tutor-name { font-weight: 700; }
+  .tutor-detail { display: none; margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
+  .tutor-card.ta-open .tutor-detail { display: block; }
+
+  .evidence-item { background: var(--navy); border: 1px solid var(--border); border-radius: 8px; padding: .9rem 1rem; margin-bottom: .7rem; }
+  .evidence-item pre { white-space: pre-wrap; font-family: var(--font-mono); font-size: .75rem; color: var(--muted); max-height: 160px; overflow-y: auto; margin-top: .5rem; }
+  .assessor-content-btn { font-size: .75rem; color: var(--gold); background: none; border: 1px solid var(--border); border-radius: 6px; padding: .3rem .7rem; cursor: pointer; margin-top: .5rem; }
+
+  .gate-form { margin-top: 1.2rem; }
+  .gate-form textarea { width: 100%; background: var(--navy); border: 1px solid var(--border); border-radius: 8px; color: var(--white); padding: .7rem .9rem; font-size: .85rem; min-height: 70px; margin: .8rem 0; }
+</style>
+</head>
+<body>
+
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying access...</div>
+</div>
+
+<header class="topbar">
+  <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
+  <div class="topbar-divider"></div>
+  <span class="topbar-title">Assessor View</span>
+  <div class="topbar-right">
+    <button class="btn-ghost" onclick="window.location.href='/teacher/tutor-academy/index.html'">← Academy home</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Tutor Academy — Assessor View</h1>
+  <p class="subhead">Review candidate progress and evidence, then record a gate decision. Confidential marking guides are only ever loaded here, and only for admins.</p>
+  <div id="tutorList"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/tutor-academy-ui.js"></script>
+<script src="/assets/js/tutor-academy-biology-content.js"></script>
+<script>
+const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+const U = window.TutorAcademyUI
+let session = null
+
+function escHtml(s) { return U.escHtml(s) }
+
+async function checkAuth() {
+  const { data: { session: s } } = await supa.auth.getSession()
+  if (!s) { window.location.href = '/index.html'; return null }
+  const { data: profile, error } = await supa.from('profiles').select('role, full_name').eq('id', s.user.id).single()
+  if (error || !profile || !['admin','super_admin'].includes(profile.role)) {
+    window.location.href = '/teacher/tutor-academy/index.html'
+    return null
+  }
+  document.getElementById('authLoading').style.display = 'none'
+  return s
+}
+
+async function loadTutors() {
+  const { data: enrollments } = await supa.from('tutor_academy_enrollments').select('*').eq('programme_id', 'biology-gcse')
+  const ids = (enrollments || []).map(e => e.profile_id)
+  if (!ids.length) {
+    document.getElementById('tutorList').innerHTML = '<p style="color:var(--muted);">No tutors enrolled yet.</p>'
+    return
+  }
+  const { data: profiles } = await supa.from('profiles').select('id, full_name, email').in('id', ids)
+  const profileById = {}
+  ;(profiles || []).forEach(p => { profileById[p.id] = p })
+
+  document.getElementById('tutorList').innerHTML = enrollments.map(e => {
+    const p = profileById[e.profile_id] || {}
+    return `
+    <div class="tutor-card" id="tutor-${e.profile_id}" onclick="toggleTutor('${e.profile_id}', event)">
+      <div class="tutor-head">
+        <span class="tutor-name">${escHtml(p.full_name || p.email || e.profile_id)}</span>
+        ${U.renderCertificationStatus(e.status)}
+      </div>
+      <div class="tutor-detail" id="tutor-detail-${e.profile_id}" onclick="event.stopPropagation()"></div>
+    </div>`
+  }).join('')
+}
+
+async function toggleTutor(profileId, evt) {
+  const card = document.getElementById('tutor-' + profileId)
+  card.classList.toggle('ta-open')
+  if (!card.classList.contains('ta-open')) return
+  const detail = document.getElementById('tutor-detail-' + profileId)
+  if (detail.dataset.loaded) return
+  detail.dataset.loaded = '1'
+
+  const { data: progressRows } = await supa.from('tutor_academy_progress').select('*').eq('profile_id', profileId)
+  const { data: evidenceRows } = await supa.from('tutor_academy_evidence').select('*').eq('profile_id', profileId).order('submitted_at', { ascending: false })
+
+  detail.innerHTML = `
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:1rem;">${(progressRows||[]).filter(r=>r.status==='complete').length} section(s) marked complete.</div>
+    <div style="font-weight:600;margin-bottom:.6rem;">Submitted evidence</div>
+    ${(evidenceRows || []).map(ev => `
+      <div class="evidence-item">
+        <div style="display:flex;justify-content:space-between;"><strong>${escHtml(ev.evidence_key)}</strong><span style="font-size:.72rem;color:var(--muted);">${escHtml(ev.evidence_type)}</span></div>
+        ${ev.content ? `<pre>${escHtml(ev.content.slice(0, 1500))}</pre>` : ''}
+        ${ev.file_url ? `<a href="${escHtml(ev.file_url)}" target="_blank" style="color:var(--gold);font-size:.8rem;">Open link →</a>` : ''}
+      </div>`).join('') || '<p style="color:var(--muted);font-size:.85rem;">No evidence submitted yet.</p>'}
+    <button class="assessor-content-btn" onclick="loadConfidential('${profileId}')">View confidential marking guide (Stage 1)</button>
+    <div id="confidential-${profileId}"></div>
+
+    <div class="gate-form">
+      <div style="font-weight:600;margin-bottom:.6rem;">Record gate decision</div>
+      ${U.renderClearanceBoard()}
+      <input type="text" placeholder="Gate type (e.g. week1_gate, final_clearance)" class="ta-evidence-input" id="gateType-${profileId}" style="margin-top:.8rem;">
+      <textarea placeholder="Rationale (required)" id="gateRationale-${profileId}"></textarea>
+      <button class="btn btn-gold" onclick="recordGate('${profileId}')">Record decision</button>
+      <div id="gateNote-${profileId}" style="font-size:.78rem;color:var(--muted);margin-top:.5rem;"></div>
+    </div>`
+}
+
+async function loadConfidential(profileId) {
+  const el = document.getElementById('confidential-' + profileId)
+  el.innerHTML = '<p style="color:var(--muted);font-size:.8rem;">Loading…</p>'
+  try {
+    const r = await fetch('/api/v1/tutor-academy/assessor-content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify({ stageId: 'biology-gcse-stage-1' })
+    })
+    const json = await r.json()
+    if (!json.success) { el.innerHTML = `<p style="color:#f87171;font-size:.8rem;">${escHtml(json.error?.message || 'Could not load.')}</p>`; return }
+    el.innerHTML = `<pre style="white-space:pre-wrap;font-family:var(--font-mono);font-size:.72rem;color:var(--muted);max-height:300px;overflow-y:auto;background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:.9rem;margin-top:.6rem;">${escHtml(JSON.stringify(json.content, null, 2))}</pre>`
+  } catch (e) {
+    el.innerHTML = '<p style="color:#f87171;font-size:.8rem;">Could not load confidential content.</p>'
+  }
+}
+
+async function recordGate(profileId) {
+  const decision = document.querySelector(`#tutor-detail-${profileId} input[name="ta-clearance-decision"]:checked`)
+  const gateType = document.getElementById('gateType-' + profileId).value.trim()
+  const rationale = document.getElementById('gateRationale-' + profileId).value.trim()
+  const note = document.getElementById('gateNote-' + profileId)
+  if (!decision) { note.textContent = 'Choose a decision.'; note.style.color = '#f87171'; return }
+  if (!gateType) { note.textContent = 'Gate type is required.'; note.style.color = '#f87171'; return }
+  if (!rationale) { note.textContent = 'Rationale is required.'; note.style.color = '#f87171'; return }
+
+  note.textContent = 'Saving…'; note.style.color = 'var(--muted)'
+  try {
+    const r = await fetch('/api/v1/tutor-academy/gate-decision', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify({ tutorProfileId: profileId, programmeId: 'biology-gcse', gateType, decision: decision.value, rationale })
+    })
+    const json = await r.json()
+    if (!json.success) { note.textContent = json.error?.message || 'Could not save.'; note.style.color = '#f87171'; return }
+    note.textContent = 'Decision recorded.'; note.style.color = '#4ade80'
+  } catch (e) {
+    note.textContent = 'Could not save.'; note.style.color = '#f87171'
+  }
+}
+
+;(async () => {
+  session = await checkAuth()
+  if (session) loadTutors()
+})()
+</script>
+</body>
+</html>
