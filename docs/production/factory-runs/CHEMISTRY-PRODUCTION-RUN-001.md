@@ -1,23 +1,25 @@
 # Chemistry Production Run #001 — Electrolysis
 
-## STATUS: HUMAN GATE 5 APPROVED — AWAITING EXTERNAL-BROWSER GATE 7 QA
+## STATUS: QA_COMPLETE — AWAITING HUMAN GATE 8 / PUBLICATION SWAP
 
 **Run type:** REAL PRODUCTION LESSON. This is not a Factory v0 pilot,
 rehydration run, or architecture proof.
 
-**Lifecycle:** `DRAFT`. Content/pedagogy is a strong candidate, automated QA
-passes, and the remediated representation set passes standalone technical QA.
-The lesson must not advance to `QA_COMPLETE` or `HUMAN_APPROVED` because real
-inner blob/iframe Gate 7 inspection in an external full-size browser remains
-outstanding.
+**Lifecycle:** `QA_COMPLETE`. Content/pedagogy is a strong candidate, automated
+and standalone QA pass, and the remediated candidate passed authenticated
+external-Chrome Gate 7 inspection in the real staging viewer. This does not
+grant lesson-level `HUMAN_APPROVED`; Gate 8 and the publication swap remain
+human-controlled. The older published staging row remains untouched and stale.
 
 ```text
 CONTENT / PEDAGOGY: strong candidate
-AUTOMATED QA: PASS
+AUTOMATED QA: PASS — 303/303 on merged staging
 STANDALONE QA: PASS
 REPRESENTATION GATE: HUMAN APPROVED — 2026-08-31
 TECHNICAL STATUS: representation remediation approved and canonical
-NEXT REQUIRED WORK: post-deployment inner-viewer QA in an external full-size browser
+LIVE VIEWER GATE: PASS — authenticated external Chrome, draft QA row
+LIFECYCLE: QA_COMPLETE
+NEXT REQUIRED WORK: human Gate 8 approval and publication-swap decision
 ```
 
 ## 1. Topic and scope
@@ -174,7 +176,7 @@ Real browser URL:
 | Mobile image loading | PASS — both 960×640 assets rendered responsively at ~331 px |
 | Alt text / figcaptions | PASS — semantic figures plus real-text equivalents |
 | Figure 3 notation | PASS — real `<sub>`/`<sup>`, atom and charge audits |
-| Full automated suite | 232/232 PASS |
+| Full automated suite | 303/303 PASS on merged staging |
 
 ## 10. Defects found and fixed
 
@@ -205,28 +207,58 @@ Real browser URL:
 | 4 Assessment validity | PASS | Original 21-mark exam bank; AO1/AO2/AO3; specific feedback. |
 | 5 Representation quality | **PASS — HUMAN APPROVED 2026-08-31** | The user explicitly approved both premium figures scientifically and visually. Figure 3 remains native semantic typesetting. The representation set is canonical. |
 | 6 Accessibility | PASS for programmatic/keyboard smoke test | Semantics, contrast, focus, live region, drawer and 390 px checks pass. No formal WCAG certification claimed. |
-| 7 Live rendered-page QA | **UNVERIFIED for production pipeline** | Standalone real-browser QA PASS; authenticated blob/iframe viewer not yet exercised. |
-| 8 Human approval | NOT STARTED | Human-only. |
+| 7 Live rendered-page QA | **PASS — 2026-08-31** | Authenticated external Chrome against the draft staging row: figures, responsive layout, tier/theme state, Practice progression, focus, drawer, persistence and page-origin console checks passed. |
+| 8 Human approval | **AWAITING HUMAN DECISION** | Lesson-level approval and publication swap remain human-only. |
 
 ## 12. Approval, publication and rollback
 
 ```text
-lessonsRowId: 82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
+currentPublishedLegacyRowId: 82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
 subjectId: 3
 topicId: 71
 lessonType: html
 title: Electrolysis
-is_published: true — explicitly enabled by the human for live testing
-qaState: DRAFT
-Gate 8: NOT STARTED
-content_url: https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/chemical-changes/1787578308857-chemical-changes-electrolysis.html
-viewer_url: https://staging.inspireacademic.org/student/lesson-viewer.html?id=82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
+legacy_is_published: true — unchanged; contains the pre-remediation build
+legacy_content_url: https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/chemical-changes/1787578308857-chemical-changes-electrolysis.html
+legacy_viewer_url: https://staging.inspireacademic.org/student/lesson-viewer.html?id=82b58ab3-0246-44a5-bb2c-5c54a4b4efe5
+
+qaCandidateRowId: 032d728e-5eac-4604-9537-ebf218214f54
+qaCandidateTitle: Electrolysis — QA replacement
+qaCandidate_is_published: false
+qaState: QA_COMPLETE
+Gate 8: AWAITING HUMAN DECISION
+deploymentCommit: 996bb11
+qaCandidate_content_url: https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/chemical-changes/1788170386019-chemical-changes-electrolysis.html
+qaCandidate_viewer_url: https://staging.inspireacademic.org/student/lesson-viewer.html?id=032d728e-5eac-4604-9537-ebf218214f54
 ```
 
 Authentication was performed independently by the human; no credentials or
-privileged keys were entered, retrieved or exposed by Codex. Publication for
-live testing does not imply `QA_COMPLETE` or `HUMAN_APPROVED`.
+privileged keys were entered, retrieved or exposed by Codex. The QA candidate
+remains a draft. Its `QA_COMPLETE` state does not imply `HUMAN_APPROVED`.
 
-Operational rollback is to turn the existing Publish control off for this row.
-Repository rollback remains a normal `git revert` of the additive production
-commits. No shared viewer, admin, schema or frozen lesson was changed.
+The safe publication swap, if authorised, is to unpublish the legacy row and
+publish the QA candidate; it does not require deleting either row. Operational
+rollback is the inverse pair of Publish toggles. Repository rollback remains a
+normal `git revert` of the additive production commits. No shared viewer,
+admin, schema or frozen lesson was changed.
+
+## 13. External Chrome Gate 7 QA — 2026-08-31
+
+The draft QA candidate was exercised through the authenticated staging lesson
+viewer in a separate full Chrome window.
+
+- Both approved WebP figures loaded at natural size 960 × 640 with descriptive
+  alt text; the former SVG representation set was absent.
+- Desktop and narrow layouts had no horizontal overflow. The narrow run
+  requested 390 × 844; the extension reported effective outer/inner CSS widths
+  of 487/468, both below the lesson's 520 px breakpoint.
+- Foundation, Higher and Foundation-with-extensions visibility behaved as
+  designed; the Higher figure appeared only in the intended states.
+- Light/dark theme switching, Practice navigation, answer gating, model-answer
+  reveal, step progression, focus movement, live-region announcement, reminder
+  drawer focus trap/Escape return and reload persistence passed.
+- Exactly one Practice step was visible, duplicate IDs were absent, both figures
+  remained contained at narrow width, and page-origin console warnings/errors
+  were empty.
+- No formal WCAG certification is claimed. “Mark Complete” was deliberately not
+  activated. The legacy published row was not edited, unpublished or deleted.
