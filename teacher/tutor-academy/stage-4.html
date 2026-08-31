@@ -14,6 +14,9 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font-body); background: var(--navy); color: var(--white); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+  .auth-loading { position: fixed; inset: 0; background: var(--navy); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
+  .auth-loading-logo { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--gold); }
+  .auth-loading-sub { font-size: 13px; color: var(--muted); font-family: var(--font-mono); }
   .topbar { position: fixed; top: 0; left: 0; right: 0; height: 56px; background: rgba(11,22,40,0.95); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 16px; z-index: 100; backdrop-filter: blur(8px); }
   .topbar-logo { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 0.02em; text-decoration: none; }
   .topbar-divider { width: 1px; height: 20px; background: var(--border); }
@@ -21,24 +24,319 @@
   .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
   .btn-ghost { background: none; border: 1px solid var(--border); color: var(--muted); padding: 8px 16px; border-radius: 7px; font-family: var(--font-body); font-size: 13px; cursor: pointer; }
   .btn-ghost:hover { border-color: var(--muted); color: var(--white); }
-  .wrap { max-width: 560px; margin: 0 auto; padding: 140px 20px 64px; text-align: center; }
-  .wrap h1 { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: .8rem; }
-  .wrap p { color: var(--muted); font-size: .92rem; }
+
+  .ta-stage-head { margin-bottom: 1.2rem; }
+  .ta-stage-head h1 { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: .3rem; }
+  .ta-stage-head .ta-sub { color: var(--muted); font-size: .9rem; }
+  .ta-download-link { display: inline-flex; align-items: center; gap: .35rem; margin-top: .6rem; font-size: .82rem; color: var(--gold); text-decoration: none; }
+  .ta-save-note { font-size: .78rem; color: var(--muted); margin-top: .5rem; font-family: var(--font-mono); min-height: 1.1em; }
+  .ta-lens-table, .ta-mini-table { width: 100%; border-collapse: collapse; font-size: .85rem; margin-bottom: 1.2rem; }
+  .ta-lens-table th, .ta-lens-table td, .ta-mini-table th, .ta-mini-table td { padding: .5rem .6rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  .ta-lens-table th, .ta-mini-table th { color: var(--gold); font-family: var(--font-mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; }
+  .ta-rp-card { background: var(--navy2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: .8rem; overflow: hidden; }
+  .ta-rp-head { width: 100%; display: flex; align-items: center; justify-content: space-between; background: none; border: none; color: var(--white); padding: 1rem 1.2rem; font-family: var(--font-display); font-weight: 700; cursor: pointer; text-align: left; }
+  .ta-rp-body { display: none; padding: 0 1.2rem 1.2rem; }
+  .ta-rp-card.ta-open .ta-rp-body { display: block; }
 </style>
 </head>
 <body>
+
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying access...</div>
+</div>
+
 <header class="topbar">
   <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
   <div class="topbar-divider"></div>
   <span class="topbar-title">Tutor Academy</span>
   <div class="topbar-right">
+    <span class="topbar-user" id="topbar-user"></span>
     <button class="btn-ghost" onclick="window.location.href='/teacher/tutor-academy/biology-gcse.html'">← Pathway</button>
   </div>
 </header>
-<div class="wrap">
-  <div style="font-size:2rem;margin-bottom:1rem;">🧪</div>
-  <h1>Stage 4 — Practical &amp; Mathematical Biology</h1>
-  <p>This stage's content (the 10 required practicals, mathematical Biology topics, and the Clearance Board) is being built next, from IBTAEP Pack 04. Complete the earlier stages first — your assessor will be in touch when Stage 4 opens.</p>
+
+<div class="ta-shell">
+  <div class="ta-stage-head">
+    <h1 id="stageTitle"></h1>
+    <div class="ta-sub" id="stageSubtitle"></div>
+    <a class="ta-download-link" href="/resources/tutor-academy/biology-gcse/04_IBTAEP_Pack_04_Practical_Mathematical_Biology_and_GCSE_Clearance.docx" target="_blank" rel="noopener">⬇ Download original workbook (Pack 04)</a>
+  </div>
+
+  <div class="ta-section-nav" id="sectionNav"></div>
+  <div id="panels"></div>
+  <div class="ta-nav-buttons">
+    <button class="btn btn-outline" id="prevBtn" onclick="goStep(-1)">← Previous</button>
+    <button class="btn btn-gold" id="nextBtn" onclick="completeAndAdvance()">Mark complete &amp; continue →</button>
+  </div>
+  <div class="ta-save-note" id="saveNote"></div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/tutor-academy-ui.js"></script>
+<script src="/assets/js/tutor-academy-biology-content.js"></script>
+<script>
+const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+const STAGE_ID = 'biology-gcse-stage-4'
+const STAGE_CONTENT = window.TutorAcademyContent[STAGE_ID]
+const U = window.TutorAcademyUI
+
+let session = null
+let currentIdx = 0
+let completedSections = new Set()
+const draftKey = sid => `ia-tutor-academy-draft-${STAGE_ID}-${sid}`
+
+function escHtml(s) { return U.escHtml(s) }
+function loadDraft(sectionId) { try { return JSON.parse(localStorage.getItem(draftKey(sectionId)) || '{}') } catch (e) { return {} } }
+function saveDraft(sectionId, data) { try { localStorage.setItem(draftKey(sectionId), JSON.stringify(data)) } catch (e) {} }
+
+function qBlock(section, id, marks, text, draft) {
+  return `
+    <div class="ta-q-block">
+      <div class="ta-q-head"><span class="ta-q-text">${escHtml(text)}</span>${marks ? `<span class="ta-q-marks">[${marks}]</span>` : ''}</div>
+      <textarea class="ta-q-answer" data-key="${id}" oninput="onFieldInput('${section.id}','${id}', this.value)">${escHtml(draft[id] || '')}</textarea>
+    </div>`
+}
+
+function renderSectionBody(section) {
+  const draft = loadDraft(section.id)
+  switch (section.type) {
+    case 'six-lens':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div style="overflow-x:auto;"><table class="ta-lens-table"><thead><tr><th>Lens</th><th>Tutor question</th></tr></thead><tbody>
+          ${section.lenses.map(l => `<tr><td style="color:var(--gold);font-weight:700;">${escHtml(l.lens)}</td><td>${escHtml(l.question)}</td></tr>`).join('')}
+        </tbody></table></div>
+        ${qBlock(section, 'task', null, section.task, draft)}`
+
+    case 'practicals-set':
+      return `
+        <div class="note-box" style="background:var(--navy);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:var(--muted);margin-bottom:1.2rem;">${escHtml(section.note)}</div>
+        ${section.practicals.map(rp => `
+          <div class="ta-rp-card">
+            <button class="ta-rp-head" onclick="this.parentElement.classList.toggle('ta-open')">
+              <span>RP${rp.number} — ${escHtml(rp.title)}${rp.biologyOnly ? ' <span style="color:var(--orange);font-weight:400;font-size:.75rem;">(Biology only)</span>' : ''}</span>
+              <span style="color:var(--muted);">▾</span>
+            </button>
+            <div class="ta-rp-body">
+              <p style="font-size:.87rem;color:var(--muted);margin-bottom:.7rem;"><strong style="color:var(--white);">Core purpose:</strong> ${escHtml(rp.purpose)}</p>
+              <p style="font-size:.85rem;color:var(--muted);margin-bottom:.5rem;"><strong style="color:var(--gold);">Maths/data link:</strong> ${escHtml(rp.mathsLink)}</p>
+              <p style="font-size:.85rem;color:var(--muted);margin-bottom:.8rem;"><strong style="color:var(--orange);">Common traps:</strong> ${escHtml(rp.traps)}</p>
+              <div style="font-size:.82rem;color:var(--muted);margin-bottom:.4rem;">Your candidate notes (independent/dependent variables, controls, apparatus, expected pattern, data processing, evaluation):</div>
+              <textarea class="ta-q-answer" style="min-height:100px;margin-bottom:.7rem;" data-key="${rp.id}-notes" oninput="onFieldInput('${section.id}','${rp.id}-notes', this.value)">${escHtml(draft[rp.id+'-notes'] || '')}</textarea>
+              <div style="font-size:.82rem;color:var(--muted);margin-bottom:.4rem;">Transfer challenge — write one unfamiliar-context question testing the same reasoning, without naming this practical, plus a concise mark-worthy answer:</div>
+              <textarea class="ta-q-answer" data-key="${rp.id}-transfer" oninput="onFieldInput('${section.id}','${rp.id}-transfer', this.value)">${escHtml(draft[rp.id+'-transfer'] || '')}</textarea>
+            </div>
+          </div>`).join('')}`
+
+    case 'design-clinic':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div style="overflow-x:auto;"><table class="ta-lens-table"><thead><tr><th>Term</th><th>Working definition</th></tr></thead><tbody>
+          ${section.terms.map(t => `<tr><td style="color:var(--gold);font-weight:700;">${escHtml(t.term)}</td><td>${escHtml(t.def)}</td></tr>`).join('')}
+        </tbody></table></div>
+        <div class="ta-group-heading">Repair these designs</div>
+        ${section.repairs.map(r => qBlock(section, r.id, null, r.text, draft)).join('')}`
+
+    case 'evaluation-language':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div style="overflow-x:auto;"><table class="ta-lens-table"><thead><tr><th>Weak statement</th><th>Stronger tutor model</th></tr></thead><tbody>
+          ${section.pairs.map(p => `<tr><td style="color:var(--muted);font-style:italic;">${escHtml(p.weak)}</td><td>${escHtml(p.strong)}</td></tr>`).join('')}
+        </tbody></table></div>
+        ${qBlock(section, 'task', null, section.task, draft)}`
+
+    case 'measurement-concepts':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div style="overflow-x:auto;"><table class="ta-lens-table"><thead><tr><th>Idea</th><th>Tutor-level distinction</th></tr></thead><tbody>
+          ${section.concepts.map(c => `<tr><td style="color:var(--gold);font-weight:700;">${escHtml(c.idea)}</td><td>${escHtml(c.def)}</td></tr>`).join('')}
+        </tbody></table></div>
+        <div class="ta-group-heading">Oral viva prompts</div>
+        ${section.vivaPrompts.map((p, i) => qBlock(section, 'viva'+i, null, p, draft)).join('')}`
+
+    case 'maths-map':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div style="overflow-x:auto;"><table class="ta-lens-table"><thead><tr><th>Domain</th><th>Candidate must teach</th></tr></thead><tbody>
+          ${section.domains.map(d => `<tr><td style="color:var(--gold);font-weight:700;">${escHtml(d.domain)}</td><td>${escHtml(d.teach)}</td></tr>`).join('')}
+        </tbody></table></div>
+        <div class="note-box" style="background:var(--navy);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:var(--muted);">${escHtml(section.principle)}</div>`
+
+    case 'maths-labs':
+      return section.labs.map(lab => `
+        <div class="ta-group-heading">Laboratory ${escHtml(lab.key)} — ${escHtml(lab.title)}</div>
+        ${lab.questions.map(q => qBlock(section, q.id, null, q.text, draft)).join('')}
+      `).join('')
+
+    case 'data-interp':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div style="overflow-x:auto;"><table class="ta-mini-table">
+          <thead><tr>${section.table.headers.map(h => `<th>${escHtml(h)}</th>`).join('')}</tr></thead>
+          <tbody>${section.table.rows.map(r => `<tr>${r.map(c => `<td>${escHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+        </table></div>
+        ${section.questions.map(q => qBlock(section, q.id, null, q.text, draft)).join('')}`
+
+    case 'claim-audit':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        ${section.claims.map(c => `
+          <div class="ta-q-block">
+            <div class="ta-q-text" style="margin-bottom:.5rem;">${escHtml(c.text)}</div>
+            <div style="display:flex;gap:.7rem;align-items:center;margin-bottom:.5rem;">
+              <label style="font-size:.82rem;color:var(--muted);">Verdict:</label>
+              <input type="text" class="ta-evidence-input" style="width:160px;" placeholder="e.g. overclaimed" data-key="${c.id}-verdict" value="${escHtml(draft[c.id+'-verdict'] || '')}" oninput="onFieldInput('${section.id}','${c.id}-verdict', this.value)">
+            </div>
+            <textarea class="ta-q-answer" placeholder="Better conclusion" data-key="${c.id}-conclusion" oninput="onFieldInput('${section.id}','${c.id}-conclusion', this.value)">${escHtml(draft[c.id+'-conclusion'] || '')}</textarea>
+          </div>`).join('')}`
+
+    case 'formal-assessment':
+      return `
+        <p class="ta-lede">${escHtml(section.instructions)}</p>
+        ${section.sections.map(sec => `
+          <div class="ta-group-heading">${escHtml(sec.heading)}</div>
+          ${sec.questions.map(q => qBlock(section, q.id, q.marks, q.text, draft)).join('')}
+        `).join('')}`
+
+    case 'clearance-microteaching':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div class="ta-group-heading">Prompt options (your assessor picks one)</div>
+        <ul style="margin-left:1.2rem;color:var(--muted);font-size:.87rem;line-height:1.8;margin-bottom:1.2rem;">
+          ${section.promptOptions.map(p => `<li>${escHtml(p)}</li>`).join('')}
+        </ul>
+        <div class="ta-group-heading">Lesson architecture</div>
+        <p style="font-size:.87rem;color:var(--gold);font-family:var(--font-mono);margin-bottom:1.2rem;">${escHtml(section.architecture)}</p>
+        <div class="ta-group-heading">Observation domains (self-rate 1-5 after delivery)</div>
+        ${section.observationDomains.map((d, i) => `
+          <div class="ta-boundary-row">
+            <span class="ta-boundary-text">${escHtml(d)}</span>
+            <select class="ta-boundary-select" data-key="rate${i}" onchange="onFieldInput('${section.id}','rate${i}', this.value)">
+              <option value="">—</option>
+              ${[1,2,3,4,5].map(v => `<option value="${v}" ${draft['rate'+i] == v ? 'selected' : ''}>${v}</option>`).join('')}
+            </select>
+          </div>`).join('')}`
+
+    case 'clearance-board':
+      return `
+        <div style="overflow-x:auto;"><table class="ta-lens-table"><thead><tr><th>Gate</th><th>Required standard</th><th>Compensable?</th></tr></thead><tbody>
+          ${section.gates.map(g => `<tr><td>${escHtml(g.gate)}</td><td style="color:var(--gold);">${escHtml(g.standard)}</td><td>${escHtml(g.compensable)}</td></tr>`).join('')}
+        </tbody></table></div>
+        <div class="ta-group-heading">Possible decisions</div>
+        <ul style="margin-left:1.2rem;color:var(--muted);font-size:.87rem;line-height:1.8;margin-bottom:1.2rem;">
+          ${section.decisions.map(d => `<li>${escHtml(d)}</li>`).join('')}
+        </ul>
+        <div class="note-box" style="background:var(--navy);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:var(--muted);">${escHtml(section.nonNegotiable)}</div>`
+
+    case 'deployment-charter':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div class="ta-group-heading">For the first six weeks, I will</div>
+        <ul style="margin-left:1.2rem;color:var(--muted);font-size:.88rem;line-height:1.9;margin-bottom:1.2rem;">
+          ${section.commitments.map(c => `<li>${escHtml(c)}</li>`).join('')}
+        </ul>
+        <div class="note-box" style="background:var(--navy);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:var(--muted);">${escHtml(section.standard)}</div>`
+
+    default:
+      return '<p style="color:var(--muted);">Content coming soon.</p>'
+  }
+}
+
+let pendingSave = null
+function onFieldInput(sectionId, key, value) {
+  const draft = loadDraft(sectionId)
+  draft[key] = value
+  saveDraft(sectionId, draft)
+  document.getElementById('saveNote').textContent = 'Saved locally…'
+  clearTimeout(pendingSave)
+  pendingSave = setTimeout(() => { document.getElementById('saveNote').textContent = '' }, 1500)
+}
+
+function renderNav() {
+  document.getElementById('sectionNav').innerHTML = STAGE_CONTENT.sections.map((s, i) => `
+    <div class="ta-section-nav-item ${i === currentIdx ? 'ta-active' : ''} ${completedSections.has(s.id) ? 'ta-done' : ''}" onclick="goToStep(${i})">
+      ${i + 1}. ${escHtml(s.title)}
+    </div>`).join('')
+}
+
+function renderCurrentPanel() {
+  const s = STAGE_CONTENT.sections[currentIdx]
+  document.getElementById('panels').innerHTML = `
+    <div class="ta-panel ta-active">
+      <h2>${escHtml(s.title)}</h2>
+      ${renderSectionBody(s)}
+    </div>`
+  document.getElementById('prevBtn').style.visibility = currentIdx === 0 ? 'hidden' : 'visible'
+  const isLast = currentIdx === STAGE_CONTENT.sections.length - 1
+  document.getElementById('nextBtn').textContent = isLast
+    ? (completedSections.has(s.id) ? 'Completed — pathway finished' : 'Mark complete & finish')
+    : 'Mark complete & continue →'
+  renderNav()
+}
+
+function goToStep(i) { currentIdx = i; renderCurrentPanel(); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+function goStep(delta) { goToStep(Math.max(0, Math.min(STAGE_CONTENT.sections.length - 1, currentIdx + delta))) }
+
+async function completeAndAdvance() {
+  const s = STAGE_CONTENT.sections[currentIdx]
+  const draft = loadDraft(s.id)
+
+  document.getElementById('saveNote').textContent = 'Saving…'
+  await fetch('/api/v1/tutor-academy/progress', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+    body: JSON.stringify({ stageId: STAGE_ID, sectionId: s.id, status: 'complete' })
+  }).catch(() => {})
+
+  if (Object.keys(draft).length) {
+    await fetch('/api/v1/tutor-academy/evidence', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify({ stageId: STAGE_ID, evidenceType: s.type, evidenceKey: s.id, content: JSON.stringify(draft) })
+    }).catch(() => {})
+  }
+
+  completedSections.add(s.id)
+  document.getElementById('saveNote').textContent = 'Saved.'
+
+  if (currentIdx === STAGE_CONTENT.sections.length - 1) {
+    window.location.href = '/teacher/tutor-academy/biology-gcse.html'
+    return
+  }
+  goStep(1)
+}
+
+async function checkAuth() {
+  const { data: { session: s } } = await supa.auth.getSession()
+  if (!s) { window.location.href = '/index.html'; return null }
+  const { data: profile, error } = await supa.from('profiles').select('role, full_name').eq('id', s.user.id).single()
+  if (error || !profile || !['teacher','admin'].includes(profile.role)) {
+    window.location.href = '/dashboard.html'
+    return null
+  }
+  if (profile.full_name) document.getElementById('topbar-user').textContent = profile.full_name
+  document.getElementById('authLoading').style.display = 'none'
+  return s
+}
+
+async function loadProgress() {
+  const { data: rows } = await supa.from('tutor_academy_progress')
+    .select('section_id, status').eq('profile_id', session.user.id).eq('stage_id', STAGE_ID)
+  ;(rows || []).forEach(r => { if (r.status === 'complete') completedSections.add(r.section_id) })
+}
+
+;(async () => {
+  session = await checkAuth()
+  if (!session) return
+  document.getElementById('stageTitle').textContent = 'Stage 4 — ' + STAGE_CONTENT.title
+  document.getElementById('stageSubtitle').textContent = STAGE_CONTENT.subtitle + ' — ' + STAGE_CONTENT.overview
+  await loadProgress()
+  renderCurrentPanel()
+})()
+</script>
 </body>
 </html>

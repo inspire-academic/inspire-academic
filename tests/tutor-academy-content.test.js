@@ -88,9 +88,29 @@ test('Stage 3 has all 13 Examiner School sections with unique ids', () => {
   assert.equal(new Set(ids).size, ids.length, 'duplicate section ids in Stage 3');
 });
 
-test('Stage 4 is still honestly marked coming_soon (not invented content)', () => {
+test('Stage 4 has all 14 sections including all 10 required practicals, with unique ids', () => {
   const content = loadContent();
-  assert.equal(content['biology-gcse-stage-4'].comingSoon, true);
+  const stage4 = content['biology-gcse-stage-4'];
+  assert.ok(!stage4.comingSoon, 'Stage 4 should no longer be a coming_soon stub');
+  assert.equal(stage4.sections.length, 14);
+  const ids = stage4.sections.map(s => s.id);
+  assert.equal(new Set(ids).size, ids.length, 'duplicate section ids in Stage 4');
+  const practicalsSet = stage4.sections.find(s => s.id === 'required-practicals');
+  assert.equal(practicalsSet.practicals.length, 10, 'AQA GCSE Biology 8461 specifies 10 required practicals');
+  const biologyOnly = practicalsSet.practicals.filter(p => p.biologyOnly);
+  assert.equal(biologyOnly.length, 3, 'RP2, RP8 and RP10 are Biology-only per the source pack');
+});
+
+test('the candidate-facing content file never contains Pack 04 confidential answer-key text', () => {
+  const code = fs.readFileSync(path.join(REPO_ROOT, 'assets/js/tutor-academy-biology-content.js'), 'utf8');
+  const CONFIDENTIAL_PHRASES_PACK04 = [
+    'Area reflects two-dimensional zone size',
+    'Mean 16; 42 likely anomaly/outlier',
+    '4.5 × 10⁻⁶ m'
+  ];
+  for (const phrase of CONFIDENTIAL_PHRASES_PACK04) {
+    assert.ok(!code.includes(phrase), `Pack 04 confidential answer-key text leaked into client content: "${phrase}"`);
+  }
 });
 
 test('the candidate-facing content file never contains Pack 03 confidential answer-key text', () => {
