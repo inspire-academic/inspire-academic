@@ -13,7 +13,7 @@ human-controlled. The older published staging row remains untouched and stale.
 
 ```text
 CONTENT / PEDAGOGY: strong candidate
-AUTOMATED QA: PASS — 303/303 on merged staging
+AUTOMATED QA: PASS — 346/346 on current merged staging
 STANDALONE QA: PASS
 REPRESENTATION GATE: HUMAN APPROVED — 2026-08-31
 TECHNICAL STATUS: representation remediation approved and canonical
@@ -176,7 +176,7 @@ Real browser URL:
 | Mobile image loading | PASS — both 960×640 assets rendered responsively at ~331 px |
 | Alt text / figcaptions | PASS — semantic figures plus real-text equivalents |
 | Figure 3 notation | PASS — real `<sub>`/`<sup>`, atom and charge audits |
-| Full automated suite | 303/303 PASS on merged staging |
+| Full automated suite | 346/346 PASS on current merged staging |
 
 ## 10. Defects found and fixed
 
