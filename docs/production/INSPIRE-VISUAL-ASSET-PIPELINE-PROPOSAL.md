@@ -1,4 +1,173 @@
-# Inspire Visual Asset Pipeline — Proposal v0.3
+# Inspire Visual Asset Pipeline — Policy and Evidence Record v0.4
+
+## PREMIUM-FIRST SCIENCE REPRESENTATION POLICY
+
+**STATUS: RATIFIED / ACTIVE. Effective immediately for all future Inspire
+Science production.** This section is the single authoritative representation
+routing policy. Earlier proposal/POC passages are retained below as historical
+evidence, but this section supersedes any language that treats Modes A–D as
+roughly equal defaults, makes deterministic SVG the presumptive choice, or
+prefers hybrid for ordinary explanatory figures.
+
+### Governing principle
+
+Whenever an Inspire Science lesson requires a scientific visual, the default
+authoring mode is a professionally rendered **Premium Final Figure**.
+Deterministic SVG/code must not be selected merely because the visual can
+technically be drawn using code.
+
+The decision question is:
+
+> Does this representation genuinely require machine-controlled geometry,
+> scale, coordinates, data precision or interaction in order to fulfil its
+> scientific or assessment purpose?
+
+- **No:** commission a Premium Final Figure.
+- **Yes:** use the appropriate deterministic representation.
+- **Uncertain:** choose a Premium Final Figure.
+
+For practical production purposes, approximately 99% of explanatory science
+diagrams should be expected to use Premium Final Figures. This is not a quota;
+it records the presumption. The burden of justification is on deterministic
+SVG, not premium rendering.
+
+### Operational routing sequence
+
+1. **REUSE BEFORE GENERATE.** Search canonical subject assets, canonical
+   representation families and approved figures from previous lessons. Reuse
+   an asset when it satisfies the new need without compromising scientific
+   accuracy or context.
+2. **Apply the deterministic-necessity test.** Numerical graphs, coordinate
+   plots, scale-sensitive constructions, exact ray paths, mathematically
+   constrained relationships, interactive geometry, and visuals whose measured
+   geometry is assessed may justify deterministic production. If exactness is
+   not materially required, use a Premium Final Figure.
+3. **Use True Hybrid only exceptionally**, and only when both a generated
+   contextual figure provides genuine pedagogical value and one specific
+   scientific layer genuinely requires deterministic machine verification.
+
+Graphs remain the major standing deterministic exception: axes, coordinates,
+scale, values, plotting precision and reproducibility matter. Ordinary
+numerical graphs must not be routed into image generation by default.
+
+### What qualifies as a Premium Final Figure
+
+A Premium Final Figure must be scientifically accurate, pedagogically
+intentional, professionally art-directed, exam-appropriate, visually calm,
+clearly hierarchical, immediately readable, correctly labelled and
+notation-accurate. It must be responsive and performance-budget compliant,
+with an accessibility equivalent supplied through surrounding real text, alt
+text and/or a figcaption. Its science must be independently validated before
+canonical approval. It must look like a deliberately published educational
+figure, not an AI-generated sketch and not a code diagram that is merely
+technically correct.
+
+### Premium Final Figure request contract
+
+Use the existing lightweight `docs/visual-requests/{id}.md` convention. Every
+request must state:
+
+- request ID; subject; topic; lesson location; learner level/tier;
+- pedagogical purpose and what the learner should understand within about
+  three seconds;
+- exact scientific scenario, required labels, notation, values, arrow
+  directions and causal relationships;
+- misconceptions to prevent and forbidden or misleading content;
+- representation hierarchy, aspect ratio, Inspire visual direction and
+  background requirements;
+- accessibility equivalent, target asset path, target dimensions and
+  performance budget;
+- scientific verification checklist and human approval status.
+
+Do not convert this contract into a database schema without new evidence.
+
+### Standing instruction for agents and operators
+
+Never begin a new explanatory Science diagram by writing SVG. Perform the
+routing decision first. If deterministic precision is not required, write a
+Premium Final Figure request. The intended future bridge is:
+
+```text
+Codex identifies the representation need
+  -> checks canonical reuse
+  -> applies the deterministic-necessity test
+  -> normally selects Premium Final Figure
+  -> writes the structured scientific visual brief
+  -> OpenAI image generation creates the complete figure
+  -> the asset is saved and optimised
+  -> Codex integrates it
+  -> automated QA
+  -> human scientific and visual approval
+```
+
+This codifies direction only. No API bridge, new script, database or Factory
+architecture is authorised by this policy.
+
+### Gate 5 — routing is part of quality
+
+Gate 5 judges five independent dimensions: **scientific accuracy,
+pedagogical value, visual craft, accessibility, and routing appropriateness**.
+A scientifically correct SVG does not automatically pass. If a Premium Final
+Figure would materially improve comprehension, hierarchy, realism, learner
+orientation, memory, exam readiness or overall craft, choosing SVG is itself a
+routing defect and Gate 5 fails.
+
+### Canonical approval and prospective application
+
+Human review is mandatory before a new premium figure becomes canonical and
+must explicitly judge science, pedagogy, notation, exam appropriateness,
+visual craft and brand standard. Neither the image generator nor Codex
+self-approves.
+
+This policy applies prospectively. Frozen pilots and approved historical
+deterministic figures are not reopened or mass-replaced unless a visible defect
+exists, a reused figure fails this routing/quality test, or human review
+explicitly requests replacement.
+
+## VISUAL ASSET BRIDGE V1 — OPERATIONAL
+
+Visual Asset Bridge v1 is the separately authorised, narrow implementation of
+the request-to-asset step. It does not alter the Premium-First policy, the
+request contract, Factory v0, lesson integration, or the requirement for human
+scientific and visual approval.
+
+The operational sequence is: Premium-First routing → request file → Visual
+Asset Bridge → OpenAI image generation → retained source → production WebP →
+Codex lesson integration → automated QA → human Gate 5 approval. Bridge v1
+stops after the production WebP and generation record are written.
+
+Run one request at a time from the repository root:
+
+```powershell
+npm run figure:generate -- docs/visual-requests/<request-id>.md
+```
+
+Set `OPENAI_API_KEY` in the local process environment. Optionally set
+`OPENAI_IMAGE_MODEL` (default `gpt-image-2`) and `OPENAI_IMAGE_QUALITY`
+(default `high`; allowed values `low`, `medium`, `high`, or `auto`). Secrets
+must not be stored in requests, assets, generation records, lesson files, or
+source control. The user is not a transport layer.
+
+The bridge validates the existing fenced-YAML and Markdown-section contract,
+builds one complete-figure prompt, and makes one bounded OpenAI Image API
+generation operation. Transient failures are retried up to three total
+attempts. Authentication, malformed-response, conversion, path, filesystem,
+and budget failures stop with a classified error. It does not batch, invent an
+SVG fallback, overwrite an existing production asset, integrate a lesson, or
+grant human approval.
+
+On success it retains the raw image under the gitignored local directory
+`.generated/visual-assets/<request-id>/`, writes the ID-matched production WebP
+to the request's `assets/images/...` target after Sharp resizing and budgeted
+quality optimisation, and writes a tracked JSON audit record under
+`docs/visual-generation-records/`. That record contains request/model/time,
+the exact generated prompt, API request ID when supplied, source and production
+metadata, technical status, and the unchanged human-approval state—never the
+API key.
+
+The two Electrolysis requests are canonical contract regression fixtures for
+the bridge. Their already-approved assets are not regenerated or modified by
+this implementation.
 
 **Status: MANUAL POC PHASE CLOSED — SUFFICIENTLY PROVEN.** Both
 authorised manual proofs of concept (Mode D `PHY-FOR-HYB-001` and Mode C

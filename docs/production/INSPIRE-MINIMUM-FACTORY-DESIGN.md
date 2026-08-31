@@ -409,7 +409,7 @@ or Maths) proves whether one Chemistry-shaped deviation generalises to
 | Worked Examples (incl. Foundation move 3) | Core Lesson | model → wrong-method callout, per blueprint §4 PD-1 | lesson HTML | Gate 2/3 | Quality Reviewer pass |
 | Misconception Clinic | Core Lesson + known misconception list | confront named wrong beliefs | lesson HTML | Gate 3 | Quality Reviewer pass |
 | Assessment (Retrieval/Guided/Independent/Exam/Close, incl. Foundation moves 4–5) | Core content + blueprint §3 object model | author inline JS items | lesson HTML `<script>` | Gate 4 (mark-sum, provenance, tier-tag — automatable) + AI pattern-match review | Quality Reviewer pass |
-| Representation Routing + Production | content needing a figure | REUSE check → mode decision (§8) → build/request | SVG in lesson HTML, or a visual-request `.md` + integrated WebP | Gate 5 (four axes) | human approval on Mode C/D assets (already-proven pattern) |
+| Representation Routing + Production | content needing a figure | REUSE check → deterministic-necessity test (§8) → normally request Premium Final Figure | justified deterministic representation, or a visual-request `.md` + integrated WebP | Gate 5 (five dimensions, including routing) | human approval before any new premium figure becomes canonical |
 | Accessibility Layer | every above output | alt text, figcaptions, focus/ARIA wiring | woven into lesson HTML as written, not a separate pass | Gate 6 | screen-reader smoke pass |
 | Lesson Build / Integration | all of the above | assemble into the proven HTML shell (§9) | complete lesson file | Gate 7 | — |
 | Quality Review | complete lesson | independent audit against all gates | QA doc + fixes | — | findings-first, remediation-second (blueprint §11's own observed rule) |
@@ -518,6 +518,10 @@ duplication has cost nothing.
 
 ## 8. Representation Routing
 
+**Active authority:** the **PREMIUM-FIRST SCIENCE REPRESENTATION POLICY** in
+`INSPIRE-VISUAL-ASSET-PIPELINE-PROPOSAL.md`. It supersedes the earlier
+equal-mode routing assumption while leaving Factory v0 architecture unchanged.
+
 **Placed at step 6/7 of the flow (§1) — after Core Content and
 Assessment are drafted, one decision per content item that needs a
 figure, never up front for the whole lesson.** This matches how all
@@ -534,20 +538,25 @@ For each need:
    diagram-primitives.js family) — REUSE BEFORE GENERATE, unchanged
    from the visual pipeline proposal §12, applies before any mode
    decision at all.
-2. If no reuse: does scientific/numeric/geometric meaning the learner
-   could be assessed on live in this figure?
-     YES, and it's a plot          -> Mode B (deterministic graph)
-     YES, and it's not a plot      -> Mode A (deterministic SVG)
-     NO — purely explanatory/context, one coherent composition
-        communicates it best       -> Mode C (premium final figure)
-     A premium contextual base IS valuable AND one specific layer
-     genuinely needs machine-verifiable exactness the generating
-     model can't be trusted with   -> Mode D (true hybrid, narrow)
-3. Route accordingly (Modes A/B: build directly, same workflow as all
-   four pilots' diagrams; Modes C/D: write a visual-request .md,
-   exactly the `PHY-FOR-HYB-001.md`/`CHEM-QUANT-PFF-001.md` pattern —
-   nothing new).
+2. If no reuse, ask: does this representation genuinely require
+   machine-controlled geometry, scale, coordinates, data precision or
+   interaction to fulfil its scientific or assessment purpose?
+     NO or UNCERTAIN                  -> Mode C (Premium Final Figure)
+     YES, and it is a numerical plot  -> Mode B (deterministic graph)
+     YES, exact geometry itself matters -> Mode A (deterministic SVG)
+3. Use Mode D (true hybrid) only when a premium contextual base has
+   genuine pedagogical value AND one specific layer genuinely requires
+   deterministic machine verification.
+4. Route accordingly. Mode A requires a written deterministic-necessity
+   justification. Mode B preserves exact graph production. Mode C/D use
+   the existing visual-request Markdown contract; nothing architectural
+   is added.
 ```
+
+Never begin a new explanatory Science diagram by writing SVG. First perform
+this routing decision. "Can be SVG" is not sufficient; SVG must be genuinely
+the better educational representation. The presumption is Premium Final
+Figure, not a numerical quota.
 
 **How Mode C requests are handled today (manual) vs. later (API),
 without changing the production contract**: today, the request
@@ -627,7 +636,7 @@ applies to the assessment object model).
 | 2. Scientific accuracy | arithmetic re-derivation of every worked example/assessed item (cheap insurance; blueprint §9 names this as never yet caught anything new but worth having) | definition correctness, terminology consistency, diagram-vs-text physical-picture agreement | final sign-off that content is safe to teach — **no human GCSE subject specialist has reviewed any of the four pilots yet; this gap has not closed and this design does not close it** |
 | 3. Pedagogical quality | Foundation six-move checklist presence (§6) | sequencing, cognitive load, wrong-method callouts, scaffolding fade — the class of check the AI-only academic audit already performed successfully, unassisted, on all four pilots | whether the *level* of stretch/scaffolding is right for a Grade 9 vs. Grade 4 candidate |
 | 4. Assessment validity | mark-sum validation, provenance field, tier-tag-vs-CSS cross-check, command-word distribution, ≥1 genuine sig-fig item | "could a learner pattern-match through every item" (AQ-1's own catch — AI-reviewable, proven) | none beyond what's folded into Gate 3's human line |
-| 5. Representation quality | duplicate-ID check, contrast computation (real alpha-compositing, never raw `rgba()` — the twice-repeated false-negative trap, blueprint failure mode #12), text-vs-text collision, text-vs-line crossing (failure mode #16), out-of-viewBox bounds, arrow-length-ratio-vs-declared-magnitude | scientific/pedagogical axes via the written spec | **visual-craft axis, non-negotiable** — proven three times across Physics pilots and confirmed again by both visual POCs that source review alone misses real defects |
+| 5. Representation quality | duplicate-ID, contrast and asset-budget checks; geometry/data checks where deterministic precision is justified | scientific accuracy, pedagogical value, accessibility and routing appropriateness against the written spec | **visual craft and canonical approval, non-negotiable**; a correct SVG still fails when premium routing would materially improve the educational figure |
 | 6. Accessibility | accessible-name sweep against the computed a11y tree, contrast (shared with Gate 5), `document.activeElement` check after step-change (the standing focus rule, blueprint §7) | motion/reduced-motion honouring, diagram title/desc presence | an actual screen-reader pass (VoiceOver/NVDA/JAWS) beyond the programmatic smoke test |
 | 7. Live rendered QA | asset-path validation (fully-qualified only — failure mode #1), console-error/duplicate-ID sweep against the real render | responsive behaviour where the tooling can verify it (documented, honest limitation — sub-400px true mobile rendering has never been independently confirmed in this environment) | **the live pixel/geometry pass itself cannot be automated away** — this gate exists because real defects were repeatedly invisible to every earlier pass; **newly required for Factory v0** (finding 4, §0): actually register the lesson and open it through the real `lesson-viewer.html` blob-iframe path at least once, not only the standalone file |
 | 8. Human approval | — | — | **always**, no exception, for every lesson, every mode, every pass |
@@ -679,13 +688,12 @@ production:
   misconception, template-identical "stretch") — the same class of
   finding that sent all four pilots back to remediation historically.
   A Gate 5/6/7 finding (diagram, accessibility, contrast) never sends
-  content back to Gate 2/3, and vice versa — the four axes stay
+  content back to Gate 2/3, and vice versa — the five Gate 5 dimensions stay
   independent, exactly as blueprint §5 already mandates ("never
   collapsed into one score").
 - **When human intervention is required**: any CRITICAL/HIGH finding at
-  Gate 2 (blocks publication, always); any Gate 5 visual-craft
-  judgement (cannot be automated, ever, per repeated evidence); Gate 8,
-  always.
+  Gate 2 (blocks publication, always); any Gate 5 visual-craft or routing
+  judgement requiring human review; Gate 8, always.
 - **Preventing one failed item from restarting the whole lesson — the
   concrete mechanism**: because assessment items and representations
   are both already independently identified (item `id` per blueprint
@@ -1014,7 +1022,7 @@ assumed was proven end-to-end but, on direct inspection, wasn't quite.
 | **Silent scientific errors** | Gate 2's human-required line (§10) is unchanged and non-negotiable; the arithmetic-re-derivation automation is insurance, not a substitute, exactly as blueprint §12 already states |
 | **Tier leakage** | §6's combination-testing requirement (not per-axis) directly targets this, backed by two real historical defects (#8, #13) that per-axis testing missed |
 | **Assessment quality regression** | the object model and its validation rules are unchanged from four already-proven pilots; the one new risk is process discipline (are manifests/tests actually run every time) rather than a design gap |
-| **Visual inconsistency** | Gate 5's human-required visual-craft line is unchanged; REUSE BEFORE GENERATE (§8) is the primary defence against drift, proven twice already |
+| **Visual inconsistency** | Gate 5's five-dimension review includes routing appropriateness and non-negotiable human visual craft; REUSE BEFORE GENERATE (§8) is the primary defence against drift. |
 | **Provenance drift** | §12's three-state model plus existing durable homes for every fact (commit hash, quality-audit doc, request file) — the risk is a manifest going stale relative to reality, mitigated by the manifest being small enough to actually keep current (a large schema is more likely to drift, not less) |
 | **Publication regression** | §14 changes nothing about the existing pipeline; the only new action (one insert) uses a call shape already live and tested in `lesson-admin.html` today |
 | **Factory becoming a second CMS** | §13's finding that the existing admin UI already suffices is the direct structural defence — there is no second system to become a CMS, by design |

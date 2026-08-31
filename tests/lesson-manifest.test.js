@@ -28,13 +28,27 @@ const SPEC_MAP = sandbox.window.SPEC_MAP;
 
 function allKnownSlugs() {
   const slugs = new Set();
-  for (const subject of Object.keys(SPEC_MAP)) {
-    for (const board of Object.keys(SPEC_MAP[subject])) {
-      for (const t of SPEC_MAP[subject][board]) slugs.add(t.slug);
+  const visit = value => {
+    if (Array.isArray(value)) {
+      for (const topic of value) if (topic && topic.slug) slugs.add(topic.slug);
+      return;
     }
-  }
+    if (value && typeof value === 'object') {
+      for (const child of Object.values(value)) visit(child);
+    }
+  };
+  visit(SPEC_MAP);
   return slugs;
 }
+
+test('manifest frontmatter parser supports LF and CRLF line endings', () => {
+  const lf = '```yaml\nid: test-manifest\nspecSlugs:\n  - test-slug\n```';
+  const crlf = lf.replace(/\n/g, '\r\n');
+  const expected = { id: 'test-manifest', specSlugs: ['test-slug'] };
+
+  assert.deepEqual(parseFrontmatter(lf), expected);
+  assert.deepEqual(parseFrontmatter(crlf), expected);
+});
 
 test('at least one lesson manifest exists', () => {
   assert.ok(manifestFiles.length > 0, 'docs/lesson-manifests/ contains no manifest files');
