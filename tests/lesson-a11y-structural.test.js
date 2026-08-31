@@ -13,6 +13,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
+const path = require('path');
 const { ileEngineLessonFiles, stripInlineScripts, relPath } = require('./helpers');
 
 for (const file of ileEngineLessonFiles()) {
@@ -33,3 +34,44 @@ for (const file of ileEngineLessonFiles()) {
     assert.deepEqual(broken, [], `${rel} has aria-labelledby/aria-describedby reference(s) with no matching id: ${broken.join(', ')}`);
   });
 }
+
+function relativeLuminance(hex) {
+  const channels = hex.match(/[0-9a-f]{2}/gi).map(value => parseInt(value, 16) / 255);
+  const [r, g, b] = channels.map(value => value <= 0.04045
+    ? value / 12.92
+    : ((value + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrastRatio(first, second) {
+  const a = relativeLuminance(first);
+  const b = relativeLuminance(second);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
+
+test('Electrolysis theme tokens retain AA contrast for small labels and gold controls', () => {
+  const file = path.join(__dirname, '..', 'teaching-lessons', 'chemistry', 'chemical-changes-electrolysis.html');
+  const html = fs.readFileSync(file, 'utf8');
+  const theme = name => html.match(new RegExp(`\\[data-theme="${name}"\\]\\{([^}]+)\\}`))[1];
+  const token = (css, name) => css.match(new RegExp(`--${name}:(#[0-9a-f]{6})`, 'i'))[1];
+  const light = theme('light');
+  const dark = theme('dark');
+
+  assert.ok(contrastRatio(token(light, 'soft'), token(light, 'bg')) >= 4.5,
+    'light-theme small sidebar labels must meet the 4.5:1 AA contrast threshold');
+  for (const [name, css] of [['light', light], ['dark', dark]]) {
+    assert.ok(contrastRatio(token(css, 'gold-text'), token(css, 'gold')) >= 4.5,
+      `${name}-theme text on gold controls must meet the 4.5:1 AA contrast threshold`);
+  }
+  assert.match(html, /\.ile-mode-tab\[aria-selected="true"\][^{]*\{[^}]*color:var\(--gold-text\)/);
+  assert.match(html, /\.ile-section-num\{[^}]*color:var\(--gold-text\)/);
+});
+
+test('lesson viewer gives every generated iframe an accessible title', () => {
+  const file = path.join(__dirname, '..', 'student', 'lesson-viewer.html');
+  const html = fs.readFileSync(file, 'utf8');
+  const iframes = [...html.matchAll(/<iframe\b[^>]*>/gi)].map(match => match[0]);
+  assert.ok(iframes.length > 0, 'expected lesson-viewer.html to generate at least one iframe');
+  assert.deepEqual(iframes.filter(markup => !/\btitle\s*=\s*"[^"]+"/i.test(markup)), [],
+    'every generated lesson iframe must have a non-empty accessible title');
+});
