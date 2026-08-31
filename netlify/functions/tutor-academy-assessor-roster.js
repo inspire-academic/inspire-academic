@@ -45,7 +45,7 @@ exports.handler = async function (event) {
     let profiles = []
     if (ids.length) {
       const encodedIds = ids.map(id => `\"${String(id).replace(/\"/g, '')}\"`).join(',')
-      profiles = await readRows(`profiles?id=in.(${encodeURIComponent(encodedIds)})&select=id,full_name,email`, serviceKey)
+      profiles = await readRows(`profiles?id=in.(${encodeURIComponent(encodedIds)})&select=id,full_name`, serviceKey)
     }
 
     return reply(200, { success: true, enrollments, profiles })
