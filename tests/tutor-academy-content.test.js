@@ -79,10 +79,30 @@ test('Stage 2 has all 7 Biology domain cards plus method/synthesis/drills/assess
   assert.equal(new Set(ids).size, ids.length, 'duplicate section ids in Stage 2');
 });
 
-test('Stage 3 and Stage 4 are still honestly marked coming_soon (not invented content)', () => {
+test('Stage 3 has all 13 Examiner School sections with unique ids', () => {
   const content = loadContent();
-  assert.equal(content['biology-gcse-stage-3'].comingSoon, true);
+  const stage3 = content['biology-gcse-stage-3'];
+  assert.ok(!stage3.comingSoon, 'Stage 3 should no longer be a coming_soon stub');
+  assert.equal(stage3.sections.length, 13);
+  const ids = stage3.sections.map(s => s.id);
+  assert.equal(new Set(ids).size, ids.length, 'duplicate section ids in Stage 3');
+});
+
+test('Stage 4 is still honestly marked coming_soon (not invented content)', () => {
+  const content = loadContent();
   assert.equal(content['biology-gcse-stage-4'].comingSoon, true);
+});
+
+test('the candidate-facing content file never contains Pack 03 confidential answer-key text', () => {
+  const code = fs.readFileSync(path.join(REPO_ROOT, 'assets/js/tutor-academy-biology-content.js'), 'utf8');
+  const CONFIDENTIAL_PHRASES_PACK03 = [
+    'Coherent full chain.',
+    'Cold conditions reduce membrane fluidity',
+    'A ≈3/4 depending wording'
+  ];
+  for (const phrase of CONFIDENTIAL_PHRASES_PACK03) {
+    assert.ok(!code.includes(phrase), `Pack 03 confidential answer-key text leaked into client content: "${phrase}"`);
+  }
 });
 
 test('the candidate-facing content file never contains confidential mark-scheme text', () => {
