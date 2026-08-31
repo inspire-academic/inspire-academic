@@ -115,7 +115,7 @@ async function loadTutors() {
     return `
     <div class="tutor-card" id="tutor-${e.profile_id}">
       <button class="tutor-head" type="button" aria-expanded="false" aria-controls="tutor-detail-${e.profile_id}" onclick="toggleTutor('${e.profile_id}', event)">
-        <span class="tutor-name">${escHtml(p.full_name || p.email || e.profile_id)}</span>
+        <span class="tutor-name">${escHtml(p.full_name || `Candidate · ${e.profile_id.slice(-8)}`)}</span>
         ${U.renderCertificationStatus(e.status)}
       </button>
       <div class="tutor-detail" id="tutor-detail-${e.profile_id}"></div>
