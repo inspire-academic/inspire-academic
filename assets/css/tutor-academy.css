@@ -7,7 +7,7 @@
 
 .ta-progress-track { width: 100%; background: var(--navy3, #1a3357); border-radius: 20px; overflow: hidden; }
 .ta-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold2, #e0bb63)); border-radius: 20px; transition: width .4s var(--spring-out, cubic-bezier(.34,1.56,.64,1)); }
-.ta-progress-label { font-size: .75rem; color: var(--muted); margin-top: .35rem; font-family: var(--font-mono); }
+.ta-progress-label { display: flex; justify-content: space-between; gap: .75rem; flex-wrap: wrap; font-size: .75rem; color: var(--muted); margin-top: .35rem; font-family: var(--font-mono); }
 
 .ta-cert-badge { display: inline-flex; align-items: center; padding: .35rem .9rem; border-radius: 20px; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .04em; text-transform: uppercase; }
 .ta-cert-in_training { background: #4a628022; color: var(--muted); }
@@ -15,8 +15,9 @@
 .ta-cert-provisionally_cleared { background: #e8620a22; color: var(--orange, #e8620a); }
 .ta-cert-cleared { background: #16803c22; color: #4ade80; }
 
-.ta-stage-card { display: flex; align-items: center; gap: 1.1rem; background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r, 14px); padding: 1.25rem 1.4rem; cursor: pointer; transition: border-color .2s, transform .2s var(--spring-out, ease); }
+.ta-stage-card { display: flex; align-items: center; gap: 1.1rem; background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r, 14px); padding: 1.25rem 1.4rem; cursor: pointer; color: inherit; text-decoration: none; transition: border-color .2s, transform .2s var(--spring-out, ease); }
 .ta-stage-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+.ta-stage-card:focus-visible, .ta-section-nav-item:focus-visible, .ta-domain-head:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 .ta-stage-card-locked { cursor: not-allowed; opacity: .55; }
 .ta-stage-card-locked:hover { border-color: var(--border); transform: none; }
 .ta-stage-card-num { font-size: 1.6rem; flex-shrink: 0; width: 44px; text-align: center; }
@@ -55,8 +56,11 @@
 
 /* Section navigation shell used by stage-N.html pages */
 .ta-shell { display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 900px; margin: 0 auto; padding: 88px 20px 80px; }
-.ta-section-nav { display: flex; gap: .5rem; overflow-x: auto; padding-bottom: .5rem; margin-bottom: .5rem; -webkit-overflow-scrolling: touch; }
-.ta-section-nav-item { flex-shrink: 0; font-family: var(--font-mono); font-size: .72rem; padding: .5rem 1rem; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); cursor: pointer; white-space: nowrap; }
+.ta-section-nav-wrap { position: relative; }
+.ta-section-nav-label { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: .45rem; font-family: var(--font-mono); font-size: .7rem; color: var(--muted); }
+.ta-section-nav-hint { display: none; }
+.ta-section-nav { display: flex; gap: .5rem; overflow-x: auto; padding: .25rem .2rem .7rem; margin: 0 -.2rem .5rem; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--gold) var(--navy3); -webkit-overflow-scrolling: touch; }
+.ta-section-nav-item { flex-shrink: 0; font-family: var(--font-mono); font-size: .72rem; padding: .5rem 1rem; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; scroll-snap-align: center; }
 .ta-section-nav-item.ta-active { border-color: var(--gold); color: var(--gold); background: #c9a84c11; }
 .ta-section-nav-item.ta-done::after { content: ' ✓'; }
 
@@ -93,7 +97,27 @@
 .ta-evidence-desc { font-size: .82rem; color: var(--muted); line-height: 1.5; margin-bottom: .5rem; }
 .ta-evidence-input { width: 100%; background: var(--navy); border: 1px solid var(--border); border-radius: 8px; color: var(--white); padding: .6rem .8rem; font-size: .85rem; }
 
-.ta-nav-buttons { display: flex; justify-content: space-between; margin-top: 1.5rem; }
+.ta-nav-buttons { display: flex; justify-content: space-between; gap: .75rem; margin-top: 1.5rem; }
+.ta-nav-buttons .btn[hidden] { display: none; }
+.ta-section-note { margin-top: .75rem; color: var(--muted); font-size: .78rem; line-height: 1.5; }
+.ta-pathway-notice { display: none; margin-bottom: 1rem; padding: .85rem 1rem; border: 1px solid var(--gold); border-radius: 10px; background: #c9a84c12; color: var(--white); font-size: .85rem; }
+.ta-pathway-notice.ta-visible { display: block; }
+.ta-validation-summary { display: none; margin-top: .9rem; padding: .75rem .9rem; border: 1px solid #f87171; border-radius: 8px; color: #fca5a5; background: #7f1d1d22; font-size: .82rem; }
+.ta-validation-summary.ta-visible { display: block; }
+.ta-field-invalid { border-color: #f87171 !important; outline: 2px solid #f8717133; }
+.ta-save-note { display: flex; align-items: center; min-height: 1.5rem; }
+.ta-save-note.ta-save-error { color: #fca5a5; }
+.ta-save-note.ta-save-success { color: #4ade80; }
+
+@media (max-width: 639px) {
+  .ta-shell { padding-inline: 16px; }
+  .ta-section-nav-hint { display: inline; }
+  .ta-stage-card { align-items: flex-start; flex-wrap: wrap; padding: 1rem; }
+  .ta-stage-card-num { width: 32px; }
+  .ta-stage-status { margin-left: 48px; }
+  .ta-nav-buttons { flex-direction: column-reverse; }
+  .ta-nav-buttons .btn { width: 100%; min-height: 48px; }
+}
 
 .ta-welcome-overlay { position: fixed; inset: 0; background: rgba(6,12,22,.92); z-index: 900; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .ta-welcome-card { background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r, 16px); padding: 2.2rem; max-width: 480px; text-align: center; }

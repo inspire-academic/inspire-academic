@@ -13,10 +13,13 @@ function taRenderProgressBar(pct, opts) {
   opts = opts || {}
   const clamped = Math.max(0, Math.min(100, Math.round(pct || 0)))
   const height = opts.height || '8px'
+  const detail = Number.isFinite(opts.completed) && Number.isFinite(opts.total)
+    ? `${opts.completed} of ${opts.total} sections complete`
+    : `${clamped}% complete`
   return `
-  <div class="ta-progress-track" style="height:${height};">
+  <div class="ta-progress-track" style="height:${height};" role="progressbar" aria-label="${taEscHtml(opts.label || 'Pathway progress')}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${clamped}" aria-valuetext="${taEscHtml(detail)}">
     <div class="ta-progress-fill" style="width:${clamped}%;"></div>
-  </div>${opts.showLabel ? `<div class="ta-progress-label">${clamped}% complete</div>` : ''}`
+  </div>${opts.showLabel ? `<div class="ta-progress-label"><span>${clamped}% complete</span>${Number.isFinite(opts.completed) && Number.isFinite(opts.total) ? `<span>${opts.completed} of ${opts.total} sections</span>` : ''}</div>` : ''}`
 }
 
 const TA_STAGE_META = {
@@ -32,15 +35,61 @@ function taRenderStageCard(stageId, status, progressPct) {
   const complete = status === 'complete'
   const statusLabel = locked ? 'Locked' : complete ? 'Complete' : progressPct > 0 ? 'In progress' : 'Not started'
   const statusClass = locked ? 'ta-status-locked' : complete ? 'ta-status-complete' : progressPct > 0 ? 'ta-status-active' : 'ta-status-pending'
+  const tag = locked ? 'div' : 'a'
+  const attrs = locked
+    ? `aria-disabled="true" aria-describedby="ta-stage-${meta.number}-requirement"`
+    : `href="stage-${meta.number}.html" aria-label="Open Stage ${meta.number}: ${taEscHtml(meta.title)} — ${statusLabel}"`
   return `
-  <div class="ta-stage-card ${locked ? 'ta-stage-card-locked' : ''}" ${locked ? '' : `onclick="window.location.href='stage-${meta.number}.html'"`}>
+  <${tag} class="ta-stage-card ${locked ? 'ta-stage-card-locked' : ''}" ${attrs}>
     <div class="ta-stage-card-num">${meta.icon}</div>
     <div class="ta-stage-card-body">
       <div class="ta-stage-card-title">Stage ${meta.number} — ${taEscHtml(meta.title)}</div>
-      ${!locked ? taRenderProgressBar(progressPct) : `<div class="ta-progress-label">Complete Stage ${meta.number - 1} to unlock</div>`}
+      ${!locked ? taRenderProgressBar(progressPct, { label: `Stage ${meta.number} progress` }) : `<div class="ta-progress-label" id="ta-stage-${meta.number}-requirement">Complete Stage ${meta.number - 1} to unlock</div>`}
     </div>
     <span class="ta-stage-status ${statusClass}">${statusLabel}</span>
-  </div>`
+  </${tag}>`
+}
+
+function taEnhanceStagePanel(panel, sectionTitle) {
+  if (!panel) return
+  const controls = panel.querySelectorAll('input, textarea, select')
+  controls.forEach((control, index) => {
+    if (control.id && panel.querySelector(`label[for="${control.id}"]`)) return
+    if (control.getAttribute('aria-label') || control.getAttribute('aria-labelledby')) return
+    const block = control.closest('.ta-q-block, .ta-evidence-row, .ta-boundary-row')
+    const prompt = block && block.querySelector('.ta-q-text, .ta-evidence-label, .ta-boundary-text')
+    const fallback = control.placeholder || `${sectionTitle} response ${index + 1}`
+    control.setAttribute('aria-label', (prompt ? prompt.textContent : fallback).trim())
+  })
+}
+
+function taValidateStagePanel(panel) {
+  if (!panel) return { valid: true, missing: [] }
+  const missing = []
+  panel.querySelectorAll('input, textarea, select').forEach(control => {
+    if (control.disabled || control.type === 'hidden') return
+    const empty = control.type === 'checkbox' || control.type === 'radio'
+      ? !control.checked
+      : !String(control.value || '').trim()
+    control.classList.toggle('ta-field-invalid', empty)
+    control.setAttribute('aria-invalid', empty ? 'true' : 'false')
+    if (empty) missing.push(control)
+  })
+  return { valid: missing.length === 0, missing }
+}
+
+async function taTutorCanAccessStage(supa, profileId, stageId, role) {
+  if (['admin', 'super_admin'].includes(role) || stageId.endsWith('-stage-1')) return true
+  const meta = TA_STAGE_META[stageId]
+  if (!meta || meta.number < 2) return false
+  const previousId = stageId.replace(/stage-\d+$/, `stage-${meta.number - 1}`)
+  const previous = window.TutorAcademyContent && window.TutorAcademyContent[previousId]
+  if (!previous || !Array.isArray(previous.sections)) return false
+  const { data, error } = await supa.from('tutor_academy_progress')
+    .select('section_id, status').eq('profile_id', profileId).eq('stage_id', previousId)
+  if (error) return false
+  const done = new Set((data || []).filter(row => row.status === 'complete').map(row => row.section_id))
+  return previous.sections.every(section => done.has(section.id))
 }
 
 const TA_CERT_LABELS = {
@@ -127,12 +176,13 @@ const TA_CLEARANCE_OUTCOMES = [
   { key: 'not_cleared', label: 'Not Cleared', tone: 'ta-outcome-bad' }
 ]
 
-function taRenderClearanceBoard(selectedKey) {
+function taRenderClearanceBoard(selectedKey, groupName) {
+  const radioName = groupName || 'ta-clearance-decision'
   return `
-  <div class="ta-clearance-board">
+  <div class="ta-clearance-board" role="radiogroup" aria-label="Clearance outcome">
     ${TA_CLEARANCE_OUTCOMES.map(o => `
       <label class="ta-clearance-option ${o.tone} ${selectedKey === o.key ? 'ta-clearance-selected' : ''}">
-        <input type="radio" name="ta-clearance-decision" value="${o.key}" ${selectedKey === o.key ? 'checked' : ''}>
+        <input type="radio" name="${taEscHtml(radioName)}" value="${o.key}" ${selectedKey === o.key ? 'checked' : ''}>
         <span>${o.label}</span>
       </label>`).join('')}
   </div>`
@@ -147,6 +197,9 @@ if (typeof window !== 'undefined') {
     renderTutorIntelligenceCard: taRenderTutorIntelligenceCard,
     renderErrorTaxonomy: taRenderErrorTaxonomy,
     renderClearanceBoard: taRenderClearanceBoard,
+    enhanceStagePanel: taEnhanceStagePanel,
+    validateStagePanel: taValidateStagePanel,
+    tutorCanAccessStage: taTutorCanAccessStage,
     STAGE_META: TA_STAGE_META,
     ERROR_TAXONOMY: TA_ERROR_TAXONOMY,
     CERT_LABELS: TA_CERT_LABELS
@@ -161,6 +214,8 @@ if (typeof module !== 'undefined' && module.exports) {
     renderTutorIntelligenceCard: taRenderTutorIntelligenceCard,
     renderErrorTaxonomy: taRenderErrorTaxonomy,
     renderClearanceBoard: taRenderClearanceBoard,
+    enhanceStagePanel: taEnhanceStagePanel,
+    validateStagePanel: taValidateStagePanel,
     STAGE_META: TA_STAGE_META,
     ERROR_TAXONOMY: TA_ERROR_TAXONOMY,
     CERT_LABELS: TA_CERT_LABELS

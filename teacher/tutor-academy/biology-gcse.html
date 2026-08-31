@@ -58,7 +58,9 @@
     <div class="overall-progress" id="overall-progress"></div>
   </div>
 
+  <div class="ta-pathway-notice" id="pathwayNotice" role="status"></div>
   <div class="stage-list" id="stage-list"></div>
+  <p class="ta-section-note">Complete every section in a stage to unlock the next. Section completion records progress; certification is awarded only after assessor review.</p>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
@@ -82,7 +84,7 @@ async function checkAuth() {
   const { data: { session } } = await supa.auth.getSession()
   if (!session) { window.location.href = '/index.html'; return null }
   const { data: profile, error } = await supa.from('profiles').select('role, full_name').eq('id', session.user.id).single()
-  if (error || !profile || !['teacher','admin'].includes(profile.role)) {
+  if (error || !profile || !['teacher','admin','super_admin'].includes(profile.role)) {
     window.location.href = '/dashboard.html'
     return null
   }
@@ -132,7 +134,8 @@ async function loadPathway(session) {
   })
 
   document.getElementById('overall-progress').innerHTML = window.TutorAcademyUI.renderProgressBar(
-    totalSections ? Math.round((totalComplete / totalSections) * 100) : 0, { showLabel: true }
+    totalSections ? Math.round((totalComplete / totalSections) * 100) : 0,
+    { showLabel: true, completed: totalComplete, total: totalSections, label: 'GCSE Biology Tutor Pathway progress' }
   )
 
   document.getElementById('stage-list').innerHTML = STAGE_IDS.map((stageId, idx) => {
@@ -145,6 +148,16 @@ async function loadPathway(session) {
     if (content && content.comingSoon) status = idx <= firstIncompleteIdx ? status : 'locked'
     return window.TutorAcademyUI.renderStageCard(stageId, status, pct)
   }).join('')
+
+  const lockedStage = new URLSearchParams(window.location.search).get('locked')
+  if (lockedStage) {
+    const meta = window.TutorAcademyUI.STAGE_META[lockedStage]
+    const notice = document.getElementById('pathwayNotice')
+    notice.textContent = meta
+      ? `Stage ${meta.number} is still locked. Complete every section in Stage ${meta.number - 1} to continue.`
+      : 'That stage is not available yet.'
+    notice.classList.add('ta-visible')
+  }
 }
 
 ;(async () => {
