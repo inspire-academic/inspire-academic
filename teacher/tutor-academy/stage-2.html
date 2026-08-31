@@ -14,6 +14,9 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font-body); background: var(--navy); color: var(--white); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+  .auth-loading { position: fixed; inset: 0; background: var(--navy); display: flex; align-items: center; justify-content: center; z-index: 999; flex-direction: column; gap: 16px; }
+  .auth-loading-logo { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--gold); }
+  .auth-loading-sub { font-size: 13px; color: var(--muted); font-family: var(--font-mono); }
   .topbar { position: fixed; top: 0; left: 0; right: 0; height: 56px; background: rgba(11,22,40,0.95); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 16px; z-index: 100; backdrop-filter: blur(8px); }
   .topbar-logo { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 0.02em; text-decoration: none; }
   .topbar-divider { width: 1px; height: 20px; background: var(--border); }
@@ -21,24 +24,261 @@
   .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
   .btn-ghost { background: none; border: 1px solid var(--border); color: var(--muted); padding: 8px 16px; border-radius: 7px; font-family: var(--font-body); font-size: 13px; cursor: pointer; }
   .btn-ghost:hover { border-color: var(--muted); color: var(--white); }
-  .wrap { max-width: 560px; margin: 0 auto; padding: 140px 20px 64px; text-align: center; }
-  .wrap h1 { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: .8rem; }
-  .wrap p { color: var(--muted); font-size: .92rem; }
+
+  .ta-stage-head { margin-bottom: 1.2rem; }
+  .ta-stage-head h1 { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: .3rem; }
+  .ta-stage-head .ta-sub { color: var(--muted); font-size: .9rem; }
+  .ta-download-link { display: inline-flex; align-items: center; gap: .35rem; margin-top: .6rem; font-size: .82rem; color: var(--gold); text-decoration: none; }
+  .ta-save-note { font-size: .78rem; color: var(--muted); margin-top: .5rem; font-family: var(--font-mono); min-height: 1.1em; }
+  .ta-drill-card { background: var(--navy); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: .9rem; }
+  .ta-drill-card:last-child { margin-bottom: 0; }
 </style>
 </head>
 <body>
+
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying access...</div>
+</div>
+
 <header class="topbar">
   <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
   <div class="topbar-divider"></div>
   <span class="topbar-title">Tutor Academy</span>
   <div class="topbar-right">
+    <span class="topbar-user" id="topbar-user"></span>
     <button class="btn-ghost" onclick="window.location.href='/teacher/tutor-academy/biology-gcse.html'">← Pathway</button>
   </div>
 </header>
-<div class="wrap">
-  <div style="font-size:2rem;margin-bottom:1rem;">🧬</div>
-  <h1>Stage 2 — Specification Mastery</h1>
-  <p>This stage's content (the 7 Biology domain cards with full Tutor Intelligence detail) is being built next, from IBTAEP Pack 02. Complete Stage 1 first — your assessor will be in touch when Stage 2 opens.</p>
+
+<div class="ta-shell">
+  <div class="ta-stage-head">
+    <h1 id="stageTitle"></h1>
+    <div class="ta-sub" id="stageSubtitle"></div>
+    <a class="ta-download-link" href="/resources/tutor-academy/biology-gcse/02_IBTAEP_Pack_02_GCSE_Biology_Specification_Mastery_and_Content_Conversion.docx" target="_blank" rel="noopener">⬇ Download original workbook (Pack 02)</a>
+  </div>
+
+  <div class="ta-section-nav" id="sectionNav"></div>
+  <div id="panels"></div>
+  <div class="ta-nav-buttons">
+    <button class="btn btn-outline" id="prevBtn" onclick="goStep(-1)">← Previous</button>
+    <button class="btn btn-gold" id="nextBtn" onclick="completeAndAdvance()">Mark complete &amp; continue →</button>
+  </div>
+  <div class="ta-save-note" id="saveNote"></div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/tutor-academy-ui.js"></script>
+<script src="/assets/js/tutor-academy-biology-content.js"></script>
+<script>
+const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+const STAGE_ID = 'biology-gcse-stage-2'
+const STAGE_CONTENT = window.TutorAcademyContent[STAGE_ID]
+const U = window.TutorAcademyUI
+
+let session = null
+let currentIdx = 0
+let completedSections = new Set()
+const draftKey = sid => `ia-tutor-academy-draft-${STAGE_ID}-${sid}`
+
+function escHtml(s) { return U.escHtml(s) }
+function loadDraft(sectionId) { try { return JSON.parse(localStorage.getItem(draftKey(sectionId)) || '{}') } catch (e) { return {} } }
+function saveDraft(sectionId, data) { try { localStorage.setItem(draftKey(sectionId), JSON.stringify(data)) } catch (e) {} }
+
+function renderSectionBody(section) {
+  const draft = loadDraft(section.id)
+  switch (section.type) {
+    case 'method':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div class="ta-group-heading">The Six-Lens Read</div>
+        <ul style="margin-left:1.2rem;color:var(--muted);font-size:.88rem;line-height:1.8;margin-bottom:1.2rem;">
+          ${section.sixLens.map(l => `<li>${escHtml(l)}</li>`).join('')}
+        </ul>
+        <div class="ta-group-heading">The 30-Second Boundary Test</div>
+        <ul style="margin-left:1.2rem;color:var(--muted);font-size:.88rem;line-height:1.8;margin-bottom:1.2rem;">
+          ${section.boundaryTest.map(l => `<li>${escHtml(l)}</li>`).join('')}
+        </ul>
+        <div class="note-box" style="background:var(--navy);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:var(--muted);">${escHtml(section.antiOverteachTest)}</div>`
+
+    case 'domain':
+      return `
+        ${U.renderTutorIntelligenceCard({ title: section.title.replace(/^Domain \d+ — /, ''), paper: section.paper, scope: section.scope, conceptFamilies: section.conceptFamilies, misconceptions: section.misconceptions, links: section.links })}
+        ${section.separateBiologyNote ? `<div class="note-box" style="background:var(--navy);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:var(--muted);margin-top:1rem;">${escHtml(section.separateBiologyNote)}</div>` : ''}
+        <div class="ta-group-heading">Candidate Task — Three-Level Explanation</div>
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:.6rem;">Choose one concept from this domain. Write Foundation-ready, Higher-ready, and Grade 8-9 stretch versions — the science stays consistent while cognitive demand changes.</p>
+        <textarea class="ta-q-answer" style="min-height:120px;" data-key="three-level" oninput="onFieldInput('${section.id}','three-level', this.value)">${escHtml(draft['three-level'] || '')}</textarea>
+        <div class="ta-group-heading">Candidate Task — Diagnostic Questions</div>
+        ${[0,1,2,3].map(i => `
+          <div class="ta-q-block">
+            <div class="ta-q-text" style="margin-bottom:.4rem;">Diagnostic question ${i+1} and the misconception/error it targets:</div>
+            <textarea class="ta-q-answer" data-key="diag${i}" oninput="onFieldInput('${section.id}','diag${i}', this.value)">${escHtml(draft['diag'+i] || '')}</textarea>
+          </div>`).join('')}`
+
+    case 'synthesis':
+      return `
+        <p class="ta-lede">${escHtml(section.intro)}</p>
+        <div class="ta-group-heading">Cross-domain connections</div>
+        ${section.connections.map(c => `<p style="font-size:.88rem;margin-bottom:.5rem;"><strong style="color:var(--gold);">${escHtml(c.anchor)}:</strong> <span style="color:var(--muted);">${escHtml(c.links)}</span></p>`).join('')}
+        <div class="ta-group-heading">The Misconception Repair Protocol</div>
+        <ul style="margin-left:1.2rem;color:var(--muted);font-size:.88rem;line-height:1.8;margin-bottom:1rem;">
+          ${section.repairProtocol.map(p => `<li>${escHtml(p)}</li>`).join('')}
+        </ul>
+        <div class="note-box" style="background:var(--navy);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:var(--muted);margin-bottom:1.2rem;">${escHtml(section.repairNote)}</div>
+        <div class="ta-group-heading">Build your Misconception Atlas entry</div>
+        <textarea class="ta-q-answer" style="min-height:100px;" placeholder="Misconception, why plausible, diagnostic prompt, repair move, mastery check" data-key="atlas" oninput="onFieldInput('${section.id}','atlas', this.value)">${escHtml(draft.atlas || '')}</textarea>`
+
+    case 'drills':
+      return `
+        <p class="ta-lede">${escHtml(section.instructions)}</p>
+        ${section.scenarios.map(s => `
+          <div class="ta-drill-card">
+            <div style="font-weight:700;margin-bottom:.2rem;">${escHtml(s.label)}</div>
+            <div style="font-size:.85rem;color:var(--muted);margin-bottom:.6rem;">${escHtml(s.prompt)}</div>
+            <textarea class="ta-q-answer" data-key="${s.id}" oninput="onFieldInput('${section.id}','${s.id}', this.value)">${escHtml(draft[s.id] || '')}</textarea>
+          </div>`).join('')}
+        <div class="ta-group-heading">Overteach / Underteach / Just Right</div>
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:.8rem;">${escHtml(section.classificationTable.instructions)}</p>
+        ${section.classificationTable.items.map((item, i) => `
+          <div class="ta-boundary-row">
+            <span class="ta-boundary-text">${escHtml(item)}</span>
+            <select class="ta-boundary-select" data-key="class${i}" onchange="onFieldInput('${section.id}','class${i}', this.value)">
+              <option value="">—</option>
+              ${['Overteach','Underteach','Just right','Scientifically wrong'].map(v => `<option value="${v}" ${draft['class'+i] === v ? 'selected' : ''}>${v}</option>`).join('')}
+            </select>
+          </div>`).join('')}`
+
+    case 'week2-assessment':
+      return `
+        <div class="ta-group-heading">${escHtml(section.specControl.heading)}</div>
+        ${section.specControl.questions.map(q => `
+          <div class="ta-q-block">
+            <div class="ta-q-head"><span class="ta-q-text">${escHtml(q.text)}</span><span class="ta-q-marks">[${q.marks}]</span></div>
+            <textarea class="ta-q-answer" data-key="${q.id}" oninput="onFieldInput('${section.id}','${q.id}', this.value)">${escHtml(draft[q.id] || '')}</textarea>
+          </div>`).join('')}
+        <div class="ta-group-heading">${escHtml(section.misconceptionClinic.heading)}</div>
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:.8rem;">${escHtml(section.misconceptionClinic.instructions)}</p>
+        ${section.misconceptionClinic.items.map(it => `
+          <div class="ta-q-block">
+            <div class="ta-q-head"><span class="ta-q-text"><strong>${escHtml(it.domain)}.</strong> ${escHtml(it.statement)}</span><span class="ta-q-marks">[4]</span></div>
+            <textarea class="ta-q-answer" data-key="${it.id}" oninput="onFieldInput('${section.id}','${it.id}', this.value)">${escHtml(draft[it.id] || '')}</textarea>
+          </div>`).join('')}
+        <div class="ta-group-heading">${escHtml(section.microteaching.heading)}</div>
+        <p style="font-size:.88rem;color:var(--muted);margin-bottom:.6rem;">${escHtml(section.microteaching.brief)}</p>
+        <ul style="margin-left:1.2rem;color:var(--muted);font-size:.85rem;line-height:1.7;margin-bottom:.8rem;">
+          ${section.microteaching.requirements.map(r => `<li>${escHtml(r)}</li>`).join('')}
+        </ul>
+        <input type="text" class="ta-evidence-input" placeholder="Recording link" data-key="microteaching-link" value="${escHtml(draft['microteaching-link'] || '')}" oninput="onFieldInput('${section.id}','microteaching-link', this.value)">`
+
+    case 'gate-info':
+      return `
+        <div class="ta-group-heading">Competency domains assessed</div>
+        <ul style="margin-left:1.2rem;color:var(--muted);font-size:.88rem;line-height:1.8;margin-bottom:1rem;">
+          ${section.domains.map(d => `<li>${escHtml(d)}</li>`).join('')}
+        </ul>
+        <div class="ta-group-heading">Traffic-light rules</div>
+        ${section.trafficLightRules.map(r => `<p style="font-size:.88rem;color:var(--muted);margin-bottom:.5rem;"><strong style="color:var(--white);">${r.level}:</strong> ${escHtml(r.desc)}</p>`).join('')}
+        <div class="note-box" style="background:var(--navy);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 18px;font-size:13px;color:var(--muted);margin-top:1.2rem;">${escHtml(section.gateNote)}</div>`
+
+    default:
+      return '<p style="color:var(--muted);">Content coming soon.</p>'
+  }
+}
+
+let pendingSave = null
+function onFieldInput(sectionId, key, value) {
+  const draft = loadDraft(sectionId)
+  draft[key] = value
+  saveDraft(sectionId, draft)
+  document.getElementById('saveNote').textContent = 'Saved locally…'
+  clearTimeout(pendingSave)
+  pendingSave = setTimeout(() => { document.getElementById('saveNote').textContent = '' }, 1500)
+}
+
+function renderNav() {
+  document.getElementById('sectionNav').innerHTML = STAGE_CONTENT.sections.map((s, i) => `
+    <div class="ta-section-nav-item ${i === currentIdx ? 'ta-active' : ''} ${completedSections.has(s.id) ? 'ta-done' : ''}" onclick="goToStep(${i})">
+      ${i + 1}. ${escHtml(s.title.replace(/^(Part [A-Z\/]+ — |Domain \d+ — )/, ''))}
+    </div>`).join('')
+}
+
+function renderCurrentPanel() {
+  const s = STAGE_CONTENT.sections[currentIdx]
+  document.getElementById('panels').innerHTML = `
+    <div class="ta-panel ta-active">
+      <h2>${escHtml(s.title)}</h2>
+      ${renderSectionBody(s)}
+    </div>`
+  document.getElementById('prevBtn').style.visibility = currentIdx === 0 ? 'hidden' : 'visible'
+  const isLast = currentIdx === STAGE_CONTENT.sections.length - 1
+  document.getElementById('nextBtn').textContent = isLast
+    ? (completedSections.has(s.id) ? 'Completed — back to pathway' : 'Mark complete & finish')
+    : 'Mark complete & continue →'
+  renderNav()
+}
+
+function goToStep(i) { currentIdx = i; renderCurrentPanel(); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+function goStep(delta) { goToStep(Math.max(0, Math.min(STAGE_CONTENT.sections.length - 1, currentIdx + delta))) }
+
+async function completeAndAdvance() {
+  const s = STAGE_CONTENT.sections[currentIdx]
+  const draft = loadDraft(s.id)
+
+  document.getElementById('saveNote').textContent = 'Saving…'
+  await fetch('/api/v1/tutor-academy/progress', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+    body: JSON.stringify({ stageId: STAGE_ID, sectionId: s.id, status: 'complete' })
+  }).catch(() => {})
+
+  if (Object.keys(draft).length) {
+    await fetch('/api/v1/tutor-academy/evidence', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify({ stageId: STAGE_ID, evidenceType: s.type, evidenceKey: s.id, content: JSON.stringify(draft) })
+    }).catch(() => {})
+  }
+
+  completedSections.add(s.id)
+  document.getElementById('saveNote').textContent = 'Saved.'
+
+  if (currentIdx === STAGE_CONTENT.sections.length - 1) {
+    window.location.href = '/teacher/tutor-academy/biology-gcse.html'
+    return
+  }
+  goStep(1)
+}
+
+async function checkAuth() {
+  const { data: { session: s } } = await supa.auth.getSession()
+  if (!s) { window.location.href = '/index.html'; return null }
+  const { data: profile, error } = await supa.from('profiles').select('role, full_name').eq('id', s.user.id).single()
+  if (error || !profile || !['teacher','admin'].includes(profile.role)) {
+    window.location.href = '/dashboard.html'
+    return null
+  }
+  if (profile.full_name) document.getElementById('topbar-user').textContent = profile.full_name
+  document.getElementById('authLoading').style.display = 'none'
+  return s
+}
+
+async function loadProgress() {
+  const { data: rows } = await supa.from('tutor_academy_progress')
+    .select('section_id, status').eq('profile_id', session.user.id).eq('stage_id', STAGE_ID)
+  ;(rows || []).forEach(r => { if (r.status === 'complete') completedSections.add(r.section_id) })
+}
+
+;(async () => {
+  session = await checkAuth()
+  if (!session) return
+  document.getElementById('stageTitle').textContent = 'Stage 2 — ' + STAGE_CONTENT.title
+  document.getElementById('stageSubtitle').textContent = STAGE_CONTENT.subtitle + ' — ' + STAGE_CONTENT.overview
+  await loadProgress()
+  renderCurrentPanel()
+})()
+</script>
 </body>
 </html>

@@ -55,34 +55,42 @@ function taRenderCertificationStatus(status) {
   return `<span class="ta-cert-badge ta-cert-${taEscHtml(status || 'in_training')}">${label}</span>`
 }
 
-// Expandable card for a Stage 2 domain's "Tutor Intelligence" fields —
-// collapsed by default per the brief's "not 11 boxes at once on mobile."
+// Expandable card for a Stage 2 domain's "Tutor Intelligence" —
+// collapsed by default per the brief's "not 11 boxes at once on
+// mobile." Shape follows IBTAEP Pack 02's actual domain structure: a
+// concept-family/boundary-warning table, high-frequency misconceptions,
+// and practical/maths/assessment links — not an invented field list.
 function taRenderTutorIntelligenceCard(domain) {
-  const fields = [
-    ['Core Concept', domain.coreConcept],
-    ['Specification Expectation', domain.specExpectation],
-    ['Foundation / Higher Boundary', domain.boundary],
-    ['Separate Biology Only', domain.separateBiologyOnly],
-    ['Key Vocabulary', domain.vocabulary],
-    ['Mathematical Link', domain.mathsLink],
-    ['Required Practical Link', domain.practicalLink],
-    ['Common Misconceptions', domain.misconceptions],
-    ['Examiner Angle', domain.examinerAngle],
-    ['Grade 8-9 Extension', domain.extension]
-  ].filter(([, v]) => v)
-
   return `
   <div class="ta-domain-card">
     <button class="ta-domain-head" onclick="this.parentElement.classList.toggle('ta-open')">
-      <span class="ta-domain-title">${taEscHtml(domain.title)}</span>
+      <span class="ta-domain-title">${taEscHtml(domain.title)}${domain.paper ? ` <span style="color:var(--muted);font-weight:400;font-size:.8rem;">(${taEscHtml(domain.paper)})</span>` : ''}</span>
       <span class="ta-domain-toggle">▾</span>
     </button>
     <div class="ta-domain-body">
-      ${fields.map(([label, val]) => `
+      ${domain.scope ? `
         <div class="ta-domain-field">
-          <div class="ta-domain-field-label">${taEscHtml(label)}</div>
-          <div class="ta-domain-field-val">${taEscHtml(val)}</div>
+          <div class="ta-domain-field-label">Domain scope</div>
+          <div class="ta-domain-field-val">${taEscHtml(domain.scope)}</div>
+        </div>` : ''}
+      ${(domain.conceptFamilies || []).map(cf => `
+        <div class="ta-domain-field">
+          <div class="ta-domain-field-label">${taEscHtml(cf.family)}</div>
+          <div class="ta-domain-field-val">${taEscHtml(cf.control)}</div>
+          ${cf.boundary ? `<div class="ta-domain-field-val" style="color:var(--orange);margin-top:.2rem;">⚠ ${taEscHtml(cf.boundary)}</div>` : ''}
         </div>`).join('')}
+      ${(domain.misconceptions && domain.misconceptions.length) ? `
+        <div class="ta-domain-field">
+          <div class="ta-domain-field-label">High-frequency misconceptions</div>
+          <ul style="margin:.3rem 0 0 1.1rem;color:var(--muted);font-size:.88rem;line-height:1.6;">
+            ${domain.misconceptions.map(m => `<li>${taEscHtml(m)}</li>`).join('')}
+          </ul>
+        </div>` : ''}
+      ${domain.links ? `
+        <div class="ta-domain-field">
+          <div class="ta-domain-field-label">Practical / maths / assessment links</div>
+          <div class="ta-domain-field-val">${taEscHtml(domain.links)}</div>
+        </div>` : ''}
     </div>
   </div>`
 }
