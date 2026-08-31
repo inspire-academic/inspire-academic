@@ -1,13 +1,13 @@
 # Visual Request — CHEM-ELEC-PFF-001
 
-**STATUS: GENERATED / SCIENTIFICALLY VALIDATED — NOT HUMAN APPROVED.** This request replaces
+**STATUS: HUMAN APPROVED / CANONICAL.** This request replaces
 the temporary/noncanonical first Electrolysis SVG. The resulting asset must be
 scientifically validated before integration and requires explicit human visual
 approval before it can become canonical.
 
 ```yaml
 id: CHEM-ELEC-PFF-001
-status: generated-pre-human-review
+status: human-approved-canonical
 authoringMode: premium-final-figure
 subject: GCSE Chemistry
 topic: Electrolysis
@@ -19,7 +19,7 @@ aspectRatio: "3:2 landscape"
 targetAsset: assets/images/chemistry/diagrams/electrolysis/CHEM-ELEC-PFF-001.webp
 targetDimensions: "960 × 640 px"
 performanceBudget: "80 KB maximum; preserve label legibility"
-humanApproval: pending
+humanApproval: approved-2026-08-31
 ```
 
 ## Pedagogical purpose
@@ -168,8 +168,10 @@ Avoid: generic AI-infographic clutter, cartoon style, sci-fi styling, decorative
 
 ## Human approval state
 
-`PENDING`. Generation and technical/scientific validation do not constitute
-human visual approval or canonical status.
+`APPROVED — 2026-08-31`. The user explicitly approved both Electrolysis
+premium figures scientifically and visually for Gate 5. This approval makes
+the figure canonical; it does not by itself complete lesson-level Gate 7 or
+Gate 8.
 
 ## Generation and optimisation record
 

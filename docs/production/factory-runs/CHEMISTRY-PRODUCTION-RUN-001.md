@@ -1,22 +1,23 @@
 # Chemistry Production Run #001 — Electrolysis
 
-## STATUS: REPRESENTATION REMEDIATION INTEGRATED — AWAITING HUMAN GATE 5 REVIEW
+## STATUS: HUMAN GATE 5 APPROVED — AWAITING EXTERNAL-BROWSER GATE 7 QA
 
 **Run type:** REAL PRODUCTION LESSON. This is not a Factory v0 pilot,
 rehydration run, or architecture proof.
 
 **Lifecycle:** `DRAFT`. Content/pedagogy is a strong candidate, automated QA
 passes, and the remediated representation set passes standalone technical QA.
-The lesson must not advance to `QA_COMPLETE` or `HUMAN_APPROVED` because human
-Gate 5 review and real inner blob/iframe Gate 7 inspection remain outstanding.
+The lesson must not advance to `QA_COMPLETE` or `HUMAN_APPROVED` because real
+inner blob/iframe Gate 7 inspection in an external full-size browser remains
+outstanding.
 
 ```text
 CONTENT / PEDAGOGY: strong candidate
 AUTOMATED QA: PASS
 STANDALONE QA: PASS
-REPRESENTATION GATE: NOT YET HUMAN APPROVED
-TECHNICAL STATUS: remediation integrated and ready for human visual review
-NEXT REQUIRED WORK: human Gate 5 inspection, then post-deployment inner-viewer QA
+REPRESENTATION GATE: HUMAN APPROVED — 2026-08-31
+TECHNICAL STATUS: representation remediation approved and canonical
+NEXT REQUIRED WORK: post-deployment inner-viewer QA in an external full-size browser
 ```
 
 ## 1. Topic and scope
@@ -202,7 +203,7 @@ Real browser URL:
 | 2 Scientific accuracy | PASS | Products, polarity, ions and half-equations independently checked. |
 | 3 Pedagogical quality | PASS | Full blueprint sequence; additive Foundation; genuine Higher transfer. |
 | 4 Assessment validity | PASS | Original 21-mark exam bank; AO1/AO2/AO3; specific feedback. |
-| 5 Representation quality | **TECHNICALLY READY FOR HUMAN REVIEW — NOT HUMAN APPROVED** | Premium figures pass scientific, pedagogical, accessibility, routing and standalone visual checks; Figure 3 uses the freshly selected native typeset medium. Human visual judgement remains mandatory. |
+| 5 Representation quality | **PASS — HUMAN APPROVED 2026-08-31** | The user explicitly approved both premium figures scientifically and visually. Figure 3 remains native semantic typesetting. The representation set is canonical. |
 | 6 Accessibility | PASS for programmatic/keyboard smoke test | Semantics, contrast, focus, live region, drawer and 390 px checks pass. No formal WCAG certification claimed. |
 | 7 Live rendered-page QA | **UNVERIFIED for production pipeline** | Standalone real-browser QA PASS; authenticated blob/iframe viewer not yet exercised. |
 | 8 Human approval | NOT STARTED | Human-only. |
