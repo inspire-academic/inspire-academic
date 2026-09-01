@@ -50,6 +50,7 @@ create table if not exists tutor_academy_enrollments (
   status           text not null default 'in_training'
                      check (status in ('in_training','foundation_cleared','provisionally_cleared','cleared')),
   current_stage_id text references tutor_academy_stages(id),
+  deadline         timestamptz,
   enrolled_at      timestamptz not null default now(),
   updated_at       timestamptz not null default now(),
   unique (profile_id, programme_id)

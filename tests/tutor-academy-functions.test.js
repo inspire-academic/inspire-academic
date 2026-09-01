@@ -10,6 +10,7 @@ const progress = require('../netlify/functions/tutor-academy-progress.js');
 const evidence = require('../netlify/functions/tutor-academy-evidence.js');
 const assessorContent = require('../netlify/functions/get-tutor-academy-assessor-content.js');
 const gateDecision = require('../netlify/functions/tutor-academy-gate-decision.js');
+const assignments = require('../netlify/functions/tutor-academy-assignments.js');
 const { getConfidentialContent } = require('../netlify/functions/_tutor-academy-confidential.js');
 
 const AUTH_HEADER = { authorization: 'Bearer test-token' };
@@ -318,5 +319,92 @@ test('gate-decision: reassessment_required does not touch enrollment status', as
     });
     const enrollmentUpdate = writes.find(w => w.u.includes('tutor_academy_enrollments'));
     assert.equal(enrollmentUpdate, undefined);
+  });
+});
+
+// ── assignments (admin-managed enrolment and deadlines) ─────────────
+function withAssignmentFetch({ callerRole = 'admin', existing = [], activity = false, onWrite } = {}, fn) {
+  const original = global.fetch;
+  process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-key';
+  global.fetch = async (url, opts = {}) => {
+    const u = String(url);
+    const method = opts.method || 'GET';
+    if (u.includes('/auth/v1/user')) return { ok: true, status: 200, json: async () => MOCK_USER };
+    if (u.includes('/rest/v1/profiles?id=eq.tutor-123')) return { ok: true, status: 200, json: async () => [{ role: callerRole }] };
+    if (u.includes('/rest/v1/profiles?id=eq.target-tutor')) return { ok: true, status: 200, json: async () => [{ id: 'target-tutor', role: 'teacher' }] };
+    if (u.includes('/rest/v1/tutor_academy_programmes?id=eq.biology-gcse')) return { ok: true, status: 200, json: async () => [{ id: 'biology-gcse' }] };
+    if (u.includes('/rest/v1/tutor_academy_stages')) return { ok: true, status: 200, json: async () => [{ id: 'biology-gcse-stage-1', order_index: 1 }] };
+    if (u.includes('/rest/v1/tutor_academy_enrollments?profile_id=')) {
+      if (method !== 'GET' && onWrite) onWrite(u, method, opts.body ? JSON.parse(opts.body) : null);
+      if (method === 'POST' || method === 'PATCH') return { ok: true, status: 200, json: async () => [{ id: 'enrollment-1', profile_id: 'target-tutor', programme_id: 'biology-gcse', deadline: '2026-10-01T22:59:59.000Z' }] };
+      return { ok: true, status: 200, json: async () => existing };
+    }
+    if (u.endsWith('/rest/v1/tutor_academy_enrollments') && method === 'POST') {
+      if (onWrite) onWrite(u, method, JSON.parse(opts.body));
+      return { ok: true, status: 201, json: async () => [{ id: 'enrollment-1', ...JSON.parse(opts.body) }] };
+    }
+    if (u.includes('/rest/v1/tutor_academy_progress') || u.includes('/rest/v1/tutor_academy_evidence') || u.includes('/rest/v1/tutor_academy_gate_decisions')) {
+      return { ok: true, status: 200, json: async () => activity ? [{ id: 'activity-1' }] : [] };
+    }
+    return { ok: true, status: 200, json: async () => [] };
+  };
+  return fn().finally(() => { global.fetch = original; delete process.env.SUPABASE_SERVICE_ROLE_KEY; });
+}
+
+test('assignments: non-admin caller is refused', async () => {
+  await withAssignmentFetch({ callerRole: 'teacher' }, async () => {
+    const res = await assignments.handler({ httpMethod: 'GET', headers: AUTH_HEADER });
+    assert.equal(res.statusCode, 403);
+  });
+});
+
+test('assignments: admin creates a pathway assignment with a deadline', async () => {
+  let write;
+  await withAssignmentFetch({ onWrite: (u, method, body) => { write = { u, method, body }; } }, async () => {
+    const res = await assignments.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ profileId: 'target-tutor', programmeId: 'biology-gcse', deadline: '2026-10-01T22:59:59.000Z' })
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(write.method, 'POST');
+    assert.equal(write.body.profile_id, 'target-tutor');
+    assert.equal(write.body.current_stage_id, 'biology-gcse-stage-1');
+  });
+});
+
+test('assignments: updating a deadline does not reset training or clearance status', async () => {
+  let write;
+  await withAssignmentFetch({ existing: [{ id: 'enrollment-1', status: 'foundation_cleared' }], onWrite: (u, method, body) => { write = { method, body }; } }, async () => {
+    const res = await assignments.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ profileId: 'target-tutor', programmeId: 'biology-gcse', deadline: null })
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(write.method, 'PATCH');
+    assert.equal(write.body.deadline, null);
+    assert.equal(write.body.status, undefined);
+  });
+});
+
+test('assignments: removal is blocked once tutor activity exists', async () => {
+  await withAssignmentFetch({ existing: [{ id: 'enrollment-1', status: 'in_training' }], activity: true }, async () => {
+    const res = await assignments.handler({
+      httpMethod: 'DELETE', headers: AUTH_HEADER,
+      body: JSON.stringify({ profileId: 'target-tutor', programmeId: 'biology-gcse' })
+    });
+    assert.equal(res.statusCode, 409);
+    assert.equal(JSON.parse(res.body).error.code, 'enrollment_has_activity');
+  });
+});
+
+test('assignments: mistaken unused enrollment can be removed', async () => {
+  let deletion;
+  await withAssignmentFetch({ existing: [{ id: 'enrollment-1', status: 'in_training' }], onWrite: (u, method) => { deletion = method; } }, async () => {
+    const res = await assignments.handler({
+      httpMethod: 'DELETE', headers: AUTH_HEADER,
+      body: JSON.stringify({ profileId: 'target-tutor', programmeId: 'biology-gcse' })
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(deletion, 'DELETE');
   });
 });
