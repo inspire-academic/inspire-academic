@@ -37,4 +37,3 @@ test('Reacting Masses teaches coefficients as mole ratios, not gram ratios', () 
 test('Reacting Masses remains narrowly scoped before limiting reagents and yield', () => {
   assert.doesNotMatch(lesson, /limiting reagents?|percentage yield|atom economy/i);
 });
-
