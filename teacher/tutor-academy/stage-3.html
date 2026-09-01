@@ -10,7 +10,7 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
-<link rel="stylesheet" href="/assets/css/tutor-academy.css?v=20260831">
+<link rel="stylesheet" href="/assets/css/tutor-academy.css?v=20260901">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font-body); background: var(--navy); color: var(--white); min-height: 100vh; font-size: 15px; line-height: 1.6; }
@@ -299,7 +299,8 @@ function renderNav() {
     <button type="button" class="ta-section-nav-item ${i === currentIdx ? 'ta-active' : ''} ${completedSections.has(s.id) ? 'ta-done' : ''}" ${i === currentIdx ? 'aria-current="step"' : ''} onclick="goToStep(${i})">
       ${i + 1}. ${escHtml(s.title)}
     </button>`).join('')
-  document.querySelector('.ta-section-nav-item.ta-active')?.scrollIntoView({ block: 'nearest', inline: 'center' })
+  const activeNavItem = nav.querySelector('.ta-section-nav-item.ta-active')
+  if (activeNavItem) nav.scrollLeft = activeNavItem.offsetLeft - (nav.clientWidth - activeNavItem.clientWidth) / 2
 }
 
 function renderCurrentPanel() {

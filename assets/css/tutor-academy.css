@@ -55,16 +55,17 @@
 .ta-outcome-bad.ta-clearance-selected { border-color: #f87171; }
 
 /* Section navigation shell used by stage-N.html pages */
-.ta-shell { display: grid; grid-template-columns: 1fr; gap: 1.5rem; max-width: 900px; margin: 0 auto; padding: 88px 20px 80px; }
-.ta-section-nav-wrap { position: relative; }
+.ta-shell { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; width: 100%; max-width: 900px; min-width: 0; margin: 0 auto; padding: 88px 20px 80px; }
+.ta-shell > * { min-width: 0; }
+.ta-section-nav-wrap { position: relative; min-width: 0; max-width: 100%; }
 .ta-section-nav-label { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: .45rem; font-family: var(--font-mono); font-size: .7rem; color: var(--muted); }
 .ta-section-nav-hint { display: none; }
-.ta-section-nav { display: flex; gap: .5rem; overflow-x: auto; padding: .25rem .2rem .7rem; margin: 0 -.2rem .5rem; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--gold) var(--navy3); -webkit-overflow-scrolling: touch; }
+.ta-section-nav { display: flex; width: 100%; max-width: 100%; min-width: 0; gap: .5rem; overflow-x: auto; overflow-y: hidden; padding: .25rem .2rem .7rem; margin: 0 -.2rem .5rem; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--gold) var(--navy3); -webkit-overflow-scrolling: touch; }
 .ta-section-nav-item { flex-shrink: 0; font-family: var(--font-mono); font-size: .72rem; padding: .5rem 1rem; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; scroll-snap-align: center; }
 .ta-section-nav-item.ta-active { border-color: var(--gold); color: var(--gold); background: #c9a84c11; }
 .ta-section-nav-item.ta-done::after { content: ' ✓'; }
 
-.ta-panel { background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r, 14px); padding: 1.75rem; display: none; }
+.ta-panel { min-width: 0; max-width: 100%; overflow-wrap: anywhere; background: var(--navy2); border: 1px solid var(--border); border-radius: var(--r, 14px); padding: 1.75rem; display: none; }
 .ta-panel.ta-active { display: block; }
 .ta-panel h2 { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: .6rem; }
 .ta-panel .ta-lede { color: var(--muted); font-size: .92rem; line-height: 1.6; margin-bottom: 1.4rem; }
