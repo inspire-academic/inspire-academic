@@ -1,6 +1,6 @@
 # Chemistry Production Run 002 — Reacting Masses from Balanced Equations
 
-**Status:** STAGING QA CANDIDATE / AWAITING GATE 8 HUMAN APPROVAL
+**Status:** PUBLISHED / GATE 8 HUMAN APPROVED
 **Branch:** `codex/chemistry-reacting-masses`
 **Authorised base:** `aebcc5904c92baa94eda91e140238ed4bed107b5`
 
@@ -67,7 +67,7 @@ described as mole ratios, never mass ratios.
 | 5 Representation | TECHNICAL PASS | Exact deterministic figures, correct routing, reused canonical raster |
 | 6 Accessibility | PASS | SVG title/desc, image alt, headings, keyboard controls, focus return, no live duplicate IDs |
 | 7 Rendered QA | PASS | Dark/Higher and Light/Foundation; Learn/Practice; MCQ feedback; reminder drawer; exact 320px Learn and Practice renders |
-| 8 Human approval | OUTSTANDING | Lesson is not published and is not self-approved |
+| 8 Human approval | PASS — 2026-09-01 | User explicitly authorised publishing the verified QA row; production library and viewer rechecked |
 
 ## Automated test evidence
 
@@ -91,8 +91,11 @@ Lesson architecture and exam numbering: PASS
 - Content URL: `https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/quantitative-chem/1788225798501-quantitative-chemistry-reacting-masses.html`.
 - Viewer URL: `https://staging.inspireacademic.org/student/lesson-viewer.html?id=2d790982-7c9d-4384-9023-b80b9bac2ca1`.
 - Row metadata: Chemistry (`subject_id: 3`), Quantitative Chem (`topic_id: 16`), HTML, Both boards, Both tiers, 50 minutes, order 2.
-- `is_published`: `false` — retained as an admin-only QA draft.
+- `is_published`: `true` — changed through the existing admin Publish control after explicit user approval.
 - Upload integrity: local MD5 `4d3f79836edfc3bf2446c54a3fdc8cd8` matched the storage ETag; the uploaded file is the committed lesson, not a regenerated copy.
 - Real viewer check: PASS in authenticated external Chrome; full lesson content rendered through the existing blob-iframe path with no page-origin console warnings or errors.
-- Production publication: no.
-- Gate 8 approval: required before changing `is_published` to `true`.
+- Production deployment commit: `c1164b7640a9d9c4c46e769ef1ca347a4ab9b3d2`.
+- Production viewer: `https://www.inspireacademic.org/student/lesson-viewer.html?id=2d790982-7c9d-4384-9023-b80b9bac2ca1`.
+- Student library: PASS — the lesson appears under Chemistry → Quantitative Chem on both staging and production.
+- Production rendered check: PASS in external Chrome; full blob-iframe lesson rendered with no page-origin console warnings or errors.
+- Gate 8 approval: PASS — explicitly granted 2026-09-01.

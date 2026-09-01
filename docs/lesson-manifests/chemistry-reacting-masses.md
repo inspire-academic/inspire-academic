@@ -11,11 +11,11 @@ tier: Both
 specSlugs:
   - aqa-ch-fh-quantitative
   - edx-ch-fh-quantitative
-qaState: QA_COMPLETE
+qaState: HUMAN_APPROVED
 sourceCommit: aebcc5904c92baa94eda91e140238ed4bed107b5
 sourcePilotDoc: docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md
 lessonsRowId: 2d790982-7c9d-4384-9023-b80b9bac2ca1
-publicationCommit: null
+publicationCommit: c1164b7640a9d9c4c46e769ef1ca347a4ab9b3d2
 ```
 
 ## LEARNING OBJECTIVES
@@ -89,7 +89,7 @@ must reference it through a fully qualified HTTPS URL for blob-iframe safety.
 ## QA STATE
 
 ```text
-qaState: QA_COMPLETE
+qaState: HUMAN_APPROVED
 
 Gate 1 curriculum scope: PASS
 Gate 2 academic review: PASS — all authored calculations independently checked
@@ -105,7 +105,7 @@ Gate 6 accessibility: PASS — semantic structure, accessible SVG names,
 Gate 7 rendered/browser QA: PASS — Dark/Higher and Light/Foundation,
   Learn/Practice switching, question feedback, reminder drawer and exact
   320px Learn/Practice layouts verified
-Gate 8 human approval: pending
+Gate 8 human approval: PASS — explicitly authorised and published 2026-09-01
 
 Complete committed suite after the lesson and its focused scientific
 regressions were added: 379/379 PASS.
@@ -121,10 +121,13 @@ registered as:
 ```text
 lessons row:      2d790982-7c9d-4384-9023-b80b9bac2ca1
 content_url:      https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/quantitative-chem/1788225798501-quantitative-chemistry-reacting-masses.html
-is_published:     false
+is_published:     true
 real viewer:      https://staging.inspireacademic.org/student/lesson-viewer.html?id=2d790982-7c9d-4384-9023-b80b9bac2ca1
+production viewer: https://www.inspireacademic.org/student/lesson-viewer.html?id=2d790982-7c9d-4384-9023-b80b9bac2ca1
 ```
 
-The lesson remains a draft QA candidate. It must not be marked
-`HUMAN_APPROVED` or published until the user explicitly grants Gate 8
-approval after reviewing the real viewer.
+The user explicitly granted Gate 8 approval and authorised publication on
+2026-09-01. The existing admin control changed only this row from draft to
+published. The production student library and real production viewer were
+then verified in external Chrome with no page-origin console warnings or
+errors.
