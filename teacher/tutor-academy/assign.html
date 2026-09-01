@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assign Tutors — Inspire Tutor Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/tutor-academy.css?v=20260901b">
+</head>
+<body class="ta-admin-page">
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying administrator access…</div>
+</div>
+
+<header class="topbar">
+  <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
+  <div class="topbar-divider"></div>
+  <span class="topbar-title">Assign tutors</span>
+  <div class="topbar-right">
+    <a class="btn-ghost" href="/teacher/tutor-academy/assessor.html">Assessor view</a>
+    <a class="btn-ghost" href="/teacher/tutor-academy/index.html">← Academy home</a>
+  </div>
+</header>
+
+<main class="ta-assignment-shell">
+  <header class="ta-assignment-head">
+    <div>
+      <p class="ta-kicker">Academy administration</p>
+      <h1>Assign tutors</h1>
+      <p>Assign subject pathways, set target dates and correct enrolment mistakes before training begins.</p>
+    </div>
+    <div class="ta-assignment-summary" id="assignmentSummary" aria-live="polite"></div>
+  </header>
+
+  <section class="ta-assignment-controls" aria-label="Tutor assignment filters">
+    <label class="ta-search-field" for="tutorSearch">
+      <span>Search tutors</span>
+      <input id="tutorSearch" type="search" placeholder="Name, role, school or subject" autocomplete="off">
+    </label>
+    <label for="programmeFilter">
+      <span>Programme</span>
+      <select id="programmeFilter"><option value="">All programmes</option></select>
+    </label>
+    <label for="assignmentFilter">
+      <span>Assignment status</span>
+      <select id="assignmentFilter">
+        <option value="all">All tutors</option>
+        <option value="assigned">Assigned</option>
+        <option value="unassigned">Unassigned</option>
+      </select>
+    </label>
+  </section>
+
+  <div class="ta-page-status" id="pageStatus" role="status" aria-live="polite">Loading tutors…</div>
+  <section class="ta-tutor-grid" id="tutorGrid" aria-label="Tutor assignment list"></section>
+</main>
+
+<dialog class="ta-remove-dialog" id="removeDialog" aria-labelledby="removeDialogTitle">
+  <form method="dialog">
+    <h2 id="removeDialogTitle">Remove this assignment?</h2>
+    <p id="removeDialogText"></p>
+    <p class="ta-dialog-note">Removal is permitted only when the tutor has not started the pathway. Training evidence and assessor records are never deleted here.</p>
+    <div class="ta-dialog-actions">
+      <button class="btn btn-outline" value="cancel">Keep assignment</button>
+      <button class="btn ta-danger-btn" id="confirmRemove" value="confirm">Remove assignment</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/tutor-academy-ui.js?v=20260831"></script>
+<script src="/assets/js/tutor-academy-assign.js?v=20260901"></script>
+</body>
+</html>

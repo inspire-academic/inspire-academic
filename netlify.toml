@@ -386,6 +386,12 @@ function = "create-teacher"
   force = true
 
 [[redirects]]
+  from = "/api/v1/tutor-academy/assignments"
+  to = "/.netlify/functions/tutor-academy-assignments"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/api/v1/tutor-academy/gate-decision"
   to = "/.netlify/functions/tutor-academy-gate-decision"
   status = 200

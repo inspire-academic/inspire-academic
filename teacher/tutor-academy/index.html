@@ -123,7 +123,7 @@ async function checkAuth() {
   }
   if (profile.full_name) document.getElementById('topbar-user').textContent = profile.full_name
   if (['admin','super_admin'].includes(profile.role)) {
-    document.getElementById('assessor-link').innerHTML = '<a href="/teacher/tutor-academy/assessor.html" style="color:var(--gold);font-size:.85rem;text-decoration:none;">Assessor view →</a>'
+    document.getElementById('assessor-link').innerHTML = '<a href="/teacher/tutor-academy/assign.html" style="color:var(--gold);font-size:.85rem;text-decoration:none;margin-right:1.2rem;">Assign tutors →</a><a href="/teacher/tutor-academy/assessor.html" style="color:var(--gold);font-size:.85rem;text-decoration:none;">Assessor view →</a>'
   }
   document.getElementById('authLoading').style.display = 'none'
   return session
@@ -169,8 +169,8 @@ async function loadProgrammes(session) {
       <div class="programme-icon" aria-hidden="true">${programmeIcon(p)}</div>
       <div class="programme-body">
         <div class="programme-title">${escHtml(p.name)}</div>
-        <div class="programme-sub">${enrolled ? 'You are enrolled — continue your pathway.' : 'Four stages, from entry diagnostic to full clearance.'}</div>
-        <a class="programme-cta" href="/teacher/tutor-academy/${escHtml(p.id)}.html">${enrolled ? 'Continue' : 'Start'} pathway →</a>
+        <div class="programme-sub">${enrolled ? `Assigned${enrolled.deadline ? ` · target ${new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium' }).format(new Date(enrolled.deadline))}` : ''}.` : 'Awaiting assignment by your Academy administrator.'}</div>
+        ${enrolled ? `<a class="programme-cta" href="/teacher/tutor-academy/${escHtml(p.id)}.html">Continue pathway →</a>` : '<span class="coming-soon-badge">Not assigned</span>'}
       </div>
     </div>`
   }).join('') || '<p style="color:var(--muted);text-align:center;">No programmes available yet.</p>'
