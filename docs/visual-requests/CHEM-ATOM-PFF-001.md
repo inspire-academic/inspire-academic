@@ -93,6 +93,9 @@ explicitly approves it scientifically and visually at Gate 5.
 - First render rejected because of an unnecessary malformed explanatory line.
 - Corrected render removes that line while preserving all required labels,
   values, formulae, arrows and apparatus.
+- Human review requested a calmer textbook treatment: the decorative gold rule
+  and flourish beneath the title were removed without changing the scientific
+  illustration or labels.
 - Production asset: `CHEM-ATOM-PFF-001.webp`, 1200 × 800, 62,172 bytes.
 - Lesson contains no inline SVG after remediation.
 - Real-text caption states the equation, 100 = 56 + 44 conservation and 56%
