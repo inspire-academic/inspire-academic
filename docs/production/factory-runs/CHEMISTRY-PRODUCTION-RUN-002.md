@@ -1,6 +1,6 @@
 # Chemistry Production Run 002 — Reacting Masses from Balanced Equations
 
-**Status:** QA COMPLETE / AWAITING GATE 8 HUMAN APPROVAL  
+**Status:** STAGING QA CANDIDATE / AWAITING GATE 8 HUMAN APPROVAL
 **Branch:** `codex/chemistry-reacting-masses`  
 **Authorised base:** `aebcc5904c92baa94eda91e140238ed4bed107b5`
 
@@ -85,8 +85,14 @@ Lesson architecture and exam numbering: PASS
 
 ## Publication state
 
-- Supabase lesson row: none.
-- Storage upload: none.
-- Staging publication: no.
+- Staging deployment commit: `fab9d54969d899e4a91e89a93b2d56b9c7c61a76`.
+- Supabase lesson row: `2d790982-7c9d-4384-9023-b80b9bac2ca1`.
+- Storage object: `chemistry/quantitative-chem/1788225798501-quantitative-chemistry-reacting-masses.html`.
+- Content URL: `https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/quantitative-chem/1788225798501-quantitative-chemistry-reacting-masses.html`.
+- Viewer URL: `https://staging.inspireacademic.org/student/lesson-viewer.html?id=2d790982-7c9d-4384-9023-b80b9bac2ca1`.
+- Row metadata: Chemistry (`subject_id: 3`), Quantitative Chem (`topic_id: 16`), HTML, Both boards, Both tiers, 50 minutes, order 2.
+- `is_published`: `false` — retained as an admin-only QA draft.
+- Upload integrity: local MD5 `4d3f79836edfc3bf2446c54a3fdc8cd8` matched the storage ETag; the uploaded file is the committed lesson, not a regenerated copy.
+- Real viewer check: PASS in authenticated external Chrome; full lesson content rendered through the existing blob-iframe path with no page-origin console warnings or errors.
 - Production publication: no.
-- Gate 8 approval: required before any upload or publication action.
+- Gate 8 approval: required before changing `is_published` to `true`.

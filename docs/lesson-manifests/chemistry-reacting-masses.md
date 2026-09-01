@@ -14,7 +14,7 @@ specSlugs:
 qaState: QA_COMPLETE
 sourceCommit: aebcc5904c92baa94eda91e140238ed4bed107b5
 sourcePilotDoc: docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md
-lessonsRowId: null
+lessonsRowId: 2d790982-7c9d-4384-9023-b80b9bac2ca1
 publicationCommit: null
 ```
 
@@ -113,6 +113,18 @@ regressions were added: 379/379 PASS.
 
 ## APPROVAL / PUBLICATION STATE
 
-This is a genuinely new lesson. It must not be marked `HUMAN_APPROVED`,
-uploaded, inserted into Supabase, or published until Gates 1–7 pass and the
-user explicitly grants Gate 8 approval.
+This is a genuinely new lesson. Gates 1–7 passed and the user authorised its
+staging deployment and unpublished QA registration on 2026-09-01. The exact
+repository file was uploaded through the existing lesson-admin path and
+registered as:
+
+```text
+lessons row:      2d790982-7c9d-4384-9023-b80b9bac2ca1
+content_url:      https://ygtsrdwoikqnrbexjrtl.supabase.co/storage/v1/object/public/lesson-content/chemistry/quantitative-chem/1788225798501-quantitative-chemistry-reacting-masses.html
+is_published:     false
+real viewer:      https://staging.inspireacademic.org/student/lesson-viewer.html?id=2d790982-7c9d-4384-9023-b80b9bac2ca1
+```
+
+The lesson remains a draft QA candidate. It must not be marked
+`HUMAN_APPROVED` or published until the user explicitly grants Gate 8
+approval after reviewing the real viewer.
