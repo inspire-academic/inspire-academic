@@ -55,6 +55,7 @@
   <div class="path-head">
     <h1>GCSE Biology Tutor Pathway</h1>
     <p id="cert-status"></p>
+    <p class="ta-deadline" id="pathwayDeadline"></p>
     <div class="overall-progress" id="overall-progress"></div>
   </div>
 
@@ -97,18 +98,16 @@ async function ensureEnrolled(session) {
   const { data: existing } = await supa.from('tutor_academy_enrollments')
     .select('*').eq('profile_id', session.user.id).eq('programme_id', PROGRAMME_ID).maybeSingle()
   if (existing) return existing
-  await fetch('/api/v1/tutor-academy/enroll', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-    body: JSON.stringify({ programmeId: PROGRAMME_ID, firstStageId: STAGE_IDS[0] })
-  })
-  const { data: created } = await supa.from('tutor_academy_enrollments')
-    .select('*').eq('profile_id', session.user.id).eq('programme_id', PROGRAMME_ID).maybeSingle()
-  return created
+  const notice = document.getElementById('pathwayNotice')
+  notice.style.display = 'block'
+  notice.textContent = 'This pathway has not been assigned to you yet. Ask your Tutor Academy administrator to assign it.'
+  document.getElementById('stage-list').innerHTML = ''
+  return null
 }
 
 async function loadPathway(session) {
   const enrollment = await ensureEnrolled(session)
+  if (!enrollment) return
   const { data: progressRows } = await supa.from('tutor_academy_progress')
     .select('stage_id, section_id, status').eq('profile_id', session.user.id)
 
@@ -120,6 +119,9 @@ async function loadPathway(session) {
   })
 
   document.getElementById('cert-status').innerHTML = window.TutorAcademyUI.renderCertificationStatus(enrollment ? enrollment.status : 'in_training')
+  document.getElementById('pathwayDeadline').textContent = enrollment.deadline
+    ? `Target completion date: ${new Intl.DateTimeFormat('en-GB', { dateStyle: 'long' }).format(new Date(enrollment.deadline))}`
+    : 'No completion deadline has been set.'
 
   let totalSections = 0, totalComplete = 0
   let firstIncompleteIdx = 0
