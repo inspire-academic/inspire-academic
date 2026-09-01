@@ -11,7 +11,7 @@ tier: Both
 specSlugs:
   - aqa-ch-fh-quantitative
   - edx-ch-fh-quantitative
-qaState: QA_COMPLETE
+qaState: HUMAN_APPROVED
 sourceCommit: dbfc8fc4b4658da291352d711fc31db915000e4f
 sourcePilotDoc: docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md
 lessonsRowId: null
@@ -90,7 +90,7 @@ Locked numerical anchors for regression coverage:
 ## QA STATE
 
 ```text
-qaState: QA_COMPLETE
+qaState: HUMAN_APPROVED
 Gate 1 curriculum scope: PASS
 Gate 2 academic review: PASS — calculations and loss mechanisms checked
 Gate 3 assessment review: PASS — 3 diagnostic, 3 guided, 5 independent,
@@ -103,13 +103,13 @@ Gate 6 accessibility: PASS — semantic structure, accessible SVG names,
 Gate 7 rendered/browser QA: PASS — desktop and exact 320px; Dark/Higher and
   Light/Foundation; Learn/Practice, MCQ feedback, mobile menu and reminder
   drawer verified with no browser warnings or errors
-Gate 8 human approval: OUTSTANDING
+Gate 8 human approval: PASS — explicitly approved 2026-09-01
 Complete repository suite: 398/398 PASS
 Publication: none
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
-Gates 1–7 have passed and the lesson is ready for Gate 8 human review. This
-manifest does not authorise a Supabase upload, lesson row, publication, or
-human approval claim.
+Gates 1–7 passed and the user explicitly approved Gate 8 on 2026-09-01,
+authorising promotion and publication. Publication identifiers remain empty
+until the real deployed lesson and row have been verified.

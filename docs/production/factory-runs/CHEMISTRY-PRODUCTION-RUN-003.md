@@ -1,6 +1,6 @@
 # Chemistry Production Run 003 — Percentage Yield
 
-**Status:** GATES 1–7 PASS / GATE 8 HUMAN REVIEW REQUIRED
+**Status:** GATE 8 HUMAN APPROVED / PROMOTION AUTHORISED
 **Branch:** `codex/chemistry-percentage-yield`
 **Authorised base:** `dbfc8fc4b4658da291352d711fc31db915000e4f`
 
@@ -63,7 +63,7 @@ tests/chemistry-percentage-yield.test.js
 | 5 Representation | TECHNICAL PASS — three exact deterministic figures |
 | 6 Accessibility | PASS — automated and interaction checks |
 | 7 Rendered QA | PASS — desktop, exact 320px and all state controls checked |
-| 8 Human approval | OUTSTANDING |
+| 8 Human approval | PASS — explicitly approved 2026-09-01 |
 
 ## QA evidence
 
@@ -84,4 +84,6 @@ switching, answer feedback, mobile navigation, the reminder drawer with focus
 return, all three scientific representations, and desktop plus exact 320px
 layouts.
 
-No upload, database row or publication action is authorised by this record.
+The user explicitly authorised promotion to `main` and publication on
+2026-09-01. Deployment and publication identifiers will be recorded only
+after the real site and lesson row are verified.
