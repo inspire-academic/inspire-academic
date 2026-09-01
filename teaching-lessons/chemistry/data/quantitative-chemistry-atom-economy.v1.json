@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "lessonId": "chemistry-atom-economy",
+  "subject": "Chemistry",
+  "title": "Atom Economy",
+  "blocks": [
+    {
+      "id": "orientation",
+      "type": "explanation",
+      "order": 1,
+      "learningGoal": "Distinguish atom economy from percentage yield and identify the desired product.",
+      "tier": "Both",
+      "content": {
+        "centralQuestion": "How much of the reactant mass becomes the product we actually want?",
+        "keyDistinction": "Yield compares actual with theoretical product; atom economy compares desired product with all products/reactants in the balanced equation."
+      }
+    },
+    {
+      "id": "core-model",
+      "type": "explanation",
+      "order": 2,
+      "learningGoal": "Explain atom economy as the proportion of reactant atoms ending in the desired product.",
+      "tier": "Both",
+      "content": {
+        "formula": "percentage atom economy = total Mr of desired product / total Mr of all reactants × 100",
+        "rules": [
+          "Use the balanced equation.",
+          "Multiply each Mr by its coefficient.",
+          "Include every reactant in the denominator.",
+          "Atom economy is theoretical and cannot be improved by more careful laboratory technique."
+        ]
+      }
+    },
+    {
+      "id": "mass-allocation",
+      "type": "diagram",
+      "order": 3,
+      "learningGoal": "Track conserved reactant mass into desired product and by-products.",
+      "tier": "Both",
+      "content": {
+        "representation": "deterministic mass-allocation flow",
+        "assessedInformation": "reactant total = desired product mass + by-product mass"
+      }
+    },
+    {
+      "id": "atom-allocation-explorer",
+      "type": "simulation",
+      "order": 4,
+      "learningGoal": "Explore how changing the desired product changes atom economy without changing the balanced reaction.",
+      "tier": "Both",
+      "componentId": "chemistry-atom-allocation-explorer",
+      "inputs": {
+        "equation": "CaCO3 -> CaO + CO2",
+        "products": [
+          { "formula": "CaO", "coefficient": 1, "mr": 56 },
+          { "formula": "CO2", "coefficient": 1, "mr": 44 }
+        ],
+        "defaultDesiredProduct": "CaO"
+      },
+      "fallback": {
+        "kind": "diagram",
+        "content": "#ae-atom-allocation-diagram"
+      },
+      "accessibility": {
+        "label": "Atom allocation explorer",
+        "description": "Compare the fraction of calcium carbonate mass forming calcium oxide with the fraction forming carbon dioxide.",
+        "keyboardInstructions": "Use the product buttons to choose the desired product; the same values are presented in the fallback diagram and text."
+      }
+    },
+    {
+      "id": "worked-caco3",
+      "type": "worked-example",
+      "order": 5,
+      "learningGoal": "Calculate atom economy for a one-to-one decomposition equation.",
+      "tier": "Both",
+      "content": {
+        "equation": "CaCO3 -> CaO + CO2",
+        "desiredProduct": "CaO",
+        "calculation": "56 / 100 × 100 = 56%"
+      }
+    },
+    {
+      "id": "worked-titanium",
+      "type": "worked-example",
+      "order": 6,
+      "learningGoal": "Use coefficients when calculating the total relative formula mass of reactants.",
+      "tier": "Both",
+      "content": {
+        "equation": "TiO2 + 2Mg -> Ti + 2MgO",
+        "desiredProduct": "Ti",
+        "calculation": "48 / (80 + 2 × 24) × 100 = 37.5%"
+      }
+    },
+    {
+      "id": "route-choice",
+      "type": "question",
+      "order": 7,
+      "learningGoal": "Evaluate reaction routes using atom economy alongside other supplied evidence.",
+      "tier": "Higher",
+      "content": {
+        "evidenceFields": ["atom economy", "percentage yield", "rate", "equilibrium position", "usefulness of by-products"],
+        "guardrail": "A higher atom economy alone does not automatically prove the best industrial route."
+      }
+    },
+    {
+      "id": "assessment",
+      "type": "assessment",
+      "order": 8,
+      "learningGoal": "Demonstrate secure calculation, interpretation and route-evaluation skills.",
+      "tier": "Both",
+      "content": {
+        "diagnostic": 3,
+        "guided": 3,
+        "independent": 5,
+        "examPractice": 6,
+        "exit": 2
+      }
+    }
+  ]
+}
