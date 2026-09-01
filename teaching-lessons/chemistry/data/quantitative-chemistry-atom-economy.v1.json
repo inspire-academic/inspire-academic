@@ -12,7 +12,15 @@
       "tier": "Both",
       "content": {
         "centralQuestion": "How much of the reactant mass becomes the product we actually want?",
-        "keyDistinction": "Yield compares actual with theoretical product; atom economy compares desired product with all products/reactants in the balanced equation."
+        "keyDistinction": "Yield compares actual with theoretical product; atom economy compares desired product with all products/reactants in the balanced equation.",
+        "objectives": [
+          "Identify the desired product and by-products in a balanced equation.",
+          "Explain atom economy as the proportion of reactant atoms ending in the desired product.",
+          "Calculate percentage atom economy using coefficient × Mr values.",
+          "Explain why high atom economy supports sustainable and economic manufacture.",
+          "Distinguish atom economy from percentage yield.",
+          "Evaluate reaction routes using several supplied criteria."
+        ]
       }
     },
     {
@@ -23,6 +31,7 @@
       "tier": "Both",
       "content": {
         "formula": "percentage atom economy = total Mr of desired product / total Mr of all reactants × 100",
+        "explanation": "Atoms are conserved, but a reaction may make more than one product. Atom economy measures what fraction of the starting-material mass is built into the product we want rather than into by-products.",
         "rules": [
           "Use the balanced equation.",
           "Multiply each Mr by its coefficient.",
@@ -39,7 +48,8 @@
       "tier": "Both",
       "content": {
         "representation": "deterministic mass-allocation flow",
-        "assessedInformation": "reactant total = desired product mass + by-product mass"
+        "assessedInformation": "reactant total = desired product mass + by-product mass",
+        "example": "CaCO3 -> CaO + CO2; 100 mass units -> 56 desired + 44 by-product"
       }
     },
     {
@@ -76,7 +86,12 @@
       "content": {
         "equation": "CaCO3 -> CaO + CO2",
         "desiredProduct": "CaO",
-        "calculation": "56 / 100 × 100 = 56%"
+        "calculation": "56 / 100 × 100 = 56%",
+        "steps": [
+          "Mr(CaO) = 40 + 16 = 56.",
+          "Total Mr of reactants = Mr(CaCO3) = 40 + 12 + 48 = 100.",
+          "Atom economy = 56 / 100 × 100 = 56%."
+        ]
       }
     },
     {
@@ -88,7 +103,12 @@
       "content": {
         "equation": "TiO2 + 2Mg -> Ti + 2MgO",
         "desiredProduct": "Ti",
-        "calculation": "48 / (80 + 2 × 24) × 100 = 37.5%"
+        "calculation": "48 / (80 + 2 × 24) × 100 = 37.5%",
+        "steps": [
+          "Mr(Ti) = 48.",
+          "Total reactant mass = 80 + (2 × 24) = 128.",
+          "Atom economy = 48 / 128 × 100 = 37.5%."
+        ]
       }
     },
     {
@@ -99,7 +119,8 @@
       "tier": "Higher",
       "content": {
         "evidenceFields": ["atom economy", "percentage yield", "rate", "equilibrium position", "usefulness of by-products"],
-        "guardrail": "A higher atom economy alone does not automatically prove the best industrial route."
+        "guardrail": "A higher atom economy alone does not automatically prove the best industrial route.",
+        "method": "Compare every supplied criterion, identify trade-offs, then make a supported judgement."
       }
     },
     {
@@ -109,11 +130,35 @@
       "learningGoal": "Demonstrate secure calculation, interpretation and route-evaluation skills.",
       "tier": "Both",
       "content": {
-        "diagnostic": 3,
-        "guided": 3,
-        "independent": 5,
-        "examPractice": 6,
-        "exit": 2
+        "diagnostic": [
+          { "stem": "What do coefficients in a balanced equation represent?", "options": ["Mass ratios", "Mole ratios", "Percentage yields", "Reaction rates"], "answer": 1, "feedback": "Coefficients give relative numbers of particles and moles." },
+          { "stem": "Which statement describes conservation of mass?", "options": ["Product mass is always lower", "Atoms are lost as heat", "Total reactant mass equals total product mass", "Every reaction gives one product"], "answer": 2, "feedback": "Atoms are rearranged, so total mass is conserved in a closed system." },
+          { "stem": "Which value is needed to calculate a compound's Mr?", "options": ["Atomic numbers", "Relative atomic masses", "Percentage yield", "Reaction time"], "answer": 1, "feedback": "Add the relative atomic masses shown by the formula." }
+        ],
+        "guided": [
+          { "stem": "CaCO3 -> CaO + CO2. CaO is desired. Calculate the atom economy. Mr: CaCO3 = 100, CaO = 56.", "hints": ["Desired product goes in the numerator.", "Use 56 / 100 × 100."], "solution": "56%" },
+          { "stem": "2H2 + O2 -> 2H2O. Water is desired. Calculate the atom economy.", "hints": ["Water is the only product.", "All reactant atoms enter water."], "solution": "100%" },
+          { "stem": "TiO2 + 2Mg -> Ti + 2MgO. Titanium is desired. Calculate the atom economy. Mr: TiO2 = 80; Mg = 24; Ti = 48.", "hints": ["The coefficient makes magnesium's contribution 2 × 24.", "Use 48 / (80 + 48) × 100."], "solution": "37.5%" }
+        ],
+        "independent": [
+          { "stem": "CaCO3 -> CaO + CO2. If CO2 is the desired product, what is the atom economy? Mr: CaCO3 = 100; CO2 = 44.", "options": ["44%", "56%", "100%", "144%"], "answer": 0, "feedback": "44 / 100 × 100 = 44%. Changing the desired product changes the numerator." },
+          { "stem": "Which reaction has 100% atom economy for its only product?", "options": ["CaCO3 -> CaO + CO2", "2H2 + O2 -> 2H2O", "CuCO3 -> CuO + CO2", "2KClO3 -> 2KCl + 3O2"], "answer": 1, "feedback": "Water is the only product, so every reactant atom enters the desired product." },
+          { "stem": "Why must a coefficient multiply Mr in an atom-economy calculation?", "options": ["It changes the formula", "It gives the number of formula units in the equation", "It measures yield", "It removes by-products"], "answer": 1, "feedback": "Coefficient × Mr gives that substance's relative mass contribution." },
+          { "stem": "A reaction has 70% atom economy but 90% yield. What do the values mean?", "options": ["They are interchangeable", "70% of reactant mass is in desired product; 90% of theoretical desired product was obtained", "70% reacted; 90% was waste", "The result is impossible"], "answer": 1, "feedback": "Atom economy measures allocation; yield measures practical recovery." },
+          { "stem": "Which change can improve percentage yield but cannot change atom economy for a fixed equation?", "options": ["Choosing a different desired product", "Reducing transfer losses", "Changing the balanced equation", "Selecting a different reaction route"], "answer": 1, "feedback": "Careful transfer may improve recovery, but the equation fixes atom economy." }
+        ],
+        "examPractice": [
+          { "command": "State", "marks": 1, "tier": "Both", "stem": "State what is meant by atom economy.", "markScheme": ["The percentage/proportion of reactant atoms or mass that forms the desired product."] },
+          { "command": "Calculate", "marks": 2, "tier": "Both", "stem": "CaCO3 -> CaO + CO2. Calculate the atom economy for CaO. Mr: CaCO3 = 100; CaO = 56.", "markScheme": ["56 / 100 × 100", "56%"] },
+          { "command": "Explain", "marks": 2, "tier": "Both", "stem": "Explain why a reaction with high atom economy can support sustainable manufacture.", "markScheme": ["More reactant atoms enter the desired product", "Less waste/by-product is produced or fewer resources are wasted"] },
+          { "command": "Calculate", "marks": 4, "tier": "Both", "stem": "Cu2S + O2 -> 2Cu + SO2. Calculate the atom economy for SO2. Mr: Cu2S = 159; O2 = 32; SO2 = 64. Give 2 significant figures.", "markScheme": ["Total reactant Mr = 159 + 32 = 191", "Uses 64 / 191", "× 100 = 33.5...%", "34% to 2 significant figures"] },
+          { "command": "Explain", "marks": 3, "tier": "Higher", "stem": "A student says that improving filtration will increase atom economy. Explain why this is incorrect.", "markScheme": ["Filtration may improve actual recovery/percentage yield", "Atom economy is calculated from the balanced equation", "The equation and allocation to desired/by-products are unchanged"] },
+          { "command": "Evaluate", "marks": 5, "tier": "Higher", "stem": "Route A has 82% atom economy, 65% yield and a fast rate. Route B has 68% atom economy, 92% yield, a slower rate and a useful by-product. Evaluate which route should be chosen.", "markScheme": ["Route A creates less waste by atom economy", "Route A is faster", "Route B recovers more theoretical product", "Route B's by-product may have value/reduce effective waste", "Supported judgement acknowledging that more cost/energy/equilibrium data may be needed"] }
+        ],
+        "exit": [
+          { "stem": "Which quantity is fixed by a balanced equation?", "options": ["Actual yield", "Atom economy", "Transfer loss", "Reaction time"], "answer": 1, "feedback": "Atom economy follows the equation's allocation of atoms." },
+          { "stem": "Desired Mr = 72 and total reactant Mr = 120. What is the atom economy?", "options": ["40%", "60%", "72%", "167%"], "answer": 1, "feedback": "72 / 120 × 100 = 60%." }
+        ]
       }
     }
   ]

@@ -1,6 +1,6 @@
 # Chemistry Production Run 004 — Atom Economy
 
-**Status:** CURRICULUM SCOPE FROZEN / CONTENT CONTRACT STARTED
+**Status:** GATES 1–7 PASS / GATE 8 HUMAN REVIEW REQUIRED
 **Branch:** `codex/chemistry-atom-economy`
 **Authorised base:** `cad70f38bb4d1ba158525a1b3b97f7dd13cbde55`
 
@@ -72,13 +72,36 @@ tests/chemistry-atom-economy.test.js
 | Gate | State |
 |---|---|
 | 1 Curriculum | PASS — official AQA/Pearson scope checked |
-| 2 Academic | IN PROGRESS |
-| 3 Assessment | IN PROGRESS |
-| 4 Build | IN PROGRESS |
-| 5 Representation | OUTSTANDING |
-| 6 Accessibility | OUTSTANDING |
-| 7 Rendered QA | OUTSTANDING |
+| 2 Academic | PASS — terminology, calculations and board scope checked |
+| 3 Assessment | PASS — contracted inventory and tier distinction delivered |
+| 4 Build | PASS — v1 content contract mapped to the established lesson UI |
+| 5 Representation | TECHNICAL PASS — three exact deterministic figures |
+| 6 Accessibility | PASS — automated and interaction checks |
+| 7 Rendered QA | PASS — desktop, exact 320px and all state controls checked |
 | 8 Human approval | OUTSTANDING |
 
-No deployment, upload, lesson row or publication is authorised by this start
-record.
+## QA evidence
+
+```text
+Focused contract, science and manifest checks: 36/36 PASS
+Complete repository suite: 424/424 PASS
+HTML syntax and local references: PASS
+Manifest contract and curriculum slugs: PASS
+Accessibility and duplicate IDs: PASS
+Asset URL and raster-budget checks: PASS
+Frozen production lessons: PASS
+Browser console: no warnings or errors
+Exact 320px page overflow: none
+```
+
+Rendered checks covered Dark/Higher and Light/Foundation, Learn/Practice
+switching, all 19 assessment items, answer feedback, mobile navigation, the
+reminder drawer, confidence and completion controls, and desktop plus exact
+320px layouts.
+
+The optional simulation was deliberately tested without a provider adapter.
+The complete deterministic mass-allocation diagram remained available, proving
+that content is durable while interaction is an additive platform capability.
+
+No deployment, upload, lesson row or publication is authorised by this run
+record. Gate 8 human approval remains required.
