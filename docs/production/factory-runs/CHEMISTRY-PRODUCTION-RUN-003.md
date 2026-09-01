@@ -1,6 +1,6 @@
 # Chemistry Production Run 003 — Percentage Yield
 
-**Status:** GATE 8 HUMAN APPROVED / PROMOTION AUTHORISED
+**Status:** PUBLISHED / GATE 8 HUMAN APPROVED
 **Branch:** `codex/chemistry-percentage-yield`
 **Authorised base:** `dbfc8fc4b4658da291352d711fc31db915000e4f`
 
@@ -84,6 +84,19 @@ switching, answer feedback, mobile navigation, the reminder drawer with focus
 return, all three scientific representations, and desktop plus exact 320px
 layouts.
 
-The user explicitly authorised promotion to `main` and publication on
-2026-09-01. Deployment and publication identifiers will be recorded only
-after the real site and lesson row are verified.
+## Publication state
+
+- User approval and publication authorisation: 2026-09-01.
+- Staging deployment: `cad70f38bb4d1ba158525a1b3b97f7dd13cbde55`.
+- Production deployment: `11cc4ebdbfd6f880b5125623a0bcdb6812353a84`.
+- Lesson row: `1111a56f-db87-46be-b700-49e1b3bcd508`.
+- Storage object:
+  `chemistry/quantitative-chem/1788275622895-quantitative-chemistry-percentage-yield.html`.
+- Stored HTML SHA-256:
+  `e532203addf1f38624bfb56bce94552603dedb1af15448a2c3d13325dbea91ba`,
+  exactly matching the approved local file.
+- `is_published: true`; Both boards; Both tiers; 50 minutes; topic order 3.
+- Production viewer:
+  `https://www.inspireacademic.org/student/lesson-viewer.html?id=1111a56f-db87-46be-b700-49e1b3bcd508`.
+- External Chrome: full blob-iframe content rendered; no page warnings/errors.
+- Production student library: PASS — exactly one Percentage Yield entry.
