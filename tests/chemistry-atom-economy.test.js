@@ -32,6 +32,12 @@ test('Atom Economy preserves the authored scientific anchors', () => {
   assert.match(lesson, /34% to 2 s\.f\./);
 });
 
+test('Atom Economy uses the approved Premium-First representation route', () => {
+  assert.match(lesson, /CHEM-ATOM-PFF-001\.webp/);
+  assert.match(lesson, /Where the mass goes/);
+  assert.doesNotMatch(lesson, /<svg\b/i);
+});
+
 test('Atom Economy distinguishes equation efficiency from practical yield', () => {
   assert.match(lesson, /Atom economy is fixed by the equation/i);
   assert.match(lesson, /Yield compares actual with theoretical product/i);

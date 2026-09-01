@@ -11,7 +11,7 @@ tier: Both
 specSlugs:
   - aqa-ch-fh-quantitative
   - edx-ch-fh-quantitative
-qaState: QA_COMPLETE
+qaState: IN_PRODUCTION
 sourceCommit: cad70f38bb4d1ba158525a1b3b97f7dd13cbde55
 sourcePilotDoc: docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md
 contentSchemaVersion: 1
@@ -71,36 +71,39 @@ Cu2S + O2 -> 2Cu + SO2; desired SO2: 64/191 × 100 = 34% (2 s.f.)
 
 ## REPRESENTATION NEEDS
 
-- Deterministic mass-allocation flow because exact conserved proportions are
-  assessed information.
-- Deterministic coefficient × M\(_r\) denominator builder.
-- Deterministic comparison of atom economy with percentage yield.
+- **Mode C — Premium Final Figure:** realistic calcium-carbonate lime-kiln
+  scene showing the 100 → 56 desired + 44 by-product mass allocation. Exact
+  assessed values are repeated in real text immediately below the image.
+- Native semantic calculation strip for coefficient × M\(_r\), keeping exact
+  numerical notation selectable and accessible without an explanatory SVG.
+- Native semantic comparison cards for atom economy versus percentage yield.
 - Provider-neutral optional atom-allocation explorer with a complete diagram
   fallback and accessibility metadata.
 
 ## QA STATE
 
 ```text
-qaState: QA_COMPLETE
+qaState: IN_PRODUCTION
 Gate 1 curriculum scope: PASS
 Gate 2 academic review: PASS — calculations, terminology and board scope checked
 Gate 3 assessment review: PASS — 3 diagnostic, 3 guided, 5 independent,
   6 exam-practice and 2 exit items; original wording throughout
 Gate 4 build/integration: PASS — semantic v1 content contract maps to the
   self-contained lesson without changing legacy Factory v0 behaviour
-Gate 5 representation quality: TECHNICAL PASS — three deterministic figures
-  preserve exact mass allocation, coefficient contribution and measure contrast
-Gate 6 accessibility: PASS — semantic structure, accessible SVG names,
-  keyboard controls, unique live and cloned IDs, and reminder focus return verified
-Gate 7 rendered/browser QA: PASS — desktop and exact 320px; Dark/Higher and
-  Light/Foundation; Learn/Practice, MCQ feedback, mobile menu, reminder drawer,
-  confidence and completion verified with no browser warnings or errors
+Gate 5 representation quality: TECHNICAL PASS / HUMAN REVIEW REQUIRED — prior
+  SVG rejected; Mode C replacement integrated and independently science-checked
+Gate 6 accessibility: PASS — descriptive alt text and complete real-text
+  equivalent; semantic calculation/comparison blocks; unique IDs verified
+Gate 7 rendered/browser QA: PASS — desktop and exact 320px integration; image
+  loaded at 1200 × 800; no SVG, browser warnings, errors or horizontal overflow
 Gate 8 human approval: OUTSTANDING
-Complete repository suite: 424/424 PASS
+Complete repository suite: 425/425 PASS
 Publication: none
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
-Gates 1–7 are complete. Gate 8 human approval, deployment, lesson-row creation
-and publication remain outstanding and are not claimed.
+Gate 5 has been reopened following explicit human rejection of the SVG visual.
+The premium replacement is integrated and Gates 6–7 have been rechecked. Human
+Gate 5 approval, Gate 8 approval, deployment, row creation and publication are
+not claimed.

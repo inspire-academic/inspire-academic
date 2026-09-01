@@ -1,6 +1,6 @@
 # Chemistry Production Run 004 — Atom Economy
 
-**Status:** GATES 1–7 PASS / GATE 8 HUMAN REVIEW REQUIRED
+**Status:** PREMIUM FIGURE INTEGRATED / HUMAN GATE 5 REVIEW REQUIRED
 **Branch:** `codex/chemistry-atom-economy`
 **Authorised base:** `cad70f38bb4d1ba158525a1b3b97f7dd13cbde55`
 
@@ -46,9 +46,10 @@ HTML will render matching `data-ile-block` attributes and consume shared v1
 design tokens with inline fallbacks.
 
 The atom-allocation explorer is declared as an optional, provider-neutral
-`simulation` block. Run 004 will ship a complete deterministic diagram fallback;
-no simulation provider or plugin is required. A future adapter can enhance the
-same learning block without rewriting its chemistry content.
+`simulation` block. Run 004 will ship the complete premium mass-allocation
+figure and its real-text explanation as the fallback; no simulation provider or
+plugin is required. A future adapter can enhance the same learning block
+without rewriting its chemistry content.
 
 Legacy lessons remain unchanged and playable. This run does not redesign the
 viewer, publication pipeline, Factory v0 gates or frozen lesson HTML.
@@ -75,16 +76,16 @@ tests/chemistry-atom-economy.test.js
 | 2 Academic | PASS — terminology, calculations and board scope checked |
 | 3 Assessment | PASS — contracted inventory and tier distinction delivered |
 | 4 Build | PASS — v1 content contract mapped to the established lesson UI |
-| 5 Representation | TECHNICAL PASS — three exact deterministic figures |
-| 6 Accessibility | PASS — automated and interaction checks |
-| 7 Rendered QA | PASS — desktop, exact 320px and all state controls checked |
+| 5 Representation | TECHNICAL PASS / HUMAN REVIEW REQUIRED — Mode C replacement integrated |
+| 6 Accessibility | PASS — alt text plus complete real-text equivalent verified |
+| 7 Rendered QA | PASS — desktop and exact 320px integration rechecked |
 | 8 Human approval | OUTSTANDING |
 
 ## QA evidence
 
 ```text
-Focused contract, science and manifest checks: 36/36 PASS
-Complete repository suite: 424/424 PASS
+Focused contract, science and manifest checks: 37/37 PASS
+Complete repository suite: 425/425 PASS
 HTML syntax and local references: PASS
 Manifest contract and curriculum slugs: PASS
 Accessibility and duplicate IDs: PASS
@@ -99,9 +100,9 @@ switching, all 19 assessment items, answer feedback, mobile navigation, the
 reminder drawer, confidence and completion controls, and desktop plus exact
 320px layouts.
 
-The optional simulation was deliberately tested without a provider adapter.
-The complete deterministic mass-allocation diagram remained available, proving
-that content is durable while interaction is an additive platform capability.
+The optional simulation will again be tested without a provider adapter. Its
+fallback is now the premium figure plus complete real-text scientific
+equivalent, preserving durable content while interaction remains additive.
 
 No deployment, upload, lesson row or publication is authorised by this run
 record. Gate 8 human approval remains required.
