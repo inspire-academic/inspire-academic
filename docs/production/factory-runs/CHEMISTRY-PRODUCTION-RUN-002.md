@@ -1,7 +1,7 @@
 # Chemistry Production Run 002 — Reacting Masses from Balanced Equations
 
 **Status:** STAGING QA CANDIDATE / AWAITING GATE 8 HUMAN APPROVAL
-**Branch:** `codex/chemistry-reacting-masses`  
+**Branch:** `codex/chemistry-reacting-masses`
 **Authorised base:** `aebcc5904c92baa94eda91e140238ed4bed107b5`
 
 ## Production scope
