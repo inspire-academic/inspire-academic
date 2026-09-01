@@ -124,6 +124,36 @@ html,body{height:100%;overflow:hidden;}
   .complete-btn-text{display:inline;}
   .download-btn-text{display:inline;}
 }
+
+/* ── LESSON STUDY UI V2 ── */
+.viewer-header{
+  height:64px;
+  padding:0 clamp(.75rem,2vw,1.5rem);
+  border-bottom:1px solid #d9e0e7;
+  background:#fff;
+  color:#102a43;
+  box-shadow:0 1px 8px rgba(20,42,67,.045);
+}
+.back-btn{border-color:#d9e0e7;color:#52657a;border-radius:8px;background:#fff;}
+.back-btn:hover{border-color:#0f4d80;color:#0f4d80;}
+.header-title{font-family:Georgia,"Times New Roman",serif;font-size:1.05rem;letter-spacing:-.01em;}
+.header-badges{gap:.55rem;}
+.badge{padding:.18rem .15rem;border-radius:0;background:transparent!important;color:#52657a!important;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:.58rem;}
+.badge + .badge{padding-left:.65rem;border-left:1px solid #d9e0e7;}
+.complete-btn{border-radius:8px;background:#e1b548;color:#102a43;box-shadow:none;}
+.complete-btn:hover{background:#d6a934;}
+.complete-btn.done{background:#087f6c;color:#fff;}
+.download-btn{border-color:#d9e0e7;border-radius:8px;color:#52657a;}
+.viewer-content{top:64px;background:#f6f4ef;}
+.loading-overlay{background:#f6f4ef;}
+.loading-text{color:#52657a;}
+.spinner{border-color:#d9e0e7;border-top-color:#087f6c;}
+@media(max-width:760px){
+  .viewer-header{height:56px;}
+  .viewer-content{top:56px;}
+  .header-badges{display:none;}
+  .header-title{font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:.78rem;}
+}
 </style>
 </head>
 <body>
@@ -249,13 +279,24 @@ async function renderContent(lesson){
       html = await response.text();
     }
 
+    // Apply the shared study presentation at the viewer boundary. Stored lesson
+    // HTML remains the source of truth for content and behaviour; this layer is
+    // presentation/progress only, so existing published lessons can improve
+    // without rewriting their scientific content.
+    const studyUiOrigin = window.location.origin;
+    const studyUiHead = `<link rel="stylesheet" href="${studyUiOrigin}/assets/css/lesson-study-ui-v2.css">`;
+    const studyUiScript = `<script src="${studyUiOrigin}/assets/js/lesson-study-ui-v2.js"><\/script>`;
+
     // Override internal masterclass layout constraints so content fills the iframe
     const overrideStyle = `<style>
 .app{grid-template-columns:260px 1fr!important;}
 .main{max-width:100%!important;padding:32px 40px!important;}
 body{overflow-x:hidden!important;}
 </style>`;
-    html = html.replace('</head>', overrideStyle + '</head>');
+    html = html.replace('</head>', studyUiHead + overrideStyle + '</head>');
+    html = html.includes('</body>')
+      ? html.replace('</body>', studyUiScript + '</body>')
+      : html + studyUiScript;
 
     const blob = new Blob([html], { type: 'text/html' });
     const blobUrl = URL.createObjectURL(blob);
