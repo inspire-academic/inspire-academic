@@ -1,0 +1,22 @@
+/* Inspire lesson-platform tokens v1.
+   These stable aliases are the shared UI seam for new factory lessons.
+   Lessons retain inline fallback values so legacy/offline playback remains safe. */
+:root {
+  --ile-platform-font-display: Georgia, "Times New Roman", serif;
+  --ile-platform-font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+  --ile-platform-radius-card: 16px;
+  --ile-platform-radius-control: 10px;
+  --ile-platform-space-page: clamp(10px, 3vw, 32px);
+  --ile-platform-space-card: clamp(16px, 3vw, 24px);
+  --ile-platform-accent: #34d399;
+  --ile-platform-accent-deep: #059669;
+  --ile-platform-highlight: #e2bd61;
+  --ile-platform-focus: #f7d778;
+  --ile-platform-success: #52e3a4;
+  --ile-platform-error: #ff8d8d;
+  --ile-platform-motion-fast: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --ile-platform-motion-fast: 0ms; }
+}
