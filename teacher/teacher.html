@@ -1569,12 +1569,23 @@ async function changeRole(userId, newRole, selectEl) {
   }
 
   selectEl.disabled = true;
-  const { error } = await supa.from('profiles')
-    .update({ role: newRole })
-    .eq('id', userId);
+  let ok = false, errorMessage = '';
+  try {
+    const { data: { session: currentSession } } = await supa.auth.getSession();
+    const res = await fetch('/api/v1/users/update-role', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${currentSession.access_token}` },
+      body: JSON.stringify({ userId, newRole })
+    });
+    const json = await res.json();
+    ok = json.success;
+    if (!ok) errorMessage = json.error?.message || 'Unknown error';
+  } catch (e) {
+    errorMessage = e.message;
+  }
 
-  if (error) {
-    alert('Failed to update role: ' + error.message);
+  if (!ok) {
+    alert('Failed to update role: ' + errorMessage);
     selectEl.disabled = false;
     return;
   }

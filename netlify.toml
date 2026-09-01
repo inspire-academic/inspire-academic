@@ -390,3 +390,12 @@ function = "create-teacher"
   to = "/.netlify/functions/tutor-academy-gate-decision"
   status = 200
   force = true
+
+# Admin-only user-role changes — profiles has no client-writable
+# UPDATE policy, so teacher.html's Users & Roles panel needs a
+# service-role-keyed path to actually persist a role change.
+[[redirects]]
+  from = "/api/v1/users/update-role"
+  to = "/.netlify/functions/update-user-role"
+  status = 200
+  force = true
