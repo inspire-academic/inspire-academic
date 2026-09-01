@@ -14,8 +14,8 @@ specSlugs:
 qaState: HUMAN_APPROVED
 sourceCommit: dbfc8fc4b4658da291352d711fc31db915000e4f
 sourcePilotDoc: docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md
-lessonsRowId: null
-publicationCommit: null
+lessonsRowId: 1111a56f-db87-46be-b700-49e1b3bcd508
+publicationCommit: 11cc4ebdbfd6f880b5125623a0bcdb6812353a84
 ```
 
 ## LEARNING OBJECTIVES
@@ -105,11 +105,22 @@ Gate 7 rendered/browser QA: PASS — desktop and exact 320px; Dark/Higher and
   drawer verified with no browser warnings or errors
 Gate 8 human approval: PASS — explicitly approved 2026-09-01
 Complete repository suite: 398/398 PASS
-Publication: none
+Publication: PASS — production student listing and viewer verified
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
-Gates 1–7 passed and the user explicitly approved Gate 8 on 2026-09-01,
-authorising promotion and publication. Publication identifiers remain empty
-until the real deployed lesson and row have been verified.
+Gates 1–7 passed and the user explicitly approved Gate 8 on 2026-09-01.
+The approved lesson was promoted and published through the existing admin path.
+
+```text
+Staging deployment commit: cad70f38bb4d1ba158525a1b3b97f7dd13cbde55
+Production deployment commit: 11cc4ebdbfd6f880b5125623a0bcdb6812353a84
+Lessons row: 1111a56f-db87-46be-b700-49e1b3bcd508
+Storage object: chemistry/quantitative-chem/1788275622895-quantitative-chemistry-percentage-yield.html
+Storage SHA-256: e532203addf1f38624bfb56bce94552603dedb1af15448a2c3d13325dbea91ba
+is_published: true
+Viewer: https://www.inspireacademic.org/student/lesson-viewer.html?id=1111a56f-db87-46be-b700-49e1b3bcd508
+Student library: PASS — exactly one Percentage Yield entry
+External Chrome rendered QA: PASS — full blob-iframe lesson, no warnings/errors
+```
