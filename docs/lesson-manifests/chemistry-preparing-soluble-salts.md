@@ -11,7 +11,7 @@ tier: Both
 specSlugs:
   - aqa-ch-fh-chemical-changes
   - edx-ch-fh-acids-bases
-qaState: PLANNING
+qaState: HUMAN_REVIEW
 sourceCommit: cf38470c4b363ea9039b7236d43459e6017b626c
 sourcePilotDoc: docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md
 contentSchemaVersion: 1
@@ -63,19 +63,18 @@ The lesson will use copper(II) oxide and dilute sulfuric acid as the common work
 ## QA STATE
 
 ```text
-qaState: PLANNING
+qaState: HUMAN_REVIEW
 Gate 1 curriculum scope: PASS
-Gate 2 academic review: PENDING
-Gate 3 assessment review: PENDING
-Gate 4 build/integration: PENDING
-Gate 5 representation quality: PENDING
-Gate 6 accessibility: PENDING
-Gate 7 rendered/browser QA: PENDING
+Gate 2 academic review: PASS
+Gate 3 assessment review: PASS
+Gate 4 build/integration: PASS
+Gate 5 representation quality: PASS — technical review; human review remains Gate 8
+Gate 6 accessibility: PASS
+Gate 7 rendered/browser QA: PASS — desktop and 390 × 844 responsive view
 Gate 8 human approval: PENDING
 Publication: none
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
-This production run has started in an isolated worktree. No lesson-row creation, deployment or publication is authorised or claimed.
-
+The lesson is complete in the isolated worktree and awaits Gate 8 human approval. The complete committed Factory suite passes 519/519. No lesson-row creation, deployment or publication is authorised or claimed.

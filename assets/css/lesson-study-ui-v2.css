@@ -418,7 +418,6 @@ body.ile-study-ui-v2 .ile-diagram-figure img {
   box-shadow: 0 2px 10px rgba(20, 42, 67, .035);
 }
 
-.ile-study-rail-card + .ile-study-rail-card { margin-top: 16px; }
 .ile-study-rail h2,
 .ile-study-rail h3 {
   margin: 0 0 14px;
@@ -426,67 +425,6 @@ body.ile-study-ui-v2 .ile-diagram-figure img {
   font-family: Georgia, "Times New Roman", serif;
   font-size: .96rem;
 }
-
-.ile-study-progress-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-  color: var(--muted);
-  font-size: .7rem;
-}
-
-.ile-study-progress-track {
-  flex: 1;
-  height: 5px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--border);
-}
-
-.ile-study-progress-fill {
-  display: block;
-  width: 0;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--green);
-  transition: width 180ms ease;
-}
-
-.ile-study-rail-list { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
-.ile-study-rail-list a,
-.ile-study-rail-list button {
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr) 16px;
-  gap: 8px;
-  align-items: center;
-  width: 100%;
-  padding: 7px 0;
-  border: 0;
-  background: transparent;
-  color: var(--muted);
-  text-align: left;
-  text-decoration: none;
-  font: inherit;
-  font-size: .72rem;
-  cursor: pointer;
-}
-
-.ile-study-rail-index {
-  display: grid;
-  width: 21px;
-  height: 21px;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  color: var(--green);
-  font-size: .62rem;
-}
-
-.ile-study-rail-state { color: transparent; font-weight: 800; }
-.ile-study-rail-list .is-complete .ile-study-rail-state { color: var(--green); }
-.ile-study-rail-list .is-active { color: var(--text); font-weight: 800; }
-.ile-study-rail-list .is-active .ile-study-rail-index { border-color: #0f4d80; background: #0f4d80; color: #fff; }
 
 .ile-study-reference {
   color: var(--muted);
@@ -548,10 +486,6 @@ body.ile-study-ui-v2 .ile-diagram-figure img {
   body.ile-study-ui-v2 .ile-method dt { padding-bottom: 2px; border-bottom: 0; }
   body.ile-study-ui-v2 .ile-method-grid dd,
   body.ile-study-ui-v2 .ile-method dd { padding-top: 2px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ile-study-progress-fill { transition: none; }
 }
 
 @media print {
