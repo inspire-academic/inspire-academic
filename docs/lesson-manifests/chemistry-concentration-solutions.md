@@ -11,13 +11,13 @@ tier: Both
 specSlugs:
   - aqa-ch-fh-quantitative
   - edx-ch-fh-quantitative
-qaState: IN_PRODUCTION
+qaState: HUMAN_APPROVED
 sourceCommit: 98d66cb72b2de45e0d981d30475721dac1401f84
 sourcePilotDoc: docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md
 contentSchemaVersion: 1
 contentContract: teaching-lessons/chemistry/data/quantitative-chemistry-concentration-solutions.v1.json
-lessonsRowId: null
-publicationCommit: null
+lessonsRowId: ca2fe8f1-c09a-429f-86ba-7ac62ac8b141
+publicationCommit: 007f3b5e42dfa037c5e1d7dbbfc9aa87bdcbe18a
 ```
 
 ## LEARNING OBJECTIVES
@@ -64,19 +64,19 @@ Required-practical technique is contextual only. This lesson does not claim to r
 ## QA STATE
 
 ```text
-qaState: IN_PRODUCTION
+qaState: HUMAN_APPROVED
 Gate 1 curriculum scope: PASS
 Gate 2 academic review: PASS — equations, units, board/tier boundary and numerical anchors checked
 Gate 3 assessment review: PASS — 3 diagnostic, 3 guided, 5 independent, 4 exam and 2 exit items
 Gate 4 build/integration: PASS — Content Contract v1 and shared Study UI shell preserved
-Gate 5 representation quality: TECHNICAL PASS / HUMAN REVIEW REQUIRED
+Gate 5 representation quality: PASS — human-approved premium realistic figure
 Gate 6 accessibility: PASS — meaningful alt text, real-text numerical equivalent and valid references
 Gate 7 rendered/browser QA: PASS — desktop and exact 320px, light default, tier/mode/feedback interactions
-Gate 8 human approval: OUTSTANDING
-Complete repository suite: 468/468 PASS
-Publication: none
+Gate 8 human approval: PASS — publication authorised by the product owner
+Complete repository suite: 472/472 PASS
+Publication: PUBLISHED — lesson row ca2fe8f1-c09a-429f-86ba-7ac62ac8b141
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
-No deployment, lesson-row creation or publication is authorised or claimed. Human Gate 5 and Gate 8 review remain required.
+Published to the production student listing from main commit `007f3b5e42dfa037c5e1d7dbbfc9aa87bdcbe18a` as lesson row `ca2fe8f1-c09a-429f-86ba-7ac62ac8b141`.
