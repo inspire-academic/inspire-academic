@@ -11,13 +11,13 @@ tier: Both
 specSlugs:
   - aqa-ch-fh-chemical-changes
   - edx-ch-fh-quantitative
-qaState: IN_PRODUCTION
+qaState: HUMAN_APPROVED
 sourceCommit: 0f02abe8a1273b21bfef09e80a65363919aa356a
 sourcePilotDoc: docs/benchmark/CHEMISTRY-PRODUCTION-BENCHMARK.md
 contentSchemaVersion: 1
 contentContract: teaching-lessons/chemistry/data/chemical-changes-acid-alkali-titration.v1.json
-lessonsRowId: null
-publicationCommit: null
+lessonsRowId: c08b8c6f-e0d4-4ee3-bcd2-8d5d4e895cb8
+publicationCommit: cf38470c4b363ea9039b7236d43459e6017b626c
 ```
 
 ## LEARNING OBJECTIVES
@@ -65,19 +65,19 @@ The lesson stays with strong acid–strong alkali titration. It does not expand 
 ## QA STATE
 
 ```text
-qaState: IN_PRODUCTION
+qaState: HUMAN_APPROVED
 Gate 1 curriculum scope: PASS
 Gate 2 academic review: PASS — apparatus, endpoint, concordance, calculations and board/tier boundary checked
 Gate 3 assessment review: PASS — 3 diagnostic, 3 guided, 5 independent, 4 exam and 2 exit items
 Gate 4 build/integration: PASS — Content Contract v1 and shared Study UI shell preserved
-Gate 5 representation quality: TECHNICAL PASS / HUMAN REVIEW REQUIRED
+Gate 5 representation quality: PASS — realistic apparatus figure approved by the human reviewer
 Gate 6 accessibility: PASS — meaningful alt text, complete real-text equivalent and valid references
 Gate 7 rendered/browser QA: PASS — desktop and exact 320px, light default, tier/mode/feedback interactions
-Gate 8 human approval: OUTSTANDING
+Gate 8 human approval: PASS — authorised for staging, main and student publication
 Complete repository suite: 495/495 PASS
-Publication: none
+Publication: LIVE — student row c08b8c6f-e0d4-4ee3-bcd2-8d5d4e895cb8
 ```
 
 ## APPROVAL / PUBLICATION STATE
 
-No deployment, lesson-row creation or publication is authorised or claimed. Human Gate 5 and Gate 8 review remain required.
+Published from main commit `cf38470c4b363ea9039b7236d43459e6017b626c`. The live student viewer is `https://www.inspireacademic.org/student/lesson-viewer.html?id=c08b8c6f-e0d4-4ee3-bcd2-8d5d4e895cb8`.
