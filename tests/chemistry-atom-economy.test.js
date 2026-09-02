@@ -19,6 +19,13 @@ test('Atom Economy content contract is valid and every semantic block maps to UI
   assert.match(lesson, /lesson-platform-contract-v1\.js/);
 });
 
+test('Atom Economy exposes the shared lesson shell required by Study UI v2', () => {
+  assert.match(lesson, /<div class="ile-shell">/);
+  assert.match(lesson, /<aside class="ile-sidebar"/);
+  assert.match(lesson, /<div class="ile-main">/);
+  assert.match(lesson, /<main class="ile-content"/);
+});
+
 test('Atom Economy preserves the authored scientific anchors', () => {
   const cases = [
     { desired: 56, total: 100, expected: 56 },
