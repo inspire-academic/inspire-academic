@@ -11,7 +11,7 @@ const updateUserRole = require('../netlify/functions/update-user-role.js');
 const AUTH_HEADER = { authorization: 'Bearer test-token' };
 const MOCK_ADMIN = { id: 'admin-123', email: 'admin@example.com' };
 
-function withMockFetch({ authOk = true, callerRole = 'admin', patchOk = true, patchedRows = [{ id: 'target-user', role: 'teacher_manager' }], onPatch } = {}, fn) {
+function withMockFetch({ authOk = true, callerRole = 'admin', patchOk = true, patchedRows = [{ id: 'target-user', role: 'teacher_manager' }], activeProgrammes = [{ id: 'biology-gcse' }], onPatch, onEnrol } = {}, fn) {
   const original = global.fetch;
   process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-key';
   global.fetch = async (url, opts = {}) => {
@@ -31,7 +31,17 @@ function withMockFetch({ authOk = true, callerRole = 'admin', patchOk = true, pa
         ? { ok: true, status: 200, json: async () => patchedRows }
         : { ok: false, status: 500, json: async () => ({}) };
     }
-    return { ok: true, status: 200, json: async () => ({}) };
+    if (u.includes('/rest/v1/tutor_academy_programmes')) {
+      return { ok: true, status: 200, json: async () => activeProgrammes };
+    }
+    if (u.includes('/rest/v1/tutor_academy_stages')) {
+      return { ok: true, status: 200, json: async () => ([{ id: 'biology-gcse-stage-1' }]) };
+    }
+    if (u.includes('/rest/v1/tutor_academy_enrollments') && method === 'POST') {
+      if (onEnrol) onEnrol(u, JSON.parse(opts.body));
+      return { ok: true, status: 201, json: async () => ([]) };
+    }
+    return { ok: true, status: 200, json: async () => ([]) };
   };
   return fn().finally(() => {
     global.fetch = original;
@@ -88,6 +98,66 @@ test('update-user-role: admin caller successfully promotes a student to teacher_
     assert.equal(body.profile.role, 'teacher_manager');
     assert.match(capturedUrl, /profiles\?id=eq\.target-user/);
     assert.equal(capturedBody.role, 'teacher_manager');
+  });
+});
+
+test('update-user-role: promoting to teacher_manager auto-enrols in every active programme', async () => {
+  const enrolments = [];
+  await withMockFetch({
+    activeProgrammes: [{ id: 'biology-gcse' }, { id: 'chemistry-gcse' }],
+    onEnrol: (u, b) => enrolments.push(b)
+  }, async () => {
+    const res = await updateUserRole.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ userId: 'target-user', newRole: 'teacher_manager' })
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(enrolments.length, 2);
+    assert.deepEqual(enrolments.map(e => e.programme_id).sort(), ['biology-gcse', 'chemistry-gcse']);
+    enrolments.forEach(e => {
+      assert.equal(e.profile_id, 'target-user');
+      assert.equal(e.current_stage_id, 'biology-gcse-stage-1');
+    });
+  });
+});
+
+test('update-user-role: promoting to plain teacher role also auto-enrols', async () => {
+  const enrolments = [];
+  await withMockFetch({ patchedRows: [{ id: 'target-user', role: 'teacher' }], onEnrol: (u, b) => enrolments.push(b) }, async () => {
+    await updateUserRole.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ userId: 'target-user', newRole: 'teacher' })
+    });
+    assert.equal(enrolments.length, 1);
+  });
+});
+
+test('update-user-role: demoting to student or promoting to admin does not touch Tutor Academy enrolments', async () => {
+  for (const newRole of ['student', 'admin']) {
+    const enrolments = [];
+    await withMockFetch({ patchedRows: [{ id: 'target-user', role: newRole }], onEnrol: (u, b) => enrolments.push(b) }, async () => {
+      await updateUserRole.handler({
+        httpMethod: 'POST', headers: AUTH_HEADER,
+        body: JSON.stringify({ userId: 'target-user', newRole })
+      });
+      assert.equal(enrolments.length, 0, `unexpected enrolment for newRole=${newRole}`);
+    });
+  }
+});
+
+test('update-user-role: a failed auto-enrol does not fail the role-change response', async () => {
+  await withMockFetch({}, async () => {
+    const original = global.fetch;
+    global.fetch = async (url, opts) => {
+      if (String(url).includes('tutor_academy_programmes')) throw new Error('network down');
+      return original(url, opts);
+    };
+    const res = await updateUserRole.handler({
+      httpMethod: 'POST', headers: AUTH_HEADER,
+      body: JSON.stringify({ userId: 'target-user', newRole: 'teacher_manager' })
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(JSON.parse(res.body).success, true);
   });
 });
 

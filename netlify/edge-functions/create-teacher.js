@@ -170,6 +170,35 @@ export default async function(request, context) {
     })
   })
 
+  // Step 4b: Auto-enrol into every active Tutor Academy programme —
+  // new teachers are assigned by default; an admin can still unassign
+  // afterward via teacher/tutor-academy/assign.html as long as the
+  // tutor hasn't started (see tutor-academy-assignments.js's DELETE
+  // guard). Not critical to account creation succeeding, so failures
+  // here are logged, not surfaced to the caller.
+  try {
+    const programmesRes = await fetch(`${SUPABASE_URL}/rest/v1/tutor_academy_programmes?status=eq.active&select=id`, {
+      headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}` }
+    })
+    const programmes = programmesRes.ok ? await programmesRes.json() : []
+    for (const programme of programmes) {
+      const stagesRes = await fetch(`${SUPABASE_URL}/rest/v1/tutor_academy_stages?programme_id=eq.${encodeURIComponent(programme.id)}&select=id&order=order_index.asc&limit=1`, {
+        headers: { 'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}` }
+      })
+      const stages = stagesRes.ok ? await stagesRes.json() : []
+      await fetch(`${SUPABASE_URL}/rest/v1/tutor_academy_enrollments`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_SERVICE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+          'Content-Type': 'application/json', 'Prefer': 'resolution=ignore-duplicates,return=minimal'
+        },
+        body: JSON.stringify({ profile_id: newUserId, programme_id: programme.id, current_stage_id: stages[0]?.id || null })
+      })
+    }
+  } catch (e) {
+    console.error('Tutor Academy auto-enrol error:', e)
+  }
+
   // Step 5: Log the action in audit log
   await fetch(`${SUPABASE_URL}/rest/v1/assessment_audit_log`, {
     method: 'POST',
