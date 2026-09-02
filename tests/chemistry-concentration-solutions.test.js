@@ -21,6 +21,8 @@ test('Concentration lesson exposes the shared Study UI shell', () => {
   for (const className of ['ile-shell', 'ile-sidebar', 'ile-main', 'ile-content']) {
     assert.match(lesson, new RegExp(`class="[^"]*${className}`));
   }
+  assert.match(lesson, /lesson-study-ui-v2\.css/);
+  assert.match(lesson, /lesson-study-ui-v2\.js/);
 });
 
 test('Concentration lesson preserves exact unit and calculation anchors', () => {

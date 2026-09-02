@@ -1,7 +1,7 @@
 # Chemistry Production Run 005 — Concentration of Solutions
 
-**Status:** TECHNICALLY READY / HUMAN GATE 5 AND GATE 8 REVIEW REQUIRED  
-**Branch:** `codex/chemistry-concentration-solutions`  
+**Status:** TECHNICALLY READY / HUMAN GATE 5 AND GATE 8 REVIEW REQUIRED
+**Branch:** `codex/chemistry-concentration-solutions`
 **Authorised base:** `98d66cb72b2de45e0d981d30475721dac1401f84`
 
 ## Scope
