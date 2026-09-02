@@ -41,24 +41,15 @@
 
   var rail = document.createElement('aside');
   rail.className = 'ile-study-rail';
-  rail.setAttribute('aria-label', 'Lesson progress and quick reference');
-  rail.innerHTML = [
-    '<section class="ile-study-rail-card">',
-    '<h2>Lesson progress</h2>',
-    '<div class="ile-study-progress-row">',
-    '<span class="ile-study-progress-track" aria-hidden="true"><span class="ile-study-progress-fill"></span></span>',
-    '<span class="ile-study-progress-label">1 of 1</span>',
-    '</div>',
-    '<ol class="ile-study-rail-list"></ol>',
-    '</section>'
-  ].join('');
+  rail.setAttribute('aria-label', 'Quick reference');
   main.appendChild(rail);
 
-  var list = rail.querySelector('.ile-study-rail-list');
-  var progressFill = rail.querySelector('.ile-study-progress-fill');
-  var progressLabel = rail.querySelector('.ile-study-progress-label');
+  function positionRail() {
+    var topbar = main.querySelector('.ile-topbar');
+    rail.style.top = topbar ? Math.max(0, topbar.getBoundingClientRect().bottom) + 'px' : '0px';
+  }
+
   var activeSections = [];
-  var railItems = [];
   var ticking = false;
 
   function visiblePanel() {
@@ -83,28 +74,6 @@
     var panel = visiblePanel();
     activeSections = Array.from(panel.querySelectorAll(':scope > .ile-section'));
     var sourceNav = navForPanel(panel);
-    var sourceItems = sourceNav ? Array.from(sourceNav.querySelectorAll('a, button')) : [];
-
-    list.replaceChildren();
-    railItems = [];
-    activeSections.forEach(function (section, index) {
-      var source = sourceItems[index];
-      var item = document.createElement('li');
-      var control = document.createElement(source && source.tagName === 'BUTTON' ? 'button' : 'a');
-      var label = source ? cleanLabel(source) : cleanLabel(section.querySelector('h1, h2, h3'));
-      var target = section.id ? '#' + section.id : '';
-      if (control.tagName === 'A') control.href = target;
-      else control.type = 'button';
-      control.innerHTML = '<span class="ile-study-rail-index">' + (index + 1) + '</span>' +
-        '<span>' + label + '</span><span class="ile-study-rail-state" aria-hidden="true">✓</span>';
-      control.addEventListener('click', function (event) {
-        event.preventDefault();
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-      item.appendChild(control);
-      list.appendChild(item);
-      railItems.push(control);
-    });
 
     var sidebarItems = sourceNav ? Array.from(sourceNav.querySelectorAll('a, button')) : [];
     sidebarItems.forEach(function (item, index) { item.dataset.studyIndex = String(index + 1); });
@@ -126,19 +95,12 @@
     ticking = false;
     if (!activeSections.length) return;
     var index = activeIndex();
-    var percent = ((index + 1) / activeSections.length) * 100;
-    progressFill.style.width = percent + '%';
-    progressLabel.textContent = (index + 1) + ' of ' + activeSections.length;
-    railItems.forEach(function (item, itemIndex) {
-      item.classList.toggle('is-active', itemIndex === index);
-      item.classList.toggle('is-complete', itemIndex < index);
-      if (itemIndex === index) item.setAttribute('aria-current', 'step');
-      else item.removeAttribute('aria-current');
-    });
 
     var sourceNav = navForPanel(visiblePanel());
     if (sourceNav) Array.from(sourceNav.querySelectorAll('a, button')).forEach(function (item, itemIndex) {
       item.classList.toggle('is-active', itemIndex === index);
+      if (itemIndex === index) item.setAttribute('aria-current', 'step');
+      else item.removeAttribute('aria-current');
     });
   }
 
@@ -179,12 +141,16 @@
   }
 
   window.addEventListener('scroll', scheduleProgress, { passive: true });
-  window.addEventListener('resize', scheduleProgress, { passive: true });
+  window.addEventListener('resize', function () {
+    positionRail();
+    scheduleProgress();
+  }, { passive: true });
 
   ['ileModeLearnBtn', 'ileModePracticeBtn'].forEach(function (id) {
     var button = document.getElementById(id);
     if (button) button.addEventListener('click', function () { setTimeout(buildRail, 0); });
   });
 
+  positionRail();
   buildRail();
 })();

@@ -24,11 +24,21 @@ test('study UI has calm light defaults and a responsive three-column reading lay
   assert.doesNotMatch(css, /glassmorphism/i);
 });
 
-test('study UI progress is derived from authored lesson sections', () => {
+test('study UI keeps section state on the authored left navigation only', () => {
   assert.match(js, /querySelectorAll\(':scope > \.ile-section'\)/);
-  assert.match(js, /scrollIntoView/);
   assert.match(js, /aria-current/);
   assert.match(js, /prefers-reduced-motion|requestAnimationFrame/);
+  assert.doesNotMatch(js, /Lesson progress/);
+  assert.doesNotMatch(js, /ile-study-rail-list/);
+});
+
+test('right rail contains Quick reference without duplicated lesson navigation', () => {
+  assert.match(js, /aria-label', 'Quick reference'/);
+  assert.match(js, /heading\.textContent = 'Quick reference'/);
+  assert.match(js, /referenceCandidates\(\)\.slice\(0, 2\)/);
+  assert.match(js, /topbar\.getBoundingClientRect\(\)\.bottom/);
+  assert.doesNotMatch(css, /ile-study-progress-(?:row|track|fill|label)/);
+  assert.doesNotMatch(css, /ile-study-rail-(?:list|index|state)/);
 });
 
 test('study UI defaults to light but retains a student theme choice', () => {
