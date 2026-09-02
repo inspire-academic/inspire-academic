@@ -12,6 +12,7 @@ const { verifyUser } = require('./_ai-usage-guard')
 
 const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
 const VALID_ROLES = ['student', 'teacher', 'teacher_manager', 'admin', 'super_admin']
+const TUTOR_ROLES = ['teacher', 'teacher_manager']
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -30,6 +31,34 @@ async function getRole(userId, serviceKey) {
   if (!r.ok) throw new Error(`Supabase request failed (${r.status})`)
   const rows = await r.json()
   return rows[0] && rows[0].role
+}
+
+// Tutors are assigned to every active Tutor Academy programme by
+// default the moment they become a teacher/teacher_manager — an admin
+// can still unassign afterward via assign.html, and because this only
+// fires here (on an explicit role change), not on every page visit,
+// that unassign actually sticks instead of being silently re-created.
+// ignore-duplicates makes this a no-op if already enrolled.
+async function autoEnrolInActiveProgrammes(profileId, serviceKey) {
+  const programmesRes = await fetch(`${SUPABASE_URL}/rest/v1/tutor_academy_programmes?status=eq.active&select=id`, {
+    headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` }
+  })
+  if (!programmesRes.ok) return
+  const programmes = await programmesRes.json()
+  for (const programme of programmes) {
+    const stagesRes = await fetch(`${SUPABASE_URL}/rest/v1/tutor_academy_stages?programme_id=eq.${encodeURIComponent(programme.id)}&select=id&order=order_index.asc&limit=1`, {
+      headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` }
+    })
+    const stages = stagesRes.ok ? await stagesRes.json() : []
+    await fetch(`${SUPABASE_URL}/rest/v1/tutor_academy_enrollments`, {
+      method: 'POST',
+      headers: {
+        apikey: serviceKey, Authorization: `Bearer ${serviceKey}`,
+        'Content-Type': 'application/json', Prefer: 'resolution=ignore-duplicates,return=minimal'
+      },
+      body: JSON.stringify({ profile_id: profileId, programme_id: programme.id, current_stage_id: stages[0]?.id || null })
+    })
+  }
 }
 
 exports.handler = async function (event) {
@@ -68,6 +97,11 @@ exports.handler = async function (event) {
     if (!r.ok) return reply(502, { success: false, error: { code: 'db_error', message: 'Could not update role' } })
     const updated = await r.json()
     if (!updated.length) return reply(404, { success: false, error: { code: 'not_found', message: 'No profile with that id' } })
+
+    if (TUTOR_ROLES.includes(newRole)) {
+      try { await autoEnrolInActiveProgrammes(userId, serviceKey) }
+      catch (e) { console.error('Tutor Academy auto-enrol error:', e) } // not critical — the role change itself already succeeded
+    }
 
     return reply(200, { success: true, profile: updated[0] })
   } catch (error) {
