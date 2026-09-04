@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inspire Science Mastery | GCSE Maths &amp; Science — Inspire Academic</title>
+<meta name="description" content="A structured GCSE Maths and Science mastery programme for Year 10 and Year 11 — live teaching, diagnostic assessment, a weekly Mastery Clinic, targeted intervention and clear progress visibility for parents.">
+<link rel="canonical" href="https://inspireacademic.org/programmes/science-mastery">
+<meta property="og:title" content="Inspire Science Mastery | GCSE Maths & Science">
+<meta property="og:description" content="A structured GCSE Maths and Science mastery programme for Year 10 and Year 11 students.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/global.css">
+<style>
+:root{
+  --sm:#c9a84c; --sm-light:#e8c96a; --sm-rgb:201,168,76;
+  --grad-sm: var(--grad-gold, linear-gradient(135deg, var(--sm), var(--sm-light)));
+  --r:12px;
+}
+body{overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--font-body);border:none;}
+.wrap{max-width:960px;margin:0 auto;padding:0 1.4rem;}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;max-width:960px;margin:0 auto;}
+.brand-link{font-family:var(--font-display);font-weight:700;font-size:1.1rem;}
+.brand-link .gold{color:var(--gold);}
+.theme-toggle{background:var(--bg-card);border:1px solid var(--border);color:var(--text-muted);width:36px;height:36px;border-radius:50%;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;}
+.theme-toggle:hover{border-color:var(--sm-light);color:var(--sm-light);}
+
+.hero{padding:2rem 0 2.6rem;text-align:center;}
+.eyebrow{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sm-light);margin-bottom:1.1rem;}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5.2vw,3.1rem);line-height:1.12;text-wrap:balance;margin-bottom:1.1rem;max-width:38rem;margin-left:auto;margin-right:auto;}
+.hero-sub{font-size:1.08rem;color:var(--text-muted);max-width:56ch;margin:0 auto 2rem;line-height:1.65;}
+.cta-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;background:var(--grad-sm);color:var(--bg-deep,#071b33);padding:.95rem 1.7rem;border-radius:var(--r);font-weight:800;font-size:.95rem;box-shadow:0 10px 30px rgba(var(--sm-rgb),.35);transition:transform .2s,box-shadow .2s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(var(--sm-rgb),.45);}
+.btn-secondary{display:inline-flex;align-items:center;gap:.5rem;background:var(--bg-card);color:var(--text);border:1px solid var(--border);padding:.95rem 1.7rem;border-radius:var(--r);font-weight:600;font-size:.95rem;transition:border-color .2s;}
+.btn-secondary:hover{border-color:var(--sm-light);}
+.hero-micro{font-size:.86rem;color:var(--text-soft);margin-top:1.2rem;}
+
+section{padding:2.2rem 0;border-top:1px solid var(--border);}
+h2{font-family:var(--font-display);font-weight:700;font-size:1.6rem;margin-bottom:1rem;text-wrap:balance;max-width:38rem;}
+p{line-height:1.7;color:var(--text-muted);margin-bottom:1rem;max-width:66ch;}
+p strong{color:var(--text);}
+
+.grid3{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1.6rem;}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.3rem 1.4rem;}
+.card h3{font-family:var(--font-body);font-weight:700;font-size:1rem;margin-bottom:.5rem;}
+.card p{font-size:.9rem;margin-bottom:0;}
+
+.steps{display:flex;flex-direction:column;gap:.8rem;margin-top:1.6rem;}
+.step{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--sm);border-radius:0 var(--r) var(--r) 0;padding:1.1rem 1.3rem;}
+.step strong{color:var(--text);}
+.step p{margin:.35rem 0 0;font-size:.92rem;}
+
+.plan-grid{display:grid;grid-template-columns:1fr;gap:1.1rem;margin-top:1.6rem;}
+.plan{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.4rem 1.6rem;}
+.plan h3{font-family:var(--font-display);font-size:1.15rem;margin-bottom:.4rem;}
+.plan .price{font-family:var(--font-display);font-size:1.9rem;font-weight:700;color:var(--sm-light);margin-bottom:.6rem;}
+.plan .price small{font-size:.9rem;color:var(--text-muted);font-weight:500;}
+.plan ul{margin:.8rem 0 0;padding-left:1.1rem;color:var(--text-muted);font-size:.88rem;line-height:1.8;}
+.plan .desc{font-size:.88rem;margin-bottom:0;}
+
+.note{font-size:.85rem;color:var(--text-soft);margin-top:1.4rem;padding:.9rem 1.1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);max-width:66ch;}
+
+.final-cta{text-align:center;}
+.short-url{font-size:.88rem;color:var(--text-muted);margin-top:1rem;}
+.short-url strong{font-family:var(--font-mono);color:var(--sm-light);font-weight:600;}
+
+footer{border-top:1px solid var(--border);padding:2rem 1.4rem 3rem;text-align:center;font-size:.82rem;color:var(--text-muted);}
+footer a{color:var(--sm-light);}
+
+a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:2px;border-radius:4px;}
+
+@media(min-width:641px){
+  .grid3{grid-template-columns:repeat(3,1fr);}
+  .plan-grid{grid-template-columns:repeat(3,1fr);}
+  section{padding:3rem 0;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark and light mode">&#9681;</button>
+</header>
+
+<main class="wrap">
+
+  <section class="hero" style="border-top:none;">
+    <div class="eyebrow">Inspire Academic &middot; September 2026 Intake</div>
+    <h1>GCSE Maths &amp; Science should not feel like four separate emergencies.</h1>
+    <p class="hero-sub">Inspire Science Mastery gives Year 10 and Year 11 students a structured pathway across Maths, Physics, Chemistry and Biology — live teaching, diagnostic assessment, targeted intervention, exam practice and clear progress visibility for parents.</p>
+    <div class="cta-row">
+      <a class="btn-primary js-register-cta" href="register/">Start the Mastery Diagnostic</a>
+      <a class="btn-secondary" href="#programme">See how ISM works</a>
+    </div>
+    <p class="hero-micro">Designed for families who want more than another weekly tutoring hour.</p>
+  </section>
+
+  <section class="problem">
+    <h2>Your child may not need "more tutoring." They need to know exactly what is holding them back.</h2>
+    <div class="grid3">
+      <div class="card"><h3>Knowledge gaps</h3><p>Small weaknesses compound quickly across GCSE Maths and the sciences. ISM identifies the gaps before simply adding more content.</p></div>
+      <div class="card"><h3>Exam execution</h3><p>Knowing the topic is not the same as converting knowledge into marks. Students practise application, calculations, explanations and exam technique.</p></div>
+      <div class="card"><h3>No clear system</h3><p>Four demanding subjects can become fragmented. ISM gives students a repeatable mastery pathway: learn, practise, assess, receive feedback, improve.</p></div>
+    </div>
+  </section>
+
+  <section id="programme">
+    <h2>Teach deeply. Diagnose precisely. Intervene where it matters.</h2>
+    <div class="steps">
+      <div class="step"><strong>1 — Mastery Teaching.</strong><p>Structured live instruction focused on the concepts and methods students must genuinely understand.</p></div>
+      <div class="step"><strong>2 — Mastery Clinic.</strong><p>A weekly shared learning touchpoint for difficult questions, misconceptions and exam-style problem solving.</p></div>
+      <div class="step"><strong>3 — Diagnostic Practice.</strong><p>Students practise and are assessed so support is based on evidence, not guesswork.</p></div>
+      <div class="step"><strong>4 — Targeted Intervention.</strong><p>Where a student needs more support, the programme can direct them into focused small-group intervention rather than repeating everything.</p></div>
+      <div class="step"><strong>5 — Parent Visibility.</strong><p>Parents receive meaningful information about progress, gaps and recommended next steps.</p></div>
+    </div>
+  </section>
+
+  <section id="diagnostic">
+    <h2>Start with the Inspire GCSE Mastery Diagnostic.</h2>
+    <p>We begin by identifying where your child is now — starting with the subject causing the most concern. The diagnostic surfaces priority strengths, gaps and areas needing attention, so we can recommend the right ISM pathway rather than guessing.</p>
+    <a class="btn-primary js-register-cta" href="register/">Start the Mastery Diagnostic</a>
+    <p class="note">The diagnostic does not predict a GCSE grade — it identifies strengths, priority gaps and a recommended next step for your child.</p>
+  </section>
+
+  <section id="membership">
+    <h2>Choose the level of support your child needs.</h2>
+    <div class="plan-grid">
+      <div class="plan">
+        <h3>Founding Membership</h3>
+        <div class="price">£169<small>/month</small></div>
+        <p class="desc">Limited launch places for eligible founding/warm families.</p>
+        <ul><li>Core live ISM teaching</li><li>Weekly Mastery Clinic</li><li>Inspire Academic learning platform</li><li>Diagnostics and progress tracking</li><li>Parent progress updates</li></ul>
+      </div>
+      <div class="plan">
+        <h3>Core</h3>
+        <div class="price">£199<small>/month</small></div>
+        <p class="desc">The standard ISM pathway.</p>
+        <ul><li>Core live ISM teaching</li><li>Weekly Mastery Clinic</li><li>Maths + Science mastery pathway</li><li>Exam-board aligned practice</li><li>Diagnostic recommendations</li></ul>
+      </div>
+      <div class="plan">
+        <h3>Plus</h3>
+        <div class="price">£249<small>/month</small></div>
+        <p class="desc">For students needing additional targeted support.</p>
+        <ul><li>Everything in Core</li><li>Additional small-group intervention when assigned</li><li>Priority diagnostic review</li><li>Enhanced parent progress review</li></ul>
+      </div>
+    </div>
+    <p class="note">Prices above are launch hypotheses being tested, not final commercial terms. Exact session frequency, term/holiday policy, cancellation terms and Plus intervention capacity will be confirmed before enrolment. Enrolment is arranged personally with our team, not by self-serve checkout, while these details are finalised.</p>
+  </section>
+
+  <section class="final-cta">
+    <h2>Find the gaps. Build the mastery. Change the trajectory.</h2>
+    <p style="max-width:44ch;margin-left:auto;margin-right:auto;">Begin with the Inspire GCSE Mastery Diagnostic and receive a clear recommendation for your child's next step.</p>
+    <a class="btn-primary js-register-cta" href="register/">Start the Mastery Diagnostic</a>
+    <p class="short-url">Or visit <strong>inspireacademic.org/science-mastery</strong> anytime.</p>
+  </section>
+
+</main>
+
+<footer>
+  <a href="/">&larr; Back to Inspire Academic</a>
+</footer>
+
+<script src="/assets/js/recruitment.js"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "115b324e79814b58b430653d922e778a"}'></script>
+<script>
+  (function(){
+    var html = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var saved = localStorage.getItem('ia-theme');
+    if (saved) html.setAttribute('data-theme', saved);
+    btn.addEventListener('click', function () {
+      var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('ia-theme', next);
+    });
+  })();
+</script>
+</body>
+</html>

@@ -28,6 +28,7 @@ exports.handler = async (event) => {
     child_name, parent_name, parent_email, parent_phone,
     school_name, heard_about_us,
     year_group, subjects_interested,
+    primary_concern, exam_board_hint,
     programme_name, programme_slug,
     source, campaign, page_url, submitted_at
   } = body;
@@ -64,6 +65,8 @@ exports.handler = async (event) => {
         heard_about_us: heard_about_us || null,
         year_group: year_group || null,
         subjects_interested: subjects_interested || null,
+        primary_concern: primary_concern || null,
+        exam_board_hint: exam_board_hint || null,
         programme_name: programme_name || null,
         programme_slug,
         source: source || null,

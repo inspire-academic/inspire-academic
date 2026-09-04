@@ -304,12 +304,38 @@ function = "create-teacher"
   to = "/assessment-engine/assessment-engine.html"
   status = 302
 
+# Inspire Science Mastery (ISM) — Campaign Ubuntu acquisition landing
+# page. Same short-URL/302 rationale as /bridge above.
+[[redirects]]
+  from = "/science-mastery"
+  to = "/programmes/science-mastery"
+  status = 302
+
 # API-first route for lead capture, following the /api/v1/resource/action
 # convention (CLAUDE.md principle 3) — kept separate from the older,
 # unversioned /api/* functions above.
 [[redirects]]
   from = "/api/v1/leads/create"
   to = "/.netlify/functions/leads-create"
+  status = 200
+  force = true
+
+# ISM Operation £6K / Campaign Ubuntu — admin-only pipeline CRUD.
+[[redirects]]
+  from = "/api/v1/ism-pipeline/list"
+  to = "/.netlify/functions/ism-pipeline-list"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/ism-pipeline/save"
+  to = "/.netlify/functions/ism-pipeline-save"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/ism-pipeline/note"
+  to = "/.netlify/functions/ism-pipeline-note"
   status = 200
   force = true
 

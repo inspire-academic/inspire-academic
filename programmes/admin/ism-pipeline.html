@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISM Pipeline — Campaign Ubuntu — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+:root{
+  --white:#F0EDE6;
+  --border:rgba(212,160,23,.18);--r:10px;
+  --green:#2ECC71;--amber:#F39C12;--red:#E74C3C;--blue:#3498DB;--purple:#9B59B6;--teal:#0e7c7b;
+}
+button{cursor:pointer;font-family:var(--font-body);border:none;}
+
+#loading-overlay{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:1rem;}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.app{display:flex;flex-direction:column;min-height:100vh;}
+.sidebar{width:100%;flex-shrink:0;background:var(--navy2);border-right:none;border-bottom:1px solid var(--border);display:flex;flex-direction:column;padding:1.5rem 0;position:static;height:auto;}
+.sidebar-logo{padding:0 1.5rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem;}
+.inspire{font-family:var(--font-display);font-style:italic;color:var(--gold);font-size:1.1rem;}
+.science{font-weight:700;font-size:1.1rem;}
+.s-badge{font-family:var(--font-mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem;}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.65rem 1.5rem;font-size:.9rem;color:var(--muted);transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,.04);}
+.nav-item.here{color:var(--gold);border-left-color:var(--gold);background:rgba(212,160,23,.06);}
+.nav-item .ico{font-size:1rem;width:20px;text-align:center;}
+.sidebar-footer{margin-top:auto;padding:1rem 1.5rem;border-top:1px solid var(--border);}
+.uname{font-size:.8rem;color:var(--muted);}
+.uname strong{display:block;color:var(--white);font-size:.9rem;margin-bottom:.15rem;}
+.sign-out{margin-top:.75rem;width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:.5rem;border-radius:var(--r);font-size:.8rem;transition:all .15s;}
+.sign-out:hover{border-color:var(--red);color:var(--red);}
+
+.main{flex:1;padding:1.25rem;overflow-y:auto;}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.pt{font-family:var(--font-display);font-size:1.8rem;}
+.ps{color:var(--muted);font-size:.9rem;margin-top:.3rem;}
+
+.tabs{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap;}
+.tab{padding:.55rem 1.1rem;border-radius:20px;border:1px solid var(--border);background:var(--navy2);color:var(--muted);font-size:.85rem;font-weight:600;}
+.tab.active{border-color:var(--gold);color:var(--gold);background:rgba(212,160,23,.08);}
+
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.sc{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.3rem;}
+.sl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.sv{font-family:var(--font-display);font-size:1.8rem;color:var(--gold);margin:.3rem 0 .1rem;line-height:1;}
+.ss{font-size:.78rem;color:var(--muted);}
+
+.funnel{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem;}
+.funnel-step{flex:1;min-width:110px;background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1rem;text-align:center;}
+.funnel-step .fv{font-family:var(--font-display);font-size:1.4rem;color:var(--white);}
+.funnel-step .fl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:.2rem;}
+.funnel-step .fc{font-size:.72rem;color:var(--gold);margin-top:.2rem;}
+
+.tc{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);overflow-x:auto;margin-bottom:1.5rem;}
+.th{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.tt{font-weight:600;font-size:.95rem;}
+.thr{display:flex;gap:.6rem;flex-wrap:wrap;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;padding:.7rem 1rem;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(0,0,0,.15);white-space:nowrap;}
+td{padding:.75rem 1rem;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.04);}
+tr:last-child td{border-bottom:none;}
+tr.clickable{cursor:pointer;}
+tr.clickable:hover td{background:rgba(255,255,255,.03);}
+
+.sinput,.sselect{padding:.55rem .9rem;border-radius:var(--r);background:var(--navy3);border:1.5px solid var(--border);color:var(--white);font-size:.82rem;outline:none;}
+.sinput:focus,.sselect:focus{border-color:var(--gold);}
+.btn{padding:.55rem 1.1rem;border-radius:var(--r);font-size:.82rem;font-weight:600;background:var(--gold);color:var(--navy);}
+.btn:hover{opacity:.9;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.btn-sm{padding:.35rem .7rem;font-size:.75rem;}
+
+.chip{display:inline-block;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .5rem;border-radius:3px;white-space:nowrap;}
+.c-new{background:rgba(52,152,219,.15);color:var(--blue);}
+.c-progress{background:rgba(243,156,18,.15);color:var(--amber);}
+.c-good{background:rgba(46,204,113,.15);color:var(--green);}
+.c-paid{background:rgba(155,89,182,.2);color:var(--purple);}
+.c-out{background:rgba(231,76,60,.15);color:var(--red);}
+.c-nurture{background:rgba(14,124,123,.18);color:var(--teal);}
+
+.empty{text-align:center;padding:3rem 1rem;color:var(--muted);}
+.ei{font-size:2.5rem;margin-bottom:.75rem;}
+.et{font-size:1rem;color:var(--white);margin-bottom:.4rem;}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;overflow-y:auto;}
+.modal-bg.show{display:flex;}
+.modal{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1.75rem;width:100%;max-width:640px;position:relative;max-height:92vh;overflow-y:auto;}
+.modal h2{font-family:var(--font-display);font-size:1.3rem;margin-bottom:1.2rem;}
+.modal-close{position:absolute;top:1rem;right:1.2rem;background:none;color:var(--muted);font-size:1.3rem;line-height:1;}
+.modal-close:hover{color:var(--white);}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.9rem;}
+.fgrid .full{grid-column:1/-1;}
+.flabel{display:block;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.35rem;}
+.finput,.fselect,.ftextarea{width:100%;padding:.6rem .8rem;border-radius:var(--r);background:var(--navy3);border:1.5px solid var(--border);color:var(--white);font-size:.85rem;font-family:var(--font-body);outline:none;}
+.finput:focus,.fselect:focus,.ftextarea:focus{border-color:var(--gold);}
+.ftextarea{resize:vertical;min-height:4rem;}
+.modal-actions{display:flex;justify-content:space-between;gap:.7rem;margin-top:1.3rem;flex-wrap:wrap;}
+.notes-log{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+.note-item{background:var(--navy3);border-radius:var(--r);padding:.7rem .9rem;margin-bottom:.6rem;font-size:.82rem;}
+.note-meta{color:var(--muted);font-size:.72rem;margin-bottom:.3rem;}
+.note-add{display:flex;gap:.6rem;margin-top:.8rem;}
+.note-add textarea{flex:1;}
+.import-panel{margin-top:.6rem;}
+.import-panel input[type=file]{color:var(--muted);font-size:.82rem;}
+.save-status{font-size:.78rem;color:var(--muted);margin-top:.6rem;min-height:1.1em;}
+.save-status.err{color:var(--red);}
+.save-status.ok{color:var(--green);}
+
+@media(min-width:769px){
+  .app{flex-direction:row;}
+  .sidebar{width:220px;border-right:1px solid var(--border);border-bottom:none;position:sticky;top:0;height:100vh;}
+  .main{padding:2rem;}
+  .stat-row{grid-template-columns:repeat(4,1fr);}
+}
+@media(max-width:480px){
+  .fgrid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div style="color:var(--muted);font-size:.9rem;margin-top:.5rem;">Loading…</div>
+</div>
+
+<div class="app">
+  <nav class="sidebar">
+    <a href="/index.html"><div class="sidebar-logo">
+      <div><span class="inspire">Inspire</span> <span class="science">Science</span></div>
+      <div class="s-badge">Admin Console</div>
+    </div></a>
+    <a href="/teacher/teacher.html"><div class="nav-item"><span class="ico">📊</span><span>Dashboard</span></div></a>
+    <a href="/teacher/admin-teacher-mgmt.html"><div class="nav-item"><span class="ico">👩‍🏫</span><span>Manage Teachers</span></div></a>
+    <a href="/programmes/admin/leads.html"><div class="nav-item"><span class="ico">📋</span><span>Registrations</span></div></a>
+    <div class="nav-item here"><span class="ico">🎯</span><span>ISM Pipeline</span></div>
+    <a href="/year6/admin-submissions.html"><div class="nav-item"><span class="ico">🧪</span><span>Year 6 Submissions</span></div></a>
+    <div class="sidebar-footer">
+      <div class="uname"><strong id="admin-name">Admin</strong>Admin Account</div>
+      <button class="sign-out" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="ph">
+      <div>
+        <div class="pt">ISM Pipeline</div>
+        <div class="ps">Campaign Ubuntu — Operation £6K acquisition pipeline</div>
+      </div>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="openImport()">⬆ Import CSV</button>
+        <button class="btn btn-sm" onclick="openModal(null)">+ Add family</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" id="tab-today" onclick="setView('today')">Today</button>
+      <button class="tab" id="tab-all" onclick="setView('all')">All pipeline</button>
+      <button class="tab" id="tab-leads" onclick="setView('leads')">New registrations</button>
+    </div>
+
+    <div id="funnel-wrap" class="funnel"></div>
+
+    <div class="stat-row" id="stat-row"></div>
+
+    <div class="tc">
+      <div class="th">
+        <div class="tt" id="table-title">Today's action queue</div>
+        <div class="thr">
+          <select class="sselect" id="f-status" onchange="render()" style="display:none;"><option value="">All statuses</option></select>
+          <input type="text" class="sinput" style="width:200px;" placeholder="Search name or email…" oninput="render()" id="f-search">
+        </div>
+      </div>
+      <div id="twrap"><div class="empty"><div class="spinner" style="margin:0 auto;"></div></div></div>
+    </div>
+  </main>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-bg" id="m-edit">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h2 id="m-edit-title">Add family</h2>
+    <form id="editForm" onsubmit="saveRecord(event)">
+      <input type="hidden" id="f-id">
+      <input type="hidden" id="f-lead-id">
+      <div class="fgrid">
+        <div><label class="flabel">Parent name</label><input class="finput" id="f-parent-name" required></div>
+        <div><label class="flabel">Child name</label><input class="finput" id="f-child-name"></div>
+        <div><label class="flabel">Parent email</label><input class="finput" type="email" id="f-parent-email"></div>
+        <div><label class="flabel">Parent phone</label><input class="finput" id="f-parent-phone"></div>
+        <div><label class="flabel">Year group</label><input class="finput" id="f-year-group" placeholder="Year 10"></div>
+        <div>
+          <label class="flabel">Source</label>
+          <select class="fselect" id="f-source">
+            <option value="">—</option>
+            <option value="existing_parent">Existing parent</option>
+            <option value="previous_parent">Previous parent</option>
+            <option value="personal_network">Personal network</option>
+            <option value="parent_referral">Parent referral</option>
+            <option value="church">Church</option>
+            <option value="community">Community organisation</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="organic">Organic web</option>
+            <option value="social">Social</option>
+            <option value="paid">Paid advertising</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="full"><label class="flabel">Referral note</label><input class="finput" id="f-referral-note" placeholder="Who referred them / which partner"></div>
+        <div class="full"><label class="flabel">Primary concern</label><textarea class="ftextarea" id="f-concern"></textarea></div>
+        <div><label class="flabel">Subjects of concern</label><input class="finput" id="f-subjects"></div>
+        <div><label class="flabel">Diagnostic link / notes</label><input class="finput" id="f-diagnostic-link" placeholder="Where to find the report"></div>
+        <div>
+          <label class="flabel">Status</label>
+          <select class="fselect" id="f-status-edit">
+            <option value="NEW">New</option>
+            <option value="CONTACTED">Contacted</option>
+            <option value="REPLIED">Replied</option>
+            <option value="DIAGNOSTIC_SENT">Diagnostic sent</option>
+            <option value="DIAGNOSTIC_COMPLETE">Diagnostic complete</option>
+            <option value="REVIEW_BOOKED">Review booked</option>
+            <option value="OFFERED">Offered</option>
+            <option value="PAID">Paid</option>
+            <option value="NURTURE">Nurture</option>
+            <option value="NOT_NOW">Not now</option>
+            <option value="NOT_FIT">Not a fit</option>
+            <option value="LOST">Lost</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Owner</label>
+          <select class="fselect" id="f-owner"><option value="">Unassigned</option></select>
+        </div>
+        <div><label class="flabel">Review date</label><input class="finput" type="date" id="f-review-date"></div>
+        <div>
+          <label class="flabel">Review outcome / objection type</label>
+          <select class="fselect" id="f-review-outcome">
+            <option value="">—</option>
+            <option value="price">Price</option>
+            <option value="timetable">Timetable</option>
+            <option value="existing_tutor">Existing tutor</option>
+            <option value="needs_partner_discussion">Needs partner discussion</option>
+            <option value="wants_trial">Wants a trial</option>
+            <option value="unsure_fit">Unsure about fit</option>
+            <option value="payment_timing">Payment timing</option>
+            <option value="enrolled">Enrolled — no objection</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="full"><label class="flabel">Objection — parent's own words</label><textarea class="ftextarea" id="f-objection"></textarea></div>
+        <div>
+          <label class="flabel">Recommended tier</label>
+          <select class="fselect" id="f-recommended-tier"><option value="">—</option><option value="founding">Founding</option><option value="core">Core</option><option value="plus">Plus</option></select>
+        </div>
+        <div>
+          <label class="flabel">Offered tier</label>
+          <select class="fselect" id="f-offered-tier"><option value="">—</option><option value="founding">Founding</option><option value="core">Core</option><option value="plus">Plus</option></select>
+        </div>
+        <div><label class="flabel">Monthly value (£)</label><input class="finput" type="number" step="0.01" id="f-monthly-value"></div>
+        <div><label class="flabel">Next action</label><input class="finput" id="f-next-action" placeholder="e.g. 24h follow-up call"></div>
+        <div><label class="flabel">Next action date</label><input class="finput" type="date" id="f-next-action-date"></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn">Save</button>
+      </div>
+      <div class="save-status" id="save-status"></div>
+    </form>
+
+    <div class="notes-log" id="notes-log" style="display:none;">
+      <div class="tt" style="margin-bottom:.7rem;">Communication log</div>
+      <div id="notes-list"></div>
+      <div class="note-add">
+        <textarea class="ftextarea" id="new-note" placeholder="Log a call, WhatsApp, or email…"></textarea>
+        <button type="button" class="btn btn-sm" onclick="addNote()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div class="modal-bg" id="m-import">
+  <div class="modal" style="max-width:480px;">
+    <button class="modal-close" onclick="closeImport()">&times;</button>
+    <h2>Import CSV</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">Expects the ISM 100-Family Pipeline column headers (Parent/Guardian, Child, Year, Source, Phone/WhatsApp, Email, Primary Concern, Notes). Rows with no parent name are skipped.</p>
+    <div class="import-panel">
+      <input type="file" id="csv-file" accept=".csv">
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-outline" onclick="closeImport()">Cancel</button>
+      <button type="button" class="btn" onclick="runImport()">Import</button>
+    </div>
+    <div class="save-status" id="import-status"></div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+let SESSION=null, PIPELINE=[], NOTES=[], OWNERS=[], FRESH_LEADS=[], VIEW='today';
+
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+const STATUS_GROUPS={
+  NEW:'c-new', CONTACTED:'c-new', REPLIED:'c-progress', DIAGNOSTIC_SENT:'c-progress', DIAGNOSTIC_COMPLETE:'c-progress',
+  REVIEW_BOOKED:'c-progress', OFFERED:'c-good', PAID:'c-paid',
+  NURTURE:'c-nurture', NOT_NOW:'c-out', NOT_FIT:'c-out', LOST:'c-out'
+};
+function statusChip(s){
+  const cls=STATUS_GROUPS[s]||'c-new';
+  return `<span class="chip ${cls}">${esc((s||'NEW').replace(/_/g,' '))}</span>`;
+}
+
+async function authedFetch(url, opts={}){
+  const {data:{session}}=await supa.auth.getSession();
+  return fetch(url, {...opts, headers:{...(opts.headers||{}), Authorization:`Bearer ${session.access_token}`}});
+}
+
+async function init(){
+  const{data:{session}}=await supa.auth.getSession();
+  if(!session){window.location.href='/';return;}
+  SESSION=session;
+
+  const{data:p}=await supa.from('profiles').select('role,full_name').eq('id',session.user.id).maybeSingle();
+  if(!p||!['admin','super_admin'].includes(p.role)){window.location.href='/teacher/teacher.html';return;}
+  document.getElementById('admin-name').textContent=p.full_name||session.user.email;
+
+  await loadAll();
+  document.getElementById('loading-overlay').style.display='none';
+}
+
+async function loadAll(){
+  const res=await authedFetch('/api/v1/ism-pipeline/list');
+  const json=await res.json().catch(()=>({}));
+  if(!res.ok||!json.success){
+    document.getElementById('twrap').innerHTML=`<div class="empty"><div class="ei">⚠️</div><div class="et">Could not load the pipeline</div><div>${esc(json.error&&json.error.message||'Unknown error')}</div></div>`;
+    return;
+  }
+  PIPELINE=json.pipeline||[]; NOTES=json.notes||[]; OWNERS=json.owners||[]; FRESH_LEADS=json.freshLeads||[];
+
+  const ownerSel=document.getElementById('f-owner');
+  ownerSel.innerHTML='<option value="">Unassigned</option>'+OWNERS.map(o=>`<option value="${esc(o.id)}">${esc(o.full_name||o.id)}</option>`).join('');
+
+  const statusSel=document.getElementById('f-status');
+  statusSel.innerHTML='<option value="">All statuses</option>'+Object.keys(STATUS_GROUPS).map(s=>`<option value="${s}">${esc(s.replace(/_/g,' '))}</option>`).join('');
+
+  renderStats();
+  render();
+}
+
+function renderStats(){
+  const total=PIPELINE.length;
+  const paid=PIPELINE.filter(p=>p.status==='PAID');
+  const mrr=paid.reduce((sum,p)=>sum+(Number(p.monthly_value)||0),0);
+
+  document.getElementById('stat-row').innerHTML=`
+    <div class="sc"><div class="sl">Total in pipeline</div><div class="sv">${total}</div><div class="ss">families tracked</div></div>
+    <div class="sc"><div class="sl">Paid students</div><div class="sv">${paid.length}</div><div class="ss">${paid.length?`of ${total} tracked`:'none yet'}</div></div>
+    <div class="sc"><div class="sl">Current MRR</div><div class="sv">£${mrr.toFixed(0)}</div><div class="ss">from tracked paid records</div></div>
+    <div class="sc"><div class="sl">New registrations</div><div class="sv">${FRESH_LEADS.length}</div><div class="ss">awaiting pipeline add</div></div>
+  `;
+
+  const stages=['NEW','CONTACTED','REPLIED','DIAGNOSTIC_SENT','DIAGNOSTIC_COMPLETE','REVIEW_BOOKED','OFFERED','PAID'];
+  const counts=stages.map(s=>PIPELINE.filter(p=>p.status===s).length);
+  const reachedCount=stages.map((s,i)=>stages.slice(i).reduce((sum,st)=>sum+PIPELINE.filter(p=>p.status===st).length,0));
+  document.getElementById('funnel-wrap').innerHTML=stages.map((s,i)=>{
+    const pct=reachedCount[0]?Math.round(reachedCount[i]/reachedCount[0]*100):0;
+    return `<div class="funnel-step"><div class="fv">${counts[i]}</div><div class="fl">${esc(s.replace(/_/g,' '))}</div><div class="fc">${pct}% of total</div></div>`;
+  }).join('');
+}
+
+function setView(v){
+  VIEW=v;
+  ['today','all','leads'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('active', t===v));
+  document.getElementById('f-status').style.display = v==='all' ? 'inline-block' : 'none';
+  document.getElementById('table-title').textContent =
+    v==='today' ? "Today's action queue" : v==='all' ? 'All pipeline records' : 'New registrations awaiting a pipeline record';
+  render();
+}
+
+function isToday(dateStr){
+  if(!dateStr) return false;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const d=new Date(dateStr); d.setHours(0,0,0,0);
+  return d<=today;
+}
+
+function render(){
+  const q=(document.getElementById('f-search').value||'').toLowerCase();
+  const statusFilter=document.getElementById('f-status').value;
+
+  if(VIEW==='leads'){
+    const rows=FRESH_LEADS.filter(l=>!q||(l.parent_name||'').toLowerCase().includes(q)||(l.parent_email||'').toLowerCase().includes(q)||(l.child_name||'').toLowerCase().includes(q));
+    renderLeadsTable(rows);
+    return;
+  }
+
+  let rows=PIPELINE;
+  if(VIEW==='today'){
+    rows=rows.filter(p=>isToday(p.next_action_date) || (p.status==='DIAGNOSTIC_SENT' && !p.diagnostic_link));
+  }
+  if(statusFilter) rows=rows.filter(p=>p.status===statusFilter);
+  if(q) rows=rows.filter(p=>(p.parent_name||'').toLowerCase().includes(q)||(p.parent_email||'').toLowerCase().includes(q)||(p.child_name||'').toLowerCase().includes(q));
+
+  renderPipelineTable(rows);
+}
+
+function renderPipelineTable(rows){
+  const w=document.getElementById('twrap');
+  if(!rows.length){
+    w.innerHTML=`<div class="empty"><div class="ei">🎯</div><div class="et">Nothing here right now</div><div>${VIEW==='today'?'No follow-ups are due today.':'No pipeline records match this filter.'}</div></div>`;
+    return;
+  }
+  w.innerHTML=`<table><thead><tr>
+    <th>Family</th><th>Status</th><th>Owner</th><th>Recommended</th><th>Monthly £</th><th>Next action</th><th>Due</th>
+  </tr></thead><tbody>
+    ${rows.map(p=>{
+      const owner=OWNERS.find(o=>o.id===p.owner_id);
+      const due=p.next_action_date?new Date(p.next_action_date).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
+      return `<tr class="clickable" onclick="openModal('${esc(p.id)}')">
+        <td><strong>${esc(p.parent_name)}</strong>${p.child_name?`<div style="color:var(--muted);font-size:.78rem">${esc(p.child_name)}${p.year_group?' · '+esc(p.year_group):''}</div>`:''}</td>
+        <td>${statusChip(p.status)}</td>
+        <td style="color:var(--muted);font-size:.82rem">${esc(owner&&owner.full_name||'—')}</td>
+        <td style="color:var(--muted);font-size:.82rem">${esc(p.recommended_tier||'—')}</td>
+        <td style="color:var(--muted);font-size:.82rem">${p.monthly_value?'£'+Number(p.monthly_value).toFixed(0):'—'}</td>
+        <td style="color:var(--muted);font-size:.82rem">${esc(p.next_action||'—')}</td>
+        <td style="color:var(--muted);font-size:.8rem">${due}</td>
+      </tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+function renderLeadsTable(rows){
+  const w=document.getElementById('twrap');
+  if(!rows.length){
+    w.innerHTML=`<div class="empty"><div class="ei">📋</div><div class="et">No new registrations</div><div>Every science-mastery registration has already been added to the pipeline.</div></div>`;
+    return;
+  }
+  w.innerHTML=`<table><thead><tr>
+    <th>Child / Year</th><th>Parent</th><th>Contact</th><th>Concern</th><th>Submitted</th><th></th>
+  </tr></thead><tbody>
+    ${rows.map(l=>{
+      const d=l.submitted_at?new Date(l.submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—';
+      return `<tr>
+        <td><strong>${esc(l.child_name)}</strong><div style="color:var(--muted);font-size:.78rem">${esc(l.year_group||'—')}</div></td>
+        <td>${esc(l.parent_name)}</td>
+        <td><div>${esc(l.parent_email)}</div><div style="color:var(--muted);font-size:.8rem">${esc(l.parent_phone)}</div></td>
+        <td style="color:var(--muted);font-size:.82rem;max-width:220px;">${esc((l.primary_concern||'—').slice(0,80))}</td>
+        <td style="color:var(--muted);font-size:.8rem">${d}</td>
+        <td><button class="btn btn-sm" onclick='addLeadToPipeline(${JSON.stringify(l).replace(/'/g,"&apos;")})'>+ Add</button></td>
+      </tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+function addLeadToPipeline(lead){
+  openModal(null);
+  document.getElementById('f-lead-id').value=lead.id;
+  document.getElementById('f-parent-name').value=lead.parent_name||'';
+  document.getElementById('f-child-name').value=lead.child_name||'';
+  document.getElementById('f-parent-email').value=lead.parent_email||'';
+  document.getElementById('f-parent-phone').value=lead.parent_phone||'';
+  document.getElementById('f-year-group').value=lead.year_group||'';
+  document.getElementById('f-subjects').value=lead.subjects_interested||'';
+  document.getElementById('f-concern').value=lead.primary_concern||'';
+}
+
+function openModal(id){
+  const modal=document.getElementById('m-edit');
+  const form=document.getElementById('editForm');
+  form.reset();
+  document.getElementById('f-id').value='';
+  document.getElementById('f-lead-id').value='';
+  document.getElementById('save-status').textContent='';
+  document.getElementById('notes-log').style.display = id ? 'block' : 'none';
+
+  if(id){
+    const row=PIPELINE.find(p=>p.id===id);
+    document.getElementById('m-edit-title').textContent='Edit family';
+    document.getElementById('f-id').value=row.id;
+    document.getElementById('f-parent-name').value=row.parent_name||'';
+    document.getElementById('f-child-name').value=row.child_name||'';
+    document.getElementById('f-parent-email').value=row.parent_email||'';
+    document.getElementById('f-parent-phone').value=row.parent_phone||'';
+    document.getElementById('f-year-group').value=row.year_group||'';
+    document.getElementById('f-source').value=row.source||'';
+    document.getElementById('f-referral-note').value=row.referral_note||'';
+    document.getElementById('f-concern').value=row.primary_concern||'';
+    document.getElementById('f-subjects').value=row.subjects_of_concern||'';
+    document.getElementById('f-diagnostic-link').value=row.diagnostic_link||'';
+    document.getElementById('f-status-edit').value=row.status||'NEW';
+    document.getElementById('f-owner').value=row.owner_id||'';
+    document.getElementById('f-review-date').value=row.review_date||'';
+    document.getElementById('f-review-outcome').value=row.review_outcome||'';
+    document.getElementById('f-objection').value=row.objection||'';
+    document.getElementById('f-recommended-tier').value=row.recommended_tier||'';
+    document.getElementById('f-offered-tier').value=row.offered_tier||'';
+    document.getElementById('f-monthly-value').value=row.monthly_value||'';
+    document.getElementById('f-next-action').value=row.next_action||'';
+    document.getElementById('f-next-action-date').value=row.next_action_date||'';
+    renderNotes(id);
+  } else {
+    document.getElementById('m-edit-title').textContent='Add family';
+  }
+  modal.classList.add('show');
+}
+function closeModal(){ document.getElementById('m-edit').classList.remove('show'); }
+
+function renderNotes(pipelineId){
+  const list=NOTES.filter(n=>n.pipeline_id===pipelineId);
+  const w=document.getElementById('notes-list');
+  if(!list.length){ w.innerHTML='<p style="color:var(--muted);font-size:.82rem;">No notes logged yet.</p>'; return; }
+  w.innerHTML=list.map(n=>{
+    const owner=OWNERS.find(o=>o.id===n.author_id);
+    const d=n.created_at?new Date(n.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+    return `<div class="note-item"><div class="note-meta">${esc(owner&&owner.full_name||'Staff')} · ${d}${n.channel?' · '+esc(n.channel):''}</div>${esc(n.note)}</div>`;
+  }).join('');
+}
+
+async function addNote(){
+  const id=document.getElementById('f-id').value;
+  const textEl=document.getElementById('new-note');
+  const text=textEl.value.trim();
+  if(!id||!text) return;
+  const res=await authedFetch('/api/v1/ism-pipeline/note',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pipelineId:id,note:text})});
+  const json=await res.json().catch(()=>({}));
+  if(res.ok&&json.success){
+    NOTES.unshift(json.note);
+    textEl.value='';
+    renderNotes(id);
+  }
+}
+
+async function saveRecord(e){
+  e.preventDefault();
+  const status=document.getElementById('save-status');
+  status.className='save-status'; status.textContent='Saving…';
+
+  const payload={
+    id: document.getElementById('f-id').value || undefined,
+    lead_id: document.getElementById('f-lead-id').value || undefined,
+    parent_name: document.getElementById('f-parent-name').value,
+    child_name: document.getElementById('f-child-name').value,
+    parent_email: document.getElementById('f-parent-email').value,
+    parent_phone: document.getElementById('f-parent-phone').value,
+    year_group: document.getElementById('f-year-group').value,
+    source: document.getElementById('f-source').value,
+    referral_note: document.getElementById('f-referral-note').value,
+    primary_concern: document.getElementById('f-concern').value,
+    subjects_of_concern: document.getElementById('f-subjects').value,
+    diagnostic_link: document.getElementById('f-diagnostic-link').value,
+    status: document.getElementById('f-status-edit').value,
+    owner_id: document.getElementById('f-owner').value || undefined,
+    review_date: document.getElementById('f-review-date').value || undefined,
+    review_outcome: document.getElementById('f-review-outcome').value,
+    objection: document.getElementById('f-objection').value,
+    recommended_tier: document.getElementById('f-recommended-tier').value,
+    offered_tier: document.getElementById('f-offered-tier').value,
+    monthly_value: document.getElementById('f-monthly-value').value || undefined,
+    next_action: document.getElementById('f-next-action').value,
+    next_action_date: document.getElementById('f-next-action-date').value || undefined
+  };
+
+  try{
+    const res=await authedFetch('/api/v1/ism-pipeline/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const json=await res.json().catch(()=>({}));
+    if(!res.ok||!json.success) throw new Error((json.error&&json.error.message)||'Could not save.');
+    status.className='save-status ok'; status.textContent='Saved.';
+    await loadAll();
+    setTimeout(closeModal, 500);
+  }catch(err){
+    status.className='save-status err'; status.textContent=err.message;
+  }
+}
+
+function openImport(){ document.getElementById('m-import').classList.add('show'); document.getElementById('import-status').textContent=''; }
+function closeImport(){ document.getElementById('m-import').classList.remove('show'); }
+
+function parseCsv(text){
+  const lines=text.split(/\r?\n/).filter(l=>l.trim().length);
+  if(!lines.length) return [];
+  const headers=lines[0].split(',').map(h=>h.trim().replace(/^﻿/,''));
+  return lines.slice(1).map(line=>{
+    // Simple CSV split — adequate for the pipeline template's plain fields (no embedded commas expected).
+    const cells=line.split(',');
+    const row={};
+    headers.forEach((h,i)=>{ row[h]=(cells[i]||'').trim(); });
+    return row;
+  });
+}
+
+// Maps the template's free-text Offer column onto our founding/core/plus
+// enum without guessing at anything the sheet doesn't already say.
+function mapTier(offer){
+  const s=(offer||'').toLowerCase();
+  if(s.includes('founding')) return 'founding';
+  if(s.includes('plus')) return 'plus';
+  if(s.includes('core')) return 'core';
+  return undefined;
+}
+
+async function runImport(){
+  const fileInput=document.getElementById('csv-file');
+  const status=document.getElementById('import-status');
+  if(!fileInput.files.length){ status.className='save-status err'; status.textContent='Choose a CSV file first.'; return; }
+
+  status.className='save-status'; status.textContent='Reading file…';
+  const text=await fileInput.files[0].text();
+  const rows=parseCsv(text).filter(r=>(r['Parent/Guardian']||'').trim());
+
+  if(!rows.length){ status.className='save-status err'; status.textContent='No rows with a parent name found.'; return; }
+
+  let imported=0, failed=0;
+  for(const r of rows){
+    // The template's own Status vocabulary (Pipeline_Rules.md) is
+    // identical to ours — pass it straight through, but only if it's
+    // actually one of our 12 values, so a typo in the sheet doesn't 400
+    // the whole row.
+    const csvStatus=(r['Status']||'').trim().toUpperCase();
+    const validStatus=['NEW','CONTACTED','REPLIED','DIAGNOSTIC_SENT','DIAGNOSTIC_COMPLETE','REVIEW_BOOKED','OFFERED','PAID','NURTURE','NOT_NOW','NOT_FIT','LOST'].includes(csvStatus);
+
+    const payload={
+      parent_name: r['Parent/Guardian'],
+      child_name: r['Child'] || undefined,
+      year_group: r['Year'] || undefined,
+      source: (r['Source']||'').toLowerCase().replace(/\s+/g,'_') || undefined,
+      parent_phone: r['Phone/WhatsApp'] || undefined,
+      parent_email: r['Email'] || undefined,
+      primary_concern: r['Primary Concern'] || undefined,
+      status: validStatus ? csvStatus : undefined,
+      review_date: r['Review Date'] || undefined,
+      offered_tier: mapTier(r['Offer']),
+      monthly_value: r['Monthly Value'] || undefined,
+      paid: /^y(es)?$/i.test((r['Paid?']||'').trim()) ? true : undefined,
+      next_action: r['Next Action'] || undefined,
+      next_action_date: r['Next Action Date'] || undefined
+    };
+    try{
+      const res=await authedFetch('/api/v1/ism-pipeline/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const json=await res.json().catch(()=>({}));
+      if(res.ok&&json.success){
+        imported++;
+        // Carry the sheet's free-text Notes column into the row's own
+        // communication log rather than dropping it — it's often the
+        // richest field in a hand-kept pipeline sheet.
+        const rawNotes=(r['Notes']||'').trim();
+        if(rawNotes && json.row && json.row.id){
+          await authedFetch('/api/v1/ism-pipeline/note',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pipelineId:json.row.id,note:`Imported from pipeline sheet: ${rawNotes}`})}).catch(()=>{});
+        }
+      } else failed++;
+    }catch(e){ failed++; }
+  }
+
+  status.className = failed ? 'save-status err' : 'save-status ok';
+  status.textContent = `Imported ${imported} record(s).${failed?` ${failed} row(s) failed.`:''}`;
+  await loadAll();
+}
+
+async function signOut(){await supa.auth.signOut();window.location.href='/';}
+
+init();
+</script>
+</body>
+</html>
