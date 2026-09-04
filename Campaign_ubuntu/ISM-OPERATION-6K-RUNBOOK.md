@@ -31,7 +31,6 @@ Items 1–7 and 9 (via the funnel view's PAID stage + monthly value) can be read
 ### Landing page or register form is down
 - Check Netlify's deploy status for the `staging` (or `main`, once merged) branch — a broken deploy anywhere on the site can take the whole domain down, not just this page.
 - The register form posts to `/api/v1/leads/create`, which routes (via `netlify.toml`) to `netlify/functions/leads-create.js`. If registrations stop appearing in the pipeline's "New registrations" tab but the form itself loads fine, check the Netlify function logs for that function specifically — a Supabase outage or a bad `SUPABASE_ANON_KEY` would show up there as repeated insert failures.
-- **This is a live, currently-open incident, not a hypothetical**: as of this build, `leads-create` is returning `insert_failed` for every submission on staging, confirmed against multiple programme slugs. See `ISM-OPERATION-6K-LAUNCH-READINESS.md`'s BLOCKED section for what's been ruled out (payload shape, the anon key/URL values themselves, general Netlify→Supabase connectivity) and what's still needed (the actual error text from Netlify's function logs).
 
 ### Pipeline admin page won't load / shows an error
 - Confirm the signed-in account has `role = admin` or `super_admin` in `profiles` — every non-admin/super_admin role is refused with a redirect, by design (Decisions doc, admin-gating principle applied throughout this codebase).
