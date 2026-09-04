@@ -421,7 +421,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(location.search);
   const leadIdParam = urlParams.get('lead_id');
   const nameParam = urlParams.get('name');
-  if (leadIdParam) S.leadId = leadIdParam;
+
+  // A lead_id in the URL means a specific registration handed this page
+  // off — that identity is authoritative regardless of whatever account
+  // happens to be logged into this browser. Skip the logged-in pre-fill
+  // and save-routing entirely in that case: otherwise a staff member
+  // testing or triaging the funnel while signed in gets their OWN
+  // profile's name silently attached to someone else's diagnostic
+  // (found live 2026-09-04 — an admin account's first_name is literally
+  // "Inspire", which is exactly the bug that sent us looking for this).
+  if (leadIdParam) {
+    S.leadId = leadIdParam;
+    if (nameParam) {
+      document.getElementById('inp-name').value = nameParam;
+      checkSetup();
+    }
+    return;
+  }
 
   try {
     const { data: { user } } = await supa.auth.getUser();
@@ -435,17 +451,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         checkSetup();
       }
       await loadSavedPlans();
-    } else if (nameParam) {
-      document.getElementById('inp-name').value = nameParam;
-      checkSetup();
     }
   } catch(e) {
     // Not logged in or no profile — continue as guest
     console.log('Guest mode');
-    if (nameParam) {
-      document.getElementById('inp-name').value = nameParam;
-      checkSetup();
-    }
   }
 });
 
