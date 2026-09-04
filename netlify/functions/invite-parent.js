@@ -10,7 +10,12 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: JSON.stringify({ error: 'Missing required fields' }) };
     }
 
-    const SUPABASE_URL = process.env.SUPABASE_URL || 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+    // Hardcoded, same as every other function in this codebase — see
+    // leads-create.js's header comment for why a process.env.SUPABASE_URL
+    // override is actively dangerous here (a stale env var silently
+    // breaks the request, and this project only ever points at one
+    // Supabase project regardless of deploy context).
+    const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
     const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     // Invite user via Supabase Admin REST API

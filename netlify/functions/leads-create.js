@@ -40,12 +40,18 @@ exports.handler = async (event) => {
     };
   }
 
-  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
-  // Anon key — same public, RLS-protected key already used client-side in register.html.
-  // Not a secret; safe to use here because the `leads` table only grants
-  // the anon role INSERT, never SELECT/UPDATE/DELETE (see leads_schema.sql).
-  const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY
-    || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+  // Hardcoded, same as every other function in this codebase (see
+  // _ai-usage-guard.js) — NOT sourced from process.env.SUPABASE_URL /
+  // SUPABASE_ANON_KEY. This file used to defer to those env vars first;
+  // a stale value set in Netlify's dashboard for one deploy context
+  // silently broke every lead-capture form on that context (discovered
+  // 2026-09-04 while verifying the ISM landing page — leads-create
+  // returned insert_failed for every programme, not just ISM's). The
+  // anon key is public/not a secret — the leads table only grants the
+  // anon role INSERT, never SELECT/UPDATE/DELETE (see leads_schema.sql)
+  // — so there's no reason for it to be configurable per environment.
+  const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 
   try {
     const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
