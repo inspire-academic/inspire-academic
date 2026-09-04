@@ -11,8 +11,12 @@ const REPO_ROOT = path.join(__dirname, '..');
 // www/, android/, ios/ are the Capacitor native-app wrapper — www/ is a
 // generated duplicate of the real site (would double-run every HTML/
 // asset test for no reason), android/ and ios/ are native project
-// source, not web content this suite's checks apply to.
-const SKIP_DIRS = new Set(['node_modules', '.git', '.netlify', '.claude', 'www', 'android', 'ios']);
+// source, not web content this suite's checks apply to. Campaign_ubuntu/
+// holds the ISM Operation £6K launch pack's own reference/template
+// material (unzipped for Claude/Codex to read) — its sample HTML
+// intentionally contains unresolved placeholders like
+// REPLACE_WITH_DIAGNOSTIC_URL and was never meant to be deployed.
+const SKIP_DIRS = new Set(['node_modules', '.git', '.netlify', '.claude', 'www', 'android', 'ios', 'Campaign_ubuntu']);
 
 function walkFiles(dir, matcher, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {

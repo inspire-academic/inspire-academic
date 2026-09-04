@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thank You — Inspire Science Mastery — Inspire Academic</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/global.css">
+<style>
+:root{
+  --sm:#c9a84c; --sm-light:#e8c96a; --sm-rgb:201,168,76;
+  --grad-sm: var(--grad-gold, linear-gradient(135deg, var(--sm), var(--sm-light)));
+  --r:12px;
+}
+body{min-height:100vh;display:flex;flex-direction:column;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--font-body);border:none;}
+
+.topbar{display:flex;align-items:center;padding:1.1rem 1.4rem;max-width:640px;margin:0 auto;width:100%;}
+.brand-link{font-family:var(--font-display);font-weight:700;font-size:1.1rem;}
+.brand-link .gold{color:var(--gold);}
+
+main{flex:1;max-width:600px;margin:0 auto;width:100%;padding:2.4rem 1.4rem 3rem;text-align:center;display:flex;flex-direction:column;align-items:center;}
+
+.badge{
+  width:56px;height:56px;border-radius:50%;background:var(--grad-sm);
+  display:flex;align-items:center;justify-content:center;margin-bottom:1.4rem;
+  box-shadow:0 10px 30px rgba(var(--sm-rgb),.35);
+}
+.badge svg{width:26px;height:26px;stroke:var(--bg-deep,#071b33);stroke-width:2.5;fill:none;}
+
+h1{font-family:var(--font-display);font-weight:700;font-size:1.6rem;margin-bottom:.7rem;text-wrap:balance;}
+p{color:var(--text-muted);line-height:1.7;margin-bottom:1.2rem;max-width:46ch;}
+p strong{color:var(--text);}
+
+.diagnostic-panel{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);
+  padding:1.5rem 1.4rem;margin:1.2rem 0 1.6rem;text-align:left;max-width:46ch;
+}
+.diagnostic-panel h2{font-family:var(--font-display);font-size:1.1rem;margin-bottom:.7rem;}
+.diagnostic-panel ol{margin:0 0 0 1.2rem;padding:0;color:var(--text-muted);font-size:.92rem;line-height:1.8;}
+.diagnostic-panel li strong{color:var(--text);}
+
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.5rem;background:var(--grad-sm);color:var(--bg-deep,#071b33);
+  padding:1rem 1.9rem;border-radius:var(--r);font-weight:800;font-size:1rem;
+  box-shadow:0 10px 30px rgba(var(--sm-rgb),.35);transition:transform .2s,box-shadow .2s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(var(--sm-rgb),.45);}
+
+.links{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:1.6rem;}
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:.5rem;background:var(--bg-card);color:var(--text);
+  border:1px solid var(--border);padding:.8rem 1.4rem;border-radius:var(--r);
+  font-weight:600;font-size:.88rem;transition:border-color .2s;
+}
+.btn-secondary:hover{border-color:var(--sm-light);}
+
+a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:2px;border-radius:4px;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
+</header>
+
+<main>
+  <div class="badge" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>
+  </div>
+  <h1>Thank you — your registration is confirmed.</h1>
+  <p>Your interest in <strong>Inspire Science Mastery</strong> has been recorded and a member of the Inspire Academic team will be in touch. Your next step is the diagnostic itself.</p>
+
+  <div class="diagnostic-panel">
+    <h2>Before you start</h2>
+    <ol>
+      <li><strong>Takes about 15&ndash;25 minutes</strong> for one subject — start with the one causing the most concern.</li>
+      <li>Your child answers on their own device, at their own pace. No account needed.</li>
+      <li>At the end, they can download or email the report — that's where strengths, priority gaps and a recommended next step appear.</li>
+      <li>You can come back and run the diagnostic again for another subject any time.</li>
+    </ol>
+  </div>
+
+  <a class="btn-primary js-register-cta" href="/diagnostic">Start the Mastery Diagnostic &rarr;</a>
+
+  <div class="links">
+    <a class="btn-secondary" href="../">Back to programme details</a>
+    <a class="btn-secondary" href="/">Inspire Academic home</a>
+  </div>
+</main>
+
+<script src="/assets/js/recruitment.js"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "115b324e79814b58b430653d922e778a"}'></script>
+</body>
+</html>
