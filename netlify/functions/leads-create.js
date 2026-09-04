@@ -6,6 +6,8 @@
 // automation should fan out from this one function rather than being
 // wired into each programme's form individually.
 
+const crypto = require('crypto');
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
@@ -53,6 +55,20 @@ exports.handler = async (event) => {
   const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 
+  // Generated here rather than left to the table's own `default
+  // gen_random_uuid()` (see leads_schema.sql) and read back afterward —
+  // `leads` grants anon INSERT only, no SELECT (by design: the public
+  // form may never read back another family's row). Asking PostgREST for
+  // `Prefer: return=representation` to get the id back doesn't just
+  // return nothing in that situation, it fails the whole insert: RETURNING
+  // is evaluated against SELECT policies under RLS, and Postgres raises
+  // "new row violates row-level security policy" when none match, even
+  // though the INSERT itself would've been allowed. Broke every
+  // programme's registration form for a few minutes on 2026-09-04 before
+  // this fix. Generating the id ourselves and using `return=minimal`
+  // avoids the RETURNING/RLS interaction entirely.
+  const leadId = crypto.randomUUID();
+
   try {
     const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
       method: 'POST',
@@ -60,9 +76,10 @@ exports.handler = async (event) => {
         'Content-Type': 'application/json',
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Prefer': 'return=representation'
+        'Prefer': 'return=minimal'
       },
       body: JSON.stringify({
+        id: leadId,
         child_name,
         parent_name,
         parent_email,
@@ -95,8 +112,7 @@ exports.handler = async (event) => {
     // the ISM/Science Mastery register page uses it to carry the lead
     // through to the no-login diagnostic (see assessment-attempt-create.js)
     // so a real result is traceable back to this registration.
-    const [inserted] = await insertRes.json();
-    return { statusCode: 200, body: JSON.stringify({ success: true, id: inserted && inserted.id }) };
+    return { statusCode: 200, body: JSON.stringify({ success: true, id: leadId }) };
   } catch (error) {
     console.error('leads-create error:', error);
     return {
