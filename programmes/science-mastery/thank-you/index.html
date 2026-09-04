@@ -87,7 +87,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
     </ol>
   </div>
 
-  <a class="btn-primary js-register-cta" href="/diagnostic">Start the Mastery Diagnostic &rarr;</a>
+  <a class="btn-primary js-register-cta" id="diagnostic-cta" href="/diagnostic">Start the Mastery Diagnostic &rarr;</a>
 
   <div class="links">
     <a class="btn-secondary" href="../">Back to programme details</a>
@@ -95,6 +95,22 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
   </div>
 </main>
 
+<script>
+  // Carries the registration through to the no-login diagnostic — without
+  // this, the diagnostic's own (separate) name field starts blank and
+  // nothing links a real result back to this family's registration (see
+  // assessment-attempt-create.js / diagnostic_attempts_guest_lead_link.sql).
+  (function () {
+    var src = new URLSearchParams(window.location.search);
+    var leadId = src.get('lead_id');
+    var name = src.get('name');
+    if (!leadId && !name) return;
+    var out = new URLSearchParams();
+    if (leadId) out.set('lead_id', leadId);
+    if (name) out.set('name', name);
+    document.getElementById('diagnostic-cta').href = '/diagnostic?' + out.toString();
+  })();
+</script>
 <script src="/assets/js/recruitment.js"></script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "115b324e79814b58b430653d922e778a"}'></script>
 </body>

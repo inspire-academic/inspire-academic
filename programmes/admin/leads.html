@@ -154,6 +154,7 @@ const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
 
 let _leads=[];
+let _attemptsByLead={}; // lead_id -> [diagnostic_attempts rows], most recent first
 
 const REG_LINKS=[
   {name:'Inspire Academic — General Registration',url:'https://www.inspireacademic.org/interest'},
@@ -241,6 +242,8 @@ async function loadLeads(){
 
   _leads=data||[];
 
+  await loadDiagnosticAttempts();
+
   document.getElementById('s1').textContent=_leads.length;
   document.getElementById('s2').textContent=_leads.filter(l=>l.status==='new').length;
   document.getElementById('s3').textContent=_leads.filter(l=>l.status==='contacted').length;
@@ -254,6 +257,47 @@ async function loadLeads(){
   });
 
   render(_leads);
+}
+
+// Guest diagnostic attempts (no-login ISM/Science Mastery funnel — see
+// assessment-attempt-create.js) are only ever linked back to a lead, not
+// to a student account, so this is the only place staff can see them.
+async function loadDiagnosticAttempts(){
+  _attemptsByLead={};
+  const{data,error}=await supa.from('diagnostic_attempts')
+    .select('id,lead_id,student_name,subject,exam_board,level,overall_score,current_grade,target_grade,not_sure_count,total_questions,topic_scores,gaps,student_profile,profile_description,strengths,teacher_note,plan,created_at')
+    .not('lead_id','is',null)
+    .order('created_at',{ascending:false});
+
+  if(error){console.warn('Could not load diagnostic attempts:',error.message);return;}
+
+  (data||[]).forEach(a=>{
+    if(!_attemptsByLead[a.lead_id]) _attemptsByLead[a.lead_id]=[];
+    _attemptsByLead[a.lead_id].push(a);
+  });
+}
+
+// Reuses the student's own PDF report page unchanged — same
+// {config,diagnosis,plan} payload shape as viewSavedPlan() in
+// assessment-engine.html / openReportForAttempt() in
+// teacher/student-diagnostics.html.
+function openReportForAttempt(id){
+  const all=[].concat(...Object.values(_attemptsByLead));
+  const a=all.find(x=>String(x.id)===String(id));
+  if(!a) return;
+  const payload={
+    config:{ name:a.student_name, subject:a.subject, level:a.level, board:a.exam_board },
+    diagnosis:{
+      overallScore:a.overall_score, currentGrade:a.current_grade, targetGrade:a.target_grade,
+      notSureCount:a.not_sure_count, topicScores:a.topic_scores, gaps:a.gaps,
+      studentProfile:a.student_profile, profileDescription:a.profile_description,
+      strengths:a.strengths, teacherNote:a.teacher_note, totalQuestions:a.total_questions
+    },
+    plan:a.plan||{},
+    generatedAt:a.created_at
+  };
+  sessionStorage.setItem('ia_report_payload',JSON.stringify(payload));
+  window.open('/assessment-engine/assessment-report.html','_blank');
 }
 
 function applyFilters(){
@@ -272,12 +316,16 @@ function render(list){
     return;
   }
   w.innerHTML=`<table><thead><tr>
-    <th>Child</th><th>Year / Subjects</th><th>Parent / Guardian</th><th>Contact</th><th>Programme</th><th>Source</th><th>Status</th><th>Submitted</th>
+    <th>Child</th><th>Year / Subjects</th><th>Parent / Guardian</th><th>Contact</th><th>Programme</th><th>Source</th><th>Status</th><th>Diagnostic</th><th>Submitted</th>
   </tr></thead><tbody>
     ${list.map(l=>{
       const d=l.submitted_at?new Date(l.submitted_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'—';
       const src=[l.source,l.campaign].filter(Boolean).join(' / ')||'—';
       const yearSubj=[l.year_group,l.subjects_interested].filter(Boolean).join(' — ')||'—';
+      const attempts=_attemptsByLead[l.id]||[];
+      const diagCell=attempts.length
+        ? attempts.map(a=>`<button class="link-copy" style="padding:.3rem .6rem;font-size:.72rem;margin:.15rem .15rem 0 0;" onclick="openReportForAttempt('${a.id}')">📄 ${esc(a.subject)}${a.overall_score!=null?' · '+a.overall_score+'%':''}</button>`).join('')
+        : '<span style="color:var(--muted);font-size:.8rem;">Not taken yet</span>';
       return`<tr>
         <td><strong>${esc(l.child_name)}</strong></td>
         <td style="color:var(--muted);font-size:.82rem">${esc(yearSubj)}</td>
@@ -286,6 +334,7 @@ function render(list){
         <td style="color:var(--muted)">${esc(l.programme_name||l.programme_slug)}</td>
         <td style="color:var(--muted);font-size:.82rem">${esc(src)}</td>
         <td>${chip(l.status)}</td>
+        <td>${diagCell}</td>
         <td style="color:var(--muted);font-size:.8rem">${d}</td>
       </tr>`;
     }).join('')}

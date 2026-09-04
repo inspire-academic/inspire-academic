@@ -225,7 +225,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
           if (!result.ok || !result.json.success) {
             throw new Error((result.json.error && result.json.error.message) || 'Something went wrong. Please try again.');
           }
-          window.location.href = '../thank-you/' + window.location.search;
+          // Carry the new lead's id + child's name forward so the thank-you
+          // page can hand them to the no-login diagnostic (/diagnostic) —
+          // without this, a real diagnostic attempt has no way back to this
+          // registration (see assessment-attempt-create.js).
+          var params = new URLSearchParams(window.location.search);
+          if (result.json.id) params.set('lead_id', result.json.id);
+          params.set('name', data.child_name);
+          window.location.href = '../thank-you/?' + params.toString();
         })
         .catch(function (err) {
           submitBtn.disabled = false;
