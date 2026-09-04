@@ -282,12 +282,16 @@ async function loadDiagnosticAttempts(){
 // assessment-engine.html / openReportForAttempt() in
 // teacher/student-diagnostics.html.
 //
-// Writes sessionStorage then lets a real <a target="_blank"> (see render())
-// carry out the navigation itself, rather than calling window.open() here —
-// a script-initiated window.open() is exactly what popup blockers exist to
-// stop, even on a genuine click, and got silently blocked in testing. A
-// direct anchor-tag navigation isn't subject to that.
-function prepareReportForAttempt(id){
+// window.open(), not a plain <a target="_blank"> — tried that first, and
+// confirmed live (2026-09-04) it opens a new tab fine but the report page
+// in it has no sessionStorage: the "copy session storage to the new
+// browsing context" behaviour is spec'd for window.open(), not for a
+// browser's native link-following navigation, so the payload set here
+// never made it across. window.open() called synchronously inside a real
+// click handler (this one) isn't popup-blocked either — that only
+// happens to calls Chrome can't tie to a direct user gesture (e.g. after
+// an await or a setTimeout), which this isn't.
+function openReportForAttempt(id){
   const all=[].concat(...Object.values(_attemptsByLead));
   const a=all.find(x=>String(x.id)===String(id));
   if(!a) return;
@@ -303,6 +307,7 @@ function prepareReportForAttempt(id){
     generatedAt:a.created_at
   };
   sessionStorage.setItem('ia_report_payload',JSON.stringify(payload));
+  window.open('/assessment-engine/assessment-report.html','_blank');
 }
 
 function applyFilters(){
@@ -329,7 +334,7 @@ function render(list){
       const yearSubj=[l.year_group,l.subjects_interested].filter(Boolean).join(' — ')||'—';
       const attempts=_attemptsByLead[l.id]||[];
       const diagCell=attempts.length
-        ? attempts.map(a=>`<a class="link-copy" href="/assessment-engine/assessment-report.html" target="_blank" style="display:inline-block;padding:.3rem .6rem;font-size:.72rem;margin:.15rem .15rem 0 0;" onclick="prepareReportForAttempt('${a.id}')">📄 ${esc(a.subject)}${a.overall_score!=null?' · '+a.overall_score+'%':''}</a>`).join('')
+        ? attempts.map(a=>`<button class="link-copy" style="padding:.3rem .6rem;font-size:.72rem;margin:.15rem .15rem 0 0;" onclick="openReportForAttempt('${a.id}')">📄 ${esc(a.subject)}${a.overall_score!=null?' · '+a.overall_score+'%':''}</button>`).join('')
         : '<span style="color:var(--muted);font-size:.8rem;">Not taken yet</span>';
       return`<tr>
         <td><strong>${esc(l.child_name)}</strong></td>
