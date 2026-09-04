@@ -406,6 +406,25 @@ function pdfOptions() {
   };
 }
 
+// Stamps "n / total" bottom-right on every page, in place. Chains onto the
+// html2pdf worker rather than breaking it — html2pdf.js's own documented
+// pattern for this: .get('pdf').then(cb) hands the live jsPDF instance to
+// cb and returns the SAME worker afterward, so .save()/.output(...) can
+// still be called on the return value exactly as before this was added.
+function withPageNumbers(worker) {
+  return worker.toPdf().get('pdf').then(pdf => {
+    const total = pdf.internal.getNumberOfPages();
+    const w = pdf.internal.pageSize.getWidth();
+    const h = pdf.internal.pageSize.getHeight();
+    pdf.setFontSize(9);
+    pdf.setTextColor(150);
+    for (let i = 1; i <= total; i++) {
+      pdf.setPage(i);
+      pdf.text(`${i} / ${total}`, w - 12, h - 8, { align: 'right' });
+    }
+  });
+}
+
 async function downloadReport() {
   const btn = document.getElementById('download-btn');
   const original = btn.textContent;
@@ -413,7 +432,7 @@ async function downloadReport() {
   btn.disabled = true;
   try {
     await loadHtml2Pdf();
-    await html2pdf().set(pdfOptions()).from(document.getElementById('report')).save();
+    await withPageNumbers(html2pdf().set(pdfOptions()).from(document.getElementById('report'))).save();
     btn.textContent = '✓ Downloaded!';
   } catch(e) {
     console.error('PDF generation error:', e);
@@ -456,7 +475,7 @@ async function emailReport() {
   btn.textContent = 'Preparing PDF...';
   try {
     await loadHtml2Pdf();
-    const dataUri = await html2pdf().set(pdfOptions()).from(document.getElementById('report')).toPdf().output('datauristring');
+    const dataUri = await withPageNumbers(html2pdf().set(pdfOptions()).from(document.getElementById('report'))).output('datauristring');
     const pdfBase64 = dataUri.split('base64,')[1];
 
     btn.textContent = 'Sending...';
