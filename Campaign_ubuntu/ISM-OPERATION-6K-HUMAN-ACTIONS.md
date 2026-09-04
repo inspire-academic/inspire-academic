@@ -2,13 +2,8 @@
 
 Everything here is something only a person can do — no software task is listed. Ordered roughly by leverage: do the top of this list first.
 
-## 0. Two things must happen before anyone can register — do these first
-
-1. **Fix the live lead-capture outage.** Registration on staging is currently broken for every programme, not just ISM — see `ISM-OPERATION-6K-LAUNCH-READINESS.md`'s BLOCKED section for the full diagnosis. You'll need Netlify dashboard access (function logs for `leads-create`, and Site settings → Environment variables) to find the real cause; I couldn't get further without that access.
-2. **Run the two new SQL migrations** in the Supabase SQL editor, in order: `supabase/leads_schema_v3_ism_fields.sql`, then `supabase/ism_pipeline_schema.sql`. Without these, the pipeline admin page loads but every action on it fails.
-
 ## 1. Send the link and start calling
-- Landing page: **https://staging.inspireacademic.org/programmes/science-mastery/** (or the short link **https://staging.inspireacademic.org/science-mastery** once you've confirmed it) — verify on staging first, then the same paths on `inspireacademic.org` once merged to main. **Don't send this to a real family until item 0.1 above is fixed** — registration will silently fail.
+- Landing page: **https://staging.inspireacademic.org/programmes/science-mastery/** (or the short link **https://staging.inspireacademic.org/science-mastery**) — verify on staging first, then the same paths on `inspireacademic.org` once merged to main. Registration is confirmed working end-to-end as of this build (both migrations run, lead capture verified live).
 - Work the **First 100 source mix** from `Campaign_ubuntu/.../05_PIPELINE/Pipeline_Rules.md`: 30 current/previous Inspire families, 20 direct personal/community relationships, 20 parent referrals, 15 church/community partners, 15 organic/social. Don't wait for all 100 names — start contacting the first 20 while building the rest.
 - Daily operating minimum (same doc): 20 new/renewed direct contacts, 5 meaningful follow-ups, same-day response to warm replies, every lead has a next action + date.
 
