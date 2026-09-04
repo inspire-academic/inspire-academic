@@ -281,7 +281,13 @@ async function loadDiagnosticAttempts(){
 // {config,diagnosis,plan} payload shape as viewSavedPlan() in
 // assessment-engine.html / openReportForAttempt() in
 // teacher/student-diagnostics.html.
-function openReportForAttempt(id){
+//
+// Writes sessionStorage then lets a real <a target="_blank"> (see render())
+// carry out the navigation itself, rather than calling window.open() here —
+// a script-initiated window.open() is exactly what popup blockers exist to
+// stop, even on a genuine click, and got silently blocked in testing. A
+// direct anchor-tag navigation isn't subject to that.
+function prepareReportForAttempt(id){
   const all=[].concat(...Object.values(_attemptsByLead));
   const a=all.find(x=>String(x.id)===String(id));
   if(!a) return;
@@ -297,7 +303,6 @@ function openReportForAttempt(id){
     generatedAt:a.created_at
   };
   sessionStorage.setItem('ia_report_payload',JSON.stringify(payload));
-  window.open('/assessment-engine/assessment-report.html','_blank');
 }
 
 function applyFilters(){
@@ -324,7 +329,7 @@ function render(list){
       const yearSubj=[l.year_group,l.subjects_interested].filter(Boolean).join(' — ')||'—';
       const attempts=_attemptsByLead[l.id]||[];
       const diagCell=attempts.length
-        ? attempts.map(a=>`<button class="link-copy" style="padding:.3rem .6rem;font-size:.72rem;margin:.15rem .15rem 0 0;" onclick="openReportForAttempt('${a.id}')">📄 ${esc(a.subject)}${a.overall_score!=null?' · '+a.overall_score+'%':''}</button>`).join('')
+        ? attempts.map(a=>`<a class="link-copy" href="/assessment-engine/assessment-report.html" target="_blank" style="display:inline-block;padding:.3rem .6rem;font-size:.72rem;margin:.15rem .15rem 0 0;" onclick="prepareReportForAttempt('${a.id}')">📄 ${esc(a.subject)}${a.overall_score!=null?' · '+a.overall_score+'%':''}</a>`).join('')
         : '<span style="color:var(--muted);font-size:.8rem;">Not taken yet</span>';
       return`<tr>
         <td><strong>${esc(l.child_name)}</strong></td>
