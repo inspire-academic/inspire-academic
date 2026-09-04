@@ -49,7 +49,12 @@
 .report-page{padding:2.4cm 2.2cm 2.6cm;min-height:26cm;position:relative;page-break-after:always;box-sizing:border-box;}
 .report-section{padding:2.4cm 2.2cm 2.6cm;position:relative;page-break-before:always;box-sizing:border-box;}
 
-.cover-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:25.5cm;background:#fff;color:var(--navy);text-align:center;padding:2.5cm 2cm;border:6px solid var(--navy);position:relative;page-break-after:always;box-sizing:border-box;margin:.5cm auto;width:19cm;}
+/* No page-break-after here on purpose — the very next element is always a
+   .report-section, which already declares page-break-before:always. Both
+   directives at the same boundary made html2pdf.js's page-break plugin
+   insert two separate breaks, producing a genuinely blank page 2 on every
+   report (confirmed live 2026-09-04). One directive per boundary. */
+.cover-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:25.5cm;background:#fff;color:var(--navy);text-align:center;padding:2.5cm 2cm;border:6px solid var(--navy);position:relative;box-sizing:border-box;margin:.5cm auto;width:19cm;}
 .cover-page::before{content:'';position:absolute;top:10px;left:10px;right:10px;bottom:10px;border:2px solid var(--gold);pointer-events:none;}
 .cover-mark{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--gold),#e0bc63);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;color:var(--navy);font-family:var(--font-display);margin-bottom:1.5rem;}
 .cover-badge{display:inline-block;background:rgba(201,168,76,.1);border:2px solid var(--gold);color:var(--navy);font-size:.78rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;padding:.4rem .9rem;border-radius:6px;margin-bottom:1.5rem;font-weight:600;}
