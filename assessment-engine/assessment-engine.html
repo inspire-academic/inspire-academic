@@ -388,6 +388,7 @@ const S = {
   plan:        null,
   studentId:   null,
   attemptId:   null,
+  leadId:      null, // set only for a guest who arrived from a programme registration (e.g. ISM) — see saveGuestAttempt()
   savedPlans:  {}   // { [subject]: {id, level, board, diagnosis, plan} } — this student's existing saved plans
 };
 
@@ -412,6 +413,16 @@ const S = {
 })();
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // A guest arriving from a programme registration (e.g. the ISM/Science
+  // Mastery funnel — see thank-you/index.html) carries their lead_id and
+  // child's name as query params, since there is no login to identify them
+  // by otherwise. Without this, a real diagnostic result has no way back
+  // to the family's registration (see saveGuestAttempt()).
+  const urlParams = new URLSearchParams(location.search);
+  const leadIdParam = urlParams.get('lead_id');
+  const nameParam = urlParams.get('name');
+  if (leadIdParam) S.leadId = leadIdParam;
+
   try {
     const { data: { user } } = await supa.auth.getUser();
     if (user) {
@@ -424,10 +435,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         checkSetup();
       }
       await loadSavedPlans();
+    } else if (nameParam) {
+      document.getElementById('inp-name').value = nameParam;
+      checkSetup();
     }
   } catch(e) {
     // Not logged in or no profile — continue as guest
     console.log('Guest mode');
+    if (nameParam) {
+      document.getElementById('inp-name').value = nameParam;
+      checkSetup();
+    }
   }
 });
 
@@ -1305,6 +1323,7 @@ async function runPlan() {
   goTo('plan');
   S.plan = computePlan();
   await savePlanToAttempt();
+  await saveGuestAttempt();
   renderPlan();
   toast('Study plan ready!', 'success');
 }
@@ -1480,6 +1499,53 @@ async function savePlanToAttempt() {
     console.log('Plan saved to Supabase');
   } catch(e) {
     console.warn('Could not save plan:', e.message);
+  }
+}
+
+// Saves a GUEST attempt (no login) that arrived from a programme
+// registration — e.g. the ISM/Science Mastery funnel. A guest with no
+// lead_id (someone who reached /diagnostic directly, not through a
+// programme's registration flow) is left exactly as before: not saved,
+// only the emailed/downloaded PDF exists. One insert covers diagnosis +
+// plan together, unlike the logged-in two-step (saveAttempt() then
+// savePlanToAttempt()) — a guest can't return to revisit a saved
+// attempt, so there's nothing to show for a diagnosis-only save if they
+// abandon before generating a plan.
+async function saveGuestAttempt() {
+  if (S.studentId || !S.leadId) return;
+  try {
+    const res = await fetch('/api/v1/assessment/attempt/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        lead_id:        S.leadId,
+        student_name:   S.config.name,
+        subject:        S.config.subject,
+        exam_board:     S.config.board,
+        level:          S.config.level,
+        overall_score:  S.diagnosis.overallScore,
+        current_grade:  S.diagnosis.currentGrade,
+        target_grade:   S.diagnosis.targetGrade,
+        confidence_low_grade:  S.diagnosis.confidence ? S.diagnosis.confidence.lowGrade : null,
+        confidence_high_grade: S.diagnosis.confidence ? S.diagnosis.confidence.highGrade : null,
+        total_questions:S.answers.length,
+        correct_count:  S.answers.filter(a => a.correct).length,
+        not_sure_count: S.answers.filter(a => a.not_sure).length,
+        question_results: S.answers,
+        topic_scores:   S.diagnosis.topicScores,
+        gaps:           S.diagnosis.gaps,
+        student_profile:      S.diagnosis.studentProfile,
+        profile_description:  S.diagnosis.profileDescription,
+        strengths:            S.diagnosis.strengths,
+        teacher_note:         S.diagnosis.teacherNote,
+        plan:           S.plan
+      })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) throw new Error((data.error && data.error.message) || 'save failed');
+    console.log('Guest attempt saved to Supabase, linked to lead', S.leadId);
+  } catch(e) {
+    console.warn('Could not save guest attempt:', e.message);
   }
 }
 

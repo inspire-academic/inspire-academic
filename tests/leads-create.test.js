@@ -19,13 +19,13 @@ const VALID_BODY = {
   exam_board_hint: 'AQA'
 };
 
-function withMockFetch({ insertOk = true, onInsert } = {}, fn) {
+function withMockFetch({ insertOk = true, insertedId = 'mock-lead-id', onInsert } = {}, fn) {
   const original = global.fetch;
   global.fetch = async (url, opts = {}) => {
     if (String(url).includes('/rest/v1/leads')) {
       if (onInsert) onInsert(JSON.parse(opts.body));
       return insertOk
-        ? { ok: true, status: 201, text: async () => '' }
+        ? { ok: true, status: 201, text: async () => '', json: async () => ([{ id: insertedId }]) }
         : { ok: false, status: 500, text: async () => 'insert failed' };
     }
     return { ok: true, status: 200, text: async () => '' };
@@ -68,6 +68,14 @@ test('leads-create: omitted primary_concern/exam_board_hint insert as null, not 
     assert.equal(res.statusCode, 200);
     assert.equal(captured.primary_concern, null);
     assert.equal(captured.exam_board_hint, null);
+  });
+});
+
+test('leads-create: returns the new lead\'s id (ISM diagnostic hand-off needs it)', async () => {
+  await withMockFetch({ insertedId: 'lead-123' }, async () => {
+    const res = await leadsCreate.handler({ httpMethod: 'POST', body: JSON.stringify(VALID_BODY) });
+    assert.equal(res.statusCode, 200);
+    assert.equal(JSON.parse(res.body).id, 'lead-123');
   });
 });
 

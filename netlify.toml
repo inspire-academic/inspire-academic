@@ -347,6 +347,15 @@ function = "create-teacher"
   status = 200
   force = true
 
+# Persists a GUEST diagnostic attempt (no-login ISM/Science Mastery
+# funnel) linked back to its leads row. Same /api/v1/resource/action
+# convention.
+[[redirects]]
+  from = "/api/v1/assessment/attempt/create"
+  to = "/.netlify/functions/assessment-attempt-create"
+  status = 200
+  force = true
+
 # Paid-tier Phase 2 (dormant — see create-checkout-session.js/
 # stripe-webhook.js header comments for the kill switches). Same
 # /api/v1/resource/action convention.

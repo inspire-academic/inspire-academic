@@ -60,7 +60,7 @@ exports.handler = async (event) => {
         'Content-Type': 'application/json',
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Prefer': 'return=minimal'
+        'Prefer': 'return=representation'
       },
       body: JSON.stringify({
         child_name,
@@ -91,7 +91,12 @@ exports.handler = async (event) => {
       };
     }
 
-    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+    // Callers that don't need it (most programme forms) just ignore this —
+    // the ISM/Science Mastery register page uses it to carry the lead
+    // through to the no-login diagnostic (see assessment-attempt-create.js)
+    // so a real result is traceable back to this registration.
+    const [inserted] = await insertRes.json();
+    return { statusCode: 200, body: JSON.stringify({ success: true, id: inserted && inserted.id }) };
   } catch (error) {
     console.error('leads-create error:', error);
     return {
