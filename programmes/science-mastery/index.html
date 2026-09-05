@@ -11,6 +11,8 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="/assets/images/ism/hero/hero-desk-mobile.webp" media="(max-width:768px)">
+<link rel="preload" as="image" href="/assets/images/ism/hero/hero-desk.webp" media="(min-width:769px)">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
@@ -42,6 +44,57 @@ h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5.2vw,3.
 .btn-secondary{display:inline-flex;align-items:center;gap:.5rem;background:var(--bg-card);color:var(--text);border:1px solid var(--border);padding:.95rem 1.7rem;border-radius:var(--r);font-weight:600;font-size:.95rem;transition:border-color .2s;}
 .btn-secondary:hover{border-color:var(--sm-light);}
 .hero-micro{font-size:.86rem;color:var(--text-soft);margin-top:1.2rem;}
+
+/* Photographic hero — ISM Diagnostic Public Front Door pack, adapted to the
+   site's own navy/gold system (tokens.css) rather than the pack's reference
+   forest-green/crest palette, which has no precedent anywhere else on this
+   site — see CLAUDE.md's DESIGN SYSTEM. Approved hero-desk photo used
+   unmodified per the pack's asset rules; full-bleed treatment matches the
+   "Full-bleed hero banner with real photography" pattern already used on
+   the subject pages (physics.html etc).
+   Full-bleed trick: cancels .wrap's max-width so this section spans the
+   viewport while its own inner content stays aligned to the 960px column. */
+.hero-photo{position:relative;overflow:hidden;padding:2.6rem 1.4rem 2.4rem;margin:0 calc(50% - 50vw);width:100vw;border-top:none;}
+.hero-photo-media{position:absolute;inset:0;z-index:-2;margin:0;line-height:0;}
+.hero-photo-media img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.hero-photo-scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(7,16,30,.93),rgba(7,16,30,.87) 55%,rgba(7,16,30,.97));}
+.hero-photo-inner{max-width:960px;margin:0 auto;position:relative;}
+.hero-photo-inner .eyebrow{text-align:left;}
+.hero-photo-inner h1{text-align:left;margin-left:0;margin-right:0;max-width:22rem;}
+.hero-photo-inner .hero-sub{text-align:left;margin-left:0;margin-right:0;max-width:34rem;}
+.hero-photo-inner .cta-row{justify-content:flex-start;}
+.trust-row{display:flex;flex-wrap:wrap;gap:.85rem 1.3rem;margin-top:1.3rem;font-size:.84rem;color:rgba(240,246,255,.85);}
+.trust-row span{display:flex;align-items:center;gap:.5rem;}
+.trust-row .tick{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--sm-light);color:var(--sm-light);display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0;}
+
+/* Feature strip — full-bleed band, four value props */
+.feature-strip{background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.8rem 1.4rem;margin:0 calc(50% - 50vw);width:100vw;}
+.feature-grid-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:1.5rem;}
+.feature-item{display:flex;gap:.9rem;align-items:flex-start;}
+.feature-ico{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--sm);color:var(--sm-light);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;}
+.feature-item h3{font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:.3rem;}
+.feature-item p{font-size:.86rem;margin:0;}
+
+/* How the diagnostic works — the funnel journey (distinct from the
+   programme's own pedagogical model in the "Teach deeply..." section
+   further down, which is unchanged). */
+.journey-grid{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1.6rem;}
+.journey-step{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.7rem 1.2rem 1.3rem;}
+.journey-num{position:absolute;top:-14px;left:1.1rem;width:30px;height:30px;border-radius:50%;background:var(--grad-gold);color:var(--bg-deep,#071b33);font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center;}
+.journey-step h4{font-family:var(--font-display);font-size:1.02rem;margin:.5rem 0 .4rem;}
+.journey-step p{font-size:.87rem;margin:0;}
+
+@media(min-width:641px){
+  .feature-grid-inner{grid-template-columns:repeat(2,1fr);}
+}
+@media(min-width:769px){
+  .hero-photo{padding:5.5rem 1.4rem;}
+  .hero-photo-scrim{background:linear-gradient(90deg,rgba(7,16,30,.95) 42%,rgba(7,16,30,.62) 68%,rgba(7,16,30,.2));}
+  .journey-grid{grid-template-columns:repeat(4,1fr);}
+}
+@media(min-width:1000px){
+  .feature-grid-inner{grid-template-columns:repeat(4,1fr);}
+}
 
 section{padding:2.2rem 0;border-top:1px solid var(--border);}
 h2{font-family:var(--font-display);font-weight:700;font-size:1.6rem;margin-bottom:1rem;text-wrap:balance;max-width:38rem;}
@@ -93,15 +146,45 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
 
 <main class="wrap">
 
-  <section class="hero" style="border-top:none;">
-    <div class="eyebrow">Inspire Academic &middot; September 2026 Intake</div>
-    <h1>GCSE Maths &amp; Science should not feel like four separate emergencies.</h1>
-    <p class="hero-sub">Inspire Science Mastery gives Year 10 and Year 11 students a structured pathway across Maths, Physics, Chemistry and Biology — live teaching, diagnostic assessment, targeted intervention, exam practice and clear progress visibility for parents.</p>
-    <div class="cta-row">
-      <a class="btn-primary js-register-cta" href="register/">Start the Mastery Diagnostic</a>
-      <a class="btn-secondary" href="#programme">See how ISM works</a>
+  <section class="hero-photo">
+    <picture class="hero-photo-media" aria-hidden="true">
+      <source media="(min-width:769px)" srcset="/assets/images/ism/hero/hero-desk.webp">
+      <img src="/assets/images/ism/hero/hero-desk-mobile.webp" alt="" width="1600" height="900" fetchpriority="high" loading="eager">
+    </picture>
+    <div class="hero-photo-scrim" aria-hidden="true"></div>
+    <div class="hero-photo-inner">
+      <div class="eyebrow">Inspire Science Mastery</div>
+      <h1>Find the Gaps.<br>Build the <span class="gold">Mastery</span>.</h1>
+      <p class="hero-sub">A free diagnostic assessment to pinpoint exactly where your child is losing marks in GCSE Maths and Science — and a clear plan to move them forward.</p>
+      <div class="cta-row">
+        <a class="btn-primary js-register-cta" href="register/">Start the Free Diagnostic</a>
+        <a class="btn-secondary" href="#programme">Learn More</a>
+      </div>
+      <div class="trust-row">
+        <span><span class="tick">&check;</span>Takes 15&ndash;25 minutes</span>
+        <span><span class="tick">&check;</span>Instant personalised report</span>
+        <span><span class="tick">&check;</span>No obligation</span>
+      </div>
     </div>
-    <p class="hero-micro">Designed for families who want more than another weekly tutoring hour.</p>
+  </section>
+
+  <section class="feature-strip">
+    <div class="feature-grid-inner">
+      <article class="feature-item"><div class="feature-ico" aria-hidden="true">&#9678;</div><div><h3>Identify Weaknesses</h3><p>Pinpoint the exact topics holding them back.</p></div></article>
+      <article class="feature-item"><div class="feature-ico" aria-hidden="true">&#9636;</div><div><h3>Personalised Report</h3><p>Clear results with practical next steps.</p></div></article>
+      <article class="feature-item"><div class="feature-ico" aria-hidden="true">&#128214;</div><div><h3>A Plan That Works</h3><p>Focused learning through Inspire Science Mastery.</p></div></article>
+      <article class="feature-item"><div class="feature-ico" aria-hidden="true">&#8599;</div><div><h3>Real Progress</h3><p>Build confidence. Improve grades. Broaden opportunities.</p></div></article>
+    </div>
+  </section>
+
+  <section class="journey">
+    <h2>From Insight to Improvement in Four Simple Steps</h2>
+    <div class="journey-grid">
+      <article class="journey-step"><div class="journey-num">1</div><h4>Take the Diagnostic</h4><p>15&ndash;25 minutes online, covering GCSE Maths and/or Science.</p></article>
+      <article class="journey-step"><div class="journey-num">2</div><h4>Get Your Report</h4><p>An instant personalised report showing strengths and priority gaps.</p></article>
+      <article class="journey-step"><div class="journey-num">3</div><h4>Talk It Through</h4><p>Our team follows up to walk through the results and the right next step for your family.</p></article>
+      <article class="journey-step"><div class="journey-num">4</div><h4>Start the Journey</h4><p>Join Inspire Science Mastery with a clear pathway forward.</p></article>
+    </div>
   </section>
 
   <section class="problem">
@@ -127,7 +210,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
   <section id="diagnostic">
     <h2>Start with the Inspire GCSE Mastery Diagnostic.</h2>
     <p>We begin by identifying where your child is now — starting with the subject causing the most concern. The diagnostic surfaces priority strengths, gaps and areas needing attention, so we can recommend the right ISM pathway rather than guessing.</p>
-    <a class="btn-primary js-register-cta" href="register/">Start the Mastery Diagnostic</a>
+    <a class="btn-primary js-register-cta" href="register/">Start the Free Diagnostic</a>
     <p class="note">The diagnostic does not predict a GCSE grade — it identifies strengths, priority gaps and a recommended next step for your child.</p>
   </section>
 
@@ -159,7 +242,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
   <section class="final-cta">
     <h2>Find the gaps. Build the mastery. Change the trajectory.</h2>
     <p style="max-width:44ch;margin-left:auto;margin-right:auto;">Begin with the Inspire GCSE Mastery Diagnostic and receive a clear recommendation for your child's next step.</p>
-    <a class="btn-primary js-register-cta" href="register/">Start the Mastery Diagnostic</a>
+    <a class="btn-primary js-register-cta" href="register/">Start the Free Diagnostic</a>
     <p class="short-url">Or visit <strong>inspireacademic.org/science-mastery</strong> anytime.</p>
   </section>
 
