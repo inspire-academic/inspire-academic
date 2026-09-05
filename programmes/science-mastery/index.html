@@ -54,19 +54,25 @@ h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5.2vw,3.
    the subject pages (physics.html etc).
    Full-bleed trick: cancels .wrap's max-width so this section spans the
    viewport while its own inner content stays aligned to the 960px column. */
-.hero-photo{position:relative;overflow:hidden;padding:2.6rem 1.4rem 2.4rem;margin:0 calc(50% - 50vw);width:100vw;border-top:none;}
+.hero-photo{position:relative;overflow:hidden;padding:2.6rem 0 2.4rem;margin:0 calc(50% - 50vw);width:100vw;border-top:none;}
 .hero-photo-media{position:absolute;inset:0;z-index:-2;margin:0;line-height:0;}
 .hero-photo-media img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
 .hero-photo-scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(7,16,30,.93),rgba(7,16,30,.87) 55%,rgba(7,16,30,.97));}
-/* Not margin:0 auto centered like .wrap's other sections — that's invisible
-   on a solid-color background but looks broken here: on a wide viewport the
-   text ends up floating in the middle of the full-bleed photo instead of
-   sitting at its left edge, since a photo (unlike a flat background color)
-   makes the "empty" side margins visually obvious. Instead, align this
-   block's left edge to exactly where .wrap's own content starts at any
-   viewport width, and let it take only the reading-width it needs rather
-   than the full 960px column. Found live on a wide desktop window. */
-.hero-photo-inner{max-width:34rem;margin-left:max(0px, calc(50vw - 480px));margin-right:1.4rem;position:relative;}
+/* Two nested boxes, not one — .hero-photo-align repeats .wrap's own
+   max-width:960px/margin:auto/padding:1.4rem rule verbatim, so its left
+   edge lands pixel-for-pixel where the rest of the page's content
+   starts at any viewport width (a hand-rolled calc() approximating that
+   position drifted by a stray padding unit — not worth re-deriving by
+   hand when copying the real rule guarantees an exact match). Text then
+   sits in .hero-photo-inner at only its own reading width, flush against
+   that edge — not centered like .wrap's other sections, which is
+   invisible on a solid background but looks broken on this section's
+   full-bleed photo (empty side margins are visibly photo, not
+   background), so the text used to float in the middle of the image
+   instead of hugging its left edge like the approved reference. Found
+   live on a wide desktop window. */
+.hero-photo-align{max-width:960px;margin:0 auto;padding:0 1.4rem;position:relative;}
+.hero-photo-inner{max-width:34rem;position:relative;}
 .hero-photo-inner .eyebrow{text-align:left;}
 /* Colors below are hardcoded, not theme variables — the backdrop is
    always a dark photo+scrim regardless of the site's light/dark toggle,
@@ -85,8 +91,8 @@ h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5.2vw,3.
 .trust-row .tick{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--sm-light);color:var(--sm-light);display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0;}
 
 /* Feature strip — full-bleed band, four value props */
-.feature-strip{background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.8rem 1.4rem;margin:0 calc(50% - 50vw);width:100vw;}
-.feature-grid-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:1.5rem;}
+.feature-strip{background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.8rem 0;margin:0 calc(50% - 50vw);width:100vw;}
+.feature-grid-inner{max-width:960px;margin:0 auto;padding:0 1.4rem;display:grid;grid-template-columns:1fr;gap:1.5rem;}
 .feature-item{display:flex;gap:.9rem;align-items:flex-start;}
 .feature-ico{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--sm);color:var(--sm-light);display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0;}
 .feature-item h3{font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:.3rem;}
@@ -105,7 +111,7 @@ h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5.2vw,3.
   .feature-grid-inner{grid-template-columns:repeat(2,1fr);}
 }
 @media(min-width:769px){
-  .hero-photo{padding:5.5rem 1.4rem;}
+  .hero-photo{padding:5.5rem 0;}
   .hero-photo-scrim{background:linear-gradient(90deg,rgba(7,16,30,.95) 42%,rgba(7,16,30,.62) 68%,rgba(7,16,30,.2));}
   .journey-grid{grid-template-columns:repeat(4,1fr);}
 }
@@ -169,18 +175,20 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
       <img src="/assets/images/ism/hero/hero-desk-mobile.webp" alt="" width="1600" height="900" fetchpriority="high" loading="eager">
     </picture>
     <div class="hero-photo-scrim" aria-hidden="true"></div>
-    <div class="hero-photo-inner">
-      <div class="eyebrow">Inspire Science Mastery</div>
-      <h1>Find the Gaps.<br>Build the <span class="gold">Mastery</span>.</h1>
-      <p class="hero-sub">A free diagnostic assessment to pinpoint exactly where your child is losing marks in GCSE Maths and Science — and a clear plan to move them forward.</p>
-      <div class="cta-row">
-        <a class="btn-primary js-register-cta" href="register/">Start the Free Diagnostic</a>
-        <a class="btn-secondary" href="#programme">Learn More</a>
-      </div>
-      <div class="trust-row">
-        <span><span class="tick">&check;</span>Takes 15&ndash;25 minutes</span>
-        <span><span class="tick">&check;</span>Instant personalised report</span>
-        <span><span class="tick">&check;</span>No obligation</span>
+    <div class="hero-photo-align">
+      <div class="hero-photo-inner">
+        <div class="eyebrow">Inspire Science Mastery</div>
+        <h1>Find the Gaps.<br>Build the <span class="gold">Mastery</span>.</h1>
+        <p class="hero-sub">A free diagnostic assessment to pinpoint exactly where your child is losing marks in GCSE Maths and Science — and a clear plan to move them forward.</p>
+        <div class="cta-row">
+          <a class="btn-primary js-register-cta" href="register/">Start the Free Diagnostic</a>
+          <a class="btn-secondary" href="#programme">Learn More</a>
+        </div>
+        <div class="trust-row">
+          <span><span class="tick">&check;</span>Takes 15&ndash;25 minutes</span>
+          <span><span class="tick">&check;</span>Instant personalised report</span>
+          <span><span class="tick">&check;</span>No obligation</span>
+        </div>
       </div>
     </div>
   </section>
