@@ -57,6 +57,11 @@
 .cover-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:25.5cm;background:#fff;color:var(--navy);text-align:center;padding:2.5cm 2cm;border:6px solid var(--navy);position:relative;box-sizing:border-box;margin:.5cm auto;width:19cm;}
 .cover-page::before{content:'';position:absolute;top:10px;left:10px;right:10px;bottom:10px;border:2px solid var(--gold);pointer-events:none;}
 .cover-mark{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--gold),#e0bc63);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;color:var(--navy);font-family:var(--font-display);margin-bottom:1.5rem;}
+/* ISM-funnel reports only (guest attempts linked to a lead, e.g. via
+   admin/leads.html) — a regular logged-in student's diagnostic keeps the
+   plain "IA" mark above. Wider pill, not the small square, so the full
+   name fits as the visible badge text itself. */
+.cover-mark-ism{display:inline-flex;align-items:center;justify-content:center;padding:.7rem 1.4rem;border-radius:999px;background:linear-gradient(135deg,var(--gold),#e0bc63);font-weight:800;font-size:1rem;color:var(--navy);font-family:var(--font-display);margin-bottom:1.5rem;white-space:nowrap;}
 .cover-badge{display:inline-block;background:rgba(201,168,76,.1);border:2px solid var(--gold);color:var(--navy);font-size:.78rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;padding:.4rem .9rem;border-radius:6px;margin-bottom:1.5rem;font-weight:600;}
 .cover-title{font-family:var(--font-display);font-size:2.6rem;font-weight:800;margin-bottom:.5rem;line-height:1.15;color:var(--navy);}
 .cover-subtitle{font-size:1.3rem;font-weight:300;color:var(--gold);margin-bottom:2rem;}
@@ -204,7 +209,7 @@ function aspirationGrade(isCombined) {
 function buildCover(c, generatedAt) {
   return `
     <div class="cover-page">
-      <div class="cover-mark">IA</div>
+      ${c.isISM ? '<div class="cover-mark-ism">Inspire Science Mastery (ISM)</div>' : '<div class="cover-mark">IA</div>'}
       <div class="cover-badge">Confidential · Diagnostic Assessment</div>
       <div class="cover-title">Diagnostic Assessment<br>&amp; Study Plan Report</div>
       <div class="cover-subtitle">${c.subject || ''} · ${c.level || ''} · ${c.board || ''}</div>

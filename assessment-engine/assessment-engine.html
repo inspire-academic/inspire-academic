@@ -1451,7 +1451,10 @@ function renderPlan() {
 function openAssessmentReport(mode) {
   if (!S.diagnosis || !S.plan) return;
   sessionStorage.setItem('ia_report_payload', JSON.stringify({
-    config: S.config, diagnosis: S.diagnosis, plan: S.plan,
+    // isISM: true only for the no-login ISM funnel (S.leadId set) — a
+    // logged-in student's own diagnostic keeps the plain Inspire Academic
+    // cover mark (see buildCover() in assessment-report.html).
+    config: { ...S.config, isISM: !!S.leadId }, diagnosis: S.diagnosis, plan: S.plan,
     generatedAt: new Date().toISOString()
   }));
   location.href = '/assessment-engine/assessment-report.html' + (mode === 'email' ? '?focus=email' : '');
