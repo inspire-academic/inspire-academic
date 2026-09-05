@@ -298,7 +298,7 @@ function openReportForAttempt(id){
   const a=all.find(x=>String(x.id)===String(id));
   if(!a) return;
   const payload={
-    config:{ name:a.student_name, subject:a.subject, level:a.level, board:a.exam_board, isISM:true },
+    config:{ name:a.student_name, subject:a.subject, level:a.level, board:a.exam_board },
     diagnosis:{
       overallScore:a.overall_score, currentGrade:a.current_grade, targetGrade:a.target_grade,
       notSureCount:a.not_sure_count, topicScores:a.topic_scores, gaps:a.gaps,
