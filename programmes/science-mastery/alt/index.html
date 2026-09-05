@@ -16,8 +16,34 @@ header{position:sticky;top:0;z-index:20;background:rgba(251,250,246,.95);backdro
 .how{padding:66px 0 72px}.how-grid{display:grid;grid-template-columns:1fr 310px;gap:44px}.sek{text-transform:uppercase;letter-spacing:.28em;color:var(--g2);font-size:.72rem;font-weight:900;margin-bottom:12px}.title{font-family:var(--serif);font-size:clamp(2.4rem,4.6vw,4rem);line-height:1.02;letter-spacing:-.035em;margin:0 0 30px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.step{position:relative;background:#f4f1e9;border-radius:17px;padding:24px 18px 20px;min-height:198px;box-shadow:0 10px 26px rgba(7,60,49,.05);transition:.2s}.step:hover{transform:translateY(-5px);box-shadow:0 18px 34px rgba(7,60,49,.1)}.num{position:absolute;top:-12px;left:16px;width:34px;height:34px;border-radius:50%;background:var(--gold);color:white;display:grid;place-items:center;font-weight:900}.step .si{font-size:1.8rem;color:var(--g);margin:10px 0 18px}.step h4{font-family:var(--serif);margin:0 0 7px;font-size:1.08rem}.step p{margin:0;color:#56605b;line-height:1.55;font-size:.9rem}.quote{background:#f2efe7;border-radius:20px;padding:30px;box-shadow:0 12px 34px rgba(7,60,49,.06)}.quote h3{font-family:var(--serif);font-size:1.3rem;margin:0 0 12px;}.quote p{margin:0;color:#56605b;line-height:1.65;font-size:.95rem}.ql{width:46px;height:3px;background:var(--gold);margin-top:22px}
 .sitefoot{background:linear-gradient(90deg,var(--g),var(--g2));color:#fff;padding:24px 0}.footin{display:flex;justify-content:center;align-items:center;gap:36px;text-transform:uppercase;letter-spacing:.26em;font-size:.72rem;flex-wrap:wrap}.rule{width:56px;height:2px;background:var(--gold)}
 @media(max-width:1000px){.links,.topcta.desktop{display:none}.hamb{display:block}.nav{grid-template-columns:auto 1fr auto}.hero{min-height:670px}.feature-grid{grid-template-columns:repeat(2,1fr)}.how-grid{grid-template-columns:1fr}}
-@media(max-width:720px){.container,.hero-inner{width:min(100% - 28px,1180px)}.nav{height:68px}.brand img{width:48px;height:50px}.hero{min-height:710px}.hero-inner{padding:58px 0 88px}h1{font-size:clamp(2.75rem,13vw,4.05rem)}.actions{flex-direction:column}.btn{width:100%}.trust{flex-direction:column;gap:12px}.note{display:none}.feature-grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.footin{flex-direction:column;gap:14px;text-align:center}}
-@media(max-width:480px){.steps{grid-template-columns:1fr}.hero:before{background:linear-gradient(180deg,rgba(3,26,22,.86),rgba(3,26,22,.8)),url('/assets/images/ism/hero/hero-desk-mobile.webp') 62% center/cover no-repeat}}
+/* Mobile hero: the desktop treatment (tall headline + a scrim dark enough
+   to read text over the photo's busiest area) leaves almost no visible
+   photo once stacked into one narrow column, and the huge clamp()
+   headline alone can fill the screen before the photo even starts.
+   Smaller headline, tighter spacing throughout, and a lighter flat scrim
+   (readable — text is bold white/gold — but not the near-opaque wash the
+   desktop gradient becomes at this width) so the mobile banner actually
+   shows as much of the photo as the desktop version does. Found live
+   checking a real phone screenshot. */
+@media(max-width:720px){
+  .container,.hero-inner{width:min(100% - 28px,1180px)}
+  .nav{height:68px}
+  .brand img{width:48px;height:50px}
+  .hero{min-height:0}
+  .hero:before{background:linear-gradient(180deg,rgba(3,26,22,.62),rgba(3,26,22,.7)),url('/assets/images/ism/hero/hero-desk-mobile.webp') center 35%/cover no-repeat}
+  .hero-inner{padding:36px 0 40px}
+  .eyebrow{margin-bottom:12px}
+  h1{font-size:clamp(2.1rem,8.5vw,2.6rem);margin-bottom:14px}
+  .lead{line-height:1.55;margin-bottom:0}
+  .actions{flex-direction:column;margin:18px 0 14px}
+  .btn{width:100%;min-height:54px;padding:14px 20px;font-size:1rem}
+  .trust{flex-direction:row;flex-wrap:wrap;gap:8px 16px;font-size:.82rem}
+  .note{display:none}
+  .feature-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .footin{flex-direction:column;gap:14px;text-align:center}
+}
+@media(max-width:480px){.steps{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 </head>
