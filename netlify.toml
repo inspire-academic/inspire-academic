@@ -440,3 +440,12 @@ function = "create-teacher"
   to = "/.netlify/functions/update-user-role"
   status = 200
   force = true
+
+# Teacher-facing student date-of-birth + parent contact panel — same
+# service-role rationale as update-role above, scoped to a teacher's
+# own assigned students (or any student for admins).
+[[redirects]]
+  from = "/api/v1/student/info"
+  to = "/.netlify/functions/student-info"
+  status = 200
+  force = true
