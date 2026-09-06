@@ -432,6 +432,8 @@ tr:hover td { background: rgba(255,255,255,.025); }
         <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
       </div>
 
+      <div id="birthday-banner"></div>
+
       <div class="stat-row" id="overview-stats">
         <div class="stat-card"><div class="stat-label">Total Students</div><div class="stat-value" id="stat-students">—</div><div class="stat-sub">with accounts</div></div>
         <div class="stat-card"><div class="stat-label">Active This Week</div><div class="stat-value" id="stat-active">—</div><div class="stat-sub">studied ≥1 session</div></div>
@@ -700,14 +702,14 @@ async function loadAll() {
     }
     const ids = assigned.map(s => s.student_id);
     const { data: p } = await supa.from('profiles')
-      .select('id, full_name, year_group, role')
+      .select('id, full_name, year_group, role, date_of_birth')
       .in('id', ids)
       .order('full_name');
     profiles = p;
   } else {
     // Admin / super_admin — see all students
     const { data: p } = await supa.from('profiles')
-      .select('id, full_name, year_group, role')
+      .select('id, full_name, year_group, role, date_of_birth')
       .eq('role', 'student')
       .order('full_name');
     profiles = p;
@@ -800,6 +802,7 @@ async function loadAll() {
       id: p.id,
       name: p.full_name || 'Unknown',
       year: p.year_group || '—',
+      dateOfBirth: p.date_of_birth || null,
       totalAttempts,
       avgPct,
       lastActiveTs,
@@ -837,7 +840,47 @@ function showView(name) {
 }
 
 // ── Overview ──────────────────────────────────────────────────────────
+// Matches birthday-digest.js's own month/day comparison (see that
+// function's header comment for why this is a separate client-side
+// computation rather than sharing code with the scheduled email).
+function isBirthdayOnDate(dobStr, targetDate) {
+  if (!dobStr) return false;
+  const dob = new Date(dobStr + 'T00:00:00');
+  if (isNaN(dob)) return false;
+  return dob.getMonth() === targetDate.getMonth() && dob.getDate() === targetDate.getDate();
+}
+
+function renderBirthdayBanner() {
+  const banner = document.getElementById('birthday-banner');
+  if (!banner) return;
+
+  const today = new Date();
+  const in2Days = new Date(today);
+  in2Days.setDate(today.getDate() + 2);
+
+  const todayMatches = _allStudents.filter(s => isBirthdayOnDate(s.dateOfBirth, today));
+  const upcomingMatches = _allStudents.filter(s => isBirthdayOnDate(s.dateOfBirth, in2Days));
+
+  if (todayMatches.length === 0 && upcomingMatches.length === 0) {
+    banner.innerHTML = '';
+    return;
+  }
+
+  const line = (label, matches) => matches.length === 0 ? '' :
+    `<div>${label} <strong>${matches.map(s => escHtml(s.name)).join(', ')}</strong></div>`;
+
+  banner.innerHTML = `
+    <div style="background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));border:1px solid var(--gold);border-radius:10px;padding:.9rem 1.2rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:.9rem">
+      <div style="font-size:1.6rem">🎂</div>
+      <div style="font-size:.88rem;line-height:1.5">
+        ${line('Today —', todayMatches)}
+        ${line('In 2 days —', upcomingMatches)}
+      </div>
+    </div>`;
+}
+
 function renderOverview() {
+  renderBirthdayBanner();
   const now = Date.now();
   const weekAgo = now - 7 * 86400000;
 

@@ -55,6 +55,12 @@ function = "create-teacher"
   [functions."*"]
   node_bundler = "esbuild"
 
+# Daily birthday digest — 07:00 UTC. Only actually sends from the
+# production context (see the function's own header comment); the
+# staging deploy runs the same schedule but no-ops.
+[functions."birthday-digest"]
+  schedule = "0 7 * * *"
+
 # Route /api/* to Netlify Functions (Node.js) — reliable on Projects platform
 [[redirects]]
   from = "/api/generate-question"
