@@ -444,7 +444,11 @@ tr:hover td { background: rgba(255,255,255,.025); }
       <div class="table-card">
         <div class="table-header">
           <div class="table-title">Students</div>
-          <div class="table-count" id="student-count-label"></div>
+          <div style="display:flex;align-items:center;gap:.9rem">
+            <input type="text" id="student-search" placeholder="Search by name or year…" oninput="renderOverview()"
+              style="background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:.45rem .8rem;color:var(--white);font-size:.82rem;width:220px">
+            <div class="table-count" id="student-count-label"></div>
+          </div>
         </div>
         <table>
           <thead>
@@ -899,8 +903,15 @@ function renderOverview() {
   document.getElementById('stat-reviews').textContent = totalAttempts.toLocaleString();
   document.getElementById('stat-mastery').textContent = classAvgPct + '%';
 
-  document.getElementById('student-count-label').textContent =
-    _allStudents.length + ' student' + (_allStudents.length !== 1 ? 's' : '');
+  const searchInput = document.getElementById('student-search');
+  const query = (searchInput?.value || '').trim().toLowerCase();
+  const visibleStudents = query
+    ? _allStudents.filter(s => s.name.toLowerCase().includes(query) || String(s.year).toLowerCase().includes(query))
+    : _allStudents;
+
+  document.getElementById('student-count-label').textContent = query
+    ? `${visibleStudents.length} of ${_allStudents.length} students`
+    : _allStudents.length + ' student' + (_allStudents.length !== 1 ? 's' : '');
 
   const tbody = document.getElementById('students-tbody');
   if (_allStudents.length === 0) {
@@ -912,9 +923,17 @@ function renderOverview() {
     </div></td></tr>`;
     return;
   }
+  if (visibleStudents.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">No students match "${escHtml(searchInput.value.trim())}"</div>
+      <div>Try a different name or year group.</div>
+    </div></td></tr>`;
+    return;
+  }
 
   // Sort by last active desc
-  const sorted = [..._allStudents].sort((a, b) => (b.lastActiveTs || 0) - (a.lastActiveTs || 0));
+  const sorted = [...visibleStudents].sort((a, b) => (b.lastActiveTs || 0) - (a.lastActiveTs || 0));
 
   tbody.innerHTML = sorted.map(s => {
     // Activity indicator
