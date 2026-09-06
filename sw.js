@@ -2,9 +2,9 @@
 // Strategy: Cache-first for assets, network-first for HTML pages
 // This makes the app feel instant after first load
 
-const CACHE_VERSION = 'inspire-v3';
-const CACHE_STATIC = 'inspire-static-v3';   // long-lived assets
-const CACHE_PAGES  = 'inspire-pages-v3';    // HTML pages
+const CACHE_VERSION = 'inspire-v4';
+const CACHE_STATIC = 'inspire-static-v4';   // long-lived assets
+const CACHE_PAGES  = 'inspire-pages-v4';    // HTML pages
 
 // Assets that never change between deploys (or rarely do)
 // These are served from cache instantly — network updates in background
@@ -54,16 +54,25 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  // Don't cache Supabase API/auth calls or POST requests — always live.
+  // Don't cache Supabase API/auth calls, this site's own /api/* Netlify
+  // Functions, or POST requests — always live. Found live 2026-09-06:
+  // teacher.html's GET /api/v1/student/info was silently falling through
+  // to the cache-first branch below (it's same-origin, so `isSupabase`
+  // alone didn't catch it) and serving a staff member's first-ever
+  // fetch of a student's info forever after, even once the underlying
+  // data had genuinely changed. Any other same-origin GET /api/* call
+  // (e.g. tutor-academy/assessor-roster) had the identical bug.
   // Exception: public storage objects (published lesson content, e.g.
   // /storage/v1/object/public/lesson-content/...) are static once
   // uploaded, so they fall through to the normal cache-first handling
   // below instead — that's what lets an opened lesson work offline.
   const isSupabase = url.hostname.includes('supabase.co');
   const isPublicStorageObject = isSupabase && url.pathname.includes('/storage/v1/object/public/');
+  const isOwnApiCall = url.origin === self.location.origin && url.pathname.startsWith('/api/');
   if (
     e.request.method !== 'GET' ||
-    (isSupabase && !isPublicStorageObject)
+    (isSupabase && !isPublicStorageObject) ||
+    isOwnApiCall
   ) {
     e.respondWith(fetch(e.request));
     return;
