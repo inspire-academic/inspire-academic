@@ -1,9 +1,14 @@
 // GET/POST /api/v1/student/info
 //
-// Teacher/admin-only read+write of a student's date of birth and
-// parent contact details (supabase/student_admin_info.sql). Same
-// posture as update-user-role.js: `profiles` has no client-writable
-// UPDATE policy, and `parent_profiles`/`student_parent_links` have no
+// Teacher/admin-only read+write of a student's date of birth, exam
+// board, school and parent contact details. date_of_birth is new
+// (supabase/student_admin_info.sql); exam_board and school_affiliation
+// already existed on profiles (school_affiliation was previously only
+// ever written for teacher rows in admin-teacher-mgmt.html — reused
+// here for students since it's the same "which school" concept on the
+// same shared table, not a student-specific column). Same posture as
+// update-user-role.js: `profiles` has no client-writable UPDATE
+// policy, and `parent_profiles`/`student_parent_links` have no
 // confirmed teacher-facing SELECT policy either (see
 // docs/reference/supabase-schema-audit.md), so both the read and the
 // write go through the service role here rather than guessing at RLS.
@@ -54,7 +59,7 @@ async function canAccessStudent(callerRole, callerId, studentId, serviceKey) {
 
 async function loadStudentInfo(studentId, serviceKey) {
   const [profileRows, linkRows] = await Promise.all([
-    sbGet(`profiles?id=eq.${encodeURIComponent(studentId)}&select=date_of_birth`, serviceKey),
+    sbGet(`profiles?id=eq.${encodeURIComponent(studentId)}&select=date_of_birth,exam_board,school_affiliation`, serviceKey),
     sbGet(`student_parent_links?student_id=eq.${encodeURIComponent(studentId)}&select=parent_id&limit=1`, serviceKey)
   ])
 
@@ -67,8 +72,11 @@ async function loadStudentInfo(studentId, serviceKey) {
     parent = parentRows[0] || null
   }
 
+  const profile = profileRows[0] || {}
   return {
-    dateOfBirth: (profileRows[0] && profileRows[0].date_of_birth) || null,
+    dateOfBirth: profile.date_of_birth || null,
+    examBoard: profile.exam_board || null,
+    school: profile.school_affiliation || null,
     parent
   }
 }
@@ -106,23 +114,27 @@ exports.handler = async function (event) {
       try { body = JSON.parse(event.body) }
       catch (e) { return reply(400, { success: false, error: { code: 'invalid_json', message: 'Invalid JSON body' } }) }
 
-      const { studentId, dateOfBirth, parentFirstName, parentLastName, parentEmail, parentPhone } = body
+      const { studentId, dateOfBirth, examBoard, school, parentFirstName, parentLastName, parentEmail, parentPhone } = body
       if (!studentId) return reply(400, { success: false, error: { code: 'missing_fields', message: 'studentId is required' } })
 
       if (!(await canAccessStudent(callerRole, user.id, studentId, serviceKey))) {
         return reply(403, { success: false, error: { code: 'forbidden', message: 'Not assigned to this student.' } })
       }
 
-      // 1. Date of birth lives directly on profiles.
-      const dobRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(studentId)}`, {
+      // 1. Date of birth, exam board and school live directly on profiles.
+      const profileRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(studentId)}`, {
         method: 'PATCH',
         headers: {
           apikey: serviceKey, Authorization: `Bearer ${serviceKey}`,
           'Content-Type': 'application/json', Prefer: 'return=minimal'
         },
-        body: JSON.stringify({ date_of_birth: dateOfBirth || null })
+        body: JSON.stringify({
+          date_of_birth: dateOfBirth || null,
+          exam_board: (examBoard || '').trim() || null,
+          school_affiliation: (school || '').trim() || null
+        })
       })
-      if (!dobRes.ok) return reply(502, { success: false, error: { code: 'db_error', message: 'Could not save date of birth' } })
+      if (!profileRes.ok) return reply(502, { success: false, error: { code: 'db_error', message: 'Could not save student profile fields' } })
 
       // 2. Parent contact — only touch it if the caller actually sent
       // parent fields (an empty/whitespace name+email+phone submit
