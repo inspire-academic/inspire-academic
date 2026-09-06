@@ -304,6 +304,13 @@
           </select>
         </div>
         <div class="form-group">
+          <label for="student-dob">Date of Birth</label>
+          <input type="date" id="student-dob">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
           <label>Exam Board <span class="required">*</span></label>
           <select id="exam-board" required>
             <option value="">Select board...</option>
@@ -340,9 +347,15 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label id="parent-email-label">Parent Email</label>
-        <input type="email" id="parent-email" placeholder="parent@example.com">
+      <div class="form-row">
+        <div class="form-group">
+          <label id="parent-email-label">Parent Email</label>
+          <input type="email" id="parent-email" placeholder="parent@example.com">
+        </div>
+        <div class="form-group">
+          <label for="parent-phone">Parent Phone</label>
+          <input type="tel" id="parent-phone" placeholder="e.g., 07123 456789">
+        </div>
       </div>
 
       <!-- Sci-Bridging Y6 only — hidden/not required for every other year
@@ -430,10 +443,12 @@ form.addEventListener('submit', async (e) => {
     const studentPassword = document.getElementById('student-password').value;
     const yearGroup = document.getElementById('year-group').value;
     const examBoard = document.getElementById('exam-board').value;
-    
+    const dateOfBirth = document.getElementById('student-dob').value || null;
+
     const parentFirstName = document.getElementById('parent-first-name').value.trim();
     const parentLastName = document.getElementById('parent-last-name').value.trim();
     const parentEmail = document.getElementById('parent-email').value.trim().toLowerCase();
+    const parentPhone = document.getElementById('parent-phone').value.trim();
     
     // 1. Create student auth account
     const { data: authData, error: authError } = await supa.auth.signUp({
@@ -464,6 +479,7 @@ form.addEventListener('submit', async (e) => {
         full_name: `${studentFirstName} ${studentLastName}`,
         year_group: yearGroup,
         exam_board: examBoard,
+        date_of_birth: dateOfBirth,
         role: 'student',
         subscription_tier: 'free',
         subscription_status: 'active',
@@ -471,12 +487,12 @@ form.addEventListener('submit', async (e) => {
         quizzes_this_period: 0
       })
       .eq('id', userId);
-    
+
     if (profileError) throw profileError;
-    
+
     // 3. Create parent account if parent email provided
     if (parentEmail && parentFirstName && parentLastName) {
-      await createParentAccount(userId, parentEmail, parentFirstName, parentLastName);
+      await createParentAccount(userId, parentEmail, parentFirstName, parentLastName, parentPhone);
     }
     
     // 4. Show success message
@@ -498,7 +514,7 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-async function createParentAccount(studentId, parentEmail, parentFirstName, parentLastName) {
+async function createParentAccount(studentId, parentEmail, parentFirstName, parentLastName, parentPhone) {
   try {
     // Check if parent already exists
     const { data: existingParent } = await supa
@@ -520,6 +536,7 @@ async function createParentAccount(studentId, parentEmail, parentFirstName, pare
           email: parentEmail,
           first_name: parentFirstName,
           last_name: parentLastName,
+          phone: parentPhone || null,
           email_notifications: true,
           weekly_report_day: 'Sunday'
         })
