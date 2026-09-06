@@ -321,8 +321,12 @@
             <option value="Other">Other</option>
           </select>
         </div>
+        <div class="form-group">
+          <label for="student-school">School</label>
+          <input type="text" id="student-school" placeholder="e.g., Accra Academy">
+        </div>
       </div>
-      
+
       <!-- PARENT INFORMATION — optional for the general platform;
            required specifically for Sci-Bridging Y6 (under-13, UK GDPR
            Article 8) — toggled by JS below, see updateParentRequirement() -->
@@ -444,6 +448,7 @@ form.addEventListener('submit', async (e) => {
     const yearGroup = document.getElementById('year-group').value;
     const examBoard = document.getElementById('exam-board').value;
     const dateOfBirth = document.getElementById('student-dob').value || null;
+    const school = document.getElementById('student-school').value.trim();
 
     const parentFirstName = document.getElementById('parent-first-name').value.trim();
     const parentLastName = document.getElementById('parent-last-name').value.trim();
@@ -480,6 +485,7 @@ form.addEventListener('submit', async (e) => {
         year_group: yearGroup,
         exam_board: examBoard,
         date_of_birth: dateOfBirth,
+        school_affiliation: school || null,
         role: 'student',
         subscription_tier: 'free',
         subscription_status: 'active',

@@ -1195,7 +1195,7 @@ async function loadStudentInfo(studentId) {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.error?.message || 'Failed to load');
-    renderStudentInfoView(studentId, json.dateOfBirth, json.parent);
+    renderStudentInfoView(studentId, json.dateOfBirth, json.examBoard, json.school, json.parent);
   } catch (e) {
     if (document.getElementById('student-info-card')) {
       card.innerHTML = `<div style="color:var(--red);font-size:.85rem">Couldn't load student info: ${escHtml(e.message)}</div>`;
@@ -1203,12 +1203,14 @@ async function loadStudentInfo(studentId) {
   }
 }
 
-function renderStudentInfoView(studentId, dob, parent) {
+function renderStudentInfoView(studentId, dob, examBoard, school, parent) {
   const card = document.getElementById('student-info-card');
   if (!card) return;
   const age = calcAge(dob);
   const dobDisplay = formatDob(dob) || '—';
   const ageDisplay = age !== null ? `${age} years` : '—';
+  const examBoardDisplay = examBoard ? escHtml(examBoard) : '—';
+  const schoolDisplay = school ? escHtml(school) : '—';
   const parentName = parent && (parent.first_name || parent.last_name)
     ? escHtml(`${parent.first_name || ''} ${parent.last_name || ''}`.trim()) : '—';
   const parentEmail = parent?.email ? escHtml(parent.email) : '—';
@@ -1218,16 +1220,18 @@ function renderStudentInfoView(studentId, dob, parent) {
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem 1.5rem">
       <div><div class="profile-label">Date of birth</div><div>${dobDisplay}</div></div>
       <div><div class="profile-label">Age</div><div>${ageDisplay}</div></div>
+      <div><div class="profile-label">School</div><div>${schoolDisplay}</div></div>
+      <div><div class="profile-label">Exam board</div><div>${examBoardDisplay}</div></div>
       <div><div class="profile-label">Parent / guardian</div><div>${parentName}</div></div>
       <div><div class="profile-label">Parent email</div><div>${parentEmail}</div></div>
       <div><div class="profile-label">Parent phone</div><div>${parentPhone}</div></div>
     </div>
     <button class="profile-save-btn" style="margin-top:1rem;padding:.5rem 1.1rem;font-size:.82rem"
-      onclick="renderStudentInfoEdit('${studentId}', ${escHtml(JSON.stringify(dob))}, ${escHtml(JSON.stringify(parent || null))})">Edit</button>
+      onclick="renderStudentInfoEdit('${studentId}', ${escHtml(JSON.stringify(dob))}, ${escHtml(JSON.stringify(examBoard))}, ${escHtml(JSON.stringify(school))}, ${escHtml(JSON.stringify(parent || null))})">Edit</button>
   `;
 }
 
-function renderStudentInfoEdit(studentId, dob, parent) {
+function renderStudentInfoEdit(studentId, dob, examBoard, school, parent) {
   const card = document.getElementById('student-info-card');
   if (!card) return;
   card.innerHTML = `
@@ -1235,6 +1239,19 @@ function renderStudentInfoEdit(studentId, dob, parent) {
       <div>
         <label class="profile-label" for="si-dob">Date of birth</label>
         <input type="date" class="profile-input" id="si-dob" value="${dob || ''}">
+      </div>
+      <div>
+        <label class="profile-label" for="si-school">School</label>
+        <input type="text" class="profile-input" id="si-school" value="${escHtml(school || '')}">
+      </div>
+      <div>
+        <label class="profile-label" for="si-exam-board">Exam board</label>
+        <select class="profile-input" id="si-exam-board">
+          <option value="">Select board...</option>
+          ${['AQA','Edexcel','OCR','WJEC','Other'].map(b =>
+            `<option value="${b}" ${(examBoard||'').toLowerCase() === b.toLowerCase() ? 'selected' : ''}>${b}</option>`
+          ).join('')}
+        </select>
       </div>
       <div>
         <label class="profile-label" for="si-parent-first">Parent first name</label>
@@ -1277,6 +1294,8 @@ async function saveStudentInfo(studentId) {
       body: JSON.stringify({
         studentId,
         dateOfBirth: document.getElementById('si-dob').value || null,
+        examBoard: document.getElementById('si-exam-board').value,
+        school: document.getElementById('si-school').value,
         parentFirstName: document.getElementById('si-parent-first').value,
         parentLastName: document.getElementById('si-parent-last').value,
         parentEmail: document.getElementById('si-parent-email').value,
@@ -1285,7 +1304,7 @@ async function saveStudentInfo(studentId) {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.error?.message || 'Save failed');
-    renderStudentInfoView(studentId, json.dateOfBirth, json.parent);
+    renderStudentInfoView(studentId, json.dateOfBirth, json.examBoard, json.school, json.parent);
   } catch (e) {
     btn.disabled = false;
     btn.textContent = 'Save';
