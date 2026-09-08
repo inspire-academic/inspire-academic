@@ -1133,7 +1133,16 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
   let currentGrade, targetGrade;
   if (isCombined) {
     const currentIdx = combinedPairIndex(overallPct, board);
-    const maxIdx     = REAL_COMBINED_BOUNDARIES[board]?.pairs.length - 1 ?? 11;
+    // Same AQA-fallback pattern as combinedPairIndex/combinedPairLabel just
+    // above — NOT `REAL_COMBINED_BOUNDARIES[board]?.pairs.length - 1 ?? 11`,
+    // which looked like a safe fallback but wasn't: for an unmapped board
+    // (OCR/WJEC), the optional chain evaluates to `undefined`, then
+    // `undefined - 1` is `NaN` *before* `??` ever sees it — `??` only
+    // catches null/undefined, not NaN, so maxIdx silently became NaN and
+    // crashed combinedPairLabel downstream. Found live 2026-09-08 testing
+    // Combined Science + OCR/WJEC end to end, right after those boards
+    // were re-enabled.
+    const maxIdx     = (REAL_COMBINED_BOUNDARIES[board] || REAL_COMBINED_BOUNDARIES.AQA).pairs.length - 1;
     const targetIdx  = Math.min(maxIdx, currentIdx + 2);
     currentGrade = combinedPairLabel(currentIdx, board);
     targetGrade  = combinedPairLabel(targetIdx, board);
