@@ -280,9 +280,9 @@ input,select,textarea{font-family:var(--font-body);}
           <label class="form-label">Exam Board</label>
           <select id="inp-board" class="form-select">
             <option value="AQA">AQA</option>
-            <option value="Edexcel" disabled>Edexcel (coming soon)</option>
-            <option value="OCR" disabled>OCR (coming soon)</option>
-            <option value="WJEC" disabled>WJEC (coming soon)</option>
+            <option value="Edexcel">Edexcel</option>
+            <option value="OCR">OCR</option>
+            <option value="WJEC">WJEC</option>
           </select>
         </div>
       </div>
@@ -603,6 +603,17 @@ async function loadQuestionsFromSupabase() {
   // not whatever arbitrary 36 rows the database happened to return
   // first. The cap to config's real question count happens after
   // weighting, not before.
+  //
+  // Question pool is always AQA + Universal regardless of config.board
+  // (decided 2026-09-08): every validated question in the bank is
+  // AQA-authored, and this diagnostic exists as a lead-gen funnel, not
+  // a board-accurate mock exam — a non-AQA board selection still needs
+  // real questions to show, not a dead end. Grading stays board-aware
+  // where real data exists (estimateGrade's REAL_GRADE_BOUNDARIES has
+  // genuine Edexcel boundaries, and falls back to AQA's for OCR/WJEC),
+  // so the grade estimate is still as accurate as it can be even though
+  // the questions themselves are AQA content. config.board is kept
+  // as-is for display/grading — only this fetch ignores it.
   const { data, error } = await supa
     .from('diagnostic_questions')
     .select('*')
@@ -610,7 +621,7 @@ async function loadQuestionsFromSupabase() {
     .eq('level', config.level)
     .eq('validated', true)
     .eq('active', true)
-    .in('exam_board', [config.board, 'Universal'])
+    .in('exam_board', ['AQA', 'Universal'])
     .in('tier', ['Higher', 'Both'])
     .order('topic');
 
@@ -624,7 +635,10 @@ async function loadQuestionsFromSupabase() {
   }
 
   console.log(`Loaded ${data.length} questions from Supabase`);
-  const weights = buildTopicWeights(config.subject, config.board, [...new Set(data.map(q => q.topic))]);
+  // Weighting also uses AQA — the content pool is AQA-sourced regardless
+  // of the board the student picked, so weighting against AQA's own
+  // real exam emphasis is the accurate choice here, not config.board.
+  const weights = buildTopicWeights(config.subject, 'AQA', [...new Set(data.map(q => q.topic))]);
   return weightedSampleAcrossTopics(data, 36, weights);
 }
 
@@ -648,14 +662,14 @@ async function loadCombinedScienceQuestions() {
       .eq('level', config.level)
       .eq('validated', true)
       .eq('active', true)
-      .in('exam_board', [config.board, 'Universal'])
+      .in('exam_board', ['AQA', 'Universal']) // see loadQuestionsFromSupabase's comment — funnel, not board-accurate
       .in('tier', ['Higher', 'Both'])
       .order('topic');
 
     if (error) throw new Error('Could not load ' + subject + ' questions: ' + error.message);
     if (!data || data.length === 0) throw new Error('No validated questions found for ' + subject + ' yet.');
 
-    const weights = buildTopicWeights(subject, config.board, [...new Set(data.map(q => q.topic))]);
+    const weights = buildTopicWeights(subject, 'AQA', [...new Set(data.map(q => q.topic))]);
     return weightedSampleAcrossTopics(data, perSubject, weights);
   }));
 
