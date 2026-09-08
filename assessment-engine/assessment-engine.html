@@ -88,6 +88,9 @@ input,select,textarea{font-family:var(--font-body);}
 .subject-icon{font-size:28px;line-height:1;}
 .subject-name{font-size:.8rem;font-weight:600;}
 .subject-saved-badge{font-size:.62rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.03em;}
+.subject-btn:disabled{opacity:.45;cursor:not-allowed;}
+.subject-btn:disabled:hover{border-color:var(--border);}
+.subject-coming-soon{font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;}
 
 /* Two col */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
@@ -252,10 +255,10 @@ input,select,textarea{font-family:var(--font-body);}
             <span class="subject-name">Biology</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
-          <button class="subject-btn" data-subject="Mathematics" onclick="pickSubject(this)">
+          <button class="subject-btn" data-subject="Mathematics" disabled title="Maths diagnostic questions are still being built — check back soon">
             <span class="subject-icon">∑</span>
             <span class="subject-name">Maths</span>
-            <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
+            <span class="subject-coming-soon">Coming soon</span>
           </button>
           <button class="subject-btn" data-subject="Combined Science" onclick="pickSubject(this)">
             <span class="subject-icon">🔬</span>
