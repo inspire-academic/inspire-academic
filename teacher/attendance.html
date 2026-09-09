@@ -26,9 +26,25 @@
   h1{font-family:var(--font-display);font-size:23px;font-weight:700;margin-bottom:6px;}
   .subhead{font-size:13.5px;color:var(--muted);margin-bottom:24px;}
 
-  .setup-row{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+  .setup-row{display:flex;flex-direction:column;gap:10px;margin-bottom:10px;}
   .setup-row input[type=text]{flex:1;background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:.7rem .9rem;color:var(--white);font-size:.9rem;}
   .setup-row input[type=text]:focus{outline:none;border-color:var(--gold);}
+
+  .cohort-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+  .cohort-row select{flex:1;min-width:160px;background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:.6rem .8rem;color:var(--white);font-size:.85rem;}
+  .cohort-row select:focus{outline:none;border-color:var(--gold);}
+  .link-btn{background:none;border:none;color:var(--gold);font-size:.8rem;font-weight:600;cursor:pointer;padding:.4rem 0;white-space:nowrap;}
+  .link-btn:hover{color:var(--gold2);}
+
+  .cohort-list-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:.7rem .9rem;}
+  .cohort-list-name{font-weight:600;font-size:.88rem;}
+  .cohort-list-count{font-size:.75rem;color:var(--muted);margin-top:2px;}
+  .cohort-list-actions{display:flex;gap:.5rem;flex-shrink:0;}
+
+  .picker-scroll{max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;margin:.8rem 0;}
+  .picker-row{display:flex;align-items:center;gap:.6rem;padding:.5rem .3rem;font-size:.85rem;border-bottom:1px solid var(--border);}
+  .picker-row:last-child{border-bottom:none;}
+  .picker-row input{width:16px;height:16px;flex-shrink:0;}
 
   .session-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:.9rem 1.1rem;margin-bottom:18px;}
   .session-banner .sb-title{font-weight:700;font-size:.95rem;}
@@ -83,9 +99,23 @@
     <button class="btn btn-gold" id="start-btn" onclick="startClass()">Start Class</button>
   </div>
 
+  <div class="cohort-row">
+    <select id="cohort-select" onchange="onCohortChange()">
+      <option value="">All my students</option>
+    </select>
+    <button class="link-btn" onclick="openCohortModal()">Manage Cohorts</button>
+  </div>
+
   <div id="session-area"></div>
 
   <a class="report-link gold" href="/teacher/attendance-report.html">View monthly attendance report →</a>
+</div>
+
+<div class="modal-overlay" id="cohort-modal" style="display:none;">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCohortModal()">✕</button>
+    <div id="cohort-modal-body"></div>
+  </div>
 </div>
 
 <div id="toast"></div>
@@ -98,8 +128,12 @@ const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 let ME = null
 let SESSION = null
-let ROSTER = []          // [{id, name}]
+let ROSTER = []          // [{id, name}] — filtered by SELECTED_COHORT, if any
 let RECORDS = {}         // student_id -> {status, marked_at}
+let ALL_STUDENTS = []    // [{id, name}] — every active student assigned to this teacher
+let COHORTS = []         // [{id, name, memberIds:Set}]
+let SELECTED_COHORT = null
+let EDITING_COHORT_ID = null
 
 function toast(msg, type){
   const t = document.getElementById('toast')
@@ -123,7 +157,50 @@ async function checkAuth(){
   ME = profile
   document.getElementById('topbar-user').textContent = profile.full_name || profile.first_name || ''
   document.getElementById('authLoading').style.display = 'none'
+  await loadAllStudents()
+  await loadCohorts()
   return true
+}
+
+async function loadAllStudents(){
+  const { data: asgn } = await supa.from('teacher_student_assignments')
+    .select('student_id').eq('teacher_id', ME.id).eq('is_active', true)
+  const studentIds = [...new Set((asgn||[]).map(a=>a.student_id))]
+
+  if (studentIds.length === 0) { ALL_STUDENTS = []; return }
+
+  const { data: students } = await supa.from('profiles')
+    .select('id, first_name, full_name').in('id', studentIds)
+  ALL_STUDENTS = (students||[])
+    .map(s => ({ id: s.id, name: s.full_name || s.first_name || 'Student' }))
+    .sort((a,b) => a.name.localeCompare(b.name))
+}
+
+async function loadCohorts(){
+  const { data: cohorts } = await supa.from('cohorts').select('id,name').eq('teacher_id', ME.id).order('name')
+  const cohortIds = (cohorts||[]).map(c => c.id)
+  const { data: members } = cohortIds.length
+    ? await supa.from('cohort_members').select('cohort_id,student_id').in('cohort_id', cohortIds)
+    : { data: [] }
+
+  const byCohort = {}
+  ;(members||[]).forEach(m => { (byCohort[m.cohort_id] ||= new Set()).add(m.student_id) })
+  COHORTS = (cohorts||[]).map(c => ({ id: c.id, name: c.name, memberIds: byCohort[c.id] || new Set() }))
+
+  if (SELECTED_COHORT && !COHORTS.some(c => c.id === SELECTED_COHORT)) SELECTED_COHORT = null
+  renderCohortSelect()
+}
+
+function renderCohortSelect(){
+  const sel = document.getElementById('cohort-select')
+  sel.innerHTML = '<option value="">All my students</option>' +
+    COHORTS.map(c => `<option value="${c.id}">${escapeHtml(c.name)} (${c.memberIds.size})</option>`).join('')
+  sel.value = SELECTED_COHORT || ''
+}
+
+async function onCohortChange(){
+  SELECTED_COHORT = document.getElementById('cohort-select').value || null
+  if (SESSION) { await loadRosterAndRecords(); renderSession() }
 }
 
 async function startClass(){
@@ -151,17 +228,8 @@ async function startClass(){
 }
 
 async function loadRosterAndRecords(){
-  const { data: asgn } = await supa.from('teacher_student_assignments')
-    .select('student_id').eq('teacher_id', ME.id).eq('is_active', true)
-  const studentIds = [...new Set((asgn||[]).map(a=>a.student_id))]
-
-  if (studentIds.length === 0) { ROSTER = []; RECORDS = {}; return }
-
-  const { data: students } = await supa.from('profiles')
-    .select('id, first_name, full_name').in('id', studentIds)
-  ROSTER = (students||[])
-    .map(s => ({ id: s.id, name: s.full_name || s.first_name || 'Student' }))
-    .sort((a,b) => a.name.localeCompare(b.name))
+  const cohort = SELECTED_COHORT ? COHORTS.find(c => c.id === SELECTED_COHORT) : null
+  ROSTER = cohort ? ALL_STUDENTS.filter(s => cohort.memberIds.has(s.id)) : ALL_STUDENTS
 
   const { data: records } = await supa.from('attendance_records')
     .select('student_id, status, marked_at').eq('session_id', SESSION.id)
@@ -177,8 +245,10 @@ function renderSession(){
   const endedNote = SESSION.ended_at ? ` · Ended ${timeStr(SESSION.ended_at)}` : ''
 
   let rosterHtml
-  if (ROSTER.length === 0) {
+  if (ROSTER.length === 0 && ALL_STUDENTS.length === 0) {
     rosterHtml = '<p class="empty-note">No students are assigned to you yet — ask an admin to assign students via Manage Teachers.</p>'
+  } else if (ROSTER.length === 0) {
+    rosterHtml = '<p class="empty-note">No one in this cohort — pick "All my students" or add members via Manage Cohorts.</p>'
   } else {
     rosterHtml = '<div class="roster">' + ROSTER.map(s => {
       const rec = RECORDS[s.id]
@@ -247,6 +317,97 @@ async function endClass(){
 
 function escapeHtml(s){
   return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
+}
+
+// ── Manage Cohorts modal ─────────────────────────────────────────
+function openCohortModal(){
+  EDITING_COHORT_ID = null
+  document.getElementById('cohort-modal').style.display = 'flex'
+  renderCohortModalList()
+}
+
+function closeCohortModal(){
+  document.getElementById('cohort-modal').style.display = 'none'
+}
+
+function renderCohortModalList(){
+  const body = document.getElementById('cohort-modal-body')
+  const rows = COHORTS.map(c => `
+    <div class="card cohort-list-row">
+      <div><div class="cohort-list-name">${escapeHtml(c.name)}</div><div class="cohort-list-count">${c.memberIds.size} student${c.memberIds.size!==1?'s':''}</div></div>
+      <div class="cohort-list-actions">
+        <button class="btn btn-outline" onclick="renderCohortForm('${c.id}')">Edit</button>
+        <button class="btn btn-outline" onclick="deleteCohort('${c.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('')
+
+  body.innerHTML = `
+    <h2 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px;">Manage Cohorts</h2>
+    ${COHORTS.length ? `<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">${rows}</div>` : '<p class="empty-note">No cohorts yet — group your regulars so you can pull them up quickly at roll call.</p>'}
+    <button class="btn btn-gold" style="width:100%;" onclick="renderCohortForm(null)">+ New Cohort</button>
+  `
+}
+
+function renderCohortForm(cohortId){
+  EDITING_COHORT_ID = cohortId
+  const cohort = cohortId ? COHORTS.find(c => c.id === cohortId) : null
+  const body = document.getElementById('cohort-modal-body')
+
+  const pickerRows = ALL_STUDENTS.map(s => `
+    <label class="picker-row">
+      <input type="checkbox" value="${s.id}" ${cohort && cohort.memberIds.has(s.id) ? 'checked' : ''}>
+      ${escapeHtml(s.name)}
+    </label>
+  `).join('') || '<p class="empty-note">No students assigned to you yet.</p>'
+
+  body.innerHTML = `
+    <h2 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px;">${cohort ? 'Edit Cohort' : 'New Cohort'}</h2>
+    <input type="text" id="cohort-name-input" placeholder="e.g. Regulars" value="${cohort ? escapeHtml(cohort.name) : ''}"
+      style="width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:.65rem .9rem;color:var(--white);font-size:.9rem;margin-bottom:12px;">
+    <div id="cohort-picker" class="picker-scroll">${pickerRows}</div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-gold" style="flex:1;" onclick="saveCohortForm()">Save</button>
+      <button class="btn btn-outline" onclick="renderCohortModalList()">Cancel</button>
+    </div>
+  `
+}
+
+async function saveCohortForm(){
+  const name = document.getElementById('cohort-name-input').value.trim()
+  if (!name) { toast('Enter a cohort name', 'error'); return }
+  const checked = [...document.querySelectorAll('#cohort-picker input:checked')].map(c => c.value)
+
+  let cohortId = EDITING_COHORT_ID
+  if (cohortId) {
+    const { error } = await supa.from('cohorts').update({ name }).eq('id', cohortId)
+    if (error) { toast('Could not save: ' + error.message, 'error'); return }
+    await supa.from('cohort_members').delete().eq('cohort_id', cohortId)
+  } else {
+    const { data, error } = await supa.from('cohorts').insert({ teacher_id: ME.id, name }).select().single()
+    if (error) { toast('Could not save: ' + error.message, 'error'); return }
+    cohortId = data.id
+  }
+
+  if (checked.length > 0) {
+    const rows = checked.map(sid => ({ cohort_id: cohortId, student_id: sid }))
+    const { error } = await supa.from('cohort_members').insert(rows)
+    if (error) { toast('Could not save members: ' + error.message, 'error'); return }
+  }
+
+  await loadCohorts()
+  if (SESSION) { await loadRosterAndRecords(); renderSession() }
+  closeCohortModal()
+  toast('Cohort saved', 'success')
+}
+
+async function deleteCohort(cohortId){
+  if (!confirm('Delete this cohort? Past attendance records are not affected.')) return
+  await supa.from('cohorts').delete().eq('id', cohortId)
+  if (SELECTED_COHORT === cohortId) SELECTED_COHORT = null
+  await loadCohorts()
+  renderCohortModalList()
+  if (SESSION) { await loadRosterAndRecords(); renderSession() }
 }
 
 checkAuth()
