@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/pathways.js"></script>
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
@@ -1257,7 +1258,7 @@ async function loadStudentInfo(studentId) {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.error?.message || 'Failed to load');
-    renderStudentInfoView(studentId, json.dateOfBirth, json.examBoard, json.school, json.parent);
+    renderStudentInfoView(studentId, json.dateOfBirth, json.examBoard, json.school, json.pathway, json.parent);
   } catch (e) {
     if (document.getElementById('student-info-card')) {
       card.innerHTML = `<div style="color:var(--red);font-size:.85rem">Couldn't load student info: ${escHtml(e.message)}</div>`;
@@ -1265,7 +1266,7 @@ async function loadStudentInfo(studentId) {
   }
 }
 
-function renderStudentInfoView(studentId, dob, examBoard, school, parent) {
+function renderStudentInfoView(studentId, dob, examBoard, school, pathway, parent) {
   const card = document.getElementById('student-info-card');
   if (!card) return;
   const age = calcAge(dob);
@@ -1273,6 +1274,7 @@ function renderStudentInfoView(studentId, dob, examBoard, school, parent) {
   const ageDisplay = age !== null ? `${age} years` : '—';
   const examBoardDisplay = examBoard ? escHtml(examBoard) : '—';
   const schoolDisplay = school ? escHtml(school) : '—';
+  const pathwayDisplay = pathway ? escHtml(pathway) : '—';
   const parentName = parent && (parent.first_name || parent.last_name)
     ? escHtml(`${parent.first_name || ''} ${parent.last_name || ''}`.trim()) : '—';
   const parentEmail = parent?.email ? escHtml(parent.email) : '—';
@@ -1284,18 +1286,20 @@ function renderStudentInfoView(studentId, dob, examBoard, school, parent) {
       <div><div class="profile-label">Age</div><div>${ageDisplay}</div></div>
       <div><div class="profile-label">School</div><div>${schoolDisplay}</div></div>
       <div><div class="profile-label">Exam board</div><div>${examBoardDisplay}</div></div>
+      <div><div class="profile-label">Pathway</div><div>${pathwayDisplay}</div></div>
       <div><div class="profile-label">Parent / guardian</div><div>${parentName}</div></div>
       <div><div class="profile-label">Parent email</div><div>${parentEmail}</div></div>
       <div><div class="profile-label">Parent phone</div><div>${parentPhone}</div></div>
     </div>
     <button class="profile-save-btn" style="margin-top:1rem;padding:.5rem 1.1rem;font-size:.82rem"
-      onclick="renderStudentInfoEdit('${studentId}', ${escHtml(JSON.stringify(dob))}, ${escHtml(JSON.stringify(examBoard))}, ${escHtml(JSON.stringify(school))}, ${escHtml(JSON.stringify(parent || null))})">Edit</button>
+      onclick="renderStudentInfoEdit('${studentId}', ${escHtml(JSON.stringify(dob))}, ${escHtml(JSON.stringify(examBoard))}, ${escHtml(JSON.stringify(school))}, ${escHtml(JSON.stringify(pathway))}, ${escHtml(JSON.stringify(parent || null))})">Edit</button>
   `;
 }
 
-function renderStudentInfoEdit(studentId, dob, examBoard, school, parent) {
+function renderStudentInfoEdit(studentId, dob, examBoard, school, pathway, parent) {
   const card = document.getElementById('student-info-card');
   if (!card) return;
+  const pathwayOptions = window.PATHWAY_OPTIONS || [];
   card.innerHTML = `
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem 1.5rem">
       <div>
@@ -1314,6 +1318,14 @@ function renderStudentInfoEdit(studentId, dob, examBoard, school, parent) {
             `<option value="${b}" ${(examBoard||'').toLowerCase() === b.toLowerCase() ? 'selected' : ''}>${b}</option>`
           ).join('')}
         </select>
+      </div>
+      <div>
+        <label class="profile-label" for="si-pathway">Pathway</label>
+        <input type="text" class="profile-input" id="si-pathway" list="si-pathway-options"
+          placeholder="Select or type a pathway…" value="${escHtml(pathway || '')}">
+        <datalist id="si-pathway-options">
+          ${pathwayOptions.map(o => `<option value="${escHtml(o.value)}" label="${escHtml(o.group)}">`).join('')}
+        </datalist>
       </div>
       <div>
         <label class="profile-label" for="si-parent-first">Parent first name</label>
@@ -1358,6 +1370,7 @@ async function saveStudentInfo(studentId) {
         dateOfBirth: document.getElementById('si-dob').value || null,
         examBoard: document.getElementById('si-exam-board').value,
         school: document.getElementById('si-school').value,
+        pathway: document.getElementById('si-pathway').value,
         parentFirstName: document.getElementById('si-parent-first').value,
         parentLastName: document.getElementById('si-parent-last').value,
         parentEmail: document.getElementById('si-parent-email').value,
@@ -1366,7 +1379,7 @@ async function saveStudentInfo(studentId) {
     });
     const json = await res.json();
     if (!json.success) throw new Error(json.error?.message || 'Save failed');
-    renderStudentInfoView(studentId, json.dateOfBirth, json.examBoard, json.school, json.parent);
+    renderStudentInfoView(studentId, json.dateOfBirth, json.examBoard, json.school, json.pathway, json.parent);
   } catch (e) {
     btn.disabled = false;
     btn.textContent = 'Save';
