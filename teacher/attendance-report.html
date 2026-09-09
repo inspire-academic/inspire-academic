@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Report — Inspire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+  .auth-loading{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px;}
+  .auth-loading-logo{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--gold);}
+  .auth-loading-sub{font-size:13px;color:var(--muted);font-family:var(--font-mono);}
+
+  .topbar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(11,22,40,0.95);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;z-index:100;backdrop-filter:blur(8px);}
+  .topbar-logo{font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--gold);letter-spacing:0.02em;}
+  .topbar-title{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+  .topbar-user{font-size:12.5px;color:var(--muted);}
+
+  .wrap{max-width:980px;margin:0 auto;padding:80px 16px 64px;}
+  h1{font-family:var(--font-display);font-size:23px;font-weight:700;margin-bottom:6px;}
+  .subhead{font-size:13.5px;color:var(--muted);margin-bottom:22px;}
+
+  .filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:22px;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  .field label{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+  .field input, .field select{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:.55rem .7rem;color:var(--white);font-size:.85rem;}
+  .field input:focus, .field select:focus{outline:none;border-color:var(--gold);}
+
+  .summary-cards{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:22px;}
+  .summary-card .sv{font-family:var(--font-display);font-size:22px;font-weight:700;}
+  .summary-card .sl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
+
+  h2{font-size:16px;font-weight:700;margin:26px 0 10px;font-family:var(--font-display);}
+
+  .table-scroll{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:.82rem;}
+  th{text-align:left;padding:8px 10px;font-size:.68rem;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);white-space:nowrap;}
+  td{padding:9px 10px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  tr:last-child td{border-bottom:none;}
+  .pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.68rem;font-family:var(--font-mono);}
+  .pill-present{background:#16803c22;color:#4ade80;}
+  .pill-absent{background:#b92b1a22;color:#f87171;}
+
+  .empty-note{font-size:.85rem;color:var(--muted);padding:1rem 0;}
+
+  @media (min-width:640px){
+    .summary-cards{grid-template-columns:repeat(3,1fr);}
+    .filters{align-items:flex-end;}
+  }
+</style>
+</head>
+<body>
+
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying access...</div>
+</div>
+
+<header class="topbar">
+  <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
+  <span class="topbar-title">Attendance Report</span>
+  <div class="topbar-right">
+    <span class="topbar-user" id="topbar-user"></span>
+    <button class="btn btn-outline" onclick="window.location.href='/teacher/attendance.html'">← Take Attendance</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Attendance Report</h1>
+  <p class="subhead">Every Zoom class held in the selected period, timestamped — for monthly billing.</p>
+
+  <div class="filters">
+    <div class="field"><label>From</label><input type="date" id="f-from"></div>
+    <div class="field"><label>To</label><input type="date" id="f-to"></div>
+    <div class="field"><label>Subject</label><select id="f-subject"><option value="">All subjects</option></select></div>
+    <button class="btn btn-gold" onclick="loadReport()">Run Report</button>
+    <button class="btn btn-outline" id="csv-btn" onclick="exportCsv()" disabled>Export CSV</button>
+  </div>
+
+  <div id="report-area"><p class="empty-note">Choose a date range and run the report.</p></div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script>
+const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+let ME = null
+let CSV_ROWS = []   // flat rows for export: [date, subject, start, end, student, status, marked_at]
+
+function toast(msg, type){
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'show ' + (type||'')
+  setTimeout(()=>{ t.className='' }, 2600)
+}
+
+function timeStr(ts){
+  return ts ? new Date(ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '—'
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
+}
+
+function monthBounds(){
+  const now = new Date()
+  const from = new Date(now.getFullYear(), now.getMonth(), 1)
+  const to = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  return [from.toISOString().slice(0,10), to.toISOString().slice(0,10)]
+}
+
+async function checkAuth(){
+  const { data: { session } } = await supa.auth.getSession()
+  if (!session) { window.location.href = '/index.html'; return false }
+  const { data: profile, error } = await supa.from('profiles').select('id, role, full_name, first_name').eq('id', session.user.id).single()
+  if (error || !profile || !['teacher','teacher_manager','admin','super_admin'].includes(profile.role)) {
+    window.location.href = '/dashboard.html'
+    return false
+  }
+  ME = profile
+  document.getElementById('topbar-user').textContent = profile.full_name || profile.first_name || ''
+  document.getElementById('authLoading').style.display = 'none'
+
+  const [from, to] = monthBounds()
+  document.getElementById('f-from').value = from
+  document.getElementById('f-to').value = to
+
+  await populateSubjects()
+  loadReport()
+  return true
+}
+
+async function populateSubjects(){
+  const { data } = await supa.from('class_sessions').select('subject').eq('teacher_id', ME.id)
+  const subjects = [...new Set((data||[]).map(s => s.subject))].sort()
+  const sel = document.getElementById('f-subject')
+  subjects.forEach(s => {
+    const opt = document.createElement('option')
+    opt.value = s; opt.textContent = s
+    sel.appendChild(opt)
+  })
+}
+
+async function loadReport(){
+  const from = document.getElementById('f-from').value
+  const to = document.getElementById('f-to').value
+  const subject = document.getElementById('f-subject').value
+  const area = document.getElementById('report-area')
+
+  if (!from || !to) { toast('Pick a from/to date', 'error'); return }
+
+  let q = supa.from('class_sessions').select('*').eq('teacher_id', ME.id)
+    .gte('session_date', from).lte('session_date', to).order('session_date')
+  if (subject) q = q.eq('subject', subject)
+  const { data: sessions, error } = await q
+  if (error) { area.innerHTML = `<p class="empty-note">Could not load sessions: ${escapeHtml(error.message)}</p>`; return }
+
+  if (!sessions || sessions.length === 0) {
+    area.innerHTML = '<p class="empty-note">No classes recorded in this period yet.</p>'
+    document.getElementById('csv-btn').disabled = true
+    CSV_ROWS = []
+    return
+  }
+
+  const sessionIds = sessions.map(s => s.id)
+  const { data: records } = await supa.from('attendance_records')
+    .select('session_id, student_id, status, marked_at').in('session_id', sessionIds)
+
+  const studentIds = [...new Set((records||[]).map(r => r.student_id))]
+  const { data: students } = studentIds.length
+    ? await supa.from('profiles').select('id, full_name, first_name').in('id', studentIds)
+    : { data: [] }
+  const nameById = {}
+  ;(students||[]).forEach(s => { nameById[s.id] = s.full_name || s.first_name || 'Student' })
+
+  const recordsBySession = {}
+  ;(records||[]).forEach(r => {
+    if (!recordsBySession[r.session_id]) recordsBySession[r.session_id] = []
+    recordsBySession[r.session_id].push(r)
+  })
+
+  renderSessionsTable(sessions, recordsBySession, nameById)
+  renderStudentSummary(sessions, records || [], nameById)
+  buildCsvRows(sessions, records || [], nameById)
+  document.getElementById('csv-btn').disabled = false
+}
+
+function renderSessionsTable(sessions, recordsBySession, nameById){
+  const rows = sessions.map(s => {
+    const recs = recordsBySession[s.id] || []
+    const present = recs.filter(r => r.status === 'present').map(r => nameById[r.student_id] || r.student_id)
+    const absent = recs.filter(r => r.status === 'absent').map(r => nameById[r.student_id] || r.student_id)
+    const duration = s.ended_at ? Math.round((new Date(s.ended_at) - new Date(s.started_at)) / 60000) + ' min' : '—'
+    return `<tr>
+      <td>${s.session_date}</td>
+      <td>${escapeHtml(s.subject)}</td>
+      <td>${timeStr(s.started_at)}–${timeStr(s.ended_at)}</td>
+      <td>${duration}</td>
+      <td><span class="pill pill-present">${present.length}</span> ${escapeHtml(present.join(', ')) || '<span class="empty-note" style="padding:0;">none</span>'}</td>
+      <td>${absent.length ? `<span class="pill pill-absent">${absent.length}</span> ${escapeHtml(absent.join(', '))}` : '—'}</td>
+    </tr>`
+  }).join('')
+
+  document.getElementById('report-area').innerHTML = `
+    <h2>Sessions</h2>
+    <div class="card table-scroll">
+      <table>
+        <thead><tr><th>Date</th><th>Subject</th><th>Time</th><th>Duration</th><th>Present</th><th>Absent</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div id="student-summary-area"></div>
+  `
+}
+
+function renderStudentSummary(sessions, records, nameById){
+  const byStudent = {}
+  records.filter(r => r.status === 'present').forEach(r => {
+    if (!byStudent[r.student_id]) byStudent[r.student_id] = []
+    byStudent[r.student_id].push(sessions.find(s => s.id === r.session_id))
+  })
+
+  const rows = Object.entries(byStudent)
+    .sort((a,b) => (nameById[a[0]]||'').localeCompare(nameById[b[0]]||''))
+    .map(([sid, sessAttended]) => {
+      const dates = sessAttended.filter(Boolean).map(s => s.session_date).sort()
+      return `<tr><td>${escapeHtml(nameById[sid] || sid)}</td><td>${dates.length}</td><td>${dates.join(', ')}</td></tr>`
+    }).join('')
+
+  document.getElementById('student-summary-area').innerHTML = rows ? `
+    <h2>Per-student summary</h2>
+    <div class="card table-scroll">
+      <table>
+        <thead><tr><th>Student</th><th>Sessions attended</th><th>Dates</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  ` : ''
+}
+
+function buildCsvRows(sessions, records, nameById){
+  const sessionById = {}
+  sessions.forEach(s => { sessionById[s.id] = s })
+  CSV_ROWS = records.map(r => {
+    const s = sessionById[r.session_id]
+    return [
+      s ? s.session_date : '',
+      s ? s.subject : '',
+      nameById[r.student_id] || r.student_id,
+      r.status,
+      r.marked_at ? new Date(r.marked_at).toLocaleString() : ''
+    ]
+  }).sort((a,b) => a[0].localeCompare(b[0]))
+}
+
+function exportCsv(){
+  if (CSV_ROWS.length === 0) { toast('Nothing to export', 'error'); return }
+  const header = ['Date','Subject','Student','Status','Marked At']
+  const csv = [header, ...CSV_ROWS].map(row =>
+    row.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')
+  ).join('\r\n')
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  const from = document.getElementById('f-from').value
+  const to = document.getElementById('f-to').value
+  a.href = url
+  a.download = `attendance_${from}_to_${to}.csv`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+checkAuth()
+</script>
+</body>
+</html>
