@@ -146,7 +146,9 @@ inspire-academic/
 │   ├── admin-teacher-mgmt.html
 │   ├── lesson-admin.html        ← Lesson content upload/publish
 │   ├── quiz-generator.html      ← AI question generation into the live quiz bank
-│   └── content-coverage.html    ← Spec-vs-live content coverage tracker
+│   ├── content-coverage.html    ← Spec-vs-live content coverage tracker
+│   ├── attendance.html          ← Live Zoom roll call, timestamped per student
+│   └── attendance-report.html   ← Monthly attendance report + CSV export (billing)
 │
 ├── parent/                     ← Parent-facing pages
 │   ├── parent-dashboard.html
