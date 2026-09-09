@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Topics — Inspire Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── NAV (mobile-first: base = phone, min-width block restores desktop) ── */
+.topnav-logo{display:flex;align-items:center;gap:.6rem;}
+.topnav-logo img{height:36px;width:auto;background:#fff;border-radius:6px;padding:2px 6px;}
+.logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
+.nav-links{display:none;gap:.3rem;flex:1;}
+.nav-user{display:flex;align-items:center;gap:.6rem;padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.82rem;cursor:pointer;transition:all .2s;}
+.nav-user span:last-child{display:none;}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;background:var(--gold);color:var(--navy);}
+
+/* ── LAYOUT ── */
+main{max-width:760px;margin:0 auto;padding:1.2rem 1rem 6rem;}
+
+/* ── PAGE HEADER ── */
+.page-header{margin-bottom:1.2rem;}
+.page-title{font-family:var(--font-display);font-size:1.4rem;font-weight:800;margin-bottom:.2rem;}
+.page-sub{font-size:.88rem;color:var(--muted);}
+
+/* ── INTRO ── */
+.intro-card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.2rem;margin-bottom:1.4rem;font-size:.85rem;color:var(--muted);line-height:1.5;}
+.intro-card strong{color:var(--white);}
+
+/* ── UPLOAD ZONE ── */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--r);padding:2rem 1.2rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--navy2);margin-bottom:1.6rem;}
+.upload-zone:hover{border-color:var(--gold);background:rgba(212,160,23,.05);}
+.upload-zone.busy{opacity:.6;pointer-events:none;}
+.upload-icon{font-size:2.2rem;margin-bottom:.5rem;}
+.upload-text strong{color:var(--white);display:block;margin-bottom:.2rem;font-size:.95rem;}
+.upload-text span{font-size:.78rem;color:var(--muted);}
+
+/* ── SECTION TITLE ── */
+.section-title{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;display:flex;align-items:center;gap:.6rem;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── GALLERY ── */
+.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.photo-card{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.photo-thumb-wrap{position:relative;aspect-ratio:1;background:var(--navy3);}
+.photo-thumb-wrap img{width:100%;height:100%;object-fit:cover;cursor:zoom-in;}
+.photo-remove{position:absolute;top:.4rem;right:.4rem;width:26px;height:26px;border-radius:50%;background:rgba(11,22,40,.85);color:#f87171;border:1px solid rgba(248,113,113,.4);font-size:.8rem;cursor:pointer;line-height:1;}
+.photo-stale-badge{position:absolute;bottom:.4rem;left:.4rem;background:rgba(11,22,40,.85);color:#fb923c;border:1px solid rgba(251,146,60,.4);font-size:.6rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;padding:.15rem .4rem;border-radius:3px;}
+.photo-meta{padding:.6rem .7rem;}
+.photo-subject-select{width:100%;background:var(--navy3);border:1px solid var(--border);color:var(--white);border-radius:6px;padding:.35rem .5rem;font-size:.75rem;font-family:var(--font-body);margin-bottom:.4rem;}
+.photo-note-input{width:100%;background:var(--navy3);border:1px solid var(--border);color:var(--white);border-radius:6px;padding:.35rem .5rem;font-size:.72rem;font-family:var(--font-body);margin-bottom:.4rem;}
+.photo-note-input::placeholder{color:var(--muted);}
+.photo-time{font-size:.66rem;color:var(--muted);}
+
+/* Subject colour dots — matches CLAUDE.md's subject accent gradients */
+.subj-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:.3rem;}
+.subj-Mathematics{background:linear-gradient(135deg,#d97706,#fbbf24);}
+.subj-Physics{background:linear-gradient(135deg,#1d4ed8,#06b6d4);}
+.subj-Chemistry{background:linear-gradient(135deg,#059669,#34d399);}
+.subj-Biology{background:linear-gradient(135deg,#7c3aed,#a78bfa);}
+.subj-Other{background:var(--muted);}
+
+/* ── EMPTY ── */
+.empty-state{text-align:center;padding:2.5rem 1.5rem;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);}
+.empty-state .ei{font-size:2rem;margin-bottom:.5rem;}
+
+/* ── Mobile Bottom Navigation ── */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--navy2);border-top:1px solid var(--border);padding:.5rem 0 env(safe-area-inset-bottom,.5rem);}
+.mobile-nav-inner{display:flex;justify-content:space-around;align-items:center;max-width:600px;margin:0 auto;}
+.mob-nav-btn{display:flex;flex-direction:column;align-items:center;gap:.2rem;background:none;border:none;color:var(--muted);font-size:.62rem;font-family:var(--font-body);font-weight:600;padding:.5rem .75rem;border-radius:8px;cursor:pointer;transition:color .2s;min-width:44px;min-height:44px;justify-content:center;text-transform:uppercase;letter-spacing:.05em;}
+.mob-nav-btn .mob-icon{font-size:1.25rem;line-height:1;}
+.mob-nav-btn:hover{color:var(--white);}
+
+/* ── Lightbox ── */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;padding:1.5rem;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:100%;max-height:100%;border-radius:8px;}
+.lightbox-close{position:absolute;top:1rem;right:1rem;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;border:none;font-size:1.1rem;cursor:pointer;}
+
+/* ── Mobile-first: base above is the phone layout; these steps
+   restore the desktop layout. Kept last so they reliably win. ── */
+@media(min-width:481px){
+  .photo-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media(min-width:769px){
+  .topnav{padding:.9rem 2rem;gap:1.5rem;}
+  .nav-links{display:flex;}
+  .nav-user span:last-child{display:inline;}
+  main{padding:2rem 1.5rem;}
+  .page-title{font-size:1.8rem;}
+  .photo-grid{grid-template-columns:repeat(4,1fr);}
+  .mobile-nav{display:none;}
+}
+</style>
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#c9a84c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Inspire Science">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+<a href="/index.html" style="text-decoration:none;color:inherit;"><div class="topnav-logo">
+    <img src="/assets/images/shared/1775416612494_image.webp" alt="Inspire Science" onerror="this.style.display='none'">
+    <span class="logo-text">Inspire Science</span>
+  </div></a>
+
+  <div class="nav-links">
+    <button class="nav-link" onclick="location.href='/dashboard.html'">Dashboard</button>
+    <button class="nav-link" onclick="location.href='/subjects.html'">Subjects</button>
+    <button class="nav-link" onclick="location.href='/student/progress.html'">My Progress</button>
+    <button class="nav-link active">My Topics</button>
+  </div>
+  <div class="nav-user" onclick="signOut()">
+    <div class="avatar" id="nav-avatar">?</div>
+    <span id="nav-name">Loading…</span>
+  </div>
+</nav>
+
+<main>
+
+  <div class="page-header fade-in">
+    <h1 class="page-title">My Topics This Term</h1>
+    <p class="page-sub" id="page-sub">Loading…</p>
+  </div>
+
+  <div class="intro-card fade-in">
+    📸 <strong>Show us what you're studying at school right now.</strong>
+    Take a photo of your topic list, timetable, or scheme of work for this
+    term — for any subject — and your teacher here will use it to keep your
+    lessons in step with what's happening in your classroom.
+  </div>
+
+  <input type="file" id="photo-input" accept="image/*" capture="environment" multiple style="display:none" onchange="handleFileSelect(event)">
+  <div class="upload-zone fade-in" id="upload-zone" onclick="document.getElementById('photo-input').click()">
+    <div class="upload-icon">📷</div>
+    <div class="upload-text">
+      <strong>Tap to take or upload a photo</strong>
+      <span>JPG, PNG or HEIC · you can add more than one</span>
+    </div>
+  </div>
+
+  <div class="section-title">🗂 Uploaded So Far</div>
+  <div id="photo-grid" class="photo-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--muted);"><span class="spinner"></span></div>
+  </div>
+
+</main>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
+  <img id="lightbox-img" src="" alt="Topic schedule photo">
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/capacitor-utils.js"></script>
+<script src="/assets/js/app-lock.js"></script>
+<script src="/assets/js/perf-utils.js"></script>
+<script>
+const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+const SUBJECTS=['Mathematics','Physics','Chemistry','Biology','Other'];
+const BUCKET='term-topic-photos';
+const MAX_FILE_BYTES=8*1024*1024; // generous for a real phone-camera JPEG
+const STALE_MS=10*7*24*60*60*1000; // ~10 weeks — roughly one school term
+
+let currentUser=null;
+let photos=[];
+
+function toast(msg,type='success'){
+  const t=document.getElementById('toast');
+  if(!t)return;
+  t.textContent=msg; t.className='show '+type;
+  setTimeout(()=>t.className='',3000);
+}
+
+async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window.location.href='/index.html'; }
+
+function escHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function timeSince(dateStr){
+  if(!dateStr) return '';
+  const diff=Date.now()-new Date(dateStr).getTime();
+  const days=Math.floor(diff/86400000);
+  const hours=Math.floor(diff/3600000);
+  const mins=Math.floor(diff/60000);
+  if(mins<60) return `${mins}m ago`;
+  if(hours<24) return `${hours}h ago`;
+  if(days<7) return `${days}d ago`;
+  return new Date(dateStr).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+}
+
+function openLightbox(url){
+  document.getElementById('lightbox-img').src=url;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(e){
+  if(e) e.stopPropagation();
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+function renderGallery(){
+  const grid=document.getElementById('photo-grid');
+  if(photos.length===0){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;">
+      <div class="ei">🗂</div>
+      <p>Nothing uploaded yet — take your first photo above.</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML=photos.map(p=>{
+    const stale=(Date.now()-new Date(p.uploaded_at).getTime())>STALE_MS;
+    const subj=p.subject||'';
+    return `
+    <div class="photo-card fade-in" data-id="${p.id}">
+      <div class="photo-thumb-wrap">
+        <img src="${p.photo_url}" alt="Topic schedule photo" loading="lazy" onclick="openLightbox('${p.photo_url}')">
+        <button class="photo-remove" onclick="deletePhoto(${p.id})" title="Delete">✕</button>
+        ${stale?'<span class="photo-stale-badge">⚠ Ageing</span>':''}
+      </div>
+      <div class="photo-meta">
+        <select class="photo-subject-select" onchange="updateSubject(${p.id}, this.value)">
+          <option value="" ${subj===''?'selected':''}>No subject tag</option>
+          ${SUBJECTS.map(s=>`<option value="${s}" ${subj===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <input class="photo-note-input" type="text" placeholder="Add a note (optional)"
+          value="${escHtml(p.note||'')}" onblur="updateNote(${p.id}, this.value)">
+        <div class="photo-time">${timeSince(p.uploaded_at)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadPhotos(){
+  const {data,error}=await supa.from('student_term_topics')
+    .select('*')
+    .eq('student_id',currentUser.id)
+    .order('uploaded_at',{ascending:false});
+  if(error){ toast('Could not load your photos: '+error.message,'error'); return; }
+  photos=data||[];
+  renderGallery();
+}
+
+async function handleFileSelect(event){
+  const files=Array.from(event.target.files||[]);
+  event.target.value=''; // allow re-selecting the same file later
+  if(!files.length) return;
+
+  const zone=document.getElementById('upload-zone');
+  zone.classList.add('busy');
+
+  for(const file of files){
+    if(file.size>MAX_FILE_BYTES){
+      toast(`${file.name} is too large (max 8MB)`, 'error');
+      continue;
+    }
+    const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+    const path=`${currentUser.id}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+
+    const {error:upErr}=await supa.storage.from(BUCKET).upload(path,file);
+    if(upErr){ toast('Upload failed: '+upErr.message,'error'); continue; }
+
+    const {data:{publicUrl}}=supa.storage.from(BUCKET).getPublicUrl(path);
+
+    const {error:insErr}=await supa.from('student_term_topics').insert({
+      student_id:currentUser.id,
+      photo_url:publicUrl
+    });
+    if(insErr){
+      toast('Could not save photo: '+insErr.message,'error');
+      await supa.storage.from(BUCKET).remove([path]);
+      continue;
+    }
+  }
+
+  zone.classList.remove('busy');
+  toast('Photo added ✓');
+  await loadPhotos();
+}
+
+function storagePathFromUrl(url){
+  const marker=`/storage/v1/object/public/${BUCKET}/`;
+  const idx=url.indexOf(marker);
+  return idx===-1?null:url.slice(idx+marker.length);
+}
+
+async function deletePhoto(id){
+  const photo=photos.find(p=>p.id===id);
+  if(!photo) return;
+  if(!confirm('Remove this photo?')) return;
+
+  const {error}=await supa.from('student_term_topics').delete().eq('id',id);
+  if(error){ toast('Delete failed: '+error.message,'error'); return; }
+
+  const path=storagePathFromUrl(photo.photo_url);
+  if(path) await supa.storage.from(BUCKET).remove([path]);
+
+  photos=photos.filter(p=>p.id!==id);
+  renderGallery();
+  toast('Photo removed');
+}
+
+async function updateSubject(id,value){
+  const {error}=await supa.from('student_term_topics').update({subject:value||null}).eq('id',id);
+  if(error){ toast('Could not save: '+error.message,'error'); return; }
+  const p=photos.find(x=>x.id===id);
+  if(p) p.subject=value||null;
+}
+
+async function updateNote(id,value){
+  const {error}=await supa.from('student_term_topics').update({note:value||null}).eq('id',id);
+  if(error){ toast('Could not save: '+error.message,'error'); return; }
+  const p=photos.find(x=>x.id===id);
+  if(p) p.note=value||null;
+}
+
+// ── MAIN ──
+(async()=>{
+  const timeoutHandle=setTimeout(()=>showTimeoutError(()=>location.reload()),8000);
+
+  const {data:{user}}=await supa.auth.getUser();
+  if(!user){ clearTimeout(timeoutHandle); window.location.href='/index.html'; return; }
+  currentUser=user;
+
+  let profile=getCachedProfile();
+  if(!profile||profile.id!==user.id){
+    const {data:pd}=await supa.from('profiles').select('*').eq('id',user.id).single();
+    profile=pd;
+    if(profile) setCachedProfile(profile);
+  }
+
+  document.getElementById('nav-name').textContent=profile?.full_name?.split(' ')[0]||'Student';
+  document.getElementById('nav-avatar').textContent=(profile?.full_name||'S')[0].toUpperCase();
+  document.getElementById('page-sub').textContent=
+    `${profile?.full_name?.split(' ')[0]||'Student'} · so your teacher can teach in step with school`;
+
+  await loadPhotos();
+  clearTimeout(timeoutHandle);
+})();
+</script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+      }
+    </script>
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mob-nav-btn" onclick="location.href='/dashboard.html'">
+      <span class="mob-icon">🏠</span>Home
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/subjects.html'">
+      <span class="mob-icon">📚</span>Subjects
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/student/progress.html'">
+      <span class="mob-icon">📈</span>Progress
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/student/assessment.html'">
+      <span class="mob-icon">📋</span>Tests
+    </button>
+    <button class="mob-nav-btn" onclick="location.href='/tools/tools.html'">
+      <span class="mob-icon">🔧</span>Tools
+    </button>
+  </div>
+</nav>
+<script src="/assets/js/subject-back.js"></script>
+</body>
+</html>

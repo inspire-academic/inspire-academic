@@ -1150,6 +1150,13 @@ function renderStudentDetail(s) {
       </div>
     </div>
 
+    <div class="subject-section">
+      <div class="subject-label">This Term's Topics <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);font-size:.75rem">— what they're covering at school right now</span></div>
+      <div class="table-card" style="padding:1.1rem 1.3rem" id="term-topics-card">
+        <div style="color:var(--muted);font-size:.85rem">Loading…</div>
+      </div>
+    </div>
+
     ${SUBJECTS.map(subj => {
       const topics = bySubject[subj] || [];
       if (topics.length === 0) {
@@ -1229,6 +1236,7 @@ function renderStudentDetail(s) {
     </div>` : ''}
   `;
   loadStudentInfo(s.id);
+  loadTermTopics(s.id, s.name);
 }
 
 // ── Student Info (DOB + parent contact) ─────────────────────────────────
@@ -1385,6 +1393,83 @@ async function saveStudentInfo(studentId) {
     btn.textContent = 'Save';
     errEl.textContent = e.message;
   }
+}
+
+// ── This Term's Topics (student-submitted photos, read-only here) ──────
+// Reads directly via the Supabase client — RLS on student_term_topics
+// (supabase/student_term_topics.sql) already scopes a teacher's SELECT
+// to their own assigned students via get_teacher_students(), the same
+// pattern quiz_attempts/topic_progress rely on elsewhere on this page,
+// so no proxy Netlify function is needed here.
+const TERM_TOPIC_STALE_MS = 10 * 7 * 24 * 60 * 60 * 1000; // ~10 weeks, roughly one school term
+const TERM_TOPICS_URL = 'https://www.inspireacademic.org/student/term-topics.html';
+
+function timeSinceShort(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor(diff / 3600000);
+  if (hours < 24) return hours + 'h ago';
+  if (days < 14) return days + 'd ago';
+  return Math.floor(days / 7) + 'w ago';
+}
+
+async function loadTermTopics(studentId, studentName) {
+  const card = document.getElementById('term-topics-card');
+  if (!card) return;
+  try {
+    const { data, error } = await supa.from('student_term_topics')
+      .select('*')
+      .eq('student_id', studentId)
+      .order('uploaded_at', { ascending: false });
+    if (error) throw error;
+
+    const firstName = (studentName || 'there').split(' ')[0];
+    const inviteBtn = `<button class="profile-save-btn" style="padding:.5rem 1.1rem;font-size:.82rem" id="term-topics-invite-btn"
+        onclick="copyTermTopicsInvite(${escHtml(JSON.stringify(firstName))}, this)">📋 Copy invite message</button>`;
+
+    if (!data || data.length === 0) {
+      card.innerHTML = `
+        <div style="color:var(--muted);font-size:.85rem;margin-bottom:.8rem">Nothing uploaded yet.</div>
+        ${inviteBtn}
+      `;
+      return;
+    }
+
+    card.innerHTML = `
+      <div style="margin-bottom:.9rem">${inviteBtn}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.9rem">
+        ${data.map(p => {
+          const stale = (Date.now() - new Date(p.uploaded_at).getTime()) > TERM_TOPIC_STALE_MS;
+          return `
+          <a href="${p.photo_url}" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit">
+            <div style="position:relative;aspect-ratio:1;border-radius:var(--r);overflow:hidden;background:var(--navy3);border:1px solid var(--border)">
+              <img src="${p.photo_url}" alt="Topic schedule" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+              ${stale ? '<span style="position:absolute;bottom:.3rem;left:.3rem;background:rgba(11,22,40,.85);color:#fb923c;border:1px solid rgba(251,146,60,.4);font-size:.55rem;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.05em;padding:.1rem .35rem;border-radius:3px">⚠ Ageing</span>' : ''}
+            </div>
+            <div style="font-size:.72rem;color:var(--muted);margin-top:.3rem">
+              ${p.subject ? escHtml(p.subject) + ' · ' : ''}${timeSinceShort(p.uploaded_at)}
+            </div>
+            ${p.note ? `<div style="font-size:.72rem;color:var(--white);margin-top:.1rem">${escHtml(p.note)}</div>` : ''}
+          </a>`;
+        }).join('')}
+      </div>
+    `;
+  } catch (e) {
+    if (document.getElementById('term-topics-card')) {
+      card.innerHTML = `<div style="color:var(--red);font-size:.85rem">Couldn't load topics: ${escHtml(e.message)}</div>`;
+    }
+  }
+}
+
+function copyTermTopicsInvite(firstName, btn) {
+  const message = `Hi ${firstName}, please open Inspire Academic and go to My Topics to add a quick photo of what you're studying at school this term: ${TERM_TOPICS_URL}`;
+  navigator.clipboard.writeText(message).then(() => {
+    const original = btn.textContent;
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => { btn.textContent = original; }, 2000);
+  }).catch(() => {
+    alert(message); // fallback so the teacher can still copy it manually
+  });
 }
 
 // ── Assessments Management ──────────────────────────────────────────────
