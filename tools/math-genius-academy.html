@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/srs-engine.js"></script>
 <style>
 :root {
   --bg:       #06060f;
@@ -1170,11 +1171,14 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
 const SUPABASE_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const _supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+window._supa = _supa; // srs-engine.js (shared with flashcards.html) syncs through this
 let _authToken = null;
 (async function requireLogin() {
   const { data: { session } } = await _supa.auth.getSession();
   if (!session) { window.location.href = '/'; return; }
   _authToken = session.access_token;
+  window._currentUser = session.user; // srs-engine.js needs this for cloud sync
+  CloudSync.pull(); // warm the local SRS cache before the child picks a subject
 })();
 
 // ══════════════════════════════════════
@@ -1464,6 +1468,7 @@ async function loadQuestionBank() {
       const rows = data
         .filter(r => r.subject === subject)
         .map(r => ({
+          id: r.id,
           q: r.question_text,
           a: r.question_type === 'mcq' ? r.correct_answer : Number(r.correct_answer),
           hint: r.hint || '',
@@ -1635,13 +1640,33 @@ function typeLabel(type) {
           word:'Word Problem',mcq:'Question',science:'Science',space:'Space',tt:'Times Tables'}[type]||'Calculate';
 }
 
+// Card id for the shared SRS engine — namespaced so it never collides
+// with flashcards.html's own `subject__topic__mode__index` ids. Falls
+// back to the question text itself when there's no DB id (the offline
+// fallback pool) — stable enough for that rarely-hit path.
+function srsCardId(subject, q) {
+  return 'protege__' + subject + '__' + (q.id || q.q);
+}
+
+// Prioritise cards due for review, then never-seen cards, before falling
+// back to a plain random pick — this is what actually makes the content
+// spaced-repetition rather than pure attempt-counting.
+function pickNextQuestion(pool, subject) {
+  const now = Date.now();
+  const withSrs = pool.map(q => ({ q, srs: SRS.getData(srsCardId(subject, q)) }));
+  const due   = withSrs.filter(x => x.srs.seen > 0 && x.srs.dueDate <= now);
+  const fresh = withSrs.filter(x => x.srs.seen === 0);
+  const from  = due.length ? due : (fresh.length ? fresh : withSrs);
+  return from[Math.floor(Math.random() * from.length)].q;
+}
+
 function loadQuestion() {
   answered=false;
   document.getElementById('hint-box').style.display='none';
   const pool = questions[state.currentSubject]||questions.math;
   let filtered = pool.filter(q=>q.level<=state.mathLevel+1);
   if(!filtered.length) filtered=pool;
-  currentQ=filtered[Math.floor(Math.random()*filtered.length)];
+  currentQ=pickNextQuestion(filtered, state.currentSubject);
   renderQuestion(currentQ);
   // AI opponent
   const delay=Math.max(2000,8000-(state.combo*300));
@@ -1699,6 +1724,12 @@ function checkAnswer(selected,btn,q) {
   state.questionsAnswered++;
   const correct=selected===q.a;
   recordTopicResult(q.type||'add',correct);
+
+  // Times Tables has its own fact-mastery tracking (state.ttFacts) below —
+  // spaced repetition here only applies to the content-bank subjects.
+  if (state.currentSubject !== 'tt') {
+    SRS.rate(srsCardId(state.currentSubject, q), correct ? 'good' : 'again');
+  }
 
   const timeBonus=Math.floor(state.timeLeft/10);
   const levelBonus=q.level*5;
