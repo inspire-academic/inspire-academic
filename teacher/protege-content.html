@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protégé Content Bank — Inspire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<style>
+  .auth-loading{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px;}
+  .auth-loading-logo{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--gold);}
+  .auth-loading-sub{font-size:13px;color:var(--muted);font-family:var(--font-mono);}
+
+  .topbar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(11,22,40,0.95);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;z-index:100;backdrop-filter:blur(8px);}
+  .topbar-logo{font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--gold);letter-spacing:0.02em;}
+  .topbar-title{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+  .topbar-user{font-size:12.5px;color:var(--muted);}
+
+  .wrap{max-width:900px;margin:0 auto;padding:80px 16px 64px;}
+  h1{font-family:var(--font-display);font-size:23px;font-weight:700;margin-bottom:6px;}
+  .subhead{font-size:13.5px;color:var(--muted);margin-bottom:20px;}
+
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;}
+  .stat-cell{text-align:center;padding:.9rem;}
+  .stat-val{font-family:var(--font-display);font-size:22px;font-weight:700;}
+  .stat-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
+
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
+  .filters select{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:.55rem .8rem;color:var(--white);font-size:.85rem;}
+  .filters select:focus{outline:none;border-color:var(--gold);}
+
+  .q-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:.85rem 1rem;margin-bottom:8px;}
+  .q-text{font-weight:600;font-size:.88rem;margin-bottom:3px;}
+  .q-meta{font-size:.72rem;color:var(--muted);font-family:var(--font-mono);}
+  .q-actions{display:flex;gap:.4rem;flex-shrink:0;}
+  .q-actions .btn{padding:.4rem .8rem;font-size:.75rem;}
+
+  .empty-note{font-size:.85rem;color:var(--muted);padding:1.5rem 0;text-align:center;}
+
+  .form-field{margin-bottom:12px;}
+  .form-field label{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px;}
+  .form-field input[type=text], .form-field textarea, .form-field select{
+    width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
+    padding:.6rem .8rem;color:var(--white);font-size:.88rem;font-family:var(--font-body);
+  }
+  .form-field textarea{resize:vertical;min-height:60px;}
+  .form-field input:focus, .form-field textarea:focus, .form-field select:focus{outline:none;border-color:var(--gold);}
+  .form-row{display:flex;gap:10px;}
+  .form-row .form-field{flex:1;}
+  .option-row{display:flex;gap:8px;margin-bottom:6px;}
+  .option-row input{flex:1;}
+  .checkbox-field{display:flex;align-items:center;gap:8px;font-size:.85rem;margin-bottom:12px;}
+  .checkbox-field input{width:16px;height:16px;}
+</style>
+</head>
+<body>
+
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying access...</div>
+</div>
+
+<header class="topbar">
+  <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
+  <span class="topbar-title">Protégé Content Bank</span>
+  <div class="topbar-right">
+    <span class="topbar-user" id="topbar-user"></span>
+    <button class="btn btn-outline" onclick="window.location.href='/teacher/teacher.html'">← Dashboard</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Protégé Content Bank</h1>
+  <p class="subhead">Maths, Science and Space questions for Protégé's arithmetic/quiz modes. Times Tables and Non-Verbal Reasoning are generated automatically and don't need content here.</p>
+
+  <div class="stat-row" id="stat-row"></div>
+
+  <div class="filters">
+    <select id="f-subject" onchange="renderList()">
+      <option value="">All subjects</option>
+      <option value="math">Maths</option>
+      <option value="science">Science</option>
+      <option value="space">Space</option>
+    </select>
+    <select id="f-tier" onchange="renderList()">
+      <option value="">All tiers</option>
+      <option value="anchors">Anchors</option>
+      <option value="build">Build</option>
+      <option value="challenge">Challenge</option>
+      <option value="mastery">Mastery</option>
+    </select>
+    <select id="f-status" onchange="renderList()">
+      <option value="">Published + drafts</option>
+      <option value="published">Published only</option>
+      <option value="draft">Drafts only</option>
+    </select>
+    <button class="btn btn-gold" style="margin-left:auto;" onclick="openForm(null)">+ Add Question</button>
+  </div>
+
+  <div id="list-area"></div>
+</div>
+
+<div class="modal-overlay" id="q-modal" style="display:none;">
+  <div class="modal" style="max-width:560px;">
+    <button class="modal-close" onclick="closeForm()">✕</button>
+    <div id="q-modal-body"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script>
+const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+let ME = null
+let QUESTIONS = []
+let EDITING_ID = null
+
+function toast(msg, type){
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'show ' + (type||'')
+  setTimeout(()=>{ t.className='' }, 2600)
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
+}
+
+async function checkAuth(){
+  const { data: { session } } = await supa.auth.getSession()
+  if (!session) { window.location.href = '/index.html'; return false }
+  const { data: profile, error } = await supa.from('profiles').select('id, role, full_name, first_name').eq('id', session.user.id).single()
+  if (error || !profile || !['teacher','teacher_manager','admin','super_admin'].includes(profile.role)) {
+    window.location.href = '/dashboard.html'
+    return false
+  }
+  ME = profile
+  document.getElementById('topbar-user').textContent = profile.full_name || profile.first_name || ''
+  document.getElementById('authLoading').style.display = 'none'
+  await loadQuestions()
+  return true
+}
+
+async function loadQuestions(){
+  const { data, error } = await supa.from('protege_questions').select('*').order('created_at', { ascending: false })
+  if (error) { toast('Could not load questions: ' + error.message, 'error'); return }
+  QUESTIONS = data || []
+  renderStats()
+  renderList()
+}
+
+function renderStats(){
+  const subjects = ['math','science','space']
+  const row = document.getElementById('stat-row')
+  row.innerHTML = subjects.map(s => {
+    const total = QUESTIONS.filter(q => q.subject === s).length
+    const published = QUESTIONS.filter(q => q.subject === s && q.is_published).length
+    return `<div class="card stat-cell">
+      <div class="stat-val">${published}<span style="color:var(--muted);font-size:14px;"> / ${total}</span></div>
+      <div class="stat-lbl">${s} published</div>
+    </div>`
+  }).join('')
+}
+
+function renderList(){
+  const subject = document.getElementById('f-subject').value
+  const tier = document.getElementById('f-tier').value
+  const status = document.getElementById('f-status').value
+
+  let list = QUESTIONS
+  if (subject) list = list.filter(q => q.subject === subject)
+  if (tier) list = list.filter(q => q.tier === tier)
+  if (status === 'published') list = list.filter(q => q.is_published)
+  if (status === 'draft') list = list.filter(q => !q.is_published)
+
+  const area = document.getElementById('list-area')
+  if (list.length === 0) { area.innerHTML = '<p class="empty-note">No questions match these filters.</p>'; return }
+
+  area.innerHTML = list.map(q => `
+    <div class="card q-row">
+      <div>
+        <div class="q-text">${escapeHtml(q.question_text)}</div>
+        <div class="q-meta">${q.subject} · ${q.tier} · ${q.question_type} · answer: ${escapeHtml(q.correct_answer)} ${q.is_published ? '· <span style="color:#4ade80;">published</span>' : '· <span style="color:var(--muted);">draft</span>'}</div>
+      </div>
+      <div class="q-actions">
+        <button class="btn btn-outline" onclick="openForm('${q.id}')">Edit</button>
+        <button class="btn btn-outline" onclick="togglePublish('${q.id}')">${q.is_published ? 'Unpublish' : 'Publish'}</button>
+        <button class="btn btn-outline" onclick="deleteQuestion('${q.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('')
+}
+
+async function togglePublish(id){
+  const q = QUESTIONS.find(q => q.id === id)
+  const { error } = await supa.from('protege_questions').update({ is_published: !q.is_published }).eq('id', id)
+  if (error) { toast('Could not update: ' + error.message, 'error'); return }
+  await loadQuestions()
+}
+
+async function deleteQuestion(id){
+  if (!confirm('Delete this question permanently?')) return
+  const { error } = await supa.from('protege_questions').delete().eq('id', id)
+  if (error) { toast('Could not delete: ' + error.message, 'error'); return }
+  await loadQuestions()
+  toast('Question deleted', 'success')
+}
+
+function openForm(id){
+  EDITING_ID = id
+  const q = id ? QUESTIONS.find(q => q.id === id) : null
+  const body = document.getElementById('q-modal-body')
+
+  const options = q && q.options ? q.options : ['', '', '', '']
+  const optionRows = options.map((opt, i) => `
+    <div class="option-row"><input type="text" class="q-option" placeholder="Option ${i+1}" value="${escapeHtml(opt)}"></div>
+  `).join('')
+
+  body.innerHTML = `
+    <h2 style="font-family:var(--font-display);font-size:18px;margin-bottom:14px;">${q ? 'Edit Question' : 'Add Question'}</h2>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Subject</label>
+        <select id="q-subject">
+          <option value="math" ${!q||q.subject==='math'?'selected':''}>Maths</option>
+          <option value="science" ${q&&q.subject==='science'?'selected':''}>Science</option>
+          <option value="space" ${q&&q.subject==='space'?'selected':''}>Space</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Tier</label>
+        <select id="q-tier">
+          <option value="anchors" ${!q||q.tier==='anchors'?'selected':''}>Anchors</option>
+          <option value="build" ${q&&q.tier==='build'?'selected':''}>Build</option>
+          <option value="challenge" ${q&&q.tier==='challenge'?'selected':''}>Challenge</option>
+          <option value="mastery" ${q&&q.tier==='mastery'?'selected':''}>Mastery</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Question Type</label>
+      <select id="q-type" onchange="toggleOptionsVisibility()">
+        <option value="numeric" ${!q||q.question_type==='numeric'?'selected':''}>Numeric answer</option>
+        <option value="mcq" ${q&&q.question_type==='mcq'?'selected':''}>Multiple choice</option>
+        <option value="word" ${q&&q.question_type==='word'?'selected':''}>Word problem (numeric answer)</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Question</label>
+      <textarea id="q-text" placeholder="e.g. What is 6 x 7?">${escapeHtml(q ? q.question_text : '')}</textarea>
+    </div>
+    <div class="form-field" id="q-options-field" style="display:${q&&q.question_type==='mcq'?'block':'none'};">
+      <label>Options (for multiple choice)</label>
+      ${optionRows}
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Correct Answer</label>
+        <input type="text" id="q-answer" placeholder="e.g. 42" value="${escapeHtml(q ? q.correct_answer : '')}">
+      </div>
+      <div class="form-field">
+        <label>Topic (optional)</label>
+        <input type="text" id="q-topic" placeholder="e.g. multiplication" value="${escapeHtml(q ? q.topic || '' : '')}">
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Hint (optional)</label>
+      <input type="text" id="q-hint" placeholder="A nudge in the right direction" value="${escapeHtml(q ? q.hint || '' : '')}">
+    </div>
+    <div class="form-field">
+      <label>Fun fact / context (optional)</label>
+      <input type="text" id="q-context" placeholder="Shown alongside the question" value="${escapeHtml(q ? q.context || '' : '')}">
+    </div>
+    <div class="checkbox-field">
+      <input type="checkbox" id="q-published" ${q && q.is_published ? 'checked' : ''}>
+      <label for="q-published" style="margin:0;text-transform:none;font-size:.85rem;color:var(--white);">Published (visible to students immediately)</label>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-gold" style="flex:1;" onclick="saveQuestion()">Save</button>
+      <button class="btn btn-outline" onclick="closeForm()">Cancel</button>
+    </div>
+  `
+  document.getElementById('q-modal').style.display = 'flex'
+}
+
+function toggleOptionsVisibility(){
+  const isMcq = document.getElementById('q-type').value === 'mcq'
+  document.getElementById('q-options-field').style.display = isMcq ? 'block' : 'none'
+}
+
+function closeForm(){
+  document.getElementById('q-modal').style.display = 'none'
+  EDITING_ID = null
+}
+
+async function saveQuestion(){
+  const subject = document.getElementById('q-subject').value
+  const tier = document.getElementById('q-tier').value
+  const question_type = document.getElementById('q-type').value
+  const question_text = document.getElementById('q-text').value.trim()
+  const correct_answer = document.getElementById('q-answer').value.trim()
+  const topic = document.getElementById('q-topic').value.trim() || null
+  const hint = document.getElementById('q-hint').value.trim() || null
+  const context = document.getElementById('q-context').value.trim() || null
+  const is_published = document.getElementById('q-published').checked
+
+  if (!question_text || !correct_answer) { toast('Question and correct answer are required', 'error'); return }
+
+  let options = null
+  if (question_type === 'mcq') {
+    options = [...document.querySelectorAll('.q-option')].map(i => i.value.trim()).filter(Boolean)
+    if (options.length < 2) { toast('Multiple choice needs at least 2 options', 'error'); return }
+  }
+
+  const row = { subject, tier, question_type, question_text, correct_answer, topic, hint, context, options, is_published }
+
+  let error
+  if (EDITING_ID) {
+    ;({ error } = await supa.from('protege_questions').update(row).eq('id', EDITING_ID))
+  } else {
+    row.created_by = ME.id
+    ;({ error } = await supa.from('protege_questions').insert(row))
+  }
+  if (error) { toast('Could not save: ' + error.message, 'error'); return }
+
+  await loadQuestions()
+  closeForm()
+  toast('Question saved', 'success')
+}
+
+checkAuth()
+</script>
+</body>
+</html>

@@ -1443,6 +1443,42 @@ const questions = {
     {q:'Light takes 8 minutes from the Sun to Earth. How many seconds is that?', a:480, hint:'8 × 60 = ?', context:'The speed of light is 300,000 km per second.', level:3, type:'space'},
   ]
 };
+// The arrays above stay in place as an offline/fallback pool — loadQuestionBank()
+// below replaces them per-subject with real content from protege_questions once
+// it loads, but a child on a dropped connection still gets a working game.
+
+// ══════════════════════════════════════
+// CONTENT BANK — real questions from Supabase, replacing the fallback
+// arrays above per-subject once loaded. Times Tables/NVR are procedural
+// and don't go through this. See supabase/protege_questions_schema.sql.
+// ══════════════════════════════════════
+const TIER_TO_LEVEL = { anchors: 1, build: 2, challenge: 3, mastery: 3 };
+
+async function loadQuestionBank() {
+  try {
+    const { data, error } = await _supa.from('protege_questions')
+      .select('*').eq('is_published', true).in('subject', ['math', 'science', 'space']);
+    if (error || !data || !data.length) return;
+
+    ['math', 'science', 'space'].forEach(subject => {
+      const rows = data
+        .filter(r => r.subject === subject)
+        .map(r => ({
+          q: r.question_text,
+          a: r.question_type === 'mcq' ? r.correct_answer : Number(r.correct_answer),
+          hint: r.hint || '',
+          context: r.context || '',
+          level: TIER_TO_LEVEL[r.tier] || 1,
+          type: r.question_type === 'mcq' ? 'mcq' : (r.topic || subject),
+          options: Array.isArray(r.options) && r.options.length >= 2 ? r.options : null
+        }));
+      if (rows.length) questions[subject] = rows;
+    });
+  } catch (e) {
+    console.warn('[MathGenius] question bank load failed, using built-in fallback:', e);
+  }
+}
+loadQuestionBank();
 
 // ══════════════════════════════════════
 // NAVIGATION
@@ -1574,12 +1610,16 @@ function renderQuestion(q) {
   const src = SUBJECT_IMGS[state.currentSubject] || SUBJECT_IMGS.math;
   img.src = src; img.style.display='block';
 
-  currentSpeakText = q.type==='word' ? q.q
+  currentSpeakText = (q.type==='word' || q.type==='mcq' || Array.isArray(q.options)) ? q.q
     : `What is ${q.q.replace(/×/g,'times').replace(/÷/g,'divided by').replace(/−/g,'minus').replace(/__/g,'the missing number')}?`;
   if(Voice.autoRead) setTimeout(()=>Voice.speak(currentSpeakText,true),400);
 
-  const wrong = generateWrong(q.a, q.level);
-  const opts  = shuffle([q.a, ...wrong]);
+  // True multiple-choice questions (real option text, e.g. "which of these
+  // is a mammal?") use their own authored options — generateWrong only
+  // makes sense for numeric answers, so it's skipped entirely here.
+  const opts = Array.isArray(q.options) && q.options.length >= 2
+    ? shuffle([...q.options])
+    : shuffle([q.a, ...generateWrong(q.a, q.level)]);
   const grid  = document.getElementById('answer-grid');
   grid.innerHTML = '';
   opts.forEach(ans=>{
@@ -1592,7 +1632,7 @@ function renderQuestion(q) {
 
 function typeLabel(type) {
   return {add:'Addition',sub:'Subtraction',mul:'Multiplication',div:'Division',
-          word:'Word Problem',science:'Science',space:'Space',tt:'Times Tables'}[type]||'Calculate';
+          word:'Word Problem',mcq:'Question',science:'Science',space:'Space',tt:'Times Tables'}[type]||'Calculate';
 }
 
 function loadQuestion() {
