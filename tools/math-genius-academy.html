@@ -1603,10 +1603,98 @@ function _actuallyStartGame(subject) {
   setPauseVisible('game', _playMode==='timed');
   updateModeToggleBtn('game');
   goTo('game');
+
+  // Times Tables keeps its own progression (state.ttFacts) — diagnostic
+  // placement and remembered level only apply to the content-bank subjects.
+  if (subject === 'tt') { loadQuestion(); return; }
+
+  if (needsPlacement(subject)) {
+    runPlacementQuiz(subject);
+  } else {
+    state.mathLevel = getStoredLevel(subject);
+    loadQuestion();
+  }
+}
+
+// ══════════════════════════════════════
+// DIAGNOSTIC PLACEMENT — runs once per subject, the first time it's
+// played, so a child doesn't always start at square one. Untimed by
+// design (time pressure is a documented anxiety trigger at this age —
+// see docs/reference/protege-rebuild-research-2026-09-10.md). The
+// result is remembered in localStorage, which also fixes state.mathLevel
+// otherwise silently resetting to 1 on every page reload.
+// ══════════════════════════════════════
+const PLACEMENT_PER_LEVEL = 2;
+let _placement = null;
+
+function levelStorageKey(subject) { return 'protege_level_' + subject; }
+function needsPlacement(subject) { return localStorage.getItem(levelStorageKey(subject)) === null; }
+function getStoredLevel(subject) { return parseInt(localStorage.getItem(levelStorageKey(subject)) || '1', 10); }
+function saveLevel(subject, level) { localStorage.setItem(levelStorageKey(subject), String(level)); }
+
+function buildPlacementSet(subject) {
+  const pool = questions[subject] || [];
+  let set = [];
+  [1, 2, 3].forEach(lvl => {
+    set = set.concat(shuffle(pool.filter(q => q.level === lvl)).slice(0, PLACEMENT_PER_LEVEL));
+  });
+  return shuffle(set);
+}
+
+function runPlacementQuiz(subject) {
+  const qs = buildPlacementSet(subject);
+  if (qs.length < 3) {
+    // Not enough content across levels yet to place meaningfully —
+    // default to level 1 rather than block play on thin content
+    // (Science/Space are still shallow pools as of this rebuild).
+    saveLevel(subject, 1);
+    state.mathLevel = 1;
+    loadQuestion();
+    return;
+  }
+  _placement = { subject, questions: qs, index: 0, correctByLevel: { 1: 0, 2: 0, 3: 0 }, answered: false };
+  showPlacementQuestion();
+}
+
+function showPlacementQuestion() {
+  const q = _placement.questions[_placement.index];
+  _placement.answered = false;
+  document.getElementById('hint-box').style.display = 'none';
+  renderQuestion(q, handlePlacementAnswer);
+  document.getElementById('q-type-label').textContent = 'Finding your level';
+  document.getElementById('q-level-tag').textContent = `Question ${_placement.index + 1} of ${_placement.questions.length}`;
+}
+
+function handlePlacementAnswer(selected, btn, q) {
+  if (_placement.answered) return;
+  _placement.answered = true;
+  const correct = selected === q.a;
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  if (correct) _placement.correctByLevel[q.level]++;
+  setTimeout(advancePlacement, 700);
+}
+
+function advancePlacement() {
+  _placement.index++;
+  if (_placement.index < _placement.questions.length) {
+    showPlacementQuestion();
+    return;
+  }
+  // Start high, drop down until the child shows they're solid — missing
+  // an easy question matters more for placement than acing a hard one.
+  const c = _placement.correctByLevel;
+  let level = 1;
+  if (c[3] >= PLACEMENT_PER_LEVEL) level = 3;
+  else if (c[2] >= PLACEMENT_PER_LEVEL - 1 && c[1] >= 1) level = 2;
+  saveLevel(_placement.subject, level);
+  state.mathLevel = level;
+  updateDashboard();
+  _placement = null;
   loadQuestion();
 }
 
-function renderQuestion(q) {
+function renderQuestion(q, onAnswer) {
+  const handleAnswer = onAnswer || checkAnswer;
   document.getElementById('q-level-tag').textContent   = `Level ${q.level}`;
   document.getElementById('q-type-label').textContent  = q.typeLabel || typeLabel(q.type);
   document.getElementById('q-question').textContent    = q.q;
@@ -1630,7 +1718,7 @@ function renderQuestion(q) {
   opts.forEach(ans=>{
     const btn=document.createElement('button');
     btn.className='ans-btn'; btn.textContent=ans;
-    btn.onclick=()=>checkAnswer(ans,btn,q);
+    btn.onclick=()=>handleAnswer(ans,btn,q);
     grid.appendChild(btn);
   });
 }
@@ -1763,7 +1851,10 @@ function checkAnswer(selected,btn,q) {
     const vp=['Correct. Well done.','Excellent.','Brilliant work.','Outstanding.','Exceptional.'];
     Voice.speak(vp[Math.floor(Math.random()*vp.length)],true);
 
-    if(state.correctAnswers>0&&state.correctAnswers%5===0) state.mathLevel=Math.min(state.mathLevel+1,5);
+    if(state.correctAnswers>0&&state.correctAnswers%5===0){
+      state.mathLevel=Math.min(state.mathLevel+1,5);
+      if(state.currentSubject!=='tt') saveLevel(state.currentSubject, state.mathLevel);
+    }
   } else {
     state.combo=0; document.getElementById('combo-text').textContent='';
     btn.classList.add('wrong');
