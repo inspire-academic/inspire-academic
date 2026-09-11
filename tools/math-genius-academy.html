@@ -197,27 +197,6 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
 .s-star.dim path { fill:rgba(255,255,255,.15); }
 .subj-level { font-size:.65rem; color:var(--muted); font-family:var(--font-mono); }
 
-/* friends */
-.friends-row { width:100%; overflow-x:auto; display:flex; gap:10px; padding-bottom:4px;
-  scrollbar-width:none; }
-.friend-card { flex-shrink:0; background:var(--surface); border:1px solid var(--border);
-  border-radius:12px; padding:10px 14px; text-align:center; cursor:pointer;
-  transition:all .2s; min-width:72px; }
-.friend-card.online { border-color:rgba(74,222,128,.4); }
-.friend-card:hover { border-color:var(--violet); }
-.friend-av { width:28px; height:28px; border-radius:8px; margin:0 auto 4px;
-  font-size:.65rem; font-weight:700; font-family:var(--font-mono);
-  display:flex; align-items:center; justify-content:center; color:var(--white); }
-.friend-name-lbl { font-size:.7rem; font-weight:700; color:var(--white); }
-.friend-status { font-size:.6rem; font-weight:600; }
-.online-dot { color:var(--mint); }
-.offline-dot { color:var(--muted); }
-.add-friend { flex-shrink:0; background:rgba(96,165,250,.08);
-  border:1px dashed rgba(96,165,250,.3); border-radius:12px; padding:10px 14px;
-  cursor:pointer; color:var(--sky); font-size:1.2rem; min-width:72px;
-  display:flex; align-items:center; justify-content:center; transition:all .2s; }
-.add-friend:hover { background:rgba(96,165,250,.15); }
-
 /* leaderboard */
 .leaderboard { width:100%; background:var(--surface); border:1px solid var(--border);
   border-radius:var(--r); overflow:hidden; }
@@ -479,9 +458,6 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
   padding:28px; max-width:340px; width:90%; text-align:center; }
 .modal-title { font-family:var(--font-display); font-size:1.3rem; font-weight:700; margin-bottom:8px; }
 .modal-sub { font-size:.82rem; color:var(--muted); line-height:1.6; margin-bottom:18px; }
-.hero-code-box { background:rgba(212,160,23,.08); border:2px dashed rgba(212,160,23,.4);
-  border-radius:12px; padding:16px; font-family:var(--font-mono);
-  font-size:1.6rem; font-weight:700; color:var(--gold); letter-spacing:4px; margin-bottom:16px; }
 .modal-btns { display:flex; gap:8px; justify-content:center; }
 .modal-btn { border:none; border-radius:10px; padding:10px 22px; font-size:.85rem;
   font-weight:700; cursor:pointer; transition:all .2s; font-family:var(--font-body); }
@@ -806,26 +782,6 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
       <div style="font-size:.75rem;color:var(--muted);line-height:1.5;">Know every times table fact permanently. Spaced repetition, Boss Battles, all 4 question formats.</div>
     </div>
     <div style="color:var(--violet);font-size:1.2rem;">&rsaquo;</div>
-  </div>
-
-  <div class="dash-section-title">Friends</div>
-  <div class="friends-row" id="friends-row">
-    <div class="friend-card online">
-      <div class="friend-av" style="background:rgba(124,47,255,.3)">AL</div>
-      <div class="friend-name-lbl">Alex</div>
-      <div class="friend-status online-dot">&#9679; Online</div>
-    </div>
-    <div class="friend-card">
-      <div class="friend-av" style="background:rgba(14,83,18,.3)">SM</div>
-      <div class="friend-name-lbl">Sam</div>
-      <div class="friend-status offline-dot">&#9679; Offline</div>
-    </div>
-    <div class="friend-card online">
-      <div class="friend-av" style="background:rgba(12,74,110,.3)">MY</div>
-      <div class="friend-name-lbl">Maya</div>
-      <div class="friend-status online-dot">&#9679; Online</div>
-    </div>
-    <div class="add-friend" onclick="showAddFriend()">+</div>
   </div>
 
   <button class="tutor-btn" onclick="openTutor()">
@@ -1194,19 +1150,6 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
     <div class="tutor-input-row">
       <input class="tutor-input" id="tutor-input" placeholder="Ask Professor Cosmo..." onkeydown="if(event.key==='Enter')sendTutorMsg()">
       <button class="tutor-send" onclick="sendTutorMsg()">&#9654;</button>
-    </div>
-  </div>
-</div>
-
-<!-- ════════ ADD FRIEND MODAL ════════ -->
-<div class="modal-overlay" id="friend-modal">
-  <div class="modal-box">
-    <div class="modal-title">Add a Friend</div>
-    <p class="modal-sub">Share your Hero Code with a friend. They enter it to join your learning network.</p>
-    <div class="hero-code-box" id="hero-code">HERO-????</div>
-    <div class="modal-btns">
-      <button class="modal-btn primary" onclick="copyCode()">Copy Code</button>
-      <button class="modal-btn secondary" onclick="closeModal('friend-modal')">Close</button>
     </div>
   </div>
 </div>
@@ -2267,17 +2210,6 @@ function launchConfetti() {
 // ══════════════════════════════════════
 // FRIENDS & MODAL
 // ══════════════════════════════════════
-function showAddFriend() {
-  const code='HERO-'+Math.random().toString(36).substr(2,4).toUpperCase();
-  document.getElementById('hero-code').textContent=code;
-  document.getElementById('friend-modal').classList.add('open');
-}
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-function copyCode(){
-  navigator.clipboard?.writeText(document.getElementById('hero-code').textContent);
-  document.getElementById('hero-code').textContent='Copied!';
-  setTimeout(showAddFriend,1500);
-}
 function joinFriend(name){
   if(!state.name||state.name==='Hero'){ goTo('profile'); return; }
   startGame('math');
