@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protégé Science Investigations — Inspire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<script src="/assets/js/protege-diagrams.js"></script>
+<style>
+  .auth-loading{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px;}
+  .auth-loading-logo{font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--gold);}
+  .auth-loading-sub{font-size:13px;color:var(--muted);font-family:var(--font-mono);}
+
+  .topbar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(11,22,40,0.95);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;z-index:100;backdrop-filter:blur(8px);}
+  .topbar-logo{font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--gold);letter-spacing:0.02em;}
+  .topbar-title{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;}
+  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+  .topbar-user{font-size:12.5px;color:var(--muted);}
+
+  .wrap{max-width:900px;margin:0 auto;padding:80px 16px 64px;}
+  h1{font-family:var(--font-display);font-size:23px;font-weight:700;margin-bottom:6px;}
+  .subhead{font-size:13.5px;color:var(--muted);margin-bottom:20px;}
+
+  .stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:22px;}
+  .stat-cell{text-align:center;padding:.9rem;}
+  .stat-val{font-family:var(--font-display);font-size:22px;font-weight:700;}
+  .stat-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
+
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
+  .filters select{background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);padding:.55rem .8rem;color:var(--white);font-size:.85rem;}
+  .filters select:focus{outline:none;border-color:var(--gold);}
+
+  .inv-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:.85rem 1rem;margin-bottom:8px;}
+  .inv-title{font-weight:600;font-size:.92rem;margin-bottom:3px;}
+  .inv-meta{font-size:.72rem;color:var(--muted);font-family:var(--font-mono);}
+  .inv-actions{display:flex;gap:.4rem;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;}
+  .inv-actions .btn{padding:.4rem .8rem;font-size:.75rem;}
+
+  .empty-note{font-size:.85rem;color:var(--muted);padding:1.5rem 0;text-align:center;}
+
+  .form-section{border-top:1px solid var(--border);margin-top:16px;padding-top:14px;}
+  .form-section-title{font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:10px;color:var(--gold);}
+  .form-field{margin-bottom:12px;}
+  .form-field label{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px;}
+  .form-field input[type=text], .form-field textarea, .form-field select{
+    width:100%;background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
+    padding:.6rem .8rem;color:var(--white);font-size:.88rem;font-family:var(--font-body);
+  }
+  .form-field textarea{resize:vertical;min-height:56px;}
+  .form-field input:focus, .form-field textarea:focus, .form-field select:focus{outline:none;border-color:var(--gold);}
+  .form-row{display:flex;gap:10px;}
+  .form-row .form-field{flex:1;}
+  .opt-row{display:flex;gap:8px;margin-bottom:6px;align-items:center;}
+  .opt-row input[type=text]{flex:1;}
+  .opt-row input[type=radio]{width:16px;height:16px;flex-shrink:0;}
+  .opt-hint{font-size:.68rem;color:var(--muted);margin-bottom:6px;}
+  .checkbox-field{display:flex;align-items:center;gap:8px;font-size:.85rem;margin-bottom:12px;}
+  .checkbox-field input{width:16px;height:16px;}
+  .modal .modal{max-width:640px;}
+  #inv-preview{width:100%;max-width:220px;margin:8px auto;}
+</style>
+</head>
+<body>
+
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying access...</div>
+</div>
+
+<header class="topbar">
+  <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
+  <span class="topbar-title">Protégé Science Investigations</span>
+  <div class="topbar-right">
+    <span class="topbar-user" id="topbar-user"></span>
+    <button class="btn btn-outline" onclick="window.location.href='/teacher/protege-content.html'">Question Bank</button>
+    <button class="btn btn-outline" onclick="window.location.href='/teacher/teacher.html'">← Dashboard</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Science Investigations</h1>
+  <p class="subhead">Guided-inquiry Science units for Protégé (predict → observe → resolve → check) — a different shape from the flat Maths/Science/Space question bank. See <code>docs/reference/protege-rebuild-research-2026-09-10.md</code> for the pedagogy behind this. Every investigation needs a human review and publish before any child sees it.</p>
+
+  <div class="stat-row" id="stat-row"></div>
+
+  <div class="filters">
+    <select id="f-year" onchange="renderList()">
+      <option value="">All years</option>
+      <option value="1">Year 1</option><option value="2">Year 2</option>
+      <option value="3">Year 3</option><option value="4">Year 4</option>
+      <option value="5">Year 5</option><option value="6">Year 6</option>
+    </select>
+    <select id="f-status" onchange="renderList()">
+      <option value="">Published + drafts</option>
+      <option value="published">Published only</option>
+      <option value="draft">Drafts only</option>
+    </select>
+    <button class="btn btn-gold" style="margin-left:auto;" onclick="openForm(null)">+ Add Investigation</button>
+  </div>
+
+  <div id="list-area"></div>
+</div>
+
+<div class="modal-overlay" id="inv-modal" style="display:none;">
+  <div class="modal" style="max-width:640px;max-height:86vh;overflow-y:auto;">
+    <button class="modal-close" onclick="closeForm()">✕</button>
+    <div id="inv-modal-body"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script>
+const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+const DIAGRAM_KEYS = ['floating-sinking', 'states-of-matter', 'plant-variables']
+
+let ME = null
+let INVESTIGATIONS = []
+let EDITING_ID = null
+
+function toast(msg, type){
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'show ' + (type||'')
+  setTimeout(()=>{ t.className='' }, 2600)
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
+}
+
+async function checkAuth(){
+  const { data: { session } } = await supa.auth.getSession()
+  if (!session) { window.location.href = '/index.html'; return false }
+  const { data: profile, error } = await supa.from('profiles').select('id, role, full_name, first_name').eq('id', session.user.id).single()
+  if (error || !profile || !['teacher','teacher_manager','admin','super_admin'].includes(profile.role)) {
+    window.location.href = '/dashboard.html'
+    return false
+  }
+  ME = profile
+  document.getElementById('topbar-user').textContent = profile.full_name || profile.first_name || ''
+  document.getElementById('authLoading').style.display = 'none'
+  await loadInvestigations()
+  return true
+}
+
+async function loadInvestigations(){
+  const { data, error } = await supa.from('protege_investigations').select('*').order('created_at', { ascending: false })
+  if (error) { toast('Could not load investigations: ' + error.message, 'error'); return }
+  INVESTIGATIONS = data || []
+  renderStats()
+  renderList()
+}
+
+function renderStats(){
+  const total = INVESTIGATIONS.length
+  const published = INVESTIGATIONS.filter(i => i.is_published).length
+  document.getElementById('stat-row').innerHTML = `
+    <div class="card stat-cell"><div class="stat-val">${published}<span style="color:var(--muted);font-size:14px;"> / ${total}</span></div><div class="stat-lbl">published</div></div>
+    <div class="card stat-cell"><div class="stat-val">${new Set(INVESTIGATIONS.map(i=>i.diagram_key)).size}</div><div class="stat-lbl">diagram types used</div></div>
+  `
+}
+
+function renderList(){
+  const year = document.getElementById('f-year').value
+  const status = document.getElementById('f-status').value
+
+  let list = INVESTIGATIONS
+  if (year) list = list.filter(i => String(i.min_year) === year)
+  if (status === 'published') list = list.filter(i => i.is_published)
+  if (status === 'draft') list = list.filter(i => !i.is_published)
+
+  const area = document.getElementById('list-area')
+  if (list.length === 0) { area.innerHTML = '<p class="empty-note">No investigations match these filters.</p>'; return }
+
+  area.innerHTML = list.map(i => `
+    <div class="card inv-row">
+      <div>
+        <div class="inv-title">${escapeHtml(i.title)}</div>
+        <div class="inv-meta">Year ${i.min_year}+ · ${escapeHtml(i.topic||'—')} · ${escapeHtml(i.diagram_key)} ${i.reasoning_goal ? '· reasoning goal (Y5/6)' : ''} ${i.is_published ? '· <span style="color:#4ade80;">published</span>' : '· <span style="color:var(--muted);">draft</span>'}</div>
+      </div>
+      <div class="inv-actions">
+        <button class="btn btn-outline" onclick="openForm('${i.id}')">Edit</button>
+        <button class="btn btn-outline" onclick="togglePublish('${i.id}')">${i.is_published ? 'Unpublish' : 'Publish'}</button>
+        <button class="btn btn-outline" onclick="deleteInvestigation('${i.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('')
+}
+
+async function togglePublish(id){
+  const i = INVESTIGATIONS.find(i => i.id === id)
+  const { error } = await supa.from('protege_investigations').update({ is_published: !i.is_published }).eq('id', id)
+  if (error) { toast('Could not update: ' + error.message, 'error'); return }
+  await loadInvestigations()
+}
+
+async function deleteInvestigation(id){
+  if (!confirm('Delete this investigation permanently?')) return
+  const { error } = await supa.from('protege_investigations').delete().eq('id', id)
+  if (error) { toast('Could not delete: ' + error.message, 'error'); return }
+  await loadInvestigations()
+  toast('Investigation deleted', 'success')
+}
+
+function optionRowsHtml(namePrefix, options, correctIndex){
+  const opts = options && options.length ? options : ['', '', '', '']
+  return opts.map((opt, i) => `
+    <div class="opt-row">
+      <input type="radio" name="${namePrefix}-correct" value="${i}" ${i===correctIndex?'checked':''}>
+      <input type="text" class="${namePrefix}-opt" placeholder="Option ${i+1}" value="${escapeHtml(opt)}">
+    </div>
+  `).join('')
+}
+
+function openForm(id){
+  EDITING_ID = id
+  const i = id ? INVESTIGATIONS.find(i => i.id === id) : null
+  const body = document.getElementById('inv-modal-body')
+
+  body.innerHTML = `
+    <h2 style="font-family:var(--font-display);font-size:18px;margin-bottom:4px;">${i ? 'Edit Investigation' : 'Add Investigation'}</h2>
+    <p class="subhead" style="margin-bottom:10px;">Predict → Observe → Resolve → Check. Untimed, no lives lost on a wrong check answer.</p>
+
+    <div class="form-row">
+      <div class="form-field"><label>Title</label><input type="text" id="i-title" value="${escapeHtml(i?i.title:'')}" placeholder="e.g. Sink or Float?"></div>
+      <div class="form-field" style="max-width:110px;"><label>Min. year</label>
+        <select id="i-year">${[1,2,3,4,5,6].map(y=>`<option value="${y}" ${i&&i.min_year===y?'selected':(!i&&y===3?'selected':'')}>Year ${y}</option>`).join('')}</select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label>Topic (short, hyphenated)</label><input type="text" id="i-topic" value="${escapeHtml(i?i.topic||'':'')}" placeholder="e.g. states-of-matter"></div>
+      <div class="form-field"><label>Diagram</label>
+        <select id="i-diagram" onchange="previewDiagram()">${DIAGRAM_KEYS.map(k=>`<option value="${k}" ${i&&i.diagram_key===k?'selected':''}>${k}</option>`).join('')}</select>
+      </div>
+    </div>
+    <div id="inv-preview"></div>
+
+    <div class="form-section">
+      <div class="form-section-title">1 · Predict</div>
+      <div class="form-field"><label>Prompt</label><textarea id="i-predict-prompt">${escapeHtml(i?i.predict_prompt:'')}</textarea></div>
+      <div class="opt-hint">Select the radio next to the option that turns out to be correct.</div>
+      <div id="i-predict-opts">${optionRowsHtml('i-predict', i?i.predict_options:null, i?i.predict_correct_index:0)}</div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">2 · Observe</div>
+      <div class="form-field"><label>What actually happens (shown with the diagram revealed)</label><textarea id="i-observe">${escapeHtml(i?i.observe_text:'')}</textarea></div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">3 · Resolve</div>
+      <div class="form-field"><label>Why it happens (plain explanation)</label><textarea id="i-resolve">${escapeHtml(i?i.resolve_text:'')}</textarea></div>
+      <div class="form-field"><label>Reasoning-skill goal — optional, shown only to Year 5/6 children</label><textarea id="i-reasoning" placeholder="e.g. why this was a fair test / control of variables">${escapeHtml(i?i.reasoning_goal||'':'')}</textarea></div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">4 · Check for understanding</div>
+      <div class="form-field"><label>Question</label><textarea id="i-check-prompt">${escapeHtml(i?i.check_prompt:'')}</textarea></div>
+      <div class="opt-hint">Select the radio next to the correct option.</div>
+      <div id="i-check-opts">${optionRowsHtml('i-check', i?i.check_options:null, i?i.check_correct_index:0)}</div>
+    </div>
+
+    <div class="checkbox-field" style="margin-top:14px;">
+      <input type="checkbox" id="i-published" ${i && i.is_published ? 'checked' : ''}>
+      <label for="i-published" style="margin:0;text-transform:none;font-size:.85rem;color:var(--white);">Published (visible to eligible students immediately)</label>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-gold" style="flex:1;" onclick="saveInvestigation()">Save</button>
+      <button class="btn btn-outline" onclick="closeForm()">Cancel</button>
+    </div>
+  `
+  document.getElementById('inv-modal').style.display = 'flex'
+  previewDiagram()
+}
+
+function previewDiagram(){
+  const key = document.getElementById('i-diagram').value
+  const box = document.getElementById('inv-preview')
+  if (box && window.renderProtegeDiagram) renderProtegeDiagram(key, box, 'observe')
+}
+
+function closeForm(){
+  document.getElementById('inv-modal').style.display = 'none'
+  EDITING_ID = null
+}
+
+function readOptionGroup(prefix){
+  const options = [...document.querySelectorAll('.' + prefix + '-opt')].map(el => el.value.trim())
+  const checked = document.querySelector(`input[name="${prefix}-correct"]:checked`)
+  return { options, correctIndex: checked ? parseInt(checked.value, 10) : 0 }
+}
+
+async function saveInvestigation(){
+  const title = document.getElementById('i-title').value.trim()
+  const min_year = parseInt(document.getElementById('i-year').value, 10)
+  const topic = document.getElementById('i-topic').value.trim() || null
+  const diagram_key = document.getElementById('i-diagram').value
+  const predict_prompt = document.getElementById('i-predict-prompt').value.trim()
+  const observe_text = document.getElementById('i-observe').value.trim()
+  const resolve_text = document.getElementById('i-resolve').value.trim()
+  const reasoning_goal = document.getElementById('i-reasoning').value.trim() || null
+  const check_prompt = document.getElementById('i-check-prompt').value.trim()
+  const is_published = document.getElementById('i-published').checked
+
+  const predict = readOptionGroup('i-predict')
+  const check = readOptionGroup('i-check')
+
+  if (!title || !predict_prompt || !observe_text || !resolve_text || !check_prompt) {
+    toast('Title and all four stage fields are required', 'error'); return
+  }
+  const predictOpts = predict.options.filter(Boolean)
+  const checkOpts = check.options.filter(Boolean)
+  if (predictOpts.length < 2 || checkOpts.length < 2) {
+    toast('Each stage needs at least 2 options', 'error'); return
+  }
+
+  const row = {
+    title, min_year, topic, diagram_key,
+    predict_prompt, predict_options: predictOpts, predict_correct_index: predict.correctIndex,
+    observe_text, resolve_text, reasoning_goal,
+    check_prompt, check_options: checkOpts, check_correct_index: check.correctIndex,
+    is_published
+  }
+
+  let error
+  if (EDITING_ID) {
+    ;({ error } = await supa.from('protege_investigations').update(row).eq('id', EDITING_ID))
+  } else {
+    row.created_by = ME.id
+    ;({ error } = await supa.from('protege_investigations').insert(row))
+  }
+  if (error) { toast('Could not save: ' + error.message, 'error'); return }
+
+  await loadInvestigations()
+  closeForm()
+  toast('Investigation saved', 'success')
+}
+
+checkAuth()
+</script>
+</body>
+</html>
