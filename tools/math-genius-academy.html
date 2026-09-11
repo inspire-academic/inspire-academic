@@ -13,6 +13,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/srs-engine.js"></script>
 <script src="/assets/js/protege-diagrams.js"></script>
+<script src="/assets/js/protege-cosmo.js"></script>
 <style>
 :root {
   --bg:       #06060f;
@@ -243,7 +244,6 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
   font-family:var(--font-body); }
 .tutor-btn:hover { border-color:var(--violet); background:rgba(124,47,255,.15); }
 .tutor-btn-icon { width:32px; height:32px; border-radius:8px;
-  background:linear-gradient(135deg,var(--purple),var(--violet));
   display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:16px; }
 
 /* ── TIMES TABLE MACHINE ── */
@@ -444,7 +444,6 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
 .tutor-topbar { display:flex; align-items:center; gap:12px; padding:14px 18px;
   border-bottom:1px solid rgba(255,255,255,.06); }
 .tutor-av { width:40px; height:40px; border-radius:12px;
-  background:linear-gradient(135deg,var(--purple),var(--violet));
   display:flex; align-items:center; justify-content:center; font-size:18px;
   flex-shrink:0; }
 .tutor-info { flex:1; }
@@ -841,7 +840,7 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
   </div>
 
   <button class="tutor-btn" onclick="openTutor()">
-    <div class="tutor-btn-icon">&#9670;</div>
+    <div class="tutor-btn-icon" id="tutor-btn-icon"></div>
     Ask Professor Cosmo
   </button>
 </div>
@@ -1193,7 +1192,7 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
 <div id="tutor-overlay">
   <div class="tutor-frame">
     <div class="tutor-topbar">
-      <div class="tutor-av">&#9670;</div>
+      <div class="tutor-av" id="tutor-av"></div>
       <div class="tutor-info">
         <div class="tutor-name">Professor Cosmo</div>
         <div class="tutor-status">Ready to help</div>
@@ -1245,6 +1244,16 @@ let _authToken = null;
   window._currentUser = session.user; // srs-engine.js needs this for cloud sync
   CloudSync.pull(); // warm the local SRS cache before the child picks a subject
 })();
+
+// Professor Cosmo as a persistent, stateful character (Phase 2b — see
+// docs/reference/protege-ui-engagement-research-2026-09-11.md). The
+// floating widget lives outside every .screen so it's visible no
+// matter which one is active; it's covered automatically when
+// #tutor-overlay opens full-screen (lower z-index), so it never
+// duplicates the chat avatar on top of the chat itself.
+ProtegeCosmo.mountWidget();
+ProtegeCosmo.renderAvatar(document.getElementById('tutor-av'), 36);
+ProtegeCosmo.renderAvatar(document.getElementById('tutor-btn-icon'), 28);
 
 // ══════════════════════════════════════
 // PLAY MODE STATE — declared first so all functions can reference it
@@ -1686,12 +1695,14 @@ function renderInvestigationStage() {
       if (i === inv.check_correct_index) {
         btn.classList.add('correct');
         document.querySelectorAll('#inv-answer-grid .ans-btn').forEach(b => b.onclick = null);
+        ProtegeCosmo.celebrate(2000);
         setTimeout(finishInvestigation, 500);
       } else {
         // Untimed, additive: a wrong guess just fades — no lives lost,
         // no lock-out, child can keep trying (never a visible regression
         // from one mistake — see the research doc's design principles).
         btn.classList.add('wrong');
+        ProtegeCosmo.nudge();
         setTimeout(() => btn.classList.remove('wrong'), 900);
       }
     });
@@ -2042,6 +2053,7 @@ function timeUp() {
   document.getElementById('combo-text').textContent='';
   loseLife();
   showFeedback(false,"Time's up",`The answer was ${currentQ.a}`,0);
+  ProtegeCosmo.nudge();
   // Always require click after time-up — child needs to see the answer
   document.getElementById('hint-box').style.display='block';
   document.getElementById('hint-box').textContent = currentQ.hint;
@@ -2077,6 +2089,7 @@ function checkAnswer(selected,btn,q) {
       document.getElementById('combo-text').textContent=c[Math.min(state.combo,c.length-1)];
     }
     spawnXpFloat(xp); spawnParticles();
+    ProtegeCosmo.celebrate();
 
     // Update TT fact web
     if(q.factKey){ state.ttFacts[q.factKey]=state.ttFacts[q.factKey]==='mastered'?'mastered':(state.ttFacts[q.factKey]==='learning'?'mastered':'learning'); }
@@ -2105,6 +2118,7 @@ function checkAnswer(selected,btn,q) {
     loseLife();
     showFeedback(false,'Not quite',`The answer is ${q.a}. ${q.hint}`,0);
     Voice.speak(`Not quite. ${q.hint}`,true);
+    ProtegeCosmo.nudge();
   }
 
   document.getElementById('game-score').textContent    = state.score;
@@ -2184,6 +2198,7 @@ async function getHint() {
   if(!currentQ) return;
   const box=document.getElementById('hint-box');
   box.style.display='block'; box.textContent='Professor Cosmo is thinking...';
+  ProtegeCosmo.think();
   try {
     const r=await fetch('/api/protege-ai',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${_authToken}`},
       body:JSON.stringify({mode:'hint',question:currentQ.q,answer:currentQ.a,hint:currentQ.hint,grade:state.grade,name:state.name})});
@@ -2191,6 +2206,7 @@ async function getHint() {
     const h=d.text||currentQ.hint; box.textContent=h;
     if(Voice.enabled) Voice.speak(h,false);
   } catch(e){ box.textContent=currentQ.hint; }
+  ProtegeCosmo.idle();
 }
 
 const tutorHistory=[];
@@ -2202,6 +2218,7 @@ async function sendTutorMsg() {
   const ud=document.createElement('div'); ud.className='msg user'; ud.textContent=msg; msgs.appendChild(ud);
   const ld=document.createElement('div'); ld.className='msg ai'; ld.textContent='Professor Cosmo is thinking...'; msgs.appendChild(ld);
   msgs.scrollTop=msgs.scrollHeight;
+  ProtegeCosmo.think();
   try {
     const r=await fetch('/api/protege-ai',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${_authToken}`},
       body:JSON.stringify({mode:'tutor',name:state.name,grade:state.grade,userMessage:msg,history:tutorHistory})});
@@ -2211,7 +2228,8 @@ async function sendTutorMsg() {
     tutorHistory.push({role:'user',content:msg},{role:'assistant',content:reply});
     if(tutorHistory.length>20) tutorHistory.splice(0,2);
     if(Voice.enabled) Voice.speak(reply,false);
-  } catch(e){ ld.textContent='A great question. Your curiosity is exactly what makes great scientists.'; }
+    ProtegeCosmo.celebrate(1000);
+  } catch(e){ ld.textContent='A great question. Your curiosity is exactly what makes great scientists.'; ProtegeCosmo.idle(); }
   msgs.scrollTop=msgs.scrollHeight;
 }
 function openTutor() { document.getElementById('tutor-overlay').classList.add('open'); }
@@ -2702,12 +2720,14 @@ function checkNVR(el, isCorrect) {
     el.classList.add('correct');
     spawnXpFloat(pts);
     spawnParticles();
+    ProtegeCosmo.celebrate();
     Voice.speak(['Correct.','Well done.','Excellent.','Right.'][Math.floor(Math.random()*4)], true);
   } else {
     el.classList.add('wrong');
     nvrState.lives = Math.max(0, nvrState.lives-1);
     nvrState.localStreak = 0;
     updateNVRLives();
+    ProtegeCosmo.nudge();
     Voice.speak('Not quite. Look at the hint.', true);
     // Show explanation
     const hb = document.getElementById('nvr-hint-box');
