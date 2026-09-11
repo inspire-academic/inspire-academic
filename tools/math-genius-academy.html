@@ -84,16 +84,6 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
   box-shadow:0 8px 24px rgba(124,47,255,.35); transition:all .2s;
   font-family:var(--font-body); }
 .primary-btn:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(124,47,255,.5); }
-.join-row { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
-.join-av { width:52px; height:52px; border-radius:50%; cursor:pointer;
-  border:2px solid var(--border); font-size:11px; font-weight:700; color:var(--muted);
-  display:flex; align-items:center; justify-content:center; font-family:var(--font-mono);
-  transition:all .2s; position:relative; }
-.join-av:hover { border-color:var(--violet); color:var(--white); }
-.join-badge { position:absolute; top:-5px; right:-5px; background:var(--mint);
-  color:#0a1a0a; font-size:9px; font-weight:700; border-radius:50%;
-  width:18px; height:18px; display:flex; align-items:center; justify-content:center; }
-
 /* ── PROFILE ── */
 #profile { text-align:center; gap:18px; }
 .profile-title { font-family:var(--font-display); font-size:1.8rem; font-weight:800; color:var(--violet); }
@@ -654,19 +644,6 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
   </div>
 
   <button class="primary-btn" onclick="goToProfile()">Begin My Journey</button>
-
-  <div class="section-label">Join a friend</div>
-  <div class="join-row">
-    <div class="join-av" style="background:rgba(124,47,255,.2)" onclick="joinFriend('Alex')">
-      AL<div class="join-badge">3</div>
-    </div>
-    <div class="join-av" style="background:rgba(14,83,18,.3)" onclick="joinFriend('Sam')">
-      SM<div class="join-badge">5</div>
-    </div>
-    <div class="join-av" style="background:rgba(12,74,110,.3)" onclick="joinFriend('Maya')">
-      MY<div class="join-badge">7</div>
-    </div>
-  </div>
 </div>
 
 <!-- ════════ PROFILE ════════ -->
@@ -2210,11 +2187,6 @@ function launchConfetti() {
 // ══════════════════════════════════════
 // FRIENDS & MODAL
 // ══════════════════════════════════════
-function joinFriend(name){
-  if(!state.name||state.name==='Hero'){ goTo('profile'); return; }
-  startGame('math');
-}
-
 // ══════════════════════════════════════
 // NVR ENGINE
 // ══════════════════════════════════════
