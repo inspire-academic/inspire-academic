@@ -455,3 +455,13 @@ function = "create-teacher"
   to = "/.netlify/functions/student-info"
   status = 200
   force = true
+
+# Emails a generated monthly invoice PDF to a parent. Auth required
+# (unlike assessment/report/email, which is deliberately guest-reachable) —
+# sending a real invoice is a billing action, staff-only, same
+# assigned-student-or-admin boundary as student/info above.
+[[redirects]]
+  from = "/api/v1/invoices/email"
+  to = "/.netlify/functions/invoice-email"
+  status = 200
+  force = true
