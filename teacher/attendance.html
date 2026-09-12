@@ -128,9 +128,10 @@ const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 let ME = null
 let SESSION = null
+let IS_ADMIN = false
 let ROSTER = []          // [{id, name}] — filtered by SELECTED_COHORT, if any
 let RECORDS = {}         // student_id -> {status, marked_at}
-let ALL_STUDENTS = []    // [{id, name}] — every active student assigned to this teacher
+let ALL_STUDENTS = []    // [{id, name}] — every student visible to this account (all students for admins, assigned only otherwise)
 let COHORTS = []         // [{id, name, memberIds:Set}]
 let SELECTED_COHORT = null
 let EDITING_COHORT_ID = null
@@ -155,6 +156,7 @@ async function checkAuth(){
     return false
   }
   ME = profile
+  IS_ADMIN = profile.role === 'admin' || profile.role === 'super_admin'
   document.getElementById('topbar-user').textContent = profile.full_name || profile.first_name || ''
   document.getElementById('authLoading').style.display = 'none'
   await loadAllStudents()
@@ -163,6 +165,18 @@ async function checkAuth(){
 }
 
 async function loadAllStudents(){
+  // Admins see every student, same as admin-teacher-mgmt.html / year6-submissions.html /
+  // student-diagnostics.html — an explicit teacher_student_assignments row shouldn't be
+  // required to take attendance for a student an admin can already see everywhere else.
+  if (IS_ADMIN) {
+    const { data: students } = await supa.from('profiles')
+      .select('id, first_name, full_name').eq('role', 'student')
+    ALL_STUDENTS = (students||[])
+      .map(s => ({ id: s.id, name: s.full_name || s.first_name || 'Student' }))
+      .sort((a,b) => a.name.localeCompare(b.name))
+    return
+  }
+
   const { data: asgn } = await supa.from('teacher_student_assignments')
     .select('student_id').eq('teacher_id', ME.id).eq('is_active', true)
   const studentIds = [...new Set((asgn||[]).map(a=>a.student_id))]
