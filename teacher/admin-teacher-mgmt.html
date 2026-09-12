@@ -240,7 +240,7 @@ const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa=supabase.createClient(SUPA_URL,SUPA_KEY);
 
-let _session=null,_teachers=[],_students=[],_tid=null;
+let _session=null,_teachers=[],_students=[],_tid=null,_checked=new Set();
 
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
@@ -363,31 +363,39 @@ async function openAssign(tid,tname){
   document.getElementById('a-subject').value='';
 
   const{data:ex}=await supa.from('teacher_student_assignments').select('student_id').eq('teacher_id',tid).eq('is_active',true);
-  const aset=new Set((ex||[]).map(e=>e.student_id));
-  renderPicker(_students,aset);
+  _checked=new Set((ex||[]).map(e=>e.student_id));
+  renderPicker(_students);
   document.getElementById('m-assign').style.display='flex';
 }
 
-function renderPicker(list,aset=new Set()){
+// _checked is the single source of truth for which students are ticked —
+// it must survive re-renders (search filtering, tickAll) since renderPicker
+// replaces the DOM and would otherwise silently drop the checked state of
+// any student scrolled out of the current filter (this caused a real
+// incident: searching wiped 47 already-assigned students on save).
+function renderPicker(list){
   const el=document.getElementById('picker');
   if(!list.length){el.innerHTML='<div style="padding:1rem;text-align:center;color:var(--muted);font-size:.85rem;">No students found</div>';return;}
   el.innerHTML=list.map(s=>`<label class="prow">
-    <input type="checkbox" value="${s.id}" ${aset.has(s.id)?'checked':''}>
+    <input type="checkbox" value="${s.id}" onchange="this.checked?_checked.add('${s.id}'):_checked.delete('${s.id}')" ${_checked.has(s.id)?'checked':''}>
     <div style="flex:1;"><div class="pname">${esc(s.full_name||'Unknown')}</div><div class="pmeta">${s.year_group||'—'} · ${s.exam_board||'—'}</div></div>
-    ${aset.has(s.id)?'<span class="chip cb" style="font-size:.6rem;">Assigned</span>':''}
+    ${_checked.has(s.id)?'<span class="chip cb" style="font-size:.6rem;">Assigned</span>':''}
   </label>`).join('');
 }
 
 function filterPicker(q){
   const lq=q.toLowerCase();
-  const checked=new Set([...document.querySelectorAll('#picker input:checked')].map(c=>c.value));
-  renderPicker(_students.filter(s=>(s.full_name||'').toLowerCase().includes(lq)),checked);
+  renderPicker(_students.filter(s=>(s.full_name||'').toLowerCase().includes(lq)));
 }
 
-function tickAll(s){document.querySelectorAll('#picker input[type=checkbox]').forEach(c=>c.checked=s);}
+function tickAll(s){
+  const visibleIds=[...document.querySelectorAll('#picker input[type=checkbox]')].map(c=>c.value);
+  visibleIds.forEach(id=>s?_checked.add(id):_checked.delete(id));
+  document.querySelectorAll('#picker input[type=checkbox]').forEach(c=>c.checked=s);
+}
 
 async function saveAssign(){
-  const ids=[...document.querySelectorAll('#picker input:checked')].map(c=>c.value);
+  const ids=[..._checked];
   const subj=document.getElementById('a-subject').value.trim()||null;
   const btn=document.getElementById('btn-save');
   btn.disabled=true;btn.innerHTML='<span class="spinner-sm"></span> Saving…';
