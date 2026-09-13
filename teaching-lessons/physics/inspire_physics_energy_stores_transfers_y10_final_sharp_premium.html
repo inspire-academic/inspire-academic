@@ -5719,6 +5719,13 @@ function setupBoard(id) {
       undoStack.push(ctx.getImageData(0,0,canvas.width,canvas.height));
       ctx.putImageData(redoStack.pop(), 0, 0);
       toast('Redo ✓');
+    },
+    // Lets an external destructive action (e.g. clearBoard) snapshot the
+    // current ink before wiping it, so Ctrl+Z can bring it back.
+    pushUndo: function() {
+      undoStack.push(ctx.getImageData(0,0,canvas.width,canvas.height));
+      if (undoStack.length > MAX_UNDO) undoStack.shift();
+      redoStack.length = 0;
     }
   };
 
@@ -5982,7 +5989,9 @@ function toggleBoardGraph(id) {
 }
 function clearBoard(id) {
   if (!BOARDS[id]) return;
+  if (!confirm('Clear this board? Ink can be brought back with Undo (Ctrl+Z) right after, but pasted items cannot.')) return;
   const b = BOARDS[id];
+  if (b.pushUndo) b.pushUndo();   // snapshot ink before wiping so Ctrl+Z can restore it
   b.ctx.clearRect(0, 0, b.canvas.width, b.canvas.height);
   if (b.commitSel)  b.commitSel();   // clear selection ants overlay
   if (b.hideCursor) b.hideCursor();  // clear cursor overlay
@@ -8853,14 +8862,13 @@ function init() {
 
   document.addEventListener('keydown', e => {
     const atag = document.activeElement.tagName;
-    
-    // Alt+C OR Ctrl+C for Clear board (check this FIRST)
-    if ((e.altKey || e.ctrlKey || e.metaKey) && e.key === 'c' && atag !== 'INPUT' && atag !== 'TEXTAREA') {
-      e.preventDefault();
-      if (activeBoardId) clearBoard(activeBoardId);
-      return; // Don't process other 'c' handlers
-    }
-    
+
+    // Clear Board is bound to Alt+C only (see the dedicated handler further
+    // below) — this used to also fire on Ctrl+C/Cmd+C, colliding with the
+    // universal copy shortcut and silently wiping the board on a reflexive
+    // keystroke. Removed; Ctrl+C now falls through to its own correct
+    // handler (copy a selected object, or normal browser copy).
+
     // C for calculator (but not with modifier keys)
     if (e.key === 'c' && !e.ctrlKey && !e.metaKey && !e.altKey && atag !== 'INPUT' && atag !== 'TEXTAREA') {
       toggleCalc();
