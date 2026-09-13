@@ -8863,7 +8863,9 @@ function initFocusAnnotationOverlay() {
   stage.appendChild(cursor);
 
   FOCUS_ANNOTATION.canvas = canvas;
-  FOCUS_ANNOTATION.ctx = canvas.getContext('2d');
+  // Perf: same rationale as the main board's context — frequent
+  // getImageData/putImageData (undo/redo) benefits from a CPU-backed canvas.
+  FOCUS_ANNOTATION.ctx = canvas.getContext('2d', { willReadFrequently: true });
   FOCUS_ANNOTATION.stage = stage;
   FOCUS_ANNOTATION.cursor = cursor;
   FOCUS_ANNOTATION.undoStack = [];
@@ -8885,6 +8887,19 @@ function resizeFocusAnnotationCanvas(preserveInk = false) {
   if (!canvas || !stage) return;
 
   const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const cssW = Math.max(stage.clientWidth, 1);
+  const cssH = Math.max(stage.scrollHeight, stage.clientHeight, 1);
+  const newW = Math.round(cssW * dpr);
+  const newH = Math.round(cssH * dpr);
+
+  // Perf: onpointerdown calls this on every stroke start to guarantee the
+  // canvas matches the current stage size, but assigning canvas.width/
+  // height always wipes the bitmap even when set to the same value —
+  // that's why this function exists at all (to copy/restore ink across a
+  // resize). Skip the whole copy-resize-restore round trip when nothing
+  // has actually changed, which is true for almost every stroke.
+  if (canvas.width === newW && canvas.height === newH) return;
+
   const old = preserveInk ? document.createElement('canvas') : null;
   if (old && canvas.width && canvas.height) {
     old.width = canvas.width;
@@ -8892,14 +8907,12 @@ function resizeFocusAnnotationCanvas(preserveInk = false) {
     old.getContext('2d').drawImage(canvas, 0, 0);
   }
 
-  const cssW = Math.max(stage.clientWidth, 1);
-  const cssH = Math.max(stage.scrollHeight, stage.clientHeight, 1);
   canvas.style.width = cssW + 'px';
   canvas.style.height = cssH + 'px';
-  canvas.width = Math.round(cssW * dpr);
-  canvas.height = Math.round(cssH * dpr);
+  canvas.width = newW;
+  canvas.height = newH;
 
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
