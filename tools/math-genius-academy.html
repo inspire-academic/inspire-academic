@@ -30,6 +30,16 @@
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 html,body { height:100%; overflow:hidden; font-family:var(--font-body); background:var(--bg); color:var(--white); }
 
+/* ── SITE HOME LINK — always visible above every screen, this is a
+   full-viewport overflow:hidden mini-app with no persistent site nav
+   otherwise, so it's fixed rather than living inside any one .screen. ── */
+.site-home-link{position:fixed;top:14px;left:14px;z-index:9999;
+  font-family:var(--font-display,serif);font-weight:700;font-size:.95rem;
+  color:var(--gold,#c9a84c);text-decoration:none;letter-spacing:.02em;
+  background:rgba(6,6,15,.55);padding:.35rem .7rem;border-radius:8px;
+  backdrop-filter:blur(4px);}
+.site-home-link:hover{color:#fff;}
+
 /* ── STAR BG ── */
 #stars-bg { position:fixed; inset:0; z-index:0; pointer-events:none;
   background: radial-gradient(ellipse at 30% 20%, rgba(124,47,255,.1) 0%, transparent 55%),
@@ -618,6 +628,7 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
 </style>
 </head>
 <body>
+<a href="/dashboard.html" class="site-home-link" title="Go to dashboard">Inspire</a>
 <div id="stars-bg"></div>
 
 <!-- ════════ LOADING ════════ -->
