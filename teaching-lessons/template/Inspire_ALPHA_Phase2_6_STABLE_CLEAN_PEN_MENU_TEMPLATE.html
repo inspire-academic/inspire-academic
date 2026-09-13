@@ -3824,7 +3824,10 @@ function setupBoard(id) {
   const bgCanvas = document.getElementById(id + '-bg');
   if (!canvas || !bgCanvas) return;
 
-  const ctx    = canvas.getContext('2d');
+  // Perf: this context does frequent getImageData/putImageData (undo/redo,
+  // selection tool, resize-preserve) — willReadFrequently tells the browser
+  // to favor a CPU-backed canvas so those reads don't force a GPU sync.
+  const ctx    = canvas.getContext('2d', { willReadFrequently: true });
   const bgCtx  = bgCanvas.getContext('2d');
   const selCv  = document.getElementById(id + '-sel');
   const selCtx = selCv ? selCv.getContext('2d') : null;
@@ -4602,8 +4605,12 @@ function setupBoard(id) {
 
     drawing = true;
     startX = p.x; startY = p.y;
+    // Perf: one getImageData() read reused for both snapshot and the undo
+    // push (was two identical full-canvas reads back-to-back on every
+    // single stroke start — the dominant cause of per-letter stutter while
+    // handwriting on a large, high-DPR board).
     snapshot = ctx.getImageData(0,0,canvas.width,canvas.height);
-    undoStack.push(ctx.getImageData(0,0,canvas.width,canvas.height));
+    undoStack.push(snapshot);
     if (undoStack.length > MAX_UNDO) undoStack.shift();
     redoStack.length = 0;
     styleCtx();
