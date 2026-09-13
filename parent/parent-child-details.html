@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
   <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
@@ -409,7 +410,7 @@
   <!-- HEADER -->
   <header class="header">
     <div class="header-left">
-      <a href="/parent/parent-dashboard.html" class="back-btn">← Back</a>
+      <a href="/parent/parent-dashboard.html" class="back-btn" onclick="inspireGoBack('/parent/parent-dashboard.html'); return false;">← Back</a>
       <a href="/parent/parent-dashboard.html" style="text-decoration:none;color:inherit;"><div class="logo">Inspire <span class="gold">Academic</span></div></a>
     </div>
     <button class="logout-btn" onclick="signOut()">Sign Out</button>

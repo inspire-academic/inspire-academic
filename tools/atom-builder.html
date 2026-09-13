@@ -178,6 +178,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--whi
 <!-- HEADER -->
 <div class="hdr">
   <a href="/dashboard.html" target="_top" style="text-decoration:none;color:inherit;"><div class="hdr-logo">INSPIRE</div></a>
+  <button onclick="inspireGoBack('/dashboard.html')" style="padding:.2rem .7rem;border-radius:99px;font-size:.65rem;font-weight:700;font-family:'Space Mono',monospace;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);">← Back</button>
   <div class="hdr-title">⚛ Atom Builder</div>
   <div class="hdr-right">
     <button class="lvl-btn gcse on" id="btn-gcse" onclick="setLevel('gcse',this)">GCSE</button>
@@ -322,6 +323,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--whi
 </div>
 <div id="toast"></div>
 
+<script src="/assets/js/nav-back.js"></script>
 <script>
 'use strict';
 // ─── ELEMENT DATA ───────────────────────────────────────────

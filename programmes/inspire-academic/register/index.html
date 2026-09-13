@@ -235,7 +235,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
   <header class="topbar-desktop">
     <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
-    <a href="../" class="back-link">&larr; Back</a>
+    <a href="../" class="back-link" onclick="inspireGoBack('/programmes/inspire-academic/'); return false;">&larr; Back</a>
   </header>
 
   <div class="card-row">
@@ -252,7 +252,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <div class="hero-content">
         <header class="topbar">
           <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
-          <a href="../" class="back-link">&larr; Back</a>
+          <a href="../" class="back-link" onclick="inspireGoBack('/programmes/inspire-academic/'); return false;">&larr; Back</a>
         </header>
         <div class="intro">
           <div class="eyebrow">Inspire Academic</div>
@@ -342,6 +342,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="/assets/js/recruitment.js"></script>
+<script src="/assets/js/nav-back.js"></script>
 <script>
   (function () {
     var html = document.documentElement;

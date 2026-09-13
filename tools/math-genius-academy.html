@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <script src="/assets/js/srs-engine.js"></script>
 <script src="/assets/js/protege-diagrams.js"></script>
 <script src="/assets/js/protege-cosmo.js"></script>
@@ -33,11 +34,12 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
 /* ── SITE HOME LINK — always visible above every screen, this is a
    full-viewport overflow:hidden mini-app with no persistent site nav
    otherwise, so it's fixed rather than living inside any one .screen. ── */
-.site-home-link{position:fixed;top:14px;left:14px;z-index:9999;
+.site-nav-links{position:fixed;top:14px;left:14px;z-index:9999;display:flex;gap:8px;}
+.site-home-link{
   font-family:var(--font-display,serif);font-weight:700;font-size:.95rem;
   color:var(--gold,#c9a84c);text-decoration:none;letter-spacing:.02em;
   background:rgba(6,6,15,.55);padding:.35rem .7rem;border-radius:8px;
-  backdrop-filter:blur(4px);}
+  backdrop-filter:blur(4px);border:none;cursor:pointer;}
 .site-home-link:hover{color:#fff;}
 
 /* ── STAR BG ── */
@@ -628,7 +630,10 @@ html,body { height:100%; overflow:hidden; font-family:var(--font-body); backgrou
 </style>
 </head>
 <body>
-<a href="/dashboard.html" class="site-home-link" title="Go to dashboard">Inspire</a>
+<div class="site-nav-links">
+  <a href="/dashboard.html" class="site-home-link" title="Go to dashboard">Inspire</a>
+  <button class="site-home-link" onclick="inspireGoBack('/dashboard.html')" title="Go back">← Back</button>
+</div>
 <div id="stars-bg"></div>
 
 <!-- ════════ LOADING ════════ -->

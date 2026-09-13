@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
@@ -710,7 +711,7 @@ body {
 <!-- TOP NAV -->
 <nav id="top-nav">
   <div class="nav-left">
-    <a href="/student/revision.html" id="back-btn">← My Revision</a>
+    <a href="/student/revision.html" id="back-btn" onclick="inspireGoBack('/student/revision.html'); return false;">← My Revision</a>
     <span style="color:var(--border)">|</span>
     <span id="pack-title-nav">Loading…</span>
   </div>
@@ -733,7 +734,7 @@ body {
 <div id="error-state" style="display:none;">
   <h2>Something went wrong</h2>
   <p id="error-msg">Could not load this revision pack.</p>
-  <a href="/student/revision.html" style="color:var(--gold);margin-top:8px;font-size:0.85rem;">← Back to My Revision</a>
+  <a href="/student/revision.html" style="color:var(--gold);margin-top:8px;font-size:0.85rem;" onclick="inspireGoBack('/student/revision.html'); return false;">← Back to My Revision</a>
 </div>
 
 <!-- MAIN (hidden until loaded) -->
@@ -764,7 +765,7 @@ body {
       <h2>Session Complete</h2>
       <p id="completion-subtitle">Well done — you've worked through every section of this revision pack.</p>
       <div class="completion-stats" id="completion-stats"></div>
-      <a href="/student/revision.html" class="back-to-revision-btn">← Back to My Revision</a>
+      <a href="/student/revision.html" class="back-to-revision-btn" onclick="inspireGoBack('/student/revision.html'); return false;">← Back to My Revision</a>
     </div>
   </div>
 

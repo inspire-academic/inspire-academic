@@ -282,6 +282,7 @@ main{max-width:860px;margin:0 auto;padding:1.2rem 1rem 6rem;}
 </nav>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <script>
 const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -311,7 +312,7 @@ function goBackToSubjects(){
   // Go back to subjects page — pass the subject id if we know it
   const url=new URL(window.location);
   const subId=url.searchParams.get('subject');
-  window.location.href=subId?`/subjects.html?subject=${subId}`:'/subjects.html';
+  inspireGoBack(subId?`/subjects.html?subject=${subId}`:'/subjects.html');
 }
 
 // Icons per content type

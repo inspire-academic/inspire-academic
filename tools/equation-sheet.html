@@ -370,6 +370,7 @@ body::before {
 <!-- HEADER -->
 <div class="header">
   <a href="/dashboard.html" target="_top" style="text-decoration:none;color:inherit;"><div class="header-logo">Inspire</div></a>
+  <button class="board-pill active" style="border-color:var(--gold);color:var(--gold);background:transparent;" onclick="inspireGoBack('/dashboard.html')">← Back</button>
   <div class="header-title">📐 Equation Reference Sheet</div>
   <div class="header-right">
     <button class="board-pill aqa active" onclick="toggleBoard('aqa',this)">AQA</button>
@@ -416,6 +417,7 @@ body::before {
 <button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
 <div id="toast"></div>
 
+<script src="/assets/js/nav-back.js"></script>
 <script>
 // ─────────────────────────────────────────────
 // EQUATIONS DATABASE

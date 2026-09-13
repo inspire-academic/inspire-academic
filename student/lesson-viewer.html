@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <script src="/assets/js/capacitor-utils.js"></script>
 <script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/offline-content.js"></script>
@@ -160,7 +161,7 @@ html,body{height:100%;overflow:hidden;}
 
 <!-- FIXED HEADER -->
 <header class="viewer-header" id="viewer-header">
-  <button class="back-btn" onclick="history.back()">← Back</button>
+  <button class="back-btn" onclick="inspireGoBack('/dashboard.html')">← Back</button>
   <div class="header-title" id="header-title">Loading…</div>
   <div class="header-badges" id="header-badges"></div>
   <button class="download-btn" id="download-btn" onclick="toggleDownload()" style="display:none;">

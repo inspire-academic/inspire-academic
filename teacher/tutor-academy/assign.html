@@ -23,7 +23,7 @@
   <span class="topbar-title">Assign tutors</span>
   <div class="topbar-right">
     <a class="btn-ghost" href="/teacher/tutor-academy/assessor.html">Assessor view</a>
-    <a class="btn-ghost" href="/teacher/tutor-academy/index.html">← Academy home</a>
+    <a class="btn-ghost" href="/teacher/tutor-academy/index.html" onclick="inspireGoBack('/teacher/tutor-academy/index.html'); return false;">← Academy home</a>
   </div>
 </header>
 
@@ -73,6 +73,7 @@
 </dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <script src="/assets/js/tutor-academy-ui.js?v=20260831"></script>
 <script src="/assets/js/tutor-academy-assign.js?v=20260901"></script>
 </body>

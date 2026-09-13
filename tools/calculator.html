@@ -610,6 +610,7 @@ body {
 <!-- HEADER -->
 <div class="header">
   <a href="/dashboard.html" target="_top" style="text-decoration:none;color:inherit;"><div class="header-logo">Inspire</div></a>
+  <button class="tab-btn" onclick="inspireGoBack('/dashboard.html')">← Back</button>
   <div class="header-title">🧮 Super Scientific Calculator</div>
   <div class="header-tabs">
     <button class="tab-btn active" id="tab-calc" onclick="switchTab('calc')">Calculator</button>
@@ -855,6 +856,7 @@ body {
 
 <div id="toast"></div>
 
+<script src="/assets/js/nav-back.js"></script>
 <script>
 // ─────────────────────────────────────────────
 // CALCULATOR ENGINE

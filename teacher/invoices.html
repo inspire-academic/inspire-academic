@@ -94,7 +94,7 @@
   <span class="topbar-title">Invoices</span>
   <div class="topbar-right">
     <span class="topbar-user" id="topbar-user"></span>
-    <button class="btn btn-outline" onclick="window.location.href='/teacher/teacher.html'">← Dashboard</button>
+    <button class="btn btn-outline" onclick="inspireGoBack('/teacher/teacher.html')">← Dashboard</button>
   </div>
 </header>
 
@@ -133,6 +133,7 @@
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <script>
 const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
 const SUPABASE_ANON_KEY = 'sb_publishable_XxmrO4J18iyQ1Srub73BhQ_FBhd8mXR'

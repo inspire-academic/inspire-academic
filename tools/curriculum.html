@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
@@ -228,7 +229,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1.5rem 5rem; }
 <div style="padding:.9rem 2rem 0;">
   <a href="/dashboard.html" target="_top" class="topnav-logo"><img src="/icons/icon-192.png" alt="Inspire Science" style="height:32px;width:auto;border-radius:6px;" onerror="this.style.display='none'"></a>
 </div>
-<a href="/tools/tools.html" class="back-link">← Back to Tools</a>
+<a href="/tools/tools.html" class="back-link" onclick="inspireGoBack('/tools/tools.html'); return false;">← Back to Tools</a>
 
 <!-- MAIN -->
 <main>

@@ -311,6 +311,7 @@ button{cursor:pointer;font-family:var(--font-body);}
   </a>
   <span class="topnav-title">Student Portal</span>
   <div class="nav-links">
+    <button class="nav-link" onclick="inspireGoBack('/dashboard.html')">← Back</button>
     <button class="nav-link" onclick="location.href='/dashboard.html'">Dashboard</button>
     <button class="nav-link" onclick="location.href='/subjects.html'">Subjects</button>
     <button class="nav-link" onclick="location.href='/student/progress.html'">My Progress</button>
@@ -536,6 +537,7 @@ button{cursor:pointer;font-family:var(--font-body);}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <script>
 // ── CONFIG ────────────────────────────────────────────────────────
 const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'

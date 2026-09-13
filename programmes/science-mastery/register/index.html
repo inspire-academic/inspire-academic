@@ -88,7 +88,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
 
 <header class="topbar">
   <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
-  <a href="../" class="back-link">&larr; Programme details</a>
+  <a href="../" class="back-link" onclick="inspireGoBack('/programmes/science-mastery/'); return false;">&larr; Programme details</a>
 </header>
 
 <main>
@@ -183,6 +183,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="/assets/js/recruitment.js"></script>
+<script src="/assets/js/nav-back.js"></script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "115b324e79814b58b430653d922e778a"}'></script>
 <script>
   (function () {

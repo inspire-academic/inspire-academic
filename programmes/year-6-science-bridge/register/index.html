@@ -75,7 +75,7 @@ h1{font-family:var(--font-display);font-weight:700;font-size:1.5rem;margin-botto
 
 <header class="topbar">
   <a href="/" class="brand-link">Inspire <span class="gold">Academic</span></a>
-  <a href="../" class="back-link">&larr; Programme details</a>
+  <a href="../" class="back-link" onclick="inspireGoBack('/programmes/year-6-science-bridge/'); return false;">&larr; Programme details</a>
 </header>
 
 <main>
@@ -131,6 +131,7 @@ h1{font-family:var(--font-display);font-weight:700;font-size:1.5rem;margin-botto
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script src="/assets/js/recruitment.js"></script>
+<script src="/assets/js/nav-back.js"></script>
 <script>
   (function () {
     var html = document.documentElement;

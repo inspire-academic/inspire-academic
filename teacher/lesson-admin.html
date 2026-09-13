@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <style>
 input,select,textarea{font-family:var(--font-body);}
 ::-webkit-scrollbar{width:5px;}
@@ -155,6 +156,7 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
     <span class="admin-badge">Lesson Admin</span>
   </div>
   <div class="topnav-right">
+    <button class="btn-logout" onclick="inspireGoBack('/teacher/teacher.html')">← Back</button>
     <span id="admin-email-display" style="font-family:var(--font-mono);font-size:.75rem;"></span>
     <button class="btn-logout" onclick="logout()">Sign Out</button>
   </div>

@@ -187,7 +187,7 @@ input,select,textarea{font-family:var(--font-body);}
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
       </svg>
     </button>
-    <a href="/dashboard.html" class="btn btn-outline" style="font-size:.82rem;padding:.45rem .9rem;">← Dashboard</a>
+    <a href="/dashboard.html" class="btn btn-outline" style="font-size:.82rem;padding:.45rem .9rem;" onclick="inspireGoBack('/dashboard.html'); return false;">← Dashboard</a>
   </div>
 </div>
 
@@ -361,6 +361,7 @@ input,select,textarea{font-family:var(--font-body);}
 <div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
 <!-- Phase 3 (assessment-engine grade-accuracy roadmap): real per-topic
      exam weighting needs spec-map's topic/slug list and the PASCO
      calibration evidence to weight against. This repo's spec-map.js is
