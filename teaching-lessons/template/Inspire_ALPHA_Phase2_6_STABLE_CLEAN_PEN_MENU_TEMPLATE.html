@@ -3215,7 +3215,15 @@ const ALPHA_SCENE = {
   settings: {
     objectMode: true,
     debug: false,
-    attachmentEnabled: true
+    attachmentEnabled: true,
+    // Perf: stroke objects (one per pen/eraser/highlighter stroke) are
+    // never read back anywhere in this file today — no renderer, hit-test,
+    // or export path touches them — so without a cap they grow unbounded
+    // for the length of a lesson. This bounds that growth the same way
+    // the undo stack already bounds itself. Pallet objects (pasted
+    // images, copied panels) are exempt — few in number, and still
+    // functionally used by selection/copy/delete.
+    maxSceneStrokes: 500
   }
 };
 
@@ -3398,8 +3406,20 @@ function initAlphaBoard(boardId) {
  */
 function addObject(boardId, object) {
   initAlphaBoard(boardId);
-  ALPHA_SCENE.boards[boardId].objects.push(object);
-  
+  const objects = ALPHA_SCENE.boards[boardId].objects;
+  objects.push(object);
+
+  if (object.type === 'stroke') {
+    let strokeCount = 0;
+    for (const o of objects) if (o.type === 'stroke') strokeCount++;
+    if (strokeCount > ALPHA_SCENE.settings.maxSceneStrokes) {
+      const oldest = objects.find(o => o.type === 'stroke');
+      // removeObject (not a raw splice) so any attachedTo/attachedStrokes
+      // bookkeeping on a parent pallet stays consistent.
+      if (oldest) removeObject(boardId, oldest.id);
+    }
+  }
+
   // If this is attached to a pallet, update pallet's attachedStrokes
   if (object.attachedTo && ALPHA_SCENE.settings.attachmentEnabled) {
     const parent = getObjectById(boardId, object.attachedTo);
