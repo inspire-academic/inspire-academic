@@ -8,9 +8,14 @@
 // rehearsing for the real paper than theme-matching would be.
 //
 // Usage: renderDiagram(containerEl, spec) — spec.type selects the
-// family: 'polygon', 'circle', or 'cartesian'. See the three render*
-// functions below for each spec shape; diagram-pilot-review.html has
-// worked examples of all three.
+// family: 'polygon', 'circle', 'cartesian' (also covers scatter graphs
+// via `points`, histograms via `bars`, and cumulative frequency curves
+// via `series` — all just Cartesian-axis variants, not separate types),
+// 'rays' (angle-only diagrams with no closed shape), 'tree' (probability
+// tree diagrams), 'venn' (2-set Venn diagrams), or 'box3d' (a schematic
+// wireframe cuboid/cube). See each render* function below for its spec
+// shape; assessment-engine/diagram-pilot-review.html and
+// diagram-maths-bank-review.html have worked examples.
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const INK = '#1a1a1a';      // exam-paper line/text colour
@@ -56,6 +61,9 @@ function renderDiagram(containerEl, spec) {
   else if (spec.type === 'circle') renderCircleDiagram(svg, spec);
   else if (spec.type === 'cartesian') renderCartesian(svg, spec);
   else if (spec.type === 'rays') renderRays(svg, spec);
+  else if (spec.type === 'tree') renderTree(svg, spec);
+  else if (spec.type === 'venn') renderVenn(svg, spec);
+  else if (spec.type === 'box3d') renderBox3D(svg, spec);
   else throw new Error('Unknown diagram type: ' + spec.type);
 
   card.appendChild(svg);
@@ -361,6 +369,35 @@ function renderCartesian(svg, spec) {
     svg.appendChild(textEl(sx(axisX) - 10, sy(y), String(y), { size: 10, fill: '#555', anchor: 'end' }));
   }
 
+  // bars — histogram-style rectangles, each spanning [x0,x1] up to `height`
+  // (frequency density, or any y-value). Supports uneven widths, matching
+  // real GCSE histogram questions.
+  (spec.bars || []).forEach(bar => {
+    const bx0 = sx(bar.x0), bx1 = sx(bar.x1), by = sy(bar.height), baseline = sy(axisY);
+    svg.appendChild(svgEl('rect', {
+      x: Math.min(bx0, bx1), y: by, width: Math.abs(bx1 - bx0), height: Math.abs(baseline - by),
+      fill: bar.color || 'rgba(11,79,168,.18)', stroke: bar.highlight ? ACCENT : INK,
+      'stroke-width': bar.highlight ? 2 : 1.4,
+    }));
+    if (bar.label) svg.appendChild(textEl((bx0 + bx1) / 2, by - 10, bar.label, { size: 11, fill: bar.highlight ? ACCENT : INK, weight: bar.highlight ? 600 : 400 }));
+  });
+
+  // series — data points connected by straight lines (a cumulative
+  // frequency curve/ogive, or any plotted dataset that isn't a formula).
+  (spec.series || []).forEach(s => {
+    const color = s.color || ACCENT;
+    const d = s.points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${sx(p.x)} ${sy(p.y)}`).join(' ');
+    svg.appendChild(svgEl('path', { d, fill: 'none', stroke: color, 'stroke-width': 2 }));
+    s.points.forEach(p => {
+      svg.appendChild(svgEl('circle', { cx: sx(p.x), cy: sy(p.y), r: 3, fill: color }));
+      if (p.label) svg.appendChild(textEl(sx(p.x) + 8, sy(p.y) - 10, p.label, { size: 11, anchor: 'start', fill: color }));
+    });
+    if (s.label) {
+      const last = s.points[s.points.length - 1];
+      svg.appendChild(textEl(sx(last.x) - 10, sy(last.y) - 16, s.label, { size: 12, fill: color, weight: 600, anchor: 'end' }));
+    }
+  });
+
   // plotted functions
   (spec.functions || []).forEach(fn => {
     const samples = 120;
@@ -397,4 +434,87 @@ function renderCartesian(svg, spec) {
       svg.appendChild(textEl(mx + 10, my - 10, v.label, { size: 12.5, fill: color, weight: 600 }));
     }
   });
+}
+
+// ── Tree diagram family (probability) ──
+//
+// spec.root = { branches: [ { label, prob, highlight?, next? }, ... ] },
+// where `next` is itself an optional { branches: [...] } for the next
+// level — recursive, so a branch's onward probabilities can differ
+// depending on which branch was taken (e.g. picking without
+// replacement). `highlight` bolds/colours a branch, for marking the
+// specific path a question asks about.
+function renderTree(svg, spec) {
+  const levelXs = [40, 165, 300];
+
+  function layout(branches, level, parentX, parentY, ySpread) {
+    const n = branches.length;
+    branches.forEach((b, i) => {
+      const y = n === 1 ? parentY : parentY - ySpread / 2 + (ySpread / (n - 1)) * i;
+      const x = levelXs[level];
+      const color = b.highlight ? ACCENT : INK;
+      svg.appendChild(svgEl('line', {
+        x1: parentX, y1: parentY, x2: x, y2: y, stroke: color, 'stroke-width': b.highlight ? 2.4 : 1.6,
+      }));
+      const mid = { x: (parentX + x) / 2, y: (parentY + y) / 2 };
+      const away = y >= parentY ? 9 : -9;
+      svg.appendChild(textEl(mid.x, mid.y + away, b.prob, { size: 11, fill: color }));
+      svg.appendChild(svgEl('circle', { cx: x, cy: y, r: 2.5, fill: INK }));
+      svg.appendChild(textEl(x + 12, y, b.label, { size: 12.5, weight: 600, anchor: 'start' }));
+      if (b.next && b.next.branches) layout(b.next.branches, level + 1, x, y, ySpread / 2.3);
+    });
+  }
+
+  svg.appendChild(svgEl('circle', { cx: levelXs[0], cy: 130, r: 2.5, fill: INK }));
+  layout(spec.root.branches, 1, levelXs[0], 130, 190);
+}
+
+// ── Venn diagram family (2 sets) ──
+//
+// spec.leftLabel/rightLabel are shown above each circle (put the set's
+// total count in the label itself, e.g. "French (18)") and
+// spec.bothLabel is shown in the overlap — the exclusive left-only/
+// right-only regions are deliberately left unlabelled, since those
+// counts are usually exactly what the question asks the student to work
+// out; labelling them would give the answer away.
+function renderVenn(svg, spec) {
+  const r = 72, cy = 140, leftCx = 145, rightCx = 215;
+  svg.appendChild(svgEl('rect', { x: 20, y: 40, width: 320, height: 200, fill: 'none', stroke: INK, 'stroke-width': 1.6 }));
+  svg.appendChild(svgEl('circle', { cx: leftCx, cy, r, fill: 'none', stroke: INK, 'stroke-width': 1.8 }));
+  svg.appendChild(svgEl('circle', { cx: rightCx, cy, r, fill: 'none', stroke: INK, 'stroke-width': 1.8 }));
+  svg.appendChild(textEl(leftCx - 40, cy - r - 14, spec.leftLabel, { size: 13, weight: 600, anchor: 'middle' }));
+  svg.appendChild(textEl(rightCx + 40, cy - r - 14, spec.rightLabel, { size: 13, weight: 600, anchor: 'middle' }));
+  if (spec.bothLabel != null) svg.appendChild(textEl((leftCx + rightCx) / 2, cy, spec.bothLabel, { size: 13, weight: 600 }));
+  if (spec.universeLabel) svg.appendChild(textEl(340, 55, spec.universeLabel, { size: 10, fill: '#555', anchor: 'end' }));
+}
+
+// ── Simple wireframe cuboid (isometric-style, schematic — always
+//    notToScale, so screen dimensions are fixed regardless of the real
+//    values; only the labels carry the actual numbers) ──
+function renderBox3D(svg, spec) {
+  const W = 150, H = 95, D = 75;
+  const ox = 95, oy = 185;
+  const depthAngle = (-35 * Math.PI) / 180;
+  const ddx = D * Math.cos(depthAngle), ddy = D * Math.sin(depthAngle);
+
+  const fbl = { x: ox, y: oy }, fbr = { x: ox + W, y: oy };
+  const ftl = { x: ox, y: oy - H }, ftr = { x: ox + W, y: oy - H };
+  const bbl = { x: fbl.x + ddx, y: fbl.y + ddy }, bbr = { x: fbr.x + ddx, y: fbr.y + ddy };
+  const btl = { x: ftl.x + ddx, y: ftl.y + ddy }, btr = { x: ftr.x + ddx, y: ftr.y + ddy };
+
+  const poly = (pts, extra = {}) => svg.appendChild(svgEl('polygon', {
+    points: pts.map(p => `${p.x},${p.y}`).join(' '), fill: 'rgba(11,79,168,.05)', stroke: INK, 'stroke-width': 1.8, ...extra,
+  }));
+  const dashed = (a, b) => svg.appendChild(svgEl('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: INK, 'stroke-width': 1.2, 'stroke-dasharray': '4 3' }));
+
+  // hidden edges first (drawn under the solid faces)
+  dashed(bbl, fbl); dashed(bbl, bbr); dashed(bbl, btl);
+
+  poly([ftl, ftr, btr, btl]); // top face
+  poly([fbr, ftr, btr, bbr]); // right face
+  poly([fbl, fbr, ftr, ftl]); // front face
+
+  if (spec.widthLabel) svg.appendChild(textEl((fbl.x + fbr.x) / 2, fbl.y + 16, spec.widthLabel, { size: 12.5 }));
+  if (spec.heightLabel) svg.appendChild(textEl(fbl.x - 22, (fbl.y + ftl.y) / 2, spec.heightLabel, { size: 12.5, anchor: 'end' }));
+  if (spec.depthLabel) svg.appendChild(textEl((ftr.x + btr.x) / 2 + 8, (ftr.y + btr.y) / 2 - 6, spec.depthLabel, { size: 12.5, anchor: 'start' }));
 }

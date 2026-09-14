@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maths Diagram Bank Review — Batch 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b1628;--navy2:#112240;
+  --gold:#c9a84c;
+  --white:#ffffff;--muted:#7a8fa6;
+  --border:#1e3a5f;
+  --font-display:'Fraunces',serif;--font-body:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);background:var(--navy);color:var(--white);line-height:1.6;}
+.wrap{max-width:840px;margin:0 auto;padding:2rem 1.25rem 4rem;}
+header{margin-bottom:2rem;}
+.eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
+h1{font-family:var(--font-display);font-size:1.9rem;margin:0 0 .5rem;}
+.sub{color:var(--muted);font-size:.95rem;max-width:65ch;}
+.q-card{background:var(--navy2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.75rem;}
+.q-meta{display:flex;gap:.6rem;flex-wrap:wrap;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
+.q-meta span{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:.2rem .55rem;}
+.q-text{font-size:1rem;margin:0 0 1.1rem;}
+.diagram-slot{text-align:center;margin-bottom:.3rem;}
+.exam-diagram-card{color:#1a1a1a;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Internal review — not linked from student nav</div>
+    <h1>Maths Diagram Bank Review — Batch 2</h1>
+    <p class="sub">The three deferred families from the first review: tree/Venn diagrams (Probability), scatter/histogram/cumulative-frequency charts (Statistics), and a wireframe cuboid/cube (3D volume &amp; surface area).</p>
+  </header>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Probability — Tree diagrams</span></div>
+    <p class="q-text">A coin is flipped twice. What is the probability of getting two heads in a row?</p>
+    <div class="diagram-slot" id="d0"></div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Probability — Venn diagrams</span></div>
+    <p class="q-text">In a class of 30 students, 18 study French, 12 study Spanish, and 5 study both. How many students study French only?</p>
+    <div class="diagram-slot" id="d1"></div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Probability — Conditional probability</span></div>
+    <p class="q-text">A bag contains 5 red and 3 blue balls. A ball is picked and NOT replaced, then a second ball is picked. What is the probability that both balls are red?</p>
+    <div class="diagram-slot" id="d2"></div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Statistics — Scatter graphs</span></div>
+    <p class="q-text">A scatter graph shows height plotted against weight for a group of people, and the points generally rise from bottom-left to top-right. What type of correlation does this show?</p>
+    <div class="diagram-slot" id="d3"></div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Statistics — Histograms</span></div>
+    <p class="q-text">A histogram bar covers the class interval 10–20 (a width of 10) and has a frequency density of 3. What is the frequency for this class?</p>
+    <div class="diagram-slot" id="d4"></div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Statistics — Cumulative frequency</span></div>
+    <p class="q-text">A cumulative frequency table shows that 25 students scored 60 marks or below, and 40 students scored 70 marks or below in total. How many students scored between 60 and 70 marks?</p>
+    <div class="diagram-slot" id="d5"></div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>3D shapes — Volume</span></div>
+    <p class="q-text">A cuboid has length 5 cm, width 3 cm, and height 4 cm. What is its volume?</p>
+    <div class="diagram-slot" id="d6"></div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>3D shapes — Surface area</span></div>
+    <p class="q-text">A cube has a side length of 4 cm. What is its total surface area?</p>
+    <div class="diagram-slot" id="d7"></div>
+  </div>
+</div>
+<script src="/assets/js/diagram-renderer.js"></script>
+<script>
+renderDiagram(document.getElementById('d0'), {"type":"tree","notToScale":true,"root":{"branches":[{"label":"H","prob":"0.5","highlight":true,"next":{"branches":[{"label":"H","prob":"0.5","highlight":true},{"label":"T","prob":"0.5"}]}},{"label":"T","prob":"0.5","next":{"branches":[{"label":"H","prob":"0.5"},{"label":"T","prob":"0.5"}]}}]}});
+renderDiagram(document.getElementById('d1'), {"type":"venn","notToScale":true,"leftLabel":"French (18)","rightLabel":"Spanish (12)","bothLabel":"5","universeLabel":"30 students"});
+renderDiagram(document.getElementById('d2'), {"type":"tree","notToScale":true,"root":{"branches":[{"label":"Red","prob":"5/8","highlight":true,"next":{"branches":[{"label":"Red","prob":"4/7","highlight":true},{"label":"Blue","prob":"3/7"}]}},{"label":"Blue","prob":"3/8","next":{"branches":[{"label":"Red","prob":"5/7"},{"label":"Blue","prob":"2/7"}]}}]}});
+renderDiagram(document.getElementById('d3'), {"type":"cartesian","notToScale":false,"xRange":[140,190],"yRange":[40,90],"xStep":10,"yStep":10,"points":[{"x":145,"y":46},{"x":150,"y":52},{"x":152,"y":48},{"x":158,"y":58},{"x":160,"y":55},{"x":165,"y":63},{"x":168,"y":60},{"x":172,"y":70},{"x":175,"y":68},{"x":180,"y":75},{"x":183,"y":80},{"x":187,"y":78}]});
+renderDiagram(document.getElementById('d4'), {"type":"cartesian","notToScale":false,"xRange":[0,40],"yRange":[0,6],"xStep":10,"yStep":1,"bars":[{"x0":0,"x1":10,"height":1.5,"label":null},{"x0":10,"x1":20,"height":3,"label":"freq. density = 3","highlight":true},{"x0":20,"x1":40,"height":1,"label":null}]});
+renderDiagram(document.getElementById('d5'), {"type":"cartesian","notToScale":false,"xRange":[0,80],"yRange":[0,50],"xStep":20,"yStep":10,"series":[{"points":[{"x":0,"y":0},{"x":20,"y":4},{"x":40,"y":12},{"x":60,"y":25,"label":"(60, 25)"},{"x":70,"y":40,"label":"(70, 40)"},{"x":80,"y":46}]}]});
+renderDiagram(document.getElementById('d6'), {"type":"box3d","notToScale":true,"widthLabel":"3 cm","heightLabel":"4 cm","depthLabel":"5 cm"});
+renderDiagram(document.getElementById('d7'), {"type":"box3d","notToScale":true,"widthLabel":"4 cm","heightLabel":"4 cm","depthLabel":"4 cm"});
+</script>
+</body>
+</html>
