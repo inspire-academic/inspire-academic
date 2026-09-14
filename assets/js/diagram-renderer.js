@@ -423,15 +423,20 @@ function renderCartesian(svg, spec) {
     if (p.label) svg.appendChild(textEl(sx(p.x) + 8, sy(p.y) - 10, p.label, { size: 11, anchor: 'start' }));
   });
 
-  // vector arrows — from one point to another, with an arrowhead
+  // vector arrows — from one point to another, with an arrowhead.
+  // Label sits just past the arrow's TIP (the actual point being
+  // labelled, e.g. "(3, 4)"), not the middle of the line — a midpoint
+  // label reads as labelling the line itself, not the coordinate.
   (spec.vectors || []).forEach(v => {
     const x1 = sx(v.from.x), y1 = sy(v.from.y), x2 = sx(v.to.x), y2 = sy(v.to.y);
     const color = v.color || ACCENT;
     svg.appendChild(svgEl('line', { x1, y1, x2, y2, stroke: color, 'stroke-width': 2.2 }));
     drawArrowheadAt(svg, x2, y2, Math.atan2(y2 - y1, x2 - x1), color);
     if (v.label) {
-      const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
-      svg.appendChild(textEl(mx + 10, my - 10, v.label, { size: 12.5, fill: color, weight: 600 }));
+      const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1;
+      const ux = dx / len, uy = dy / len;
+      const lx = x2 + ux * 16 - uy * 8, ly = x2 === x1 && y2 === y1 ? y2 - 10 : y2 + uy * 16 + ux * 8;
+      svg.appendChild(textEl(lx, ly, v.label, { size: 12.5, fill: color, weight: 600, anchor: 'start' }));
     }
   });
 }
