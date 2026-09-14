@@ -691,10 +691,14 @@ async function loadCombinedScienceQuestions() {
 
 // "Maths — Paper 2": a second, deliberately separate Mathematics
 // diagnostic — same subject/level/tier as the main Maths diagnostic,
-// but drawn ONLY from the dedicated Paper 2 question bank (source
-// 'ai_drafted_paper2' — see diagnostic_questions_maths_paper2_seed.sql's
-// header comment for why source, not paper, is what identifies this
-// pool). That pool is exactly 4 questions x 8 Paper 2 topics = 32, no
+// but drawn ONLY from the dedicated Paper 2 question bank
+// (specification_ref = 'PAPER2_POOL_2026' — see
+// diagnostic_questions_maths_paper2_seed.sql's header comment for why
+// specification_ref, not paper or source, is what identifies this pool:
+// paper alone also matches the general bank's Paper-2-topic questions,
+// and a source value distinct from 'ai_drafted' was tried first but
+// rejected live by a CHECK constraint that only allows values already
+// in use). That pool is exactly 4 questions x 8 Paper 2 topics = 32, no
 // more and no fewer, so this loads and shows all of them rather than
 // running them through weightedSampleAcrossTopics — the point of this
 // diagnostic is complete, even coverage of every Paper 2 topic, and a
@@ -709,7 +713,7 @@ async function loadMathsPaper2Questions() {
     .eq('level', config.level)
     .eq('validated', true)
     .eq('active', true)
-    .eq('source', 'ai_drafted_paper2')
+    .eq('specification_ref', 'PAPER2_POOL_2026')
     .in('exam_board', ['AQA', 'Universal'])
     .in('tier', ['Higher', 'Both'])
     .order('topic');
