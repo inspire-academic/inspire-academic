@@ -265,6 +265,11 @@ input,select,textarea{font-family:var(--font-body);}
             <span class="subject-name">Combined Science</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
+          <button class="subject-btn" data-subject="Mathematics — Paper 2" onclick="pickSubject(this)" title="A second, diagram-heavy Maths diagnostic — all new questions, no overlap with the main Maths diagnostic">
+            <span class="subject-icon">📐</span>
+            <span class="subject-name">Maths — Paper 2</span>
+            <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
+          </button>
         </div>
       </div>
 
@@ -597,6 +602,10 @@ async function loadQuestionsFromSupabase() {
     return loadCombinedScienceQuestions();
   }
 
+  if (config.subject === 'Mathematics — Paper 2') {
+    return loadMathsPaper2Questions();
+  }
+
   // Skip RPC — go straight to direct query (more reliable)
   // The direct query handles everything we need
 
@@ -678,6 +687,43 @@ async function loadCombinedScienceQuestions() {
   const combined = perSubjectResults.flat();
   console.log(`Loaded ${combined.length} Combined Science questions (Physics/Chemistry/Biology)`);
   return shuffleArray(combined);
+}
+
+// "Maths — Paper 2": a second, deliberately separate Mathematics
+// diagnostic — same subject/level/tier as the main Maths diagnostic,
+// but drawn ONLY from the dedicated Paper 2 question bank (source
+// 'ai_drafted_paper2' — see diagnostic_questions_maths_paper2_seed.sql's
+// header comment for why source, not paper, is what identifies this
+// pool). That pool is exactly 4 questions x 8 Paper 2 topics = 32, no
+// more and no fewer, so this loads and shows all of them rather than
+// running them through weightedSampleAcrossTopics — the point of this
+// diagnostic is complete, even coverage of every Paper 2 topic, and a
+// weighted sampler could easily end up trimming some topics down given
+// how tight that 32-question pool already is.
+async function loadMathsPaper2Questions() {
+  const { config } = S;
+  const { data, error } = await supa
+    .from('diagnostic_questions')
+    .select('*')
+    .eq('subject', 'Mathematics')
+    .eq('level', config.level)
+    .eq('validated', true)
+    .eq('active', true)
+    .eq('source', 'ai_drafted_paper2')
+    .in('exam_board', ['AQA', 'Universal'])
+    .in('tier', ['Higher', 'Both'])
+    .order('topic');
+
+  if (error) {
+    console.error('Supabase query error:', error);
+    throw new Error('Could not load questions: ' + error.message);
+  }
+  if (!data || data.length === 0) {
+    throw new Error('No validated questions found for the Paper 2 diagnostic yet.');
+  }
+
+  console.log(`Loaded ${data.length} Maths Paper 2 questions from Supabase`);
+  return shuffleArray(data);
 }
 
 function shuffleArray(arr) {
@@ -1145,6 +1191,12 @@ function aspirationGrade(isCombined) {
 
 function computeDiagnosis(topicScores, overallPct, notSureCount) {
   const { subject, board } = S.config;
+  // 'Mathematics — Paper 2' is a display/tracking-only label (keeps its
+  // saved-plan and diagnostic_attempts rows separate from the main Maths
+  // diagnostic — see pickSubject's Paper 2 button). Grading always uses
+  // the real 'Mathematics' boundaries/notes: Paper 2 is a subset of the
+  // same GCSE Mathematics qualification, not a separately-boundaried exam.
+  const gradingSubject = subject === 'Mathematics — Paper 2' ? 'Mathematics' : subject;
   const total = S.answers.length;
   const correctCount = S.answers.filter(a => a.correct).length;
   const isCombined = subject === 'Combined Science';
@@ -1166,7 +1218,7 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
     currentGrade = combinedPairLabel(currentIdx, board);
     targetGrade  = combinedPairLabel(targetIdx, board);
   } else {
-    const currentGradeNum = estimateGrade(overallPct, board, subject);
+    const currentGradeNum = estimateGrade(overallPct, board, gradingSubject);
     const targetGradeNum  = Math.min(9, currentGradeNum + 2);
     currentGrade = gradeLabel(currentGradeNum);
     targetGrade  = gradeLabel(targetGradeNum);
@@ -1181,7 +1233,7 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
   // (a Wilson score interval on the raw correct/total count, translated
   // to a grade range via Phase 1's real boundaries) — not a guessed
   // fudge factor.
-  const confidence = confidenceRangeForScore(correctCount, total, board, subject, isCombined);
+  const confidence = confidenceRangeForScore(correctCount, total, board, gradingSubject, isCombined);
 
   const studentProfile =
     overallPct < 40 ? 'struggling' :
@@ -1194,7 +1246,7 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
 
   const profileDescription = isCombined
     ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award${rangeNote} on real ${board} Combined Science June 2026 boundaries, with a realistic path to ${targetGrade}.`
-    : `Scored ${overallPct}% overall — around Grade ${currentGrade}${rangeNote} on real ${board} ${subject} June 2026 boundaries, ` +
+    : `Scored ${overallPct}% overall — around Grade ${currentGrade}${rangeNote} on real ${board} ${gradingSubject} June 2026 boundaries, ` +
       `with a realistic path to Grade ${targetGrade}.`;
 
   const gaps = topicScores
