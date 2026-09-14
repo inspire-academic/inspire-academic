@@ -24,6 +24,16 @@
 -- circle 'sector' and 'tangents', and venn 'disjoint' — all backward
 -- compatible, no existing diagram_spec needs to change.
 --
+-- source is 'ai_drafted_paper2' (NOT 'ai_drafted', used by the original
+-- 68-question bank) deliberately — this is the tag the Paper 2 diagnostic
+-- entry point filters on. The original 68 questions ALSO get paper=1/2
+-- backfilled by diagnostic_questions_paper_column.sql (including 32 that
+-- land on paper=2, since 8 of the general bank's 17 topics are Paper 2
+-- topics), so 'paper' alone can't distinguish "this dedicated Paper 2
+-- diagnostic's own pool" from "a Paper-2-topic question that's part of
+-- the general/shared pool" — source is what does that, so a student who
+-- takes both diagnostics never sees the same question twice.
+--
 -- Run once in the Supabase SQL editor, after
 -- diagnostic_questions_paper_column.sql.
 -- ================================================================
@@ -40,7 +50,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'This uses n=7 instead of n=8 in the formula ((7−2)×180=900) — an octagon has 8 sides, not 7.',
  'An octagon can be divided into (8−2)=6 triangles from one vertex. Since each triangle''s angles sum to 180°, the total interior angle sum is 6×180=1080°.',
  '(8-2)×180 = 1080° [1]',
- 'ai_drafted', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":1,"y":0},{"x":0.7071067811865476,"y":0.7071067811865475},{"x":6.123233995736766e-17,"y":1},{"x":-0.7071067811865475,"y":0.7071067811865476},{"x":-1,"y":1.2246467991473532e-16},{"x":-0.7071067811865477,"y":-0.7071067811865475},{"x":-1.8369701987210297e-16,"y":-1},{"x":0.7071067811865474,"y":-0.7071067811865477}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":1,"y":0},{"x":0.7071067811865476,"y":0.7071067811865475},{"x":6.123233995736766e-17,"y":1},{"x":-0.7071067811865475,"y":0.7071067811865476},{"x":-1,"y":1.2246467991473532e-16},{"x":-0.7071067811865477,"y":-0.7071067811865475},{"x":-1.8369701987210297e-16,"y":-1},{"x":0.7071067811865474,"y":-0.7071067811865477}]}'::jsonb),
 
 -- Properties of shapes / Circle theorems (Higher)
 ('Mathematics','AQA','GCSE','Higher','Properties of shapes','Circle theorems (Higher)','TO_BE_VERIFIED',2,
@@ -52,7 +62,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Correct — a tangent to a circle is always perpendicular to the radius drawn to the point of contact; this angle is always exactly 90°.',
  'This is a standard circle theorem: wherever a tangent touches a circle, the radius drawn to that point of contact always meets the tangent at a right angle (90°).',
  'Tangent-radius angle is always 90° (circle theorem) [1]',
- 'ai_drafted', true, true, 2, '{"type":"circle","notToScale":true,"radius":3,"centerLabel":"O","points":[{"angleDeg":30,"label":"A"}],"radiusLines":[{"toLabel":"A","text":""}],"tangents":[{"atLabel":"A","length":70}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"circle","notToScale":true,"radius":3,"centerLabel":"O","points":[{"angleDeg":30,"label":"A"}],"radiusLines":[{"toLabel":"A","text":""}],"tangents":[{"atLabel":"A","length":70}]}'::jsonb),
 
 -- Properties of shapes / Congruence and similarity
 ('Mathematics','AQA','GCSE','Higher','Properties of shapes','Congruence and similarity','TO_BE_VERIFIED',3,
@@ -64,7 +74,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'This adds the scale factor to the area (8+3=11) — but similar shapes scale by multiplication (specifically the square of the linear factor, for area), not by addition.',
  'For similar shapes, if the linear scale factor is k, the AREA scale factor is k². Here k=3, so the area scale factor is 3²=9. The larger area is 8×9=72 cm².',
  'Area scale factor = 3² = 9; larger area = 8×9 = 72 cm² [1]',
- 'ai_drafted', true, true, 2, NULL),
+ 'ai_drafted_paper2', true, true, 2, NULL),
 
 -- Properties of shapes / Transformations
 ('Mathematics','AQA','GCSE','Higher','Properties of shapes','Transformations','TO_BE_VERIFIED',2,
@@ -76,7 +86,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Correct — for a 90° clockwise rotation about the origin, the rule is (x,y)→(y,−x); applying this to (2,3) gives (3,−2).',
  'A 90° clockwise rotation about the origin maps (x,y) to (y,−x). For the point (2,3): x=2, y=3, so the image is (y,−x)=(3,−2).',
  '90° clockwise about origin: (x,y)→(y,-x); (2,3)→(3,-2) [1]',
- 'ai_drafted', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-4,4],"yRange":[-4,4],"xStep":1,"yStep":1,"points":[{"x":2,"y":3,"label":"(2, 3)"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-4,4],"yRange":[-4,4],"xStep":1,"yStep":1,"points":[{"x":2,"y":3,"label":"(2, 3)"}]}'::jsonb),
 
 -- Perimeter, area, volume / Area of 2D shapes
 ('Mathematics','AQA','GCSE','Higher','Perimeter, area, volume','Area of 2D shapes','TO_BE_VERIFIED',2,
@@ -88,7 +98,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'This simply adds the three given numbers together (6+10+4=20) — area comes from the trapezium formula ½×(a+b)×h, not from adding the given lengths.',
  'Area of a trapezium = ½ × (sum of parallel sides) × height = ½ × (6+10) × 4 = ½ × 16 × 4 = 32 cm².',
  '½×(6+10)×4 = 32 cm² [1]',
- 'ai_drafted', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":10,"y":0,"label":"B"},{"x":8,"y":4,"label":"C"},{"x":2,"y":4,"label":"D"}],"sideLabels":[{"from":0,"to":1,"text":"10 cm"},{"from":3,"to":2,"text":"6 cm"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":10,"y":0,"label":"B"},{"x":8,"y":4,"label":"C"},{"x":2,"y":4,"label":"D"}],"sideLabels":[{"from":0,"to":1,"text":"10 cm"},{"from":3,"to":2,"text":"6 cm"}]}'::jsonb),
 
 -- Perimeter, area, volume / Circumference and area of circle
 ('Mathematics','AQA','GCSE','Higher','Perimeter, area, volume','Circumference and area of circle','TO_BE_VERIFIED',3,
@@ -100,7 +110,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'This uses πr instead of 2πr (forgetting to double the radius) — the full circumference formula is 2πr, and the arc-length fraction must be applied to that.',
  'Arc length = (angle ÷ 360) × circumference = (60 ÷ 360) × (2 × 3.14 × 6) = (1/6) × 37.68 = 6.28 cm.',
  '(60/360) × 2×3.14×6 = 6.28 cm [1]',
- 'ai_drafted', true, true, 2, '{"type":"circle","notToScale":true,"radius":3,"centerLabel":"O","points":[{"angleDeg":90,"label":"A"},{"angleDeg":30,"label":"B"}],"sector":{"fromDeg":30,"toDeg":90,"angleText":"60°"}}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"circle","notToScale":true,"radius":3,"centerLabel":"O","points":[{"angleDeg":90,"label":"A"},{"angleDeg":30,"label":"B"}],"sector":{"fromDeg":30,"toDeg":90,"angleText":"60°"}}'::jsonb),
 
 -- Perimeter, area, volume / Volume of 3D shapes
 ('Mathematics','AQA','GCSE','Higher','Perimeter, area, volume','Volume of 3D shapes','TO_BE_VERIFIED',1,
@@ -112,7 +122,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'This calculates the total SURFACE AREA (2×(6×2+2×3+6×3)=2×36=72), not the volume — surface area and volume are different measurements using different formulas.',
  'Volume of a cuboid = length × width × height = 6 × 2 × 3 = 36 m³.',
  '6×2×3 = 36 m³ [1]',
- 'ai_drafted', true, true, 2, '{"type":"box3d","notToScale":true,"widthLabel":"2 m","heightLabel":"3 m","depthLabel":"6 m"}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"box3d","notToScale":true,"widthLabel":"2 m","heightLabel":"3 m","depthLabel":"6 m"}'::jsonb),
 
 -- Perimeter, area, volume / Surface area
 ('Mathematics','AQA','GCSE','Higher','Perimeter, area, volume','Surface area','TO_BE_VERIFIED',2,
@@ -124,7 +134,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'This only accounts for ONE pair of opposite faces (2×(5×2)=20) — a cuboid has three DIFFERENT pairs of faces (front/back, top/bottom, left/right), and all three must be included.',
  'Surface area of a cuboid = 2×(length×width + width×height + length×height) = 2×(5×2 + 2×3 + 5×3) = 2×(10+6+15) = 2×31 = 62 cm².',
  '2×(10+6+15) = 62 cm² [1]',
- 'ai_drafted', true, true, 2, '{"type":"box3d","notToScale":true,"widthLabel":"2 cm","heightLabel":"3 cm","depthLabel":"5 cm"}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"box3d","notToScale":true,"widthLabel":"2 cm","heightLabel":"3 cm","depthLabel":"5 cm"}'::jsonb),
 
 -- Angles and geometry / Parallel lines
 ('Mathematics','AQA','GCSE','Higher','Angles and geometry','Parallel lines','TO_BE_VERIFIED',2,
@@ -136,7 +146,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Correct — co-interior (allied) angles between parallel lines always sum to 180°, so the second angle is 180−115=65°.',
  'Co-interior (allied) angles lie between two parallel lines, on the same side of the transversal, and always sum to 180°. Since one angle is 115°, the other is 180−115=65°.',
  'Co-interior angles sum to 180°; 180-115=65° [1]',
- 'ai_drafted', true, true, 2, '{"type":"transversal","notToScale":true,"labels":[{"at":"top","rays":["left","transDown"],"text":"115°"},{"at":"bottom","rays":["left","transUp"],"text":"x°"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"transversal","notToScale":true,"labels":[{"at":"top","rays":["left","transDown"],"text":"115°"},{"at":"bottom","rays":["left","transUp"],"text":"x°"}]}'::jsonb),
 
 -- Angles and geometry / Angles in polygons
 ('Mathematics','AQA','GCSE','Higher','Angles and geometry','Angles in polygons','TO_BE_VERIFIED',2,
@@ -148,7 +158,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  '45°=360÷8 uses 8 sides instead of 9 — a nonagon has 9 sides, not 8.',
  'The exterior angles of any polygon always sum to 360°, regardless of the number of sides. For a regular nonagon (9 sides, all exterior angles equal), each one is 360÷9=40°.',
  '360÷9 = 40° per exterior angle [1]',
- 'ai_drafted', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":6.123233995736766e-17,"y":1},{"x":-0.6427876096865394,"y":0.766044443118978},{"x":-0.984807753012208,"y":0.17364817766693028},{"x":-0.8660254037844388,"y":-0.4999999999999997},{"x":-0.34202014332566855,"y":-0.9396926207859084},{"x":0.34202014332566816,"y":-0.9396926207859085},{"x":0.8660254037844384,"y":-0.5000000000000004},{"x":0.9848077530122081,"y":0.17364817766692991},{"x":0.6427876096865396,"y":0.7660444431189778}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":6.123233995736766e-17,"y":1},{"x":-0.6427876096865394,"y":0.766044443118978},{"x":-0.984807753012208,"y":0.17364817766693028},{"x":-0.8660254037844388,"y":-0.4999999999999997},{"x":-0.34202014332566855,"y":-0.9396926207859084},{"x":0.34202014332566816,"y":-0.9396926207859085},{"x":0.8660254037844384,"y":-0.5000000000000004},{"x":0.9848077530122081,"y":0.17364817766692991},{"x":0.6427876096865396,"y":0.7660444431189778}]}'::jsonb),
 
 -- Angles and geometry / Bearings
 ('Mathematics','AQA','GCSE','Higher','Angles and geometry','Bearings','TO_BE_VERIFIED',3,
@@ -160,7 +170,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  '115° is just the bearing of ship B on its own — the question asks for the angle BETWEEN the two ships as seen from the lighthouse, which needs both bearings.',
  'Since both bearings are measured from the same point (the lighthouse) relative to North, the angle between the two directions LA and LB is the difference between the two bearings: 115°−40°=75°.',
  'Angle ALB = 115° - 40° = 75° [1]',
- 'ai_drafted', true, true, 2, '{"type":"rays","notToScale":true,"vertexLabel":"L","arrowedRays":true,"rays":[{"angleDeg":90,"length":3,"label":"N"},{"angleDeg":50,"length":3,"label":"A"},{"angleDeg":-25,"length":3,"label":"B"}],"angleMarks":[{"from":0,"to":1,"text":"40°"},{"from":0,"to":2,"text":"115°"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"rays","notToScale":true,"vertexLabel":"L","arrowedRays":true,"rays":[{"angleDeg":90,"length":3,"label":"N"},{"angleDeg":50,"length":3,"label":"A"},{"angleDeg":-25,"length":3,"label":"B"}],"angleMarks":[{"from":0,"to":1,"text":"40°"},{"from":0,"to":2,"text":"115°"}]}'::jsonb),
 
 -- Angles and geometry / Angles on lines and points
 ('Mathematics','AQA','GCSE','Higher','Angles and geometry','Angles on lines and points','TO_BE_VERIFIED',1,
@@ -172,7 +182,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  '360−55=305 treats this as if measuring all the way around the point, but vertically opposite angles are simply EQUAL to each other, not related by subtracting from 360°.',
  'When two straight lines cross, the angles directly opposite each other (vertically opposite angles) are always equal. So the angle vertically opposite the 55° angle is also 55°.',
  'Vertically opposite angles are equal: 55° [1]',
- 'ai_drafted', true, true, 2, '{"type":"rays","notToScale":true,"rays":[{"angleDeg":15,"length":3},{"angleDeg":100,"length":3},{"angleDeg":195,"length":3},{"angleDeg":280,"length":3}],"angleMarks":[{"from":0,"to":1,"text":"55°"},{"from":2,"to":3,"text":"x°"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"rays","notToScale":true,"rays":[{"angleDeg":15,"length":3},{"angleDeg":100,"length":3},{"angleDeg":195,"length":3},{"angleDeg":280,"length":3}],"angleMarks":[{"from":0,"to":1,"text":"55°"},{"from":2,"to":3,"text":"x°"}]}'::jsonb),
 
 -- Constructions and loci / Angle bisector
 ('Mathematics','AQA','GCSE','Higher','Constructions and loci','Angle bisector','TO_BE_VERIFIED',2,
@@ -184,7 +194,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  '"Perpendicular bisector" is the construction for two POINTS, not for two lines (fences) meeting at an angle — bisecting an angle between two lines uses a related but different compass construction.',
  'When a point must stay the same distance from two straight lines that meet at a point, its path is the angle bisector of the angle between those two lines — every point on the bisector is the same perpendicular distance from both lines.',
  'Angle bisector = locus of points equidistant from two lines meeting at a point [1]',
- 'ai_drafted', true, true, 2, '{"type":"rays","notToScale":true,"rays":[{"angleDeg":0,"length":3,"label":"Fence 1"},{"angleDeg":90,"length":3,"label":"Fence 2"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"rays","notToScale":true,"rays":[{"angleDeg":0,"length":3,"label":"Fence 1"},{"angleDeg":90,"length":3,"label":"Fence 2"}]}'::jsonb),
 
 -- Constructions and loci / Perpendicular bisector
 ('Mathematics','AQA','GCSE','Higher','Constructions and loci','Perpendicular bisector','TO_BE_VERIFIED',1,
@@ -196,7 +206,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'The straight line through A and B is just the line segment itself — only its exact midpoint is equidistant from A and B, not every point along it.',
  'The set of all points equidistant from two given points A and B is the perpendicular bisector of the line segment AB — constructed with a compass by drawing equal-radius arcs from A and B and joining where they cross.',
  'Perpendicular bisector of AB = locus of points equidistant from A and B [1]',
- 'ai_drafted', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":8,"y":0,"label":"B"}],"sideLabels":[{"from":0,"to":1,"text":"8 cm"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":8,"y":0,"label":"B"}],"sideLabels":[{"from":0,"to":1,"text":"8 cm"}]}'::jsonb),
 
 -- Constructions and loci / Angle bisector
 ('Mathematics','AQA','GCSE','Higher','Constructions and loci','Angle bisector','TO_BE_VERIFIED',1,
@@ -208,7 +218,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'A set square constructs right angles (90°) specifically — bisecting an arbitrary angle (which may not be 90°) requires the compass-based arc construction, not a set square.',
  'To construct an angle bisector accurately: place the compass point at the vertex and draw an arc crossing both arms; then, from each of those two crossing points, draw a second arc of equal radius so they intersect; the line from the vertex through that intersection point is the exact angle bisector.',
  'Compass-drawn arcs from each arm locate the bisector direction [1]',
- 'ai_drafted', true, true, 2, '{"type":"rays","notToScale":true,"rays":[{"angleDeg":20,"length":3,"label":"Path 1"},{"angleDeg":80,"length":3,"label":"Path 2"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"rays","notToScale":true,"rays":[{"angleDeg":20,"length":3,"label":"Path 1"},{"angleDeg":80,"length":3,"label":"Path 2"}]}'::jsonb),
 
 -- Constructions and loci / Constructing a triangle
 ('Mathematics','AQA','GCSE','Higher','Constructions and loci','Constructing a triangle','TO_BE_VERIFIED',2,
@@ -220,7 +230,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Dividing a circle into 5 equal arcs relates to constructing angles of 360÷5=72°, not 60° — this method targets the wrong angle entirely.',
  'An equilateral triangle (all three sides equal) always has three equal angles, and since a triangle''s angles sum to 180°, each angle must be 180÷3=60°. It can be constructed with just a compass and straightedge: draw a line segment, then draw two arcs of the SAME radius (equal to the segment''s length) from each end — where they cross is the third vertex.',
  'Equilateral triangle has 3 equal 60° angles (180÷3=60°) [1]',
- 'ai_drafted', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":4,"y":0,"label":"B"},{"x":2,"y":3.46,"label":"C"}],"equalTicks":[{"from":0,"to":1,"ticks":1},{"from":1,"to":2,"ticks":1},{"from":2,"to":0,"ticks":1}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":4,"y":0,"label":"B"},{"x":2,"y":3.46,"label":"C"}],"equalTicks":[{"from":0,"to":1,"ticks":1},{"from":1,"to":2,"ticks":1},{"from":2,"to":0,"ticks":1}]}'::jsonb),
 
 -- Trigonometry / Pythagoras' theorem
 ('Mathematics','AQA','GCSE','Higher','Trigonometry','Pythagoras'' theorem','TO_BE_VERIFIED',1,
@@ -232,7 +242,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Averaging the two sides ((9+12)÷2=10.5) has no connection to Pythagoras'' theorem, which is based on squares, not an average.',
  'Pythagoras'' theorem: hypotenuse²=a²+b². Here, 9²+12²=81+144=225, so the hypotenuse=√225=15 cm.',
  '√(9²+12²)=√225=15 cm [1]',
- 'ai_drafted', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":9,"y":0,"label":"B"},{"x":9,"y":12,"label":"C"}],"sideLabels":[{"from":0,"to":1,"text":"9 cm"},{"from":1,"to":2,"text":"12 cm"}],"angleMarks":[{"at":1,"rightAngle":true}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":9,"y":0,"label":"B"},{"x":9,"y":12,"label":"C"}],"sideLabels":[{"from":0,"to":1,"text":"9 cm"},{"from":1,"to":2,"text":"12 cm"}],"angleMarks":[{"at":1,"rightAngle":true}]}'::jsonb),
 
 -- Trigonometry / SOH CAH TOA
 ('Mathematics','AQA','GCSE','Higher','Trigonometry','SOH CAH TOA','TO_BE_VERIFIED',2,
@@ -244,7 +254,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Correct — CAH says cos(angle)=adjacent÷hypotenuse, so hypotenuse=adjacent÷cos(angle)=10÷0.77≈13.0 cm.',
  'CAH: cos(angle)=adjacent÷hypotenuse. Rearranged: hypotenuse=adjacent÷cos(angle)=10÷0.77≈13.0 cm.',
  'Hypotenuse = 10 ÷ 0.77 ≈ 13.0 cm [1]',
- 'ai_drafted', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":10,"y":0,"label":"B"},{"x":10,"y":8.4,"label":"C"}],"sideLabels":[{"from":0,"to":1,"text":"10 cm"}],"angleMarks":[{"at":0,"text":"40°"},{"at":1,"rightAngle":true}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":10,"y":0,"label":"B"},{"x":10,"y":8.4,"label":"C"}],"sideLabels":[{"from":0,"to":1,"text":"10 cm"}],"angleMarks":[{"at":0,"text":"40°"},{"at":1,"rightAngle":true}]}'::jsonb),
 
 -- Trigonometry / SOH CAH TOA
 ('Mathematics','AQA','GCSE','Higher','Trigonometry','SOH CAH TOA','TO_BE_VERIFIED',3,
@@ -256,7 +266,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Subtracting 20−0.70=19.3 does not relate to the tangent ratio either — the relationship between opposite, adjacent and tan(angle) is multiplicative, not additive.',
  'TOA: tan(angle)=opposite÷adjacent. Rearranged: opposite (height)=adjacent×tan(angle)=20×0.70=14.0 m.',
  'Height = 20 × 0.70 = 14.0 m [1]',
- 'ai_drafted', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":20,"y":0,"label":"B"},{"x":20,"y":14,"label":"C"}],"sideLabels":[{"from":0,"to":1,"text":"20 m"}],"angleMarks":[{"at":0,"text":"35°"},{"at":1,"rightAngle":true}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"polygon","notToScale":true,"points":[{"x":0,"y":0,"label":"A"},{"x":20,"y":0,"label":"B"},{"x":20,"y":14,"label":"C"}],"sideLabels":[{"from":0,"to":1,"text":"20 m"}],"angleMarks":[{"at":0,"text":"35°"},{"at":1,"rightAngle":true}]}'::jsonb),
 
 -- Trigonometry / Exact trig values
 ('Mathematics','AQA','GCSE','Higher','Trigonometry','Exact trig values','TO_BE_VERIFIED',2,
@@ -268,7 +278,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  '1/2 is not a standard exact trig value for 45° at all — sin(30°)=1/2, which may be where this comes from, but it doesn''t apply here.',
  'The standard exact trig values include tan(45°)=1 (since sin(45°)=cos(45°), their ratio is exactly 1), tan(30°)=1/√3, and tan(60°)=√3 — worth memorising directly.',
  'tan(45°) = 1 (standard exact value) [1]',
- 'ai_drafted', true, true, 2, NULL),
+ 'ai_drafted_paper2', true, true, 2, NULL),
 
 -- Vectors / Adding and subtracting vectors
 ('Mathematics','AQA','GCSE','Higher','Vectors','Adding and subtracting vectors','TO_BE_VERIFIED',2,
@@ -280,7 +290,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Correct — subtract the x-components (7−3=4) and the y-components (2−5=−3) separately: a−b=(4,−3).',
  'To subtract vectors, subtract the corresponding components separately: a−b=(7−3, 2−5)=(4,−3).',
  'a-b = (7-3, 2-5) = (4,-3) [1]',
- 'ai_drafted', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-1,8],"yRange":[-1,6],"xStep":1,"yStep":1,"vectors":[{"from":{"x":0,"y":0},"to":{"x":7,"y":2},"label":"a"},{"from":{"x":0,"y":0},"to":{"x":3,"y":5},"label":"b","color":"#c0392b"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-1,8],"yRange":[-1,6],"xStep":1,"yStep":1,"vectors":[{"from":{"x":0,"y":0},"to":{"x":7,"y":2},"label":"a"},{"from":{"x":0,"y":0},"to":{"x":3,"y":5},"label":"b","color":"#c0392b"}]}'::jsonb),
 
 -- Vectors / Vector notation
 ('Mathematics','AQA','GCSE','Higher','Vectors','Vector notation','TO_BE_VERIFIED',2,
@@ -292,7 +302,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  '(−4,6) flips the sign of only the x-component — for a scalar multiple, the SAME scalar must multiply BOTH components; here x is multiplied by −1 while y is multiplied by +1, which are different scalars.',
  'Two vectors are parallel if one is a scalar multiple of the other — i.e., every component is scaled by the SAME number. Since (2,3) = ½×(4,6), it is exactly half of p in both components, so it is parallel to p.',
  '(2,3) = ½ × (4,6), a scalar multiple of p [1]',
- 'ai_drafted', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-1,7],"yRange":[-1,7],"xStep":1,"yStep":1,"vectors":[{"from":{"x":0,"y":0},"to":{"x":4,"y":6},"label":"p"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-1,7],"yRange":[-1,7],"xStep":1,"yStep":1,"vectors":[{"from":{"x":0,"y":0},"to":{"x":4,"y":6},"label":"p"}]}'::jsonb),
 
 -- Vectors / Vector notation
 ('Mathematics','AQA','GCSE','Higher','Vectors','Vector notation','TO_BE_VERIFIED',2,
@@ -304,7 +314,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'The x-component is correct, but the y-component sign is wrong: 1−5=−4, not +4.',
  'The vector from one point to another is (position vector of the endpoint) − (position vector of the start point). For PQ (from P to Q): PQ = q − p = (6−2, 1−5) = (4,−4).',
  'PQ = q - p = (6-2, 1-5) = (4,-4) [1]',
- 'ai_drafted', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-1,7],"yRange":[-1,7],"xStep":1,"yStep":1,"points":[{"x":2,"y":5,"label":"P (2, 5)"},{"x":6,"y":1,"label":"Q (6, 1)"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-1,7],"yRange":[-1,7],"xStep":1,"yStep":1,"points":[{"x":2,"y":5,"label":"P (2, 5)"},{"x":6,"y":1,"label":"Q (6, 1)"}]}'::jsonb),
 
 -- Vectors / Vector notation
 ('Mathematics','AQA','GCSE','Higher','Vectors','Vector notation','TO_BE_VERIFIED',1,
@@ -316,7 +326,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Multiplying the components (5×12=60) has no connection to the magnitude formula, which requires squaring and adding each component separately, then taking the square root.',
  'The magnitude (length) of a vector (x,y) is found using Pythagoras'' theorem: √(x²+y²). For (5,12): √(5²+12²)=√169=13.',
  'Magnitude = √(5²+12²) = √169 = 13 [1]',
- 'ai_drafted', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-1,6],"yRange":[-1,13],"xStep":1,"yStep":2,"vectors":[{"from":{"x":0,"y":0},"to":{"x":5,"y":12},"label":"(5, 12)"}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[-1,6],"yRange":[-1,13],"xStep":1,"yStep":2,"vectors":[{"from":{"x":0,"y":0},"to":{"x":5,"y":12},"label":"(5, 12)"}]}'::jsonb),
 
 -- Probability / Tree diagrams
 ('Mathematics','AQA','GCSE','Higher','Probability','Tree diagrams','TO_BE_VERIFIED',2,
@@ -328,7 +338,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'This multiplies P(red) by P(blue) instead of P(red) by P(red) (3/4×1/4=3/16) — but the question asks for red on BOTH spins, so the same probability (3/4) should be used both times.',
  'Each spin is independent, and P(red)=3/4 on each spin (3 red sections out of 4 total). Along the tree diagram, multiply the probabilities for red-then-red: 3/4×3/4=9/16.',
  'P(red,red) = 3/4 × 3/4 = 9/16 [1]',
- 'ai_drafted', true, true, 2, '{"type":"tree","notToScale":true,"root":{"branches":[{"label":"Red","prob":"3/4","highlight":true,"next":{"branches":[{"label":"Red","prob":"3/4","highlight":true},{"label":"Blue","prob":"1/4"}]}},{"label":"Blue","prob":"1/4","next":{"branches":[{"label":"Red","prob":"3/4"},{"label":"Blue","prob":"1/4"}]}}]}}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"tree","notToScale":true,"root":{"branches":[{"label":"Red","prob":"3/4","highlight":true,"next":{"branches":[{"label":"Red","prob":"3/4","highlight":true},{"label":"Blue","prob":"1/4"}]}},{"label":"Blue","prob":"1/4","next":{"branches":[{"label":"Red","prob":"3/4"},{"label":"Blue","prob":"1/4"}]}}]}}'::jsonb),
 
 -- Probability / Venn diagrams
 ('Mathematics','AQA','GCSE','Higher','Probability','Venn diagrams','TO_BE_VERIFIED',2,
@@ -340,7 +350,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  '25+18−40=3 subtracts the total number of students at the wrong point — the overlap (10) needs to be subtracted from 25+18 first to avoid double-counting, then the result subtracted from 40.',
  'Students playing at least one sport = 25+18−10 = 33 (the 10 who play both would otherwise be counted twice). Students playing neither sport = total − at least one = 40−33 = 7.',
  '40 - (25+18-10) = 40-33 = 7 [1]',
- 'ai_drafted', true, true, 2, '{"type":"venn","notToScale":true,"leftLabel":"Football (25)","rightLabel":"Basketball (18)","bothLabel":"10","universeLabel":"40 students"}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"venn","notToScale":true,"leftLabel":"Football (25)","rightLabel":"Basketball (18)","bothLabel":"10","universeLabel":"40 students"}'::jsonb),
 
 -- Probability / Venn diagrams
 ('Mathematics','AQA','GCSE','Higher','Probability','Venn diagrams','TO_BE_VERIFIED',1,
@@ -352,7 +362,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  '"Independent" and "mutually exclusive" are different concepts — two mutually exclusive events (other than impossible events) are actually never independent, since knowing one happened tells you the other definitely did NOT happen.',
  'Two events are mutually exclusive if they cannot both occur at the same time. Since a single card has exactly one rank, it cannot be both a King and a Queen — so drawing a King and drawing a Queen are mutually exclusive events.',
  'A and B cannot occur together, so they are mutually exclusive [1]',
- 'ai_drafted', true, true, 2, '{"type":"venn","notToScale":true,"disjoint":true,"leftLabel":"King (A)","rightLabel":"Queen (B)"}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"venn","notToScale":true,"disjoint":true,"leftLabel":"King (A)","rightLabel":"Queen (B)"}'::jsonb),
 
 -- Probability / Tree diagrams
 ('Mathematics','AQA','GCSE','Higher','Probability','Tree diagrams','TO_BE_VERIFIED',2,
@@ -364,7 +374,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Correct — for two independent events, P(both) = P(first) × P(second) = 1/2 × 1/4 = 1/8.',
  'The coin and die are independent (one doesn''t affect the other). For independent events, the probability of both happening is found by multiplying: P(Heads) × P(4) = 1/2 × 1/4 = 1/8.',
  'P(H and 4) = 1/2 × 1/4 = 1/8 [1]',
- 'ai_drafted', true, true, 2, '{"type":"tree","notToScale":true,"root":{"branches":[{"label":"H","prob":"1/2","highlight":true,"next":{"branches":[{"label":"4","prob":"1/4","highlight":true},{"label":"Not 4","prob":"3/4"}]}},{"label":"T","prob":"1/2","next":{"branches":[{"label":"4","prob":"1/4"},{"label":"Not 4","prob":"3/4"}]}}]}}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"tree","notToScale":true,"root":{"branches":[{"label":"H","prob":"1/2","highlight":true,"next":{"branches":[{"label":"4","prob":"1/4","highlight":true},{"label":"Not 4","prob":"3/4"}]}},{"label":"T","prob":"1/2","next":{"branches":[{"label":"4","prob":"1/4"},{"label":"Not 4","prob":"3/4"}]}}]}}'::jsonb),
 
 -- Statistics / Averages and spread
 ('Mathematics','AQA','GCSE','Higher','Statistics','Averages and spread','TO_BE_VERIFIED',1,
@@ -376,7 +386,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Correct — the range is the difference between the largest and smallest values: 15−3=12.',
  'The range of a data set is found by subtracting the smallest value from the largest value. Here, the largest is 15 and the smallest is 3, so the range is 15−3=12.',
  'Range = 15 - 3 = 12 [1]',
- 'ai_drafted', true, true, 2, NULL),
+ 'ai_drafted_paper2', true, true, 2, NULL),
 
 -- Statistics / Scatter graphs
 ('Mathematics','AQA','GCSE','Higher','Statistics','Scatter graphs','TO_BE_VERIFIED',1,
@@ -388,7 +398,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'Correct — when one variable increases as the other DECREASES (points trending from top-left to bottom-right), this is called negative correlation.',
  'A falling trend from top-left to bottom-right on a scatter graph means as one variable increases, the other tends to decrease — this is called negative correlation.',
  'Points falling left-to-right shows negative correlation [1]',
- 'ai_drafted', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[0,10],"yRange":[0,10],"xStep":2,"yStep":2,"points":[{"x":1,"y":8.5},{"x":1.5,"y":9},{"x":2,"y":7.8},{"x":3,"y":7},{"x":4,"y":6.5},{"x":4.5,"y":5},{"x":5.5,"y":4.8},{"x":6,"y":3.5},{"x":7,"y":3},{"x":8,"y":2},{"x":8.5,"y":1.5},{"x":9,"y":1}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[0,10],"yRange":[0,10],"xStep":2,"yStep":2,"points":[{"x":1,"y":8.5},{"x":1.5,"y":9},{"x":2,"y":7.8},{"x":3,"y":7},{"x":4,"y":6.5},{"x":4.5,"y":5},{"x":5.5,"y":4.8},{"x":6,"y":3.5},{"x":7,"y":3},{"x":8,"y":2},{"x":8.5,"y":1.5},{"x":9,"y":1}]}'::jsonb),
 
 -- Statistics / Histograms (Higher)
 ('Mathematics','AQA','GCSE','Higher','Statistics','Histograms (Higher)','TO_BE_VERIFIED',2,
@@ -400,7 +410,7 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  '30÷2=15 divides instead of multiplying — frequency density and class width combine by MULTIPLICATION to give frequency, not division.',
  'On a histogram, frequency density = frequency ÷ class width. Rearranged: frequency = frequency density × class width = 2×30=60.',
  'Frequency = 2 × 30 = 60 [1]',
- 'ai_drafted', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[0,80],"yRange":[0,4],"xStep":20,"yStep":1,"bars":[{"x0":0,"x1":20,"height":1},{"x0":20,"x1":50,"height":2,"label":"freq. density = 2","highlight":true},{"x0":50,"x1":80,"height":0.7}]}'::jsonb),
+ 'ai_drafted_paper2', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[0,80],"yRange":[0,4],"xStep":20,"yStep":1,"bars":[{"x0":0,"x1":20,"height":1},{"x0":20,"x1":50,"height":2,"label":"freq. density = 2","highlight":true},{"x0":50,"x1":80,"height":0.7}]}'::jsonb),
 
 -- Statistics / Cumulative frequency (Higher)
 ('Mathematics','AQA','GCSE','Higher','Statistics','Cumulative frequency (Higher)','TO_BE_VERIFIED',3,
@@ -412,5 +422,5 @@ INSERT INTO diagnostic_questions (subject, exam_board, level, tier, topic, subto
  'The MODE is the most frequently occurring value — a cumulative frequency graph doesn''t directly show which individual mark occurs most often; the halfway point on the curve identifies the median, not the mode.',
  'On a cumulative frequency graph, the median is found by locating HALF of the total frequency on the vertical axis (here, 80÷2=40) and reading across to the curve, then down to the mark on the horizontal axis. Since cumulative frequency 40 is exactly half of 80, the corresponding mark (55) is the median.',
  'Half of 80 = 40; the mark at this cumulative frequency is the median [1]',
- 'ai_drafted', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[0,100],"yRange":[0,80],"xStep":20,"yStep":20,"series":[{"points":[{"x":0,"y":0},{"x":20,"y":5},{"x":40,"y":15},{"x":55,"y":40,"label":"(55, 40)"},{"x":70,"y":65},{"x":90,"y":78},{"x":100,"y":80}]}]}'::jsonb);
+ 'ai_drafted_paper2', true, true, 2, '{"type":"cartesian","notToScale":false,"xRange":[0,100],"yRange":[0,80],"xStep":20,"yStep":20,"series":[{"points":[{"x":0,"y":0},{"x":20,"y":5},{"x":40,"y":15},{"x":55,"y":40,"label":"(55, 40)"},{"x":70,"y":65},{"x":90,"y":78},{"x":100,"y":80}]}]}'::jsonb);
 
