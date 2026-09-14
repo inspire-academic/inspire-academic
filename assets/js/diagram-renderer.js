@@ -572,7 +572,17 @@ function renderBox3D(svg, spec) {
 
   if (spec.widthLabel) svg.appendChild(textEl((fbl.x + fbr.x) / 2, fbl.y + 16, spec.widthLabel, { size: 12.5 }));
   if (spec.heightLabel) svg.appendChild(textEl(fbl.x - 22, (fbl.y + ftl.y) / 2, spec.heightLabel, { size: 12.5, anchor: 'end' }));
-  if (spec.depthLabel) svg.appendChild(textEl((ftr.x + btr.x) / 2 + 8, (ftr.y + btr.y) / 2 - 6, spec.depthLabel, { size: 12.5, anchor: 'start' }));
+  if (spec.depthLabel) {
+    // The depth edge (ftr→btr) is diagonal and shared by the top AND
+    // right faces — there's no "outside" a small perpendicular offset
+    // from its midpoint, since one side is the top face and the other
+    // is the right face itself (tried this first: it just moved the
+    // label onto the adjacent right face instead of off the line).
+    // btr (the back-top-right corner) is the box's topmost point, so
+    // placing the label above and centred on it guarantees clearance
+    // from every edge regardless of the label's own text width.
+    svg.appendChild(textEl(btr.x, btr.y - 14, spec.depthLabel, { size: 12.5, anchor: 'middle' }));
+  }
 }
 
 // ── Two parallel lines cut by a transversal ──
