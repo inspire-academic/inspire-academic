@@ -10,7 +10,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 
-const SUBJECTS = ['Physics', 'Chemistry', 'Biology', 'Maths'];
+const SUBJECTS = ['Physics', 'Chemistry', 'Biology', 'Mathematics'];
 const BOARDS = ['AQA', 'Edexcel'];
 
 const CURRICULUM_SYSTEM = 'gcse-uk';

@@ -98,7 +98,12 @@ window.SPEC_MAP = {
       { slug:'edx-bi-fh-aerobic-anaerobic', name:'Respiration', paper:2, tier:'Both', subtopics:['Aerobic respiration','Anaerobic respiration','Response to exercise','Fermentation'] },
     ]
   },
-  Maths: {
+  // Named 'Mathematics' (not 'Maths') to match diagnostic_questions.subject,
+  // assessment-engine.html's data-subject/grade-boundary keys, and the DB
+  // convention documented in memory (subjectMeta was previously keyed to
+  // the wrong name for the same reason) — found while wiring up Maths
+  // diagnostics, which is why this rename ships alongside that work.
+  Mathematics: {
     AQA: [
       { slug:'aqa-ma-fh-number-basics', name:'Number — basics and operations', paper:1, tier:'Both', subtopics:['Place value','Four operations','BIDMAS','HCF and LCM','Prime factor decomposition'] },
       { slug:'aqa-ma-fh-fractions-decimals-percentages', name:'Fractions, decimals and percentages', paper:1, tier:'Both', subtopics:['Converting FDP','Operations with fractions','Percentage change','Reverse percentage'] },
@@ -112,6 +117,11 @@ window.SPEC_MAP = {
       { slug:'aqa-ma-fh-geometry-shapes', name:'Properties of shapes', paper:2, tier:'Both', subtopics:['Properties of polygons','Angles','Circle theorems (Higher)','Congruence and similarity','Transformations'] },
       { slug:'aqa-ma-fh-geometry-measures', name:'Perimeter, area, volume', paper:2, tier:'Both', subtopics:['Area of 2D shapes','Circumference and area of circle','Arc and sector','Volume of 3D shapes','Surface area'] },
       { slug:'aqa-ma-fh-geometry-angles', name:'Angles and geometry', paper:2, tier:'Both', subtopics:['Angles on lines and points','Parallel lines','Angles in polygons','Bearings'] },
+      // Added 2026-09-14: real PASCO calibration data already existed for this
+      // slug (assets/js/pasco-calibration-stats.js) but the topic itself was
+      // missing from this map, meaning it could never be matched or weighted —
+      // found while producing the Maths diagnostic question bank.
+      { slug:'aqa-ma-fh-constructions-loci', name:'Constructions and loci', paper:2, tier:'Both', subtopics:['Perpendicular bisector','Angle bisector','Loci','Constructing a triangle'] },
       { slug:'aqa-ma-fh-trigonometry', name:'Trigonometry', paper:2, tier:'Both', subtopics:['Pythagoras\' theorem','SOH CAH TOA','Exact trig values','Sine and cosine rule (Higher)'] },
       { slug:'aqa-ma-fh-vectors', name:'Vectors', paper:2, tier:'Higher', subtopics:['Vector notation','Adding and subtracting vectors','Geometric proof with vectors'] },
       { slug:'aqa-ma-fh-probability', name:'Probability', paper:2, tier:'Both', subtopics:['Probability scale','Tree diagrams','Venn diagrams','Conditional probability (Higher)'] },

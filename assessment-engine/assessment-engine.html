@@ -255,10 +255,10 @@ input,select,textarea{font-family:var(--font-body);}
             <span class="subject-name">Biology</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
-          <button class="subject-btn" data-subject="Mathematics" disabled title="Maths diagnostic questions are still being built — check back soon">
+          <button class="subject-btn" data-subject="Mathematics" onclick="pickSubject(this)">
             <span class="subject-icon">∑</span>
             <span class="subject-name">Maths</span>
-            <span class="subject-coming-soon">Coming soon</span>
+            <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
           <button class="subject-btn" data-subject="Combined Science" onclick="pickSubject(this)">
             <span class="subject-icon">🔬</span>
@@ -714,7 +714,14 @@ function normTopic(s) {
 // actually goes to this topic. Falls back to the median matched weight
 // for any topic with no calibration match.
 function buildTopicWeights(subject, board, topicNames) {
-  const specTopics = (window.SPEC_MAP?.[subject]?.[board]) || [];
+  // spec-map.js nests everything under a 'gcse-uk' curriculum-system key
+  // (window.SPEC_MAP['gcse-uk'][subject][board] — see its own header
+  // comment and tests/shared-js.test.js). This lookup was missing that
+  // key, so it silently found nothing for every subject and always fell
+  // through to the baseline/median weight below — found while wiring up
+  // Mathematics diagnostics; fixing it restores real exam-topic weighting
+  // for Physics/Chemistry/Biology/Combined Science too, not just Maths.
+  const specTopics = (window.SPEC_MAP?.['gcse-uk']?.[subject]?.[board]) || [];
   const slugByNormName = {};
   specTopics.forEach(t => { slugByNormName[normTopic(t.name)] = t.slug; });
 
