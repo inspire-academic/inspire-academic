@@ -55,6 +55,7 @@ function renderDiagram(containerEl, spec) {
   if (spec.type === 'polygon') renderPolygon(svg, spec);
   else if (spec.type === 'circle') renderCircleDiagram(svg, spec);
   else if (spec.type === 'cartesian') renderCartesian(svg, spec);
+  else if (spec.type === 'rays') renderRays(svg, spec);
   else throw new Error('Unknown diagram type: ' + spec.type);
 
   card.appendChild(svg);
@@ -171,7 +172,12 @@ function drawAngleArc(svg, v, n1, n2, label) {
 // ── Polygon family ──
 
 function renderPolygon(svg, spec) {
-  const pts = fitPointsToViewBox(spec.points);
+  // extraPoints (e.g. a marked midpoint that isn't a polygon vertex) are
+  // fitted together with the main points so both share one scale/offset.
+  const extraCount = (spec.extraPoints || []).length;
+  const allFitted = fitPointsToViewBox([...spec.points, ...(spec.extraPoints || [])]);
+  const pts = allFitted.slice(0, spec.points.length);
+  const extraPts = extraCount ? allFitted.slice(spec.points.length) : [];
 
   // parallel marks (drawn first, sit "under" the shape outline visually)
   (spec.parallelMarks || []).forEach(m => drawParallelArrows(svg, pts[m.from], pts[m.to], m.arrows || 1));
@@ -191,6 +197,13 @@ function renderPolygon(svg, spec) {
     const dx = p.sx - cx, dy = p.sy - cy;
     const d = Math.hypot(dx, dy) || 1;
     svg.appendChild(textEl(p.sx + (dx / d) * 16, p.sy + (dy / d) * 16, p.label, { weight: 600 }));
+  });
+
+  // extra (unconnected) points — e.g. a marked midpoint
+  extraPts.forEach((p, i) => {
+    svg.appendChild(svgEl('circle', { cx: p.sx, cy: p.sy, r: 2.5, fill: INK }));
+    const label = (spec.extraPoints[i] || {}).label;
+    if (label) svg.appendChild(textEl(p.sx + 10, p.sy - 10, label, { size: 12.5, weight: 600 }));
   });
 
   // side length labels
@@ -220,7 +233,15 @@ function renderCircleDiagram(svg, spec) {
   const ccx = 180, ccy = 130;
   const toScreen = (x, y) => ({ sx: ccx + x * scale, sy: ccy - y * scale });
 
-  svg.appendChild(svgEl('circle', { cx: ccx, cy: ccy, r: spec.radius * scale, fill: 'none', stroke: INK, 'stroke-width': 2 }));
+  svg.appendChild(svgEl('circle', {
+    cx: ccx, cy: ccy, r: spec.radius * scale, fill: 'none', stroke: INK, 'stroke-width': 2,
+    ...(spec.dashed ? { 'stroke-dasharray': '5 4' } : {}),
+  }));
+
+  if (spec.centerLabel) {
+    svg.appendChild(svgEl('circle', { cx: ccx, cy: ccy, r: 2.2, fill: INK }));
+    svg.appendChild(textEl(ccx, ccy + 15, spec.centerLabel, { size: 12.5, weight: 600 }));
+  }
 
   const labeled = {};
   (spec.points || []).forEach(p => {
@@ -246,6 +267,53 @@ function renderCircleDiagram(svg, spec) {
   (spec.angleMarks || []).forEach(m => {
     drawAngleArc(svg, labeled[m.at], labeled[m.from], labeled[m.to], m.text);
   });
+
+  // labeled radius lines from the centre out to a circumference point,
+  // e.g. showing "7 cm" on the radius of a circle question.
+  (spec.radiusLines || []).forEach(r => {
+    const pt = labeled[r.toLabel];
+    svg.appendChild(svgEl('line', { x1: ccx, y1: ccy, x2: pt.sx, y2: pt.sy, stroke: INK, 'stroke-width': 1.8 }));
+    const mid = { x: (ccx + pt.sx) / 2, y: (ccy + pt.sy) / 2 };
+    svg.appendChild(textEl(mid.x + 10, mid.y - 8, r.text, { size: 12.5 }));
+  });
+}
+
+// ── Rays family (angles from a single vertex — angles-on-a-line,
+//    bearings, angle-between-two-rays questions with no closed shape) ──
+
+function drawArrowheadAt(svg, x, y, angle, color) {
+  const size = 7;
+  const a1 = angle + Math.PI - 0.4, a2 = angle + Math.PI + 0.4;
+  const p1x = x + Math.cos(a1) * size, p1y = y + Math.sin(a1) * size;
+  const p2x = x + Math.cos(a2) * size, p2y = y + Math.sin(a2) * size;
+  svg.appendChild(svgEl('polygon', { points: `${x},${y} ${p1x},${p1y} ${p2x},${p2y}`, fill: color }));
+}
+
+function renderRays(svg, spec) {
+  const vx = 180, vy = 130;
+  const pxPerUnit = 32;
+  // angleDeg uses the standard maths convention (0=right, 90=up,
+  // measured anticlockwise) — screen space flips Y.
+  const rayPts = spec.rays.map(r => {
+    const rad = (r.angleDeg * Math.PI) / 180;
+    const len = (r.length || 3) * pxPerUnit;
+    return { sx: vx + Math.cos(rad) * len, sy: vy - Math.sin(rad) * len, label: r.label };
+  });
+
+  rayPts.forEach(p => {
+    svg.appendChild(svgEl('line', { x1: vx, y1: vy, x2: p.sx, y2: p.sy, stroke: INK, 'stroke-width': 2 }));
+    if (spec.arrowedRays) drawArrowheadAt(svg, p.sx, p.sy, Math.atan2(p.sy - vy, p.sx - vx), INK);
+    if (p.label) {
+      const dx = p.sx - vx, dy = p.sy - vy, d = Math.hypot(dx, dy) || 1;
+      svg.appendChild(textEl(p.sx + (dx / d) * 14, p.sy + (dy / d) * 14, p.label, { weight: 600 }));
+    }
+  });
+
+  svg.appendChild(svgEl('circle', { cx: vx, cy: vy, r: 2.2, fill: INK }));
+  if (spec.vertexLabel) svg.appendChild(textEl(vx - 14, vy + 14, spec.vertexLabel, { size: 12.5, weight: 600 }));
+
+  const v = { sx: vx, sy: vy };
+  (spec.angleMarks || []).forEach(m => drawAngleArc(svg, v, rayPts[m.from], rayPts[m.to], m.text));
 }
 
 // ── Cartesian graph family ──
@@ -316,5 +384,17 @@ function renderCartesian(svg, spec) {
   (spec.points || []).forEach(p => {
     svg.appendChild(svgEl('circle', { cx: sx(p.x), cy: sy(p.y), r: 3, fill: INK }));
     if (p.label) svg.appendChild(textEl(sx(p.x) + 8, sy(p.y) - 10, p.label, { size: 11, anchor: 'start' }));
+  });
+
+  // vector arrows — from one point to another, with an arrowhead
+  (spec.vectors || []).forEach(v => {
+    const x1 = sx(v.from.x), y1 = sy(v.from.y), x2 = sx(v.to.x), y2 = sy(v.to.y);
+    const color = v.color || ACCENT;
+    svg.appendChild(svgEl('line', { x1, y1, x2, y2, stroke: color, 'stroke-width': 2.2 }));
+    drawArrowheadAt(svg, x2, y2, Math.atan2(y2 - y1, x2 - x1), color);
+    if (v.label) {
+      const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+      svg.appendChild(textEl(mx + 10, my - 10, v.label, { size: 12.5, fill: color, weight: 600 }));
+    }
   });
 }

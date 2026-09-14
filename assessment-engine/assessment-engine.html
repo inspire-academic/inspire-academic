@@ -309,7 +309,8 @@ input,select,textarea{font-family:var(--font-body);}
         <span class="badge badge-gold" id="q-topic">Topic</span>
         <span class="muted" style="font-size:.82rem;">Question <span id="q-num">1</span> of <span id="q-total">36</span></span>
       </div>
-      <p style="font-size:1.05rem;font-weight:600;margin-bottom:1.5rem;line-height:1.7;" id="q-text">Loading question...</p>
+      <p style="font-size:1.05rem;font-weight:600;margin-bottom:1rem;line-height:1.7;" id="q-text">Loading question...</p>
+      <div id="q-diagram" style="text-align:center;margin-bottom:1.5rem;"></div>
       <div id="q-options" style="display:flex;flex-direction:column;gap:.6rem;"></div>
       <button class="btn btn-gold" style="width:100%;margin-top:1.25rem;opacity:.4;" id="btn-next" onclick="nextQuestion()" disabled>
         Select an answer to continue →
@@ -370,6 +371,7 @@ input,select,textarea{font-family:var(--font-body);}
      exists in the separate PASCO branch, never merged here. -->
 <script src="/assets/js/spec-map.js"></script>
 <script src="/assets/js/pasco-calibration-stats.js"></script>
+<script src="/assets/js/diagram-renderer.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
 // SUPABASE CONFIG — matches your platform
@@ -809,6 +811,15 @@ function renderQuestion() {
   document.getElementById('q-total').textContent    = S.questions.length;
   document.getElementById('q-text').textContent     = q.question_text;
   document.getElementById('assess-progress').style.width = pct + '%';
+
+  const diagramSlot = document.getElementById('q-diagram');
+  if (q.diagram_spec) {
+    diagramSlot.style.display = 'block';
+    renderDiagram(diagramSlot, q.diagram_spec);
+  } else {
+    diagramSlot.style.display = 'none';
+    diagramSlot.innerHTML = '';
+  }
 
   S.selectedOpt = null;
   const nextBtn = document.getElementById('btn-next');
