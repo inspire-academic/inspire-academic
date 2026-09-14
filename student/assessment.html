@@ -917,9 +917,11 @@ async function openAssessment(assessmentId) {
 
   currentAttempt = attempt
 
-  // Load questions
+  // Load questions — assessment_questions_student_view never carries
+  // correct_answer or options[].is_correct (grading happens server-side
+  // in assessment-submit.js), so nothing here can leak the answer key.
   const { data: questions } = await supa
-    .from('assessment_questions_safe')
+    .from('assessment_questions_student_view')
     .select('*')
     .eq('assessment_id', assessmentId)
     .order('question_number', { ascending: true })
@@ -1195,82 +1197,33 @@ async function submitAssessment() {
   document.getElementById('btn-submit').disabled = true
   document.getElementById('btn-submit').textContent = 'Submitting...'
 
-  // Save all responses with auto-marking for MCQ
-  if (currentQuestions.length > 0) {
-    const responses = currentQuestions.map(q => {
-      const studentAnswer = answers[q.id]?.value || null
-      const isAutoMCQ = q.question_type === 'mcq' && q.correct_answer
-      const isNotSure = studentAnswer === 'NS'
-      const marksAwarded = isAutoMCQ
-        ? (isNotSure ? 0 : (studentAnswer === q.correct_answer ? q.marks_available : 0))
-        : null  // null = pending tutor marking
+  // Grading happens server-side (netlify/functions/assessment-submit.js) —
+  // the browser only ever sends the student's own chosen answers and
+  // never receives the answer key back. Grading used to happen here by
+  // comparing against q.correct_answer, which meant the browser had to
+  // hold the correct answer before the student had even submitted.
+  const responsesPayload = currentQuestions.map(q => ({
+    questionId:    q.id,
+    studentAnswer: answers[q.id]?.value || null
+  }))
 
-      return {
-        attempt_id:             currentAttempt.id,
-        question_id:            q.id,
-        student_answer:         studentAnswer,
-        marks_available:        q.marks_available,
-        marks_awarded:          marksAwarded,
-        grading_mode_used:      isAutoMCQ ? 'auto' : (q.grading_mode || 'manual'),
-        misconceptions_detected: isAutoMCQ && !isNotSure && studentAnswer !== q.correct_answer
-          ? [{ type: 'misconception', answer_given: studentAnswer }]
-          : isNotSure
-          ? [{ type: 'knowledge_gap', label: 'Student flagged as not sure' }]
-          : []
-      }
+  try {
+    const { data: { session } } = await supa.auth.getSession()
+    const res = await fetch('/api/v1/assessment/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
+      body: JSON.stringify({ attemptId: currentAttempt.id, responses: responsesPayload })
     })
-
-    // Delete any existing responses first, then insert fresh
-    await supa.from('attempt_question_responses')
-      .delete()
-      .eq('attempt_id', currentAttempt.id)
-
-    const { error: insertError } = await supa
-      .from('attempt_question_responses')
-      .insert(responses)
-
-    if (insertError) {
-      console.error('Response insert error:', insertError)
-    } else {
-      console.log('Responses saved:', responses.length)
-    }
+    const result = await res.json()
+    if (!result.success) throw new Error(result.error?.message || 'Submit failed')
+    currentAttempt = result.attempt || currentAttempt
+  } catch (e) {
+    console.error('Submit error:', e)
+    alert('Something went wrong submitting your assessment. Please try again.')
+    document.getElementById('btn-submit').disabled = false
+    document.getElementById('btn-submit').textContent = 'Submit Assessment'
+    return
   }
-
-  // Calculate score for auto-marked MCQ questions
-  let totalMarksAvailable = 0
-  let totalMarksAwarded   = 0
-
-  currentQuestions.forEach(q => {
-    totalMarksAvailable += q.marks_available
-    if (q.question_type === 'mcq' && q.correct_answer) {
-      const studentAns = answers[q.id]?.value
-      if (studentAns === q.correct_answer) {
-        totalMarksAwarded += q.marks_available
-      }
-    }
-  })
-
-  const percentage = totalMarksAvailable > 0
-    ? Math.round((totalMarksAwarded / totalMarksAvailable) * 100)
-    : null
-
-  // Update attempt to submitted
-  const { data: updatedAttempt } = await supa
-    .from('assessment_attempts')
-    .update({
-      status:                'submitted',
-      submitted_at:          new Date().toISOString(),
-      total_marks_available: totalMarksAvailable,
-      total_marks_awarded:   totalMarksAwarded,
-      percentage:            percentage
-    })
-    .eq('id', currentAttempt.id)
-    .select()
-    .single()
-
-  currentAttempt = updatedAttempt || currentAttempt
-
-  // Audit log — skipped on client (server-side only)
 
   await showResults(currentAttempt)
 }
@@ -1310,7 +1263,7 @@ async function showResults(attempt) {
   // Load questions if not already in memory (e.g. viewing from list)
   if (!currentQuestions.length && currentAssessment) {
     const { data: qs } = await supa
-      .from('assessment_questions_safe')
+      .from('assessment_questions_student_view')
       .select('*')
       .eq('assessment_id', currentAssessment.id)
       .order('question_number', { ascending: true })
@@ -1334,16 +1287,18 @@ async function showResults(attempt) {
     const responseMap = {}
     responses.forEach(r => { responseMap[r.question_id] = r })
 
-    // Build diagnostic summary by topic
+    // Build diagnostic summary by topic. Correctness comes from the
+    // student's OWN response row (marks_awarded, set server-side at
+    // grading time in assessment-submit.js) — assessment_questions_student_view
+    // never carries an answer key for q.correct_answer to come from.
     const topicMap = {}
     currentQuestions.forEach(q => {
       const slug = q.topic_slug || q.subtopic || 'General'
       if (!topicMap[slug]) topicMap[slug] = { name: slug, correct: 0, wrong: 0, notSure: 0, total: 0 }
       const r = responseMap[q.id] || {}
-      const ans = r.student_answer
       topicMap[slug].total++
-      if (ans === 'NS') topicMap[slug].notSure++
-      else if (ans === q.correct_answer) topicMap[slug].correct++
+      if (r.student_answer === 'NS') topicMap[slug].notSure++
+      else if (r.marks_awarded != null && r.marks_available > 0 && r.marks_awarded === r.marks_available) topicMap[slug].correct++
       else topicMap[slug].wrong++
     })
 
@@ -1368,25 +1323,26 @@ async function showResults(attempt) {
         }).join('')}
       </div>`
 
-    // Question by question breakdown
+    // Question by question breakdown. isAutoMCQ and the correct-answer
+    // label both come from the response row (grading_mode_used /
+    // correct_answer, both written server-side at grading time) — the
+    // question object itself (q) never carries the answer key.
     const questionsHtml = currentQuestions.map(q => {
       const r = responseMap[q.id] || {}
-      const isAutoMCQ = q.question_type === 'mcq' && q.correct_answer
+      const isAutoMCQ = r.grading_mode_used === 'auto'
       const isNS = r.student_answer === 'NS'
       const marksHtml = r.marks_awarded != null
         ? `<span class="marks-auto">${r.marks_awarded}/${q.marks_available}</span>`
-        : isAutoMCQ
-          ? `<span class="marks-auto">${r.student_answer === q.correct_answer ? q.marks_available : 0}/${q.marks_available}</span>`
-          : `<span class="marks-pending">Pending — tutor marking</span>`
+        : `<span class="marks-pending">Pending — tutor marking</span>`
 
       const studentAnsLabel = isNS
         ? `<em style="color:var(--text-muted)">Not sure — flagged for teaching</em>`
         : escHtml(r.student_answer || '—')
 
-      const correctAns = isReleased && isAutoMCQ
+      const correctAns = isReleased && isAutoMCQ && r.correct_answer
         ? `<div class="feedback-answer-row">
             <div class="feedback-answer-label">Correct</div>
-            <div class="feedback-answer-val correct">${q.correct_answer}</div>
+            <div class="feedback-answer-val correct">${r.correct_answer}</div>
            </div>`
         : ''
 

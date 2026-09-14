@@ -362,6 +362,16 @@ function = "create-teacher"
   status = 200
   force = true
 
+# Server-side grading for teacher-created assessments (student/assessment.html)
+# — moved off the client 2026-09-15 so the browser never receives the
+# answer key. See assessment-submit.js header comment. Same
+# /api/v1/resource/action convention.
+[[redirects]]
+  from = "/api/v1/assessment/submit"
+  to = "/.netlify/functions/assessment-submit"
+  status = 200
+  force = true
+
 # Paid-tier Phase 2 (dormant — see create-checkout-session.js/
 # stripe-webhook.js header comments for the kill switches). Same
 # /api/v1/resource/action convention.
