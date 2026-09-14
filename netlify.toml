@@ -457,6 +457,17 @@ function = "create-teacher"
   status = 200
   force = true
 
+# Admin-only teacher verification (is_verified) — same profiles-has-no-
+# client-writable-UPDATE-policy posture as update-role above. Needed
+# because a teacher_manager promoted via the role-change flow never
+# gets is_verified set, leaving them permanently "Pending" in
+# admin-teacher-mgmt.html with no way to fix it.
+[[redirects]]
+  from = "/api/v1/users/verify-teacher"
+  to = "/.netlify/functions/verify-teacher"
+  status = 200
+  force = true
+
 # Teacher-facing student date-of-birth + parent contact panel — same
 # service-role rationale as update-role above, scoped to a teacher's
 # own assigned students (or any student for admins).

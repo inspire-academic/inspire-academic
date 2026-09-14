@@ -309,6 +309,7 @@ function renderT(list){
       <td><span style="font-family:var(--font-mono);color:${t.sc>0?'var(--gold)':'var(--muted)'}">${t.sc}</span></td>
       <td>${t.is_verified?'<span class="chip cg">Active</span>':'<span class="chip ca">Pending</span>'}</td>
       <td><div style="display:flex;gap:.4rem;">
+        ${t.is_verified?'':`<button class="btn bo bs" onclick="verifyTeacher('${t.id}','${esc(t.full_name||'')}')">✓ Verify</button>`}
         <button class="btn bo bs" onclick="openAssign('${t.id}','${esc(t.full_name||'')}')">👥 Assign</button>
         <button class="btn bo bs" onclick="viewStu('${t.id}','${esc(t.full_name||'')}')">👁 View</button>
       </div></td>
@@ -354,6 +355,25 @@ async function createTeacher(){
   }catch(e){toast('Network error — please try again','err');console.error(e);}
 
   btn.disabled=false;btn.textContent='Send Invite & Create Account';
+}
+
+// ── Verify Teacher ────────────────────────────────────────────────
+// profiles has no client-writable UPDATE policy, so this goes through
+// verify-teacher.js (service role) rather than a direct supa.from()
+// call, same posture as every other admin write in this file's flow.
+async function verifyTeacher(tid,tname){
+  if(!confirm(`Mark ${tname} as an active, verified teacher?`))return;
+  try{
+    const res=await fetch('/api/v1/users/verify-teacher',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${_session.access_token}`},
+      body:JSON.stringify({teacherId:tid})
+    });
+    const data=await res.json();
+    if(!res.ok||!data.success){toast(data.error?.message||'Failed to verify teacher','err');return;}
+    toast(`✓ ${tname} is now active`,'ok');
+    await loadTeachers();
+  }catch(e){toast('Network error — please try again','err');console.error(e);}
 }
 
 // ── Assign Students ──────────────────────────────────────────────
