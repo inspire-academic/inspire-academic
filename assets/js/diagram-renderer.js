@@ -12,10 +12,12 @@
 // via `points`, histograms via `bars`, and cumulative frequency curves
 // via `series` — all just Cartesian-axis variants, not separate types),
 // 'rays' (angle-only diagrams with no closed shape), 'tree' (probability
-// tree diagrams), 'venn' (2-set Venn diagrams), or 'box3d' (a schematic
-// wireframe cuboid/cube). See each render* function below for its spec
-// shape; assessment-engine/diagram-pilot-review.html and
-// diagram-maths-bank-review.html have worked examples.
+// tree diagrams), 'venn' (2-set Venn diagrams), 'box3d' (a schematic
+// wireframe cuboid/cube), or 'transversal' (two parallel lines cut by a
+// third — corresponding/alternate/co-interior angles). See each
+// render* function below for its spec shape; assessment-engine/
+// diagram-pilot-review.html and diagram-maths-bank-review*.html have
+// worked examples.
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const INK = '#1a1a1a';      // exam-paper line/text colour
@@ -64,6 +66,7 @@ function renderDiagram(containerEl, spec) {
   else if (spec.type === 'tree') renderTree(svg, spec);
   else if (spec.type === 'venn') renderVenn(svg, spec);
   else if (spec.type === 'box3d') renderBox3D(svg, spec);
+  else if (spec.type === 'transversal') renderTransversal(svg, spec);
   else throw new Error('Unknown diagram type: ' + spec.type);
 
   card.appendChild(svg);
@@ -290,6 +293,38 @@ function renderCircleDiagram(svg, spec) {
     const mid = { x: (ccx + pt.sx) / 2, y: (ccy + pt.sy) / 2 };
     svg.appendChild(textEl(mid.x + px * 12, mid.y + py * 12, r.text, { size: 12.5 }));
   });
+
+  // a highlighted sector ("pie slice") between two angles, e.g. for an
+  // arc-length or sector-area question.
+  if (spec.sector) {
+    const a1 = (spec.sector.fromDeg * Math.PI) / 180, a2 = (spec.sector.toDeg * Math.PI) / 180;
+    const p1 = toScreen(Math.cos(a1) * spec.radius, Math.sin(a1) * spec.radius);
+    const p2 = toScreen(Math.cos(a2) * spec.radius, Math.sin(a2) * spec.radius);
+    const large = Math.abs(spec.sector.toDeg - spec.sector.fromDeg) > 180 ? 1 : 0;
+    svg.appendChild(svgEl('path', {
+      d: `M ${ccx} ${ccy} L ${p1.sx} ${p1.sy} A ${spec.radius * scale} ${spec.radius * scale} 0 ${large} 0 ${p2.sx} ${p2.sy} Z`,
+      fill: 'rgba(11,79,168,.08)', stroke: ACCENT, 'stroke-width': 1.8,
+    }));
+    if (spec.sector.angleText) {
+      const midDeg = (spec.sector.fromDeg + spec.sector.toDeg) / 2;
+      const midRad = (midDeg * Math.PI) / 180;
+      const lp = toScreen(Math.cos(midRad) * spec.radius * 0.55, Math.sin(midRad) * spec.radius * 0.55);
+      svg.appendChild(textEl(lp.sx, lp.sy, spec.sector.angleText, { size: 11.5, fill: ACCENT }));
+    }
+  }
+
+  // a tangent line through a labelled circumference point, perpendicular
+  // to the radius there, with a right-angle mark at the point of contact.
+  (spec.tangents || []).forEach(t => {
+    const pt = labeled[t.atLabel];
+    const dx = pt.sx - ccx, dy = pt.sy - ccy, len = Math.hypot(dx, dy) || 1;
+    const px = -dy / len, py = dx / len; // perpendicular to the radius = tangent direction
+    const half = (t.length || 60) / 2;
+    const t1 = { sx: pt.sx - px * half, sy: pt.sy - py * half };
+    const t2 = { sx: pt.sx + px * half, sy: pt.sy + py * half };
+    svg.appendChild(svgEl('line', { x1: t1.sx, y1: t1.sy, x2: t2.sx, y2: t2.sy, stroke: INK, 'stroke-width': 1.8 }));
+    drawRightAngleMark(svg, pt, { sx: ccx, sy: ccy }, t2);
+  });
 }
 
 // ── Rays family (angles from a single vertex — angles-on-a-line,
@@ -489,13 +524,23 @@ function renderTree(svg, spec) {
 // counts are usually exactly what the question asks the student to work
 // out; labelling them would give the answer away.
 function renderVenn(svg, spec) {
-  const r = 72, cy = 140, leftCx = 145, rightCx = 215;
+  const r = 72, cy = 140;
+  // 'disjoint' pushes the circles apart with no overlap, for
+  // illustrating mutually exclusive events — bothLabel makes no sense
+  // here and is ignored even if passed.
+  const leftCx = spec.disjoint ? 95 : 145, rightCx = spec.disjoint ? 265 : 215;
   svg.appendChild(svgEl('rect', { x: 20, y: 40, width: 320, height: 200, fill: 'none', stroke: INK, 'stroke-width': 1.6 }));
   svg.appendChild(svgEl('circle', { cx: leftCx, cy, r, fill: 'none', stroke: INK, 'stroke-width': 1.8 }));
   svg.appendChild(svgEl('circle', { cx: rightCx, cy, r, fill: 'none', stroke: INK, 'stroke-width': 1.8 }));
-  svg.appendChild(textEl(leftCx - 40, cy - r - 14, spec.leftLabel, { size: 13, weight: 600, anchor: 'middle' }));
-  svg.appendChild(textEl(rightCx + 40, cy - r - 14, spec.rightLabel, { size: 13, weight: 600, anchor: 'middle' }));
-  if (spec.bothLabel != null) svg.appendChild(textEl((leftCx + rightCx) / 2, cy, spec.bothLabel, { size: 13, weight: 600 }));
+  // Non-disjoint circles overlap, so their centres sit close together —
+  // push each label outward (away from the other set) to keep them from
+  // colliding above the overlap region. Disjoint circles are already far
+  // enough apart that centring each label works fine.
+  const leftLabelX = spec.disjoint ? leftCx : leftCx - 40;
+  const rightLabelX = spec.disjoint ? rightCx : rightCx + 40;
+  svg.appendChild(textEl(leftLabelX, cy - r - 14, spec.leftLabel, { size: 13, weight: 600, anchor: 'middle' }));
+  svg.appendChild(textEl(rightLabelX, cy - r - 14, spec.rightLabel, { size: 13, weight: 600, anchor: 'middle' }));
+  if (!spec.disjoint && spec.bothLabel != null) svg.appendChild(textEl((leftCx + rightCx) / 2, cy, spec.bothLabel, { size: 13, weight: 600 }));
   if (spec.universeLabel) svg.appendChild(textEl(340, 55, spec.universeLabel, { size: 10, fill: '#555', anchor: 'end' }));
 }
 
@@ -528,4 +573,50 @@ function renderBox3D(svg, spec) {
   if (spec.widthLabel) svg.appendChild(textEl((fbl.x + fbr.x) / 2, fbl.y + 16, spec.widthLabel, { size: 12.5 }));
   if (spec.heightLabel) svg.appendChild(textEl(fbl.x - 22, (fbl.y + ftl.y) / 2, spec.heightLabel, { size: 12.5, anchor: 'end' }));
   if (spec.depthLabel) svg.appendChild(textEl((ftr.x + btr.x) / 2 + 8, (ftr.y + btr.y) / 2 - 6, spec.depthLabel, { size: 12.5, anchor: 'start' }));
+}
+
+// ── Two parallel lines cut by a transversal ──
+//
+// spec.labels: [{ at: 'top'|'bottom', rays: [a,b], text }], where each
+// ray name is one of 'left', 'right' (along the horizontal line) or
+// 'transUp'/'transDown' (along the transversal, toward the top/bottom
+// line respectively — these mean the same absolute direction at BOTH
+// intersections, so e.g. the same rays:['right','transDown'] pair at
+// 'top' and at 'bottom' draws a matching CORRESPONDING-angle pair;
+// ['left','transDown'] at top + ['left','transUp'] at bottom draws a
+// CO-INTERIOR pair; ['left','transDown'] at top + ['right','transUp']
+// at bottom draws an ALTERNATE pair.
+function renderTransversal(svg, spec) {
+  const topY = 90, botY = 190, leftX = 30, rightX = 330, midX = 150;
+  const skew = spec.skew != null ? spec.skew : 70;
+  const topX = midX, botX = midX + skew;
+
+  svg.appendChild(svgEl('line', { x1: leftX, y1: topY, x2: rightX, y2: topY, stroke: INK, 'stroke-width': 2 }));
+  svg.appendChild(svgEl('line', { x1: leftX, y1: botY, x2: rightX, y2: botY, stroke: INK, 'stroke-width': 2 }));
+  drawParallelArrows(svg, { sx: leftX + 30, sy: topY }, { sx: leftX + 60, sy: topY }, 1);
+  drawParallelArrows(svg, { sx: leftX + 30, sy: botY }, { sx: leftX + 60, sy: botY }, 1);
+
+  const dx = botX - topX, dy = botY - topY, len = Math.hypot(dx, dy);
+  const ux = dx / len, uy = dy / len;
+  const overshoot = 35;
+  svg.appendChild(svgEl('line', {
+    x1: topX - ux * overshoot, y1: topY - uy * overshoot,
+    x2: botX + ux * overshoot, y2: botY + uy * overshoot,
+    stroke: INK, 'stroke-width': 2,
+  }));
+
+  const topPt = { sx: topX, sy: topY }, botPt = { sx: botX, sy: botY };
+  const rayPoint = (origin, name) => {
+    const r = 40;
+    if (name === 'left') return { sx: origin.sx - r, sy: origin.sy };
+    if (name === 'right') return { sx: origin.sx + r, sy: origin.sy };
+    if (name === 'transDown') return { sx: origin.sx + ux * r, sy: origin.sy + uy * r };
+    if (name === 'transUp') return { sx: origin.sx - ux * r, sy: origin.sy - uy * r };
+    throw new Error('Unknown transversal ray: ' + name);
+  };
+
+  (spec.labels || []).forEach(l => {
+    const origin = l.at === 'top' ? topPt : botPt;
+    drawAngleArc(svg, origin, rayPoint(origin, l.rays[0]), rayPoint(origin, l.rays[1]), l.text);
+  });
 }
