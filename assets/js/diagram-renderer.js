@@ -281,8 +281,14 @@ function renderCircleDiagram(svg, spec) {
   (spec.radiusLines || []).forEach(r => {
     const pt = labeled[r.toLabel];
     svg.appendChild(svgEl('line', { x1: ccx, y1: ccy, x2: pt.sx, y2: pt.sy, stroke: INK, 'stroke-width': 1.8 }));
+    // offset perpendicular to the radius line itself, not a fixed
+    // diagonal nudge — a fixed offset sits ON the line at some angles
+    // (e.g. a shallow radius), which is exactly the bug the vector
+    // label had.
+    const dx = pt.sx - ccx, dy = pt.sy - ccy, len = Math.hypot(dx, dy) || 1;
+    const px = -dy / len, py = dx / len; // unit perpendicular
     const mid = { x: (ccx + pt.sx) / 2, y: (ccy + pt.sy) / 2 };
-    svg.appendChild(textEl(mid.x + 10, mid.y - 8, r.text, { size: 12.5 }));
+    svg.appendChild(textEl(mid.x + px * 12, mid.y + py * 12, r.text, { size: 12.5 }));
   });
 }
 
