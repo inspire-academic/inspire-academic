@@ -3406,16 +3406,20 @@ const ALPHA_SCENE = {
   version: '0.3.0',  // Phase 2: Selection System (Standalone)
   boards: {},
   settings: {
-    objectMode: true,
+    // This board is intentionally ephemeral scratch space — ink is
+    // never meant to be saved anywhere, even if the lesson page itself
+    // is (a teacher's live handwriting is explanation, not lesson
+    // content). Per-stroke object tracking exists only to support a
+    // future save/reload of the board's ink, which this board will
+    // never need, so it's off. Pallet objects (pasted images, copied
+    // panels) are untouched by this flag — their selection/copy/delete
+    // support is a separate, real, still-used code path.
+    objectMode: false,
     debug: false,
     attachmentEnabled: true,
-    // Perf: stroke objects (one per pen/eraser/highlighter stroke) are
-    // never read back anywhere in this file today — no renderer, hit-test,
-    // or export path touches them — so without a cap they grow unbounded
-    // for the length of a lesson. This bounds that growth the same way
-    // the undo stack already bounds itself. Pallet objects (pasted
-    // images, copied panels) are exempt — few in number, and still
-    // functionally used by selection/copy/delete.
+    // Safety net in case objectMode is ever turned back on for a
+    // different kind of board — bounds stroke-object growth the same
+    // way the undo stack already bounds itself.
     maxSceneStrokes: 500
   }
 };
@@ -5008,13 +5012,17 @@ function setupBoard(id) {
         _addPoint(p.x, p.y, pressure, pointerType);
       }
       
-      // ALPHA 0.2: Collect stroke points before flushing
-      const strokePoints = _pts.map(pt => ({
-        x: pt.x,
-        y: pt.y,
-        pressure: pt.w / Number(sizePick.value)  // Convert width back to pressure
-      }));
-      
+      // ALPHA 0.2: Collect stroke points before flushing (_pts is cleared
+      // by _flushStroke below, so this has to happen first) — skipped
+      // entirely when objectMode is off, since nothing then reads it.
+      const strokePoints = ALPHA_SCENE.settings.objectMode
+        ? _pts.map(pt => ({
+            x: pt.x,
+            y: pt.y,
+            pressure: pt.w / Number(sizePick.value)  // Convert width back to pressure
+          }))
+        : [];
+
       _flushStroke(true);
       
       // ALPHA 0.2: Create and store stroke object
@@ -9258,8 +9266,12 @@ function bindFocusAnnotationEvents() {
     FOCUS_ANNOTATION.drawing = true;
     FOCUS_ANNOTATION.lastX = p.x;
     FOCUS_ANNOTATION.lastY = p.y;
-    // ALPHA 0.2: Track points for object creation
-    FOCUS_ANNOTATION.currentStrokePoints = [{x: p.x, y: p.y, pressure: e.pressure || 1.0}];
+    // ALPHA 0.2: Track points for object creation — null (rather than an
+    // array that grows on every pointermove below) when objectMode is
+    // off, since nothing then reads this.
+    FOCUS_ANNOTATION.currentStrokePoints = ALPHA_SCENE.settings.objectMode
+      ? [{x: p.x, y: p.y, pressure: e.pressure || 1.0}]
+      : null;
     canvas.setPointerCapture?.(e.pointerId);
     ctx.beginPath();
     ctx.moveTo(p.x, p.y);
