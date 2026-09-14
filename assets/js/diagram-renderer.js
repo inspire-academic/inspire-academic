@@ -1,0 +1,320 @@
+// ── Exam-style diagram renderer ──
+// Renders GCSE Maths exam diagrams (geometry shapes, circles, Cartesian
+// graphs) from a small JSON spec into inline SVG — no images, no
+// external library, no build step. Diagrams always render as a fixed
+// white "exam paper" card regardless of the app's dark/light theme
+// (agreed 2026-09-15 pilot): real exam diagrams are black-line-art on
+// white, and matching that exactly is more useful to a student
+// rehearsing for the real paper than theme-matching would be.
+//
+// Usage: renderDiagram(containerEl, spec) — spec.type selects the
+// family: 'polygon', 'circle', or 'cartesian'. See the three render*
+// functions below for each spec shape; diagram-pilot-review.html has
+// worked examples of all three.
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const INK = '#1a1a1a';      // exam-paper line/text colour
+const GRID = '#c9c9c9';     // light grid/axis-tick colour
+const ACCENT = '#0b4fa8';   // sparingly used for plotted functions/points
+
+function svgEl(tag, attrs = {}) {
+  const el = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+function textEl(x, y, content, opts = {}) {
+  const t = svgEl('text', {
+    x, y,
+    'font-family': opts.fontFamily || 'Arial, Helvetica, sans-serif',
+    'font-size': opts.size || 14,
+    'font-weight': opts.weight || 400,
+    fill: opts.fill || INK,
+    'text-anchor': opts.anchor || 'middle',
+    'dominant-baseline': opts.baseline || 'middle',
+  });
+  t.textContent = content;
+  return t;
+}
+
+// Renders a bordered "exam paper" card with an SVG diagram inside plus
+// the conventional "Diagram NOT accurately drawn" caption when the spec
+// asks for it. Returns nothing — mutates containerEl in place.
+function renderDiagram(containerEl, spec) {
+  containerEl.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'exam-diagram-card';
+  card.style.cssText = 'background:#ffffff;border:1px solid #d8d8d8;border-radius:8px;padding:1rem 1rem .6rem;display:inline-block;max-width:100%;box-sizing:border-box;';
+
+  const svg = svgEl('svg', {
+    viewBox: '0 0 360 260',
+    width: '100%',
+    style: 'max-width:360px;display:block;margin:0 auto;',
+  });
+
+  if (spec.type === 'polygon') renderPolygon(svg, spec);
+  else if (spec.type === 'circle') renderCircleDiagram(svg, spec);
+  else if (spec.type === 'cartesian') renderCartesian(svg, spec);
+  else throw new Error('Unknown diagram type: ' + spec.type);
+
+  card.appendChild(svg);
+
+  if (spec.notToScale) {
+    const cap = document.createElement('div');
+    cap.textContent = 'Diagram NOT accurately drawn';
+    cap.style.cssText = 'text-align:center;font-style:italic;font-size:.78rem;color:#555;margin-top:.35rem;';
+    card.appendChild(cap);
+  }
+
+  containerEl.appendChild(card);
+}
+
+// ── Shared geometry helpers ──
+
+function fitPointsToViewBox(points, pad = 60) {
+  const xs = points.map(p => p.x), ys = points.map(p => p.y);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const w = maxX - minX || 1, h = maxY - minY || 1;
+  const availW = 360 - pad * 2, availH = 260 - pad * 2;
+  const scale = Math.min(availW / w, availH / h);
+  // flip Y (screen space grows downward, geometry space grows upward)
+  return points.map(p => ({
+    ...p,
+    sx: pad + (p.x - minX) * scale + (availW - w * scale) / 2,
+    sy: 260 - (pad + (p.y - minY) * scale + (availH - h * scale) / 2),
+  }));
+}
+
+function midpoint(a, b) { return { x: (a.sx + b.sx) / 2, y: (a.sy + b.sy) / 2 }; }
+function angleOf(a, b) { return Math.atan2(b.sy - a.sy, b.sx - a.sx); }
+function dist(a, b) { return Math.hypot(b.sx - a.sx, b.sy - a.sy); }
+
+// Perpendicular tick mark(s) at a segment's midpoint — indicates equal
+// side lengths (1 tick, 2 ticks, ...) matching the real exam convention.
+function drawTicks(svg, a, b, count) {
+  const mid = midpoint(a, b);
+  const theta = angleOf(a, b);
+  const perp = theta + Math.PI / 2;
+  const spacing = 5;
+  const start = -((count - 1) * spacing) / 2;
+  for (let i = 0; i < count; i++) {
+    const off = start + i * spacing;
+    const cx = mid.x + Math.cos(theta) * off;
+    const cy = mid.y + Math.sin(theta) * off;
+    const len = 7;
+    svg.appendChild(svgEl('line', {
+      x1: cx - Math.cos(perp) * len, y1: cy - Math.sin(perp) * len,
+      x2: cx + Math.cos(perp) * len, y2: cy + Math.sin(perp) * len,
+      stroke: INK, 'stroke-width': 1.6,
+    }));
+  }
+}
+
+// Small chevron arrow(s) at a segment's midpoint — parallel-line marker.
+function drawParallelArrows(svg, a, b, count) {
+  const mid = midpoint(a, b);
+  const theta = angleOf(a, b);
+  const spacing = 6;
+  const start = -((count - 1) * spacing) / 2;
+  for (let i = 0; i < count; i++) {
+    const off = start + i * spacing;
+    const cx = mid.x + Math.cos(theta) * off;
+    const cy = mid.y + Math.sin(theta) * off;
+    const wing = 5;
+    const back = theta + Math.PI;
+    const p1x = cx + Math.cos(back + 0.5) * wing, p1y = cy + Math.sin(back + 0.5) * wing;
+    const p2x = cx + Math.cos(back - 0.5) * wing, p2y = cy + Math.sin(back - 0.5) * wing;
+    svg.appendChild(svgEl('polyline', {
+      points: `${p1x},${p1y} ${cx},${cy} ${p2x},${p2y}`,
+      fill: 'none', stroke: INK, 'stroke-width': 1.6,
+    }));
+  }
+}
+
+// Right-angle square marker at vertex `v`, using the directions toward
+// its two neighbours to orient the square correctly.
+function drawRightAngleMark(svg, v, n1, n2) {
+  const s = 10;
+  const u1x = (n1.sx - v.sx) / dist(v, n1), u1y = (n1.sy - v.sy) / dist(v, n1);
+  const u2x = (n2.sx - v.sx) / dist(v, n2), u2y = (n2.sy - v.sy) / dist(v, n2);
+  const p1x = v.sx + u1x * s, p1y = v.sy + u1y * s;
+  const p2x = v.sx + u1x * s + u2x * s, p2y = v.sy + u1y * s + u2y * s;
+  const p3x = v.sx + u2x * s, p3y = v.sy + u2y * s;
+  svg.appendChild(svgEl('polyline', {
+    points: `${p1x},${p1y} ${p2x},${p2y} ${p3x},${p3y}`,
+    fill: 'none', stroke: INK, 'stroke-width': 1.4,
+  }));
+}
+
+// Angle arc + label at vertex `v`, spanning from neighbour n1 to n2.
+function drawAngleArc(svg, v, n1, n2, label) {
+  const a1 = angleOf(v, n1), a2 = angleOf(v, n2);
+  let start = a1, end = a2;
+  let delta = end - start;
+  while (delta <= -Math.PI) delta += 2 * Math.PI;
+  while (delta > Math.PI) delta -= 2 * Math.PI;
+  const r = 22;
+  const x1 = v.sx + Math.cos(start) * r, y1 = v.sy + Math.sin(start) * r;
+  const x2 = v.sx + Math.cos(start + delta) * r, y2 = v.sy + Math.sin(start + delta) * r;
+  const largeArc = Math.abs(delta) > Math.PI ? 1 : 0;
+  const sweep = delta > 0 ? 1 : 0;
+  svg.appendChild(svgEl('path', {
+    d: `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} ${sweep} ${x2} ${y2}`,
+    fill: 'none', stroke: INK, 'stroke-width': 1.3,
+  }));
+  const midA = start + delta / 2;
+  const lx = v.sx + Math.cos(midA) * (r + 14), ly = v.sy + Math.sin(midA) * (r + 14);
+  svg.appendChild(textEl(lx, ly, label, { size: 12.5 }));
+}
+
+// ── Polygon family ──
+
+function renderPolygon(svg, spec) {
+  const pts = fitPointsToViewBox(spec.points);
+
+  // parallel marks (drawn first, sit "under" the shape outline visually)
+  (spec.parallelMarks || []).forEach(m => drawParallelArrows(svg, pts[m.from], pts[m.to], m.arrows || 1));
+
+  // shape outline
+  const path = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.sx} ${p.sy}`).join(' ') + ' Z';
+  svg.appendChild(svgEl('path', { d: path, fill: 'none', stroke: INK, 'stroke-width': 2 }));
+
+  // equal-side ticks
+  (spec.equalTicks || []).forEach(t => drawTicks(svg, pts[t.from], pts[t.to], t.ticks || 1));
+
+  // vertex labels (offset outward from the shape's centroid)
+  const cx = pts.reduce((s, p) => s + p.sx, 0) / pts.length;
+  const cy = pts.reduce((s, p) => s + p.sy, 0) / pts.length;
+  pts.forEach(p => {
+    if (!p.label) return;
+    const dx = p.sx - cx, dy = p.sy - cy;
+    const d = Math.hypot(dx, dy) || 1;
+    svg.appendChild(textEl(p.sx + (dx / d) * 16, p.sy + (dy / d) * 16, p.label, { weight: 600 }));
+  });
+
+  // side length labels
+  (spec.sideLabels || []).forEach(s => {
+    const a = pts[s.from], b = pts[s.to];
+    const mid = midpoint(a, b);
+    const theta = angleOf(a, b) + Math.PI / 2;
+    const offset = 13;
+    svg.appendChild(textEl(mid.x + Math.cos(theta) * offset, mid.y + Math.sin(theta) * offset, s.text, { size: 12.5 }));
+  });
+
+  // angle marks
+  (spec.angleMarks || []).forEach(m => {
+    const v = pts[m.at];
+    const n = pts.length;
+    const n1 = pts[(m.at - 1 + n) % n], n2 = pts[(m.at + 1) % n];
+    if (m.rightAngle) drawRightAngleMark(svg, v, n1, n2);
+    else drawAngleArc(svg, v, n1, n2, m.text);
+  });
+}
+
+// ── Circle family ──
+
+function renderCircleDiagram(svg, spec) {
+  const pad = 46;
+  const scale = (Math.min(360, 260) - pad * 2) / (spec.radius * 2);
+  const ccx = 180, ccy = 130;
+  const toScreen = (x, y) => ({ sx: ccx + x * scale, sy: ccy - y * scale });
+
+  svg.appendChild(svgEl('circle', { cx: ccx, cy: ccy, r: spec.radius * scale, fill: 'none', stroke: INK, 'stroke-width': 2 }));
+
+  const labeled = {};
+  (spec.points || []).forEach(p => {
+    const rad = (p.angleDeg * Math.PI) / 180;
+    const pt = toScreen(Math.cos(rad) * spec.radius, Math.sin(rad) * spec.radius);
+    labeled[p.label] = pt;
+    svg.appendChild(svgEl('circle', { cx: pt.sx, cy: pt.sy, r: 2.5, fill: INK }));
+    const dx = pt.sx - ccx, dy = pt.sy - ccy;
+    const d = Math.hypot(dx, dy) || 1;
+    svg.appendChild(textEl(pt.sx + (dx / d) * 14, pt.sy + (dy / d) * 14, p.label, { weight: 600 }));
+  });
+
+  (spec.chords || []).forEach(c => {
+    const a = labeled[c.from], b = labeled[c.to];
+    svg.appendChild(svgEl('line', { x1: a.sx, y1: a.sy, x2: b.sx, y2: b.sy, stroke: INK, 'stroke-width': 1.8 }));
+  });
+
+  if (spec.rightAngleAt) {
+    const [atLabel, n1Label, n2Label] = spec.rightAngleAt;
+    drawRightAngleMark(svg, labeled[atLabel], labeled[n1Label], labeled[n2Label]);
+  }
+
+  (spec.angleMarks || []).forEach(m => {
+    drawAngleArc(svg, labeled[m.at], labeled[m.from], labeled[m.to], m.text);
+  });
+}
+
+// ── Cartesian graph family ──
+
+function evalFn(fn, x) {
+  if (fn.kind === 'linear') return fn.m * x + fn.c;
+  if (fn.kind === 'quadratic') return fn.a * x * x + fn.b * x + fn.c;
+  if (fn.kind === 'cubic') return fn.a * x * x * x + (fn.b || 0) * x * x + (fn.c || 0) * x + (fn.d || 0);
+  if (fn.kind === 'reciprocal') return x === 0 ? null : fn.k / x;
+  throw new Error('Unknown function kind: ' + fn.kind);
+}
+
+function renderCartesian(svg, spec) {
+  const [xMin, xMax] = spec.xRange, [yMin, yMax] = spec.yRange;
+  const padL = 34, padR = 20, padT = 16, padB = 30;
+  const w = 360 - padL - padR, h = 260 - padT - padB;
+  const sx = x => padL + ((x - xMin) / (xMax - xMin)) * w;
+  const sy = y => padT + h - ((y - yMin) / (yMax - yMin)) * h;
+
+  const step = spec.xStep || 1, ystep = spec.yStep || step;
+
+  // gridlines
+  for (let x = Math.ceil(xMin / step) * step; x <= xMax; x += step) {
+    svg.appendChild(svgEl('line', { x1: sx(x), y1: sy(yMin), x2: sx(x), y2: sy(yMax), stroke: GRID, 'stroke-width': 1 }));
+  }
+  for (let y = Math.ceil(yMin / ystep) * ystep; y <= yMax; y += ystep) {
+    svg.appendChild(svgEl('line', { x1: sx(xMin), y1: sy(y), x2: sx(xMax), y2: sy(y), stroke: GRID, 'stroke-width': 1 }));
+  }
+
+  // axes (through origin if in range, else at the frame edge)
+  const axisX = xMin <= 0 && xMax >= 0 ? 0 : xMin;
+  const axisY = yMin <= 0 && yMax >= 0 ? 0 : yMin;
+  svg.appendChild(svgEl('line', { x1: sx(xMin), y1: sy(axisY), x2: sx(xMax), y2: sy(axisY), stroke: INK, 'stroke-width': 1.6 }));
+  svg.appendChild(svgEl('line', { x1: sx(axisX), y1: sy(yMin), x2: sx(axisX), y2: sy(yMax), stroke: INK, 'stroke-width': 1.6 }));
+  svg.appendChild(textEl(sx(xMax) - 6, sy(axisY) - 10, 'x', { size: 12, anchor: 'end' }));
+  svg.appendChild(textEl(sx(axisX) + 12, sy(yMax) + 8, 'y', { size: 12 }));
+
+  // integer tick labels (skip a few near the origin/axes to avoid clutter)
+  for (let x = Math.ceil(xMin / step) * step; x <= xMax; x += step) {
+    if (x === 0) continue;
+    svg.appendChild(textEl(sx(x), sy(axisY) + 12, String(x), { size: 10, fill: '#555' }));
+  }
+  for (let y = Math.ceil(yMin / ystep) * ystep; y <= yMax; y += ystep) {
+    if (y === 0) continue;
+    svg.appendChild(textEl(sx(axisX) - 10, sy(y), String(y), { size: 10, fill: '#555', anchor: 'end' }));
+  }
+
+  // plotted functions
+  (spec.functions || []).forEach(fn => {
+    const samples = 120;
+    let d = '';
+    let started = false;
+    for (let i = 0; i <= samples; i++) {
+      const x = xMin + ((xMax - xMin) * i) / samples;
+      const y = evalFn(fn, x);
+      if (y === null || y < yMin - (yMax - yMin) || y > yMax + (yMax - yMin)) { started = false; continue; }
+      d += `${started ? 'L' : 'M'} ${sx(x)} ${sy(Math.max(yMin, Math.min(yMax, y)))} `;
+      started = true;
+    }
+    svg.appendChild(svgEl('path', { d, fill: 'none', stroke: fn.color || ACCENT, 'stroke-width': 2 }));
+    if (fn.label) {
+      const lx = xMax - (xMax - xMin) * 0.12;
+      svg.appendChild(textEl(sx(lx), sy(evalFn(fn, lx)) - 10, fn.label, { size: 12, fill: fn.color || ACCENT, weight: 600 }));
+    }
+  });
+
+  // marked points
+  (spec.points || []).forEach(p => {
+    svg.appendChild(svgEl('circle', { cx: sx(p.x), cy: sy(p.y), r: 3, fill: INK }));
+    if (p.label) svg.appendChild(textEl(sx(p.x) + 8, sy(p.y) - 10, p.label, { size: 11, anchor: 'start' }));
+  });
+}

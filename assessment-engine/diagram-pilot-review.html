@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagram Pilot Review — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b1628;--navy2:#112240;
+  --gold:#c9a84c;--gold2:#e8c96a;
+  --white:#ffffff;--muted:#7a8fa6;
+  --border:#1e3a5f;
+  --font-display:'Fraunces',serif;--font-body:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:var(--font-body);background:var(--navy);color:var(--white);line-height:1.6;}
+.wrap{max-width:840px;margin:0 auto;padding:2rem 1.25rem 4rem;}
+header{margin-bottom:2rem;}
+.eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;}
+h1{font-family:var(--font-display);font-size:1.9rem;margin:0 0 .5rem;}
+.sub{color:var(--muted);font-size:.95rem;max-width:60ch;}
+.note{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:1rem 1.2rem;margin-top:1.25rem;font-size:.85rem;color:var(--white);}
+.note strong{color:var(--gold);}
+
+.q-card{background:var(--navy2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.75rem;}
+.q-meta{display:flex;gap:.6rem;flex-wrap:wrap;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
+.q-meta span{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:.2rem .55rem;}
+.q-text{font-size:1rem;margin:0 0 1.1rem;}
+.diagram-slot{text-align:center;margin-bottom:1.2rem;}
+.options{display:grid;gap:.55rem;grid-template-columns:1fr;}
+@media (min-width:600px){.options{grid-template-columns:1fr 1fr;}}
+.opt{border:1px solid var(--border);border-radius:9px;padding:.65rem .85rem;font-size:.88rem;display:flex;gap:.5rem;}
+.opt b{color:var(--gold);flex-shrink:0;}
+.answer{margin-top:1rem;font-size:.82rem;color:var(--muted);}
+.answer strong{color:#6fd38a;}
+
+/* Exam diagram card content is always rendered as fixed white "paper" —
+   deliberately NOT theme-aware, see assets/js/diagram-renderer.js header
+   comment. */
+.exam-diagram-card{color:#1a1a1a;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Internal review — not linked from student nav</div>
+    <h1>Diagram Pilot</h1>
+    <p class="sub">Six sample Maths questions using the new exam-style diagram renderer (<code>assets/js/diagram-renderer.js</code>) — geometry and Cartesian graphs, the two families agreed for this first pass. Nothing here is wired into the live diagnostic engine or question bank yet.</p>
+    <div class="note"><strong>What to look for:</strong> do the diagrams read as authentic exam-paper diagrams (clean line art, correct angle/tick/parallel marks, legible at phone width)? Scroll to check responsiveness — the page is mobile-first like the rest of the site.</div>
+  </header>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Geometry</span><span>Pythagoras' theorem</span></div>
+    <p class="q-text">A right-angled triangle has a base of 4 cm and a height of 3 cm, as shown. What is the length of the hypotenuse?</p>
+    <div class="diagram-slot" id="d1"></div>
+    <div class="options">
+      <div class="opt"><b>A</b> 5 cm</div>
+      <div class="opt"><b>B</b> 7 cm</div>
+      <div class="opt"><b>C</b> 12 cm</div>
+      <div class="opt"><b>D</b> 25 cm</div>
+    </div>
+    <div class="answer">Correct: <strong>A</strong> — √(4² + 3²) = √25 = 5 cm</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Geometry</span><span>Isosceles triangles</span></div>
+    <p class="q-text">Triangle ABC is isosceles, with AB = AC. Angle A = 40°. What is the size of angle B?</p>
+    <div class="diagram-slot" id="d2"></div>
+    <div class="options">
+      <div class="opt"><b>A</b> 40°</div>
+      <div class="opt"><b>B</b> 70°</div>
+      <div class="opt"><b>C</b> 100°</div>
+      <div class="opt"><b>D</b> 140°</div>
+    </div>
+    <div class="answer">Correct: <strong>B</strong> — base angles are equal: (180° − 40°) ÷ 2 = 70°</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Geometry</span><span>Parallelograms</span></div>
+    <p class="q-text">ABCD is a parallelogram. AB is parallel to DC, and AD is parallel to BC. Angle A = 65°. What is the size of angle B?</p>
+    <div class="diagram-slot" id="d3"></div>
+    <div class="options">
+      <div class="opt"><b>A</b> 65°</div>
+      <div class="opt"><b>B</b> 90°</div>
+      <div class="opt"><b>C</b> 115°</div>
+      <div class="opt"><b>D</b> 130°</div>
+    </div>
+    <div class="answer">Correct: <strong>C</strong> — adjacent angles in a parallelogram are supplementary: 180° − 65° = 115°</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Circle theorems</span><span>Higher</span></div>
+    <p class="q-text">A and B are the ends of a diameter of the circle. C is a point on the circumference. What is the size of angle ACB?</p>
+    <div class="diagram-slot" id="d4"></div>
+    <div class="options">
+      <div class="opt"><b>A</b> 45°</div>
+      <div class="opt"><b>B</b> 60°</div>
+      <div class="opt"><b>C</b> 90°</div>
+      <div class="opt"><b>D</b> It depends on where C is</div>
+    </div>
+    <div class="answer">Correct: <strong>C</strong> — the angle in a semicircle is always 90°</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Graphs</span><span>Quadratic graphs</span></div>
+    <p class="q-text">The graph of y = x² − 4 is shown. What are the coordinates of the points where the curve crosses the x-axis?</p>
+    <div class="diagram-slot" id="d5"></div>
+    <div class="options">
+      <div class="opt"><b>A</b> (2, 0) and (−2, 0)</div>
+      <div class="opt"><b>B</b> (4, 0) and (−4, 0)</div>
+      <div class="opt"><b>C</b> (0, 4) and (0, −4)</div>
+      <div class="opt"><b>D</b> (0, 0) only</div>
+    </div>
+    <div class="answer">Correct: <strong>A</strong> — x² − 4 = 0 gives x = ±2</div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-meta"><span>Graphs</span><span>Straight line graphs</span></div>
+    <p class="q-text">The line y = 2x + 1 is shown. What is the gradient of the line?</p>
+    <div class="diagram-slot" id="d6"></div>
+    <div class="options">
+      <div class="opt"><b>A</b> 1</div>
+      <div class="opt"><b>B</b> 2</div>
+      <div class="opt"><b>C</b> 1/2</div>
+      <div class="opt"><b>D</b> −2</div>
+    </div>
+    <div class="answer">Correct: <strong>B</strong> — in y = mx + c, m is the gradient</div>
+  </div>
+</div>
+
+<script src="/assets/js/diagram-renderer.js"></script>
+<script>
+renderDiagram(document.getElementById('d1'), {
+  type: 'polygon', notToScale: true,
+  points: [{x:0,y:0,label:'A'},{x:4,y:0,label:'B'},{x:4,y:3,label:'C'}],
+  sideLabels: [{from:0,to:1,text:'4 cm'},{from:1,to:2,text:'3 cm'}],
+  angleMarks: [{at:1, rightAngle:true}],
+});
+
+renderDiagram(document.getElementById('d2'), {
+  type: 'polygon', notToScale: true,
+  points: [{x:0,y:4,label:'A'},{x:-3,y:0,label:'B'},{x:3,y:0,label:'C'}],
+  equalTicks: [{from:0,to:1,ticks:1},{from:0,to:2,ticks:1}],
+  angleMarks: [{at:0,text:'40°'},{at:1,text:'x°'}],
+});
+
+renderDiagram(document.getElementById('d3'), {
+  type: 'polygon', notToScale: true,
+  points: [{x:0,y:0,label:'A'},{x:4,y:0,label:'B'},{x:5,y:3,label:'C'},{x:1,y:3,label:'D'}],
+  parallelMarks: [{from:0,to:1,arrows:1},{from:3,to:2,arrows:1},{from:0,to:3,arrows:2},{from:1,to:2,arrows:2}],
+  angleMarks: [{at:0,text:'65°'},{at:1,text:'x°'}],
+});
+
+renderDiagram(document.getElementById('d4'), {
+  type: 'circle', notToScale: true,
+  radius: 3,
+  points: [{angleDeg:180,label:'A'},{angleDeg:0,label:'B'},{angleDeg:60,label:'C'}],
+  chords: [{from:'A',to:'C'},{from:'C',to:'B'},{from:'A',to:'B'}],
+  rightAngleAt: ['C','A','B'],
+});
+
+renderDiagram(document.getElementById('d5'), {
+  type: 'cartesian', notToScale: false,
+  xRange:[-4,4], yRange:[-5,6], xStep:1, yStep:2,
+  functions: [{kind:'quadratic', a:1, b:0, c:-4, label:'y = x² − 4'}],
+  points: [{x:-2,y:0,label:'(−2, 0)'},{x:2,y:0,label:'(2, 0)'},{x:0,y:-4,label:'(0, −4)'}],
+});
+
+renderDiagram(document.getElementById('d6'), {
+  type: 'cartesian', notToScale: false,
+  xRange:[-3,4], yRange:[-3,10], xStep:1, yStep:2,
+  functions: [{kind:'linear', m:2, c:1, label:'y = 2x + 1'}],
+  points: [{x:0,y:1,label:'(0, 1)'},{x:2,y:5,label:'(2, 5)'}],
+});
+</script>
+</body>
+</html>
