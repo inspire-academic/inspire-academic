@@ -84,7 +84,7 @@ self.addEventListener('fetch', e => {
   // This ensures students always get the latest page content
   if (e.request.headers.get('accept')?.includes('text/html')) {
     e.respondWith(
-      fetch(e.request)
+      fetch(e.request, { cache: 'no-store' }) // belt-and-braces alongside netlify.toml's max-age=0 on *.html — see the JS/CSS branch below for why relying on Cache-Control alone isn't safe
         .then(res => {
           // Update cache with fresh version in background
           const clone = res.clone();
@@ -107,11 +107,20 @@ self.addEventListener('fetch', e => {
   // from instant-cache on a slow connection), "always try fresh first"
   // matches what HTML pages already do and is worth the extra round
   // trip when online — the cache fallback still keeps it working offline.
+  // {cache:'no-store'} is load-bearing here, not decoration: netlify.toml
+  // sets Cache-Control: public, max-age=3600 on /assets/js/* and
+  // /assets/css/*, so a plain fetch(e.request) can be silently answered
+  // from the BROWSER's own HTTP cache within that hour — a real network
+  // round-trip never happens, and "network first" quietly becomes
+  // "whatever the browser already has, first." Found live 2026-09-15
+  // testing this exact fix: curl confirmed the server had the corrected
+  // file, but a fetch() from an affected tab still returned the old one
+  // because it never left the browser's HTTP cache.
   const isOwnJsOrCss = url.origin === self.location.origin &&
     (url.pathname.startsWith('/assets/js/') || url.pathname.startsWith('/assets/css/'));
   if (isOwnJsOrCss) {
     e.respondWith(
-      fetch(e.request)
+      fetch(e.request, { cache: 'no-store' })
         .then(res => {
           if (res.ok) {
             const clone = res.clone();
