@@ -1623,27 +1623,47 @@ const GAP_TOPIC_TO_CONTENT_TOPIC_ID = {
   },
 };
 
-// Looks up whatever REAL, published lesson/quizzes exist for a gap's
-// topic. Returns null/[] rather than throwing when nothing matches —
-// callers fall back to an honest "coming soon" task, never a fabricated
-// link. This is the fix for the Plan stage previously generating
+// Looks up whatever REAL, published lesson/quizzes exist for every
+// week's gap in ONE batched round-trip pair, not one pair of queries
+// per week. This is the fix for the Plan stage previously generating
 // template strings ("Watch: {topic} — Core Concept Overview") with no
 // actual content behind them (found 2026-09-15 competitive research —
 // every real competitor routes a diagnosed gap into real, trackable
-// practice; we were handing students a to-do list of placeholders).
-async function findContentForGap(subject, topicString) {
-  const topicId = (GAP_TOPIC_TO_CONTENT_TOPIC_ID[subject] || {})[topicString];
-  if (!topicId) return { lesson: null, quizzes: [] };
+// practice; we were handing students a to-do list of placeholders) —
+// AND for a real latency bug found while shipping that fix: a
+// one-query-pair-per-week version measured 1.1s for a 6-week plan.
+// Parallelizing client-side didn't help (still ~1.2s — the cost is
+// fixed per-request overhead, not something client concurrency can
+// route around); batching into two `.in(topicId)` queries measured
+// 77-115ms regardless of week count. Returns a Map from topicId to
+// {lesson, quizzes} — callers fall back to an honest "coming soon"
+// task for any topic with nothing real, never a fabricated link.
+async function findContentForGaps(subjectTopicPairs) {
+  const topicIds = [...new Set(
+    subjectTopicPairs
+      .map(({subject, topic}) => (GAP_TOPIC_TO_CONTENT_TOPIC_ID[subject] || {})[topic])
+      .filter(Boolean)
+  )];
+  const byTopic = new Map();
+  topicIds.forEach(id => byTopic.set(id, { lesson: null, quizzes: [] }));
+  if (topicIds.length === 0) return byTopic;
   try {
     const [{ data: lessons }, { data: quizzes }] = await Promise.all([
-      supa.from('lessons').select('id,title').eq('topic_id', topicId).eq('is_published', true).limit(1),
-      supa.from('quizzes').select('id,title').eq('topic_id', topicId).eq('is_published', true).limit(2),
+      supa.from('lessons').select('id,title,topic_id').in('topic_id', topicIds).eq('is_published', true),
+      supa.from('quizzes').select('id,title,topic_id').in('topic_id', topicIds).eq('is_published', true),
     ]);
-    return { lesson: (lessons && lessons[0]) || null, quizzes: quizzes || [] };
+    (lessons || []).forEach(l => {
+      const entry = byTopic.get(l.topic_id);
+      if (entry && !entry.lesson) entry.lesson = l; // first published lesson per topic
+    });
+    (quizzes || []).forEach(q => {
+      const entry = byTopic.get(q.topic_id);
+      if (entry && entry.quizzes.length < 2) entry.quizzes.push(q); // up to 2 per topic
+    });
   } catch(e) {
-    console.warn('Could not look up content for gap topic', topicString, e.message);
-    return { lesson: null, quizzes: [] };
+    console.warn('Could not batch-look-up content for gaps:', e.message);
   }
+  return byTopic;
 }
 
 async function runPlan() {
@@ -1667,15 +1687,25 @@ async function computePlan() {
   const currentNum = parseInt(d.currentGrade, 10) || 0;
   const targetNum  = parseInt(d.targetGrade, 10)  || Math.min(9, currentNum + 2);
 
-  const weeks = [];
-  for (let i = 0; i < numWeeks; i++) {
-    const gap   = gaps[i % gaps.length];
+  // One gap per week (repeating if there are fewer gaps than weeks) —
+  // resolved as a single batch, not one round-trip per week. See
+  // findContentForGaps()'s comment for why this matters (measured 1.1s
+  // vs ~100ms for a 6-week plan).
+  const weekGaps = Array.from({ length: numWeeks }, (_, i) => gaps[i % gaps.length]);
+  const contentByTopicId = await findContentForGaps(
+    weekGaps.map(gap => ({ subject: gap.subject || S.config.subject, topic: gap.topic }))
+  );
+
+  const weeks = weekGaps.map((gap, i) => {
     const topic = isCombined && gap.subject ? `${gap.subject} — ${gap.topic}` : gap.topic;
     const phase = phaseFor(i, numWeeks);
 
-    // Real content only — see findContentForGap()'s comment. No task is
-    // ever a fabricated placeholder pretending to link somewhere real.
-    const content = await findContentForGap(gap.subject || S.config.subject, gap.topic);
+    const contentSubject = gap.subject || S.config.subject;
+    const topicId = (GAP_TOPIC_TO_CONTENT_TOPIC_ID[contentSubject] || {})[gap.topic];
+    // Real content only. No task is ever a fabricated placeholder
+    // pretending to link somewhere real.
+    const content = (topicId && contentByTopicId.get(topicId)) || { lesson: null, quizzes: [] };
+
     const tasks = [];
     if (content.lesson) {
       tasks.push({ id:'w'+(i+1)+'t1', type:'video', label:'Watch: '+content.lesson.title, mins:15, topic,
@@ -1693,14 +1723,20 @@ async function computePlan() {
       tasks.push({ id:'w'+(i+1)+'t0', type:'soon', label: topic+' — practice content coming soon', mins:0, topic, href:null });
     }
 
-    weeks.push({
+    return {
       number: i + 1,
       title:  phase,
       focus:  topic,
       why:    `Targets a diagnosed gap: ${topic}${gap.priority ? ' (' + gap.priority + ' priority)' : ''}.`,
+      // Real practice exists, just no video lesson for this topic yet —
+      // surfaced honestly in renderPlan() rather than silently having
+      // one fewer task with no explanation (agreed with Eric 2026-09-15:
+      // never fake a "Watch" task, but don't leave the gap unexplained
+      // either).
+      noLessonYet: !content.lesson && tasks.some(t => t.href),
       tasks
-    });
-  }
+    };
+  });
 
   const gradeJourney = weeks.map((w, i) => {
     const grade = i === weeks.length - 1
@@ -1743,6 +1779,7 @@ function renderPlan() {
         </div>
         ${w.focus ? `<div style="font-size:.8rem;color:var(--teal);margin-bottom:.4rem;font-weight:600;">Focus: ${w.focus}</div>` : ''}
         <p class="week-why">${w.why}</p>
+        ${w.noLessonYet ? `<p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:-.3rem 0 .6rem;">No video lesson yet for this topic — the tasks below are real practice with explanations built in.</p>` : ''}
         <div class="tasks-grid">`;
 
     (w.tasks || []).forEach(t => {
