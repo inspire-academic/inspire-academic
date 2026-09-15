@@ -291,6 +291,11 @@ input,select,textarea{font-family:var(--font-body);}
         </div>
       </div>
 
+      <div id="resume-banner" style="display:none;margin-bottom:.85rem;padding:.85rem 1rem;border-radius:var(--r);border:1px solid rgba(201,168,76,.35);background:rgba(201,168,76,.08);align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <span style="font-size:.85rem;color:var(--white);" id="resume-banner-text"></span>
+        <button class="btn btn-gold" style="font-size:.82rem;padding:.5rem 1rem;flex-shrink:0;" onclick="resumeAttempt()">Resume →</button>
+      </div>
+
       <div id="saved-plan-banner" style="display:none;margin-bottom:.85rem;padding:.85rem 1rem;border-radius:var(--r);border:1px solid rgba(45,212,191,.35);background:rgba(45,212,191,.08);align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
         <span style="font-size:.85rem;color:var(--white);" id="saved-plan-text"></span>
         <button class="btn btn-teal" style="font-size:.82rem;padding:.5rem 1rem;flex-shrink:0;" onclick="viewSavedPlan()">View Saved Plan →</button>
@@ -399,7 +404,9 @@ const S = {
   studentId:   null,
   attemptId:   null,
   leadId:      null, // set only for a guest who arrived from a programme registration (e.g. ISM) — see saveGuestAttempt()
-  savedPlans:  {}   // { [subject]: {id, level, board, diagnosis, plan} } — this student's existing saved plans
+  savedPlans:  {},  // { [subject]: {id, level, board, diagnosis, plan} } — this student's existing saved plans
+  inProgressAttempts: {}, // { [subject]: {id, question_ids, question_results, ...} } — see loadInProgressAttempts()
+  autosaveChain: Promise.resolve() // serializes autosaveAttempt() calls so a slow write can't clobber a newer one
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -460,7 +467,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('inp-name').value = profile.first_name;
         checkSetup();
       }
-      await loadSavedPlans();
+      await Promise.all([loadSavedPlans(), loadInProgressAttempts()]);
     }
   } catch(e) {
     // Not logged in or no profile — continue as guest
@@ -494,6 +501,27 @@ async function loadSavedPlans() {
   }
 }
 
+// One in-progress attempt per subject — same "most recent wins" pattern
+// as loadSavedPlans(). completed:false is what autosaveAttempt() writes
+// after every answered question (see nextQuestion()).
+async function loadInProgressAttempts() {
+  try {
+    const { data, error } = await supa.from('diagnostic_attempts')
+      .select('id,subject,level,exam_board,question_ids,question_results,total_questions')
+      .eq('student_id', S.studentId)
+      .eq('completed', false)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+
+    (data || []).forEach(row => {
+      if (S.inProgressAttempts[row.subject]) return; // already have a more recent one
+      S.inProgressAttempts[row.subject] = row;
+    });
+  } catch(e) {
+    console.warn('Could not load in-progress attempts:', e.message);
+  }
+}
+
 // ═══════════════════════════════════════════════════════════
 // SETUP
 // ═══════════════════════════════════════════════════════════
@@ -502,14 +530,32 @@ function pickSubject(btn) {
   btn.classList.add('active');
   checkSetup();
 
-  const saved  = S.savedPlans[btn.dataset.subject];
-  const banner = document.getElementById('saved-plan-banner');
+  const subject      = btn.dataset.subject;
+  const inProgress   = S.inProgressAttempts[subject];
+  const saved        = S.savedPlans[subject];
+  const resumeBanner = document.getElementById('resume-banner');
+  const savedBanner  = document.getElementById('saved-plan-banner');
+
+  // An in-progress attempt takes priority over a completed plan for the
+  // same subject — resuming unfinished work is more time-sensitive than
+  // revisiting an old result, and showing both at once gets cluttered.
+  if (inProgress) {
+    const answered = (inProgress.question_results || []).length;
+    const total    = inProgress.total_questions || (inProgress.question_ids || []).length;
+    document.getElementById('resume-banner-text').textContent =
+      `You have a ${subject} assessment in progress — ${answered} of ${total} questions answered.`;
+    resumeBanner.style.display = 'flex';
+    savedBanner.style.display  = 'none';
+    return;
+  }
+  resumeBanner.style.display = 'none';
+
   if (saved) {
     document.getElementById('saved-plan-text').textContent =
-      `You already have a ${btn.dataset.subject} plan — Grade ${saved.current_grade} → ${saved.target_grade}.`;
-    banner.style.display = 'flex';
+      `You already have a ${subject} plan — Grade ${saved.current_grade} → ${saved.target_grade}.`;
+    savedBanner.style.display = 'flex';
   } else {
-    banner.style.display = 'none';
+    savedBanner.style.display = 'none';
   }
 }
 
@@ -550,6 +596,57 @@ function viewSavedPlan() {
   goTo('plan');
 }
 
+// Picks back up an in-progress attempt (see loadInProgressAttempts() /
+// autosaveAttempt()) at the next unanswered question. Re-fetches the
+// exact question set by id, in the order it was originally sampled —
+// question selection is randomised (weightedSampleAcrossTopics /
+// shuffleArray), so re-running startAssessment()'s loader here would
+// hand the student a different set mid-attempt.
+async function resumeAttempt() {
+  const sub = document.querySelector('.subject-btn.active')?.dataset.subject;
+  const row = S.inProgressAttempts[sub];
+  if (!row || !row.question_ids || row.question_ids.length === 0) return;
+
+  const name = document.getElementById('inp-name').value.trim() || 'Student';
+  S.config = { name, subject: row.subject, level: row.level, board: row.exam_board };
+  S.attemptId = row.id;
+
+  const btn = document.getElementById('btn-start');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Resuming...';
+
+  try {
+    const { data, error } = await supa.from('diagnostic_questions')
+      .select('*').in('id', row.question_ids);
+    if (error) throw error;
+
+    const byId = new Map((data || []).map(q => [q.id, q]));
+    S.questions = row.question_ids.map(id => byId.get(id)).filter(Boolean);
+    if (S.questions.length === 0) {
+      throw new Error('The questions from this attempt are no longer available.');
+    }
+
+    S.answers  = row.question_results || [];
+    S.currentQ = Math.min(S.answers.length, S.questions.length - 1);
+    goTo('assess');
+
+    if (S.answers.length >= S.questions.length) {
+      runDiagnosis(); // every question was already answered — just finish it
+      return;
+    }
+
+    renderQuestion();
+    document.getElementById('assess-sub').textContent =
+      `${S.questions.length} questions · ${S.config.level} ${S.config.subject} · ${S.config.board} · Resumed — picking up where you left off`;
+    toast('Welcome back — resuming your assessment', 'success');
+  } catch(e) {
+    toast('Could not resume: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Start Assessment →';
+  }
+}
+
 function checkSetup() {
   const name = document.getElementById('inp-name').value.trim();
   const sub  = document.querySelector('.subject-btn.active');
@@ -564,6 +661,13 @@ async function startAssessment() {
   if (!name || !sub) return;
 
   S.config = { name, subject: sub.dataset.subject, level, board };
+  // Reset per-attempt state — without this, starting a fresh assessment
+  // after an earlier one completed in the same tab session would reuse
+  // its attemptId, and autosaveAttempt() would UPDATE that already-
+  // completed row back to completed:false with a brand new question set.
+  S.attemptId = null;
+  S.diagnosis = null;
+  S.plan      = null;
 
   const btn = document.getElementById('btn-start');
   btn.disabled = true;
@@ -945,6 +1049,7 @@ function nextQuestion() {
     not_sure:     notSure,
     misconception: !correct && !notSure ? getMisconception(q, chosen) : null
   });
+  autosaveAttempt(); // fire-and-forget — never blocks the quiz on a slow/failed write
 
   if (S.currentQ < S.questions.length - 1) {
     S.currentQ++;
@@ -959,6 +1064,47 @@ function getMisconception(q, chosen) {
   const map = { a: q.misconception_a, b: q.misconception_b,
                 c: q.misconception_c, d: q.misconception_d };
   return map[chosen] || null;
+}
+
+// Saves progress after every answered question as an in-progress
+// (completed:false) row, so a student who leaves mid-attempt (closes
+// the tab, hits Dashboard, loses connectivity) can pick back up later
+// via resumeAttempt() instead of losing everything. Guest attempts
+// (no login) are out of scope — same as the final saveAttempt(), see
+// its comment. Chained off S.autosaveChain rather than fired
+// independently each call: a slow write from an earlier question could
+// otherwise land AFTER a faster later one and clobber it with stale
+// answers.
+function autosaveAttempt() {
+  if (!S.studentId) return;
+  S.autosaveChain = S.autosaveChain.then(async () => {
+    try {
+      const payload = {
+        student_id:      S.studentId,
+        student_name:    S.config.name,
+        subject:         S.config.subject,
+        exam_board:      S.config.board,
+        level:           S.config.level,
+        tier:            'Higher',
+        total_questions: S.questions.length,
+        correct_count:   S.answers.filter(a => a.correct).length,
+        not_sure_count:  S.answers.filter(a => a.not_sure).length,
+        question_results:S.answers,
+        question_ids:    S.questions.map(q => q.id),
+        completed:       false
+      };
+      if (S.attemptId) {
+        const { error } = await supa.from('diagnostic_attempts').update(payload).eq('id', S.attemptId);
+        if (error) throw error;
+      } else {
+        const { data, error } = await supa.from('diagnostic_attempts').insert(payload).select('id').single();
+        if (error) throw error;
+        S.attemptId = data.id;
+      }
+    } catch(e) {
+      console.warn('Could not autosave attempt:', e.message);
+    }
+  });
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1562,8 +1708,11 @@ function openAssessmentReport(mode) {
 // ═══════════════════════════════════════════════════════════
 async function saveAttempt() {
   if (!S.studentId) return; // guest — don't save
+  // Let any in-flight autosave finish first, so this final write is the
+  // last word rather than racing it (see autosaveAttempt()'s chaining note).
+  try { await S.autosaveChain; } catch(e) {}
   try {
-    const { data, error } = await supa.from('diagnostic_attempts').insert({
+    const payload = {
       student_id:     S.studentId,
       student_name:   S.config.name,
       subject:        S.config.subject,
@@ -1579,6 +1728,7 @@ async function saveAttempt() {
       correct_count:  S.answers.filter(a => a.correct).length,
       not_sure_count: S.answers.filter(a => a.not_sure).length,
       question_results: S.answers,
+      question_ids:   S.questions.map(q => q.id),
       topic_scores:   S.diagnosis.topicScores,
       gaps:           S.diagnosis.gaps,
       student_profile:      S.diagnosis.studentProfile,
@@ -1586,9 +1736,22 @@ async function saveAttempt() {
       strengths:            S.diagnosis.strengths,
       teacher_note:         S.diagnosis.teacherNote,
       completed:      true
-    }).select('id').single();
-    if (error) throw error;
-    S.attemptId = data.id;
+    };
+    // S.attemptId is already set if any question got autosaved this
+    // attempt (the common case) — update that same row rather than
+    // inserting a second one. Only insert fresh if diagnosis somehow ran
+    // with zero autosaved questions (e.g. viewSavedPlan()'s placeholder
+    // S.answers array, or autosave failed on every question).
+    if (S.attemptId) {
+      const { error } = await supa.from('diagnostic_attempts')
+        .update(payload).eq('id', S.attemptId);
+      if (error) throw error;
+    } else {
+      const { data, error } = await supa.from('diagnostic_attempts')
+        .insert(payload).select('id').single();
+      if (error) throw error;
+      S.attemptId = data.id;
+    }
     console.log('Attempt saved to Supabase');
   } catch(e) {
     console.warn('Could not save attempt:', e.message);

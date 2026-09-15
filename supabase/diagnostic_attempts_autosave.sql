@@ -1,0 +1,37 @@
+-- ================================================================
+-- diagnostic_attempts_autosave.sql
+--
+-- Why: assessment-engine.html only ever wrote to diagnostic_attempts
+-- once, at the very end (saveAttempt(), completed:true) — a student
+-- who left mid-diagnostic (closed the tab, hit "Dashboard", lost
+-- connectivity) lost every answer with no way to resume. Found
+-- 2026-09-15 while reviewing the diagnostic UX.
+--
+-- This lets the question loop autosave after every answered question
+-- as an in-progress (completed:false) row, and lets a student resume
+-- into the exact same question set later:
+--   - `question_ids` records the ordered list of question ids the
+--     sampler picked for this attempt. Question selection is randomised
+--     (weightedSampleAcrossTopics/shuffleArray) — resuming has to
+--     re-fetch this exact set by id, not re-run the sampler, or the
+--     student would land on a different question set mid-attempt.
+--
+-- `completed` already exists on the base table (dashboard-created, see
+-- CLAUDE.md) and was already being set explicitly on every insert —
+-- this migration doesn't change its meaning, just adds the first writer
+-- that ever sets it false.
+--
+-- No RLS change needed: the existing student-owns-their-row UPDATE
+-- policy already covers this (proved by savePlanToAttempt() in
+-- assessment-engine.html, which already does
+-- `.update({plan}).eq('id', S.attemptId)` as a student). Guest
+-- (lead_id-linked) attempts are NOT in scope here — they save once,
+-- server-side, at completion only (see saveGuestAttempt() /
+-- netlify/functions/assessment-attempt-create.js) and that's
+-- unchanged; extending autosave to guests would need that function to
+-- support updates too, left for a follow-up.
+--
+-- Additive only. Run once in the Supabase SQL editor.
+-- ================================================================
+
+alter table diagnostic_attempts add column if not exists question_ids jsonb;
