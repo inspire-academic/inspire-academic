@@ -1574,16 +1574,88 @@ function renderDiagnosis() {
 // PLAN — deterministic, gap-ordered, built directly from the diagnosis.
 // Struggling profiles get a longer 6-week ramp; everyone else gets 3.
 // ═══════════════════════════════════════════════════════════
+
+// Maps a diagnostic gap's free-text topic (diagnostic_questions.topic)
+// to the topics.id used by the separate lessons/quizzes content system.
+// These are two independently-evolved vocabularies with no shared FK
+// (confirmed live 2026-09-15 — diagnostic topics are exam-spec-grained,
+// e.g. "Angles and geometry", while `topics.name` ranges from narrow
+// legacy rows to a broader generalised set added later, e.g. "Geometry
+// & Measures", with some genuine duplicate topic names at different
+// ids), so this is a hand-curated best-match table, not a generated
+// one — an automatic string/fuzzy match risked linking a student to
+// the WRONG topic's content, which is worse than the honest "coming
+// soon" fallback below. Picked whichever real topics.id had the
+// closest name match, preferring the better-quiz-populated id when two
+// duplicates existed for the same name. Biology's 7 diagnostic topics
+// are AQA's broad specification units, each spanning many finer
+// `topics` rows with no single equivalent — mapped to the single
+// best-covered representative sub-topic; genuinely approximate, but a
+// real, related link beats no link. Revisit if `topics` ever gets
+// cleaned up into one consistent vocabulary (see supabase-schema-audit.md).
+const GAP_TOPIC_TO_CONTENT_TOPIC_ID = {
+  Mathematics: {
+    'Algebra — Higher only': 110, 'Algebra — expressions': 110, 'Equations and inequalities': 110,
+    'Graphs': 110, 'Sequences': 110,
+    'Angles and geometry': 107, 'Constructions and loci': 107, 'Perimeter, area, volume': 107,
+    'Properties of shapes': 107,
+    'Fractions, decimals and percentages': 109, 'Number — basics and operations': 109,
+    'Powers, roots and standard form': 109,
+    'Probability': 111, 'Statistics': 106,
+    'Ratio, proportion and rates of change': 108,
+    'Trigonometry': 3, 'Vectors': 7,
+  },
+  Physics: {
+    'Atomic Structure': 12, 'Circuit Calculations': 80, 'Electricity': 9,
+    'Energy Stores & Transfers': 11, 'Forces & Motion': 8, 'Magnetism': 74,
+    'Particle Model': 81, 'Space Physics': 73, 'Waves': 85,
+  },
+  Chemistry: {
+    'Atomic Structure': 14, 'Bonding': 15, 'Chemical Analysis': 18,
+    'Chemical Changes': 99, 'Chemistry of the Atmosphere': 70,
+    'Energy Changes': 69, 'Organic Chemistry': 17,
+    'Quantitative Chemistry': 16, 'Rates and Equilibrium': 68,
+  },
+  Biology: {
+    'Cell Biology': 88, 'Organisation': 32, 'Infection and Response': 92,
+    'Bioenergetics': 45, 'Homeostasis and Response': 96,
+    'Inheritance, Variation and Evolution': 89, 'Ecology': 91,
+  },
+};
+
+// Looks up whatever REAL, published lesson/quizzes exist for a gap's
+// topic. Returns null/[] rather than throwing when nothing matches —
+// callers fall back to an honest "coming soon" task, never a fabricated
+// link. This is the fix for the Plan stage previously generating
+// template strings ("Watch: {topic} — Core Concept Overview") with no
+// actual content behind them (found 2026-09-15 competitive research —
+// every real competitor routes a diagnosed gap into real, trackable
+// practice; we were handing students a to-do list of placeholders).
+async function findContentForGap(subject, topicString) {
+  const topicId = (GAP_TOPIC_TO_CONTENT_TOPIC_ID[subject] || {})[topicString];
+  if (!topicId) return { lesson: null, quizzes: [] };
+  try {
+    const [{ data: lessons }, { data: quizzes }] = await Promise.all([
+      supa.from('lessons').select('id,title').eq('topic_id', topicId).eq('is_published', true).limit(1),
+      supa.from('quizzes').select('id,title').eq('topic_id', topicId).eq('is_published', true).limit(2),
+    ]);
+    return { lesson: (lessons && lessons[0]) || null, quizzes: quizzes || [] };
+  } catch(e) {
+    console.warn('Could not look up content for gap topic', topicString, e.message);
+    return { lesson: null, quizzes: [] };
+  }
+}
+
 async function runPlan() {
   goTo('plan');
-  S.plan = computePlan();
+  S.plan = await computePlan();
   await savePlanToAttempt();
   await saveGuestAttempt();
   renderPlan();
   toast('Study plan ready!', 'success');
 }
 
-function computePlan() {
+async function computePlan() {
   const d        = S.diagnosis;
   const profile  = d.studentProfile || 'developing';
   const numWeeks = profile === 'struggling' ? 6 : 3;
@@ -1600,16 +1672,33 @@ function computePlan() {
     const gap   = gaps[i % gaps.length];
     const topic = isCombined && gap.subject ? `${gap.subject} — ${gap.topic}` : gap.topic;
     const phase = phaseFor(i, numWeeks);
+
+    // Real content only — see findContentForGap()'s comment. No task is
+    // ever a fabricated placeholder pretending to link somewhere real.
+    const content = await findContentForGap(gap.subject || S.config.subject, gap.topic);
+    const tasks = [];
+    if (content.lesson) {
+      tasks.push({ id:'w'+(i+1)+'t1', type:'video', label:'Watch: '+content.lesson.title, mins:15, topic,
+        href: '/student/lesson-viewer.html?id='+content.lesson.id });
+    }
+    if (content.quizzes[0]) {
+      tasks.push({ id:'w'+(i+1)+'t2', type:'drill', label:'Practice: '+content.quizzes[0].title, mins:20, topic,
+        href: '/student/quiz.html?id='+content.quizzes[0].id });
+    }
+    if (content.quizzes[1]) {
+      tasks.push({ id:'w'+(i+1)+'t3', type:'test', label:'Check: '+content.quizzes[1].title, mins:15, topic,
+        href: '/student/quiz.html?id='+content.quizzes[1].id });
+    }
+    if (tasks.length === 0) {
+      tasks.push({ id:'w'+(i+1)+'t0', type:'soon', label: topic+' — practice content coming soon', mins:0, topic, href:null });
+    }
+
     weeks.push({
       number: i + 1,
       title:  phase,
       focus:  topic,
       why:    `Targets a diagnosed gap: ${topic}${gap.priority ? ' (' + gap.priority + ' priority)' : ''}.`,
-      tasks: [
-        {id:'w'+(i+1)+'t1',type:'video',label:'Watch: '+topic+' — Core Concept Overview',mins:15,topic},
-        {id:'w'+(i+1)+'t2',type:'drill',label:'Practice: '+topic+' — Key Questions',mins:20,topic},
-        {id:'w'+(i+1)+'t3',type:'test', label:'Check: '+topic+' — Mini Topic Test',mins:15,topic}
-      ]
+      tasks
     });
   }
 
@@ -1657,15 +1746,22 @@ function renderPlan() {
         <div class="tasks-grid">`;
 
     (w.tasks || []).forEach(t => {
-      const icon    = t.type==='video' ? '▶' : t.type==='drill' ? '◎' : '✓';
-      const badgeCls= t.type==='video' ? 'badge-teal' : t.type==='drill' ? 'badge-gold' : 'badge-green';
-      html += `
-        <div class="task-item">
+      const icon    = t.type==='video' ? '▶' : t.type==='drill' ? '◎' : t.type==='test' ? '✓' : '🕒';
+      const badgeCls= t.type==='video' ? 'badge-teal' : t.type==='drill' ? 'badge-gold' : t.type==='test' ? 'badge-green' : '';
+      const badge   = t.href
+        ? `<span class="badge ${badgeCls}">${t.mins} min</span>`
+        : `<span class="badge" style="background:rgba(255,255,255,.08);color:var(--muted);">Coming soon</span>`;
+      const inner = `
           <div class="task-icon">${icon}</div>
           <div class="task-name">${t.label}</div>
           ${t.topic ? `<div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">${t.topic}</div>` : ''}
-          <div><span class="badge ${badgeCls}">${t.mins} min</span></div>
-        </div>`;
+          <div>${badge}</div>`;
+      // Real content gets a real link (opens the actual lesson/quiz);
+      // no matching content yet gets an honest, unclickable placeholder
+      // — never a task that LOOKS actionable but goes nowhere.
+      html += t.href
+        ? `<a class="task-item" href="${t.href}" style="display:block;text-decoration:none;color:inherit;">${inner}</a>`
+        : `<div class="task-item" style="opacity:.6;">${inner}</div>`;
     });
 
     html += `</div></div>`;
