@@ -582,23 +582,26 @@ function renderBox3D(svg, spec) {
   if (spec.widthLabel) svg.appendChild(textEl((fbl.x + fbr.x) / 2, fbl.y + 16, spec.widthLabel, { size: 12.5 }));
   if (spec.heightLabel) svg.appendChild(textEl(fbl.x - 22, (fbl.y + ftl.y) / 2, spec.heightLabel, { size: 12.5, anchor: 'end' }));
   if (spec.depthLabel) {
-    // The depth edge (ftr→btr) is diagonal and shared by the top AND
-    // right faces — there's no "outside" a small perpendicular offset
-    // from its midpoint, since one side is the top face and the other
-    // is the right face itself (tried this first: it just moved the
-    // label onto the adjacent right face instead of off the line).
-    // btr (the back-top-right corner) is the box's topmost point, so
-    // placing the label above and centred on it guarantees clearance
-    // from every edge regardless of the label's own text width. Offset
-    // widened 14->20 (2026-09-15): btr is where three edges converge
-    // (top face's back edge, the ftr-btr diagonal, and the dashed
-    // bbl-btl edge nearby) — a programmatic check found no literal
-    // intersection at -14, but a label sitting that close to a 3-edge
-    // vertex still read as "touching" on a real screen, likely font-
-    // metric variance between the measuring environment and an actual
-    // browser. More clearance costs nothing here (plenty of headroom
-    // above the box in the viewBox).
-    svg.appendChild(textEl(btr.x, btr.y - 20, spec.depthLabel, { size: 12.5, anchor: 'middle' }));
+    // Anchoring above the far vertex (btr, tried 2026-09-15) reads worse
+    // than the original near-the-line placement, not better — Eric's
+    // call after seeing it live: it pulls the label away to the corner
+    // instead of just nudging it clear of the edge it labels. Back to a
+    // perpendicular offset from the ftr-btr edge's MIDPOINT, same
+    // convention as radiusLines/sideLabels elsewhere in this file — but
+    // in the "up-left" direction (away from the right face, onto the
+    // top face), not "down-right" (which the original comment found
+    // landed on the right face — same visual result since both faces
+    // share this near-white fill, but up-left reads as more clearly
+    // "off the box" since it's the face the label's own edge belongs
+    // to). A true perpendicular offset clears the line by exactly the
+    // offset distance regardless of the edge's angle, unlike a fixed
+    // diagonal nudge.
+    const dlen = Math.hypot(ddx, ddy) || 1;
+    const ux = ddx / dlen, uy = ddy / dlen;
+    const px = uy, py = -ux; // "up-left" perpendicular for this edge's direction (up: -y, left: -x)
+    const mid = { x: (ftr.x + btr.x) / 2, y: (ftr.y + btr.y) / 2 };
+    const offset = 13;
+    svg.appendChild(textEl(mid.x + px * offset, mid.y + py * offset, spec.depthLabel, { size: 12.5, anchor: 'middle' }));
   }
 }
 
