@@ -1723,17 +1723,29 @@ async function computePlan() {
       tasks.push({ id:'w'+(i+1)+'t0', type:'soon', label: topic+' — practice content coming soon', mins:0, topic, href:null });
     }
 
+    const missingLesson = !content.lesson && tasks.some(t => t.href);
     return {
       number: i + 1,
       title:  phase,
       focus:  topic,
       why:    `Targets a diagnosed gap: ${topic}${gap.priority ? ' (' + gap.priority + ' priority)' : ''}.`,
-      // Real practice exists, just no video lesson for this topic yet —
-      // surfaced honestly in renderPlan() rather than silently having
-      // one fewer task with no explanation (agreed with Eric 2026-09-15:
-      // never fake a "Watch" task, but don't leave the gap unexplained
-      // either).
-      noLessonYet: !content.lesson && tasks.some(t => t.href),
+      // Real practice exists, just no video lesson shown for this topic
+      // — surfaced honestly rather than silently having one fewer task
+      // with no explanation (agreed with Eric 2026-09-15: never fake a
+      // "Watch" task, but don't leave the gap unexplained either).
+      //
+      // Two genuinely different reasons collapse into "missingLesson",
+      // and they need different copy — found live 2026-09-15 testing
+      // the guest (no-login) flow: `lessons` RLS is `TO authenticated`
+      // only, while `quizzes` allows `anon` too, so a guest gets an
+      // empty lessons result even for topics (e.g. Physics "Circuit
+      // Calculations") that DO have a real published lesson — saying
+      // "no video lesson yet" to a guest in that case would just be
+      // false. A guest can't tell the difference between "doesn't
+      // exist" and "exists but I can't see it", so guests always get
+      // the honest, always-true framing regardless of which case it is.
+      noLessonYet: missingLesson && !!S.studentId,
+      guestLessonLocked: missingLesson && !S.studentId,
       tasks
     };
   });
@@ -1780,6 +1792,7 @@ function renderPlan() {
         ${w.focus ? `<div style="font-size:.8rem;color:var(--teal);margin-bottom:.4rem;font-weight:600;">Focus: ${w.focus}</div>` : ''}
         <p class="week-why">${w.why}</p>
         ${w.noLessonYet ? `<p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:-.3rem 0 .6rem;">No video lesson yet for this topic — the tasks below are real practice with explanations built in.</p>` : ''}
+        ${w.guestLessonLocked ? `<p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:-.3rem 0 .6rem;"><a href="/register.html" style="color:var(--gold);text-decoration:underline;">Sign up free</a> to unlock video lessons for this topic — the tasks below are real practice with explanations built in.</p>` : ''}
         <div class="tasks-grid">`;
 
     (w.tasks || []).forEach(t => {
