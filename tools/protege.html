@@ -478,16 +478,16 @@ button{cursor:pointer;font-family:var(--font-body);}
       </div>
     </div>
   </div>
-  <div class="subject-card locked">
+  <div class="subject-card active" onclick="launchGame('mathgenius','science')">
     <img class="sc-banner" src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80&fit=crop" alt="Science lab">
     <div class="sc-accent" style="background:linear-gradient(90deg,#16803c,#4ade80)"></div>
     <div class="sc-body">
-      <span class="sc-badge" style="background:rgba(122,143,166,.1);color:var(--muted);border:1px solid rgba(255,255,255,.08);">Coming Soon</span>
+      <span class="sc-badge" style="background:rgba(74,222,128,.2);color:#4ade80;">Live Now</span>
       <div class="sc-name">Science Explorer</div>
-      <div class="sc-desc">Biology, Chemistry and Physics brought to life. Build molecules, conduct virtual experiments, and explore the natural world with precision.</div>
+      <div class="sc-desc">Guided investigations — predict what will happen, watch it play out, then find out why. Sink or float, states of matter, and fair testing, with more on the way.</div>
       <div class="sc-footer">
-        <span class="sc-meta">All Sciences · Yr 5–9</span>
-        <button class="sc-btn dim">Soon</button>
+        <span class="sc-meta">States of Matter · Fair Testing · Yr 1–6</span>
+        <button class="sc-btn gold" onclick="event.stopPropagation();launchGame('mathgenius','science')">Explore &rarr;</button>
       </div>
     </div>
   </div>
@@ -538,6 +538,7 @@ button{cursor:pointer;font-family:var(--font-body);}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/nav-back.js"></script>
+<script src="/assets/js/protege-cosmo.js"></script>
 <script>
 // ── CONFIG ────────────────────────────────────────────────────────
 const SUPABASE_URL      = 'https://ygtsrdwoikqnrbexjrtl.supabase.co'
@@ -657,6 +658,15 @@ async function init() {
   } finally {
     document.getElementById('loadingScreen').style.display = 'none'
     initStars()
+    // Professor Cosmo as a persistent presence on the hub itself, not
+    // just inside the MathGenius Academy iframe — the UI-engagement
+    // research's headline finding (see docs/reference/protege-ui-
+    // engagement-research-2026-09-11.md) was "visible on every screen,"
+    // and the hub is the first screen a child sees. openTutor doesn't
+    // exist here (that's the in-game chat), so tapping Cosmo opens the
+    // game instead of silently doing nothing.
+    window.openTutor = () => launchGame('mathgenius')
+    ProtegeCosmo.mountWidget()
   }
 }
 
@@ -759,7 +769,12 @@ function setSpeed(btn) {
 }
 
 // ── GAME LAUNCHER ─────────────────────────────────────────────────
-function launchGame(gameId) {
+// subject is optional — deep-links straight into a subject inside
+// MathGenius Academy (e.g. 'science') instead of leaving the child on
+// its own dashboard. Used by the Science Explorer card below, which
+// used to be a dead "Coming Soon" placeholder even though real Science
+// investigation content has been live since 2026-09-11.
+function launchGame(gameId, subject) {
   const files = { mathgenius: '/tools/math-genius-academy.html' }
   const names = { mathgenius: 'MathGenius Academy' }
   const src = files[gameId]; if (!src) return
@@ -767,6 +782,7 @@ function launchGame(gameId) {
   // Build URL with user context + voice settings
   const params = new URLSearchParams()
   params.set('name', STATE.userName)
+  if (subject) params.set('subject', subject)
   if (STATE.settings?.voice_enabled !== false) params.set('voice', '1')
   if (STATE.settings?.auto_read_questions)     params.set('autoread', '1')
   params.set('speed', STATE.settings?.voice_speed || 'normal')

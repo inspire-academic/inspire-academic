@@ -1168,6 +1168,29 @@ let _authToken = null;
   _authToken = session.access_token;
   window._currentUser = session.user; // srs-engine.js needs this for cloud sync
   CloudSync.pull(); // warm the local SRS cache before the child picks a subject
+
+  // Pull the child's real year group from their profile. The welcome
+  // screen's grade picker (pickGrade/.grade-chip) is unreachable for
+  // any real student: protege.html always launches this page with
+  // ?name=..., which makes boot skip straight to the dashboard with
+  // state.grade stuck at its hardcoded 'Year 1' default (see bottom of
+  // this script). That silently made every Science investigation
+  // ineligible (min_year 3+) for every logged-in child regardless of
+  // actual age. Falls back to the Year 1 default, unchanged, if the
+  // profile has no year_group or it's outside Protégé's Year 1-6 range
+  // (e.g. an older GCSE-track "Year 10").
+  try {
+    const { data: profile } = await _supa.from('profiles').select('year_group').eq('id', session.user.id).single();
+    const m = /^Year\s*([1-6])$/i.exec((profile?.year_group || '').trim());
+    if (m) {
+      state.grade = `Year ${m[1]}`;
+      const chip = [...document.querySelectorAll('.grade-chip')].find(c => c.textContent.trim() === state.grade);
+      if (chip) { document.querySelectorAll('.grade-chip').forEach(c => c.classList.remove('sel')); chip.classList.add('sel'); }
+      updateDashboard(); // re-render in case the dashboard already painted with the default
+    }
+  } catch (e) {
+    console.warn('[MathGenius] year_group lookup failed, staying on default grade:', e);
+  }
 })();
 
 // Professor Cosmo as a persistent, stateful character (Phase 2b — see
@@ -1204,6 +1227,7 @@ setTimeout(() => {
   if(ls && ls.classList.contains('active')) {
     if(_urlName){ state.name=_urlName; updateDashboard(); }
     goTo(_urlName ? 'dashboard' : 'welcome');
+    if(_urlName) _maybeLaunchSubject();
   }
 }, 5000);
 
@@ -1215,6 +1239,22 @@ const _urlName   = _params.get('name')     || '';
 const _voiceOn   = _params.get('voice')    !== '0';
 const _autoRead  = _params.get('autoread') === '1';
 const _voiceSpeed= _params.get('speed')    || 'normal';
+// Deep-link straight into a subject from the hub (tools/protege.html's
+// Science Explorer card uses this instead of leaving Science dead
+// behind a "Coming Soon" badge). Only known startGame() subjects are
+// honoured; anything else is ignored and the child just lands on the
+// normal dashboard.
+const _urlSubject = _params.get('subject') || '';
+const _VALID_URL_SUBJECTS = ['math','science','space','tt'];
+let _subjectLaunched = false;
+// Called from every boot path that lands on the dashboard (there are a
+// few, all pre-existing) — guarded so a deep link only fires the game
+// once even if more than one of those paths runs.
+function _maybeLaunchSubject() {
+  if (_subjectLaunched || !_VALID_URL_SUBJECTS.includes(_urlSubject)) return;
+  _subjectLaunched = true;
+  startGame(_urlSubject);
+}
 
 // ══════════════════════════════════════
 // VOICE ENGINE
@@ -1703,7 +1743,7 @@ function createProfile() {
 // Auto-skip to dashboard if name passed via URL
 if(_urlName) {
   state.name = _urlName;
-  document.addEventListener('DOMContentLoaded', () => { updateDashboard(); goTo('dashboard'); });
+  document.addEventListener('DOMContentLoaded', () => { updateDashboard(); goTo('dashboard'); _maybeLaunchSubject(); });
 }
 
 // ══════════════════════════════════════
@@ -2889,7 +2929,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeTutor(); });
 initStars();
 setTimeout(()=>{
   try {
-    if(_urlName){ state.name=_urlName; updateDashboard(); goTo('dashboard'); }
+    if(_urlName){ state.name=_urlName; updateDashboard(); goTo('dashboard'); _maybeLaunchSubject(); }
     else goTo('welcome');
   } catch(e) {
     console.error('[MathGenius] boot error:', e);
