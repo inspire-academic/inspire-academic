@@ -541,7 +541,16 @@ function renderVenn(svg, spec) {
   svg.appendChild(textEl(leftLabelX, cy - r - 14, spec.leftLabel, { size: 13, weight: 600, anchor: 'middle' }));
   svg.appendChild(textEl(rightLabelX, cy - r - 14, spec.rightLabel, { size: 13, weight: 600, anchor: 'middle' }));
   if (!spec.disjoint && spec.bothLabel != null) svg.appendChild(textEl((leftCx + rightCx) / 2, cy, spec.bothLabel, { size: 13, weight: 600 }));
-  if (spec.universeLabel) svg.appendChild(textEl(340, 55, spec.universeLabel, { size: 10, fill: '#555', anchor: 'end' }));
+  // Bottom-right corner, not top-right: the set labels (leftLabel/
+  // rightLabel) already occupy the same height as the old (340,55)
+  // position, and rightLabel gets pushed out to rightCx+40 for the
+  // non-disjoint case — close enough to collide with a right-anchored
+  // label ending at the same x=340. Found live 2026-09-15 (the
+  // Football/Basketball/"40 students" question). The band below the
+  // circles (cy+r=212 to the rect's bottom at 240) is always empty for
+  // both circle layouts, so it's a safe, uncontested spot regardless of
+  // label lengths on either side.
+  if (spec.universeLabel) svg.appendChild(textEl(335, 230, spec.universeLabel, { size: 10, fill: '#555', anchor: 'end' }));
 }
 
 // ── Simple wireframe cuboid (isometric-style, schematic — always
@@ -580,8 +589,16 @@ function renderBox3D(svg, spec) {
     // label onto the adjacent right face instead of off the line).
     // btr (the back-top-right corner) is the box's topmost point, so
     // placing the label above and centred on it guarantees clearance
-    // from every edge regardless of the label's own text width.
-    svg.appendChild(textEl(btr.x, btr.y - 14, spec.depthLabel, { size: 12.5, anchor: 'middle' }));
+    // from every edge regardless of the label's own text width. Offset
+    // widened 14->20 (2026-09-15): btr is where three edges converge
+    // (top face's back edge, the ftr-btr diagonal, and the dashed
+    // bbl-btl edge nearby) — a programmatic check found no literal
+    // intersection at -14, but a label sitting that close to a 3-edge
+    // vertex still read as "touching" on a real screen, likely font-
+    // metric variance between the measuring environment and an actual
+    // browser. More clearance costs nothing here (plenty of headroom
+    // above the box in the viewBox).
+    svg.appendChild(textEl(btr.x, btr.y - 20, spec.depthLabel, { size: 12.5, anchor: 'middle' }));
   }
 }
 
