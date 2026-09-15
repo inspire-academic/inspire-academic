@@ -1,10 +1,12 @@
 // Inspire Academic — Service Worker
-// Strategy: Cache-first for assets, network-first for HTML pages
-// This makes the app feel instant after first load
+// Strategy: cache-first for assets that rarely change (images, fonts, the
+// vendor Supabase bundle), network-first (cache as fallback) for HTML
+// pages AND this site's own JS/CSS — see the FETCH section below for why
+// JS/CSS moved off pure cache-first.
 
-const CACHE_VERSION = 'inspire-v4';
-const CACHE_STATIC = 'inspire-static-v4';   // long-lived assets
-const CACHE_PAGES  = 'inspire-pages-v4';    // HTML pages
+const CACHE_VERSION = 'inspire-v5';
+const CACHE_STATIC = 'inspire-static-v5';   // long-lived assets
+const CACHE_PAGES  = 'inspire-pages-v5';    // HTML pages
 
 // Assets that never change between deploys (or rarely do)
 // These are served from cache instantly — network updates in background
@@ -94,9 +96,37 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Everything else (JS, CSS, images, fonts) — cache first, update in background
-  // This is what makes the app feel instant: serve from cache immediately,
-  // then silently fetch a fresh copy for next time
+  // This site's own JS/CSS (/assets/js/*, /assets/css/*) — network first,
+  // fall back to cache, same as HTML pages above. Found live 2026-09-15:
+  // the old cache-first-with-background-refresh strategy meant a shipped
+  // bugfix only reached a real device on the SECOND reload after
+  // deploying — the first reload serves whatever was already cached
+  // (however stale) and only refetches in the background for next time.
+  // For actively-developed application code (as opposed to vendor
+  // bundles/fonts/images below, which are genuinely static and benefit
+  // from instant-cache on a slow connection), "always try fresh first"
+  // matches what HTML pages already do and is worth the extra round
+  // trip when online — the cache fallback still keeps it working offline.
+  const isOwnJsOrCss = url.origin === self.location.origin &&
+    (url.pathname.startsWith('/assets/js/') || url.pathname.startsWith('/assets/css/'));
+  if (isOwnJsOrCss) {
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(CACHE_STATIC).then(c => c.put(e.request, clone));
+          }
+          return res;
+        })
+        .catch(() => caches.match(e.request)) // offline fallback
+    );
+    return;
+  }
+
+  // Everything else (images, fonts, third-party vendor bundles) — cache
+  // first, update in background. These rarely change, so instant-from-
+  // cache is the right tradeoff for a student on a slow connection.
   e.respondWith(
     caches.match(e.request).then(cached => {
       const networkFetch = fetch(e.request).then(res => {
