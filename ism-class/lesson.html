@@ -38,10 +38,13 @@ html,body{height:100%;}
 .submit-btn:hover:not(:disabled){background:var(--gold2);}
 .submit-btn:disabled{opacity:.5;cursor:default;}
 
-main{max-width:960px;margin:0 auto;padding:1rem 1rem 4rem;}
+main{max-width:960px;margin:0 auto;padding:1.5rem 1rem 4rem;}
 
-.lesson-frame-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:1.5rem;position:relative;min-height:400px;}
-.lesson-frame-wrap iframe{width:100%;min-height:1400px;border:none;display:block;background:#fff;}
+/* Full-bleed — the lesson reads as the page itself, not a widget
+   boxed inside it. Sits directly under the header, edge to edge,
+   no card border/radius/max-width. */
+.lesson-frame-wrap{background:#fff;overflow:hidden;position:relative;min-height:calc(100vh - 56px);}
+.lesson-frame-wrap iframe{width:100%;min-height:calc(100vh - 56px);border:none;display:block;background:#fff;}
 .loading-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--navy);gap:1rem;}
 .loading-overlay.hidden{display:none;}
 .loading-text{font-size:.85rem;color:var(--muted);}
@@ -85,14 +88,14 @@ main{max-width:960px;margin:0 auto;padding:1rem 1rem 4rem;}
   <button class="submit-btn" id="submit-btn" style="display:none;" onclick="submitLesson()">Submit to Teacher</button>
 </header>
 
-<main>
-  <div class="lesson-frame-wrap" id="frame-wrap">
-    <div class="loading-overlay" id="loading-overlay">
-      <div class="spinner"></div>
-      <div class="loading-text">Loading lesson…</div>
-    </div>
+<div class="lesson-frame-wrap" id="frame-wrap">
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Loading lesson…</div>
   </div>
+</div>
 
+<main>
   <section class="photo-section">
     <div class="section-title">Photos of handwritten work</div>
     <div class="card">
@@ -197,18 +200,6 @@ async function loadLesson() {
 
   iframe.addEventListener('load', () => {
     document.getElementById('loading-overlay')?.classList.add('hidden');
-    // Sandboxed content can grow after load (accordions, dynamic
-    // rows) — resize the wrapper to its scrollHeight so nothing gets
-    // clipped, checked periodically since the iframe itself can't be
-    // read cross-document without allow-same-origin.
-    const resize = () => {
-      try {
-        const h = iframe.contentWindow.document.body.scrollHeight;
-        if (h) iframe.style.minHeight = (h + 40) + 'px';
-      } catch (e) { /* opaque origin — expected, ignore */ }
-    };
-    setInterval(resize, 1000);
-    setTimeout(resize, 300);
   });
 
   await loadPhotos();
@@ -235,6 +226,10 @@ window.addEventListener('message', (event) => {
         setSaveIndicator('error');
       }
     }, 150); // bridge already debounces 800ms per field; this just coalesces the network call
+  }
+
+  if (msg.type === 'ism:resize' && typeof msg.height === 'number') {
+    iframeEl.style.height = Math.max(msg.height, 200) + 'px';
   }
 
   if (msg.type === 'ism:progress' && Array.isArray(msg.completedSteps)) {

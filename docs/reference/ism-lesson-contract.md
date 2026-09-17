@@ -74,6 +74,7 @@ ever talks in one direction, child → parent:
 | `ism:ready` | — (sent once the bridge has scanned the DOM and populated fields) |
 | `ism:save` | `{ fieldId, value }` (debounced ~800ms per field) |
 | `ism:progress` | `{ completedSteps: [stepNumber, …] }` |
+| `ism:resize` | `{ height }` — the document's real content height in px, sent on load and whenever it changes (`ResizeObserver` on `document.body`). The parent can't read this itself across the sandbox boundary, so it sets the iframe's height from this message instead of guessing a fixed value — this is what makes the lesson render as a real full page instead of a boxed widget with its own inner scrollbar. |
 
 The parent only ever accepts messages whose `event.source` is the exact iframe it created (not by
 origin string — the sandboxed child has an opaque origin) and validates payload shape against this

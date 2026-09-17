@@ -68,6 +68,21 @@
     }, true);
   }
 
+  // The parent can't read this document's height itself (opaque
+  // sandboxed origin, by design — see file header), so the iframe
+  // would otherwise fall back to a guessed fixed height and get its
+  // own internal scrollbar, making the lesson feel like a boxed
+  // widget instead of a real page. Reporting our own height lets the
+  // parent size the iframe exactly and rely on one normal page
+  // scrollbar instead.
+  var lastReportedHeight = 0;
+  function reportHeight() {
+    var height = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+    if (height === lastReportedHeight) return;
+    lastReportedHeight = height;
+    post('ism:resize', { height: height });
+  }
+
   function init() {
     scan(document);
     trackProgress();
@@ -82,9 +97,17 @@
           scan(node);
         }
       }
+      reportHeight();
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
+    if (window.ResizeObserver) {
+      new ResizeObserver(reportHeight).observe(document.body);
+    } else {
+      setInterval(reportHeight, 1000); // older-browser fallback
+    }
+
+    reportHeight();
     post('ism:ready', {});
   }
 
