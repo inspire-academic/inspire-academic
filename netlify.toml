@@ -61,6 +61,14 @@ function = "create-teacher"
 [functions."birthday-digest"]
   schedule = "0 7 * * *"
 
+# ism-lesson-content.js inlines the runtime bridge script into every
+# served lesson via fs.readFileSync at request time (see its header
+# comment) — esbuild only bundles files reached by require()/import,
+# so the raw asset has to be listed here explicitly or the read fails
+# once deployed.
+[functions."ism-lesson-content"]
+  included_files = ["assets/js/ism-lesson-bridge.js"]
+
 # Route /api/* to Netlify Functions (Node.js) — reliable on Projects platform
 [[redirects]]
   from = "/api/generate-question"
@@ -484,5 +492,57 @@ function = "create-teacher"
 [[redirects]]
   from = "/api/v1/invoices/email"
   to = "/.netlify/functions/invoice-email"
+  status = 200
+  force = true
+
+# ISM Class — authenticated weekly interactive lessons (Physics/
+# Chemistry/Biology/Mathematics) with per-field autosave, versioning
+# and a teacher submit/review workflow. See supabase/ism_class_schema.sql
+# and docs/reference/ism-lesson-contract.md.
+[[redirects]]
+  from = "/api/v1/ism-class/lesson/upload"
+  to = "/.netlify/functions/ism-lesson-upload"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/ism-class/lesson/publish"
+  to = "/.netlify/functions/ism-lesson-publish"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/ism-class/lesson/assign"
+  to = "/.netlify/functions/ism-lesson-assign"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/ism-class/lesson/content"
+  to = "/.netlify/functions/ism-lesson-content"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/ism-class/lesson/submit"
+  to = "/.netlify/functions/ism-lesson-submit"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/ism-class/response/save"
+  to = "/.netlify/functions/ism-response-save"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/ism-class/review/save"
+  to = "/.netlify/functions/ism-review-save"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/ism-class/submissions/list"
+  to = "/.netlify/functions/ism-submissions-list"
   status = 200
   force = true

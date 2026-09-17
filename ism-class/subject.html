@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISM Class — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
+<script src="/assets/js/capacitor-utils.js"></script>
+<script src="/assets/js/app-lock.js"></script>
+<script src="/assets/js/perf-utils.js"></script>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c9a84c">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<style>
+.nav-links{display:none;gap:.3rem;flex:1;}
+@media(min-width:769px){ .nav-links{display:flex;} .nav-user span:last-child{display:inline;} }
+
+main{max-width:820px;margin:0 auto;padding:1.2rem 1rem 4rem;}
+.back-link{font-size:.8rem;color:var(--muted);display:inline-block;margin-bottom:.8rem;}
+.back-link:hover{color:var(--gold);}
+.page-header{margin-bottom:1.6rem;}
+.page-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;}
+
+.lesson-list{display:flex;flex-direction:column;gap:.8rem;}
+.lesson-row{display:flex;align-items:center;gap:1rem;}
+.lesson-week{font-family:var(--font-mono);font-size:.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;}
+.lesson-title{font-weight:700;font-size:1rem;margin-bottom:.3rem;}
+.lesson-meta{font-size:.78rem;color:var(--muted);display:flex;gap:.7rem;flex-wrap:wrap;}
+.lesson-info{flex:1;min-width:0;}
+.status-pill{font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;padding:.25rem .6rem;border-radius:99px;white-space:nowrap;}
+.status-not_started{background:var(--navy3);color:var(--muted);}
+.status-in_progress{background:#e8620a22;color:var(--orange);}
+.status-submitted{background:#1c4f8a22;color:#60a5fa;}
+.status-reviewed{background:#16803c22;color:#4ade80;}
+.status-returned{background:#b92b1a22;color:#f87171;}
+
+.empty-state{text-align:center;padding:2.5rem;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+<a href="/dashboard.html" style="text-decoration:none;color:inherit;"><div class="topnav-logo" style="display:flex;align-items:center;gap:.6rem;">
+  <img src="/assets/images/shared/1775416612494_image.webp" alt="Inspire Science" onerror="this.style.display='none'">
+  <span class="topnav-title" style="flex:none;">Inspire Science</span>
+</div></a>
+<div class="nav-links">
+  <button class="nav-link" onclick="location.href='/dashboard.html'">Dashboard</button>
+  <button class="nav-link" onclick="location.href='/subjects.html'">Subjects</button>
+  <button class="nav-link" onclick="location.href='/diagnostic'">Inspire Diagnostic</button>
+  <button class="nav-link" onclick="location.href='/student/progress.html'">My Progress</button>
+  <button class="nav-link active" onclick="location.href='/ism-class/index.html'">ISM Class</button>
+</div>
+<div class="nav-user" onclick="signOut()">
+  <div class="avatar" id="nav-avatar" style="background:var(--gold);color:var(--navy);">?</div>
+  <span id="nav-name">Loading…</span>
+</div>
+</nav>
+
+<main>
+  <a class="back-link" href="/ism-class/index.html">← ISM Class</a>
+  <div class="page-header fade-in">
+    <h1 class="page-title" id="subject-title">Loading…</h1>
+  </div>
+
+  <div class="lesson-list" id="lesson-list">
+    <div class="card"><div class="spinner"></div></div>
+  </div>
+</main>
+
+<script>
+const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+const STATUS_LABEL = {
+  not_started: 'Not Started', in_progress: 'In Progress',
+  submitted: 'Submitted', reviewed: 'Reviewed', returned: 'Returned'
+};
+
+async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window.location.href='/index.html'; }
+
+function fmtDate(d){
+  if (!d) return '';
+  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+
+(async () => {
+  const params = new URLSearchParams(location.search);
+  const subjectId = params.get('subject');
+  if (!subjectId) { location.href = '/ism-class/index.html'; return; }
+
+  const { data: { user } } = await supa.auth.getUser();
+  if (!user) { window.location.href = '/index.html'; return; }
+
+  let profile = getCachedProfile();
+  if (!profile || profile.id !== user.id) {
+    const { data: pd } = await supa.from('profiles').select('*').eq('id', user.id).single();
+    profile = pd;
+    if (profile) setCachedProfile(profile);
+  }
+  document.getElementById('nav-name').textContent = profile?.full_name?.split(' ')[0] || 'Student';
+  document.getElementById('nav-avatar').textContent = (profile?.full_name || 'S')[0].toUpperCase();
+
+  const { data: subjectRow } = await supa.from('subjects').select('name').eq('id', subjectId).single();
+  document.getElementById('subject-title').textContent = `ISM Class — ${subjectRow?.name || 'Subject'}`;
+
+  const { data: lessons } = await supa.from('ism_lessons')
+    .select('id,title,week_number,due_date')
+    .eq('subject_id', subjectId)
+    .order('week_number', { ascending: true });
+
+  const list = document.getElementById('lesson-list');
+  list.innerHTML = '';
+
+  if (!lessons || lessons.length === 0) {
+    list.innerHTML = '<div class="empty-state">No ISM lessons have been assigned to you yet for this subject.</div>';
+    return;
+  }
+
+  const lessonIds = lessons.map(l => l.id);
+  const { data: progressRows } = await supa.from('ism_student_lesson_progress')
+    .select('lesson_id,status').eq('student_id', user.id).in('lesson_id', lessonIds);
+  const statusByLesson = Object.fromEntries((progressRows || []).map(p => [p.lesson_id, p.status]));
+
+  lessons.forEach(lesson => {
+    const status = statusByLesson[lesson.id] || 'not_started';
+    const row = document.createElement('a');
+    row.href = `/ism-class/lesson.html?lesson=${lesson.id}`;
+    row.className = 'card lesson-row fade-in';
+    row.innerHTML = `
+      <div class="lesson-info">
+        <div class="lesson-week">Week ${lesson.week_number}</div>
+        <div class="lesson-title">${lesson.title}</div>
+        <div class="lesson-meta">${lesson.due_date ? `<span>Due ${fmtDate(lesson.due_date)}</span>` : ''}</div>
+      </div>
+      <span class="status-pill status-${status}">${STATUS_LABEL[status] || status}</span>`;
+    list.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>

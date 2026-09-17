@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISM Class Management — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
+<style>
+.topnav-left{display:flex;align-items:center;gap:.75rem;}
+.logo-text{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);}
+.staff-badge{font-family:var(--font-mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;background:rgba(212,160,23,.15);color:var(--gold);border:1px solid rgba(212,160,23,.3);padding:.2rem .6rem;border-radius:3px;}
+.topnav-right{display:flex;align-items:center;gap:.75rem;font-size:.82rem;color:var(--muted);}
+.btn-logout{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.4rem .9rem;border-radius:var(--r);font-size:.8rem;}
+.btn-logout:hover{border-color:var(--red);color:#f87171;}
+
+main{max-width:1100px;margin:0 auto;padding:1.5rem 1rem 4rem;}
+h1.page-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;margin-bottom:1.2rem;}
+
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:1.5rem;}
+.tab-btn{background:none;border:none;color:var(--muted);padding:.7rem 1rem;font-size:.85rem;font-weight:600;border-bottom:2px solid transparent;}
+.tab-btn.active{color:var(--gold);border-color:var(--gold);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.4rem;}
+.field{margin-bottom:1rem;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.field-input,.field-select,.field-textarea{background:var(--navy);border:1.5px solid var(--border);color:var(--white);border-radius:var(--r);padding:.6rem .85rem;font-size:.88rem;width:100%;}
+.field-input:focus,.field-select:focus,.field-textarea:focus{border-color:var(--gold);outline:none;}
+.field-textarea{min-height:70px;resize:vertical;}
+.field-hint{font-size:.72rem;color:var(--muted);margin-top:.3rem;}
+
+.lesson-row{display:flex;align-items:center;gap:.8rem;padding:.8rem 1rem;}
+.lesson-row-info{flex:1;min-width:0;}
+.lesson-row-title{font-weight:700;font-size:.9rem;}
+.lesson-row-meta{font-size:.75rem;color:var(--muted);margin-top:.2rem;}
+.lesson-row-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
+.mini-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.35rem .7rem;border-radius:var(--r);font-size:.75rem;}
+.mini-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+.radio-group{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem;}
+.radio-pill{position:relative;}
+.radio-pill input{position:absolute;opacity:0;}
+.radio-pill label{margin:0;display:flex;align-items:center;padding:.4rem .9rem;border:1.5px solid var(--border);border-radius:20px;font-size:.78rem;font-weight:600;cursor:pointer;color:var(--muted);text-transform:none;letter-spacing:0;}
+.radio-pill input:checked+label{border-color:var(--gold);color:var(--gold);background:rgba(212,160,23,.1);}
+
+.roster-row{display:flex;align-items:center;gap:.8rem;padding:.7rem 1rem;}
+.roster-name{flex:1;font-size:.88rem;font-weight:600;}
+.roster-meta{font-size:.75rem;color:var(--muted);}
+
+.field-feedback-row{display:grid;grid-template-columns:120px 1fr auto;gap:.5rem;margin-bottom:.5rem;align-items:center;}
+.remove-x{background:none;border:none;color:var(--muted);font-size:1rem;}
+.remove-x:hover{color:#f87171;}
+
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:.6rem;margin:.8rem 0;}
+.photo-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);border:1px solid var(--border);}
+.response-item{border-top:1px solid var(--border);padding:.5rem 0;font-size:.85rem;}
+.response-item .fid{font-family:var(--font-mono);font-size:.7rem;color:var(--gold);}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-left">
+    <span class="logo-text">Inspire Academic</span>
+    <span class="staff-badge">Staff</span>
+  </div>
+  <div class="topnav-right">
+    <a href="/teacher/teacher.html" style="color:var(--muted);">← Teacher Dashboard</a>
+    <span id="staff-email"></span>
+    <button class="btn-logout" onclick="logout()">Sign out</button>
+  </div>
+</nav>
+
+<main>
+  <h1 class="page-title">ISM Class Management</h1>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="upload" onclick="showTab('upload')">Upload Lesson</button>
+    <button class="tab-btn" data-tab="manage" onclick="showTab('manage')">Manage Lessons</button>
+    <button class="tab-btn" data-tab="assign" onclick="showTab('assign')">Assign Lessons</button>
+    <button class="tab-btn" data-tab="submissions" onclick="showTab('submissions')">Student Submissions</button>
+    <button class="tab-btn" data-tab="review" onclick="showTab('review')">Review / Marking</button>
+  </div>
+
+  <!-- ── UPLOAD ── -->
+  <div class="tab-panel active" id="tab-upload">
+    <div class="card">
+      <div class="field">
+        <label>Add a new version to an existing lesson? (optional)</label>
+        <select class="field-select" id="upload-existing-lesson"><option value="">— Create a new lesson —</option></select>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Subject</label><select class="field-select" id="upload-subject"></select></div>
+        <div class="field"><label>Week number</label><input class="field-input" type="number" min="1" id="upload-week"></div>
+      </div>
+      <div class="field"><label>Title</label><input class="field-input" type="text" id="upload-title" placeholder="Week 1 — The Physicist's Toolkit"></div>
+      <div class="field"><label>Description (optional)</label><textarea class="field-textarea" id="upload-description"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Teach week start</label><input class="field-input" type="date" id="upload-week-start"></div>
+        <div class="field"><label>Teach week end</label><input class="field-input" type="date" id="upload-week-end"></div>
+      </div>
+      <div class="field"><label>Due date (optional)</label><input class="field-input" type="datetime-local" id="upload-due"></div>
+      <div class="field">
+        <label>Student lesson HTML file</label>
+        <input class="field-input" type="file" accept=".html" id="upload-html-file">
+        <div class="field-hint">Must contain at least one <code>data-save="…"</code> field — see docs/reference/ism-lesson-contract.md.</div>
+      </div>
+      <div class="field">
+        <label>Teacher reference doc (optional)</label>
+        <input class="field-input" type="file" accept=".html" id="upload-teacher-file">
+        <div class="field-hint">Your talk-track/observation-prompt version — never shown to students.</div>
+      </div>
+      <button class="btn btn-gold" id="upload-submit-btn" onclick="submitUpload()">Upload lesson</button>
+    </div>
+  </div>
+
+  <!-- ── MANAGE ── -->
+  <div class="tab-panel" id="tab-manage">
+    <div class="card" style="padding:0;">
+      <div id="manage-list"><div style="padding:1.5rem;"><div class="spinner"></div></div></div>
+    </div>
+  </div>
+
+  <!-- ── ASSIGN ── -->
+  <div class="tab-panel" id="tab-assign">
+    <div class="card">
+      <div class="field"><label>Lesson</label><select class="field-select" id="assign-lesson-select" onchange="loadAssignments()"></select></div>
+      <div class="radio-group" id="assign-type-group">
+        <div class="radio-pill"><input type="radio" name="assign-type" id="assign-type-student" value="student" checked><label for="assign-type-student">Specific student</label></div>
+        <div class="radio-pill"><input type="radio" name="assign-type" id="assign-type-cohort" value="cohort"><label for="assign-type-cohort">Cohort/group</label></div>
+        <div class="radio-pill"><input type="radio" name="assign-type" id="assign-type-all" value="all"><label for="assign-type-all">All my students</label></div>
+      </div>
+      <div class="field" id="assign-student-field"><label>Student</label><select class="field-select" id="assign-student-select"></select></div>
+      <div class="field" id="assign-cohort-field" style="display:none;"><label>Cohort</label><select class="field-select" id="assign-cohort-select"></select></div>
+      <button class="btn btn-gold" onclick="submitAssign()">Add assignment</button>
+      <div class="field-hint" style="margin-top:1rem;">Current assignments</div>
+      <div id="assignment-list"></div>
+    </div>
+  </div>
+
+  <!-- ── SUBMISSIONS ── -->
+  <div class="tab-panel" id="tab-submissions">
+    <div class="card">
+      <div class="field"><label>Lesson</label><select class="field-select" id="submissions-lesson-select" onchange="loadSubmissionsRoster()"></select></div>
+      <div id="submissions-roster"></div>
+    </div>
+  </div>
+
+  <!-- ── REVIEW ── -->
+  <div class="tab-panel" id="tab-review">
+    <div class="card" id="review-empty">
+      <p class="muted">Open a submitted lesson from the Student Submissions tab to review it here.</p>
+    </div>
+    <div id="review-detail" style="display:none;"></div>
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+const VALID_ROLES = ['teacher', 'teacher_manager', 'admin', 'super_admin'];
+const SUBJECTS = [
+  { match: n => n.includes('physics') }, { match: n => n.includes('chem') },
+  { match: n => n.includes('bio') }, { match: n => n.includes('math') }
+];
+
+let accessToken = null;
+let myLessons = [];
+let assignedStudents = [];
+let myCohorts = [];
+let currentReviewSubmission = null;
+
+function toast(msg, type = 'success') {
+  const t = document.getElementById('toast'); t.textContent = msg; t.className = 'show ' + type;
+  setTimeout(() => t.className = '', 3500);
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
+}
+window.showTab = showTab;
+
+async function apiCall(path, options = {}) {
+  const res = await fetch(path, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, ...(options.headers || {}) }
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok || body.success === false) throw new Error(body?.error?.message || 'Request failed');
+  return body;
+}
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
+}
+
+async function logout() { await supa.auth.signOut(); window.location.href = '/index.html'; }
+
+// ── Upload ──
+async function loadSubjectsAndLessons() {
+  const { data: subjectRows } = await supa.from('subjects').select('id,name');
+  const subjectSel = document.getElementById('upload-subject');
+  const relevant = (subjectRows || []).filter(s => SUBJECTS.some(m => m.match((s.name || '').toLowerCase())));
+  subjectSel.innerHTML = relevant.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+
+  const { data: lessons } = await supa.from('ism_lessons').select('*, subjects(name)').order('created_at', { ascending: false });
+  myLessons = lessons || [];
+
+  const existingSel = document.getElementById('upload-existing-lesson');
+  existingSel.innerHTML = '<option value="">— Create a new lesson —</option>' +
+    myLessons.map(l => `<option value="${l.id}">${l.subjects?.name || ''} · Week ${l.week_number} · ${l.title}</option>`).join('');
+
+  const assignSel = document.getElementById('assign-lesson-select');
+  assignSel.innerHTML = myLessons.map(l => `<option value="${l.id}">${l.subjects?.name || ''} · Week ${l.week_number} · ${l.title}</option>`).join('');
+  const subSel = document.getElementById('submissions-lesson-select');
+  subSel.innerHTML = myLessons.map(l => `<option value="${l.id}">${l.subjects?.name || ''} · Week ${l.week_number} · ${l.title}</option>`).join('');
+
+  renderManageList();
+  if (myLessons.length) { loadAssignments(); loadSubmissionsRoster(); }
+}
+
+async function submitUpload() {
+  const btn = document.getElementById('upload-submit-btn');
+  const htmlFile = document.getElementById('upload-html-file').files[0];
+  if (!htmlFile) { toast('Choose a student lesson HTML file', 'error'); return; }
+
+  const lessonId = document.getElementById('upload-existing-lesson').value || undefined;
+  const teacherFile = document.getElementById('upload-teacher-file').files[0];
+
+  btn.disabled = true;
+  try {
+    const htmlContent = await readFileAsText(htmlFile);
+    const teacherDocContent = teacherFile ? await readFileAsText(teacherFile) : undefined;
+
+    await apiCall('/api/v1/ism-class/lesson/upload', {
+      method: 'POST',
+      body: JSON.stringify({
+        lessonId,
+        subjectId: document.getElementById('upload-subject').value || undefined,
+        title: document.getElementById('upload-title').value.trim() || undefined,
+        weekNumber: document.getElementById('upload-week').value ? Number(document.getElementById('upload-week').value) : undefined,
+        description: document.getElementById('upload-description').value.trim() || undefined,
+        teachWeekStart: document.getElementById('upload-week-start').value || undefined,
+        teachWeekEnd: document.getElementById('upload-week-end').value || undefined,
+        dueDate: document.getElementById('upload-due').value || undefined,
+        htmlContent, teacherDocContent
+      })
+    });
+    toast('Lesson uploaded! Publish it from Manage Lessons when ready.');
+    document.getElementById('upload-html-file').value = '';
+    document.getElementById('upload-teacher-file').value = '';
+    await loadSubjectsAndLessons();
+    showTab('manage');
+  } catch (e) {
+    toast(e.message || 'Upload failed', 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+window.submitUpload = submitUpload;
+
+// ── Manage ──
+function renderManageList() {
+  const el = document.getElementById('manage-list');
+  if (!myLessons.length) { el.innerHTML = '<div style="padding:1.5rem;" class="muted">No ISM lessons yet — upload one to get started.</div>'; return; }
+  el.innerHTML = myLessons.map(l => `
+    <div class="lesson-row" style="border-bottom:1px solid var(--border);">
+      <div class="lesson-row-info">
+        <div class="lesson-row-title">${l.subjects?.name || ''} · Week ${l.week_number} · ${l.title}</div>
+        <div class="lesson-row-meta">${l.is_published ? 'Published' : 'Draft'}${l.due_date ? ' · Due ' + new Date(l.due_date).toLocaleDateString('en-GB') : ''}</div>
+      </div>
+      <div class="lesson-row-actions">
+        <button class="mini-btn" onclick="previewLesson('${l.id}')">Preview</button>
+        <button class="mini-btn" onclick="togglePublish('${l.id}', ${!l.is_published})">${l.is_published ? 'Unpublish' : 'Publish'}</button>
+      </div>
+    </div>`).join('');
+}
+
+async function togglePublish(lessonId, isPublished) {
+  try {
+    await apiCall('/api/v1/ism-class/lesson/publish', { method: 'POST', body: JSON.stringify({ lessonId, isPublished }) });
+    toast(isPublished ? 'Published' : 'Unpublished');
+    await loadSubjectsAndLessons();
+  } catch (e) { toast(e.message || 'Could not update', 'error'); }
+}
+window.togglePublish = togglePublish;
+
+async function previewLesson(lessonId) {
+  try {
+    const data = await apiCall(`/api/v1/ism-class/lesson/content?lessonId=${encodeURIComponent(lessonId)}&preview=true`);
+    const w = window.open('', '_blank');
+    w.document.open(); w.document.write(data.html); w.document.close();
+  } catch (e) { toast(e.message || 'Could not load preview', 'error'); }
+}
+window.previewLesson = previewLesson;
+
+// ── Assign ──
+document.querySelectorAll('input[name="assign-type"]').forEach(r => r.addEventListener('change', () => {
+  const type = document.querySelector('input[name="assign-type"]:checked').value;
+  document.getElementById('assign-student-field').style.display = type === 'student' ? 'block' : 'none';
+  document.getElementById('assign-cohort-field').style.display = type === 'cohort' ? 'block' : 'none';
+}));
+
+async function loadAssignOptions() {
+  const { data: { user } } = await supa.auth.getUser();
+  const [{ data: assignments }, { data: cohorts }] = await Promise.all([
+    supa.from('teacher_student_assignments').select('student_id').eq('teacher_id', user.id).eq('is_active', true),
+    supa.from('cohorts').select('id,name').eq('teacher_id', user.id)
+  ]);
+  myCohorts = cohorts || [];
+  const studentIds = (assignments || []).map(a => a.student_id);
+  if (studentIds.length) {
+    const { data: profiles } = await supa.from('profiles').select('id,full_name').in('id', studentIds);
+    assignedStudents = profiles || [];
+  }
+  document.getElementById('assign-student-select').innerHTML = assignedStudents.map(s => `<option value="${s.id}">${s.full_name || s.id}</option>`).join('');
+  document.getElementById('assign-cohort-select').innerHTML = myCohorts.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+}
+
+async function loadAssignments() {
+  const lessonId = document.getElementById('assign-lesson-select').value;
+  if (!lessonId) return;
+  await loadAssignOptions();
+  try {
+    const data = await apiCall(`/api/v1/ism-class/lesson/assign?lessonId=${encodeURIComponent(lessonId)}`);
+    const studentById = Object.fromEntries(assignedStudents.map(s => [s.id, s.full_name]));
+    const cohortById = Object.fromEntries(myCohorts.map(c => [c.id, c.name]));
+    const el = document.getElementById('assignment-list');
+    el.innerHTML = (data.assignments || []).map(a => `
+      <div class="lesson-row" style="border-bottom:1px solid var(--border);">
+        <div class="lesson-row-info">${
+          a.assignee_type === 'student' ? (studentById[a.student_id] || a.student_id) :
+          a.assignee_type === 'cohort' ? 'Cohort: ' + (cohortById[a.cohort_id] || a.cohort_id) :
+          'All my assigned students'
+        }</div>
+        <button class="mini-btn" onclick="removeAssignment('${lessonId}','${a.id}')">Remove</button>
+      </div>`).join('') || '<div class="muted" style="padding:.6rem 0;">No assignments yet.</div>';
+  } catch (e) { toast(e.message || 'Could not load assignments', 'error'); }
+}
+window.loadAssignments = loadAssignments;
+
+async function submitAssign() {
+  const lessonId = document.getElementById('assign-lesson-select').value;
+  if (!lessonId) { toast('Choose a lesson first', 'error'); return; }
+  const type = document.querySelector('input[name="assign-type"]:checked').value;
+  const add = [{
+    assigneeType: type,
+    studentId: type === 'student' ? document.getElementById('assign-student-select').value : undefined,
+    cohortId: type === 'cohort' ? document.getElementById('assign-cohort-select').value : undefined
+  }];
+  try {
+    await apiCall('/api/v1/ism-class/lesson/assign', { method: 'POST', body: JSON.stringify({ lessonId, add }) });
+    toast('Assigned');
+    await loadAssignments();
+  } catch (e) { toast(e.message || 'Could not assign', 'error'); }
+}
+window.submitAssign = submitAssign;
+
+async function removeAssignment(lessonId, assignmentId) {
+  try {
+    await apiCall('/api/v1/ism-class/lesson/assign', { method: 'POST', body: JSON.stringify({ lessonId, removeIds: [assignmentId] }) });
+    await loadAssignments();
+  } catch (e) { toast(e.message || 'Could not remove', 'error'); }
+}
+window.removeAssignment = removeAssignment;
+
+// ── Submissions ──
+async function loadSubmissionsRoster() {
+  const lessonId = document.getElementById('submissions-lesson-select').value;
+  if (!lessonId) return;
+  const el = document.getElementById('submissions-roster');
+  el.innerHTML = '<div class="spinner"></div>';
+  try {
+    const data = await apiCall(`/api/v1/ism-class/submissions/list?lessonId=${encodeURIComponent(lessonId)}`);
+    el.innerHTML = (data.roster || []).map(r => `
+      <div class="roster-row" style="border-bottom:1px solid var(--border);">
+        <div class="roster-name">${r.student.full_name || r.student.email || r.student.id}</div>
+        <div class="roster-meta">${(r.progress.status || 'not_started').replace('_',' ')}</div>
+        ${r.latestSubmission ? `<button class="mini-btn" onclick='openReview(${JSON.stringify(r.latestSubmission).replace(/'/g, "&#39;")})'>Review</button>` : ''}
+      </div>`).join('') || '<div class="muted">No students assigned to this lesson yet.</div>';
+  } catch (e) { el.innerHTML = ''; toast(e.message || 'Could not load roster', 'error'); }
+}
+window.loadSubmissionsRoster = loadSubmissionsRoster;
+
+// ── Review ──
+let fieldFeedbackRows = [];
+
+async function openReview(submission) {
+  currentReviewSubmission = submission;
+  fieldFeedbackRows = [];
+  document.getElementById('review-empty').style.display = 'none';
+  const detail = document.getElementById('review-detail');
+  detail.style.display = 'block';
+
+  const [{ data: photos }, { data: existingReview }] = await Promise.all([
+    submission.photo_ids?.length
+      ? supa.from('ism_response_photos').select('photo_url').in('id', submission.photo_ids)
+      : Promise.resolve({ data: [] }),
+    supa.from('ism_teacher_reviews').select('*').eq('submission_id', submission.id).order('reviewed_at', { ascending: false }).limit(1)
+  ]);
+  const prior = existingReview && existingReview[0];
+
+  const responseEntries = Object.entries(submission.responses_snapshot || {});
+  detail.innerHTML = `
+    <div class="card">
+      <div class="field-hint">Submission #${submission.submission_number} · ${new Date(submission.submitted_at).toLocaleString('en-GB')}</div>
+      <button class="mini-btn" style="margin:.6rem 0;" onclick="printSubmission()">🖨 Print</button>
+      <div id="review-responses">${responseEntries.map(([fid, val]) => `<div class="response-item"><span class="fid">${fid}</span> — ${val === null ? '<em>blank</em>' : val}</div>`).join('') || '<div class="muted">No text responses.</div>'}</div>
+      ${(photos && photos.length) ? `<div class="field-hint" style="margin-top:1rem;">Photos</div><div class="photo-grid">${photos.map(p => `<img src="${p.photo_url}">`).join('')}</div>` : ''}
+
+      <div class="field" style="margin-top:1.2rem;"><label>Marks</label><div class="field-row">
+        <input class="field-input" type="number" id="review-marks" placeholder="Marks" value="${prior?.marks ?? ''}">
+        <input class="field-input" type="number" id="review-marks-total" placeholder="Out of" value="${prior?.marks_total ?? ''}">
+      </div></div>
+      <div class="field"><label>Mastery score</label><input class="field-input" type="text" id="review-mastery" placeholder="e.g. Secure" value="${prior?.mastery_score || ''}"></div>
+      <div class="field"><label>Overall comment</label><textarea class="field-textarea" id="review-comment">${prior?.overall_comment || ''}</textarea></div>
+
+      <label>Field-level feedback</label>
+      <div id="field-feedback-list"></div>
+      <button class="mini-btn" onclick="addFieldFeedbackRow()">+ Add field comment</button>
+
+      <div style="display:flex;gap:.6rem;margin-top:1.2rem;">
+        <button class="btn btn-gold" onclick="saveReview('reviewed')">Mark Reviewed</button>
+        <button class="btn btn-outline" onclick="saveReview('returned')">Return for Corrections</button>
+      </div>
+    </div>`;
+  renderFieldFeedbackRows();
+  showTab('review');
+}
+window.openReview = openReview;
+
+function renderFieldFeedbackRows() {
+  const el = document.getElementById('field-feedback-list');
+  if (!el) return;
+  el.innerHTML = fieldFeedbackRows.map((r, i) => `
+    <div class="field-feedback-row">
+      <input class="field-input" placeholder="field id" value="${r.fieldId}" oninput="fieldFeedbackRows[${i}].fieldId=this.value">
+      <input class="field-input" placeholder="comment" value="${r.comment}" oninput="fieldFeedbackRows[${i}].comment=this.value">
+      <button class="remove-x" onclick="fieldFeedbackRows.splice(${i},1);renderFieldFeedbackRows()">✕</button>
+    </div>`).join('');
+}
+function addFieldFeedbackRow() { fieldFeedbackRows.push({ fieldId: '', comment: '' }); renderFieldFeedbackRows(); }
+window.addFieldFeedbackRow = addFieldFeedbackRow;
+window.renderFieldFeedbackRows = renderFieldFeedbackRows;
+window.fieldFeedbackRows = fieldFeedbackRows;
+
+async function saveReview(statusAfter) {
+  try {
+    await apiCall('/api/v1/ism-class/review/save', {
+      method: 'POST',
+      body: JSON.stringify({
+        submissionId: currentReviewSubmission.id,
+        marks: document.getElementById('review-marks').value,
+        marksTotal: document.getElementById('review-marks-total').value,
+        masteryScore: document.getElementById('review-mastery').value,
+        overallComment: document.getElementById('review-comment').value,
+        fieldFeedback: fieldFeedbackRows.filter(r => r.fieldId && r.comment),
+        statusAfter
+      })
+    });
+    toast(statusAfter === 'reviewed' ? 'Marked reviewed — feedback released to student' : 'Returned for corrections');
+    await loadSubmissionsRoster();
+  } catch (e) { toast(e.message || 'Could not save review', 'error'); }
+}
+window.saveReview = saveReview;
+
+function printSubmission() {
+  const entries = Object.entries(currentReviewSubmission.responses_snapshot || {});
+  const w = window.open('', '_blank');
+  w.document.write(`<pre style="font-family:sans-serif;white-space:pre-wrap;">${entries.map(([k, v]) => `${k}: ${v ?? ''}`).join('\n\n')}</pre>`);
+  w.document.close();
+  w.print();
+}
+window.printSubmission = printSubmission;
+
+// ── Init ──
+(async () => {
+  const { data: { session } } = await supa.auth.getSession();
+  if (!session) { window.location.href = '/index.html?next=/teacher/ism-class-management.html'; return; }
+  const { data: profile } = await supa.from('profiles').select('role').eq('id', session.user.id).maybeSingle();
+  if (!profile || !VALID_ROLES.includes(profile.role)) { window.location.href = '/index.html'; return; }
+
+  accessToken = session.access_token;
+  document.getElementById('staff-email').textContent = session.user.email;
+  await loadSubjectsAndLessons();
+})();
+</script>
+</body>
+</html>

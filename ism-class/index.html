@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISM Class — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/nav-back.js"></script>
+<script src="/assets/js/capacitor-utils.js"></script>
+<script src="/assets/js/app-lock.js"></script>
+<script src="/assets/js/perf-utils.js"></script>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c9a84c">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<style>
+.nav-links{display:none;gap:.3rem;flex:1;}
+@media(min-width:769px){ .nav-links{display:flex;} .nav-user span:last-child{display:inline;} }
+
+main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 4rem;}
+.page-header{margin-bottom:1.8rem;}
+.page-title{font-family:var(--font-display);font-size:1.6rem;font-weight:800;margin-bottom:.3rem;}
+.page-sub{font-size:.9rem;color:var(--muted);}
+
+.subject-grid{display:grid;grid-template-columns:1fr;gap:1rem;}
+@media(min-width:600px){ .subject-grid{grid-template-columns:1fr 1fr;} }
+
+.subject-card{position:relative;overflow:hidden;padding:0;display:flex;flex-direction:column;}
+.subject-card::before{content:'';display:block;height:4px;}
+.subject-card.physics::before{background:linear-gradient(90deg,#1d4ed8,#06b6d4);}
+.subject-card.chemistry::before{background:linear-gradient(90deg,#059669,#34d399);}
+.subject-card.biology::before{background:linear-gradient(90deg,#7c3aed,#a78bfa);}
+.subject-card.maths::before{background:linear-gradient(90deg,#d97706,#fbbf24);}
+.subject-card-body{padding:1.4rem;flex:1;display:flex;flex-direction:column;gap:.6rem;}
+.subject-card-title{font-family:var(--font-display);font-size:1.2rem;font-weight:700;}
+.subject-card-count{font-size:.82rem;color:var(--muted);}
+.subject-card-cta{margin-top:auto;align-self:flex-start;}
+.subject-card.disabled{opacity:.5;}
+.subject-card.disabled .subject-card-cta{pointer-events:none;}
+
+.empty-state{text-align:center;padding:2.5rem;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);margin-top:1rem;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+<a href="/dashboard.html" style="text-decoration:none;color:inherit;"><div class="topnav-logo" style="display:flex;align-items:center;gap:.6rem;">
+  <img src="/assets/images/shared/1775416612494_image.webp" alt="Inspire Science" onerror="this.style.display='none'">
+  <span class="topnav-title" style="flex:none;">Inspire Science</span>
+</div></a>
+<div class="nav-links">
+  <button class="nav-link" onclick="location.href='/dashboard.html'">Dashboard</button>
+  <button class="nav-link" onclick="location.href='/subjects.html'">Subjects</button>
+  <button class="nav-link" onclick="location.href='/diagnostic'">Inspire Diagnostic</button>
+  <button class="nav-link" onclick="location.href='/student/progress.html'">My Progress</button>
+  <button class="nav-link active">ISM Class</button>
+</div>
+<div class="nav-user" onclick="signOut()">
+  <div class="avatar" id="nav-avatar" style="background:var(--gold);color:var(--navy);">?</div>
+  <span id="nav-name">Loading…</span>
+</div>
+</nav>
+
+<main>
+  <div class="page-header fade-in">
+    <h1 class="page-title">ISM Class</h1>
+    <p class="page-sub">Your weekly Inspire Science Mastery lessons — pick a subject to continue.</p>
+  </div>
+
+  <div class="subject-grid" id="subject-grid">
+    <div class="card"><div class="spinner"></div></div>
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<script>
+const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// Same tolerant subject-name matching convention already used by
+// student/lesson-viewer.html's subjectBadgeClass() — subject names
+// aren't version-controlled (see CLAUDE.md), so this never assumes
+// an exact string.
+const SUBJECTS = [
+  { key: 'physics',   label: 'Physics',     match: n => n.includes('physics') },
+  { key: 'chemistry', label: 'Chemistry',   match: n => n.includes('chem') },
+  { key: 'biology',   label: 'Biology',     match: n => n.includes('bio') },
+  { key: 'maths',     label: 'Mathematics', match: n => n.includes('math') }
+];
+
+async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window.location.href='/index.html'; }
+
+(async () => {
+  const { data: { user } } = await supa.auth.getUser();
+  if (!user) { window.location.href = '/index.html'; return; }
+
+  let profile = getCachedProfile();
+  if (!profile || profile.id !== user.id) {
+    const { data: pd } = await supa.from('profiles').select('*').eq('id', user.id).single();
+    profile = pd;
+    if (profile) setCachedProfile(profile);
+  }
+  document.getElementById('nav-name').textContent = profile?.full_name?.split(' ')[0] || 'Student';
+  document.getElementById('nav-avatar').textContent = (profile?.full_name || 'S')[0].toUpperCase();
+
+  const [{ data: subjectRows }, { data: lessonRows }] = await Promise.all([
+    supa.from('subjects').select('id,name'),
+    supa.from('ism_lessons').select('id,subject_id') // RLS already scopes to published + assigned-to-me
+  ]);
+
+  const grid = document.getElementById('subject-grid');
+  grid.innerHTML = '';
+
+  SUBJECTS.forEach(s => {
+    const subjectRow = (subjectRows || []).find(r => s.match((r.name || '').toLowerCase()));
+    const count = subjectRow ? (lessonRows || []).filter(l => l.subject_id === subjectRow.id).length : 0;
+    const enabled = !!subjectRow;
+
+    const card = document.createElement(enabled ? 'a' : 'div');
+    card.className = `card subject-card ${s.key} ${enabled ? '' : 'disabled'} fade-in`;
+    if (enabled) card.href = `/ism-class/subject.html?subject=${subjectRow.id}`;
+    card.innerHTML = `
+      <div class="subject-card-body">
+        <div class="subject-card-title">${s.label}</div>
+        <div class="subject-card-count">${enabled ? (count ? `${count} lesson${count === 1 ? '' : 's'} available` : 'No lessons assigned yet') : 'Coming soon'}</div>
+        <span class="btn btn-gold subject-card-cta">${enabled ? 'Open' : 'Not available'}</span>
+      </div>`;
+    grid.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>
