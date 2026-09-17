@@ -174,7 +174,11 @@ async function loadLesson() {
   try {
     data = await apiCall(`/api/v1/ism-class/lesson/content?lessonId=${encodeURIComponent(lessonId)}`);
   } catch (e) {
-    document.getElementById('frame-wrap').innerHTML = `<div class="loading-overlay"><div class="loading-text">This lesson isn't available — it may not be published or assigned to you yet.</div></div>`;
+    console.error('ISM Class content load failed:', e);
+    const friendly = e.message === 'Lesson not found.'
+      ? "This lesson isn't available — it may not be published or assigned to you yet."
+      : `Something went wrong loading this lesson (${e.message || 'unknown error'}). Please try again, or contact support if it persists.`;
+    document.getElementById('frame-wrap').innerHTML = `<div class="loading-overlay"><div class="loading-text">${friendly}</div></div>`;
     return;
   }
 
