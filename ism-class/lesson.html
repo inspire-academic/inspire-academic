@@ -346,6 +346,9 @@ function esc(v) {
 }
 
 async function loadFeedback() {
+  // loadLesson() re-runs after Submit; clear what a previous pass showed so an old
+  // "returned for corrections" panel doesn't linger over a freshly submitted lesson.
+  document.getElementById('feedback-panel').style.display = 'none';
   const { data: submissions } = await supa.from('ism_submissions')
     .select('id,status,submission_number').eq('student_id', currentUser.id).eq('lesson_id', lessonId)
     .order('submission_number', { ascending: false }).limit(1);
