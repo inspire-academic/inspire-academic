@@ -17,6 +17,16 @@ const MOCK_USER = { id: 'user-123', email: 'user@example.com' };
 const LESSON_ID = 'lesson-1';
 const STUDENT_ID = 'student-1';
 
+// Real fetch Responses expose .text() as well as .json(); the shared sb()
+// helper reads .text() (a 201 from Prefer: return=minimal has an empty body).
+function withText(handler) {
+  return async (url, opts) => {
+    const r = await handler(url, opts);
+    if (r.text || !r.json) return r;
+    return { ...r, text: async () => JSON.stringify(await r.json()) };
+  };
+}
+
 function withMockFetch(overrides = {}, fn) {
   const {
     authOk = true,
@@ -32,7 +42,7 @@ function withMockFetch(overrides = {}, fn) {
 
   const original = global.fetch;
   process.env.SUPABASE_SERVICE_ROLE_KEY = 'test-service-key';
-  global.fetch = async (url, opts = {}) => {
+  global.fetch = withText(async (url, opts = {}) => {
     const u = String(url);
     const method = opts.method || 'GET';
 
@@ -132,7 +142,7 @@ function withMockFetch(overrides = {}, fn) {
       return { ok: true, status: 200, json: async () => ([]) };
     }
     return { ok: true, status: 200, json: async () => ([]) };
-  };
+  });
   return fn().finally(() => {
     global.fetch = original;
     delete process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -319,6 +329,27 @@ test('ism-response-save: in-progress lesson saves successfully', async () => {
   await withMockFetch({}, async () => {
     const res = await responseSave.handler({ httpMethod: 'POST', headers: AUTH_HEADER, body: JSON.stringify({ lessonId: LESSON_ID, fieldId: 'q1', value: 'x' }) });
     assert.equal(res.statusCode, 200);
+  });
+});
+
+test('ism-response-save: tolerates an empty 201 body and upserts on the unique key', async () => {
+  await withMockFetch({}, async () => {
+    const inner = global.fetch;
+    const calls = [];
+    global.fetch = async (url, opts = {}) => {
+      const u = String(url);
+      calls.push({ u, method: opts.method || 'GET' });
+      // Exactly what PostgREST sends for POST + Prefer: return=minimal.
+      if (u.includes('/rest/v1/ism_student_responses') && opts.method === 'POST') {
+        return { ok: true, status: 201, text: async () => '', json: async () => { throw new SyntaxError('Unexpected end of JSON input'); } };
+      }
+      return inner(url, opts);
+    };
+    const res = await responseSave.handler({ httpMethod: 'POST', headers: AUTH_HEADER, body: JSON.stringify({ lessonId: LESSON_ID, fieldId: 'q1', value: 'x' }) });
+    assert.equal(res.statusCode, 200);
+    const upsert = calls.find(c => c.u.includes('/rest/v1/ism_student_responses') && c.method === 'POST');
+    assert.ok(upsert.u.includes('on_conflict=student_id,lesson_id,field_id'), 'upsert must name the unique key');
+    assert.ok(calls.some(c => c.u.includes('/rest/v1/ism_student_lesson_progress') && c.method === 'PATCH'), 'progress must still be updated after the insert');
   });
 });
 

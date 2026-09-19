@@ -34,7 +34,10 @@ async function sb(path, serviceKey, options = {}) {
   })
   if (!response.ok) throw new Error(`Supabase REST ${path} failed (${response.status}): ${await response.text()}`)
   if (response.status === 204) return []
-  return response.json()
+  // A POST with Prefer: return=minimal answers 201 with an EMPTY body —
+  // calling .json() on that throws, after the write has already landed.
+  const text = await response.text()
+  return text ? JSON.parse(text) : []
 }
 
 async function sbRpc(fn, args, serviceKey) {

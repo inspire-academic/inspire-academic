@@ -36,7 +36,10 @@ exports.handler = async function (event) {
       return reply(409, { success: false, error: { code: 'locked', message: 'This lesson has been submitted and can no longer be edited.' } })
     }
 
-    await sb('ism_student_responses', serviceKey, {
+    // on_conflict must name the UNIQUE(student_id, lesson_id, field_id)
+    // columns — without it merge-duplicates only targets the primary key,
+    // so the second save of any field fails on the unique constraint.
+    await sb('ism_student_responses?on_conflict=student_id,lesson_id,field_id', serviceKey, {
       method: 'POST',
       headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
       body: JSON.stringify({
