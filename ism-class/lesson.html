@@ -133,6 +133,7 @@ const STATUS_LABEL = {
 let currentUser = null;
 let accessToken = null;
 let lessonId = null;
+let lessonVersionId = null; // the version this student is pinned to — ism_response_photos.lesson_version_id is NOT NULL
 let currentStatus = 'not_started';
 let iframeEl = null;
 
@@ -185,6 +186,7 @@ async function loadLesson() {
     return;
   }
 
+  lessonVersionId = (data.progress && data.progress.lesson_version_id) || (data.version && data.version.id) || null;
   document.getElementById('header-title').textContent = data.lesson.title;
   document.getElementById('header-week').textContent = `Week ${data.lesson.week_number}`;
   document.title = data.lesson.title + ' — ISM Class';
@@ -309,10 +311,18 @@ document.getElementById('photo-input').addEventListener('change', async (e) => {
       const { error: upErr } = await supa.storage.from(PHOTO_BUCKET).upload(path, blob, { contentType: 'image/jpeg' });
       if (upErr) throw upErr;
       const { data: { publicUrl } } = supa.storage.from(PHOTO_BUCKET).getPublicUrl(path);
-      await supa.from('ism_response_photos').insert({
+      // supabase-js returns {error} rather than throwing — without this check
+      // a rejected insert (e.g. a missing NOT NULL column) failed silently and
+      // the student's photo just vanished with no message.
+      const { error: insErr } = await supa.from('ism_response_photos').insert({
         student_id: currentUser.id, lesson_id: lessonId,
+        lesson_version_id: lessonVersionId,
         photo_url: publicUrl
       });
+      if (insErr) {
+        await supa.storage.from(PHOTO_BUCKET).remove([path]); // don't orphan the file
+        throw insErr;
+      }
     } catch (err) {
       toast('Could not upload photo: ' + (err.message || 'unknown error'), 'error');
     }
