@@ -424,6 +424,24 @@ test('ism-submissions-list: non-owner teacher is refused with 403', async () => 
   });
 });
 
+test('ism-submissions-list: never selects nonexistent profile columns (profiles has no email)', async () => {
+  await withMockFetch({}, async () => {
+    const inner = global.fetch;
+    const profileQueries = [];
+    global.fetch = async (url, opts) => {
+      if (String(url).includes('/rest/v1/profiles') && String(url).includes('id=in.')) profileQueries.push(String(url));
+      return inner(url, opts);
+    };
+    const res = await submissionsList.handler({ httpMethod: 'GET', headers: AUTH_HEADER, queryStringParameters: { lessonId: LESSON_ID } });
+    assert.equal(res.statusCode, 200);
+    assert.ok(profileQueries.length > 0, 'roster should look students up');
+    profileQueries.forEach(q => {
+      assert.ok(!/select=[^&]*email/.test(q), 'must not select profiles.email');
+      assert.ok(/full_name/.test(q), 'must select full_name');
+    });
+  });
+});
+
 test('ism-submissions-list: owner gets a roster array', async () => {
   await withMockFetch({}, async () => {
     const res = await submissionsList.handler({ httpMethod: 'GET', headers: AUTH_HEADER, queryStringParameters: { lessonId: LESSON_ID } });

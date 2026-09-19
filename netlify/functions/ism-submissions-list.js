@@ -59,7 +59,8 @@ exports.handler = async function (event) {
     if (studentIds.size === 0) return reply(200, { success: true, roster: [] })
 
     const idList = Array.from(studentIds).map(id => `"${id}"`).join(',')
-    const profileRows = await sb(`profiles?id=in.(${idList})&select=id,first_name,last_name,email`, serviceKey)
+    // profiles has no email column — selecting it 400s the whole roster (502).
+    const profileRows = await sb(`profiles?id=in.(${idList})&select=id,full_name,first_name,last_name`, serviceKey)
     const profileById = Object.fromEntries(profileRows.map(p => [p.id, p]))
     const progressByStudent = Object.fromEntries(progressRows.map(p => [p.student_id, p]))
     const latestSubmissionByStudent = {}
