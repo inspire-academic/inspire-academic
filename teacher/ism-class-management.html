@@ -180,6 +180,12 @@ let assignedStudents = [];
 let myCohorts = [];
 let currentReviewSubmission = null;
 
+// Student answers are untrusted text rendered inside the teacher's authenticated
+// session — always escape before putting them in innerHTML.
+function esc(v) {
+  return String(v === null || v === undefined ? '' : v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
 function toast(msg, type = 'success') {
   const t = document.getElementById('toast'); t.textContent = msg; t.className = 'show ' + type;
   setTimeout(() => t.className = '', 3500);
@@ -390,7 +396,7 @@ async function loadSubmissionsRoster() {
     const data = await apiCall(`/api/v1/ism-class/submissions/list?lessonId=${encodeURIComponent(lessonId)}`);
     el.innerHTML = (data.roster || []).map(r => `
       <div class="roster-row" style="border-bottom:1px solid var(--border);">
-        <div class="roster-name">${r.student.full_name || r.student.email || r.student.id}</div>
+        <div class="roster-name">${esc(r.student.full_name || [r.student.first_name, r.student.last_name].filter(Boolean).join(' ') || r.student.id)}</div>
         <div class="roster-meta">${(r.progress.status || 'not_started').replace('_',' ')}</div>
         ${r.latestSubmission ? `<button class="mini-btn" onclick='openReview(${JSON.stringify(r.latestSubmission).replace(/'/g, "&#39;")})'>Review</button>` : ''}
       </div>`).join('') || '<div class="muted">No students assigned to this lesson yet.</div>';
@@ -421,8 +427,8 @@ async function openReview(submission) {
     <div class="card">
       <div class="field-hint">Submission #${submission.submission_number} · ${new Date(submission.submitted_at).toLocaleString('en-GB')}</div>
       <button class="mini-btn" style="margin:.6rem 0;" onclick="printSubmission()">🖨 Print</button>
-      <div id="review-responses">${responseEntries.map(([fid, val]) => `<div class="response-item"><span class="fid">${fid}</span> — ${val === null ? '<em>blank</em>' : val}</div>`).join('') || '<div class="muted">No text responses.</div>'}</div>
-      ${(photos && photos.length) ? `<div class="field-hint" style="margin-top:1rem;">Photos</div><div class="photo-grid">${photos.map(p => `<img src="${p.photo_url}">`).join('')}</div>` : ''}
+      <div id="review-responses">${responseEntries.map(([fid, val]) => `<div class="response-item"><span class="fid">${esc(fid)}</span> — ${val === null ? '<em>blank</em>' : esc(val)}</div>`).join('') || '<div class="muted">No text responses.</div>'}</div>
+      ${(photos && photos.length) ? `<div class="field-hint" style="margin-top:1rem;">Photos</div><div class="photo-grid">${photos.map(p => `<img src="${esc(p.photo_url)}">`).join('')}</div>` : ''}
 
       <div class="field" style="margin-top:1.2rem;"><label>Marks</label><div class="field-row">
         <input class="field-input" type="number" id="review-marks" placeholder="Marks" value="${prior?.marks ?? ''}">
@@ -483,7 +489,7 @@ window.saveReview = saveReview;
 function printSubmission() {
   const entries = Object.entries(currentReviewSubmission.responses_snapshot || {});
   const w = window.open('', '_blank');
-  w.document.write(`<pre style="font-family:sans-serif;white-space:pre-wrap;">${entries.map(([k, v]) => `${k}: ${v ?? ''}`).join('\n\n')}</pre>`);
+  w.document.write(`<pre style="font-family:sans-serif;white-space:pre-wrap;">${entries.map(([k, v]) => `${esc(k)}: ${esc(v ?? '')}`).join('\n\n')}</pre>`);
   w.document.close();
   w.print();
 }
