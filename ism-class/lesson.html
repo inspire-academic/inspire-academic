@@ -340,12 +340,19 @@ async function removePhoto(id) {
 window.removePhoto = removePhoto;
 
 // ── Feedback ──
+// Teacher-authored text is still untrusted input to the student's page — escape it.
+function esc(v) {
+  return String(v === null || v === undefined ? '' : v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
 async function loadFeedback() {
   const { data: submissions } = await supa.from('ism_submissions')
     .select('id,status,submission_number').eq('student_id', currentUser.id).eq('lesson_id', lessonId)
     .order('submission_number', { ascending: false }).limit(1);
   const submission = submissions && submissions[0];
-  if (!submission || submission.status !== 'reviewed') return;
+  // A returned lesson must show the teacher's reasons too — otherwise the student
+  // is told to correct their work with no way to see what was wrong.
+  if (!submission || !['reviewed', 'returned'].includes(submission.status)) return;
 
   const [{ data: reviews }, { data: fieldFeedback }] = await Promise.all([
     supa.from('ism_teacher_reviews').select('*').eq('submission_id', submission.id).order('reviewed_at', { ascending: false }).limit(1),
@@ -354,15 +361,18 @@ async function loadFeedback() {
   const review = reviews && reviews[0];
   if (!review) return;
 
-  document.getElementById('feedback-panel').style.display = 'block';
+  const panel = document.getElementById('feedback-panel');
+  panel.style.display = 'block';
+  panel.querySelector('.section-title').textContent =
+    submission.status === 'returned' ? 'Teacher feedback — returned for corrections' : 'Teacher feedback';
   const stats = document.getElementById('feedback-stats');
   stats.innerHTML = [
-    review.marks !== null ? `<div class="feedback-stat"><div class="feedback-stat-val">${review.marks}${review.marks_total !== null ? ' / ' + review.marks_total : ''}</div><div class="feedback-stat-lbl">Marks</div></div>` : '',
-    review.mastery_score ? `<div class="feedback-stat"><div class="feedback-stat-val">${review.mastery_score}</div><div class="feedback-stat-lbl">Mastery</div></div>` : ''
+    review.marks !== null ? `<div class="feedback-stat"><div class="feedback-stat-val">${esc(review.marks)}${review.marks_total !== null ? ' / ' + esc(review.marks_total) : ''}</div><div class="feedback-stat-lbl">Marks</div></div>` : '',
+    review.mastery_score ? `<div class="feedback-stat"><div class="feedback-stat-val">${esc(review.mastery_score)}</div><div class="feedback-stat-lbl">Mastery</div></div>` : ''
   ].join('');
   document.getElementById('feedback-comment').textContent = review.overall_comment || '';
   document.getElementById('feedback-fields').innerHTML = (fieldFeedback || [])
-    .map(f => `<div class="field-feedback-item"><span class="fid">${f.field_id}</span> — ${f.comment}</div>`).join('');
+    .map(f => `<div class="field-feedback-item"><span class="fid">${esc(f.field_id)}</span> — ${esc(f.comment)}</div>`).join('');
 }
 
 (async () => {
