@@ -193,6 +193,9 @@ async function loadLesson() {
   setStatus(data.progress?.status || 'not_started');
 
   const wrap = document.getElementById('frame-wrap');
+  // submitLesson() calls loadLesson() again to re-render read-only; drop the
+  // previous frame first or the old, still-editable one stays on screen above it.
+  wrap.querySelectorAll('iframe').forEach(f => f.remove());
   const iframe = document.createElement('iframe');
   iframe.setAttribute('sandbox', 'allow-scripts allow-forms');
   iframe.setAttribute('title', data.lesson.title);
