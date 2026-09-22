@@ -546,3 +546,16 @@ function = "create-teacher"
   to = "/.netlify/functions/ism-submissions-list"
   status = 200
   force = true
+
+# Next-phase architecture, Section 16 of the handoff brief / decision 5 in
+# docs/architecture-migration-plan.md — a human-friendly interim gateway
+# ("go to inspireacademic.org/learn") pending the real learn.inspireacademic.org
+# subdomain cutover, which is deliberately NOT happening yet (see the plan
+# doc's subdomain-spike sequencing). 302 (temporary) since the destination
+# will change once the real subdomain exists. dashboard.html already calls
+# requireAuth() at page load (assets/js/supabase.js), which bounces an
+# unauthenticated visitor to /index.html — safe today with zero new code.
+[[redirects]]
+  from = "/learn"
+  to = "/dashboard.html"
+  status = 302
