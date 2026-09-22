@@ -11,7 +11,8 @@ supplied 2026-09-22) before any implementation of the proposed
 architecture. It also reconciles that brief against two things it was
 written without visibility into: this repo's own existing `CLAUDE.md`
 migration roadmap, and a prior dated research pass on Ghana/WASSCE
-expansion (`2026-08-29-app-store-and-ghana-expansion-strategy.md`). Where
+expansion (originally `2026-08-29-app-store-and-ghana-expansion-strategy.md`,
+now `docs/reference/ghana-wassce-expansion-strategy.md` — see §L.9). Where
 the new brief's example data conflicts with that research, this report
 says so explicitly rather than presenting two competing versions.
 
@@ -459,8 +460,8 @@ The brief's own Section 9 example data (`stages: JHS, SHS`;
 `examSystems: BECE, WASSCE`; `subjects: Mathematics, Integrated Science,
 Physics, Chemistry, Biology`) is explicitly labeled by the brief itself
 as "architecture only, not curriculum-accurate." A dated research pass
-(`2026-08-29-app-store-and-ghana-expansion-strategy.md`) already resolved
-this properly and should be used instead:
+(now `docs/reference/ghana-wassce-expansion-strategy.md`, see §L.9) already
+resolved this properly and should be used instead:
 
 - **Target WASSCE specifically, not BECE.** WASSCE is the actual
   GCSE-equivalent qualification (UK NARIC/ENIC: A1-C6 ≈ GCSE grade 4+)
@@ -672,3 +673,203 @@ numbering rather than restarting a second "Phase 1."
 7. **Staging database isolation** (§G): is running staging against the same production Supabase project an accepted, already-understood risk, or does this initiative need to fund/build a real staging database before any further schema work proceeds? This predates this initiative but this report is the first place it's been written down as a gap against the brief's own Section 21 requirement.
 8. **Sequencing against in-flight work**: this initiative's Phase 1 (config layer) can run concurrently with the existing Phase 2 (design tokens) and Phase 3 (live Supabase data) work already on the roadmap, and with the dormant paid-tier activation whenever that's picked up. Confirm this is the right priority ordering relative to Eric's actual near-term plans (app-store submission timeline, Ghana content resourcing, paid-tier activation) — this report sequences the engineering dependencies but doesn't know the business priority among them.
 9. **Should the Ghana strategy doc (`C:\InspireAcademic-Strategy\2026-08-29-app-store-and-ghana-expansion-strategy.md`) be copied into this repo's `docs/reference/`?** It currently lives outside version control entirely; the schema migration file already references "see docs/reference for the strategy doc this implements" as though it expects to find it there, but it isn't there yet.
+
+---
+
+## L. Approved decisions (2026-09-22) and reconciled implementation sequence
+
+Eric reviewed §A-K and returned 12 decisions. This section records them as
+binding, resolves the §K questions they answer, and replaces §H with the
+single authoritative sequence required by decision 12. **This section
+supersedes §H where the two conflict; §H is retained above for historical
+context (how the sequence was originally reasoned about) but is no longer
+the plan to execute.**
+
+### Decisions and which §K questions they resolve
+
+1. **Ghana content model** — AI-assisted drafting grounded directly in
+   official NaCCA/WAEC source material, with Ghanaian subject-matter-expert
+   review required before anything is published. **Resolves §K.1.** Not "AI
+   draft alone" and not "commission-only" — a hybrid, with the SME review
+   gate treated as non-optional.
+2. **Ghana grade prediction** — does not block launch. The Ghana learner
+   experience launches on mastery state, diagnostic performance,
+   strengths/gaps and readiness indicators only. The existing GCSE
+   grade-prediction model (`REAL_GRADE_BOUNDARIES` and related engine work)
+   is explicitly **not** ported to WASSCE unless and until a defensible
+   WASSCE-specific model exists. **Resolves §K.2** exactly along the lines
+   this report already recommended.
+3. **WAEC licensing** — rights/licensing investigation begins now, in
+   parallel with everything else, but no product ships or depends
+   commercially on WAEC past-paper content until permission is secured.
+   Ghana content in the meantime is built as original Inspire-authored
+   questions aligned to curriculum and WASSCE assessment demands, not
+   reproduced past papers. **Resolves §K.3** — investigation starts
+   immediately rather than waiting, but the publishing gate is firm.
+4. **Mathematics / Additional Mathematics** — deliberately left **OPEN**.
+   The precise science-track subject combination is not encoded into the
+   platform (schema, `regions.js`, or content plan) until confirmed by
+   NaCCA/WAEC directly or in writing. **This is the one §K question that
+   remains genuinely unresolved** (§K.4) — every other numbered question
+   above and below has a decision. Any future schema or config work
+   touching Ghana mathematics subjects must treat this as a blocking
+   unknown, not default to either interpretation.
+5. **Public/Learn split** — sequence confirmed as: `/learn` gateway first,
+   then empirically spike both candidate mechanisms from §E in
+   preview/staging. Eric's stated leading candidate is **a second Netlify
+   deployment from the same repository** (§E option 2) over Host-based Edge
+   Function routing (§E option 3), specifically for deployment isolation,
+   rollback simplicity, configuration separation and operational clarity —
+   but this is a *leading candidate*, not a final choice; §E's instruction
+   to validate empirically before committing stands. **Resolves §K.5**,
+   with the priority order reversed from this report's original
+   recommendation (which favored spiking the Edge Function route first for
+   cost) — Eric's operational-clarity reasoning takes precedence.
+6. **Registration** — authentication and account creation ultimately belong
+   to `learn.inspireacademic.org`, not the public site. Public-site
+   registration/login CTAs hand off to `learn.`; legacy URLs are preserved
+   via redirect, not left to break. **Resolves §K.6.**
+7. **Environment isolation** — real staging/production Supabase separation
+   is required *before* any further significant schema, authentication,
+   regionalisation or curriculum-migration work. Staging must stop sharing
+   the production learner database for the duration of this programme.
+   **Resolves §K.7** — this is now the explicit gating item at the top of
+   the Engineering foundation track below, not an accepted risk. See the
+   "Requires Eric's action" subsection immediately following this list —
+   this cannot be executed by an agent without dashboard access to a
+   Supabase account.
+8. **Programme priority** — three coordinated tracks, detailed in full in
+   "Reconciled implementation sequence" below. **Resolves §K.8.**
+9. **Repository documentation** — the Ghana strategy/research material
+   moves into `docs/reference/` as institutional memory, secrets excluded.
+   **Resolves §K.9.** Done as part of this same change — see
+   `docs/reference/ghana-wassce-expansion-strategy.md`.
+10. **Existing multi-country groundwork** — `profiles.country`,
+    `profiles.curriculum_system`, the `grade-scales.js` abstraction, and
+    other already-landed or in-flight work are to be built upon, not
+    reimplemented. This was already this report's own §D/§E finding;
+    Eric's decision makes it binding rather than merely observed.
+11. **Curriculum abstraction** — investigating `spec-map.js`'s
+    AQA/Edexcel-only assumption is elevated to immediate priority (not
+    scheduled behind the subdomain work as §H originally sequenced it).
+    The investigation is complete as of this change — see
+    `docs/reference/curriculum-neutral-engine-investigation.md`. It is
+    investigation/design only; no Ghana subject data has been added to
+    `spec-map.js` itself, per decision 4's constraint against encoding
+    unconfirmed assumptions.
+12. **Roadmaps** — this section, together with the "Reconciled
+    implementation sequence" below, is now the **one** authoritative
+    sequence. `CLAUDE.md`'s existing 8-phase roadmap is not replaced — it
+    is interleaved into the three tracks below — but §H above is
+    historical, and no second/competing sequence should be maintained
+    going forward. If `CLAUDE.md` itself is later edited to reflect this,
+    that edit should point back to this section rather than restate it.
+
+### Requires Eric's action — environment isolation (blocks decision 7)
+
+No Supabase or Netlify CLI is installed or authenticated in this working
+environment, so none of the following can be executed by an agent working
+in this repo alone. This is the concrete blocking checklist:
+
+1. **Create a new Supabase project** to serve as the real staging database.
+   Same organisation as the existing production project is the reasonable
+   default; region parity with the existing `eu-west-2` (London) project is
+   worth keeping for latency parity, but this is Eric's call, not assumed
+   here.
+2. **Run the tracked migrations** in `supabase/*.sql` against the new
+   project, in their existing order, and confirm they apply cleanly against
+   an empty schema (they haven't been tested against a truly empty
+   database in this repo's history — they were written incrementally
+   against the live production schema).
+3. **Obtain the new project's URL and anon key** (safe to be
+   client-embedded, per existing practice — anon key is not a secret
+   boundary here, RLS is). **Obtain its service-role key separately** and
+   store it only in Netlify's environment-variable dashboard, scoped to the
+   `staging` deploy context — never commit it to the repository.
+4. **Set `staging`-deploy-context-scoped environment variables in
+   Netlify** for the new project's URL/anon key, distinct from whatever
+   production's values are.
+5. **A real code change is required and is *not* optional once step 4 is
+   done** — `assets/js/supabase.js:5-6` currently hardcodes `SUPA_URL` and
+   `SUPA_KEY` as literal constants in a static file served identically to
+   every deploy context. A static file cannot differ between staging and
+   production deploys as things stand today; setting Netlify environment
+   variables alone (step 4) will have **no effect** until this is
+   addressed. This directly collides with `CLAUDE.md`'s "zero build step"
+   principle, since environment-variable injection into client-side JS
+   normally happens at build time. **This is a design decision, not one to
+   resolve unilaterally here** — two realistic options, both consistent
+   with patterns already used in this repo:
+   - A small Netlify Function or Edge Function (two Edge Functions already
+     exist in this project — `mileiq-distance`, `create-teacher`) that
+     serves `/assets/js/supabase-config.js` dynamically, reading
+     `context.deploy.context` or a Netlify env var server-side and
+     returning the correct `SUPA_URL`/`SUPA_KEY` as a small JS snippet,
+     loaded before `supabase.js`. Zero build step preserved; adds one more
+     dynamic asset to reason about.
+   - A tiny build step introduced specifically for this one file (envsubst
+     or equivalent at deploy time), which is the more conventional
+     solution but is a genuine, explicit departure from the zero-build-step
+     principle and should not be adopted silently.
+   Neither option has been implemented. This needs a decision from Eric
+   before implementation, flagged here rather than picked unilaterally.
+6. **Until steps 1-5 are complete, no further schema, authentication,
+   regionalisation or curriculum-migration work should proceed**, per
+   decision 7. This is now the first, blocking item in the Engineering
+   foundation track below.
+
+### Reconciled implementation sequence (supersedes §H)
+
+Three coordinated tracks, run in parallel, each internally sequenced.
+`CLAUDE.md`'s existing Phase 2-8 numbering is folded in rather than
+restarted.
+
+**Track 1 — Engineering foundation**
+1. Environment isolation (blocked on Eric — see checklist above).
+2. `/learn` gateway — **done in this same change**, see `netlify.toml`.
+3. Subdomain spike — empirically validate both §E candidates in
+   preview/staging once environment isolation is resolved; Eric's stated
+   leading candidate is a second Netlify site (§E option 2), decision 5.
+4. Curriculum/region abstraction — `regions.js` plus the `spec-map.js`
+   refactor design already investigated (decision 11); implementation
+   waits on environment isolation per decision 7, since this is
+   curriculum-migration-adjacent schema/config work.
+5. Public/LMS domain cutover — per §E/§J, once 1-4 are proven.
+   This absorbs the existing roadmap's Phase 2 (design tokens/CSS — can
+   run concurrently, independent of the split) and Phase 3 (live Supabase
+   data on subject dashboards — also independent, can run concurrently).
+
+**Track 2 — Commercial** (explicitly does not wait for Track 1's
+completion, per decision 8)
+- Paid-tier activation (Stripe/Paystack, currently dormant behind
+  `billing-flags.js` kill switches) and existing UK/ISM monetisation
+  continue on their own timeline.
+- App-store submission (Capacitor/native wrappers already scaffolded)
+  proceeds, but **final submission is deliberately held** until the web
+  hostname/authentication architecture (Track 1, steps 1-3 at minimum) is
+  stable enough that the native wrappers won't need avoidable rework —
+  the app bundles the web assets (per the existing app-store strategy
+  research), so a hostname change after submission would mean a real
+  native rebuild, not a config edit.
+
+**Track 3 — Ghana**
+- Curriculum research, SME validation, and WAEC rights/licensing
+  conversations (decisions 1 and 3) can proceed immediately and don't
+  depend on engineering work at all.
+- Curriculum-content production scales up once Track 1's schema work
+  (step 4, curriculum/region abstraction) is sufficiently stable —
+  per decision 8, "in parallel once the technical schema is sufficiently
+  stable," not before.
+- The Mathematics/Additional Mathematics question (decision 4) must be
+  resolved with NaCCA before any Ghana mathematics content or schema
+  entry is finalised — this can block only that specific subject, not the
+  rest of Track 3.
+
+**Existing `CLAUDE.md` Phases 4-8** (Mentorship module, AI learning engine,
+Ubuntu social layer, continental scale, mobile app) continue independently
+of this programme, except that the mobile-app phase should consume
+whatever region/country config Track 1 produces rather than building its
+own.
+
+This is now the single roadmap. Any future planning conversation about
+this initiative should update this section, not create a parallel one.
