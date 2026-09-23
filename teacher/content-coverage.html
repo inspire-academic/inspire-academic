@@ -141,15 +141,20 @@ async function checkAuth() {
   return true
 }
 
-// subjects.name in the DB is "Mathematics" but spec-map.js (and the
-// Subject dropdowns in quiz-generator.html / teacher-assessment-create.html)
-// key Maths topics as "Maths" — map by subject id, not by name string,
-// so this doesn't silently break again if a display name changes.
-const SUBJECT_ID_TO_SPEC_NAME = { 1: 'Maths', 2: 'Physics', 3: 'Chemistry', 4: 'Biology' }
+// window.SPEC_MAP is nested CurriculumSystem -> Subject -> Board (see
+// assets/js/spec-map.js) — quiz-generator.html and
+// teacher-assessment-create.html both key through CURRICULUM_SYSTEM_ID
+// first. This lookup was skipping that level entirely, so it always
+// read undefined regardless of subject; it also used the stale name
+// "Maths" instead of spec-map.js's current "Mathematics" for subject
+// id 1. Map by subject id, not by name string, so this doesn't
+// silently break again if a display name changes.
+const CURRICULUM_SYSTEM_ID = 'gcse-uk'
+const SUBJECT_ID_TO_SPEC_NAME = { 1: 'Mathematics', 2: 'Physics', 3: 'Chemistry', 4: 'Biology' }
 
 function specTopicCount(subjectId) {
   const specName = SUBJECT_ID_TO_SPEC_NAME[subjectId]
-  const boards = (specName && window.SPEC_MAP[specName]) || {}
+  const boards = (specName && window.SPEC_MAP[CURRICULUM_SYSTEM_ID]?.[specName]) || {}
   return Object.values(boards).reduce((s, arr) => s + arr.length, 0)
 }
 
