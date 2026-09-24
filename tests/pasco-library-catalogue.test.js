@@ -64,6 +64,14 @@ test('parses Edexcel filenames, including November mark schemes published in Jan
     ['Edexcel', 'Mathematics', 2022, 'November', 3, 'mark_scheme']);
 });
 
+test('parses Inspire-normalised Edexcel names', () => {
+  assert.deepEqual(pick(CAT.parseFileName('Edexcel-1PH0-1H-QP-JUN22.pdf')),
+    ['Edexcel', 'Physics', 2022, 'June', 1, 'paper']);
+  assert.deepEqual(pick(CAT.parseFileName('Edexcel-1PH0-2H-MS-NOV20.pdf')),
+    ['Edexcel', 'Physics', 2020, 'November', 2, 'mark_scheme']);
+  assert.equal(CAT.parseFileName('Edexcel-1PH0-Specification.pdf'), null);
+});
+
 test('parses Inspire solution filenames', () => {
   assert.deepEqual(pick(CAT.parseFileName('PASCO-AQA-Chemistry-2H-Nov2020-Review.html')),
     ['AQA', 'Chemistry', 2020, 'November', 2, 'solution']);

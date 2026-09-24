@@ -163,6 +163,17 @@
       });
     }
 
+    // Inspire's normalised Edexcel names (used when a download site has
+    // renamed the board's file): Edexcel-1PH0-1H-QP-JUN22.pdf
+    m = /Edexcel[-_ ](1PH0|1CH0|1BI0|1MA1)[-_ ]([123])H[-_ ](QP|MS)[-_ ](JUN|NOV)((?:20)?\d{2})\b/i.exec(name);
+    if (m) {
+      return finish({
+        board: 'Edexcel', subject: subjectFromCode('Edexcel', m[1]),
+        year: fullYear(m[5]), series: seriesFromMonth(m[4]), paper: +m[2],
+        docType: m[3].toUpperCase() === 'QP' ? 'paper' : 'mark_scheme'
+      });
+    }
+
     m = /(1ph0|1ch0|1bi0|1ma1)[-_ ]?([123])h[-_ ](que|msc|rms)[-_ ](\d{4})(\d{2})\d{2}/i.exec(name);
     if (m) {
       var y = +m[4], mo = +m[5], docType = m[3].toLowerCase() === 'que' ? 'paper' : 'mark_scheme';
