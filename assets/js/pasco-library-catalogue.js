@@ -153,7 +153,8 @@
       });
     }
 
-    m = /(8461|8462|8463|8300)[-_ ]?([123])H\b.*?\b(QP|MS|INS)\b.*?\b(JUN|NOV)[-_ ]?(\d{2,4})\b/i.exec(name);
+    // AQA appends a version digit to the series: JUN241 = June 2024, version 1.
+    m = /(8461|8462|8463|8300)[-_ ]?([123])H\b.*?\b(QP|MS|INS)\b.*?\b(JUN|NOV)[-_ ]?((?:20)?\d{2})\d?\b/i.exec(name);
     if (m && m[3].toUpperCase() !== 'INS') {
       return finish({
         board: 'AQA', subject: subjectFromCode('AQA', m[1]),

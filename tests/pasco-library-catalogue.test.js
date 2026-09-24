@@ -42,6 +42,17 @@ test('parses AQA board filenames', () => {
     ['AQA', 'Biology', 2019, 'June', 2, 'paper']);
 });
 
+test('parses real AQA downloads, which append a version digit (JUN241 = June 2024 v1)', () => {
+  assert.deepEqual(pick(CAT.parseFileName('AQA-84631H-QP-JUN241.pdf')),
+    ['AQA', 'Physics', 2024, 'June', 1, 'paper']);
+  assert.deepEqual(pick(CAT.parseFileName('AQA-84632H-MS-JUN241.pdf')),
+    ['AQA', 'Physics', 2024, 'June', 2, 'mark_scheme']);
+  assert.deepEqual(pick(CAT.parseFileName('AQA-84631H-QP-MQP18A4-JUN231.pdf')),
+    ['AQA', 'Physics', 2023, 'June', 1, 'paper']);
+  assert.equal(CAT.parseFileName('AQA-84631H-INS-JUN241.pdf'), null);  // insert
+  assert.equal(CAT.parseFileName('AQA-8463-DB-JUN231.pdf'), null);     // data booklet, no paper number
+});
+
 test('parses Edexcel filenames, including November mark schemes published in January', () => {
   assert.deepEqual(pick(CAT.parseFileName('1ph0-1h-que-20220520.pdf')),
     ['Edexcel', 'Physics', 2022, 'June', 1, 'paper']);
