@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>PASCO Library — Inspire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/pasco-library.css">
+</head>
+<body>
+
+<div class="auth-loading" id="authLoading">
+  <div class="auth-loading-logo">Inspire</div>
+  <div class="auth-loading-sub">Verifying access...</div>
+</div>
+
+<header class="topbar">
+  <a href="/teacher/teacher.html" class="topbar-logo">Inspire</a>
+  <span class="topbar-title">PASCO Library</span>
+  <div class="topbar-right">
+    <button class="btn btn-outline btn-sm" id="backBtn" type="button">← Dashboard</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ── Library: board + subject → years ── -->
+  <section id="libraryPanel">
+    <div class="hero">
+      <div class="eyebrow">PASCO · Private file cabinet</div>
+      <h1>Past papers, by year.</h1>
+      <p class="subhead">GCSE Higher tier, 9–1 specifications from 2018. Choose a board and subject, then open a year to view or upload its papers, mark schemes and Inspire solutions.</p>
+    </div>
+
+    <div class="toolbar">
+      <div class="seg" role="tablist" aria-label="Exam board" id="boardTabs"></div>
+      <div class="chips" role="tablist" aria-label="Subject" id="subjectTabs"></div>
+    </div>
+
+    <div class="section-head">
+      <div>
+        <h2 id="subjectTitle">Examination years</h2>
+        <p id="subjectMeta"></p>
+      </div>
+      <label class="btn btn-gold btn-sm bulk-btn">
+        <input type="file" id="bulkInput" accept=".pdf,.html,.htm" multiple hidden>
+        ⇪ Bulk upload
+      </label>
+    </div>
+
+    <div class="years" id="yearsGrid"></div>
+  </section>
+
+  <!-- ── Year: series → papers → document slots ── -->
+  <section id="yearPanel" hidden>
+    <a class="back-link" id="backToYears" href="#">← All years</a>
+    <div class="year-head">
+      <div class="eyebrow" id="yearEyebrow"></div>
+      <h1 id="yearTitle"></h1>
+    </div>
+    <div id="seriesList"></div>
+  </section>
+
+  <p class="footnote">Private preparation material — admin access only. Files are stored in a private bucket and are never publicly reachable.</p>
+</main>
+
+<!-- ── Document viewer ── -->
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+  <div class="viewer-bar">
+    <div class="viewer-titles">
+      <strong id="viewerTitle"></strong>
+      <span id="viewerSub"></span>
+    </div>
+    <div class="viewer-actions">
+      <a class="btn btn-outline btn-sm" id="viewerNewTab" target="_blank" rel="noopener">Open in new tab</a>
+      <a class="btn btn-outline btn-sm" id="viewerDownload">Download</a>
+      <button class="btn btn-gold btn-sm" id="viewerClose" type="button">Close</button>
+    </div>
+  </div>
+  <div class="viewer-body">
+    <div class="viewer-loading" id="viewerLoading"><div class="spinner"></div></div>
+    <iframe id="viewerFrame" title="Document"></iframe>
+  </div>
+</div>
+
+<!-- ── Bulk upload review ── -->
+<div class="modal-overlay pl-modal" id="bulkModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="bulkTitle">
+    <h2 id="bulkTitle">Bulk upload</h2>
+    <p class="muted small">Files are matched to slots by filename (AQA / Edexcel downloads and Inspire <span class="mono">PASCO-…-Review.html</span> files). Check the matches, then upload.</p>
+    <div id="bulkList" class="bulk-list"></div>
+    <div class="action-row">
+      <button class="btn btn-outline" id="bulkCancel" type="button">Cancel</button>
+      <button class="btn btn-gold" id="bulkConfirm" type="button">Upload</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="slotInput" accept=".pdf,.html,.htm" hidden>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/nav-back.js"></script>
+<script src="/assets/js/pasco-library-catalogue.js"></script>
+<script src="/assets/js/pasco-library.js"></script>
+</body>
+</html>

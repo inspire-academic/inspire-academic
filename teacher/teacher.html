@@ -330,6 +330,11 @@ tr:hover td { background: rgba(255,255,255,.025); }
         <span class="icon">📋</span><span>Registrations</span>
       </div>
     </a>
+    <a href="/teacher/pasco-library.html" style="text-decoration:none;color:inherit;">
+      <div class="nav-item" id="nav-pasco-library" style="display:none">
+        <span class="icon">🗄️</span><span>PASCO Library</span>
+      </div>
+    </a>
 
     <div style="height:1px;background:var(--border);margin:.5rem 0;"></div>
 
@@ -682,6 +687,7 @@ async function init() {
       document.getElementById('nav-users').style.display = 'flex';
       document.getElementById('nav-teacher-mgmt').style.display = 'flex';
       document.getElementById('nav-leads').style.display = 'flex';
+      document.getElementById('nav-pasco-library').style.display = 'flex';
     }
 
     if (session.user.email.trim().toLowerCase() === 'inspire.science.uk@gmail.com') {
