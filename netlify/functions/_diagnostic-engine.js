@@ -12,6 +12,7 @@
 
 const SPEC_MAP = require('../../assets/js/spec-map.js');
 const PASCO_CALIBRATION_STATS = require('../../assets/js/pasco-calibration-stats.js');
+const { withMathsHtml } = require('./_maths-html');
 
 const QUESTIONS_PER_TEST = 36;
 const COMBINED_PER_SUBJECT = 15;
@@ -168,13 +169,15 @@ function sourceSubjects(subject) {
 }
 
 // What the browser is allowed to see before answering: no correct answer,
-// no misconceptions, no explanation.
+// no misconceptions, no explanation. Text with maths also comes typeset
+// (<field>_html, see _maths-html.js), so the page needn't load KaTeX.
 const PUBLIC_QUESTION_FIELDS = ['id', 'subject', 'topic', 'subtopic', 'difficulty', 'question_text',
   'option_a', 'option_b', 'option_c', 'option_d', 'option_e', 'diagram_spec'];
+const TEXT_FIELDS = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d', 'option_e'];
 function publicQuestion(q) {
   const out = {};
   PUBLIC_QUESTION_FIELDS.forEach(f => { out[f] = q[f] === undefined ? null : q[f]; });
-  return out;
+  return withMathsHtml(out, TEXT_FIELDS);
 }
 
 // ── Marking ────────────────────────────────────────────────────────────
@@ -495,7 +498,7 @@ function reviewItems(questions, answers) {
   const byId = new Map(questions.map(q => [q.id, q]));
   return answers.map((a, i) => {
     const q = byId.get(a.question_id) || {};
-    return {
+    return withMathsHtml({
       position: i + 1,
       ...publicQuestion(q),
       chosen: a.chosen,
@@ -504,8 +507,14 @@ function reviewItems(questions, answers) {
       not_sure: a.not_sure,
       misconception: a.misconception,
       explanation: q.explanation || null
-    };
+    }, ['misconception', 'explanation']);
   });
+}
+
+// The diagnosis as the page shows it: gap reasons typeset too. (The saved
+// result keeps plain text; reports and teacher views typeset it themselves.)
+function diagnosisForDisplay(d) {
+  return { ...d, gaps: d.gaps.map(g => withMathsHtml(g, ['reason'])) };
 }
 
 module.exports = {
@@ -513,5 +522,5 @@ module.exports = {
   shuffleArray, normTopic, buildTopicWeights, weightedSampleAcrossTopics, isCombinedEligible,
   selectQuestions, sourceSubjects, publicQuestion, PUBLIC_QUESTION_FIELDS, markAnswers,
   estimateGrade, gradeLabel, combinedPairIndex, combinedPairLabel, wilsonInterval,
-  confidenceRangeForScore, computeTopicScores, computeDiagnosis, reviewItems
+  confidenceRangeForScore, computeTopicScores, computeDiagnosis, reviewItems, diagnosisForDisplay
 };

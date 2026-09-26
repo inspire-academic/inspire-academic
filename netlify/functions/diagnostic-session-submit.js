@@ -58,21 +58,30 @@ exports.handler = async (event) => {
   try {
     const { session, error } = await loadSession(client, event, body.sessionId, body.token);
     if (error) return error;
-    if (session.status === 'submitted') {
-      if (session.result) return ok({ ...session.result, attemptId: session.attempt_id || null });
-      return fail(409, 'submitting', 'Your results are still being worked out. Please try again in a moment.');
+    if (session.status !== 'in_progress' && session.status !== 'submitted') {
+      return fail(409, 'not_in_progress', 'This test was replaced by a newer one.');
     }
-    if (session.status !== 'in_progress') return fail(409, 'not_in_progress', 'This test was replaced by a newer one.');
 
     const ids = session.question_ids.map(Number);
     const rows = await client.get(`diagnostic_questions?id=in.(${ids.join(',')})&select=${FULL_COLUMNS}`);
     const byId = new Map(rows.map(q => [Number(q.id), q]));
     const questions = ids.map(id => byId.get(id)).filter(Boolean);
-
-    // Record answers that never arrived on their own (first write wins).
     const recorded = await client.get(`diagnostic_responses?session_id=eq.${session.id}&select=question_id,chosen`);
     const choice = {};
     recorded.forEach(r => { choice[Number(r.question_id)] = r.chosen; });
+
+    // Already marked: return the same result. Only the plain diagnosis is
+    // stored; the review is rebuilt from the recorded answers.
+    if (session.status === 'submitted') {
+      if (!session.result) return fail(409, 'submitting', 'Your results are still being worked out. Please try again in a moment.');
+      return ok({
+        diagnosis: engine.diagnosisForDisplay(session.result.diagnosis),
+        review: engine.reviewItems(questions, engine.markAnswers(questions, choice)),
+        saved: session.result.saved, attemptId: session.attempt_id || null
+      });
+    }
+
+    // Record answers that never arrived on their own (first write wins).
     const missing = (Array.isArray(body.answers) ? body.answers : [])
       .map(a => ({ id: Number(a && a.questionId), chosen: String((a && a.chosen) || ''), t: Number(a && a.timeMs) }))
       .filter(a => byId.has(a.id) && CHOICES.includes(a.chosen) && !(a.id in choice));
@@ -115,9 +124,9 @@ exports.handler = async (event) => {
       }
     }
 
-    const result = { diagnosis, review, saved };
-    await client.patch(`diagnostic_sessions?id=eq.${session.id}`, { result, attempt_id: attemptId, updated_at: new Date().toISOString() });
-    return ok({ ...result, attemptId });
+    await client.patch(`diagnostic_sessions?id=eq.${session.id}`,
+      { result: { diagnosis, saved }, attempt_id: attemptId, updated_at: new Date().toISOString() });
+    return ok({ diagnosis: engine.diagnosisForDisplay(diagnosis), review, saved, attemptId });
   } catch (e) {
     console.error('diagnostic-session-submit error:', e.message);
     return fail(502, 'db_error', 'Could not mark the test. Your answers are saved, so please try again.');

@@ -1,8 +1,9 @@
 // Inspire Academic — Service Worker
 // Strategy: cache-first for assets that rarely change (images, fonts, the
-// vendor Supabase bundle), network-first (cache as fallback) for HTML
-// pages AND this site's own JS/CSS — see the FETCH section below for why
-// JS/CSS moved off pure cache-first.
+// vendor Supabase bundle), network-first (cache as fallback, and after a
+// 4s time limit on a slow connection) for HTML pages AND this site's own
+// JS/CSS — see the FETCH section below for why JS/CSS moved off pure
+// cache-first.
 
 const CACHE_VERSION = 'inspire-v5';
 const CACHE_STATIC = 'inspire-static-v5';   // long-lived assets
@@ -52,6 +53,31 @@ self.addEventListener('activate', e => {
   );
 });
 
+// ─── NETWORK FIRST, WITH A TIME LIMIT ─────────────────────────────────────────
+// Tries the network, and keeps the cache fresh from it. But on a flaky 2G
+// connection a request can hang for 30s+ before failing, so if the network
+// hasn't answered within NETWORK_TIMEOUT_MS and a cached copy exists, the
+// cached copy is served straight away (the network answer, when it comes,
+// still refreshes the cache for next time). With no cached copy it simply
+// waits for the network, as before.
+const NETWORK_TIMEOUT_MS = 4000;
+
+function networkFirst(request, cacheName) {
+  const network = fetch(request, { cache: 'no-store' }).then(res => {
+    if (res.ok) {
+      const clone = res.clone();
+      caches.open(cacheName).then(c => c.put(request, clone));
+    }
+    return res;
+  });
+  network.catch(() => {}); // a late failure after the cache has answered is fine
+  const cachedAfterTimeout = new Promise(resolve => setTimeout(resolve, NETWORK_TIMEOUT_MS))
+    .then(() => caches.match(request))
+    .then(cached => cached || network);
+  return Promise.race([network, cachedAfterTimeout])
+    .catch(() => caches.match(request)); // offline fallback
+}
+
 // ─── FETCH ────────────────────────────────────────────────────────────────────
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
@@ -83,16 +109,10 @@ self.addEventListener('fetch', e => {
   // HTML pages — network first, fall back to cache
   // This ensures students always get the latest page content
   if (e.request.headers.get('accept')?.includes('text/html')) {
-    e.respondWith(
-      fetch(e.request, { cache: 'no-store' }) // belt-and-braces alongside netlify.toml's max-age=0 on *.html — see the JS/CSS branch below for why relying on Cache-Control alone isn't safe
-        .then(res => {
-          // Update cache with fresh version in background
-          const clone = res.clone();
-          caches.open(CACHE_PAGES).then(c => c.put(e.request, clone));
-          return res;
-        })
-        .catch(() => caches.match(e.request)) // offline fallback
-    );
+    // {cache:'no-store'} inside networkFirst is belt-and-braces alongside
+    // netlify.toml's max-age=0 on *.html — see the JS/CSS branch below for
+    // why relying on Cache-Control alone isn't safe.
+    e.respondWith(networkFirst(e.request, CACHE_PAGES));
     return;
   }
 
@@ -119,17 +139,7 @@ self.addEventListener('fetch', e => {
   const isOwnJsOrCss = url.origin === self.location.origin &&
     (url.pathname.startsWith('/assets/js/') || url.pathname.startsWith('/assets/css/'));
   if (isOwnJsOrCss) {
-    e.respondWith(
-      fetch(e.request, { cache: 'no-store' })
-        .then(res => {
-          if (res.ok) {
-            const clone = res.clone();
-            caches.open(CACHE_STATIC).then(c => c.put(e.request, clone));
-          }
-          return res;
-        })
-        .catch(() => caches.match(e.request)) // offline fallback
-    );
+    e.respondWith(networkFirst(e.request, CACHE_STATIC));
     return;
   }
 

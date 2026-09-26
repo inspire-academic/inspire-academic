@@ -24,6 +24,8 @@
 //   IAMaths.preload()             start loading KaTeX early (returns a promise)
 //   IAMaths.prepareForSnapshot(el) call before an html2canvas/html2pdf snapshot
 //   IAMaths.hasMaths(text)        true if text contains a maths span
+//   IAMaths.styles()              load only KaTeX's stylesheet, for maths the
+//                                 server already typeset (no KaTeX script)
 (function (root) {
   var KATEX_BASE = '/assets/vendor/katex-0.16.47/';
   var SPAN_RE = /\\\(([\s\S]*?)\\\)/g;
@@ -175,6 +177,11 @@
     document.head.appendChild(link);
   }
 
+  function styles() {
+    addStylesheet(KATEX_BASE + 'katex.min.css');
+    addStylesheet('/assets/css/maths-typeset.css');
+  }
+
   function preload() {
     if (katexReady()) return Promise.resolve(root.katex);
     if (loading) return loading;
@@ -227,7 +234,7 @@
     ]);
   }
 
-  var api = { render: render, html: html, typeset: typeset, preload: preload, ready: ready, hasMaths: hasMaths, toPlain: toPlain, prepareForSnapshot: prepareForSnapshot };
+  var api = { render: render, html: html, typeset: typeset, preload: preload, ready: ready, hasMaths: hasMaths, toPlain: toPlain, prepareForSnapshot: prepareForSnapshot, styles: styles };
   root.IAMaths = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -211,3 +211,33 @@ test('the test is usable with a keyboard and a screen reader', () => {
   const renderer = fs.readFileSync(path.join(__dirname, '..', 'assets/js/diagram-renderer.js'), 'utf8');
   assert.match(renderer, /svg\.setAttribute\('aria-label', spec\.description \|\| describeDiagram\(svg, spec\)\)/);
 });
+
+test('maths arrives typeset from the server; plain text is left for the page to escape', () => {
+  const pub = E.publicQuestion({ id: 1, question_text: String.raw`Work out \(\frac{2}{3}\) of <b>9</b>`, option_a: 'Six', option_b: String.raw`\(x^{2}\)` });
+  assert.match(pub.question_text_html, /class="ia-maths ia-maths-done"/);
+  assert.match(pub.question_text_html, /class="katex"/);
+  assert.match(pub.question_text_html, /&lt;b&gt;9&lt;\/b&gt;/, 'text around the maths is escaped');
+  assert.equal(pub.option_a_html, undefined, 'no maths, no extra html sent');
+  assert.match(pub.option_b_html, /katex/);
+  assert.match(PAGE, /return obj\[field \+ '_html'\] \|\| IAMaths\.html\(obj\[field\]\)/);
+});
+
+test('grade estimation follows the real June 2026 boundaries', () => {
+  // AQA Physics: grade 9 from 157/200 (78.5%), grade 4 from 67/200 (33.5%).
+  assert.equal(E.estimateGrade(79, 'AQA', 'Physics'), 9);
+  assert.equal(E.estimateGrade(78, 'AQA', 'Physics'), 8);
+  assert.equal(E.estimateGrade(34, 'AQA', 'Physics'), 4);
+  assert.equal(E.estimateGrade(20, 'AQA', 'Physics'), 0);
+  assert.equal(E.gradeLabel(0), 'U');
+  assert.equal(E.combinedPairLabel(E.combinedPairIndex(100, 'AQA'), 'AQA'), '9-9');
+  assert.equal(E.combinedPairLabel(E.combinedPairIndex(0, 'AQA'), 'AQA'), 'U-U');
+});
+
+test('the confidence range brackets the score and narrows with more questions', () => {
+  const small = E.wilsonInterval(18, 36, 1.2816);
+  const big = E.wilsonInterval(180, 360, 1.2816);
+  assert.ok(small.lower < 0.5 && small.upper > 0.5);
+  assert.ok(big.upper - big.lower < small.upper - small.lower);
+  const range = E.confidenceRangeForScore(18, 36, 'AQA', 'Chemistry', false);
+  assert.ok(Number(range.lowGrade) <= Number(range.highGrade));
+});

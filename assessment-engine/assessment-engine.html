@@ -5,8 +5,11 @@
 <title>Assessment Center — Inspire Academic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<!-- Brand fonts only, and only the faces this page uses. JetBrains Mono (31 KB,
+     just the A–E option letters and badges) is left out for students on slow
+     connections; --font-mono falls back to the system monospace font. -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
 <style>
@@ -610,10 +613,6 @@ function pickSubject(btn) {
   checkSetup();
 
   const subject      = btn.dataset.subject;
-  // Maths, Physics and Chemistry questions include typeset formulas
-  // (KaTeX): start fetching it now, while the student is still on this
-  // screen, so Q1 doesn't wait for it. Biology has none, so skips it.
-  if (subject !== 'Biology') IAMaths.preload().catch(() => {});
   const inProgress   = S.activeSessions[subject];
   const saved        = S.savedPlans[subject];
   const resumeBanner = document.getElementById('resume-banner');
@@ -770,15 +769,22 @@ async function resumeAttempt() {
   }
 }
 
-// Holds the first question for up to 4s (behind the loading spinner)
-// while KaTeX finishes loading, so a Maths question appears typeset
-// rather than flipping from plain text a moment later. On a very slow
-// connection it goes ahead anyway: the maths shows as readable plain
-// text and upgrades itself when KaTeX arrives.
+// The server sends maths already typeset (<field>_html), so the page only
+// needs KaTeX's stylesheet, not its 76 KB script. If any maths somehow
+// arrives untypeset, fall back to loading KaTeX, holding the first question
+// for up to 4s so it doesn't flip from plain text a moment later.
 function waitForMathsTypesetting(questions) {
   const fields = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d'];
-  const anyMaths = questions.some(q => fields.some(f => IAMaths.hasMaths(q[f])));
-  return anyMaths ? IAMaths.ready(4000) : Promise.resolve();
+  const typeset = questions.some(q => fields.some(f => q[f + '_html']));
+  const untypeset = questions.some(q => fields.some(f => IAMaths.hasMaths(q[f]) && !q[f + '_html']));
+  if (typeset) IAMaths.styles();
+  return untypeset ? IAMaths.ready(4000) : Promise.resolve();
+}
+
+// A text field as HTML: the server's typeset version when it sent one,
+// otherwise the text escaped (and any maths typeset in the browser).
+function mathsField(obj, field) {
+  return obj[field + '_html'] || IAMaths.html(obj[field]);
 }
 
 // What students see for a subject. "Mathematics — Paper 2" stays the stored
@@ -811,7 +817,8 @@ function renderQuestion() {
   document.getElementById('q-topic').textContent    = q.topic;
   document.getElementById('q-num').textContent      = S.currentQ + 1;
   document.getElementById('q-total').textContent    = S.questions.length;
-  IAMaths.render(document.getElementById('q-text'), q.question_text);
+  const qText = document.getElementById('q-text');
+  qText.innerHTML = mathsField(q, 'question_text');
   document.getElementById('assess-progress').style.width = pct + '%';
   const bar = document.getElementById('assess-progressbar');
   bar.setAttribute('aria-valuemax', S.questions.length);
@@ -844,10 +851,10 @@ function renderQuestion() {
   // mapped to its misconception — only the letter shown follows position.
   const opts = [
     ...shuffleArray([
-      { key: 'a', text: q.option_a },
-      { key: 'b', text: q.option_b },
-      { key: 'c', text: q.option_c },
-      { key: 'd', text: q.option_d }
+      { key: 'a', text: q.option_a, html: q.option_a_html },
+      { key: 'b', text: q.option_b, html: q.option_b_html },
+      { key: 'c', text: q.option_c, html: q.option_c_html },
+      { key: 'd', text: q.option_d, html: q.option_d_html }
     ]),
     { key: 'e', text: q.option_e || 'Not sure' }
   ];
@@ -864,10 +871,11 @@ function renderQuestion() {
     btn.tabIndex = pos === 0 ? 0 : -1; // one tab stop; arrow keys move within
     btn.innerHTML = `
       <div class="opt-label" aria-hidden="true">${'ABCDE'[pos]}</div>
-      <div class="opt-text">${IAMaths.html(opt.text)}</div>`;
+      <div class="opt-text">${opt.html || IAMaths.html(opt.text)}</div>`;
     btn.addEventListener('click', () => selectOption(opt.key));
     container.appendChild(btn);
   });
+  IAMaths.typeset(qText);
   IAMaths.typeset(container);
   S.shownAt = performance.now();
 
@@ -1078,7 +1086,7 @@ function renderDiagnosis() {
           <div>
             <div class="win-topic">${topicLabel(g)}${g.total ? ` <span class="muted">· ${g.correct}/${g.total} right</span>` : ''}</div>
             <div class="win-how">${approachLabel[g.approach] || ''}</div>
-            <p class="win-why">${IAMaths.html(g.reason)}</p>
+            <p class="win-why">${mathsField(g, 'reason')}</p>
             ${note ? `<div class="evidence-tag">${note}</div>` : ''}
           </div>
         </div>`;
@@ -1166,16 +1174,16 @@ function renderReview(filter) {
     const opts = ['a', 'b', 'c', 'd'].map(k => {
       const cls = k === r.correct_answer ? 'is-key' : k === r.chosen ? 'is-chosen' : '';
       const tag = k === r.correct_answer ? '<span class="opt-tag">Right answer</span>' : k === r.chosen ? '<span class="opt-tag">Your answer</span>' : '';
-      return `<li class="review-opt ${cls}"><span class="opt-label" aria-hidden="true">${letter[k]}</span><span>${IAMaths.html(r['option_' + k])} ${tag}</span></li>`;
+      return `<li class="review-opt ${cls}"><span class="opt-label" aria-hidden="true">${letter[k]}</span><span>${mathsField(r, 'option_' + k)} ${tag}</span></li>`;
     }).join('');
     return `
       <article class="review-item ${status}" aria-labelledby="rv-${r.id}">
         <div class="review-meta"><span>Question ${r.position} · ${escHtmlText(r.topic)}</span><span class="review-status">${statusText}</span></div>
-        <p class="review-q" id="rv-${r.id}">${IAMaths.html(r.question_text)}</p>
+        <p class="review-q" id="rv-${r.id}">${mathsField(r, 'question_text')}</p>
         ${r.diagram_spec ? `<div class="review-diagram" data-review-diagram="${r.id}"></div>` : ''}
         <ul class="review-opts">${opts}</ul>
-        ${!r.correct && !r.not_sure && r.misconception ? `<p class="review-why"><strong>Why ${letter[r.chosen]} is tempting:</strong> ${IAMaths.html(r.misconception)}</p>` : ''}
-        ${r.explanation ? `<p class="review-method"><strong>How to work it out:</strong> ${IAMaths.html(r.explanation)}</p>` : ''}
+        ${!r.correct && !r.not_sure && r.misconception ? `<p class="review-why"><strong>Why ${letter[r.chosen]} is tempting:</strong> ${mathsField(r, 'misconception')}</p>` : ''}
+        ${r.explanation ? `<p class="review-method"><strong>How to work it out:</strong> ${mathsField(r, 'explanation')}</p>` : ''}
       </article>`;
   }).join('');
   list.hidden = false;
