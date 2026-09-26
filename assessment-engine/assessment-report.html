@@ -184,7 +184,29 @@ const APPROACH_SENTENCES = {
   extend:                 name => `${name} has secured the basics here and is ready to be stretched further.`
 };
 
-function renderReport(payload) {
+// Everything in the payload (student name, profile text, teacher note,
+// topics, plan) can come from a saved attempt, and the report is opened by
+// staff from the leads and teacher consoles — so every string is escaped
+// before any of it is built into HTML. Gap reasons are the one exception:
+// IAMaths.html() escapes them itself (and typesets their maths).
+function escHtml(v) {
+  return String(v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+function escapeDeep(v) {
+  if (typeof v === 'string') return escHtml(v);
+  if (Array.isArray(v)) return v.map(escapeDeep);
+  if (v && typeof v === 'object') {
+    const out = {};
+    for (const k of Object.keys(v)) out[k] = escapeDeep(v[k]);
+    return out;
+  }
+  return v;
+}
+
+function renderReport(rawPayload) {
+  const payload = escapeDeep(rawPayload);
+  const rawGaps = (rawPayload.diagnosis && rawPayload.diagnosis.gaps) || [];
+  ((payload.diagnosis && payload.diagnosis.gaps) || []).forEach((g, i) => { g.reason = rawGaps[i] ? rawGaps[i].reason : ''; });
   const c = payload.config || {};
   const d = payload.diagnosis || {};
   const p = payload.plan || {};
@@ -395,6 +417,8 @@ function loadHtml2Pdf() {
   html2pdfLoaded = new Promise((resolve, reject) => {
     const s = document.createElement('script');
     s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    s.integrity = 'sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc';
+    s.crossOrigin = 'anonymous';
     s.onload = resolve;
     s.onerror = () => reject(new Error('Could not load PDF engine — check your connection and try again.'));
     document.head.appendChild(s);
