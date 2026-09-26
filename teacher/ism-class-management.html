@@ -643,7 +643,7 @@ async function openReview(submission, studentName) {
         <div class="rh-stats">
           <div class="rh-stat"><b>Submitted</b><span>${esc(new Date(submission.submitted_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))}</span></div>
           <div class="rh-stat"><b>Submission</b><span>#${esc(submission.submission_number)}</span></div>
-          <div class="rh-stat"><b>Answered</b><span>${counts.answered} of ${counts.total}</span></div>
+          <div class="rh-stat"><b>Answered</b><span id="rh-answered">${counts.answered} of ${counts.total}</span></div>
           <div class="rh-stat"><b>Photos</b><span>${reviewPhotos.length}</span></div>
           <div class="rh-stat"><b>Status</b><span><span class="status-chip ${esc(status)}">${esc(statusLabel(status))}</span></span></div>
         </div>
@@ -690,6 +690,9 @@ async function openReview(submission, studentName) {
     const data = await apiCall(`/api/v1/ism-class/lesson/content?submissionId=${encodeURIComponent(submission.id)}`);
     if (currentReviewSubmission !== submission) return; // another review was opened meanwhile
     reviewContent = data;
+    // The lesson's own field list is only known now; count unanswered boxes too.
+    const c = answerCounts();
+    document.getElementById('rh-answered').textContent = `${c.answered} of ${c.total}`;
     const box = document.getElementById('review-frame-box');
     box.innerHTML = '';
     const frame = document.createElement('iframe');
