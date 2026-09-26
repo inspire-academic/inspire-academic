@@ -592,7 +592,7 @@
       const streakPromise = supa.from('streaks').select('current_streak').eq('student_id', user.id).single();
       const diagnosticPromise = supa.from('diagnostic_attempts')
         .select('current_grade,target_grade,created_at')
-        .eq('student_id', user.id).eq('subject', SUBJECT_NAME)
+        .eq('student_id', user.id).eq('subject', SUBJECT_NAME).eq('completed', true)
         .order('created_at', { ascending: false }).limit(1);
       const lessonsPromise = supa.from('lessons')
         .select('id,title,duration_minutes,order_number,topic_id,topics(name,slug)')

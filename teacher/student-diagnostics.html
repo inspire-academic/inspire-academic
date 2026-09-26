@@ -164,6 +164,7 @@ tr.clickable:hover td{background:rgba(255,255,255,.03);}
         <option value="Biology">Biology</option>
         <option value="Combined Science">Combined Science</option>
         <option value="Mathematics">Maths</option>
+        <option value="Mathematics — Paper 2">Maths — Geometry &amp; Statistics</option>
       </select>
       <input type="text" id="f-search" placeholder="Search student name…" oninput="applyFilters()" style="flex:1;min-width:180px;">
       <label class="flag-toggle"><input type="checkbox" id="f-flagged" onchange="applyFilters()"> Flagged only</label>
@@ -261,6 +262,7 @@ async function init(){
 
     let q=supa.from('diagnostic_attempts')
       .select('id,created_at,student_id,student_name,subject,exam_board,level,overall_score,current_grade,target_grade,total_questions,not_sure_count,student_profile,profile_description,gaps,strengths,teacher_note,topic_scores,plan')
+      .eq('completed',true) // autosaved, unfinished attempts aren't results
       .order('created_at',{ascending:false});
     if(studentIds) q=q.in('student_id',studentIds);
 

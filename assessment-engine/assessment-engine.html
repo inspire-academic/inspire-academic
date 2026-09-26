@@ -508,15 +508,19 @@ async function loadSavedPlans() {
 async function loadInProgressAttempts() {
   try {
     const { data, error } = await supa.from('diagnostic_attempts')
-      .select('id,subject,level,exam_board,question_ids,question_results,total_questions')
+      .select('id,subject,level,exam_board,question_ids,question_results,total_questions,completed')
       .eq('student_id', S.studentId)
-      .eq('completed', false)
       .order('created_at', { ascending: false });
     if (error) throw error;
 
+    // Only the most recent attempt per subject counts: an unfinished one
+    // left behind when the student later started (or finished) another
+    // mustn't keep offering itself for resume forever.
+    const seen = new Set();
     (data || []).forEach(row => {
-      if (S.inProgressAttempts[row.subject]) return; // already have a more recent one
-      S.inProgressAttempts[row.subject] = row;
+      if (seen.has(row.subject)) return;
+      seen.add(row.subject);
+      if (!row.completed) S.inProgressAttempts[row.subject] = row;
     });
   } catch(e) {
     console.warn('Could not load in-progress attempts:', e.message);
