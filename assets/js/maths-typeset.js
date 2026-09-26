@@ -22,6 +22,7 @@
 //                                 call IAMaths.typeset(container) after
 //                                 inserting it
 //   IAMaths.preload()             start loading KaTeX early (returns a promise)
+//   IAMaths.prepareForSnapshot(el) call before an html2canvas/html2pdf snapshot
 //   IAMaths.hasMaths(text)        true if text contains a maths span
 (function (root) {
   var KATEX_BASE = '/assets/vendor/katex-0.16.47/';
@@ -190,6 +191,32 @@
     return loading;
   }
 
+  // html2canvas (the PDF snapshot in assessment-report.html) can't draw
+  // KaTeX's inline SVGs, so root signs and vector arrows vanish from the
+  // PDF. Swaps each one for an <img> of the same SVG at its on-screen
+  // size, which html2canvas draws correctly. Looks identical on screen.
+  function prepareForSnapshot(container) {
+    var svgs = (container || document).querySelectorAll('.katex svg');
+    for (var i = 0; i < svgs.length; i++) {
+      var svg = svgs[i];
+      var box = svg.getBoundingClientRect();
+      if (!box.width || !box.height) continue;
+      var copy = svg.cloneNode(true);
+      copy.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      copy.setAttribute('width', box.width);
+      copy.setAttribute('height', box.height);
+      copy.setAttribute('fill', getComputedStyle(svg).color);
+      var img = document.createElement('img');
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(copy));
+      img.alt = '';
+      img.style.display = 'block';
+      img.style.width = box.width + 'px';
+      img.style.height = box.height + 'px';
+      img.style.maxWidth = 'none';
+      svg.parentNode.replaceChild(img, svg);
+    }
+  }
+
   // Resolves once KaTeX is ready or after ms, whichever comes first, so a
   // page can briefly hold its first render for typeset maths without
   // ever blocking on a slow connection.
@@ -200,7 +227,7 @@
     ]);
   }
 
-  var api = { render: render, html: html, typeset: typeset, preload: preload, ready: ready, hasMaths: hasMaths, toPlain: toPlain };
+  var api = { render: render, html: html, typeset: typeset, preload: preload, ready: ready, hasMaths: hasMaths, toPlain: toPlain, prepareForSnapshot: prepareForSnapshot };
   root.IAMaths = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -446,6 +446,7 @@ async function downloadReport() {
   try {
     // The PDF is a snapshot of the page, so any maths must be typeset first.
     await Promise.all([loadHtml2Pdf(), IAMaths.typeset(document.getElementById('report'))]);
+    IAMaths.prepareForSnapshot(document.getElementById('report'));
     await withPageNumbers(html2pdf().set(pdfOptions()).from(document.getElementById('report'))).save();
     btn.textContent = '✓ Downloaded!';
   } catch(e) {
@@ -490,6 +491,7 @@ async function emailReport() {
   try {
     // The PDF is a snapshot of the page, so any maths must be typeset first.
     await Promise.all([loadHtml2Pdf(), IAMaths.typeset(document.getElementById('report'))]);
+    IAMaths.prepareForSnapshot(document.getElementById('report'));
     const dataUri = await withPageNumbers(html2pdf().set(pdfOptions()).from(document.getElementById('report'))).output('datauristring');
     const pdfBase64 = dataUri.split('base64,')[1];
 
