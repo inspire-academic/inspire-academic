@@ -68,6 +68,12 @@ function = "create-teacher"
 [functions."birthday-digest"]
   schedule = "0 7 * * *"
 
+# Nightly per-question statistics for the diagnostic (facility,
+# discrimination, how often each wrong answer is picked, flags for broken
+# items) from diagnostic_responses. See diagnostic-item-stats.js.
+[functions."diagnostic-item-stats"]
+  schedule = "30 2 * * *"
+
 # ism-lesson-content.js inlines the runtime bridge script into every
 # served lesson via fs.readFileSync at request time (see its header
 # comment) — esbuild only bundles files reached by require()/import,
@@ -384,6 +390,41 @@ function = "create-teacher"
 [[redirects]]
   from = "/api/v1/assessment/submit"
   to = "/.netlify/functions/assessment-submit"
+  status = 200
+  force = true
+
+# The diagnostic (assessment-engine.html), scored on the server so the
+# browser never holds the answer key: start a test, record each answer,
+# submit for marking, find an unfinished test, attach the study plan.
+# See the header comment in each function. Same /api/v1/resource/action
+# convention.
+[[redirects]]
+  from = "/api/v1/diagnostic/session/start"
+  to = "/.netlify/functions/diagnostic-session-start"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/diagnostic/session/answer"
+  to = "/.netlify/functions/diagnostic-session-answer"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/diagnostic/session/submit"
+  to = "/.netlify/functions/diagnostic-session-submit"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/diagnostic/session/active"
+  to = "/.netlify/functions/diagnostic-session-active"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/diagnostic/attempt/plan"
+  to = "/.netlify/functions/diagnostic-attempt-plan"
   status = 200
   force = true
 

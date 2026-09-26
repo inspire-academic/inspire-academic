@@ -3,7 +3,11 @@
 // Consumed by teacher/teacher-assessment-create.html and teacher/quiz-generator.html
 // 'gcse-uk' is the only curriculum system today; the outer key exists so a
 // future WASSCE/Ghana entry has somewhere to go without a reshape.
-window.SPEC_MAP = {
+// Isomorphic: a browser <script> sets window.SPEC_MAP; a Node require()
+// (the diagnostic functions' topic weighting) gets it as module.exports.
+// Assigned as a property, never declared, because pages declare their own
+// const SPEC_MAP from it (teacher/teacher-assessment-create.html).
+(typeof window !== 'undefined' ? window : globalThis).SPEC_MAP = {
  'gcse-uk': {
   Physics: {
     AQA: [
@@ -142,3 +146,4 @@ window.SPEC_MAP = {
   }
  }
 }
+if (typeof module !== 'undefined' && module.exports) module.exports = (typeof window !== 'undefined' ? window : globalThis).SPEC_MAP;
