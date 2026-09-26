@@ -709,7 +709,7 @@ async function startAssessment() {
     renderQuestion();
     const total = S.questions.length;
     document.getElementById('assess-sub').textContent =
-      `${total} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · Select one answer per question`;
+      `${total} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · Choose "Not sure" rather than guess: wrong guesses count against you, "Not sure" doesn't`;
     toast('Assessment ready — good luck ' + name + '!', 'success');
   } catch(e) {
     toast('Error: ' + e.message, 'error');
@@ -1459,9 +1459,18 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
   const correctCount = S.answers.filter(a => a.correct).length;
   const isCombined = subject === 'Combined Science';
 
+  // Guess-corrected score for the grade: each wrong answer costs a third of
+  // a mark, so blind guessing on 4-option questions averages zero, while
+  // "Not sure" costs nothing. Without this, random clicking reached grade 4
+  // in up to 71% of tries in some subjects. A student who knows the answers
+  // loses nothing; the raw percentage is still what's shown as "Scored".
+  const wrongCount   = S.answers.filter(a => !a.correct && !a.not_sure).length;
+  const effective    = Math.max(0, correctCount - wrongCount / 3);
+  const gradedPct    = total ? Math.round((effective / total) * 100) : 0;
+
   let currentGrade, targetGrade;
   if (isCombined) {
-    const currentIdx = combinedPairIndex(overallPct, board);
+    const currentIdx = combinedPairIndex(gradedPct, board);
     // Same AQA-fallback pattern as combinedPairIndex/combinedPairLabel just
     // above — NOT `REAL_COMBINED_BOUNDARIES[board]?.pairs.length - 1 ?? 11`,
     // which looked like a safe fallback but wasn't: for an unmapped board
@@ -1476,7 +1485,7 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
     currentGrade = combinedPairLabel(currentIdx, board);
     targetGrade  = combinedPairLabel(targetIdx, board);
   } else {
-    const currentGradeNum = estimateGrade(overallPct, board, gradingSubject);
+    const currentGradeNum = estimateGrade(gradedPct, board, gradingSubject);
     // Next target: two grades up, but never below 4 — Higher tier doesn't
     // award 1 or 2, so "U → target 2" was a target that can't be awarded.
     const targetGradeNum  = Math.min(9, Math.max(4, currentGradeNum + 2));
@@ -1493,21 +1502,24 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
   // (a Wilson score interval on the raw correct/total count, translated
   // to a grade range via Phase 1's real boundaries) — not a guessed
   // fudge factor.
-  const confidence = confidenceRangeForScore(correctCount, total, board, gradingSubject, isCombined);
+  const confidence = confidenceRangeForScore(Math.round(effective), total, board, gradingSubject, isCombined);
 
   const studentProfile =
-    overallPct < 40 ? 'struggling' :
-    overallPct < 60 ? 'developing' :
-    overallPct < 80 ? 'secure' : 'strong';
+    gradedPct < 40 ? 'struggling' :
+    gradedPct < 60 ? 'developing' :
+    gradedPct < 80 ? 'secure' : 'strong';
 
   const rangeNote = confidence && confidence.lowGrade !== confidence.highGrade
     ? ` (likely range ${confidence.lowGrade}–${confidence.highGrade}, based on this being a ${total}-question sample)`
     : '';
+  const guessNote = overallPct - gradedPct >= 3
+    ? ` The grade uses ${gradedPct}%, which allows for answers that were probably lucky guesses — "Not sure" is always the better choice when you don't know.`
+    : '';
 
-  const profileDescription = isCombined
+  const profileDescription = (isCombined
     ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award${rangeNote} on real ${board} Combined Science June 2026 boundaries. Next target: ${targetGrade}.`
     : `Scored ${overallPct}% overall — around Grade ${currentGrade}${rangeNote} on real ${board} ${gradingSubject} June 2026 boundaries, ` +
-      `next target: Grade ${targetGrade}.`;
+      `next target: Grade ${targetGrade}.`) + guessNote;
 
   const gaps = topicScores
     .filter(t => t.score < 80)

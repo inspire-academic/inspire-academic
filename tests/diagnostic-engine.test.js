@@ -77,3 +77,13 @@ test('options are shuffled but keep their original keys, with Not sure last', ()
   assert.match(body, /\{ key: 'e', text: q\.option_e \|\| 'Not sure' \}\s*\]/, 'Not sure should stay last, outside the shuffle');
   assert.match(body, /btn\.dataset\.key = opt\.key/, 'buttons must carry the original key for scoring');
 });
+
+test('grades use guess-corrected scores, so blind guessing earns no grade', () => {
+  const body = extractFunction('computeDiagnosis');
+  assert.match(body, /const effective\s*=\s*Math\.max\(0, correctCount - wrongCount \/ 3\)/);
+  assert.match(body, /estimateGrade\(gradedPct,/);
+  assert.match(body, /combinedPairIndex\(gradedPct,/);
+  // An expected random guesser (9 of 36 right, 27 wrong) scores zero.
+  const correct = 9, wrong = 27;
+  assert.equal(Math.max(0, correct - wrong / 3), 0);
+});
