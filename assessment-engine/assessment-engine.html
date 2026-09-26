@@ -957,6 +957,15 @@ function weightedSampleAcrossTopics(questions, n, weights) {
     used += base;
   });
 
+  // The one-per-topic floor can push the total past n when many topics are
+  // lightly weighted; take the excess back from the largest allocations.
+  while (used > n) {
+    const biggest = topics.filter(t => allocated[t] > 1).sort((a, b) => allocated[b] - allocated[a])[0];
+    if (!biggest) break;
+    allocated[biggest]--;
+    used--;
+  }
+
   let remaining = n - used;
   const byRemainder = topics
     .map(t => ({ topic: t, remainder: exact[t] - Math.floor(exact[t]) }))
@@ -964,6 +973,19 @@ function weightedSampleAcrossTopics(questions, n, weights) {
   for (const r of byRemainder) {
     if (remaining <= 0) break;
     if (allocated[r.topic] < byTopic[r.topic].length) { allocated[r.topic]++; remaining--; }
+  }
+  // Heavily weighted topics can hit their pool size, leaving slots unused
+  // after one pass (Physics and Chemistry served 32 of 36). Keep handing
+  // leftover slots to topics that still have questions, largest weight
+  // first, until n is reached or every pool is used up.
+  const byWeight = topics.slice().sort((a, b) => (weights[b] || 1) - (weights[a] || 1));
+  while (remaining > 0) {
+    let placed = false;
+    for (const t of byWeight) {
+      if (remaining <= 0) break;
+      if (allocated[t] < byTopic[t].length) { allocated[t]++; remaining--; placed = true; }
+    }
+    if (!placed) break;
   }
 
   const result = [];
@@ -999,11 +1021,10 @@ function renderQuestion() {
   nextBtn.style.opacity = '.4';
   nextBtn.textContent = 'Select an answer to continue →';
 
-  const isLast = S.currentQ === S.questions.length - 1;
-  if (!nextBtn._hasListener) {
-    nextBtn.addEventListener('click', nextQuestion);
-    nextBtn._hasListener = true;
-  }
+  // The Next button's only handler is its inline onclick. A second,
+  // addEventListener-bound handler used to live here, so on the last
+  // question both fired and every completed attempt recorded its final
+  // answer twice (and ran the diagnosis twice).
 
   // Build options
   const opts = [
@@ -1051,7 +1072,15 @@ function nextQuestion() {
   if (!S.selectedOpt) return;
 
   const q      = S.questions[S.currentQ];
+  // Each question is answered exactly once, however the click arrives.
+  if (S.answers.some(a => a.question_id === q.id)) return;
   const chosen = S.selectedOpt;
+  S.selectedOpt = null;
+  if (S.currentQ === S.questions.length - 1) {
+    const nextBtn = document.getElementById('btn-next');
+    nextBtn.disabled = true;
+    nextBtn.style.opacity = '.4';
+  }
   const correct = chosen === q.correct_answer;
   const notSure = chosen === 'e';
 
@@ -2028,6 +2057,9 @@ function goTo(stage) {
 }
 
 function pipeGoTo(stage) {
+  // A finished test can't be re-entered from the progress steps: its last
+  // question would reappear with Next still live and add answers again.
+  if (stage === 'assess' && S.questions && S.questions.length && S.answers.length >= S.questions.length) return;
   const idx = STAGES.indexOf(stage);
   const dot = document.getElementById('dot-'+(idx-1));
   if (dot && (dot.classList.contains('done') || dot.classList.contains('active'))) {
