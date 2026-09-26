@@ -12,16 +12,7 @@
 // resubmit as a new submission — the original stays exactly as it was
 // reviewed, per the "preserve the submitted version" requirement.
 
-const { ADMIN_ROLES, CORS, reply, sb, getRole, verifyUser } = require('./_ism-shared')
-
-async function canAccessStudent(callerRole, callerId, studentId, serviceKey) {
-  if (ADMIN_ROLES.includes(callerRole)) return true
-  const rows = await sb(
-    `teacher_student_assignments?teacher_id=eq.${encodeURIComponent(callerId)}&student_id=eq.${encodeURIComponent(studentId)}&is_active=eq.true&select=teacher_id`,
-    serviceKey
-  )
-  return rows.length > 0
-}
+const { ADMIN_ROLES, CORS, reply, sb, getRole, canAccessStudent, verifyUser } = require('./_ism-shared')
 
 exports.handler = async function (event) {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers: CORS, body: '' }

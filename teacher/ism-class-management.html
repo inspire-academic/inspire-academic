@@ -74,6 +74,55 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
 .photo-viewer-bar .mini-btn{color:#e8edf6;border-color:rgba(255,255,255,.35);text-decoration:none;display:inline-flex;align-items:center;}
 .photo-viewer-count{color:#cbd5e1;font-size:.8rem;min-width:4.5rem;text-align:center;}
 .photo-viewer-bar [hidden]{display:none;}
+/* ── Review panel ── */
+.review-stack{display:flex;flex-direction:column;gap:1rem;}
+.review-head{display:flex;flex-direction:column;gap:1rem;}
+.rh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;}
+.rh-eyebrow{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);}
+.rh-title{font-family:var(--font-display);font-size:1.45rem;font-weight:800;line-height:1.2;margin:.25rem 0 .35rem;}
+.rh-student{font-size:1rem;font-weight:600;}
+.rh-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
+.rh-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.6rem;}
+.rh-stat{background:var(--navy);border:1px solid var(--border);border-radius:var(--r);padding:.6rem .8rem;display:flex;flex-direction:column;gap:.15rem;}
+.rh-stat b{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+.rh-stat span{font-size:.95rem;font-weight:700;font-variant-numeric:tabular-nums;}
+.status-chip{display:inline-block;padding:.12rem .55rem;border-radius:20px;font-size:.75rem;font-weight:700;background:rgba(212,160,23,.15);color:var(--gold);}
+.status-chip.reviewed{background:rgba(74,222,128,.15);color:#4ade80;}
+.status-chip.returned{background:rgba(248,113,113,.15);color:#f87171;}
+.lv-head{display:flex;justify-content:space-between;align-items:baseline;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem;}
+.lv-head h3{font-size:.95rem;font-weight:700;margin:0;}
+.lesson-frame-box{max-height:78vh;overflow:auto;border-radius:var(--r);border:1px solid var(--border);background:#fff;}
+.lesson-frame-box iframe{width:100%;height:600px;border:0;display:block;background:#fff;}
+.lesson-frame-box.expanded{max-height:none;}
+.glance summary{cursor:pointer;font-weight:700;font-size:.9rem;}
+.glance[open] summary{margin-bottom:.6rem;}
+.pdf-progress{font-size:.78rem;color:var(--muted);}
+
+/* PDF cover, rendered off-screen at A4 size and captured into the PDF */
+.pdf-cover{position:absolute;left:-12000px;top:0;width:794px;height:1123px;background:#ffffff;color:#0b1628;font-family:'Plus Jakarta Sans',system-ui,sans-serif;display:flex;flex-direction:column;}
+.pdf-cover .pc-band{background:#0b1628;color:#fff;padding:34px 48px 30px;}
+.pdf-cover .pc-brand{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#d4a017;}
+.pdf-cover .pc-kind{font-size:13px;color:#b8c4d6;margin-top:6px;}
+.pdf-cover .pc-body{padding:40px 48px;display:flex;flex-direction:column;gap:26px;flex:1;}
+.pdf-cover .pc-eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#8a6a17;}
+.pdf-cover .pc-title{font-family:'Fraunces',Georgia,serif;font-weight:800;font-size:34px;line-height:1.15;margin:8px 0 0;}
+.pdf-cover .pc-student{font-size:22px;font-weight:700;}
+.pdf-cover .pc-sub{font-size:14px;color:#4f5d73;margin-top:4px;}
+.pdf-cover .pc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.pdf-cover .pc-stat{border:1px solid #dde2eb;border-radius:10px;padding:12px 14px;}
+.pdf-cover .pc-stat b{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#4f5d73;}
+.pdf-cover .pc-stat span{display:block;font-size:20px;font-weight:800;margin-top:4px;}
+.pdf-cover .pc-review{border:2px solid #c9a84c;border-radius:12px;padding:20px 22px;background:#fffbea;display:flex;flex-direction:column;gap:12px;}
+.pdf-cover .pc-review h3{font-family:'Fraunces',Georgia,serif;font-size:19px;margin:0;}
+.pdf-cover .pc-review-row{display:flex;gap:28px;flex-wrap:wrap;}
+.pdf-cover .pc-review-row div b{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6b5a1e;}
+.pdf-cover .pc-review-row div span{font-size:18px;font-weight:800;}
+.pdf-cover .pc-comment{font-size:14px;line-height:1.55;white-space:pre-wrap;}
+.pdf-cover .pc-feedback{margin:0;padding-left:18px;font-size:13px;line-height:1.5;}
+.pdf-cover .pc-pending{border:1.5px dashed #b8c4d6;border-radius:12px;padding:16px 20px;color:#4f5d73;font-size:14px;}
+.pdf-cover .pc-key{font-size:12.5px;color:#4f5d73;display:flex;align-items:center;gap:10px;}
+.pdf-cover .pc-key i{display:inline-block;width:34px;height:16px;border:1.5px solid #c9a84c;background:#fffbea;border-radius:4px;}
+.pdf-cover .pc-foot{padding:18px 48px 28px;font-size:11px;color:#7b889c;border-top:1px solid #dde2eb;}
 .response-item{border-top:1px solid var(--border);padding:.5rem 0;font-size:.85rem;}
 .response-item .fid{font-family:var(--font-mono);font-size:.7rem;color:var(--gold);}
 </style>
@@ -496,71 +545,529 @@ async function loadSubmissionsRoster() {
   el.innerHTML = '<div class="spinner"></div>';
   try {
     const data = await apiCall(`/api/v1/ism-class/submissions/list?lessonId=${encodeURIComponent(lessonId)}`);
-    el.innerHTML = (data.roster || []).map(r => `
+    rosterSubmissions = {};
+    el.innerHTML = (data.roster || []).map(r => {
+      const name = r.student.full_name || [r.student.first_name, r.student.last_name].filter(Boolean).join(' ') || r.student.id;
+      if (r.latestSubmission) rosterSubmissions[r.latestSubmission.id] = { submission: r.latestSubmission, name };
+      return `
       <div class="roster-row" style="border-bottom:1px solid var(--border);">
-        <div class="roster-name">${esc(r.student.full_name || [r.student.first_name, r.student.last_name].filter(Boolean).join(' ') || r.student.id)}</div>
-        <div class="roster-meta">${(r.progress.status || 'not_started').replace('_',' ')}</div>
-        ${r.latestSubmission ? `<button class="mini-btn" onclick='openReview(${JSON.stringify(r.latestSubmission).replace(/'/g, "&#39;")})'>Review</button>` : ''}
-      </div>`).join('') || '<div class="muted">No students assigned to this lesson yet.</div>';
+        <div class="roster-name">${esc(name)}</div>
+        <div class="roster-meta">${esc((r.progress.status || 'not_started').replace('_',' '))}</div>
+        ${r.latestSubmission ? `<button class="mini-btn" data-review-id="${esc(r.latestSubmission.id)}">Review</button>` : ''}
+      </div>`;
+    }).join('') || '<div class="muted">No students assigned to this lesson yet.</div>';
   } catch (e) { el.innerHTML = ''; toast(e.message || 'Could not load roster', 'error'); }
 }
 window.loadSubmissionsRoster = loadSubmissionsRoster;
 
 // ── Review ──
 let fieldFeedbackRows = [];
+let rosterSubmissions = {};   // submission id -> { submission, name } from the last roster load
+let reviewContent = null;     // lesson-content API response for the open submission
+let reviewPrior = null;       // latest saved teacher review, if any
+let reviewFeedback = [];      // saved field-level feedback for that review
+let reviewPhotoCaptions = [];
+let reviewStudentName = '';
+let reviewFrame = null;
 
-async function openReview(submission) {
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-review-id]');
+  if (!btn) return;
+  const entry = rosterSubmissions[btn.dataset.reviewId];
+  if (entry) openReview(entry.submission, entry.name);
+});
+
+function lessonMeta() {
+  const l = (reviewContent && reviewContent.lesson) || myLessons.find(x => x.id === currentReviewSubmission.lesson_id) || {};
+  return { title: l.title || 'Lesson', week: l.week_number, subject: (l.subjects && l.subjects.name) || '' };
+}
+
+function answerCounts() {
+  const snap = currentReviewSubmission.responses_snapshot || {};
+  const manifest = (reviewContent && reviewContent.version && reviewContent.version.field_manifest) || [];
+  const total = Math.max(manifest.length, Object.keys(snap).length);
+  const answered = Object.values(snap).filter(v => v !== null && String(v).trim() !== '').length;
+  return { answered, total };
+}
+
+function statusLabel(s) {
+  return { submitted: 'Submitted', reviewed: 'Reviewed', returned: 'Returned for corrections' }[s] || 'Submitted';
+}
+
+async function openReview(submission, studentName) {
   currentReviewSubmission = submission;
+  reviewStudentName = studentName || 'Student';
   fieldFeedbackRows = [];
+  reviewContent = null;
+  reviewFrame = null;
   document.getElementById('review-empty').style.display = 'none';
   const detail = document.getElementById('review-detail');
   detail.style.display = 'block';
+  detail.innerHTML = '<div class="card"><div class="spinner"></div></div>';
+  showTab('review');
 
   const [{ data: photos }, { data: existingReview }] = await Promise.all([
     submission.photo_ids?.length
-      ? supa.from('ism_response_photos').select('photo_url').in('id', submission.photo_ids)
+      ? supa.from('ism_response_photos').select('id,photo_url,caption,uploaded_at').in('id', submission.photo_ids)
       : Promise.resolve({ data: [] }),
     supa.from('ism_teacher_reviews').select('*').eq('submission_id', submission.id).order('reviewed_at', { ascending: false }).limit(1)
   ]);
   const prior = existingReview && existingReview[0];
-  reviewPhotos = (photos || []).map(p => safePhotoUrl(p.photo_url)).filter(Boolean);
+  reviewPrior = prior || null;
+  const orderedPhotos = (photos || []).slice().sort((a, b) => String(a.uploaded_at).localeCompare(String(b.uploaded_at)));
+  reviewPhotos = orderedPhotos.map(p => safePhotoUrl(p.photo_url)).filter(Boolean);
+  reviewPhotoCaptions = orderedPhotos.filter(p => safePhotoUrl(p.photo_url)).map(p => p.caption || '');
+  reviewFeedback = [];
+  if (prior) {
+    const { data: fb } = await supa.from('ism_teacher_feedback').select('field_id,comment').eq('submission_id', submission.id).order('created_at');
+    reviewFeedback = fb || [];
+  }
 
+  const meta = lessonMeta();
+  const counts = answerCounts();
   const responseEntries = Object.entries(submission.responses_snapshot || {});
+  const status = submission.status || 'submitted';
   detail.innerHTML = `
-    <div class="card">
-      <div class="field-hint">Submission #${submission.submission_number} · ${new Date(submission.submitted_at).toLocaleString('en-GB')}</div>
-      <button class="mini-btn" style="margin:.6rem 0;" onclick="printSubmission()">🖨 Print</button>
-      <div id="review-responses">${responseEntries.map(([fid, val]) => `<div class="response-item"><span class="fid">${esc(fid)}</span> — ${val === null ? '<em>blank</em>' : esc(val)}</div>`).join('') || '<div class="muted">No text responses.</div>'}</div>
-      ${reviewPhotos.length ? `<div class="field-hint" style="margin-top:1rem;">Photos · click to enlarge</div><div class="photo-grid">${reviewPhotos.map((url, i) => `<button type="button" class="photo-thumb" data-photo-index="${i}" aria-label="Open photo ${i + 1} of ${reviewPhotos.length} larger"><img src="${esc(url)}" alt="Student photo ${i + 1}"><span class="photo-thumb-hint">View</span></button>`).join('')}</div>` : ''}
+    <div class="review-stack">
+      <div class="card review-head">
+        <div class="rh-top">
+          <div>
+            <div class="rh-eyebrow">${esc(meta.subject)}${meta.week ? ` · Week ${esc(meta.week)}` : ''}</div>
+            <h2 class="rh-title">${esc(meta.title)}</h2>
+            <div class="rh-student">${esc(reviewStudentName)}</div>
+          </div>
+          <div class="rh-actions">
+            <button class="btn btn-gold" id="btn-download-pdf" onclick="downloadSubmissionPdf()" disabled>⬇ Download PDF</button>
+          </div>
+        </div>
+        <div class="rh-stats">
+          <div class="rh-stat"><b>Submitted</b><span>${esc(new Date(submission.submitted_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))}</span></div>
+          <div class="rh-stat"><b>Submission</b><span>#${esc(submission.submission_number)}</span></div>
+          <div class="rh-stat"><b>Answered</b><span>${counts.answered} of ${counts.total}</span></div>
+          <div class="rh-stat"><b>Photos</b><span>${reviewPhotos.length}</span></div>
+          <div class="rh-stat"><b>Status</b><span><span class="status-chip ${esc(status)}">${esc(statusLabel(status))}</span></span></div>
+        </div>
+        <div class="pdf-progress" id="pdf-progress" hidden></div>
+      </div>
 
-      <div class="field" style="margin-top:1.2rem;"><label>Marks</label><div class="field-row">
-        <input class="field-input" type="number" id="review-marks" placeholder="Marks" value="${prior?.marks ?? ''}">
-        <input class="field-input" type="number" id="review-marks-total" placeholder="Out of" value="${prior?.marks_total ?? ''}">
-      </div></div>
-      <div class="field"><label>Mastery score</label><input class="field-input" type="text" id="review-mastery" placeholder="e.g. Secure" value="${prior?.mastery_score || ''}"></div>
-      <div class="field"><label>Overall comment</label><textarea class="field-textarea" id="review-comment">${prior?.overall_comment || ''}</textarea></div>
+      <div class="card">
+        <div class="lv-head">
+          <h3>The lesson as ${esc(reviewStudentName.split(' ')[0])} completed it</h3>
+          <button class="mini-btn" id="btn-expand-lesson" onclick="toggleLessonExpand()">Show full length</button>
+        </div>
+        <div class="lesson-frame-box" id="review-frame-box"><div style="padding:2rem;"><div class="spinner"></div></div></div>
+      </div>
 
-      <label>Field-level feedback</label>
-      <div id="field-feedback-list"></div>
-      <button class="mini-btn" onclick="addFieldFeedbackRow()">+ Add field comment</button>
+      <details class="card glance">
+        <summary>Answers at a glance (${responseEntries.length})</summary>
+        <div id="review-responses">${responseEntries.map(([fid, val]) => `<div class="response-item"><span class="fid">${esc(fid)}</span> — ${val === null || String(val).trim() === '' ? '<em>blank</em>' : esc(val)}</div>`).join('') || '<div class="muted">No text responses.</div>'}</div>
+      </details>
 
-      <div style="display:flex;gap:.6rem;margin-top:1.2rem;">
-        <button class="btn btn-gold" onclick="saveReview('reviewed')">Mark Reviewed</button>
-        <button class="btn btn-outline" onclick="saveReview('returned')">Return for Corrections</button>
+      ${reviewPhotos.length ? `<div class="card"><div class="field-hint">Photos · click to enlarge</div><div class="photo-grid">${reviewPhotos.map((url, i) => `<button type="button" class="photo-thumb" data-photo-index="${i}" aria-label="Open photo ${i + 1} of ${reviewPhotos.length} larger"><img src="${esc(url)}" alt="Student photo ${i + 1}"><span class="photo-thumb-hint">View</span></button>`).join('')}</div></div>` : ''}
+
+      <div class="card">
+        <div class="field"><label>Marks</label><div class="field-row">
+          <input class="field-input" type="number" id="review-marks" placeholder="Marks" value="${esc(prior?.marks ?? '')}">
+          <input class="field-input" type="number" id="review-marks-total" placeholder="Out of" value="${esc(prior?.marks_total ?? '')}">
+        </div></div>
+        <div class="field"><label>Mastery score</label><input class="field-input" type="text" id="review-mastery" placeholder="e.g. Secure" value="${esc(prior?.mastery_score || '')}"></div>
+        <div class="field"><label>Overall comment</label><textarea class="field-textarea" id="review-comment">${esc(prior?.overall_comment || '')}</textarea></div>
+
+        <label>Field-level feedback</label>
+        <div id="field-feedback-list"></div>
+        <button class="mini-btn" onclick="addFieldFeedbackRow()">+ Add field comment</button>
+
+        <div style="display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap;">
+          <button class="btn btn-gold" onclick="saveReview('reviewed')">Mark Reviewed</button>
+          <button class="btn btn-outline" onclick="saveReview('returned')">Return for Corrections</button>
+        </div>
+        <div class="field-hint" style="margin-top:.6rem;">The PDF includes the latest <em>saved</em> marks and comments.</div>
       </div>
     </div>`;
   renderFieldFeedbackRows();
-  showTab('review');
+
+  try {
+    const data = await apiCall(`/api/v1/ism-class/lesson/content?submissionId=${encodeURIComponent(submission.id)}`);
+    if (currentReviewSubmission !== submission) return; // another review was opened meanwhile
+    reviewContent = data;
+    const box = document.getElementById('review-frame-box');
+    box.innerHTML = '';
+    const frame = document.createElement('iframe');
+    frame.setAttribute('sandbox', 'allow-scripts allow-forms');
+    frame.setAttribute('title', `${meta.title} — ${reviewStudentName}'s answers`);
+    frame.srcdoc = data.html;
+    box.appendChild(frame);
+    reviewFrame = frame;
+    document.getElementById('btn-download-pdf').disabled = false;
+  } catch (e) {
+    const box = document.getElementById('review-frame-box');
+    if (box) box.innerHTML = `<div style="padding:1.5rem;" class="muted">Could not load the lesson: ${esc(e.message || 'unknown error')}</div>`;
+  }
 }
 window.openReview = openReview;
+
+function toggleLessonExpand() {
+  const box = document.getElementById('review-frame-box');
+  const expanded = box.classList.toggle('expanded');
+  document.getElementById('btn-expand-lesson').textContent = expanded ? 'Show in a scroll box' : 'Show full length';
+}
+window.toggleLessonExpand = toggleLessonExpand;
+
+window.addEventListener('message', e => {
+  const m = e.data;
+  if (!m || typeof m !== 'object') return;
+  if (reviewFrame && e.source === reviewFrame.contentWindow) {
+    if (m.type === 'ism:resize' && typeof m.height === 'number') reviewFrame.style.height = Math.max(m.height, 300) + 'px';
+    return;
+  }
+});
+
+// ── Submission PDF ──
+// Cover page + the full lesson exactly as the student saw it (captured
+// inside its own sandboxed frame) + every attached photo, one per page.
+const H2C = { src: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', integrity: 'sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H' };
+const JSPDF = { src: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', integrity: 'sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk' };
+const PDF = { w: 210, h: 297, margin: 10, top: 14, bottom: 12 };      // mm
+const LESSON_WIDTH_PX = 794;                                             // A4 width at 96 dpi
+const PAGE_CONTENT_PX = Math.floor((PDF.h - PDF.top - PDF.bottom) * LESSON_WIDTH_PX / (PDF.w - 2 * PDF.margin));
+let pdfBusy = false;
+const loadedScripts = {};
+
+function loadScriptOnce(lib) {
+  if (!loadedScripts[lib.src]) {
+    loadedScripts[lib.src] = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = lib.src; s.integrity = lib.integrity; s.crossOrigin = 'anonymous';
+      s.onload = resolve;
+      s.onerror = () => { delete loadedScripts[lib.src]; reject(new Error('Could not load the PDF tools — check your connection.')); };
+      document.head.appendChild(s);
+    });
+  }
+  return loadedScripts[lib.src];
+}
+
+function setPdfProgress(text) {
+  const el = document.getElementById('pdf-progress');
+  if (!el) return;
+  el.hidden = !text;
+  el.textContent = text || '';
+}
+
+// The PDF copy of the lesson loads in a frame with scripts switched OFF
+// (sandbox="allow-same-origin", no allow-scripts): the lesson's own code
+// never runs, so it can't reach this page or the teacher's session, and
+// this page can read the frame to fill in the answers and capture it.
+// Lessons are essentially static HTML (their scripts only drive
+// interactions), so nothing the student saw is lost.
+function prepareLessonForPrint(doc, responses) {
+  const style = doc.createElement('style');
+  style.textContent =
+    '.ism-print-answer{white-space:pre-wrap;word-wrap:break-word;border:1.5px solid #c9a84c;background:#fffbea;' +
+    'color:#1a1a1a;border-radius:6px;padding:6px 10px;margin:2px 0;min-height:1.7em;font-size:inherit;line-height:1.45;' +
+    'box-sizing:border-box;text-align:left;}' +
+    '.ism-print-answer.ism-print-empty{color:#9a9a9a;font-style:italic;border-style:dashed;background:#fafafa;}' +
+    '.ism-print-answer.ism-print-inline{display:inline-block;min-width:6em;vertical-align:middle;}' +
+    '.ism-print-extra{margin:32px 24px;padding:18px 20px;border:2px solid #c9a84c;border-radius:10px;font-family:sans-serif;}' +
+    '.ism-print-extra h2{margin:0 0 10px;font-size:18px;color:#0b1628;}' +
+    '.ism-print-extra .ism-print-id{font-size:12px;color:#6b5a1e;margin-top:10px;}';
+  doc.head.appendChild(style);
+
+  const has = (k) => Object.prototype.hasOwnProperty.call(responses, k);
+  const seen = new Set();
+  doc.querySelectorAll('[data-save]').forEach(el => {
+    const id = el.getAttribute('data-save');
+    seen.add(id);
+    const tag = el.tagName;
+    const type = (el.getAttribute('type') || '').toLowerCase();
+    const value = has(id) && responses[id] !== null ? String(responses[id]) : '';
+    if (tag === 'INPUT' && (type === 'checkbox' || type === 'radio')) {
+      el.checked = value === 'true' || value === 'on' || value === el.value;
+      return;
+    }
+    let text = value;
+    if (tag === 'SELECT') {
+      const opt = [...el.options].find(o => o.value === value);
+      text = opt && value !== '' ? opt.text : value;
+    }
+    const box = doc.createElement('div');
+    box.className = 'ism-print-answer' + (text.trim() ? '' : ' ism-print-empty') + (tag === 'TEXTAREA' ? '' : ' ism-print-inline');
+    box.textContent = text.trim() ? text : 'No answer';
+    el.parentNode.insertBefore(box, el.nextSibling);
+    el.style.display = 'none';
+    // A collapsed section holding an answer would hide it from the PDF.
+    for (let d = el.closest('details'); d; d = d.parentElement && d.parentElement.closest('details')) d.open = true;
+  });
+
+  // Answers with no matching box (e.g. extra error-log rows the student
+  // added) still belong in the record.
+  const extra = Object.keys(responses).filter(k => !seen.has(k) && responses[k] !== null && String(responses[k]).trim() !== '');
+  if (extra.length) {
+    const sec = doc.createElement('section');
+    sec.className = 'ism-print-extra';
+    const h = doc.createElement('h2');
+    h.textContent = 'Additional answers';
+    sec.appendChild(h);
+    extra.forEach(k => {
+      const idEl = doc.createElement('div'); idEl.className = 'ism-print-id'; idEl.textContent = k;
+      const box = doc.createElement('div'); box.className = 'ism-print-answer'; box.textContent = String(responses[k]);
+      sec.appendChild(idEl); sec.appendChild(box);
+    });
+    doc.body.appendChild(sec);
+  }
+
+  // Sticky and fixed headers would repeat or overlap on every page.
+  const win = doc.defaultView;
+  [...doc.body.getElementsByTagName('*')].forEach(el => {
+    const p = win.getComputedStyle(el).position;
+    if (p === 'sticky' || p === 'fixed') el.style.position = 'static';
+  });
+}
+
+// Page breaks at element edges nearest each page bottom, so a page
+// rarely cuts through a line of text.
+function lessonPageBreaks(doc, total, pageHeight) {
+  const win = doc.defaultView;
+  const edges = [];
+  const textBoxes = [];   // [top, bottom] of anything that draws text, images or answer boxes
+  [...doc.body.getElementsByTagName('*')].forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.height <= 0 || r.width <= 0) return;
+    const top = r.top + win.scrollY, bottom = r.bottom + win.scrollY;
+    const disp = win.getComputedStyle(el).display;
+    if (!(disp.startsWith('inline') && disp !== 'inline-block')) edges.push(Math.round(top), Math.round(bottom));
+    const drawsText = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
+    if (drawsText || ['IMG', 'SVG', 'CANVAS', 'VIDEO'].includes(el.tagName.toUpperCase()) || el.classList.contains('ism-print-answer')) {
+      textBoxes.push([top, bottom]);
+    }
+  });
+  edges.sort((a, b) => a - b);
+  // A break is clean if it doesn't pass through a line of text or an image.
+  const clean = y => !textBoxes.some(([t, b]) => t < y - 1 && b > y + 1);
+  const breaks = [];
+  let start = 0;
+  while (start < total) {
+    const limit = start + pageHeight;
+    if (limit >= total) { breaks.push([start, total]); break; }
+    let end = 0, fallback = 0;
+    for (let k = edges.length - 1; k >= 0; k--) {
+      const y = edges[k];
+      if (y <= start + pageHeight * 0.4) break;
+      if (y > limit) continue;
+      if (!fallback) fallback = y;
+      if (clean(y)) { end = y; break; }
+    }
+    end = end || fallback || limit;
+    breaks.push([start, end]);
+    start = end;
+  }
+  return breaks;
+}
+
+function captureLessonPages() {
+  return new Promise((resolve, reject) => {
+    const frame = document.createElement('iframe');
+    frame.setAttribute('sandbox', 'allow-same-origin');   // scripts OFF — see above
+    frame.setAttribute('aria-hidden', 'true');
+    frame.tabIndex = -1;
+    frame.style.cssText = `position:absolute;left:-12000px;top:0;width:${LESSON_WIDTH_PX}px;height:1123px;border:0;`;
+    const timer = setTimeout(() => { frame.remove(); reject(new Error('Loading the lesson took too long.')); }, 60000);
+    frame.addEventListener('load', async () => {
+      try {
+        const doc = frame.contentDocument;
+        prepareLessonForPrint(doc, currentReviewSubmission.responses_snapshot || {});
+        if (doc.fonts && doc.fonts.ready) await doc.fonts.ready;
+        await Promise.all([...doc.images].map(img => img.complete ? null : new Promise(r => { img.onload = img.onerror = r; })));
+        const width = doc.documentElement.scrollWidth;
+        const total = Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight);
+        const breaks = lessonPageBreaks(doc, total, PAGE_CONTENT_PX);
+        const bgRaw = doc.defaultView.getComputedStyle(doc.body).backgroundColor;
+        const bg = !bgRaw || bgRaw === 'rgba(0, 0, 0, 0)' || bgRaw === 'transparent' ? '#ffffff' : bgRaw;
+        // One capture of the whole lesson, then cut into pages: far faster
+        // than re-capturing per page. Scale stays under the browser's
+        // ~32k px canvas limit for very long lessons.
+        setPdfProgress('Capturing the lesson…');
+        const scale = Math.min(2, 30000 / total);
+        const full = await window.html2canvas(doc.documentElement, {
+          x: 0, y: 0, width, height: total, windowWidth: width, windowHeight: total,
+          scrollX: 0, scrollY: 0, scale, backgroundColor: bg, useCORS: true, logging: false
+        });
+        const k = full.width / width;
+        const pages = breaks.map(([y0, y1]) => {
+          const c = document.createElement('canvas');
+          c.width = full.width;
+          c.height = Math.max(1, Math.round((y1 - y0) * k));
+          const g = c.getContext('2d');
+          g.fillStyle = bg; g.fillRect(0, 0, c.width, c.height);
+          g.drawImage(full, 0, Math.round(y0 * k), full.width, c.height, 0, 0, c.width, c.height);
+          return { dataUrl: c.toDataURL('image/jpeg', 0.9), width, height: y1 - y0 };
+        });
+        resolve(pages);
+      } catch (e) {
+        reject(e);
+      } finally {
+        clearTimeout(timer);
+        frame.remove();
+      }
+    }, { once: true });
+    frame.srcdoc = reviewContent.html;
+    document.body.appendChild(frame);
+  });
+}
+
+async function loadPhotoForPdf(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('A photo could not be downloaded.');
+  const blobUrl = URL.createObjectURL(await res.blob());
+  try {
+    const img = new Image();
+    // Load events rather than img.decode(), which can stall in some Chrome builds.
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = () => reject(new Error('A photo could not be read.'));
+      img.src = blobUrl;
+    });
+    const max = 2000;
+    const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return { dataUrl: c.toDataURL('image/jpeg', 0.88), width: c.width, height: c.height };
+  } finally { URL.revokeObjectURL(blobUrl); }
+}
+
+async function renderCoverPage(lessonPageCount) {
+  const meta = lessonMeta();
+  const counts = answerCounts();
+  const sub = currentReviewSubmission;
+  const prior = reviewPrior;
+  const when = new Date(sub.submitted_at).toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const marks = prior && prior.marks !== null && prior.marks !== undefined
+    ? `${prior.marks}${prior.marks_total !== null && prior.marks_total !== undefined ? ` / ${prior.marks_total}` : ''}` : '—';
+  const el = document.createElement('div');
+  el.className = 'pdf-cover';
+  el.innerHTML = `
+    <div class="pc-band">
+      <div class="pc-brand">Inspire Science Mastery · ISM Class</div>
+      <div class="pc-kind">Student work record</div>
+    </div>
+    <div class="pc-body">
+      <div>
+        <div class="pc-eyebrow">${esc(meta.subject)}${meta.week ? ` · Week ${esc(meta.week)}` : ''}</div>
+        <div class="pc-title">${esc(meta.title)}</div>
+      </div>
+      <div>
+        <div class="pc-student">${esc(reviewStudentName)}</div>
+        <div class="pc-sub">Submitted ${esc(when)} · Submission #${esc(sub.submission_number)}</div>
+      </div>
+      <div class="pc-stats">
+        <div class="pc-stat"><b>Answered</b><span>${counts.answered} of ${counts.total}</span></div>
+        <div class="pc-stat"><b>Photos attached</b><span>${reviewPhotos.length}</span></div>
+        <div class="pc-stat"><b>Lesson pages</b><span>${lessonPageCount}</span></div>
+        <div class="pc-stat"><b>Status</b><span>${esc(statusLabel(sub.status))}</span></div>
+      </div>
+      ${prior ? `
+      <div class="pc-review">
+        <h3>Teacher's review</h3>
+        <div class="pc-review-row">
+          <div><b>Marks</b><span>${esc(marks)}</span></div>
+          ${prior.mastery_score ? `<div><b>Mastery</b><span>${esc(prior.mastery_score)}</span></div>` : ''}
+          <div><b>Reviewed</b><span>${esc(new Date(prior.reviewed_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }))}</span></div>
+        </div>
+        ${prior.overall_comment ? `<div class="pc-comment">${esc(prior.overall_comment)}</div>` : ''}
+        ${reviewFeedback.length ? `<ul class="pc-feedback">${reviewFeedback.slice(0, 10).map(f => `<li><b>${esc(f.field_id)}:</b> ${esc(f.comment)}</li>`).join('')}</ul>` : ''}
+      </div>` : `<div class="pc-pending">Not yet reviewed by a teacher.</div>`}
+      <div class="pc-key"><i></i> Highlighted boxes in the lesson pages are ${esc(reviewStudentName.split(' ')[0])}'s own answers, exactly as submitted.</div>
+    </div>
+    <div class="pc-foot">Generated ${esc(new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }))} · inspireacademic.org · Confidential: for the student, their parents or guardians, and their teachers.</div>`;
+  document.body.appendChild(el);
+  try {
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    const canvas = await window.html2canvas(el, { scale: 2, backgroundColor: '#ffffff', logging: false, useCORS: true });
+    return canvas.toDataURL('image/jpeg', 0.92);
+  } finally { el.remove(); }
+}
+
+// jsPDF's built-in font covers Latin-1 only; keep header/footer text safe.
+function pdfText(s) {
+  return String(s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[—–]/g, '-').replace(/[^\x20-\xFF]/g, '');
+}
+
+function pdfFileName() {
+  const meta = lessonMeta();
+  const parts = ['ISM', reviewStudentName, meta.subject, meta.week ? `Week ${meta.week}` : '', meta.title, `submission ${currentReviewSubmission.submission_number}`];
+  return pdfText(parts.filter(Boolean).join(' - ')).replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ').slice(0, 150) + '.pdf';
+}
+
+async function downloadSubmissionPdf() {
+  if (!reviewContent || pdfBusy) return;
+  pdfBusy = true;
+  const btn = document.getElementById('btn-download-pdf');
+  const label = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Preparing PDF…';
+  try {
+    setPdfProgress('Loading PDF tools…');
+    await Promise.all([loadScriptOnce(H2C), loadScriptOnce(JSPDF)]);
+    setPdfProgress('Capturing the lesson…');
+    const lessonPages = await captureLessonPages();
+    setPdfProgress(reviewPhotos.length ? 'Adding photos…' : 'Building the PDF…');
+    const photos = [];
+    for (const url of reviewPhotos) photos.push(await loadPhotoForPdf(url));
+    setPdfProgress('Building the PDF…');
+    const cover = await renderCoverPage(lessonPages.length);
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+    const meta = lessonMeta();
+    const total = 1 + lessonPages.length + photos.length;
+    const header = pdfText(`${reviewStudentName} - ${meta.title}`);
+    const decorate = (pageNo, right) => {
+      pdf.setFont('helvetica', 'normal'); pdf.setFontSize(8); pdf.setTextColor(110, 120, 135);
+      pdf.text(header, PDF.margin, 8);
+      pdf.text(pdfText(right), PDF.w - PDF.margin, 8, { align: 'right' });
+      pdf.text(`Page ${pageNo} of ${total}`, PDF.w - PDF.margin, PDF.h - 5, { align: 'right' });
+      pdf.text('Inspire Academic - ISM Class', PDF.margin, PDF.h - 5);
+    };
+
+    pdf.addImage(cover, 'JPEG', 0, 0, PDF.w, PDF.h);
+    let pageNo = 1;
+    const contentW = PDF.w - 2 * PDF.margin;
+    lessonPages.forEach(p => {
+      pdf.addPage(); pageNo++;
+      pdf.addImage(p.dataUrl, 'JPEG', PDF.margin, PDF.top, contentW, p.height * contentW / p.width);
+      decorate(pageNo, 'Lesson');
+    });
+    photos.forEach((ph, i) => {
+      pdf.addPage(); pageNo++;
+      const boxW = contentW, boxH = PDF.h - PDF.top - PDF.bottom - 8;
+      const k = Math.min(boxW / ph.width, boxH / ph.height);
+      const w = ph.width * k, h = ph.height * k;
+      pdf.setFont('helvetica', 'bold'); pdf.setFontSize(11); pdf.setTextColor(11, 22, 40);
+      const caption = reviewPhotoCaptions[i] ? ` - ${reviewPhotoCaptions[i]}` : '';
+      pdf.text(pdfText(`Attached work: photo ${i + 1} of ${photos.length}${caption}`), PDF.margin, PDF.top + 3);
+      pdf.addImage(ph.dataUrl, 'JPEG', PDF.margin + (boxW - w) / 2, PDF.top + 7, w, h);
+      decorate(pageNo, 'Attached work');
+    });
+    pdf.save(pdfFileName());
+    toast('PDF downloaded');
+  } catch (e) {
+    toast('Could not create the PDF: ' + (e.message || 'unknown error'), 'error');
+  } finally {
+    setPdfProgress('');
+    btn.disabled = false;
+    btn.textContent = label;
+    pdfBusy = false;
+  }
+}
+window.downloadSubmissionPdf = downloadSubmissionPdf;
 
 function renderFieldFeedbackRows() {
   const el = document.getElementById('field-feedback-list');
   if (!el) return;
   el.innerHTML = fieldFeedbackRows.map((r, i) => `
     <div class="field-feedback-row">
-      <input class="field-input" placeholder="field id" value="${r.fieldId}" oninput="fieldFeedbackRows[${i}].fieldId=this.value">
-      <input class="field-input" placeholder="comment" value="${r.comment}" oninput="fieldFeedbackRows[${i}].comment=this.value">
+      <input class="field-input" placeholder="field id" value="${esc(r.fieldId)}" oninput="fieldFeedbackRows[${i}].fieldId=this.value">
+      <input class="field-input" placeholder="comment" value="${esc(r.comment)}" oninput="fieldFeedbackRows[${i}].comment=this.value">
       <button class="remove-x" onclick="fieldFeedbackRows.splice(${i},1);renderFieldFeedbackRows()">✕</button>
     </div>`).join('');
 }
@@ -584,19 +1091,20 @@ async function saveReview(statusAfter) {
       })
     });
     toast(statusAfter === 'reviewed' ? 'Marked reviewed — feedback released to student' : 'Returned for corrections');
+    // Keep the PDF cover in step with what was just saved.
+    currentReviewSubmission.status = statusAfter;
+    const [{ data: latest }, { data: fb }] = await Promise.all([
+      supa.from('ism_teacher_reviews').select('*').eq('submission_id', currentReviewSubmission.id).order('reviewed_at', { ascending: false }).limit(1),
+      supa.from('ism_teacher_feedback').select('field_id,comment').eq('submission_id', currentReviewSubmission.id).order('created_at')
+    ]);
+    reviewPrior = (latest && latest[0]) || reviewPrior;
+    reviewFeedback = fb || [];
+    const chip = document.querySelector('.review-head .status-chip');
+    if (chip) { chip.className = 'status-chip ' + statusAfter; chip.textContent = statusLabel(statusAfter); }
     await loadSubmissionsRoster();
   } catch (e) { toast(e.message || 'Could not save review', 'error'); }
 }
 window.saveReview = saveReview;
-
-function printSubmission() {
-  const entries = Object.entries(currentReviewSubmission.responses_snapshot || {});
-  const w = window.open('', '_blank');
-  w.document.write(`<pre style="font-family:sans-serif;white-space:pre-wrap;">${entries.map(([k, v]) => `${esc(k)}: ${esc(v ?? '')}`).join('\n\n')}</pre>`);
-  w.document.close();
-  w.print();
-}
-window.printSubmission = printSubmission;
 
 // ── Init ──
 (async () => {

@@ -21,12 +21,17 @@
 // Staff (?preview=true): lesson owner or admin only, always read-only,
 // never touches progress — used by teacher/ism-class-management.html's
 // Preview button before publishing.
+//
+// Staff (?submissionId=...): the student's submitted lesson exactly as
+// they saw it — the lesson version they worked on, with that
+// submission's frozen answers, read-only. Admins, or teachers actively
+// assigned to the student. Used by the review panel and its PDF export.
 
 const fs = require('fs')
 const path = require('path')
 const {
   STAFF_ROLES, ADMIN_ROLES, CORS, reply, sb, sbRpc, storageDownload,
-  getRole, ownsLesson, verifyUser
+  getRole, ownsLesson, canAccessStudent, verifyUser
 } = require('./_ism-shared')
 
 let BRIDGE_SCRIPT = null
@@ -38,10 +43,15 @@ function bridgeScript() {
 }
 
 function injectRuntime(html, config) {
-  const configScript = `<script>window.__ISM_CONFIG__=${JSON.stringify(config)};</script>`
+  // Escape "<" so an answer containing "</script>" can't end the tag early.
+  const json = JSON.stringify(config).replace(/</g, '\\u003c')
+  const configScript = `<script>window.__ISM_CONFIG__=${json};</script>`
   const bridgeTag = `<script>${bridgeScript()}</script>`
   const payload = configScript + bridgeTag
-  return html.includes('</body>') ? html.replace('</body>', payload + '</body>') : html + payload
+  const at = html.lastIndexOf('</body>')
+  // Slice rather than String.replace, whose "$&"/"$'" patterns would
+  // corrupt the page if a student's answer contained them.
+  return at === -1 ? html + payload : html.slice(0, at) + payload + html.slice(at)
 }
 
 exports.handler = async function (event) {
@@ -51,7 +61,8 @@ exports.handler = async function (event) {
   const qs = event.queryStringParameters || {}
   const lessonId = qs.lessonId
   const preview = qs.preview === 'true'
-  if (!lessonId) return reply(400, { success: false, error: { code: 'missing_fields', message: 'lessonId is required.' } })
+  const submissionId = qs.submissionId
+  if (!lessonId && !submissionId) return reply(400, { success: false, error: { code: 'missing_fields', message: 'lessonId or submissionId is required.' } })
 
   const authHeader = (event.headers && (event.headers.authorization || event.headers.Authorization)) || ''
   const user = await verifyUser(authHeader)
@@ -62,6 +73,41 @@ exports.handler = async function (event) {
 
   try {
     const callerRole = await getRole(user.id, serviceKey)
+
+    if (submissionId) {
+      if (!STAFF_ROLES.includes(callerRole)) {
+        return reply(403, { success: false, error: { code: 'forbidden', message: 'Teacher/admin access required.' } })
+      }
+      const submissionRows = await sb(`ism_submissions?id=eq.${encodeURIComponent(submissionId)}&select=*`, serviceKey)
+      const submission = submissionRows[0]
+      if (!submission) return reply(404, { success: false, error: { code: 'not_found', message: 'No such submission.' } })
+      if (!(await canAccessStudent(callerRole, user.id, submission.student_id, serviceKey))) {
+        return reply(403, { success: false, error: { code: 'forbidden', message: 'Not assigned to this student.' } })
+      }
+
+      const [lessonRows, versionRows, studentRows] = await Promise.all([
+        sb(`ism_lessons?id=eq.${encodeURIComponent(submission.lesson_id)}&select=*,subjects(name)`, serviceKey),
+        sb(`ism_lesson_versions?id=eq.${encodeURIComponent(submission.lesson_version_id)}&select=*`, serviceKey),
+        sb(`profiles?id=eq.${encodeURIComponent(submission.student_id)}&select=first_name,last_name,full_name`, serviceKey)
+      ])
+      const lesson = lessonRows[0]
+      const version = versionRows[0]
+      if (!lesson || !version) return reply(404, { success: false, error: { code: 'not_found', message: 'This lesson version is no longer available.' } })
+      const s = studentRows[0] || {}
+      const studentName = s.full_name || [s.first_name, s.last_name].filter(Boolean).join(' ') || 'Student'
+
+      const rawHtml = await storageDownload('ism-lesson-content', version.html_storage_path, serviceKey)
+      const html = injectRuntime(rawHtml, { responses: submission.responses_snapshot || {}, readOnly: true })
+      return reply(200, {
+        success: true, html, lesson, readOnly: true, status: 'submission',
+        version: { id: version.id, version_number: version.version_number, field_manifest: version.field_manifest },
+        submission: {
+          id: submission.id, submission_number: submission.submission_number,
+          submitted_at: submission.submitted_at, status: submission.status
+        },
+        student: { name: studentName }
+      })
+    }
 
     if (preview) {
       if (!STAFF_ROLES.includes(callerRole)) {

@@ -85,6 +85,17 @@ async function ownsLesson(lessonId, userId, callerRole, serviceKey) {
   return rows[0] && rows[0].created_by === userId
 }
 
+// Staff may see a student's ISM work if they're an admin or actively
+// assigned to that student — the same boundary as get_teacher_students().
+async function canAccessStudent(callerRole, callerId, studentId, serviceKey) {
+  if (ADMIN_ROLES.includes(callerRole)) return true
+  const rows = await sb(
+    `teacher_student_assignments?teacher_id=eq.${encodeURIComponent(callerId)}&student_id=eq.${encodeURIComponent(studentId)}&is_active=eq.true&select=teacher_id`,
+    serviceKey
+  )
+  return rows.length > 0
+}
+
 // Every data-save="..." id found in a lesson's HTML — used both to
 // validate an upload (must contain at least one) and to record a
 // field_manifest for admin visibility.
@@ -99,5 +110,5 @@ function extractFieldManifest(html) {
 module.exports = {
   SUPABASE_URL, STAFF_ROLES, ADMIN_ROLES, CORS,
   reply, sb, sbRpc, storageUpload, storageDownload,
-  getRole, ownsLesson, extractFieldManifest, verifyUser
+  getRole, ownsLesson, canAccessStudent, extractFieldManifest, verifyUser
 }
