@@ -298,8 +298,6 @@ input,select,textarea{font-family:var(--font-body);}
           <select id="inp-board" class="form-select">
             <option value="AQA">AQA</option>
             <option value="Edexcel">Edexcel</option>
-            <option value="OCR">OCR</option>
-            <option value="WJEC">WJEC</option>
           </select>
         </div>
       </div>
@@ -1439,6 +1437,12 @@ function confidenceRangeForScore(correct, total, board, subject, isCombined) {
 // target computed in computeDiagnosis(). Never conflate the two:
 // "mastery, not time" means the near-term target must stay honest about
 // what a 3-6 week plan can actually deliver.
+// Profile words shown to students and parents. The internal values stay as
+// they are (teachers see them in their console), but a child is never told
+// they are 'STRUGGLING'.
+const PROFILE_LABELS = { struggling: 'Building foundations', developing: 'Developing', secure: 'Secure', strong: 'Strong' };
+function profileLabel(p) { return PROFILE_LABELS[p] || 'Developing'; }
+
 function aspirationGrade(isCombined) {
   return isCombined ? '9-9' : '9';
 }
@@ -1473,7 +1477,9 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
     targetGrade  = combinedPairLabel(targetIdx, board);
   } else {
     const currentGradeNum = estimateGrade(overallPct, board, gradingSubject);
-    const targetGradeNum  = Math.min(9, currentGradeNum + 2);
+    // Next target: two grades up, but never below 4 — Higher tier doesn't
+    // award 1 or 2, so "U → target 2" was a target that can't be awarded.
+    const targetGradeNum  = Math.min(9, Math.max(4, currentGradeNum + 2));
     currentGrade = gradeLabel(currentGradeNum);
     targetGrade  = gradeLabel(targetGradeNum);
   }
@@ -1499,9 +1505,9 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
     : '';
 
   const profileDescription = isCombined
-    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award${rangeNote} on real ${board} Combined Science June 2026 boundaries, with a realistic path to ${targetGrade}.`
+    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award${rangeNote} on real ${board} Combined Science June 2026 boundaries. Next target: ${targetGrade}.`
     : `Scored ${overallPct}% overall — around Grade ${currentGrade}${rangeNote} on real ${board} ${gradingSubject} June 2026 boundaries, ` +
-      `with a realistic path to Grade ${targetGrade}.`;
+      `next target: Grade ${targetGrade}.`;
 
   const gaps = topicScores
     .filter(t => t.score < 80)
@@ -1602,7 +1608,7 @@ function renderDiagnosis() {
         🎯 Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}
       </div>
       <div style="margin-top:.75rem;display:inline-block;padding:.35rem 1rem;border-radius:20px;background:${profileColor}22;color:${profileColor};font-weight:700;font-size:.85rem;">
-        ${d.studentProfile?.toUpperCase() || 'DEVELOPING'}
+        ${profileLabel(d.studentProfile)}
       </div>
       <p style="margin-top:.75rem;color:var(--muted);font-size:.9rem;">${d.profileDescription || ''}</p>
       ${notSurePct >= 30 ? `
@@ -1859,14 +1865,10 @@ async function computePlan() {
     };
   });
 
-  const gradeJourney = weeks.map((w, i) => {
-    const grade = i === weeks.length - 1
-      ? targetNum
-      : currentNum + Math.round(((i + 1) * (targetNum - currentNum)) / weeks.length);
-    return { week: i + 1, grade: gradeLabel(grade), description: w.title };
-  });
-
-  return { gradeJourney, weeks };
+  // No grade-per-week trajectory: nothing yet shows a student gains a
+  // grade a week, so the plan no longer promises one (it went to parents
+  // in the report PDF). Kept as an empty list for older readers.
+  return { gradeJourney: [], weeks };
 }
 
 function renderPlan() {
@@ -1877,19 +1879,8 @@ function renderPlan() {
   document.getElementById('plan-subtitle').textContent =
     `${weekCount}-week personalised roadmap based on your diagnosis.`;
 
-  if (p.gradeJourney && p.gradeJourney.length) {
-    html += `<div class="grade-row">`;
-    p.gradeJourney.forEach((g, i) => {
-      html += `
-        <div class="grade-box">
-          <div class="grade-val">${g.grade}</div>
-          <div class="grade-wk">Week ${g.week}</div>
-          <div class="grade-desc">${g.description}</div>
-        </div>`;
-      if (i < p.gradeJourney.length - 1) html += `<div class="grade-arrow">→</div>`;
-    });
-    html += `</div>`;
-  }
+  // (The old grade-per-week "journey" row is no longer shown, including for
+  // plans saved before it was retired: it promised a grade a week.)
 
   (p.weeks || []).forEach(w => {
     html += `

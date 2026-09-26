@@ -268,7 +268,7 @@ function buildExecutiveSummary(c, d, name) {
         <div class="num" style="color:${sColor};">${sc}%</div>
         <div class="grades">Current grade <strong>${d.currentGrade ?? '—'}</strong> &nbsp;→&nbsp; Target grade <strong style="color:#0d9488;">${d.targetGrade ?? '—'}</strong></div>
         <div class="aspiration">🎯 Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}</div>
-        <div class="badge-pill" style="background:${pColor};">${(d.studentProfile || 'developing').toUpperCase()}</div>
+        <div class="badge-pill" style="background:${pColor};">${profileLabel(d.studentProfile)}</div>
         <div class="desc">${d.profileDescription || ''}</div>
         ${notSurePct >= 30 ? `<div class="notsure-callout">${notSurePct}% of questions in this assessment were answered "not sure" — the study plan below is weighted toward building foundational confidence first.</div>` : ''}
       </div>
@@ -345,14 +345,13 @@ function buildGapsAndStrengths(c, d, name) {
     </div>`;
 }
 
+// Profile words shown to parents; a child is never labelled "STRUGGLING".
+const PROFILE_LABELS = { struggling: 'Building foundations', developing: 'Developing', secure: 'Secure', strong: 'Strong' };
+function profileLabel(p) { return PROFILE_LABELS[p] || 'Developing'; }
+
 function buildPlan(c, p) {
-  const journey = (p.gradeJourney || []).map((g, i, arr) => `
-    <div class="gj-box">
-      <div class="val">${g.grade}</div>
-      <div class="wk">Week ${g.week}</div>
-      <div class="desc">${g.description}</div>
-    </div>${i < arr.length - 1 ? `<div class="gj-arrow">→</div>` : ''}
-  `).join('');
+  // No grade-per-week journey: it promised a grade a week with nothing
+  // behind it. Older saved plans still carry one; it isn't shown.
 
   const weeks = (p.weeks || []).map(w => `
     <div class="week-card">
@@ -371,8 +370,7 @@ function buildPlan(c, p) {
     <div class="report-section">
       ${pageHeader(c.subject)}
       <div class="section-title">Study Plan</div>
-      <div class="section-subtitle">A structured, spec-aligned path from the current diagnosis to the target grade.</div>
-      <div class="grade-journey">${journey}</div>
+      <div class="section-subtitle">A structured, spec-aligned plan working on the priority gaps, week by week.</div>
       ${weeks}
     </div>`;
 }
