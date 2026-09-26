@@ -181,8 +181,11 @@ input,select{font-family:var(--font-body);}
    [data-theme="light"]. Raw colours come from tokens.css (--ia-*); this block
    only remaps this page family's own tokens onto them, so every page that
    styles through var(--navy)/var(--white)/var(--muted)... follows for free.
+   Selector is :root[data-theme="light"], not just [data-theme="light"], so it
+   outranks the plain :root blocks where many pages re-declare these same
+   tokens with their dark values (e.g. teacher.html's --white:#F0EDE6).
    ========================================================================== */
-[data-theme="light"]{
+:root[data-theme="light"]{
   color-scheme:light;
   --navy:var(--ia-bg);            /* page canvas: warm parchment */
   --navy2:var(--ia-surface);      /* cards: soft ivory */
@@ -199,13 +202,38 @@ input,select{font-family:var(--font-body);}
   --teal:#0E6B6A;
   --green:#2F6B45;
   --red:var(--ia-red);
+  /* Other names that many pages define for themselves in :root (surveyed
+     2026-09-26), mapped onto the same palette so those pages follow too. */
+  --bg:var(--ia-bg);
+  --bg2:var(--ia-surface);
+  --bg3:var(--ia-surface-2);
+  --bg-hover:rgba(23,35,58,.05);
+  --search-bg:var(--ia-surface);
+  --sidebar-bg:var(--ia-surface);
+  --text:var(--ia-text);
+  --text-primary:var(--ia-text);
+  --text-secondary:var(--ia-text-2);
+  --text-muted:var(--ia-text-muted);
+  --navy-mid:var(--ia-surface);
+  --navy-light:var(--ia-surface-2);
+  --navy-border:var(--ia-border);
+  --gold-light:var(--ia-gold-dark);
+  --success:#2F6B45;
+  --danger:var(--ia-red);
+  --warning:#A34A0B;
+  --amber:#8A5A00;
+  --blue:var(--ia-blue);
+  --purple:var(--ia-purple);
 }
 
 /* The top bar (and the phone's bottom bar) stays deep navy in light mode:
-   it anchors the brand. Re-declaring the dark tokens on the bar itself
+   it anchors the brand. Add class="ia-keep-dark" to any other panel that is
+   dark by design (e.g. a login page's brand panel over a photo). Re-declaring the dark tokens on the bar itself
    makes everything inside it — links, account menu, dropdown — dark again. */
 [data-theme="light"] .topnav,
-[data-theme="light"] .mobile-nav{
+[data-theme="light"] .topbar,
+[data-theme="light"] .mobile-nav,
+[data-theme="light"] .ia-keep-dark{
   color-scheme:dark;
   --navy:var(--ia-nav);
   --navy2:var(--ia-nav);
@@ -217,12 +245,29 @@ input,select{font-family:var(--font-body);}
   --gold2:#D7B65A;
   --orange:#e8620a;
   --red:#e0624f;
-  background:var(--ia-nav);
+  --bg:var(--ia-nav);
+  --bg2:var(--ia-nav-hover);
+  --bg3:var(--ia-nav-active);
+  --bg-hover:rgba(248,247,242,.07);
+  --text:var(--ia-text-on-dark);
+  --text-primary:var(--ia-text-on-dark);
+  --text-secondary:#B9C3D1;
+  --text-muted:#93A3B8;
+  --navy-mid:var(--ia-nav-hover);
+  --navy-light:var(--ia-nav-active);
+  --navy-border:rgba(248,247,242,.14);
+  --gold-light:#E2C97E;
   color:var(--ia-text-on-dark);
 }
+[data-theme="light"] .topnav,
+[data-theme="light"] .topbar,
+[data-theme="light"] .mobile-nav{background:var(--ia-nav);}
 [data-theme="light"] .topnav{border-bottom-color:transparent;}
 [data-theme="light"] .nav-link:hover{background:var(--ia-nav-hover);}
 [data-theme="light"] .nav-link.active{background:var(--ia-nav-active);color:var(--ia-text-on-dark);}
+
+/* Body text is ink on parchment, even where a page hard-codes body{color:#fff}. */
+:root[data-theme="light"] body{color:var(--ia-text);}
 
 /* Surfaces: fine borders and tonal separation, barely any shadow. */
 [data-theme="light"] .card,
@@ -253,6 +298,11 @@ input,select{font-family:var(--font-body);}
 [data-theme="light"] ::-webkit-scrollbar-thumb{background:var(--ia-border-strong);}
 [data-theme="light"] ::selection{background:var(--ia-gold-soft);color:var(--ia-text);}
 
+/* The floating "← Subject" pill (subject-back.js) is tinted glass built for
+   dark pages; on parchment it becomes a small navy pill instead. Its colours
+   are set inline by the script, hence !important. */
+[data-theme="light"] .ia-subject-back--floating{background:var(--ia-nav)!important;border-color:var(--ia-nav)!important;color:var(--ia-text-on-dark)!important;box-shadow:var(--ia-shadow-md)!important;}
+
 /* Keyboard focus stays obvious on light surfaces. */
 [data-theme="light"] a:focus-visible,
 [data-theme="light"] button:focus-visible,
@@ -266,7 +316,7 @@ input,select{font-family:var(--font-body);}
 /* The light/dark switch (added to every page's top bar by theme.js). */
 .ia-theme-toggle{
   display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
-  width:36px;height:36px;border-radius:50%;
+  width:32px;height:32px;border-radius:50%;
   background:transparent;border:1px solid var(--border);color:var(--muted);
   cursor:pointer;transition:border-color .2s,color .2s;
 }

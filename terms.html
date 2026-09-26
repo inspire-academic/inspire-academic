@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/assets/js/theme.js"></script>
 <title>Terms of Service — Inspire Academic</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,6 +60,9 @@
   }
 
   footer { text-align:center; padding: 2rem; color:#888; font-size:.8rem; }
+  /* Light mode: --navy is this page's ink (text and header bar), so it stays
+     ink navy rather than following the canvas to parchment. */
+  :root[data-theme="light"] { --navy: var(--ia-text); }
 </style>
   <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "115b324e79814b58b430653d922e778a"}'></script>
 </head>

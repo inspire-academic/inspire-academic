@@ -16,6 +16,16 @@
 (function () {
   var KEY = 'ia-theme';
   var root = document.documentElement;
+  // Dark must look exactly as it always has. Pages that were built with
+  // data-theme="dark" on <html> (the subject pages) keep it; pages that never
+  // had the attribute don't get one in dark mode, so no theme-keyed CSS
+  // (e.g. tokens.css's [data-theme="dark"] block) starts applying to them.
+  var markupTheme = root.getAttribute('data-theme');
+  // Immersive tools that are dark by design (Protégé's starfield, the
+  // calculator, the PDF annotator...) opt out with
+  // <html data-theme-lock="dark">: always dark, no switch, and the student's
+  // saved choice is left alone for every other page.
+  var locked = root.getAttribute('data-theme-lock') === 'dark';
 
   function read() {
     try { return localStorage.getItem(KEY) === 'light' ? 'light' : 'dark'; } catch (e) { return 'dark'; }
@@ -27,7 +37,9 @@
 
   function apply(theme) {
     current = theme;
-    root.setAttribute('data-theme', theme);
+    if (theme === 'light' && !locked) root.setAttribute('data-theme', 'light');
+    else if (markupTheme) root.setAttribute('data-theme', markupTheme === 'light' ? 'dark' : markupTheme);
+    else root.removeAttribute('data-theme');
     var meta = document.querySelector('meta[name="theme-color"]');
     // The top bar stays navy in both themes, so the browser chrome does too.
     if (meta) meta.setAttribute('content', '#10233F');
@@ -64,7 +76,10 @@
     '<svg class="ia-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.2M12 20.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M1.5 12h2.2M20.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>';
 
   function addToggle() {
-    if (document.querySelector('#themeToggle, .theme-toggle, [data-ia-theme-toggle]')) return;
+    if (locked || document.querySelector('#themeToggle, .theme-toggle, [data-ia-theme-toggle]')) return;
+    // The button is styled by app-shared.css; pages without it (subject
+    // pages, lesson pages with their own light/dark control) are left alone.
+    if (!document.querySelector('link[href*="app-shared.css"]')) return;
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'ia-theme-toggle';
@@ -74,7 +89,7 @@
 
     // Into the page's top bar, just before the account menu if there is
     // one; otherwise a small fixed button in the corner.
-    var bar = document.querySelector('.topnav, .app-header, header, nav');
+    var bar = document.querySelector('.topnav, .topbar, .app-header, header.header, body > header');
     if (bar) {
       var anchor = bar.querySelector('.profile-dropdown-wrapper, .nav-user, .topnav-right, .header-right');
       if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(btn, anchor);

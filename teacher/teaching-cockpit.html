@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/assets/js/theme.js"></script>
 <title>Inspire Teaching Cockpit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -273,6 +274,12 @@ body {
   .subjects-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
   .page-title { font-size: 2.5rem; }
 }
+
+/* Light mode: pieces this page colours white directly. */
+[data-theme="light"] .sidebar-logo .science { color: var(--ia-text); }
+[data-theme="light"] .nav-item:hover { color: var(--ia-text); }
+[data-theme="light"] .sign-out-btn { color: var(--ia-text-2); }
+[data-theme="light"] .filter-select { color: var(--ia-text); }
 </style>
 </head>
 <body>

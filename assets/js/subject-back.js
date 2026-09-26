@@ -75,6 +75,7 @@
     const pill = makeBtn(
       'position:fixed;top:14px;left:16px;z-index:10000;box-shadow:0 2px 10px rgba(0,0,0,.45)'
     );
+    pill.classList.add('ia-subject-back--floating'); // light mode restyles it (app-shared.css)
     document.body.appendChild(pill);
   }
 

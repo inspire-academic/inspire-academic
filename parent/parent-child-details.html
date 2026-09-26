@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/assets/js/theme.js"></script>
   <title>Student Progress Report - Inspire Academic</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -403,7 +404,12 @@
     @media(min-width:769px) {
       .two-col { grid-template-columns: 1fr 1fr; }
     }
-  </style>
+  
+    /* Light mode: this page uses --navy as its ink colour (text and the
+       header bar), so it stays ink navy rather than following the page
+       canvas to parchment. */
+    :root[data-theme="light"] { --navy: var(--ia-text); }
+</style>
 </head>
 <body>
 

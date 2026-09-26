@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/assets/js/theme.js"></script>
   <title>Parent Login - Inspire Academic</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -201,7 +202,13 @@
       .card { padding: 3rem 2.5rem; }
       h1 { font-size: 1.75rem; }
     }
-  </style>
+  
+    /* Light mode: this page uses --navy as its ink colour, so it stays ink
+       navy; the card sits on the parchment canvas instead of a navy gradient. */
+    :root[data-theme="light"] { --navy: var(--ia-text); }
+    [data-theme="light"] body { background: var(--ia-bg); }
+    [data-theme="light"] .container { border: 1px solid var(--ia-border); box-shadow: var(--ia-shadow-md); }
+</style>
 </head>
 <body>
 
