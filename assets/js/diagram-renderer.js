@@ -69,6 +69,12 @@ function renderDiagram(containerEl, spec) {
   else if (spec.type === 'transversal') renderTransversal(svg, spec);
   else throw new Error('Unknown diagram type: ' + spec.type);
 
+  // A text alternative for screen readers: an authored spec.description if
+  // there is one, otherwise what the diagram is plus every label drawn on it
+  // (lengths, angles, points), which is what the question depends on.
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', spec.description || describeDiagram(svg, spec));
+
   card.appendChild(svg);
 
   if (spec.notToScale) {
@@ -79,6 +85,25 @@ function renderDiagram(containerEl, spec) {
   }
 
   containerEl.appendChild(card);
+}
+
+const DIAGRAM_NAMES = {
+  polygon: 'Shape', circle: 'Circle', cartesian: 'Graph', rays: 'Angle',
+  tree: 'Probability tree', venn: 'Venn', box3d: '3D box', transversal: 'Parallel lines'
+};
+
+function describeDiagram(svg, spec) {
+  let labels = [...svg.querySelectorAll('text')].map(t => t.textContent.trim()).filter(Boolean);
+  let axes = '';
+  if (spec.type === 'cartesian') {
+    // Axis tick numbers would drown out the labels that matter.
+    labels = labels.filter(l => !/^[−-]?\d+(\.\d+)?$/.test(l));
+    if (spec.xRange && spec.yRange) axes = ` with x from ${spec.xRange[0]} to ${spec.xRange[1]} and y from ${spec.yRange[0]} to ${spec.yRange[1]}`;
+  }
+  const unique = [...new Set(labels)].slice(0, 30);
+  return `${DIAGRAM_NAMES[spec.type] || 'Exam'} diagram${axes}` +
+    (unique.length ? `, labelled: ${unique.join(', ')}` : '') +
+    (spec.notToScale ? '. Not accurately drawn.' : '.');
 }
 
 // ── Shared geometry helpers ──

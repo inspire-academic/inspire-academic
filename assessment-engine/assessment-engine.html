@@ -179,6 +179,9 @@ input,select,textarea{font-family:var(--font-body);}
 .timer-bar{width:100%;height:4px;background:var(--border);border-radius:2px;margin-bottom:1rem;overflow:hidden;}
 .timer-fill{height:100%;background:var(--teal);border-radius:2px;transition:width 1s linear;}
 
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.mcq-option:focus-visible,.pipe-step:focus-visible,.subject-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
 /* Results */
 .marking{text-align:center;padding:2.5rem 1.5rem;}
 .result-head{text-align:center;margin-bottom:1.25rem;}
@@ -291,40 +294,40 @@ input,select,textarea{font-family:var(--font-body);}
 
     <div class="card">
       <div class="form-group">
-        <label class="form-label">Your First Name</label>
-        <input type="text" id="inp-name" class="form-input" placeholder="e.g. Amara" oninput="checkSetup()">
+        <label class="form-label" for="inp-name">Your First Name</label>
+        <input type="text" id="inp-name" autocomplete="given-name" class="form-input" placeholder="e.g. Amara" oninput="checkSetup()">
       </div>
 
       <div class="form-group">
-        <label class="form-label">Subject</label>
-        <div class="subject-grid">
-          <button class="subject-btn" data-subject="Physics" onclick="pickSubject(this)">
-            <span class="subject-icon">⚡</span>
+        <span class="form-label" id="subject-label">Subject</span>
+        <div class="subject-grid" role="group" aria-labelledby="subject-label">
+          <button class="subject-btn" data-subject="Physics" aria-pressed="false" onclick="pickSubject(this)">
+            <span class="subject-icon" aria-hidden="true">⚡</span>
             <span class="subject-name">Physics</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
-          <button class="subject-btn" data-subject="Chemistry" onclick="pickSubject(this)">
-            <span class="subject-icon">⚗️</span>
+          <button class="subject-btn" data-subject="Chemistry" aria-pressed="false" onclick="pickSubject(this)">
+            <span class="subject-icon" aria-hidden="true">⚗️</span>
             <span class="subject-name">Chemistry</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
-          <button class="subject-btn" data-subject="Biology" onclick="pickSubject(this)">
-            <span class="subject-icon">🧬</span>
+          <button class="subject-btn" data-subject="Biology" aria-pressed="false" onclick="pickSubject(this)">
+            <span class="subject-icon" aria-hidden="true">🧬</span>
             <span class="subject-name">Biology</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
-          <button class="subject-btn" data-subject="Mathematics" onclick="pickSubject(this)">
-            <span class="subject-icon">∑</span>
+          <button class="subject-btn" data-subject="Mathematics" aria-pressed="false" onclick="pickSubject(this)">
+            <span class="subject-icon" aria-hidden="true">∑</span>
             <span class="subject-name">Maths</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
-          <button class="subject-btn" data-subject="Combined Science" onclick="pickSubject(this)">
-            <span class="subject-icon">🔬</span>
+          <button class="subject-btn" data-subject="Combined Science" aria-pressed="false" onclick="pickSubject(this)">
+            <span class="subject-icon" aria-hidden="true">🔬</span>
             <span class="subject-name">Combined Science</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
-          <button class="subject-btn" data-subject="Mathematics — Paper 2" onclick="pickSubject(this)" title="A second Maths diagnostic on geometry and statistics, with diagrams. None of its questions appear in the main Maths diagnostic.">
-            <span class="subject-icon">📐</span>
+          <button class="subject-btn" data-subject="Mathematics — Paper 2" aria-pressed="false" onclick="pickSubject(this)" title="A second Maths diagnostic on geometry and statistics, with diagrams. None of its questions appear in the main Maths diagnostic.">
+            <span class="subject-icon" aria-hidden="true">📐</span>
             <span class="subject-name">Maths — Geometry &amp; Statistics</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
@@ -333,13 +336,13 @@ input,select,textarea{font-family:var(--font-body);}
 
       <div class="two-col">
         <div class="form-group">
-          <label class="form-label">Level</label>
+          <label class="form-label" for="inp-level">Level</label>
           <select id="inp-level" class="form-select">
             <option value="GCSE">GCSE</option>
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Exam Board</label>
+          <label class="form-label" for="inp-board">Exam Board</label>
           <select id="inp-board" class="form-select">
             <option value="AQA">AQA</option>
             <option value="Edexcel">Edexcel</option>
@@ -369,15 +372,16 @@ input,select,textarea{font-family:var(--font-body);}
       <h2 class="serif" style="font-size:1.6rem;margin-bottom:.4rem;">Diagnostic Assessment</h2>
       <p class="muted" id="assess-sub">Loading questions...</p>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="assess-progress" style="width:0%;"></div></div>
+    <div class="progress-bar" id="assess-progressbar" role="progressbar" aria-label="Progress through the test" aria-valuemin="0" aria-valuemax="36" aria-valuenow="0"><div class="progress-fill" id="assess-progress" style="width:0%;"></div></div>
     <div class="card" id="q-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
         <span class="badge badge-gold" id="q-topic">Topic</span>
         <span class="muted" style="font-size:.82rem;">Question <span id="q-num">1</span> of <span id="q-total">36</span></span>
       </div>
-      <p style="font-size:1.05rem;font-weight:600;margin-bottom:1rem;line-height:1.7;" id="q-text">Loading question...</p>
+      <p style="font-size:1.05rem;font-weight:600;margin-bottom:1rem;line-height:1.7;outline:none;" id="q-text" tabindex="-1">Loading question...</p>
       <div id="q-diagram" style="text-align:center;margin-bottom:1.5rem;"></div>
-      <div id="q-options" style="display:flex;flex-direction:column;gap:.6rem;"></div>
+      <div id="q-options" role="radiogroup" aria-labelledby="q-text" style="display:flex;flex-direction:column;gap:.6rem;"></div>
+      <p class="sr-only" id="q-announce" aria-live="polite"></p>
       <button class="btn btn-gold" style="width:100%;margin-top:1.25rem;opacity:.4;" id="btn-next" onclick="nextQuestion()" disabled>
         Select an answer to continue →
       </button>
@@ -426,7 +430,7 @@ input,select,textarea{font-family:var(--font-body);}
 </div><!-- /wrap -->
 
 <!-- Toast -->
-<div id="toast"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/nav-back.js"></script>
@@ -809,6 +813,10 @@ function renderQuestion() {
   document.getElementById('q-total').textContent    = S.questions.length;
   IAMaths.render(document.getElementById('q-text'), q.question_text);
   document.getElementById('assess-progress').style.width = pct + '%';
+  const bar = document.getElementById('assess-progressbar');
+  bar.setAttribute('aria-valuemax', S.questions.length);
+  bar.setAttribute('aria-valuenow', S.currentQ);
+  bar.setAttribute('aria-valuetext', `Question ${S.currentQ + 1} of ${S.questions.length}`);
 
   const diagramSlot = document.getElementById('q-diagram');
   if (q.diagram_spec) {
@@ -851,22 +859,55 @@ function renderQuestion() {
     const btn = document.createElement('button');
     btn.className = 'mcq-option' + (opt.key === 'e' ? ' not-sure' : '');
     btn.dataset.key = opt.key;
+    btn.setAttribute('role', 'radio');
+    btn.setAttribute('aria-checked', 'false');
+    btn.tabIndex = pos === 0 ? 0 : -1; // one tab stop; arrow keys move within
     btn.innerHTML = `
-      <div class="opt-label">${'ABCDE'[pos]}</div>
+      <div class="opt-label" aria-hidden="true">${'ABCDE'[pos]}</div>
       <div class="opt-text">${IAMaths.html(opt.text)}</div>`;
     btn.addEventListener('click', () => selectOption(opt.key));
     container.appendChild(btn);
   });
   IAMaths.typeset(container);
   S.shownAt = performance.now();
+
+  // After an answer, move focus to the new question so keyboard and
+  // screen-reader users land on it (not on the first question: the student
+  // hasn't asked to move yet).
+  if (S.currentQ > 0 || S.answers.length) {
+    document.getElementById('q-announce').textContent = `Question ${S.currentQ + 1} of ${S.questions.length}`;
+    document.getElementById('q-text').focus();
+  }
 }
+
+// Arrow keys move between the options of the radio group, selecting as they
+// go (the standard radio-group behaviour); Enter on a chosen option moves on.
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('q-options').addEventListener('keydown', e => {
+    const opts = [...document.querySelectorAll('#q-options .mcq-option')];
+    const i = opts.indexOf(document.activeElement);
+    if (i === -1) return;
+    const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+    if (step) {
+      e.preventDefault();
+      const next = opts[(i + step + opts.length) % opts.length];
+      next.focus();
+      selectOption(next.dataset.key);
+    } else if (e.key === 'Enter' && S.selectedOpt === opts[i].dataset.key) {
+      e.preventDefault();
+      nextQuestion();
+    }
+  });
+});
 
 function selectOption(key) {
   S.selectedOpt = key;
 
   document.querySelectorAll('.mcq-option').forEach(btn => {
-    btn.classList.remove('selected');
-    if (btn.dataset.key === key) btn.classList.add('selected');
+    const on = btn.dataset.key === key;
+    btn.classList.toggle('selected', on);
+    btn.setAttribute('aria-checked', String(on));
+    btn.tabIndex = on ? 0 : -1;
   });
 
   const nextBtn = document.getElementById('btn-next');
@@ -1438,10 +1479,23 @@ function goTo(stage) {
     // A stage is revisitable once it's been reached (done or active) —
     // lets a student jump back to review their Diagnosis or Plan instead
     // of getting stuck (see CLAUDE.md principle 7: never build a dead end).
-    if (step) step.classList.toggle('clickable', dot.classList.contains('done') || dot.classList.contains('active'));
+    if (step) {
+      const reachable = dot.classList.contains('done') || dot.classList.contains('active');
+      step.classList.toggle('clickable', reachable);
+      step.setAttribute('role', 'button');
+      step.tabIndex = reachable ? 0 : -1;
+      step.setAttribute('aria-disabled', String(!reachable));
+      step.setAttribute('aria-current', i === pipeIdx ? 'step' : 'false');
+    }
   }
   window.scrollTo({top:0,behavior:'smooth'});
 }
+
+// Enter/Space on a progress step works like a click.
+document.addEventListener('keydown', e => {
+  const step = e.target.closest && e.target.closest('.pipe-step');
+  if (step && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); step.click(); }
+});
 
 function pipeGoTo(stage) {
   // A finished test can't be re-entered from the progress steps: its last

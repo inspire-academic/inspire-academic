@@ -200,3 +200,14 @@ test('a subject weak-spot note is only added to the topic it is about', () => {
   assert.match(reason('Quantitative Chemistry'), /moles/);
   assert.match(d.profileDescription, /not yet at a Higher-tier grade/);
 });
+
+test('the test is usable with a keyboard and a screen reader', () => {
+  assert.match(PAGE, /id="q-options" role="radiogroup" aria-labelledby="q-text"/);
+  assert.match(PAGE, /btn\.setAttribute\('role', 'radio'\)/);
+  assert.match(PAGE, /btn\.setAttribute\('aria-checked', String\(on\)\)/);
+  assert.match(PAGE, /role="progressbar"/);
+  assert.match(PAGE, /document\.getElementById\('q-text'\)\.focus\(\)/);
+  assert.match(PAGE, /<label class="form-label" for="inp-name">/);
+  const renderer = fs.readFileSync(path.join(__dirname, '..', 'assets/js/diagram-renderer.js'), 'utf8');
+  assert.match(renderer, /svg\.setAttribute\('aria-label', spec\.description \|\| describeDiagram\(svg, spec\)\)/);
+});
