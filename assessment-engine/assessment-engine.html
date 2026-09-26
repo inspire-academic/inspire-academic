@@ -805,6 +805,17 @@ async function loadQuestionsFromSupabase() {
 // weightedSampleAcrossTopics below), not spread flat — the three
 // subjects' questions are then interleaved so the assessment doesn't run
 // as three back-to-back blocks.
+//
+// Separate-science-only content (Space Physics, static electricity,
+// transformers, flame tests, percentage yield...) is marked
+// combined_eligible = false in the database (see
+// supabase/diagnostic_questions_combined_eligible.sql) and never drawn
+// here. A row without the column counts as eligible, so this page is safe
+// to deploy before or after that SQL runs.
+function isCombinedEligible(q) {
+  return q.combined_eligible !== false;
+}
+
 async function loadCombinedScienceQuestions() {
   const { config }   = S;
   const subjects     = ['Physics', 'Chemistry', 'Biology'];
@@ -825,8 +836,9 @@ async function loadCombinedScienceQuestions() {
     if (error) throw new Error('Could not load ' + subject + ' questions: ' + error.message);
     if (!data || data.length === 0) throw new Error('No validated questions found for ' + subject + ' yet.');
 
-    const weights = buildTopicWeights(subject, 'AQA', [...new Set(data.map(q => q.topic))]);
-    return weightedSampleAcrossTopics(data, perSubject, weights);
+    const pool = data.filter(isCombinedEligible);
+    const weights = buildTopicWeights(subject, 'AQA', [...new Set(pool.map(q => q.topic))]);
+    return weightedSampleAcrossTopics(pool, perSubject, weights);
   }));
 
   const combined = perSubjectResults.flat();

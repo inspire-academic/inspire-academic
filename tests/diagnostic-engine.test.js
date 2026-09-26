@@ -87,3 +87,14 @@ test('grades use guess-corrected scores, so blind guessing earns no grade', () =
   const correct = 9, wrong = 27;
   assert.equal(Math.max(0, correct - wrong / 3), 0);
 });
+
+test('Combined Science skips separate-science-only questions, and tolerates the column being absent', () => {
+  const src = extractFunction('isCombinedEligible');
+  const isCombinedEligible = new Function(`${src}\nreturn isCombinedEligible;`)();
+  assert.equal(isCombinedEligible({ id: 29, combined_eligible: false }), false);
+  assert.equal(isCombinedEligible({ id: 1, combined_eligible: true }), true);
+  assert.equal(isCombinedEligible({ id: 1 }), true); // before the SQL has run
+  const loader = extractFunction('loadCombinedScienceQuestions');
+  assert.match(loader, /data\.filter\(isCombinedEligible\)/);
+  assert.match(loader, /weightedSampleAcrossTopics\(pool, perSubject/);
+});
