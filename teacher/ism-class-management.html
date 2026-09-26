@@ -982,7 +982,13 @@ async function renderCoverPage(lessonPageCount) {
   document.body.appendChild(el);
   try {
     if (document.fonts && document.fonts.ready) await document.fonts.ready;
-    const canvas = await window.html2canvas(el, { scale: 2, backgroundColor: '#ffffff', logging: false, useCORS: true });
+    // html2canvas copies the whole page before drawing; skip everything but
+    // the cover (the embedded lesson frame alone can stall it).
+    const canvas = await window.html2canvas(el, {
+      scale: 2, backgroundColor: '#ffffff', logging: false, useCORS: true,
+      ignoreElements: node => node !== el && !el.contains(node) && !node.contains(el) &&
+        node.tagName !== 'HEAD' && node.tagName !== 'STYLE' && node.tagName !== 'LINK'
+    });
     return canvas.toDataURL('image/jpeg', 0.92);
   } finally { el.remove(); }
 }
