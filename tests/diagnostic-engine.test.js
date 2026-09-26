@@ -70,3 +70,10 @@ test('an answer is recorded once per question', () => {
   const body = extractFunction('nextQuestion');
   assert.match(body, /S\.answers\.some\(a => a\.question_id === q\.id\)/);
 });
+
+test('options are shuffled but keep their original keys, with Not sure last', () => {
+  const body = extractFunction('renderQuestion');
+  assert.match(body, /shuffleArray\(\[\s*\{ key: 'a'/, 'options a-d should be shuffled');
+  assert.match(body, /\{ key: 'e', text: q\.option_e \|\| 'Not sure' \}\s*\]/, 'Not sure should stay last, outside the shuffle');
+  assert.match(body, /btn\.dataset\.key = opt\.key/, 'buttons must carry the original key for scoring');
+});

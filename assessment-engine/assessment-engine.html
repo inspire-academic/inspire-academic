@@ -1039,24 +1039,29 @@ function renderQuestion() {
   // question both fired and every completed attempt recorded its final
   // answer twice (and ran the diagnosis twice).
 
-  // Build options
+  // Build options. A–D are shuffled on every render so the right answer's
+  // position carries no signal; "Not sure" always stays last. Each button
+  // keeps its option's original key (a–d), which is what gets scored and
+  // mapped to its misconception — only the letter shown follows position.
   const opts = [
-    { key: 'a', text: q.option_a },
-    { key: 'b', text: q.option_b },
-    { key: 'c', text: q.option_c },
-    { key: 'd', text: q.option_d },
+    ...shuffleArray([
+      { key: 'a', text: q.option_a },
+      { key: 'b', text: q.option_b },
+      { key: 'c', text: q.option_c },
+      { key: 'd', text: q.option_d }
+    ]),
     { key: 'e', text: q.option_e || 'Not sure' }
   ];
 
   const container = document.getElementById('q-options');
   container.innerHTML = '';
 
-  opts.forEach(opt => {
+  opts.forEach((opt, pos) => {
     const btn = document.createElement('button');
     btn.className = 'mcq-option' + (opt.key === 'e' ? ' not-sure' : '');
     btn.dataset.key = opt.key;
     btn.innerHTML = `
-      <div class="opt-label">${opt.key.toUpperCase()}</div>
+      <div class="opt-label">${'ABCDE'[pos]}</div>
       <div class="opt-text">${IAMaths.html(opt.text)}</div>`;
     btn.addEventListener('click', () => selectOption(opt.key));
     container.appendChild(btn);
