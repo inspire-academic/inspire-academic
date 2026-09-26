@@ -265,9 +265,9 @@ input,select,textarea{font-family:var(--font-body);}
             <span class="subject-name">Combined Science</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
-          <button class="subject-btn" data-subject="Mathematics — Paper 2" onclick="pickSubject(this)" title="A second, diagram-heavy Maths diagnostic — all new questions, no overlap with the main Maths diagnostic">
+          <button class="subject-btn" data-subject="Mathematics — Paper 2" onclick="pickSubject(this)" title="A second Maths diagnostic on geometry and statistics, with diagrams. None of its questions appear in the main Maths diagnostic.">
             <span class="subject-icon">📐</span>
-            <span class="subject-name">Maths — Paper 2</span>
+            <span class="subject-name">Maths — Geometry &amp; Statistics</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
         </div>
@@ -643,7 +643,7 @@ async function resumeAttempt() {
 
     renderQuestion();
     document.getElementById('assess-sub').textContent =
-      `${S.questions.length} questions · ${S.config.level} ${S.config.subject} · ${S.config.board} · Resumed — picking up where you left off`;
+      `${S.questions.length} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · Resumed — picking up where you left off`;
     toast('Welcome back — resuming your assessment', 'success');
   } catch(e) {
     toast('Could not resume: ' + e.message, 'error');
@@ -693,7 +693,7 @@ async function startAssessment() {
     renderQuestion();
     const total = S.questions.length;
     document.getElementById('assess-sub').textContent =
-      `${total} questions · ${S.config.level} ${S.config.subject} · ${S.config.board} · Select one answer per question`;
+      `${total} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · Select one answer per question`;
     toast('Assessment ready — good luck ' + name + '!', 'success');
   } catch(e) {
     toast('Error: ' + e.message, 'error');
@@ -767,12 +767,19 @@ async function loadQuestionsFromSupabase() {
     throw new Error('No validated questions found for ' + config.subject);
   }
 
-  console.log(`Loaded ${data.length} questions from Supabase`);
+  // The main Maths diagnostic must not draw from the separate Geometry &
+  // Statistics pool (loadMathsPaper2Questions), which promises "no
+  // overlap" — it used to share about 9 of its 36 questions with it.
+  const pool = config.subject === 'Mathematics'
+    ? data.filter(q => q.specification_ref !== 'PAPER2_POOL_2026')
+    : data;
+
+  console.log(`Loaded ${pool.length} questions from Supabase`);
   // Weighting also uses AQA — the content pool is AQA-sourced regardless
   // of the board the student picked, so weighting against AQA's own
   // real exam emphasis is the accurate choice here, not config.board.
-  const weights = buildTopicWeights(config.subject, 'AQA', [...new Set(data.map(q => q.topic))]);
-  return weightedSampleAcrossTopics(data, 36, weights);
+  const weights = buildTopicWeights(config.subject, 'AQA', [...new Set(pool.map(q => q.topic))]);
+  return weightedSampleAcrossTopics(pool, 36, weights);
 }
 
 // Combined Science (Trilogy): 15 questions from each of Physics, Chemistry
@@ -851,6 +858,12 @@ async function loadMathsPaper2Questions() {
   console.log(`Loaded ${data.length} Maths Paper 2 questions from Supabase`);
   return shuffleArray(data);
 }
+
+// What students see for a subject. "Mathematics — Paper 2" stays the stored
+// name (saved attempts and grading use it) but its questions are really
+// geometry and statistics, so it's shown as that.
+const SUBJECT_LABELS = { 'Mathematics — Paper 2': 'Maths — Geometry & Statistics' };
+function subjectLabel(subject) { return SUBJECT_LABELS[subject] || subject; }
 
 function shuffleArray(arr) {
   const a = [...arr];
