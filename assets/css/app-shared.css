@@ -173,3 +173,110 @@ input,select{font-family:var(--font-body);}
   display:flex;align-items:center;justify-content:center;
   font-weight:700;font-size:.82rem;flex-shrink:0;
 }
+
+/* ==========================================================================
+   LIGHT MODE (approved 2026-09-26) — "the same Inspire Academic institution
+   in daylight". Applied by assets/js/theme.js as <html data-theme="light">.
+   Dark stays the default and is untouched: everything below is scoped to
+   [data-theme="light"]. Raw colours come from tokens.css (--ia-*); this block
+   only remaps this page family's own tokens onto them, so every page that
+   styles through var(--navy)/var(--white)/var(--muted)... follows for free.
+   ========================================================================== */
+[data-theme="light"]{
+  color-scheme:light;
+  --navy:var(--ia-bg);            /* page canvas: warm parchment */
+  --navy2:var(--ia-surface);      /* cards: soft ivory */
+  --navy3:var(--ia-surface-2);    /* hover / inset: stone cream */
+  --white:var(--ia-text);         /* primary text: ink navy */
+  --off:var(--ia-surface);
+  --border:var(--ia-border);      /* fine warm grey */
+  --border2:var(--ia-border-strong);
+  --muted:var(--ia-text-2);       /* slate */
+  --muted2:var(--ia-text-muted);
+  --gold:var(--ia-gold-text);     /* gold TEXT must stay readable on parchment */
+  --gold2:var(--ia-gold-dark);
+  --orange:#A34A0B;
+  --teal:#0E6B6A;
+  --green:#2F6B45;
+  --red:var(--ia-red);
+}
+
+/* The top bar (and the phone's bottom bar) stays deep navy in light mode:
+   it anchors the brand. Re-declaring the dark tokens on the bar itself
+   makes everything inside it — links, account menu, dropdown — dark again. */
+[data-theme="light"] .topnav,
+[data-theme="light"] .mobile-nav{
+  color-scheme:dark;
+  --navy:var(--ia-nav);
+  --navy2:var(--ia-nav);
+  --navy3:var(--ia-nav-active);
+  --white:var(--ia-text-on-dark);
+  --muted:#B9C3D1;
+  --border:rgba(248,247,242,.14);
+  --gold:var(--ia-gold);
+  --gold2:#D7B65A;
+  --orange:#e8620a;
+  --red:#e0624f;
+  background:var(--ia-nav);
+  color:var(--ia-text-on-dark);
+}
+[data-theme="light"] .topnav{border-bottom-color:transparent;}
+[data-theme="light"] .nav-link:hover{background:var(--ia-nav-hover);}
+[data-theme="light"] .nav-link.active{background:var(--ia-nav-active);color:var(--ia-text-on-dark);}
+
+/* Surfaces: fine borders and tonal separation, barely any shadow. */
+[data-theme="light"] .card,
+[data-theme="light"] .modal{box-shadow:var(--ia-shadow-sm);}
+[data-theme="light"] .card:hover{border-color:var(--ia-border-strong);}
+[data-theme="light"] .modal-overlay{background:rgba(23,35,58,.45);}
+[data-theme="light"] #toast{box-shadow:var(--ia-shadow-md);}
+
+/* Buttons: heritage gold with ink text, deepening on hover. */
+[data-theme="light"] .btn-gold{background:var(--ia-gold);color:var(--ia-text);border:1px solid var(--ia-gold-dark);}
+[data-theme="light"] .btn-gold:hover{background:var(--ia-gold-dark);color:#fff;}
+[data-theme="light"] .btn-outline{border-color:var(--ia-border-strong);color:var(--ia-text-2);}
+[data-theme="light"] .btn-outline:hover{border-color:var(--ia-gold-dark);color:var(--ia-gold-text);}
+
+/* Status colours tuned for a light ground (the dark theme's pastel greens
+   and reds are unreadable on parchment). */
+[data-theme="light"] .badge-gold{background:var(--ia-gold-soft);color:var(--ia-gold-text);}
+[data-theme="light"] .badge-green{background:var(--ia-green-soft);color:var(--ia-green);}
+[data-theme="light"] .badge-red{background:#F6E0DC;color:var(--ia-red);}
+[data-theme="light"] .badge-blue{background:var(--ia-blue-soft);color:var(--ia-blue);}
+[data-theme="light"] .badge-orange{background:#F7E4D3;color:#A34A0B;}
+[data-theme="light"] .mastery-learning{color:var(--ia-red);}
+[data-theme="light"] .mastery-developing{color:#A34A0B;}
+[data-theme="light"] .mastery-secure{color:var(--ia-gold-text);}
+[data-theme="light"] .mastery-mastered{color:var(--ia-green);}
+
+[data-theme="light"] ::-webkit-scrollbar-track{background:var(--ia-surface-2);}
+[data-theme="light"] ::-webkit-scrollbar-thumb{background:var(--ia-border-strong);}
+[data-theme="light"] ::selection{background:var(--ia-gold-soft);color:var(--ia-text);}
+
+/* Keyboard focus stays obvious on light surfaces. */
+[data-theme="light"] a:focus-visible,
+[data-theme="light"] button:focus-visible,
+[data-theme="light"] input:focus-visible,
+[data-theme="light"] select:focus-visible,
+[data-theme="light"] textarea:focus-visible,
+[data-theme="light"] [tabindex]:focus-visible{outline:2px solid var(--ia-focus);outline-offset:2px;}
+[data-theme="light"] .topnav :focus-visible,
+[data-theme="light"] .mobile-nav :focus-visible{outline-color:var(--ia-gold);}
+
+/* The light/dark switch (added to every page's top bar by theme.js). */
+.ia-theme-toggle{
+  display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+  width:36px;height:36px;border-radius:50%;
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  cursor:pointer;transition:border-color .2s,color .2s;
+}
+.ia-theme-toggle:hover{border-color:var(--gold);color:var(--white);}
+.ia-theme-toggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.ia-theme-toggle .ia-icon-sun{display:none;}
+[data-theme="light"] .ia-theme-toggle .ia-icon-sun{display:block;}
+[data-theme="light"] .ia-theme-toggle .ia-icon-moon{display:none;}
+.ia-theme-toggle--floating{
+  position:fixed;top:.75rem;right:.75rem;z-index:1002;
+  background:var(--navy2);box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+@media (prefers-reduced-motion:reduce){.ia-theme-toggle{transition:none;}}

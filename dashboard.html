@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="/assets/js/theme.js"></script>
 <title>My Dashboard — Inspire Science</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,6 +120,106 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 .tq-left h3{font-family:var(--font-display);font-size:1.3rem;font-weight:700;}
 .tq-left p{font-size:.85rem;color:var(--muted);margin-top:.3rem;}
 
+/* the cards' own variants (colours moved out of inline styles so light
+   mode can restyle them; dark values unchanged) */
+.today-quiz{position:relative;overflow:hidden;}
+.tq-cta{font-size:1rem;padding:.8rem 2rem;text-decoration:none;position:relative;z-index:1;}
+.tq-left{position:relative;z-index:1;}
+.diagnostic-card{background:linear-gradient(135deg,#1a2a4a 0%,#2a1a4a 100%);border-color:rgba(192,132,252,0.5);}
+.diagnostic-card .tq-label{color:#c084fc;}
+.diagnostic-card p,.topics-card p,.mileiq-card p{color:var(--muted);}
+.btn-diagnostic{background:#c084fc;color:#0b1628;}
+.topics-card{background:var(--navy2);border-color:var(--border);}
+.btn-outline-gold{background:transparent;border:1px solid var(--gold);color:var(--gold);}
+.mileiq-card{background:linear-gradient(135deg,#0f2a4a 0%,#1a3a5c 100%);border-color:rgba(0,201,167,0.5);}
+.mileiq-card .tq-label{color:#00c9a7;}
+.btn-teal-solid{background:#00c9a7;color:#0b1628;}
+.nav-link--protege{background:rgba(124,47,255,.12);color:#b46cff;border:1px solid rgba(180,108,255,.25);}
+.nav-link--teacher{background:#ffd60a;border:1px solid #ffd60a;color:#1a1400;font-weight:700;box-shadow:0 0 0 1px rgba(255,214,10,.5),0 2px 10px rgba(255,214,10,.45);}
+.nav-link--upgrade{background:rgba(212,160,23,.1);border:1px solid var(--gold);color:var(--gold);}
+.s-value--green{color:#4ade80;}
+.s-value--orange{color:var(--orange);}
+.score-good{color:#4ade80;}
+.score-mid{color:#facc15;}
+.score-low{color:#f87171;}
+.streak-best{margin-left:.5rem;font-size:.8rem;color:var(--muted);}
+.welcome-eyebrow{display:none;}
+.card-artifact,.page-botanical{display:none;}
+
+/* ── LIGHT MODE (approved concept: warm parchment, ivory, heritage gold,
+   hand-drawn editorial artefacts). Dark mode above is unchanged. ── */
+[data-theme="light"] .welcome-eyebrow{
+  display:block;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ia-text-2);margin-bottom:.35rem;
+}
+[data-theme="light"] .welcome-text h2{color:var(--ia-text);}
+[data-theme="light"] .welcome-text h2 span{color:inherit;}
+[data-theme="light"] .streak-widget{background:var(--ia-surface);border-color:var(--ia-border);box-shadow:var(--ia-shadow-sm);border-radius:14px;}
+[data-theme="light"] .streak-fire{
+  width:52px;height:52px;border-radius:50%;background:var(--ia-surface-2);
+  display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;
+}
+[data-theme="light"] .streak-num{color:var(--ia-gold-dark);}
+[data-theme="light"] .streak-best{border-left:1px solid var(--ia-border);padding-left:1.1rem;margin-left:.75rem;align-self:stretch;display:flex;align-items:center;}
+
+[data-theme="light"] .today-quiz{border-radius:14px;box-shadow:none;}
+[data-theme="light"] #today-quiz-card{background:linear-gradient(90deg,var(--ia-surface) 0%,#F4F7FA 100%);border-color:var(--ia-border-gold);}
+[data-theme="light"] .tq-left .tq-label{color:var(--ia-gold-text);font-family:var(--font-body);font-weight:600;}
+[data-theme="light"] .tq-left h3{color:var(--ia-text);}
+[data-theme="light"] .diagnostic-card{background:linear-gradient(90deg,#FBF9FE 0%,var(--ia-surface-purple) 100%);border-color:var(--ia-border-lilac);}
+[data-theme="light"] .diagnostic-card .tq-label{color:var(--ia-purple);}
+[data-theme="light"] .btn-diagnostic{background:#B77AEC;color:#181125;border:1px solid #8C64B8;}
+[data-theme="light"] .btn-diagnostic:hover{background:var(--ia-purple);color:#fff;}
+[data-theme="light"] .topics-card{background:var(--ia-surface);border-color:var(--ia-border);}
+[data-theme="light"] .btn-outline-gold{border-color:var(--ia-gold-dark);color:var(--ia-gold-text);}
+[data-theme="light"] .btn-outline-gold:hover{background:var(--ia-gold-soft);}
+[data-theme="light"] .mileiq-card{background:linear-gradient(90deg,var(--ia-surface) 0%,var(--ia-surface-green) 100%);border-color:#B9CFC0;}
+[data-theme="light"] .mileiq-card .tq-label{color:var(--ia-green);}
+[data-theme="light"] .btn-teal-solid{background:var(--ia-green);color:#fff;}
+
+[data-theme="light"] .nav-link--protege{background:rgba(183,122,236,.16);color:#D9B8FA;border-color:rgba(205,189,231,.45);}
+[data-theme="light"] .nav-link--teacher{background:var(--ia-gold);border-color:var(--ia-gold-dark);color:var(--ia-text);box-shadow:none;}
+[data-theme="light"] .nav-link--teacher:hover{background:#D7B65A;color:var(--ia-text);}
+
+[data-theme="light"] .stat-card,
+[data-theme="light"] .subject-card,
+[data-theme="light"] .activity-item{border-radius:12px;}
+[data-theme="light"] .subject-card:hover{box-shadow:var(--ia-shadow-md);border-color:var(--ia-border-strong);}
+[data-theme="light"] .progress-bar-wrap{background:var(--ia-surface-2);}
+[data-theme="light"] .s-value--green,[data-theme="light"] .score-good{color:var(--ia-green);}
+[data-theme="light"] .score-mid{color:var(--ia-gold-text);}
+[data-theme="light"] .score-low{color:var(--ia-red);}
+
+/* Hand-drawn artefacts: one-colour line art (the SVG is a mask, tinted by
+   the theme) over a faint watercolour wash. Decorative only. */
+[data-theme="light"] .card-artifact{
+  display:block;position:absolute;top:50%;right:clamp(190px,24%,300px);
+  height:calc(100% - 12px);max-height:150px;aspect-ratio:26/17;transform:translateY(-50%);
+  pointer-events:none;user-select:none;z-index:0;
+}
+[data-theme="light"] .card-artifact::before{
+  content:'';position:absolute;inset:8% 18% 4% 22%;border-radius:50%;
+  filter:blur(14px);opacity:.55;
+}
+[data-theme="light"] .card-artifact::after{
+  content:'';position:absolute;inset:0;background:currentColor;
+  -webkit-mask:var(--art) center/contain no-repeat;mask:var(--art) center/contain no-repeat;
+}
+[data-theme="light"] .card-artifact--flask{--art:url(/assets/images/illustrations/chemistry-glassware.svg);color:#5F7C99;opacity:.62;}
+[data-theme="light"] .card-artifact--flask::before{background:radial-gradient(closest-side,#C9D8E8,transparent);}
+[data-theme="light"] .card-artifact--book{--art:url(/assets/images/illustrations/open-book.svg);color:#8A73AF;opacity:.6;}
+[data-theme="light"] .card-artifact--book::before{background:radial-gradient(closest-side,#DCCDF1,transparent);}
+[data-theme="light"] .page-botanical{
+  display:block;position:absolute;top:58px;right:0;width:110px;height:180px;z-index:0;
+  background:#B5A67E;opacity:.35;pointer-events:none;
+  -webkit-mask:url(/assets/images/illustrations/botanical-branch.svg) center/contain no-repeat;
+  mask:url(/assets/images/illustrations/botanical-branch.svg) center/contain no-repeat;
+}
+/* Art is the first thing to go when space is tight. */
+@media (max-width:900px){
+  [data-theme="light"] .card-artifact,[data-theme="light"] .page-botanical{display:none;}
+}
+
 /* two-column layout */
 .two-col{display:grid;grid-template-columns:1fr;gap:1.5rem;}
 
@@ -199,10 +300,10 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
     <button class="nav-link" onclick="location.href='/student/report-results.html'">Report Results</button>
     <button class="nav-link" onclick="location.href='/student/revision.html'">Personalised Learning</button>
     <button class="nav-link" onclick="location.href='/year6/year6-dashboard.html'">Sci_Bridge</button>
-    <button class="nav-link" onclick="location.href='/tools/protege.html'" style="background:rgba(124,47,255,.12);color:#b46cff;border:1px solid rgba(180,108,255,.25);">✦ Protégé</button>
+    <button class="nav-link nav-link--protege" onclick="location.href='/tools/protege.html'">✦ Protégé</button>
     <button class="nav-link" onclick="location.href='/tools/tools.html'">Tools</button>
-    <button class="nav-link" id="teacher-dashboard-link" onclick="location.href='/teacher/teacher.html'" style="display:none;background:#ffd60a;border:1px solid #ffd60a;color:#1a1400;font-weight:700;box-shadow:0 0 0 1px rgba(255,214,10,.5),0 2px 10px rgba(255,214,10,.45);">🎓 Teacher Dashboard</button>
-    <button class="nav-link" id="upgrade-plus-link" onclick="location.href='/student/upgrade.html'" style="display:none;background:rgba(212,160,23,.1);border:1px solid var(--gold);color:var(--gold);">✨ Upgrade</button>
+    <button class="nav-link nav-link--teacher" id="teacher-dashboard-link" onclick="location.href='/teacher/teacher.html'" style="display:none;">🎓 Teacher Dashboard</button>
+    <button class="nav-link nav-link--upgrade" id="upgrade-plus-link" onclick="location.href='/student/upgrade.html'" style="display:none;">✨ Upgrade</button>
   </div>
   <div class="profile-dropdown-wrapper">
     <div class="nav-user" id="nav-user-btn" onclick="toggleProfileDropdown()">
@@ -270,69 +371,71 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 </nav>
 
 <main>
+  <div class="page-botanical" aria-hidden="true"></div>
 
   <!-- Welcome -->
   <div class="welcome fade-in">
     <div class="welcome-text">
+      <div class="welcome-eyebrow">Welcome back</div>
       <h2>Good <span id="greeting-time">morning</span>, <span id="student-name">Student</span> 👋</h2>
       <p id="welcome-sub">Ready for today's challenge?</p>
     </div>
     <div class="streak-widget">
-      <div class="streak-fire">🔥</div>
+      <div class="streak-fire" aria-hidden="true">🔥</div>
       <div>
         <div class="streak-num" id="streak-num">0</div>
         <div class="streak-lbl">day streak</div>
       </div>
-      <div style="margin-left:.5rem;">
-        <div style="font-size:.8rem;color:var(--muted);">Best: <span id="best-streak">0</span></div>
-      </div>
+      <div class="streak-best">Best: <span id="best-streak">0</span></div>
     </div>
   </div>
 
   <!-- Today's Quiz CTA -->
   <div class="today-quiz fade-in" id="today-quiz-card">
+    <span class="card-artifact card-artifact--flask" aria-hidden="true"></span>
     <div class="tq-left">
       <div class="tq-label">⚡ Today's Daily Challenge</div>
       <h3 id="tq-title">Loading…</h3>
       <p id="tq-desc">Fetching your challenge…</p>
     </div>
-    <button class="btn btn-gold" id="tq-btn" onclick="goToQuiz(null)" style="font-size:1rem;padding:.8rem 2rem;">
+    <button class="btn btn-gold tq-cta" id="tq-btn" onclick="goToQuiz(null)">
       Start Quiz →
     </button>
   </div>
 
   <!-- Diagnostic Assessment CTA -->
-  <div class="today-quiz fade-in" id="diagnostic-card" style="background:linear-gradient(135deg,#1a2a4a 0%,#2a1a4a 100%);border-color:rgba(192,132,252,0.5);">
+  <div class="today-quiz diagnostic-card fade-in" id="diagnostic-card">
+    <span class="card-artifact card-artifact--book" aria-hidden="true"></span>
     <div class="tq-left">
-      <div class="tq-label" style="color:#c084fc;">🎯 New Here? Start With a Diagnostic</div>
+      <div class="tq-label">🎯 New Here? Start With a Diagnostic</div>
       <h3>Find Out Where You Stand</h3>
-      <p style="color:var(--muted);">A short assessment, an honest diagnosis, and a personalised 3-week study plan for any subject.</p>
+      <p>A short assessment, an honest diagnosis, and a personalised 3-week study plan for any subject.</p>
     </div>
-    <a href="/assessment-engine/assessment-engine.html" class="btn btn-gold" style="font-size:1rem;padding:.8rem 2rem;background:#c084fc;color:#0b1628;text-decoration:none;">
+    <a href="/assessment-engine/assessment-engine.html" class="btn btn-diagnostic tq-cta">
       Start Diagnostic →
     </a>
   </div>
 
   <!-- My Topics CTA -->
-  <div class="today-quiz fade-in" style="background:var(--navy2);border-color:var(--border);">
+  <div class="today-quiz topics-card fade-in">
     <div class="tq-left">
       <div class="tq-label">🗂 Teaching In Step With School</div>
       <h3>Show Us What You're Studying This Term</h3>
-      <p style="color:var(--muted);">Add a quick photo of your topic list or timetable so your teacher can keep lessons in step with your classroom.</p>
+      <p>Add a quick photo of your topic list or timetable so your teacher can keep lessons in step with your classroom.</p>
     </div>
-    <a href="/student/term-topics.html" class="btn btn-gold" style="font-size:1rem;padding:.8rem 2rem;background:transparent;border:1px solid var(--gold);color:var(--gold);text-decoration:none;">
+    <a href="/student/term-topics.html" class="btn btn-outline-gold tq-cta">
       Add a Photo →
     </a>
   </div>
 
   <!-- MileIQ Button (Conditional) -->
-  <div class="today-quiz fade-in" id="mileiq-card" style="background:linear-gradient(135deg,#0f2a4a 0%,#1a3a5c 100%);border-color:rgba(0,201,167,0.5);display:none;">
+  <div class="today-quiz mileiq-card fade-in" id="mileiq-card" style="display:none;">
     <div class="tq-left">
-      <div class="tq-label" style="color:#00c9a7;">🚗 Mileage Tracking</div>
+      <div class="tq-label">🚗 Mileage Tracking</div>
       <h3>MileIQ</h3>
-      <p id="mileiq-desc" style="color:var(--muted);">Track journeys, upload receipts, generate monthly reports</p>
+      <p id="mileiq-desc">Track journeys, upload receipts, generate monthly reports</p>
     </div>
-    <button class="btn btn-gold" onclick="openMileIQ()" style="font-size:1rem;padding:.8rem 2rem;background:#00c9a7;color:#0b1628;">
+    <button class="btn btn-teal-solid tq-cta" onclick="openMileIQ()">
       Open MileIQ →
     </button>
   </div>
@@ -351,12 +454,12 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
     </div>
     <div class="stat-card">
       <div class="s-label">Topics Mastered</div>
-      <div class="s-value" style="color:#4ade80;" id="stat-mastered">—</div>
+      <div class="s-value s-value--green" id="stat-mastered">—</div>
       <div class="s-sub">out of <span id="stat-total-topics">—</span> topics</div>
     </div>
     <div class="stat-card">
       <div class="s-label">Best Score</div>
-      <div class="s-value" style="color:var(--orange);" id="stat-best">—</div>
+      <div class="s-value s-value--orange" id="stat-best">—</div>
       <div class="s-sub">personal best</div>
     </div>
   </div>
@@ -539,14 +642,14 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
   } else {
     al.innerHTML=recent.map(a=>{
       const pct=parseFloat(a.percentage)||0;
-      const col=pct>=70?'#4ade80':pct>=50?'#facc15':'#f87171';
+      const band=pct>=70?'score-good':pct>=50?'score-mid':'score-low';
       return `<div class="activity-item">
         <div class="activity-icon">📝</div>
         <div class="activity-body">
           <strong>${a.quizzes?.title||'Quiz'}</strong>
           <span>${a.quizzes?.topics?.subjects?.name||''} · ${timeAgo(a.completed_at)}</span>
         </div>
-        <div class="activity-score" style="color:${col}">${pct.toFixed(0)}%</div>
+        <div class="activity-score ${band}">${pct.toFixed(0)}%</div>
       </div>`;
     }).join('');
   }

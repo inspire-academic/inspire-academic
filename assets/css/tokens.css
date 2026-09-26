@@ -34,6 +34,45 @@
   --success: #22c55e;
 
   /* ============================================================
+     LIGHT-MODE PALETTE (approved 2026-09-26: "the same Inspire
+     Academic institution in daylight" — warm parchment, ivory, ink
+     navy, heritage gold, slate, aubergine, sage). Raw values live
+     only here; the [data-theme="light"] blocks below and in
+     app-shared.css map them onto the semantic tokens pages use.
+     ============================================================ */
+  --ia-bg:             #F4F1E8;  /* warm parchment page */
+  --ia-surface:        #FBFAF6;  /* soft ivory card */
+  --ia-surface-2:      #ECE8DC;  /* stone cream */
+  --ia-surface-blue:   #EDF2F6;
+  --ia-surface-purple: #F2EDF8;
+  --ia-surface-green:  #EDF3EE;
+  --ia-nav:            #10233F;  /* deep academic navy — the top bar in both themes */
+  --ia-nav-hover:      #193657;
+  --ia-nav-active:     #21486F;
+  --ia-text:           #17233A;  /* ink navy */
+  --ia-text-2:         #5B6577;  /* slate (darkened from #667085 for AA on parchment) */
+  --ia-text-muted:     #63686F;  /* (darkened from #8A8F98 for AA) */
+  --ia-text-on-dark:   #F8F7F2;
+  --ia-gold:           #C7A13B;  /* heritage gold: fills, borders, icons */
+  --ia-gold-dark:      #A98225;
+  --ia-gold-text:      #7F6116;  /* gold for small text on parchment (AA) */
+  --ia-gold-soft:      #F4E9C7;
+  --ia-blue:           #294E78;
+  --ia-blue-soft:      #DCE7F0;
+  --ia-purple:         #6E55A3;
+  --ia-purple-soft:    #E7DCF5;
+  --ia-green:          #52715E;
+  --ia-green-soft:     #DDE9E0;
+  --ia-red:            #A63A2B;
+  --ia-border:         #D8D2C4;  /* warm grey */
+  --ia-border-strong:  #C9C1B1;
+  --ia-border-gold:    #D2B052;
+  --ia-border-lilac:   #CDBDE7;
+  --ia-shadow-sm:      0 1px 2px rgba(23,35,58,.05), 0 6px 18px rgba(23,35,58,.04);
+  --ia-shadow-md:      0 8px 28px rgba(23,35,58,.08);
+  --ia-focus:          #294E78;
+
+  /* ============================================================
      SUBJECT ACCENT TOKENS — placeholders only.
      Each subject page's own inline <style> re-declares these 9
      custom properties on :root with its own accent pair. The
@@ -83,22 +122,22 @@
 }
 
 [data-theme="light"] {
-  --bg:              #eef2f9;
-  --bg-deep:         #e4eaf5;
-  --bg-panel:        #ffffff;
-  --bg-card:         #ffffff;
+  --bg:              var(--ia-bg);
+  --bg-deep:         var(--ia-surface-2);
+  --bg-panel:        var(--ia-surface);
+  --bg-card:         var(--ia-surface);
   --bg-hover:        rgba(var(--blue-rgb),.06);
-  --border:          rgba(var(--blue-rgb),.12);
-  --border-strong:   rgba(var(--blue-rgb),.22);
-  --text:            #0d1929;
-  --text-muted:      rgba(13,25,41,.65);
-  --text-soft:       rgba(13,25,41,.38);
-  --sidebar-bg:      #ffffff;
-  --sidebar-border:  rgba(0,0,0,.07);
+  --border:          var(--ia-border);
+  --border-strong:   var(--ia-border-strong);
+  --text:            var(--ia-text);
+  --text-muted:      var(--ia-text-2);
+  --text-soft:       var(--ia-text-muted);
+  --sidebar-bg:      var(--ia-surface);
+  --sidebar-border:  var(--ia-border);
   --progress-track:  rgba(var(--blue-rgb),.1);
-  --search-bg:       #ffffff;
-  --shadow:          0 20px 60px rgba(var(--blue-rgb),.12);
-  --shadow-card:     0 4px 20px rgba(var(--blue-rgb),.09);
+  --search-bg:       var(--ia-surface);
+  --shadow:          var(--ia-shadow-md);
+  --shadow-card:     var(--ia-shadow-sm);
   --card-3d-top:     rgba(255,255,255,.9);
-  --card-3d-bottom:  rgba(var(--blue-rgb),.06);
+  --card-3d-bottom:  rgba(23,35,58,.05);
 }

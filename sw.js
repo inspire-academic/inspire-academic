@@ -136,7 +136,11 @@ self.addEventListener('fetch', e => {
   // testing this exact fix: curl confirmed the server had the corrected
   // file, but a fetch() from an affected tab still returned the old one
   // because it never left the browser's HTTP cache.
+  // Exception: theme.js sits in every page's <head> and blocks rendering, so
+  // it's served straight from the cache (refreshed in the background, below)
+  // rather than costing a network round trip on every page view.
   const isOwnJsOrCss = url.origin === self.location.origin &&
+    url.pathname !== '/assets/js/theme.js' &&
     (url.pathname.startsWith('/assets/js/') || url.pathname.startsWith('/assets/css/'));
   if (isOwnJsOrCss) {
     e.respondWith(networkFirst(e.request, CACHE_STATIC));
