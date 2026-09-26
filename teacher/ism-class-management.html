@@ -59,7 +59,20 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
 .remove-x:hover{color:#f87171;}
 
 .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:.6rem;margin:.8rem 0;}
-.photo-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);border:1px solid var(--border);}
+.photo-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);border:1px solid var(--border);display:block;}
+.photo-thumb{padding:0;border:none;background:none;cursor:zoom-in;border-radius:var(--r);position:relative;}
+.photo-thumb:hover img,.photo-thumb:focus-visible img{border-color:var(--gold);}
+.photo-thumb:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.photo-thumb-hint{position:absolute;right:.3rem;bottom:.3rem;background:rgba(11,22,40,.8);color:#fff;font-size:.65rem;padding:.1rem .35rem;border-radius:4px;}
+.photo-viewer{position:fixed;inset:0;z-index:1000;background:rgba(5,10,20,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;padding:1rem;}
+.photo-viewer[hidden]{display:none;}
+.photo-viewer-stage{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;overflow:auto;}
+.photo-viewer-stage img{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px;cursor:zoom-in;}
+.photo-viewer-stage.zoomed{align-items:flex-start;justify-content:flex-start;}
+.photo-viewer-stage.zoomed img{max-width:none;max-height:none;cursor:zoom-out;}
+.photo-viewer-bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;justify-content:center;}
+.photo-viewer-bar .mini-btn{color:#e8edf6;border-color:rgba(255,255,255,.35);text-decoration:none;display:inline-flex;align-items:center;}
+.photo-viewer-count{color:#cbd5e1;font-size:.8rem;min-width:4.5rem;text-align:center;}
 .response-item{border-top:1px solid var(--border);padding:.5rem 0;font-size:.85rem;}
 .response-item .fid{font-family:var(--font-mono);font-size:.7rem;color:var(--gold);}
 </style>
@@ -164,6 +177,21 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
 
 <div id="toast"></div>
 
+<div class="photo-viewer" id="photo-viewer" role="dialog" aria-modal="true" aria-label="Student photo" hidden>
+  <div class="photo-viewer-stage" id="photo-viewer-stage">
+    <img id="photo-viewer-img" alt="">
+  </div>
+  <div class="photo-viewer-bar">
+    <button type="button" class="mini-btn" id="photo-viewer-prev" aria-label="Previous photo">← Prev</button>
+    <span class="photo-viewer-count" id="photo-viewer-count"></span>
+    <button type="button" class="mini-btn" id="photo-viewer-next" aria-label="Next photo">Next →</button>
+    <button type="button" class="mini-btn" id="photo-viewer-zoom">Zoom</button>
+    <a class="mini-btn" id="photo-viewer-open" target="_blank" rel="noopener">Open full size ↗</a>
+    <a class="mini-btn" id="photo-viewer-download">Download</a>
+    <button type="button" class="mini-btn" id="photo-viewer-close">Close ✕</button>
+  </div>
+</div>
+
 <script>
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -185,6 +213,79 @@ let currentReviewSubmission = null;
 function esc(v) {
   return String(v === null || v === undefined ? '' : v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 }
+
+// ── Photo viewer ──
+// Thumbnails in a submission open a full-screen viewer with zoom, open
+// full size and download. Only photos from our own Supabase storage are
+// shown, so a tampered photo_url can't become a javascript: link.
+let reviewPhotos = [];
+let viewerIndex = 0;
+let viewerReturnFocus = null;
+
+function safePhotoUrl(u) {
+  try {
+    const url = new URL(u);
+    return url.origin === SUPA_URL && url.pathname.startsWith('/storage/v1/object/') ? url.href : null;
+  } catch (e) { return null; }
+}
+
+function photoFileName(i) {
+  const n = currentReviewSubmission ? currentReviewSubmission.submission_number : '';
+  const ext = ((reviewPhotos[i] || '').split('?')[0].match(/\.(jpe?g|png|webp|heic|gif)$/i) || ['', 'jpg'])[1];
+  return `ISM-submission-${n}-photo-${i + 1}.${ext}`;
+}
+
+function showViewerPhoto(i) {
+  viewerIndex = (i + reviewPhotos.length) % reviewPhotos.length;
+  const url = reviewPhotos[viewerIndex];
+  document.getElementById('photo-viewer-img').src = url;
+  document.getElementById('photo-viewer-img').alt = `Student photo ${viewerIndex + 1} of ${reviewPhotos.length}`;
+  document.getElementById('photo-viewer-count').textContent = `${viewerIndex + 1} / ${reviewPhotos.length}`;
+  document.getElementById('photo-viewer-open').href = url;
+  document.getElementById('photo-viewer-download').href = url + (url.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent(photoFileName(viewerIndex));
+  document.getElementById('photo-viewer-stage').classList.remove('zoomed');
+  document.getElementById('photo-viewer-zoom').textContent = 'Zoom';
+  const multi = reviewPhotos.length > 1;
+  document.getElementById('photo-viewer-prev').hidden = !multi;
+  document.getElementById('photo-viewer-next').hidden = !multi;
+}
+
+function openPhotoViewer(i) {
+  if (!reviewPhotos.length) return;
+  viewerReturnFocus = document.activeElement;
+  showViewerPhoto(i);
+  document.getElementById('photo-viewer').hidden = false;
+  document.getElementById('photo-viewer-close').focus();
+}
+
+function closePhotoViewer() {
+  document.getElementById('photo-viewer').hidden = true;
+  document.getElementById('photo-viewer-img').removeAttribute('src');
+  if (viewerReturnFocus && viewerReturnFocus.focus) viewerReturnFocus.focus();
+}
+
+function togglePhotoZoom() {
+  const stage = document.getElementById('photo-viewer-stage');
+  const zoomed = stage.classList.toggle('zoomed');
+  document.getElementById('photo-viewer-zoom').textContent = zoomed ? 'Fit to screen' : 'Zoom';
+}
+
+document.addEventListener('click', e => {
+  const thumb = e.target.closest('.photo-thumb');
+  if (thumb) { openPhotoViewer(Number(thumb.dataset.photoIndex)); return; }
+  if (document.getElementById('photo-viewer').hidden) return;
+  if (e.target.id === 'photo-viewer' || e.target.id === 'photo-viewer-stage' || e.target.closest('#photo-viewer-close')) closePhotoViewer();
+  else if (e.target.closest('#photo-viewer-prev')) showViewerPhoto(viewerIndex - 1);
+  else if (e.target.closest('#photo-viewer-next')) showViewerPhoto(viewerIndex + 1);
+  else if (e.target.closest('#photo-viewer-zoom') || e.target.id === 'photo-viewer-img') togglePhotoZoom();
+});
+
+document.addEventListener('keydown', e => {
+  if (document.getElementById('photo-viewer').hidden) return;
+  if (e.key === 'Escape') closePhotoViewer();
+  else if (e.key === 'ArrowLeft' && reviewPhotos.length > 1) showViewerPhoto(viewerIndex - 1);
+  else if (e.key === 'ArrowRight' && reviewPhotos.length > 1) showViewerPhoto(viewerIndex + 1);
+});
 
 function toast(msg, type = 'success') {
   const t = document.getElementById('toast'); t.textContent = msg; t.className = 'show ' + type;
@@ -421,6 +522,7 @@ async function openReview(submission) {
     supa.from('ism_teacher_reviews').select('*').eq('submission_id', submission.id).order('reviewed_at', { ascending: false }).limit(1)
   ]);
   const prior = existingReview && existingReview[0];
+  reviewPhotos = (photos || []).map(p => safePhotoUrl(p.photo_url)).filter(Boolean);
 
   const responseEntries = Object.entries(submission.responses_snapshot || {});
   detail.innerHTML = `
@@ -428,7 +530,7 @@ async function openReview(submission) {
       <div class="field-hint">Submission #${submission.submission_number} · ${new Date(submission.submitted_at).toLocaleString('en-GB')}</div>
       <button class="mini-btn" style="margin:.6rem 0;" onclick="printSubmission()">🖨 Print</button>
       <div id="review-responses">${responseEntries.map(([fid, val]) => `<div class="response-item"><span class="fid">${esc(fid)}</span> — ${val === null ? '<em>blank</em>' : esc(val)}</div>`).join('') || '<div class="muted">No text responses.</div>'}</div>
-      ${(photos && photos.length) ? `<div class="field-hint" style="margin-top:1rem;">Photos</div><div class="photo-grid">${photos.map(p => `<img src="${esc(p.photo_url)}">`).join('')}</div>` : ''}
+      ${reviewPhotos.length ? `<div class="field-hint" style="margin-top:1rem;">Photos · click to enlarge</div><div class="photo-grid">${reviewPhotos.map((url, i) => `<button type="button" class="photo-thumb" data-photo-index="${i}" aria-label="Open photo ${i + 1} of ${reviewPhotos.length} larger"><img src="${esc(url)}" alt="Student photo ${i + 1}"><span class="photo-thumb-hint">View</span></button>`).join('')}</div>` : ''}
 
       <div class="field" style="margin-top:1.2rem;"><label>Marks</label><div class="field-row">
         <input class="field-input" type="number" id="review-marks" placeholder="Marks" value="${prior?.marks ?? ''}">
