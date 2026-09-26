@@ -382,6 +382,7 @@ input,select,textarea{font-family:var(--font-body);}
 <script src="/assets/js/spec-map.js"></script>
 <script src="/assets/js/pasco-calibration-stats.js"></script>
 <script src="/assets/js/diagram-renderer.js"></script>
+<script src="/assets/js/maths-typeset.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
 // SUPABASE CONFIG — matches your platform
@@ -531,6 +532,9 @@ function pickSubject(btn) {
   checkSetup();
 
   const subject      = btn.dataset.subject;
+  // Maths questions are typeset with KaTeX: start fetching it now, while
+  // the student is still on this screen, so Q1 doesn't wait for it.
+  if (subject.startsWith('Mathematics')) IAMaths.preload().catch(() => {});
   const inProgress   = S.inProgressAttempts[subject];
   const saved        = S.savedPlans[subject];
   const resumeBanner = document.getElementById('resume-banner');
@@ -628,6 +632,7 @@ async function resumeAttempt() {
 
     S.answers  = row.question_results || [];
     S.currentQ = Math.min(S.answers.length, S.questions.length - 1);
+    await waitForMathsTypesetting(S.questions);
     goTo('assess');
 
     if (S.answers.length >= S.questions.length) {
@@ -682,6 +687,7 @@ async function startAssessment() {
 
     S.answers  = [];
     S.currentQ = 0;
+    await waitForMathsTypesetting(S.questions);
     goTo('assess');
     renderQuestion();
     const total = S.questions.length;
@@ -693,6 +699,17 @@ async function startAssessment() {
     btn.disabled = false;
     btn.innerHTML = 'Start Assessment →';
   }
+}
+
+// Holds the first question for up to 4s (behind the loading spinner)
+// while KaTeX finishes loading, so a Maths question appears typeset
+// rather than flipping from plain text a moment later. On a very slow
+// connection it goes ahead anyway: the maths shows as readable plain
+// text and upgrades itself when KaTeX arrives.
+function waitForMathsTypesetting(questions) {
+  const fields = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d'];
+  const anyMaths = questions.some(q => fields.some(f => IAMaths.hasMaths(q[f])));
+  return anyMaths ? IAMaths.ready(4000) : Promise.resolve();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -963,7 +980,7 @@ function renderQuestion() {
   document.getElementById('q-topic').textContent    = q.topic;
   document.getElementById('q-num').textContent      = S.currentQ + 1;
   document.getElementById('q-total').textContent    = S.questions.length;
-  document.getElementById('q-text').textContent     = q.question_text;
+  IAMaths.render(document.getElementById('q-text'), q.question_text);
   document.getElementById('assess-progress').style.width = pct + '%';
 
   const diagramSlot = document.getElementById('q-diagram');
@@ -1005,10 +1022,11 @@ function renderQuestion() {
     btn.dataset.key = opt.key;
     btn.innerHTML = `
       <div class="opt-label">${opt.key.toUpperCase()}</div>
-      <div class="opt-text">${opt.text}</div>`;
+      <div class="opt-text">${IAMaths.html(opt.text)}</div>`;
     btn.addEventListener('click', () => selectOption(opt.key));
     container.appendChild(btn);
   });
+  IAMaths.typeset(container);
 }
 
 function selectOption(key) {
@@ -1548,7 +1566,7 @@ function renderDiagnosis() {
             <strong style="font-size:.95rem;">${topicLabel(g)}</strong>
             <span class="badge badge-${g.priority==='critical'?'red':g.priority==='high'?'orange':g.priority==='medium'?'gold':'green'}">${g.priority}</span>
           </div>
-          <p style="font-size:.85rem;color:var(--muted);margin-bottom:.4rem;">${g.reason}</p>
+          <p style="font-size:.85rem;color:var(--muted);margin-bottom:.4rem;">${IAMaths.html(g.reason)}</p>
           <span style="font-size:.78rem;color:${pc};">${approachIcons[g.approach] || ''}</span>
         </div>`;
     });
@@ -1567,7 +1585,9 @@ function renderDiagnosis() {
     Generate My Study Plan →
   </button>`;
 
-  document.getElementById('diagnose-content').innerHTML = html;
+  const diagnoseContent = document.getElementById('diagnose-content');
+  diagnoseContent.innerHTML = html;
+  IAMaths.typeset(diagnoseContent);
 }
 
 // ═══════════════════════════════════════════════════════════

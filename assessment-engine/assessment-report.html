@@ -159,6 +159,7 @@
 
 <div class="report-container" id="report"></div>
 
+<script src="/assets/js/maths-typeset.js"></script>
 <script>
 let PAYLOAD = null;
 try {
@@ -196,7 +197,9 @@ function renderReport(payload) {
   html += buildPlan(c, p);
   html += buildClosing(c, payload.generatedAt);
 
-  document.getElementById('report').innerHTML = html;
+  const report = document.getElementById('report');
+  report.innerHTML = html;
+  IAMaths.typeset(report);
 }
 
 // Brand aspiration ceiling — always Grade 9 (9-9 for Combined Science's
@@ -300,7 +303,7 @@ function buildGapsAndStrengths(c, d, name) {
     return `
       <div class="gap-item" style="border-left-color:${pc};">
         <div class="top"><span class="name">${topicLabel(g, isCombined)}</span><span class="chip" style="background:${pc};">${g.priority}</span></div>
-        <div class="reason">${g.reason || ''}</div>
+        <div class="reason">${IAMaths.html(g.reason || '')}</div>
         <div class="approach">${sentence}</div>
       </div>`;
   }).join('');
@@ -441,7 +444,8 @@ async function downloadReport() {
   btn.textContent = '⏳ Generating...';
   btn.disabled = true;
   try {
-    await loadHtml2Pdf();
+    // The PDF is a snapshot of the page, so any maths must be typeset first.
+    await Promise.all([loadHtml2Pdf(), IAMaths.typeset(document.getElementById('report'))]);
     await withPageNumbers(html2pdf().set(pdfOptions()).from(document.getElementById('report'))).save();
     btn.textContent = '✓ Downloaded!';
   } catch(e) {
@@ -484,7 +488,8 @@ async function emailReport() {
   btn.disabled = true;
   btn.textContent = 'Preparing PDF...';
   try {
-    await loadHtml2Pdf();
+    // The PDF is a snapshot of the page, so any maths must be typeset first.
+    await Promise.all([loadHtml2Pdf(), IAMaths.typeset(document.getElementById('report'))]);
     const dataUri = await withPageNumbers(html2pdf().set(pdfOptions()).from(document.getElementById('report'))).output('datauristring');
     const pdfBase64 = dataUri.split('base64,')[1];
 

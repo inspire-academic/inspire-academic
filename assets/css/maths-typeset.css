@@ -1,0 +1,14 @@
+/* Typeset maths (assets/js/maths-typeset.js). Loaded with KaTeX's own
+   stylesheet, only on pages that show maths. */
+
+/* KaTeX's default 1.21em is sized for Computer Modern next to a
+   small-x-height serif; beside Plus Jakarta Sans that reads oversized. */
+.ia-maths .katex {
+  font-size: 1.1em;
+}
+
+/* Column vectors and fractions are taller than a line of text: give the
+   line room so they never overlap the line above. */
+.ia-maths {
+  line-height: 1.6;
+}

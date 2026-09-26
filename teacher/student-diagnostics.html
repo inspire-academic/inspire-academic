@@ -186,6 +186,7 @@ tr.clickable:hover td{background:rgba(255,255,255,.03);}
   </div>
 </div>
 
+<script src="/assets/js/maths-typeset.js"></script>
 <script>
 const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -428,7 +429,7 @@ function openDetail(id){
             <span class="chip ${g.priority==='critical'?'cr':g.priority==='high'?'ca':g.priority==='medium'?'cb':'cg'}">${esc(g.priority)}</span>
           </span>
         </div>
-        <div class="greason">${esc(APPROACH_LABELS[g.approach]||g.approach||'')}${g.approach?' — ':''}${esc(g.reason||'')}</div>
+        <div class="greason">${esc(APPROACH_LABELS[g.approach]||g.approach||'')}${g.approach?' — ':''}${IAMaths.html(g.reason||'')}</div>
       </div>`;
       }).join('')}
     </div>`;
@@ -466,7 +467,9 @@ function openDetail(id){
     </div>`;
   }
 
-  document.getElementById('dc').innerHTML=html;
+  const dc=document.getElementById('dc');
+  dc.innerHTML=html;
+  IAMaths.typeset(dc);
   document.getElementById('m-detail').style.display='flex';
 }
 
