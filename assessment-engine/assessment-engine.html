@@ -13,6 +13,11 @@
 :root{
   --teal:#00c9a7;--teal2:#00d9b5;
   --purple:#c084fc;
+  /* Text on gold/teal fills stays dark in both themes (--navy turns light
+     in the light theme, which made button text near-white on gold). */
+  --on-accent:#0b1628;
+  --good:#4ade80;--bad:#f87171;
+  --gold-text:var(--gold);--teal-text:var(--teal);
 }
 /* app-shared.css's --navy/--navy2/--white/--muted/--border tokens are
    static (dark-only) — this page is the one place in the site that
@@ -25,16 +30,20 @@
   --navy:#eef2f9;--navy2:#ffffff;
   --white:#0d1929;--muted:#5c6b80;
   --border:rgba(13,25,41,.14);
+  /* Darker accents for text on the light background (WCAG AA 4.5:1). */
+  --good:#166534;--bad:#b91c1c;
+  --gold-text:#8a6a17;--teal-text:#0f766e;
 }
 button{cursor:pointer;font-family:var(--font-body);border:none;}
 input,select,textarea{font-family:var(--font-body);}
 
-.teal{color:var(--teal);}
+.teal{color:var(--teal-text);}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;border-radius:var(--r);font-size:.9rem;font-weight:600;transition:all .2s;cursor:pointer;border:none;}
 .btn-gold:disabled{opacity:.5;cursor:not-allowed;}
-.btn-teal{background:var(--teal);color:var(--navy);}
+.btn-teal{background:var(--teal);color:var(--on-accent);}
+.btn-gold{color:var(--on-accent);}
 .btn-teal:hover{background:var(--teal2);}
 
 /* Badges */
@@ -49,7 +58,7 @@ input,select,textarea{font-family:var(--font-body);}
 /* Top nav */
 .topnav{background:var(--navy2);border-bottom:1px solid var(--border);padding:.9rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .topnav-logo{display:flex;align-items:center;gap:.75rem;}
-.logo-mark{width:42px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;letter-spacing:-.02em;color:var(--navy);}
+.logo-mark{width:42px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--teal),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;letter-spacing:-.02em;color:var(--on-accent);}
 .topnav-title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--gold);}
 .topnav-sub{font-size:.75rem;color:var(--muted);}
 
@@ -57,10 +66,14 @@ input,select,textarea{font-family:var(--font-body);}
 .pipeline{display:flex;align-items:center;padding:2rem 0 1.5rem;overflow-x:auto;}
 .pipe-step{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex-shrink:0;}
 .pipe-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted);transition:all .3s;background:var(--navy);}
-.pipe-dot.active{border-color:var(--gold);background:var(--gold);color:var(--navy);font-weight:700;}
-.pipe-dot.done{border-color:var(--teal);background:var(--teal);color:var(--navy);}
+.pipe-dot.active{border-color:var(--gold);background:var(--gold);color:var(--on-accent);font-weight:700;}
+.pipe-dot.done{border-color:var(--teal);background:var(--teal);color:var(--on-accent);}
 .pipe-step.clickable{cursor:pointer;}
 .pipe-step.clickable:hover .pipe-dot{filter:brightness(1.15);}
+.pipeline [hidden]{display:none;}
+.save-status{font-size:.8rem;margin-top:.5rem;color:var(--muted);}
+.save-status.saved{color:var(--good);}
+.save-status.failed{color:var(--bad);}
 .pipe-step.clickable:hover .pipe-label{color:var(--white);}
 .pipe-label{font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
 .pipe-label.active{color:var(--white);}
@@ -97,10 +110,10 @@ input,select,textarea{font-family:var(--font-body);}
 
 /* Gap cards */
 .gap-card{padding:1rem;background:var(--navy);border-radius:var(--r);border-left:3px solid var(--border);margin-bottom:.75rem;}
-.gap-card.critical{border-left-color:#f87171;}
+.gap-card.critical{border-left-color:var(--bad);}
 .gap-card.high{border-left-color:var(--orange);}
 .gap-card.medium{border-left-color:var(--gold);}
-.gap-card.low{border-left-color:#4ade80;}
+.gap-card.low{border-left-color:var(--good);}
 
 /* Grade journey */
 .grade-row{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:.5rem;margin-bottom:2rem;}
@@ -113,7 +126,7 @@ input,select,textarea{font-family:var(--font-body);}
 /* Week card */
 .week-card{margin-bottom:1.25rem;}
 .week-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;}
-.week-num{background:var(--gold);color:var(--navy);font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;}
+.week-num{background:var(--gold);color:var(--on-accent);font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:20px;}
 .week-title{font-weight:700;font-size:1.05rem;}
 .week-why{font-size:.85rem;color:var(--muted);margin-bottom:1rem;}
 .tasks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;}
@@ -156,11 +169,11 @@ input,select,textarea{font-family:var(--font-body);}
 .mcq-option{display:flex;align-items:flex-start;gap:.75rem;padding:.85rem 1rem;border-radius:var(--r);border:1.5px solid var(--border);background:var(--navy);cursor:pointer;transition:all .2s;text-align:left;width:100%;color:var(--white);}
 .mcq-option:hover{border-color:var(--gold);background:rgba(212,160,23,.06);}
 .mcq-option.selected{border-color:var(--teal);background:rgba(0,201,167,.08);}
-.mcq-option.correct{border-color:#4ade80;background:rgba(74,222,128,.1);}
-.mcq-option.wrong{border-color:#f87171;background:rgba(248,113,113,.1);}
+.mcq-option.correct{border-color:var(--good);background:rgba(74,222,128,.1);}
+.mcq-option.wrong{border-color:var(--bad);background:rgba(248,113,113,.1);}
 .mcq-option.not-sure{border-color:var(--muted);background:rgba(122,143,166,.08);font-style:italic;}
 .opt-label{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;margin-top:.1rem;font-family:var(--font-mono);}
-.mcq-option.selected .opt-label{background:var(--teal);border-color:var(--teal);color:var(--navy);}
+.mcq-option.selected .opt-label{background:var(--teal);border-color:var(--teal);color:var(--on-accent);}
 .mcq-option.not-sure .opt-label{border-color:var(--muted);}
 .opt-text{font-size:.9rem;line-height:1.5;}
 .timer-bar{width:100%;height:4px;background:var(--border);border-radius:2px;margin-bottom:1rem;overflow:hidden;}
@@ -209,13 +222,13 @@ input,select,textarea{font-family:var(--font-body);}
       <div class="pipe-dot" id="dot-2">3</div>
       <div class="pipe-label" id="lbl-2">Plan</div>
     </div>
-    <div class="pipe-line" id="line-2"></div>
-    <div class="pipe-step" id="step-3" onclick="pipeGoTo('execute')">
+    <div class="pipe-line" id="line-2" hidden></div>
+    <div class="pipe-step" id="step-3" hidden onclick="pipeGoTo('execute')">
       <div class="pipe-dot" id="dot-3">4</div>
       <div class="pipe-label" id="lbl-3">Execute</div>
     </div>
-    <div class="pipe-line" id="line-3"></div>
-    <div class="pipe-step" id="step-4" onclick="pipeGoTo('track')">
+    <div class="pipe-line" id="line-3" hidden></div>
+    <div class="pipe-step" id="step-4" hidden onclick="pipeGoTo('track')">
       <div class="pipe-dot" id="dot-4">5</div>
       <div class="pipe-label" id="lbl-4">Track</div>
     </div>
@@ -333,6 +346,7 @@ input,select,textarea{font-family:var(--font-body);}
     <div style="margin-bottom:1.5rem;">
       <h2 class="serif" style="font-size:1.6rem;margin-bottom:.4rem;">Your Diagnosis</h2>
       <p class="muted">Here's where you stand and what to work on.</p>
+      <p class="save-status" id="save-status" role="status" hidden></p>
     </div>
     <div id="diagnose-content"></div>
   </div>
@@ -869,6 +883,11 @@ async function loadMathsPaper2Questions() {
 const SUBJECT_LABELS = { 'Mathematics — Paper 2': 'Maths — Geometry & Statistics' };
 function subjectLabel(subject) { return SUBJECT_LABELS[subject] || subject; }
 
+// Plain text into HTML (saved plans are read back from the database).
+function escHtmlText(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
 function shuffleArray(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -1198,10 +1217,25 @@ async function runDiagnosis() {
   S.diagnosis.notSureCount   = notSureCount;
   S.diagnosis.totalQuestions = S.answers.length;
 
-  await saveAttempt();
-
+  // Show the results straight away; saving happens behind them. On a slow
+  // connection the page used to sit blank until the save finished, and a
+  // failed save was never mentioned.
   renderDiagnosis();
   toast('Diagnosis complete!', 'success');
+  setSaveStatus('saving');
+  const saved = await saveAttempt();
+  setSaveStatus(saved === true ? 'saved' : saved === false ? 'failed' : null);
+}
+
+function setSaveStatus(state) {
+  const el = document.getElementById('save-status');
+  if (!el) return;
+  el.hidden = !state;
+  el.className = 'save-status ' + (state || '');
+  el.textContent = state === 'saving' ? 'Saving your results…'
+    : state === 'saved' ? 'Saved to your account ✓'
+    : state === 'failed' ? "Couldn't save your results — check your connection. Your plan still works on this page, and you can download it."
+    : '';
 }
 
 function computeTopicScores() {
@@ -1538,7 +1572,7 @@ function computeDiagnosis(topicScores, overallPct, notSureCount) {
 function renderDiagnosis() {
   const d  = S.diagnosis;
   const sc = d.overallScore;
-  const scColor = sc >= 70 ? '#4ade80' : sc >= 50 ? 'var(--gold)' : '#f87171';
+  const scColor = sc >= 70 ? 'var(--good)' : sc >= 50 ? 'var(--gold-text)' : 'var(--bad)';
   const notSurePct = Math.round((d.notSureCount / S.answers.length) * 100);
   // Combined Science mixes topics from 3 subjects, some sharing the same
   // topic name (e.g. "Atomic Structure" in both Physics and Chemistry) —
@@ -1547,10 +1581,10 @@ function renderDiagnosis() {
   const topicLabel = t => isCombined ? `${t.subject} — ${t.topic}` : t.topic;
 
   const profileColors = {
-    struggling: '#f87171', developing: 'var(--gold)',
-    secure: 'var(--teal)', strong: '#4ade80'
+    struggling: 'var(--bad)', developing: 'var(--gold-text)',
+    secure: 'var(--teal-text)', strong: 'var(--good)'
   };
-  const profileColor = profileColors[d.studentProfile] || 'var(--gold)';
+  const profileColor = profileColors[d.studentProfile] || 'var(--gold-text)';
 
   let html = `
     <div class="card" style="text-align:center;margin-bottom:1.25rem;">
@@ -1582,7 +1616,7 @@ function renderDiagnosis() {
     html += `<div class="card" style="margin-bottom:1.25rem;">
       <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Topic Breakdown</h3>`;
     d.topicScores.forEach(t => {
-      const color = t.score >= 75 ? '#4ade80' : t.score >= 50 ? 'var(--gold)' : '#f87171';
+      const color = t.score >= 75 ? 'var(--good)' : t.score >= 50 ? 'var(--gold-text)' : 'var(--bad)';
       const barW  = t.score + '%';
       html += `
         <div style="margin-bottom:.85rem;">
@@ -1604,8 +1638,8 @@ function renderDiagnosis() {
     html += `<div class="card" style="margin-bottom:1.25rem;">
       <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Priority Knowledge Gaps</h3>`;
     d.gaps.forEach(g => {
-      const pColors = { critical:'#f87171', high:'var(--orange)', medium:'var(--gold)', low:'#4ade80' };
-      const pc = pColors[g.priority] || 'var(--gold)';
+      const pColors = { critical:'var(--bad)', high:'var(--orange)', medium:'var(--gold-text)', low:'var(--good)' };
+      const pc = pColors[g.priority] || 'var(--gold-text)';
       const approachIcons = {
         reteach_from_scratch: '📚 Needs full re-teaching',
         fix_misconception:    '🔧 Misconception to correct',
@@ -1629,7 +1663,7 @@ function renderDiagnosis() {
   if (d.strengths && d.strengths.length > 0) {
     html += `<div class="card" style="margin-bottom:1.25rem;">
       <h3 style="font-size:1rem;font-weight:700;margin-bottom:.75rem;">✓ Strengths</h3>
-      ${d.strengths.map(s => `<div style="font-size:.88rem;color:#4ade80;margin-bottom:.3rem;">✓ ${topicLabel(s)}</div>`).join('')}
+      ${d.strengths.map(s => `<div style="font-size:.88rem;color:var(--good);margin-bottom:.3rem;">✓ ${topicLabel(s)}</div>`).join('')}
     </div>`;
   }
 
@@ -1740,11 +1774,14 @@ async function findContentForGaps(subjectTopicPairs) {
 
 async function runPlan() {
   goTo('plan');
+  const planEl = document.getElementById('plan-content');
+  if (planEl) planEl.innerHTML = '<div class="muted" style="padding:2rem 0;text-align:center;"><span class="spinner"></span> Building your plan…</div>';
   S.plan = await computePlan();
-  await savePlanToAttempt();
-  await saveGuestAttempt();
+  // Show the plan first; save behind it (see runDiagnosis).
   renderPlan();
   toast('Study plan ready!', 'success');
+  await savePlanToAttempt();
+  await saveGuestAttempt();
 }
 
 async function computePlan() {
@@ -1861,7 +1898,7 @@ function renderPlan() {
           <span class="week-num">Week ${w.number}</span>
           <span class="week-title">${w.title}</span>
         </div>
-        ${w.focus ? `<div style="font-size:.8rem;color:var(--teal);margin-bottom:.4rem;font-weight:600;">Focus: ${w.focus}</div>` : ''}
+        ${w.focus ? `<div style="font-size:.8rem;color:var(--teal-text);margin-bottom:.4rem;font-weight:600;">Focus: ${w.focus}</div>` : ''}
         <p class="week-why">${w.why}</p>
         ${w.noLessonYet ? `<p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:-.3rem 0 .6rem;">No video lesson yet for this topic — the tasks below are real practice with explanations built in.</p>` : ''}
         ${w.guestLessonLocked ? `<p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:-.3rem 0 .6rem;"><a href="/register.html" style="color:var(--gold);text-decoration:underline;">Sign up free</a> to unlock video lessons for this topic — the tasks below are real practice with explanations built in.</p>` : ''}
@@ -1875,8 +1912,8 @@ function renderPlan() {
         : `<span class="badge" style="background:rgba(255,255,255,.08);color:var(--muted);">Coming soon</span>`;
       const inner = `
           <div class="task-icon">${icon}</div>
-          <div class="task-name">${t.label}</div>
-          ${t.topic ? `<div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">${t.topic}</div>` : ''}
+          <div class="task-name">${escHtmlText(t.label)}</div>
+          ${t.topic ? `<div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">${escHtmlText(t.topic)}</div>` : ''}
           <div>${badge}</div>`;
       // Real content gets a real link (opens the actual lesson/quiz);
       // no matching content yet gets an honest, unclickable placeholder
@@ -1889,10 +1926,16 @@ function renderPlan() {
     html += `</div></div>`;
   });
 
+  // The main action goes straight into the plan's first real task. The old
+  // "Start Executing" button opened a "coming soon" page, a dead end at
+  // the moment a student is most ready to start.
+  const firstTask = (p.weeks || []).flatMap(w => w.tasks || []).find(t => t.href);
+  html += firstTask
+    ? `<a class="btn btn-teal" style="display:block;text-align:center;width:100%;font-size:1rem;padding:.9rem;margin-top:1rem;text-decoration:none;" href="${firstTask.href}">
+        Start week 1: ${escHtmlText(firstTask.label)} →
+      </a>`
+    : `<div class="muted" style="margin-top:1rem;font-size:.9rem;line-height:1.5;">Lessons and practice for these topics are being added. Use the plan above as your checklist for now, and download or email it below.</div>`;
   html += `
-    <button class="btn btn-teal" style="width:100%;font-size:1rem;padding:.9rem;margin-top:1rem;" onclick="goTo('execute')">
-      Start Executing →
-    </button>
     <div style="display:flex;gap:.75rem;margin-top:.75rem;flex-wrap:wrap;">
       <button class="btn btn-outline" style="flex:1;min-width:180px;font-size:.85rem;padding:.75rem;" onclick="openAssessmentReport('download')">
         📄 Download PDF Report
@@ -1924,8 +1967,10 @@ function openAssessmentReport(mode) {
 // ═══════════════════════════════════════════════════════════
 // SAVE ATTEMPT TO SUPABASE
 // ═══════════════════════════════════════════════════════════
+// Returns true once saved, false if the save failed, null for guests
+// (not saved here).
 async function saveAttempt() {
-  if (!S.studentId) return; // guest — don't save
+  if (!S.studentId) return null; // guest — don't save
   // Let any in-flight autosave finish first, so this final write is the
   // last word rather than racing it (see autosaveAttempt()'s chaining note).
   try { await S.autosaveChain; } catch(e) {}
@@ -1971,8 +2016,10 @@ async function saveAttempt() {
       S.attemptId = data.id;
     }
     console.log('Attempt saved to Supabase');
+    return true;
   } catch(e) {
     console.warn('Could not save attempt:', e.message);
+    return false;
   }
 }
 
