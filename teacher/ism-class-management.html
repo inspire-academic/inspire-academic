@@ -235,6 +235,8 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
     <button type="button" class="mini-btn" id="photo-viewer-prev" aria-label="Previous photo">← Prev</button>
     <span class="photo-viewer-count" id="photo-viewer-count"></span>
     <button type="button" class="mini-btn" id="photo-viewer-next" aria-label="Next photo">Next →</button>
+    <button type="button" class="mini-btn" id="photo-viewer-rotate-left" aria-label="Rotate photo 90 degrees anticlockwise">↺ Rotate</button>
+    <button type="button" class="mini-btn" id="photo-viewer-rotate" aria-label="Rotate photo 90 degrees clockwise">Rotate ↻</button>
     <button type="button" class="mini-btn" id="photo-viewer-zoom">Zoom</button>
     <a class="mini-btn" id="photo-viewer-open" target="_blank" rel="noopener">Open full size ↗</a>
     <a class="mini-btn" id="photo-viewer-download">Download</a>
@@ -285,19 +287,89 @@ function photoFileName(i) {
   return `ISM-submission-${n}-photo-${i + 1}.${ext}`;
 }
 
-function showViewerPhoto(i) {
+// Rotation, per photo, for this review session: sideways photos can be
+// turned upright, and the viewer, Open full size, Download and the PDF
+// all use the turned version. The stored photo itself is never changed.
+let reviewPhotoRotations = [];   // degrees: 0, 90, 180, 270
+let rotatedPhotoCache = {};      // "index:degrees" -> blob URL of the turned photo
+
+async function loadImage(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('A photo could not be downloaded.');
+  const blobUrl = URL.createObjectURL(await res.blob());
+  try {
+    const img = new Image();
+    // Load events rather than img.decode(), which can stall in some Chrome builds.
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = () => reject(new Error('A photo could not be read.'));
+      img.src = blobUrl;
+    });
+    return img;
+  } finally { URL.revokeObjectURL(blobUrl); }
+}
+
+// Draws img turned clockwise by deg, scaled so the long side is at most max px.
+function drawRotated(img, deg, max) {
+  const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+  const w = Math.round(img.naturalWidth * k), h = Math.round(img.naturalHeight * k);
+  const quarter = deg === 90 || deg === 270;
+  const c = document.createElement('canvas');
+  c.width = quarter ? h : w; c.height = quarter ? w : h;
+  const g = c.getContext('2d');
+  g.translate(c.width / 2, c.height / 2);
+  g.rotate(deg * Math.PI / 180);
+  g.drawImage(img, -w / 2, -h / 2, w, h);
+  return c;
+}
+
+async function photoUrlFor(i) {
+  const deg = reviewPhotoRotations[i] || 0;
+  if (!deg) return reviewPhotos[i];
+  const key = `${i}:${deg}`;
+  if (!rotatedPhotoCache[key]) {
+    const c = drawRotated(await loadImage(reviewPhotos[i]), deg, 4000);
+    const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.92));
+    rotatedPhotoCache[key] = URL.createObjectURL(blob);
+  }
+  return rotatedPhotoCache[key];
+}
+
+function resetPhotoRotations() {
+  Object.values(rotatedPhotoCache).forEach(u => URL.revokeObjectURL(u));
+  rotatedPhotoCache = {};
+  reviewPhotoRotations = [];
+}
+
+async function showViewerPhoto(i) {
   viewerIndex = (i + reviewPhotos.length) % reviewPhotos.length;
-  const url = reviewPhotos[viewerIndex];
+  const index = viewerIndex;
+  const deg = reviewPhotoRotations[index] || 0;
+  let url = reviewPhotos[index];
+  try { url = await photoUrlFor(index); } catch (e) { toast('Could not rotate this photo: ' + e.message, 'error'); }
+  if (index !== viewerIndex) return; // moved on while the turned copy was being made
   document.getElementById('photo-viewer-img').src = url;
-  document.getElementById('photo-viewer-img').alt = `Student photo ${viewerIndex + 1} of ${reviewPhotos.length}`;
-  document.getElementById('photo-viewer-count').textContent = `${viewerIndex + 1} / ${reviewPhotos.length}`;
+  document.getElementById('photo-viewer-img').alt = `Student photo ${index + 1} of ${reviewPhotos.length}`;
+  document.getElementById('photo-viewer-count').textContent = `${index + 1} / ${reviewPhotos.length}` + (deg ? ` · turned ${deg}°` : '');
   document.getElementById('photo-viewer-open').href = url;
-  document.getElementById('photo-viewer-download').href = url + (url.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent(photoFileName(viewerIndex));
+  const dl = document.getElementById('photo-viewer-download');
+  dl.setAttribute('download', photoFileName(index));
+  // A turned copy is a same-page blob, so the download attribute names it;
+  // the original lives on Supabase, where ?download= names it.
+  dl.href = url.startsWith('blob:') ? url : url + (url.includes('?') ? '&' : '?') + 'download=' + encodeURIComponent(photoFileName(index));
   document.getElementById('photo-viewer-stage').classList.remove('zoomed');
   document.getElementById('photo-viewer-zoom').textContent = 'Zoom';
   const multi = reviewPhotos.length > 1;
   document.getElementById('photo-viewer-prev').hidden = !multi;
   document.getElementById('photo-viewer-next').hidden = !multi;
+}
+
+function rotateViewerPhoto(step) {
+  const i = viewerIndex;
+  reviewPhotoRotations[i] = ((reviewPhotoRotations[i] || 0) + step + 360) % 360;
+  const thumb = document.querySelector(`.photo-thumb[data-photo-index="${i}"] img`);
+  if (thumb) thumb.style.transform = reviewPhotoRotations[i] ? `rotate(${reviewPhotoRotations[i]}deg)` : '';
+  showViewerPhoto(i);
 }
 
 function openPhotoViewer(i) {
@@ -327,6 +399,8 @@ document.addEventListener('click', e => {
   if (e.target.id === 'photo-viewer' || e.target.id === 'photo-viewer-stage' || e.target.closest('#photo-viewer-close')) closePhotoViewer();
   else if (e.target.closest('#photo-viewer-prev')) showViewerPhoto(viewerIndex - 1);
   else if (e.target.closest('#photo-viewer-next')) showViewerPhoto(viewerIndex + 1);
+  else if (e.target.closest('#photo-viewer-rotate-left')) rotateViewerPhoto(-90);
+  else if (e.target.closest('#photo-viewer-rotate')) rotateViewerPhoto(90);
   else if (e.target.closest('#photo-viewer-zoom') || e.target.id === 'photo-viewer-img') togglePhotoZoom();
 });
 
@@ -617,6 +691,7 @@ async function openReview(submission, studentName) {
   const orderedPhotos = (photos || []).slice().sort((a, b) => String(a.uploaded_at).localeCompare(String(b.uploaded_at)));
   reviewPhotos = orderedPhotos.map(p => safePhotoUrl(p.photo_url)).filter(Boolean);
   reviewPhotoCaptions = orderedPhotos.filter(p => safePhotoUrl(p.photo_url)).map(p => p.caption || '');
+  resetPhotoRotations();
   reviewFeedback = [];
   if (prior) {
     const { data: fb } = await supa.from('ism_teacher_feedback').select('field_id,comment').eq('submission_id', submission.id).order('created_at');
@@ -917,25 +992,9 @@ function captureLessonPages() {
   });
 }
 
-async function loadPhotoForPdf(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('A photo could not be downloaded.');
-  const blobUrl = URL.createObjectURL(await res.blob());
-  try {
-    const img = new Image();
-    // Load events rather than img.decode(), which can stall in some Chrome builds.
-    await new Promise((resolve, reject) => {
-      img.onload = resolve;
-      img.onerror = () => reject(new Error('A photo could not be read.'));
-      img.src = blobUrl;
-    });
-    const max = 2000;
-    const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
-    const c = document.createElement('canvas');
-    c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
-    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-    return { dataUrl: c.toDataURL('image/jpeg', 0.88), width: c.width, height: c.height };
-  } finally { URL.revokeObjectURL(blobUrl); }
+async function loadPhotoForPdf(i) {
+  const c = drawRotated(await loadImage(reviewPhotos[i]), reviewPhotoRotations[i] || 0, 2000);
+  return { dataUrl: c.toDataURL('image/jpeg', 0.88), width: c.width, height: c.height };
 }
 
 async function renderCoverPage(lessonPageCount) {
@@ -1021,7 +1080,7 @@ async function downloadSubmissionPdf() {
     const lessonPages = await captureLessonPages();
     setPdfProgress(reviewPhotos.length ? 'Adding photos…' : 'Building the PDF…');
     const photos = [];
-    for (const url of reviewPhotos) photos.push(await loadPhotoForPdf(url));
+    for (let i = 0; i < reviewPhotos.length; i++) photos.push(await loadPhotoForPdf(i));
     setPdfProgress('Building the PDF…');
     const cover = await renderCoverPage(lessonPages.length);
 
