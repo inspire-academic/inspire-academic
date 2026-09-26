@@ -1,6 +1,6 @@
 // Typeset maths: assets/js/maths-typeset.js (the page-side helper) and the
-// Mathematics diagnostic content in
-// supabase/diagnostic_questions_maths_typeset.sql.
+// diagnostic content in supabase/diagnostic_questions_maths_typeset.sql
+// and supabase/diagnostic_questions_science_typeset.sql.
 //
 // The content check renders every \( \) span with the same vendored
 // KaTeX build the site loads, in strict mode, so a typo in the LaTeX
@@ -14,6 +14,7 @@ const ROOT = path.join(__dirname, '..');
 const IAMaths = require(path.join(ROOT, 'assets/js/maths-typeset.js'));
 const katex = require(path.join(ROOT, 'assets/vendor/katex-0.16.47/katex.min.js'));
 const MIGRATION = path.join(ROOT, 'supabase/diagnostic_questions_maths_typeset.sql');
+const SCIENCE_MIGRATION = path.join(ROOT, 'supabase/diagnostic_questions_science_typeset.sql');
 
 // ── helper ──
 test('maths-typeset: text without maths is escaped and otherwise unchanged', () => {
@@ -74,6 +75,23 @@ test('diagnostic maths typeset migration: every maths span renders with KaTeX', 
     // Unicode powers/roots/fractions must never be left outside the maths.
     const outside = text.replace(/\\\([\s\S]*?\\\)/g, ' ');
     if (/[²³⁴⁵⁶⁷⁸⁹⁻√∛½¼¾⅓₀₁₂ₙ]/.test(outside)) problems.push(`${field}: plain-text maths left: ${outside.slice(0, 100)}`);
+  }
+  assert.deepEqual(problems, []);
+});
+
+test('diagnostic science typeset migration: every UPDATE targets a science row by id, and every maths span renders', () => {
+  const sql = fs.readFileSync(SCIENCE_MIGRATION, 'utf8');
+  const updates = sql.match(/^UPDATE diagnostic_questions SET$/gm) || [];
+  const wheres = sql.match(/^WHERE id = \d+ AND subject = '(Physics|Chemistry|Biology)';$/gm) || [];
+  assert.ok(updates.length > 0);
+  assert.equal(wheres.length, updates.length);
+  const problems = [];
+  for (const { field, text } of updatedValues(sql)) {
+    for (const m of text.matchAll(/\\\(([\s\S]*?)\\\)/g)) {
+      try { katex.renderToString(m[1], { throwOnError: true, strict: 'error' }); }
+      catch (e) { problems.push(`${field}: ${e.message.split('\n')[0]} in ${m[0].slice(0, 80)}`); }
+    }
+    if (/->/.test(text)) problems.push(`${field}: ASCII arrow left: ${text.slice(0, 80)}`);
   }
   assert.deepEqual(problems, []);
 });

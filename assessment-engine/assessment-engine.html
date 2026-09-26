@@ -532,9 +532,10 @@ function pickSubject(btn) {
   checkSetup();
 
   const subject      = btn.dataset.subject;
-  // Maths questions are typeset with KaTeX: start fetching it now, while
-  // the student is still on this screen, so Q1 doesn't wait for it.
-  if (subject.startsWith('Mathematics')) IAMaths.preload().catch(() => {});
+  // Maths, Physics and Chemistry questions include typeset formulas
+  // (KaTeX): start fetching it now, while the student is still on this
+  // screen, so Q1 doesn't wait for it. Biology has none, so skips it.
+  if (subject !== 'Biology') IAMaths.preload().catch(() => {});
   const inProgress   = S.inProgressAttempts[subject];
   const saved        = S.savedPlans[subject];
   const resumeBanner = document.getElementById('resume-banner');
