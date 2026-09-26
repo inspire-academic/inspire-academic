@@ -110,7 +110,7 @@ exports.handler = async (event) => {
 
     // Callers that don't need it (most programme forms) just ignore this —
     // the ISM/Science Mastery register page uses it to carry the lead
-    // through to the no-login diagnostic (see assessment-attempt-create.js)
+    // through to the no-login diagnostic (see diagnostic-session-submit.js)
     // so a real result is traceable back to this registration.
     return { statusCode: 200, body: JSON.stringify({ success: true, id: leadId }) };
   } catch (error) {

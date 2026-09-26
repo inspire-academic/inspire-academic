@@ -178,6 +178,51 @@ input,select,textarea{font-family:var(--font-body);}
 .opt-text{font-size:.9rem;line-height:1.5;}
 .timer-bar{width:100%;height:4px;background:var(--border);border-radius:2px;margin-bottom:1rem;overflow:hidden;}
 .timer-fill{height:100%;background:var(--teal);border-radius:2px;transition:width 1s linear;}
+
+/* Results */
+.marking{text-align:center;padding:2.5rem 1.5rem;}
+.result-head{text-align:center;margin-bottom:1.25rem;}
+.result-score{font-family:var(--font-display);font-size:3.5rem;font-weight:800;line-height:1;}
+.result-grade{margin-top:.6rem;font-size:1.05rem;}
+.result-note{margin:.5rem auto 0;max-width:34rem;font-size:.85rem;color:var(--muted);}
+.result-target{margin-top:.75rem;font-size:.9rem;}
+.result-block{margin-bottom:1.25rem;}
+.result-h{font-size:1rem;font-weight:700;margin-bottom:.75rem;}
+.secure-list,.check-list{list-style:none;display:flex;flex-direction:column;gap:.35rem;font-size:.9rem;}
+.secure-list li{color:var(--good);}
+.secure-list li .muted{color:var(--muted);}
+.win-card{display:grid;grid-template-columns:auto 1fr;gap:.85rem;padding:1rem;background:var(--navy);border-radius:var(--r);margin-bottom:.75rem;}
+.win-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--on-accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;}
+.win-topic{font-weight:700;font-size:.95rem;}
+.win-how{font-size:.8rem;color:var(--teal-text);font-weight:600;margin:.15rem 0 .35rem;}
+.win-why{font-size:.85rem;color:var(--muted);}
+.evidence-tag{display:inline-block;margin-top:.45rem;font-size:.72rem;color:var(--muted);border:1px solid var(--border);border-radius:20px;padding:.1rem .55rem;}
+.topic-details summary{cursor:pointer;margin-bottom:0;}
+.topic-row{margin-bottom:.8rem;}
+.topic-row-head{display:flex;justify-content:space-between;gap:1rem;font-size:.85rem;margin-bottom:.3rem;}
+.topic-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.topic-bar div{height:100%;border-radius:3px;}
+.review-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;}
+.review-filter[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-text);}
+.review-item{padding:1rem;border-radius:var(--r);background:var(--navy);border-left:3px solid var(--border);margin-bottom:.85rem;}
+.review-item.right{border-left-color:var(--good);}
+.review-item.wrong{border-left-color:var(--bad);}
+.review-item.unsure{border-left-color:var(--gold);}
+.review-meta{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.75rem;color:var(--muted);margin-bottom:.5rem;}
+.review-status{font-weight:700;}
+.review-item.right .review-status{color:var(--good);}
+.review-item.wrong .review-status{color:var(--bad);}
+.review-q{font-weight:600;margin-bottom:.75rem;line-height:1.6;}
+.review-diagram{text-align:center;margin-bottom:.75rem;}
+.review-opts{list-style:none;display:flex;flex-direction:column;gap:.4rem;margin-bottom:.75rem;}
+.review-opt{display:flex;gap:.6rem;align-items:flex-start;padding:.5rem .7rem;border-radius:var(--r);border:1px solid var(--border);font-size:.88rem;}
+.review-opt.is-key{border-color:var(--good);}
+.review-opt.is-chosen{border-color:var(--bad);}
+.opt-tag{display:inline-block;margin-left:.35rem;font-size:.7rem;font-weight:700;color:var(--muted);}
+.review-opt.is-key .opt-tag{color:var(--good);}
+.review-opt.is-chosen .opt-tag{color:var(--bad);}
+.review-why,.review-method{font-size:.85rem;margin-top:.5rem;line-height:1.6;}
+.review-why{color:var(--gold-text);}
 </style>
 </head>
 <body>
@@ -385,19 +430,13 @@ input,select,textarea{font-family:var(--font-body);}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/nav-back.js"></script>
-<!-- Phase 3 (assessment-engine grade-accuracy roadmap): real per-topic
-     exam weighting needs spec-map's topic/slug list and the PASCO
-     calibration evidence to weight against. This repo's spec-map.js is
-     still the single monolithic file defining window.SPEC_MAP directly
-     — the AQA/Edexcel shard (spec-map-aqa.js/spec-map-edexcel.js) only
-     exists in the separate PASCO branch, never merged here. -->
-<script src="/assets/js/spec-map.js"></script>
-<script src="/assets/js/pasco-calibration-stats.js"></script>
 <script src="/assets/js/diagram-renderer.js"></script>
 <script src="/assets/js/maths-typeset.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
-// SUPABASE CONFIG — matches your platform
+// SUPABASE CONFIG — used only for sign-in and for reading this student's
+// own saved plans. Questions, marking and saving results all go through
+// the /api/v1/diagnostic endpoints: the browser never sees an answer key.
 // ═══════════════════════════════════════════════════════════
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -408,22 +447,26 @@ const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 // ═══════════════════════════════════════════════════════════
 const S = {
   config:      null,
-  questions:   [],   // from Supabase
-  answers:     [],   // {question_id, chosen, correct, topic, not_sure}
+  questions:   [],   // from the server, without answer keys
+  answers:     [],   // { question_id, chosen, timeMs } in the order answered
   currentQ:    0,
-  selectedOpt: null, // currently selected option
-  diagnosis:   null,
+  selectedOpt: null,
+  shownAt:     0,    // when the current question appeared (for timing)
+  sessionId:   null, // this test on the server
+  token:       null, // proves this browser started it
+  diagnosis:   null, // marked on the server
+  review:      null, // each question with its key and method, after marking
   plan:        null,
   studentId:   null,
   attemptId:   null,
-  leadId:      null, // set only for a guest who arrived from a programme registration (e.g. ISM) — see saveGuestAttempt()
-  savedPlans:  {},  // { [subject]: {id, level, board, diagnosis, plan} } — this student's existing saved plans
-  inProgressAttempts: {}, // { [subject]: {id, question_ids, question_results, ...} } — see loadInProgressAttempts()
-  autosaveChain: Promise.resolve() // serializes autosaveAttempt() calls so a slow write can't clobber a newer one
+  leadId:      null, // a guest who arrived from a programme registration (e.g. ISM)
+  savedPlans:  {},   // { [subject]: saved attempt row with a plan }
+  activeSessions: {}, // { [subject]: { sessionId, answered, total } } unfinished tests
+  answerChain: Promise.resolve() // answers are sent one at a time, in order
 };
 
 // ═══════════════════════════════════════════════════════════
-// INIT — get logged-in student
+// INIT
 // ═══════════════════════════════════════════════════════════
 // ── THEME ────────────────────────────────────────────────────
 // Same "ia-theme" localStorage key and [data-theme] attribute the
@@ -446,22 +489,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   // A guest arriving from a programme registration (e.g. the ISM/Science
   // Mastery funnel — see thank-you/index.html) carries their lead_id and
   // child's name as query params, since there is no login to identify them
-  // by otherwise. Without this, a real diagnostic result has no way back
-  // to the family's registration (see saveGuestAttempt()).
+  // by otherwise. The server checks the lead exists before linking to it.
   const urlParams = new URLSearchParams(location.search);
   const leadIdParam = urlParams.get('lead_id');
   const nameParam = urlParams.get('name');
 
   // A lead_id in the URL means a specific registration handed this page
   // off — that identity is authoritative regardless of whatever account
-  // happens to be logged into this browser. Skip the logged-in pre-fill
-  // and save-routing entirely in that case: otherwise a staff member
-  // testing or triaging the funnel while signed in gets their OWN
-  // profile's name silently attached to someone else's diagnostic
-  // (found live 2026-09-04 — an admin account's first_name is literally
-  // "Inspire", which is exactly the bug that sent us looking for this).
+  // happens to be logged into this browser (a signed-in admin testing the
+  // funnel must not get their own name attached to a family's result).
   if (leadIdParam) {
     S.leadId = leadIdParam;
+    S.asGuest = true;
     if (nameParam) {
       document.getElementById('inp-name').value = nameParam;
       checkSetup();
@@ -473,38 +512,65 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { data: { user } } = await supa.auth.getUser();
     if (user) {
       S.studentId = user.id;
-      // Pre-fill name from profile
       const { data: profile } = await supa.from('profiles')
         .select('first_name').eq('id', user.id).single();
       if (profile?.first_name) {
         document.getElementById('inp-name').value = profile.first_name;
         checkSetup();
       }
-      await Promise.all([loadSavedPlans(), loadInProgressAttempts()]);
+      await Promise.all([loadSavedPlans(), loadActiveSessions()]);
     }
   } catch(e) {
-    // Not logged in or no profile — continue as guest
     console.log('Guest mode');
   }
 });
 
-// One saved plan per subject — a fresh assessment for a subject the
-// student already has a plan for replaces it (see savePlanToAttempt /
-// saveAttempt, which both write to the same row by id).
+// Calls a /api/v1/diagnostic endpoint. Sends the student's sign-in token
+// when there is one (guests from a programme link never send it). Throws an
+// Error with a readable message on failure; err.retryable marks network
+// trouble or a server hiccup, where trying again makes sense.
+async function api(path, body) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (S.studentId && !S.asGuest) {
+    try {
+      const { data } = await supa.auth.getSession();
+      if (data?.session?.access_token) headers.Authorization = 'Bearer ' + data.session.access_token;
+    } catch(e) {}
+  }
+  let res;
+  try {
+    res = await fetch('/api/v1/diagnostic/' + path, body === undefined
+      ? { headers }
+      : { method: 'POST', headers, body: JSON.stringify(body) });
+  } catch(e) {
+    const err = new Error("Couldn't reach Inspire — check your connection.");
+    err.retryable = true;
+    throw err;
+  }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) {
+    const err = new Error((data.error && data.error.message) || 'Something went wrong. Please try again.');
+    err.retryable = res.status >= 500 || res.status === 409;
+    err.code = data.error && data.error.code;
+    throw err;
+  }
+  return data;
+}
+
+// One saved plan per subject: the newest result for a subject that has one.
 async function loadSavedPlans() {
   try {
     const { data, error } = await supa.from('diagnostic_attempts')
-      .select('id,subject,level,exam_board,overall_score,current_grade,target_grade,not_sure_count,total_questions,topic_scores,gaps,student_profile,profile_description,strengths,teacher_note,plan,created_at')
+      .select('id,subject,level,exam_board,overall_score,current_grade,target_grade,confidence_low_grade,confidence_high_grade,not_sure_count,total_questions,topic_scores,gaps,student_profile,profile_description,strengths,teacher_note,plan,created_at')
       .eq('student_id', S.studentId)
+      .eq('completed', true)
       .not('plan', 'is', null)
       .order('created_at', { ascending: false });
     if (error) throw error;
 
     (data || []).forEach(row => {
-      if (S.savedPlans[row.subject]) return; // already have a more recent one
-      S.savedPlans[row.subject] = row;
+      if (!S.savedPlans[row.subject]) S.savedPlans[row.subject] = row;
     });
-
     document.querySelectorAll('.subject-btn').forEach(btn => {
       const badge = btn.querySelector('.subject-saved-badge');
       if (badge) badge.style.display = S.savedPlans[btn.dataset.subject] ? 'block' : 'none';
@@ -514,28 +580,16 @@ async function loadSavedPlans() {
   }
 }
 
-// One in-progress attempt per subject — same "most recent wins" pattern
-// as loadSavedPlans(). completed:false is what autosaveAttempt() writes
-// after every answered question (see nextQuestion()).
-async function loadInProgressAttempts() {
+// This student's unfinished tests (the server keeps only the newest per
+// subject resumable), for the "pick up where you left off" banner.
+async function loadActiveSessions() {
   try {
-    const { data, error } = await supa.from('diagnostic_attempts')
-      .select('id,subject,level,exam_board,question_ids,question_results,total_questions,completed')
-      .eq('student_id', S.studentId)
-      .order('created_at', { ascending: false });
-    if (error) throw error;
-
-    // Only the most recent attempt per subject counts: an unfinished one
-    // left behind when the student later started (or finished) another
-    // mustn't keep offering itself for resume forever.
-    const seen = new Set();
-    (data || []).forEach(row => {
-      if (seen.has(row.subject)) return;
-      seen.add(row.subject);
-      if (!row.completed) S.inProgressAttempts[row.subject] = row;
+    const data = await api('session/active');
+    (data.sessions || []).forEach(s => {
+      if (s.answered > 0) S.activeSessions[s.subject] = s;
     });
   } catch(e) {
-    console.warn('Could not load in-progress attempts:', e.message);
+    console.warn('Could not check for unfinished tests:', e.message);
   }
 }
 
@@ -543,8 +597,12 @@ async function loadInProgressAttempts() {
 // SETUP
 // ═══════════════════════════════════════════════════════════
 function pickSubject(btn) {
-  document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.subject-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
   btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
   checkSetup();
 
   const subject      = btn.dataset.subject;
@@ -552,19 +610,15 @@ function pickSubject(btn) {
   // (KaTeX): start fetching it now, while the student is still on this
   // screen, so Q1 doesn't wait for it. Biology has none, so skips it.
   if (subject !== 'Biology') IAMaths.preload().catch(() => {});
-  const inProgress   = S.inProgressAttempts[subject];
+  const inProgress   = S.activeSessions[subject];
   const saved        = S.savedPlans[subject];
   const resumeBanner = document.getElementById('resume-banner');
   const savedBanner  = document.getElementById('saved-plan-banner');
 
-  // An in-progress attempt takes priority over a completed plan for the
-  // same subject — resuming unfinished work is more time-sensitive than
-  // revisiting an old result, and showing both at once gets cluttered.
+  // Resuming unfinished work comes before revisiting an old result.
   if (inProgress) {
-    const answered = (inProgress.question_results || []).length;
-    const total    = inProgress.total_questions || (inProgress.question_ids || []).length;
     document.getElementById('resume-banner-text').textContent =
-      `You have a ${subject} assessment in progress — ${answered} of ${total} questions answered.`;
+      `You have a ${subjectLabel(subject)} assessment in progress — ${inProgress.answered} of ${inProgress.total} questions answered.`;
     resumeBanner.style.display = 'flex';
     savedBanner.style.display  = 'none';
     return;
@@ -573,16 +627,15 @@ function pickSubject(btn) {
 
   if (saved) {
     document.getElementById('saved-plan-text').textContent =
-      `You already have a ${subject} plan — Grade ${saved.current_grade} → ${saved.target_grade}.`;
+      `You already have a ${subjectLabel(subject)} plan — Grade ${saved.current_grade} → ${saved.target_grade}.`;
     savedBanner.style.display = 'flex';
   } else {
     savedBanner.style.display = 'none';
   }
 }
 
-// Loads a previously saved diagnosis + plan straight from Supabase —
-// no AI calls, so revisiting an existing plan is free — and jumps
-// straight to it, same as generating one fresh would.
+// Shows a previously saved diagnosis + plan straight from the student's own
+// saved result, no new test needed.
 function viewSavedPlan() {
   const sub = document.querySelector('.subject-btn.active')?.dataset.subject;
   const row = S.savedPlans[sub];
@@ -595,19 +648,25 @@ function viewSavedPlan() {
     board:   row.exam_board
   };
   S.attemptId = row.id;
-  S.answers   = new Array(row.total_questions || 0); // renderDiagnosis only needs .length, for the "not sure" %
+  S.sessionId = null;
+  S.review    = null; // the answer-by-answer review is shown once, straight after a test
+  S.questions = [];
+  S.answers   = [];
+  const low = row.confidence_low_grade, high = row.confidence_high_grade;
   S.diagnosis = {
-    overallScore:        row.overall_score,
-    currentGrade:        row.current_grade,
-    targetGrade:          row.target_grade,
-    notSureCount:         row.not_sure_count,
-    topicScores:          row.topic_scores,
-    gaps:                 row.gaps,
-    studentProfile:       row.student_profile,
-    profileDescription:   row.profile_description,
-    strengths:            row.strengths,
-    teacherNote:          row.teacher_note,
-    totalQuestions:       row.total_questions
+    overallScore:       row.overall_score,
+    currentGrade:       row.current_grade,
+    targetGrade:        row.target_grade,
+    confidence:         low && high ? { lowGrade: low, highGrade: high } : null,
+    notSureCount:       row.not_sure_count,
+    totalQuestions:     row.total_questions,
+    topicScores:        row.topic_scores || [],
+    gaps:               row.gaps || [],
+    checks:             checksFromTopicScores(row.topic_scores || [], row.gaps || []),
+    studentProfile:     row.student_profile,
+    profileDescription: row.profile_description,
+    strengths:          row.strengths || [],
+    teacherNote:        row.teacher_note
   };
   S.plan = row.plan;
 
@@ -617,62 +676,49 @@ function viewSavedPlan() {
   goTo('plan');
 }
 
-// Picks back up an in-progress attempt (see loadInProgressAttempts() /
-// autosaveAttempt()) at the next unanswered question. Re-fetches the
-// exact question set by id, in the order it was originally sampled —
-// question selection is randomised (weightedSampleAcrossTopics /
-// shuffleArray), so re-running startAssessment()'s loader here would
-// hand the student a different set mid-attempt.
-async function resumeAttempt() {
-  const sub = document.querySelector('.subject-btn.active')?.dataset.subject;
-  const row = S.inProgressAttempts[sub];
-  if (!row || !row.question_ids || row.question_ids.length === 0) return;
-
-  const name = document.getElementById('inp-name').value.trim() || 'Student';
-  S.config = { name, subject: row.subject, level: row.level, board: row.exam_board };
-  S.attemptId = row.id;
-
-  const btn = document.getElementById('btn-start');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Resuming...';
-
-  try {
-    const { data, error } = await supa.from('diagnostic_questions')
-      .select('*').in('id', row.question_ids);
-    if (error) throw error;
-
-    const byId = new Map((data || []).map(q => [q.id, q]));
-    S.questions = row.question_ids.map(id => byId.get(id)).filter(Boolean);
-    if (S.questions.length === 0) {
-      throw new Error('The questions from this attempt are no longer available.');
-    }
-
-    S.answers  = row.question_results || [];
-    S.currentQ = Math.min(S.answers.length, S.questions.length - 1);
-    await waitForMathsTypesetting(S.questions);
-    goTo('assess');
-
-    if (S.answers.length >= S.questions.length) {
-      runDiagnosis(); // every question was already answered — just finish it
-      return;
-    }
-
-    renderQuestion();
-    document.getElementById('assess-sub').textContent =
-      `${S.questions.length} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · Resumed — picking up where you left off`;
-    toast('Welcome back — resuming your assessment', 'success');
-  } catch(e) {
-    toast('Could not resume: ' + e.message, 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = 'Start Assessment →';
-  }
+// Older saved results have no separate "worth a check" list; rebuild it from
+// their topic scores the same way the server does (see _diagnostic-engine.js).
+function checksFromTopicScores(topicScores, gaps) {
+  const isGap = new Set(gaps.map(g => g.subject + '|' + g.topic));
+  return topicScores
+    .filter(t => t.evidence && !isGap.has(t.subject + '|' + t.topic) && t.score < 80 && t.correct < t.total)
+    .map(t => ({ subject: t.subject, topic: t.topic, score: t.score, correct: t.correct, total: t.total }));
 }
 
 function checkSetup() {
   const name = document.getElementById('inp-name').value.trim();
   const sub  = document.querySelector('.subject-btn.active');
   document.getElementById('btn-start').disabled = !name || !sub;
+}
+
+function setStartButton(busyText) {
+  const btn = document.getElementById('btn-start');
+  btn.disabled = !!busyText;
+  btn.innerHTML = busyText ? `<span class="spinner" aria-hidden="true"></span> ${busyText}` : 'Start Assessment →';
+  if (!busyText) checkSetup();
+}
+
+// Takes a test the server has just started or resumed and shows its first
+// unanswered question.
+async function beginTest(data, note) {
+  S.sessionId = data.sessionId;
+  S.token     = data.token;
+  S.questions = data.questions || [];
+  S.answers   = (data.answered || []).map(a => ({ question_id: a.questionId, chosen: a.chosen, timeMs: null }));
+  S.diagnosis = null;
+  S.review    = null;
+  S.plan      = null;
+  S.attemptId = null;
+  S.answerChain = Promise.resolve();
+  if (!S.questions.length) throw new Error('No questions are available for this subject yet. Please check back soon.');
+
+  S.currentQ = Math.min(S.answers.length, S.questions.length - 1);
+  await waitForMathsTypesetting(S.questions);
+  goTo('assess');
+  if (S.answers.length >= S.questions.length) { runDiagnosis(); return; }
+  renderQuestion();
+  document.getElementById('assess-sub').textContent =
+    `${S.questions.length} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · ${note}`;
 }
 
 async function startAssessment() {
@@ -683,38 +729,40 @@ async function startAssessment() {
   if (!name || !sub) return;
 
   S.config = { name, subject: sub.dataset.subject, level, board };
-  // Reset per-attempt state — without this, starting a fresh assessment
-  // after an earlier one completed in the same tab session would reuse
-  // its attemptId, and autosaveAttempt() would UPDATE that already-
-  // completed row back to completed:false with a brand new question set.
-  S.attemptId = null;
-  S.diagnosis = null;
-  S.plan      = null;
-
-  const btn = document.getElementById('btn-start');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Loading questions...';
-
+  setStartButton('Loading questions...');
   try {
-    S.questions = await loadQuestionsFromSupabase();
-
-    if (!S.questions || S.questions.length === 0) {
-      throw new Error('No validated questions found for this subject yet. Please check back soon.');
-    }
-
-    S.answers  = [];
-    S.currentQ = 0;
-    await waitForMathsTypesetting(S.questions);
-    goTo('assess');
-    renderQuestion();
-    const total = S.questions.length;
-    document.getElementById('assess-sub').textContent =
-      `${total} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · Choose "Not sure" rather than guess: wrong guesses count against you, "Not sure" doesn't`;
+    const data = await api('session/start', {
+      subject: S.config.subject, level, board, name,
+      leadId: S.leadId || undefined
+    });
+    await beginTest(data, 'Choose "Not sure" rather than guess: wrong guesses count against you, "Not sure" doesn\'t');
     toast('Assessment ready — good luck ' + name + '!', 'success');
   } catch(e) {
-    toast('Error: ' + e.message, 'error');
-    btn.disabled = false;
-    btn.innerHTML = 'Start Assessment →';
+    toast(e.message, 'error');
+  } finally {
+    setStartButton(null);
+  }
+}
+
+// Picks an unfinished test back up at its next unanswered question — the
+// same questions, in the same order, on any device the student signs in on.
+async function resumeAttempt() {
+  const sub = document.querySelector('.subject-btn.active')?.dataset.subject;
+  const active = S.activeSessions[sub];
+  if (!active) return;
+
+  const name = document.getElementById('inp-name').value.trim() || 'Student';
+  S.config = { name, subject: active.subject, level: active.level, board: active.board };
+  setStartButton('Resuming...');
+  try {
+    const data = await api('session/start', { resumeSessionId: active.sessionId });
+    delete S.activeSessions[sub];
+    await beginTest(data, 'Resumed — picking up where you left off');
+    toast('Welcome back — resuming your assessment', 'success');
+  } catch(e) {
+    toast('Could not resume: ' + e.message, 'error');
+  } finally {
+    setStartButton(null);
   }
 }
 
@@ -727,164 +775,6 @@ function waitForMathsTypesetting(questions) {
   const fields = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d'];
   const anyMaths = questions.some(q => fields.some(f => IAMaths.hasMaths(q[f])));
   return anyMaths ? IAMaths.ready(4000) : Promise.resolve();
-}
-
-// ═══════════════════════════════════════════════════════════
-// LOAD QUESTIONS FROM SUPABASE
-// Falls back to direct query if RPC times out or unavailable
-// ═══════════════════════════════════════════════════════════
-async function loadQuestionsFromSupabase() {
-  const { config } = S;
-
-  if (config.subject === 'Combined Science') {
-    return loadCombinedScienceQuestions();
-  }
-
-  if (config.subject === 'Mathematics — Paper 2') {
-    return loadMathsPaper2Questions();
-  }
-
-  // Skip RPC — go straight to direct query (more reliable)
-  // The direct query handles everything we need
-
-  // No .limit() here (removed 2026-08-29, Phase 3) — the weighted
-  // sampler below needs the FULL real pool per topic to allocate from,
-  // not whatever arbitrary 36 rows the database happened to return
-  // first. The cap to config's real question count happens after
-  // weighting, not before.
-  //
-  // Question pool is always AQA + Universal regardless of config.board
-  // (decided 2026-09-08): every validated question in the bank is
-  // AQA-authored, and this diagnostic exists as a lead-gen funnel, not
-  // a board-accurate mock exam — a non-AQA board selection still needs
-  // real questions to show, not a dead end. Grading stays board-aware
-  // where real data exists (estimateGrade's REAL_GRADE_BOUNDARIES has
-  // genuine Edexcel boundaries, and falls back to AQA's for OCR/WJEC),
-  // so the grade estimate is still as accurate as it can be even though
-  // the questions themselves are AQA content. config.board is kept
-  // as-is for display/grading — only this fetch ignores it.
-  const { data, error } = await supa
-    .from('diagnostic_questions')
-    .select('*')
-    .eq('subject', config.subject)
-    .eq('level', config.level)
-    .eq('validated', true)
-    .eq('active', true)
-    .in('exam_board', ['AQA', 'Universal'])
-    .in('tier', ['Higher', 'Both'])
-    .order('topic');
-
-  if (error) {
-    console.error('Supabase query error:', error);
-    throw new Error('Could not load questions: ' + error.message);
-  }
-
-  if (!data || data.length === 0) {
-    throw new Error('No validated questions found for ' + config.subject);
-  }
-
-  // The main Maths diagnostic must not draw from the separate Geometry &
-  // Statistics pool (loadMathsPaper2Questions), which promises "no
-  // overlap" — it used to share about 9 of its 36 questions with it.
-  const pool = config.subject === 'Mathematics'
-    ? data.filter(q => q.specification_ref !== 'PAPER2_POOL_2026')
-    : data;
-
-  console.log(`Loaded ${pool.length} questions from Supabase`);
-  // Weighting also uses AQA — the content pool is AQA-sourced regardless
-  // of the board the student picked, so weighting against AQA's own
-  // real exam emphasis is the accurate choice here, not config.board.
-  const weights = buildTopicWeights(config.subject, 'AQA', [...new Set(pool.map(q => q.topic))]);
-  return weightedSampleAcrossTopics(pool, 36, weights);
-}
-
-// Combined Science (Trilogy): 15 questions from each of Physics, Chemistry
-// and Biology — equal thirds, matching how AQA/Edexcel Combined Science
-// actually weights the three sciences across its six exam papers. WITHIN
-// each subject's 15, topics are now weighted by real exam emphasis (see
-// weightedSampleAcrossTopics below), not spread flat — the three
-// subjects' questions are then interleaved so the assessment doesn't run
-// as three back-to-back blocks.
-//
-// Separate-science-only content (Space Physics, static electricity,
-// transformers, flame tests, percentage yield...) is marked
-// combined_eligible = false in the database (see
-// supabase/diagnostic_questions_combined_eligible.sql) and never drawn
-// here. A row without the column counts as eligible, so this page is safe
-// to deploy before or after that SQL runs.
-function isCombinedEligible(q) {
-  return q.combined_eligible !== false;
-}
-
-async function loadCombinedScienceQuestions() {
-  const { config }   = S;
-  const subjects     = ['Physics', 'Chemistry', 'Biology'];
-  const perSubject   = 15;
-
-  const perSubjectResults = await Promise.all(subjects.map(async (subject) => {
-    const { data, error } = await supa
-      .from('diagnostic_questions')
-      .select('*')
-      .eq('subject', subject)
-      .eq('level', config.level)
-      .eq('validated', true)
-      .eq('active', true)
-      .in('exam_board', ['AQA', 'Universal']) // see loadQuestionsFromSupabase's comment — funnel, not board-accurate
-      .in('tier', ['Higher', 'Both'])
-      .order('topic');
-
-    if (error) throw new Error('Could not load ' + subject + ' questions: ' + error.message);
-    if (!data || data.length === 0) throw new Error('No validated questions found for ' + subject + ' yet.');
-
-    const pool = data.filter(isCombinedEligible);
-    const weights = buildTopicWeights(subject, 'AQA', [...new Set(pool.map(q => q.topic))]);
-    return weightedSampleAcrossTopics(pool, perSubject, weights);
-  }));
-
-  const combined = perSubjectResults.flat();
-  console.log(`Loaded ${combined.length} Combined Science questions (Physics/Chemistry/Biology)`);
-  return shuffleArray(combined);
-}
-
-// "Maths — Paper 2": a second, deliberately separate Mathematics
-// diagnostic — same subject/level/tier as the main Maths diagnostic,
-// but drawn ONLY from the dedicated Paper 2 question bank
-// (specification_ref = 'PAPER2_POOL_2026' — see
-// diagnostic_questions_maths_paper2_seed.sql's header comment for why
-// specification_ref, not paper or source, is what identifies this pool:
-// paper alone also matches the general bank's Paper-2-topic questions,
-// and a source value distinct from 'ai_drafted' was tried first but
-// rejected live by a CHECK constraint that only allows values already
-// in use). That pool is exactly 4 questions x 8 Paper 2 topics = 32, no
-// more and no fewer, so this loads and shows all of them rather than
-// running them through weightedSampleAcrossTopics — the point of this
-// diagnostic is complete, even coverage of every Paper 2 topic, and a
-// weighted sampler could easily end up trimming some topics down given
-// how tight that 32-question pool already is.
-async function loadMathsPaper2Questions() {
-  const { config } = S;
-  const { data, error } = await supa
-    .from('diagnostic_questions')
-    .select('*')
-    .eq('subject', 'Mathematics')
-    .eq('level', config.level)
-    .eq('validated', true)
-    .eq('active', true)
-    .eq('specification_ref', 'PAPER2_POOL_2026')
-    .in('exam_board', ['AQA', 'Universal'])
-    .in('tier', ['Higher', 'Both'])
-    .order('topic');
-
-  if (error) {
-    console.error('Supabase query error:', error);
-    throw new Error('Could not load questions: ' + error.message);
-  }
-  if (!data || data.length === 0) {
-    throw new Error('No validated questions found for the Paper 2 diagnostic yet.');
-  }
-
-  console.log(`Loaded ${data.length} Maths Paper 2 questions from Supabase`);
-  return shuffleArray(data);
 }
 
 // What students see for a subject. "Mathematics — Paper 2" stays the stored
@@ -905,138 +795,6 @@ function shuffleArray(arr) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
-}
-
-// ═══════════════════════════════════════════════════════════
-// PHASE 3 — exam-representative topic weighting (2026-08-29)
-//
-// diagnostic_questions.topic is free text, admin-authored directly in
-// Supabase with no tracked schema and no other page in this codebase
-// cross-referencing it — there is no live-DB way to confirm its exact
-// naming convention against spec-map's topic names from here. Matching
-// below is therefore best-effort (normalized exact match, then a
-// substring fallback) and DEFENSIVE: a topic that doesn't match real
-// PASCO evidence still gets sampled at a baseline (median) weight,
-// never dropped or zeroed out — an unmatched topic is a data-quality
-// question worth checking, not a reason to narrow the diagnostic.
-// Mismatches are logged to the console (not shown to the student) so
-// this can actually be checked, and diagnostic_questions.topic values
-// aligned to spec-map names later if that turns out to help.
-// ═══════════════════════════════════════════════════════════
-
-function normTopic(s) {
-  return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-}
-
-// Builds { topicName -> weight } for a subject/board from real PASCO
-// evidence — weight = total real marks observed for that spec_slug
-// (sampleSize x avgMarks), a proxy for how much of a real exam paper
-// actually goes to this topic. Falls back to the median matched weight
-// for any topic with no calibration match.
-function buildTopicWeights(subject, board, topicNames) {
-  // spec-map.js nests everything under a 'gcse-uk' curriculum-system key
-  // (window.SPEC_MAP['gcse-uk'][subject][board] — see its own header
-  // comment and tests/shared-js.test.js). This lookup was missing that
-  // key, so it silently found nothing for every subject and always fell
-  // through to the baseline/median weight below — found while wiring up
-  // Mathematics diagnostics; fixing it restores real exam-topic weighting
-  // for Physics/Chemistry/Biology/Combined Science too, not just Maths.
-  const specTopics = (window.SPEC_MAP?.['gcse-uk']?.[subject]?.[board]) || [];
-  const slugByNormName = {};
-  specTopics.forEach(t => { slugByNormName[normTopic(t.name)] = t.slug; });
-
-  const stats = window.PASCO_CALIBRATION_STATS || {};
-  const weights = {};
-  const matchedWeights = [];
-  const unmatched = [];
-
-  for (const name of topicNames) {
-    const norm = normTopic(name);
-    let slug = slugByNormName[norm];
-    if (!slug) {
-      const hit = Object.keys(slugByNormName).find(k => k.includes(norm) || norm.includes(k));
-      if (hit) slug = slugByNormName[hit];
-    }
-    const stat = slug && stats[slug];
-    if (stat && stat.sampleSize) {
-      const w = stat.sampleSize * (stat.avgMarks || 1);
-      weights[name] = w;
-      matchedWeights.push(w);
-    } else {
-      unmatched.push(name);
-    }
-  }
-
-  const sortedMatched = [...matchedWeights].sort((a, b) => a - b);
-  const median = sortedMatched.length ? sortedMatched[Math.floor(sortedMatched.length / 2)] : 1;
-  for (const name of unmatched) weights[name] = median;
-
-  if (unmatched.length) {
-    console.log(`[Phase 3 topic weighting] ${unmatched.length}/${topicNames.length} topic(s) had no PASCO calibration match for ${subject}/${board}, using baseline weight:`, unmatched);
-  }
-
-  return weights;
-}
-
-// Allocates n questions across topics proportional to `weights` (largest-
-// remainder apportionment — exact integer allocations summing to n, not
-// naive rounding drift), respecting each topic's real available pool
-// size, and guaranteeing every topic with at least one real question
-// gets at least 1 slot so diagnostic breadth doesn't collapse just
-// because a topic is lightly weighted.
-function weightedSampleAcrossTopics(questions, n, weights) {
-  const byTopic = {};
-  questions.forEach(q => { (byTopic[q.topic] = byTopic[q.topic] || []).push(q); });
-  const topics = Object.keys(byTopic);
-  if (!topics.length) return [];
-
-  const totalWeight = topics.reduce((sum, t) => sum + (weights[t] || 1), 0);
-  const exact = {};
-  topics.forEach(t => { exact[t] = (n * (weights[t] || 1)) / totalWeight; });
-
-  const allocated = {};
-  let used = 0;
-  topics.forEach(t => {
-    const available = byTopic[t].length;
-    const base = Math.min(available, Math.max(available > 0 ? 1 : 0, Math.floor(exact[t])));
-    allocated[t] = base;
-    used += base;
-  });
-
-  // The one-per-topic floor can push the total past n when many topics are
-  // lightly weighted; take the excess back from the largest allocations.
-  while (used > n) {
-    const biggest = topics.filter(t => allocated[t] > 1).sort((a, b) => allocated[b] - allocated[a])[0];
-    if (!biggest) break;
-    allocated[biggest]--;
-    used--;
-  }
-
-  let remaining = n - used;
-  const byRemainder = topics
-    .map(t => ({ topic: t, remainder: exact[t] - Math.floor(exact[t]) }))
-    .sort((a, b) => b.remainder - a.remainder);
-  for (const r of byRemainder) {
-    if (remaining <= 0) break;
-    if (allocated[r.topic] < byTopic[r.topic].length) { allocated[r.topic]++; remaining--; }
-  }
-  // Heavily weighted topics can hit their pool size, leaving slots unused
-  // after one pass (Physics and Chemistry served 32 of 36). Keep handing
-  // leftover slots to topics that still have questions, largest weight
-  // first, until n is reached or every pool is used up.
-  const byWeight = topics.slice().sort((a, b) => (weights[b] || 1) - (weights[a] || 1));
-  while (remaining > 0) {
-    let placed = false;
-    for (const t of byWeight) {
-      if (remaining <= 0) break;
-      if (allocated[t] < byTopic[t].length) { allocated[t]++; remaining--; placed = true; }
-    }
-    if (!placed) break;
-  }
-
-  const result = [];
-  topics.forEach(t => { result.push(...shuffleArray(byTopic[t]).slice(0, allocated[t])); });
-  return shuffleArray(result);
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1100,18 +858,17 @@ function renderQuestion() {
     container.appendChild(btn);
   });
   IAMaths.typeset(container);
+  S.shownAt = performance.now();
 }
 
 function selectOption(key) {
   S.selectedOpt = key;
 
-  // Update visual state
   document.querySelectorAll('.mcq-option').forEach(btn => {
     btn.classList.remove('selected');
     if (btn.dataset.key === key) btn.classList.add('selected');
   });
 
-  // Enable next button
   const nextBtn = document.getElementById('btn-next');
   nextBtn.disabled = false;
   nextBtn.style.opacity = '1';
@@ -1122,7 +879,7 @@ function selectOption(key) {
 function nextQuestion() {
   if (!S.selectedOpt) return;
 
-  const q      = S.questions[S.currentQ];
+  const q = S.questions[S.currentQ];
   // Each question is answered exactly once, however the click arrives.
   if (S.answers.some(a => a.question_id === q.id)) return;
   const chosen = S.selectedOpt;
@@ -1132,109 +889,69 @@ function nextQuestion() {
     nextBtn.disabled = true;
     nextBtn.style.opacity = '.4';
   }
-  const correct = chosen === q.correct_answer;
-  const notSure = chosen === 'e';
 
-  // Record answer
-  S.answers.push({
-    question_id:  q.id,
-    subject:      q.subject,
-    topic:        q.topic,
-    subtopic:     q.subtopic,
-    difficulty:   q.difficulty,
-    chosen,
-    correct_answer: q.correct_answer,
-    correct:      correct,
-    not_sure:     notSure,
-    misconception: !correct && !notSure ? getMisconception(q, chosen) : null
-  });
-  autosaveAttempt(); // fire-and-forget — never blocks the quiz on a slow/failed write
+  const answer = { question_id: q.id, chosen, timeMs: Math.round(performance.now() - S.shownAt) };
+  S.answers.push(answer);
+  sendAnswer(answer); // in the background — never holds up the next question
 
   if (S.currentQ < S.questions.length - 1) {
     S.currentQ++;
     renderQuestion();
   } else {
-    // All answered — run diagnosis
     runDiagnosis();
   }
 }
 
-function getMisconception(q, chosen) {
-  const map = { a: q.misconception_a, b: q.misconception_b,
-                c: q.misconception_c, d: q.misconception_d };
-  return map[chosen] || null;
-}
-
-// Saves progress after every answered question as an in-progress
-// (completed:false) row, so a student who leaves mid-attempt (closes
-// the tab, hits Dashboard, loses connectivity) can pick back up later
-// via resumeAttempt() instead of losing everything. Guest attempts
-// (no login) are out of scope — same as the final saveAttempt(), see
-// its comment. Chained off S.autosaveChain rather than fired
-// independently each call: a slow write from an earlier question could
-// otherwise land AFTER a faster later one and clobber it with stale
-// answers.
-function autosaveAttempt() {
-  if (!S.studentId) return;
-  S.autosaveChain = S.autosaveChain.then(async () => {
-    try {
-      const payload = {
-        student_id:      S.studentId,
-        student_name:    S.config.name,
-        subject:         S.config.subject,
-        exam_board:      S.config.board,
-        level:           S.config.level,
-        tier:            'Higher',
-        total_questions: S.questions.length,
-        correct_count:   S.answers.filter(a => a.correct).length,
-        not_sure_count:  S.answers.filter(a => a.not_sure).length,
-        question_results:S.answers,
-        question_ids:    S.questions.map(q => q.id),
-        completed:       false
-      };
-      if (S.attemptId) {
-        const { error } = await supa.from('diagnostic_attempts').update(payload).eq('id', S.attemptId);
-        if (error) throw error;
-      } else {
-        const { data, error } = await supa.from('diagnostic_attempts').insert(payload).select('id').single();
-        if (error) throw error;
-        S.attemptId = data.id;
+// Records one answer on the server as soon as it's given (that's what lets a
+// signed-in student resume later, and what the per-question statistics are
+// built from). Sent one at a time, in order; one retry after a short wait. If
+// it still fails nothing is lost: submitting sends every answer again.
+function sendAnswer(answer) {
+  const payload = { sessionId: S.sessionId, token: S.token, questionId: answer.question_id, chosen: answer.chosen, timeMs: answer.timeMs };
+  S.answerChain = S.answerChain.then(async () => {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try { await api('session/answer', payload); return; }
+      catch(e) {
+        if (!e.retryable) return;
+        await new Promise(r => setTimeout(r, 1500));
       }
-    } catch(e) {
-      console.warn('Could not autosave attempt:', e.message);
     }
   });
 }
 
 // ═══════════════════════════════════════════════════════════
-// DIAGNOSE — self-contained, deterministic engine built from the question
-// bank's own curated content (per-answer misconceptions, topic tags) plus
-// board-specific grade-boundary tables. No AI call, no network dependency
-// beyond Supabase, no per-run cost, works offline.
+// DIAGNOSE — marked on the server (see _diagnostic-engine.js): real exam
+// boundaries, guess-corrected scoring, and topic verdicts that only claim
+// what the number of questions can support.
 // ═══════════════════════════════════════════════════════════
 async function runDiagnosis() {
   goTo('diagnose');
+  const content = document.getElementById('diagnose-content');
+  content.innerHTML = `<div class="card marking" role="status"><span class="spinner" aria-hidden="true"></span> Marking your answers…</div>`;
+  setSaveStatus(null);
 
-  const topicScores  = computeTopicScores();
-  const overallPct   = Math.round(
-    (S.answers.filter(a => a.correct).length / S.answers.length) * 100
-  );
-  const notSureCount = S.answers.filter(a => a.not_sure).length;
+  // Give queued answers a moment to land; the submit carries them all anyway.
+  await Promise.race([S.answerChain, new Promise(r => setTimeout(r, 6000))]);
 
-  S.diagnosis = computeDiagnosis(topicScores, overallPct, notSureCount);
-  S.diagnosis.topicScores    = topicScores;
-  S.diagnosis.overallScore   = overallPct;
-  S.diagnosis.notSureCount   = notSureCount;
-  S.diagnosis.totalQuestions = S.answers.length;
-
-  // Show the results straight away; saving happens behind them. On a slow
-  // connection the page used to sit blank until the save finished, and a
-  // failed save was never mentioned.
-  renderDiagnosis();
-  toast('Diagnosis complete!', 'success');
-  setSaveStatus('saving');
-  const saved = await saveAttempt();
-  setSaveStatus(saved === true ? 'saved' : saved === false ? 'failed' : null);
+  try {
+    const data = await api('session/submit', {
+      sessionId: S.sessionId, token: S.token,
+      answers: S.answers.map(a => ({ questionId: a.question_id, chosen: a.chosen, timeMs: a.timeMs }))
+    });
+    S.diagnosis = data.diagnosis;
+    S.review    = data.review;
+    S.attemptId = data.attemptId;
+    renderDiagnosis();
+    toast('Diagnosis complete!', 'success');
+    setSaveStatus(data.saved === true ? 'saved' : data.saved === false ? 'failed' : null);
+  } catch(e) {
+    content.innerHTML = `
+      <div class="card marking" role="alert">
+        <p style="margin-bottom:1rem;">${escHtmlText(e.message)}</p>
+        <p class="muted" style="font-size:.85rem;margin-bottom:1rem;">Your answers are safe on this page${S.studentId ? ' and saved to your account' : ''}.</p>
+        <button class="btn btn-gold" onclick="runDiagnosis()">Try again →</button>
+      </div>`;
+  }
 }
 
 function setSaveStatus(state) {
@@ -1242,458 +959,137 @@ function setSaveStatus(state) {
   if (!el) return;
   el.hidden = !state;
   el.className = 'save-status ' + (state || '');
-  el.textContent = state === 'saving' ? 'Saving your results…'
-    : state === 'saved' ? 'Saved to your account ✓'
-    : state === 'failed' ? "Couldn't save your results — check your connection. Your plan still works on this page, and you can download it."
+  el.textContent = state === 'saved' ? 'Saved to your account ✓'
+    : state === 'failed' ? "Couldn't save your results to your account. Your plan still works on this page, and you can download it."
     : '';
 }
 
-function computeTopicScores() {
-  // Keyed by subject+topic, not topic alone — Physics and Chemistry both
-  // have a topic literally called "Atomic Structure", and Combined Science
-  // mixes both in one run, so grouping by topic name alone would silently
-  // merge two unrelated subjects' scores into one.
-  const topics = {};
-  S.answers.forEach(a => {
-    const key = a.subject + '|' + a.topic;
-    if (!topics[key]) topics[key] = { subject: a.subject, topic: a.topic, correct:0, total:0, not_sure:0, misconceptions:[] };
-    topics[key].total++;
-    if (a.correct)      topics[key].correct++;
-    if (a.not_sure)     topics[key].not_sure++;
-    if (a.misconception) topics[key].misconceptions.push(a.misconception);
-  });
-  // Convert to array with score %
-  return Object.values(topics).map(d => ({
-    subject:      d.subject,
-    topic:        d.topic,
-    score:        Math.round((d.correct / d.total) * 100),
-    correct:      d.correct,
-    total:        d.total,
-    not_sure:     d.not_sure,
-    misconceptions: [...new Set(d.misconceptions)]
-  })).sort((a, b) => a.score - b.score); // worst first
-}
-
-// Real, published raw-mark grade boundaries — AQA "Subject grade
-// boundaries – June 2026 exams" and Edexcel "Grade Boundaries Edexcel
-// GCSE (9-1) June 2026" (both fetched directly from aqa.org.uk /
-// qualifications.pearson.com, cross-checked against a second visual
-// read of each source PDF before being typed in here — not
-// interpolated, not estimated). Replaces the old 3-point-anchored
-// interpolated curve this tool used before 2026-08-29.
-//
-// Higher tier only, matching this tool's current scope — S.diagnosis's
-// saved rows hardcode tier:'Higher' (see the save-attempt code below),
-// so Foundation-tier boundaries aren't wired up yet even though the
-// real data for them was sourced at the same time. Adding a tier
-// selector is a separate, future piece of work, not done here.
-//
-// Boundaries move every series — this table is a snapshot of the real
-// June 2026 series and will need refreshing after each results day,
-// same as any exam board's own published table would.
-const REAL_GRADE_BOUNDARIES = {
-  AQA: {
-    maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
-    // [grade, raw mark boundary], highest grade first, Higher tier (9 down to 3 — AQA doesn't report 2/1 at Higher)
-    Physics:     [[9,157],[8,142],[7,128],[6,107],[5,87],[4,67],[3,57]],
-    Chemistry:   [[9,155],[8,137],[7,120],[6,94],[5,68],[4,43],[3,30]],
-    Biology:     [[9,133],[8,120],[7,107],[6,88],[5,70],[4,52],[3,43]],
-    Mathematics: [[9,219],[8,192],[7,166],[6,131],[5,97],[4,63],[3,46]]
-  },
-  Edexcel: {
-    maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
-    Physics:     [[9,163],[8,148],[7,134],[6,113],[5,92],[4,71],[3,60]],
-    Chemistry:   [[9,165],[8,146],[7,127],[6,103],[5,79],[4,55],[3,43]],
-    Biology:     [[9,170],[8,158],[7,147],[6,126],[5,105],[4,84],[3,73]],
-    Mathematics: [[9,208],[8,177],[7,146],[6,114],[5,82],[4,50],[3,34]]
-  }
-};
-
-// Combined Science (Trilogy for AQA, Combined Science for Edexcel) is a
-// genuine double-award qualification, graded as a pair (e.g. "7-6"),
-// not a single 1-9 grade — real boundaries for every achievable pair,
-// Higher tier, ordered lowest to highest. Source: the same two grade-
-// boundary documents above, "GCSE Double Award" section.
-const REAL_COMBINED_BOUNDARIES = {
-  AQA: {
-    maxMark: 420,
-    pairs: [ // [gradeHigh, gradeLow, raw mark boundary], ascending
-      [4,3,101],[4,4,111],[5,4,130],[5,5,149],[6,5,168],[6,6,188],
-      [7,6,208],[7,7,228],[8,7,245],[8,8,262],[9,8,280],[9,9,298]
-    ]
-  },
-  Edexcel: {
-    maxMark: 360,
-    pairs: [
-      [4,3,99],[4,4,108],[5,4,126],[5,5,145],[6,5,164],[6,6,183],
-      [7,6,202],[7,7,221],[8,7,236],[8,8,251],[9,8,266],[9,9,282]
-    ]
-  }
-};
-
-// UK-only by construction: WAEC (Ghana/WASSCE) publishes no percentage grade
-// boundaries or raw marks, only post-moderation letter grades, so this
-// boundary-lookup approach has no WASSCE equivalent input data — a Ghana
-// grade estimate needs a structurally different (cohort-relative) approach,
-// not another entry in REAL_GRADE_BOUNDARIES.
-function estimateGrade(pct, board, subject) {
-  const boardData = REAL_GRADE_BOUNDARIES[board] || REAL_GRADE_BOUNDARIES.AQA;
-  const table = boardData[subject];
-  const maxMark = boardData.maxMark[subject];
-  if (!table || !maxMark) return estimateGradeFallback(pct, board); // safety net for an unmapped subject
-  for (const [grade, raw] of table) if (pct >= (raw / maxMark) * 100) return grade;
-  return 0; // below the grade 3 boundary — ungraded at Higher tier (a real Foundation resit signal, not modelled here yet)
-}
-
-// Only reached if a subject somehow isn't in REAL_GRADE_BOUNDARIES —
-// the old interpolated curve, kept purely as a safety net so an
-// unmapped subject degrades gracefully instead of throwing.
-function estimateGradeFallback(pct, board) {
-  const table = board === 'Edexcel'
-    ? [[9,82],[8,75],[7,69],[6,62],[5,52],[4,42],[3,28],[2,15],[1,5]]
-    : [[9,85],[8,78],[7,72],[6,65],[5,55],[4,45],[3,30],[2,15],[1,5]];
-  for (const [grade, threshold] of table) if (pct >= threshold) return grade;
-  return 0;
-}
-
-function gradeLabel(n) { return n <= 0 ? 'U' : String(n); }
-
-// Subject/board-specific common-weakness notes — the same knowledge the
-// old AI system prompt carried, now used directly rather than paraphrased
-// through an LLM.
-const SUBJECT_NOTES = {
-  AQA: {
-    Chemistry: 'a common AQA Chemistry weak spot — moles and quantitative calculations catch most students out here',
-    Biology:   'a common AQA Biology weak spot — required-practical recall is often the gap',
-    Physics:   'a common AQA Physics weak spot — wave equation and transformer calculations catch most students out here'
-  },
-  Edexcel: {
-    Chemistry: 'a common Edexcel Chemistry weak spot — ionic equations are the usual sticking point',
-    Biology:   'a common Edexcel Biology weak spot — evaluating evidence is the usual sticking point',
-    Physics:   'a common Edexcel Physics weak spot — resolving vectors and moments trip most students up'
-  }
-};
-
-// Combined Science double-award, now against the real published pair
-// boundaries in REAL_COMBINED_BOUNDARIES — replaces the old
-// doubleAward() approximation, which always paired a grade with itself
-// (e.g. "7-7") because it had no real data to back an uneven split.
-// Real boundaries can and do produce uneven pairs (e.g. "8-7"), which
-// is genuinely how AQA/Edexcel award Combined Science, not an
-// approximation this version is making.
-function combinedPairIndex(pct, board) {
-  const data = REAL_COMBINED_BOUNDARIES[board] || REAL_COMBINED_BOUNDARIES.AQA;
-  const { pairs, maxMark } = data;
-  for (let i = pairs.length - 1; i >= 0; i--) {
-    if (pct >= (pairs[i][2] / maxMark) * 100) return i;
-  }
-  return -1; // below the lowest pair boundary — ungraded at Higher tier
-}
-function combinedPairLabel(index, board) {
-  if (index < 0) return 'U-U';
-  const data = REAL_COMBINED_BOUNDARIES[board] || REAL_COMBINED_BOUNDARIES.AQA;
-  const [high, low] = data.pairs[index];
-  return `${high}-${low}`;
-}
-
-// ═══════════════════════════════════════════════════════════
-// PHASE 5 — confidence-aware output (2026-08-29)
-//
-// A bare "Grade 6" from a 36-question sample overclaims precision the
-// sample doesn't have — the same statistical fact behind why FFT
-// Aspire/ALPS/CEM show a likely range, not a single number. This
-// computes a real one: a Wilson score interval on the raw
-// correct/total count (the standard way to bound a binomial
-// proportion's uncertainty for a finite sample — not a guessed fudge
-// factor), then translates that score range into a grade range using
-// Phase 1's real boundaries, the same way a bare score gets translated
-// to a bare grade elsewhere in this file.
-//
-// Confidence level chosen: 80%, not the more familiar 95%. Documented
-// reasoning, not arbitrary: at n=36 a 95% interval is wide enough to
-// span 3+ grades for many real scores, which would be technically
-// correct but nearly useless as a "likely range" a student or teacher
-// can act on. 80% keeps the range meaningfully tighter while still
-// being an honest, real statistical statement — worth revisiting once
-// Phase 6 has real outcome data to check calibration against, per
-// Phase 0.2's "claims are a live decision, not a one-time gate."
-function wilsonInterval(correct, total, z) {
-  if (!total) return null;
-  const p = correct / total;
-  const denom = 1 + (z * z) / total;
-  const center = (p + (z * z) / (2 * total)) / denom;
-  const margin = (z * Math.sqrt((p * (1 - p)) / total + (z * z) / (4 * total * total))) / denom;
-  return { lower: Math.max(0, center - margin), upper: Math.min(1, center + margin) };
-}
-
-const CONFIDENCE_Z_80 = 1.2816; // z-score for an 80% two-sided interval
-
-function confidenceRangeForScore(correct, total, board, subject, isCombined) {
-  const interval = wilsonInterval(correct, total, CONFIDENCE_Z_80);
-  if (!interval) return null;
-  const lowerPct = interval.lower * 100;
-  const upperPct = interval.upper * 100;
-
-  if (isCombined) {
-    const lowIdx  = combinedPairIndex(lowerPct, board);
-    const highIdx = combinedPairIndex(upperPct, board);
-    return { lowGrade: combinedPairLabel(lowIdx, board), highGrade: combinedPairLabel(highIdx, board), lowerPct, upperPct };
-  }
-  const lowNum  = estimateGrade(lowerPct, board, subject);
-  const highNum = estimateGrade(upperPct, board, subject);
-  return { lowGrade: gradeLabel(lowNum), highGrade: gradeLabel(highNum), lowerPct, upperPct };
-}
-
 // Brand aspiration ceiling — always Grade 9 (9-9 for Combined Science's
-// double award), shown as a separate figure from the realistic near-term
-// target computed in computeDiagnosis(). Never conflate the two:
-// "mastery, not time" means the near-term target must stay honest about
-// what a 3-6 week plan can actually deliver.
-// Profile words shown to students and parents. The internal values stay as
-// they are (teachers see them in their console), but a child is never told
-// they are 'STRUGGLING'.
-const PROFILE_LABELS = { struggling: 'Building foundations', developing: 'Developing', secure: 'Secure', strong: 'Strong' };
-function profileLabel(p) { return PROFILE_LABELS[p] || 'Developing'; }
-
+// double award), shown apart from the realistic next target. Never
+// conflate the two: "mastery, not time" means the near-term target must
+// stay honest about what a few weeks can deliver.
 function aspirationGrade(isCombined) {
   return isCombined ? '9-9' : '9';
 }
 
-function computeDiagnosis(topicScores, overallPct, notSureCount) {
-  const { subject, board } = S.config;
-  // 'Mathematics — Paper 2' is a display/tracking-only label (keeps its
-  // saved-plan and diagnostic_attempts rows separate from the main Maths
-  // diagnostic — see pickSubject's Paper 2 button). Grading always uses
-  // the real 'Mathematics' boundaries/notes: Paper 2 is a subset of the
-  // same GCSE Mathematics qualification, not a separately-boundaried exam.
-  const gradingSubject = subject === 'Mathematics — Paper 2' ? 'Mathematics' : subject;
-  const total = S.answers.length;
-  const correctCount = S.answers.filter(a => a.correct).length;
-  const isCombined = subject === 'Combined Science';
-
-  // Guess-corrected score for the grade: each wrong answer costs a third of
-  // a mark, so blind guessing on 4-option questions averages zero, while
-  // "Not sure" costs nothing. Without this, random clicking reached grade 4
-  // in up to 71% of tries in some subjects. A student who knows the answers
-  // loses nothing; the raw percentage is still what's shown as "Scored".
-  const wrongCount   = S.answers.filter(a => !a.correct && !a.not_sure).length;
-  const effective    = Math.max(0, correctCount - wrongCount / 3);
-  const gradedPct    = total ? Math.round((effective / total) * 100) : 0;
-
-  let currentGrade, targetGrade;
-  if (isCombined) {
-    const currentIdx = combinedPairIndex(gradedPct, board);
-    // Same AQA-fallback pattern as combinedPairIndex/combinedPairLabel just
-    // above — NOT `REAL_COMBINED_BOUNDARIES[board]?.pairs.length - 1 ?? 11`,
-    // which looked like a safe fallback but wasn't: for an unmapped board
-    // (OCR/WJEC), the optional chain evaluates to `undefined`, then
-    // `undefined - 1` is `NaN` *before* `??` ever sees it — `??` only
-    // catches null/undefined, not NaN, so maxIdx silently became NaN and
-    // crashed combinedPairLabel downstream. Found live 2026-09-08 testing
-    // Combined Science + OCR/WJEC end to end, right after those boards
-    // were re-enabled.
-    const maxIdx     = (REAL_COMBINED_BOUNDARIES[board] || REAL_COMBINED_BOUNDARIES.AQA).pairs.length - 1;
-    const targetIdx  = Math.min(maxIdx, currentIdx + 2);
-    currentGrade = combinedPairLabel(currentIdx, board);
-    targetGrade  = combinedPairLabel(targetIdx, board);
-  } else {
-    const currentGradeNum = estimateGrade(gradedPct, board, gradingSubject);
-    // Next target: two grades up, but never below 4 — Higher tier doesn't
-    // award 1 or 2, so "U → target 2" was a target that can't be awarded.
-    const targetGradeNum  = Math.min(9, Math.max(4, currentGradeNum + 2));
-    currentGrade = gradeLabel(currentGradeNum);
-    targetGrade  = gradeLabel(targetGradeNum);
-  }
-
-  // Phase 5 (grade-accuracy roadmap): a calibrated confidence range, not
-  // just a bare point-estimate grade — the same convention real
-  // target-setting systems (FFT Aspire, ALPS, CEM/ALIS) use, and for the
-  // same reason: a single number presented as fact overclaims precision
-  // a 36-question sample genuinely doesn't have. See
-  // confidenceRangeForScore() below for the real statistics behind it
-  // (a Wilson score interval on the raw correct/total count, translated
-  // to a grade range via Phase 1's real boundaries) — not a guessed
-  // fudge factor.
-  const confidence = confidenceRangeForScore(Math.round(effective), total, board, gradingSubject, isCombined);
-
-  const studentProfile =
-    gradedPct < 40 ? 'struggling' :
-    gradedPct < 60 ? 'developing' :
-    gradedPct < 80 ? 'secure' : 'strong';
-
-  const rangeNote = confidence && confidence.lowGrade !== confidence.highGrade
-    ? ` (likely range ${confidence.lowGrade}–${confidence.highGrade}, based on this being a ${total}-question sample)`
-    : '';
-  const guessNote = overallPct - gradedPct >= 3
-    ? ` The grade uses ${gradedPct}%, which allows for answers that were probably lucky guesses — "Not sure" is always the better choice when you don't know.`
-    : '';
-
-  const profileDescription = (isCombined
-    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award${rangeNote} on real ${board} Combined Science June 2026 boundaries. Next target: ${targetGrade}.`
-    : `Scored ${overallPct}% overall — around Grade ${currentGrade}${rangeNote} on real ${board} ${gradingSubject} June 2026 boundaries, ` +
-      `next target: Grade ${targetGrade}.`) + guessNote;
-
-  const gaps = topicScores
-    .filter(t => t.score < 80)
-    .map(t => {
-      const priority =
-        t.score < 40 ? 'critical' :
-        t.score < 55 ? 'high' :
-        t.score < 70 ? 'medium' : 'low';
-
-      const heavyNotSure = t.not_sure >= Math.ceil(t.total / 2);
-      const approach =
-        heavyNotSure                ? 'reteach_from_scratch' :
-        t.misconceptions.length > 0 ? 'fix_misconception' :
-        t.score < 55                ? 'reteach_from_scratch' : 'consolidate';
-
-      let reason;
-      if (heavyNotSure) {
-        reason = `${t.not_sure} of ${t.total} questions marked "Not sure" — this topic likely hasn't been covered yet, or needs a first proper pass.`;
-      } else if (t.misconceptions.length > 0) {
-        reason = t.misconceptions.slice(0, 2).join(' ');
-      } else {
-        reason = `Scored ${t.score}% (${t.correct}/${t.total}) — partial understanding, not yet secure enough for exam conditions.`;
-      }
-      // Use the gap's own originating subject (t.subject), not S.config.subject —
-      // for Combined Science, config.subject is "Combined Science" itself, which
-      // isn't in SUBJECT_NOTES; each gap's real subject (Physics/Chemistry/Biology)
-      // always is. This also means single-subject mode is unaffected, since there
-      // t.subject and config.subject are always the same value.
-      const subjectNote = SUBJECT_NOTES[board]?.[t.subject];
-      if (subjectNote && t.score < 55) reason += ` This is ${subjectNote}.`;
-
-      return { subject: t.subject, topic: t.topic, score: t.score, priority, reason, approach };
-    })
-    .sort((a, b) => ({critical:0,high:1,medium:2,low:3}[a.priority]) - ({critical:0,high:1,medium:2,low:3}[b.priority]));
-
-  const strengths = topicScores.filter(t => t.score >= 80).map(t => ({ subject: t.subject, topic: t.topic }));
-
-  const notSurePct = Math.round((notSureCount / total) * 100);
-  const teacherNoteParts = [];
-  if (notSurePct >= 30) {
-    teacherNoteParts.push(`${notSurePct}% of answers were "Not sure" — worth checking whether this reflects genuine content gaps or exam anxiety.`);
-  }
-  const repeatedMisconceptionTopics = topicScores.filter(t => t.misconceptions.length >= 2).map(t => t.topic);
-  if (repeatedMisconceptionTopics.length) {
-    teacherNoteParts.push(`Persistent, repeated misconceptions in: ${repeatedMisconceptionTopics.join(', ')}.`);
-  }
-  if (isCombined) {
-    const bySubject = {};
-    topicScores.forEach(t => {
-      if (!bySubject[t.subject]) bySubject[t.subject] = { correct: 0, total: 0 };
-      bySubject[t.subject].correct += t.correct;
-      bySubject[t.subject].total   += t.total;
-    });
-    const subjectPcts = Object.entries(bySubject).map(([s, d]) => ({ subject: s, pct: Math.round((d.correct / d.total) * 100) }));
-    const weakest   = [...subjectPcts].sort((a, b) => a.pct - b.pct)[0];
-    const strongest = [...subjectPcts].sort((a, b) => b.pct - a.pct)[0];
-    if (weakest && strongest && strongest.subject !== weakest.subject && strongest.pct - weakest.pct >= 20) {
-      teacherNoteParts.push(`Notable imbalance across the three sciences: ${weakest.subject} (${weakest.pct}%) is well behind ${strongest.subject} (${strongest.pct}%) — worth checking whether study time is being split evenly across all three.`);
-    }
-  }
-  const teacherNote = teacherNoteParts.length
-    ? teacherNoteParts.join(' ')
-    : 'No major red flags — steady, targeted practice on the gaps above should be enough.';
-
-  return { currentGrade, targetGrade, studentProfile, profileDescription, gaps, strengths, teacherNote, confidence };
-}
+const EVIDENCE_NOTE = {
+  firm:  n => `Based on ${n} questions`,
+  early: n => `Early signal — only ${n} questions on this topic`
+};
 
 function renderDiagnosis() {
   const d  = S.diagnosis;
   const sc = d.overallScore;
   const scColor = sc >= 70 ? 'var(--good)' : sc >= 50 ? 'var(--gold-text)' : 'var(--bad)';
-  const notSurePct = Math.round((d.notSureCount / S.answers.length) * 100);
+  const total = d.totalQuestions || S.answers.length || 0;
+  const notSurePct = total ? Math.round((d.notSureCount / total) * 100) : 0;
   // Combined Science mixes topics from 3 subjects, some sharing the same
   // topic name (e.g. "Atomic Structure" in both Physics and Chemistry) —
   // prefix with the subject so they're never ambiguous on screen.
   const isCombined = S.config.subject === 'Combined Science';
-  const topicLabel = t => isCombined ? `${t.subject} — ${t.topic}` : t.topic;
+  const topicLabel = t => escHtmlText(isCombined ? `${t.subject} — ${t.topic}` : t.topic);
+  const range = d.confidence && d.confidence.lowGrade !== d.confidence.highGrade ? d.confidence : null;
+  // Below the Higher-tier grade 3 boundary ("U", or "U-U" for Combined).
+  const ungraded = /^U(-U)?$/.test(String(d.currentGrade));
+  const strengths = d.strengths || [];
+  const gaps = d.gaps || [];
+  const checks = d.checks || [];
 
-  const profileColors = {
-    struggling: 'var(--bad)', developing: 'var(--gold-text)',
-    secure: 'var(--teal-text)', strong: 'var(--good)'
-  };
-  const profileColor = profileColors[d.studentProfile] || 'var(--gold-text)';
-
+  // 1. Where you are — the range written out, not hidden in a tooltip.
   let html = `
-    <div class="card" style="text-align:center;margin-bottom:1.25rem;">
-      <div style="font-size:3.5rem;font-weight:800;color:${scColor};font-family:var(--font-display);line-height:1;">${sc}%</div>
-      <div style="margin-top:.5rem;font-size:1rem;">
-        Current grade: <strong>${d.currentGrade}</strong> &nbsp;→&nbsp;
-        Target: <strong style="color:var(--teal);">${d.targetGrade}</strong>
+    <div class="card result-head">
+      <div class="result-score" style="color:${scColor};">${sc}%</div>
+      <div class="result-grade">
+        ${ungraded
+          ? `Not yet at a Higher-tier grade${range ? `, but could be up to <strong>${escHtmlText(range.highGrade)}</strong>` : ''}`
+          : `${isCombined ? 'Around' : 'Around Grade'} <strong>${escHtmlText(d.currentGrade)}</strong>${range ? `, likely somewhere between <strong>${escHtmlText(range.lowGrade)}</strong> and <strong>${escHtmlText(range.highGrade)}</strong>` : ''}`}
       </div>
-      ${d.confidence && d.confidence.lowGrade !== d.confidence.highGrade ? `
-      <div style="margin-top:.25rem;font-size:.78rem;color:var(--muted);">
-        Likely range: ${d.confidence.lowGrade}–${d.confidence.highGrade}
-        <span title="A ${S.answers.length}-question sample can't pin down a grade exactly — this is the honest range, not a hedge.">ⓘ</span>
-      </div>` : ''}
-      <div style="margin-top:.35rem;font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.02em;">
-        🎯 Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}
-      </div>
-      <div style="margin-top:.75rem;display:inline-block;padding:.35rem 1rem;border-radius:20px;background:${profileColor}22;color:${profileColor};font-weight:700;font-size:.85rem;">
-        ${profileLabel(d.studentProfile)}
-      </div>
-      <p style="margin-top:.75rem;color:var(--muted);font-size:.9rem;">${d.profileDescription || ''}</p>
-      ${notSurePct >= 30 ? `
-      <div style="margin-top:1rem;padding:.75rem;background:rgba(212,160,23,.1);border-radius:var(--r);border:1px solid rgba(212,160,23,.3);">
-        <span style="color:var(--gold);font-size:.85rem;">⚠ ${notSurePct}% of questions answered "Not sure" — your study plan will focus on building foundational knowledge.</span>
-      </div>` : ''}
+      ${range ? `<p class="result-note">A ${total}-question test can't pin a grade down exactly, so this is the honest range rather than a single number.</p>` : ''}
+      <div class="result-target">Next target: <strong>${escHtmlText(d.targetGrade)}</strong> <span class="muted">· Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}</span></div>
+      ${notSurePct >= 30 ? `<p class="result-note" style="color:var(--gold-text);">You chose "Not sure" on ${notSurePct}% of questions — honest answers, and they show exactly where to start. Your plan begins with the foundations.</p>` : ''}
     </div>`;
 
-  // Topic breakdown
-  if (d.topicScores && d.topicScores.length > 0) {
-    html += `<div class="card" style="margin-bottom:1.25rem;">
-      <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Topic Breakdown</h3>`;
-    d.topicScores.forEach(t => {
+  // 2. What's already secure — lead with it.
+  html += `<div class="card result-block">
+    <h3 class="result-h">What you've got secure</h3>`;
+  html += strengths.length
+    ? `<ul class="secure-list">${strengths.map(s => `<li><span aria-hidden="true">✓</span> ${topicLabel(s)}${s.total ? ` <span class="muted">(${s.correct}/${s.total})</span>` : ''}</li>`).join('')}</ul>`
+    : `<p class="muted" style="font-size:.9rem;">No topic is fully secure yet${(d.topicScores || []).some(t => t.score >= 80) ? ' with enough questions to be sure' : ''} — that's exactly what your plan is for.</p>`;
+  html += `</div>`;
+
+  // 3. Your next 3 wins — the highest-value gaps first.
+  const wins = gaps.slice(0, 3);
+  if (wins.length) {
+    const approachLabel = {
+      reteach_from_scratch: 'Learn it properly from the start',
+      fix_misconception:    'Fix a specific misunderstanding',
+      consolidate:          'Practise until it sticks',
+      extend:               'Ready to stretch further'
+    };
+    html += `<div class="card result-block">
+      <h3 class="result-h">Your next ${wins.length === 1 ? 'win' : wins.length + ' wins'}</h3>
+      <p class="muted" style="font-size:.85rem;margin-bottom:1rem;">Chosen for how much they're worth in the real exam and how much there is to gain.</p>`;
+    wins.forEach((g, i) => {
+      const note = g.total && EVIDENCE_NOTE[g.evidence] ? EVIDENCE_NOTE[g.evidence](g.total) : '';
+      html += `
+        <div class="win-card">
+          <div class="win-num" aria-hidden="true">${i + 1}</div>
+          <div>
+            <div class="win-topic">${topicLabel(g)}${g.total ? ` <span class="muted">· ${g.correct}/${g.total} right</span>` : ''}</div>
+            <div class="win-how">${approachLabel[g.approach] || ''}</div>
+            <p class="win-why">${IAMaths.html(g.reason)}</p>
+            ${note ? `<div class="evidence-tag">${note}</div>` : ''}
+          </div>
+        </div>`;
+    });
+    if (gaps.length > 3) {
+      html += `<p class="muted" style="font-size:.82rem;margin-top:.5rem;">Also to work on after these: ${gaps.slice(3).map(topicLabel).join(', ')}.</p>`;
+    }
+    html += `</div>`;
+  }
+
+  // 4. Worth a quick check — too few questions to call a gap.
+  if (checks.length) {
+    const shown = checks.slice(0, 5);
+    html += `<div class="card result-block">
+      <h3 class="result-h">Worth a quick check</h3>
+      <p class="muted" style="font-size:.85rem;margin-bottom:.75rem;">You missed something here, but this test had too few questions on these topics to call them gaps. A quick look will tell you.</p>
+      <ul class="check-list">${shown.map(c => `<li>${topicLabel(c)} <span class="muted">(${c.correct}/${c.total})</span></li>`).join('')}</ul>
+      ${checks.length > shown.length ? `<p class="muted" style="font-size:.8rem;margin-top:.4rem;">and ${checks.length - shown.length} more in the topic breakdown below.</p>` : ''}
+    </div>`;
+  }
+
+  // 5. Every topic, folded away.
+  if (d.topicScores && d.topicScores.length) {
+    html += `<details class="card result-block topic-details">
+      <summary class="result-h">Every topic</summary>
+      <div style="margin-top:1rem;">`;
+    [...d.topicScores].sort((a, b) => b.score - a.score).forEach(t => {
       const color = t.score >= 75 ? 'var(--good)' : t.score >= 50 ? 'var(--gold-text)' : 'var(--bad)';
-      const barW  = t.score + '%';
       html += `
-        <div style="margin-bottom:.85rem;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;">
-            <span style="font-size:.85rem;font-weight:600;">${topicLabel(t)}</span>
-            <span style="font-size:.82rem;color:${color};font-weight:700;">${t.score}%</span>
+        <div class="topic-row">
+          <div class="topic-row-head">
+            <span>${topicLabel(t)}</span>
+            <span style="color:${color};font-weight:700;">${t.total ? `${t.correct}/${t.total}` : t.score + '%'}</span>
           </div>
-          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
-            <div style="height:100%;width:${barW};background:${color};border-radius:3px;transition:width .6s ease;"></div>
-          </div>
-          ${t.not_sure > 0 ? `<div style="font-size:.75rem;color:var(--muted);margin-top:.2rem;">${t.not_sure} "Not sure" response${t.not_sure > 1 ? 's' : ''}</div>` : ''}
+          <div class="topic-bar" role="img" aria-label="${escHtmlText(t.topic)}: ${t.score}%"><div style="width:${t.score}%;background:${color};"></div></div>
         </div>`;
     });
-    html += `</div>`;
+    html += `</div></details>`;
   }
 
-  // Gaps
-  if (d.gaps && d.gaps.length > 0) {
-    html += `<div class="card" style="margin-bottom:1.25rem;">
-      <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Priority Knowledge Gaps</h3>`;
-    d.gaps.forEach(g => {
-      const pColors = { critical:'var(--bad)', high:'var(--orange)', medium:'var(--gold-text)', low:'var(--good)' };
-      const pc = pColors[g.priority] || 'var(--gold-text)';
-      const approachIcons = {
-        reteach_from_scratch: '📚 Needs full re-teaching',
-        fix_misconception:    '🔧 Misconception to correct',
-        consolidate:          '🔄 Needs consolidation',
-        extend:               '⬆ Ready to extend'
-      };
-      html += `
-        <div class="gap-card ${g.priority}" style="margin-bottom:.75rem;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
-            <strong style="font-size:.95rem;">${topicLabel(g)}</strong>
-            <span class="badge badge-${g.priority==='critical'?'red':g.priority==='high'?'orange':g.priority==='medium'?'gold':'green'}">${g.priority}</span>
-          </div>
-          <p style="font-size:.85rem;color:var(--muted);margin-bottom:.4rem;">${IAMaths.html(g.reason)}</p>
-          <span style="font-size:.78rem;color:${pc};">${approachIcons[g.approach] || ''}</span>
-        </div>`;
-    });
-    html += `</div>`;
-  }
-
-  // Strengths
-  if (d.strengths && d.strengths.length > 0) {
-    html += `<div class="card" style="margin-bottom:1.25rem;">
-      <h3 style="font-size:1rem;font-weight:700;margin-bottom:.75rem;">✓ Strengths</h3>
-      ${d.strengths.map(s => `<div style="font-size:.88rem;color:var(--good);margin-bottom:.3rem;">✓ ${topicLabel(s)}</div>`).join('')}
+  // 6. Go through the answers.
+  if (S.review && S.review.length) {
+    const toLook = S.review.filter(r => !r.correct).length;
+    html += `<div class="card result-block">
+      <h3 class="result-h">Review your answers</h3>
+      <p class="muted" style="font-size:.85rem;margin-bottom:1rem;">See the right answer, why a wrong one was tempting, and how to work it out${toLook ? ` — ${toLook} question${toLook === 1 ? '' : 's'} worth a look` : ''}.</p>
+      <div class="review-filters" role="group" aria-label="Which answers to show">
+        <button class="btn btn-outline review-filter" aria-pressed="true" data-filter="missed" onclick="renderReview('missed')">Wrong or not sure</button>
+        <button class="btn btn-outline review-filter" aria-pressed="false" data-filter="all" onclick="renderReview('all')">All ${S.review.length}</button>
+      </div>
+      <div id="review-list" hidden></div>
+      <button class="btn btn-outline" id="review-open" style="width:100%;margin-top:.75rem;" onclick="renderReview('missed')">Show my answers ↓</button>
     </div>`;
   }
 
@@ -1706,9 +1102,52 @@ function renderDiagnosis() {
   IAMaths.typeset(diagnoseContent);
 }
 
+// The answer review: each question as it was asked, the student's choice,
+// the right answer, why their wrong choice was tempting, and the method.
+// Built only when opened — it's the heaviest part of the page.
+function renderReview(filter) {
+  const list = document.getElementById('review-list');
+  if (!list || !S.review) return;
+  document.querySelectorAll('.review-filter').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.filter === filter)));
+  const openBtn = document.getElementById('review-open');
+  if (openBtn) openBtn.hidden = true;
+
+  const items = filter === 'all' ? S.review : S.review.filter(r => !r.correct);
+  if (!items.length) {
+    list.innerHTML = `<p class="muted">Every answer was right — nothing to review.</p>`;
+    list.hidden = false;
+    return;
+  }
+  const letter = { a: 'A', b: 'B', c: 'C', d: 'D' };
+  list.innerHTML = items.map(r => {
+    const status = r.correct ? 'right' : r.not_sure ? 'unsure' : 'wrong';
+    const statusText = r.correct ? 'You got this right' : r.not_sure ? 'You chose "Not sure"' : 'Not quite';
+    const opts = ['a', 'b', 'c', 'd'].map(k => {
+      const cls = k === r.correct_answer ? 'is-key' : k === r.chosen ? 'is-chosen' : '';
+      const tag = k === r.correct_answer ? '<span class="opt-tag">Right answer</span>' : k === r.chosen ? '<span class="opt-tag">Your answer</span>' : '';
+      return `<li class="review-opt ${cls}"><span class="opt-label" aria-hidden="true">${letter[k]}</span><span>${IAMaths.html(r['option_' + k])} ${tag}</span></li>`;
+    }).join('');
+    return `
+      <article class="review-item ${status}" aria-labelledby="rv-${r.id}">
+        <div class="review-meta"><span>Question ${r.position} · ${escHtmlText(r.topic)}</span><span class="review-status">${statusText}</span></div>
+        <p class="review-q" id="rv-${r.id}">${IAMaths.html(r.question_text)}</p>
+        ${r.diagram_spec ? `<div class="review-diagram" data-review-diagram="${r.id}"></div>` : ''}
+        <ul class="review-opts">${opts}</ul>
+        ${!r.correct && !r.not_sure && r.misconception ? `<p class="review-why"><strong>Why ${letter[r.chosen]} is tempting:</strong> ${IAMaths.html(r.misconception)}</p>` : ''}
+        ${r.explanation ? `<p class="review-method"><strong>How to work it out:</strong> ${IAMaths.html(r.explanation)}</p>` : ''}
+      </article>`;
+  }).join('');
+  list.hidden = false;
+  items.forEach(r => {
+    const slot = r.diagram_spec && list.querySelector(`[data-review-diagram="${r.id}"]`);
+    if (slot) renderDiagram(slot, r.diagram_spec);
+  });
+  IAMaths.typeset(list);
+}
+
 // ═══════════════════════════════════════════════════════════
 // PLAN — deterministic, gap-ordered, built directly from the diagnosis.
-// Struggling profiles get a longer 6-week ramp; everyone else gets 3.
+// A student building foundations gets a longer 6-week ramp; everyone else 3.
 // ═══════════════════════════════════════════════════════════
 
 // Maps a diagnostic gap's free-text topic (diagnostic_questions.topic)
@@ -1761,19 +1200,11 @@ const GAP_TOPIC_TO_CONTENT_TOPIC_ID = {
 
 // Looks up whatever REAL, published lesson/quizzes exist for every
 // week's gap in ONE batched round-trip pair, not one pair of queries
-// per week. This is the fix for the Plan stage previously generating
-// template strings ("Watch: {topic} — Core Concept Overview") with no
-// actual content behind them (found 2026-09-15 competitive research —
-// every real competitor routes a diagnosed gap into real, trackable
-// practice; we were handing students a to-do list of placeholders) —
-// AND for a real latency bug found while shipping that fix: a
-// one-query-pair-per-week version measured 1.1s for a 6-week plan.
-// Parallelizing client-side didn't help (still ~1.2s — the cost is
-// fixed per-request overhead, not something client concurrency can
-// route around); batching into two `.in(topicId)` queries measured
-// 77-115ms regardless of week count. Returns a Map from topicId to
-// {lesson, quizzes} — callers fall back to an honest "coming soon"
-// task for any topic with nothing real, never a fabricated link.
+// per week (a one-pair-per-week version measured 1.1s for a 6-week plan;
+// batching into two `.in(topicId)` queries measured 77-115ms). Returns a
+// Map from topicId to {lesson, quizzes} — callers fall back to an honest
+// "coming soon" task for any topic with nothing real, never a fabricated
+// link.
 async function findContentForGaps(subjectTopicPairs) {
   const topicIds = [...new Set(
     subjectTopicPairs
@@ -1805,31 +1236,28 @@ async function findContentForGaps(subjectTopicPairs) {
 async function runPlan() {
   goTo('plan');
   const planEl = document.getElementById('plan-content');
-  if (planEl) planEl.innerHTML = '<div class="muted" style="padding:2rem 0;text-align:center;"><span class="spinner"></span> Building your plan…</div>';
+  if (planEl) planEl.innerHTML = '<div class="muted" style="padding:2rem 0;text-align:center;" role="status"><span class="spinner" aria-hidden="true"></span> Building your plan…</div>';
   S.plan = await computePlan();
-  // Show the plan first; save behind it (see runDiagnosis).
+  // Show the plan first; save behind it.
   renderPlan();
   toast('Study plan ready!', 'success');
-  await savePlanToAttempt();
-  await saveGuestAttempt();
+  await savePlan();
 }
 
 async function computePlan() {
   const d        = S.diagnosis;
   const profile  = d.studentProfile || 'developing';
   const numWeeks = profile === 'struggling' ? 6 : 3;
-  const gaps     = (d.gaps && d.gaps.length) ? d.gaps : [{ topic: 'General revision', priority: 'medium' }];
+  // Firm gaps first, then the "worth a check" topics; general revision only
+  // if there's genuinely nothing to target.
+  const targets  = [...(d.gaps || []), ...(d.checks || []).map(c => ({ ...c, priority: 'check' }))];
+  const gaps     = targets.length ? targets : [{ topic: 'General revision', priority: 'medium' }];
   const isCombined = S.config.subject === 'Combined Science';
 
   const phaseFor = (i, n) => i < n/3 ? 'Foundation' : i < 2*n/3 ? 'Skill Development' : 'Exam Technique';
 
-  const currentNum = parseInt(d.currentGrade, 10) || 0;
-  const targetNum  = parseInt(d.targetGrade, 10)  || Math.min(9, currentNum + 2);
-
-  // One gap per week (repeating if there are fewer gaps than weeks) —
-  // resolved as a single batch, not one round-trip per week. See
-  // findContentForGaps()'s comment for why this matters (measured 1.1s
-  // vs ~100ms for a 6-week plan).
+  // One gap per week (repeating if there are fewer gaps than weeks),
+  // resolved as a single batch, not one round-trip per week.
   const weekGaps = Array.from({ length: numWeeks }, (_, i) => gaps[i % gaps.length]);
   const contentByTopicId = await findContentForGaps(
     weekGaps.map(gap => ({ subject: gap.subject || S.config.subject, topic: gap.topic }))
@@ -1863,36 +1291,39 @@ async function computePlan() {
     }
 
     const missingLesson = !content.lesson && tasks.some(t => t.href);
+    const why = gap.priority === 'check'
+      ? `A quick check on ${topic}: you missed a question here, and a short practice will show whether it's a real gap.`
+      : `Targets a diagnosed gap: ${topic}${gap.priority ? ' (' + gap.priority + ' priority)' : ''}.`;
     return {
       number: i + 1,
       title:  phase,
       focus:  topic,
-      why:    `Targets a diagnosed gap: ${topic}${gap.priority ? ' (' + gap.priority + ' priority)' : ''}.`,
-      // Real practice exists, just no video lesson shown for this topic
-      // — surfaced honestly rather than silently having one fewer task
-      // with no explanation (agreed with Eric 2026-09-15: never fake a
-      // "Watch" task, but don't leave the gap unexplained either).
-      //
-      // Two genuinely different reasons collapse into "missingLesson",
-      // and they need different copy — found live 2026-09-15 testing
-      // the guest (no-login) flow: `lessons` RLS is `TO authenticated`
-      // only, while `quizzes` allows `anon` too, so a guest gets an
-      // empty lessons result even for topics (e.g. Physics "Circuit
-      // Calculations") that DO have a real published lesson — saying
-      // "no video lesson yet" to a guest in that case would just be
-      // false. A guest can't tell the difference between "doesn't
-      // exist" and "exists but I can't see it", so guests always get
-      // the honest, always-true framing regardless of which case it is.
-      noLessonYet: missingLesson && !!S.studentId,
-      guestLessonLocked: missingLesson && !S.studentId,
+      why,
+      // Real practice exists, just no video lesson shown for this topic.
+      // `lessons` RLS is authenticated-only while `quizzes` allows anon, so
+      // a guest can't tell "no lesson" from "lesson they can't see" — they
+      // get the always-true "sign up to unlock" framing instead.
+      noLessonYet: missingLesson && !!S.studentId && !S.asGuest,
+      guestLessonLocked: missingLesson && (!S.studentId || S.asGuest),
       tasks
     };
   });
 
   // No grade-per-week trajectory: nothing yet shows a student gains a
-  // grade a week, so the plan no longer promises one (it went to parents
-  // in the report PDF). Kept as an empty list for older readers.
+  // grade a week, so the plan doesn't promise one. Kept as an empty list
+  // for older readers.
   return { gradeJourney: [], weeks };
+}
+
+// Attaches the plan to the saved result (signed-in students and programme
+// guests); an anonymous guest's plan lives on this page and in the PDF.
+async function savePlan() {
+  if (!S.sessionId || !S.token) return;
+  try {
+    await api('attempt/plan', { sessionId: S.sessionId, token: S.token, plan: S.plan });
+  } catch(e) {
+    console.warn('Could not save plan:', e.message);
+  }
 }
 
 function renderPlan() {
@@ -1903,18 +1334,15 @@ function renderPlan() {
   document.getElementById('plan-subtitle').textContent =
     `${weekCount}-week personalised roadmap based on your diagnosis.`;
 
-  // (The old grade-per-week "journey" row is no longer shown, including for
-  // plans saved before it was retired: it promised a grade a week.)
-
   (p.weeks || []).forEach(w => {
     html += `
       <div class="card week-card">
         <div class="week-header">
           <span class="week-num">Week ${w.number}</span>
-          <span class="week-title">${w.title}</span>
+          <span class="week-title">${escHtmlText(w.title)}</span>
         </div>
-        ${w.focus ? `<div style="font-size:.8rem;color:var(--teal-text);margin-bottom:.4rem;font-weight:600;">Focus: ${w.focus}</div>` : ''}
-        <p class="week-why">${w.why}</p>
+        ${w.focus ? `<div style="font-size:.8rem;color:var(--teal-text);margin-bottom:.4rem;font-weight:600;">Focus: ${escHtmlText(w.focus)}</div>` : ''}
+        <p class="week-why">${escHtmlText(w.why)}</p>
         ${w.noLessonYet ? `<p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:-.3rem 0 .6rem;">No video lesson yet for this topic — the tasks below are real practice with explanations built in.</p>` : ''}
         ${w.guestLessonLocked ? `<p style="font-size:.78rem;color:var(--muted);font-style:italic;margin:-.3rem 0 .6rem;"><a href="/register.html" style="color:var(--gold);text-decoration:underline;">Sign up free</a> to unlock video lessons for this topic — the tasks below are real practice with explanations built in.</p>` : ''}
         <div class="tasks-grid">`;
@@ -1926,13 +1354,13 @@ function renderPlan() {
         ? `<span class="badge ${badgeCls}">${t.mins} min</span>`
         : `<span class="badge" style="background:rgba(255,255,255,.08);color:var(--muted);">Coming soon</span>`;
       const inner = `
-          <div class="task-icon">${icon}</div>
+          <div class="task-icon" aria-hidden="true">${icon}</div>
           <div class="task-name">${escHtmlText(t.label)}</div>
           ${t.topic ? `<div style="font-size:.72rem;color:var(--muted);margin-bottom:.3rem;">${escHtmlText(t.topic)}</div>` : ''}
           <div>${badge}</div>`;
-      // Real content gets a real link (opens the actual lesson/quiz);
-      // no matching content yet gets an honest, unclickable placeholder
-      // — never a task that LOOKS actionable but goes nowhere.
+      // Real content gets a real link; no content yet gets an honest,
+      // unclickable placeholder — never a task that LOOKS actionable but
+      // goes nowhere.
       html += t.href
         ? `<a class="task-item" href="${t.href}" style="display:block;text-decoration:none;color:inherit;">${inner}</a>`
         : `<div class="task-item" style="opacity:.6;">${inner}</div>`;
@@ -1941,9 +1369,7 @@ function renderPlan() {
     html += `</div></div>`;
   });
 
-  // The main action goes straight into the plan's first real task. The old
-  // "Start Executing" button opened a "coming soon" page, a dead end at
-  // the moment a student is most ready to start.
+  // The main action goes straight into the plan's first real task.
   const firstTask = (p.weeks || []).flatMap(w => w.tasks || []).find(t => t.href);
   html += firstTask
     ? `<a class="btn btn-teal" style="display:block;text-align:center;width:100%;font-size:1rem;padding:.9rem;margin-top:1rem;text-decoration:none;" href="${firstTask.href}">
@@ -1980,128 +1406,6 @@ function openAssessmentReport(mode) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// SAVE ATTEMPT TO SUPABASE
-// ═══════════════════════════════════════════════════════════
-// Returns true once saved, false if the save failed, null for guests
-// (not saved here).
-async function saveAttempt() {
-  if (!S.studentId) return null; // guest — don't save
-  // Let any in-flight autosave finish first, so this final write is the
-  // last word rather than racing it (see autosaveAttempt()'s chaining note).
-  try { await S.autosaveChain; } catch(e) {}
-  try {
-    const payload = {
-      student_id:     S.studentId,
-      student_name:   S.config.name,
-      subject:        S.config.subject,
-      exam_board:     S.config.board,
-      level:          S.config.level,
-      tier:           'Higher',
-      overall_score:  S.diagnosis.overallScore,
-      current_grade:  S.diagnosis.currentGrade,
-      target_grade:   S.diagnosis.targetGrade,
-      confidence_low_grade:  S.diagnosis.confidence ? S.diagnosis.confidence.lowGrade : null,
-      confidence_high_grade: S.diagnosis.confidence ? S.diagnosis.confidence.highGrade : null,
-      total_questions:S.answers.length,
-      correct_count:  S.answers.filter(a => a.correct).length,
-      not_sure_count: S.answers.filter(a => a.not_sure).length,
-      question_results: S.answers,
-      question_ids:   S.questions.map(q => q.id),
-      topic_scores:   S.diagnosis.topicScores,
-      gaps:           S.diagnosis.gaps,
-      student_profile:      S.diagnosis.studentProfile,
-      profile_description:  S.diagnosis.profileDescription,
-      strengths:            S.diagnosis.strengths,
-      teacher_note:         S.diagnosis.teacherNote,
-      completed:      true
-    };
-    // S.attemptId is already set if any question got autosaved this
-    // attempt (the common case) — update that same row rather than
-    // inserting a second one. Only insert fresh if diagnosis somehow ran
-    // with zero autosaved questions (e.g. viewSavedPlan()'s placeholder
-    // S.answers array, or autosave failed on every question).
-    if (S.attemptId) {
-      const { error } = await supa.from('diagnostic_attempts')
-        .update(payload).eq('id', S.attemptId);
-      if (error) throw error;
-    } else {
-      const { data, error } = await supa.from('diagnostic_attempts')
-        .insert(payload).select('id').single();
-      if (error) throw error;
-      S.attemptId = data.id;
-    }
-    console.log('Attempt saved to Supabase');
-    return true;
-  } catch(e) {
-    console.warn('Could not save attempt:', e.message);
-    return false;
-  }
-}
-
-// Called once the study plan itself has been generated — the diagnosis
-// row already exists (saveAttempt runs first, in runDiagnosis), this
-// just attaches the plan to it so a returning student can view it later
-// instead of it only living in this page's memory for one session.
-async function savePlanToAttempt() {
-  if (!S.studentId || !S.attemptId) return; // guest, or diagnosis wasn't saved
-  try {
-    const { error } = await supa.from('diagnostic_attempts')
-      .update({ plan: S.plan }).eq('id', S.attemptId);
-    if (error) throw error;
-    console.log('Plan saved to Supabase');
-  } catch(e) {
-    console.warn('Could not save plan:', e.message);
-  }
-}
-
-// Saves a GUEST attempt (no login) that arrived from a programme
-// registration — e.g. the ISM/Science Mastery funnel. A guest with no
-// lead_id (someone who reached /diagnostic directly, not through a
-// programme's registration flow) is left exactly as before: not saved,
-// only the emailed/downloaded PDF exists. One insert covers diagnosis +
-// plan together, unlike the logged-in two-step (saveAttempt() then
-// savePlanToAttempt()) — a guest can't return to revisit a saved
-// attempt, so there's nothing to show for a diagnosis-only save if they
-// abandon before generating a plan.
-async function saveGuestAttempt() {
-  if (S.studentId || !S.leadId) return;
-  try {
-    const res = await fetch('/api/v1/assessment/attempt/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        lead_id:        S.leadId,
-        student_name:   S.config.name,
-        subject:        S.config.subject,
-        exam_board:     S.config.board,
-        level:          S.config.level,
-        overall_score:  S.diagnosis.overallScore,
-        current_grade:  S.diagnosis.currentGrade,
-        target_grade:   S.diagnosis.targetGrade,
-        confidence_low_grade:  S.diagnosis.confidence ? S.diagnosis.confidence.lowGrade : null,
-        confidence_high_grade: S.diagnosis.confidence ? S.diagnosis.confidence.highGrade : null,
-        total_questions:S.answers.length,
-        correct_count:  S.answers.filter(a => a.correct).length,
-        not_sure_count: S.answers.filter(a => a.not_sure).length,
-        question_results: S.answers,
-        topic_scores:   S.diagnosis.topicScores,
-        gaps:           S.diagnosis.gaps,
-        student_profile:      S.diagnosis.studentProfile,
-        profile_description:  S.diagnosis.profileDescription,
-        strengths:            S.diagnosis.strengths,
-        teacher_note:         S.diagnosis.teacherNote,
-        plan:           S.plan
-      })
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.success) throw new Error((data.error && data.error.message) || 'save failed');
-    console.log('Guest attempt saved to Supabase, linked to lead', S.leadId);
-  } catch(e) {
-    console.warn('Could not save guest attempt:', e.message);
-  }
-}
-
-// ═══════════════════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════════════════
 const STAGES = ['setup','assess','diagnose','plan','execute','track'];
@@ -2133,8 +1437,7 @@ function goTo(stage) {
     }
     // A stage is revisitable once it's been reached (done or active) —
     // lets a student jump back to review their Diagnosis or Plan instead
-    // of getting stuck on the Execute/Track placeholder screens with no
-    // way back (see CLAUDE.md principle 7: never build a dead end).
+    // of getting stuck (see CLAUDE.md principle 7: never build a dead end).
     if (step) step.classList.toggle('clickable', dot.classList.contains('done') || dot.classList.contains('active'));
   }
   window.scrollTo({top:0,behavior:'smooth'});
@@ -2151,9 +1454,6 @@ function pipeGoTo(stage) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-// COST TRACKING
-// ═══════════════════════════════════════════════════════════
 function toast(msg, type='info') {
   const t = document.getElementById('toast');
   t.textContent = msg;

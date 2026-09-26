@@ -2,7 +2,7 @@
 //
 // Server-side grading for teacher-created assessments (student/assessment.html,
 // assessment_questions/assessment_attempts — NOT the diagnostic engine or the
-// guest ISM funnel, see assessment-attempt-create.js for that).
+// guest ISM funnel, see diagnostic-session-submit.js for that).
 //
 // Grading used to happen entirely client-side, comparing the student's
 // answer against `q.correct_answer` on question objects the browser had

@@ -263,7 +263,7 @@ async function loadLeads(){
 }
 
 // Guest diagnostic attempts (no-login ISM/Science Mastery funnel — see
-// assessment-attempt-create.js) are only ever linked back to a lead, not
+// diagnostic-session-submit.js) are only ever linked back to a lead, not
 // to a student account, so this is the only place staff can see them.
 async function loadDiagnosticAttempts(){
   _attemptsByLead={};

@@ -99,7 +99,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
   // Carries the registration through to the no-login diagnostic — without
   // this, the diagnostic's own (separate) name field starts blank and
   // nothing links a real result back to this family's registration (see
-  // assessment-attempt-create.js / diagnostic_attempts_guest_lead_link.sql).
+  // diagnostic-session-submit.js, which checks the lead exists).
   (function () {
     var src = new URLSearchParams(window.location.search);
     var leadId = src.get('lead_id');

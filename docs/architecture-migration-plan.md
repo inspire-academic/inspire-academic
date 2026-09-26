@@ -124,7 +124,7 @@ All are Netlify Functions, server-side. Full current inventory (from
   `/api/protege-ai`
 - `/api/v1/leads/create`
 - `/api/v1/ism-pipeline/{list,save,note}`
-- `/api/v1/assessment/{report/email, attempt/create, submit}`
+- `/api/v1/assessment/{report/email, submit}`, `/api/v1/diagnostic/{session/start, session/answer, session/submit, session/active, attempt/plan}`
 - `/api/v1/billing/{checkout,webhook}` — **dormant**, see §D
 - `/api/v1/notifications/{register-token,send}` — **plumbing only, unused**
 - `/api/v1/tutor-academy/{enroll,progress,evidence,assessor-content,assessor-roster,assignments,gate-decision}`

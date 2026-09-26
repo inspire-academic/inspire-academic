@@ -229,7 +229,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
           // Carry the new lead's id + child's name forward so the thank-you
           // page can hand them to the no-login diagnostic (/diagnostic) —
           // without this, a real diagnostic attempt has no way back to this
-          // registration (see assessment-attempt-create.js).
+          // registration (see diagnostic-session-submit.js).
           var params = new URLSearchParams(window.location.search);
           if (result.json.id) params.set('lead_id', result.json.id);
           params.set('name', data.child_name);

@@ -176,3 +176,27 @@ test('the Next button has exactly one click handler', () => {
   assert.match(PAGE, /id="btn-next"[^>]*onclick="nextQuestion\(\)"/);
   assert.doesNotMatch(PAGE, /addEventListener\('click',\s*nextQuestion\)/);
 });
+
+test('the page never loads questions itself or computes a grade', () => {
+  assert.doesNotMatch(PAGE, /from\('diagnostic_questions'\)/, 'questions come only from /api/v1/diagnostic/session/start');
+  assert.doesNotMatch(PAGE, /function computeDiagnosis|REAL_GRADE_BOUNDARIES|misconception_[a-d]/);
+  assert.doesNotMatch(PAGE, /from\('diagnostic_attempts'\)\s*\.(insert|update)/, 'results are saved only by the server');
+  assert.match(PAGE, /api\('session\/submit'/);
+});
+
+test('each answer is recorded once, with its timing, and options keep their original keys', () => {
+  assert.match(PAGE, /if \(S\.answers\.some\(a => a\.question_id === q\.id\)\) return;/);
+  assert.match(PAGE, /timeMs: Math\.round\(performance\.now\(\) - S\.shownAt\)/);
+  assert.match(PAGE, /shuffleArray\(\[\s*\{ key: 'a'/, 'options a-d should be shuffled');
+  assert.match(PAGE, /\{ key: 'e', text: q\.option_e \|\| 'Not sure' \}\s*\]/, 'Not sure stays last, outside the shuffle');
+  assert.match(PAGE, /btn\.dataset\.key = opt\.key/, 'buttons carry the original key for scoring');
+});
+
+test('a subject weak-spot note is only added to the topic it is about', () => {
+  const qs = [...bank({ 'Chemical Changes': 6 }, 'Chemistry'), ...bank({ 'Quantitative Chemistry': 6 }, 'Chemistry').map(q => ({ ...q, id: q.id + 50 }))];
+  const d = E.computeDiagnosis(E.markAnswers(qs, {}), { subject: 'Chemistry', board: 'AQA' });
+  const reason = t => d.gaps.find(g => g.topic === t).reason;
+  assert.doesNotMatch(reason('Chemical Changes'), /moles/);
+  assert.match(reason('Quantitative Chemistry'), /moles/);
+  assert.match(d.profileDescription, /not yet at a Higher-tier grade/);
+});

@@ -81,7 +81,6 @@
 .score-hero .num{font-family:var(--font-display);font-size:3.2rem;font-weight:800;line-height:1;}
 .score-hero .grades{margin-top:.6rem;font-size:1.05rem;color:var(--navy);}
 .score-hero .aspiration{margin-top:.35rem;font-size:.75rem;font-weight:700;color:var(--gold);letter-spacing:.02em;}
-.score-hero .badge-pill{margin-top:.85rem;display:inline-block;padding:.35rem 1.1rem;border-radius:20px;font-weight:700;font-size:.8rem;letter-spacing:.03em;color:#fff;}
 .score-hero .desc{margin-top:.85rem;color:var(--print-muted);font-size:.92rem;max-width:32rem;margin-left:auto;margin-right:auto;}
 .notsure-callout{margin-top:1rem;padding:.75rem 1rem;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.4);border-radius:6px;font-size:.85rem;color:#8a6d1a;max-width:32rem;margin-left:auto;margin-right:auto;}
 
@@ -106,6 +105,9 @@
 
 .strength-item{font-size:.9rem;color:#1a1a1a;margin-bottom:.4rem;padding-left:1.4rem;position:relative;}
 .strength-item::before{content:'✓';position:absolute;left:0;color:#16a34a;font-weight:700;}
+.check-item::before{content:'?';color:#ca8a04;}
+.evidence{font-size:.75rem;color:var(--print-muted);margin-bottom:.35rem;}
+.score-hero .range{font-size:.82rem;color:var(--print-muted);margin-top:.35rem;}
 
 .grade-journey{display:flex;align-items:stretch;gap:.5rem;margin-bottom:1.75rem;page-break-inside:avoid;}
 .gj-box{flex:1;background:#f7f6f2;border-radius:8px;padding:1rem .5rem;text-align:center;}
@@ -175,7 +177,8 @@ function scoreColor(pct) {
   return pct >= 70 ? '#16a34a' : pct >= 50 ? '#ca8a04' : '#dc2626';
 }
 
-const PROFILE_COLORS = { struggling:'#dc2626', developing:'#ca8a04', secure:'#0d9488', strong:'#16a34a' };
+// No profile label ("Building foundations", "Strong"...) goes to parents:
+// those words are for teachers, in their own console.
 const PRIORITY_COLORS = { critical:'#dc2626', high:'#ea580c', medium:'#ca8a04', low:'#16a34a' };
 const APPROACH_SENTENCES = {
   reteach_from_scratch: name => `This topic needs to be taught from the beginning — ${name} has not yet secured the foundational concept.`,
@@ -254,7 +257,6 @@ function pageHeader(subject) {
 function buildExecutiveSummary(c, d, name) {
   const sc = d.overallScore ?? 0;
   const sColor = scoreColor(sc);
-  const pColor = PROFILE_COLORS[d.studentProfile] || '#ca8a04';
   const notSurePct = d.totalQuestions ? Math.round((d.notSureCount / d.totalQuestions) * 100) : 0;
   const isCombined = c.subject === 'Combined Science';
 
@@ -267,15 +269,15 @@ function buildExecutiveSummary(c, d, name) {
       <div class="score-hero">
         <div class="num" style="color:${sColor};">${sc}%</div>
         <div class="grades">Current grade <strong>${d.currentGrade ?? '—'}</strong> &nbsp;→&nbsp; Target grade <strong style="color:#0d9488;">${d.targetGrade ?? '—'}</strong></div>
+        ${d.confidence && d.confidence.lowGrade !== d.confidence.highGrade ? `<div class="range">Likely range ${d.confidence.lowGrade}–${d.confidence.highGrade}. A ${d.totalQuestions || 36}-question test can't pin a grade down exactly, so this is the honest range.</div>` : ''}
         <div class="aspiration">🎯 Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}</div>
-        <div class="badge-pill" style="background:${pColor};">${profileLabel(d.studentProfile)}</div>
         <div class="desc">${d.profileDescription || ''}</div>
         ${notSurePct >= 30 ? `<div class="notsure-callout">${notSurePct}% of questions in this assessment were answered "not sure" — the study plan below is weighted toward building foundational confidence first.</div>` : ''}
       </div>
 
       ${d.teacherNote ? `
       <div class="assessor-note">
-        <div class="label">Assessor's Note</div>
+        <div class="label">What the results suggest</div>
         <p>${d.teacherNote}</p>
       </div>` : ''}
     </div>`;
@@ -316,15 +318,18 @@ function topicLabel(t, isCombined) {
 function buildGapsAndStrengths(c, d, name) {
   const gaps = d.gaps || [];
   const strengths = d.strengths || [];
-  if (!gaps.length && !strengths.length) return '';
+  const checks = d.checks || [];
+  if (!gaps.length && !strengths.length && !checks.length) return '';
   const isCombined = c.subject === 'Combined Science';
 
   const gapHtml = gaps.map(g => {
     const pc = PRIORITY_COLORS[g.priority] || '#ca8a04';
     const sentence = (APPROACH_SENTENCES[g.approach] || (n => `This topic needs continued attention for ${n}.`))(name);
+    const evidence = g.evidence === 'early' && g.total ? `<div class="evidence">Early signal: based on ${g.total} questions on this topic.</div>` : '';
     return `
       <div class="gap-item" style="border-left-color:${pc};">
         <div class="top"><span class="name">${topicLabel(g, isCombined)}</span><span class="chip" style="background:${pc};">${g.priority}</span></div>
+        ${evidence}
         <div class="reason">${IAMaths.html(g.reason || '')}</div>
         <div class="approach">${sentence}</div>
       </div>`;
@@ -334,20 +339,24 @@ function buildGapsAndStrengths(c, d, name) {
     <h3 style="font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--navy);margin:1.5rem 0 .75rem;">Strengths</h3>
     ${strengths.map(s => `<div class="strength-item">${topicLabel(s, isCombined)}</div>`).join('')}
   ` : '';
+  // Topics with too few questions to call a gap, but a missed answer.
+  const checkHtml = checks.length ? `
+    <h3 style="font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--navy);margin:1.5rem 0 .5rem;">Worth a quick check</h3>
+    <p class="evidence" style="margin-bottom:.5rem;">Something was missed on these, but the test had too few questions on them to call them gaps.</p>
+    ${checks.map(k => `<div class="strength-item check-item">${topicLabel(k, isCombined)} (${k.correct}/${k.total})</div>`).join('')}
+  ` : '';
 
   return `
     <div class="report-section">
       ${pageHeader(c.subject)}
       <div class="section-title">Priority Knowledge Gaps</div>
-      <div class="section-subtitle">What the study plan is built to fix first, ordered by priority.</div>
+      <div class="section-subtitle">What the study plan is built to fix first, ordered by what each is worth in the real exam.</div>
       ${gapHtml}
       ${strengthHtml}
+      ${checkHtml}
     </div>`;
 }
 
-// Profile words shown to parents; a child is never labelled "STRUGGLING".
-const PROFILE_LABELS = { struggling: 'Building foundations', developing: 'Developing', secure: 'Secure', strong: 'Strong' };
-function profileLabel(p) { return PROFILE_LABELS[p] || 'Developing'; }
 
 function buildPlan(c, p) {
   // No grade-per-week journey: it promised a grade a week with nothing
@@ -394,7 +403,7 @@ function buildClosing(c, generatedAt) {
 }
 
 // Runs last, after every function/const above is initialized — the render
-// call needs PROFILE_COLORS/PRIORITY_COLORS/APPROACH_SENTENCES (all const,
+// call needs PRIORITY_COLORS/APPROACH_SENTENCES (both const,
 // so unlike the hoisted function declarations, calling this any earlier in
 // the file throws a "before initialization" ReferenceError.
 if (!PAYLOAD || !PAYLOAD.diagnosis || !PAYLOAD.plan) {

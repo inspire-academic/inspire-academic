@@ -374,15 +374,6 @@ function = "create-teacher"
   status = 200
   force = true
 
-# Persists a GUEST diagnostic attempt (no-login ISM/Science Mastery
-# funnel) linked back to its leads row. Same /api/v1/resource/action
-# convention.
-[[redirects]]
-  from = "/api/v1/assessment/attempt/create"
-  to = "/.netlify/functions/assessment-attempt-create"
-  status = 200
-  force = true
-
 # Server-side grading for teacher-created assessments (student/assessment.html)
 # — moved off the client 2026-09-15 so the browser never receives the
 # answer key. See assessment-submit.js header comment. Same

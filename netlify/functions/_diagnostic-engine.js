@@ -301,16 +301,17 @@ function confidenceRangeForScore(correct, total, board, subject, isCombined) {
 
 // ── Diagnosis ──────────────────────────────────────────────────────────
 
+// A known weak spot, added to a gap's reason only for the topic it's about
+// (it used to be added to every weak topic in the subject, so a Chemical
+// Changes gap was told "moles and quantitative calculations" were the issue).
 const SUBJECT_NOTES = {
   AQA: {
-    Chemistry: 'a common AQA Chemistry weak spot — moles and quantitative calculations catch most students out here',
-    Biology:   'a common AQA Biology weak spot — required-practical recall is often the gap',
-    Physics:   'a common AQA Physics weak spot — wave equation and transformer calculations catch most students out here'
+    Chemistry: { topics: ['Quantitative Chemistry'], note: 'a common AQA Chemistry weak spot — moles and quantitative calculations catch most students out here' },
+    Physics:   { topics: ['Waves', 'Magnetism'], note: 'a common AQA Physics weak spot — wave equation and transformer calculations catch most students out here' }
   },
   Edexcel: {
-    Chemistry: 'a common Edexcel Chemistry weak spot — ionic equations are the usual sticking point',
-    Biology:   'a common Edexcel Biology weak spot — evaluating evidence is the usual sticking point',
-    Physics:   'a common Edexcel Physics weak spot — resolving vectors and moments trip most students up'
+    Chemistry: { topics: ['Chemical Changes'], note: 'a common Edexcel Chemistry weak spot — ionic equations are the usual sticking point' },
+    Physics:   { topics: ['Forces & Motion'], note: 'a common Edexcel Physics weak spot — resolving vectors and moments trip most students up' }
   }
 };
 
@@ -394,9 +395,13 @@ function computeDiagnosis(answers, config) {
   const guessNote = overallPct - gradedPct >= 3
     ? ` The grade uses ${gradedPct}%, which allows for answers that were probably lucky guesses — "Not sure" is always the better choice when you don't know.`
     : '';
+  const ungraded = /^U(-U)?$/.test(currentGrade);
+  const where = ungraded
+    ? `not yet at a Higher-tier grade${rangeNote}`
+    : isCombined ? `around a ${currentGrade} double award${rangeNote}` : `around Grade ${currentGrade}${rangeNote}`;
   const profileDescription = (isCombined
-    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — around a ${currentGrade} double award${rangeNote} on real ${board} Combined Science June 2026 boundaries. Next target: ${targetGrade}.`
-    : `Scored ${overallPct}% overall — around Grade ${currentGrade}${rangeNote} on real ${board} ${gradingSubject} June 2026 boundaries, next target: Grade ${targetGrade}.`) + guessNote;
+    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — ${where} on real ${board} Combined Science June 2026 boundaries. Next target: ${targetGrade}.`
+    : `Scored ${overallPct}% overall — ${where} on real ${board} ${gradingSubject} June 2026 boundaries, next target: Grade ${targetGrade}.`) + guessNote;
 
   const topicScores = computeTopicScores(answers);
   const shares = examWeightShares(topicScores, board);
@@ -415,8 +420,8 @@ function computeDiagnosis(answers, config) {
     } else {
       reason = `Scored ${t.score}% (${t.correct}/${t.total}) — partial understanding, not yet secure enough for exam conditions.`;
     }
-    const subjectNote = SUBJECT_NOTES[board] && SUBJECT_NOTES[board][t.subject];
-    if (subjectNote && t.score < 55) reason += ` This is ${subjectNote}.`;
+    const known = SUBJECT_NOTES[board] && SUBJECT_NOTES[board][t.subject];
+    if (known && known.topics.includes(t.topic) && t.score < 55) reason += ` This is ${known.note}.`;
     return { approach, reason };
   };
 
