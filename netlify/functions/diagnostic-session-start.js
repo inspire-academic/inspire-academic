@@ -31,7 +31,7 @@ const STARTS_PER_HOUR = 20; // per connection; a family sharing one phone won't 
 
 // answer_spec is read only to build a numeric question's unit list; the
 // browser never receives it (see engine.publicQuestion).
-const QUESTION_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'tier', 'specification_ref', 'combined_eligible', 'updated_at'].join(',');
+const QUESTION_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'tier', 'specification_ref', 'combined_eligible', 'combined_eligible_edexcel', 'updated_at'].join(',');
 
 
 async function resume(client, event, sessionId) {
@@ -107,14 +107,14 @@ exports.handler = async (event) => {
     }
 
     const rows = await client.get(`diagnostic_questions?${questionPoolFilter(engine.sourceSubjects(subject), level, board)}&select=${QUESTION_COLUMNS}`);
-    const available = engine.tierAvailability(subject, rows);
+    const available = engine.tierAvailability(subject, rows, board);
     if (!available[tierChoice]) {
       return fail(409, 'tier_unavailable', tierChoice === 'Higher'
         ? 'There are not enough questions for this subject yet. Please check back soon.'
         : 'That option is not available for this subject yet. Please choose Higher tier.');
     }
     const routing = tierChoice === 'route';
-    const questions = routing ? engine.selectRoutingQuestions(subject, rows) : engine.selectQuestions(subject, rows, tierChoice);
+    const questions = routing ? engine.selectRoutingQuestions(subject, rows, board) : engine.selectQuestions(subject, rows, tierChoice, null, null, board);
     if (!questions.length) return fail(404, 'no_questions', 'There are no questions for this subject yet. Please check back soon.');
 
     // Only the newest unfinished test per subject stays resumable.

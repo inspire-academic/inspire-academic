@@ -15,7 +15,7 @@ const { fail, db, QUESTION_BOARDS } = require('./_diagnostic-shared');
 const engine = require('./_diagnostic-engine');
 
 const SUBJECTS = ['Physics', 'Chemistry', 'Biology', 'Combined Science', 'Mathematics', engine.MATHS_PAPER2];
-const COLUMNS = 'id,subject,topic,difficulty,tier,exam_board,specification_ref,combined_eligible';
+const COLUMNS = 'id,subject,topic,difficulty,tier,exam_board,specification_ref,combined_eligible,combined_eligible_edexcel';
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'GET') return fail(405, 'method_not_allowed', 'Method not allowed.');
@@ -32,7 +32,7 @@ exports.handler = async (event) => {
       boards[board] = {};
       SUBJECTS.forEach(subject => {
         const sources = engine.sourceSubjects(subject);
-        boards[board][subject] = engine.tierAvailability(subject, onBoard.filter(q => sources.includes(q.subject)));
+        boards[board][subject] = engine.tierAvailability(subject, onBoard.filter(q => sources.includes(q.subject)), board);
       });
     });
     const subjects = boards.AQA;

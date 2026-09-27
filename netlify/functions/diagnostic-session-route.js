@@ -15,7 +15,7 @@ const engine = require('./_diagnostic-engine');
 
 const MARKING_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'correct_answer', 'answer_spec'].join(',');
 // The same pool the start endpoint draws on (see questionPoolFilter).
-const POOL_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'tier', 'specification_ref', 'combined_eligible', 'updated_at'].join(',');
+const POOL_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'tier', 'specification_ref', 'combined_eligible', 'combined_eligible_edexcel', 'updated_at'].join(',');
 
 async function questionsFrom(client, ids) {
   if (!ids.length) return [];
@@ -53,7 +53,7 @@ exports.handler = async (event) => {
     const tier = engine.routeTier(engine.markAnswers(routingQuestions, byQuestion));
 
     const pool = await client.get(`diagnostic_questions?${questionPoolFilter(engine.sourceSubjects(session.subject), session.level, session.exam_board)}&select=${POOL_COLUMNS}`);
-    const rest = engine.selectQuestions(session.subject, pool, tier, new Set(ids), engine.remainingCounts(session.subject, routingQuestions));
+    const rest = engine.selectQuestions(session.subject, pool, tier, new Set(ids), engine.remainingCounts(session.subject, routingQuestions), session.exam_board);
     const versions = { ...(session.question_versions || {}) };
     rest.forEach(q => { versions[q.id] = q.updated_at || null; });
 

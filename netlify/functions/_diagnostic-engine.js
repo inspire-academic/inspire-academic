@@ -12,6 +12,7 @@
 
 const SPEC_MAP = require('../../assets/js/spec-map.js');
 const PASCO_CALIBRATION_STATS = require('../../assets/js/pasco-calibration-stats.js');
+const DIAGNOSTIC_TOPIC_WEIGHTS = require('../../assets/js/diagnostic-topic-weights.js');
 const { withMathsHtml } = require('./_maths-html');
 const { markNumeric } = require('../../assets/js/diagnostic-numeric.js');
 
@@ -43,11 +44,26 @@ function normTopic(s) {
   return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
-// { topicName -> weight } for a subject/board from real PASCO evidence:
-// total real marks observed for the matching spec topic, a proxy for how much
-// of a real paper goes to it. Unmatched topics get the median weight — an
-// unmatched topic is a data-quality question, never a reason to drop it.
+// { topicName -> weight } for a subject/board from real PASCO evidence: the
+// real marks that board's papers give the topic (diagnostic-topic-weights.js).
+// Unmatched topics get the median weight — an unmatched topic is a
+// data-quality question, never a reason to drop it.
 function buildTopicWeights(subject, board, topicNames) {
+  const table = DIAGNOSTIC_TOPIC_WEIGHTS[subject] && DIAGNOSTIC_TOPIC_WEIGHTS[subject][board === 'Edexcel' ? 'Edexcel' : 'AQA'];
+  if (table) {
+    const known = Object.values(table).sort((a, b) => a - b);
+    const median = known[Math.floor(known.length / 2)];
+    const weights = {};
+    for (const name of topicNames) weights[name] = table[name] || median;
+    return weights;
+  }
+  return specTopicWeights(subject, board, topicNames);
+}
+
+// The older fallback, for a subject with no row in diagnostic-topic-weights.js:
+// match topic names to spec-map.js by name and weight by the 25-paper AQA
+// calibration stats.
+function specTopicWeights(subject, board, topicNames) {
   const specTopics = (SPEC_MAP['gcse-uk'] && SPEC_MAP['gcse-uk'][subject] && SPEC_MAP['gcse-uk'][subject][board]) || [];
   const slugByNormName = {};
   specTopics.forEach(t => { slugByNormName[normTopic(t.name)] = t.slug; });
@@ -133,9 +149,14 @@ function weightedSampleAcrossTopics(questions, n, weights) {
   return shuffleArray(result);
 }
 
-// Separate-science-only content (Space Physics, flame tests...) is marked
-// combined_eligible = false and never drawn for Combined Science.
-function isCombinedEligible(q) {
+// Separate-science-only content (Space Physics, flame tests...) is never drawn
+// for Combined Science. The boards draw that line in different places (Edexcel
+// Combined leaves out the eye, kidneys and polymers, but keeps transformers),
+// so each board has its own flag: combined_eligible for AQA Trilogy,
+// combined_eligible_edexcel for Edexcel 1SC0. A row whose Edexcel flag isn't
+// set uses the AQA one.
+function isCombinedEligible(q, board = 'AQA') {
+  if (board === 'Edexcel' && q.combined_eligible_edexcel != null) return q.combined_eligible_edexcel !== false;
   return q.combined_eligible !== false;
 }
 
@@ -148,23 +169,25 @@ function inTier(q, tier) {
 
 // The rows one subject's test may draw on, before sampling: the main Maths
 // diagnostic never draws from the Geometry & Statistics (Paper 2) pool,
-// which promises no overlap with it.
-function subjectPool(subject, s, rows) {
-  if (subject === 'Combined Science') return rows.filter(q => q.subject === s && isCombinedEligible(q));
+// which promises no overlap with it. Combined Science keeps only what the
+// board's Combined specification teaches.
+function subjectPool(subject, s, rows, board = 'AQA') {
+  if (subject === 'Combined Science') return rows.filter(q => q.subject === s && isCombinedEligible(q, board));
   return rows.filter(q => q.subject === s && !(s === 'Mathematics' && q.specification_ref === PAPER2_POOL));
 }
 
 // Picks one test's questions from every active, reviewed row for the
-// subject(s) involved (the pool is always AQA-authored; see the session
-// start function), from the tier's pool. `exclude` holds ids already asked
+// subject(s) involved (the session functions load the board's questions plus
+// the universal ones), from the tier's pool, spread across topics the way the
+// board's real papers spread their marks. `exclude` holds ids already asked
 // (the routing block), and `counts` overrides how many to draw ({ total }
 // or per science for Combined). Returns rows in the order they'll be asked.
-function selectQuestions(subject, rows, tier = 'Higher', exclude = null, counts = null) {
+function selectQuestions(subject, rows, tier = 'Higher', exclude = null, counts = null, board = 'AQA') {
   const usable = rows.filter(q => inTier(q, tier) && !(exclude && exclude.has(Number(q.id))));
   if (subject === 'Combined Science') {
     return shuffleArray(COMBINED_SUBJECTS.flatMap(s => {
-      const pool = subjectPool(subject, s, usable);
-      const weights = buildTopicWeights(s, 'AQA', [...new Set(pool.map(q => q.topic))]);
+      const pool = subjectPool(subject, s, usable, board);
+      const weights = buildTopicWeights(s, board, [...new Set(pool.map(q => q.topic))]);
       return weightedSampleAcrossTopics(pool, counts && counts[s] != null ? counts[s] : COMBINED_PER_SUBJECT, weights);
     }));
   }
@@ -173,8 +196,8 @@ function selectQuestions(subject, rows, tier = 'Higher', exclude = null, counts 
     // whole pool, in a random order.
     return shuffleArray(usable.filter(q => q.subject === 'Mathematics' && q.specification_ref === PAPER2_POOL));
   }
-  const pool = subjectPool(subject, subject, usable);
-  const weights = buildTopicWeights(subject, 'AQA', [...new Set(pool.map(q => q.topic))]);
+  const pool = subjectPool(subject, subject, usable, board);
+  const weights = buildTopicWeights(subject, board, [...new Set(pool.map(q => q.topic))]);
   return weightedSampleAcrossTopics(pool, counts && counts.total != null ? counts.total : QUESTIONS_PER_TEST, weights);
 }
 
@@ -194,12 +217,12 @@ const ROUTE_TO_HIGHER = 0.5;
 
 // Eight questions for both tiers, spread across difficulty (easier, middle
 // and harder thirds) and across topics, never from the Paper 2 pool.
-function selectRoutingQuestions(subject, rows) {
+function selectRoutingQuestions(subject, rows, board = 'AQA') {
   const both = rows.filter(q => (q.tier || 'Higher') === 'Both');
   const subjects = subject === 'Combined Science' ? COMBINED_SUBJECTS : [subject];
   const perSubject = subjects.map((s, i) => Math.floor(ROUTING_COUNT / subjects.length) + (i < ROUTING_COUNT % subjects.length ? 1 : 0));
   return shuffleArray(subjects.flatMap((s, i) => {
-    const pool = shuffleArray(subjectPool(subject, s, both));
+    const pool = shuffleArray(subjectPool(subject, s, both, board));
     const bands = [pool.filter(q => (q.difficulty || 2) <= 2), pool.filter(q => q.difficulty === 3), pool.filter(q => (q.difficulty || 2) >= 4)];
     const picked = [];
     const topics = new Set();
@@ -246,16 +269,16 @@ function fullTestLength(subject) {
 // has questions (as before tiers existed). Foundation needs enough reviewed
 // questions for a full test, and finding a tier needs a routing block plus
 // a full bank for both tiers. The start page only shows what's available.
-function tierAvailability(subject, rows) {
+function tierAvailability(subject, rows, board = 'AQA') {
   const enough = tier => {
     const usable = rows.filter(q => inTier(q, tier));
-    if (subject === 'Combined Science') return COMBINED_SUBJECTS.every(s => subjectPool(subject, s, usable).length >= COMBINED_PER_SUBJECT);
+    if (subject === 'Combined Science') return COMBINED_SUBJECTS.every(s => subjectPool(subject, s, usable, board).length >= COMBINED_PER_SUBJECT);
     if (subject === MATHS_PAPER2) return tier === 'Higher' && usable.some(q => q.specification_ref === PAPER2_POOL);
-    return subjectPool(subject, subject, usable).length >= QUESTIONS_PER_TEST;
+    return subjectPool(subject, subject, usable, board).length >= QUESTIONS_PER_TEST;
   };
   const higher = rows.some(q => inTier(q, 'Higher'));
   const foundation = subject !== MATHS_PAPER2 && enough('Foundation');
-  const routing = enough('Higher') && foundation && selectRoutingQuestions(subject, rows).length === ROUTING_COUNT;
+  const routing = enough('Higher') && foundation && selectRoutingQuestions(subject, rows, board).length === ROUTING_COUNT;
   return { Higher: higher, Foundation: foundation, route: routing };
 }
 
@@ -536,7 +559,7 @@ function examWeightShares(topicScores, board) {
   const bySubject = {};
   topicScores.forEach(t => { (bySubject[t.subject] = bySubject[t.subject] || []).push(t.topic); });
   Object.entries(bySubject).forEach(([subject, topics]) => {
-    const w = buildTopicWeights(subject, board === 'Edexcel' ? 'Edexcel' : 'AQA', topics);
+    const w = buildTopicWeights(subject, board, topics);
     const total = topics.reduce((s, t) => s + (w[t] || 1), 0);
     topics.forEach(t => { shares[subject + '|' + t] = (w[t] || 1) / total; });
   });
