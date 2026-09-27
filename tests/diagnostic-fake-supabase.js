@@ -4,6 +4,7 @@
 const path = require('path');
 
 const FN = path.join(__dirname, '..', 'netlify', 'functions');
+const UUID_TABLES = ['diagnostic_sessions', 'quiz_attempts'];
 
 // ── Fake PostgREST ─────────────────────────────────────────────────────
 function fakeSupabase(seed) {
@@ -19,7 +20,7 @@ function fakeSupabase(seed) {
     const raw = decodeURIComponent(expr.slice(dot + 1));
     const cell = row[key];
     if (op === 'eq') return String(cell) === raw;
-    if (op === 'is') return cell === parseVal(raw) || (raw === 'true' && cell === true);
+    if (op === 'is') return (cell === undefined ? null : cell) === parseVal(raw) || (raw === 'true' && cell === true);
     if (op === 'gte') return String(cell) >= raw;
     if (op === 'lt') return String(cell) < raw;
     if (op === 'in') {
@@ -65,7 +66,7 @@ function fakeSupabase(seed) {
           if (prefer.includes('merge-duplicates')) Object.assign(clash, row);
           continue;
         }
-        const full = { id: table === 'diagnostic_sessions' ? `00000000-0000-4000-8000-${String(nextId++).padStart(12, '0')}` : nextId++,
+        const full = { id: UUID_TABLES.includes(table) ? `00000000-0000-4000-8000-${String(nextId++).padStart(12, '0')}` : nextId++,
           created_at: new Date().toISOString(), ...row };
         tables[table].push(full);
         out.push(full);

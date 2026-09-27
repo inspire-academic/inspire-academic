@@ -431,6 +431,27 @@ function = "create-teacher"
   status = 200
   force = true
 
+# Topic quizzes (student/quiz.html), marked on the server so the browser
+# never holds the answer key or writes its own score: start an attempt,
+# mark each answer, finish. See the header comment in each function.
+[[redirects]]
+  from = "/api/v1/quiz/attempt/start"
+  to = "/.netlify/functions/quiz-attempt-start"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/quiz/attempt/answer"
+  to = "/.netlify/functions/quiz-attempt-answer"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/quiz/attempt/finish"
+  to = "/.netlify/functions/quiz-attempt-finish"
+  status = 200
+  force = true
+
 # Paid-tier Phase 2 (dormant — see create-checkout-session.js/
 # stripe-webhook.js header comments for the kill switches). Same
 # /api/v1/resource/action convention.

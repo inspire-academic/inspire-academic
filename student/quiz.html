@@ -392,6 +392,7 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
 <script src="/assets/js/capacitor-utils.js"></script>
 <script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/maths-typeset.js"></script>
 <script>
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -458,6 +459,18 @@ const params=new URLSearchParams(window.location.search);
 const quizId=params.get('id') ? parseInt(params.get('id')) : null;
 const subjectParam=params.get('subject');
 
+// POST to /api/v1/quiz/attempt/<action> as the signed-in student. Resolves
+// with the response body; rejects on a network error or { success:false }.
+async function quizApi(action, body){
+  const {data} = await supa.auth.getSession();
+  const headers={'Content-Type':'application/json'};
+  if(data?.session?.access_token) headers.Authorization='Bearer '+data.session.access_token;
+  const res=await fetch('/api/v1/quiz/attempt/'+action,{method:'POST',headers,body:JSON.stringify(body)});
+  const out=await res.json().catch(()=>({}));
+  if(!res.ok||!out.success) throw new Error(out.error?.message||'Request failed');
+  return out;
+}
+
 // ── Quiz picker (no ?id=) ───────────────────────────────────────────
 async function initPicker(){
   document.getElementById('screen-intro').classList.remove('active');
@@ -520,19 +533,24 @@ function goToQuiz(id){
   if(!user){ clearTimeout(timeoutHandle); return; }
   window._user=user; window._profile=profile;
 
-  // Load quiz metadata AND questions in parallel — saves one full round-trip
+  // Load quiz metadata AND start the attempt in parallel. The server creates
+  // the attempt and returns the questions without their answers; each answer
+  // is marked by /api/v1/quiz/attempt/answer.
   perfStart('quiz-data');
-  const [quizRes, qsRes] = await Promise.all([
+  const [quizRes, started] = await Promise.all([
     supa.from('quizzes').select('*,topics(name,subjects(name))').eq('id',quizId).single(),
-    supa.from('questions').select('*').eq('quiz_id',quizId).order('order_idx')
+    quizApi('start',{quizId}).catch(e=>({error:e}))
   ]);
   perfEnd('quiz-data');
   clearTimeout(timeoutHandle);
 
   const quiz = quizRes.data;
   if(!quiz){toast('Quiz not found','error');return;}
+  if(started.error){ showTimeoutError(() => location.reload()); return; }
   quizData=quiz;
-  questions=qsRes.data||[];
+  questions=started.questions||[];
+  attemptId=started.attemptId;
+  if(questions.some(q=>[q.question_text,q.option_a,q.option_b,q.option_c,q.option_d].some(IAMaths.hasMaths))) IAMaths.preload();
 
   // Populate intro
   document.getElementById('nav-quiz-title').textContent=quiz.title;
@@ -545,14 +563,6 @@ function goToQuiz(id){
   document.getElementById('im-pass').textContent=quiz.pass_mark+'%';
   document.getElementById('im-difficulty').textContent=
     ({foundation:'Found.',medium:'Medium',higher:'Higher',challenge:'Challenge'})[quiz.difficulty]||quiz.difficulty;
-
-  // Create attempt record — fire and don't await (non-blocking)
-  supa.from('quiz_attempts').insert({
-    student_id:user.id, quiz_id:quizId,
-    score:0, max_score:questions.reduce((s,q)=>s+q.marks,0)
-  }).select().single().then(({data:att}) => {
-    if(att) attemptId=att.id;
-  }).catch(e => console.warn('Attempt insert:',e));
 
   // Enable Begin Quiz button immediately
   const btnBegin=document.getElementById('btn-begin');
@@ -589,7 +599,7 @@ function renderQuestion(){
   document.getElementById('qp-label').textContent=`Question ${currentQ+1} of ${total}`;
   document.getElementById('q-num-label').textContent=`Question ${currentQ+1} of ${total}`;
   document.getElementById('q-marks-label').textContent=`${q.marks} mark${q.marks>1?'s':''}`;
-  document.getElementById('q-text').textContent=q.question_text;
+  IAMaths.render(document.getElementById('q-text'),q.question_text);
   document.getElementById('explanation').style.display='none';
   document.getElementById('btn-next').style.display='none';
   document.getElementById('btn-finish').style.display='none';
@@ -610,34 +620,48 @@ function renderQuestion(){
 
   const opts=document.getElementById('options-wrap');
   const letters=['A','B','C','D'];
-  const optTexts=[q.option_a,q.option_b,q.option_c,q.option_d].filter(Boolean);
 
-  // Shuffle options so the correct answer isn't always in the same position
-  const correctText = optTexts[letters.indexOf(q.correct_answer)];
-  const shuffled = optTexts
-    .map((text, i) => ({ text, originalLetter: letters[i] }))
+  // Shuffle options so the correct answer isn't always in the same position.
+  // q._order[i] is the stored letter (A–D) of the option shown in position i;
+  // the server marks by stored letter.
+  const shuffled = letters
+    .map(l => ({ letter: l, text: q['option_'+l.toLowerCase()] }))
+    .filter(o => o.text)
     .sort(() => Math.random() - 0.5);
-
-  // Remap correct answer to new shuffled position
-  const newCorrectLetter = letters[shuffled.findIndex(o => o.text === correctText)];
-  q._shuffledCorrect = newCorrectLetter; // store for answer checking
+  q._order = shuffled.map(o => o.letter);
 
   opts.innerHTML=shuffled.map((o,i)=>`
     <button class="option" onclick="selectAnswer('${letters[i]}',${i})">
       <div class="opt-letter">${letters[i]}</div>
-      <div class="opt-text">${o.text}</div>
+      <div class="opt-text">${IAMaths.html(o.text)}</div>
     </button>`).join('');
+  IAMaths.typeset(opts);
 }
 
 async function selectAnswer(letter, idx){
   const q=questions[currentQ];
-  const correctLetter = q._shuffledCorrect || q.correct_answer;
-  const isCorrect=letter===correctLetter;
-  answers.push({question_id:q.id,answer:letter,correct:isCorrect,marks:isCorrect?q.marks:0});
+  const buttons=[...document.querySelectorAll('.option')];
+  buttons.forEach(o=>{ o.disabled=true; });
+  buttons[idx].classList.add('selected');
+
+  let r;
+  try{
+    r=await quizApi('answer',{attemptId, questionId:q.id, answer:q._order[idx]});
+  }catch(e){
+    buttons[idx].classList.remove('selected');
+    buttons.forEach(o=>{ o.disabled=false; });
+    toast('Could not check that answer. Please try again.','error');
+    return;
+  }
+
+  // Shown letter of the correct option (the server returns the stored one)
+  const correctLetter=['A','B','C','D'][q._order.indexOf(r.correctAnswer)]||'';
+  answers[currentQ]={question_id:q.id,answer:letter,correct:r.correct,marks:r.marksAwarded,
+    correctLetter,explanation:r.explanation};
 
   // Visual feedback
-  document.querySelectorAll('.option').forEach((o,i)=>{
-    o.disabled=true;
+  buttons.forEach((o,i)=>{
+    o.classList.remove('selected');
     const l=['A','B','C','D'][i];
     if(l===correctLetter) o.classList.add('correct');
     else if(i===idx) o.classList.add('wrong');
@@ -645,18 +669,10 @@ async function selectAnswer(letter, idx){
 
   // Explanation
   const expEl=document.getElementById('explanation');
-  expEl.className='explanation '+(isCorrect?'correct-exp':'wrong-exp');
-  document.getElementById('exp-label').textContent=isCorrect?'✓ Correct!':'✗ Incorrect';
-  document.getElementById('exp-text').textContent=q.explanation||'';
+  expEl.className='explanation '+(r.correct?'correct-exp':'wrong-exp');
+  document.getElementById('exp-label').textContent=r.correct?'✓ Correct!':'✗ Incorrect';
+  IAMaths.render(document.getElementById('exp-text'),r.explanation||'');
   expEl.style.display='block';
-
-  // Save answer
-  if(attemptId){
-    await supa.from('question_answers').insert({
-      attempt_id:attemptId, question_id:q.id,
-      answer_given:letter, is_correct:isCorrect
-    });
-  }
 
   // Show next/finish
   if(currentQ<questions.length-1){
@@ -681,43 +697,22 @@ async function submitFreeResponse(){
   document.getElementById('fr-submit').style.display='none';
   document.getElementById('fr-marking').style.display='flex';
 
-  let marksAwarded=0, feedback='', examinerNote='', pointsAwarded=[];
+  // Marked on the server against the mark scheme it holds; the answer is
+  // saved there too. If marking itself fails the server still saves the
+  // answer and returns a note that the teacher will review it.
+  let r;
   try{
-    const res=await fetch('/api/mark-exam-response',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        subject:      quizData.topics?.subjects?.name || '',
-        exam_board:   quizData.exam_board || 'AQA',
-        stem:         q.question_text,
-        marks:        q.marks,
-        mark_points:  (q.mark_scheme_points||[]).map(p=>p.point||p),
-        model_answer: q.model_answer || '',
-        student_name: window._profile?.full_name || window._profile?.first_name || '',
-        response
-      })
-    });
-    if(!res.ok) throw new Error('Marking failed');
-    const data=await res.json();
-    marksAwarded=data.marks_awarded ?? 0;
-    feedback=data.feedback || '';
-    examinerNote=data.examiner_note || '';
-    pointsAwarded=data.mark_points_awarded || [];
+    r=await quizApi('answer',{attemptId, questionId:q.id, answer:response});
   }catch(e){
-    console.warn('AI marking failed:',e);
-    feedback='Your answer was saved, but could not be auto-marked right now — your teacher will review it.';
+    console.warn('Free-response marking failed:',e);
+    ta.disabled=false;
+    document.getElementById('fr-submit').style.display='inline-flex';
+    document.getElementById('fr-marking').style.display='none';
+    toast(e.message||'Could not send your answer. Please try again.','error');
+    return;
   }
-
-  const isCorrect=marksAwarded>=q.marks;
-  answers.push({question_id:q.id,answer:response,correct:isCorrect,marks:marksAwarded,feedback});
-
-  if(attemptId){
-    await supa.from('question_answers').insert({
-      attempt_id:attemptId, question_id:q.id,
-      answer_given:response, is_correct:isCorrect,
-      marks_awarded:marksAwarded, ai_feedback:feedback
-    });
-  }
+  const marksAwarded=r.marksAwarded||0, feedback=r.feedback||'', examinerNote=r.examinerNote||'', pointsAwarded=r.pointsAwarded||[];
+  answers[currentQ]={question_id:q.id,answer:response,correct:r.correct,marks:marksAwarded,feedback};
 
   document.getElementById('fr-marking').style.display='none';
   const resultEl=document.getElementById('fr-result');
@@ -749,21 +744,28 @@ function nextQuestion(){
   });
 }
 
+let finishing=false;
 async function finishQuiz(){
+  if(finishing) return;
+  finishing=true;
   clearInterval(timerInterval);
   const elapsed=Math.round((Date.now()-startTime)/1000);
-  const correct=answers.filter(a=>a.correct).length;
-  const totalMarks=answers.reduce((s,a)=>s+a.marks,0);
-  const maxMarks=questions.reduce((s,q)=>s+q.marks,0);
-  const pct=maxMarks>0?Math.round((totalMarks/maxMarks)*100):0;
-  const passed=pct>=quizData.pass_mark;
+  const given=answers.filter(Boolean);
+  const correct=given.filter(a=>a.correct).length;
 
-  // Save attempt
-  if(attemptId){
-    await supa.from('quiz_attempts').update({
-      score:totalMarks, max_score:maxMarks, percentage:pct,
-      passed, time_taken:elapsed, completed_at:new Date().toISOString()
-    }).eq('id',attemptId);
+  // The server scores the attempt from the answers it marked and saves it.
+  // If that request fails, show the same sum worked out here so the student
+  // still sees a result, and say it wasn't saved.
+  let pct, passed;
+  try{
+    const r=await quizApi('finish',{attemptId, timeTaken:elapsed});
+    pct=r.percentage; passed=r.passed;
+  }catch(e){
+    const marksOf=q=>Number(q.marks)>0?Number(q.marks):1;
+    const maxMarks=questions.reduce((s,q)=>s+marksOf(q),0);
+    pct=maxMarks>0?Math.round(given.reduce((s,a)=>s+(a.marks||0),0)/maxMarks*100):0;
+    passed=pct>=(quizData.pass_mark||0);
+    toast('Your result could not be saved. Check your connection.','error');
   }
 
   // ── Update streak ──────────────────────────────────────
@@ -819,7 +821,7 @@ async function finishQuiz(){
   }
   // ──────────────────────────────────────────────────────
 
-  showResults(correct, answers.length-correct, pct, passed, elapsed);
+  showResults(correct, given.length-correct, pct, passed, elapsed);
 }
 
 function showResults(cor, wrong, pct, passed, elapsed){
@@ -850,6 +852,9 @@ function showResults(cor, wrong, pct, passed, elapsed){
   document.getElementById('rb-time').textContent=m>0?`${m}m ${s}s`:`${s}s`;
 
   // Answer review
+  // Question stems are cut to 80 characters, except ones with maths in them
+  // (cutting inside a \( … \) span would break it).
+  const stem=t=>IAMaths.hasMaths(t)||t.length<=80?IAMaths.html(t):escHtml(t.substring(0,80))+'…';
   const rev=document.getElementById('answer-review');
   rev.innerHTML='<h3 style="font-family:var(--font-display);font-size:1.1rem;margin-bottom:1rem;">Question Review</h3>'+
     questions.map((q,i)=>{
@@ -862,7 +867,7 @@ function showResults(cor, wrong, pct, passed, elapsed){
         return `<div class="ar-item">
           <div class="ar-icon">${earned>=q.marks?'✅':earned>0?'🟡':'❌'}</div>
           <div>
-            <div class="ar-q">${escHtml(q.question_text.substring(0,80))}${q.question_text.length>80?'…':''}</div>
+            <div class="ar-q">${stem(q.question_text)}</div>
             <div class="ar-ans">Your answer: <strong>${escHtml(preview)}</strong></div>
             ${a?.feedback?`<div style="font-size:.78rem;color:var(--muted);margin-top:.3rem;font-style:italic;">${escHtml(a.feedback)}</div>`:''}
           </div>
@@ -873,16 +878,17 @@ function showResults(cor, wrong, pct, passed, elapsed){
       return `<div class="ar-item">
         <div class="ar-icon">${isC?'✅':'❌'}</div>
         <div>
-          <div class="ar-q">${q.question_text.substring(0,80)}${q.question_text.length>80?'…':''}</div>
-          <div class="ar-ans">
-            Your answer: <strong>${a?a.answer:'—'}</strong> ·
-            Correct: <strong>${q._shuffledCorrect || q.correct_answer}</strong>
+          <div class="ar-q">${stem(q.question_text)}</div>
+          <div class="ar-ans">${a
+            ?`Your answer: <strong>${a.answer}</strong> · Correct: <strong>${a.correctLetter}</strong>`
+            :'Not answered'}
           </div>
-          ${!isC?`<div style="font-size:.78rem;color:var(--muted);margin-top:.3rem;font-style:italic;">${q.explanation||''}</div>`:''}
+          ${a&&!isC&&a.explanation?`<div style="font-size:.78rem;color:var(--muted);margin-top:.3rem;font-style:italic;">${IAMaths.html(a.explanation)}</div>`:''}
         </div>
-        <div class="ar-result ${isC?'ar-correct':'ar-wrong'}">${isC?'+'+q.marks+'m':'0m'}</div>
+        <div class="ar-result ${isC?'ar-correct':'ar-wrong'}">${isC?'+'+earned+'m':'0m'}</div>
       </div>`;
     }).join('');
+  IAMaths.typeset(rev);
 }
 </script>
     <script>
