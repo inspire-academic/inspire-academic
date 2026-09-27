@@ -4,10 +4,15 @@
 // returns them WITHOUT correct answers, misconceptions or explanations; the
 // browser gets a session id and a random token to send each answer with.
 //
-// Body (new test):  { subject, level, board, name?, leadId? }
+// Body (new test):  { subject, level, board, tier?, name?, leadId? }
+//   tier: 'Higher' (default) | 'Foundation' | 'route' ("Not sure: find my
+//   tier": the test starts with engine.ROUTING_COUNT questions for both
+//   tiers; after them the page calls /session/route for the rest)
 // Body (resume):    { resumeSessionId }   — signed-in students only
-// Returns: { sessionId, token, subject, level, board,
-//            questions: [public question fields], answered: [{ questionId, chosen }] }
+// Returns: { sessionId, token, subject, level, board, tier, tierChoice,
+//            totalQuestions, questions: [public question fields],
+//            answered: [{ questionId, chosen }] }
+//   tier is null while a "find my tier" test is still in its routing block.
 //
 // Guests are welcome (the diagnostic is the no-login funnel). A signed-in
 // student's name comes from their profile; a programme guest's lead id must
@@ -21,11 +26,12 @@ const engine = require('./_diagnostic-engine');
 const SUBJECTS = ['Physics', 'Chemistry', 'Biology', 'Combined Science', 'Mathematics', engine.MATHS_PAPER2];
 const LEVELS = ['GCSE'];
 const BOARDS = ['AQA', 'Edexcel'];
+const TIER_CHOICES = ['Higher', 'Foundation', 'route'];
 const STARTS_PER_HOUR = 20; // per connection; a family sharing one phone won't get near it
 
 // answer_spec is read only to build a numeric question's unit list; the
 // browser never receives it (see engine.publicQuestion).
-const QUESTION_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'specification_ref', 'combined_eligible', 'updated_at'].join(',');
+const QUESTION_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'tier', 'specification_ref', 'combined_eligible', 'updated_at'].join(',');
 
 // Only questions a person has approved (or the pre-pipeline 'legacy' bank,
 // queued for review) reach students; drafts never do. Only the question
@@ -33,7 +39,7 @@ const QUESTION_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'spec
 function questionFilter(subjects, level) {
   const inList = subjects.map(s => `"${s}"`).join(',');
   return `subject=in.(${encodeURIComponent(inList)})&level=eq.${encodeURIComponent(level)}` +
-    `&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)&active=is.true&exam_board=in.(AQA,Universal)&tier=in.(Higher,Both)`;
+    `&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)&active=is.true&exam_board=in.(AQA,Universal)&tier=in.(Higher,Foundation,Both)`;
 }
 
 async function resume(client, event, sessionId) {
@@ -46,6 +52,7 @@ async function resume(client, event, sessionId) {
   if (session.status !== 'in_progress') return fail(409, 'not_in_progress', 'That test has already finished.');
 
   const ids = session.question_ids.map(Number);
+  const tierChoice = session.tier_choice || 'Higher';
   const [questions, responses] = await Promise.all([
     client.get(`diagnostic_questions?id=in.(${ids.join(',')})&select=${engine.PUBLIC_QUESTION_FIELDS.join(',')},answer_spec`),
     client.get(`diagnostic_responses?session_id=eq.${session.id}&select=question_id,chosen&order=position`)
@@ -60,6 +67,8 @@ async function resume(client, event, sessionId) {
   return ok({
     sessionId: session.id, token, resumed: true,
     subject: session.subject, level: session.level, board: session.exam_board,
+    tier: session.tier || (tierChoice === 'route' ? null : 'Higher'), tierChoice,
+    totalQuestions: tierChoice === 'route' && !session.tier ? engine.fullTestLength(session.subject) : ordered.length,
     questions: ordered.map(engine.publicQuestion),
     answered: responses.map(r => ({ questionId: Number(r.question_id), chosen: r.chosen }))
   });
@@ -81,6 +90,8 @@ exports.handler = async (event) => {
     if (!SUBJECTS.includes(subject)) return fail(400, 'invalid_subject', 'Please choose a subject.');
     if (!LEVELS.includes(level)) return fail(400, 'invalid_level', 'Please choose a level.');
     if (!BOARDS.includes(board)) return fail(400, 'invalid_board', 'Please choose an exam board.');
+    const tierChoice = body.tier == null ? 'Higher' : String(body.tier);
+    if (!TIER_CHOICES.includes(tierChoice)) return fail(400, 'invalid_tier', 'Please choose Foundation, Higher, or "find my tier".');
 
     const ipHash = sha256('diag:' + clientIp(event));
     const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
@@ -104,7 +115,14 @@ exports.handler = async (event) => {
     }
 
     const rows = await client.get(`diagnostic_questions?${questionFilter(engine.sourceSubjects(subject), level)}&select=${QUESTION_COLUMNS}`);
-    const questions = engine.selectQuestions(subject, rows);
+    const available = engine.tierAvailability(subject, rows);
+    if (!available[tierChoice]) {
+      return fail(409, 'tier_unavailable', tierChoice === 'Higher'
+        ? 'There are not enough questions for this subject yet. Please check back soon.'
+        : 'That option is not available for this subject yet. Please choose Higher tier.');
+    }
+    const routing = tierChoice === 'route';
+    const questions = routing ? engine.selectRoutingQuestions(subject, rows) : engine.selectQuestions(subject, rows, tierChoice);
     if (!questions.length) return fail(404, 'no_questions', 'There are no questions for this subject yet. Please check back soon.');
 
     // Only the newest unfinished test per subject stays resumable.
@@ -124,6 +142,8 @@ exports.handler = async (event) => {
       lead_id: leadId,
       student_name: studentName,
       subject, level, exam_board: board,
+      tier: routing ? null : tierChoice,
+      tier_choice: tierChoice,
       question_ids: questions.map(q => q.id),
       question_versions: versions,
       status: 'in_progress',
@@ -132,6 +152,8 @@ exports.handler = async (event) => {
 
     return ok({
       sessionId: session.id, token, resumed: false, subject, level, board,
+      tier: routing ? null : tierChoice, tierChoice,
+      totalQuestions: routing ? engine.fullTestLength(subject) : questions.length,
       questions: questions.map(engine.publicQuestion), answered: []
     });
   } catch (e) {

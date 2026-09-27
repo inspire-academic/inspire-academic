@@ -408,6 +408,18 @@ function = "create-teacher"
   force = true
 
 [[redirects]]
+  from = "/api/v1/diagnostic/session/route"
+  to = "/.netlify/functions/diagnostic-session-route"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/diagnostic/availability"
+  to = "/.netlify/functions/diagnostic-availability"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/api/v1/diagnostic/session/active"
   to = "/.netlify/functions/diagnostic-session-active"
   status = 200

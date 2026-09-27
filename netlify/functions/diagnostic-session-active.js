@@ -5,6 +5,7 @@
 // level, board, answered, total, updatedAt }] }. Guests get an empty list.
 
 const { fail, ok, currentUser, db } = require('./_diagnostic-shared');
+const engine = require('./_diagnostic-engine');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'GET') return fail(405, 'method_not_allowed', 'Method not allowed.');
@@ -16,7 +17,7 @@ exports.handler = async (event) => {
   try {
     const rows = await client.get(
       `diagnostic_sessions?student_id=eq.${user.id}&status=eq.in_progress` +
-      `&select=id,subject,level,exam_board,question_ids,updated_at&order=created_at.desc`
+      `&select=id,subject,level,exam_board,question_ids,tier,tier_choice,updated_at&order=created_at.desc`
     );
     const newest = [];
     const seen = new Set();
@@ -32,7 +33,9 @@ exports.handler = async (event) => {
     return ok({
       sessions: newest.map(r => ({
         sessionId: r.id, subject: r.subject, level: r.level, board: r.exam_board,
-        answered: count[r.id] || 0, total: (r.question_ids || []).length, updatedAt: r.updated_at
+        answered: count[r.id] || 0, updatedAt: r.updated_at,
+        // A "find my tier" test only holds its routing block until routed.
+        total: r.tier_choice === 'route' && !r.tier ? engine.fullTestLength(r.subject) : (r.question_ids || []).length
       }))
     });
   } catch (e) {

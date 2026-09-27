@@ -139,27 +139,124 @@ function isCombinedEligible(q) {
   return q.combined_eligible !== false;
 }
 
-// Picks one test's questions from every active, validated row for the
+// A tier's pool: its own questions plus those written for both tiers.
+// Rows with no tier are Higher (the bank before Foundation existed).
+function inTier(q, tier) {
+  const t = q.tier || 'Higher';
+  return t === 'Both' || t === (tier === 'Foundation' ? 'Foundation' : 'Higher');
+}
+
+// The rows one subject's test may draw on, before sampling: the main Maths
+// diagnostic never draws from the Geometry & Statistics (Paper 2) pool,
+// which promises no overlap with it.
+function subjectPool(subject, s, rows) {
+  if (subject === 'Combined Science') return rows.filter(q => q.subject === s && isCombinedEligible(q));
+  return rows.filter(q => q.subject === s && !(s === 'Mathematics' && q.specification_ref === PAPER2_POOL));
+}
+
+// Picks one test's questions from every active, reviewed row for the
 // subject(s) involved (the pool is always AQA-authored; see the session
-// start function). Returns rows in the order they'll be asked.
-function selectQuestions(subject, rows) {
+// start function), from the tier's pool. `exclude` holds ids already asked
+// (the routing block), and `counts` overrides how many to draw ({ total }
+// or per science for Combined). Returns rows in the order they'll be asked.
+function selectQuestions(subject, rows, tier = 'Higher', exclude = null, counts = null) {
+  const usable = rows.filter(q => inTier(q, tier) && !(exclude && exclude.has(Number(q.id))));
   if (subject === 'Combined Science') {
     return shuffleArray(COMBINED_SUBJECTS.flatMap(s => {
-      const pool = rows.filter(q => q.subject === s && isCombinedEligible(q));
+      const pool = subjectPool(subject, s, usable);
       const weights = buildTopicWeights(s, 'AQA', [...new Set(pool.map(q => q.topic))]);
-      return weightedSampleAcrossTopics(pool, COMBINED_PER_SUBJECT, weights);
+      return weightedSampleAcrossTopics(pool, counts && counts[s] != null ? counts[s] : COMBINED_PER_SUBJECT, weights);
     }));
   }
   if (subject === MATHS_PAPER2) {
     // Complete, even coverage of every Geometry & Statistics topic: the
     // whole pool, in a random order.
-    return shuffleArray(rows.filter(q => q.subject === 'Mathematics' && q.specification_ref === PAPER2_POOL));
+    return shuffleArray(usable.filter(q => q.subject === 'Mathematics' && q.specification_ref === PAPER2_POOL));
   }
-  // The main Maths diagnostic never draws from the Paper 2 pool, which
-  // promises no overlap with it.
-  const pool = rows.filter(q => q.subject === subject && !(subject === 'Mathematics' && q.specification_ref === PAPER2_POOL));
+  const pool = subjectPool(subject, subject, usable);
   const weights = buildTopicWeights(subject, 'AQA', [...new Set(pool.map(q => q.topic))]);
-  return weightedSampleAcrossTopics(pool, QUESTIONS_PER_TEST, weights);
+  return weightedSampleAcrossTopics(pool, counts && counts.total != null ? counts.total : QUESTIONS_PER_TEST, weights);
+}
+
+// ── Finding a student's tier ───────────────────────────────────────────
+//
+// "Not sure: find my tier" starts with ROUTING_COUNT questions written for
+// both tiers, spread from easy to hard. Their guess-corrected score decides
+// the rest of the test: at least ROUTE_TO_HIGHER of the routing block right
+// continues at Higher, otherwise Foundation. The routing answers count in the
+// final result, graded on the chosen tier's boundaries.
+//
+// The 50% line is a starting point, not a measured cut: once routed students'
+// full-test grades are in the response log, it should be checked against
+// where Higher and Foundation results actually overlap (grades 4–5).
+const ROUTING_COUNT = 8;
+const ROUTE_TO_HIGHER = 0.5;
+
+// Eight questions for both tiers, spread across difficulty (easier, middle
+// and harder thirds) and across topics, never from the Paper 2 pool.
+function selectRoutingQuestions(subject, rows) {
+  const both = rows.filter(q => (q.tier || 'Higher') === 'Both');
+  const subjects = subject === 'Combined Science' ? COMBINED_SUBJECTS : [subject];
+  const perSubject = subjects.map((s, i) => Math.floor(ROUTING_COUNT / subjects.length) + (i < ROUTING_COUNT % subjects.length ? 1 : 0));
+  return shuffleArray(subjects.flatMap((s, i) => {
+    const pool = shuffleArray(subjectPool(subject, s, both));
+    const bands = [pool.filter(q => (q.difficulty || 2) <= 2), pool.filter(q => q.difficulty === 3), pool.filter(q => (q.difficulty || 2) >= 4)];
+    const picked = [];
+    const topics = new Set();
+    // Round-robin over the bands, preferring a topic not yet used.
+    for (let round = 0; picked.length < perSubject[i] && round < pool.length; round++) {
+      const band = bands[round % 3];
+      if (!band.length) continue;
+      const k = Math.max(0, band.findIndex(q => !topics.has(q.topic)));
+      const [q] = band.splice(k, 1);
+      picked.push(q);
+      topics.add(q.topic);
+    }
+    return picked;
+  }));
+}
+
+// Which tier the routing answers point to.
+function routeTier(markedAnswers) {
+  const total = markedAnswers.length;
+  if (!total) return 'Higher';
+  const correct = markedAnswers.filter(a => a.correct).length;
+  const wrongGuessable = markedAnswers.filter(a => !a.correct && !a.not_sure && a.chosen !== TYPED).length;
+  return Math.max(0, correct - wrongGuessable / 3) / total >= ROUTE_TO_HIGHER ? 'Higher' : 'Foundation';
+}
+
+// How many of the rest to draw once routed, so the whole test is the usual
+// length: per science for Combined (15 each, less what routing asked).
+function remainingCounts(subject, routingQuestions) {
+  if (subject === 'Combined Science') {
+    const out = {};
+    COMBINED_SUBJECTS.forEach(s => { out[s] = Math.max(0, COMBINED_PER_SUBJECT - routingQuestions.filter(q => q.subject === s).length); });
+    return out;
+  }
+  return { total: Math.max(0, QUESTIONS_PER_TEST - routingQuestions.length) };
+}
+
+// How many questions a whole test has (a "find my tier" test is this long
+// once routed; before that the session only holds the routing block).
+function fullTestLength(subject) {
+  return subject === 'Combined Science' ? COMBINED_PER_SUBJECT * COMBINED_SUBJECTS.length : QUESTIONS_PER_TEST;
+}
+
+// Which tier choices a subject can offer yet. Higher is offered whenever it
+// has questions (as before tiers existed). Foundation needs enough reviewed
+// questions for a full test, and finding a tier needs a routing block plus
+// a full bank for both tiers. The start page only shows what's available.
+function tierAvailability(subject, rows) {
+  const enough = tier => {
+    const usable = rows.filter(q => inTier(q, tier));
+    if (subject === 'Combined Science') return COMBINED_SUBJECTS.every(s => subjectPool(subject, s, usable).length >= COMBINED_PER_SUBJECT);
+    if (subject === MATHS_PAPER2) return tier === 'Higher' && usable.some(q => q.specification_ref === PAPER2_POOL);
+    return subjectPool(subject, subject, usable).length >= QUESTIONS_PER_TEST;
+  };
+  const higher = rows.some(q => inTier(q, 'Higher'));
+  const foundation = subject !== MATHS_PAPER2 && enough('Foundation');
+  const routing = enough('Higher') && foundation && selectRoutingQuestions(subject, rows).length === ROUTING_COUNT;
+  return { Higher: higher, Foundation: foundation, route: routing };
 }
 
 // The subjects whose rows a test for `subject` draws on.
@@ -253,40 +350,77 @@ function markAnswers(questions, responseByQuestionId) {
 
 // ── Grading ────────────────────────────────────────────────────────────
 
-// Real published raw-mark boundaries, June 2026, Higher tier (AQA "Subject
-// grade boundaries – June 2026 exams"; Edexcel "Grade Boundaries Edexcel GCSE
-// (9-1) June 2026"). Refresh after each results day.
+// Real published raw-mark subject boundaries, June 2026 (AQA "Subject grade
+// boundaries – June 2026 exams", published 20 August 2026; Pearson "Grade
+// Boundaries Edexcel GCSE (9-1) June 2026"). Higher tier awards 9–3 (below
+// the 3 boundary is U); Foundation awards 5–1. Each figure was read from the
+// PDF text and checked against an image of the page. Refresh after each
+// results day.
 const REAL_GRADE_BOUNDARIES = {
-  AQA: {
-    maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
-    Physics:     [[9,157],[8,142],[7,128],[6,107],[5,87],[4,67],[3,57]],
-    Chemistry:   [[9,155],[8,137],[7,120],[6,94],[5,68],[4,43],[3,30]],
-    Biology:     [[9,133],[8,120],[7,107],[6,88],[5,70],[4,52],[3,43]],
-    Mathematics: [[9,219],[8,192],[7,166],[6,131],[5,97],[4,63],[3,46]]
+  Higher: {
+    AQA: {
+      maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
+      Physics:     [[9,157],[8,142],[7,128],[6,107],[5,87],[4,67],[3,57]],
+      Chemistry:   [[9,155],[8,137],[7,120],[6,94],[5,68],[4,43],[3,30]],
+      Biology:     [[9,133],[8,120],[7,107],[6,88],[5,70],[4,52],[3,43]],
+      Mathematics: [[9,219],[8,192],[7,166],[6,131],[5,97],[4,63],[3,46]]
+    },
+    Edexcel: {
+      maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
+      Physics:     [[9,163],[8,148],[7,134],[6,113],[5,92],[4,71],[3,60]],
+      Chemistry:   [[9,165],[8,146],[7,127],[6,103],[5,79],[4,55],[3,43]],
+      Biology:     [[9,170],[8,158],[7,147],[6,126],[5,105],[4,84],[3,73]],
+      Mathematics: [[9,208],[8,177],[7,146],[6,114],[5,82],[4,50],[3,34]]
+    }
   },
-  Edexcel: {
-    maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
-    Physics:     [[9,163],[8,148],[7,134],[6,113],[5,92],[4,71],[3,60]],
-    Chemistry:   [[9,165],[8,146],[7,127],[6,103],[5,79],[4,55],[3,43]],
-    Biology:     [[9,170],[8,158],[7,147],[6,126],[5,105],[4,84],[3,73]],
-    Mathematics: [[9,208],[8,177],[7,146],[6,114],[5,82],[4,50],[3,34]]
+  Foundation: {
+    AQA: {
+      maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
+      Physics:     [[5,141],[4,126],[3,92],[2,58],[1,24]],
+      Chemistry:   [[5,132],[4,110],[3,81],[2,52],[1,24]],
+      Biology:     [[5,144],[4,127],[3,91],[2,55],[1,19]],
+      Mathematics: [[5,187],[4,154],[3,115],[2,76],[1,38]]
+    },
+    Edexcel: {
+      maxMark: { Physics: 200, Chemistry: 200, Biology: 200, Mathematics: 240 },
+      Physics:     [[5,135],[4,118],[3,88],[2,59],[1,30]],
+      Chemistry:   [[5,137],[4,118],[3,88],[2,59],[1,30]],
+      Biology:     [[5,132],[4,115],[3,84],[2,53],[1,22]],
+      Mathematics: [[5,181],[4,151],[3,110],[2,69],[1,29]]
+    }
   }
 };
 
 // Combined Science is a double award graded as a pair ("7-6"). Real
-// boundaries for every Higher-tier pair, lowest first, same sources.
+// boundaries for every pair each tier awards, lowest first, same sources
+// (AQA: Combined Science: Trilogy 8464).
 const REAL_COMBINED_BOUNDARIES = {
-  AQA: {
-    maxMark: 420,
-    pairs: [[4,3,101],[4,4,111],[5,4,130],[5,5,149],[6,5,168],[6,6,188],
-            [7,6,208],[7,7,228],[8,7,245],[8,8,262],[9,8,280],[9,9,298]]
+  Higher: {
+    AQA: {
+      maxMark: 420,
+      pairs: [[4,3,101],[4,4,111],[5,4,130],[5,5,149],[6,5,168],[6,6,188],
+              [7,6,208],[7,7,228],[8,7,245],[8,8,262],[9,8,280],[9,9,298]]
+    },
+    Edexcel: {
+      maxMark: 360,
+      pairs: [[4,3,99],[4,4,108],[5,4,126],[5,5,145],[6,5,164],[6,6,183],
+              [7,6,202],[7,7,221],[8,7,236],[8,8,251],[9,8,266],[9,9,282]]
+    }
   },
-  Edexcel: {
-    maxMark: 360,
-    pairs: [[4,3,99],[4,4,108],[5,4,126],[5,5,145],[6,5,164],[6,6,183],
-            [7,6,202],[7,7,221],[8,7,236],[8,8,251],[9,8,266],[9,9,282]]
+  Foundation: {
+    AQA: {
+      maxMark: 420,
+      pairs: [[1,1,62],[2,1,91],[2,2,120],[3,2,149],[3,3,178],[4,3,208],[4,4,238],[5,4,257],[5,5,276]]
+    },
+    Edexcel: {
+      maxMark: 360,
+      pairs: [[1,1,41],[2,1,66],[2,2,91],[3,2,116],[3,3,142],[4,3,168],[4,4,194],[5,4,212],[5,5,231]]
+    }
   }
 };
+
+const TIERS = ['Higher', 'Foundation'];
+const tierOf = t => (t === 'Foundation' ? 'Foundation' : 'Higher');
 
 function estimateGradeFallback(pct, board) {
   const table = board === 'Edexcel'
@@ -296,27 +430,34 @@ function estimateGradeFallback(pct, board) {
   return 0;
 }
 
-function estimateGrade(pct, board, subject) {
-  const boardData = REAL_GRADE_BOUNDARIES[board] || REAL_GRADE_BOUNDARIES.AQA;
+// The grade a percentage earns on a tier's real boundaries; 0 means U
+// (below Higher's 3, or below Foundation's 1).
+function estimateGrade(pct, board, subject, tier) {
+  const byBoard = REAL_GRADE_BOUNDARIES[tierOf(tier)];
+  const boardData = byBoard[board] || byBoard.AQA;
   const table = boardData[subject];
   const maxMark = boardData.maxMark[subject];
   if (!table || !maxMark) return estimateGradeFallback(pct, board);
   for (const [grade, raw] of table) if (pct >= (raw / maxMark) * 100) return grade;
-  return 0; // below grade 3: ungraded at Higher tier
+  return 0;
 }
 
 function gradeLabel(n) { return n <= 0 ? 'U' : String(n); }
 
-function combinedPairIndex(pct, board) {
-  const { pairs, maxMark } = REAL_COMBINED_BOUNDARIES[board] || REAL_COMBINED_BOUNDARIES.AQA;
+function combinedTable(board, tier) {
+  const byBoard = REAL_COMBINED_BOUNDARIES[tierOf(tier)];
+  return byBoard[board] || byBoard.AQA;
+}
+function combinedPairIndex(pct, board, tier) {
+  const { pairs, maxMark } = combinedTable(board, tier);
   for (let i = pairs.length - 1; i >= 0; i--) {
     if (pct >= (pairs[i][2] / maxMark) * 100) return i;
   }
   return -1;
 }
-function combinedPairLabel(index, board) {
+function combinedPairLabel(index, board, tier) {
   if (index < 0) return 'U-U';
-  const [high, low] = (REAL_COMBINED_BOUNDARIES[board] || REAL_COMBINED_BOUNDARIES.AQA).pairs[index];
+  const [high, low] = combinedTable(board, tier).pairs[index];
   return `${high}-${low}`;
 }
 
@@ -332,17 +473,17 @@ function wilsonInterval(correct, total, z) {
 }
 const CONFIDENCE_Z_80 = 1.2816;
 
-function confidenceRangeForScore(correct, total, board, subject, isCombined) {
+function confidenceRangeForScore(correct, total, board, subject, isCombined, tier) {
   const interval = wilsonInterval(correct, total, CONFIDENCE_Z_80);
   if (!interval) return null;
   const lowerPct = interval.lower * 100;
   const upperPct = interval.upper * 100;
   if (isCombined) {
-    return { lowGrade: combinedPairLabel(combinedPairIndex(lowerPct, board), board),
-             highGrade: combinedPairLabel(combinedPairIndex(upperPct, board), board), lowerPct, upperPct };
+    return { lowGrade: combinedPairLabel(combinedPairIndex(lowerPct, board, tier), board, tier),
+             highGrade: combinedPairLabel(combinedPairIndex(upperPct, board, tier), board, tier), lowerPct, upperPct };
   }
-  return { lowGrade: gradeLabel(estimateGrade(lowerPct, board, subject)),
-           highGrade: gradeLabel(estimateGrade(upperPct, board, subject)), lowerPct, upperPct };
+  return { lowGrade: gradeLabel(estimateGrade(lowerPct, board, subject, tier)),
+           highGrade: gradeLabel(estimateGrade(upperPct, board, subject, tier)), lowerPct, upperPct };
 }
 
 // ── Diagnosis ──────────────────────────────────────────────────────────
@@ -406,6 +547,8 @@ const PRIORITY_ORDER = ['critical', 'high', 'medium', 'low'];
 
 function computeDiagnosis(answers, config) {
   const { subject, board } = config;
+  const tier = tierOf(config.tier);
+  const foundation = tier === 'Foundation';
   const gradingSubject = subject === MATHS_PAPER2 ? 'Mathematics' : subject;
   const isCombined = subject === 'Combined Science';
   const total = answers.length;
@@ -425,18 +568,24 @@ function computeDiagnosis(answers, config) {
   const gradedPct = total ? Math.round((effective / total) * 100) : 0;
 
   let currentGrade, targetGrade;
+  let topOfTier = false;
   if (isCombined) {
-    const currentIdx = combinedPairIndex(gradedPct, board);
-    const maxIdx = (REAL_COMBINED_BOUNDARIES[board] || REAL_COMBINED_BOUNDARIES.AQA).pairs.length - 1;
-    currentGrade = combinedPairLabel(currentIdx, board);
-    targetGrade = combinedPairLabel(Math.min(maxIdx, currentIdx + 2), board);
+    const currentIdx = combinedPairIndex(gradedPct, board, tier);
+    const maxIdx = combinedTable(board, tier).pairs.length - 1;
+    currentGrade = combinedPairLabel(currentIdx, board, tier);
+    targetGrade = combinedPairLabel(Math.min(maxIdx, currentIdx + 2), board, tier);
+    topOfTier = currentIdx === maxIdx;
   } else {
-    const currentNum = estimateGrade(gradedPct, board, gradingSubject);
-    // Two grades up, never below 4: Higher tier doesn't award 1 or 2.
+    const currentNum = estimateGrade(gradedPct, board, gradingSubject, tier);
     currentGrade = gradeLabel(currentNum);
-    targetGrade = gradeLabel(Math.min(9, Math.max(4, currentNum + 2)));
+    // Two grades up, within what the tier awards: Higher never below 4 (it
+    // doesn't award 1 or 2), Foundation never above 5 (its top grade).
+    targetGrade = gradeLabel(foundation
+      ? Math.min(5, Math.max(2, currentNum + 2))
+      : Math.min(9, Math.max(4, currentNum + 2)));
+    topOfTier = foundation && currentNum >= 5;
   }
-  const confidence = confidenceRangeForScore(Math.round(effective), total, board, gradingSubject, isCombined);
+  const confidence = confidenceRangeForScore(Math.round(effective), total, board, gradingSubject, isCombined, tier);
 
   const studentProfile =
     gradedPct < 40 ? 'struggling' :
@@ -451,11 +600,16 @@ function computeDiagnosis(answers, config) {
     : '';
   const ungraded = /^U(-U)?$/.test(currentGrade);
   const where = ungraded
-    ? `not yet at a Higher-tier grade${rangeNote}`
+    ? `not yet at a ${tier}-tier grade${rangeNote}`
     : isCombined ? `around a ${currentGrade} double award${rangeNote}` : `around Grade ${currentGrade}${rangeNote}`;
+  // A Foundation paper can't award above 5: a student at the top of it is
+  // told so, rather than shown a target the tier can't give.
+  const tierNote = foundation && topOfTier
+    ? ' That is the top of what Foundation tier awards: worth taking the Higher-tier diagnostic next.'
+    : '';
   const profileDescription = (isCombined
-    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — ${where} on real ${board} Combined Science June 2026 boundaries. Next target: ${targetGrade}.`
-    : `Scored ${overallPct}% overall — ${where} on real ${board} ${gradingSubject} June 2026 boundaries, next target: Grade ${targetGrade}.`) + guessNote;
+    ? `Scored ${overallPct}% overall across Physics, Chemistry and Biology — ${where} on real ${board} Combined Science ${tier}-tier June 2026 boundaries.${topOfTier && foundation ? '' : ` Next target: ${targetGrade}.`}`
+    : `Scored ${overallPct}% overall — ${where} on real ${board} ${gradingSubject} ${tier}-tier June 2026 boundaries${topOfTier && foundation ? '.' : `, next target: Grade ${targetGrade}.`}`) + tierNote + guessNote;
 
   const topicScores = computeTopicScores(answers);
   const shares = examWeightShares(topicScores, board);
@@ -547,7 +701,7 @@ function computeDiagnosis(answers, config) {
     : 'No major red flags — steady, targeted practice on the gaps above should be enough.';
 
   return {
-    overallScore: overallPct, gradedScore: gradedPct, correctCount, notSureCount, totalQuestions: total,
+    tier, overallScore: overallPct, gradedScore: gradedPct, correctCount, notSureCount, totalQuestions: total,
     confidentWrongCount: confidentWrong.length, unsureRightCount: unsureRight.length,
     currentGrade, targetGrade, confidence, studentProfile, profileDescription,
     topicScores, gaps, checks, strengths, teacherNote
@@ -591,8 +745,9 @@ function diagnosisForDisplay(d) {
 module.exports = {
   QUESTIONS_PER_TEST, COMBINED_PER_SUBJECT, MIN_FOR_VERDICT, FIRM_EVIDENCE, MATHS_PAPER2,
   TYPED, markOne,
+  ROUTING_COUNT, ROUTE_TO_HIGHER, inTier, selectRoutingQuestions, routeTier, remainingCounts, tierAvailability, fullTestLength,
   shuffleArray, normTopic, buildTopicWeights, weightedSampleAcrossTopics, isCombinedEligible,
   selectQuestions, sourceSubjects, publicQuestion, PUBLIC_QUESTION_FIELDS, markAnswers,
-  estimateGrade, gradeLabel, combinedPairIndex, combinedPairLabel, wilsonInterval,
+  TIERS, estimateGrade, gradeLabel, combinedPairIndex, combinedPairLabel, wilsonInterval,
   confidenceRangeForScore, computeTopicScores, computeDiagnosis, reviewItems, diagnosisForDisplay
 };

@@ -5,9 +5,9 @@
 -- key columns stay nullable: whether they were NOT NULL before was never
 -- recorded (the table was created in the dashboard).
 begin;
--- Numeric questions go too: the rolled-back engine cannot mark them.
+-- Numeric questions are retired (kept, not deleted): the rolled-back engine cannot mark them.
 delete from public.diagnostic_responses where chosen = 'x';
-delete from public.diagnostic_questions where question_type = 'numeric';
+update public.diagnostic_questions set active = false where question_type = 'numeric';
 alter table public.diagnostic_questions drop constraint if exists diagnostic_questions_type_shape_check;
 alter table public.diagnostic_responses
   drop constraint if exists diagnostic_responses_typed_check,
@@ -15,6 +15,10 @@ alter table public.diagnostic_responses
   drop constraint if exists diagnostic_responses_chosen_check;
 alter table public.diagnostic_responses add constraint diagnostic_responses_chosen_check
   check (chosen in ('a', 'b', 'c', 'd', 'e'));
+alter table public.diagnostic_sessions drop constraint if exists diagnostic_sessions_tier_check;
+alter table public.diagnostic_sessions
+  drop column if exists tier,
+  drop column if exists tier_choice;
 alter table public.diagnostic_responses
   drop column if exists answer_text,
   drop column if exists answer_unit,

@@ -28,7 +28,7 @@ function attemptRow(session, diagnosis, answers) {
     subject: session.subject,
     exam_board: session.exam_board,
     level: session.level,
-    tier: 'Higher',
+    tier: diagnosis.tier || 'Higher',
     overall_score: diagnosis.overallScore,
     current_grade: diagnosis.currentGrade,
     target_grade: diagnosis.targetGrade,
@@ -62,6 +62,13 @@ exports.handler = async (event) => {
     if (session.status !== 'in_progress' && session.status !== 'submitted') {
       return fail(409, 'not_in_progress', 'This test was replaced by a newer one.');
     }
+
+    // A "find my tier" test is graded on the tier it was routed to, so it
+    // can't be marked before routing.
+    if (session.tier_choice === 'route' && !session.tier) {
+      return fail(409, 'route_first', 'Please finish the first questions so we can find your tier.');
+    }
+    const tier = session.tier || 'Higher';
 
     const ids = session.question_ids.map(Number);
     const rows = await client.get(`diagnostic_questions?id=in.(${ids.join(',')})&select=${FULL_COLUMNS}`);
@@ -103,7 +110,8 @@ exports.handler = async (event) => {
     if (!claimed.length) return fail(409, 'submitting', 'Your results are still being worked out. Please try again in a moment.');
 
     const answers = engine.markAnswers(questions, choice);
-    const diagnosis = engine.computeDiagnosis(answers, { subject: session.subject, board: session.exam_board });
+    const diagnosis = engine.computeDiagnosis(answers, { subject: session.subject, board: session.exam_board, tier });
+    if (session.tier_choice === 'route') diagnosis.routed = true;
     const review = engine.reviewItems(questions, answers);
 
     let attemptId = null;

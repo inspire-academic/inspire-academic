@@ -1,4 +1,4 @@
--- Diagnostic Stage 2: typed number answers and a confidence rating.
+-- Diagnostic Stage 2: typed number answers, a confidence rating, and tiers.
 --
 -- diagnostic_questions: a numeric question has no options or letter key (its
 -- answer is in answer_spec), so those columns may be null, and a check makes
@@ -12,8 +12,15 @@
 --                answer was "Not sure" or came from an older version of the
 --                page
 --
+-- diagnostic_sessions gains:
+--   tier_choice  what the student picked: 'Higher' | 'Foundation' | 'route'
+--                ("Not sure: find my tier"); older sessions are Higher
+--   tier         the tier the test is graded on; null only while a 'route'
+--                test is still in its routing block
+--
 -- RUN THIS BEFORE the engine code that uses it is deployed (the answer
--- endpoint writes these columns). Safe to re-run. Run in the LIVE project only:
+-- endpoint writes the response columns; the start endpoint writes the
+-- session ones). Safe to re-run. Run in the LIVE project only:
 -- https://supabase.com/dashboard/project/ygtsrdwoikqnrbexjrtl/sql/new
 
 begin;
@@ -53,12 +60,27 @@ alter table public.diagnostic_responses drop constraint if exists diagnostic_res
 alter table public.diagnostic_responses add constraint diagnostic_responses_confidence_check
   check (confidence is null or confidence in ('sure', 'unsure'));
 
+alter table public.diagnostic_sessions
+  add column if not exists tier_choice text not null default 'Higher',
+  add column if not exists tier        text default 'Higher';
+
+alter table public.diagnostic_sessions drop constraint if exists diagnostic_sessions_tier_check;
+alter table public.diagnostic_sessions add constraint diagnostic_sessions_tier_check
+  check (tier_choice in ('Higher', 'Foundation', 'route')
+         and (tier in ('Higher', 'Foundation') or (tier is null and tier_choice = 'route')));
+
 commit;
 
 -- Check: expect answer_text, answer_unit and confidence listed.
 select column_name, data_type from information_schema.columns
  where table_schema = 'public' and table_name = 'diagnostic_responses'
    and column_name in ('answer_text', 'answer_unit', 'confidence')
+ order by column_name;
+
+-- Check: expect tier and tier_choice listed.
+select column_name, data_type from information_schema.columns
+ where table_schema = 'public' and table_name = 'diagnostic_sessions'
+   and column_name in ('tier', 'tier_choice')
  order by column_name;
 
 -- Check: expect 0 (every existing question already fits the new shape check;

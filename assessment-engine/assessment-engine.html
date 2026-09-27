@@ -355,6 +355,15 @@ input,select,textarea{font-family:var(--font-body);}
         </div>
       </div>
 
+      <fieldset class="tier-choice" id="tier-choice" hidden>
+        <legend class="form-label">Tier</legend>
+        <div class="tier-options">
+          <label class="tier-opt" data-tier="Higher"><input type="radio" name="tier" value="Higher" checked><span><b>Higher</b><small>Grades 4–9</small></span></label>
+          <label class="tier-opt" data-tier="Foundation"><input type="radio" name="tier" value="Foundation"><span><b>Foundation</b><small>Grades 1–5</small></span></label>
+          <label class="tier-opt" data-tier="route"><input type="radio" name="tier" value="route"><span><b>Not sure: find my tier</b><small>The first 8 questions decide</small></span></label>
+        </div>
+      </fieldset>
+
       <div id="resume-banner" style="display:none;margin-bottom:.85rem;padding:.85rem 1rem;border-radius:var(--r);border:1px solid rgba(201,168,76,.35);background:rgba(201,168,76,.08);align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
         <span style="font-size:.85rem;color:var(--white);" id="resume-banner-text"></span>
         <button class="btn btn-gold" style="font-size:.82rem;padding:.5rem 1rem;flex-shrink:0;" onclick="resumeAttempt()">Resume →</button>
@@ -476,6 +485,7 @@ const S = {
   leadId:      null, // a guest who arrived from a programme registration (e.g. ISM)
   savedPlans:  {},   // { [subject]: saved attempt row with a plan }
   activeSessions: {}, // { [subject]: { sessionId, answered, total } } unfinished tests
+  availability: {},   // { [subject]: { Higher, Foundation, route } } tier choices on offer
   answerChain: Promise.resolve() // answers are sent one at a time, in order
 };
 
@@ -500,6 +510,7 @@ const S = {
 })();
 
 document.addEventListener('DOMContentLoaded', async () => {
+  loadAvailability(); // in the background: the tier choice appears when it can
   // A guest arriving from a programme registration (e.g. the ISM/Science
   // Mastery funnel — see thank-you/index.html) carries their lead_id and
   // child's name as query params, since there is no login to identify them
@@ -594,6 +605,39 @@ async function loadSavedPlans() {
   }
 }
 
+// Which tier choices each subject offers yet. Foundation and "find my tier"
+// appear only once a subject has enough reviewed questions for them; until
+// then the tier choice stays hidden and every test is Higher, as before.
+async function loadAvailability() {
+  try {
+    const data = await api('availability');
+    S.availability = data.subjects || {};
+    const sub = document.querySelector('.subject-btn.active')?.dataset.subject;
+    if (sub) updateTierChoice(sub);
+  } catch(e) {
+    S.availability = {};
+  }
+}
+
+function updateTierChoice(subject) {
+  const avail = S.availability[subject] || {};
+  const box = document.getElementById('tier-choice');
+  const offered = { Higher: true, Foundation: !!avail.Foundation, route: !!avail.route };
+  box.hidden = !offered.Foundation && !offered.route;
+  box.querySelectorAll('.tier-opt').forEach(opt => {
+    opt.hidden = !offered[opt.dataset.tier];
+    const input = opt.querySelector('input');
+    if (opt.hidden && input.checked) box.querySelector('input[value="Higher"]').checked = true;
+  });
+}
+
+function chosenTier() {
+  const box = document.getElementById('tier-choice');
+  if (box.hidden) return 'Higher';
+  const picked = box.querySelector('input[name="tier"]:checked');
+  return picked ? picked.value : 'Higher';
+}
+
 // This student's unfinished tests (the server keeps only the newest per
 // subject resumable), for the "pick up where you left off" banner.
 async function loadActiveSessions() {
@@ -620,6 +664,7 @@ function pickSubject(btn) {
   checkSetup();
 
   const subject      = btn.dataset.subject;
+  updateTierChoice(subject);
   const inProgress   = S.activeSessions[subject];
   const saved        = S.savedPlans[subject];
   const resumeBanner = document.getElementById('resume-banner');
@@ -716,6 +761,9 @@ async function beginTest(data, note) {
   S.questions = data.questions || [];
   S.answers   = (data.answered || []).map(a => ({ question_id: a.questionId, chosen: a.chosen, timeMs: null }));
   S.typed     = null;
+  S.tier       = data.tier || null;       // null while a "find my tier" test is routing
+  S.tierChoice = data.tierChoice || 'Higher';
+  S.total      = data.totalQuestions || (data.questions || []).length;
   S.diagnosis = null;
   S.review    = null;
   S.plan      = null;
@@ -726,10 +774,14 @@ async function beginTest(data, note) {
   S.currentQ = Math.min(S.answers.length, S.questions.length - 1);
   await waitForMathsTypesetting(S.questions);
   goTo('assess');
-  if (S.answers.length >= S.questions.length) { runDiagnosis(); return; }
-  renderQuestion();
   document.getElementById('assess-sub').textContent =
-    `${S.questions.length} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · ${note}`;
+    `${S.total} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · ${tierLabel()} · ${note}`;
+  if (S.answers.length >= S.questions.length) {
+    if (needsRouting()) { await continueAfterRouting(); return; }
+    runDiagnosis();
+    return;
+  }
+  renderQuestion();
 }
 
 async function startAssessment() {
@@ -743,7 +795,7 @@ async function startAssessment() {
   setStartButton('Loading questions...');
   try {
     const data = await api('session/start', {
-      subject: S.config.subject, level, board, name,
+      subject: S.config.subject, level, board, name, tier: chosenTier(),
       leadId: S.leadId || undefined
     });
     await beginTest(data, 'Choose "Not sure" rather than guess: wrong guesses count against you, "Not sure" doesn\'t');
@@ -781,6 +833,50 @@ async function resumeAttempt() {
 // needs KaTeX's stylesheet, not its 76 KB script. If any maths somehow
 // arrives untypeset, fall back to loading KaTeX, holding the first question
 // for up to 4s so it doesn't flip from plain text a moment later.
+function tierLabel() {
+  if (S.tierChoice === 'route' && !S.tier) return 'finding your tier';
+  return (S.tier || 'Higher') + ' tier';
+}
+
+// A "find my tier" test whose routing block is done but not yet routed.
+function needsRouting() {
+  return S.tierChoice === 'route' && !S.tier && S.answers.length >= S.questions.length;
+}
+
+// After the routing block: the server marks it, picks the tier and sends the
+// rest of the test. The student is told which tier it chose, then carries on.
+async function continueAfterRouting() {
+  const card = document.getElementById('q-card');
+  card.classList.add('routing');
+  document.getElementById('q-announce').textContent = 'Finding your tier';
+  await Promise.race([S.answerChain, new Promise(r => setTimeout(r, 6000))]);
+  let data = null;
+  for (let attempt = 0; attempt < 3 && !data; attempt++) {
+    try {
+      data = await api('session/route', { sessionId: S.sessionId, token: S.token });
+    } catch(e) {
+      if (attempt === 2) { card.classList.remove('routing'); toast(e.message, 'error'); return; }
+      // The server routes only once it holds every routing answer: send them
+      // again (first write wins, so this never changes one) and retry.
+      for (const a of S.answers) {
+        try { await api('session/answer', { sessionId: S.sessionId, token: S.token, ...answerPayload(a) }); } catch(_) {}
+      }
+    }
+  }
+  card.classList.remove('routing');
+  S.tier = data.tier;
+  S.total = data.totalQuestions || (S.questions.length + data.questions.length);
+  S.questions = S.questions.concat(data.questions || []);
+  await waitForMathsTypesetting(data.questions || []);
+  document.getElementById('assess-sub').textContent =
+    `${S.total} questions · ${S.config.level} ${subjectLabel(S.config.subject)} · ${S.config.board} · ${tierLabel()}`;
+  const msg = `Based on your first ${S.answers.length} answers, this test continues at ${S.tier} tier.`;
+  toast(msg, 'success');
+  S.currentQ = S.answers.length;
+  renderQuestion();
+  document.getElementById('q-announce').textContent = msg;
+}
+
 function waitForMathsTypesetting(questions) {
   const fields = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d'];
   const typeset = questions.some(q => fields.some(f => q[f + '_html']));
@@ -820,18 +916,18 @@ function shuffleArray(arr) {
 // ═══════════════════════════════════════════════════════════
 function renderQuestion() {
   const q   = S.questions[S.currentQ];
-  const pct = ((S.currentQ) / S.questions.length) * 100;
+  const pct = ((S.currentQ) / S.total) * 100;
 
   document.getElementById('q-topic').textContent    = q.topic;
   document.getElementById('q-num').textContent      = S.currentQ + 1;
-  document.getElementById('q-total').textContent    = S.questions.length;
+  document.getElementById('q-total').textContent    = S.total;
   const qText = document.getElementById('q-text');
   qText.innerHTML = mathsField(q, 'question_text');
   document.getElementById('assess-progress').style.width = pct + '%';
   const bar = document.getElementById('assess-progressbar');
-  bar.setAttribute('aria-valuemax', S.questions.length);
+  bar.setAttribute('aria-valuemax', S.total);
   bar.setAttribute('aria-valuenow', S.currentQ);
-  bar.setAttribute('aria-valuetext', `Question ${S.currentQ + 1} of ${S.questions.length}`);
+  bar.setAttribute('aria-valuetext', `Question ${S.currentQ + 1} of ${S.total}`);
 
   const diagramSlot = document.getElementById('q-diagram');
   if (q.diagram_spec) {
@@ -878,7 +974,7 @@ function renderQuestion() {
     IAMaths.typeset(qText);
     S.shownAt = performance.now();
     if (S.currentQ > 0 || S.answers.length) {
-      document.getElementById('q-announce').textContent = `Question ${S.currentQ + 1} of ${S.questions.length}`;
+      document.getElementById('q-announce').textContent = `Question ${S.currentQ + 1} of ${S.total}`;
       qText.focus();
     }
     return;
@@ -906,7 +1002,7 @@ function renderQuestion() {
   // screen-reader users land on it (not on the first question: the student
   // hasn't asked to move yet).
   if (S.currentQ > 0 || S.answers.length) {
-    document.getElementById('q-announce').textContent = `Question ${S.currentQ + 1} of ${S.questions.length}`;
+    document.getElementById('q-announce').textContent = `Question ${S.currentQ + 1} of ${S.total}`;
     document.getElementById('q-text').focus();
   }
 }
@@ -954,7 +1050,8 @@ function setNextButtons() {
   const prompt = document.getElementById('q-conf-prompt');
   const chosen = S.selectedOpt;
   const answered = chosen && chosen !== 'e';
-  const isLast = S.currentQ === S.questions.length - 1;
+  // The routing block's last question isn't the test's last.
+  const isLast = S.currentQ === S.total - 1;
   nextBtn.disabled = !chosen;
   nextBtn.style.opacity = chosen ? '1' : '.4';
   nextBtn.textContent = !chosen ? 'Select an answer to continue →'
@@ -975,7 +1072,7 @@ function nextQuestion(confidence) {
   const typed = S.typed;
   S.selectedOpt = null;
   S.typed = null;
-  if (S.currentQ === S.questions.length - 1) setNextButtons();
+  if (S.currentQ === S.total - 1) setNextButtons();
 
   const answer = { question_id: q.id, chosen, timeMs: Math.round(performance.now() - S.shownAt),
     confidence: chosen === 'e' ? null : (confidence === 'unsure' ? 'unsure' : 'sure'),
@@ -986,6 +1083,8 @@ function nextQuestion(confidence) {
   if (S.currentQ < S.questions.length - 1) {
     S.currentQ++;
     renderQuestion();
+  } else if (needsRouting()) {
+    continueAfterRouting();
   } else {
     runDiagnosis();
   }
@@ -1096,10 +1195,11 @@ function renderDiagnosis() {
       <div class="result-score" style="color:${scColor};">${sc}%</div>
       <div class="result-grade">
         ${ungraded
-          ? `Not yet at a Higher-tier grade${range ? `, but could be up to <strong>${escHtmlText(range.highGrade)}</strong>` : ''}`
+          ? `Not yet at a ${escHtmlText(d.tier || 'Higher')}-tier grade${range ? `, but could be up to <strong>${escHtmlText(range.highGrade)}</strong>` : ''}`
           : `${isCombined ? 'Around' : 'Around Grade'} <strong>${escHtmlText(d.currentGrade)}</strong>${range ? `, likely somewhere between <strong>${escHtmlText(range.lowGrade)}</strong> and <strong>${escHtmlText(range.highGrade)}</strong>` : ''}`}
       </div>
       ${range ? `<p class="result-note">A ${total}-question test can't pin a grade down exactly, so this is the honest range rather than a single number.</p>` : ''}
+      ${d.tier ? `<p class="result-note">Graded on real ${escHtmlText(d.tier)}-tier boundaries (grades ${d.tier === 'Foundation' ? '1–5' : '4–9'})${d.routed ? `: your first answers placed this test at ${escHtmlText(d.tier)} tier` : ''}.</p>` : ''}
       <div class="result-target">Next target: <strong>${escHtmlText(d.targetGrade)}</strong> <span class="muted">· Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}</span></div>
       ${notSurePct >= 30 ? `<p class="result-note" style="color:var(--gold-text);">You chose "Not sure" on ${notSurePct}% of questions — honest answers, and they show exactly where to start. Your plan begins with the foundations.</p>` : ''}
     </div>`;
