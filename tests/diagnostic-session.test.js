@@ -88,7 +88,7 @@ function fakeSupabase(seed) {
 function question(id, subject, topic, key) {
   return {
     id, subject, topic, subtopic: topic, difficulty: 2, level: 'GCSE', tier: 'Higher', exam_board: 'AQA',
-    validated: true, active: true, specification_ref: null, combined_eligible: true, updated_at: '2026-09-26T00:00:00Z',
+    validated: true, active: true, review_status: 'legacy', question_type: 'mcq', specification_ref: null, combined_eligible: true, updated_at: '2026-09-26T00:00:00Z',
     question_text: `Q${id}`, option_a: 'A', option_b: 'B', option_c: 'C', option_d: 'D', option_e: 'Not sure',
     correct_answer: key, misconception_a: 'why a', misconception_b: 'why b', misconception_c: 'why c', misconception_d: 'why d',
     explanation: `method ${id}`, diagram_spec: null
@@ -248,4 +248,13 @@ test('bad input is refused cleanly', async () => {
   assert.equal((await post(s.start, { subject: 'Physics', board: 'OCR' })).status, 400);
   assert.equal((await post(s.submit, { sessionId: 'not-a-uuid', token: 'x' })).status, 400);
   assert.equal((await post(s.plan, { sessionId: 'x', token: 'x', plan: 'nope' })).status, 400);
+});
+
+test('drafts and rejected questions are never served', async () => {
+  const s2 = setup();
+  s2.fake.tables.diagnostic_questions.forEach((q, i) => { if (i % 3 === 0) q.review_status = i % 2 ? 'draft' : 'rejected'; if (i % 3 === 1) q.review_status = 'approved'; });
+  const res = await post(s2.start, { subject: 'Physics' });
+  const status = new Map(s2.fake.tables.diagnostic_questions.map(q => [q.id, q.review_status]));
+  assert.ok(res.body.questions.length > 0);
+  assert.ok(res.body.questions.every(q => ['approved', 'legacy'].includes(status.get(q.id))));
 });

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="/assets/js/theme.js"></script>
+<title>Question Review — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/question-review.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="qr-brand" href="/teacher/teacher.html">Inspire</a>
+  <span class="qr-title">Question review</span>
+  <span class="qr-spacer"></span>
+  <a class="btn btn-outline qr-back" href="/teacher/teacher.html">← Teacher dashboard</a>
+</header>
+
+<main class="qr-main">
+  <section class="qr-intro">
+    <h1>Diagnostic question bank</h1>
+    <p class="muted">Every question a student sees must have been checked by a named person. New questions arrive as drafts; the older bank is marked <strong>legacy</strong>: still in use, waiting for its check. Only approved and legacy questions are ever served.</p>
+    <div class="qr-counts" id="qr-counts" aria-live="polite"></div>
+  </section>
+
+  <section class="qr-filters card" aria-label="Filter questions">
+    <label>Subject
+      <select id="f-subject">
+        <option value="">All subjects</option>
+        <option>Physics</option><option>Chemistry</option><option>Biology</option><option>Mathematics</option>
+      </select>
+    </label>
+    <label>Status
+      <select id="f-status">
+        <option value="queue">Needs review (drafts, changes, legacy)</option>
+        <option value="draft">Drafts</option>
+        <option value="changes_requested">Changes requested</option>
+        <option value="legacy">Legacy</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="flagged">Flagged by statistics</option>
+        <option value="all">Everything</option>
+      </select>
+    </label>
+    <label>Topic
+      <select id="f-topic"><option value="">All topics</option></select>
+    </label>
+    <label class="qr-search">Search
+      <input id="f-search" type="search" placeholder="Words in the question or options">
+    </label>
+  </section>
+
+  <div class="qr-body">
+    <nav class="qr-list card" id="qr-list" aria-label="Questions"><p class="muted qr-pad">Loading…</p></nav>
+    <section class="qr-detail card" id="qr-detail" aria-live="polite">
+      <p class="muted">Choose a question from the list.</p>
+    </section>
+  </div>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/spec-map.js"></script>
+<script src="/assets/js/diagram-renderer.js"></script>
+<script src="/assets/js/maths-typeset.js"></script>
+<script src="/assets/js/question-review.js"></script>
+</body>
+</html>

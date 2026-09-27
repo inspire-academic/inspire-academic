@@ -25,10 +25,13 @@ const STARTS_PER_HOUR = 20; // per connection; a family sharing one phone won't 
 
 const QUESTION_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'specification_ref', 'combined_eligible', 'updated_at'].join(',');
 
+// Only questions a person has approved (or the pre-pipeline 'legacy' bank,
+// queued for review) reach students; drafts never do. Multiple choice only
+// until the page can show the other question types.
 function questionFilter(subjects, level) {
   const inList = subjects.map(s => `"${s}"`).join(',');
   return `subject=in.(${encodeURIComponent(inList)})&level=eq.${encodeURIComponent(level)}` +
-    `&validated=is.true&active=is.true&exam_board=in.(AQA,Universal)&tier=in.(Higher,Both)`;
+    `&review_status=in.(approved,legacy)&question_type=eq.mcq&active=is.true&exam_board=in.(AQA,Universal)&tier=in.(Higher,Both)`;
 }
 
 async function resume(client, event, sessionId) {
