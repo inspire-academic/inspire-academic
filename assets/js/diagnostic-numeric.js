@@ -46,6 +46,7 @@ function parseNumber(input) {
 }
 
 const DEFAULT_TOLERANCE = 0.005;
+const WRONG_TOLERANCE = 0.02;
 
 function close(a, b, tolerance) {
   if (b === 0) return Math.abs(a) <= 1e-9;
@@ -65,8 +66,12 @@ function markNumeric(spec, text, unit) {
     if (unitOk) return { correct: true, misconception: null };
     return { correct: false, misconception: spec.unit_feedback || `The number is right, but the unit should be ${wantUnit}.` };
   }
+  // Typed wrong answers are matched more loosely than the right one: students
+  // round (0.67 for 2/3), and the right answer has already been ruled out, so
+  // a looser match here can never turn a right answer wrong.
+  const wrongTol = Math.max(tol, WRONG_TOLERANCE);
   for (const w of spec.wrong || []) {
-    if (close(value, Number(w.value), tol) && (!w.unit || w.unit === unit)) return { correct: false, misconception: w.misconception || null };
+    if (close(value, Number(w.value), wrongTol) && (!w.unit || w.unit === unit)) return { correct: false, misconception: w.misconception || null };
   }
   return { correct: false, misconception: null };
 }
@@ -87,6 +92,9 @@ function specProblems(spec) {
     if (!Number.isFinite(Number(w.value))) problems.push(`wrong[${i}].value must be a number`);
     else if (close(Number(w.value), Number(spec.value), tol) && (!w.unit || w.unit === spec.unit)) problems.push(`wrong[${i}] would be marked right`);
     if (!String(w.misconception || '').trim()) problems.push(`wrong[${i}] needs a misconception`);
+    else if (Number.isFinite(Number(w.value)) && markNumeric(spec, String(w.value), w.unit || spec.unit || null).misconception !== w.misconception) {
+      problems.push(`wrong[${i}] is too close to another answer to get its own feedback`);
+    }
   });
   if (!(spec.wrong || []).length) problems.push('list at least one typed wrong answer with its misconception');
   return problems;

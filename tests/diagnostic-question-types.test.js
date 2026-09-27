@@ -40,6 +40,7 @@ test('a typed wrong answer gets the feedback for the mistake that produces it', 
   assert.equal(N.markNumeric(SPEC, '750', 'J').misconception, 'kinetic energy');
   assert.equal(N.markNumeric(SPEC, '750', 'kg m/s').misconception, null, 'a unit-specific mistake needs its unit');
   assert.equal(N.markNumeric(SPEC, '42', 'kg m/s').misconception, null);
+  assert.equal(N.markNumeric(SPEC, '12.1', 'kg m/s').misconception, 'divided', 'a rounded wrong answer still matches');
   assert.match(N.markNumeric(SPEC, 'lots', 'kg m/s').misconception, /could not be read/);
 });
 
