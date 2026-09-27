@@ -166,7 +166,7 @@
     const total = Object.values(counts).reduce((a, b) => a + b, 0) || 1;
     const bars = ['a', 'b', 'c', 'd', 'e'].map(k => `
       <span>${k === 'e' ? 'Not sure' : k.toUpperCase()}</span>
-      <span class="qr-bar${k === r.correct_answer ? ' key' : ''}"><i style="width:${Math.round((counts[k] || 0) / total * 100)}%"></i></span>
+      <span class="qr-bar${k === r.correct_answer ? ' key' : ''}"><i data-pct="${Math.round((counts[k] || 0) / total * 100)}"></i></span>
       <span>${counts[k] || 0}</span>`).join('');
     const flags = (s.flags || []).map(f => `<li class="qr-flag">⚑ ${esc(FLAG_LABEL[f] || f)}</li>`).join('');
     return `
@@ -227,6 +227,8 @@
       </div>`;
     const slot = $('qr-diagram');
     if (slot) { try { renderDiagram(slot, r.diagram_spec); } catch (e) { slot.textContent = 'Diagram could not be drawn: ' + e.message; } }
+    // Bar widths are set here, not in markup: no inline styles.
+    el.querySelectorAll('.qr-bar i[data-pct]').forEach(i => { i.style.width = i.dataset.pct + '%'; });
     IAMaths.typeset(el);
     $('act-approve').onclick = () => decide('approved');
     $('act-changes').onclick = () => decide('changes_requested');
