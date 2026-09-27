@@ -147,7 +147,7 @@ module.exports = {
       explanation: r`Platelets are fragments of cells that help the blood to clot at a wound, stopping bleeding and keeping pathogens out.` },
 
     // ── Infection and Response ──
-    { topic: 'Infection and Response', subtopic: 'Measles', spec_slug: 'aqa-bi-fh-infection-response', difficulty: 1, combined: true,
+    { topic: 'Infection and Response', subtopic: 'Measles', exam_board: 'AQA', spec_slug: 'aqa-bi-fh-infection-response', difficulty: 1, combined: true,
       question_text: r`How is measles spread from person to person?`,
       options: { a: r`By drinking contaminated water`, b: r`By insect bites`, c: r`By droplets from coughs`, d: r`By contaminated food` }, key: 'c',
       feedback: {
@@ -157,7 +157,7 @@ module.exports = {
       },
       explanation: r`Measles is a virus spread by inhaling droplets from an infected person's sneezes and coughs.` },
 
-    { topic: 'Infection and Response', subtopic: 'Salmonella', spec_slug: 'aqa-bi-fh-infection-response', difficulty: 2, combined: true,
+    { topic: 'Infection and Response', subtopic: 'Salmonella', exam_board: 'AQA', spec_slug: 'aqa-bi-fh-infection-response', difficulty: 2, combined: true,
       question_text: r`Which measures help control the spread of Salmonella food poisoning?`,
       options: { a: r`Spraying crops with fungicide`, b: r`Sleeping under mosquito nets`, c: r`Taking antibiotics for any cold or flu`, d: r`Vaccinating poultry and cooking well` }, key: 'd',
       feedback: {
@@ -248,7 +248,7 @@ module.exports = {
       },
       explanation: r`Light intensity is inversely proportional to the square of the distance: \(I \propto \tfrac{1}{d^{2}}\). Doubling the distance makes it \(\tfrac{1}{2^{2}} = \tfrac{1}{4}\) of what it was.` },
 
-    { topic: 'Bioenergetics', subtopic: 'Oxygen Debt', spec_slug: 'aqa-bi-fh-bioenergetics', difficulty: 3, combined: true,
+    { topic: 'Bioenergetics', subtopic: 'Oxygen Debt', exam_board: 'AQA', spec_slug: 'aqa-bi-fh-bioenergetics', difficulty: 3, combined: true,
       question_text: r`Why do you keep breathing hard for a while after vigorous exercise stops?`,
       options: { a: r`To remove extra glucose from the blood`, b: r`To repay the oxygen debt from lactic acid`, c: r`Because the heart has slowed down`, d: r`To cool the body down more quickly` }, key: 'b',
       feedback: {
@@ -268,7 +268,7 @@ module.exports = {
       },
       explanation: r`In yeast, anaerobic respiration (fermentation): glucose → ethanol + carbon dioxide. This is used in making bread and alcoholic drinks.` },
 
-    { topic: 'Bioenergetics', subtopic: 'Metabolism', spec_slug: 'aqa-bi-fh-bioenergetics', difficulty: 2, combined: true,
+    { topic: 'Bioenergetics', subtopic: 'Metabolism', exam_board: 'AQA', spec_slug: 'aqa-bi-fh-bioenergetics', difficulty: 2, combined: true,
       question_text: r`What is metabolism?`,
       options: { a: r`Digesting food in the stomach and gut`, b: r`All the reactions in a cell or body`, c: r`How fast the heart beats`, d: r`Moving substances into cells` }, key: 'b',
       feedback: {
@@ -461,7 +461,7 @@ module.exports = {
       },
       explanation: r`Decomposers (bacteria and fungi) break down dead organisms and waste. As they respire they release carbon dioxide to the atmosphere, and mineral ions return to the soil.` },
 
-    { topic: 'Ecology', subtopic: 'Deforestation', spec_slug: 'aqa-bi-fh-ecology', difficulty: 3, combined: true,
+    { topic: 'Ecology', subtopic: 'Deforestation', exam_board: 'AQA', spec_slug: 'aqa-bi-fh-ecology', difficulty: 3, combined: true,
       question_text: r`Why does large-scale deforestation increase carbon dioxide in the atmosphere?`,
       options: { a: r`Trees give out CO₂ as they grow`, b: r`Felled land absorbs less oxygen`, c: r`Cutting trees makes methane`, d: r`Less photosynthesis, and burning adds CO₂` }, key: 'd',
       feedback: {
@@ -481,7 +481,7 @@ module.exports = {
       },
       explanation: r`With their predator gone, more rabbits survive to reproduce, so the rabbit population increases at first. That puts more pressure on the grass they eat.` },
 
-    { topic: 'Ecology', subtopic: 'Extremophiles', spec_slug: 'aqa-bi-fh-ecology', difficulty: 1, combined: true,
+    { topic: 'Ecology', subtopic: 'Extremophiles', exam_board: 'AQA', spec_slug: 'aqa-bi-fh-ecology', difficulty: 1, combined: true,
       question_text: r`What is an extremophile?`,
       options: { a: r`An organism that only eats animals`, b: r`An organism that can't adapt to change`, c: r`An organism found only in the cold`, d: r`An organism living in extreme conditions` }, key: 'd',
       feedback: {

@@ -20,7 +20,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Fractions, decimals and percentages$t$, $t$Percentage of an Amount$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Fractions, decimals and percentages$t$, $t$Percentage of an Amount$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 1,
   $t$A school bag costs GH₵ 240. Work out 15% of GH₵ 240, in cedis.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -33,7 +33,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Ratio, proportion and rates of change$t$, $t$Sharing in a Ratio$t$, $t$aqa-ma-fh-ratio-proportion$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Ratio, proportion and rates of change$t$, $t$Sharing in a Ratio$t$, $t$aqa-ma-fh-ratio-proportion$t$, 2,
   $t$Chinedu and Ngozi share ₦45 000 in the ratio 2 : 3. How much does Ngozi get, in naira?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -46,7 +46,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Compound Interest$t$, $t$aqa-ma-fh-ratio-proportion$t$, 4,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Compound Interest$t$, $t$aqa-ma-fh-ratio-proportion$t$, 4,
   $t$Efua saves GH₵ 5000 at 4% compound interest per year. How much is in the account after 3 years? Give your answer to the nearest pesewa (2 decimal places).$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -59,7 +59,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Fractions, decimals and percentages$t$, $t$Reverse Percentages$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 3,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Fractions, decimals and percentages$t$, $t$Reverse Percentages$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 3,
   $t$After a 25% increase, the price of a bag of rice is GH₵ 150. What was the price before the increase, in cedis?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -72,7 +72,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Fractions, decimals and percentages$t$, $t$Percentage Change$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 3,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Fractions, decimals and percentages$t$, $t$Percentage Change$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 3,
   $t$The population of a town near Tamale grew from 36 000 to 45 000. What is the percentage increase?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -85,7 +85,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Ratio, proportion and rates of change$t$, $t$Speed, Distance, Time$t$, $t$aqa-ma-fh-ratio-proportion$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Ratio, proportion and rates of change$t$, $t$Speed, Distance, Time$t$, $t$aqa-ma-fh-ratio-proportion$t$, 2,
   $t$A bus travels 250 km from Accra to Kumasi at an average speed of 62.5 km/h. How many hours does the journey take?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -98,7 +98,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Proportion to a Square$t$, $t$aqa-ma-fh-ratio-proportion$t$, 4,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Proportion to a Square$t$, $t$aqa-ma-fh-ratio-proportion$t$, 4,
   $t$\(y\) is directly proportional to \(x^{2}\). When \(x = 2\), \(y = 12\). Find \(y\) when \(x = 5\).$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -111,7 +111,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Powers, roots and standard form$t$, $t$Standard Form Division$t$, $t$aqa-ma-fh-powers-roots$t$, 4,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Powers, roots and standard form$t$, $t$Standard Form Division$t$, $t$aqa-ma-fh-powers-roots$t$, 4,
   $t$Work out \((6 \times 10^{5}) \div (3 \times 10^{-2})\). You can type your answer in standard form, for example 4e9.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -124,7 +124,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Powers, roots and standard form$t$, $t$Fractional Indices$t$, $t$aqa-ma-fh-powers-roots$t$, 4,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Powers, roots and standard form$t$, $t$Fractional Indices$t$, $t$aqa-ma-fh-powers-roots$t$, 4,
   $t$Evaluate \(8^{\frac{2}{3}}\).$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -137,7 +137,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Equations and inequalities$t$, $t$Unknowns on Both Sides$t$, $t$aqa-ma-fh-algebra-equations$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Equations and inequalities$t$, $t$Unknowns on Both Sides$t$, $t$aqa-ma-fh-algebra-equations$t$, 2,
   $t$Solve \(5x - 7 = 3x + 9\). What is \(x\)?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -150,7 +150,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Sequences$t$, $t$nth Term$t$, $t$aqa-ma-fh-algebra-sequences$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Sequences$t$, $t$nth Term$t$, $t$aqa-ma-fh-algebra-sequences$t$, 2,
   $t$The sequence \(7, 10, 13, 16, \ldots\) continues in the same way. What is its 50th term?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -163,7 +163,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Number — basics and operations$t$, $t$Bounds$t$, $t$aqa-ma-fh-number-basics$t$, 5,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Number — basics and operations$t$, $t$Bounds$t$, $t$aqa-ma-fh-number-basics$t$, 5,
   $t$A rectangle measures 6 cm by 4 cm, each measured to the nearest centimetre. What is the upper bound of its area, in cm²?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -176,7 +176,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Probability$t$, $t$Without Replacement$t$, $t$aqa-ma-fh-probability$t$, 4,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Probability$t$, $t$Without Replacement$t$, $t$aqa-ma-fh-probability$t$, 4,
   $t$A bag has 3 red and 5 blue counters. Two counters are taken out without replacement. What is the probability that both are red? You can type a fraction, such as 2/9.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -189,7 +189,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Trigonometry$t$, $t$Finding a Side$t$, $t$aqa-ma-fh-trigonometry$t$, 3,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Trigonometry$t$, $t$Finding a Side$t$, $t$aqa-ma-fh-trigonometry$t$, 3,
   $t$A 5 m ladder leans against a wall, making an angle of \(70^{\circ}\) with the ground. How high up the wall does it reach? Give your answer to 2 decimal places.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -202,7 +202,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Trigonometry$t$, $t$Pythagoras' Theorem$t$, $t$aqa-ma-fh-trigonometry$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Trigonometry$t$, $t$Pythagoras' Theorem$t$, $t$aqa-ma-fh-trigonometry$t$, 2,
   $t$A right-angled triangle has shorter sides of 9 cm and 12 cm. How long is the hypotenuse, in cm?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -215,7 +215,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Graphs$t$, $t$Gradient$t$, $t$aqa-ma-fh-graphs$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Graphs$t$, $t$Gradient$t$, $t$aqa-ma-fh-graphs$t$, 2,
   $t$What is the gradient of the straight line through \((1, 3)\) and \((5, 11)\)?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -228,7 +228,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Perimeter, area, volume$t$, $t$Area of a Circle$t$, $t$aqa-ma-fh-geometry-measures$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Perimeter, area, volume$t$, $t$Area of a Circle$t$, $t$aqa-ma-fh-geometry-measures$t$, 2,
   $t$A round cocoa-drying mat has a diameter of 3 m. What is its area, in m², to 1 decimal place?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -241,7 +241,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Number — basics and operations$t$, $t$Order of Operations$t$, $t$aqa-ma-fh-number-basics$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Number — basics and operations$t$, $t$Order of Operations$t$, $t$aqa-ma-fh-number-basics$t$, 1,
   $t$Work out \(20 - 3 \times (2 + 4)^{2}\).$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,

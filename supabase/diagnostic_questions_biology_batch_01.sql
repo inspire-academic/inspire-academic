@@ -19,7 +19,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Magnification$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Magnification$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
   $t$In a drawing, a cell is 50 mm long. The real cell is 0.1 mm long. What is the magnification?$t$,
   $t$\(\times 5\)$t$, $t$\(\times 0.002\)$t$, $t$\(\times 500\)$t$, $t$\(\times 50.1\)$t$, 'Not sure', $t$c$t$,
   $t$This multiplies the two sizes. Magnification = image size ÷ real size \(= 50 \div 0.1 = 500\).$t$, $t$This divides the real size by the image size. Use image ÷ real: \(50 \div 0.1 = 500\).$t$, null, $t$This adds the sizes. Magnification = image size ÷ real size \(= 500\).$t$,
@@ -32,7 +32,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Units of Size$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Units of Size$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
   $t$A cell is 0.02 mm across. What is this in micrometres (\(\mu\text{m}\))?$t$,
   $t$\(2\,\mu\text{m}\)$t$, $t$\(20\,\mu\text{m}\)$t$, $t$\(200\,\mu\text{m}\)$t$, $t$\(0.00002\,\mu\text{m}\)$t$, 'Not sure', $t$b$t$,
   $t$This multiplies by 100. There are 1000 micrometres in a millimetre: \(0.02 \times 1000 = 20\,\mu\text{m}\).$t$, null, $t$This multiplies by 10 000. There are 1000 µm in 1 mm: \(0.02 \times 1000 = 20\,\mu\text{m}\).$t$, $t$This divides instead of multiplying. Micrometres are smaller units, so the number gets bigger: \(0.02 \times 1000 = 20\,\mu\text{m}\).$t$,
@@ -45,7 +45,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Microscopy$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Microscopy$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
   $t$Why can an electron microscope show structures that a light microscope cannot?$t$,
   $t$It shows cells in natural colour$t$, $t$It can be used on living cells$t$, $t$It has a much higher resolution$t$, $t$It has a much lower magnification$t$, 'Not sure', $t$c$t$,
   $t$Electron micrographs are black and white (colour is added later). The key advantage is higher resolution.$t$, $t$Specimens for electron microscopes must be dead. The advantage is much higher resolution.$t$, null, $t$Electron microscopes have a much higher magnification as well as higher resolution.$t$,
@@ -58,7 +58,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Stem Cells$t$, $t$aqa-bi-fh-cell-biology$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Stem Cells$t$, $t$aqa-bi-fh-cell-biology$t$, 1,
   $t$What is a stem cell?$t$,
   $t$A cell found only in plant stems$t$, $t$A cell that has already specialised for a job$t$, $t$A cell that cannot divide to make new cells$t$, $t$An unspecialised cell that can differentiate$t$, 'Not sure', $t$d$t$,
   $t$Despite the name, stem cells are found in animals as well as plants.$t$, $t$It's the opposite: a stem cell is undifferentiated and can become other types of cell.$t$, $t$Stem cells can divide to make more cells, which can then differentiate.$t$, null,
@@ -71,7 +71,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Meristems$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Meristems$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
   $t$Where are stem cells found in plants?$t$,
   $t$In the palisade layer at the top of leaves$t$, $t$In meristems at root and shoot tips$t$, $t$In the xylem vessels$t$, $t$Only inside the seed coat$t$, 'Not sure', $t$b$t$,
   $t$Palisade cells are specialised for photosynthesis. Plant stem cells are in meristem tissue.$t$, null, $t$Xylem vessels are dead, specialised cells for carrying water. Stem cells are in the meristems.$t$, $t$Growing plants keep making new cells throughout life, from meristems at the tips of roots and shoots.$t$,
@@ -84,7 +84,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Active Transport$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Active Transport$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
   $t$Root hair cells take in mineral ions from soil, where the ions are less concentrated than inside the cell. How?$t$,
   $t$By diffusion, down the concentration gradient$t$, $t$By osmosis, with the water$t$, $t$By active transport, using energy$t$, $t$By photosynthesis in the root$t$, 'Not sure', $t$c$t$,
   $t$Diffusion only moves particles from high to low concentration. Moving against the gradient needs active transport.$t$, $t$Osmosis moves water, not mineral ions. The ions move against their gradient by active transport.$t$, null, $t$Roots don't photosynthesise. The ions are taken up by active transport, using energy from respiration.$t$,
@@ -97,7 +97,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Surface Area to Volume$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Surface Area to Volume$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
   $t$Why do large multicellular organisms need specialised exchange surfaces?$t$,
   $t$Their cells are bigger than in small ones$t$, $t$They need less oxygen for each cell$t$, $t$Their surface area to volume ratio is small$t$, $t$Their surface area to volume ratio is large$t$, 'Not sure', $t$c$t$,
   $t$Cell size isn't the issue. As an organism gets bigger, its surface area to volume ratio gets smaller.$t$, $t$Their cells still need oxygen, and many are far from the surface.$t$, null, $t$It's the other way round: larger organisms have a smaller surface area to volume ratio.$t$,
@@ -110,7 +110,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Enzyme Specificity$t$, $t$aqa-bi-fh-organisation$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Enzyme Specificity$t$, $t$aqa-bi-fh-organisation$t$, 2,
   $t$Why does an enzyme work on only one type of substrate?$t$,
   $t$It is used up after catalysing one reaction$t$, $t$It is made of that same substrate$t$, $t$Other substrates denature it$t$, $t$Only that substrate fits its active site$t$, 'Not sure', $t$d$t$,
   $t$Enzymes are not used up; they catalyse reaction after reaction. They are specific because of the shape of the active site.$t$, $t$Enzymes are proteins. They are specific because only one substrate's shape fits the active site.$t$, $t$Denaturing is caused by high temperature or extreme pH, not by other substrates.$t$, null,
@@ -123,7 +123,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Digestive Enzymes$t$, $t$aqa-bi-fh-organisation$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Digestive Enzymes$t$, $t$aqa-bi-fh-organisation$t$, 1,
   $t$Amylase breaks down starch. What does it produce?$t$,
   $t$Sugars$t$, $t$Amino acids$t$, $t$Fatty acids and glycerol$t$, $t$Proteins$t$, 'Not sure', $t$a$t$,
   null, $t$Amino acids come from proteins, broken down by protease. Amylase breaks starch into sugars.$t$, $t$Fatty acids and glycerol come from lipids, broken down by lipase.$t$, $t$Proteins are broken down by protease, not made by amylase.$t$,
@@ -136,7 +136,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Gas Exchange in the Lungs$t$, $t$aqa-bi-fh-organisation$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Gas Exchange in the Lungs$t$, $t$aqa-bi-fh-organisation$t$, 2,
   $t$How are the alveoli adapted for efficient gas exchange?$t$,
   $t$Thick walls to protect the blood$t$, $t$Few capillaries, so blood flows past slowly$t$, $t$A small area to trap the gases$t$, $t$Thin walls and a large surface area$t$, 'Not sure', $t$d$t$,
   $t$Thick walls would slow diffusion. Alveolar walls are one cell thick, giving a short diffusion path.$t$, $t$Alveoli have a rich blood supply, keeping concentration gradients steep.$t$, $t$A large surface area speeds up diffusion; millions of alveoli give a huge area.$t$, null,
@@ -149,7 +149,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Coronary Heart Disease$t$, $t$aqa-bi-fh-organisation$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Coronary Heart Disease$t$, $t$aqa-bi-fh-organisation$t$, 2,
   $t$What does a stent do for a patient with coronary heart disease?$t$,
   $t$It replaces a faulty heart valve$t$, $t$It lowers the blood cholesterol$t$, $t$It keeps a narrowed artery open$t$, $t$It keeps the heartbeat regular$t$, 'Not sure', $t$c$t$,
   $t$Faulty valves are replaced with biological or mechanical valves. A stent holds a narrowed coronary artery open.$t$, $t$That is what statins do. A stent physically keeps a narrowed artery open.$t$, null, $t$That is a pacemaker's job. A stent keeps a coronary artery open.$t$,
@@ -162,7 +162,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Transpiration$t$, $t$aqa-bi-fh-organisation$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Transpiration$t$, $t$aqa-bi-fh-organisation$t$, 2,
   $t$Which change would increase the rate of transpiration?$t$,
   $t$A rise in temperature$t$, $t$A rise in humidity$t$, $t$Closing the stomata$t$, $t$Lower light intensity$t$, 'Not sure', $t$a$t$,
   null, $t$Humid air reduces the concentration gradient for water vapour, so transpiration slows.$t$, $t$Water vapour escapes through the stomata, so closing them reduces transpiration.$t$, $t$In dim light fewer stomata are open, so transpiration slows.$t$,
@@ -175,7 +175,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Blood Components$t$, $t$aqa-bi-fh-organisation$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Blood Components$t$, $t$aqa-bi-fh-organisation$t$, 1,
   $t$What is the job of platelets in the blood?$t$,
   $t$They carry oxygen$t$, $t$They help blood to clot$t$, $t$They engulf pathogens$t$, $t$They carry dissolved sugar$t$, 'Not sure', $t$b$t$,
   $t$Red blood cells carry oxygen. Platelets help the blood to clot.$t$, null, $t$White blood cells engulf pathogens. Platelets help the blood to clot.$t$, $t$Plasma carries dissolved substances such as glucose. Platelets help the blood to clot.$t$,
@@ -214,7 +214,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$Malaria$t$, $t$aqa-bi-fh-infection-response$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$Malaria$t$, $t$aqa-bi-fh-infection-response$t$, 1,
   $t$How is malaria spread?$t$,
   $t$By mosquitoes acting as vectors$t$, $t$By drinking contaminated water$t$, $t$By droplets in the air$t$, $t$By touching an infected person$t$, 'Not sure', $t$a$t$,
   null, $t$Malaria isn't waterborne. The protist is carried between people by mosquitoes.$t$, $t$Malaria isn't airborne. It is spread by mosquito bites.$t$, $t$Malaria isn't spread by touch. Mosquitoes carry it from person to person.$t$,
@@ -227,7 +227,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$White Blood Cells$t$, $t$aqa-bi-fh-infection-response$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$White Blood Cells$t$, $t$aqa-bi-fh-infection-response$t$, 1,
   $t$Which is one way white blood cells defend the body?$t$,
   $t$They produce antibodies$t$, $t$They thicken the skin$t$, $t$They produce stomach acid$t$, $t$They carry oxygen to wounds$t$, 'Not sure', $t$a$t$,
   null, $t$The skin is a barrier in its own right; white blood cells don't thicken it. They produce antibodies.$t$, $t$Stomach acid is made by the stomach, not white blood cells.$t$, $t$Red blood cells carry oxygen. White blood cells fight pathogens, for example by producing antibodies.$t$,
@@ -240,7 +240,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$Drug Trials$t$, $t$aqa-bi-fh-infection-response$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$Drug Trials$t$, $t$aqa-bi-fh-infection-response$t$, 2,
   $t$In a double-blind drug trial, who knows which patients receive the new drug?$t$,
   $t$Only the doctors$t$, $t$Only the patients$t$, $t$Both the doctors and the patients$t$, $t$Neither the doctors nor patients$t$, 'Not sure', $t$d$t$,
   $t$That would be a single-blind trial. In a double-blind trial the doctors don't know either.$t$, $t$Patients in a blind trial don't know. In a double-blind trial neither patients nor doctors know.$t$, $t$If both knew, the trial wouldn't be blind at all.$t$, null,
@@ -253,7 +253,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$Antibiotic Resistance$t$, $t$aqa-bi-fh-infection-response$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$Antibiotic Resistance$t$, $t$aqa-bi-fh-infection-response$t$, 3,
   $t$Why should a patient finish the whole course of antibiotics?$t$,
   $t$Because antibiotics also kill viruses$t$, $t$So all the bacteria are killed$t$, $t$So the body makes its own antibodies$t$, $t$Because they take a week to work$t$, 'Not sure', $t$b$t$,
   $t$Antibiotics don't kill viruses. The course is finished so that all the bacteria are killed, leaving no resistant survivors.$t$, null, $t$Antibiotics kill bacteria; they don't make the body produce antibodies (vaccines do that).$t$, $t$Antibiotics start working quickly. The course is finished so that no bacteria survive to become resistant.$t$,
@@ -266,7 +266,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$Plant Disease$t$, $t$aqa-bi-fh-infection-response$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Infection and Response$t$, $t$Plant Disease$t$, $t$aqa-bi-fh-infection-response$t$, 3,
   $t$Tobacco mosaic virus (TMV) makes infected plants grow poorly. Why?$t$,
   $t$It destroys all the plant's roots$t$, $t$It makes the plant produce too much sugar$t$, $t$It blocks all the stomata so water can't escape$t$, $t$It discolours leaves, cutting photosynthesis$t$, 'Not sure', $t$d$t$,
   $t$TMV affects the leaves, not the roots. The mosaic pattern reduces photosynthesis.$t$, $t$The plant makes less sugar, not more, because the discoloured leaves photosynthesise less.$t$, $t$TMV doesn't block stomata. It discolours leaves, so less photosynthesis happens.$t$, null,
@@ -279,7 +279,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Photosynthesis is Endothermic$t$, $t$aqa-bi-fh-bioenergetics$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Photosynthesis is Endothermic$t$, $t$aqa-bi-fh-bioenergetics$t$, 1,
   $t$Photosynthesis is an endothermic reaction. What does this mean?$t$,
   $t$It gives out energy as heat$t$, $t$It only happens in the dark$t$, $t$It takes in energy from light$t$, $t$It needs no energy at all$t$, 'Not sure', $t$c$t$,
   $t$Giving out energy is exothermic. Photosynthesis takes in energy, transferred from the environment by light.$t$, $t$Photosynthesis needs light. Endothermic means it takes in energy.$t$, null, $t$Photosynthesis needs energy, which is transferred from light and absorbed by chlorophyll.$t$,
@@ -292,7 +292,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Uses of Glucose$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Uses of Glucose$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
   $t$Which is one way a plant uses the glucose it makes in photosynthesis?$t$,
   $t$To absorb light energy$t$, $t$To make mineral ions$t$, $t$To make cellulose for cell walls$t$, $t$To break down oxygen in respiration$t$, 'Not sure', $t$c$t$,
   $t$Chlorophyll absorbs light. Glucose is used for respiration, to make cellulose and starch, and more.$t$, $t$Mineral ions come from the soil; glucose can't be turned into them.$t$, null, $t$Oxygen isn't broken down. Glucose is used in respiration, and to make cellulose, starch, fats and proteins.$t$,
@@ -305,7 +305,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Light Intensity$t$, $t$aqa-bi-fh-bioenergetics$t$, 4,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Light Intensity$t$, $t$aqa-bi-fh-bioenergetics$t$, 4,
   $t$A lamp is moved from 10 cm to 20 cm away from a plant. How does the light intensity reaching the plant change?$t$,
   $t$It halves$t$, $t$It doubles$t$, $t$It falls to a quarter$t$, $t$It falls to an eighth$t$, 'Not sure', $t$c$t$,
   $t$Light intensity doesn't fall in simple proportion. It follows the inverse square law: doubling the distance gives \(\tfrac{1}{2^{2}} = \tfrac{1}{4}\).$t$, $t$Moving the lamp further away lowers the intensity. By the inverse square law it falls to a quarter.$t$, null, $t$That would be an inverse cube. Light intensity \(\propto \tfrac{1}{d^{2}}\), so doubling the distance gives a quarter.$t$,
@@ -331,7 +331,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Fermentation$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Fermentation$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
   $t$What are the products of anaerobic respiration in yeast?$t$,
   $t$Lactic acid only$t$, $t$Carbon dioxide and water only$t$, $t$Ethanol and oxygen$t$, $t$Ethanol and carbon dioxide$t$, 'Not sure', $t$d$t$,
   $t$Lactic acid is made by anaerobic respiration in muscles. Yeast makes ethanol and carbon dioxide.$t$, $t$Carbon dioxide and water come from aerobic respiration.$t$, $t$Respiration uses oxygen rather than producing it. Yeast's anaerobic respiration makes ethanol and carbon dioxide.$t$, null,
@@ -357,7 +357,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Homeostasis$t$, $t$aqa-bi-fh-homeostasis$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Homeostasis$t$, $t$aqa-bi-fh-homeostasis$t$, 1,
   $t$What is homeostasis?$t$,
   $t$Keeping internal conditions stable$t$, $t$Growing in response to a change$t$, $t$Keeping body temperature very high$t$, $t$Removing all body waste at once$t$, 'Not sure', $t$a$t$,
   null, $t$Homeostasis is about regulating internal conditions, not growth.$t$, $t$Homeostasis keeps temperature at an optimum (about 37 °C in humans), not as high as possible.$t$, $t$Removing waste is part of it, but homeostasis is regulating internal conditions for cells and enzymes.$t$,
@@ -370,7 +370,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Diabetes$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Diabetes$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
   $t$What causes Type 1 diabetes?$t$,
   $t$The body's cells stop responding to insulin$t$, $t$Eating too much sugar as a child$t$, $t$The pancreas makes too little insulin$t$, $t$The liver makes too much glucagon$t$, 'Not sure', $t$c$t$,
   $t$That describes Type 2 diabetes. Type 1 is when the pancreas produces too little insulin.$t$, $t$Type 1 diabetes isn't caused by diet. The pancreas fails to produce enough insulin.$t$, null, $t$Glucagon isn't the cause. In Type 1 diabetes the pancreas produces too little insulin.$t$,
@@ -383,7 +383,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Adrenaline$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Adrenaline$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
   $t$What does adrenaline do in the body?$t$,
   $t$Lowers blood glucose after meals$t$, $t$Controls the body's basal metabolic rate$t$, $t$Triggers the release of an egg$t$, $t$Raises heart rate for fight or flight$t$, 'Not sure', $t$d$t$,
   $t$That is insulin. Adrenaline raises heart rate and prepares the body for fight or flight.$t$, $t$That is thyroxine. Adrenaline prepares the body for fight or flight.$t$, $t$That is LH. Adrenaline raises heart rate, boosting oxygen and glucose delivery.$t$, null,
@@ -396,7 +396,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Negative Feedback$t$, $t$aqa-bi-fh-homeostasis$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Negative Feedback$t$, $t$aqa-bi-fh-homeostasis$t$, 3,
   $t$Thyroxine levels are controlled by negative feedback. What does this mean?$t$,
   $t$A change sets off a response that reverses it$t$, $t$A change sets off a response that makes it bigger$t$, $t$The hormone stops being made permanently$t$, $t$Levels rise until the gland runs out$t$, 'Not sure', $t$a$t$,
   null, $t$A response that amplifies a change is positive feedback. Negative feedback reverses the change.$t$, $t$Production is adjusted up or down, not switched off for good.$t$, $t$Negative feedback keeps levels within limits; they don't keep rising.$t$,
@@ -409,7 +409,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Contraception$t$, $t$aqa-bi-fh-homeostasis$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Contraception$t$, $t$aqa-bi-fh-homeostasis$t$, 3,
   $t$How does an oral contraceptive containing oestrogen help prevent pregnancy?$t$,
   $t$It kills sperm in the vagina$t$, $t$It blocks the cervix with a barrier$t$, $t$It inhibits FSH, so no eggs mature$t$, $t$It removes eggs from the ovaries$t$, 'Not sure', $t$c$t$,
   $t$Killing sperm is what spermicides do. Oestrogen in the pill inhibits FSH, so eggs don't mature.$t$, $t$That is a barrier method, such as a diaphragm. Oestrogen works hormonally, by inhibiting FSH.$t$, null, $t$Eggs aren't removed. Inhibiting FSH means eggs don't mature in the first place.$t$,
@@ -422,7 +422,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Synapses$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$Synapses$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
   $t$How does a nerve impulse pass across a synapse?$t$,
   $t$An electrical signal jumps the gap$t$, $t$Chemicals diffuse across the gap$t$, $t$The two neurones fuse together$t$, $t$Blood carries it across$t$, 'Not sure', $t$b$t$,
   $t$The electrical impulse can't cross the gap. It triggers chemicals that diffuse across.$t$, null, $t$The neurones don't join; a synapse is a gap between them.$t$, $t$Blood carries hormones, not nerve impulses across synapses.$t$,
@@ -435,7 +435,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$The Eye$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Homeostasis and Response$t$, $t$The Eye$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
   $t$What does the iris do when you move into bright light?$t$,
   $t$Makes the pupil larger$t$, $t$Makes the pupil smaller$t$, $t$Changes the lens's shape$t$, $t$Detects colour on the retina$t$, 'Not sure', $t$b$t$,
   $t$A larger pupil lets in more light, which happens in dim light. In bright light the pupil gets smaller.$t$, null, $t$The ciliary muscles change the lens shape to focus. The iris controls pupil size.$t$, $t$Cone cells in the retina detect colour. The iris controls how much light enters.$t$,
@@ -448,7 +448,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Gametes$t$, $t$aqa-bi-fh-inheritance$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Gametes$t$, $t$aqa-bi-fh-inheritance$t$, 1,
   $t$How many chromosomes are in a human egg cell?$t$,
   $t$23$t$, $t$46$t$, $t$92$t$, $t$22$t$, 'Not sure', $t$a$t$,
   null, $t$46 is in body cells. Gametes have half that number, 23, so fertilisation restores 46.$t$, $t$92 is double a body cell's number. Gametes have 23.$t$, $t$That forgets the sex chromosome. Each gamete has 23 chromosomes (22 plus an X or Y).$t$,
@@ -461,7 +461,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Meiosis$t$, $t$aqa-bi-fh-inheritance$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Meiosis$t$, $t$aqa-bi-fh-inheritance$t$, 2,
   $t$What does meiosis produce?$t$,
   $t$Two identical body cells$t$, $t$Four identical gametes$t$, $t$Four genetically different gametes$t$, $t$Two cells with twice the chromosomes$t$, 'Not sure', $t$c$t$,
   $t$Two identical body cells are made by mitosis.$t$, $t$Meiosis mixes up genetic material, so the four gametes are all different.$t$, null, $t$Meiosis halves the chromosome number, it doesn't double it.$t$,
@@ -474,7 +474,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Sex Determination$t$, $t$aqa-bi-fh-inheritance$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Sex Determination$t$, $t$aqa-bi-fh-inheritance$t$, 1,
   $t$What is the probability that a baby will be a boy?$t$,
   $t$25%$t$, $t$50%$t$, $t$75%$t$, $t$100%$t$, 'Not sure', $t$b$t$,
   $t$A Punnett square of XX × XY gives two XX and two XY outcomes out of four, so 50%.$t$, null, $t$Three out of four isn't right: half of all sperm carry Y, so 50%.$t$, $t$Half of sperm carry an X chromosome, so a girl is just as likely.$t$,
@@ -487,7 +487,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Genetic Crosses$t$, $t$aqa-bi-fh-inheritance$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Genetic Crosses$t$, $t$aqa-bi-fh-inheritance$t$, 3,
   $t$Tall (T) is dominant to short (t) in pea plants. Two heterozygous plants (Tt × Tt) are crossed. What proportion of the offspring are expected to be short?$t$,
   $t$1 in 2$t$, $t$3 in 4$t$, $t$1 in 4$t$, $t$None$t$, 'Not sure', $t$c$t$,
   $t$Half are heterozygous (Tt), but they are tall. Only tt plants are short: 1 in 4.$t$, $t$3 in 4 are tall (TT or Tt). Only 1 in 4 is tt, which is short.$t$, null, $t$Both parents carry t, so a quarter of offspring get t from each: tt, which is short.$t$,
@@ -500,7 +500,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Genetic Engineering$t$, $t$aqa-bi-fh-inheritance$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Genetic Engineering$t$, $t$aqa-bi-fh-inheritance$t$, 2,
   $t$What happens in genetic engineering?$t$,
   $t$Two animals with useful traits are bred together$t$, $t$A gene from one organism is put into another$t$, $t$A new organism grows from a single cell$t$, $t$Mutations are caused to make new genes$t$, 'Not sure', $t$b$t$,
   $t$That is selective breeding. Genetic engineering moves a gene from one organism into another.$t$, null, $t$That describes cloning. Genetic engineering transfers a gene between organisms.$t$, $t$Genetic engineering doesn't rely on random mutations; it transfers a specific gene into another organism.$t$,
@@ -513,7 +513,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Selective Breeding$t$, $t$aqa-bi-fh-inheritance$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Selective Breeding$t$, $t$aqa-bi-fh-inheritance$t$, 3,
   $t$What is a risk of selective breeding?$t$,
   $t$It makes a new species in one generation$t$, $t$It always causes genetic disease$t$, $t$It moves genes between species$t$, $t$Inbreeding, which reduces variation$t$, 'Not sure', $t$d$t$,
   $t$Selective breeding takes many generations and doesn't create new species that quickly.$t$, $t$It can make inherited disorders more likely, but doesn't always cause them.$t$, $t$Moving genes between species is genetic engineering, not selective breeding.$t$, null,
@@ -526,7 +526,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Fossils$t$, $t$aqa-bi-fh-inheritance$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Fossils$t$, $t$aqa-bi-fh-inheritance$t$, 2,
   $t$Why is the fossil record incomplete?$t$,
   $t$Fossils only form in the sea$t$, $t$Every fossil has already been found$t$, $t$Many soft-bodied organisms didn't fossilise$t$, $t$Early life forms were all too large to fossilise$t$, 'Not sure', $t$c$t$,
   $t$Fossils form in many places, not only the sea. Many early organisms were soft-bodied and decayed before fossilising.$t$, $t$New fossils are still being found. The record is incomplete because many organisms never fossilised.$t$, null, $t$Early life forms were mostly small and soft-bodied, which is why few fossilised.$t$,
@@ -539,7 +539,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Classification$t$, $t$aqa-bi-fh-inheritance$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Classification$t$, $t$aqa-bi-fh-inheritance$t$, 1,
   $t$In the name Homo sapiens, what does "Homo" refer to?$t$,
   $t$The species$t$, $t$The genus$t$, $t$The kingdom$t$, $t$The family$t$, 'Not sure', $t$b$t$,
   $t$The species is the second part, "sapiens". The first part is the genus.$t$, null, $t$The kingdom is Animalia. In the binomial name, the first word is the genus.$t$, $t$The family (Hominidae) isn't part of the binomial name. The first word is the genus.$t$,
@@ -552,7 +552,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Quadrat Sampling$t$, $t$aqa-bi-fh-ecology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Quadrat Sampling$t$, $t$aqa-bi-fh-ecology$t$, 3,
   $t$A student counts 12 daisies in 4 quadrats, each \(1\,\text{m}^{2}\). The field is \(500\,\text{m}^{2}\). Estimate the number of daisies in the field.$t$,
   $t$6000$t$, $t$125$t$, $t$48$t$, $t$1500$t$, 'Not sure', $t$d$t$,
   $t$This multiplies the total count by the field area. First find the mean per quadrat: \(12 \div 4 = 3\) per \(\text{m}^{2}\), then \(3 \times 500 = 1500\).$t$, $t$This divides the area by the number of quadrats. Use the mean per \(\text{m}^{2}\): \(3 \times 500 = 1500\).$t$, $t$This multiplies the count by the number of quadrats. Mean per \(\text{m}^{2}\) \(= 3\), so \(3 \times 500 = 1500\).$t$, null,
@@ -565,7 +565,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Transects$t$, $t$aqa-bi-fh-ecology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Transects$t$, $t$aqa-bi-fh-ecology$t$, 2,
   $t$What is a transect used for in fieldwork?$t$,
   $t$Counting organisms in one square metre$t$, $t$Showing how a species changes across an area$t$, $t$Measuring the temperature of a habitat$t$, $t$Catching and marking animals to estimate numbers$t$, 'Not sure', $t$b$t$,
   $t$A single quadrat samples one small area. A transect shows how distribution changes along a line.$t$, null, $t$Temperature is measured with a thermometer. A transect shows changes in distribution across a habitat.$t$, $t$Capture–recapture uses marking. A transect is a line along which you sample.$t$,
@@ -578,7 +578,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Decomposers$t$, $t$aqa-bi-fh-ecology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Decomposers$t$, $t$aqa-bi-fh-ecology$t$, 2,
   $t$What is the role of decomposers in the carbon cycle?$t$,
   $t$They take in carbon dioxide$t$, $t$They respire, releasing carbon dioxide$t$, $t$They turn dead matter into fossil fuels$t$, $t$They release only nitrogen gas$t$, 'Not sure', $t$b$t$,
   $t$Producers take in carbon dioxide (photosynthesis). Decomposers release it by respiring.$t$, null, $t$Fossil fuels form over millions of years when decay is prevented; decomposers break matter down instead.$t$, $t$Decomposers release carbon dioxide as they respire, returning carbon to the atmosphere.$t$,
@@ -604,7 +604,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Interdependence$t$, $t$aqa-bi-fh-ecology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Interdependence$t$, $t$aqa-bi-fh-ecology$t$, 2,
   $t$In a food web, the only predator of rabbits dies out. What is likely to happen first?$t$,
   $t$The rabbit population rises$t$, $t$The rabbit population falls$t$, $t$The grass grows much more$t$, $t$Nothing changes in the web$t$, 'Not sure', $t$a$t$,
   null, $t$With no predator eating them, more rabbits survive, so their numbers rise at first.$t$, $t$More rabbits would eat more grass, so the grass is likely to decrease.$t$, $t$Species in a food web are interdependent, so removing one affects others.$t$,
@@ -630,7 +630,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Biomass Transfer$t$, $t$aqa-bi-fh-ecology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Biomass Transfer$t$, $t$aqa-bi-fh-ecology$t$, 3,
   $t$Why is biomass lost at each stage of a food chain?$t$,
   $t$Each organism creates new energy$t$, $t$Predators eat all of their prey$t$, $t$Much is egested or used in respiration$t$, $t$Plants take biomass from the soil$t$, 'Not sure', $t$c$t$,
   $t$Energy can't be created. Biomass is lost because much isn't absorbed and much is used in respiration.$t$, $t$Predators don't eat every part of their prey, and much of what is eaten is lost.$t$, null, $t$Plants make biomass by photosynthesis, not from the soil. Biomass is lost between levels as waste and respiration.$t$,

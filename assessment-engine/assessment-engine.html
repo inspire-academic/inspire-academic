@@ -485,7 +485,7 @@ const S = {
   leadId:      null, // a guest who arrived from a programme registration (e.g. ISM)
   savedPlans:  {},   // { [subject]: saved attempt row with a plan }
   activeSessions: {}, // { [subject]: { sessionId, answered, total } } unfinished tests
-  availability: {},   // { [subject]: { Higher, Foundation, route } } tier choices on offer
+  availability: {},   // { [board]: { [subject]: { Higher, Foundation, route } } } tier choices on offer
   answerChain: Promise.resolve() // answers are sent one at a time, in order
 };
 
@@ -511,6 +511,10 @@ const S = {
 
 document.addEventListener('DOMContentLoaded', async () => {
   loadAvailability(); // in the background: the tier choice appears when it can
+  document.getElementById('inp-board').addEventListener('change', () => {
+    const sub = document.querySelector('.subject-btn.active')?.dataset.subject;
+    if (sub) updateTierChoice(sub); // what's on offer can differ by board
+  });
   // A guest arriving from a programme registration (e.g. the ISM/Science
   // Mastery funnel — see thank-you/index.html) carries their lead_id and
   // child's name as query params, since there is no login to identify them
@@ -611,7 +615,7 @@ async function loadSavedPlans() {
 async function loadAvailability() {
   try {
     const data = await api('availability');
-    S.availability = data.subjects || {};
+    S.availability = data.boards || { AQA: data.subjects || {} };
     const sub = document.querySelector('.subject-btn.active')?.dataset.subject;
     if (sub) updateTierChoice(sub);
   } catch(e) {
@@ -620,7 +624,8 @@ async function loadAvailability() {
 }
 
 function updateTierChoice(subject) {
-  const avail = S.availability[subject] || {};
+  const board = document.getElementById('inp-board').value;
+  const avail = (S.availability[board] || {})[subject] || {};
   const box = document.getElementById('tier-choice');
   const offered = { Higher: true, Foundation: !!avail.Foundation, route: !!avail.route };
   box.hidden = !offered.Foundation && !offered.route;

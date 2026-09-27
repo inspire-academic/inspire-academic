@@ -19,7 +19,7 @@
 // exist in leads; an anonymous guest's name is not stored at all.
 
 const {
-  fail, ok, parseBody, currentUser, clientIp, sha256, newToken, clean, UUID_RE, db
+  fail, ok, parseBody, currentUser, clientIp, sha256, newToken, clean, UUID_RE, db, questionPoolFilter
 } = require('./_diagnostic-shared');
 const engine = require('./_diagnostic-engine');
 
@@ -33,14 +33,6 @@ const STARTS_PER_HOUR = 20; // per connection; a family sharing one phone won't 
 // browser never receives it (see engine.publicQuestion).
 const QUESTION_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'tier', 'specification_ref', 'combined_eligible', 'updated_at'].join(',');
 
-// Only questions a person has approved (or the pre-pipeline 'legacy' bank,
-// queued for review) reach students; drafts never do. Only the question
-// types the page can show: multiple choice and typed numbers.
-function questionFilter(subjects, level) {
-  const inList = subjects.map(s => `"${s}"`).join(',');
-  return `subject=in.(${encodeURIComponent(inList)})&level=eq.${encodeURIComponent(level)}` +
-    `&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)&active=is.true&exam_board=in.(AQA,Universal)&tier=in.(Higher,Foundation,Both)`;
-}
 
 async function resume(client, event, sessionId) {
   const user = await currentUser(event);
@@ -114,7 +106,7 @@ exports.handler = async (event) => {
       }
     }
 
-    const rows = await client.get(`diagnostic_questions?${questionFilter(engine.sourceSubjects(subject), level)}&select=${QUESTION_COLUMNS}`);
+    const rows = await client.get(`diagnostic_questions?${questionPoolFilter(engine.sourceSubjects(subject), level, board)}&select=${QUESTION_COLUMNS}`);
     const available = engine.tierAvailability(subject, rows);
     if (!available[tierChoice]) {
       return fail(409, 'tier_unavailable', tierChoice === 'Higher'

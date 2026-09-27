@@ -19,7 +19,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Elements and Compounds$t$, $t$aqa-ch-fh-atomic-structure$t$, 1,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Elements and Compounds$t$, $t$aqa-ch-fh-atomic-structure$t$, 1,
   $t$Which of these is a compound?$t$,
   $t$Oxygen$t$, $t$Iron$t$, $t$Water$t$, $t$Neon$t$, 'Not sure', $t$c$t$,
   $t$Oxygen is an element: it contains only one type of atom.$t$, $t$Iron is an element.$t$, null, $t$Neon is an element, a noble gas.$t$,
@@ -32,7 +32,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Separating Mixtures$t$, $t$aqa-ch-fh-atomic-structure$t$, 1,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Separating Mixtures$t$, $t$aqa-ch-fh-atomic-structure$t$, 1,
   $t$Which method separates sand from a mixture of sand and water?$t$,
   $t$Filtration$t$, $t$Distillation$t$, $t$Chromatography$t$, $t$Crystallisation$t$, 'Not sure', $t$a$t$,
   null, $t$Distillation separates a liquid from a solution; filtering is simpler for an insoluble solid.$t$, $t$Chromatography separates dissolved substances, such as inks.$t$, $t$Crystallisation gets a dissolved solid out of a solution. Sand doesn't dissolve.$t$,
@@ -45,7 +45,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Atomic Number$t$, $t$aqa-ch-fh-atomic-structure$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Atomic Number$t$, $t$aqa-ch-fh-atomic-structure$t$, 2,
   $t$A sodium atom has atomic number 11 and mass number 23. How many neutrons does it have?$t$,
   $t$11$t$, $t$23$t$, $t$34$t$, $t$12$t$, 'Not sure', $t$d$t$,
   $t$11 is the number of protons (the atomic number).$t$, $t$23 is the mass number: protons plus neutrons together.$t$, $t$This adds the two numbers. Neutrons = mass number − atomic number = 23 − 11 = 12.$t$, null,
@@ -58,7 +58,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Periodic Table Groups$t$, $t$aqa-ch-fh-atomic-structure$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Periodic Table Groups$t$, $t$aqa-ch-fh-atomic-structure$t$, 2,
   $t$Why do elements in the same group of the periodic table react in similar ways?$t$,
   $t$They have the same number of electrons in their outer shell$t$, $t$They have the same mass, so their atoms behave in the same way$t$, $t$They have the same number of electron shells around the nucleus$t$, $t$They were discovered at the same time$t$, 'Not sure', $t$a$t$,
   null, $t$Masses increase down a group. Reactions depend on outer electrons.$t$, $t$Elements in the same period (row) have the same number of shells, not the same group.$t$, $t$Discovery dates have nothing to do with how elements react.$t$,
@@ -71,7 +71,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Noble Gases$t$, $t$aqa-ch-fh-atomic-structure$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Noble Gases$t$, $t$aqa-ch-fh-atomic-structure$t$, 2,
   $t$Why are the noble gases (group 0) unreactive?$t$,
   $t$They are gases$t$, $t$Their outer shell is full$t$, $t$They have no electrons$t$, $t$They are very heavy$t$, 'Not sure', $t$b$t$,
   $t$Many gases (like oxygen) are very reactive. Being a gas isn't the reason.$t$, null, $t$Noble gases have electrons; their outer shell is full.$t$, $t$Helium and neon are very light, yet still unreactive.$t$,
@@ -84,7 +84,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Atomic Structure$t$, $t$Group 1 Trends$t$, $t$aqa-ch-fh-atomic-structure$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Atomic Structure$t$, $t$Group 1 Trends$t$, $t$aqa-ch-fh-atomic-structure$t$, 3,
   $t$Potassium reacts more vigorously with water than sodium. Why?$t$,
   $t$Potassium's outer electron is further from the nucleus, so it is lost more easily$t$, $t$Potassium has more electrons in its outer shell, so it has more to lose$t$, $t$Potassium is less dense, so it floats higher and reacts more$t$, $t$Potassium's outer electron is closer to the nucleus, so it is held more tightly$t$, 'Not sure', $t$a$t$,
   null, $t$All group 1 metals have one outer electron.$t$, $t$Density doesn't decide reactivity; how easily the outer electron is lost does.$t$, $t$It is the other way round: further down the group, the outer electron is further away.$t$,
@@ -97,7 +97,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Atomic Structure$t$, $t$Model of the Atom$t$, $t$aqa-ch-fh-atomic-structure$t$, 5,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Atomic Structure$t$, $t$Model of the Atom$t$, $t$aqa-ch-fh-atomic-structure$t$, 5,
   $t$In the alpha scattering experiment, a few alpha particles bounced back. What did this show?$t$,
   $t$Atoms are mostly empty space$t$, $t$The mass and positive charge are concentrated in a tiny nucleus$t$, $t$Electrons are spread through a ball of positive charge$t$, $t$Atoms are solid spheres$t$, 'Not sure', $t$b$t$,
   $t$Most particles passing straight through showed that. The few bouncing back showed a dense nucleus.$t$, null, $t$That is the plum pudding model, which this experiment disproved.$t$, $t$If atoms were solid, most particles would bounce back, not just a few.$t$,
@@ -110,7 +110,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Bonding$t$, $t$Types of Bonding$t$, $t$aqa-ch-fh-bonding$t$, 1,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Bonding$t$, $t$Types of Bonding$t$, $t$aqa-ch-fh-bonding$t$, 1,
   $t$What type of bonding is found between a metal and a non-metal, as in sodium chloride?$t$,
   $t$Covalent$t$, $t$Ionic$t$, $t$Metallic$t$, $t$No bonding$t$, 'Not sure', $t$b$t$,
   $t$Covalent bonds form between non-metals, which share electrons.$t$, null, $t$Metallic bonding is between metal atoms only.$t$, $t$Sodium chloride is held together by strong bonds.$t$,
@@ -123,7 +123,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Bonding$t$, $t$Covalent Bonds$t$, $t$aqa-ch-fh-bonding$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Bonding$t$, $t$Covalent Bonds$t$, $t$aqa-ch-fh-bonding$t$, 2,
   $t$What happens to electrons in a covalent bond?$t$,
   $t$They are shared between two atoms$t$, $t$They are transferred from one atom to another$t$, $t$They are free to move through the whole structure$t$, $t$They are destroyed$t$, 'Not sure', $t$a$t$,
   null, $t$Transferring electrons makes ions: that is ionic bonding.$t$, $t$Free-moving (delocalised) electrons are found in metallic bonding.$t$, $t$Electrons aren't destroyed in bonding.$t$,
@@ -136,7 +136,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Bonding$t$, $t$Properties of Metals$t$, $t$aqa-ch-fh-bonding$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Bonding$t$, $t$Properties of Metals$t$, $t$aqa-ch-fh-bonding$t$, 2,
   $t$Why can metals conduct electricity?$t$,
   $t$They contain delocalised electrons that can move$t$, $t$Their positive ions move through the metal carrying charge$t$, $t$Their ions are fixed in place$t$, $t$They have high melting points$t$, 'Not sure', $t$a$t$,
   null, $t$The positive ions are held in a fixed lattice. It is the delocalised electrons that move and carry charge.$t$, $t$Fixed ions can't carry charge. It's the free electrons that move.$t$, $t$A high melting point doesn't explain conduction.$t$,
@@ -149,7 +149,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Bonding$t$, $t$Ionic Compounds$t$, $t$aqa-ch-fh-bonding$t$, 4,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Bonding$t$, $t$Ionic Compounds$t$, $t$aqa-ch-fh-bonding$t$, 4,
   $t$Solid sodium chloride does not conduct electricity, but molten sodium chloride does. Why?$t$,
   $t$When molten, its ions are free to move and carry charge$t$, $t$When molten, it has free electrons that can carry the charge$t$, $t$Melting creates new ions that were not in the solid$t$, $t$Heat itself carries the current$t$, 'Not sure', $t$a$t$,
   null, $t$Ionic compounds don't have free electrons; the moving ions carry the charge.$t$, $t$The ions were already there in the solid; they just couldn't move.$t$, $t$Heat doesn't carry current; charged particles must move.$t$,
@@ -162,7 +162,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Quantitative Chemistry$t$, $t$Conservation of Mass$t$, $t$aqa-ch-fh-quantitative$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Quantitative Chemistry$t$, $t$Conservation of Mass$t$, $t$aqa-ch-fh-quantitative$t$, 2,
   $t$Magnesium is burned in an open crucible. The mass of solid goes up. Why?$t$,
   $t$Mass is created in the reaction$t$, $t$Oxygen from the air joins with the magnesium$t$, $t$The magnesium absorbs heat, which has mass$t$, $t$The crucible gets heavier$t$, 'Not sure', $t$b$t$,
   $t$Mass is never created. The extra mass comes from oxygen atoms from the air.$t$, null, $t$Heat has no mass.$t$, $t$The crucible doesn't change; the magnesium gains oxygen.$t$,
@@ -175,7 +175,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Quantitative Chemistry$t$, $t$Balancing Equations$t$, $t$aqa-ch-fh-quantitative$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Quantitative Chemistry$t$, $t$Balancing Equations$t$, $t$aqa-ch-fh-quantitative$t$, 3,
   $t$Which is the balanced equation for hydrogen reacting with oxygen to make water?$t$,
   $t$\(\text{H}_{2} + \text{O}_{2} \rightarrow \text{H}_{2}\text{O}\)$t$, $t$\(2\text{H}_{2} + \text{O}_{2} \rightarrow 2\text{H}_{2}\text{O}\)$t$, $t$\(\text{H}_{2} + \text{O} \rightarrow \text{H}_{2}\text{O}\)$t$, $t$\(\text{H}_{2} + \text{O}_{2} \rightarrow \text{H}_{2}\text{O}_{2}\)$t$, 'Not sure', $t$b$t$,
   $t$This has 2 oxygen atoms on the left but only 1 on the right. Balance with 2s in front.$t$, null, $t$Oxygen exists as \(\text{O}_{2}\) molecules, not single atoms.$t$, $t$Changing the formula makes a different substance (hydrogen peroxide). Balance with numbers in front instead.$t$,
@@ -188,7 +188,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Changes$t$, $t$pH Scale$t$, $t$aqa-ch-fh-chemical-changes$t$, 1,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Changes$t$, $t$pH Scale$t$, $t$aqa-ch-fh-chemical-changes$t$, 1,
   $t$A solution has a pH of 2. What is it?$t$,
   $t$A strong acid$t$, $t$Neutral$t$, $t$A weak alkali$t$, $t$A strong alkali$t$, 'Not sure', $t$a$t$,
   null, $t$Neutral is pH 7.$t$, $t$Alkalis have a pH above 7.$t$, $t$Strong alkalis have a pH near 14.$t$,
@@ -201,7 +201,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Changes$t$, $t$Neutralisation$t$, $t$aqa-ch-fh-chemical-changes$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Changes$t$, $t$Neutralisation$t$, $t$aqa-ch-fh-chemical-changes$t$, 2,
   $t$What is made when an acid reacts with an alkali?$t$,
   $t$A salt and water$t$, $t$A salt and hydrogen$t$, $t$Only water$t$, $t$A metal and oxygen$t$, 'Not sure', $t$a$t$,
   null, $t$A salt and hydrogen are made when an acid reacts with a metal.$t$, $t$A salt is made as well as water.$t$, $t$Neutralisation doesn't produce a metal or oxygen.$t$,
@@ -214,7 +214,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Changes$t$, $t$Reactivity Series$t$, $t$aqa-ch-fh-chemical-changes$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Changes$t$, $t$Reactivity Series$t$, $t$aqa-ch-fh-chemical-changes$t$, 2,
   $t$Iron is placed in copper sulfate solution. The iron becomes coated in copper. Why?$t$,
   $t$Iron is more reactive than copper, so it displaces it$t$, $t$Copper is more reactive than iron, so it pushes out of solution$t$, $t$The solution is too hot$t$, $t$Iron and copper are equally reactive, so they swap places$t$, 'Not sure', $t$a$t$,
   null, $t$If copper were more reactive, nothing would happen.$t$, $t$This displacement happens at room temperature; it depends on reactivity.$t$, $t$Equally reactive metals wouldn't displace each other.$t$,
@@ -227,7 +227,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Changes$t$, $t$Extracting Metals$t$, $t$aqa-ch-fh-chemical-changes$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Changes$t$, $t$Extracting Metals$t$, $t$aqa-ch-fh-chemical-changes$t$, 3,
   $t$Why is gold found as the pure metal in the ground, for example in the mines around Obuasi?$t$,
   $t$Gold is very unreactive$t$, $t$Gold is very reactive$t$, $t$Gold is magnetic$t$, $t$Gold has a low melting point$t$, 'Not sure', $t$a$t$,
   null, $t$Reactive metals are found as compounds (ores). Gold is found pure because it is unreactive.$t$, $t$Gold isn't magnetic, and magnetism doesn't decide this.$t$, $t$Gold's melting point is over 1000 °C, and it isn't the reason.$t$,
@@ -240,7 +240,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Chemical Changes$t$, $t$Oxidation and Reduction$t$, $t$aqa-ch-fh-chemical-changes$t$, 4,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Chemical Changes$t$, $t$Oxidation and Reduction$t$, $t$aqa-ch-fh-chemical-changes$t$, 4,
   $t$In a blast furnace, carbon removes oxygen from iron oxide. What happens to the iron oxide?$t$,
   $t$It is oxidised$t$, $t$It is reduced$t$, $t$It is neutralised$t$, $t$It is electrolysed$t$, 'Not sure', $t$b$t$,
   $t$Oxidation is gaining oxygen. The iron oxide loses oxygen.$t$, null, $t$Neutralisation is an acid reacting with a base.$t$, $t$Electrolysis uses electricity; this is reduction by carbon.$t$,
@@ -253,7 +253,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Chemical Changes$t$, $t$Electrolysis$t$, $t$aqa-ch-fh-chemical-changes$t$, 5,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Chemical Changes$t$, $t$Electrolysis$t$, $t$aqa-ch-fh-chemical-changes$t$, 5,
   $t$In the electrolysis of molten lead bromide, what forms at the negative electrode?$t$,
   $t$Lead$t$, $t$Bromine$t$, $t$Hydrogen$t$, $t$Oxygen$t$, 'Not sure', $t$a$t$,
   null, $t$Bromide ions are negative, so they go to the positive electrode.$t$, $t$There is no water in molten lead bromide, so no hydrogen forms.$t$, $t$There is no oxygen in lead bromide.$t$,
@@ -266,7 +266,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Energy Changes$t$, $t$Exothermic Reactions$t$, $t$aqa-ch-fh-energy-changes$t$, 1,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Changes$t$, $t$Exothermic Reactions$t$, $t$aqa-ch-fh-energy-changes$t$, 1,
   $t$In an exothermic reaction, what happens to the temperature of the surroundings?$t$,
   $t$It increases$t$, $t$It decreases$t$, $t$It stays the same$t$, $t$It drops to zero$t$, 'Not sure', $t$a$t$,
   null, $t$A fall in temperature shows an endothermic reaction.$t$, $t$An exothermic reaction transfers energy to the surroundings, so they warm up.$t$, $t$Nothing like that happens; the surroundings warm up.$t$,
@@ -279,7 +279,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Energy Changes$t$, $t$Endothermic Reactions$t$, $t$aqa-ch-fh-energy-changes$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Changes$t$, $t$Endothermic Reactions$t$, $t$aqa-ch-fh-energy-changes$t$, 2,
   $t$Which of these is an everyday use of an endothermic reaction?$t$,
   $t$A sports injury cold pack$t$, $t$A reusable hand warmer$t$, $t$A camping gas cooker$t$, $t$A firework$t$, 'Not sure', $t$a$t$,
   null, $t$Hand warmers use exothermic reactions to give out heat.$t$, $t$Burning gas is exothermic.$t$, $t$Fireworks release energy: exothermic.$t$,
@@ -292,7 +292,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Energy Changes$t$, $t$Reaction Profiles$t$, $t$aqa-ch-fh-energy-changes$t$, 4,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Changes$t$, $t$Reaction Profiles$t$, $t$aqa-ch-fh-energy-changes$t$, 4,
   $t$On a reaction profile, what is the activation energy?$t$,
   $t$The energy of the products$t$, $t$The minimum energy needed for particles to react$t$, $t$The overall energy released$t$, $t$The energy of the reactants$t$, 'Not sure', $t$b$t$,
   $t$The products' energy is where the profile ends.$t$, null, $t$The overall energy change is the difference between reactants and products.$t$, $t$The reactants' energy is where the profile starts.$t$,
@@ -305,7 +305,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Rates and Equilibrium$t$, $t$Factors Affecting Rate$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Rates and Equilibrium$t$, $t$Factors Affecting Rate$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
   $t$Which change makes marble chips react faster with acid?$t$,
   $t$Using larger chips$t$, $t$Using powdered marble$t$, $t$Using more dilute acid$t$, $t$Cooling the acid$t$, 'Not sure', $t$b$t$,
   $t$Larger chips have less surface area, so the reaction is slower.$t$, null, $t$More dilute acid has fewer particles to collide, so the reaction is slower.$t$, $t$Cooling slows particles down, so the reaction is slower.$t$,
@@ -318,7 +318,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Rates and Equilibrium$t$, $t$Catalysts$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Rates and Equilibrium$t$, $t$Catalysts$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
   $t$What does a catalyst do?$t$,
   $t$Speeds up a reaction without being used up$t$, $t$Gets used up in the reaction to make more product$t$, $t$Slows down a reaction so it is easier to control$t$, $t$Changes what the products are$t$, 'Not sure', $t$a$t$,
   null, $t$A catalyst is not used up; it can be used again.$t$, $t$Catalysts speed reactions up.$t$, $t$A catalyst gives the same products, just faster.$t$,
@@ -331,7 +331,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Rates and Equilibrium$t$, $t$Collision Theory$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Rates and Equilibrium$t$, $t$Collision Theory$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 3,
   $t$Why does increasing the temperature increase the rate of reaction?$t$,
   $t$The particles move faster, so they collide more often and with more energy$t$, $t$Heating makes more reactant particles, so there are more collisions$t$, $t$The particles get bigger, so they are easier to hit$t$, $t$The activation energy goes up, so reactions are more energetic$t$, 'Not sure', $t$a$t$,
   null, $t$Heating doesn't add particles; it makes them move faster.$t$, $t$Particles don't get bigger when heated.$t$, $t$The activation energy stays the same; more particles have enough energy to reach it.$t$,
@@ -344,7 +344,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Organic Chemistry$t$, $t$Crude Oil$t$, $t$aqa-ch-fh-organic$t$, 1,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Organic Chemistry$t$, $t$Crude Oil$t$, $t$aqa-ch-fh-organic$t$, 1,
   $t$What are most of the compounds in crude oil?$t$,
   $t$Hydrocarbons$t$, $t$Carbohydrates$t$, $t$Metal ores$t$, $t$Proteins$t$, 'Not sure', $t$a$t$,
   null, $t$Carbohydrates contain oxygen as well as carbon and hydrogen. Crude oil is mostly hydrocarbons.$t$, $t$Metal ores are dug from rock; crude oil is a mixture of hydrocarbons.$t$, $t$Proteins are in living things, not crude oil.$t$,
@@ -357,7 +357,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Organic Chemistry$t$, $t$Fractional Distillation$t$, $t$aqa-ch-fh-organic$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Organic Chemistry$t$, $t$Fractional Distillation$t$, $t$aqa-ch-fh-organic$t$, 2,
   $t$How is crude oil separated into fractions?$t$,
   $t$Fractional distillation$t$, $t$Filtration$t$, $t$Electrolysis$t$, $t$Chromatography$t$, 'Not sure', $t$a$t$,
   null, $t$Filtering separates insoluble solids from liquids.$t$, $t$Electrolysis breaks down ionic compounds.$t$, $t$Chromatography separates small amounts of dissolved substances.$t$,
@@ -370,7 +370,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Organic Chemistry$t$, $t$Combustion$t$, $t$aqa-ch-fh-organic$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Organic Chemistry$t$, $t$Combustion$t$, $t$aqa-ch-fh-organic$t$, 3,
   $t$What are the products when a hydrocarbon burns completely in plenty of oxygen?$t$,
   $t$Carbon dioxide and water$t$, $t$Carbon monoxide and water$t$, $t$Carbon and hydrogen$t$, $t$Oxygen and water$t$, 'Not sure', $t$a$t$,
   null, $t$Carbon monoxide forms with too little oxygen (incomplete combustion).$t$, $t$Burning oxidises the carbon and hydrogen; they don't separate.$t$, $t$Oxygen is used up, not produced.$t$,
@@ -383,7 +383,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Analysis$t$, $t$Pure Substances$t$, $t$aqa-ch-fh-analysis$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Analysis$t$, $t$Pure Substances$t$, $t$aqa-ch-fh-analysis$t$, 2,
   $t$How can you tell that a sample of water is pure?$t$,
   $t$It boils at exactly 100 °C$t$, $t$It looks clear$t$, $t$It has no smell$t$, $t$It boils over a range of temperatures$t$, 'Not sure', $t$a$t$,
   null, $t$Salty water looks clear too. Clear doesn't mean pure.$t$, $t$Many impure solutions have no smell.$t$, $t$Boiling over a range shows an impure mixture.$t$,
@@ -396,7 +396,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Analysis$t$, $t$Gas Tests$t$, $t$aqa-ch-fh-analysis$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Chemical Analysis$t$, $t$Gas Tests$t$, $t$aqa-ch-fh-analysis$t$, 2,
   $t$Which gas turns limewater milky?$t$,
   $t$Oxygen$t$, $t$Hydrogen$t$, $t$Carbon dioxide$t$, $t$Chlorine$t$, 'Not sure', $t$c$t$,
   $t$Oxygen relights a glowing splint.$t$, $t$Hydrogen burns with a squeaky pop.$t$, null, $t$Chlorine bleaches damp litmus paper.$t$,
@@ -409,7 +409,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Chemistry of the Atmosphere$t$, $t$Greenhouse Gases$t$, $t$aqa-ch-fh-atmosphere$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Chemistry of the Atmosphere$t$, $t$Greenhouse Gases$t$, $t$aqa-ch-fh-atmosphere$t$, 2,
   $t$Which of these is a greenhouse gas?$t$,
   $t$Nitrogen$t$, $t$Methane$t$, $t$Oxygen$t$, $t$Argon$t$, 'Not sure', $t$b$t$,
   $t$Nitrogen makes up most of the air but isn't a greenhouse gas.$t$, null, $t$Oxygen isn't a greenhouse gas.$t$, $t$Argon isn't a greenhouse gas.$t$,
@@ -422,7 +422,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Chemistry of the Atmosphere$t$, $t$Early Atmosphere$t$, $t$aqa-ch-fh-atmosphere$t$, 4,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Chemistry of the Atmosphere$t$, $t$Early Atmosphere$t$, $t$aqa-ch-fh-atmosphere$t$, 4,
   $t$How did the amount of oxygen in the Earth's atmosphere first increase?$t$,
   $t$Algae and plants produced it by photosynthesis$t$, $t$Volcanoes released large amounts of it$t$, $t$It came from the Sun$t$, $t$Oceans released it as they cooled and formed$t$, 'Not sure', $t$a$t$,
   null, $t$Early volcanoes released mainly carbon dioxide, water vapour and nitrogen, not oxygen.$t$, $t$Oxygen wasn't delivered from the Sun.$t$, $t$As oceans formed, carbon dioxide dissolved into them; they didn't release oxygen.$t$,
@@ -435,7 +435,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Using Resources$t$, $t$Potable Water$t$, $t$aqa-ch-fh-resources$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Using Resources$t$, $t$Potable Water$t$, $t$aqa-ch-fh-resources$t$, 2,
   $t$Why is chlorine added to drinking water?$t$,
   $t$To kill microbes$t$, $t$To remove salt$t$, $t$To make it taste better$t$, $t$To remove sand$t$, 'Not sure', $t$a$t$,
   null, $t$Chlorine doesn't remove salt; that needs distillation or reverse osmosis.$t$, $t$Chlorine is added for safety, not taste.$t$, $t$Sand is removed earlier by filtration.$t$,
@@ -448,7 +448,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Using Resources$t$, $t$Recycling$t$, $t$aqa-ch-fh-resources$t$, 5,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Using Resources$t$, $t$Recycling$t$, $t$aqa-ch-fh-resources$t$, 5,
   $t$Why is recycling aluminium cans better than extracting new aluminium?$t$,
   $t$Recycling uses much less energy than electrolysis of the ore$t$, $t$Recycling turns aluminium into a stronger, different element$t$, $t$Extracting aluminium needs no energy$t$, $t$Aluminium ore never runs out, but cans are cheaper to collect$t$, 'Not sure', $t$a$t$,
   null, $t$Recycled aluminium is still aluminium.$t$, $t$Extracting aluminium uses electrolysis, which needs a great deal of electricity.$t$, $t$Ores are finite; they will run out.$t$,
@@ -461,7 +461,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Using Resources$t$, $t$Alloys$t$, $t$aqa-ch-fh-resources$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Using Resources$t$, $t$Alloys$t$, $t$aqa-ch-fh-resources$t$, 3,
   $t$Why is steel (an alloy of iron) used for building rather than pure iron?$t$,
   $t$Steel is harder and stronger$t$, $t$Steel is softer and bends more easily$t$, $t$Steel is a pure element$t$, $t$Steel does not contain any iron$t$, 'Not sure', $t$a$t$,
   null, $t$Alloys are usually harder, not softer.$t$, $t$Steel is a mixture (an alloy), not an element.$t$, $t$Steel is mostly iron, with carbon and other elements added.$t$,
@@ -474,7 +474,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Rates and Equilibrium$t$, $t$Reversible Reactions$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Rates and Equilibrium$t$, $t$Reversible Reactions$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
   $t$What does the symbol \(\rightleftharpoons\) mean in a chemical equation?$t$,
   $t$The reaction is reversible$t$, $t$The reaction is very fast$t$, $t$The reaction gives out heat$t$, $t$The reaction needs a catalyst$t$, 'Not sure', $t$a$t$,
   null, $t$The symbol says nothing about speed.$t$, $t$It doesn't show energy changes.$t$, $t$A catalyst is written above the arrow, not shown by this symbol.$t$,

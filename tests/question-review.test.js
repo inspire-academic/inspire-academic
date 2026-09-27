@@ -18,9 +18,13 @@ test('the database refuses approvals and approved-wording edits without a signed
 });
 
 test('students are only ever served approved or legacy questions of a type the page can show', () => {
-  const start = read('netlify/functions/diagnostic-session-start.js');
-  assert.match(start, /review_status=in\.\(approved,legacy\)&question_type=in\.\(mcq,numeric\)&active=is\.true/);
-  assert.doesNotMatch(start, /validated=is\.true/);
+  const { questionPoolFilter } = require('../netlify/functions/_diagnostic-shared.js');
+  const filter = questionPoolFilter(['Physics'], 'GCSE', 'AQA');
+  assert.match(filter, /review_status=in\.\(approved,legacy\)&question_type=in\.\(mcq,numeric\)&active=is\.true/);
+  assert.doesNotMatch(filter, /validated=is\.true/);
+  for (const f of ['diagnostic-session-start.js', 'diagnostic-session-route.js']) {
+    assert.match(read('netlify/functions/' + f), /questionPoolFilter\(/, f + ' uses the shared pool filter');
+  }
 });
 
 test('the review page is admin-only, themed, and has no inline scripts or styles', () => {

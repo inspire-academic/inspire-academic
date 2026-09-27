@@ -221,7 +221,7 @@ module.exports = {
       feedback: { b: 'Animals compete for food, mates and territory.', c: 'Gases are usually plentiful; plants compete for light, water, space and minerals.', d: 'Plants compete strongly for resources.' },
       explanation: 'Plants compete for light, space, water and mineral ions from the soil.' },
 
-    { tier: F, topic: ECO, subtopic: 'Deforestation', spec_slug: 'aqa-bi-fh-ecology', difficulty: 2,
+    { tier: F, topic: ECO, subtopic: 'Deforestation', exam_board: 'AQA', spec_slug: 'aqa-bi-fh-ecology', difficulty: 2,
       question_text: r`Large areas of forest in West Africa have been cleared. How does this affect carbon dioxide in the air?`,
       options: { a: 'It rises: fewer trees take it in, and burning adds more', b: 'It falls, because trees give out carbon dioxide', c: 'It stays the same, because trees have no effect', d: 'It falls, because burning the cleared wood removes carbon dioxide' }, key: 'a',
       feedback: { b: 'Trees take in carbon dioxide for photosynthesis overall.', c: 'Trees remove large amounts of carbon dioxide from the air.', d: 'Burning releases carbon dioxide.' },

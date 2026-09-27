@@ -10,17 +10,12 @@
 // Returns: { tier, questions: [public question fields], totalQuestions }
 // Safe to repeat: once routed, it returns the same tier and questions.
 
-const { fail, ok, parseBody, db, loadSession } = require('./_diagnostic-shared');
+const { fail, ok, parseBody, db, loadSession, questionPoolFilter } = require('./_diagnostic-shared');
 const engine = require('./_diagnostic-engine');
 
 const MARKING_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'correct_answer', 'answer_spec'].join(',');
-// The same pool the start endpoint draws on (see diagnostic-session-start.js).
+// The same pool the start endpoint draws on (see questionPoolFilter).
 const POOL_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'tier', 'specification_ref', 'combined_eligible', 'updated_at'].join(',');
-function poolFilter(subjects, level) {
-  const inList = subjects.map(s => `"${s}"`).join(',');
-  return `subject=in.(${encodeURIComponent(inList)})&level=eq.${encodeURIComponent(level)}` +
-    `&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)&active=is.true&exam_board=in.(AQA,Universal)&tier=in.(Higher,Foundation,Both)`;
-}
 
 async function questionsFrom(client, ids) {
   if (!ids.length) return [];
@@ -57,7 +52,7 @@ exports.handler = async (event) => {
     const routingQuestions = ids.map(id => routingById.get(id)).filter(Boolean);
     const tier = engine.routeTier(engine.markAnswers(routingQuestions, byQuestion));
 
-    const pool = await client.get(`diagnostic_questions?${poolFilter(engine.sourceSubjects(session.subject), session.level)}&select=${POOL_COLUMNS}`);
+    const pool = await client.get(`diagnostic_questions?${questionPoolFilter(engine.sourceSubjects(session.subject), session.level, session.exam_board)}&select=${POOL_COLUMNS}`);
     const rest = engine.selectQuestions(session.subject, pool, tier, new Set(ids), engine.remainingCounts(session.subject, routingQuestions));
     const versions = { ...(session.question_versions || {}) };
     rest.forEach(q => { versions[q.id] = q.updated_at || null; });

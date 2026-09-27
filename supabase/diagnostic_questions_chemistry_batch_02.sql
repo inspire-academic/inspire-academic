@@ -20,7 +20,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Quantitative Chemistry$t$, $t$Relative Formula Mass$t$, $t$aqa-ch-fh-quantitative$t$, 1,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Quantitative Chemistry$t$, $t$Relative Formula Mass$t$, $t$aqa-ch-fh-quantitative$t$, 1,
   $t$Calculate the relative formula mass \(M_r\) of calcium carbonate, \(\text{CaCO}_{3}\). Relative atomic masses: Ca = 40, C = 12, O = 16.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -33,7 +33,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Relative Formula Mass$t$, $t$aqa-ch-fh-quantitative$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Relative Formula Mass$t$, $t$aqa-ch-fh-quantitative$t$, 2,
   $t$Calculate the relative formula mass \(M_r\) of sulfuric acid, \(\text{H}_{2}\text{SO}_{4}\). Relative atomic masses: H = 1, S = 32, O = 16.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -46,7 +46,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Moles from Mass$t$, $t$aqa-ch-fh-quantitative$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Moles from Mass$t$, $t$aqa-ch-fh-quantitative$t$, 2,
   $t$How many moles are there in \(22\,\text{g}\) of carbon dioxide, \(\text{CO}_{2}\)? (\(M_r\) of \(\text{CO}_{2}\) = 44)$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -59,7 +59,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Mass from Moles$t$, $t$aqa-ch-fh-quantitative$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Mass from Moles$t$, $t$aqa-ch-fh-quantitative$t$, 3,
   $t$Salt from the Songor lagoon is mostly sodium chloride. What is the mass of \(0.25\,\text{mol}\) of sodium chloride, NaCl? (\(M_r\) = 58.5)$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -72,7 +72,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Concentration (g/dm³)$t$, $t$aqa-ch-fh-quantitative$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Concentration (g/dm³)$t$, $t$aqa-ch-fh-quantitative$t$, 3,
   $t$\(10\,\text{g}\) of sodium hydroxide is dissolved in water to make \(250\,\text{cm}^{3}\) of solution. What is the concentration in \(\text{g/dm}^{3}\)?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -85,7 +85,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Percentage Yield$t$, $t$aqa-ch-fh-quantitative$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Percentage Yield$t$, $t$aqa-ch-fh-quantitative$t$, 2,
   $t$A reaction could make \(20\,\text{g}\) of product in theory. A student actually makes \(15\,\text{g}\). What is the percentage yield?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -98,7 +98,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Atom Economy$t$, $t$aqa-ch-fh-quantitative$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Atom Economy$t$, $t$aqa-ch-fh-quantitative$t$, 3,
   $t$Limestone quarried at Ewekoro is heated to make lime: \(\text{CaCO}_{3} \rightarrow \text{CaO} + \text{CO}_{2}\). Calcium oxide is the useful product. What is the percentage atom economy? (\(M_r\): \(\text{CaCO}_{3}\) = 100, CaO = 56, \(\text{CO}_{2}\) = 44)$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -111,7 +111,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Rates and Equilibrium$t$, $t$Mean Rate of Reaction$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Rates and Equilibrium$t$, $t$Mean Rate of Reaction$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
   $t$Marble chips react with acid and give off \(60\,\text{cm}^{3}\) of gas in the first \(30\,\text{s}\). What is the mean rate of reaction over that time?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -124,7 +124,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Changes$t$, $t$Bond Energies$t$, $t$aqa-ch-fh-energy-changes$t$, 5,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Changes$t$, $t$Bond Energies$t$, $t$aqa-ch-fh-energy-changes$t$, 5,
   $t$Use the bond energies to find the overall energy change for \(\text{H}_{2} + \text{Cl}_{2} \rightarrow 2\text{HCl}\). Bond energies in kJ/mol: H–H = 436, Cl–Cl = 243, H–Cl = 432.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -137,7 +137,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Volumes of Gases$t$, $t$aqa-ch-fh-quantitative$t$, 4,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Volumes of Gases$t$, $t$aqa-ch-fh-quantitative$t$, 4,
   $t$One mole of any gas occupies \(24\,\text{dm}^{3}\) at room temperature and pressure. What volume does \(0.5\,\text{mol}\) of oxygen occupy?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -150,7 +150,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Concentration (mol/dm³)$t$, $t$aqa-ch-fh-quantitative$t$, 4,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Concentration (mol/dm³)$t$, $t$aqa-ch-fh-quantitative$t$, 4,
   $t$\(0.1\,\text{mol}\) of hydrochloric acid is dissolved to make \(250\,\text{cm}^{3}\) of solution. What is its concentration in \(\text{mol/dm}^{3}\)?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -163,7 +163,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Analysis$t$, $t$Rf Values$t$, $t$aqa-ch-fh-analysis$t$, 2,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Chemical Analysis$t$, $t$Rf Values$t$, $t$aqa-ch-fh-analysis$t$, 2,
   $t$In a chromatogram of a food dye, a spot moved \(3.0\,\text{cm}\) and the solvent front moved \(7.5\,\text{cm}\). What is the \(R_f\) value of the spot?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -176,7 +176,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Titration Calculations$t$, $t$aqa-ch-h-quantitative-advanced$t$, 5,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Titration Calculations$t$, $t$aqa-ch-h-quantitative-advanced$t$, 5,
   $t$In a school lab in Obuasi, \(25.0\,\text{cm}^{3}\) of sodium hydroxide solution is exactly neutralised by \(20.0\,\text{cm}^{3}\) of \(0.10\,\text{mol/dm}^{3}\) hydrochloric acid. \(\text{NaOH} + \text{HCl} \rightarrow \text{NaCl} + \text{H}_{2}\text{O}\). What is the concentration of the sodium hydroxide, in \(\text{mol/dm}^{3}\)?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -189,7 +189,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Relative Atomic Mass from Isotopes$t$, $t$aqa-ch-fh-atomic-structure$t$, 3,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Relative Atomic Mass from Isotopes$t$, $t$aqa-ch-fh-atomic-structure$t$, 3,
   $t$Chlorine is 75% chlorine-35 and 25% chlorine-37. Calculate its relative atomic mass.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -202,7 +202,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Reacting Masses$t$, $t$aqa-ch-fh-quantitative$t$, 4,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Reacting Masses$t$, $t$aqa-ch-fh-quantitative$t$, 4,
   $t$Magnesium burns in oxygen: \(2\text{Mg} + \text{O}_{2} \rightarrow 2\text{MgO}\). What mass of magnesium oxide is made from \(12\,\text{g}\) of magnesium? (\(A_r\) Mg = 24; \(M_r\) MgO = 40)$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -215,7 +215,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Avogadro Constant$t$, $t$aqa-ch-fh-quantitative$t$, 4,
+select $t$Chemistry$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Avogadro Constant$t$, $t$aqa-ch-fh-quantitative$t$, 4,
   $t$How many molecules are there in \(2\,\text{mol}\) of water? The Avogadro constant is \(6.02 \times 10^{23}\) per mole. Give your answer in standard form, for example 3.2e24.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,

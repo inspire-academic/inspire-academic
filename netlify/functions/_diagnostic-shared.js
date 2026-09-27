@@ -89,6 +89,22 @@ async function loadSession(client, event, sessionId, token) {
   return { error: fail(403, 'forbidden', 'This test session belongs to someone else.') };
 }
 
+// The reviewed question pool a test can draw on, as a PostgREST filter.
+// Only questions a person has approved (or the pre-pipeline 'legacy' bank,
+// queued for review) reach students; drafts never do. Only the question
+// types the page can show (multiple choice and typed numbers). A question's
+// exam_board is 'Universal' when its content is on every board's
+// specification, or the one board whose specification it's on, so a test
+// for a board draws on that board's questions plus the universal ones.
+const QUESTION_BOARDS = ['AQA', 'Edexcel'];
+function questionPoolFilter(subjects, level, board) {
+  const inList = subjects.map(s => `"${s}"`).join(',');
+  const b = QUESTION_BOARDS.includes(board) ? board : 'AQA';
+  return `subject=in.(${encodeURIComponent(inList)})&level=eq.${encodeURIComponent(level)}` +
+    `&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)&active=is.true` +
+    `&exam_board=in.(${b},Universal)&tier=in.(Higher,Foundation,Both)`;
+}
+
 const MAX_TIME_MS = 60 * 60 * 1000;
 
 // The diagnostic_responses row for one answer (from the answer endpoint or a
@@ -113,5 +129,6 @@ function responseRecord(session, q, position, a) {
 }
 
 module.exports = {
-  SUPABASE_URL, fail, ok, parseBody, currentUser, clientIp, sha256, newToken, clean, UUID_RE, db, loadSession, responseRecord
+  SUPABASE_URL, fail, ok, parseBody, currentUser, clientIp, sha256, newToken, clean, UUID_RE, db, loadSession, responseRecord,
+  QUESTION_BOARDS, questionPoolFilter
 };

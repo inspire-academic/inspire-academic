@@ -1,7 +1,8 @@
 // GET /api/v1/diagnostic/availability
 //
 // Which tier choices each subject can offer yet, for the start page:
-// { subjects: { Physics: { Higher: true, Foundation: false, route: false }, ... } }
+// { boards: { AQA: { Physics: { Higher, Foundation, route }, ... }, Edexcel: {...} },
+//   subjects: <the AQA entry, for pages written before boards> }
 //   Higher      a Higher-tier test (offered whenever there are questions)
 //   Foundation  a Foundation-tier test (needs a full test's worth of reviewed
 //               Foundation or both-tier questions)
@@ -10,11 +11,11 @@
 // returns a question. Cached briefly: it changes only as questions are
 // approved.
 
-const { fail, db } = require('./_diagnostic-shared');
+const { fail, db, QUESTION_BOARDS } = require('./_diagnostic-shared');
 const engine = require('./_diagnostic-engine');
 
 const SUBJECTS = ['Physics', 'Chemistry', 'Biology', 'Combined Science', 'Mathematics', engine.MATHS_PAPER2];
-const COLUMNS = 'id,subject,topic,difficulty,tier,specification_ref,combined_eligible';
+const COLUMNS = 'id,subject,topic,difficulty,tier,exam_board,specification_ref,combined_eligible';
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'GET') return fail(405, 'method_not_allowed', 'Method not allowed.');
@@ -23,17 +24,22 @@ exports.handler = async (event) => {
   try {
     const rows = await client.get(
       'diagnostic_questions?level=eq.GCSE&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)' +
-      `&active=is.true&exam_board=in.(AQA,Universal)&tier=in.(Higher,Foundation,Both)&select=${COLUMNS}`
+      `&active=is.true&exam_board=in.(${QUESTION_BOARDS.join(',')},Universal)&tier=in.(Higher,Foundation,Both)&select=${COLUMNS}`
     );
-    const subjects = {};
-    SUBJECTS.forEach(subject => {
-      const sources = engine.sourceSubjects(subject);
-      subjects[subject] = engine.tierAvailability(subject, rows.filter(q => sources.includes(q.subject)));
+    const boards = {};
+    QUESTION_BOARDS.forEach(board => {
+      const onBoard = rows.filter(q => q.exam_board === board || q.exam_board === 'Universal');
+      boards[board] = {};
+      SUBJECTS.forEach(subject => {
+        const sources = engine.sourceSubjects(subject);
+        boards[board][subject] = engine.tierAvailability(subject, onBoard.filter(q => sources.includes(q.subject)));
+      });
     });
+    const subjects = boards.AQA;
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=300' },
-      body: JSON.stringify({ success: true, subjects })
+      body: JSON.stringify({ success: true, boards, subjects })
     };
   } catch (e) {
     console.error('diagnostic-availability error:', e.message);

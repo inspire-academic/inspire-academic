@@ -146,7 +146,7 @@ module.exports = {
         unit_feedback: 'Resistance is measured in ohms (Ω).' },
       explanation: r`\(V = IR\), so \(R = \dfrac{V}{I} = \dfrac{12}{0.4} = 30\,\Omega\).` },
 
-    { type: 'numeric', topic: EL, subtopic: 'Energy Used (kWh)', spec_slug: 'aqa-ph-fh-electricity-domestic', difficulty: 2,
+    { type: 'numeric', topic: EL, subtopic: 'Energy Used (kWh)', exam_board: 'AQA', spec_slug: 'aqa-ph-fh-electricity-domestic', difficulty: 2,
       question_text: r`An air conditioner in a Lagos flat has a power of \(2\,\text{kW}\) and runs for 3 hours. How much energy does it use, in kilowatt-hours?`,
       answer: { value: 6, unit: 'kWh', unit_options: ['kWh', 'kW', 'W', 'h'],
         wrong: [

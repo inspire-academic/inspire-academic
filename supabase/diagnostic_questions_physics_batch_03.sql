@@ -19,7 +19,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Energy Stores$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Energy Stores$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 1,
   $t$A ball is held still at the top of a hill. Which energy store is largest?$t$,
   $t$Kinetic$t$, $t$Gravitational potential$t$, $t$Elastic potential$t$, $t$Nuclear$t$, 'Not sure', $t$b$t$,
   $t$Kinetic energy is energy of movement; the ball is still, so it has none.$t$, null, $t$Elastic potential energy is stored in something stretched or squashed, like a spring.$t$, $t$Nuclear energy is stored inside atoms; it isn't changed by where the ball is held.$t$,
@@ -32,7 +32,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Energy Transfers$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Energy Transfers$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 1,
   $t$A torch uses a battery to light a bulb. Which energy store does the battery empty?$t$,
   $t$Chemical$t$, $t$Thermal$t$, $t$Kinetic$t$, $t$Gravitational potential$t$, 'Not sure', $t$a$t$,
   null, $t$The bulb heats up (thermal store), but the battery's energy was in its chemical store.$t$, $t$Nothing in the battery is moving; its energy is in its chemical store.$t$, $t$The battery isn't raised; its energy is in its chemical store.$t$,
@@ -45,7 +45,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Wasted Energy$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Wasted Energy$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
   $t$A phone charger gets warm while it charges a phone. What happens to the energy that warms the charger?$t$,
   $t$It is destroyed$t$, $t$It is stored in the phone$t$, $t$It is wasted, spreading into the surroundings$t$, $t$It turns back into electricity$t$, 'Not sure', $t$c$t$,
   $t$Energy is never destroyed. It spreads out into the surroundings, where it isn't useful.$t$, $t$The energy that warms the charger doesn't reach the phone's battery.$t$, null, $t$Energy that has spread out as heat can't usefully be turned back into electricity.$t$,
@@ -58,7 +58,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Renewable Resources$t$, $t$aqa-ph-fh-energy-resources$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Renewable Resources$t$, $t$aqa-ph-fh-energy-resources$t$, 1,
   $t$Which of these energy resources is renewable?$t$,
   $t$Coal$t$, $t$Natural gas$t$, $t$Solar$t$, $t$Oil$t$, 'Not sure', $t$c$t$,
   $t$Coal is a fossil fuel; it takes millions of years to form, so it will run out.$t$, $t$Natural gas is a fossil fuel and will run out.$t$, null, $t$Oil is a fossil fuel and will run out.$t$,
@@ -71,7 +71,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Energy Resources$t$, $t$aqa-ph-fh-energy-resources$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Energy Resources$t$, $t$aqa-ph-fh-energy-resources$t$, 2,
   $t$A village in northern Ghana wants electricity. Why might solar panels be a better choice than a diesel generator?$t$,
   $t$Solar panels work equally well at night$t$, $t$Sunlight is free and the panels release no carbon dioxide while working$t$, $t$Diesel is a renewable fuel$t$, $t$Solar panels never need any maintenance$t$, 'Not sure', $t$b$t$,
   $t$Solar panels produce nothing at night; batteries are needed to store energy for then.$t$, null, $t$Diesel is made from oil, a fossil fuel. It is not renewable.$t$, $t$Panels need cleaning and occasional repair, just less than a generator.$t$,
@@ -84,7 +84,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Efficiency$t$, $t$aqa-ph-fh-energy-efficiency$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Efficiency$t$, $t$aqa-ph-fh-energy-efficiency$t$, 3,
   $t$A light bulb transfers \(100\,\text{J}\) of energy each second. \(20\,\text{J}\) is transferred as light. What is its efficiency?$t$,
   $t$\(80\%\)$t$, $t$\(20\%\)$t$, $t$\(5\%\)$t$, $t$\(120\%\)$t$, 'Not sure', $t$b$t$,
   $t$80% is the share that is wasted as heat. Efficiency is the useful share: 20 ÷ 100 = 20%.$t$, null, $t$This divides 100 by 20. Efficiency = useful ÷ total = 20 ÷ 100 = 20%.$t$, $t$No device can be more than 100% efficient. Efficiency = 20 ÷ 100 = 20%.$t$,
@@ -97,7 +97,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Power$t$, $t$aqa-ph-fh-energy-efficiency$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Power$t$, $t$aqa-ph-fh-energy-efficiency$t$, 4,
   $t$Two kettles boil the same amount of water. Kettle A takes 2 minutes and kettle B takes 3 minutes. What does this tell you?$t$,
   $t$Kettle A has a higher power$t$, $t$Kettle B has a higher power$t$, $t$Kettle B transfers more energy in total$t$, $t$Both kettles have the same power$t$, 'Not sure', $t$a$t$,
   null, $t$Taking longer to transfer the same energy means a lower power.$t$, $t$Both boil the same water, so they transfer about the same useful energy; A just does it faster.$t$, $t$They take different times for the same job, so their powers are different.$t$,
@@ -110,7 +110,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Circuit Symbols$t$, $t$aqa-ph-fh-electricity-circuits$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Circuit Symbols$t$, $t$aqa-ph-fh-electricity-circuits$t$, 1,
   $t$Which component is used to measure the current in a circuit?$t$,
   $t$A voltmeter$t$, $t$An ammeter$t$, $t$A resistor$t$, $t$A fuse$t$, 'Not sure', $t$b$t$,
   $t$A voltmeter measures potential difference (voltage), not current.$t$, null, $t$A resistor limits the current; it doesn't measure it.$t$, $t$A fuse melts to break the circuit if the current is too big; it doesn't measure it.$t$,
@@ -123,7 +123,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Series Circuits$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Series Circuits$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
   $t$Two lamps are connected in series with a cell. One lamp breaks. What happens to the other lamp?$t$,
   $t$It gets brighter$t$, $t$It stays the same$t$, $t$It goes out$t$, $t$It flickers on and off$t$, 'Not sure', $t$c$t$,
   $t$In a series circuit there is only one path, so a break stops the current everywhere.$t$, $t$The broken lamp breaks the only path, so no current can flow.$t$, null, $t$A break is permanent until it is fixed; no current flows at all.$t$,
@@ -136,7 +136,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Parallel Circuits$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Parallel Circuits$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
   $t$Why are the lights in a house wired in parallel?$t$,
   $t$So that one light can be switched off without turning off the others$t$, $t$So that all the lights share one switch$t$, $t$So that less current flows from the mains$t$, $t$So that each light gets a smaller voltage$t$, 'Not sure', $t$a$t$,
   null, $t$Parallel wiring lets each light have its own switch.$t$, $t$Adding lights in parallel increases the total current drawn from the mains.$t$, $t$In parallel, each light gets the full mains voltage.$t$,
@@ -149,7 +149,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Mains Electricity$t$, $t$aqa-ph-fh-electricity-domestic$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Mains Electricity$t$, $t$aqa-ph-fh-electricity-domestic$t$, 2,
   $t$What is the frequency and voltage of the UK mains supply?$t$,
   $t$\(50\,\text{Hz}\) and \(230\,\text{V}\)$t$, $t$\(230\,\text{Hz}\) and \(50\,\text{V}\)$t$, $t$\(60\,\text{Hz}\) and \(110\,\text{V}\)$t$, $t$\(50\,\text{Hz}\) and \(12\,\text{V}\)$t$, 'Not sure', $t$a$t$,
   null, $t$The numbers are swapped: UK mains is 50 Hz and 230 V.$t$, $t$That is the supply in the USA. The UK uses 50 Hz and 230 V.$t$, $t$12 V is a car battery. UK mains is 230 V.$t$,
@@ -162,7 +162,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Plug Wiring$t$, $t$aqa-ph-fh-electricity-domestic$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Electricity$t$, $t$Plug Wiring$t$, $t$aqa-ph-fh-electricity-domestic$t$, 2,
   $t$What is the job of the earth wire (green and yellow) in a plug?$t$,
   $t$It carries the current to the appliance$t$, $t$It stops the appliance becoming live if a fault happens$t$, $t$It completes the circuit when the appliance is working normally$t$, $t$It switches the appliance on and off$t$, 'Not sure', $t$b$t$,
   $t$The live wire (brown) carries the current to the appliance.$t$, null, $t$The neutral wire (blue) completes the circuit in normal use; the earth carries current only if there is a fault.$t$, $t$A switch does that. The earth wire is a safety wire.$t$,
@@ -175,7 +175,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Electricity$t$, $t$Current and Resistance$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Electricity$t$, $t$Current and Resistance$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
   $t$The potential difference across a resistor stays the same, but its resistance is increased. What happens to the current?$t$,
   $t$It increases$t$, $t$It decreases$t$, $t$It stays the same$t$, $t$It becomes zero$t$, 'Not sure', $t$b$t$,
   $t$More resistance means the current is opposed more, so it goes down.$t$, null, $t$With the same voltage, the current depends on the resistance: \(I = V \div R\).$t$, $t$The current falls but doesn't stop, unless the resistance becomes infinite.$t$,
@@ -188,7 +188,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Electricity$t$, $t$Power in Circuits$t$, $t$aqa-ph-fh-electricity-domestic$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Electricity$t$, $t$Power in Circuits$t$, $t$aqa-ph-fh-electricity-domestic$t$, 3,
   $t$A phone charger has a current of \(2\,\text{A}\) at a potential difference of \(5\,\text{V}\). What is its power?$t$,
   $t$\(2.5\,\text{W}\)$t$, $t$\(0.4\,\text{W}\)$t$, $t$\(7\,\text{W}\)$t$, $t$\(10\,\text{W}\)$t$, 'Not sure', $t$d$t$,
   $t$This divides 5 by 2. Power = current × potential difference = 2 × 5 = 10 W.$t$, $t$This divides 2 by 5. Power = 2 × 5 = 10 W.$t$, $t$This adds them. Power is current multiplied by potential difference: 10 W.$t$, null,
@@ -201,7 +201,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Electricity$t$, $t$Static Electricity$t$, $t$aqa-ph-fh-electricity-static$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Electricity$t$, $t$Static Electricity$t$, $t$aqa-ph-fh-electricity-static$t$, 4,
   $t$A plastic comb is rubbed with a cloth and becomes negatively charged. What has happened?$t$,
   $t$Protons moved from the cloth to the comb$t$, $t$Electrons moved from the cloth to the comb$t$, $t$Electrons moved from the comb to the cloth$t$, $t$Negative charge was made by the rubbing$t$, 'Not sure', $t$b$t$,
   $t$Protons are held in the nucleus and don't move. Only electrons are transferred.$t$, null, $t$Losing electrons would leave the comb positive. It gained electrons, so it is negative.$t$, $t$Charge isn't created; electrons are moved from one object to the other.$t$,
@@ -214,7 +214,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Particle Model$t$, $t$States of Matter$t$, null, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Particle Model$t$, $t$States of Matter$t$, null, 1,
   $t$In which state are the particles closest together and only vibrate about fixed positions?$t$,
   $t$Solid$t$, $t$Liquid$t$, $t$Gas$t$, $t$All states equally$t$, 'Not sure', $t$a$t$,
   null, $t$Liquid particles are close together but move around each other.$t$, $t$Gas particles are far apart and move quickly in all directions.$t$, $t$The arrangement is different in each state.$t$,
@@ -227,7 +227,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Particle Model$t$, $t$Changes of State$t$, null, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Particle Model$t$, $t$Changes of State$t$, null, 2,
   $t$Ice melts into water. What happens to its mass?$t$,
   $t$It increases$t$, $t$It decreases$t$, $t$It stays the same$t$, $t$It becomes zero$t$, 'Not sure', $t$c$t$,
   $t$No particles are added when ice melts, so the mass doesn't increase.$t$, $t$No particles are lost; they just rearrange.$t$, null, $t$The water is still there, with all the same particles.$t$,
@@ -240,7 +240,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Particle Model$t$, $t$Evaporation$t$, null, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Particle Model$t$, $t$Evaporation$t$, null, 2,
   $t$Clothes hung outside in Lagos dry quickly on a hot day. Why?$t$,
   $t$Heat makes the water disappear$t$, $t$More water particles have enough energy to escape as a gas$t$, $t$The water turns into air$t$, $t$The clothes absorb the water$t$, 'Not sure', $t$b$t$,
   $t$Water doesn't disappear; it evaporates and becomes water vapour in the air.$t$, null, $t$Water becomes water vapour, which mixes with the air; it doesn't become air.$t$, $t$The clothes lose water; they don't absorb more.$t$,
@@ -253,7 +253,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Particle Model$t$, $t$Density$t$, null, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Particle Model$t$, $t$Density$t$, null, 3,
   $t$Two blocks are the same size. Block P has a greater mass than block Q. Which statement is correct?$t$,
   $t$P is less dense than Q$t$, $t$P is denser than Q$t$, $t$P and Q have the same density$t$, $t$Density does not depend on mass$t$, 'Not sure', $t$b$t$,
   $t$More mass in the same volume means a higher density.$t$, null, $t$Same volume but different masses gives different densities.$t$, $t$Density is mass ÷ volume, so it depends directly on mass.$t$,
@@ -266,7 +266,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Particle Model$t$, $t$Gas Pressure$t$, null, 5,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Particle Model$t$, $t$Gas Pressure$t$, null, 5,
   $t$A sealed bottle of gas is warmed. The volume does not change. Why does the pressure increase?$t$,
   $t$The particles get bigger$t$, $t$There are more particles in the bottle$t$, $t$The particles move faster and hit the walls harder and more often$t$, $t$The particles stop moving and push outwards$t$, 'Not sure', $t$c$t$,
   $t$The particles don't change size; they speed up.$t$, $t$The bottle is sealed, so the number of particles stays the same.$t$, null, $t$Warming makes particles move faster, not stop.$t$,
@@ -279,7 +279,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$The Atom$t$, $t$aqa-ph-fh-atomic-structure$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$The Atom$t$, $t$aqa-ph-fh-atomic-structure$t$, 1,
   $t$Where are the protons and neutrons in an atom?$t$,
   $t$In the nucleus$t$, $t$In shells around the nucleus$t$, $t$Spread evenly through the atom$t$, $t$Outside the atom$t$, 'Not sure', $t$a$t$,
   null, $t$Electrons are in shells around the nucleus; protons and neutrons are in the nucleus.$t$, $t$That is the old "plum pudding" idea. Protons and neutrons are packed in a tiny nucleus.$t$, $t$They are part of the atom, in its nucleus.$t$,
@@ -292,7 +292,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Charges of Particles$t$, $t$aqa-ph-fh-atomic-structure$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Charges of Particles$t$, $t$aqa-ph-fh-atomic-structure$t$, 1,
   $t$What is the charge on a neutron?$t$,
   $t$Positive$t$, $t$Negative$t$, $t$No charge$t$, $t$It changes$t$, 'Not sure', $t$c$t$,
   $t$Protons are positive. Neutrons are neutral.$t$, $t$Electrons are negative. Neutrons are neutral.$t$, null, $t$A neutron's charge is always zero: it is neutral.$t$,
@@ -305,7 +305,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Types of Radiation$t$, $t$aqa-ph-fh-atomic-structure$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Types of Radiation$t$, $t$aqa-ph-fh-atomic-structure$t$, 2,
   $t$Which type of nuclear radiation is stopped by a sheet of paper?$t$,
   $t$Alpha$t$, $t$Beta$t$, $t$Gamma$t$, $t$None of them$t$, 'Not sure', $t$a$t$,
   null, $t$Beta passes through paper; it is stopped by a few millimetres of aluminium.$t$, $t$Gamma passes through paper and needs thick lead or concrete to reduce it.$t$, $t$Alpha radiation is stopped by paper.$t$,
@@ -318,7 +318,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Contamination and Irradiation$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Atomic Structure$t$, $t$Contamination and Irradiation$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
   $t$Why do workers who handle radioactive sources wear gloves and use tongs?$t$,
   $t$To stop the source becoming more radioactive$t$, $t$To avoid getting radioactive material on their skin$t$, $t$To keep the source warm$t$, $t$To make the radiation turn into light$t$, 'Not sure', $t$b$t$,
   $t$Handling doesn't change how radioactive a source is.$t$, null, $t$Temperature doesn't affect radioactive decay.$t$, $t$Gloves don't change the radiation; they prevent contamination.$t$,
@@ -331,7 +331,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Atomic Structure$t$, $t$Isotopes$t$, $t$aqa-ph-fh-atomic-structure$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Atomic Structure$t$, $t$Isotopes$t$, $t$aqa-ph-fh-atomic-structure$t$, 4,
   $t$Carbon-12 and carbon-14 are isotopes. What is different about their atoms?$t$,
   $t$The number of protons$t$, $t$The number of neutrons$t$, $t$The number of electrons$t$, $t$The charge of the nucleus$t$, 'Not sure', $t$b$t$,
   $t$Both are carbon, so both have 6 protons. The difference is in the neutrons.$t$, null, $t$Neutral atoms of both have 6 electrons.$t$, $t$Both nuclei have 6 protons, so the same charge.$t$,
@@ -344,7 +344,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Forces & Motion$t$, $t$Weight and Mass$t$, $t$aqa-ph-fh-forces-intro$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Forces & Motion$t$, $t$Weight and Mass$t$, $t$aqa-ph-fh-forces-intro$t$, 1,
   $t$What is the unit of weight?$t$,
   $t$Kilogram (kg)$t$, $t$Newton (N)$t$, $t$Metre (m)$t$, $t$Joule (J)$t$, 'Not sure', $t$b$t$,
   $t$The kilogram is the unit of mass. Weight is a force, measured in newtons.$t$, null, $t$The metre measures length.$t$, $t$The joule measures energy.$t$,
@@ -357,7 +357,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Forces & Motion$t$, $t$Resultant Force$t$, $t$aqa-ph-fh-forces-intro$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Forces & Motion$t$, $t$Resultant Force$t$, $t$aqa-ph-fh-forces-intro$t$, 2,
   $t$A tug-of-war rope has \(300\,\text{N}\) pulling left and \(300\,\text{N}\) pulling right. What happens?$t$,
   $t$The rope moves left$t$, $t$The rope moves right$t$, $t$The rope stays still$t$, $t$The rope speeds up$t$, 'Not sure', $t$c$t$,
   $t$The forces are equal, so there is no resultant force to the left.$t$, $t$The forces are equal, so there is no resultant force to the right.$t$, null, $t$Balanced forces give no acceleration. A still rope stays still.$t$,
@@ -370,7 +370,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Forces & Motion$t$, $t$Distance–Time Graphs$t$, $t$aqa-ph-fh-forces-motion$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Forces & Motion$t$, $t$Distance–Time Graphs$t$, $t$aqa-ph-fh-forces-motion$t$, 2,
   $t$On a distance–time graph, what does a horizontal (flat) line show?$t$,
   $t$The object is stationary$t$, $t$The object is moving at a steady speed$t$, $t$The object is speeding up$t$, $t$The object is slowing down$t$, 'Not sure', $t$a$t$,
   null, $t$A steady speed is a straight sloping line: the distance keeps increasing.$t$, $t$Speeding up shows as a curve getting steeper.$t$, $t$Slowing down shows as a curve getting less steep.$t$,
@@ -383,7 +383,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Forces & Motion$t$, $t$Stopping Distance$t$, $t$aqa-ph-fh-forces-motion$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Forces & Motion$t$, $t$Stopping Distance$t$, $t$aqa-ph-fh-forces-motion$t$, 2,
   $t$Which of these increases a driver's thinking distance?$t$,
   $t$Worn tyres$t$, $t$An icy road$t$, $t$Being tired$t$, $t$Worn brakes$t$, 'Not sure', $t$c$t$,
   $t$Worn tyres increase the braking distance, not the thinking distance.$t$, $t$Ice reduces friction, which increases the braking distance.$t$, null, $t$Worn brakes increase the braking distance.$t$,
@@ -396,7 +396,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Forces & Motion$t$, $t$Weight Calculation$t$, $t$aqa-ph-fh-forces-intro$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Forces & Motion$t$, $t$Weight Calculation$t$, $t$aqa-ph-fh-forces-intro$t$, 2,
   $t$A bag of rice has a mass of \(5\,\text{kg}\). What is its weight on Earth? (\(g = 9.8\,\text{N/kg}\))$t$,
   $t$\(5\,\text{N}\)$t$, $t$\(0.51\,\text{N}\)$t$, $t$\(49\,\text{N}\)$t$, $t$\(14.8\,\text{N}\)$t$, 'Not sure', $t$c$t$,
   $t$That treats mass and weight as the same. Weight = mass × g = 5 × 9.8 = 49 N.$t$, $t$This divides 5 by 9.8. Weight = mass × g = 49 N.$t$, null, $t$This adds 5 and 9.8. Weight = 5 × 9.8 = 49 N.$t$,
@@ -409,7 +409,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Forces & Motion$t$, $t$Newton's First Law$t$, $t$aqa-ph-fh-forces-motion$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Forces & Motion$t$, $t$Newton's First Law$t$, $t$aqa-ph-fh-forces-motion$t$, 3,
   $t$A car is moving at a steady speed in a straight line. What can you say about the forces on it?$t$,
   $t$The driving force is bigger than the resistive forces$t$, $t$The forces are balanced$t$, $t$There are no forces acting$t$, $t$The resistive forces are bigger than the driving force$t$, 'Not sure', $t$b$t$,
   $t$A bigger driving force would make the car speed up.$t$, null, $t$Forces are acting (driving force, friction, air resistance); they just cancel out.$t$, $t$Bigger resistive forces would slow the car down.$t$,
@@ -422,7 +422,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Forces & Motion$t$, $t$Work Done$t$, $t$aqa-ph-fh-forces-work-energy$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Forces & Motion$t$, $t$Work Done$t$, $t$aqa-ph-fh-forces-work-energy$t$, 4,
   $t$A market trader pushes a cart with a force of \(40\,\text{N}\) for \(15\,\text{m}\). How much work is done?$t$,
   $t$\(55\,\text{J}\)$t$, $t$\(2.7\,\text{J}\)$t$, $t$\(600\,\text{J}\)$t$, $t$\(0.375\,\text{J}\)$t$, 'Not sure', $t$c$t$,
   $t$This adds force and distance. Work done = force × distance = 40 × 15 = 600 J.$t$, $t$This divides 40 by 15. Work done = 40 × 15 = 600 J.$t$, null, $t$This divides 15 by 40. Work done = 40 × 15 = 600 J.$t$,
@@ -435,7 +435,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Waves$t$, $t$Types of Wave$t$, $t$aqa-ph-fh-waves-properties$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Waves$t$, $t$Types of Wave$t$, $t$aqa-ph-fh-waves-properties$t$, 1,
   $t$Which of these is a longitudinal wave?$t$,
   $t$Light$t$, $t$Sound$t$, $t$Radio waves$t$, $t$Ripples on water$t$, 'Not sure', $t$b$t$,
   $t$Light is an electromagnetic wave, which is transverse.$t$, null, $t$Radio waves are electromagnetic, so transverse.$t$, $t$Ripples on water are transverse: the water moves up and down.$t$,
@@ -448,7 +448,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Waves$t$, $t$Electromagnetic Spectrum$t$, $t$aqa-ph-fh-waves-electromagnetic$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Waves$t$, $t$Electromagnetic Spectrum$t$, $t$aqa-ph-fh-waves-electromagnetic$t$, 2,
   $t$Which electromagnetic wave is used by TV remote controls?$t$,
   $t$Infrared$t$, $t$X-rays$t$, $t$Gamma rays$t$, $t$Ultraviolet$t$, 'Not sure', $t$a$t$,
   null, $t$X-rays are used for medical images, not remote controls.$t$, $t$Gamma rays are used to kill cancer cells and sterilise equipment.$t$, $t$Ultraviolet is used in security marking and sunbeds.$t$,
@@ -461,7 +461,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Waves$t$, $t$Wave Features$t$, $t$aqa-ph-fh-waves-properties$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Waves$t$, $t$Wave Features$t$, $t$aqa-ph-fh-waves-properties$t$, 2,
   $t$What is the amplitude of a wave?$t$,
   $t$The distance from one peak to the next$t$, $t$The maximum distance a point moves from its rest position$t$, $t$The number of waves passing each second$t$, $t$The speed of the wave$t$, 'Not sure', $t$b$t$,
   $t$That is the wavelength.$t$, null, $t$That is the frequency.$t$, $t$Speed is how fast the wave travels; amplitude is how big the vibration is.$t$,
@@ -474,7 +474,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Waves$t$, $t$Frequency and Period$t$, $t$aqa-ph-fh-waves-properties$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Waves$t$, $t$Frequency and Period$t$, $t$aqa-ph-fh-waves-properties$t$, 3,
   $t$A wave has a frequency of \(5\,\text{Hz}\). What does this mean?$t$,
   $t$Each wave is 5 m long$t$, $t$5 waves pass a point every second$t$, $t$The wave travels 5 m every second$t$, $t$Each wave takes 5 seconds to pass$t$, 'Not sure', $t$b$t$,
   $t$That would be the wavelength, measured in metres.$t$, null, $t$That would be the wave speed, in m/s.$t$, $t$That would be a period of 5 s. A frequency of 5 Hz gives a period of 0.2 s.$t$,
@@ -487,7 +487,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Magnetism$t$, $t$Magnetic Materials$t$, $t$aqa-ph-fh-magnetism-fields$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Magnetism$t$, $t$Magnetic Materials$t$, $t$aqa-ph-fh-magnetism-fields$t$, 1,
   $t$Which of these metals is magnetic?$t$,
   $t$Copper$t$, $t$Aluminium$t$, $t$Iron$t$, $t$Gold$t$, 'Not sure', $t$c$t$,
   $t$Copper is a metal but it isn't magnetic.$t$, $t$Aluminium isn't magnetic; that's why a magnet can sort steel cans from aluminium ones.$t$, null, $t$Gold isn't magnetic.$t$,
@@ -500,7 +500,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Magnetism$t$, $t$Poles$t$, $t$aqa-ph-fh-magnetism-fields$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Magnetism$t$, $t$Poles$t$, $t$aqa-ph-fh-magnetism-fields$t$, 1,
   $t$Two magnets are placed with their north poles facing each other. What happens?$t$,
   $t$They attract$t$, $t$They repel$t$, $t$Nothing happens$t$, $t$They become demagnetised$t$, 'Not sure', $t$b$t$,
   $t$Opposite poles attract. Like poles (north and north) repel.$t$, null, $t$Poles close together always exert forces on each other.$t$, $t$Bringing poles together doesn't destroy the magnets' magnetism.$t$,
@@ -513,7 +513,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Magnetism$t$, $t$Electromagnets$t$, $t$aqa-ph-fh-magnetism-fields$t$, 5,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Magnetism$t$, $t$Electromagnets$t$, $t$aqa-ph-fh-magnetism-fields$t$, 5,
   $t$Which change would make an electromagnet stronger?$t$,
   $t$Using fewer turns of wire$t$, $t$Using a smaller current$t$, $t$Adding an iron core$t$, $t$Using a copper core instead of iron$t$, 'Not sure', $t$c$t$,
   $t$Fewer turns make the field weaker. More turns make it stronger.$t$, $t$A smaller current makes the field weaker.$t$, null, $t$Copper isn't magnetic, so a copper core wouldn't strengthen it.$t$,

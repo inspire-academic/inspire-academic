@@ -19,7 +19,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Cell Biology$t$, $t$Cell Structures$t$, $t$aqa-bi-fh-cell-biology$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Cell Biology$t$, $t$Cell Structures$t$, $t$aqa-bi-fh-cell-biology$t$, 1,
   $t$Which part of a cell controls its activities and contains the genetic material?$t$,
   $t$Cell membrane$t$, $t$Nucleus$t$, $t$Cytoplasm$t$, $t$Ribosome$t$, 'Not sure', $t$b$t$,
   $t$The cell membrane controls what enters and leaves the cell.$t$, null, $t$The cytoplasm is where most chemical reactions happen.$t$, $t$Ribosomes make proteins.$t$,
@@ -32,7 +32,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Cell Biology$t$, $t$Plant Cells$t$, $t$aqa-bi-fh-cell-biology$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Cell Biology$t$, $t$Plant Cells$t$, $t$aqa-bi-fh-cell-biology$t$, 1,
   $t$Which structure is found in plant cells but not in animal cells?$t$,
   $t$Mitochondria$t$, $t$Nucleus$t$, $t$Chloroplast$t$, $t$Cell membrane$t$, 'Not sure', $t$c$t$,
   $t$Both plant and animal cells have mitochondria for respiration.$t$, $t$Both plant and animal cells have a nucleus.$t$, null, $t$Both plant and animal cells have a cell membrane.$t$,
@@ -45,7 +45,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Cell Biology$t$, $t$Mitochondria$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Cell Biology$t$, $t$Mitochondria$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
   $t$What is the job of mitochondria?$t$,
   $t$They carry out aerobic respiration$t$, $t$They carry out photosynthesis using light$t$, $t$They make proteins for the cell$t$, $t$They store the cell's genes$t$, 'Not sure', $t$a$t$,
   null, $t$Photosynthesis happens in chloroplasts.$t$, $t$Proteins are made by ribosomes.$t$, $t$Genes are stored in the nucleus.$t$,
@@ -58,7 +58,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Cell Biology$t$, $t$Diffusion$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Cell Biology$t$, $t$Diffusion$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
   $t$What is diffusion?$t$,
   $t$Movement of particles from a low to a high concentration$t$, $t$Movement of particles from a high to a low concentration$t$, $t$Movement of water only, through a membrane$t$, $t$Movement that always needs energy from respiration$t$, 'Not sure', $t$b$t$,
   $t$That is the wrong way round. Moving against the gradient is active transport.$t$, null, $t$Movement of water through a partially permeable membrane is osmosis.$t$, $t$Diffusion is passive: it needs no energy.$t$,
@@ -71,7 +71,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Cell Biology$t$, $t$Prokaryotic Cells$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Cell Biology$t$, $t$Prokaryotic Cells$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
   $t$How is a bacterial cell different from an animal cell?$t$,
   $t$It has no nucleus; its DNA is loose in the cytoplasm$t$, $t$It has a nucleus but no cell membrane at all$t$, $t$It is much larger than an animal cell$t$, $t$It has chloroplasts for making its own food$t$, 'Not sure', $t$a$t$,
   null, $t$Bacteria do have a cell membrane. What they lack is a nucleus.$t$, $t$Bacteria are much smaller than animal cells.$t$, $t$Most bacteria don't have chloroplasts.$t$,
@@ -84,7 +84,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Cell Biology$t$, $t$Stem Cells$t$, $t$aqa-bi-fh-cell-biology$t$, 4,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Cell Biology$t$, $t$Stem Cells$t$, $t$aqa-bi-fh-cell-biology$t$, 4,
   $t$What is special about stem cells?$t$,
   $t$They can become many different types of cell$t$, $t$They are found only in plant roots and shoots$t$, $t$They cannot divide once they have formed$t$, $t$They are already fully specialised for one job$t$, 'Not sure', $t$a$t$,
   null, $t$Plants have stem cells in meristems, but animals (including humans) have stem cells too.$t$, $t$Stem cells can divide to make more cells.$t$, $t$Stem cells are undifferentiated: not yet specialised.$t$,
@@ -97,7 +97,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Organisation$t$, $t$Levels of Organisation$t$, $t$aqa-bi-fh-organisation$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Organisation$t$, $t$Levels of Organisation$t$, $t$aqa-bi-fh-organisation$t$, 1,
   $t$Which list is in order from smallest to largest?$t$,
   $t$Cell, tissue, organ, organ system$t$, $t$Tissue, cell, organ, organ system$t$, $t$Organ, tissue, cell, organ system$t$, $t$Cell, organ, tissue, organ system$t$, 'Not sure', $t$a$t$,
   null, $t$A tissue is made of many cells, so cells come first.$t$, $t$An organ is made of tissues, which are made of cells.$t$, $t$Tissues come before organs: an organ is made of several tissues.$t$,
@@ -110,7 +110,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Organisation$t$, $t$Enzymes$t$, $t$aqa-bi-fh-organisation$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Organisation$t$, $t$Enzymes$t$, $t$aqa-bi-fh-organisation$t$, 2,
   $t$Which enzyme breaks down starch?$t$,
   $t$Amylase$t$, $t$Protease$t$, $t$Lipase$t$, $t$Bile$t$, 'Not sure', $t$a$t$,
   null, $t$Protease breaks down proteins.$t$, $t$Lipase breaks down fats (lipids).$t$, $t$Bile isn't an enzyme; it emulsifies fats.$t$,
@@ -123,7 +123,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Organisation$t$, $t$The Heart$t$, $t$aqa-bi-fh-organisation$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Organisation$t$, $t$The Heart$t$, $t$aqa-bi-fh-organisation$t$, 2,
   $t$Which blood vessels carry blood away from the heart?$t$,
   $t$Veins$t$, $t$Arteries$t$, $t$Capillaries$t$, $t$Valves$t$, 'Not sure', $t$b$t$,
   $t$Veins carry blood back to the heart.$t$, null, $t$Capillaries link arteries and veins and exchange substances with cells.$t$, $t$Valves stop blood flowing backwards; they aren't vessels.$t$,
@@ -136,7 +136,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Organisation$t$, $t$Blood$t$, $t$aqa-bi-fh-organisation$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Organisation$t$, $t$Blood$t$, $t$aqa-bi-fh-organisation$t$, 2,
   $t$What is the job of red blood cells?$t$,
   $t$To carry oxygen around the body$t$, $t$To fight infection with antibodies$t$, $t$To help the blood to clot$t$, $t$To carry dissolved food and waste$t$, 'Not sure', $t$a$t$,
   null, $t$White blood cells fight infection.$t$, $t$Platelets help blood clot.$t$, $t$Plasma carries dissolved substances.$t$,
@@ -149,7 +149,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Organisation$t$, $t$Enzyme Action$t$, $t$aqa-bi-fh-organisation$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Organisation$t$, $t$Enzyme Action$t$, $t$aqa-bi-fh-organisation$t$, 3,
   $t$Why does an enzyme stop working at a very high temperature?$t$,
   $t$Its active site changes shape and it is denatured$t$, $t$It is killed, like a bacterium would be$t$, $t$It speeds up too much to hold on to its substrate$t$, $t$It turns into its substrate molecule$t$, 'Not sure', $t$a$t$,
   null, $t$Enzymes are proteins, not living things, so they can't be killed. They are denatured.$t$, $t$Beyond the optimum, the rate drops because the enzyme is damaged.$t$, $t$Enzymes don't turn into substrates.$t$,
@@ -162,7 +162,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Organisation$t$, $t$Plant Transport$t$, $t$aqa-bi-fh-organisation$t$, 4,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Organisation$t$, $t$Plant Transport$t$, $t$aqa-bi-fh-organisation$t$, 4,
   $t$Which tissue carries water from a plant's roots to its leaves?$t$,
   $t$Xylem$t$, $t$Phloem$t$, $t$Epidermis$t$, $t$Palisade mesophyll$t$, 'Not sure', $t$a$t$,
   null, $t$Phloem carries dissolved sugars around the plant.$t$, $t$The epidermis covers and protects the leaf.$t$, $t$Palisade cells carry out most photosynthesis.$t$,
@@ -175,7 +175,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Infection and Response$t$, $t$Pathogens$t$, $t$aqa-bi-fh-infection-response$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Infection and Response$t$, $t$Pathogens$t$, $t$aqa-bi-fh-infection-response$t$, 1,
   $t$Malaria is caused by which type of pathogen?$t$,
   $t$A virus$t$, $t$A bacterium$t$, $t$A protist$t$, $t$A fungus$t$, 'Not sure', $t$c$t$,
   $t$Measles and HIV are caused by viruses; malaria is not.$t$, $t$Salmonella is a bacterium; malaria is caused by a protist.$t$, null, $t$Athlete's foot is a fungus; malaria is caused by a protist.$t$,
@@ -188,7 +188,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Infection and Response$t$, $t$Preventing Malaria$t$, $t$aqa-bi-fh-infection-response$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Infection and Response$t$, $t$Preventing Malaria$t$, $t$aqa-bi-fh-infection-response$t$, 2,
   $t$Why do insecticide-treated bed nets reduce the spread of malaria?$t$,
   $t$They stop mosquitoes biting people while they sleep$t$, $t$They kill the malaria virus floating in the night air$t$, $t$They give people immunity to malaria$t$, $t$They cure people who already have malaria$t$, 'Not sure', $t$a$t$,
   null, $t$Malaria isn't a virus and isn't spread through the air; mosquitoes carry it.$t$, $t$Nets prevent bites; they don't make people immune.$t$, $t$Nets prevent new infections; medicines treat malaria.$t$,
@@ -201,7 +201,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Infection and Response$t$, $t$Defences$t$, $t$aqa-bi-fh-infection-response$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Infection and Response$t$, $t$Defences$t$, $t$aqa-bi-fh-infection-response$t$, 2,
   $t$How does the skin help to protect the body from pathogens?$t$,
   $t$It is a barrier that pathogens cannot easily pass$t$, $t$It makes antibodies that kill every pathogen it touches$t$, $t$It makes stomach acid to kill bacteria$t$, $t$It produces white blood cells for the blood$t$, 'Not sure', $t$a$t$,
   null, $t$Antibodies are made by white blood cells, not skin.$t$, $t$Stomach acid is made in the stomach.$t$, $t$White blood cells are made in the bone marrow.$t$,
@@ -214,7 +214,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Infection and Response$t$, $t$Antibiotics$t$, $t$aqa-bi-fh-infection-response$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Infection and Response$t$, $t$Antibiotics$t$, $t$aqa-bi-fh-infection-response$t$, 3,
   $t$Why can't antibiotics be used to treat a cold?$t$,
   $t$Colds are caused by viruses, which antibiotics do not kill$t$, $t$Colds are caused by bacteria that are too small for the drug to reach$t$, $t$Antibiotics only work on fungi, not other pathogens$t$, $t$Colds heal too fast for antibiotics to be needed$t$, 'Not sure', $t$a$t$,
   null, $t$Colds are caused by viruses, not bacteria.$t$, $t$Antibiotics kill bacteria. They don't work on viruses.$t$, $t$The reason is the type of pathogen: antibiotics don't affect viruses.$t$,
@@ -227,7 +227,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Infection and Response$t$, $t$Vaccination$t$, $t$aqa-bi-fh-infection-response$t$, 4,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Infection and Response$t$, $t$Vaccination$t$, $t$aqa-bi-fh-infection-response$t$, 4,
   $t$How does a vaccine protect a person from a disease?$t$,
   $t$It makes white blood cells produce antibodies, so they respond fast later$t$, $t$It contains antibiotics that stay in the body for years$t$, $t$It kills all the pathogens already present in the body$t$, $t$It gives the person the full disease so they get over it$t$, 'Not sure', $t$a$t$,
   null, $t$Vaccines don't contain antibiotics.$t$, $t$A vaccine prepares the immune system; it doesn't attack existing infections.$t$, $t$Vaccines use dead or weakened pathogens so you don't get the full disease.$t$,
@@ -240,7 +240,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Bioenergetics$t$, $t$Photosynthesis$t$, $t$aqa-bi-fh-bioenergetics$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Bioenergetics$t$, $t$Photosynthesis$t$, $t$aqa-bi-fh-bioenergetics$t$, 1,
   $t$Which gas do plants take in for photosynthesis?$t$,
   $t$Oxygen$t$, $t$Carbon dioxide$t$, $t$Nitrogen$t$, $t$Hydrogen$t$, 'Not sure', $t$b$t$,
   $t$Oxygen is given out by photosynthesis.$t$, null, $t$Plants don't use nitrogen gas for photosynthesis.$t$, $t$Hydrogen gas isn't used in photosynthesis.$t$,
@@ -253,7 +253,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Bioenergetics$t$, $t$Respiration$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Bioenergetics$t$, $t$Respiration$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
   $t$What are the products of aerobic respiration?$t$,
   $t$Carbon dioxide and water$t$, $t$Glucose and oxygen$t$, $t$Lactic acid only$t$, $t$Oxygen and water$t$, 'Not sure', $t$a$t$,
   null, $t$Glucose and oxygen are the reactants of aerobic respiration.$t$, $t$Lactic acid is made in anaerobic respiration in muscles.$t$, $t$Oxygen is used up, not made.$t$,
@@ -266,7 +266,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Bioenergetics$t$, $t$Anaerobic Respiration$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Bioenergetics$t$, $t$Anaerobic Respiration$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
   $t$During a hard sprint, a runner's muscles respire anaerobically. What does this produce?$t$,
   $t$Lactic acid$t$, $t$Ethanol and carbon dioxide$t$, $t$Oxygen$t$, $t$Glucose$t$, 'Not sure', $t$a$t$,
   null, $t$Ethanol and carbon dioxide come from anaerobic respiration in yeast.$t$, $t$Respiration uses oxygen; it never makes it.$t$, $t$Glucose is used up in respiration.$t$,
@@ -279,7 +279,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Bioenergetics$t$, $t$Limiting Factors$t$, $t$aqa-bi-fh-bioenergetics$t$, 4,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Bioenergetics$t$, $t$Limiting Factors$t$, $t$aqa-bi-fh-bioenergetics$t$, 4,
   $t$On a dull morning, a farmer's greenhouse crop grows slowly. Which change is most likely to speed up photosynthesis?$t$,
   $t$Adding more light$t$, $t$Adding more oxygen$t$, $t$Removing carbon dioxide$t$, $t$Cooling the greenhouse down$t$, 'Not sure', $t$a$t$,
   null, $t$Oxygen is a product of photosynthesis, not a raw material.$t$, $t$Removing carbon dioxide would slow photosynthesis.$t$, $t$Cooling slows the enzymes that control photosynthesis.$t$,
@@ -292,7 +292,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Homeostasis and Response$t$, $t$Reflexes$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Homeostasis and Response$t$, $t$Reflexes$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
   $t$Why are reflex actions useful?$t$,
   $t$They are fast and automatic, protecting the body$t$, $t$They are slow and carefully thought through$t$, $t$They are controlled by hormones in the blood$t$, $t$They only happen while the person is asleep and resting$t$, 'Not sure', $t$a$t$,
   null, $t$Reflexes are fast and don't involve conscious thought.$t$, $t$Reflexes use nerves, which are much faster than hormones.$t$, $t$Reflexes happen whether you are awake or asleep.$t$,
@@ -305,7 +305,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Homeostasis and Response$t$, $t$Blood Glucose$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Homeostasis and Response$t$, $t$Blood Glucose$t$, $t$aqa-bi-fh-homeostasis$t$, 2,
   $t$Which hormone lowers blood glucose concentration?$t$,
   $t$Insulin$t$, $t$Adrenaline$t$, $t$Oestrogen$t$, $t$Testosterone$t$, 'Not sure', $t$a$t$,
   null, $t$Adrenaline prepares the body for "fight or flight".$t$, $t$Oestrogen is a female reproductive hormone.$t$, $t$Testosterone is a male reproductive hormone.$t$,
@@ -318,7 +318,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Homeostasis and Response$t$, $t$Type 2 Diabetes$t$, $t$aqa-bi-fh-homeostasis$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Homeostasis and Response$t$, $t$Type 2 Diabetes$t$, $t$aqa-bi-fh-homeostasis$t$, 3,
   $t$Which of these is a common way to help control Type 2 diabetes?$t$,
   $t$A diet low in sugar, with regular exercise$t$, $t$Eating more sugary foods to raise energy levels each day$t$, $t$Taking antibiotics every single day$t$, $t$Having the pancreas removed completely$t$, 'Not sure', $t$a$t$,
   null, $t$More sugar raises blood glucose further.$t$, $t$Diabetes isn't caused by bacteria.$t$, $t$The pancreas makes insulin; removing it would make things much worse.$t$,
@@ -331,7 +331,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Homeostasis and Response$t$, $t$Nervous System$t$, $t$aqa-bi-fh-homeostasis$t$, 5,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Homeostasis and Response$t$, $t$Nervous System$t$, $t$aqa-bi-fh-homeostasis$t$, 5,
   $t$In a reflex arc, what does the relay neurone connect?$t$,
   $t$The sensory neurone to the motor neurone$t$, $t$The receptor directly to the effector, skipping the other neurones$t$, $t$The motor neurone to the receptor$t$, $t$The effector to the sensory neurone$t$, 'Not sure', $t$a$t$,
   null, $t$Receptors and effectors are linked through neurones, not directly.$t$, $t$Signals go from receptor to sensory neurone, not motor.$t$, $t$The effector receives a signal from the motor neurone.$t$,
@@ -344,7 +344,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Inheritance, Variation and Evolution$t$, $t$DNA$t$, $t$aqa-bi-fh-inheritance$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Inheritance, Variation and Evolution$t$, $t$DNA$t$, $t$aqa-bi-fh-inheritance$t$, 1,
   $t$What is a gene?$t$,
   $t$A section of DNA that codes for a protein$t$, $t$A whole chromosome in the nucleus$t$, $t$A type of cell found in the blood$t$, $t$A disease passed on from parents$t$, 'Not sure', $t$a$t$,
   null, $t$A chromosome carries many genes.$t$, $t$Genes are in the DNA of cells, not a type of cell.$t$, $t$Some genes can cause disorders, but a gene itself isn't a disease.$t$,
@@ -357,7 +357,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Inheritance, Variation and Evolution$t$, $t$Sex Determination$t$, $t$aqa-bi-fh-inheritance$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Inheritance, Variation and Evolution$t$, $t$Sex Determination$t$, $t$aqa-bi-fh-inheritance$t$, 2,
   $t$Which pair of sex chromosomes does a human male have?$t$,
   $t$XX$t$, $t$XY$t$, $t$YY$t$, $t$XXY$t$, 'Not sure', $t$b$t$,
   $t$XX is female.$t$, null, $t$YY isn't possible: every egg carries an X.$t$, $t$XXY is an unusual condition, not typical.$t$,
@@ -370,7 +370,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Inheritance, Variation and Evolution$t$, $t$Variation$t$, $t$aqa-bi-fh-inheritance$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Inheritance, Variation and Evolution$t$, $t$Variation$t$, $t$aqa-bi-fh-inheritance$t$, 2,
   $t$Which feature is caused only by the environment, not by genes?$t$,
   $t$A scar from an injury$t$, $t$Natural eye colour$t$, $t$Blood group$t$, $t$Natural hair colour$t$, 'Not sure', $t$a$t$,
   null, $t$Eye colour is inherited through genes.$t$, $t$Blood group is inherited.$t$, $t$Natural hair colour is inherited.$t$,
@@ -383,7 +383,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Inheritance, Variation and Evolution$t$, $t$Natural Selection$t$, $t$aqa-bi-fh-inheritance$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Inheritance, Variation and Evolution$t$, $t$Natural Selection$t$, $t$aqa-bi-fh-inheritance$t$, 3,
   $t$Mosquitoes in an area become resistant to an insecticide. How does this happen?$t$,
   $t$Resistant mosquitoes survive and pass on their genes$t$, $t$Every mosquito learns to avoid the insecticide$t$, $t$The insecticide causes resistance to develop in each mosquito it touches$t$, $t$Mosquitoes choose to change their genes$t$, 'Not sure', $t$a$t$,
   null, $t$Learned behaviour isn't passed on in genes.$t$, $t$Resistance comes from mutations that were already there, not caused by the insecticide.$t$, $t$Organisms can't choose to change their genes.$t$,
@@ -396,7 +396,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Inheritance, Variation and Evolution$t$, $t$Genetic Crosses$t$, $t$aqa-bi-fh-inheritance$t$, 5,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Inheritance, Variation and Evolution$t$, $t$Genetic Crosses$t$, $t$aqa-bi-fh-inheritance$t$, 5,
   $t$Two parents are both Bb (b is recessive). What is the ratio of offspring showing the dominant feature to the recessive feature?$t$,
   $t$3 : 1$t$, $t$1 : 1$t$, $t$1 : 2 : 1$t$, $t$4 : 0$t$, 'Not sure', $t$a$t$,
   null, $t$A 1 : 1 ratio comes from Bb × bb.$t$, $t$1 : 2 : 1 is the ratio of genotypes (BB : Bb : bb), not of features shown.$t$, $t$One in four offspring is bb and shows the recessive feature.$t$,
@@ -409,7 +409,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Ecology$t$, $t$Food Chains$t$, $t$aqa-bi-fh-ecology$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Ecology$t$, $t$Food Chains$t$, $t$aqa-bi-fh-ecology$t$, 1,
   $t$In the food chain grass → grasshopper → lizard → hawk, which organism is the producer?$t$,
   $t$Grass$t$, $t$Grasshopper$t$, $t$Lizard$t$, $t$Hawk$t$, 'Not sure', $t$a$t$,
   null, $t$The grasshopper is the primary consumer.$t$, $t$The lizard is the secondary consumer.$t$, $t$The hawk is the top (tertiary) consumer.$t$,
@@ -422,7 +422,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Ecology$t$, $t$Competition$t$, $t$aqa-bi-fh-ecology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Ecology$t$, $t$Competition$t$, $t$aqa-bi-fh-ecology$t$, 2,
   $t$What do plants in a field compete with each other for?$t$,
   $t$Light, water, space and mineral ions$t$, $t$Food, mates and territory$t$, $t$Oxygen and carbon dioxide only$t$, $t$Nothing, because plants cannot compete$t$, 'Not sure', $t$a$t$,
   null, $t$Animals compete for food, mates and territory.$t$, $t$Gases are usually plentiful; plants compete for light, water, space and minerals.$t$, $t$Plants compete strongly for resources.$t$,
@@ -448,7 +448,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Ecology$t$, $t$Biodiversity$t$, $t$aqa-bi-fh-ecology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Ecology$t$, $t$Biodiversity$t$, $t$aqa-bi-fh-ecology$t$, 3,
   $t$Why is high biodiversity good for an ecosystem?$t$,
   $t$It makes the ecosystem more stable$t$, $t$It means there is only one species$t$, $t$It stops all competition between species$t$, $t$It means no species ever becomes extinct$t$, 'Not sure', $t$a$t$,
   null, $t$Biodiversity means a variety of species, not just one.$t$, $t$Competition still happens in diverse ecosystems.$t$, $t$Species can still become extinct; biodiversity reduces the damage when one declines.$t$,
@@ -461,7 +461,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Ecology$t$, $t$Decomposition$t$, $t$aqa-bi-fh-ecology$t$, 4,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Ecology$t$, $t$Decomposition$t$, $t$aqa-bi-fh-ecology$t$, 4,
   $t$Why do dead leaves rot faster in a warm, damp forest than in a cold, dry one?$t$,
   $t$Decomposers grow and respire faster when warm and moist$t$, $t$The leaves photosynthesise faster there$t$, $t$Cold, dry air contains more decomposers$t$, $t$Water dissolves the leaves away directly$t$, 'Not sure', $t$a$t$,
   null, $t$Dead leaves don't photosynthesise.$t$, $t$Decomposers are less active in cold, dry conditions.$t$, $t$The leaves are broken down by decomposers, not dissolved.$t$,
@@ -474,7 +474,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Cell Biology$t$, $t$Osmosis$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Cell Biology$t$, $t$Osmosis$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
   $t$A slice of yam is put in very salty water. What happens to its mass?$t$,
   $t$It decreases, as water leaves by osmosis$t$, $t$It increases, as salt moves into the cells$t$, $t$It stays the same$t$, $t$It increases, as water enters by osmosis$t$, 'Not sure', $t$a$t$,
   null, $t$The mass change is due to water moving, not salt.$t$, $t$Water moves out, so the mass changes.$t$, $t$Water moves out towards the more concentrated salt solution.$t$,

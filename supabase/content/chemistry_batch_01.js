@@ -402,7 +402,7 @@ module.exports = {
       },
       explanation: r`A pure substance is a single element or compound, not mixed with anything else. It melts and boils at specific temperatures.` },
 
-    { topic: 'Chemical Analysis', subtopic: 'Formulations', spec_slug: 'aqa-ch-fh-analysis', difficulty: 2, combined: true,
+    { topic: 'Chemical Analysis', subtopic: 'Formulations', exam_board: 'AQA', spec_slug: 'aqa-ch-fh-analysis', difficulty: 2, combined: true,
       question_text: r`What is a formulation?`,
       options: { a: r`A mixture designed as a useful product`, b: r`A pure element with a single use`, c: r`A compound made in one reaction`, d: r`Any mixture of two different gases` }, key: 'a',
       feedback: {

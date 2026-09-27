@@ -20,7 +20,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Kinetic Energy$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Kinetic Energy$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 3,
   $t$A tro-tro of mass \(1200\,\text{kg}\) is travelling at \(15\,\text{m/s}\). How much kinetic energy does it have?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -33,7 +33,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Gravitational Potential Energy$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Gravitational Potential Energy$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 2,
   $t$At the Akosombo dam, \(2.0\,\text{kg}\) of water falls through a height of \(70\,\text{m}\). How much gravitational potential energy does it lose? Use \(g = 9.8\,\text{N/kg}\).$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -46,7 +46,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Power$t$, $t$aqa-ph-fh-energy-efficiency$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Power$t$, $t$aqa-ph-fh-energy-efficiency$t$, 3,
   $t$An electric kettle transfers \(540\,000\,\text{J}\) of energy in 4 minutes. What is its power?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -59,7 +59,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Efficiency$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Efficiency$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
   $t$A solar-powered water pump in Kano receives \(800\,\text{J}\) of light energy each second and transfers \(120\,\text{J}\) usefully. What is its efficiency, as a percentage?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -72,7 +72,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Forces & Motion$t$, $t$Speed$t$, $t$aqa-ph-fh-forces-motion$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Forces & Motion$t$, $t$Speed$t$, $t$aqa-ph-fh-forces-motion$t$, 1,
   $t$A sprinter at the Accra Sports Stadium runs \(400\,\text{m}\) in \(50\,\text{s}\). What is her average speed?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -85,7 +85,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Acceleration$t$, $t$aqa-ph-fh-forces-motion$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Acceleration$t$, $t$aqa-ph-fh-forces-motion$t$, 2,
   $t$A car speeds up from \(5\,\text{m/s}\) to \(25\,\text{m/s}\) in \(4\,\text{s}\). What is its acceleration?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -98,7 +98,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Newton's Second Law$t$, $t$aqa-ph-fh-forces-motion$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Newton's Second Law$t$, $t$aqa-ph-fh-forces-motion$t$, 2,
   $t$A football of mass \(0.5\,\text{kg}\) is kicked and accelerates at \(12\,\text{m/s}^{2}\). What resultant force acts on it?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -111,7 +111,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Braking (v² = u² + 2as)$t$, $t$aqa-ph-fh-forces-motion$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Braking (v² = u² + 2as)$t$, $t$aqa-ph-fh-forces-motion$t$, 4,
   $t$A car travelling at \(20\,\text{m/s}\) brakes steadily and stops in a distance of \(40\,\text{m}\). What is the size of its deceleration?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -124,7 +124,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Hooke's Law$t$, $t$aqa-ph-fh-forces-intro$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Hooke's Law$t$, $t$aqa-ph-fh-forces-intro$t$, 3,
   $t$A spring has a spring constant of \(25\,\text{N/m}\). What force stretches it by \(8\,\text{cm}\)?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -137,7 +137,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Moments$t$, $t$aqa-ph-h-forces-levers-gears$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Moments$t$, $t$aqa-ph-h-forces-levers-gears$t$, 3,
   $t$A force of \(30\,\text{N}\) acts at right angles to a spanner, \(40\,\text{cm}\) from the nut. What is the moment of the force?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -150,7 +150,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Charge$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Charge$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
   $t$A current of \(0.5\,\text{A}\) flows through a phone charger cable for 2 minutes. How much charge flows?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -163,7 +163,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Resistance$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Resistance$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
   $t$There is a potential difference of \(12\,\text{V}\) across a resistor and a current of \(0.4\,\text{A}\) through it. What is its resistance?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -189,7 +189,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Wave Equation$t$, $t$aqa-ph-fh-waves-properties$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Wave Equation$t$, $t$aqa-ph-fh-waves-properties$t$, 4,
   $t$A radio station in Accra broadcasts at a frequency of \(100\,\text{MHz}\). Radio waves travel at \(3 \times 10^{8}\,\text{m/s}\). What is their wavelength?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -202,7 +202,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Density$t$, null, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Density$t$, null, 2,
   $t$A block of iroko wood has a volume of \(0.02\,\text{m}^{3}\) and a mass of \(12\,\text{kg}\). What is its density?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -215,7 +215,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Specific Heat Capacity$t$, null, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Specific Heat Capacity$t$, null, 3,
   $t$How much energy is needed to heat \(2\,\text{kg}\) of water from \(20\,^{\circ}\text{C}\) to \(100\,^{\circ}\text{C}\)? The specific heat capacity of water is \(4200\,\text{J/kg}\,^{\circ}\text{C}\).$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -228,7 +228,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Half-life$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Half-life$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
   $t$A radioactive sample has an activity of \(800\,\text{Bq}\). Its half-life is 5 days. What is its activity after 15 days?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -241,7 +241,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$Transformers$t$, $t$aqa-ph-fh-magnetism-induction$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$Transformers$t$, $t$aqa-ph-fh-magnetism-induction$t$, 4,
   $t$A transformer has \(1000\) turns on its primary coil and \(50\) turns on its secondary coil. The primary coil is connected to the \(230\,\text{V}\) mains. What is the secondary voltage?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,

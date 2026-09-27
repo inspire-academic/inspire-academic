@@ -19,7 +19,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Number — basics and operations$t$, $t$Place Value$t$, $t$aqa-ma-fh-number-basics$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Number — basics and operations$t$, $t$Place Value$t$, $t$aqa-ma-fh-number-basics$t$, 1,
   $t$What is the value of the digit 7 in 3.472?$t$,
   $t$7 tenths$t$, $t$7 hundredths$t$, $t$7 thousandths$t$, $t$7 units$t$, 'Not sure', $t$b$t$,
   $t$The tenths digit is 4. The 7 is one place further right: hundredths.$t$, null, $t$The thousandths digit is 2.$t$, $t$The units digit is 3.$t$,
@@ -32,7 +32,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Number — basics and operations$t$, $t$Negative Numbers$t$, $t$aqa-ma-fh-number-basics$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Number — basics and operations$t$, $t$Negative Numbers$t$, $t$aqa-ma-fh-number-basics$t$, 1,
   $t$At night in Jos the temperature is \(-3^{\circ}\text{C}\). By midday it has risen by \(10^{\circ}\text{C}\). What is the temperature at midday?$t$,
   $t$\(13^{\circ}\text{C}\)$t$, $t$\(-13^{\circ}\text{C}\)$t$, $t$\(7^{\circ}\text{C}\)$t$, $t$\(-7^{\circ}\text{C}\)$t$, 'Not sure', $t$c$t$,
   $t$This ignores the minus sign on −3. Start at −3 and count up 10: 7.$t$, $t$Rising means adding: −3 + 10 = 7, not −13.$t$, null, $t$This goes the wrong way from −3. Counting up 10 from −3 gives 7.$t$,
@@ -45,7 +45,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Number — basics and operations$t$, $t$Rounding$t$, $t$aqa-ma-fh-number-basics$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Number — basics and operations$t$, $t$Rounding$t$, $t$aqa-ma-fh-number-basics$t$, 1,
   $t$Round 4.6851 to 2 decimal places.$t$,
   $t$4.68$t$, $t$4.69$t$, $t$4.7$t$, $t$4.685$t$, 'Not sure', $t$b$t$,
   $t$The next digit (5) means round up: 4.69.$t$, null, $t$That is 1 decimal place.$t$, $t$That is 3 decimal places.$t$,
@@ -58,7 +58,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Number — basics and operations$t$, $t$Factors and Multiples$t$, $t$aqa-ma-fh-number-basics$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Number — basics and operations$t$, $t$Factors and Multiples$t$, $t$aqa-ma-fh-number-basics$t$, 2,
   $t$Which of these is a prime number?$t$,
   $t$21$t$, $t$27$t$, $t$29$t$, $t$33$t$, 'Not sure', $t$c$t$,
   $t$21 = 3 × 7, so it isn't prime.$t$, $t$27 = 3 × 9, so it isn't prime.$t$, null, $t$33 = 3 × 11, so it isn't prime.$t$,
@@ -71,7 +71,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Number — basics and operations$t$, $t$Highest Common Factor$t$, $t$aqa-ma-fh-number-basics$t$, 3,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Number — basics and operations$t$, $t$Highest Common Factor$t$, $t$aqa-ma-fh-number-basics$t$, 3,
   $t$What is the highest common factor (HCF) of 24 and 36?$t$,
   $t$6$t$, $t$12$t$, $t$72$t$, $t$4$t$, 'Not sure', $t$b$t$,
   $t$6 is a common factor, but 12 is bigger and also divides both.$t$, null, $t$72 is the lowest common multiple, not a factor.$t$, $t$4 is a common factor, but not the highest: 12 also divides both.$t$,
@@ -84,7 +84,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Fractions, decimals and percentages$t$, $t$Equivalent Fractions$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Fractions, decimals and percentages$t$, $t$Equivalent Fractions$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 1,
   $t$Which fraction is equal to \(\tfrac{3}{4}\)?$t$,
   $t$\(\tfrac{6}{8}\)$t$, $t$\(\tfrac{4}{5}\)$t$, $t$\(\tfrac{3}{8}\)$t$, $t$\(\tfrac{7}{8}\)$t$, 'Not sure', $t$a$t$,
   null, $t$Adding 1 to top and bottom changes the value. Multiply both by the same number.$t$, $t$Only the bottom was doubled. Double both: \(\tfrac{6}{8}\).$t$, $t$Adding 4 to top and bottom changes the value.$t$,
@@ -97,7 +97,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Fractions, decimals and percentages$t$, $t$Adding Fractions$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Fractions, decimals and percentages$t$, $t$Adding Fractions$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 2,
   $t$Work out \(\tfrac{1}{3} + \tfrac{1}{4}\).$t$,
   $t$\(\tfrac{2}{7}\)$t$, $t$\(\tfrac{7}{12}\)$t$, $t$\(\tfrac{1}{7}\)$t$, $t$\(\tfrac{2}{12}\)$t$, 'Not sure', $t$b$t$,
   $t$This adds tops and bottoms. Use a common denominator: \(\tfrac{4}{12} + \tfrac{3}{12} = \tfrac{7}{12}\).$t$, null, $t$Denominators aren't added. Use twelfths: \(\tfrac{7}{12}\).$t$, $t$The numerators change too: \(\tfrac{4}{12} + \tfrac{3}{12} = \tfrac{7}{12}\).$t$,
@@ -110,7 +110,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Fractions, decimals and percentages$t$, $t$Fractions to Percentages$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Fractions, decimals and percentages$t$, $t$Fractions to Percentages$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 1,
   $t$Write \(\tfrac{2}{5}\) as a percentage.$t$,
   $t$25%$t$, $t$40%$t$, $t$20%$t$, $t$2.5%$t$, 'Not sure', $t$b$t$,
   $t$25% is \(\tfrac{1}{4}\). \(\tfrac{2}{5} = \tfrac{40}{100} = 40\%\).$t$, null, $t$20% is \(\tfrac{1}{5}\). Two fifths is 40%.$t$, $t$This divides 5 by 2. \(2 \div 5 = 0.4 = 40\%\).$t$,
@@ -123,7 +123,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Fractions, decimals and percentages$t$, $t$Percentage Decrease$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 3,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Fractions, decimals and percentages$t$, $t$Percentage Decrease$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 3,
   $t$A phone costs ₦80 000. In a sale it is reduced by 15%. What is the sale price?$t$,
   $t$₦12 000$t$, $t$₦68 000$t$, $t$₦79 985$t$, $t$₦65 000$t$, 'Not sure', $t$b$t$,
   $t$₦12 000 is the discount, not the sale price. Subtract it: ₦68 000.$t$, null, $t$This takes away ₦15, not 15%. 15% of ₦80 000 is ₦12 000.$t$, $t$This takes away ₦15 000. 15% of ₦80 000 is ₦12 000, so ₦68 000.$t$,
@@ -136,7 +136,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Ratio, proportion and rates of change$t$, $t$Simplifying Ratios$t$, $t$aqa-ma-fh-ratio-proportion$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Ratio, proportion and rates of change$t$, $t$Simplifying Ratios$t$, $t$aqa-ma-fh-ratio-proportion$t$, 1,
   $t$Write the ratio 12 : 18 in its simplest form.$t$,
   $t$2 : 3$t$, $t$3 : 2$t$, $t$6 : 9$t$, $t$4 : 6$t$, 'Not sure', $t$a$t$,
   null, $t$The order matters: 12 comes first, so 2 : 3.$t$, $t$6 : 9 simplifies further (divide by 3).$t$, $t$4 : 6 simplifies further (divide by 2).$t$,
@@ -149,7 +149,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Ratio, proportion and rates of change$t$, $t$Recipes (Proportion)$t$, $t$aqa-ma-fh-ratio-proportion$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Ratio, proportion and rates of change$t$, $t$Recipes (Proportion)$t$, $t$aqa-ma-fh-ratio-proportion$t$, 2,
   $t$A jollof rice recipe for 4 people uses 300 g of rice. How much rice is needed for 10 people?$t$,
   $t$750 g$t$, $t$306 g$t$, $t$3000 g$t$, $t$120 g$t$, 'Not sure', $t$a$t$,
   null, $t$This adds 6 grams for 6 more people. Find the amount for 1 person: 75 g, then × 10.$t$, $t$This multiplies 300 by 10 but forgets it was for 4 people.$t$, $t$This divides instead of scaling up.$t$,
@@ -162,7 +162,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Ratio, proportion and rates of change$t$, $t$Best Value$t$, $t$aqa-ma-fh-ratio-proportion$t$, 4,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Ratio, proportion and rates of change$t$, $t$Best Value$t$, $t$aqa-ma-fh-ratio-proportion$t$, 4,
   $t$Which is the better buy: 3 tins of milk for GH₵ 18, or 5 tins for GH₵ 28?$t$,
   $t$5 tins for GH₵ 28, at GH₵ 5.60 a tin$t$, $t$3 tins for GH₵ 18, as it costs less in total$t$, $t$They are exactly the same value per tin$t$, $t$3 tins for GH₵ 18, at GH₵ 5.60 a tin$t$, 'Not sure', $t$a$t$,
   null, $t$A lower total doesn't mean better value: compare the price per tin.$t$, $t$GH₵ 6.00 and GH₵ 5.60 per tin are different.$t$, $t$3 tins for GH₵ 18 is GH₵ 6.00 a tin. GH₵ 5.60 is the price of the 5-tin deal.$t$,
@@ -175,7 +175,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Powers, roots and standard form$t$, $t$Squares and Roots$t$, $t$aqa-ma-fh-powers-roots$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Powers, roots and standard form$t$, $t$Squares and Roots$t$, $t$aqa-ma-fh-powers-roots$t$, 1,
   $t$Work out \(\sqrt{81}\).$t$,
   $t$9$t$, $t$40.5$t$, $t$6561$t$, $t$8$t$, 'Not sure', $t$a$t$,
   null, $t$This halves 81. The square root is the number that times itself gives 81.$t$, $t$This squares 81 instead of finding its root.$t$, $t$8 × 8 = 64, not 81.$t$,
@@ -188,7 +188,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Powers, roots and standard form$t$, $t$Index Laws$t$, $t$aqa-ma-fh-powers-roots$t$, 3,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Powers, roots and standard form$t$, $t$Index Laws$t$, $t$aqa-ma-fh-powers-roots$t$, 3,
   $t$Simplify \(x^{5} \times x^{3}\).$t$,
   $t$\(x^{15}\)$t$, $t$\(x^{8}\)$t$, $t$\(x^{2}\)$t$, $t$\(2x^{8}\)$t$, 'Not sure', $t$b$t$,
   $t$This multiplies the powers. When multiplying, add them: \(x^{5 + 3} = x^{8}\).$t$, null, $t$This subtracts the powers, which is for dividing.$t$, $t$There is only one \(x\) term; nothing doubles it.$t$,
@@ -201,7 +201,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Algebra — expressions$t$, $t$Collecting Like Terms$t$, $t$aqa-ma-fh-algebra-expressions$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Algebra — expressions$t$, $t$Collecting Like Terms$t$, $t$aqa-ma-fh-algebra-expressions$t$, 1,
   $t$Simplify \(3a + 5b - a + 2b\).$t$,
   $t$\(2a + 7b\)$t$, $t$\(4a + 7b\)$t$, $t$\(9ab\)$t$, $t$\(2a + 3b\)$t$, 'Not sure', $t$a$t$,
   null, $t$The \(-a\) takes away: \(3a - a = 2a\).$t$, $t$\(a\) and \(b\) terms are unlike, so they can't be combined.$t$, $t$\(5b + 2b = 7b\), not \(3b\).$t$,
@@ -214,7 +214,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Algebra — expressions$t$, $t$Substitution$t$, $t$aqa-ma-fh-algebra-expressions$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Algebra — expressions$t$, $t$Substitution$t$, $t$aqa-ma-fh-algebra-expressions$t$, 2,
   $t$Work out the value of \(4x - 3\) when \(x = 5\).$t$,
   $t$17$t$, $t$42$t$, $t$12$t$, $t$23$t$, 'Not sure', $t$a$t$,
   null, $t$This reads \(4x\) as 45. \(4x\) means \(4 \times x = 20\).$t$, $t$This adds 4 and 5. \(4x = 4 \times 5 = 20\), so 17.$t$, $t$This adds 3 instead of subtracting it: \(20 - 3 = 17\).$t$,
@@ -227,7 +227,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Algebra — expressions$t$, $t$Expanding Brackets$t$, $t$aqa-ma-fh-algebra-expressions$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Algebra — expressions$t$, $t$Expanding Brackets$t$, $t$aqa-ma-fh-algebra-expressions$t$, 2,
   $t$Expand \(3(2x - 4)\).$t$,
   $t$\(6x - 4\)$t$, $t$\(6x - 12\)$t$, $t$\(5x - 7\)$t$, $t$\(6x + 12\)$t$, 'Not sure', $t$b$t$,
   $t$Multiply both terms: \(3 \times -4 = -12\).$t$, null, $t$This adds 3 to each term. Multiply: \(6x - 12\).$t$, $t$The sign: \(3 \times -4 = -12\).$t$,
@@ -240,7 +240,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Algebra — expressions$t$, $t$Factorising$t$, $t$aqa-ma-fh-algebra-expressions$t$, 4,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Algebra — expressions$t$, $t$Factorising$t$, $t$aqa-ma-fh-algebra-expressions$t$, 4,
   $t$Factorise fully \(12x + 18\).$t$,
   $t$\(6(2x + 3)\)$t$, $t$\(2(6x + 9)\)$t$, $t$\(3(4x + 6)\)$t$, $t$\(12(x + 18)\)$t$, 'Not sure', $t$a$t$,
   null, $t$Correct but not fully factorised: 6x + 9 still has a factor of 3.$t$, $t$Not fully factorised: 4x + 6 still has a factor of 2.$t$, $t$12 × 18 = 216, not 18. The HCF of 12 and 18 is 6.$t$,
@@ -253,7 +253,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Equations and inequalities$t$, $t$One-Step Equations$t$, $t$aqa-ma-fh-algebra-equations$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Equations and inequalities$t$, $t$One-Step Equations$t$, $t$aqa-ma-fh-algebra-equations$t$, 1,
   $t$Solve \(x + 7 = 12\).$t$,
   $t$\(x = 19\)$t$, $t$\(x = 5\)$t$, $t$\(x = 84\)$t$, $t$\(x = -5\)$t$, 'Not sure', $t$b$t$,
   $t$This adds 7. Undo +7 by subtracting: \(12 - 7 = 5\).$t$, null, $t$This multiplies. Subtract 7 from both sides.$t$, $t$The sign is wrong: \(12 - 7 = 5\).$t$,
@@ -266,7 +266,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Equations and inequalities$t$, $t$Two-Step Equations$t$, $t$aqa-ma-fh-algebra-equations$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Equations and inequalities$t$, $t$Two-Step Equations$t$, $t$aqa-ma-fh-algebra-equations$t$, 2,
   $t$Solve \(3x - 4 = 11\).$t$,
   $t$\(x = 5\)$t$, $t$\(x = 2.3\)$t$, $t$\(x = 15\)$t$, $t$\(x = 21\)$t$, 'Not sure', $t$a$t$,
   null, $t$This subtracts 4 instead of adding it: \(3x = 15\), so \(x = 5\).$t$, $t$15 is \(3x\). Divide by 3: \(x = 5\).$t$, $t$This multiplies by 3 instead of dividing.$t$,
@@ -279,7 +279,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Equations and inequalities$t$, $t$Inequalities$t$, $t$aqa-ma-fh-algebra-equations$t$, 3,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Equations and inequalities$t$, $t$Inequalities$t$, $t$aqa-ma-fh-algebra-equations$t$, 3,
   $t$Which integers satisfy \(-2 < n \le 2\)?$t$,
   $t$−1, 0, 1, 2$t$, $t$−2, −1, 0, 1, 2$t$, $t$−2, −1, 0, 1$t$, $t$−1, 0, 1$t$, 'Not sure', $t$a$t$,
   null, $t$\(<\) means −2 itself is not included.$t$, $t$−2 is excluded and 2 is included (\(\le\)).$t$, $t$\(\le 2\) means 2 is included.$t$,
@@ -292,7 +292,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Sequences$t$, $t$Term-to-Term Rule$t$, $t$aqa-ma-fh-algebra-sequences$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Sequences$t$, $t$Term-to-Term Rule$t$, $t$aqa-ma-fh-algebra-sequences$t$, 1,
   $t$What is the next term in the sequence 5, 9, 13, 17, …?$t$,
   $t$21$t$, $t$20$t$, $t$22$t$, $t$34$t$, 'Not sure', $t$a$t$,
   null, $t$The terms go up by 4 each time: 17 + 4 = 21.$t$, $t$Add 4, not 5: 17 + 4 = 21.$t$, $t$This doubles 17. The rule is add 4.$t$,
@@ -305,7 +305,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Sequences$t$, $t$nth Term$t$, $t$aqa-ma-fh-algebra-sequences$t$, 4,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Sequences$t$, $t$nth Term$t$, $t$aqa-ma-fh-algebra-sequences$t$, 4,
   $t$What is the \(n\)th term of 3, 8, 13, 18, …?$t$,
   $t$\(5n - 2\)$t$, $t$\(n + 5\)$t$, $t$\(5n + 3\)$t$, $t$\(3n + 5\)$t$, 'Not sure', $t$a$t$,
   null, $t$The difference of 5 goes in front of \(n\): \(5n\), then adjust: \(5n - 2\).$t$, $t$Check \(n = 1\): \(5 + 3 = 8\), not 3. It should be \(5n - 2\).$t$, $t$This swaps the first term and the difference.$t$,
@@ -318,7 +318,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Graphs$t$, $t$Coordinates$t$, $t$aqa-ma-fh-graphs$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Graphs$t$, $t$Coordinates$t$, $t$aqa-ma-fh-graphs$t$, 1,
   $t$A point is 3 units to the left of the origin and 2 units up. What are its coordinates?$t$,
   $t$(−3, 2)$t$, $t$(2, −3)$t$, $t$(3, 2)$t$, $t$(−2, 3)$t$, 'Not sure', $t$a$t$,
   null, $t$The \(x\)-coordinate (across) comes first.$t$, $t$Left of the origin means a negative \(x\).$t$, $t$Across first, then up: (−3, 2).$t$,
@@ -331,7 +331,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Graphs$t$, $t$Straight-Line Graphs$t$, $t$aqa-ma-fh-graphs$t$, 5,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Graphs$t$, $t$Straight-Line Graphs$t$, $t$aqa-ma-fh-graphs$t$, 5,
   $t$What is the gradient of the line \(y = 4x - 3\)?$t$,
   $t$4$t$, $t$−3$t$, $t$3$t$, $t$1$t$, 'Not sure', $t$a$t$,
   null, $t$−3 is where the line crosses the \(y\)-axis (the intercept).$t$, $t$The gradient is the number multiplying \(x\): 4.$t$, $t$The coefficient of \(x\) is 4, not 1.$t$,
@@ -344,7 +344,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Properties of shapes$t$, $t$Properties of Quadrilaterals$t$, $t$aqa-ma-fh-geometry-shapes$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Properties of shapes$t$, $t$Properties of Quadrilaterals$t$, $t$aqa-ma-fh-geometry-shapes$t$, 2,
   $t$Which quadrilateral has all four sides equal but its angles are not all \(90^{\circ}\)?$t$,
   $t$Rhombus$t$, $t$Square$t$, $t$Rectangle$t$, $t$Trapezium$t$, 'Not sure', $t$a$t$,
   null, $t$A square has four equal sides and all angles 90°.$t$, $t$A rectangle's sides are not all equal.$t$, $t$A trapezium has one pair of parallel sides and usually unequal sides.$t$,
@@ -357,7 +357,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Perimeter, area, volume$t$, $t$Area of a Rectangle$t$, $t$aqa-ma-fh-geometry-measures$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Perimeter, area, volume$t$, $t$Area of a Rectangle$t$, $t$aqa-ma-fh-geometry-measures$t$, 1,
   $t$A classroom floor is 8 m long and 6 m wide. What is its area?$t$,
   $t$\(48\,\text{m}^{2}\)$t$, $t$\(28\,\text{m}^{2}\)$t$, $t$\(14\,\text{m}^{2}\)$t$, $t$\(24\,\text{m}^{2}\)$t$, 'Not sure', $t$a$t$,
   null, $t$28 m is the perimeter. Area = length × width = 48 m².$t$, $t$This adds the sides once. Area = 8 × 6 = 48 m².$t$, $t$This halves the area, as for a triangle. A rectangle is 8 × 6 = 48 m².$t$,
@@ -370,7 +370,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Perimeter, area, volume$t$, $t$Area of a Triangle$t$, $t$aqa-ma-fh-geometry-measures$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Perimeter, area, volume$t$, $t$Area of a Triangle$t$, $t$aqa-ma-fh-geometry-measures$t$, 2,
   $t$A triangle has a base of 10 cm and a perpendicular height of 7 cm. What is its area?$t$,
   $t$\(35\,\text{cm}^{2}\)$t$, $t$\(70\,\text{cm}^{2}\)$t$, $t$\(17\,\text{cm}^{2}\)$t$, $t$\(8.5\,\text{cm}^{2}\)$t$, 'Not sure', $t$a$t$,
   null, $t$This forgets to halve. Area = \(\tfrac{1}{2} \times 10 \times 7 = 35\,\text{cm}^{2}\).$t$, $t$This adds base and height.$t$, $t$This halves the sum instead of the product.$t$,
@@ -383,7 +383,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Angles and geometry$t$, $t$Angles on a Straight Line$t$, $t$aqa-ma-fh-geometry-angles$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Angles and geometry$t$, $t$Angles on a Straight Line$t$, $t$aqa-ma-fh-geometry-angles$t$, 1,
   $t$Two angles on a straight line are \(115^{\circ}\) and \(x\). What is \(x\)?$t$,
   $t$\(65^{\circ}\)$t$, $t$\(245^{\circ}\)$t$, $t$\(75^{\circ}\)$t$, $t$\(115^{\circ}\)$t$, 'Not sure', $t$a$t$,
   null, $t$245° uses 360°, which is angles around a point. On a line they add to 180°.$t$, $t$180 − 115 = 65, not 75.$t$, $t$The angles aren't equal; together they make 180°.$t$,
@@ -396,7 +396,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Angles and geometry$t$, $t$Angles in a Triangle$t$, $t$aqa-ma-fh-geometry-angles$t$, 3,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Angles and geometry$t$, $t$Angles in a Triangle$t$, $t$aqa-ma-fh-geometry-angles$t$, 3,
   $t$An isosceles triangle has one angle of \(40^{\circ}\) between its two equal sides. What size is each of the other two angles?$t$,
   $t$\(70^{\circ}\)$t$, $t$\(40^{\circ}\)$t$, $t$\(140^{\circ}\)$t$, $t$\(50^{\circ}\)$t$, 'Not sure', $t$a$t$,
   null, $t$The 40° is the angle between the equal sides; the other two are the equal base angles.$t$, $t$140° is what the two base angles add up to. Each is half: 70°.$t$, $t$180 − 40 = 140, and half of 140 is 70, not 50.$t$,
@@ -409,7 +409,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Probability$t$, $t$Simple Probability$t$, $t$aqa-ma-fh-probability$t$, 1,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Probability$t$, $t$Simple Probability$t$, $t$aqa-ma-fh-probability$t$, 1,
   $t$A fair six-sided dice is rolled. What is the probability of rolling a number greater than 4?$t$,
   $t$\(\tfrac{1}{3}\)$t$, $t$\(\tfrac{1}{6}\)$t$, $t$\(\tfrac{2}{3}\)$t$, $t$\(\tfrac{1}{2}\)$t$, 'Not sure', $t$a$t$,
   null, $t$Greater than 4 means 5 or 6: two outcomes, not one.$t$, $t$\(\tfrac{4}{6}\) counts the numbers up to 4. Greater than 4 is 5 and 6: \(\tfrac{2}{6}\).$t$, $t$Only 5 and 6 are greater than 4: \(\tfrac{2}{6} = \tfrac{1}{3}\).$t$,
@@ -422,7 +422,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Probability$t$, $t$Probabilities Summing to 1$t$, $t$aqa-ma-fh-probability$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Probability$t$, $t$Probabilities Summing to 1$t$, $t$aqa-ma-fh-probability$t$, 2,
   $t$The probability that it rains in Kumasi tomorrow is 0.35. What is the probability that it does not rain?$t$,
   $t$0.65$t$, $t$0.35$t$, $t$1.35$t$, $t$0.75$t$, 'Not sure', $t$a$t$,
   null, $t$That is the probability that it does rain.$t$, $t$Probabilities can't be more than 1. Subtract from 1: 0.65.$t$, $t$1 − 0.35 = 0.65, not 0.75.$t$,
@@ -435,7 +435,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Foundation$t$, $t$Statistics$t$, $t$Mean, Median, Mode$t$, $t$aqa-ma-fh-statistics$t$, 2,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Statistics$t$, $t$Mean, Median, Mode$t$, $t$aqa-ma-fh-statistics$t$, 2,
   $t$Find the median of 4, 9, 2, 7, 5.$t$,
   $t$5$t$, $t$7$t$, $t$5.4$t$, $t$2$t$, 'Not sure', $t$a$t$,
   null, $t$7 is in the middle of the list as written, but the list must be put in order first.$t$, $t$5.4 is the mean. The median is the middle value in order: 5.$t$, $t$2 is the smallest value.$t$,
@@ -448,7 +448,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Statistics$t$, $t$Range$t$, $t$aqa-ma-fh-statistics$t$, 5,
+select $t$Mathematics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Statistics$t$, $t$Range$t$, $t$aqa-ma-fh-statistics$t$, 5,
   $t$The ages of five football players are 17, 23, 19, 31 and 20. A new player joins and the range becomes 16. The new player is older than all the others. How old are they?$t$,
   $t$33$t$, $t$47$t$, $t$16$t$, $t$14$t$, 'Not sure', $t$a$t$,
   null, $t$This adds 16 to the oldest. The range is highest − lowest: 17 + 16 = 33.$t$, $t$16 is the range, not an age.$t$, $t$The range is currently 14; that is not the new player's age.$t$,

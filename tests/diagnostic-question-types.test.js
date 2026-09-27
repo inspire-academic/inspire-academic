@@ -119,8 +119,8 @@ test('the content builder accepts numeric questions and checks their answers', (
 });
 
 test('students are served numeric questions, and the page can answer them', () => {
-  const start = read('netlify/functions/diagnostic-session-start.js');
-  assert.match(start, /question_type=in\.\(mcq,numeric\)/);
+  const { questionPoolFilter } = require('../netlify/functions/_diagnostic-shared.js');
+  assert.match(questionPoolFilter(['Physics'], 'GCSE', 'AQA'), /question_type=in\.\(mcq,numeric\)/);
   const page = read('assessment-engine/assessment-engine.html');
   assert.match(page, /<script src="\/assets\/js\/diagnostic-answer-types\.js"><\/script>/);
   assert.match(page, /<link rel="stylesheet" href="\/assets\/css\/diagnostic-answer-types\.css">/);

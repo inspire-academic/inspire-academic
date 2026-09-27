@@ -19,7 +19,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Momentum$t$, $t$aqa-ph-fh-forces-momentum$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Momentum$t$, $t$aqa-ph-fh-forces-momentum$t$, 2,
   $t$A cyclist and her bicycle have a total mass of 60 kg and move at \(5\,\text{m/s}\). What is their momentum?$t$,
   $t$\(12\,\text{kg m/s}\)$t$, $t$\(300\,\text{kg m/s}\)$t$, $t$\(65\,\text{kg m/s}\)$t$, $t$\(750\,\text{kg m/s}\)$t$, 'Not sure', $t$b$t$,
   $t$This divides mass by velocity (60 ÷ 5). Momentum is mass × velocity: \(p = mv = 60 \times 5 = 300\,\text{kg m/s}\).$t$, null, $t$This adds mass and velocity (60 + 5). Momentum is their product: \(p = mv = 300\,\text{kg m/s}\).$t$, $t$750 is the kinetic energy in joules (\(\tfrac{1}{2}mv^{2}\)), not the momentum. Momentum is \(p = mv = 300\,\text{kg m/s}\).$t$,
@@ -32,7 +32,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Conservation of Momentum$t$, $t$aqa-ph-fh-forces-momentum$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Conservation of Momentum$t$, $t$aqa-ph-fh-forces-momentum$t$, 4,
   $t$A 2 kg trolley moving at \(3\,\text{m/s}\) hits a stationary 1 kg trolley and they move off together. What is their speed just after the collision?$t$,
   $t$\(3\,\text{m/s}\)$t$, $t$\(1.5\,\text{m/s}\)$t$, $t$\(2\,\text{m/s}\)$t$, $t$\(6\,\text{m/s}\)$t$, 'Not sure', $t$c$t$,
   $t$The speed can't stay the same: the same momentum is now shared by a larger mass. Momentum before \(= 2 \times 3 = 6\,\text{kg m/s}\), so \(v = 6 \div 3 = 2\,\text{m/s}\).$t$, $t$This halves the speed. Total momentum is conserved: \(6\,\text{kg m/s}\) shared by \(3\,\text{kg}\) gives \(v = 2\,\text{m/s}\).$t$, null, $t$6 is the momentum in kg m/s, not the speed. Divide it by the combined mass: \(v = 6 \div 3 = 2\,\text{m/s}\).$t$,
@@ -45,7 +45,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Uniform Acceleration$t$, $t$aqa-ph-fh-forces-motion$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Uniform Acceleration$t$, $t$aqa-ph-fh-forces-motion$t$, 4,
   $t$A car accelerates uniformly from rest to \(20\,\text{m/s}\) over a distance of 100 m. What is its acceleration?$t$,
   $t$\(0.2\,\text{m/s}^{2}\)$t$, $t$\(4\,\text{m/s}^{2}\)$t$, $t$\(5\,\text{m/s}^{2}\)$t$, $t$\(2\,\text{m/s}^{2}\)$t$, 'Not sure', $t$d$t$,
   $t$This divides the final speed by the distance (20 ÷ 100). Use \(v^{2} - u^{2} = 2as\): \(400 = 2 \times a \times 100\), so \(a = 2\,\text{m/s}^{2}\).$t$, $t$This forgets the 2 in \(v^{2} - u^{2} = 2as\) (400 ÷ 100). With it: \(a = 400 \div 200 = 2\,\text{m/s}^{2}\).$t$, $t$This divides distance by speed (100 ÷ 20). Use \(v^{2} - u^{2} = 2as\): \(a = 400 \div 200 = 2\,\text{m/s}^{2}\).$t$, null,
@@ -58,7 +58,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Hooke's Law$t$, $t$aqa-ph-fh-forces-work-energy$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Hooke's Law$t$, $t$aqa-ph-fh-forces-work-energy$t$, 3,
   $t$A spring has a spring constant of \(40\,\text{N/m}\). What force stretches it by 0.05 m, within its limit of proportionality?$t$,
   $t$\(2\,\text{N}\)$t$, $t$\(800\,\text{N}\)$t$, $t$\(0.00125\,\text{N}\)$t$, $t$\(40.05\,\text{N}\)$t$, 'Not sure', $t$a$t$,
   null, $t$This divides the spring constant by the extension (40 ÷ 0.05). Force = spring constant × extension: \(F = ke = 40 \times 0.05 = 2\,\text{N}\).$t$, $t$This divides the extension by the spring constant. Use \(F = ke = 40 \times 0.05 = 2\,\text{N}\).$t$, $t$This adds the spring constant and the extension. They multiply: \(F = ke = 2\,\text{N}\).$t$,
@@ -71,7 +71,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Moments$t$, $t$aqa-ph-h-forces-levers-gears$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Moments$t$, $t$aqa-ph-h-forces-levers-gears$t$, 2,
   $t$A force of 3 N acts at right angles to a spanner, 0.2 m from the pivot. What is the moment of the force?$t$,
   $t$\(15\,\text{N m}\)$t$, $t$\(3.2\,\text{N m}\)$t$, $t$\(0.6\,\text{N m}\)$t$, $t$\(0.067\,\text{N m}\)$t$, 'Not sure', $t$c$t$,
   $t$This divides the force by the distance (3 ÷ 0.2). Moment = force × perpendicular distance: \(M = Fd = 3 \times 0.2 = 0.6\,\text{N m}\).$t$, $t$This adds the force and the distance. They multiply: \(M = Fd = 0.6\,\text{N m}\).$t$, null, $t$This divides the distance by the force. Use \(M = Fd = 3 \times 0.2 = 0.6\,\text{N m}\).$t$,
@@ -84,7 +84,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Resultant Force$t$, $t$aqa-ph-fh-forces-intro$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Forces & Motion$t$, $t$Resultant Force$t$, $t$aqa-ph-fh-forces-intro$t$, 1,
   $t$Two forces act on a box: 12 N to the right and 5 N to the left. What is the resultant force?$t$,
   $t$\(17\,\text{N}\) to the right$t$, $t$\(7\,\text{N}\) to the right$t$, $t$\(7\,\text{N}\) to the left$t$, $t$\(0\,\text{N}\) (balanced)$t$, 'Not sure', $t$b$t$,
   $t$This adds forces that act in opposite directions. Opposite forces subtract: 12 − 5 = 7 N, in the direction of the larger force (right).$t$, null, $t$The size is right but the direction is wrong: the resultant acts in the direction of the larger force, which is to the right.$t$, $t$The forces are only balanced if they are equal. 12 N and 5 N leave a resultant of 7 N to the right.$t$,
@@ -97,7 +97,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Kinetic Energy$t$, $t$aqa-ph-fh-forces-work-energy$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Kinetic Energy$t$, $t$aqa-ph-fh-forces-work-energy$t$, 2,
   $t$A ball of mass 0.2 kg moves at \(10\,\text{m/s}\). What is its kinetic energy?$t$,
   $t$\(20\,\text{J}\)$t$, $t$\(1\,\text{J}\)$t$, $t$\(2\,\text{J}\)$t$, $t$\(10\,\text{J}\)$t$, 'Not sure', $t$d$t$,
   $t$This leaves out the half. \(E_{k} = \tfrac{1}{2}mv^{2} = \tfrac{1}{2} \times 0.2 \times 10^{2} = 10\,\text{J}\).$t$, $t$This forgets to square the speed. \(E_{k} = \tfrac{1}{2}mv^{2} = 0.5 \times 0.2 \times 100 = 10\,\text{J}\).$t$, $t$This multiplies mass by speed, which gives momentum, not energy. \(E_{k} = \tfrac{1}{2}mv^{2} = 10\,\text{J}\).$t$, null,
@@ -110,7 +110,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Work Done$t$, $t$aqa-ph-fh-forces-work-energy$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Work Done$t$, $t$aqa-ph-fh-forces-work-energy$t$, 1,
   $t$A student pushes a box with a force of 50 N through a distance of 4 m in the direction of the force. How much work is done?$t$,
   $t$\(200\,\text{J}\)$t$, $t$\(12.5\,\text{J}\)$t$, $t$\(54\,\text{J}\)$t$, $t$\(0.08\,\text{J}\)$t$, 'Not sure', $t$a$t$,
   null, $t$This divides the force by the distance. Work done = force × distance: \(W = Fs = 50 \times 4 = 200\,\text{J}\).$t$, $t$This adds the force and the distance. They multiply: \(W = Fs = 200\,\text{J}\).$t$, $t$This divides the distance by the force. Use \(W = Fs = 50 \times 4 = 200\,\text{J}\).$t$,
@@ -123,7 +123,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Power$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Power$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
   $t$A motor transfers 1200 J of energy in 30 s. What is its power?$t$,
   $t$\(36\,000\,\text{W}\)$t$, $t$\(40\,\text{W}\)$t$, $t$\(0.025\,\text{W}\)$t$, $t$\(1230\,\text{W}\)$t$, 'Not sure', $t$b$t$,
   $t$This multiplies energy by time. Power is energy transferred per second: \(P = E \div t = 1200 \div 30 = 40\,\text{W}\).$t$, null, $t$This divides time by energy. Use \(P = E \div t = 1200 \div 30 = 40\,\text{W}\).$t$, $t$This adds the energy and the time. Power = energy ÷ time \(= 40\,\text{W}\).$t$,
@@ -136,7 +136,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Elastic Potential Energy$t$, $t$aqa-ph-fh-forces-work-energy$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Elastic Potential Energy$t$, $t$aqa-ph-fh-forces-work-energy$t$, 3,
   $t$A spring with spring constant \(100\,\text{N/m}\) is stretched by 0.1 m. How much elastic potential energy does it store?$t$,
   $t$\(1\,\text{J}\)$t$, $t$\(5\,\text{J}\)$t$, $t$\(0.5\,\text{J}\)$t$, $t$\(10\,\text{J}\)$t$, 'Not sure', $t$c$t$,
   $t$This leaves out the half. \(E_{e} = \tfrac{1}{2}ke^{2} = \tfrac{1}{2} \times 100 \times 0.1^{2} = 0.5\,\text{J}\).$t$, $t$This forgets to square the extension. \(E_{e} = \tfrac{1}{2}ke^{2} = 0.5 \times 100 \times 0.01 = 0.5\,\text{J}\).$t$, null, $t$\(k \times e\) gives the force in newtons, not the energy. \(E_{e} = \tfrac{1}{2}ke^{2} = 0.5\,\text{J}\).$t$,
@@ -149,7 +149,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Reducing Wasted Energy$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Reducing Wasted Energy$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
   $t$Why does oiling the moving parts of a machine make it more efficient?$t$,
   $t$The oil adds extra energy to the moving parts$t$, $t$It lowers friction, so less energy is wasted as heat$t$, $t$It increases the total energy put into the machine$t$, $t$It stops energy from being conserved in the machine$t$, 'Not sure', $t$b$t$,
   $t$Oil doesn't supply energy to the machine. It reduces friction, so less of the input energy is dissipated as heat.$t$, null, $t$The input energy is unchanged. Efficiency rises because less of it is wasted by friction.$t$, $t$Energy is always conserved. Lubrication just means less of it is dissipated to the surroundings as heat.$t$,
@@ -162,7 +162,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Wave Speed and Period$t$, $t$aqa-ph-fh-waves-properties$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Wave Speed and Period$t$, $t$aqa-ph-fh-waves-properties$t$, 3,
   $t$A wave has a period of 0.02 s and a wavelength of 3 m. What is its speed?$t$,
   $t$\(0.06\,\text{m/s}\)$t$, $t$\(50\,\text{m/s}\)$t$, $t$\(150\,\text{m/s}\)$t$, $t$\(0.0067\,\text{m/s}\)$t$, 'Not sure', $t$c$t$,
   $t$This multiplies wavelength by period. First find the frequency, \(f = 1 \div T = 50\,\text{Hz}\), then \(v = f\lambda = 50 \times 3 = 150\,\text{m/s}\).$t$, $t$50 is the frequency in hertz (\(1 \div 0.02\)). Multiply by the wavelength: \(v = f\lambda = 150\,\text{m/s}\).$t$, null, $t$This divides the period by the wavelength. Use \(f = 1 \div T = 50\,\text{Hz}\), then \(v = f\lambda = 150\,\text{m/s}\).$t$,
@@ -175,7 +175,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Transverse and Longitudinal$t$, $t$aqa-ph-fh-waves-properties$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Transverse and Longitudinal$t$, $t$aqa-ph-fh-waves-properties$t$, 1,
   $t$Which of these is a longitudinal wave?$t$,
   $t$Light waves$t$, $t$Ripples on water$t$, $t$Microwaves$t$, $t$Sound waves in air$t$, 'Not sure', $t$d$t$,
   $t$Light is an electromagnetic wave, and all electromagnetic waves are transverse.$t$, $t$Ripples on water are transverse: the water moves up and down, at right angles to the direction the wave travels.$t$, $t$Microwaves are electromagnetic waves, which are transverse.$t$, null,
@@ -188,7 +188,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$EM Hazards$t$, $t$aqa-ph-fh-waves-electromagnetic$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$EM Hazards$t$, $t$aqa-ph-fh-waves-electromagnetic$t$, 2,
   $t$Why can too much exposure to ultraviolet radiation be harmful?$t$,
   $t$It heats organs deep inside the body$t$, $t$It can make body tissues radioactive$t$, $t$It can damage skin cells and cause cancer$t$, $t$It only affects the eyes, by bending light$t$, 'Not sure', $t$c$t$,
   $t$Ultraviolet is absorbed by the skin; it doesn't penetrate to heat internal organs.$t$, $t$Radiation does not make the body radioactive. Ultraviolet can damage skin cells and cause them to become cancerous.$t$, null, $t$Ultraviolet can harm the eyes, but its main risk is to the skin: it can damage skin cells and cause cancer.$t$,
@@ -201,7 +201,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$EM Uses$t$, $t$aqa-ph-fh-waves-electromagnetic$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$EM Uses$t$, $t$aqa-ph-fh-waves-electromagnetic$t$, 1,
   $t$Which type of electromagnetic wave is used to communicate with satellites?$t$,
   $t$Gamma rays$t$, $t$Microwaves$t$, $t$Ultraviolet$t$, $t$X-rays$t$, 'Not sure', $t$b$t$,
   $t$Gamma rays are used to sterilise equipment and treat cancer, not for communication.$t$, null, $t$Ultraviolet is used in energy-efficient lamps and sun tanning, not satellite communication.$t$, $t$X-rays are used in medical imaging, not satellite communication.$t$,
@@ -214,7 +214,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Ultrasound$t$, $t$aqa-ph-fh-waves-sound$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Ultrasound$t$, $t$aqa-ph-fh-waves-sound$t$, 4,
   $t$An ultrasound pulse travels to a boundary inside the body and its echo returns 0.0001 s after it was sent. Ultrasound travels at \(1500\,\text{m/s}\) in the tissue. How far away is the boundary?$t$,
   $t$\(0.15\,\text{m}\)$t$, $t$\(0.075\,\text{m}\)$t$, $t$\(0.0375\,\text{m}\)$t$, $t$\(15\,000\,000\,\text{m}\)$t$, 'Not sure', $t$b$t$,
   $t$This is the distance there and back. The echo travels to the boundary and returns, so halve it: \(0.15 \div 2 = 0.075\,\text{m}\).$t$, null, $t$This halves the distance twice. The total path is \(1500 \times 0.0001 = 0.15\,\text{m}\); the boundary is half of that, \(0.075\,\text{m}\).$t$, $t$This divides speed by time. Distance = speed × time \(= 0.15\,\text{m}\) there and back, so the boundary is \(0.075\,\text{m}\) away.$t$,
@@ -227,7 +227,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Lenses$t$, $t$aqa-ph-h-waves-light$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Waves$t$, $t$Lenses$t$, $t$aqa-ph-h-waves-light$t$, 3,
   $t$A converging lens forms a real image of an object. Which statement about the image is correct?$t$,
   $t$It can be projected onto a screen$t$, $t$It can only be seen through the lens$t$, $t$It is always the right way up$t$, $t$It is always the same size as the object$t$, 'Not sure', $t$a$t$,
   null, $t$That describes a virtual image. A real image forms where light rays actually meet, so it can be projected onto a screen.$t$, $t$A real image formed by a converging lens is inverted (upside down).$t$, $t$A real image can be larger, smaller or the same size as the object, depending on how far the object is from the lens.$t$,
@@ -240,7 +240,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Filament Lamp$t$, $t$aqa-ph-fh-electricity-circuits$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Filament Lamp$t$, $t$aqa-ph-fh-electricity-circuits$t$, 3,
   $t$As the current through a filament lamp increases, its resistance increases. Why?$t$,
   $t$The filament gets thinner as more current flows$t$, $t$More electrons are used up as the current flows$t$, $t$The filament heats up, so its ions vibrate more$t$, $t$The potential difference across the lamp falls$t$, 'Not sure', $t$c$t$,
   $t$The filament doesn't change thickness. It gets hotter, so its ions vibrate more and get in the way of the electrons.$t$, $t$Electrons (charge) are not used up in a circuit. Resistance rises because the hotter filament's ions vibrate more.$t$, null, $t$The potential difference rises as the current rises. Resistance increases because the filament heats up.$t$,
@@ -253,7 +253,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Diode$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Diode$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
   $t$What is the main property of a diode?$t$,
   $t$Its resistance falls as light gets brighter$t$, $t$It lets current flow in one direction only$t$, $t$Its resistance falls as it gets warmer$t$, $t$It stores charge until it is fully charged$t$, 'Not sure', $t$b$t$,
   $t$That describes a light-dependent resistor (LDR). A diode lets current flow in one direction only.$t$, null, $t$That describes a thermistor. A diode lets current flow in one direction only.$t$, $t$A diode does not store charge. It has a very high resistance in one direction, so current flows only one way.$t$,
@@ -266,7 +266,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Thermistor$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Thermistor$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
   $t$A thermistor is used to switch on a heater when a room gets cold. What happens to the thermistor's resistance as the room gets colder?$t$,
   $t$It decreases$t$, $t$It increases$t$, $t$It stays the same$t$, $t$It falls to zero$t$, 'Not sure', $t$b$t$,
   $t$That is what happens as it gets warmer. A thermistor's resistance increases as the temperature falls.$t$, null, $t$A thermistor's resistance depends on temperature: it increases as the room gets colder.$t$, $t$The resistance doesn't fall to zero; as the temperature falls it increases.$t$,
@@ -279,7 +279,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Parallel Circuits$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Parallel Circuits$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
   $t$Two identical lamps are connected in parallel to a battery. The current from the battery is 0.6 A. What is the current through each lamp?$t$,
   $t$\(0.6\,\text{A}\)$t$, $t$\(1.2\,\text{A}\)$t$, $t$\(0.15\,\text{A}\)$t$, $t$\(0.3\,\text{A}\)$t$, 'Not sure', $t$d$t$,
   $t$The current is the same everywhere in a series circuit, not a parallel one. In parallel the 0.6 A splits between the branches.$t$, $t$This doubles the current. The total current splits between the two branches: \(0.6 \div 2 = 0.3\,\text{A}\) each.$t$, $t$This splits the current four ways. With two identical branches each gets half: \(0.3\,\text{A}\).$t$, null,
@@ -292,7 +292,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Mains Electricity$t$, $t$aqa-ph-fh-electricity-domestic$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Mains Electricity$t$, $t$aqa-ph-fh-electricity-domestic$t$, 1,
   $t$What are the frequency and potential difference of the UK mains supply?$t$,
   $t$50 Hz and about 230 V$t$, $t$230 Hz and about 50 V$t$, $t$60 Hz and about 120 V$t$, $t$50 Hz and about 12 V$t$, 'Not sure', $t$a$t$,
   null, $t$The numbers are swapped: the UK mains is 50 Hz and about 230 V.$t$, $t$60 Hz and about 120 V is the supply in some other countries, such as the USA. The UK mains is 50 Hz and about 230 V.$t$, $t$12 V is a typical car battery. The UK mains is 50 Hz and about 230 V.$t$,
@@ -305,7 +305,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Earth Wire$t$, $t$aqa-ph-fh-electricity-domestic$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Electricity$t$, $t$Earth Wire$t$, $t$aqa-ph-fh-electricity-domestic$t$, 2,
   $t$What is the purpose of the earth wire in a three-core cable?$t$,
   $t$It carries current back to the supply in normal use$t$, $t$It carries the alternating potential difference$t$, $t$It stops a metal casing staying live after a fault$t$, $t$It completes the circuit so the appliance works$t$, 'Not sure', $t$c$t$,
   $t$That is the neutral wire. The earth wire only carries current if there is a fault.$t$, $t$That is the live wire. The earth wire is a safety wire, at 0 V.$t$, null, $t$The live and neutral wires complete the circuit. The earth wire carries current only if there's a fault, so the casing can't stay live.$t$,
@@ -318,7 +318,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$National Grid$t$, $t$aqa-ph-fh-magnetism-induction$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$National Grid$t$, $t$aqa-ph-fh-magnetism-induction$t$, 3,
   $t$Why does the National Grid transmit electricity at a very high potential difference?$t$,
   $t$A higher current flows, so it arrives more quickly$t$, $t$A smaller current flows, so less energy is wasted$t$, $t$It lets homes use the electricity more safely$t$, $t$It increases the power station's energy output$t$, 'Not sure', $t$b$t$,
   $t$For the same power, a higher potential difference means a smaller current, not a larger one, and the aim is reducing energy losses, not speed.$t$, null, $t$Homes need a low potential difference; transformers step it back down before it reaches them. The high p.d. is to reduce energy losses in the cables.$t$, $t$Transformers don't create energy. The high p.d. means a smaller current, so less energy is lost heating the cables.$t$,
@@ -331,7 +331,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$Electromagnets$t$, $t$aqa-ph-fh-magnetism-fields$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$Electromagnets$t$, $t$aqa-ph-fh-magnetism-fields$t$, 2,
   $t$Which change would make an electromagnet (a coil around an iron core) stronger?$t$,
   $t$Replacing the iron core with copper$t$, $t$Reducing the current in the coil$t$, $t$Adding more turns to the coil$t$, $t$Using thicker plastic on the wire$t$, 'Not sure', $t$c$t$,
   $t$Copper is not magnetic. An iron core makes the electromagnet much stronger; removing it weakens it.$t$, $t$A smaller current makes a weaker magnetic field. Increasing the current, or the number of turns, makes it stronger.$t$, null, $t$The insulation has no effect on the magnetic field. More turns or more current make the electromagnet stronger.$t$,
@@ -344,7 +344,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$Induced Magnets$t$, $t$aqa-ph-fh-magnetism-fields$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$Induced Magnets$t$, $t$aqa-ph-fh-magnetism-fields$t$, 2,
   $t$How does an induced magnet differ from a permanent magnet?$t$,
   $t$It is only magnetic while in a magnetic field$t$, $t$It is always stronger than a permanent magnet$t$, $t$It keeps its magnetism when the field is removed$t$, $t$It can repel a permanent magnet as well as attract$t$, 'Not sure', $t$a$t$,
   null, $t$Strength isn't the difference. An induced magnet becomes magnetic only while it is in a magnetic field.$t$, $t$That describes a permanent magnet. An induced magnet loses most or all of its magnetism when removed from the field.$t$, $t$The force between a permanent magnet and an induced magnet is always attraction.$t$,
@@ -357,7 +357,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$Field Lines$t$, $t$aqa-ph-fh-magnetism-fields$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Magnetism$t$, $t$Field Lines$t$, $t$aqa-ph-fh-magnetism-fields$t$, 1,
   $t$Outside a bar magnet, which way do the magnetic field lines point?$t$,
   $t$From the south pole to the north pole$t$, $t$From the north pole to the south pole$t$, $t$Straight out from the middle of the magnet$t$, $t$In circles around the length of the magnet$t$, 'Not sure', $t$b$t$,
   $t$That is backwards: outside the magnet, field lines point from north to south.$t$, null, $t$Field lines leave the north pole and curve round to the south pole; they don't come out of the middle.$t$, $t$Circles around a conductor describe the field of a current-carrying wire, not a bar magnet.$t$,
@@ -370,7 +370,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Internal Energy$t$, null, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Internal Energy$t$, null, 2,
   $t$What is the internal energy of a substance?$t$,
   $t$Its temperature, measured in kelvin$t$, $t$The energy needed to melt it at its melting point$t$, $t$The kinetic energy of its particles only$t$, $t$The total kinetic and potential energy of its particles$t$, 'Not sure', $t$d$t$,
   $t$Temperature is related to the particles' average kinetic energy, but it isn't the internal energy. Internal energy is the total kinetic and potential energy of all the particles.$t$, $t$That is latent heat. Internal energy is the total kinetic and potential energy of all the particles.$t$, $t$That misses the potential energy stored in the particles' positions. Internal energy is kinetic plus potential energy.$t$, null,
@@ -383,7 +383,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Gas Pressure and Temperature$t$, null, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Gas Pressure and Temperature$t$, null, 3,
   $t$A sealed container of gas is heated. Its volume stays the same. Why does the pressure increase?$t$,
   $t$The particles get bigger and fill more of the space$t$, $t$The number of gas particles increases as it warms$t$, $t$The particles move faster and hit the walls harder$t$, $t$The particles slow down and collide with each other$t$, 'Not sure', $t$c$t$,
   $t$Particles don't get bigger when heated. They move faster, hitting the walls more often and with more force.$t$, $t$The container is sealed, so the number of particles can't change. They move faster, so they hit the walls more often and harder.$t$, null, $t$Heating makes the particles move faster, not slower, so they hit the walls more often and with more force.$t$,
@@ -396,7 +396,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Latent Heat Calculation$t$, null, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Latent Heat Calculation$t$, null, 3,
   $t$How much energy is needed to melt 2 kg of ice at 0 °C? (Specific latent heat of fusion of ice \(= 334\,000\,\text{J/kg}\).)$t$,
   $t$\(167\,000\,\text{J}\)$t$, $t$\(668\,000\,\text{J}\)$t$, $t$\(0\,\text{J}\)$t$, $t$\(334\,002\,\text{J}\)$t$, 'Not sure', $t$b$t$,
   $t$This divides the latent heat by the mass. Energy = mass × specific latent heat: \(E = mL = 2 \times 334\,000 = 668\,000\,\text{J}\).$t$, null, $t$Energy is needed even though the temperature doesn't change: it breaks the bonds between the particles. \(E = mL = 668\,000\,\text{J}\).$t$, $t$This adds the mass to the latent heat. They multiply: \(E = mL = 668\,000\,\text{J}\).$t$,
@@ -409,7 +409,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Density by Displacement$t$, null, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Particle Model$t$, $t$Density by Displacement$t$, null, 3,
   $t$A stone has a mass of 60 g. When it is lowered into a measuring cylinder, the water level rises from \(40\,\text{cm}^{3}\) to \(64\,\text{cm}^{3}\). What is the stone's density?$t$,
   $t$\(1.5\,\text{g/cm}^{3}\)$t$, $t$\(0.94\,\text{g/cm}^{3}\)$t$, $t$\(2.5\,\text{g/cm}^{3}\)$t$, $t$\(0.4\,\text{g/cm}^{3}\)$t$, 'Not sure', $t$c$t$,
   $t$This uses the starting water level as the stone's volume. The stone's volume is the rise: \(64 - 40 = 24\,\text{cm}^{3}\), so \(\rho = 60 \div 24 = 2.5\,\text{g/cm}^{3}\).$t$, $t$This uses the final water level as the volume. The stone's volume is the change in level, \(24\,\text{cm}^{3}\): \(\rho = 60 \div 24 = 2.5\,\text{g/cm}^{3}\).$t$, null, $t$This divides volume by mass. Density = mass ÷ volume \(= 60 \div 24 = 2.5\,\text{g/cm}^{3}\).$t$,
@@ -422,7 +422,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Isotopes$t$, $t$aqa-ph-fh-atomic-structure$t$, 1,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Isotopes$t$, $t$aqa-ph-fh-atomic-structure$t$, 1,
   $t$Carbon-12 and carbon-14 are isotopes of carbon. What do their nuclei have in common?$t$,
   $t$The same number of neutrons$t$, $t$The same number of protons$t$, $t$The same mass number$t$, $t$The same number of nucleons$t$, 'Not sure', $t$b$t$,
   $t$Isotopes have different numbers of neutrons: carbon-12 has 6 and carbon-14 has 8.$t$, null, $t$Their mass numbers are different (12 and 14); that is what the names show.$t$, $t$The number of nucleons is the mass number, which differs (12 and 14).$t$,
@@ -435,7 +435,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Beta Decay$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Beta Decay$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
   $t$Carbon-14 decays by emitting a beta particle. What happens in its nucleus?$t$,
   $t$Two protons and two neutrons are emitted together$t$, $t$A neutron becomes a proton and an electron is emitted$t$, $t$A neutron is emitted and the mass number falls by 1$t$, $t$A gamma ray is emitted and a proton is lost$t$, 'Not sure', $t$b$t$,
   $t$Two protons and two neutrons leaving together is alpha decay.$t$, null, $t$That is neutron emission. In beta decay a neutron turns into a proton, and the mass number stays the same.$t$, $t$Gamma emission doesn't change the number of protons. In beta decay a neutron turns into a proton and an electron is emitted.$t$,
@@ -448,7 +448,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Contamination and Irradiation$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Contamination and Irradiation$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
   $t$What is the difference between radioactive contamination and irradiation?$t$,
   $t$Irradiation makes an object radioactive; contamination doesn't$t$, $t$They both mean being exposed to radiation from a source$t$, $t$Contamination leaves radioactive atoms on or in the object$t$, $t$Contamination can only happen with gamma sources$t$, 'Not sure', $t$c$t$,
   $t$It's the other way round: irradiation doesn't make an object radioactive; contamination puts radioactive atoms onto or into it.$t$, $t$That is irradiation only. Contamination means radioactive atoms actually get onto or into an object.$t$, null, $t$Contamination can involve any radioactive material; alpha sources are especially dangerous inside the body.$t$,
@@ -461,7 +461,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Half-Life Calculation$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Half-Life Calculation$t$, $t$aqa-ph-fh-atomic-structure$t$, 3,
   $t$A radioactive source has an activity of 1200 Bq and a half-life of 2 hours. What is its activity after 6 hours?$t$,
   $t$\(400\,\text{Bq}\)$t$, $t$\(600\,\text{Bq}\)$t$, $t$\(300\,\text{Bq}\)$t$, $t$\(150\,\text{Bq}\)$t$, 'Not sure', $t$d$t$,
   $t$This divides by 3. Six hours is three half-lives, so the activity halves three times: \(1200 \to 600 \to 300 \to 150\,\text{Bq}\).$t$, $t$That is after one half-life (2 hours). After 6 hours it has halved three times: \(150\,\text{Bq}\).$t$, $t$That is after two half-lives (4 hours). After 6 hours it has halved three times: \(150\,\text{Bq}\).$t$, null,
@@ -474,7 +474,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Nuclear Fission$t$, $t$aqa-ph-fh-atomic-structure$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Nuclear Fission$t$, $t$aqa-ph-fh-atomic-structure$t$, 2,
   $t$What happens in nuclear fission?$t$,
   $t$Two light nuclei join to form a heavier nucleus$t$, $t$A nucleus emits an alpha particle and is stable$t$, $t$A large nucleus absorbs a neutron and splits$t$, $t$Electrons are removed from atoms to form ions$t$, 'Not sure', $t$c$t$,
   $t$Joining light nuclei is fusion. Fission is a large nucleus splitting into two smaller ones.$t$, $t$That is alpha decay. In fission a large nucleus absorbs a neutron and splits into two smaller nuclei.$t$, null, $t$Removing electrons is ionisation, not a nuclear reaction.$t$,
@@ -487,7 +487,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Nuclear Fusion$t$, $t$aqa-ph-fh-atomic-structure$t$, 4,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Nuclear Fusion$t$, $t$aqa-ph-fh-atomic-structure$t$, 4,
   $t$Why does nuclear fusion need an extremely high temperature?$t$,
   $t$The neutrons must be heated before they are absorbed$t$, $t$A high temperature slows the nuclei so they can join$t$, $t$The heavy nuclei must be split apart before fusing$t$, $t$Nuclei must move fast enough to overcome repulsion$t$, 'Not sure', $t$d$t$,
   $t$Fusion doesn't involve absorbing a neutron (that's fission). The nuclei must collide at very high speed to overcome their repulsion.$t$, $t$A high temperature makes nuclei move faster, not slower. They need that speed to get close enough to fuse.$t$, $t$Splitting heavy nuclei is fission. Fusion joins light nuclei, which must overcome their electrostatic repulsion.$t$, null,
@@ -500,7 +500,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Circuit Calculations$t$, $t$Power and Resistance$t$, $t$aqa-ph-fh-electricity-circuits$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Circuit Calculations$t$, $t$Power and Resistance$t$, $t$aqa-ph-fh-electricity-circuits$t$, 3,
   $t$A current of 2 A flows through a \(10\,\Omega\) resistor. What power is transferred?$t$,
   $t$\(20\,\text{W}\)$t$, $t$\(40\,\text{W}\)$t$, $t$\(5\,\text{W}\)$t$, $t$\(400\,\text{W}\)$t$, 'Not sure', $t$b$t$,
   $t$\(I \times R\) gives the potential difference in volts (20 V), not the power. \(P = I^{2}R = 2^{2} \times 10 = 40\,\text{W}\).$t$, null, $t$This divides the resistance by the current. \(P = I^{2}R = 4 \times 10 = 40\,\text{W}\).$t$, $t$This squares the resistance as well as the current. Only the current is squared: \(P = I^{2}R = 40\,\text{W}\).$t$,
@@ -513,7 +513,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Circuit Calculations$t$, $t$Energy and Power$t$, $t$aqa-ph-fh-electricity-domestic$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Circuit Calculations$t$, $t$Energy and Power$t$, $t$aqa-ph-fh-electricity-domestic$t$, 2,
   $t$A 2000 W kettle is switched on for 60 s. How much energy does it transfer?$t$,
   $t$\(33\,\text{J}\)$t$, $t$\(2060\,\text{J}\)$t$, $t$\(0.03\,\text{J}\)$t$, $t$\(120\,000\,\text{J}\)$t$, 'Not sure', $t$d$t$,
   $t$This divides power by time. Energy = power × time: \(E = Pt = 2000 \times 60 = 120\,000\,\text{J}\).$t$, $t$This adds power and time. They multiply: \(E = Pt = 120\,000\,\text{J}\).$t$, $t$This divides time by power. Use \(E = Pt = 2000 \times 60 = 120\,000\,\text{J}\).$t$, null,
@@ -526,7 +526,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Circuit Calculations$t$, $t$Charge and Time$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Circuit Calculations$t$, $t$Charge and Time$t$, $t$aqa-ph-fh-electricity-circuits$t$, 2,
   $t$A charge of 90 C passes a point in a circuit while a steady current of 3 A flows. How long does this take?$t$,
   $t$\(270\,\text{s}\)$t$, $t$\(30\,\text{s}\)$t$, $t$\(0.033\,\text{s}\)$t$, $t$\(87\,\text{s}\)$t$, 'Not sure', $t$b$t$,
   $t$This multiplies charge by current. Rearrange \(Q = It\): \(t = Q \div I = 90 \div 3 = 30\,\text{s}\).$t$, null, $t$This divides current by charge. \(t = Q \div I = 90 \div 3 = 30\,\text{s}\).$t$, $t$This subtracts the current from the charge. \(t = Q \div I = 30\,\text{s}\).$t$,
@@ -539,7 +539,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Circuit Calculations$t$, $t$Resistors in Parallel$t$, $t$aqa-ph-fh-electricity-circuits$t$, 3,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Circuit Calculations$t$, $t$Resistors in Parallel$t$, $t$aqa-ph-fh-electricity-circuits$t$, 3,
   $t$A second resistor is added in parallel to a resistor in a circuit. What happens to the total resistance?$t$,
   $t$It increases, as there is more to pass through$t$, $t$It stays the same, as the p.d. is unchanged$t$, $t$It decreases, as there are more paths for current$t$, $t$It doubles, as two resistors are now in use$t$, 'Not sure', $t$c$t$,
   $t$Adding resistors in series increases the total resistance. In parallel, each extra branch is another path, so the total resistance decreases.$t$, $t$The total resistance does change: an extra parallel path lets more current flow for the same p.d., so it decreases.$t$, null, $t$Doubling would apply to two equal resistors in series. In parallel the total resistance is less than the smallest resistor.$t$,

@@ -213,7 +213,7 @@
       <div class="qr-meta">
         <span><b>#${r.id}</b></span><span class="qr-pill ${r.review_status}">${STATUS_LABEL[r.review_status] || r.review_status}</span>
         <span>${esc(r.subject)} · <b>${esc(r.topic)}</b>${r.subtopic ? ' · ' + esc(r.subtopic) : ''}</span>
-        <span>${esc(r.exam_board)} ${esc(r.tier)} · difficulty ${esc(r.difficulty)}${isNumeric(r) ? ' · typed number' : ''}</span>
+        <span>${r.exam_board === 'Universal' ? 'AQA + Edexcel' : esc(r.exam_board) + ' only'} · ${esc(r.tier)} · difficulty ${esc(r.difficulty)}${isNumeric(r) ? ' · typed number' : ''}</span>
         <span>Curriculum topic: <b>${esc(r.spec_slug || '— not set')}</b></span>
         <span>${r.active ? 'Active' : 'Retired'}${r.combined_eligible === false ? ' · separate science only' : ''}</span>
       </div>
@@ -287,6 +287,7 @@
           ${isNumeric(r) ? '' : `<label>Correct answer<select name="correct_answer">${OPTION_KEYS.map(k => `<option value="${k}"${k === r.correct_answer ? ' selected' : ''}>${k.toUpperCase()}</option>`).join('')}</select></label>`}
           <label>Difficulty (1–5)<input name="difficulty" type="number" min="1" max="5" value="${esc(r.difficulty)}"></label>
           <label>Tier<select name="tier">${['Higher', 'Foundation', 'Both'].map(t => `<option${t === r.tier ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
+          <label>Exam board<select name="exam_board">${[['Universal', 'Both boards'], ['AQA', 'AQA only'], ['Edexcel', 'Edexcel only']].map(([v, l]) => `<option value="${v}"${v === r.exam_board ? ' selected' : ''}>${l}</option>`).join('')}</select></label>
           <label>Curriculum topic<select name="spec_slug">${specOptions(r)}</select></label>
         </div>
         ${isNumeric(r) ? '' : OPTION_KEYS.map(k => field('misconception_' + k, 'Feedback if a student picks ' + k.toUpperCase(), 2)).join('')}
@@ -303,8 +304,8 @@
       const form = new FormData(e.target);
       const patch = {};
       const fields = isNumeric(r)
-        ? ['question_text', 'explanation', 'tier', 'spec_slug', 'topic', 'subtopic']
-        : [...EDIT_FIELDS, 'correct_answer', 'tier', 'spec_slug', 'topic', 'subtopic'];
+        ? ['question_text', 'explanation', 'tier', 'exam_board', 'spec_slug', 'topic', 'subtopic']
+        : [...EDIT_FIELDS, 'correct_answer', 'tier', 'exam_board', 'spec_slug', 'topic', 'subtopic'];
       if (isNumeric(r)) {
         try { patch.answer_spec = JSON.parse(String(form.get('answer_spec') || '')); }
         catch (err) { toast('The answer is not valid JSON: ' + err.message, 'error'); return; }

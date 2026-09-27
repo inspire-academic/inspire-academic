@@ -20,7 +20,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Magnification$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Magnification$t$, $t$aqa-bi-fh-cell-biology$t$, 2,
   $t$In a drawing, a cell is \(12\,\text{mm}\) long. The real cell is \(0.05\,\text{mm}\) long. What is the magnification? (Type the number only.)$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -33,7 +33,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Real Size$t$, $t$aqa-bi-fh-cell-biology$t$, 4,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Real Size$t$, $t$aqa-bi-fh-cell-biology$t$, 4,
   $t$A bacterium in a micrograph is \(6\,\text{mm}\) long at a magnification of \(\times 1500\). What is its real length in micrometres (\(\mu\text{m}\))?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -46,7 +46,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Osmosis: Percentage Change$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Osmosis: Percentage Change$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
   $t$In an osmosis practical, a piece of yam had a mass of \(2.50\,\text{g}\) before and \(2.20\,\text{g}\) after being left in salt solution. What is the percentage change in mass? (A decrease is negative.)$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -59,7 +59,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Surface Area to Volume Ratio$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Surface Area to Volume Ratio$t$, $t$aqa-bi-fh-cell-biology$t$, 3,
   $t$A cube-shaped cell model has sides of \(2\,\text{cm}\). What is its surface area to volume ratio, written as \(n : 1\)? Type \(n\).$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -72,7 +72,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Rate of Photosynthesis$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Bioenergetics$t$, $t$Rate of Photosynthesis$t$, $t$aqa-bi-fh-bioenergetics$t$, 2,
   $t$A pondweed gives off 45 bubbles of oxygen in 3 minutes. What is the rate, in bubbles per minute?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -85,7 +85,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Both$t$, $t$Ecology$t$, $t$Mean from Quadrats$t$, $t$aqa-bi-fh-ecology$t$, 1,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Ecology$t$, $t$Mean from Quadrats$t$, $t$aqa-bi-fh-ecology$t$, 1,
   $t$Five quadrats on the school field counted 3, 7, 4, 0 and 6 plants. What is the mean number of plants per quadrat?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -98,7 +98,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Estimating Population Size$t$, $t$aqa-bi-fh-ecology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Estimating Population Size$t$, $t$aqa-bi-fh-ecology$t$, 3,
   $t$A cassava field measures \(50\,\text{m}\) by \(40\,\text{m}\). A mean of 4 weeds were found per \(1\,\text{m}^{2}\) quadrat. Estimate the number of weeds in the whole field.$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -111,7 +111,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Efficiency of Biomass Transfer$t$, $t$aqa-bi-fh-ecology$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Ecology$t$, $t$Efficiency of Biomass Transfer$t$, $t$aqa-bi-fh-ecology$t$, 3,
   $t$Grass in a savanna food chain stores \(20\,000\,\text{kJ}\) of energy in its biomass. The antelope that eat it store \(200\,\text{kJ}\). What percentage of the energy is transferred?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -124,7 +124,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Genetic Cross Probability$t$, $t$aqa-bi-fh-inheritance$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Inheritance, Variation and Evolution$t$, $t$Genetic Cross Probability$t$, $t$aqa-bi-fh-inheritance$t$, 3,
   $t$Two parents are both heterozygous (Bb) for a recessive allele b. What is the percentage chance that a child is bb?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -137,7 +137,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Rate of Transpiration$t$, $t$aqa-bi-fh-organisation$t$, 3,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Organisation$t$, $t$Rate of Transpiration$t$, $t$aqa-bi-fh-organisation$t$, 3,
   $t$In a potometer, an air bubble moves \(36\,\text{mm}\) in 12 minutes. What is the rate of water uptake, in mm per minute?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
@@ -150,7 +150,7 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Biology$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Bacterial Growth$t$, $t$aqa-bi-fh-cell-biology$t$, 4,
+select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Cell Biology$t$, $t$Bacterial Growth$t$, $t$aqa-bi-fh-cell-biology$t$, 4,
   $t$A single bacterium divides once every 20 minutes. Assuming every cell keeps dividing, how many bacteria are there after 2 hours?$t$,
   null, null, null, null, 'Not sure', null,
   null, null, null, null,
