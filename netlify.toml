@@ -452,6 +452,14 @@ function = "create-teacher"
   status = 200
   force = true
 
+# Teachers save generated quizzes here: every question is re-checked on the
+# server (_question-checks.js) before anything is written. See quiz-create.js.
+[[redirects]]
+  from = "/api/v1/quiz/create"
+  to = "/.netlify/functions/quiz-create"
+  status = 200
+  force = true
+
 # Paid-tier Phase 2 (dormant — see create-checkout-session.js/
 # stripe-webhook.js header comments for the kill switches). Same
 # /api/v1/resource/action convention.

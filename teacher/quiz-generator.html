@@ -132,6 +132,14 @@
   .btn-approve.active { background: var(--success); color: var(--navy); }
   .btn-reject { background: var(--danger-dim); border: 1px solid rgba(224,82,82,0.3); color: var(--danger); padding: 5px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
   .btn-reject.active { background: var(--danger); color: white; }
+  /* automatic check results on each generated question */
+  .qrc-checks { font-size: 12px; line-height: 1.5; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; }
+  .qrc-checks ul { margin: 6px 0 0; padding-left: 18px; }
+  .qrc-checks-pass { background: rgba(46,160,90,0.10); color: var(--success); }
+  .qrc-checks-warn { background: rgba(212,160,23,0.12); color: #b98a0f; }
+  .qrc-checks-fail { background: var(--danger-dim); color: var(--danger); }
+  .question-review-card.failed { border-color: var(--danger); }
+  .question-review-card.regenerating { opacity: 0.4; pointer-events: none; }
   .qrc-body { padding: 18px 20px; }
   .qrc-question-text { font-size: 14px; color: var(--text-primary); line-height: 1.7; margin-bottom: 16px; }
   .qrc-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
@@ -319,7 +327,7 @@
       <div class="gen-summary-item"><div class="gen-summary-val" id="sum-marks">0</div><div class="gen-summary-lbl">Marks</div></div>
     </div>
     <div class="btn-row">
-      <button class="btn-approve-all" onclick="approveAll()">✓ Approve all</button>
+      <button class="btn-approve-all" onclick="approveAll()">✓ Approve all that passed the checks</button>
       <button class="btn-save-quiz" id="btn-save-quiz" onclick="saveQuiz()" disabled>Save quiz to live bank →</button>
     </div>
     <div class="alert alert-danger" id="alert-save"></div>
@@ -330,6 +338,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/spec-map.js"></script>
+<script src="/assets/js/maths-typeset.js"></script>
 <script src="/assets/js/nav-back.js"></script>
 <script>
 // Hardcoded until a curriculum-system picker exists (Ghana/WASSCE is a later phase)
@@ -345,7 +354,10 @@ const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 const SUBJECT_NAME_TO_ID = { Maths: 1, Physics: 2, Chemistry: 3, Biology: 4 }
 
 let dbTopicsCache = []       // topics rows for the currently selected subject
-let generatedQuestions = []  // { question, status: 'approved'|'rejected'|'error' }
+// { question, checks: {errors, warnings}, status: 'pending'|'approved'|'rejected'|'failed'|'error' }
+// Nothing starts approved: a teacher approves each question after reading it,
+// and a question that fails the automatic checks cannot be approved.
+let generatedQuestions = []
 let selectedSpecTopic = null
 
 // ─────────────────────────────────────────────
@@ -474,32 +486,14 @@ async function generateQuestions() {
   document.getElementById('review-section').style.display = 'none'
   generatedQuestions = []
 
+  genRequest = { topic: { name: selectedSpecTopic.name, slug: selectedSpecTopic.slug, subtopics: selectedSpecTopic.subtopics, marks, difficulty: mix },
+    board, subject, tier, questionType }
+
   for (let i = 0; i < count; i++) {
     document.getElementById('gen-status-title').textContent = `Generating question ${i + 1} of ${count}`
     document.getElementById('gen-status-sub').textContent = `${selectedSpecTopic.name} · ${board} · ${tier}`
     document.getElementById('gen-progress-fill').style.width = ((i / count) * 100) + '%'
-
-    try {
-      const { data: { session } } = await supa.auth.getSession()
-      const response = await fetch('/api/generate-question', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
-        body: JSON.stringify({
-          topic: { name: selectedSpecTopic.name, slug: selectedSpecTopic.slug, subtopics: selectedSpecTopic.subtopics, marks, difficulty: mix },
-          board, subject, tier, questionType
-        })
-      })
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}))
-        throw new Error(err.error || 'Generation failed')
-      }
-      const data = await response.json()
-      generatedQuestions.push({ question: data.question, marks, questionType, status: 'approved' })
-    } catch (err) {
-      console.error('generate-question error:', err)
-      generatedQuestions.push({ question: null, marks, status: 'error', errorMsg: err.message })
-    }
-
+    generatedQuestions.push(await generateOne())
     document.getElementById('gen-progress-fill').style.width = (((i + 1) / count) * 100) + '%'
   }
 
@@ -517,6 +511,43 @@ async function generateQuestions() {
 }
 window.generateQuestions = generateQuestions
 
+// The settings of the last Generate, reused by "Regenerate" on a single question.
+let genRequest = null
+
+// Generates one question. The server checks it and retries on failure; a
+// question that still fails comes back with status 'failed' and its problems.
+async function generateOne() {
+  const { marks, } = genRequest.topic
+  const questionType = genRequest.questionType
+  try {
+    const { data: { session } } = await supa.auth.getSession()
+    const response = await fetch('/api/generate-question', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
+      body: JSON.stringify({ ...genRequest, typeset: true })
+    })
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}))
+      throw new Error(err.error || 'Generation failed')
+    }
+    const data = await response.json()
+    const checks = data.checks || { errors: [], warnings: [] }
+    return { question: data.question, checks, marks, questionType, status: checks.errors.length ? 'failed' : 'pending' }
+  } catch (err) {
+    console.error('generate-question error:', err)
+    return { question: null, marks, questionType, status: 'error', errorMsg: err.message }
+  }
+}
+
+async function regenerateOne(idx) {
+  if (!genRequest) return
+  const card = document.getElementById('qrc-' + idx)
+  if (card) card.classList.add('regenerating')
+  generatedQuestions[idx] = await generateOne()
+  renderReview()
+}
+window.regenerateOne = regenerateOne
+
 // ─────────────────────────────────────────────
 // REVIEW UI
 // ─────────────────────────────────────────────
@@ -525,49 +556,64 @@ function renderReview() {
   container.innerHTML = generatedQuestions.map((item, idx) => {
     if (item.status === 'error' || !item.question) {
       return `
-        <div class="question-review-card rejected">
+        <div class="question-review-card rejected" id="qrc-${idx}">
           <div class="qrc-header">
             <span class="qrc-num">Q${idx + 1}</span>
             <span style="font-size:12px;color:var(--danger);">Generation failed — ${escHtml(item.errorMsg || 'unknown error')}</span>
+            <div class="qrc-actions"><button class="btn-reject" onclick="regenerateOne(${idx})">↻ Regenerate</button></div>
           </div>
         </div>`
     }
     const q = item.question
     const isApproved = item.status === 'approved'
     const isRejected = item.status === 'rejected'
+    const isFailed   = item.status === 'failed'
+    const checks = item.checks || { errors: [], warnings: [] }
+    const checkHtml = checks.errors.length
+      ? `<div class="qrc-checks qrc-checks-fail"><strong>Failed the automatic checks — regenerate or remove:</strong><ul>${checks.errors.map(e => `<li>${escHtml(e)}</li>`).join('')}</ul></div>`
+      : checks.warnings.length
+        ? `<div class="qrc-checks qrc-checks-warn"><strong>Check before approving:</strong><ul>${checks.warnings.map(e => `<li>${escHtml(e)}</li>`).join('')}</ul></div>`
+        : `<div class="qrc-checks qrc-checks-pass">Passed the automatic checks (key, options, worked solution). Read it before approving.</div>`
     return `
-      <div class="question-review-card ${isApproved ? 'approved' : isRejected ? 'rejected' : ''}" id="qrc-${idx}">
+      <div class="question-review-card ${isApproved ? 'approved' : isFailed ? 'failed' : isRejected ? 'rejected' : ''}" id="qrc-${idx}">
         <div class="qrc-header" onclick="toggleQRC(${idx})">
           <span class="qrc-num">Q${idx + 1}</span>
           <span class="qrc-marks">${item.marks}m</span>
           <div class="qrc-actions" onclick="event.stopPropagation()">
-            <button class="btn-approve ${isApproved ? 'active' : ''}" onclick="setQStatus(${idx},'approved')">✓ Approve</button>
+            ${isFailed ? '' : `<button class="btn-approve ${isApproved ? 'active' : ''}" onclick="setQStatus(${idx},'approved')">✓ Approve</button>`}
             <button class="btn-reject ${isRejected ? 'active' : ''}" onclick="setQStatus(${idx},'rejected')">✗ Reject</button>
+            <button class="btn-reject" onclick="regenerateOne(${idx})">↻ Regenerate</button>
           </div>
         </div>
         <div class="qrc-body" id="qrc-body-${idx}">
-          <div class="qrc-question-text">${escHtml(q.question_text)}</div>
+          ${checkHtml}
+          <div class="qrc-question-text">${IAMaths.html(q.question_text)}</div>
           ${item.questionType === 'free_response' ? `
             <div class="qrc-ms" style="border-top:none;padding-top:0;margin-bottom:14px;">
               <div class="qrc-ms-title">Model answer</div>
-              <div style="font-size:12px;color:var(--text-secondary);white-space:pre-wrap;">${escHtml(q.model_answer || '')}</div>
+              <div style="font-size:12px;color:var(--text-secondary);white-space:pre-wrap;">${IAMaths.html(q.model_answer || '')}</div>
             </div>` : `
             <div class="qrc-options">
               ${(q.options || []).map(o => `
                 <div class="qrc-option ${o.is_correct ? 'correct' : ''}">
-                  <span class="qrc-option-label">${o.label}</span>
-                  <span>${escHtml(o.text)}</span>
+                  <span class="qrc-option-label">${escHtml(o.label)}</span>
+                  <span>${IAMaths.html(o.text)}</span>
                   ${o.is_correct ? '<span style="margin-left:auto;font-size:11px;color:var(--success);">✓ correct</span>' : ''}
                 </div>`).join('')}
+            </div>
+            <div class="qrc-ms" style="border-top:none;padding-top:0;margin-bottom:14px;">
+              <div class="qrc-ms-title">Worked solution (students see this after answering)</div>
+              <div style="font-size:13px;color:var(--text-secondary);">${IAMaths.html(q.worked_solution || '')}</div>
             </div>`}
           <div class="qrc-ms">
             <div class="qrc-ms-title">Mark scheme</div>
-            ${(q.mark_scheme_points || []).map(p => `<div class="qrc-ms-point">${escHtml(p.point)} [${p.marks}m]</div>`).join('')}
+            ${(q.mark_scheme_points || []).map(p => `<div class="qrc-ms-point">${IAMaths.html(p.point)} [${escHtml(p.marks)}m]</div>`).join('')}
             ${q.difficulty_justification ? `<div style="margin-top:8px;font-style:italic;">${escHtml(q.difficulty_justification)}</div>` : ''}
           </div>
         </div>
       </div>`
   }).join('')
+  IAMaths.typeset(container)
   updateSummary()
 }
 
@@ -578,6 +624,7 @@ function toggleQRC(idx) {
 window.toggleQRC = toggleQRC
 
 function setQStatus(idx, status) {
+  if (status === 'approved' && generatedQuestions[idx].status === 'failed') return
   generatedQuestions[idx].status = status
   const card = document.getElementById('qrc-' + idx)
   if (card) card.className = 'question-review-card ' + (status === 'approved' ? 'approved' : 'rejected')
@@ -589,8 +636,9 @@ function setQStatus(idx, status) {
 }
 window.setQStatus = setQStatus
 
+// Approves every question that passed the automatic checks (never a failed one).
 function approveAll() {
-  generatedQuestions.forEach((q, idx) => { if (q.question) setQStatus(idx, 'approved') })
+  generatedQuestions.forEach((q, idx) => { if (q.question && q.status === 'pending') setQStatus(idx, 'approved') })
 }
 window.approveAll = approveAll
 
@@ -607,14 +655,14 @@ function updateSummary() {
 }
 
 // ─────────────────────────────────────────────
-// SAVE — creates a quizzes row, then inserts approved
-// questions into the questions table (quiz_id FK).
-// This is the same live quiz bank subjects/*.html and
-// student/quiz.html read from.
+// SAVE — /api/v1/quiz/create re-checks every approved question on the server
+// and only then writes the quiz and its questions to the live bank that
+// subjects/*.html and student/quiz.html read from. For multiple choice the
+// worked solution becomes the explanation students see.
 // ─────────────────────────────────────────────
 async function saveQuiz() {
-  const approved = generatedQuestions.filter(q => q.question && q.status === 'approved')
-  if (!approved.length) return
+  const approvedIdx = generatedQuestions.map((q, i) => (q.question && q.status === 'approved') ? i : -1).filter(i => i >= 0)
+  if (!approvedIdx.length) return
 
   const saveErrEl = document.getElementById('alert-save')
   const saveOkEl  = document.getElementById('alert-save-success')
@@ -624,76 +672,50 @@ async function saveQuiz() {
   const btn = document.getElementById('btn-save-quiz')
   btn.disabled = true
   btn.textContent = 'Saving…'
+  const resetBtn = () => { btn.disabled = false; btn.textContent = 'Save quiz to live bank →' }
 
-  const topicId  = parseInt(document.getElementById('f-db-topic').value)
-  const timeMins = parseInt(document.getElementById('f-time').value) || 0
-  const difficulty = document.getElementById('f-difficulty').value
-  const board = document.getElementById('f-board').value
-
-  const { data: quizRow, error: quizErr } = await supa
-    .from('quizzes')
-    .insert({
+  const payload = {
+    quiz: {
       title:       document.getElementById('f-title').value.trim(),
       description: document.getElementById('f-desc').value.trim(),
-      topic_id:    topicId,
-      difficulty,
-      exam_board:  board,
-      time_limit:  timeMins * 60,
+      topic_id:    parseInt(document.getElementById('f-db-topic').value),
+      difficulty:  document.getElementById('f-difficulty').value,
+      exam_board:  document.getElementById('f-board').value,
+      time_limit:  (parseInt(document.getElementById('f-time').value) || 0) * 60,
       pass_mark:   parseInt(document.getElementById('f-pass').value) || 60
+    },
+    questions: approvedIdx.map(i => {
+      const item = generatedQuestions[i]
+      return { question: item.question, questionType: item.questionType, marks: item.marks }
     })
-    .select()
-    .single()
-
-  if (quizErr) {
-    saveErrEl.textContent = 'Could not create quiz: ' + quizErr.message
-    saveErrEl.classList.add('visible')
-    btn.disabled = false
-    btn.textContent = 'Save quiz to live bank →'
-    return
   }
 
-  const rows = approved.map((item, idx) => {
-    const q = item.question
-    if (item.questionType === 'free_response') {
-      return {
-        quiz_id:            quizRow.id,
-        order_idx:          idx + 1,
-        question_type:      'free_response',
-        question_text:      q.question_text,
-        model_answer:       q.model_answer || '',
-        mark_scheme_points: q.mark_scheme_points || [],
-        marks:              item.marks
+  let out
+  try {
+    const { data: { session } } = await supa.auth.getSession()
+    const res = await fetch('/api/v1/quiz/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session?.access_token}` },
+      body: JSON.stringify(payload)
+    })
+    out = await res.json().catch(() => ({}))
+    if (!res.ok || !out.success) {
+      // Questions the server's checks refused: mark them failed so they can be regenerated.
+      for (const p of out.problems || []) {
+        const i = approvedIdx[p.index]
+        if (i !== undefined) generatedQuestions[i] = { ...generatedQuestions[i], status: 'failed', checks: { errors: p.errors, warnings: [] } }
       }
+      if (out.problems) renderReview()
+      throw new Error(out.error?.message || 'Could not save the quiz.')
     }
-    const byLabel = {}
-    ;(q.options || []).forEach(o => { byLabel[o.label] = o.text })
-    const explanation = (q.mark_scheme_points || []).map(p => p.point).join(' ')
-    return {
-      quiz_id:        quizRow.id,
-      order_idx:      idx + 1,
-      question_type:  'mcq',
-      question_text:  q.question_text,
-      option_a:       byLabel.A || '',
-      option_b:       byLabel.B || '',
-      option_c:       byLabel.C || '',
-      option_d:       byLabel.D || '',
-      correct_answer: q.correct_answer,
-      explanation,
-      marks:          item.marks
-    }
-  })
-
-  const { error: qErr } = await supa.from('questions').insert(rows)
-
-  if (qErr) {
-    saveErrEl.textContent = 'Quiz created but questions failed to save: ' + qErr.message
+  } catch (e) {
+    saveErrEl.textContent = e.message
     saveErrEl.classList.add('visible')
-    btn.disabled = false
-    btn.textContent = 'Save quiz to live bank →'
+    resetBtn()
     return
   }
 
-  saveOkEl.textContent = `"${quizRow.title}" saved with ${rows.length} questions — live now for students.`
+  saveOkEl.textContent = `"${payload.quiz.title}" saved with ${out.questionCount} questions — live now for students.`
   saveOkEl.classList.add('visible')
   btn.textContent = '✓ Saved'
 }

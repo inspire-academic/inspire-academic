@@ -43,6 +43,20 @@ const TIER_RULES = {
 
 const { verifyUser, checkAndLogUsage } = require('./_ai-usage-guard')
 const { getUserTier } = require('./_billing-guard')
+const { checkQuestion } = require('./_question-checks')
+
+// Each question is checked automatically (key, options, worked solution,
+// drafting, maths). A failing question is regenerated with the problems fed
+// back, up to this many extra attempts; the last attempt is returned with
+// its check results so the teacher can see why it still fails.
+const MAX_RETRIES = 2
+
+// Maths written for the typeset quiz page (student/quiz.html renders \( \)).
+const TYPESET_RULES = `MATHS FORMAT:
+- Write every calculation, equation, variable and quantity-with-unit as LaTeX between \\( and \\), e.g. \\(v = \\dfrac{d}{t} = \\dfrac{120}{8} = 15\\,\\text{m/s}\\), \\(x^{2} - 5x + 6 = 0\\), \\(2.5 \\times 10^{-3}\\,\\text{kg}\\).
+- Units upright with \\text{}, a thin space \\, before them. Never \\[ \\] or $…$.
+- Chemical formulas and ions are plain Unicode, not LaTeX: CO₂, H₂O, Fe²⁺, SO₄²⁻.
+- Ordinary words stay outside the maths.`
 
 // Real-evidence calibration, distilled from PASCO — 25 real, transcribed
 // AQA/Edexcel past papers (1036 questions), reduced to aggregate
@@ -110,7 +124,8 @@ exports.handler = async function(event) {
     return { statusCode: 401, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Please sign in to use this feature.' }) }
   }
 
-  const { topic, board, subject, tier, questionType } = body
+  // typeset: the quiz generator asks for LaTeX maths (other callers show plain text)
+  const { topic, board, subject, tier, questionType, typeset } = body
   if (!topic || !board || !subject || !tier) {
     return { statusCode: 400, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Missing required fields' }) }
   }
@@ -150,8 +165,12 @@ UNIVERSAL QUESTION QUALITY RULES:
 - Never use "all of the above" or "none of the above"
 - Question stem must be self-contained — no reference to diagrams or figures
 - Units must be correct and consistent throughout
-${isFreeResponse ? '' : '- The correct answer must be unambiguously correct\n- Wrong options must target REAL documented student misconceptions'}
-
+${isFreeResponse ? '' : `- Work the answer out completely FIRST (in worked_solution), then write the options from it: the correct option must be exactly the value your working reaches
+- The correct answer must be unambiguously correct, and exactly one option may be correct
+- All four options must be different from each other (not the same value written two ways)
+- Wrong options must target REAL documented student misconceptions (e.g. forgetting to square, using the wrong formula)`}
+- Never include drafting or self-correction ("wait", "let me", "actually", "closest answer is") — if your working does not match an option, fix the options before answering
+${typeset ? '\n' + TYPESET_RULES + '\n' : ''}
 You MUST respond with valid JSON only — no preamble, no markdown fences.`
 
   const userPrompt = isFreeResponse ? `Generate one ${board} GCSE ${subject} ${tier} tier free-response (written-answer) question that requires the student to show their working, not just select an option — exactly as it would appear on a real exam paper.
@@ -175,8 +194,9 @@ SPECIFICATION CONTENT: ${subtopicList}
 DIFFICULTY: ${difficulty} — ${diffGuide[difficulty] || diffGuide.mixed}
 MARKS: ${topic.marks}${evidence}
 
-Respond with this exact JSON structure:
+Respond with this exact JSON structure (worked_solution first — it is shown to students after they answer):
 {
+  "worked_solution": "The full worked answer in 2-4 short sentences: the method, the substitution and the result with units. For a non-calculation question, the reasoning that makes the correct option right.",
   "question_text": "The full question stem, including command word",
   "options": [
     {"label": "A", "text": "Option A text", "is_correct": false},
@@ -190,7 +210,11 @@ Respond with this exact JSON structure:
   "difficulty_justification": "One sentence explaining difficulty match"
 }`
 
-  try {
+  // One model call; `feedback` lists the problems with the previous attempt.
+  async function ask(feedback) {
+    const content = feedback
+      ? `${userPrompt}\n\nYour previous attempt failed these checks — fix every one:\n- ${feedback.join('\n- ')}`
+      : userPrompt
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -200,27 +224,38 @@ Respond with this exact JSON structure:
       },
       body: JSON.stringify({
         model:      'claude-sonnet-4-6',
-        max_tokens: 1200,
+        max_tokens: 1400,
         system:     systemPrompt,
-        messages:   [{ role: 'user', content: userPrompt }]
+        messages:   [{ role: 'user', content }]
       })
     })
-
     if (!response.ok) {
-      const err = await response.json()
-      return { statusCode: response.status, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: err.error?.message || 'Anthropic API error' }) }
+      const err = await response.json().catch(() => ({}))
+      const e = new Error(err.error?.message || 'Anthropic API error')
+      e.status = response.status
+      throw e
     }
-
     const data  = await response.json()
     const text  = data.content?.[0]?.text || ''
-    let clean   = text.replace(/```json|```/g, '').trim()
-    const match = clean.match(/\{[\s\S]*\}/)
+    const match = text.replace(/```json|```/g, '').trim().match(/\{[\s\S]*\}/)
     if (!match) throw new Error('No JSON in response')
-    const question = JSON.parse(match[0])
+    return JSON.parse(match[0])
+  }
 
-    return { statusCode: 200, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ question }) }
+  try {
+    let question = null, checks = null, attempts = 0
+    for (let feedback = null; attempts <= MAX_RETRIES; attempts++) {
+      question = await ask(feedback)
+      checks = checkQuestion(question, { questionType: isFreeResponse ? 'free_response' : 'mcq', marks: topic.marks, typeset: !!typeset })
+      if (!checks.errors.length) break
+      feedback = checks.errors
+    }
+    return { statusCode: 200, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ question, checks, attempts: Math.min(attempts + 1, MAX_RETRIES + 1) }) }
 
   } catch (err) {
+    if (err.status) {
+      return { statusCode: err.status, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: err.message }) }
+    }
     console.error('generate-question error:', err)
     return { statusCode: 500, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: err.message || 'Internal server error' }) }
   }
