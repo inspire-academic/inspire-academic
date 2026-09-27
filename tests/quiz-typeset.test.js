@@ -9,6 +9,7 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const katex = require(path.join(ROOT, 'assets/vendor/katex-0.16.47/katex.min.js'));
+const CHEM = /\d*(?:[A-Z][a-z]?[₀-₉]*|\((?:[A-Z][a-z]?[₀-₉]*)+\)[₀-₉]*)+[⁰¹²³⁴⁵⁶⁷⁸⁹]*[⁺⁻]|\d*(?:[A-Z][a-z]?[₀-₉]*|\((?:[A-Z][a-z]?[₀-₉]*)+\)[₀-₉]*)*(?:[A-Z][a-z]?|\))[₀-₉]+(?:\((?:s|l|g|aq)\))?|\d*e⁻/g;
 const SUBJECTS = fs.readdirSync(path.join(ROOT, 'supabase'))
   .map(f => /^quiz_typeset_([a-z]+)\.sql$/.exec(f)).filter(Boolean).map(m => m[1]);
 
@@ -54,7 +55,9 @@ for (const subject of SUBJECTS) {
         try { katex.renderToString(m[1], { throwOnError: true, strict: 'error' }); }
         catch (e) { problems.push(`${u.id} ${field}: ${e.message.split('\n')[0]}`); }
       }
-      const outside = text.replace(/\\\([\s\S]*?\\\)/g, ' ');
+      // Chemistry is written in Unicode on purpose (CO₂, Fe²⁺, SO₄²⁻, 2e⁻), so
+      // formulas and ions are removed before looking for leftover maths.
+      const outside = text.replace(/\\\([\s\S]*?\\\)/g, ' ').replace(CHEM, ' ');
       if (/[²³√∛½¼¾⅓₀₁₂]|\bsqrt\b|\bpi\b/.test(outside)) problems.push(`${u.id} ${field}: plain-text maths left: ${outside.slice(0, 100)}`);
     }
     assert.deepEqual(problems, []);
