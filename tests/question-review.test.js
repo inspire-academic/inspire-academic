@@ -17,9 +17,9 @@ test('the database refuses approvals and approved-wording edits without a signed
   assert.match(sql, /specification_ref <> 'PAPER2_POOL_2026'/, 'the Paper 2 pool tag survives the reference clean-up');
 });
 
-test('students are only ever served approved or legacy multiple-choice questions', () => {
+test('students are only ever served approved or legacy questions of a type the page can show', () => {
   const start = read('netlify/functions/diagnostic-session-start.js');
-  assert.match(start, /review_status=in\.\(approved,legacy\)&question_type=eq\.mcq&active=is\.true/);
+  assert.match(start, /review_status=in\.\(approved,legacy\)&question_type=in\.\(mcq,numeric\)&active=is\.true/);
   assert.doesNotMatch(start, /validated=is\.true/);
 });
 

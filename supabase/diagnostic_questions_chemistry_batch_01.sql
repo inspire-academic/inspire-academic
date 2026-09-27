@@ -18,650 +18,650 @@ insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Group 1 Trend$t$, $t$aqa-ch-fh-atomic-structure$t$, 3,
   $t$Why does reactivity increase going down Group 1?$t$,
   $t$The atoms have more electrons in their outer shell$t$, $t$The outer electron is further from the nucleus$t$, $t$The atoms get smaller going down the group$t$, $t$The nucleus holds the outer electron more tightly$t$, 'Not sure', $t$b$t$,
   $t$Every Group 1 atom has one outer electron. Going down, that electron is further from the nucleus, so it is lost more easily.$t$, null, $t$The atoms get larger going down the group, not smaller, so the outer electron is further from the nucleus.$t$, $t$It's the opposite: further down, the outer electron is held less tightly, so it is lost more easily.$t$,
   $t$Going down Group 1 the atoms have more shells, so the single outer electron is further from the nucleus and more shielded. It is attracted less strongly and lost more easily, so reactivity increases.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why does reactivity increase going down Group 1?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Group 7 Trend$t$, $t$aqa-ch-fh-atomic-structure$t$, 2,
   $t$How do the halogens (Group 7) change going down the group?$t$,
   $t$Reactivity increases; boiling point decreases$t$, $t$Reactivity increases; boiling point increases$t$, $t$Reactivity decreases; boiling point increases$t$, $t$Neither reactivity nor boiling point changes$t$, 'Not sure', $t$c$t$,
   $t$Both trends are reversed. Going down Group 7, reactivity decreases and boiling point increases.$t$, $t$Boiling point does increase, but reactivity decreases: it gets harder for larger atoms to gain an electron.$t$, null, $t$Both change: reactivity decreases and boiling point increases going down the group.$t$,
   $t$Going down Group 7 the atoms get larger, so the nucleus attracts an incoming electron less strongly and reactivity decreases. The molecules get larger, with stronger forces between them, so boiling points increase.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$How do the halogens (Group 7) change going down the group?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Halogen Displacement$t$, $t$aqa-ch-fh-atomic-structure$t$, 3,
   $t$Chlorine water is added to potassium bromide solution. What happens?$t$,
   $t$Nothing happens, as bromine is more reactive$t$, $t$Chlorine displaces bromine from the solution$t$, $t$Bromine displaces chlorine from the solution$t$, $t$Chlorine displaces potassium from the solution$t$, 'Not sure', $t$b$t$,
   $t$Chlorine is higher in Group 7, so it is more reactive than bromine and does react.$t$, null, $t$The less reactive halogen can't displace the more reactive one. Chlorine is more reactive, so it displaces bromine.$t$, $t$A halogen displaces another halogen, not a metal. Chlorine displaces bromide ions, forming bromine.$t$,
   $t$A more reactive halogen displaces a less reactive one from its salt. Chlorine is more reactive than bromine: chlorine + potassium bromide → potassium chloride + bromine, so the solution turns orange.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Chlorine water is added to potassium bromide solution. What happens?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Noble Gases$t$, $t$aqa-ch-fh-atomic-structure$t$, 2,
   $t$Why are the noble gases (Group 0) very unreactive?$t$,
   $t$Their outer shells are full and stable$t$, $t$They have no electrons in their outer shell$t$, $t$Their atoms are too large to react$t$, $t$They have no protons in their nucleus$t$, 'Not sure', $t$a$t$,
   null, $t$They do have outer electrons: their outer shell is full (8, or 2 for helium), which is a stable arrangement.$t$, $t$Size isn't the reason; helium is tiny and still unreactive. Their outer shells are full, so they don't need to gain or lose electrons.$t$, $t$Every atom has protons. The noble gases are unreactive because their outer shells are full.$t$,
   $t$The noble gases have full outer shells (a stable arrangement), so they have no tendency to gain, lose or share electrons.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why are the noble gases (Group 0) very unreactive?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Atomic Structure$t$, $t$Nuclear Model$t$, $t$aqa-ch-fh-atomic-structure$t$, 2,
   $t$In the alpha-scattering experiment, most alpha particles passed straight through a thin gold foil. What did this show?$t$,
   $t$Atoms are solid spheres of positive charge$t$, $t$Most of the atom is empty space$t$, $t$Electrons are spread through the whole atom$t$, $t$The nucleus has a negative charge$t$, 'Not sure', $t$b$t$,
   $t$If atoms were solid spheres, the particles couldn't pass straight through. Most passing through shows most of the atom is empty space.$t$, null, $t$That's the plum pudding model, which the experiment replaced. It showed most of the atom is empty space around a tiny nucleus.$t$, $t$A few alpha particles bounced back, which shows the nucleus is positive (it repels them), not negative.$t$,
   $t$Most alpha particles passed straight through, so most of the atom is empty space. A few were deflected or bounced back, showing mass and positive charge are concentrated in a tiny nucleus.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$In the alpha-scattering experiment, most alpha particles passed straight through a thin gold foil. What did this show?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bonding$t$, $t$Ionic Compound Properties$t$, $t$aqa-ch-fh-bonding$t$, 2,
   $t$Why does sodium chloride have a high melting point?$t$,
   $t$Its covalent bonds are very strong$t$, $t$Its molecules attract each other strongly$t$, $t$Strong forces between its ions take energy to break$t$, $t$Its free electrons hold the structure together$t$, 'Not sure', $t$c$t$,
   $t$Sodium chloride is ionic, not covalent. Its oppositely charged ions attract strongly in a giant lattice.$t$, $t$Sodium chloride isn't made of molecules; it's a giant lattice of ions held by strong electrostatic forces.$t$, null, $t$Free (delocalised) electrons belong to metallic bonding. Sodium chloride is held together by attractions between ions.$t$,
   $t$Sodium chloride is a giant ionic lattice. The strong electrostatic forces between the oppositely charged ions act in all directions, so a lot of energy is needed to overcome them.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why does sodium chloride have a high melting point?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bonding$t$, $t$Simple Molecular Substances$t$, $t$aqa-ch-fh-bonding$t$, 3,
   $t$Why does water boil at a much lower temperature than sodium chloride melts?$t$,
   $t$Its covalent bonds break when it boils$t$, $t$Only weak forces between molecules are overcome$t$, $t$It contains ions that separate easily$t$, $t$Its molecules are much larger than the ions$t$, 'Not sure', $t$b$t$,
   $t$The covalent bonds inside the molecules don't break when water boils; only the weak forces between molecules are overcome.$t$, null, $t$Water is made of molecules, not ions. Boiling only overcomes weak intermolecular forces.$t$, $t$Size isn't the reason. Boiling water only overcomes weak forces between molecules, which needs little energy.$t$,
   $t$Water is a simple molecular substance. Boiling only overcomes the weak intermolecular forces between molecules, not the strong covalent bonds within them, so little energy is needed.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why does water boil at a much lower temperature than sodium chloride melts?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bonding$t$, $t$Conductivity of Ionic Compounds$t$, $t$aqa-ch-fh-bonding$t$, 2,
   $t$When does sodium chloride conduct electricity?$t$,
   $t$When it is solid, as its ions are fixed$t$, $t$When melted or dissolved in water$t$, $t$Never, because it has no charged particles$t$, $t$Only when it is cooled below 0 °C$t$, 'Not sure', $t$b$t$,
   $t$In a solid the ions are fixed in place, so they can't move to carry charge.$t$, null, $t$It does contain charged particles (ions); they just need to be free to move.$t$, $t$Cooling keeps the ions fixed. They must be free to move, by melting or dissolving.$t$,
   $t$Sodium chloride is made of ions. When it is melted or dissolved, the ions are free to move and carry charge, so it conducts. As a solid, the ions are fixed and it doesn't.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$When does sodium chloride conduct electricity?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bonding$t$, $t$Alloys$t$, $t$aqa-ch-fh-bonding$t$, 3,
   $t$Why are alloys harder than the pure metals they are made from?$t$,
   $t$Their atoms are joined by covalent bonds$t$, $t$Different-sized atoms stop layers sliding$t$, $t$They have no delocalised electrons$t$, $t$All their atoms are exactly the same size$t$, 'Not sure', $t$b$t$,
   $t$Alloys still have metallic bonding. They are harder because atoms of different sizes distort the layers.$t$, null, $t$Alloys still have delocalised electrons (they still conduct). Their hardness comes from distorted layers.$t$, $t$In a pure metal all the atoms are the same size, which lets layers slide. Alloys mix in different-sized atoms.$t$,
   $t$In a pure metal the atoms are the same size and arranged in layers that slide easily. An alloy contains atoms of different sizes, which distort the layers and make it harder for them to slide.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why are alloys harder than the pure metals they are made from?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Bonding$t$, $t$Ionic Formulae$t$, $t$aqa-ch-fh-bonding$t$, 2,
   $t$Magnesium ions are Mg²⁺ and chloride ions are Cl⁻. What is the formula of magnesium chloride?$t$,
   $t$MgCl$t$, $t$Mg₂Cl$t$, $t$MgCl₂$t$, $t$MgCl₃$t$, 'Not sure', $t$c$t$,
   $t$MgCl would leave an overall charge of +1. Two Cl⁻ ions are needed to balance one Mg²⁺: MgCl₂.$t$, $t$Two Mg²⁺ and one Cl⁻ would give +3 overall. The charges balance with one Mg²⁺ and two Cl⁻: MgCl₂.$t$, null, $t$Three Cl⁻ with one Mg²⁺ would give −1 overall. Two Cl⁻ balance the +2 charge: MgCl₂.$t$,
   $t$The compound must have no overall charge. One Mg²⁺ (+2) needs two Cl⁻ (−1 each), so the formula is MgCl₂.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Magnesium ions are Mg²⁺ and chloride ions are Cl⁻. What is the formula of magnesium chloride?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Balancing Equations$t$, $t$aqa-ch-fh-quantitative$t$, 2,
   $t$Which is the balanced equation for hydrogen burning in oxygen?$t$,
   $t$H₂ + O₂ → H₂O$t$, $t$2H₂ + O₂ → 2H₂O$t$, $t$H₂ + O₂ → H₂O₂$t$, $t$2H + O → H₂O$t$, 'Not sure', $t$b$t$,
   $t$This isn't balanced: there are 2 oxygen atoms on the left and only 1 on the right.$t$, null, $t$H₂O₂ is hydrogen peroxide, not water. Balance by putting numbers in front of formulae, not changing them: 2H₂ + O₂ → 2H₂O.$t$, $t$Hydrogen and oxygen exist as molecules (H₂ and O₂), not single atoms.$t$,
   $t$Water is H₂O. Two water molecules need 4 hydrogen atoms (2H₂) and 2 oxygen atoms (O₂): 2H₂ + O₂ → 2H₂O.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Which is the balanced equation for hydrogen burning in oxygen?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Reacting Masses$t$, $t$aqa-ch-fh-quantitative$t$, 4,
   $t$What mass of water forms when 4 g of hydrogen reacts completely? (2H₂ + O₂ → 2H₂O; \(M_{\text{r}}\): H₂ = 2, H₂O = 18)$t$,
   $t$\(18\,\text{g}\)$t$, $t$\(72\,\text{g}\)$t$, $t$\(2\,\text{g}\)$t$, $t$\(36\,\text{g}\)$t$, 'Not sure', $t$d$t$,
   $t$18 is the \(M_{\text{r}}\) of water, the mass of one mole. Here 4 g of H₂ is 2 mol, which makes 2 mol of water: \(2 \times 18 = 36\,\text{g}\).$t$, $t$This uses 4 moles. \(4 \div 2 = 2\,\text{mol}\) of H₂ gives 2 mol of H₂O (1 : 1 ratio), so \(2 \times 18 = 36\,\text{g}\).$t$, $t$2 is the number of moles of hydrogen, not the mass of water. Convert: 2 mol of H₂O \(= 2 \times 18 = 36\,\text{g}\).$t$, null,
   $t$Moles of H₂ \(= 4 \div 2 = 2\,\text{mol}\). The equation's ratio H₂ : H₂O is 2 : 2 (1 : 1), so 2 mol of water forms: \(2 \times 18 = 36\,\text{g}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$What mass of water forms when 4 g of hydrogen reacts completely? (2H₂ + O₂ → 2H₂O; \(M_{\text{r}}\): H₂ = 2, H₂O = 18)$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Atom Economy$t$, $t$aqa-ch-fh-quantitative$t$, 4,
   $t$Hydrogen can be made by C + H₂O → CO + H₂. What is the atom economy for making hydrogen? (\(M_{\text{r}}\): C = 12, H₂O = 18, CO = 28, H₂ = 2)$t$,
   $t$\(7.1\%\)$t$, $t$\(6.7\%\)$t$, $t$\(93\%\)$t$, $t$\(11\%\)$t$, 'Not sure', $t$b$t$,
   $t$This divides by the \(M_{\text{r}}\) of CO. Divide by the total \(M_{\text{r}}\) of the reactants: \(2 \div 30 \times 100 = 6.7\%\).$t$, null, $t$That is the share that ends up as the waste product CO. Atom economy uses the useful product: \(2 \div 30 \times 100 = 6.7\%\).$t$, $t$This divides by the \(M_{\text{r}}\) of water only. Use all the reactants: \(12 + 18 = 30\), so \(2 \div 30 \times 100 = 6.7\%\).$t$,
   $t$Atom economy \(= \dfrac{M_{\text{r}}\text{ of useful product}}{\text{total }M_{\text{r}}\text{ of reactants}} \times 100 = \dfrac{2}{12 + 18} \times 100 = 6.7\%\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', false, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, false, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Hydrogen can be made by C + H₂O → CO + H₂. What is the atom economy for making hydrogen? (\(M_{\text{r}}\): C = 12, H₂O = 18, CO = 28, H₂ = 2)$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Concentration$t$, $t$aqa-ch-fh-quantitative$t$, 3,
   $t$20 g of a solid is dissolved to make \(500\,\text{cm}^{3}\) of solution. What is the concentration in \(\text{g/dm}^{3}\)?$t$,
   $t$\(10\,\text{g/dm}^{3}\)$t$, $t$\(40\,\text{g/dm}^{3}\)$t$, $t$\(0.04\,\text{g/dm}^{3}\)$t$, $t$\(25\,\text{g/dm}^{3}\)$t$, 'Not sure', $t$b$t$,
   $t$This multiplies the mass by the volume in dm³. Concentration = mass ÷ volume: \(20 \div 0.5 = 40\,\text{g/dm}^{3}\).$t$, null, $t$This divides by the volume in cm³. Convert first: \(500\,\text{cm}^{3} = 0.5\,\text{dm}^{3}\), so \(20 \div 0.5 = 40\,\text{g/dm}^{3}\).$t$, $t$This divides the volume by the mass. Concentration = mass ÷ volume \(= 20 \div 0.5 = 40\,\text{g/dm}^{3}\).$t$,
   $t$Convert the volume: \(500\,\text{cm}^{3} = 0.5\,\text{dm}^{3}\). Concentration = mass ÷ volume \(= 20 \div 0.5 = 40\,\text{g/dm}^{3}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$20 g of a solid is dissolved to make \(500\,\text{cm}^{3}\) of solution. What is the concentration in \(\text{g/dm}^{3}\)?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Quantitative Chemistry$t$, $t$Avogadro Constant$t$, $t$aqa-ch-fh-quantitative$t$, 3,
   $t$How many molecules are in 2 moles of carbon dioxide? (Avogadro constant \(= 6.02 \times 10^{23}\) per mole)$t$,
   $t$\(6.02 \times 10^{23}\)$t$, $t$\(3.01 \times 10^{23}\)$t$, $t$\(1.204 \times 10^{24}\)$t$, $t$\(1.204 \times 10^{23}\)$t$, 'Not sure', $t$c$t$,
   $t$That's the number in one mole. Two moles contain twice as many: \(2 \times 6.02 \times 10^{23} = 1.204 \times 10^{24}\).$t$, $t$This halves instead of doubling. \(2 \times 6.02 \times 10^{23} = 1.204 \times 10^{24}\).$t$, null, $t$The number is right but the power of ten is one too small: \(12.04 \times 10^{23} = 1.204 \times 10^{24}\).$t$,
   $t$Number of molecules = moles × Avogadro constant \(= 2 \times 6.02 \times 10^{23} = 12.04 \times 10^{23} = 1.204 \times 10^{24}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$How many molecules are in 2 moles of carbon dioxide? (Avogadro constant \(= 6.02 \times 10^{23}\) per mole)$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Extraction of Metals$t$, $t$aqa-ch-fh-chemical-changes$t$, 3,
   $t$Iron is extracted by heating its oxide with carbon, but aluminium is not. Why?$t$,
   $t$Carbon is too costly to use for aluminium$t$, $t$Iron is more reactive than carbon$t$, $t$Aluminium is more reactive than carbon$t$, $t$Aluminium ore contains no oxygen$t$, 'Not sure', $t$c$t$,
   $t$Cost isn't the reason. Carbon can only reduce oxides of metals less reactive than itself; aluminium is more reactive than carbon.$t$, $t$It's the other way round: iron is less reactive than carbon, so carbon can remove oxygen from iron oxide.$t$, null, $t$Aluminium ore is aluminium oxide. The problem is that aluminium is more reactive than carbon, so electrolysis is needed.$t$,
   $t$Carbon can reduce the oxide of a metal that is less reactive than carbon, such as iron. Aluminium is more reactive than carbon, so it is extracted by electrolysis instead.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Iron is extracted by heating its oxide with carbon, but aluminium is not. Why?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Oxidation and Reduction$t$, $t$aqa-ch-fh-chemical-changes$t$, 2,
   $t$When iron oxide is heated with carbon, the iron oxide is reduced. What does "reduced" mean here?$t$,
   $t$It gains oxygen$t$, $t$It loses oxygen$t$, $t$It gains protons$t$, $t$It loses mass$t$, 'Not sure', $t$b$t$,
   $t$Gaining oxygen is oxidation. Reduction is the loss of oxygen.$t$, null, $t$Reduction is not about protons. In terms of oxygen, it means losing oxygen.$t$, $t$"Reduced" here is a chemical term: the iron oxide loses oxygen, leaving iron.$t$,
   $t$Reduction is the loss of oxygen (and oxidation is the gain of oxygen). Carbon removes oxygen from iron oxide, reducing it to iron.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$When iron oxide is heated with carbon, the iron oxide is reduced. What does "reduced" mean here?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Acids and Metals$t$, $t$aqa-ch-fh-chemical-changes$t$, 1,
   $t$What are the products when magnesium reacts with hydrochloric acid?$t$,
   $t$Magnesium chloride and water$t$, $t$Magnesium oxide and hydrogen$t$, $t$Magnesium chloride and hydrogen$t$, $t$Magnesium chloride and carbon dioxide$t$, 'Not sure', $t$c$t$,
   $t$Water forms when an acid reacts with a base or alkali. A metal and an acid make a salt and hydrogen.$t$, $t$Hydrochloric acid gives chloride salts, not oxides: the products are magnesium chloride and hydrogen.$t$, null, $t$Carbon dioxide forms when an acid reacts with a carbonate. A metal and an acid make a salt and hydrogen.$t$,
   $t$Metal + acid → salt + hydrogen. Magnesium + hydrochloric acid → magnesium chloride + hydrogen.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$What are the products when magnesium reacts with hydrochloric acid?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Acids and Carbonates$t$, $t$aqa-ch-fh-chemical-changes$t$, 1,
   $t$Which gas is produced when calcium carbonate reacts with hydrochloric acid?$t$,
   $t$Hydrogen$t$, $t$Carbon dioxide$t$, $t$Oxygen$t$, $t$Chlorine$t$, 'Not sure', $t$b$t$,
   $t$Hydrogen forms when an acid reacts with a metal. A carbonate and an acid give carbon dioxide.$t$, null, $t$No oxygen is released. Acid + carbonate → salt + water + carbon dioxide.$t$, $t$The chlorine stays in the salt (calcium chloride). The gas is carbon dioxide.$t$,
   $t$Acid + carbonate → salt + water + carbon dioxide: calcium carbonate + hydrochloric acid → calcium chloride + water + carbon dioxide.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Which gas is produced when calcium carbonate reacts with hydrochloric acid?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Ionic Equation for Neutralisation$t$, $t$aqa-ch-fh-chemical-changes$t$, 3,
   $t$Which ionic equation describes every neutralisation between an acid and an alkali?$t$,
   $t$Na⁺ + Cl⁻ → NaCl$t$, $t$H⁺ + OH⁻ → H₂O$t$, $t$2H⁺ + O²⁻ → H₂O$t$, $t$H₂ + O → H₂O$t$, 'Not sure', $t$b$t$,
   $t$That shows a salt forming; the spectator ions differ from one reaction to another. Every acid–alkali neutralisation is H⁺ + OH⁻ → H₂O.$t$, null, $t$Alkalis supply hydroxide ions (OH⁻), not oxide ions. The reaction is H⁺ + OH⁻ → H₂O.$t$, $t$This isn't an ionic equation, and hydrogen gas isn't involved. It is H⁺ + OH⁻ → H₂O.$t$,
   $t$Acids release H⁺ ions and alkalis release OH⁻ ions in solution. Neutralisation is always H⁺(aq) + OH⁻(aq) → H₂O(l); the other ions are spectators.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Which ionic equation describes every neutralisation between an acid and an alkali?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Titration Technique$t$, $t$aqa-ch-h-quantitative-advanced$t$, 2,
   $t$In a titration, why do you read the burette with your eye level with the bottom of the meniscus?$t$,
   $t$To avoid a parallax error$t$, $t$To make the reaction go faster$t$, $t$Because the indicator collects there$t$, $t$To reach the end point sooner$t$, 'Not sure', $t$a$t$,
   null, $t$How you read the burette doesn't affect the reaction. Reading at eye level avoids a parallax error.$t$, $t$The indicator is in the flask, not the burette. Eye level avoids a parallax error in the reading.$t$, $t$It doesn't change the end point. It gives an accurate reading by avoiding parallax error.$t$,
   $t$Looking at the meniscus from above or below makes the reading appear higher or lower than it is (parallax error). Reading the bottom of the meniscus at eye level gives an accurate volume.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', false, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, false, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$In a titration, why do you read the burette with your eye level with the bottom of the meniscus?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Electrolysis of Solutions$t$, $t$aqa-ch-fh-chemical-changes$t$, 3,
   $t$Sodium chloride solution is electrolysed. What forms at the negative electrode?$t$,
   $t$Sodium$t$, $t$Chlorine$t$, $t$Hydrogen$t$, $t$Oxygen$t$, 'Not sure', $t$c$t$,
   $t$Sodium is more reactive than hydrogen, so in solution hydrogen is produced instead of sodium.$t$, $t$Chlorine forms at the positive electrode, from chloride ions.$t$, null, $t$Oxygen would form at the positive electrode, and here chloride ions are discharged there instead. Hydrogen forms at the negative electrode.$t$,
   $t$In an aqueous solution, at the negative electrode hydrogen is produced if the metal is more reactive than hydrogen. Sodium is, so hydrogen gas forms; chlorine forms at the positive electrode.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Sodium chloride solution is electrolysed. What forms at the negative electrode?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Changes$t$, $t$Strong and Weak Acids$t$, $t$aqa-ch-fh-chemical-changes$t$, 3,
   $t$What makes an acid a strong acid?$t$,
   $t$It is very concentrated$t$, $t$It has a very high pH$t$, $t$It is fully ionised in water$t$, $t$It contains no water$t$, 'Not sure', $t$c$t$,
   $t$Concentration is how much acid is in a volume. Strength is how completely it ionises: a strong acid is fully ionised.$t$, $t$Acids have a low pH, below 7. A strong acid is one that is fully ionised in water.$t$, null, $t$Acids act as acids in water. A strong acid is completely ionised in aqueous solution.$t$,
   $t$A strong acid is completely ionised in aqueous solution (e.g. hydrochloric acid); a weak acid is only partially ionised (e.g. ethanoic acid). Strength is different from concentration.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$What makes an acid a strong acid?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Changes$t$, $t$Bond Energy Calculation$t$, $t$aqa-ch-fh-energy-changes$t$, 4,
   $t$Breaking the bonds in the reactants needs 2000 kJ. Making the bonds in the products releases 2500 kJ. What is the overall energy change?$t$,
   $t$\(+500\,\text{kJ}\)$t$, $t$\(+4500\,\text{kJ}\)$t$, $t$\(-4500\,\text{kJ}\)$t$, $t$\(-500\,\text{kJ}\)$t$, 'Not sure', $t$d$t$,
   $t$The size is right but the sign is wrong. More energy is released than taken in, so the reaction is exothermic: \(2000 - 2500 = -500\,\text{kJ}\).$t$, $t$This adds the two values. Overall change = energy in − energy out \(= 2000 - 2500 = -500\,\text{kJ}\).$t$, $t$This adds the two values and makes it negative. Subtract instead: \(2000 - 2500 = -500\,\text{kJ}\).$t$, null,
   $t$Overall energy change = energy needed to break bonds − energy released making bonds \(= 2000 - 2500 = -500\,\text{kJ}\). It is negative, so the reaction is exothermic.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Breaking the bonds in the reactants needs 2000 kJ. Making the bonds in the products releases 2500 kJ. What is the overall energy change?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Changes$t$, $t$Catalysts$t$, $t$aqa-ch-fh-energy-changes$t$, 2,
   $t$How does a catalyst speed up a reaction?$t$,
   $t$It gives the particles more kinetic energy$t$, $t$It offers a route with lower activation energy$t$, $t$It raises the concentration of the reactants$t$, $t$It is used up to supply extra energy$t$, 'Not sure', $t$b$t$,
   $t$That's what heating does. A catalyst provides a different pathway with a lower activation energy.$t$, null, $t$A catalyst doesn't change concentration. It lowers the activation energy, so more collisions succeed.$t$, $t$A catalyst is not used up in the reaction. It works by providing a pathway with lower activation energy.$t$,
   $t$A catalyst provides a different reaction pathway with a lower activation energy, so more collisions have enough energy to react. The catalyst is not used up.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$How does a catalyst speed up a reaction?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Changes$t$, $t$Endothermic Reactions$t$, $t$aqa-ch-fh-energy-changes$t$, 2,
   $t$Which of these reactions is endothermic?$t$,
   $t$Burning methane$t$, $t$Neutralising an acid with an alkali$t$, $t$Thermal decomposition of calcium carbonate$t$, $t$Respiration in cells$t$, 'Not sure', $t$c$t$,
   $t$Combustion releases energy to the surroundings, so it is exothermic.$t$, $t$Neutralisation releases energy, so it is exothermic.$t$, null, $t$Respiration releases energy for living cells, so it is exothermic.$t$,
   $t$Thermal decomposition takes in energy from the surroundings (the carbonate must be heated to break down), so it is endothermic. Combustion, neutralisation and respiration are exothermic.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Which of these reactions is endothermic?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Energy Changes$t$, $t$Chemical Cells$t$, $t$aqa-ch-fh-energy-changes$t$, 3,
   $t$Why does a simple chemical cell eventually stop producing a potential difference?$t$,
   $t$One of the reactants is used up$t$, $t$The electrons in the wires run out$t$, $t$The electrolyte turns into a metal$t$, $t$The metals become more reactive$t$, 'Not sure', $t$a$t$,
   null, $t$Electrons are not used up; they flow round the circuit. The cell stops when a reactant has been used up.$t$, $t$The electrolyte doesn't become a metal. The cell stops when one of its reactants runs out.$t$, $t$The reactivity of the metals doesn't change. The chemical reaction stops once a reactant is used up.$t$,
   $t$A chemical cell produces a potential difference from a chemical reaction. When one of the reactants has been used up, the reaction stops and so does the potential difference (non-rechargeable cells).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', false, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, false, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why does a simple chemical cell eventually stop producing a potential difference?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Rates and Equilibrium$t$, $t$Mean Rate$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
   $t$In a reaction that gives off a gas, \(60\,\text{cm}^{3}\) of gas is collected in the first 20 s. What is the mean rate over this time?$t$,
   $t$\(1200\,\text{cm}^{3}\text{/s}\)$t$, $t$\(0.33\,\text{cm}^{3}\text{/s}\)$t$, $t$\(40\,\text{cm}^{3}\text{/s}\)$t$, $t$\(3\,\text{cm}^{3}\text{/s}\)$t$, 'Not sure', $t$d$t$,
   $t$This multiplies volume by time. Mean rate = amount of product ÷ time \(= 60 \div 20 = 3\,\text{cm}^{3}\text{/s}\).$t$, $t$This divides time by volume. Mean rate = volume ÷ time \(= 60 \div 20 = 3\,\text{cm}^{3}\text{/s}\).$t$, $t$This subtracts time from volume. Mean rate = volume ÷ time \(= 3\,\text{cm}^{3}\text{/s}\).$t$, null,
   $t$Mean rate of reaction = quantity of product formed ÷ time taken \(= 60 \div 20 = 3\,\text{cm}^{3}\text{/s}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$In a reaction that gives off a gas, \(60\,\text{cm}^{3}\) of gas is collected in the first 20 s. What is the mean rate over this time?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Rates and Equilibrium$t$, $t$Surface Area$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
   $t$Why does powdered marble react faster with acid than marble chips?$t$,
   $t$Its particles have more energy$t$, $t$It raises the acid's concentration$t$, $t$It lowers the activation energy$t$, $t$It has a larger surface area$t$, 'Not sure', $t$d$t$,
   $t$Grinding doesn't give the particles more energy. It exposes more surface, so collisions happen more often.$t$, $t$The acid's concentration is unchanged. More surface area means more frequent collisions.$t$, $t$Only a catalyst lowers the activation energy. Powder reacts faster because of its larger surface area.$t$, null,
   $t$Powder has a much larger surface area to volume ratio than chips, so more particles are exposed to the acid and collisions happen more often. The rate increases.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why does powdered marble react faster with acid than marble chips?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Rates and Equilibrium$t$, $t$Concentration and Rate$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 2,
   $t$Why does using a more concentrated acid make a reaction faster?$t$,
   $t$The acid particles move faster$t$, $t$The activation energy is lower$t$, $t$Collisions happen more often$t$, $t$Each collision has more energy$t$, 'Not sure', $t$c$t$,
   $t$Particle speed depends on temperature, not concentration. More particles in the same volume means more frequent collisions.$t$, $t$Concentration doesn't change the activation energy; only a catalyst does.$t$, null, $t$The energy of collisions depends on temperature. Higher concentration makes collisions more frequent.$t$,
   $t$A more concentrated solution has more reacting particles in the same volume, so collisions happen more often and the rate increases.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why does using a more concentrated acid make a reaction faster?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Rates and Equilibrium$t$, $t$Dynamic Equilibrium$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 3,
   $t$A reversible reaction reaches equilibrium in a closed system. What is true at equilibrium?$t$,
   $t$Both reactions have stopped$t$, $t$All the reactants have become products$t$, $t$The amounts of reactants and products are equal$t$, $t$The forward and reverse rates are equal$t$, 'Not sure', $t$d$t$,
   $t$Both reactions keep going; that's why it's called dynamic equilibrium. They happen at the same rate.$t$, $t$A reversible reaction never goes to completion. At equilibrium both reactants and products are present.$t$, $t$The amounts stay constant, but they are not necessarily equal. What is equal is the rate of the forward and reverse reactions.$t$, null,
   $t$At dynamic equilibrium the forward and reverse reactions continue at the same rate, so the amounts of reactants and products stay constant (but are not necessarily equal).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$A reversible reaction reaches equilibrium in a closed system. What is true at equilibrium?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Rates and Equilibrium$t$, $t$Pressure and Equilibrium$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 4,
   $t$N₂ + 3H₂ ⇌ 2NH₃. What happens to the yield of ammonia if the pressure is increased?$t$,
   $t$It decreases, as the reactants are favoured$t$, $t$It stays the same, as pressure has no effect$t$, $t$It increases, as the reaction gets faster$t$, $t$It increases: that side has fewer gas molecules$t$, 'Not sure', $t$d$t$,
   $t$Higher pressure favours the side with fewer gas molecules. The products side has 2 molecules and the reactants side 4, so ammonia is favoured.$t$, $t$Pressure does shift an equilibrium involving gases: it favours the side with fewer molecules (the ammonia side here).$t$, $t$A faster rate doesn't change the yield. The yield rises because equilibrium shifts to the side with fewer gas molecules.$t$, null,
   $t$There are 4 gas molecules on the left (1 + 3) and 2 on the right. Increasing pressure shifts the equilibrium towards the side with fewer molecules, so the yield of ammonia increases.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$N₂ + 3H₂ ⇌ 2NH₃. What happens to the yield of ammonia if the pressure is increased?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organic Chemistry$t$, $t$Fractional Distillation$t$, $t$aqa-ch-fh-organic$t$, 1,
   $t$How is crude oil separated into fractions?$t$,
   $t$By filtration, using particle size$t$, $t$By cracking, over a hot catalyst$t$, $t$By fractional distillation, using boiling points$t$, $t$By chromatography, using solubility$t$, 'Not sure', $t$c$t$,
   $t$Crude oil is a mixture of liquids, which can't be separated by filtering. The fractions are separated by boiling point.$t$, $t$Cracking breaks long hydrocarbons into shorter ones after separation; it doesn't separate crude oil.$t$, null, $t$Chromatography is used for small samples of dissolved substances. Crude oil is separated by fractional distillation.$t$,
   $t$Crude oil is heated and the vapour rises up a fractionating column. Hydrocarbons with different boiling points condense at different heights, separating the mixture into fractions.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$How is crude oil separated into fractions?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organic Chemistry$t$, $t$Complete Combustion$t$, $t$aqa-ch-fh-organic$t$, 1,
   $t$What are the products of the complete combustion of methane?$t$,
   $t$Carbon monoxide and water$t$, $t$Carbon dioxide and water$t$, $t$Carbon and hydrogen$t$, $t$Carbon dioxide and hydrogen$t$, 'Not sure', $t$b$t$,
   $t$Carbon monoxide forms in incomplete combustion, when oxygen is limited. Complete combustion gives carbon dioxide and water.$t$, null, $t$Burning oxidises the carbon and hydrogen; it doesn't just separate them.$t$, $t$The hydrogen is oxidised to water, not released as hydrogen gas.$t$,
   $t$Complete combustion of a hydrocarbon in plenty of oxygen oxidises the carbon to carbon dioxide and the hydrogen to water: CH₄ + 2O₂ → CO₂ + 2H₂O.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$What are the products of the complete combustion of methane?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organic Chemistry$t$, $t$Alkane Formulae$t$, $t$aqa-ch-fh-organic$t$, 2,
   $t$Which is the formula of propane, the alkane with three carbon atoms?$t$,
   $t$C₃H₆$t$, $t$C₃H₈$t$, $t$C₂H₆$t$, $t$C₃H₄$t$, 'Not sure', $t$b$t$,
   $t$C₃H₆ is propene, an alkene. Alkanes follow CₙH₂ₙ₊₂, so propane is C₃H₈.$t$, null, $t$C₂H₆ is ethane, which has two carbon atoms. With three: C₃H₈.$t$, $t$C₃H₄ has too few hydrogens for an alkane. Using CₙH₂ₙ₊₂: C₃H₈.$t$,
   $t$Alkanes have the general formula CₙH₂ₙ₊₂. With \(n = 3\): C₃H₈.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Which is the formula of propane, the alkane with three carbon atoms?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organic Chemistry$t$, $t$Properties of Hydrocarbons$t$, $t$aqa-ch-fh-organic$t$, 2,
   $t$As hydrocarbon molecules get longer, how do their properties change?$t$,
   $t$Less viscous and easier to ignite$t$, $t$More viscous and harder to ignite$t$, $t$Lower boiling point and more flammable$t$, $t$They burn with a cleaner, bluer flame$t$, 'Not sure', $t$b$t$,
   $t$Both trends are reversed: longer chains are more viscous and harder to ignite.$t$, null, $t$Longer molecules have higher boiling points and are less flammable.$t$, $t$Longer hydrocarbons burn with smokier flames, as combustion is less complete.$t$,
   $t$Longer hydrocarbon molecules have stronger forces between them, so they have higher boiling points, are more viscous (thicker) and are harder to ignite.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$As hydrocarbon molecules get longer, how do their properties change?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Organic Chemistry$t$, $t$Alcohols$t$, $t$aqa-ch-fh-organic$t$, 2,
   $t$Which functional group do all alcohols contain?$t$,
   $t$–COOH$t$, $t$C=C$t$, $t$–OH$t$, $t$–NH₂$t$, 'Not sure', $t$c$t$,
   $t$–COOH is the carboxylic acid group, as in ethanoic acid. Alcohols contain –OH.$t$, $t$A carbon–carbon double bond is the functional group of alkenes. Alcohols contain –OH.$t$, null, $t$–NH₂ is an amine group, found in amino acids. Alcohols contain –OH.$t$,
   $t$Alcohols contain the –OH functional group, for example ethanol, CH₃CH₂OH.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', false, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, false, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Which functional group do all alcohols contain?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Analysis$t$, $t$Pure Substances$t$, $t$aqa-ch-fh-analysis$t$, 1,
   $t$In chemistry, what does it mean to say a substance is pure?$t$,
   $t$It has had nothing added to it$t$, $t$It is safe to eat or drink$t$, $t$It contains only one substance$t$, $t$It contains no water at all$t$, 'Not sure', $t$c$t$,
   $t$That's the everyday meaning (like "pure orange juice"). In chemistry, pure means a single element or compound.$t$, $t$Safety isn't what "pure" means in chemistry. A pure substance contains only one element or compound.$t$, null, $t$Pure water is a pure substance. "Pure" means containing a single element or compound.$t$,
   $t$A pure substance is a single element or compound, not mixed with anything else. It melts and boils at specific temperatures.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$In chemistry, what does it mean to say a substance is pure?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Analysis$t$, $t$Formulations$t$, $t$aqa-ch-fh-analysis$t$, 2,
   $t$What is a formulation?$t$,
   $t$A mixture designed as a useful product$t$, $t$A pure element with a single use$t$, $t$A compound made in one reaction$t$, $t$Any mixture of two different gases$t$, 'Not sure', $t$a$t$,
   null, $t$A formulation is a mixture, not a pure element. Examples are paints, medicines and alloys.$t$, $t$A formulation is a mixture of components, not a single compound.$t$, $t$A formulation is a designed mixture with each part in a set amount, such as a medicine or paint.$t$,
   $t$A formulation is a mixture designed as a useful product, with each component in a measured quantity and a particular purpose. Examples include medicines, fuels, paints and fertilisers.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$What is a formulation?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Analysis$t$, $t$Test for Chlorine$t$, $t$aqa-ch-fh-analysis$t$, 1,
   $t$How do you test for chlorine gas?$t$,
   $t$A lit splint gives a squeaky pop$t$, $t$A glowing splint relights$t$, $t$Limewater turns milky$t$, $t$Damp litmus paper is bleached$t$, 'Not sure', $t$d$t$,
   $t$A squeaky pop is the test for hydrogen.$t$, $t$A glowing splint relighting is the test for oxygen.$t$, $t$Limewater turning milky (cloudy) is the test for carbon dioxide.$t$, null,
   $t$Chlorine bleaches damp litmus paper, turning it white.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$How do you test for chlorine gas?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemical Analysis$t$, $t$Rf Values$t$, $t$aqa-ch-fh-analysis$t$, 2,
   $t$On a chromatogram, a spot moves 3.0 cm and the solvent front moves 7.5 cm. What is the spot's \(R_{\text{f}}\) value?$t$,
   $t$\(2.5\)$t$, $t$\(0.4\)$t$, $t$\(4.5\)$t$, $t$\(22.5\)$t$, 'Not sure', $t$b$t$,
   $t$This divides the solvent distance by the spot distance. \(R_{\text{f}} = \text{spot distance} \div \text{solvent distance} = 3.0 \div 7.5 = 0.4\).$t$, null, $t$This subtracts the distances. \(R_{\text{f}} = 3.0 \div 7.5 = 0.4\).$t$, $t$This multiplies the distances. \(R_{\text{f}} = 3.0 \div 7.5 = 0.4\); it is always less than 1.$t$,
   $t$\(R_{\text{f}} = \dfrac{\text{distance moved by substance}}{\text{distance moved by solvent}} = \dfrac{3.0}{7.5} = 0.4\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$On a chromatogram, a spot moves 3.0 cm and the solvent front moves 7.5 cm. What is the spot's \(R_{\text{f}}\) value?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemistry of the Atmosphere$t$, $t$Origin of Oxygen$t$, $t$aqa-ch-fh-atmosphere$t$, 2,
   $t$Where did most of the oxygen in today's atmosphere come from?$t$,
   $t$Volcanic eruptions$t$, $t$Photosynthesis by algae and plants$t$, $t$Sunlight splitting carbon dioxide$t$, $t$Oxygen released as the oceans formed$t$, 'Not sure', $t$b$t$,
   $t$Early volcanoes released mainly carbon dioxide, water vapour and nitrogen, not much oxygen.$t$, null, $t$Sunlight didn't break down carbon dioxide into oxygen. Photosynthesis by algae and plants produced it.$t$, $t$The oceans formed as water vapour condensed; that didn't release oxygen.$t$,
   $t$Algae and later plants produced oxygen by photosynthesis (carbon dioxide + water → glucose + oxygen), and over billions of years the oxygen level rose.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Where did most of the oxygen in today's atmosphere come from?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemistry of the Atmosphere$t$, $t$Early Carbon Dioxide$t$, $t$aqa-ch-fh-atmosphere$t$, 3,
   $t$How did the amount of carbon dioxide in the early atmosphere fall?$t$,
   $t$It was used up by volcanoes$t$, $t$It escaped into space$t$, $t$It was turned into nitrogen$t$, $t$It dissolved in oceans and formed rocks$t$, 'Not sure', $t$d$t$,
   $t$Volcanoes released carbon dioxide rather than using it up.$t$, $t$Carbon dioxide molecules are too heavy to escape. Much of it dissolved in the oceans and was locked into rocks.$t$, $t$Carbon dioxide can't turn into nitrogen. It dissolved in the oceans, was used in photosynthesis and was locked in rocks and fossil fuels.$t$, null,
   $t$Carbon dioxide dissolved in the oceans and formed carbonate compounds that became sedimentary rocks. Algae and plants also removed it by photosynthesis, and some was locked into fossil fuels.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$How did the amount of carbon dioxide in the early atmosphere fall?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Chemistry of the Atmosphere$t$, $t$Carbon Monoxide$t$, $t$aqa-ch-fh-atmosphere$t$, 2,
   $t$Why is carbon monoxide dangerous?$t$,
   $t$It causes acid rain$t$, $t$It stops blood carrying oxygen$t$, $t$It destroys the ozone layer$t$, $t$It is a powerful greenhouse gas$t$, 'Not sure', $t$b$t$,
   $t$Acid rain comes from sulfur dioxide and oxides of nitrogen. Carbon monoxide is dangerous because it stops blood carrying oxygen.$t$, null, $t$Ozone damage is caused mainly by CFCs. Carbon monoxide is toxic because it reduces the blood's oxygen-carrying capacity.$t$, $t$That describes carbon dioxide and methane. Carbon monoxide is toxic: it stops blood carrying oxygen.$t$,
   $t$Carbon monoxide is a toxic, colourless, odourless gas. It combines with haemoglobin in red blood cells, reducing the blood's capacity to carry oxygen.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why is carbon monoxide dangerous?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Using Resources$t$, $t$Potable Water$t$, $t$aqa-ch-fh-resources$t$, 2,
   $t$In the UK, how is drinking water produced from fresh ground water?$t$,
   $t$It is distilled, then boiled$t$, $t$It is filtered, then sterilised$t$, $t$It is desalinated by reverse osmosis$t$, $t$It is left to settle, then bottled$t$, 'Not sure', $t$b$t$,
   $t$Distillation uses a lot of energy and isn't needed for fresh water. It is filtered and then sterilised.$t$, null, $t$Desalination is for sea water, where fresh water is scarce. Fresh ground water is filtered and sterilised.$t$, $t$Settling alone doesn't remove microbes. The water is filtered and then sterilised.$t$,
   $t$A suitable fresh water source is passed through filter beds to remove solids, then sterilised (with chlorine, ozone or ultraviolet light) to kill microbes.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$In the UK, how is drinking water produced from fresh ground water?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Using Resources$t$, $t$Sterilising Water$t$, $t$aqa-ch-fh-resources$t$, 1,
   $t$Which of these is used to sterilise drinking water?$t$,
   $t$Carbon dioxide$t$, $t$Sodium chloride$t$, $t$Chlorine$t$, $t$Nitrogen$t$, 'Not sure', $t$c$t$,
   $t$Carbon dioxide doesn't kill microbes in water. Chlorine, ozone or ultraviolet light are used.$t$, $t$Salt doesn't sterilise drinking water. Chlorine, ozone or ultraviolet light are used.$t$, null, $t$Nitrogen is unreactive and doesn't kill microbes.$t$,
   $t$Drinking water is sterilised with chlorine, ozone or ultraviolet light to kill harmful microbes.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Which of these is used to sterilise drinking water?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Using Resources$t$, $t$Life Cycle Assessment$t$, $t$aqa-ch-fh-resources$t$, 2,
   $t$What does a life cycle assessment (LCA) of a product assess?$t$,
   $t$Only the cost of making it$t$, $t$Only how long it lasts in use$t$, $t$Its environmental impact at every stage$t$, $t$Only the energy used to recycle it$t$, 'Not sure', $t$c$t$,
   $t$An LCA is about environmental impact, not cost, and covers the whole life of the product.$t$, $t$An LCA looks at every stage, from extracting raw materials to disposal, not just its useful life.$t$, null, $t$Recycling or disposal is only the last stage. An LCA covers every stage.$t$,
   $t$A life cycle assessment assesses the environmental impact of a product at each stage: extracting and processing raw materials, manufacturing and packaging, use, and disposal at the end of its life.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$What does a life cycle assessment (LCA) of a product assess?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Using Resources$t$, $t$Rusting$t$, $t$aqa-ch-fh-resources$t$, 1,
   $t$Which conditions are needed for iron to rust?$t$,
   $t$Oxygen only$t$, $t$Water only$t$, $t$Water and oxygen$t$, $t$Carbon dioxide and heat$t$, 'Not sure', $t$c$t$,
   $t$Iron in dry air doesn't rust. Both water and oxygen are needed.$t$, $t$Iron in water with no dissolved oxygen doesn't rust. Both water and oxygen are needed.$t$, null, $t$Rusting doesn't need carbon dioxide or heat. It needs water and oxygen.$t$,
   $t$Rusting is the corrosion of iron. It needs both water and oxygen; take away either and iron doesn't rust.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', false, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, false, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Which conditions are needed for iron to rust?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Using Resources$t$, $t$Recycling Metals$t$, $t$aqa-ch-fh-resources$t$, 2,
   $t$Why is recycling aluminium better than extracting new aluminium from its ore?$t$,
   $t$It uses far less energy than electrolysis$t$, $t$It makes a different, stronger metal$t$, $t$It gives more aluminium from each can$t$, $t$It needs no energy at all$t$, 'Not sure', $t$a$t$,
   null, $t$Recycled aluminium is the same metal. Recycling is better because it uses far less energy than extraction.$t$, $t$Recycling can't produce more metal than an object contains. The benefit is the energy saved.$t$, $t$Recycling still needs some energy (to collect and melt the metal), but much less than electrolysis.$t$,
   $t$Extracting aluminium by electrolysis uses a huge amount of energy. Recycling needs far less energy, conserves the ore and reduces waste and mining.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Why is recycling aluminium better than extracting new aluminium from its ore?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Chemistry$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Using Resources$t$, $t$Haber Process$t$, $t$aqa-ch-fh-rates-equilibrium$t$, 3,
   $t$Which conditions are used in the Haber process to make ammonia?$t$,
   $t$About 25 °C, 1 atm, no catalyst$t$, $t$About 1000 °C, 1 atm, platinum catalyst$t$, $t$About 450 °C, 200 atm, iron catalyst$t$, $t$About 450 °C, 200 atm, no catalyst$t$, 'Not sure', $t$c$t$,
   $t$At room temperature the reaction is far too slow. The process runs at about 450 °C and 200 atm with an iron catalyst.$t$, $t$A very high temperature would lower the yield, and the catalyst is iron. The conditions are about 450 °C and 200 atm.$t$, null, $t$The temperature and pressure are right, but an iron catalyst is used to speed the reaction up.$t$,
   $t$The Haber process uses a temperature of about 450 °C, a pressure of about 200 atmospheres and an iron catalyst: a compromise between a good yield and a fast rate.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', false, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, false, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Chemistry$t$ and question_text = $t$Which conditions are used in the Haber process to make ammonia?$t$);
 
 commit;

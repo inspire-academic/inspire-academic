@@ -147,8 +147,15 @@
     return state.reviewers.get(id) || 'a reviewer';
   }
 
+  const isNumeric = r => r.question_type === 'numeric';
+
   function problems(r) {
     const out = [];
+    if (isNumeric(r)) {
+      out.push(...window.IANumeric.specProblems(r.answer_spec).map(p => 'Answer: ' + p + '.'));
+      if (!String(r.explanation || '').trim()) out.push('There is no worked explanation.');
+      return out;
+    }
     if (!OPTION_KEYS.includes(r.correct_answer)) out.push('The answer key is not A–D.');
     OPTION_KEYS.forEach(k => { if (!String(r['option_' + k] || '').trim()) out.push(`Option ${k.toUpperCase()} is empty.`); });
     OPTION_KEYS.filter(k => k !== r.correct_answer).forEach(k => {
@@ -164,8 +171,10 @@
     const pct = v => (v == null ? '—' : Math.round(v * 100) + '%');
     const counts = s.choice_counts || {};
     const total = Object.values(counts).reduce((a, b) => a + b, 0) || 1;
-    const bars = ['a', 'b', 'c', 'd', 'e'].map(k => `
-      <span>${k === 'e' ? 'Not sure' : k.toUpperCase()}</span>
+    const keys = isNumeric(r) ? ['x', 'e'] : ['a', 'b', 'c', 'd', 'e'];
+    const label = k => (k === 'e' ? 'Not sure' : k === 'x' ? 'Typed an answer' : k.toUpperCase());
+    const bars = keys.map(k => `
+      <span>${label(k)}</span>
       <span class="qr-bar${k === r.correct_answer ? ' key' : ''}"><i data-pct="${Math.round((counts[k] || 0) / total * 100)}"></i></span>
       <span>${counts[k] || 0}</span>`).join('');
     const flags = (s.flags || []).map(f => `<li class="qr-flag">⚑ ${esc(FLAG_LABEL[f] || f)}</li>`).join('');
@@ -199,11 +208,12 @@
           : '<span class="qr-why missing">No feedback for this wrong answer.</span>')}
       </li>`).join('') + `<li class="qr-option"><span class="qr-letter">E</span><span>${esc(r.option_e || 'Not sure')}</span></li>`;
 
+    const answerBlock = isNumeric(r) ? numericHtml(r.answer_spec || {}) : `<div class="qr-h">Options, key and feedback</div><ul class="qr-options">${options}</ul>`;
     el.innerHTML = `
       <div class="qr-meta">
         <span><b>#${r.id}</b></span><span class="qr-pill ${r.review_status}">${STATUS_LABEL[r.review_status] || r.review_status}</span>
         <span>${esc(r.subject)} · <b>${esc(r.topic)}</b>${r.subtopic ? ' · ' + esc(r.subtopic) : ''}</span>
-        <span>${esc(r.exam_board)} ${esc(r.tier)} · difficulty ${esc(r.difficulty)}</span>
+        <span>${esc(r.exam_board)} ${esc(r.tier)} · difficulty ${esc(r.difficulty)}${isNumeric(r) ? ' · typed number' : ''}</span>
         <span>Curriculum topic: <b>${esc(r.spec_slug || '— not set')}</b></span>
         <span>${r.active ? 'Active' : 'Retired'}${r.combined_eligible === false ? ' · separate science only' : ''}</span>
       </div>
@@ -212,7 +222,7 @@
         <div class="qr-question">${IAMaths.html(r.question_text)}</div>
         ${r.diagram_spec ? '<div class="qr-diagram" id="qr-diagram"></div>' : ''}
       </div>
-      <div><div class="qr-h">Options, key and feedback</div><ul class="qr-options">${options}</ul></div>
+      <div>${answerBlock}</div>
       <div><div class="qr-h">Worked explanation</div><div class="qr-explanation">${r.explanation ? IAMaths.html(r.explanation) : '<span class="qr-why missing">None.</span>'}</div></div>
       <div><div class="qr-h">How students have answered it</div>${statsHtml(r)}</div>
       <div class="qr-history">${reviewed}${r.review_notes ? `<span class="notes">${esc(r.review_notes)}</span>` : ''}</div>
@@ -237,6 +247,23 @@
     $('act-next').onclick = () => step(1);
   }
 
+  // A numeric question's answer as a reviewer needs to check it: the value
+  // and unit, how close counts, the units offered, and each typed wrong
+  // answer with the feedback it gets.
+  function numericHtml(spec) {
+    const tol = Number(spec.tolerance) > 0 ? Number(spec.tolerance) : window.IANumeric.DEFAULT_TOLERANCE;
+    const wrong = (spec.wrong || []).map(w => `
+      <li class="qr-option"><span class="qr-letter">✗</span><span>${esc(w.value)}${w.unit ? ' ' + esc(w.unit) : ''}</span>
+        <span class="qr-why">${w.misconception ? IAMaths.html(w.misconception) : '<span class="missing">No feedback.</span>'}</span></li>`).join('');
+    return `<div class="qr-h">Typed answer, units and feedback</div>
+      <ul class="qr-options">
+        <li class="qr-option key"><span class="qr-letter">✓</span><span><b>${esc(spec.value)}${spec.unit ? ' ' + esc(spec.unit) : ''}</b> (within ±${esc(+(tol * 100).toFixed(2))}%)</span>
+          <span class="qr-why">${spec.unit ? 'Units offered: ' + esc((spec.unit_options || []).join(', ')) : 'No unit asked for.'}${spec.unit_feedback ? ' Right number, wrong unit: ' + IAMaths.html(spec.unit_feedback) : ''}</span></li>
+        ${wrong}
+        <li class="qr-option"><span class="qr-letter">?</span><span>Not sure</span></li>
+      </ul>`;
+  }
+
   function specOptions(r) {
     const map = (window.SPEC_MAP && window.SPEC_MAP['gcse-uk'] && window.SPEC_MAP['gcse-uk'][r.subject]) || {};
     const boards = r.exam_board === 'Edexcel' ? ['Edexcel'] : ['AQA', 'Edexcel'];
@@ -253,16 +280,16 @@
       <form class="qr-edit" id="qr-edit-form">
         <div class="qr-meta"><span><b>Editing #${r.id}</b></span><span>Maths goes between \\( and \\) (LaTeX). Saving an approved question records you as its reviewer.</span></div>
         ${field('question_text', 'Question', 3)}
-        <div class="qr-row">
+        ${isNumeric(r) ? `<label>Answer (JSON: value, tolerance, unit, unit_options, wrong[{value, unit?, misconception}], unit_feedback)<textarea name="answer_spec" rows="12" spellcheck="false">${esc(JSON.stringify(r.answer_spec || {}, null, 2))}</textarea></label>` : `<div class="qr-row">
           ${OPTION_KEYS.map(k => field('option_' + k, 'Option ' + k.toUpperCase())).join('')}
-        </div>
+        </div>`}
         <div class="qr-row">
-          <label>Correct answer<select name="correct_answer">${OPTION_KEYS.map(k => `<option value="${k}"${k === r.correct_answer ? ' selected' : ''}>${k.toUpperCase()}</option>`).join('')}</select></label>
+          ${isNumeric(r) ? '' : `<label>Correct answer<select name="correct_answer">${OPTION_KEYS.map(k => `<option value="${k}"${k === r.correct_answer ? ' selected' : ''}>${k.toUpperCase()}</option>`).join('')}</select></label>`}
           <label>Difficulty (1–5)<input name="difficulty" type="number" min="1" max="5" value="${esc(r.difficulty)}"></label>
           <label>Tier<select name="tier">${['Higher', 'Foundation', 'Both'].map(t => `<option${t === r.tier ? ' selected' : ''}>${t}</option>`).join('')}</select></label>
           <label>Curriculum topic<select name="spec_slug">${specOptions(r)}</select></label>
         </div>
-        ${OPTION_KEYS.map(k => field('misconception_' + k, 'Feedback if a student picks ' + k.toUpperCase(), 2)).join('')}
+        ${isNumeric(r) ? '' : OPTION_KEYS.map(k => field('misconception_' + k, 'Feedback if a student picks ' + k.toUpperCase(), 2)).join('')}
         ${field('explanation', 'Worked explanation', 4)}
         <div class="qr-row">${field('topic', 'Topic')}${field('subtopic', 'Subtopic')}</div>
         <div class="qr-actions">
@@ -275,7 +302,16 @@
       e.preventDefault();
       const form = new FormData(e.target);
       const patch = {};
-      [...EDIT_FIELDS, 'correct_answer', 'tier', 'spec_slug', 'topic', 'subtopic'].forEach(f => {
+      const fields = isNumeric(r)
+        ? ['question_text', 'explanation', 'tier', 'spec_slug', 'topic', 'subtopic']
+        : [...EDIT_FIELDS, 'correct_answer', 'tier', 'spec_slug', 'topic', 'subtopic'];
+      if (isNumeric(r)) {
+        try { patch.answer_spec = JSON.parse(String(form.get('answer_spec') || '')); }
+        catch (err) { toast('The answer is not valid JSON: ' + err.message, 'error'); return; }
+        const specIssues = window.IANumeric.specProblems(patch.answer_spec);
+        if (specIssues.length) { toast('Answer: ' + specIssues.join('; '), 'error'); return; }
+      }
+      fields.forEach(f => {
         const v = String(form.get(f) == null ? '' : form.get(f));
         patch[f] = v.trim() === '' && ['spec_slug', 'subtopic', 'explanation'].includes(f) ? null : v;
       });

@@ -231,6 +231,7 @@ input,select,textarea{font-family:var(--font-body);}
 .review-why,.review-method{font-size:.85rem;margin-top:.5rem;line-height:1.6;}
 .review-why{color:var(--gold-text);}
 </style>
+<link rel="stylesheet" href="/assets/css/diagnostic-answer-types.css">
 </head>
 <body>
 
@@ -386,9 +387,13 @@ input,select,textarea{font-family:var(--font-body);}
       <div id="q-diagram" style="text-align:center;margin-bottom:1.5rem;"></div>
       <div id="q-options" role="radiogroup" aria-labelledby="q-text" style="display:flex;flex-direction:column;gap:.6rem;"></div>
       <p class="sr-only" id="q-announce" aria-live="polite"></p>
-      <button class="btn btn-gold" style="width:100%;margin-top:1.25rem;opacity:.4;" id="btn-next" onclick="nextQuestion()" disabled>
-        Select an answer to continue →
-      </button>
+      <p class="conf-prompt" id="q-conf-prompt" hidden>How sure are you of this answer?</p>
+      <div class="next-row">
+        <button class="btn btn-outline" id="btn-unsure" onclick="nextQuestion('unsure')" hidden>Not certain →</button>
+        <button class="btn btn-gold" id="btn-next" onclick="nextQuestion()" disabled>
+          Select an answer to continue →
+        </button>
+      </div>
     </div>
   </div>
 
@@ -440,6 +445,7 @@ input,select,textarea{font-family:var(--font-body);}
 <script src="/assets/js/nav-back.js"></script>
 <script src="/assets/js/diagram-renderer.js"></script>
 <script src="/assets/js/maths-typeset.js"></script>
+<script src="/assets/js/diagnostic-answer-types.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
 // SUPABASE CONFIG — used only for sign-in and for reading this student's
@@ -709,6 +715,7 @@ async function beginTest(data, note) {
   S.token     = data.token;
   S.questions = data.questions || [];
   S.answers   = (data.answered || []).map(a => ({ question_id: a.questionId, chosen: a.chosen, timeMs: null }));
+  S.typed     = null;
   S.diagnosis = null;
   S.review    = null;
   S.plan      = null;
@@ -836,10 +843,8 @@ function renderQuestion() {
   }
 
   S.selectedOpt = null;
-  const nextBtn = document.getElementById('btn-next');
-  nextBtn.disabled = true;
-  nextBtn.style.opacity = '.4';
-  nextBtn.textContent = 'Select an answer to continue →';
+  S.typed = null;
+  setNextButtons();
 
   // The Next button's only handler is its inline onclick. A second,
   // addEventListener-bound handler used to live here, so on the last
@@ -862,6 +867,23 @@ function renderQuestion() {
 
   const container = document.getElementById('q-options');
   container.innerHTML = '';
+
+  // A typed-number question: a number box (and unit list) instead of options.
+  if (q.question_type === 'numeric') {
+    IADiagTypes.renderNumeric(container, q, sel => {
+      S.selectedOpt = sel ? sel.chosen : null;
+      S.typed = sel && sel.chosen === 'x' ? { answerText: sel.answerText, answerUnit: sel.answerUnit } : null;
+      setNextButtons();
+    });
+    IAMaths.typeset(qText);
+    S.shownAt = performance.now();
+    if (S.currentQ > 0 || S.answers.length) {
+      document.getElementById('q-announce').textContent = `Question ${S.currentQ + 1} of ${S.questions.length}`;
+      qText.focus();
+    }
+    return;
+  }
+  container.setAttribute('role', 'radiogroup');
 
   opts.forEach((opt, pos) => {
     const btn = document.createElement('button');
@@ -919,28 +941,45 @@ function selectOption(key) {
     btn.tabIndex = on ? 0 : -1;
   });
 
-  const nextBtn = document.getElementById('btn-next');
-  nextBtn.disabled = false;
-  nextBtn.style.opacity = '1';
-  const isLast = S.currentQ === S.questions.length - 1;
-  nextBtn.textContent = isLast ? 'Complete Assessment →' : 'Next Question →';
+  setNextButtons();
 }
 
-function nextQuestion() {
+// The ways on from a question. With an answer chosen there are two: "I'm
+// sure" and "Not certain" (how sure a student is, recorded with the answer:
+// sure and wrong is the strongest sign of a firmly held misconception). With
+// "Not sure" chosen there's just one, and with nothing chosen, none yet.
+function setNextButtons() {
+  const nextBtn = document.getElementById('btn-next');
+  const unsureBtn = document.getElementById('btn-unsure');
+  const prompt = document.getElementById('q-conf-prompt');
+  const chosen = S.selectedOpt;
+  const answered = chosen && chosen !== 'e';
+  const isLast = S.currentQ === S.questions.length - 1;
+  nextBtn.disabled = !chosen;
+  nextBtn.style.opacity = chosen ? '1' : '.4';
+  nextBtn.textContent = !chosen ? 'Select an answer to continue →'
+    : answered ? (isLast ? "I'm sure: finish →" : "I'm sure →")
+    : (isLast ? 'Complete Assessment →' : 'Next Question →');
+  unsureBtn.hidden = !answered;
+  unsureBtn.textContent = isLast ? 'Not certain: finish →' : 'Not certain →';
+  prompt.hidden = !answered;
+}
+
+function nextQuestion(confidence) {
   if (!S.selectedOpt) return;
 
   const q = S.questions[S.currentQ];
   // Each question is answered exactly once, however the click arrives.
   if (S.answers.some(a => a.question_id === q.id)) return;
   const chosen = S.selectedOpt;
+  const typed = S.typed;
   S.selectedOpt = null;
-  if (S.currentQ === S.questions.length - 1) {
-    const nextBtn = document.getElementById('btn-next');
-    nextBtn.disabled = true;
-    nextBtn.style.opacity = '.4';
-  }
+  S.typed = null;
+  if (S.currentQ === S.questions.length - 1) setNextButtons();
 
-  const answer = { question_id: q.id, chosen, timeMs: Math.round(performance.now() - S.shownAt) };
+  const answer = { question_id: q.id, chosen, timeMs: Math.round(performance.now() - S.shownAt),
+    confidence: chosen === 'e' ? null : (confidence === 'unsure' ? 'unsure' : 'sure'),
+    answerText: typed ? typed.answerText : undefined, answerUnit: typed ? typed.answerUnit : undefined };
   S.answers.push(answer);
   sendAnswer(answer); // in the background — never holds up the next question
 
@@ -952,12 +991,18 @@ function nextQuestion() {
   }
 }
 
+// One answer as the API takes it.
+function answerPayload(a) {
+  return { questionId: a.question_id, chosen: a.chosen, timeMs: a.timeMs, confidence: a.confidence || undefined,
+           answerText: a.answerText, answerUnit: a.answerUnit };
+}
+
 // Records one answer on the server as soon as it's given (that's what lets a
 // signed-in student resume later, and what the per-question statistics are
 // built from). Sent one at a time, in order; one retry after a short wait. If
 // it still fails nothing is lost: submitting sends every answer again.
 function sendAnswer(answer) {
-  const payload = { sessionId: S.sessionId, token: S.token, questionId: answer.question_id, chosen: answer.chosen, timeMs: answer.timeMs };
+  const payload = { sessionId: S.sessionId, token: S.token, ...answerPayload(answer) };
   S.answerChain = S.answerChain.then(async () => {
     for (let attempt = 0; attempt < 2; attempt++) {
       try { await api('session/answer', payload); return; }
@@ -986,7 +1031,7 @@ async function runDiagnosis() {
   try {
     const data = await api('session/submit', {
       sessionId: S.sessionId, token: S.token,
-      answers: S.answers.map(a => ({ questionId: a.question_id, chosen: a.chosen, timeMs: a.timeMs }))
+      answers: S.answers.map(answerPayload)
     });
     S.diagnosis = data.diagnosis;
     S.review    = data.review;
@@ -1172,18 +1217,19 @@ function renderReview(filter) {
   list.innerHTML = items.map(r => {
     const status = r.correct ? 'right' : r.not_sure ? 'unsure' : 'wrong';
     const statusText = r.correct ? 'You got this right' : r.not_sure ? 'You chose "Not sure"' : 'Not quite';
-    const opts = ['a', 'b', 'c', 'd'].map(k => {
+    const conf = r.confidence === 'sure' ? 'You were sure' : r.confidence === 'unsure' ? "You weren't certain" : '';
+    const opts = r.question_type === 'numeric' ? null : ['a', 'b', 'c', 'd'].map(k => {
       const cls = k === r.correct_answer ? 'is-key' : k === r.chosen ? 'is-chosen' : '';
       const tag = k === r.correct_answer ? '<span class="opt-tag">Right answer</span>' : k === r.chosen ? '<span class="opt-tag">Your answer</span>' : '';
       return `<li class="review-opt ${cls}"><span class="opt-label" aria-hidden="true">${letter[k]}</span><span>${mathsField(r, 'option_' + k)} ${tag}</span></li>`;
     }).join('');
     return `
       <article class="review-item ${status}" aria-labelledby="rv-${r.id}">
-        <div class="review-meta"><span>Question ${r.position} · ${escHtmlText(r.topic)}</span><span class="review-status">${statusText}</span></div>
+        <div class="review-meta"><span>Question ${r.position} · ${escHtmlText(r.topic)}</span><span><span class="review-status">${statusText}</span>${conf ? ` <span class="review-conf">· ${conf}</span>` : ''}</span></div>
         <p class="review-q" id="rv-${r.id}">${mathsField(r, 'question_text')}</p>
         ${r.diagram_spec ? `<div class="review-diagram" data-review-diagram="${r.id}"></div>` : ''}
-        <ul class="review-opts">${opts}</ul>
-        ${!r.correct && !r.not_sure && r.misconception ? `<p class="review-why"><strong>Why ${letter[r.chosen]} is tempting:</strong> ${mathsField(r, 'misconception')}</p>` : ''}
+        ${opts === null ? IADiagTypes.typedAnswerHtml(r, escHtmlText) : `<ul class="review-opts">${opts}</ul>`}
+        ${!r.correct && !r.not_sure && r.misconception ? `<p class="review-why"><strong>${letter[r.chosen] ? `Why ${letter[r.chosen]} is tempting` : 'Where that answer comes from'}:</strong> ${mathsField(r, 'misconception')}</p>` : ''}
         ${r.explanation ? `<p class="review-method"><strong>How to work it out:</strong> ${mathsField(r, 'explanation')}</p>` : ''}
       </article>`;
   }).join('');

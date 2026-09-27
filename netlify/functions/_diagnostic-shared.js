@@ -89,6 +89,29 @@ async function loadSession(client, event, sessionId, token) {
   return { error: fail(403, 'forbidden', 'This test session belongs to someone else.') };
 }
 
+const MAX_TIME_MS = 60 * 60 * 1000;
+
+// The diagnostic_responses row for one answer (from the answer endpoint or a
+// submit's catch-up list): { questionId, chosen, answerText?, answerUnit?,
+// confidence?, timeMs }, marked against question row q by the engine.
+function responseRecord(session, q, position, a) {
+  const { markOne } = require('./_diagnostic-engine');
+  const m = markOne(q, { chosen: a.chosen, answer_text: clean(a.answerText, 60), answer_unit: clean(a.answerUnit, 30) || null, confidence: a.confidence });
+  const t = Number(a.timeMs);
+  return {
+    session_id: session.id,
+    question_id: Number(a.questionId),
+    question_updated_at: (session.question_versions || {})[Number(a.questionId)] || null,
+    position: position + 1,
+    chosen: m.chosen,
+    answer_text: m.answer_text,
+    answer_unit: m.answer_unit,
+    confidence: m.confidence,
+    correct: m.correct,
+    time_ms: Number.isFinite(t) && t >= 0 ? Math.min(Math.round(t), MAX_TIME_MS) : null
+  };
+}
+
 module.exports = {
-  SUPABASE_URL, fail, ok, parseBody, currentUser, clientIp, sha256, newToken, clean, UUID_RE, db, loadSession
+  SUPABASE_URL, fail, ok, parseBody, currentUser, clientIp, sha256, newToken, clean, UUID_RE, db, loadSession, responseRecord
 };

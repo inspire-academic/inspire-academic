@@ -18,520 +18,520 @@ insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Compound Interest$t$, $t$aqa-ma-fh-ratio-proportion$t$, 3,
   $t$£2000 is invested at 3% compound interest per year. How much is it worth after 2 years?$t$,
   $t$\(\text{£}2120.00\)$t$, $t$\(\text{£}2121.80\)$t$, $t$\(\text{£}2060.00\)$t$, $t$\(\text{£}2185.45\)$t$, 'Not sure', $t$b$t$,
   $t$This is simple interest (£60 each year). Compound interest earns interest on the interest: \(2000 \times 1.03^{2} = \text{£}2121.80\).$t$, null, $t$That is the value after one year. After two years: \(2000 \times 1.03^{2} = \text{£}2121.80\).$t$, $t$That is after three years (\(1.03^{3}\)). After two years: \(2000 \times 1.03^{2} = \text{£}2121.80\).$t$,
   $t$Each year the amount is multiplied by 1.03: \(2000 \times 1.03^{2} = 2000 \times 1.0609 = \text{£}2121.80\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$£2000 is invested at 3% compound interest per year. How much is it worth after 2 years?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Direct Proportion$t$, $t$aqa-ma-fh-ratio-proportion$t$, 2,
   $t$\(y\) is directly proportional to \(x\). When \(x = 4\), \(y = 10\). Find \(y\) when \(x = 6\).$t$,
   $t$\(12\)$t$, $t$\(6.67\)$t$, $t$\(24\)$t$, $t$\(15\)$t$, 'Not sure', $t$d$t$,
   $t$This adds 2 to \(y\) because \(x\) went up by 2. Proportion multiplies: \(y = 2.5x\), so \(y = 2.5 \times 6 = 15\).$t$, $t$That treats it as inverse proportion (\(xy = 40\)). Direct proportion: \(y = 2.5x = 15\).$t$, $t$This multiplies 6 by 4. Find the constant first: \(y = kx\), \(k = 10 \div 4 = 2.5\), so \(y = 15\).$t$, null,
   $t$\(y = kx\). From \(10 = 4k\), \(k = 2.5\). When \(x = 6\): \(y = 2.5 \times 6 = 15\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$\(y\) is directly proportional to \(x\). When \(x = 4\), \(y = 10\). Find \(y\) when \(x = 6\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Inverse Proportion$t$, $t$aqa-ma-fh-ratio-proportion$t$, 3,
   $t$\(y\) is inversely proportional to \(x\). When \(x = 2\), \(y = 12\). Find \(y\) when \(x = 6\).$t$,
   $t$\(36\)$t$, $t$\(4\)$t$, $t$\(16\)$t$, $t$\(2\)$t$, 'Not sure', $t$b$t$,
   $t$That is direct proportion (\(x\) trebles so \(y\) trebles). Inverse proportion: \(xy = 24\), so \(y = 24 \div 6 = 4\).$t$, null, $t$This adds 4. For inverse proportion, \(y = \dfrac{k}{x}\) with \(k = 24\): \(y = 4\).$t$, $t$This divides 12 by 6. Find \(k\) first: \(k = xy = 24\), so \(y = 24 \div 6 = 4\).$t$,
   $t$\(y = \dfrac{k}{x}\). From \(12 = \dfrac{k}{2}\), \(k = 24\). When \(x = 6\): \(y = \dfrac{24}{6} = 4\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$\(y\) is inversely proportional to \(x\). When \(x = 2\), \(y = 12\). Find \(y\) when \(x = 6\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Inverse Square Proportion$t$, $t$aqa-ma-fh-ratio-proportion$t$, 4,
   $t$\(y\) is inversely proportional to \(x^{2}\). When \(x = 2\), \(y = 9\). Find \(y\) when \(x = 3\).$t$,
   $t$\(6\)$t$, $t$\(13.5\)$t$, $t$\(4\)$t$, $t$\(20.25\)$t$, 'Not sure', $t$c$t$,
   $t$That uses \(y \propto \dfrac{1}{x}\) without squaring. With \(y = \dfrac{k}{x^{2}}\): \(k = 9 \times 4 = 36\), so \(y = \dfrac{36}{9} = 4\).$t$, $t$That is direct proportion to \(x\). Here \(y = \dfrac{k}{x^{2}}\), \(k = 36\), so \(y = 4\).$t$, null, $t$That is direct proportion to \(x^{2}\). Inverse: \(y = \dfrac{36}{x^{2}} = \dfrac{36}{9} = 4\).$t$,
   $t$\(y = \dfrac{k}{x^{2}}\). From \(9 = \dfrac{k}{4}\), \(k = 36\). When \(x = 3\): \(y = \dfrac{36}{9} = 4\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$\(y\) is inversely proportional to \(x^{2}\). When \(x = 2\), \(y = 9\). Find \(y\) when \(x = 3\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Speed$t$, $t$aqa-ma-fh-ratio-proportion$t$, 3,
   $t$A train travels 150 km in 1 hour 15 minutes. What is its average speed?$t$,
   $t$\(130.4\,\text{km/h}\)$t$, $t$\(187.5\,\text{km/h}\)$t$, $t$\(120\,\text{km/h}\)$t$, $t$\(100\,\text{km/h}\)$t$, 'Not sure', $t$c$t$,
   $t$This treats 1 hour 15 minutes as 1.15 hours. 15 minutes is \(\tfrac{1}{4}\) of an hour, so the time is 1.25 h: \(150 \div 1.25 = 120\,\text{km/h}\).$t$, $t$This multiplies distance by time. Speed = distance ÷ time \(= 150 \div 1.25 = 120\,\text{km/h}\).$t$, null, $t$This treats 1 hour 15 minutes as 1.5 hours. It is 1.25 hours: \(150 \div 1.25 = 120\,\text{km/h}\).$t$,
   $t$1 hour 15 minutes \(= 1.25\) hours. Speed = distance ÷ time \(= 150 \div 1.25 = 120\,\text{km/h}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$A train travels 150 km in 1 hour 15 minutes. What is its average speed?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Ratio Problems$t$, $t$aqa-ma-fh-ratio-proportion$t$, 4,
   $t$Ama and Kofi share some money in the ratio 3 : 5. Kofi gets £24 more than Ama. How much money do they share?$t$,
   $t$\(\text{£}96\)$t$, $t$\(\text{£}64\)$t$, $t$\(\text{£}48\)$t$, $t$\(\text{£}192\)$t$, 'Not sure', $t$a$t$,
   null, $t$This treats £24 as three parts. The difference is \(5 - 3 = 2\) parts, so 1 part = £12 and the total (8 parts) is £96.$t$, $t$This doubles the £24. The difference is 2 parts, so 1 part = £12, and 8 parts \(= \text{£}96\).$t$, $t$This treats £24 as one part. The difference is 2 parts, so 1 part = £12 and 8 parts \(= \text{£}96\).$t$,
   $t$The difference is \(5 - 3 = 2\) parts \(= \text{£}24\), so 1 part = £12. The total is \(3 + 5 = 8\) parts \(= 8 \times 12 = \text{£}96\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Ama and Kofi share some money in the ratio 3 : 5. Kofi gets £24 more than Ama. How much money do they share?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Ratio, proportion and rates of change$t$, $t$Best Buy$t$, $t$aqa-ma-fh-ratio-proportion$t$, 2,
   $t$Which is better value: 400 g of rice for £2.60, or 650 g for £4.10?$t$,
   $t$The 400 g bag: it costs less$t$, $t$The 650 g bag: about 63p per 100 g$t$, $t$The 400 g bag: 65p per 100 g$t$, $t$They are exactly the same value$t$, 'Not sure', $t$b$t$,
   $t$A lower price doesn't mean better value. Compare the cost per 100 g: 65p for the 400 g bag, about 63p for the 650 g bag.$t$, null, $t$65p per 100 g is right for the 400 g bag, but the 650 g bag is cheaper per 100 g (about 63p).$t$, $t$Compare the cost per 100 g: 65p against about 63p, so they differ.$t$,
   $t$400 g: \(260 \div 4 = 65\)p per 100 g. 650 g: \(410 \div 6.5 \approx 63.1\)p per 100 g. The 650 g bag is better value.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Which is better value: 400 g of rice for £2.60, or 650 g for £4.10?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Fractions, decimals and percentages$t$, $t$Reverse Percentages$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 3,
   $t$After a 20% reduction, a coat costs £48. What was the original price?$t$,
   $t$\(\text{£}57.60\)$t$, $t$\(\text{£}38.40\)$t$, $t$\(\text{£}68\)$t$, $t$\(\text{£}60\)$t$, 'Not sure', $t$d$t$,
   $t$This adds 20% of the sale price. £48 is 80% of the original, so divide by 0.8: \(48 \div 0.8 = \text{£}60\).$t$, $t$This takes 20% off again. £48 is 80% of the original: \(48 \div 0.8 = \text{£}60\).$t$, $t$This adds 20 pounds. £48 is 80% of the original: \(48 \div 0.8 = \text{£}60\).$t$, null,
   $t$The sale price is 80% of the original, so original \(= 48 \div 0.8 = \text{£}60\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$After a 20% reduction, a coat costs £48. What was the original price?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Fractions, decimals and percentages$t$, $t$Percentage Change$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 2,
   $t$A price rises from £40 to £50. What is the percentage increase?$t$,
   $t$\(20\%\)$t$, $t$\(25\%\)$t$, $t$\(10\%\)$t$, $t$\(125\%\)$t$, 'Not sure', $t$b$t$,
   $t$This divides the increase by the new price. Divide by the original: \(10 \div 40 \times 100 = 25\%\).$t$, null, $t$£10 is the increase in pounds, not the percentage: \(10 \div 40 \times 100 = 25\%\).$t$, $t$125% is the new price as a percentage of the old one. The increase is \(25\%\).$t$,
   $t$Percentage change \(= \dfrac{\text{change}}{\text{original}} \times 100 = \dfrac{10}{40} \times 100 = 25\%\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$A price rises from £40 to £50. What is the percentage increase?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Fractions, decimals and percentages$t$, $t$Percentage of an Amount$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 2,
   $t$Without a calculator, work out 17.5% of £80.$t$,
   $t$\(\text{£}1.40\)$t$, $t$\(\text{£}14\)$t$, $t$\(\text{£}66\)$t$, $t$\(\text{£}12\)$t$, 'Not sure', $t$b$t$,
   $t$This is 1.75% of £80: the decimal point has slipped. 10% = £8, 5% = £4, 2.5% = £2, so 17.5% = £14.$t$, null, $t$That is the amount left after taking 17.5% off. 17.5% of £80 is £14.$t$, $t$This finds 15% only. Add 2.5% (£2): 10% + 5% + 2.5% \(= 8 + 4 + 2 = \text{£}14\).$t$,
   $t$10% of £80 = £8, 5% = £4 and 2.5% = £2, so 17.5% \(= 8 + 4 + 2 = \text{£}14\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Without a calculator, work out 17.5% of £80.$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Fractions, decimals and percentages$t$, $t$Multiplying Mixed Numbers$t$, $t$aqa-ma-fh-fractions-decimals-percentages$t$, 3,
   $t$Work out \(2\tfrac{1}{3} \times 1\tfrac{1}{2}\).$t$,
   $t$\(2\tfrac{1}{6}\)$t$, $t$\(3\tfrac{5}{6}\)$t$, $t$\(3\tfrac{1}{2}\)$t$, $t$\(4\)$t$, 'Not sure', $t$c$t$,
   $t$This multiplies the whole numbers and the fractions separately. Convert to improper fractions: \(\tfrac{7}{3} \times \tfrac{3}{2} = \tfrac{7}{2} = 3\tfrac{1}{2}\).$t$, $t$This adds the numbers instead of multiplying. \(\tfrac{7}{3} \times \tfrac{3}{2} = \tfrac{21}{6} = 3\tfrac{1}{2}\).$t$, null, $t$Rounding isn't enough here. \(\tfrac{7}{3} \times \tfrac{3}{2} = \tfrac{7}{2} = 3\tfrac{1}{2}\).$t$,
   $t$\(2\tfrac{1}{3} = \tfrac{7}{3}\) and \(1\tfrac{1}{2} = \tfrac{3}{2}\). \(\tfrac{7}{3} \times \tfrac{3}{2} = \tfrac{21}{6} = \tfrac{7}{2} = 3\tfrac{1}{2}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Work out \(2\tfrac{1}{3} \times 1\tfrac{1}{2}\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Number — basics and operations$t$, $t$Upper Bounds$t$, $t$aqa-ma-fh-number-basics$t$, 3,
   $t$A length is 7.4 cm, correct to 1 decimal place. What is its upper bound?$t$,
   $t$\(7.49\,\text{cm}\)$t$, $t$\(7.5\,\text{cm}\)$t$, $t$\(7.45\,\text{cm}\)$t$, $t$\(7.35\,\text{cm}\)$t$, 'Not sure', $t$c$t$,
   $t$The bound is half a unit (0.05) above 7.4, not the largest value that "looks like" 7.4: the upper bound is 7.45.$t$, $t$7.5 would round to 7.5, not 7.4. Add half of 0.1: \(7.4 + 0.05 = 7.45\).$t$, null, $t$7.35 is the lower bound. The upper bound is \(7.4 + 0.05 = 7.45\).$t$,
   $t$To 1 d.p. the accuracy is 0.1, so the bounds are \(\pm 0.05\): the error interval is \(7.35 \le l < 7.45\). The upper bound is 7.45.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$A length is 7.4 cm, correct to 1 decimal place. What is its upper bound?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Number — basics and operations$t$, $t$Bounds in Calculations$t$, $t$aqa-ma-fh-number-basics$t$, 5,
   $t$\(a = 5.2\) and \(b = 1.6\), both correct to 1 decimal place. What is the upper bound of \(a - b\)?$t$,
   $t$\(3.6\)$t$, $t$\(3.65\)$t$, $t$\(3.5\)$t$, $t$\(3.7\)$t$, 'Not sure', $t$d$t$,
   $t$That uses the rounded values. For the largest difference, use the upper bound of \(a\) and the lower bound of \(b\): \(5.25 - 1.55 = 3.7\).$t$, $t$This bounds only \(a\). Subtracting the smallest possible \(b\) gives the largest result: \(5.25 - 1.55 = 3.7\).$t$, $t$That is the lower bound (\(5.15 - 1.65\)). The upper bound is \(5.25 - 1.55 = 3.7\).$t$, null,
   $t$To make \(a - b\) as large as possible, take the largest \(a\) and the smallest \(b\): \(5.25 - 1.55 = 3.7\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$\(a = 5.2\) and \(b = 1.6\), both correct to 1 decimal place. What is the upper bound of \(a - b\)?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Number — basics and operations$t$, $t$Lowest Common Multiple$t$, $t$aqa-ma-fh-number-basics$t$, 2,
   $t$What is the lowest common multiple (LCM) of 12 and 18?$t$,
   $t$\(6\)$t$, $t$\(216\)$t$, $t$\(72\)$t$, $t$\(36\)$t$, 'Not sure', $t$d$t$,
   $t$6 is the highest common factor. The LCM is the smallest number both divide into: 36.$t$, $t$\(12 \times 18 = 216\) is a common multiple, but not the lowest. The LCM is 36.$t$, $t$72 is a common multiple, but 36 is smaller: \(36 \div 12 = 3\) and \(36 \div 18 = 2\).$t$, null,
   $t$\(12 = 2^{2} \times 3\) and \(18 = 2 \times 3^{2}\). The LCM takes the highest power of each prime: \(2^{2} \times 3^{2} = 36\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$What is the lowest common multiple (LCM) of 12 and 18?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Number — basics and operations$t$, $t$Recurring Decimals$t$, $t$aqa-ma-fh-number-basics$t$, 5,
   $t$Which fraction is equal to \(0.\dot{4}\dot{5}\) (0.454545…)?$t$,
   $t$\(\tfrac{9}{20}\)$t$, $t$\(\tfrac{5}{11}\)$t$, $t$\(\tfrac{1}{2}\)$t$, $t$\(\tfrac{4}{9}\)$t$, 'Not sure', $t$b$t$,
   $t$\(\tfrac{9}{20} = 0.45\) exactly, which doesn't recur. Let \(x = 0.\dot{4}\dot{5}\); then \(100x - x = 45\), so \(x = \tfrac{45}{99} = \tfrac{5}{11}\).$t$, null, $t$\(\tfrac{1}{2} = 0.5\). Using \(100x - x = 45\) gives \(x = \tfrac{45}{99} = \tfrac{5}{11}\).$t$, $t$\(\tfrac{4}{9} = 0.444\ldots\), where only the 4 recurs. For two recurring digits use \(100x\): \(x = \tfrac{45}{99} = \tfrac{5}{11}\).$t$,
   $t$Let \(x = 0.4545\ldots\). Then \(100x = 45.4545\ldots\). Subtracting: \(99x = 45\), so \(x = \tfrac{45}{99} = \tfrac{5}{11}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Which fraction is equal to \(0.\dot{4}\dot{5}\) (0.454545…)?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Number — basics and operations$t$, $t$Counting (Product Rule)$t$, $t$aqa-ma-fh-number-basics$t$, 4,
   $t$A code is one letter (A to Z) followed by two digits (0 to 9). Digits may repeat. How many different codes are there?$t$,
   $t$\(46\)$t$, $t$\(2340\)$t$, $t$\(260\)$t$, $t$\(2600\)$t$, 'Not sure', $t$d$t$,
   $t$This adds the choices. For a sequence of choices, multiply: \(26 \times 10 \times 10 = 2600\).$t$, $t$This stops the digits repeating. They may repeat, so: \(26 \times 10 \times 10 = 2600\).$t$, $t$This counts only one digit. There are two: \(26 \times 10 \times 10 = 2600\).$t$, null,
   $t$By the product rule: 26 choices of letter × 10 choices for each digit \(= 26 \times 10 \times 10 = 2600\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$A code is one letter (A to Z) followed by two digits (0 to 9). Digits may repeat. How many different codes are there?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Powers, roots and standard form$t$, $t$Simplifying Surds$t$, $t$aqa-ma-fh-powers-roots$t$, 3,
   $t$Simplify \(\sqrt{72}\).$t$,
   $t$\(36\sqrt{2}\)$t$, $t$\(6\sqrt{2}\)$t$, $t$\(9\sqrt{8}\)$t$, $t$\(8\sqrt{3}\)$t$, 'Not sure', $t$b$t$,
   $t$36 comes out of the root as \(\sqrt{36} = 6\), not 36: \(\sqrt{72} = \sqrt{36}\sqrt{2} = 6\sqrt{2}\).$t$, null, $t$9 comes out as \(\sqrt{9} = 3\), and 8 can be simplified further. The largest square factor is 36: \(6\sqrt{2}\).$t$, $t$72 isn't \(64 \times 3\) (that's 192). Use the largest square factor, 36: \(\sqrt{72} = 6\sqrt{2}\).$t$,
   $t$Find the largest square factor: \(72 = 36 \times 2\), so \(\sqrt{72} = \sqrt{36} \times \sqrt{2} = 6\sqrt{2}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Simplify \(\sqrt{72}\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Powers, roots and standard form$t$, $t$Rationalising Denominators$t$, $t$aqa-ma-fh-powers-roots$t$, 4,
   $t$Rationalise the denominator of \(\dfrac{6}{\sqrt{3}}\).$t$,
   $t$\(6\sqrt{3}\)$t$, $t$\(3\sqrt{2}\)$t$, $t$\(2\sqrt{3}\)$t$, $t$\(\dfrac{\sqrt{3}}{2}\)$t$, 'Not sure', $t$c$t$,
   $t$This multiplies the top by \(\sqrt{3}\) but not the bottom. Multiply both: \(\dfrac{6\sqrt{3}}{3} = 2\sqrt{3}\).$t$, $t$This divides 6 by 3 and moves the root. Multiply top and bottom by \(\sqrt{3}\): \(\dfrac{6\sqrt{3}}{3} = 2\sqrt{3}\).$t$, null, $t$This inverts the fraction. \(\dfrac{6}{\sqrt{3}} \times \dfrac{\sqrt{3}}{\sqrt{3}} = \dfrac{6\sqrt{3}}{3} = 2\sqrt{3}\).$t$,
   $t$Multiply top and bottom by \(\sqrt{3}\): \(\dfrac{6}{\sqrt{3}} \times \dfrac{\sqrt{3}}{\sqrt{3}} = \dfrac{6\sqrt{3}}{3} = 2\sqrt{3}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Rationalise the denominator of \(\dfrac{6}{\sqrt{3}}\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Powers, roots and standard form$t$, $t$Fractional and Negative Indices$t$, $t$aqa-ma-fh-powers-roots$t$, 4,
   $t$Evaluate \(27^{-\frac{2}{3}}\).$t$,
   $t$\(9\)$t$, $t$\(-18\)$t$, $t$\(\tfrac{1}{6}\)$t$, $t$\(\tfrac{1}{9}\)$t$, 'Not sure', $t$d$t$,
   $t$This ignores the negative sign. A negative power means the reciprocal: \(27^{-\frac{2}{3}} = \dfrac{1}{9}\).$t$, $t$This multiplies 27 by −2/3. A power isn't multiplication: the 3 on the bottom means cube root (\(\sqrt[3]{27} = 3\)), the 2 means square (\(3^{2} = 9\)), and the minus means take the reciprocal, giving \(\dfrac{1}{9}\).$t$, $t$This doubles the cube root instead of squaring it. \((\sqrt[3]{27})^{2} = 3^{2} = 9\), so the answer is \(\dfrac{1}{9}\).$t$, null,
   $t$The denominator 3 means cube root, the 2 means square, and the minus means reciprocal: \(27^{-\frac{2}{3}} = \dfrac{1}{(\sqrt[3]{27})^{2}} = \dfrac{1}{3^{2}} = \dfrac{1}{9}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Evaluate \(27^{-\frac{2}{3}}\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Powers, roots and standard form$t$, $t$Standard Form Calculations$t$, $t$aqa-ma-fh-powers-roots$t$, 3,
   $t$Work out \((3 \times 10^{4}) \times (5 \times 10^{6})\). Give your answer in standard form.$t$,
   $t$\(15 \times 10^{10}\)$t$, $t$\(1.5 \times 10^{24}\)$t$, $t$\(8 \times 10^{10}\)$t$, $t$\(1.5 \times 10^{11}\)$t$, 'Not sure', $t$d$t$,
   $t$The value is right, but 15 isn't between 1 and 10, so it isn't standard form: \(15 \times 10^{10} = 1.5 \times 10^{11}\).$t$, $t$This multiplies the powers. When multiplying, add them: \(10^{4} \times 10^{6} = 10^{10}\), giving \(1.5 \times 10^{11}\).$t$, $t$This adds 3 and 5. Multiply them: \(3 \times 5 = 15\), so \(15 \times 10^{10} = 1.5 \times 10^{11}\).$t$, null,
   $t$\(3 \times 5 = 15\) and \(10^{4} \times 10^{6} = 10^{10}\), giving \(15 \times 10^{10} = 1.5 \times 10^{11}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Work out \((3 \times 10^{4}) \times (5 \times 10^{6})\). Give your answer in standard form.$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — expressions$t$, $t$Expanding Brackets$t$, $t$aqa-ma-fh-algebra-expressions$t$, 2,
   $t$Expand and simplify \((x + 3)(x - 5)\).$t$,
   $t$\(x^{2} - 2x - 15\)$t$, $t$\(x^{2} - 15\)$t$, $t$\(x^{2} + 2x - 15\)$t$, $t$\(x^{2} - 2x + 15\)$t$, 'Not sure', $t$a$t$,
   null, $t$This misses the middle terms. \(x \times (-5) + 3 \times x = -2x\), so \(x^{2} - 2x - 15\).$t$, $t$The middle term's sign is wrong: \(-5x + 3x = -2x\).$t$, $t$The constant's sign is wrong: \(3 \times (-5) = -15\).$t$,
   $t$\((x + 3)(x - 5) = x^{2} - 5x + 3x - 15 = x^{2} - 2x - 15\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Expand and simplify \((x + 3)(x - 5)\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — expressions$t$, $t$Squaring a Bracket$t$, $t$aqa-ma-fh-algebra-expressions$t$, 2,
   $t$Expand \((2x - 3)^{2}\).$t$,
   $t$\(4x^{2} + 9\)$t$, $t$\(4x^{2} - 12x + 9\)$t$, $t$\(4x^{2} - 6x + 9\)$t$, $t$\(2x^{2} - 12x + 9\)$t$, 'Not sure', $t$b$t$,
   $t$Squaring a bracket isn't squaring each term. Write it as \((2x - 3)(2x - 3)\): the middle terms give \(-12x\).$t$, null, $t$The middle term is counted once. There are two: \(-6x - 6x = -12x\).$t$, $t$\((2x)^{2} = 4x^{2}\), not \(2x^{2}\).$t$,
   $t$\((2x - 3)^{2} = (2x - 3)(2x - 3) = 4x^{2} - 6x - 6x + 9 = 4x^{2} - 12x + 9\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Expand \((2x - 3)^{2}\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — expressions$t$, $t$Factorising Quadratics$t$, $t$aqa-ma-fh-algebra-expressions$t$, 4,
   $t$Factorise \(2x^{2} + 7x + 3\).$t$,
   $t$\((2x + 3)(x + 1)\)$t$, $t$\((2x + 1)(x + 3)\)$t$, $t$\((2x - 1)(x + 3)\)$t$, $t$\((x + 1)(x + 3)\)$t$, 'Not sure', $t$b$t$,
   $t$Expanding gives \(2x^{2} + 5x + 3\), not \(+7x\). Try \((2x + 1)(x + 3) = 2x^{2} + 7x + 3\).$t$, null, $t$Expanding gives \(2x^{2} + 5x - 3\). Both signs must be + to give \(+3\): \((2x + 1)(x + 3)\).$t$, $t$This loses the 2 in \(2x^{2}\). \((2x + 1)(x + 3)\) expands to \(2x^{2} + 7x + 3\).$t$,
   $t$Find two numbers that multiply to \(2 \times 3 = 6\) and add to 7: 1 and 6. \(2x^{2} + x + 6x + 3 = x(2x + 1) + 3(2x + 1) = (2x + 1)(x + 3)\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Factorise \(2x^{2} + 7x + 3\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — expressions$t$, $t$Algebraic Fractions$t$, $t$aqa-ma-fh-algebra-expressions$t$, 4,
   $t$Simplify \(\dfrac{x^{2} - 9}{x + 3}\).$t$,
   $t$\(x + 3\)$t$, $t$\(x - 3\)$t$, $t$\(x^{2} - 3\)$t$, $t$\(x - 9\)$t$, 'Not sure', $t$b$t$,
   $t$Factorise the top first: \(x^{2} - 9 = (x + 3)(x - 3)\). Cancelling \((x + 3)\) leaves \(x - 3\).$t$, null, $t$You can't cancel terms, only factors. \(\dfrac{(x + 3)(x - 3)}{x + 3} = x - 3\).$t$, $t$That cancels \(x\) terms separately. Factorise: \(x^{2} - 9 = (x + 3)(x - 3)\), leaving \(x - 3\).$t$,
   $t$\(x^{2} - 9\) is a difference of two squares: \((x + 3)(x - 3)\). So \(\dfrac{(x + 3)(x - 3)}{x + 3} = x - 3\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Simplify \(\dfrac{x^{2} - 9}{x + 3}\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — expressions$t$, $t$Changing the Subject$t$, $t$aqa-ma-fh-algebra-expressions$t$, 3,
   $t$Make \(r\) the subject of \(A = \pi r^{2}\).$t$,
   $t$\(r = \dfrac{A}{2\pi}\)$t$, $t$\(r = \sqrt{A\pi}\)$t$, $t$\(r = \sqrt{\dfrac{A}{\pi}}\)$t$, $t$\(r = \left(\dfrac{A}{\pi}\right)^{2}\)$t$, 'Not sure', $t$c$t$,
   $t$The inverse of squaring is square rooting, not halving. \(r^{2} = \dfrac{A}{\pi}\), so \(r = \sqrt{\dfrac{A}{\pi}}\).$t$, $t$Divide by \(\pi\), don't multiply: \(r^{2} = \dfrac{A}{\pi}\), so \(r = \sqrt{\dfrac{A}{\pi}}\).$t$, null, $t$This squares instead of square-rooting. \(r = \sqrt{\dfrac{A}{\pi}}\).$t$,
   $t$Divide both sides by \(\pi\): \(r^{2} = \dfrac{A}{\pi}\). Then square root: \(r = \sqrt{\dfrac{A}{\pi}}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Make \(r\) the subject of \(A = \pi r^{2}\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — expressions$t$, $t$Odd and Even Expressions$t$, $t$aqa-ma-fh-algebra-expressions$t$, 2,
   $t$\(n\) is any integer. Which expression is always odd?$t$,
   $t$\(2n\)$t$, $t$\(n + 1\)$t$, $t$\(2n + 1\)$t$, $t$\(3n\)$t$, 'Not sure', $t$c$t$,
   $t$\(2n\) is always even: it's a multiple of 2.$t$, $t$\(n + 1\) is odd only when \(n\) is even. \(2n + 1\) is one more than an even number, so always odd.$t$, null, $t$\(3n\) is odd when \(n\) is odd and even when \(n\) is even. \(2n + 1\) is always odd.$t$,
   $t$\(2n\) is always even, so \(2n + 1\) is always one more than an even number: always odd.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$\(n\) is any integer. Which expression is always odd?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Equations and inequalities$t$, $t$Quadratic Formula$t$, $t$aqa-ma-fh-algebra-equations$t$, 5,
   $t$Solve \(x^{2} - 4x - 1 = 0\). Give your answers to 2 decimal places.$t$,
   $t$\(x = 0.24\) or \(x = -4.24\)$t$, $t$\(x = 4.24\) or \(x = -0.24\)$t$, $t$\(x = 6.24\) or \(x = 1.76\)$t$, $t$\(x = 2.24\) or \(x = -2.24\)$t$, 'Not sure', $t$b$t$,
   $t$The signs are swapped: \(-b = +4\). \(x = \dfrac{4 \pm \sqrt{20}}{2} = 4.24\) or \(-0.24\).$t$, null, $t$This divides only the square root by 2. The whole top is divided by \(2a = 2\): \(x = \dfrac{4 \pm \sqrt{20}}{2} = 4.24\) or \(-0.24\).$t$, $t$This drops the \(-b\) term. \(x = \dfrac{4 \pm \sqrt{20}}{2} = 2 \pm 2.236\): 4.24 or \(-0.24\).$t$,
   $t$\(a = 1, b = -4, c = -1\). \(x = \dfrac{4 \pm \sqrt{16 + 4}}{2} = \dfrac{4 \pm \sqrt{20}}{2} = 2 \pm 2.236\), so \(x = 4.24\) or \(x = -0.24\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Solve \(x^{2} - 4x - 1 = 0\). Give your answers to 2 decimal places.$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Equations and inequalities$t$, $t$Simultaneous Equations$t$, $t$aqa-ma-fh-algebra-equations$t$, 3,
   $t$Solve the simultaneous equations \(2x + y = 11\) and \(x - y = 1\).$t$,
   $t$\(x = 3,\ y = 5\)$t$, $t$\(x = 4,\ y = 3\)$t$, $t$\(x = 5,\ y = 1\)$t$, $t$\(x = 6,\ y = 5\)$t$, 'Not sure', $t$b$t$,
   $t$This fits the first equation but not the second (\(3 - 5 \ne 1\)). Add the equations: \(3x = 12\), so \(x = 4, y = 3\).$t$, null, $t$This fits the first equation but not the second (\(5 - 1 \ne 1\)). Adding gives \(3x = 12\): \(x = 4, y = 3\).$t$, $t$This fits the second equation but not the first (\(12 + 5 \ne 11\)). Solve both together: \(x = 4, y = 3\).$t$,
   $t$Add the equations to eliminate \(y\): \(3x = 12\), so \(x = 4\). Then \(4 - y = 1\) gives \(y = 3\). Check: \(2 \times 4 + 3 = 11\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Solve the simultaneous equations \(2x + y = 11\) and \(x - y = 1\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Equations and inequalities$t$, $t$Quadratic Inequalities$t$, $t$aqa-ma-fh-algebra-equations$t$, 4,
   $t$Solve \(x^{2} - 9 < 0\).$t$,
   $t$\(x < 3\)$t$, $t$\(x < -3\) or \(x > 3\)$t$, $t$\(-3 < x < 3\)$t$, $t$\(x < \pm 3\)$t$, 'Not sure', $t$c$t$,
   $t$This misses the negative solutions: \(x = -4\) fits \(x < 3\) but gives \(16 - 9 > 0\). The solution is \(-3 < x < 3\).$t$, $t$That solves \(x^{2} - 9 > 0\). For \(< 0\) you want the region between the roots: \(-3 < x < 3\).$t$, null, $t$"\(x < \pm 3\)" isn't a valid way to write it. Between the roots: \(-3 < x < 3\).$t$,
   $t$\(x^{2} - 9 = (x - 3)(x + 3)\) is zero at \(x = \pm 3\) and negative between them (the curve dips below the \(x\)-axis there), so \(-3 < x < 3\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Solve \(x^{2} - 9 < 0\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Equations and inequalities$t$, $t$Linear Inequalities$t$, $t$aqa-ma-fh-algebra-equations$t$, 2,
   $t$Solve \(3x - 7 > 11\).$t$,
   $t$\(x > \tfrac{4}{3}\)$t$, $t$\(x < 6\)$t$, $t$\(x > 18\)$t$, $t$\(x > 6\)$t$, 'Not sure', $t$d$t$,
   $t$This subtracts 7 instead of adding it. \(3x > 18\), so \(x > 6\).$t$, $t$The inequality only reverses when you multiply or divide by a negative. Dividing by 3 keeps it: \(x > 6\).$t$, $t$This forgets to divide by 3. \(3x > 18\), so \(x > 6\).$t$, null,
   $t$Add 7: \(3x > 18\). Divide by 3: \(x > 6\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Solve \(3x - 7 > 11\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Sequences$t$, $t$Quadratic nth Term$t$, $t$aqa-ma-fh-algebra-sequences$t$, 5,
   $t$Find the \(n\)th term of the sequence \(3, 9, 19, 33, \ldots\)$t$,
   $t$\(6n - 3\)$t$, $t$\(4n^{2} - 1\)$t$, $t$\(n^{2} + 2\)$t$, $t$\(2n^{2} + 1\)$t$, 'Not sure', $t$d$t$,
   $t$The first differences (6, 10, 14) aren't constant, so it isn't linear. The second difference is 4, so it starts \(2n^{2}\).$t$, $t$The coefficient of \(n^{2}\) is half the second difference: \(4 \div 2 = 2\). \(2n^{2}\) gives 2, 8, 18, 32; add 1.$t$, $t$This works for \(n = 1\) (3) but not \(n = 2\) (6, not 9). The \(n^{2}\) coefficient is 2: \(2n^{2} + 1\).$t$, null,
   $t$Differences: 6, 10, 14; second difference 4, so the sequence starts \(\tfrac{4}{2}n^{2} = 2n^{2}\): 2, 8, 18, 32. The sequence minus these is 1, 1, 1, 1, so the \(n\)th term is \(2n^{2} + 1\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Find the \(n\)th term of the sequence \(3, 9, 19, 33, \ldots\)$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Sequences$t$, $t$Geometric Sequences$t$, $t$aqa-ma-fh-algebra-sequences$t$, 2,
   $t$What is the next term of the geometric sequence \(2, 6, 18, 54, \ldots\)?$t$,
   $t$\(108\)$t$, $t$\(90\)$t$, $t$\(162\)$t$, $t$\(216\)$t$, 'Not sure', $t$c$t$,
   $t$This doubles the last term. The common ratio is 3: \(54 \times 3 = 162\).$t$, $t$This adds 36, the last difference. It's geometric (multiply by 3): \(54 \times 3 = 162\).$t$, null, $t$This multiplies by 4. The ratio is \(6 \div 2 = 3\), so \(54 \times 3 = 162\).$t$,
   $t$Each term is 3 times the previous one (common ratio 3), so the next term is \(54 \times 3 = 162\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$What is the next term of the geometric sequence \(2, 6, 18, 54, \ldots\)?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Graphs$t$, $t$Perpendicular Gradients$t$, $t$aqa-ma-fh-graphs$t$, 3,
   $t$A line has gradient 2. What is the gradient of a line perpendicular to it?$t$,
   $t$\(-2\)$t$, $t$\(\tfrac{1}{2}\)$t$, $t$\(2\)$t$, $t$\(-\tfrac{1}{2}\)$t$, 'Not sure', $t$d$t$,
   $t$This changes the sign only. Perpendicular gradients multiply to \(-1\): \(-\tfrac{1}{2}\).$t$, $t$This takes the reciprocal only. It must also change sign: \(-\tfrac{1}{2}\).$t$, $t$That is the gradient of a parallel line. Perpendicular: \(-\tfrac{1}{2}\).$t$, null,
   $t$Perpendicular gradients multiply to \(-1\): \(2 \times m = -1\), so \(m = -\tfrac{1}{2}\) (the negative reciprocal).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$A line has gradient 2. What is the gradient of a line perpendicular to it?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Graphs$t$, $t$Equation of a Circle$t$, $t$aqa-ma-fh-graphs$t$, 3,
   $t$What is the radius of the circle \(x^{2} + y^{2} = 49\)?$t$,
   $t$\(49\)$t$, $t$\(24.5\)$t$, $t$\(14\)$t$, $t$\(7\)$t$, 'Not sure', $t$d$t$,
   $t$49 is the radius squared. \(x^{2} + y^{2} = r^{2}\), so \(r = \sqrt{49} = 7\).$t$, $t$This halves 49. The equation is \(x^{2} + y^{2} = r^{2}\), so take the square root: 7.$t$, $t$14 is the diameter. The radius is \(\sqrt{49} = 7\).$t$, null,
   $t$A circle centred on the origin has equation \(x^{2} + y^{2} = r^{2}\). Here \(r^{2} = 49\), so \(r = 7\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$What is the radius of the circle \(x^{2} + y^{2} = 49\)?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Graphs$t$, $t$Turning Points$t$, $t$aqa-ma-h-algebra-advanced$t$, 4,
   $t$By completing the square, find the coordinates of the turning point of \(y = x^{2} - 8x + 11\).$t$,
   $t$\((-4,\ -5)\)$t$, $t$\((4,\ 5)\)$t$, $t$\((4,\ -5)\)$t$, $t$\((4,\ 11)\)$t$, 'Not sure', $t$c$t$,
   $t$The sign of the \(x\)-coordinate is wrong. \((x - 4)^{2}\) is smallest when \(x = 4\), not \(-4\).$t$, $t$This adds the 16 instead of subtracting it: \((x - 4)^{2} - 16 + 11 = (x - 4)^{2} - 5\), so the turning point is \((4, -5)\).$t$, null, $t$11 is the \(y\)-intercept, not the minimum. \(y = (x - 4)^{2} - 5\), so the turning point is \((4, -5)\).$t$,
   $t$Halve \(-8\) to get \(-4\): \(x^{2} - 8x + 11 = (x - 4)^{2} - 16 + 11 = (x - 4)^{2} - 5\). The minimum is when \(x - 4 = 0\), so the turning point is \((4, -5)\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$By completing the square, find the coordinates of the turning point of \(y = x^{2} - 8x + 11\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Graphs$t$, $t$Equation of a Line$t$, $t$aqa-ma-fh-graphs$t$, 3,
   $t$A line has gradient 3 and passes through the point \((2, 7)\). What is its equation?$t$,
   $t$\(y = 3x + 7\)$t$, $t$\(y = 3x + 1\)$t$, $t$\(y = 3x - 1\)$t$, $t$\(y = 2x + 3\)$t$, 'Not sure', $t$b$t$,
   $t$7 is the \(y\)-value at \(x = 2\), not the \(y\)-intercept. Substitute: \(7 = 3 \times 2 + c\), so \(c = 1\).$t$, null, $t$Check with \((2, 7)\): \(3 \times 2 - 1 = 5 \ne 7\). Solving \(7 = 6 + c\) gives \(c = 1\).$t$, $t$The gradient is 3, not 2. \(y = 3x + c\) with \(7 = 6 + c\) gives \(y = 3x + 1\).$t$,
   $t$Use \(y = mx + c\) with \(m = 3\): \(7 = 3 \times 2 + c\), so \(c = 1\). The equation is \(y = 3x + 1\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$A line has gradient 3 and passes through the point \((2, 7)\). What is its equation?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — Higher only$t$, $t$Composite Functions$t$, $t$aqa-ma-h-algebra-advanced$t$, 4,
   $t$\(f(x) = 2x + 1\) and \(g(x) = x^{2}\). Find \(fg(3)\).$t$,
   $t$\(49\)$t$, $t$\(19\)$t$, $t$\(16\)$t$, $t$\(18\)$t$, 'Not sure', $t$b$t$,
   $t$That is \(gf(3)\). \(fg(3)\) means apply \(g\) first: \(g(3) = 9\), then \(f(9) = 2 \times 9 + 1 = 19\).$t$, null, $t$This adds \(f(3)\) and \(g(3)\). A composite function applies one after the other: \(f(g(3)) = f(9) = 19\).$t$, $t$This forgets the \(+1\) in \(f\): \(f(9) = 2 \times 9 + 1 = 19\).$t$,
   $t$\(fg(3) = f(g(3))\). First \(g(3) = 3^{2} = 9\), then \(f(9) = 2 \times 9 + 1 = 19\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$\(f(x) = 2x + 1\) and \(g(x) = x^{2}\). Find \(fg(3)\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — Higher only$t$, $t$Inverse Functions$t$, $t$aqa-ma-h-algebra-advanced$t$, 4,
   $t$\(f(x) = 3x - 4\). Find \(f^{-1}(x)\).$t$,
   $t$\(\dfrac{x - 4}{3}\)$t$, $t$\(\dfrac{1}{3x - 4}\)$t$, $t$\(3x + 4\)$t$, $t$\(\dfrac{x + 4}{3}\)$t$, 'Not sure', $t$d$t$,
   $t$Undo \(-4\) by adding 4: \(y = 3x - 4 \Rightarrow x = \dfrac{y + 4}{3}\).$t$, $t$The inverse function isn't the reciprocal. Undo each step in reverse: add 4, then divide by 3.$t$, $t$This reverses the sign but doesn't undo the \(\times 3\). \(f^{-1}(x) = \dfrac{x + 4}{3}\).$t$, null,
   $t$Let \(y = 3x - 4\). Rearrange: \(x = \dfrac{y + 4}{3}\). So \(f^{-1}(x) = \dfrac{x + 4}{3}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$\(f(x) = 3x - 4\). Find \(f^{-1}(x)\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — Higher only$t$, $t$Iteration$t$, $t$aqa-ma-h-algebra-advanced$t$, 3,
   $t$Using \(x_{n+1} = \sqrt{5 + x_{n}}\) with \(x_{0} = 2\), find \(x_{1}\) to 3 decimal places.$t$,
   $t$\(2.236\)$t$, $t$\(3.500\)$t$, $t$\(2.646\)$t$, $t$\(7.000\)$t$, 'Not sure', $t$c$t$,
   $t$That is \(\sqrt{5}\), leaving out \(x_{0}\). \(x_{1} = \sqrt{5 + 2} = \sqrt{7} = 2.646\).$t$, $t$This halves instead of square-rooting: \(x_{1} = \sqrt{5 + 2} = \sqrt{7} = 2.646\).$t$, null, $t$This forgets the square root: \(\sqrt{7} = 2.646\).$t$,
   $t$Substitute \(x_{0} = 2\): \(x_{1} = \sqrt{5 + 2} = \sqrt{7} = 2.646\) (3 d.p.).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Using \(x_{n+1} = \sqrt{5 + x_{n}}\) with \(x_{0} = 2\), find \(x_{1}\) to 3 decimal places.$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, combined_eligible, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Algebra — Higher only$t$, $t$Rearranging with Factorising$t$, $t$aqa-ma-h-algebra-advanced$t$, 5,
   $t$Make \(x\) the subject of \(ax + 3 = bx - 5\).$t$,
   $t$\(x = \dfrac{8}{a - b}\)$t$, $t$\(x = \dfrac{-2}{a - b}\)$t$, $t$\(x = \dfrac{b - a}{8}\)$t$, $t$\(x = \dfrac{8}{b - a}\)$t$, 'Not sure', $t$d$t$,
   $t$The sign of the denominator is wrong. Collect \(x\) on the right: \(8 = bx - ax = x(b - a)\), so \(x = \dfrac{8}{b - a}\).$t$, $t$\(3\) and \(-5\) combine to 8 when moved to the same side: \(3 + 5 = bx - ax\), so \(x = \dfrac{8}{b - a}\).$t$, $t$This inverts the fraction. From \(8 = x(b - a)\), divide by \((b - a)\): \(x = \dfrac{8}{b - a}\).$t$, null,
   $t$Collect the \(x\) terms on one side and the numbers on the other: \(3 + 5 = bx - ax\), so \(8 = x(b - a)\) and \(x = \dfrac{8}{b - a}\).$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Make \(x\) the subject of \(ax + 3 = bx - 5\).$t$);
 
 commit;

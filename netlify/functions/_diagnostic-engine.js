@@ -13,6 +13,7 @@
 const SPEC_MAP = require('../../assets/js/spec-map.js');
 const PASCO_CALIBRATION_STATS = require('../../assets/js/pasco-calibration-stats.js');
 const { withMathsHtml } = require('./_maths-html');
+const { markNumeric } = require('../../assets/js/diagnostic-numeric.js');
 
 const QUESTIONS_PER_TEST = 36;
 const COMBINED_PER_SUBJECT = 15;
@@ -171,39 +172,81 @@ function sourceSubjects(subject) {
 // What the browser is allowed to see before answering: no correct answer,
 // no misconceptions, no explanation. Text with maths also comes typeset
 // (<field>_html, see _maths-html.js), so the page needn't load KaTeX.
+// A numeric question also gets its unit list (shuffled, so the right unit's
+// place carries no signal) but never its answer_spec, which holds the answer.
 const PUBLIC_QUESTION_FIELDS = ['id', 'subject', 'topic', 'subtopic', 'difficulty', 'question_text',
-  'option_a', 'option_b', 'option_c', 'option_d', 'option_e', 'diagram_spec'];
+  'option_a', 'option_b', 'option_c', 'option_d', 'option_e', 'diagram_spec', 'question_type'];
 const TEXT_FIELDS = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d', 'option_e'];
 function publicQuestion(q) {
   const out = {};
   PUBLIC_QUESTION_FIELDS.forEach(f => { out[f] = q[f] === undefined ? null : q[f]; });
+  out.question_type = q.question_type || 'mcq';
+  if (out.question_type === 'numeric') {
+    const units = (q.answer_spec && q.answer_spec.unit && q.answer_spec.unit_options) || [];
+    out.unit_options = shuffleArray(units);
+  }
   return withMathsHtml(out, TEXT_FIELDS);
 }
 
 // ── Marking ────────────────────────────────────────────────────────────
 
 const VALID_CHOICES = ['a', 'b', 'c', 'd', 'e'];
+// 'x' is a typed answer to a numeric question (the text is in answer_text).
+const TYPED = 'x';
+const CONFIDENCE = ['sure', 'unsure'];
 
-// Turns recorded choices into marked answers, in question order. A question
-// with no recorded choice counts as "Not sure" (it earned nothing, and it
-// isn't a wrong guess either).
-function markAnswers(questions, choiceByQuestionId) {
+// One recorded response as { chosen, answer_text, answer_unit, confidence }.
+// Older callers pass just the choice letter.
+function normResponse(raw) {
+  if (raw && typeof raw === 'object') return raw;
+  return { chosen: raw };
+}
+
+// Marks one question. Choice questions compare against correct_answer; typed
+// answers are marked by assets/js/diagnostic-numeric.js. Anything invalid is "Not sure".
+function markOne(q, raw) {
+  const r = normResponse(raw);
+  const numeric = q.question_type === 'numeric';
+  const typed = numeric && r.chosen === TYPED && String(r.answer_text || '').trim() !== '';
+  const chosen = typed ? TYPED : (!numeric && VALID_CHOICES.includes(r.chosen)) ? r.chosen : 'e';
+  const notSure = chosen === 'e';
+  let correct = false;
+  let misconception = null;
+  if (typed) {
+    ({ correct, misconception } = markNumeric(q.answer_spec, r.answer_text, r.answer_unit || null));
+  } else if (!notSure) {
+    correct = chosen === q.correct_answer;
+    misconception = correct ? null : (q['misconception_' + chosen] || null);
+  }
+  return {
+    chosen, correct, not_sure: notSure, misconception,
+    answer_text: typed ? String(r.answer_text).slice(0, 60) : null,
+    answer_unit: typed ? (r.answer_unit || null) : null,
+    confidence: !notSure && CONFIDENCE.includes(r.confidence) ? r.confidence : null
+  };
+}
+
+// Turns recorded responses into marked answers, in question order. A
+// question with no recorded response counts as "Not sure" (it earned nothing,
+// and it isn't a wrong guess either).
+function markAnswers(questions, responseByQuestionId) {
   return questions.map(q => {
-    const raw = choiceByQuestionId[q.id];
-    const chosen = VALID_CHOICES.includes(raw) ? raw : 'e';
-    const notSure = chosen === 'e';
-    const correct = !notSure && chosen === q.correct_answer;
+    const m = markOne(q, responseByQuestionId[q.id]);
     return {
       question_id: q.id,
       subject: q.subject,
       topic: q.topic,
       subtopic: q.subtopic,
       difficulty: q.difficulty,
-      chosen,
-      correct_answer: q.correct_answer,
-      correct,
-      not_sure: notSure,
-      misconception: !correct && !notSure ? (q['misconception_' + chosen] || null) : null
+      question_type: q.question_type || 'mcq',
+      chosen: m.chosen,
+      answer_text: m.answer_text,
+      answer_unit: m.answer_unit,
+      correct_answer: q.question_type === 'numeric' ? null : q.correct_answer,
+      correct: m.correct,
+      not_sure: m.not_sure,
+      confidence: m.confidence,
+      misconception: m.misconception
     };
   });
 }
@@ -324,11 +367,13 @@ function computeTopicScores(answers) {
   const topics = {};
   answers.forEach(a => {
     const key = a.subject + '|' + a.topic;
-    if (!topics[key]) topics[key] = { subject: a.subject, topic: a.topic, correct: 0, total: 0, not_sure: 0, misconceptions: [] };
+    if (!topics[key]) topics[key] = { subject: a.subject, topic: a.topic, correct: 0, total: 0, not_sure: 0, confident_wrong: 0, unsure_right: 0, misconceptions: [] };
     topics[key].total++;
     if (a.correct) topics[key].correct++;
     if (a.not_sure) topics[key].not_sure++;
     if (a.misconception) topics[key].misconceptions.push(a.misconception);
+    if (!a.correct && !a.not_sure && a.confidence === 'sure') topics[key].confident_wrong++;
+    if (a.correct && a.confidence === 'unsure') topics[key].unsure_right++;
   });
   return Object.values(topics).map(d => ({
     subject: d.subject,
@@ -337,6 +382,8 @@ function computeTopicScores(answers) {
     correct: d.correct,
     total: d.total,
     not_sure: d.not_sure,
+    confident_wrong: d.confident_wrong,
+    unsure_right: d.unsure_right,
     evidence: d.total >= FIRM_EVIDENCE ? 'firm' : d.total >= MIN_FOR_VERDICT ? 'early' : 'limited',
     misconceptions: [...new Set(d.misconceptions)]
   })).sort((a, b) => a.score - b.score);
@@ -364,13 +411,17 @@ function computeDiagnosis(answers, config) {
   const total = answers.length;
   const correctCount = answers.filter(a => a.correct).length;
   const notSureCount = answers.filter(a => a.not_sure).length;
-  const wrongCount = total - correctCount - notSureCount;
+  // Only a wrong multiple-choice answer can be a lucky-guess risk; a typed
+  // number can't be guessed, so it isn't penalised.
+  const wrongCount = answers.filter(a => !a.correct && !a.not_sure && a.chosen !== TYPED).length;
   const overallPct = total ? Math.round((correctCount / total) * 100) : 0;
 
   // Guess-corrected score for the grade: a wrong answer costs a third of a
   // mark, so blind guessing on 4 options averages zero; "Not sure" costs
   // nothing. The raw percentage is still what's shown as "Scored".
   const effective = Math.max(0, correctCount - wrongCount / 3);
+  const confidentWrong = answers.filter(a => !a.correct && !a.not_sure && a.confidence === 'sure');
+  const unsureRight = answers.filter(a => a.correct && a.confidence === 'unsure');
   const gradedPct = total ? Math.round((effective / total) * 100) : 0;
 
   let currentGrade, targetGrade;
@@ -420,6 +471,9 @@ function computeDiagnosis(answers, config) {
       reason = `${t.not_sure} of ${t.total} questions marked "Not sure" — this topic likely hasn't been covered yet, or needs a first proper pass.`;
     } else if (t.misconceptions.length > 0) {
       reason = t.misconceptions.slice(0, 2).join(' ');
+      // Sure and wrong is a firmly held idea, not a slip: it needs unpicking,
+      // and it's the strongest signal a diagnostic gets.
+      if (t.confident_wrong) reason = 'You were sure of a wrong answer here, so this is an idea to unpick, not just revise. ' + reason;
     } else {
       reason = `Scored ${t.score}% (${t.correct}/${t.total}) — partial understanding, not yet secure enough for exam conditions.`;
     }
@@ -465,6 +519,13 @@ function computeDiagnosis(answers, config) {
   if (notSurePct >= 30) {
     teacherNoteParts.push(`${notSurePct}% of answers were "Not sure" — worth checking whether this reflects genuine content gaps or exam anxiety.`);
   }
+  if (confidentWrong.length) {
+    const where = [...new Set(confidentWrong.map(a => a.topic))];
+    teacherNoteParts.push(`Sure but wrong on ${confidentWrong.length} question${confidentWrong.length === 1 ? '' : 's'} (${where.join(', ')}): ${confidentWrong.length === 1 ? 'a firmly held misconception' : 'firmly held misconceptions'}, the first thing to address.`);
+  }
+  if (unsureRight.length >= 3) {
+    teacherNoteParts.push(`Right but unsure on ${unsureRight.length} questions: knowledge that isn't secure yet, worth a quick recheck.`);
+  }
   const repeated = topicScores.filter(t => t.misconceptions.length >= 2).map(t => t.topic);
   if (repeated.length) teacherNoteParts.push(`Persistent, repeated misconceptions in: ${repeated.join(', ')}.`);
   if (isCombined) {
@@ -487,9 +548,15 @@ function computeDiagnosis(answers, config) {
 
   return {
     overallScore: overallPct, gradedScore: gradedPct, correctCount, notSureCount, totalQuestions: total,
+    confidentWrongCount: confidentWrong.length, unsureRightCount: unsureRight.length,
     currentGrade, targetGrade, confidence, studentProfile, profileDescription,
     topicScores, gaps, checks, strengths, teacherNote
   };
+}
+
+// The right answer to a numeric question as the review shows it ("300 kg m/s").
+function numericAnswerText(spec) {
+  return String(spec.value) + (spec.unit ? ' ' + spec.unit : '');
 }
 
 // What the student sees after submitting: each question with their choice,
@@ -502,7 +569,11 @@ function reviewItems(questions, answers) {
       position: i + 1,
       ...publicQuestion(q),
       chosen: a.chosen,
+      answer_text: a.answer_text || null,
+      answer_unit: a.answer_unit || null,
+      confidence: a.confidence || null,
       correct_answer: a.correct_answer,
+      correct_value: q.question_type === 'numeric' && q.answer_spec ? numericAnswerText(q.answer_spec) : null,
       correct: a.correct,
       not_sure: a.not_sure,
       misconception: a.misconception,
@@ -519,6 +590,7 @@ function diagnosisForDisplay(d) {
 
 module.exports = {
   QUESTIONS_PER_TEST, COMBINED_PER_SUBJECT, MIN_FOR_VERDICT, FIRM_EVIDENCE, MATHS_PAPER2,
+  TYPED, markOne,
   shuffleArray, normTopic, buildTopicWeights, weightedSampleAcrossTopics, isCombinedEligible,
   selectQuestions, sourceSubjects, publicQuestion, PUBLIC_QUESTION_FIELDS, markAnswers,
   estimateGrade, gradeLabel, combinedPairIndex, combinedPairLabel, wilsonInterval,

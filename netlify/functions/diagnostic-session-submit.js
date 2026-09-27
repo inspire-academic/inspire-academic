@@ -1,6 +1,7 @@
 // POST /api/v1/diagnostic/session/submit
 //
-// Finishes a test: { sessionId, token, answers?: [{ questionId, chosen, timeMs }] }.
+// Finishes a test: { sessionId, token, answers?: [{ questionId, chosen,
+// answerText?, answerUnit?, confidence?, timeMs }] }.
 // `answers` is the browser's full list, so any answer whose own request never
 // arrived (a dropped connection) is still recorded; answers already recorded
 // are never overwritten. The server marks everything against the real key,
@@ -11,12 +12,12 @@
 // Returns: { diagnosis, review: [...], attemptId, saved: true | false | null }
 //   saved: null for an anonymous guest (nothing to save the result to).
 
-const { fail, ok, parseBody, db, loadSession } = require('./_diagnostic-shared');
+const { fail, ok, parseBody, db, loadSession, responseRecord } = require('./_diagnostic-shared');
 const engine = require('./_diagnostic-engine');
 
-const CHOICES = ['a', 'b', 'c', 'd', 'e'];
+const CHOICES = ['a', 'b', 'c', 'd', 'e', 'x'];
 const FULL_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'correct_answer', 'misconception_a', 'misconception_b',
-  'misconception_c', 'misconception_d', 'explanation'].join(',');
+  'misconception_c', 'misconception_d', 'explanation', 'answer_spec'].join(',');
 
 function attemptRow(session, diagnosis, answers) {
   const c = diagnosis.confidence;
@@ -66,9 +67,9 @@ exports.handler = async (event) => {
     const rows = await client.get(`diagnostic_questions?id=in.(${ids.join(',')})&select=${FULL_COLUMNS}`);
     const byId = new Map(rows.map(q => [Number(q.id), q]));
     const questions = ids.map(id => byId.get(id)).filter(Boolean);
-    const recorded = await client.get(`diagnostic_responses?session_id=eq.${session.id}&select=question_id,chosen`);
+    const recorded = await client.get(`diagnostic_responses?session_id=eq.${session.id}&select=question_id,chosen,answer_text,answer_unit,confidence`);
     const choice = {};
-    recorded.forEach(r => { choice[Number(r.question_id)] = r.chosen; });
+    recorded.forEach(r => { choice[Number(r.question_id)] = r; });
 
     // Already marked: return the same result. Only the plain diagnosis is
     // stored; the review is rebuilt from the recorded answers.
@@ -83,19 +84,13 @@ exports.handler = async (event) => {
 
     // Record answers that never arrived on their own (first write wins).
     const missing = (Array.isArray(body.answers) ? body.answers : [])
-      .map(a => ({ id: Number(a && a.questionId), chosen: String((a && a.chosen) || ''), t: Number(a && a.timeMs) }))
-      .filter(a => byId.has(a.id) && CHOICES.includes(a.chosen) && !(a.id in choice));
+      .filter(a => a && byId.has(Number(a.questionId)) && CHOICES.includes(String(a.chosen || '')) && !(Number(a.questionId) in choice));
     const seen = new Set();
-    const newRows = missing.filter(a => !seen.has(a.id) && seen.add(a.id)).map(a => {
-      const q = byId.get(a.id);
-      choice[a.id] = a.chosen;
-      return {
-        session_id: session.id, question_id: a.id,
-        question_updated_at: (session.question_versions || {})[a.id] || null,
-        position: ids.indexOf(a.id) + 1, chosen: a.chosen,
-        correct: a.chosen !== 'e' && a.chosen === q.correct_answer,
-        time_ms: Number.isFinite(a.t) && a.t >= 0 ? Math.min(Math.round(a.t), 3600000) : null
-      };
+    const newRows = missing.filter(a => !seen.has(Number(a.questionId)) && seen.add(Number(a.questionId))).map(a => {
+      const id = Number(a.questionId);
+      const row = responseRecord(session, byId.get(id), ids.indexOf(id), a);
+      choice[id] = row;
+      return row;
     });
     if (newRows.length) {
       await client.insert('diagnostic_responses?on_conflict=session_id,question_id', newRows, 'resolution=ignore-duplicates,return=minimal');

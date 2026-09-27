@@ -23,15 +23,17 @@ const LEVELS = ['GCSE'];
 const BOARDS = ['AQA', 'Edexcel'];
 const STARTS_PER_HOUR = 20; // per connection; a family sharing one phone won't get near it
 
-const QUESTION_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'specification_ref', 'combined_eligible', 'updated_at'].join(',');
+// answer_spec is read only to build a numeric question's unit list; the
+// browser never receives it (see engine.publicQuestion).
+const QUESTION_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'answer_spec', 'specification_ref', 'combined_eligible', 'updated_at'].join(',');
 
 // Only questions a person has approved (or the pre-pipeline 'legacy' bank,
-// queued for review) reach students; drafts never do. Multiple choice only
-// until the page can show the other question types.
+// queued for review) reach students; drafts never do. Only the question
+// types the page can show: multiple choice and typed numbers.
 function questionFilter(subjects, level) {
   const inList = subjects.map(s => `"${s}"`).join(',');
   return `subject=in.(${encodeURIComponent(inList)})&level=eq.${encodeURIComponent(level)}` +
-    `&review_status=in.(approved,legacy)&question_type=eq.mcq&active=is.true&exam_board=in.(AQA,Universal)&tier=in.(Higher,Both)`;
+    `&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)&active=is.true&exam_board=in.(AQA,Universal)&tier=in.(Higher,Both)`;
 }
 
 async function resume(client, event, sessionId) {
@@ -45,7 +47,7 @@ async function resume(client, event, sessionId) {
 
   const ids = session.question_ids.map(Number);
   const [questions, responses] = await Promise.all([
-    client.get(`diagnostic_questions?id=in.(${ids.join(',')})&select=${engine.PUBLIC_QUESTION_FIELDS.join(',')}`),
+    client.get(`diagnostic_questions?id=in.(${ids.join(',')})&select=${engine.PUBLIC_QUESTION_FIELDS.join(',')},answer_spec`),
     client.get(`diagnostic_responses?session_id=eq.${session.id}&select=question_id,chosen&order=position`)
   ]);
   const byId = new Map(questions.map(q => [Number(q.id), q]));

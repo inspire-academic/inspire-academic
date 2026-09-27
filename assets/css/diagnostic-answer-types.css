@@ -1,0 +1,32 @@
+/* Diagnostic answer types and the confidence buttons (assessment-engine.html).
+   Mobile first: the number box and unit list stack, then sit side by side. */
+
+.num-answer { display: flex; flex-direction: column; gap: .6rem; }
+.num-input { font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.num-hint { font-size: .8rem; margin: .1rem 0 .4rem; }
+
+@media (min-width: 480px) {
+  .num-answer { flex-direction: row; }
+  .num-input { flex: 1 1 auto; }
+  .num-unit { flex: 0 0 11rem; width: 11rem; }
+}
+
+/* The two ways to move on: "I'm sure" and "Not certain". */
+.conf-prompt { margin: 1.25rem 0 .5rem; font-size: .85rem; color: var(--muted); }
+.next-row { display: flex; flex-direction: column-reverse; gap: .6rem; margin-top: .75rem; }
+.next-row .btn { width: 100%; justify-content: center; }
+.next-row #btn-next { margin-top: 0; }
+
+@media (min-width: 480px) {
+  .next-row { flex-direction: row; }
+  .next-row .btn { flex: 1 1 0; }
+}
+
+.review-conf { font-size: .75rem; color: var(--muted); }
+
+/* .btn sets display, which would otherwise override the hidden attribute. */
+.next-row [hidden], .conf-prompt[hidden] { display: none; }
+
+/* "Not certain" is an equal choice, not a secondary link: give it a clear edge. */
+.next-row #btn-unsure { background: transparent; color: var(--white); border: 1.5px solid var(--muted); }
+.next-row #btn-unsure:hover { border-color: var(--gold); }
