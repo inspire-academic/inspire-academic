@@ -371,15 +371,15 @@ module.exports = {
       },
       explanation: r`A circle centred on the origin has equation \(x^{2} + y^{2} = r^{2}\). Here \(r^{2} = 49\), so \(r = 7\).` },
 
-    { topic: GRA, subtopic: 'Completing the Square', spec_slug: 'aqa-ma-h-algebra-advanced', difficulty: 4,
-      question_text: r`Write \(x^{2} + 6x + 5\) in the form \((x + a)^{2} + b\).`,
-      options: { a: r`\((x + 3)^{2} + 5\)`, b: r`\((x + 6)^{2} - 31\)`, c: r`\((x + 3)^{2} - 4\)`, d: r`\((x + 3)^{2} + 14\)` }, key: 'c',
+    { topic: GRA, subtopic: 'Turning Points', spec_slug: 'aqa-ma-h-algebra-advanced', difficulty: 4,
+      question_text: r`By completing the square, find the coordinates of the turning point of \(y = x^{2} - 8x + 11\).`,
+      options: { a: r`\((-4,\ -5)\)`, b: r`\((4,\ 5)\)`, c: r`\((4,\ -5)\)`, d: r`\((4,\ 11)\)` }, key: 'c',
       feedback: {
-        a: r`\((x + 3)^{2} = x^{2} + 6x + 9\), so you must subtract 9: \(9 - 9 + 5\) gives \((x + 3)^{2} - 4\).`,
-        b: r`Halve the coefficient of \(x\): \(a = 3\), not 6. \((x + 3)^{2} - 9 + 5 = (x + 3)^{2} - 4\).`,
-        d: r`This adds 9 instead of subtracting it: \((x + 3)^{2} - 9 + 5 = (x + 3)^{2} - 4\).`
+        a: r`The sign of the \(x\)-coordinate is wrong. \((x - 4)^{2}\) is smallest when \(x = 4\), not \(-4\).`,
+        b: r`This adds the 16 instead of subtracting it: \((x - 4)^{2} - 16 + 11 = (x - 4)^{2} - 5\), so the turning point is \((4, -5)\).`,
+        d: r`11 is the \(y\)-intercept, not the minimum. \(y = (x - 4)^{2} - 5\), so the turning point is \((4, -5)\).`
       },
-      explanation: r`Halve 6 to get 3: \((x + 3)^{2} = x^{2} + 6x + 9\). So \(x^{2} + 6x + 5 = (x + 3)^{2} - 9 + 5 = (x + 3)^{2} - 4\). The turning point is \((-3, -4)\).` },
+      explanation: r`Halve \(-8\) to get \(-4\): \(x^{2} - 8x + 11 = (x - 4)^{2} - 16 + 11 = (x - 4)^{2} - 5\). The minimum is when \(x - 4 = 0\), so the turning point is \((4, -5)\).` },
 
     { topic: GRA, subtopic: 'Equation of a Line', spec_slug: 'aqa-ma-fh-graphs', difficulty: 3,
       question_text: r`A line has gradient 3 and passes through the point \((2, 7)\). What is its equation?`,

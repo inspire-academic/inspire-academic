@@ -461,13 +461,13 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, combined_eligible, context_region)
-select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Graphs$t$, $t$Completing the Square$t$, $t$aqa-ma-h-algebra-advanced$t$, 4,
-  $t$Write \(x^{2} + 6x + 5\) in the form \((x + a)^{2} + b\).$t$,
-  $t$\((x + 3)^{2} + 5\)$t$, $t$\((x + 6)^{2} - 31\)$t$, $t$\((x + 3)^{2} - 4\)$t$, $t$\((x + 3)^{2} + 14\)$t$, 'Not sure', $t$c$t$,
-  $t$\((x + 3)^{2} = x^{2} + 6x + 9\), so you must subtract 9: \(9 - 9 + 5\) gives \((x + 3)^{2} - 4\).$t$, $t$Halve the coefficient of \(x\): \(a = 3\), not 6. \((x + 3)^{2} - 9 + 5 = (x + 3)^{2} - 4\).$t$, null, $t$This adds 9 instead of subtracting it: \((x + 3)^{2} - 9 + 5 = (x + 3)^{2} - 4\).$t$,
-  $t$Halve 6 to get 3: \((x + 3)^{2} = x^{2} + 6x + 9\). So \(x^{2} + 6x + 5 = (x + 3)^{2} - 9 + 5 = (x + 3)^{2} - 4\). The turning point is \((-3, -4)\).$t$,
+select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Graphs$t$, $t$Turning Points$t$, $t$aqa-ma-h-algebra-advanced$t$, 4,
+  $t$By completing the square, find the coordinates of the turning point of \(y = x^{2} - 8x + 11\).$t$,
+  $t$\((-4,\ -5)\)$t$, $t$\((4,\ 5)\)$t$, $t$\((4,\ -5)\)$t$, $t$\((4,\ 11)\)$t$, 'Not sure', $t$c$t$,
+  $t$The sign of the \(x\)-coordinate is wrong. \((x - 4)^{2}\) is smallest when \(x = 4\), not \(-4\).$t$, $t$This adds the 16 instead of subtracting it: \((x - 4)^{2} - 16 + 11 = (x - 4)^{2} - 5\), so the turning point is \((4, -5)\).$t$, null, $t$11 is the \(y\)-intercept, not the minimum. \(y = (x - 4)^{2} - 5\), so the turning point is \((4, -5)\).$t$,
+  $t$Halve \(-8\) to get \(-4\): \(x^{2} - 8x + 11 = (x - 4)^{2} - 16 + 11 = (x - 4)^{2} - 5\). The minimum is when \(x - 4 = 0\), so the turning point is \((4, -5)\).$t$,
   'ai_drafted', false, true, 'draft', 'mcq', true, null
-where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Write \(x^{2} + 6x + 5\) in the form \((x + a)^{2} + b\).$t$);
+where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$By completing the square, find the coordinates of the turning point of \(y = x^{2} - 8x + 11\).$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
