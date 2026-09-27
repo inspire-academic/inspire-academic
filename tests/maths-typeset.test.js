@@ -41,6 +41,9 @@ test('maths-typeset: plain-text fallback reads like maths, never like LaTeX', ()
     [String.raw`60\,\text{cm}^{3}`, '60 cm³'],
     [String.raw`45{,}000 = 4.5 \times 10^{4}`, '45,000 = 4.5 × 10⁴'],
     [String.raw`\text{speed} = \text{distance} \div \text{time}`, 'speed = distance ÷ time'],
+    [String.raw`2\tfrac{1}{3} \times 1\tfrac{1}{2}`, '2 1/3 × 1 1/2'],
+    [String.raw`0.\dot{4}\dot{5}`, '0.4̇5̇'],
+    [String.raw`3, 9, 19, 33, \ldots`, '3, 9, 19, 33, …'],
   ];
   for (const [tex, plain] of cases) assert.equal(IAMaths.toPlain(tex), plain, tex);
 });

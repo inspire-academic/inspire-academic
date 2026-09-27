@@ -212,7 +212,7 @@ module.exports = {
       options: { a: r`\(9\)`, b: r`\(-18\)`, c: r`\(\tfrac{1}{6}\)`, d: r`\(\tfrac{1}{9}\)` }, key: 'd',
       feedback: {
         a: r`This ignores the negative sign. A negative power means the reciprocal: \(27^{-\frac{2}{3}} = \dfrac{1}{9}\).`,
-        b: r`A negative power doesn't make the answer negative; it means the reciprocal. \(\sqrt[3]{27} = 3\), \(3^{2} = 9\), so \(\dfrac{1}{9}\).`,
+        b: r`This multiplies 27 by −2/3. A power isn't multiplication: the 3 on the bottom means cube root (\(\sqrt[3]{27} = 3\)), the 2 means square (\(3^{2} = 9\)), and the minus means take the reciprocal, giving \(\dfrac{1}{9}\).`,
         c: r`This doubles the cube root instead of squaring it. \((\sqrt[3]{27})^{2} = 3^{2} = 9\), so the answer is \(\dfrac{1}{9}\).`
       },
       explanation: r`The denominator 3 means cube root, the 2 means square, and the minus means reciprocal: \(27^{-\frac{2}{3}} = \dfrac{1}{(\sqrt[3]{27})^{2}} = \dfrac{1}{3^{2}} = \dfrac{1}{9}\).` },

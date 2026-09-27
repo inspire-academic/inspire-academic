@@ -256,7 +256,7 @@ insert into public.diagnostic_questions (
 select $t$Mathematics$t$, $t$AQA$t$, 'GCSE', $t$Higher$t$, $t$Powers, roots and standard form$t$, $t$Fractional and Negative Indices$t$, $t$aqa-ma-fh-powers-roots$t$, 4,
   $t$Evaluate \(27^{-\frac{2}{3}}\).$t$,
   $t$\(9\)$t$, $t$\(-18\)$t$, $t$\(\tfrac{1}{6}\)$t$, $t$\(\tfrac{1}{9}\)$t$, 'Not sure', $t$d$t$,
-  $t$This ignores the negative sign. A negative power means the reciprocal: \(27^{-\frac{2}{3}} = \dfrac{1}{9}\).$t$, $t$A negative power doesn't make the answer negative; it means the reciprocal. \(\sqrt[3]{27} = 3\), \(3^{2} = 9\), so \(\dfrac{1}{9}\).$t$, $t$This doubles the cube root instead of squaring it. \((\sqrt[3]{27})^{2} = 3^{2} = 9\), so the answer is \(\dfrac{1}{9}\).$t$, null,
+  $t$This ignores the negative sign. A negative power means the reciprocal: \(27^{-\frac{2}{3}} = \dfrac{1}{9}\).$t$, $t$This multiplies 27 by −2/3. A power isn't multiplication: the 3 on the bottom means cube root (\(\sqrt[3]{27} = 3\)), the 2 means square (\(3^{2} = 9\)), and the minus means take the reciprocal, giving \(\dfrac{1}{9}\).$t$, $t$This doubles the cube root instead of squaring it. \((\sqrt[3]{27})^{2} = 3^{2} = 9\), so the answer is \(\dfrac{1}{9}\).$t$, null,
   $t$The denominator 3 means cube root, the 2 means square, and the minus means reciprocal: \(27^{-\frac{2}{3}} = \dfrac{1}{(\sqrt[3]{27})^{2}} = \dfrac{1}{3^{2}} = \dfrac{1}{9}\).$t$,
   'ai_drafted', false, true, 'draft', 'mcq', true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Mathematics$t$ and question_text = $t$Evaluate \(27^{-\frac{2}{3}}\).$t$);

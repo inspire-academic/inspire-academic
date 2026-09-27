@@ -47,7 +47,8 @@
   var SYMBOLS = {
     times: '×', div: '÷', pm: '±', le: '≤', ge: '≥', ne: '≠', approx: '≈', to: '→',
     infty: '∞', pi: 'π', theta: 'θ', circ: '°', cdot: '·', checkmark: '✓',
-    sin: 'sin', cos: 'cos', tan: 'tan', quad: ' ', left: '', right: ''
+    sin: 'sin', cos: 'cos', tan: 'tan', quad: ' ', left: '', right: '',
+    ldots: '…', dots: '…', cdots: '⋯', Rightarrow: '⇒', propto: '∝', lt: '<', gt: '>'
   };
 
   // Reads one {...} group starting at s[i] === '{'; returns [content, nextIndex].
@@ -83,6 +84,8 @@
         i += m[0].length;
         if (name === 'frac' || name === 'tfrac' || name === 'dfrac') {
           var num = group(s, i); var den = group(s, num[1]);
+          // A space keeps a mixed number readable: 2 1/3, not 21/3.
+          if (/[0-9]$/.test(out)) out += ' ';
           out += wrap(toPlain(num[0])) + '/' + wrap(toPlain(den[0]));
           i = den[1];
         } else if (name === 'sqrt') {
@@ -95,6 +98,10 @@
           var g = group(s, i);
           out += name === 'text' ? g[0] : toPlain(g[0]);
           i = g[1];
+        } else if (name === 'dot') {
+          var d = group(s, i);
+          out += toPlain(d[0]) + '̇';
+          i = d[1];
         } else if (name === ',' || name === ' ' || name === ';') {
           out += ' ';
         } else if (name === '%' || name === '{' || name === '}') {
