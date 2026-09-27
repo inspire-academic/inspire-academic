@@ -1199,7 +1199,7 @@ function renderDiagnosis() {
           : `${isCombined ? 'Around' : 'Around Grade'} <strong>${escHtmlText(d.currentGrade)}</strong>${range ? `, likely somewhere between <strong>${escHtmlText(range.lowGrade)}</strong> and <strong>${escHtmlText(range.highGrade)}</strong>` : ''}`}
       </div>
       ${range ? `<p class="result-note">A ${total}-question test can't pin a grade down exactly, so this is the honest range rather than a single number.</p>` : ''}
-      ${d.tier ? `<p class="result-note">Graded on real ${escHtmlText(d.tier)}-tier boundaries (grades ${d.tier === 'Foundation' ? '1–5' : '4–9'})${d.routed ? `: your first answers placed this test at ${escHtmlText(d.tier)} tier` : ''}.</p>` : ''}
+      ${d.tier ? `<p class="result-note">Graded on real ${escHtmlText(d.tier)}-tier boundaries (${d.tier === 'Foundation' ? 'grades 5 to 1' : 'grades 9 to 4, with an allowed 3'})${d.routed ? `: your first answers placed this test at ${escHtmlText(d.tier)} tier` : ''}.</p>` : ''}
       <div class="result-target">Next target: <strong>${escHtmlText(d.targetGrade)}</strong> <span class="muted">· Inspire long-term aspiration: Grade ${aspirationGrade(isCombined)}</span></div>
       ${notSurePct >= 30 ? `<p class="result-note" style="color:var(--gold-text);">You chose "Not sure" on ${notSurePct}% of questions — honest answers, and they show exactly where to start. Your plan begins with the foundations.</p>` : ''}
     </div>`;
