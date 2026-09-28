@@ -7,7 +7,7 @@
 // specification statements are metadata on a concept, so Edexcel or WASSCE
 // can be mapped later without new concepts.
 //
-// status: 'draft' until Eric approves the card; only 'approved' concepts
+// status: 'approved' until Eric approves the card; only 'approved' concepts
 // may receive content or evidence.
 //
 // Fields:
@@ -41,7 +41,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: false, templated: true },
     boundaries: ['Prefixes limited to those in maths-and-units.md'],
     misconceptions: ['MIS-PHY-SKL-001', 'MIS-PHY-SKL-002'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.skills.standard-form',
@@ -55,7 +55,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: false, templated: true },
     boundaries: [],
     misconceptions: ['MIS-PHY-SKL-003'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.skills.rearranging',
@@ -69,7 +69,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: false, templated: true },
     boundaries: ['Square-root rearrangements are Higher demand (band 3)'],
     misconceptions: ['MIS-PHY-SKL-004', 'MIS-PHY-SKL-005'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.skills.graph-reading',
@@ -83,7 +83,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: false, templated: false },
     boundaries: ['Tangents to curves belong to later domains (MS 4e)'],
     misconceptions: ['MIS-PHY-SKL-006'],
-    status: 'draft'
+    status: 'approved'
   },
 
   // ── Energy (AQA 8463 4.1) ──
@@ -99,7 +99,7 @@ const CONCEPTS = [
     evidence: { numeric: false, application: true, templated: false },
     boundaries: ['Store names as AQA uses them; no "heat energy" or "movement energy" stores'],
     misconceptions: ['MIS-PHY-ENE-001', 'MIS-PHY-ENE-002'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.energy.conservation',
@@ -113,7 +113,7 @@ const CONCEPTS = [
     evidence: { numeric: false, application: true, templated: false },
     boundaries: [],
     misconceptions: ['MIS-PHY-ENE-001', 'MIS-PHY-ENE-003'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.energy.kinetic',
@@ -130,7 +130,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: true, templated: true },
     boundaries: ['Finding speed needs a square root: band 3 / Higher'],
     misconceptions: ['MIS-PHY-ENE-004', 'MIS-PHY-ENE-005'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.energy.gravitational',
@@ -147,7 +147,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: true, templated: true },
     boundaries: ['g is always stated in the item'],
     misconceptions: ['MIS-PHY-ENE-006', 'MIS-PHY-ENE-007'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.energy.elastic',
@@ -164,7 +164,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: false, templated: true },
     boundaries: ['Assume limit of proportionality not exceeded; Hooke\'s law itself belongs to Forces'],
     misconceptions: ['MIS-PHY-ENE-005', 'MIS-PHY-ENE-008'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.energy.transfer-calcs',
@@ -182,7 +182,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: true, templated: true },
     boundaries: ['Air resistance ignored unless the item gives the energy dissipated'],
     misconceptions: ['MIS-PHY-ENE-003', 'MIS-PHY-ENE-004'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.energy.shc',
@@ -199,7 +199,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: true, templated: true },
     boundaries: ['Latent heat belongs to Particle Model'],
     misconceptions: ['MIS-PHY-ENE-009', 'MIS-PHY-ENE-010'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.energy.power',
@@ -216,7 +216,7 @@ const CONCEPTS = [
     evidence: { numeric: true, application: true, templated: true },
     boundaries: ['Electrical power (P = VI, P = I²R) belongs to Electricity'],
     misconceptions: ['MIS-PHY-ENE-011'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.energy.dissipation-efficiency',
@@ -239,7 +239,7 @@ const CONCEPTS = [
       'Required practical 2 (thermal insulators) is separate-only: tag such items separateOnly'
     ],
     misconceptions: ['MIS-PHY-ENE-003', 'MIS-PHY-ENE-012'],
-    status: 'draft'
+    status: 'approved'
   },
   {
     id: 'phy.energy.resources',
@@ -253,7 +253,7 @@ const CONCEPTS = [
     evidence: { numeric: false, application: true, templated: false },
     boundaries: ['How resources generate electricity is not required'],
     misconceptions: ['MIS-PHY-ENE-013'],
-    status: 'draft'
+    status: 'approved'
   }
 ];
 
