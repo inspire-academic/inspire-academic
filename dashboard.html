@@ -190,25 +190,17 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 [data-theme="light"] .score-mid{color:var(--ia-gold-text);}
 [data-theme="light"] .score-low{color:var(--ia-red);}
 
-/* Hand-drawn artefacts: one-colour line art (the SVG is a mask, tinted by
-   the theme) over a faint watercolour wash. Decorative only. */
+/* Hand-drawn artefacts: full-colour watercolour illustrations (WebP, the wash
+   is painted in). Decorative only; hidden in the dark theme and on narrow
+   screens, so phones never download them. */
 [data-theme="light"] .card-artifact{
   display:block;position:absolute;top:50%;right:clamp(190px,24%,300px);
   height:calc(100% - 12px);max-height:150px;aspect-ratio:26/17;transform:translateY(-50%);
   pointer-events:none;user-select:none;z-index:0;
+  background:var(--art) center/contain no-repeat;
 }
-[data-theme="light"] .card-artifact::before{
-  content:'';position:absolute;inset:-6% 10% -6% 4%;border-radius:46% 54% 50% 50%;
-  filter:blur(18px);opacity:1;
-}
-[data-theme="light"] .card-artifact::after{
-  content:'';position:absolute;inset:0;background:currentColor;
-  -webkit-mask:var(--art) center/contain no-repeat;mask:var(--art) center/contain no-repeat;
-}
-[data-theme="light"] .card-artifact--flask{--art:url(/assets/images/illustrations/chemistry-glassware.svg);color:#5F7C99;opacity:.62;}
-[data-theme="light"] .card-artifact--flask::before{background:radial-gradient(closest-side,rgba(150,178,212,.75),rgba(150,178,212,.25) 60%,transparent);}
-[data-theme="light"] .card-artifact--book{--art:url(/assets/images/illustrations/open-book.svg);color:#8A73AF;opacity:.6;}
-[data-theme="light"] .card-artifact--book::before{background:radial-gradient(closest-side,rgba(184,160,226,.7),rgba(184,160,226,.22) 60%,transparent);}
+[data-theme="light"] .card-artifact--notebook{--art:url(/assets/images/illustrations/daily-notebook.webp);}
+[data-theme="light"] .card-artifact--microscope{--art:url(/assets/images/illustrations/diagnostic-microscope.webp);}
 [data-theme="light"] .page-botanical{
   display:block;position:absolute;top:58px;right:0;width:110px;height:180px;z-index:0;
   background:#B5A67E;opacity:.35;pointer-events:none;
@@ -392,7 +384,7 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 
   <!-- Today's Quiz CTA -->
   <div class="today-quiz fade-in" id="today-quiz-card">
-    <span class="card-artifact card-artifact--flask" aria-hidden="true"></span>
+    <span class="card-artifact card-artifact--notebook" aria-hidden="true"></span>
     <div class="tq-left">
       <div class="tq-label">⚡ Today's Daily Challenge</div>
       <h3 id="tq-title">Loading…</h3>
@@ -405,7 +397,7 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 
   <!-- Diagnostic Assessment CTA -->
   <div class="today-quiz diagnostic-card fade-in" id="diagnostic-card">
-    <span class="card-artifact card-artifact--book" aria-hidden="true"></span>
+    <span class="card-artifact card-artifact--microscope" aria-hidden="true"></span>
     <div class="tq-left">
       <div class="tq-label">🎯 New Here? Start With a Diagnostic</div>
       <h3>Find Out Where You Stand</h3>
