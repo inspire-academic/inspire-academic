@@ -321,3 +321,45 @@ test('protege-ai: valid tutor request returns the model\'s reply (mocked API)', 
     assert.match(body.text, /Rayleigh/);
   });
 });
+
+// Data minimisation: the student's name and profile year group must
+// never reach the AI provider, even if an older cached page still sends
+// them in the request body.
+function captureProtegeRequest(payload) {
+  const sent = [];
+  return withMockFetch({
+    anthropicBody: { content: [{ text: 'Try counting on from the bigger number.' }] },
+    onAnthropicRequest: (body) => { if (body.model) sent.push(body); }
+  }, async () => {
+    const res = await protegeAi.handler({ httpMethod: 'POST', headers: AUTH_HEADER, body: JSON.stringify(payload) });
+    assert.equal(res.statusCode, 200);
+    assert.equal(sent.length, 1, 'exactly one call to the AI provider');
+    return JSON.stringify(sent[0]);
+  });
+}
+
+test('protege-ai: hint mode sends neither the student name nor their year group to the AI provider', async () => {
+  const sent = await captureProtegeRequest({ mode: 'hint', name: 'Kwabena', grade: 'Year 4', question: '3 + 8', answer: 11, hint: 'Start at 8.' });
+  assert.doesNotMatch(sent, /Kwabena/);
+  assert.doesNotMatch(sent, /Year 4/);
+  assert.doesNotMatch(sent, /Explorer/, 'no placeholder name substituted either');
+  assert.match(sent, /3 \+ 8/, 'the question itself is still sent');
+});
+
+test('protege-ai: tutor mode sends neither the student name nor their year group to the AI provider', async () => {
+  const sent = await captureProtegeRequest({ mode: 'tutor', name: 'Kwabena', grade: 'Year 4', userMessage: 'Why is the sky blue?' });
+  assert.doesNotMatch(sent, /Kwabena/);
+  assert.doesNotMatch(sent, /Year 4/);
+  assert.doesNotMatch(sent, /Explorer/);
+  assert.match(sent, /primary-school learner/, 'a generic level descriptor pitches the language instead');
+});
+
+test('protege-ai: the page no longer sends the name or year group in the request body', () => {
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'tools', 'math-genius-academy.html'), 'utf8');
+  const calls = [...src.matchAll(/fetch\('\/api\/protege-ai'[\s\S]*?\}\)\}\);/g)].map(m => m[0]);
+  assert.equal(calls.length, 2, 'hint + tutor calls found');
+  for (const call of calls) {
+    assert.doesNotMatch(call, /\bname\s*:/, 'no name in payload');
+    assert.doesNotMatch(call, /\bgrade\s*:/, 'no grade in payload');
+  }
+});

@@ -35,22 +35,27 @@ exports.handler = async function(event) {
     return { statusCode: 429, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: `You've reached the hourly limit for Professor Cosmo (${maxPerHour}/hour). Please try again later.` }) }
   }
 
-  const { mode, name, grade, question, answer, hint, userMessage, history } = body
-  const studentName = name || 'Explorer'
-  const yearGroup   = grade || 'Year 6'
+  // Data minimisation: nothing that identifies the student is sent to the
+  // AI provider. `name` and `grade` (the student's profile year group) are
+  // deliberately NOT read from the body — older cached copies of the page
+  // may still send them, and they are simply ignored. Protégé is a
+  // Year 1–6 product, so a fixed "primary-school learner" level is enough
+  // to pitch the language; in hint mode the question itself sets the level.
+  const { mode, question, answer, hint, userMessage, history } = body
+  const LEARNER_LEVEL = 'a primary-school learner (roughly ages 5-11)'
 
   if (mode === 'hint') {
     if (!question) return { statusCode: 200, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ text: hint || 'Think carefully about what the question is asking.' }) }
 
     const systemPrompt = `You are Professor Cosmo — a warm, enthusiastic science and maths tutor for young learners.
 Give ONE helpful hint that guides thinking without revealing the answer.
-Use simple language for ${yearGroup}. 1-2 sentences only. Never say "the answer is..."`
+Use simple language suitable for ${LEARNER_LEVEL}, pitched at the level of the question itself. 1-2 sentences only. Never say "the answer is..."`
 
     try {
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 150, system: systemPrompt, messages: [{ role: 'user', content: `Question: ${question}\nCorrect answer: ${answer}\nPre-written hint: ${hint || 'none'}\nWrite a personalised hint for ${studentName} (${yearGroup}). Do not reveal the answer.` }] })
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 150, system: systemPrompt, messages: [{ role: 'user', content: `Question: ${question}\nCorrect answer: ${answer}\nPre-written hint: ${hint || 'none'}\nWrite a hint for the student. Do not reveal the answer.` }] })
       })
       const d = await r.json()
       return { statusCode: 200, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ text: d.content?.[0]?.text?.trim() || hint || 'Think carefully — you are closer than you think!' }) }
@@ -63,7 +68,7 @@ Use simple language for ${yearGroup}. 1-2 sentences only. Never say "the answer 
     if (!userMessage) return { statusCode: 200, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ text: 'Ask me anything!' }) }
 
     const systemPrompt = `You are Professor Cosmo — the most brilliant and inspiring science and maths tutor in the universe.
-You are speaking with ${studentName}, a ${yearGroup} student who loves learning.
+You are speaking with ${LEARNER_LEVEL} who loves learning. Address them as "you" — you do not know their name.
 Be warm, enthusiastic, and use vivid analogies. Keep responses to 3-5 sentences.
 Ask one follow-up question or end with encouragement.
 Only discuss educational topics: maths, science, space, nature, technology, history of science.

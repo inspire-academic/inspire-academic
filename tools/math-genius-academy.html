@@ -2157,6 +2157,9 @@ function hideFeedback() { document.getElementById('feedback-popup').classList.re
 // ══════════════════════════════════════
 // HINT & TUTOR (secure edge function)
 // ══════════════════════════════════════
+// Data minimisation: the child's name and year group stay on this page
+// (the UI still greets them by name) and are never sent to protege-ai,
+// which forwards prompts to the AI provider.
 async function getHint() {
   if(!currentQ) return;
   const box=document.getElementById('hint-box');
@@ -2164,7 +2167,7 @@ async function getHint() {
   ProtegeCosmo.think();
   try {
     const r=await fetch('/api/protege-ai',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${_authToken}`},
-      body:JSON.stringify({mode:'hint',question:currentQ.q,answer:currentQ.a,hint:currentQ.hint,grade:state.grade,name:state.name})});
+      body:JSON.stringify({mode:'hint',question:currentQ.q,answer:currentQ.a,hint:currentQ.hint})});
     const d=await r.json();
     const h=d.text||currentQ.hint; box.textContent=h;
     if(Voice.enabled) Voice.speak(h,false);
@@ -2184,7 +2187,7 @@ async function sendTutorMsg() {
   ProtegeCosmo.think();
   try {
     const r=await fetch('/api/protege-ai',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${_authToken}`},
-      body:JSON.stringify({mode:'tutor',name:state.name,grade:state.grade,userMessage:msg,history:tutorHistory})});
+      body:JSON.stringify({mode:'tutor',userMessage:msg,history:tutorHistory})});
     const d=await r.json();
     const reply=d.text||'That is a fascinating question. Keep exploring.';
     ld.textContent=reply;
