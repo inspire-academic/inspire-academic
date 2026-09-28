@@ -86,7 +86,7 @@ function fakeSupabase(seed) {
 function question(id, subject, topic, key) {
   return {
     id, subject, topic, subtopic: topic, difficulty: 2, level: 'GCSE', tier: 'Higher', exam_board: 'AQA',
-    validated: true, active: true, review_status: 'legacy', question_type: 'mcq', specification_ref: null, combined_eligible: true, updated_at: '2026-09-26T00:00:00Z',
+    validated: true, active: true, review_status: 'legacy', question_type: 'mcq', specification_ref: null, combined_eligible: true, evidence_class: 'diagnostic', updated_at: '2026-09-26T00:00:00Z',
     question_text: `Q${id}`, option_a: 'A', option_b: 'B', option_c: 'C', option_d: 'D', option_e: 'Not sure',
     correct_answer: key, misconception_a: 'why a', misconception_b: 'why b', misconception_c: 'why c', misconception_d: 'why d',
     explanation: `method ${id}`, diagram_spec: null

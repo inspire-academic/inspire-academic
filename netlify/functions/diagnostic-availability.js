@@ -23,7 +23,7 @@ exports.handler = async (event) => {
   if (!client) return fail(503, 'not_configured', 'The diagnostic is not available right now.');
   try {
     const rows = await client.get(
-      'diagnostic_questions?level=eq.GCSE&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)' +
+      'diagnostic_questions?level=eq.GCSE&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)&evidence_class=eq.diagnostic' +
       `&active=is.true&exam_board=in.(${QUESTION_BOARDS.join(',')},Universal)&tier=in.(Higher,Foundation,Both)&select=${COLUMNS}`
     );
     const boards = {};

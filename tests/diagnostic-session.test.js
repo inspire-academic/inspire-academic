@@ -139,6 +139,15 @@ test('bad input is refused cleanly', async () => {
   assert.equal((await post(s.plan, { sessionId: 'x', token: 'x', plan: 'nope' })).status, 400);
 });
 
+test('approved practice and mastery-check items are never served in a diagnostic', async () => {
+  const s2 = setup();
+  s2.fake.tables.diagnostic_questions.forEach((q, i) => { if (i % 2 === 0) { q.review_status = 'approved'; q.evidence_class = i % 4 ? 'practice' : 'mastery_check'; } });
+  const res = await post(s2.start, { subject: 'Physics' });
+  const cls = new Map(s2.fake.tables.diagnostic_questions.map(q => [q.id, q.evidence_class]));
+  assert.ok(res.body.questions.length > 0);
+  assert.ok(res.body.questions.every(q => cls.get(q.id) === 'diagnostic'));
+});
+
 test('drafts and rejected questions are never served', async () => {
   const s2 = setup();
   s2.fake.tables.diagnostic_questions.forEach((q, i) => { if (i % 3 === 0) q.review_status = i % 2 ? 'draft' : 'rejected'; if (i % 3 === 1) q.review_status = 'approved'; });

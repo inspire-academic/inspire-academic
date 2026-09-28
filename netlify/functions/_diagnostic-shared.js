@@ -102,7 +102,11 @@ function questionPoolFilter(subjects, level, board) {
   const b = QUESTION_BOARDS.includes(board) ? board : 'AQA';
   return `subject=in.(${encodeURIComponent(inList)})&level=eq.${encodeURIComponent(level)}` +
     `&review_status=in.(approved,legacy)&question_type=in.(mcq,numeric)&active=is.true` +
-    `&exam_board=in.(${b},Universal)&tier=in.(Higher,Foundation,Both)`;
+    `&exam_board=in.(${b},Universal)&tier=in.(Higher,Foundation,Both)` +
+    // Only diagnostic items: practice, mastery-check, retrieval and
+    // application items share this table (Mastery Engine) but never appear
+    // in a diagnostic.
+    `&evidence_class=eq.diagnostic`;
 }
 
 const MAX_TIME_MS = 60 * 60 * 1000;
