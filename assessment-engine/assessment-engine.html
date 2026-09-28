@@ -102,7 +102,9 @@ input,select,textarea{font-family:var(--font-body);}
 .subject-btn{display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:1.25rem .5rem;border-radius:var(--r);border:1.5px solid var(--border);background:var(--navy);cursor:pointer;transition:all .2s;color:var(--white);}
 .subject-btn:hover{border-color:var(--gold);}
 .subject-btn.active{border-color:var(--teal);background:rgba(0,201,167,.08);}
-.subject-icon{font-size:28px;line-height:1;}
+/* Watercolour subject illustrations (WebP, 2x): fixed height, width follows
+   each drawing, never wider than the card. */
+.subject-icon{display:block;height:72px;width:auto;max-width:100%;object-fit:contain;}
 .subject-name{font-size:.8rem;font-weight:600;}
 .subject-saved-badge{font-size:.62rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.03em;}
 .subject-btn:disabled{opacity:.45;cursor:not-allowed;}
@@ -307,32 +309,32 @@ input,select,textarea{font-family:var(--font-body);}
         <span class="form-label" id="subject-label">Subject</span>
         <div class="subject-grid" role="group" aria-labelledby="subject-label">
           <button class="subject-btn" data-subject="Physics" aria-pressed="false" onclick="pickSubject(this)">
-            <span class="subject-icon" aria-hidden="true">⚡</span>
+            <img class="subject-icon" src="/assets/images/illustrations/subject-physics.webp" alt="" width="105" height="72" decoding="async">
             <span class="subject-name">Physics</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
           <button class="subject-btn" data-subject="Chemistry" aria-pressed="false" onclick="pickSubject(this)">
-            <span class="subject-icon" aria-hidden="true">⚗️</span>
+            <img class="subject-icon" src="/assets/images/illustrations/subject-chemistry.webp" alt="" width="80" height="72" decoding="async">
             <span class="subject-name">Chemistry</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
           <button class="subject-btn" data-subject="Biology" aria-pressed="false" onclick="pickSubject(this)">
-            <span class="subject-icon" aria-hidden="true">🧬</span>
+            <img class="subject-icon" src="/assets/images/illustrations/subject-biology.webp" alt="" width="79" height="72" decoding="async">
             <span class="subject-name">Biology</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
           <button class="subject-btn" data-subject="Mathematics" aria-pressed="false" onclick="pickSubject(this)">
-            <span class="subject-icon" aria-hidden="true">∑</span>
+            <img class="subject-icon" src="/assets/images/illustrations/subject-maths.webp" alt="" width="87" height="72" decoding="async">
             <span class="subject-name">Maths</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
           <button class="subject-btn" data-subject="Combined Science" aria-pressed="false" onclick="pickSubject(this)">
-            <span class="subject-icon" aria-hidden="true">🔬</span>
+            <img class="subject-icon" src="/assets/images/illustrations/subject-combined-science.webp" alt="" width="87" height="72" decoding="async">
             <span class="subject-name">Combined Science</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
           <button class="subject-btn" data-subject="Mathematics — Paper 2" aria-pressed="false" onclick="pickSubject(this)" title="A second Maths diagnostic on geometry and statistics, with diagrams. None of its questions appear in the main Maths diagnostic.">
-            <span class="subject-icon" aria-hidden="true">📐</span>
+            <img class="subject-icon" src="/assets/images/illustrations/subject-maths-paper2.webp" alt="" width="80" height="72" decoding="async">
             <span class="subject-name">Maths — Geometry &amp; Statistics</span>
             <span class="subject-saved-badge" style="display:none;">✓ Saved plan</span>
           </button>
