@@ -161,13 +161,13 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
   .card-artifact{
     flex:none;width:auto;margin:0;
     position:absolute;top:50%;right:clamp(190px,24%,300px);
-    height:calc(100% - 12px);max-height:150px;aspect-ratio:26/17;transform:translateY(-50%);
+    height:calc(100% - 12px);max-height:115px;aspect-ratio:26/17;transform:translateY(-50%);
     z-index:0;
     background:var(--art) center/contain no-repeat;
   }
   /* Keep a card's text clear of its illustration: stop the text column
-     before the art (its right offset plus its ~230px width, plus a gap). */
-  .card-artifact + .tq-left{max-width:calc(100% - clamp(190px,24%,300px) - 250px);}
+     before the art (its right offset plus its ~175px width, plus a gap). */
+  .card-artifact + .tq-left{max-width:calc(100% - clamp(190px,24%,300px) - 200px);}
 }
 .card-artifact--calendar{--art:url(/assets/images/illustrations/daily-calendar.webp);--art-sm:url(/assets/images/illustrations/daily-calendar-sm.webp);}
 .card-artifact--notebook{--art:url(/assets/images/illustrations/daily-notebook.webp);--art-sm:url(/assets/images/illustrations/daily-notebook-sm.webp);}
