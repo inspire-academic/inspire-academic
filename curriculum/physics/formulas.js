@@ -168,6 +168,35 @@ const FORMULAS = {
     }
   },
 
+  'ee-k': {
+    family: ['ee'],
+    concepts: ['phy.energy.elastic'], rearranged: true,
+    inputs: { E: 'energy', e: 'length' }, output: 'spring',
+    f: ({ E, e }) => 2 * E / (e * e),
+    equation: { kind: 'given', patterns: [] },
+    mistakes: {
+      'no-square': { f: ({ E, e }) => 2 * E / e, misconceptions: ['MIS-PHY-ENE-015'] },
+      'no-half': { f: ({ E, e }) => E / (e * e), misconceptions: ['MIS-PHY-ENE-005'] },
+      'half-wrong-way': { f: ({ E, e }) => E / (2 * e * e), misconceptions: ['MIS-PHY-SKL-005'] }
+    }
+  },
+  // Energy stored from the natural and stretched lengths: the extension is
+  // L - L0. Items give both lengths in cm, so 'used-cm' models a student who
+  // squares the extension in centimetres.
+  'ee-lengths': {
+    family: ['ee'],
+    concepts: ['phy.energy.elastic'],
+    inputs: { k: 'spring', L0: 'length', L: 'length' }, output: 'energy',
+    f: ({ k, L0, L }) => 0.5 * k * (L - L0) ** 2,
+    equation: { kind: 'given', patterns: [] },
+    mistakes: {
+      'total-length': { f: ({ k, L }) => 0.5 * k * L * L, misconceptions: ['MIS-PHY-ENE-008'] },
+      'used-cm': { f: ({ k, L0, L }) => 0.5 * k * ((L - L0) * 100) ** 2, misconceptions: ['MIS-PHY-ENE-008', 'MIS-PHY-SKL-002'] },
+      'no-square': { f: ({ k, L0, L }) => 0.5 * k * (L - L0), misconceptions: ['MIS-PHY-ENE-015'] },
+      'force-not-energy': { f: ({ k, L0, L }) => k * (L - L0), misconceptions: ['MIS-PHY-ENE-016'] }
+    }
+  },
+
   // ── Specific heat capacity (given) ──
   shc: {
     concepts: ['phy.energy.shc'],

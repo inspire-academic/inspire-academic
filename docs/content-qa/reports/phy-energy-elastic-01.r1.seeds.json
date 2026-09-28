@@ -1,0 +1,126 @@
+[
+ {
+  "label": "S-A2 wrong key: same extension, double k stores double the energy; key says the same",
+  "item": {
+   "ref": "seed-twok",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "Springs X and Y are stretched by the same extension. Spring X has twice the spring constant of spring Y. How does the energy stored in X compare with Y? Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "options": {
+    "a": "X stores twice as much",
+    "b": "They store the same energy",
+    "c": "X stores four times as much",
+    "d": "Y stores twice as much"
+   },
+   "key": "b",
+   "feedback": {
+    "a": "The extension is the same, so the energy stored is the same.",
+    "c": "Only the extension is squared, and it is the same for both.",
+    "d": "A spring with a smaller spring constant does not store more energy for the same extension."
+   },
+   "misconception_map": {
+    "a": "slip: thinks the spring constant changes the energy",
+    "c": "MIS-PHY-ENE-015",
+    "d": "slip: inverted the relationship with k"
+   },
+   "explanation": "With the same extension, both springs store the same energy."
+  }
+ },
+ {
+  "label": "S-B2 outside the boundary: Ee = ½ke² applied beyond the limit of proportionality",
+  "item": {
+   "ref": "seed-beyond",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "A spring with a spring constant of \\(100\\,\\text{N/m}\\) is stretched beyond its limit of proportionality, to an extension of \\(0.3\\,\\text{m}\\). Calculate the energy stored in its elastic potential energy store. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "calc": {
+    "formula": "ee",
+    "unit": "J",
+    "inputs": {
+     "k": {
+      "value": 100,
+      "unit": "N/m"
+     },
+     "e": {
+      "value": 0.3,
+      "unit": "m"
+     }
+    },
+    "wrong": [
+     "no-square",
+     "no-half"
+    ]
+   },
+   "answer": {
+    "value": 4.5,
+    "tolerance": 0.01,
+    "unit": "J",
+    "unit_options": [
+     "J",
+     "N",
+     "N/m"
+    ],
+    "wrong": [
+     {
+      "value": 15,
+      "misconception": "This does not square the extension: \\(\\tfrac{1}{2} \\times 100 \\times 0.3^{2} = 4.5\\,\\text{J}\\)."
+     },
+     {
+      "value": 9,
+      "misconception": "This leaves out the half: \\(\\tfrac{1}{2} \\times 100 \\times 0.3^{2} = 4.5\\,\\text{J}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "9": "MIS-PHY-ENE-005",
+    "15": "MIS-PHY-ENE-015"
+   },
+   "explanation": "\\(E_e = \\tfrac{1}{2}ke^{2} = \\tfrac{1}{2} \\times 100 \\times 0.3^{2} = 4.5\\,\\text{J}\\)."
+  }
+ },
+ {
+  "label": "S-B1/C1 mastery check that tests unit recall (not elastic energy), with a filler option (kg)",
+  "item": {
+   "ref": "seed-unit",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-spring-constant"
+   ],
+   "question_text": "In which unit is the spring constant of a spring measured?",
+   "options": {
+    "a": "newtons per metre",
+    "b": "joules",
+    "c": "newtons",
+    "d": "kilograms"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "Joules measure energy, not the spring constant.",
+    "c": "Newtons measure force; the spring constant is force per metre of extension.",
+    "d": "Kilograms measure mass."
+   },
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-016",
+    "c": "slip: gave the unit of force",
+    "d": "slip: gave the unit of mass"
+   },
+   "explanation": "The spring constant is the force needed per metre of extension, so its unit is N/m."
+  }
+ }
+]

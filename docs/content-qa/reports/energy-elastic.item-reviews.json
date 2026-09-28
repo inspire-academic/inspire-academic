@@ -1,0 +1,33 @@
+{
+ "note": "The Physics Subject Expert Review Agent's verdicts on every item in phy-energy-elastic-01 (seeds excluded; see the manifest and docs/content-qa/review-energy-elastic.md). Transcribed from the reviewer's JSON report of 28 Sep 2026 (one round). Read by curriculum/build-pack-sql.js.",
+ "reviewer": "physics-subject-reviewer",
+ "reviewer_version": "v1 (general-purpose opus agent loading .claude/agents/physics-subject-reviewer.md)",
+ "rubric_version": 1,
+ "reference_pack_commit": "fcbb5f93cafdb45e32ad3f82e1ed6a3334a419bf",
+ "reviews": [
+  { "pack": "phy-energy-elastic-01", "ref": "el-t2", "round": 1, "item_ref": "b02", "decision": "APPROVE", "key_matches": true,
+    "blind_solve": "Symbolically: E = 1/2 k (e/100)^2 J. Seed 1: k=100, e=2 cm -> 0.5x100x0.0004 = 0.02 J. Seed 3: k=200, e=3 cm -> 0.5x200x0.0009 = 0.09 J. Seed 4: k=250, e=6 cm -> 0.5x250x0.0036 = 0.45 J. Seed 5: k=250, e=8 cm -> 0.8 J. Range ends: k=40, e=2 -> 0.008 J; k=300, e=15 -> 3.375 J. All match the key and fall inside answer_range [0.005, 5].",
+    "criteria": { "A1": "PASS", "A2": "PASS", "A3": "PASS", "A4": "PASS", "A5": "PASS", "B1": "PASS", "B2": "PASS", "B3": "PASS", "B4": "PASS", "C1": "PASS", "C2": "PASS", "D1": "N/A", "D2": "N/A", "D3": "N/A", "E1": "PASS", "E2": "PASS", "F1": "PASS", "F2": "PASS: 17% wording overlap with a past-paper question. It is generic spring wording, not a paraphrase.", "G1": "PASS" } },
+  { "pack": "phy-energy-elastic-01", "ref": "el-mc-1", "round": 1, "item_ref": "b03", "decision": "APPROVE", "key_matches": true,
+    "blind_solve": "e = 20 - 12 = 8 cm = 0.08 m. Ee = 0.5 x 50 x 0.08^2 = 0.5 x 50 x 0.0064 = 0.16 J.",
+    "criteria": { "A1": "PASS", "A2": "PASS", "A3": "PASS", "A4": "PASS", "A5": "PASS", "B1": "PASS", "B2": "PASS", "B3": "PASS", "B4": "PASS", "C1": "PASS", "C2": "PASS", "D1": "PASS", "D2": "N/A", "D3": "N/A", "E1": "PASS", "E2": "PASS", "F1": "PASS", "F2": "PASS", "G1": "N/A" } },
+  { "pack": "phy-energy-elastic-01", "ref": "el-t1", "round": 1, "item_ref": "b05", "decision": "APPROVE", "key_matches": true,
+    "blind_solve": "Symbolically: E = 1/2 k e^2. Seed 1: k=50, e=0.04 -> 0.5x50x0.0016 = 0.04 J. Seed 2: k=120, e=0.04 -> 0.096 J. Seed 5: k=120, e=0.2 -> 0.5x120x0.04 = 2.4 J. Range ends: k=50, e=0.02 -> 0.01 J; k=500, e=0.2 -> 10 J. All match the key and fall inside [0.005, 12].",
+    "criteria": { "A1": "PASS", "A2": "PASS", "A3": "PASS", "A4": "PASS", "A5": "PASS", "B1": "PASS", "B2": "PASS", "B3": "PASS", "B4": "PASS", "C1": "PASS", "C2": "PASS", "D1": "N/A", "D2": "N/A", "D3": "N/A", "E1": "PASS", "E2": "PASS", "F1": "PASS", "F2": "PASS: 18% generic overlap.", "G1": "PASS" } },
+  { "pack": "phy-energy-elastic-01", "ref": "el-mc-2", "round": 1, "item_ref": "b06", "decision": "APPROVE", "key_matches": true,
+    "blind_solve": "k = 2Ee/e^2 = 2 x 0.9 / 0.06^2 = 1.8 / 0.0036 = 500 N/m, option d.",
+    "criteria": { "A1": "PASS", "A2": "PASS", "A3": "PASS", "A4": "PASS", "A5": "PASS", "B1": "PASS", "B2": "PASS", "B3": "PASS", "B4": "PASS", "C1": "PASS", "C2": "PASS", "D1": "PASS", "D2": "N/A", "D3": "N/A", "E1": "PASS", "E2": "PASS", "F1": "PASS", "F2": "PASS", "G1": "N/A" } },
+  { "pack": "phy-energy-elastic-01", "ref": "el-diag-1", "round": 1, "item_ref": "b07", "decision": "APPROVE", "key_matches": true,
+    "blind_solve": "Ee = 0.5 x 320 x 0.25^2 = 0.5 x 320 x 0.0625 = 10 J, option a.",
+    "criteria": { "A1": "PASS", "A2": "PASS", "A3": "PASS", "A4": "PASS", "A5": "PASS", "B1": "PASS", "B2": "PASS", "B3": "PASS", "B4": "PASS", "C1": "PASS", "C2": "PASS", "D1": "N/A", "D2": "N/A", "D3": "N/A", "E1": "PASS", "E2": "PASS", "F1": "PASS", "F2": "PASS", "G1": "N/A" } },
+  { "pack": "phy-energy-elastic-01", "ref": "el-prac-c1", "round": 1, "item_ref": "b09", "decision": "APPROVE", "key_matches": true,
+    "blind_solve": "Ee is proportional to e^2 with k fixed. Doubling e multiplies Ee by 2^2 = 4, so option b.",
+    "criteria": { "A1": "PASS", "A2": "PASS", "A3": "N/A", "A4": "PASS", "A5": "PASS", "B1": "PASS", "B2": "PASS", "B3": "PASS", "B4": "PASS: the wording 'stretched again to twice the extension' is slightly awkward but unambiguous.", "C1": "PASS", "C2": "PASS", "D1": "N/A", "D2": "N/A", "D3": "N/A", "E1": "PASS", "E2": "PASS", "F1": "PASS", "F2": "PASS", "G1": "N/A" } }
+ ],
+ "second_solver": {
+  "phy-energy-elastic-01": { "el-mc-1": "0.16 J (agrees)", "el-mc-2": "d, 500 N/m (agrees)", "el-prac-c1": "b, four times (agrees)" }
+ },
+ "blocks": {
+  "phy-energy-elastic-01": { "batches": 1, "seeded_total": 3, "seeded_caught": 3 }
+ }
+}

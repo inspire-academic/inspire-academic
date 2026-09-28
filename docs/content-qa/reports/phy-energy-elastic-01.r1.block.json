@@ -1,0 +1,882 @@
+{
+ "block": "phy-energy-elastic-01",
+ "subject": "Physics",
+ "concepts": [
+  "phy.energy.elastic"
+ ],
+ "reference_pack_commit": "fcbb5f93cafdb45e32ad3f82e1ed6a3334a419bf",
+ "check_suite": "checks-1",
+ "items": [
+  {
+   "item_ref": "b01",
+   "kind": "item",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "A spring with a spring constant of \\(100\\,\\text{N/m}\\) is stretched beyond its limit of proportionality, to an extension of \\(0.3\\,\\text{m}\\). Calculate the energy stored in its elastic potential energy store. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "calc": {
+    "formula": "ee",
+    "unit": "J",
+    "inputs": {
+     "k": {
+      "value": 100,
+      "unit": "N/m"
+     },
+     "e": {
+      "value": 0.3,
+      "unit": "m"
+     }
+    },
+    "wrong": [
+     "no-square",
+     "no-half"
+    ]
+   },
+   "answer": {
+    "value": 4.5,
+    "tolerance": 0.01,
+    "unit": "J",
+    "unit_options": [
+     "J",
+     "N",
+     "N/m"
+    ],
+    "wrong": [
+     {
+      "value": 15,
+      "misconception": "This does not square the extension: \\(\\tfrac{1}{2} \\times 100 \\times 0.3^{2} = 4.5\\,\\text{J}\\)."
+     },
+     {
+      "value": 9,
+      "misconception": "This leaves out the half: \\(\\tfrac{1}{2} \\times 100 \\times 0.3^{2} = 4.5\\,\\text{J}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "9": "MIS-PHY-ENE-005",
+    "15": "MIS-PHY-ENE-015"
+   },
+   "explanation": "\\(E_e = \\tfrac{1}{2}ke^{2} = \\tfrac{1}{2} \\times 100 \\times 0.3^{2} = 4.5\\,\\text{J}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 14
+   }
+  },
+  {
+   "item_ref": "b02",
+   "kind": "template",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "practice",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-energy",
+    "extension-in-cm"
+   ],
+   "stem": "A spring with a spring constant of \\([[k]]\\,\\text{N/m}\\) is stretched by \\([[e]]\\,\\text{cm}\\). Calculate the energy stored in its elastic potential energy store, in joules. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "params": {
+    "k": {
+     "values": [
+      40,
+      60,
+      80,
+      100,
+      150,
+      200,
+      250,
+      300
+     ],
+     "unit": "N/m"
+    },
+    "e": {
+     "values": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      10,
+      12,
+      15
+     ],
+     "unit": "cm"
+    }
+   },
+   "sig_figs": 4,
+   "calc": {
+    "formula": "ee",
+    "unit": "J",
+    "wrong": [
+     "unconverted:e",
+     "no-square",
+     "no-half"
+    ]
+   },
+   "misconception_map": {
+    "unconverted:e": "MIS-PHY-ENE-008",
+    "no-square": "MIS-PHY-ENE-015",
+    "no-half": "MIS-PHY-ENE-005"
+   },
+   "feedback": {
+    "unconverted:e": "This uses the extension in centimetres. Convert first: \\([[e]]\\,\\text{cm} = [[e]] \\div 100\\,\\text{m}\\).",
+    "no-square": "Square the extension (in metres) before multiplying: \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+    "no-half": "This leaves out the half. \\(E_e = \\tfrac{1}{2}ke^{2} = [[answer]]\\,\\text{J}\\)."
+   },
+   "explanation": "Convert the extension: \\([[e]]\\,\\text{cm} = [[e]] \\div 100\\,\\text{m}\\). Then \\(E_e = \\tfrac{1}{2}ke^{2} = [[answer]]\\,\\text{J}\\).",
+   "unit_options": [
+    "J",
+    "N",
+    "N/m"
+   ],
+   "answer_range": [
+    0.005,
+    5
+   ],
+   "sample_instances": [
+    {
+     "seed": 1,
+     "params": {
+      "k": 100,
+      "e": 2
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(100\\,\\text{N/m}\\) is stretched by \\(2\\,\\text{cm}\\). Calculate the energy stored in its elastic potential energy store, in joules. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 0.02,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 200,
+        "misconception": "This uses the extension in centimetres. Convert first: \\(2\\,\\text{cm} = 2 \\div 100\\,\\text{m}\\)."
+       },
+       {
+        "value": 1,
+        "misconception": "Square the extension (in metres) before multiplying: \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 0.04,
+        "misconception": "This leaves out the half. \\(E_e = \\tfrac{1}{2}ke^{2} = 0.02\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 0.02
+    },
+    {
+     "seed": 2,
+     "params": {
+      "k": 100,
+      "e": 5
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(100\\,\\text{N/m}\\) is stretched by \\(5\\,\\text{cm}\\). Calculate the energy stored in its elastic potential energy store, in joules. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 0.125,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 1250,
+        "misconception": "This uses the extension in centimetres. Convert first: \\(5\\,\\text{cm} = 5 \\div 100\\,\\text{m}\\)."
+       },
+       {
+        "value": 2.5,
+        "misconception": "Square the extension (in metres) before multiplying: \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 0.25,
+        "misconception": "This leaves out the half. \\(E_e = \\tfrac{1}{2}ke^{2} = 0.125\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 0.125
+    },
+    {
+     "seed": 3,
+     "params": {
+      "k": 200,
+      "e": 3
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(200\\,\\text{N/m}\\) is stretched by \\(3\\,\\text{cm}\\). Calculate the energy stored in its elastic potential energy store, in joules. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 0.09,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 900,
+        "misconception": "This uses the extension in centimetres. Convert first: \\(3\\,\\text{cm} = 3 \\div 100\\,\\text{m}\\)."
+       },
+       {
+        "value": 3,
+        "misconception": "Square the extension (in metres) before multiplying: \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 0.18,
+        "misconception": "This leaves out the half. \\(E_e = \\tfrac{1}{2}ke^{2} = 0.09\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 0.09
+    },
+    {
+     "seed": 4,
+     "params": {
+      "k": 250,
+      "e": 6
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(250\\,\\text{N/m}\\) is stretched by \\(6\\,\\text{cm}\\). Calculate the energy stored in its elastic potential energy store, in joules. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 0.44999999999999996,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 4500,
+        "misconception": "This uses the extension in centimetres. Convert first: \\(6\\,\\text{cm} = 6 \\div 100\\,\\text{m}\\)."
+       },
+       {
+        "value": 7.5,
+        "misconception": "Square the extension (in metres) before multiplying: \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 0.9,
+        "misconception": "This leaves out the half. \\(E_e = \\tfrac{1}{2}ke^{2} = 0.45\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 0.45
+    },
+    {
+     "seed": 5,
+     "params": {
+      "k": 250,
+      "e": 8
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(250\\,\\text{N/m}\\) is stretched by \\(8\\,\\text{cm}\\). Calculate the energy stored in its elastic potential energy store, in joules. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 0.8,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 8000,
+        "misconception": "This uses the extension in centimetres. Convert first: \\(8\\,\\text{cm} = 8 \\div 100\\,\\text{m}\\)."
+       },
+       {
+        "value": 10,
+        "misconception": "Square the extension (in metres) before multiplying: \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 1.6,
+        "misconception": "This leaves out the half. \\(E_e = \\tfrac{1}{2}ke^{2} = 0.8\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 0.8
+    }
+   ],
+   "instances_checked": 72,
+   "automated_checks": {
+    "passed": true,
+    "warnings": [
+     "copyright: warning: 17% of its wording matches past paper pasco_pilot_aqa_ph_2h_nov21#33"
+    ],
+    "past_paper_overlap_pct": 17
+   }
+  },
+  {
+   "item_ref": "b03",
+   "kind": "item",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-energy",
+    "extension-in-cm",
+    "extension-from-lengths"
+   ],
+   "question_text": "A spring has a natural length of \\(12\\,\\text{cm}\\). A mass hung from it stretches it to a length of \\(20\\,\\text{cm}\\). The spring constant is \\(50\\,\\text{N/m}\\). Calculate the energy stored in its elastic potential energy store. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "calc": {
+    "formula": "ee-lengths",
+    "unit": "J",
+    "inputs": {
+     "k": {
+      "value": 50,
+      "unit": "N/m"
+     },
+     "L0": {
+      "value": 12,
+      "unit": "cm"
+     },
+     "L": {
+      "value": 20,
+      "unit": "cm"
+     }
+    },
+    "wrong": [
+     "total-length",
+     "used-cm",
+     "no-square",
+     "force-not-energy"
+    ]
+   },
+   "answer": {
+    "value": 0.16,
+    "tolerance": 0.01,
+    "unit": "J",
+    "unit_options": [
+     "J",
+     "N",
+     "N/m"
+    ],
+    "wrong": [
+     {
+      "value": 1,
+      "misconception": "This uses the stretched length, 20 cm. Use the extension: \\(20 - 12 = 8\\,\\text{cm} = 0.08\\,\\text{m}\\), so \\(E_e = \\tfrac{1}{2} \\times 50 \\times 0.08^{2} = 0.16\\,\\text{J}\\)."
+     },
+     {
+      "value": 1600,
+      "misconception": "This uses the extension in centimetres. Convert first: 8 cm = 0.08 m, so \\(E_e = \\tfrac{1}{2} \\times 50 \\times 0.08^{2} = 0.16\\,\\text{J}\\)."
+     },
+     {
+      "value": 2,
+      "misconception": "This does not square the extension. \\(E_e = \\tfrac{1}{2} \\times 50 \\times 0.08^{2} = 0.16\\,\\text{J}\\)."
+     },
+     {
+      "value": 4,
+      "misconception": "4 N is the force on the spring (\\(F = ke = 50 \\times 0.08\\)), not the energy stored. \\(E_e = \\tfrac{1}{2}ke^{2} = 0.16\\,\\text{J}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "1": "MIS-PHY-ENE-008",
+    "2": "MIS-PHY-ENE-015",
+    "4": "MIS-PHY-ENE-016",
+    "1600": "MIS-PHY-ENE-008"
+   },
+   "explanation": "Extension = stretched length − natural length = 20 − 12 = 8 cm = 0.08 m. \\(E_e = \\tfrac{1}{2}ke^{2} = \\tfrac{1}{2} \\times 50 \\times 0.08^{2} = 0.16\\,\\text{J}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 2
+   }
+  },
+  {
+   "item_ref": "b04",
+   "kind": "item",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-spring-constant"
+   ],
+   "question_text": "In which unit is the spring constant of a spring measured?",
+   "options": {
+    "a": "newtons per metre",
+    "b": "joules",
+    "c": "newtons",
+    "d": "kilograms"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "Joules measure energy, not the spring constant.",
+    "c": "Newtons measure force; the spring constant is force per metre of extension.",
+    "d": "Kilograms measure mass."
+   },
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-016",
+    "c": "slip: gave the unit of force",
+    "d": "slip: gave the unit of mass"
+   },
+   "explanation": "The spring constant is the force needed per metre of extension, so its unit is N/m.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [
+     "copyright: warning: 15% of its wording matches past paper pasco_pilot_aqa_ph_2h_jun18#12"
+    ],
+    "past_paper_overlap_pct": 15
+   }
+  },
+  {
+   "item_ref": "b05",
+   "kind": "template",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-energy"
+   ],
+   "stem": "A spring with a spring constant of \\([[k]]\\,\\text{N/m}\\) is stretched by \\([[e]]\\,\\text{m}\\). Calculate the energy stored in its elastic potential energy store. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "params": {
+    "k": {
+     "values": [
+      50,
+      80,
+      100,
+      120,
+      150,
+      200,
+      250,
+      300,
+      400,
+      500
+     ],
+     "unit": "N/m"
+    },
+    "e": {
+     "values": [
+      0.02,
+      0.03,
+      0.04,
+      0.05,
+      0.06,
+      0.08,
+      0.1,
+      0.12,
+      0.15,
+      0.2
+     ],
+     "unit": "m"
+    }
+   },
+   "sig_figs": 4,
+   "calc": {
+    "formula": "ee",
+    "unit": "J",
+    "wrong": [
+     "no-square",
+     "force-not-energy",
+     "no-half"
+    ]
+   },
+   "misconception_map": {
+    "no-square": "MIS-PHY-ENE-015",
+    "force-not-energy": "MIS-PHY-ENE-016",
+    "no-half": "MIS-PHY-ENE-005"
+   },
+   "feedback": {
+    "no-square": "This does not square the extension. \\(E_e = \\tfrac{1}{2} \\times [[k]] \\times [[e]]^{2}\\).",
+    "force-not-energy": "This is the force on the spring (\\(F = ke\\)), in newtons, not the energy stored. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+    "no-half": "This leaves out the half: \\(E_e = \\tfrac{1}{2} \\times [[k]] \\times [[e]]^{2} = [[answer]]\\,\\text{J}\\)."
+   },
+   "explanation": "\\(E_e = \\tfrac{1}{2}ke^{2} = \\tfrac{1}{2} \\times [[k]] \\times [[e]]^{2} = [[answer]]\\,\\text{J}\\).",
+   "unit_options": [
+    "J",
+    "N",
+    "N/m"
+   ],
+   "answer_range": [
+    0.005,
+    12
+   ],
+   "sample_instances": [
+    {
+     "seed": 1,
+     "params": {
+      "k": 50,
+      "e": 0.04
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(50\\,\\text{N/m}\\) is stretched by \\(0.04\\,\\text{m}\\). Calculate the energy stored in its elastic potential energy store. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 0.04,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 1,
+        "misconception": "This does not square the extension. \\(E_e = \\tfrac{1}{2} \\times 50 \\times 0.04^{2}\\)."
+       },
+       {
+        "value": 2,
+        "misconception": "This is the force on the spring (\\(F = ke\\)), in newtons, not the energy stored. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 0.08,
+        "misconception": "This leaves out the half: \\(E_e = \\tfrac{1}{2} \\times 50 \\times 0.04^{2} = 0.04\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 0.04
+    },
+    {
+     "seed": 2,
+     "params": {
+      "k": 120,
+      "e": 0.04
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(120\\,\\text{N/m}\\) is stretched by \\(0.04\\,\\text{m}\\). Calculate the energy stored in its elastic potential energy store. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 0.096,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 2.4,
+        "misconception": "This does not square the extension. \\(E_e = \\tfrac{1}{2} \\times 120 \\times 0.04^{2}\\)."
+       },
+       {
+        "value": 4.8,
+        "misconception": "This is the force on the spring (\\(F = ke\\)), in newtons, not the energy stored. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 0.192,
+        "misconception": "This leaves out the half: \\(E_e = \\tfrac{1}{2} \\times 120 \\times 0.04^{2} = 0.096\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 0.096
+    },
+    {
+     "seed": 3,
+     "params": {
+      "k": 50,
+      "e": 0.02
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(50\\,\\text{N/m}\\) is stretched by \\(0.02\\,\\text{m}\\). Calculate the energy stored in its elastic potential energy store. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 0.01,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 0.5,
+        "misconception": "This does not square the extension. \\(E_e = \\tfrac{1}{2} \\times 50 \\times 0.02^{2}\\)."
+       },
+       {
+        "value": 1,
+        "misconception": "This is the force on the spring (\\(F = ke\\)), in newtons, not the energy stored. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 0.02,
+        "misconception": "This leaves out the half: \\(E_e = \\tfrac{1}{2} \\times 50 \\times 0.02^{2} = 0.01\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 0.01
+    },
+    {
+     "seed": 4,
+     "params": {
+      "k": 50,
+      "e": 0.2
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(50\\,\\text{N/m}\\) is stretched by \\(0.2\\,\\text{m}\\). Calculate the energy stored in its elastic potential energy store. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 1,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 5,
+        "misconception": "This does not square the extension. \\(E_e = \\tfrac{1}{2} \\times 50 \\times 0.2^{2}\\)."
+       },
+       {
+        "value": 10,
+        "misconception": "This is the force on the spring (\\(F = ke\\)), in newtons, not the energy stored. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 2,
+        "misconception": "This leaves out the half: \\(E_e = \\tfrac{1}{2} \\times 50 \\times 0.2^{2} = 1\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 1
+    },
+    {
+     "seed": 5,
+     "params": {
+      "k": 120,
+      "e": 0.2
+     },
+     "words": {},
+     "question_text": "A spring with a spring constant of \\(120\\,\\text{N/m}\\) is stretched by \\(0.2\\,\\text{m}\\). Calculate the energy stored in its elastic potential energy store. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+     "answer": {
+      "value": 2.4000000000000004,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "N/m"
+      ],
+      "wrong": [
+       {
+        "value": 12,
+        "misconception": "This does not square the extension. \\(E_e = \\tfrac{1}{2} \\times 120 \\times 0.2^{2}\\)."
+       },
+       {
+        "value": 24,
+        "misconception": "This is the force on the spring (\\(F = ke\\)), in newtons, not the energy stored. Use \\(E_e = \\tfrac{1}{2}ke^{2}\\)."
+       },
+       {
+        "value": 4.8,
+        "misconception": "This leaves out the half: \\(E_e = \\tfrac{1}{2} \\times 120 \\times 0.2^{2} = 2.4\\,\\text{J}\\)."
+       }
+      ]
+     },
+     "correct": 2.4
+    }
+   ],
+   "instances_checked": 100,
+   "automated_checks": {
+    "passed": true,
+    "warnings": [
+     "copyright: warning: 18% of its wording matches past paper pasco_pilot_aqa_ph_2h_nov21#33"
+    ],
+    "past_paper_overlap_pct": 18
+   }
+  },
+  {
+   "item_ref": "b06",
+   "kind": "item",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-spring-constant"
+   ],
+   "question_text": "When a spring is stretched by \\(0.06\\,\\text{m}\\), it stores \\(0.9\\,\\text{J}\\) in its elastic potential energy store. What is its spring constant? Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "options": {
+    "a": "\\(30\\,\\text{N/m}\\)",
+    "b": "\\(125\\,\\text{N/m}\\)",
+    "c": "\\(250\\,\\text{N/m}\\)",
+    "d": "\\(500\\,\\text{N/m}\\)"
+   },
+   "key": "d",
+   "calc": {
+    "formula": "ee-k",
+    "unit": "N/m",
+    "inputs": {
+     "E": {
+      "value": 0.9,
+      "unit": "J"
+     },
+     "e": {
+      "value": 0.06,
+      "unit": "m"
+     }
+    },
+    "options": {
+     "a": "no-square",
+     "b": "half-wrong-way",
+     "c": "no-half",
+     "d": "correct"
+    }
+   },
+   "feedback": {
+    "a": "This divides by the extension, not the extension squared. \\(k = \\dfrac{2E_e}{e^{2}} = \\dfrac{2 \\times 0.9}{0.06^{2}} = 500\\,\\text{N/m}\\).",
+    "b": "The half goes the other way when you rearrange: multiply the energy by 2. \\(k = \\dfrac{2E_e}{e^{2}} = 500\\,\\text{N/m}\\).",
+    "c": "This loses the 2 that comes from the half. \\(k = \\dfrac{2E_e}{e^{2}} = \\dfrac{1.8}{0.0036} = 500\\,\\text{N/m}\\)."
+   },
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-015",
+    "b": "MIS-PHY-SKL-005",
+    "c": "MIS-PHY-ENE-005"
+   },
+   "explanation": "Rearrange \\(E_e = \\tfrac{1}{2}ke^{2}\\) to \\(k = \\dfrac{2E_e}{e^{2}} = \\dfrac{2 \\times 0.9}{0.06^{2}} = \\dfrac{1.8}{0.0036} = 500\\,\\text{N/m}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 9
+   }
+  },
+  {
+   "item_ref": "b07",
+   "kind": "item",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "The elastic band of a catapult has a spring constant of \\(320\\,\\text{N/m}\\). It is pulled back so that it stretches by \\(0.25\\,\\text{m}\\). How much energy is stored in its elastic potential energy store? Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "options": {
+    "a": "\\(10\\,\\text{J}\\)",
+    "b": "\\(20\\,\\text{J}\\)",
+    "c": "\\(40\\,\\text{J}\\)",
+    "d": "\\(80\\,\\text{J}\\)"
+   },
+   "key": "a",
+   "calc": {
+    "formula": "ee",
+    "unit": "J",
+    "inputs": {
+     "k": {
+      "value": 320,
+      "unit": "N/m"
+     },
+     "e": {
+      "value": 0.25,
+      "unit": "m"
+     }
+    },
+    "options": {
+     "a": "correct",
+     "b": "no-half",
+     "c": "no-square",
+     "d": "force-not-energy"
+    }
+   },
+   "feedback": {
+    "b": "This leaves out the half. \\(E_e = \\tfrac{1}{2} \\times 320 \\times 0.25^{2} = 10\\,\\text{J}\\).",
+    "c": "This does not square the extension. \\(E_e = \\tfrac{1}{2} \\times 320 \\times 0.25^{2} = \\tfrac{1}{2} \\times 320 \\times 0.0625 = 10\\,\\text{J}\\).",
+    "d": "80 is the force on the band in newtons (\\(F = ke = 320 \\times 0.25\\)), not the energy stored. \\(E_e = \\tfrac{1}{2}ke^{2} = 10\\,\\text{J}\\)."
+   },
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-005",
+    "c": "MIS-PHY-ENE-015",
+    "d": "MIS-PHY-ENE-016"
+   },
+   "explanation": "\\(E_e = \\tfrac{1}{2}ke^{2} = \\tfrac{1}{2} \\times 320 \\times 0.25^{2} = \\tfrac{1}{2} \\times 320 \\times 0.0625 = 10\\,\\text{J}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 7
+   }
+  },
+  {
+   "item_ref": "b08",
+   "kind": "item",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "Springs X and Y are stretched by the same extension. Spring X has twice the spring constant of spring Y. How does the energy stored in X compare with Y? Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "options": {
+    "a": "X stores twice as much",
+    "b": "They store the same energy",
+    "c": "X stores four times as much",
+    "d": "Y stores twice as much"
+   },
+   "key": "b",
+   "feedback": {
+    "a": "The extension is the same, so the energy stored is the same.",
+    "c": "Only the extension is squared, and it is the same for both.",
+    "d": "A spring with a smaller spring constant does not store more energy for the same extension."
+   },
+   "misconception_map": {
+    "a": "slip: thinks the spring constant changes the energy",
+    "c": "MIS-PHY-ENE-015",
+    "d": "slip: inverted the relationship with k"
+   },
+   "explanation": "With the same extension, both springs store the same energy.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 0
+   }
+  },
+  {
+   "item_ref": "b09",
+   "kind": "item",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "practice",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy",
+    "proportional-reasoning"
+   ],
+   "question_text": "A spring is stretched, and then stretched again to twice the extension. It stays within its limit of proportionality. How does the energy in its elastic potential energy store change? Use \\(E_e = \\tfrac{1}{2}ke^{2}\\).",
+   "options": {
+    "a": "It doubles, because the extension doubles",
+    "b": "It becomes four times as large",
+    "c": "It stays the same, because the spring constant does not change",
+    "d": "It becomes twice as large, because ½ × 2² = 2"
+   },
+   "key": "b",
+   "feedback": {
+    "a": "The energy depends on the extension squared, not the extension. Doubling e multiplies e² by 4, so the energy is four times as large.",
+    "c": "The spring constant stays the same, but the extension has changed. The energy depends on e², so it becomes four times as large.",
+    "d": "The ½ is in both the old and the new energy, so it cancels in the comparison. Only the 2² remains: the energy becomes four times as large."
+   },
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-015",
+    "c": "slip: thinks the energy stored depends only on the spring constant",
+    "d": "slip: applied the ½ to the ratio instead of to each energy"
+   },
+   "explanation": "The energy stored is proportional to the extension squared (Ee = ½ke², with k fixed). Doubling the extension multiplies it by 2² = 4.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 2
+   }
+  }
+ ]
+}
