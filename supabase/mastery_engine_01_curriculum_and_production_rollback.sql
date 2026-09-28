@@ -14,6 +14,11 @@
 begin;
 
 drop function if exists public.approve_content_block(text);
+drop function if exists public.return_content_block(text, text, text);
+drop function if exists public.draw_block_sample(text);
+drop trigger if exists diagnostic_questions_block_guard on public.diagnostic_questions;
+drop trigger if exists item_templates_block_guard on public.item_templates;
+drop function if exists public.block_item_approval_guard();
 drop trigger if exists item_templates_review_stamp on public.item_templates;
 drop function if exists public.item_templates_review_stamp();
 
