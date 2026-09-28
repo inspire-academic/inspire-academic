@@ -48,7 +48,10 @@
       rows.push(...data);
       if (data.length < 1000) break;
     }
-    state.rows = rows;
+    // Mastery Engine block items are approved only as a block, on the
+    // Content blocks view (the database refuses anything else).
+    state.blockItems = rows.filter(r => r.block_id).length;
+    state.rows = rows.filter(r => !r.block_id);
     try {
       const { data } = await supa.from('diagnostic_item_stats').select('*');
       (data || []).forEach(s => state.stats.set(Number(s.question_id), s));
@@ -109,7 +112,8 @@
       ['Drafts', count('draft')], ['Changes requested', count('changes_requested')], ['Legacy', count('legacy')],
       ['Approved', count('approved')], ['Rejected', count('rejected')], ['Flagged', flagged]
     ].map(([l, n]) => `<span class="qr-count">${l} <strong>${n}</strong></span>`).join('') +
-      `<span class="qr-count">Showing <strong>${state.filtered.length}</strong></span>`;
+      `<span class="qr-count">Showing <strong>${state.filtered.length}</strong></span>` +
+      (state.blockItems ? `<span class="qr-count">In content blocks <strong>${state.blockItems}</strong> (see Content blocks)</span>` : '');
   }
 
   function renderList() {
@@ -372,6 +376,7 @@
     const auth = await requireAuth('admin');
     if (!auth) return;
     state.me = auth.user;
+    document.dispatchEvent(new CustomEvent('qr:ready', { detail: { me: auth.user } }));
     try {
       await loadAll();
     } catch (e) {
@@ -391,6 +396,7 @@
     };
     document.addEventListener('keydown', e => {
       if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
+      if ($('bank-view') && $('bank-view').hidden) return;
       if (e.key === 'j') step(1);
       else if (e.key === 'k') step(-1);
       else if (e.key === 'a' && !state.editing) { const b = $('act-approve'); if (b && !b.disabled) decide('approved'); }

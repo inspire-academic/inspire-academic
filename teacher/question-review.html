@@ -21,6 +21,12 @@
 </header>
 
 <main class="qr-main">
+  <nav class="qr-views" aria-label="Review views">
+    <button type="button" class="qr-view" id="view-bank" aria-pressed="true">Question bank</button>
+    <button type="button" class="qr-view" id="view-blocks" aria-pressed="false">Content blocks · spot check</button>
+  </nav>
+
+  <div id="bank-view" class="qr-view-body">
   <section class="qr-intro">
     <h1>Diagnostic question bank</h1>
     <p class="muted">Every question a student sees must have been checked by a named person. New questions arrive as drafts; the older bank is marked <strong>legacy</strong>: still in use, waiting for its check. Only approved and legacy questions are ever served.</p>
@@ -60,6 +66,18 @@
       <p class="muted">Choose a question from the list.</p>
     </section>
   </div>
+  </div>
+
+  <div id="blocks-view" class="qr-view-body" hidden>
+    <section class="qr-intro">
+      <h1>Content blocks</h1>
+      <p class="muted">Mastery Engine content reaches students one block at a time. Each block has passed the automated checks and the Physics subject reviewer. Here you spot-check a random sample the database draws, then approve the whole block or send it back. Items in a block cannot be approved one by one.</p>
+    </section>
+    <div class="qr-body">
+      <nav class="qr-list card" id="cqa-list" aria-label="Content blocks"><p class="muted qr-pad">Loading…</p></nav>
+      <section class="qr-detail card" id="cqa-detail" aria-live="polite"><p class="muted">Choose a block.</p></section>
+    </div>
+  </div>
 </main>
 
 <div id="toast" role="status" aria-live="polite"></div>
@@ -71,5 +89,6 @@
 <script src="/assets/js/maths-typeset.js"></script>
 <script src="/assets/js/diagnostic-numeric.js"></script>
 <script src="/assets/js/question-review.js"></script>
+<script src="/assets/js/content-qa.js"></script>
 </body>
 </html>
