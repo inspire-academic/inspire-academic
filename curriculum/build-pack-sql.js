@@ -93,7 +93,7 @@ function itemSql(pack, x, check, review, meta, commit) {
       source, validated, active, review_status, question_type, answer_spec, combined_eligible,
       evidence_class, block_id, pipeline_stage, drafted_by, draft_ref, marks)
     values (${q(pack.subject)}, ${q(x.exam_board || 'Universal')}, 'GCSE', ${q(x.tier)}, ${q(topic)}, ${q(subtopic)}, ${q(slug)}, ${BAND_TO_DIFFICULTY[x.difficulty_band]},
-      ${q(x.question_text)}, ${q(o.a)}, ${q(o.b)}, ${q(o.c)}, ${q(o.d)}, ${numeric ? 'null' : "'Not sure'"}, ${q(numeric ? null : x.key)},
+      ${q(x.question_text)}, ${q(o.a)}, ${q(o.b)}, ${q(o.c)}, ${q(o.d)}, 'Not sure', ${q(numeric ? null : x.key)},
       ${feedback.join(', ')}, ${q(x.explanation)},
       'ai_drafted', false, true, 'draft', ${q(numeric ? 'numeric' : 'mcq')}, ${numeric ? json(x.answer) : 'null'}, ${x.separate_only ? 'false' : 'true'},
       ${q(x.evidence_class)}, ${q(pack.id)}, 'in_block', ${q(pack.drafted_by)}, ${q(commit)}, ${x.marks == null ? 'null' : Number(x.marks)})

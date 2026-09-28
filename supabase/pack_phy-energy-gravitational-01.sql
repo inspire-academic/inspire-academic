@@ -94,7 +94,7 @@ do $$ declare v_id bigint; begin
       source, validated, active, review_status, question_type, answer_spec, combined_eligible,
       evidence_class, block_id, pipeline_stage, drafted_by, draft_ref, marks)
     values ($t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Gravitational Potential Energy$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 3,
-      $t$A crane lifts a steel beam 12 m vertically. The energy in the beam's gravitational potential energy store increases by \(58\,800\,\text{J}\). Gravitational field strength, \(g = 9.8\,\text{N/kg}\). Calculate the mass of the beam.$t$, null, null, null, null, null, null,
+      $t$A crane lifts a steel beam 12 m vertically. The energy in the beam's gravitational potential energy store increases by \(58\,800\,\text{J}\). Gravitational field strength, \(g = 9.8\,\text{N/kg}\). Calculate the mass of the beam.$t$, null, null, null, null, 'Not sure', null,
       null, null, null, null, $t$Rearrange \(E_p = mgh\) to \(m = \dfrac{E_p}{gh} = \dfrac{58\,800}{9.8 \times 12} = \dfrac{58\,800}{117.6} = 500\,\text{kg}\).$t$,
       'ai_drafted', false, true, 'draft', $t$numeric$t$, $t${"value":500,"tolerance":0.01,"unit":"kg","unit_options":["kg","N","J"],"wrong":[{"value":4900,"misconception":"This leaves out \\(g\\). Rearrange \\(E_p = mgh\\) to \\(m = \\dfrac{E_p}{gh} = \\dfrac{58\\,800}{9.8 \\times 12} = 500\\,\\text{kg}\\)."},{"value":0.002,"misconception":"This divides the wrong way round. \\(m = \\dfrac{E_p}{gh} = \\dfrac{58\\,800}{117.6} = 500\\,\\text{kg}\\)."}]}$t$::jsonb, true,
       $t$mastery_check$t$, $t$phy-energy-gravitational-01$t$, 'in_block', $t$drafter / claude-opus-5-5 / concept-pack-format v1$t$, $t$005aca1$t$, null)
