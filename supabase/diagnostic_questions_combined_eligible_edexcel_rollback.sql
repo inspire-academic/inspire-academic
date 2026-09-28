@@ -17,3 +17,8 @@ update public.diagnostic_questions set combined_eligible_edexcel = null;
 update public.diagnostic_questions set exam_board = 'Universal'
  where subject = 'Biology' and exam_board = 'AQA'
    and subtopic in ('Bile', 'The Digestive System') and question_text like 'Which organ %bile%';
+
+-- The leaf-decomposition question back on the AQA Combined list (only if
+-- the AQA fix itself was wrong):
+-- update public.diagnostic_questions set combined_eligible = true
+--  where subject = 'Biology' and subtopic = 'Decomposition' and question_text like 'Why do dead leaves rot faster%';

@@ -466,7 +466,7 @@ select $t$Biology$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Ecology$t$, $t$Dec
   $t$Decomposers grow and respire faster when warm and moist$t$, $t$The leaves photosynthesise faster there$t$, $t$Cold, dry air contains more decomposers$t$, $t$Water dissolves the leaves away directly$t$, 'Not sure', $t$a$t$,
   null, $t$Dead leaves don't photosynthesise.$t$, $t$Decomposers are less active in cold, dry conditions.$t$, $t$The leaves are broken down by decomposers, not dissolved.$t$,
   $t$Bacteria and fungi decompose leaves. Their enzymes work faster when warm, and they need water.$t$,
-  'ai_drafted', false, true, 'draft', 'mcq', null, true, null
+  'ai_drafted', false, true, 'draft', 'mcq', null, false, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Biology$t$ and question_text = $t$Why do dead leaves rot faster in a warm, damp forest than in a cold, dry one?$t$);
 
 insert into public.diagnostic_questions (

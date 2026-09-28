@@ -18,9 +18,14 @@
 --                formula of propane                         9.10C
 --                what "saturated" means for alkanes         9.11C
 --                bromine water test for alkenes             9.15C
---     Biology    why leaves rot faster when warm and damp   9.17B/9.18B
 --   Taught in Edexcel Combined (AQA Trilogy doesn't):
 --     Chemistry  Haber process conditions                   4.17
+--
+-- AQA fix: "why do dead leaves rot faster when warm and damp" is AQA
+-- 4.7.2.3 Decomposition (biology only), checked against AQA 8461, and
+-- Edexcel 9.17B, so it comes off the Combined list for both boards. Every
+-- other AQA flag was re-checked against the "(biology/chemistry/physics
+-- only)" sections of AQA 8461/8462/8463 and is right.
 --
 -- Same on both boards (checked, no change): transformer turns ratio (13.7P),
 -- moments (9.7P), lenses (5.4P-5.6P), ultrasound (4.13P), static (11.xP),
@@ -51,6 +56,16 @@ declare
   n integer;
   r record;
 begin
+  -- AQA fix: this question is AQA 4.7.2.3 Decomposition (biology only), so
+  -- it was wrongly on the Combined Science list for AQA too.
+  update public.diagnostic_questions
+     set combined_eligible = false
+   where subject = 'Biology' and subtopic = 'Decomposition' and question_text like 'Why do dead leaves rot faster%';
+  get diagnostics n = row_count;
+  if n <> 1 then
+    raise exception 'Expected 1 leaf-decomposition question, found %. Nothing was changed.', n;
+  end if;
+
   -- Start every science question at its AQA flag.
   update public.diagnostic_questions
      set combined_eligible_edexcel = combined_eligible
@@ -63,8 +78,7 @@ begin
       ('Chemistry', 'Alkane Formulae',    'Which is the formula of propane%',                false),
       ('Chemistry', 'Alkanes',            'Alkanes are described as%saturated%',             false),
       ('Chemistry', 'Alkenes',            'How can you test whether a hydrocarbon%bromine%', false),
-      ('Chemistry', 'Haber Process',      'Which conditions are used in the Haber process%', true),
-      ('Biology',   'Decomposition',      'Why do dead leaves rot faster%',                  false)
+      ('Chemistry', 'Haber Process',      'Which conditions are used in the Haber process%', true)
     ) as t(subject, subtopic, text_like, edexcel)
   loop
     update public.diagnostic_questions
@@ -80,15 +94,15 @@ begin
   -- Bile: on no Edexcel specification, so AQA-only.
   update public.diagnostic_questions
      set exam_board = 'AQA'
-   where subject = 'Biology' and exam_board = 'Universal'
+   where subject = 'Biology' and exam_board in ('Universal', 'AQA')
      and subtopic in ('Bile', 'The Digestive System') and question_text like 'Which organ %bile%';
   get diagnostics n = row_count;
   if n <> 2 then
     raise exception 'Expected 2 bile questions, found %. Nothing was changed.', n;
   end if;
-end $;
+end $$;
 
--- Check 1. Expected: 7 rows where the boards differ (6 Edexcel no / AQA
+-- Check 1. Expected: 6 rows where the boards differ (5 Edexcel no / AQA
 -- yes, 1 Edexcel yes / AQA no).
 select subject, subtopic, combined_eligible as aqa, combined_eligible_edexcel as edexcel
   from public.diagnostic_questions

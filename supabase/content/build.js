@@ -91,17 +91,20 @@ function row(batch, x) {
   const numeric = x.type === 'numeric';
   const o = numeric ? {} : x.options;
   const feedback = KEYS.map(k => q(numeric || k === x.key ? null : x.feedback[k])).join(', ');
+  // Only questions that set combined_edexcel write that column, so batches
+  // written before it existed build exactly as they were run.
+  const edx = x.combined_edexcel != null;
   return `insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
-  source, validated, active, review_status, question_type, answer_spec, combined_eligible, combined_eligible_edexcel, context_region)
+  source, validated, active, review_status, question_type, answer_spec, combined_eligible${edx ? ', combined_eligible_edexcel' : ''}, context_region)
 select ${q(batch.subject)}, ${q(x.exam_board || 'Universal')}, 'GCSE', ${q(x.tier || 'Higher')}, ${q(x.topic)}, ${q(x.subtopic)}, ${q(x.spec_slug)}, ${Number(x.difficulty)},
   ${q(x.question_text)},
   ${q(o.a)}, ${q(o.b)}, ${q(o.c)}, ${q(o.d)}, 'Not sure', ${q(numeric ? null : x.key)},
   ${feedback},
   ${q(x.explanation)},
-  'ai_drafted', false, true, 'draft', '${numeric ? 'numeric' : 'mcq'}', ${numeric ? q(JSON.stringify(x.answer)) + '::jsonb' : 'null'}, ${x.combined === false ? 'false' : 'true'}, ${x.combined_edexcel == null ? 'null' : x.combined_edexcel ? 'true' : 'false'}, ${q(x.context_region || null)}
+  'ai_drafted', false, true, 'draft', '${numeric ? 'numeric' : 'mcq'}', ${numeric ? q(JSON.stringify(x.answer)) + '::jsonb' : 'null'}, ${x.combined === false ? 'false' : 'true'}${edx ? (x.combined_edexcel ? ', true' : ', false') : ''}, ${q(x.context_region || null)}
 where not exists (select 1 from public.diagnostic_questions where subject = ${q(batch.subject)} and question_text = ${q(x.question_text)});`;
 }
 

@@ -233,7 +233,7 @@ module.exports = {
       feedback: { b: 'Biodiversity means a variety of species, not just one.', c: 'Competition still happens in diverse ecosystems.', d: 'Species can still become extinct; biodiversity reduces the damage when one declines.' },
       explanation: 'With many species, organisms depend less on any single one, so the ecosystem is more stable.' },
 
-    { tier: B, topic: ECO, subtopic: 'Decomposition', spec_slug: 'aqa-bi-fh-ecology', difficulty: 4,
+    { tier: B, topic: ECO, subtopic: 'Decomposition', spec_slug: 'aqa-bi-fh-ecology', difficulty: 4, combined: false, // AQA 4.7.2.3 and Edexcel 9.17B: separate Biology only
       question_text: r`Why do dead leaves rot faster in a warm, damp forest than in a cold, dry one?`,
       options: { a: 'Decomposers grow and respire faster when warm and moist', b: 'The leaves photosynthesise faster there', c: 'Cold, dry air contains more decomposers', d: 'Water dissolves the leaves away directly' }, key: 'a',
       feedback: { b: 'Dead leaves don\'t photosynthesise.', c: 'Decomposers are less active in cold, dry conditions.', d: 'The leaves are broken down by decomposers, not dissolved.' },
