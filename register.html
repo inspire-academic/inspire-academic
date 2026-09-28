@@ -337,8 +337,9 @@
       </div>
 
       <!-- PARENT INFORMATION — optional for the general platform;
-           required specifically for Sci-Bridging Y6 (under-13, UK GDPR
-           Article 8) — toggled by JS below, see updateParentRequirement() -->
+           required for Sci-Bridging Y6, Year 7 and Year 8 (students who may
+           be under 13, UK GDPR Article 8 / DPA 2018 s.9) — toggled by JS
+           below, see updateParentRequirement() -->
       <div class="section-title">
         👨‍👩‍👧 Parent/Guardian Information
         <span class="optional-badge" id="parent-section-badge">Optional</span>
@@ -371,8 +372,9 @@
         </div>
       </div>
 
-      <!-- Sci-Bridging Y6 only — hidden/not required for every other year
-           group. This is the consent gate itself, not just a form field. -->
+      <!-- Sci-Bridging Y6, Year 7 and Year 8 only — hidden/not required for
+           every other year group. This is the consent gate itself, not just
+           a form field. (The year6-* ids predate the Y7/Y8 extension.) -->
       <div class="checkbox-group" id="year6-consent-group" style="display:none;">
         <label class="checkbox-label">
           <input type="checkbox" id="year6-parent-consent">
@@ -414,25 +416,27 @@ const btnText = document.getElementById('btn-text');
 const errorMsg = document.getElementById('error-message');
 const successMsg = document.getElementById('success-message');
 
-// Sci-Bridging Y6 is the platform's only under-13 self-registration path
-// (UK GDPR digital consent age is 13) — parent details + explicit consent
-// are optional for every other year group, required only for this one.
+// Year 6–8 students may be under 13 (UK GDPR digital consent age is 13,
+// DPA 2018 s.9): Sci-Bridging Y6 is always under 13, Year 7 is 11–12 and
+// Year 8 is 12–13. Parent details + explicit consent are required for
+// these year groups and optional for every other one (Year 9+ are 13+).
 // See docs/reference/ (2026-08-30 DPIA draft) for why.
-function isYear6Selected(){
-  return document.getElementById('year-group').value === 'Sci-Bridging Y6';
+const UNDER_13_YEAR_GROUPS = ['Sci-Bridging Y6', 'Y7', 'Y8'];
+function isUnder13YearGroupSelected(){
+  return UNDER_13_YEAR_GROUPS.includes(document.getElementById('year-group').value);
 }
 
 function updateParentRequirement(){
-  const year6 = isYear6Selected();
-  document.getElementById('parent-section-badge').textContent = year6 ? 'Required' : 'Optional';
-  document.getElementById('parent-info-box').innerHTML = year6
-    ? '<strong>👨‍👩‍👧 Required for this age group</strong> A parent or guardian must complete this section and confirm consent below — Sci-Bridging Y6 is for students under 13.'
+  const under13 = isUnder13YearGroupSelected();
+  document.getElementById('parent-section-badge').textContent = under13 ? 'Required' : 'Optional';
+  document.getElementById('parent-info-box').innerHTML = under13
+    ? '<strong>👨‍👩‍👧 Required for this age group</strong> A parent or guardian must complete this section and confirm consent below — Year 6–8 students may be under 13.'
     : '<strong>💡 Why add parent details?</strong> Your parent/guardian can track your progress, see your achievements, and receive weekly updates on your learning journey!';
-  document.getElementById('parent-first-name').required = year6;
-  document.getElementById('parent-last-name').required = year6;
-  document.getElementById('parent-email').required = year6;
-  document.getElementById('year6-consent-group').style.display = year6 ? 'block' : 'none';
-  document.getElementById('year6-parent-consent').required = year6;
+  document.getElementById('parent-first-name').required = under13;
+  document.getElementById('parent-last-name').required = under13;
+  document.getElementById('parent-email').required = under13;
+  document.getElementById('year6-consent-group').style.display = under13 ? 'block' : 'none';
+  document.getElementById('year6-parent-consent').required = under13;
 }
 document.getElementById('year-group').addEventListener('change', updateParentRequirement);
 updateParentRequirement();
@@ -463,7 +467,16 @@ form.addEventListener('submit', async (e) => {
     const parentLastName = document.getElementById('parent-last-name').value.trim();
     const parentEmail = document.getElementById('parent-email').value.trim().toLowerCase();
     const parentPhone = document.getElementById('parent-phone').value.trim();
-    
+
+    // Belt-and-braces for the under-13 consent gate — the `required`
+    // attributes above normally stop the submit, but never create the
+    // account if they were bypassed.
+    if (isUnder13YearGroupSelected() &&
+        (!document.getElementById('year6-parent-consent').checked ||
+         !parentFirstName || !parentLastName || !parentEmail)) {
+      throw new Error('A parent or guardian must complete their details and confirm consent for this year group.');
+    }
+
     // 1. Create student auth account
     const { data: authData, error: authError } = await supa.auth.signUp({
       email: studentEmail,

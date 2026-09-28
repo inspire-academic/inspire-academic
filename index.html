@@ -337,6 +337,17 @@ function showStep(n){
   }
 }
 
+// Year 6–8 students may be under 13 (UK GDPR digital consent age is 13,
+// DPA 2018 s.9). This quick sign-up has no parent/guardian consent step,
+// so those year groups are sent to /register.html, which requires parent
+// details + explicit consent for them (see updateParentRequirement() there).
+const UNDER_13_YEARS=['Year 6','Year 7','Year 8'];
+function needsParentalConsent(year){return UNDER_13_YEARS.includes(year);}
+function sendToParentConsentSignup(){
+  toast('Year 6–8 students may be under 13, so a parent or guardian needs to complete sign-up. Taking you there…','error');
+  setTimeout(()=>{window.location.href='/register.html';},2500);
+}
+
 function goStep2(){
   const firstName=document.getElementById('su-firstname').value.trim();
   const lastName=document.getElementById('su-lastname').value.trim();
@@ -348,6 +359,7 @@ function goStep2(){
   if(!email||!email.includes('@')){toast('Please enter a valid email','error');return;}
   if(pass.length<8){toast('Password must be at least 8 characters','error');return;}
   if(!year){toast('Please select your year group','error');return;}
+  if(needsParentalConsent(year)){sendToParentConsentSignup();return;}
   showStep(2);
   selectBoard('AQA');
 }
@@ -407,6 +419,7 @@ async function doSignup(){
   const email=document.getElementById('su-email').value.trim();
   const pass=document.getElementById('su-pass').value;
   const year=document.getElementById('su-year').value;
+  if(needsParentalConsent(year)){sendToParentConsentSignup();return;}
   const boardIds={AQA:1,Edexcel:2,OCR:3,WJEC:4,CCEA:5};
   const btn=document.getElementById('signup-btn');
   btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Creating account…';
