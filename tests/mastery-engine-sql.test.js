@@ -91,6 +91,9 @@ test('each reviewed concept pack has current load SQL', { skip: !fs.existsSync(p
   for (const p of packs) {
     const file = `supabase/pack_${p}.sql`;
     assert.ok(fs.existsSync(path.join(ROOT, file)), `run: node curriculum/build-pack-sql.js ${p}`);
-    assert.equal(read(file), build(p), `regenerate: node curriculum/build-pack-sql.js ${p}`);
+    // The pack's commit id (draft_ref, generator@) changes whenever history is
+    // rebased; the loaded SQL is still current if nothing else differs.
+    const noCommit = s => s.replace(/\$t\$[0-9a-f]{7,40}\$t\$/g, '$t$<commit>$t$').replace(/templates\.js@[0-9a-f]{7,40}/g, 'templates.js@<commit>');
+    assert.equal(noCommit(read(file)), noCommit(build(p)), `regenerate: node curriculum/build-pack-sql.js ${p}`);
   }
 });
