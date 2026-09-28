@@ -77,6 +77,16 @@ function consentEmail({ parentFirstName, childFirstName, link }) {
   };
 }
 
+// The confirmation link goes back to the site the child signed up on, so a
+// staging sign-up links to staging (Netlify's URL is always production). Only
+// our own hosts are ever used; anything else gets the production address.
+const SITE_HOSTS = ['www.inspireacademic.org', 'inspireacademic.org', 'staging.inspireacademic.org'];
+function siteBase(event) {
+  const host = String(((event && event.headers) || {}).host || '').toLowerCase();
+  if (SITE_HOSTS.includes(host)) return `https://${host}`;
+  return (process.env.URL || 'https://www.inspireacademic.org').replace(/\/$/, '');
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return fail(405, 'method_not_allowed', 'Method not allowed.');
   const client = db();
@@ -130,7 +140,7 @@ exports.handler = async (event) => {
       verification_token_hash: sha256(token)
     });
 
-    const base = (process.env.URL || 'https://www.inspireacademic.org').replace(/\/$/, '');
+    const base = siteBase(event);
     const childFirstName = clean((account.user_metadata || {}).first_name, 60) || 'Your child';
     let emailed = false;
     try {

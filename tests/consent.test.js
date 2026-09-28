@@ -91,6 +91,19 @@ test('consent-record: records consent server-side and emails the parent a confir
   });
 });
 
+test('consent-record: the link returns to the site signed up on, and only to our own hosts', async () => {
+  for (const [host, want] of [
+    ['staging.inspireacademic.org', 'https://staging.inspireacademic.org/consent-confirm.html#t='],
+    ['www.inspireacademic.org', 'https://www.inspireacademic.org/consent-confirm.html#t='],
+    ['evil.example.com', 'https://www.inspireacademic.org/consent-confirm.html#t=']
+  ]) {
+    await withFake({ account: account() }, async ({ sent }) => {
+      await post(record.handler, body(), { host });
+      assert.ok(sent[0].html.includes(want), `${host}: link should start ${want}`);
+    });
+  }
+});
+
 test('consent-record: only during sign-up, only for Year 6-8, once per student', async () => {
   await withFake({ account: account({ created_at: new Date(NOW - 31 * 60 * 1000).toISOString() }) }, async ({ consents }) => {
     assert.equal((await post(record.handler, body())).statusCode, 403, 'account older than 30 minutes');
