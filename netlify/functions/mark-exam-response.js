@@ -31,7 +31,9 @@ exports.handler = async function(event) {
     return { statusCode: 401, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Please sign in to use this feature.' }) }
   }
 
-  const { subject, exam_board, stem, marks, mark_points, model_answer, student_name, response } = body
+  // student_name is deliberately not read: nothing that identifies the
+  // student is sent to the AI provider (see _exam-marking.js).
+  const { subject, exam_board, stem, marks, mark_points, model_answer, response } = body
   if (!stem || !response || marks === undefined) {
     return { statusCode: 400, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Missing required fields: stem, response, marks' }) }
   }
@@ -46,7 +48,7 @@ exports.handler = async function(event) {
   try {
     const result = await markExamResponse({
       subject, examBoard: exam_board, stem, marks, markPoints: mark_points,
-      modelAnswer: model_answer, studentName: student_name, response
+      modelAnswer: model_answer, response
     })
     return { statusCode: 200, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify(result) }
   } catch (err) {

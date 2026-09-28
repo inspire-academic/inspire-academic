@@ -787,7 +787,6 @@ let packData        = null;
 let assignmentData  = null;
 let attemptId       = null;
 let sessionSeconds  = 0;
-let studentName     = '';
 let heartbeatTimer  = null;
 let clockTimer      = null;
 let sectionsTotal   = 0;
@@ -804,15 +803,6 @@ let examResponses   = {};   // mirrors attempt.exam_responses
 
   const { data: { user } } = await sb.auth.getUser();
   if (!user) { location.href = '/index.html'; return; }
-
-  // Fetch student's first name for personalised feedback
-  const { data: profile } = await sb
-    .from('profiles')
-    .select('first_name, full_name')
-    .eq('id', user.id)
-    .single();
-  // Use first_name if available, fall back to splitting full_name
-  studentName = profile?.first_name || profile?.full_name?.split(' ')[0] || '';
 
   // Load assignment + pack in one query
   const { data: assignment, error: aErr } = await sb
@@ -1186,7 +1176,6 @@ async function submitExamQ(qId, secId) {
       marks:        sec?.marks || 0,
       mark_points:  sec?.mark_points || [],
       model_answer: sec?.model_answer || '',
-      student_name: studentName,
       response
     });
 

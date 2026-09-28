@@ -38,7 +38,6 @@ async function markFree(client, user, attempt, q, text) {
     return { error: fail(429, 'rate_limited', `You've reached the hourly limit for marking (${maxPerHour}/hour). Please try again later.`) };
   }
   const [quiz] = (await client.get(`quizzes?id=eq.${attempt.quiz_id}&select=exam_board,topics(subjects(name))`)) || [];
-  const [profile] = (await client.get(`profiles?id=eq.${user.id}&select=first_name,full_name`)) || [];
   try {
     const r = await markExamResponse({
       subject: quiz?.topics?.subjects?.name || '',
@@ -47,7 +46,6 @@ async function markFree(client, user, attempt, q, text) {
       marks: marksOf(q),
       markPoints: (q.mark_scheme_points || []).map(p => p.point || p),
       modelAnswer: q.model_answer || '',
-      studentName: profile?.first_name || profile?.full_name || '',
       response: text
     });
     return { marked: r };

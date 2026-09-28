@@ -6,10 +6,13 @@
 // Returns { marks_awarded, mark_points_awarded, feedback, examiner_note },
 // with marks_awarded clamped to 0..marks. Throws on an API or parse failure;
 // err.status carries the API's HTTP status when there is one.
+//
+// Data minimisation: nothing that identifies the student is sent to the AI
+// provider. The feedback addresses the student as "you"; a name field
+// passed by an older caller is ignored.
 
-async function markExamResponse({ subject, examBoard, stem, marks, markPoints, modelAnswer, studentName, response }) {
+async function markExamResponse({ subject, examBoard, stem, marks, markPoints, modelAnswer, response }) {
   const board = (examBoard || 'AQA').toUpperCase()
-  const name = studentName || 'the student'
   const subjectStr = subject || 'Science'
   const points = markPoints || []
   const markSchemeStr = points.length > 0
@@ -18,7 +21,7 @@ async function markExamResponse({ subject, examBoard, stem, marks, markPoints, m
 
   const systemPrompt = `You are an expert ${board} GCSE ${subjectStr} examiner with years of experience marking student scripts.
 Award marks strictly according to the mark scheme. Be encouraging but honest.
-Address the student as ${name}. Keep feedback to 3-5 sentences.
+Address the student directly as "you" — you do not know their name. Keep feedback to 3-5 sentences.
 You MUST respond with valid JSON only.`
 
   const userPrompt = `QUESTION (${marks} mark${marks !== 1 ? 's' : ''}):
@@ -34,7 +37,7 @@ Respond with this exact JSON:
 {
   "marks_awarded": <integer 0 to ${marks}>,
   "mark_points_awarded": [<list of mark scheme points earned>],
-  "feedback": "<personalised feedback for ${name} — 3 to 5 sentences>",
+  "feedback": "<feedback written to the student as 'you' — 3 to 5 sentences>",
   "examiner_note": "<one sentence examiner observation>"
 }`
 

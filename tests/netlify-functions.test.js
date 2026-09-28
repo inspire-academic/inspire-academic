@@ -363,3 +363,28 @@ test('protege-ai: the page no longer sends the name or year group in the request
     assert.doesNotMatch(call, /\bgrade\s*:/, 'no grade in payload');
   }
 });
+
+// ── exam marking: no student identity to the AI provider ─────────────
+test('mark-exam-response: the student name is never sent to the AI provider', async () => {
+  let sent = '';
+  const anthropicBody = { content: [{ text: JSON.stringify({ marks_awarded: 1, mark_points_awarded: [], feedback: 'ok', examiner_note: '' }) }] };
+  await withMockFetch({ anthropicBody, onAnthropicRequest: req => { sent = JSON.stringify(req); } }, async () => {
+    const res = await markExamResponse.handler({
+      httpMethod: 'POST',
+      headers: AUTH_HEADER,
+      body: JSON.stringify({ subject: 'Physics', stem: 'State Newton\'s first law.', marks: 1, student_name: 'Kwabena', response: 'Objects keep moving.' })
+    });
+    assert.equal(res.statusCode, 200);
+  });
+  assert.doesNotMatch(sent, /Kwabena/);
+  assert.match(sent, /Objects keep moving/, 'the answer itself is still marked');
+});
+
+test('exam marking: no caller sends or looks up the student name', () => {
+  const fs = require('fs');
+  const path = require('path');
+  const read = f => fs.readFileSync(path.join(__dirname, '..', f), 'utf8');
+  assert.doesNotMatch(read('netlify/functions/_exam-marking.js'), /studentName/);
+  assert.doesNotMatch(read('netlify/functions/quiz-attempt-answer.js'), /first_name|full_name|studentName/);
+  assert.doesNotMatch(read('student/revision-pack.html'), /student_name/);
+});
