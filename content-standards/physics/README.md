@@ -12,6 +12,7 @@ The standards every Inspire Physics item is written and reviewed against. The Ph
 | `evidence-classes.md` | Diagnostic, practice, mastery check, retrieval, application and practical items, with difficulty bands and the mastery rules they feed |
 | `item-writing-standards.md` | How Inspire items are written: stems, options, distractors, feedback, templates, contexts |
 | `review-rubric.md` | The review criteria, severities, decision rules and report format |
+| `concept-pack-format.md` | How a concept pack is written (items, calculation blocks, templates) and what the automated checks enforce |
 
 Canonical concept definitions and the misconception library live with the curriculum source (`curriculum/physics/`) and are part of the reviewer's input too.
 

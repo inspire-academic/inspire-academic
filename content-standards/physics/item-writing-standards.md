@@ -1,6 +1,6 @@
 # Inspire item-writing standards (Physics)
 
-These apply to every item regardless of evidence class. The automated checks in `supabase/content/build.js` enforce the mechanical ones; the reviewer enforces the rest.
+These apply to every item regardless of evidence class. The automated checks (`curriculum/checks.js`, run with `node curriculum/check-pack.js <pack>`; pack format in `concept-pack-format.md`) enforce the mechanical ones; the reviewer enforces the rest.
 
 ## Stem
 

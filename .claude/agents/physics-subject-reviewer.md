@@ -18,7 +18,9 @@ Treat them as the standard. Where the item conflicts with them, the item is wron
 
 ## What you receive
 
-A block: a list of items (or templates) with their metadata, plus the automated-check report and the similarity report for each. You do not receive, and must not ask for, the drafting agent's reasoning.
+A block: a list of items (or templates) with their metadata, plus the automated-check report (`docs/content-qa/reports/<block>.checks.json`), which includes the past-paper overlap for each item and five seeded sample instances of each template. You do not receive, and must not ask for, the drafting agent's reasoning.
+
+The checks have already recomputed every calculation key and distractor, checked units, and verified every template instance mechanically. That does not make the physics right: still solve every item yourself. A check warning (band, copyright overlap) is yours to judge.
 
 ## How to review each item
 
