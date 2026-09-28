@@ -161,13 +161,13 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
   .card-artifact{
     flex:none;width:auto;margin:0;
     position:absolute;top:50%;right:clamp(190px,24%,300px);
-    height:calc(100% - 12px);max-height:115px;aspect-ratio:26/17;transform:translateY(-50%);
+    height:calc(100% - 12px);max-height:88px;aspect-ratio:26/17;transform:translateY(-50%);
     z-index:0;
     background:var(--art) center/contain no-repeat;
   }
   /* Keep a card's text clear of its illustration: stop the text column
-     before the art (its right offset plus its ~175px width, plus a gap). */
-  .card-artifact + .tq-left{max-width:calc(100% - clamp(190px,24%,300px) - 200px);}
+     before the art (its right offset plus its ~135px width, plus a gap). */
+  .card-artifact + .tq-left{max-width:calc(100% - clamp(190px,24%,300px) - 160px);}
 }
 .card-artifact--calendar{--art:url(/assets/images/illustrations/daily-calendar.webp);--art-sm:url(/assets/images/illustrations/daily-calendar-sm.webp);}
 .card-artifact--notebook{--art:url(/assets/images/illustrations/daily-notebook.webp);--art-sm:url(/assets/images/illustrations/daily-notebook-sm.webp);}
@@ -402,7 +402,7 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
   <div class="today-quiz fade-in" id="today-quiz-card">
     <span class="card-artifact card-artifact--calendar" aria-hidden="true"></span>
     <div class="tq-left">
-      <div class="tq-label">⚡ Today's Daily Challenge</div>
+      <div class="tq-label">Today's Daily Challenge</div>
       <h3 id="tq-title">Loading…</h3>
       <p id="tq-desc">Fetching your challenge…</p>
     </div>
@@ -415,7 +415,7 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
   <div class="today-quiz diagnostic-card fade-in" id="diagnostic-card">
     <span class="card-artifact card-artifact--microscope" aria-hidden="true"></span>
     <div class="tq-left">
-      <div class="tq-label">🎯 New Here? Start With a Diagnostic</div>
+      <div class="tq-label">New Here? Start With a Diagnostic</div>
       <h3>Find Out Where You Stand</h3>
       <p>A short assessment, an honest diagnosis, and a personalised 3-week study plan for any subject.</p>
     </div>
@@ -428,7 +428,7 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
   <div class="today-quiz topics-card fade-in">
     <span class="card-artifact card-artifact--notebook" aria-hidden="true"></span>
     <div class="tq-left">
-      <div class="tq-label">🗂 Teaching In Step With School</div>
+      <div class="tq-label">Teaching In Step With School</div>
       <h3>Show Us What You're Studying This Term</h3>
       <p>Add a quick photo of your topic list or timetable so your teacher can keep lessons in step with your classroom.</p>
     </div>
