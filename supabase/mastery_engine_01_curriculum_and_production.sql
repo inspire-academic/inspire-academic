@@ -417,7 +417,8 @@ begin
   perform setseed(v_seed / 2147483647.0);
 
   create temporary table if not exists _draw (src text, item_id text, grp text, corrected boolean, r double precision, picked boolean) on commit drop;
-  delete from _draw;
+  -- truncate, not a bare delete: Supabase refuses DELETE without WHERE from the API.
+  truncate _draw;
   insert into _draw
   select i.src, i.item_id,
          case when i.evidence_class = 'mastery_check' then 'mc' when i.evidence_class = 'application' then 'app' else 'dp' end,
