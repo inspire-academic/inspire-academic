@@ -138,7 +138,9 @@ Every criterion is scored PASS / FAIL / N/A with a one-line reason on FAIL.
   - The reviewer then confirms the correction in a short second pass.
 - **REJECT:** any Hard FAIL, or any correction that would change the key, concept, evidence class or difficulty. The drafter writes a new item, which is reviewed from scratch.
 
-### 2.4 Calibrating the reviewer (the safeguard your spot checks cannot provide alone)
+### 2.4 Measuring the reviewer
+
+The reviewer carries the review load; human spot checks are a sanity check on its work. These mechanisms measure whether it is reliable enough to carry that load, and cost no human time.
 
 - **Seeded defects.** Every batch sent to the reviewer contains 2–3 deliberately defective items that it doesn't know are there: a wrong key, a unit error, an ambiguous stem, a clue, an out-of-spec item, or a near-copy of a past-paper question.
   - The orchestrator records whether they are caught.
@@ -183,9 +185,8 @@ DRAFTED ─▶ AUTO_CHECKED ─▶ AGENT_REVIEWED ─▶ IN_BLOCK ─▶ SAMPLED
 **5. Human spot check.**
 - The system draws a sample **with a recorded random seed**.
 - Sample size:
-  - **minimum 3**;
-  - **5 for each of the first three blocks** of a new subject or a new version of the reviewer (the reviewer has no track record yet);
-  - then 3.
+  - **3** as standard;
+  - **5 only if the reviewer missed a seeded defect** in any of its last three batches, until it has three clean batches in a row.
 - Stratification:
   - at least one item from each evidence class present in the block (diagnostic/practice, mastery check, application);
   - at least one item the reviewer approved *with corrections*, if any exist;
@@ -328,7 +329,7 @@ Each step ends in something testable. Code goes to staging before main, as usual
 **The critical path:**
 - your concept-card approval (step 4);
 - your SQL runs (steps 5, 9);
-- your spot-check time (step 8): five items for each of the first three blocks, then three per block, at about 5 minutes each, so roughly 1–2 hours across the Energy slice.
+- your spot-check time (step 8): three items per block at about 5 minutes each, so roughly an hour across the Energy slice.
 
 **Deferred to November by your decision:**
 - practice and mastery-check sessions;
