@@ -112,6 +112,7 @@ const FORMULAS = {
     mistakes: {
       'no-g': { f: ({ m, h }) => m * h, slip: 'left out g' },
       'divided-height': { f: ({ m, g, h }) => m * g / h, slip: 'divided by the height instead of multiplying' },
+      'half': { f: ({ m, g, h }) => 0.5 * m * g * h, misconceptions: ['MIS-PHY-ENE-014'] },
       'weight-as-mass': { f: ({ m, g, h }) => m * g * g * h, misconceptions: ['MIS-PHY-ENE-007'] }
     }
   },
@@ -161,7 +162,8 @@ const FORMULAS = {
     equation: { kind: 'given', patterns: re(/E_\{?e\}?\s*=/, /\\frac\{1\}\{2\}\s*k\s*e/, /½\s*k\s*e/, /0\.5\s*(\\times|×)?\s*k/) },
     unconvertedMisconceptions: { e: ['MIS-PHY-ENE-008'] },
     mistakes: {
-      'no-square': { f: ({ k, e }) => 0.5 * k * e, slip: 'did not square the extension' },
+      'no-square': { f: ({ k, e }) => 0.5 * k * e, misconceptions: ['MIS-PHY-ENE-015'] },
+      'force-not-energy': { f: ({ k, e }) => k * e, misconceptions: ['MIS-PHY-ENE-016'] },
       'no-half': { f: ({ k, e }) => k * e * e, misconceptions: ['MIS-PHY-ENE-005'] }
     }
   },
@@ -253,6 +255,53 @@ const FORMULAS = {
     mistakes: {
       'divided': { f: ({ eff, total }) => total / eff, misconceptions: [SKL.quotient] },
       'wasted': { f: ({ eff, total }) => (1 - eff) * total, slip: 'calculated the wasted energy' }
+    }
+  },
+
+  // ── Work done ──
+  work: {
+    concepts: ['phy.forces.work-done', 'phy.energy.power', 'phy.energy.transfer-calcs'],
+    inputs: { F: 'force', s: 'length' }, output: 'energy',
+    f: ({ F, s }) => F * s,
+    equation: { kind: 'recall', patterns: re(/W\s*=\s*F\s*s\b/, /W\s*=\s*Fs/, /work done\s*=\s*force/i) },
+    mistakes: {
+      'divided': { f: ({ F, s }) => F / s, misconceptions: [SKL.quotient] },
+      'upside-down': { f: ({ F, s }) => s / F, misconceptions: [SKL.quotient] }
+    }
+  },
+  'work-force': {
+    family: ['work'],
+    concepts: ['phy.forces.work-done'], rearranged: true,
+    inputs: { W: 'energy', s: 'length' }, output: 'force',
+    f: ({ W, s }) => W / s,
+    equation: { kind: 'recall', patterns: [] },
+    mistakes: {
+      'multiplied': { f: ({ W, s }) => W * s, misconceptions: [SKL.quotient] },
+      'upside-down': { f: ({ W, s }) => s / W, misconceptions: [SKL.quotient] }
+    }
+  },
+  'work-distance': {
+    family: ['work'],
+    concepts: ['phy.forces.work-done'], rearranged: true,
+    inputs: { W: 'energy', F: 'force' }, output: 'length',
+    f: ({ W, F }) => W / F,
+    equation: { kind: 'recall', patterns: [] },
+    mistakes: {
+      'multiplied': { f: ({ W, F }) => W * F, misconceptions: [SKL.quotient] },
+      'upside-down': { f: ({ W, F }) => F / W, misconceptions: [SKL.quotient] }
+    }
+  },
+  // Power from a force and a distance: P = Fs / t (work done, then power).
+  'power-from-work': {
+    family: ['work', 'power'],
+    concepts: ['phy.energy.power'],
+    inputs: { F: 'force', s: 'length', t: 'time' }, output: 'power',
+    f: ({ F, s, t }) => F * s / t,
+    equation: { kind: 'recall', patterns: [] },
+    mistakes: {
+      'work-only': { f: ({ F, s }) => F * s, misconceptions: ['MIS-PHY-ENE-011'] },
+      'multiplied': { f: ({ F, s, t }) => F * s * t, misconceptions: [SKL.quotient] },
+      'no-distance': { f: ({ F, t }) => F / t, slip: 'divided the force by the time, leaving out the distance' }
     }
   },
 

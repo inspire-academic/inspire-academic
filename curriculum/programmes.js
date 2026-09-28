@@ -18,7 +18,7 @@ const PROGRAMMES = [
         id: 'ism-y10-physics.energy', name: 'Energy',
         concepts: ['phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational',
           'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power',
-          'phy.energy.dissipation-efficiency', 'phy.energy.resources']
+          'phy.energy.dissipation-efficiency', 'phy.energy.resources', 'phy.forces.work-done']
       },
       { id: 'ism-y10-physics.electricity', name: 'Electricity', concepts: [] }
     ]

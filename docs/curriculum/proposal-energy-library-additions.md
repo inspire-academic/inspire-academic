@@ -1,6 +1,6 @@
 # Proposal: Energy library additions (for Eric's decision)
 
-*28 September 2026 · status: PROPOSAL, nothing changed. The concept cards and misconception library in `curriculum/physics/energy.js` are approved content; nothing below goes in without your yes.*
+*28 September 2026 · status: **APPROVED by Eric, 28 Sep 2026** (work done added now; misconception table as it stands; W = mg assumed from KS3). Applied in `curriculum/physics/energy.js`, `curriculum/programmes.js` and the formula library.*
 
 The reviewer calibration (`docs/content-qa/calibration-energy-1.md`) listed two things to settle before the Energy packs. The kinetic and gravitational packs didn't need either. Power and the later packs do.
 

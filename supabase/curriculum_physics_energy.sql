@@ -31,7 +31,7 @@ insert into public.concepts (id, subject, home_domain, name, objective, tier, se
 values ('phy.energy.kinetic', 'Physics', 'phy.energy', 'Kinetic energy (Ek = ½mv²)', 'Recall and use Ek = ½mv², including finding mass or speed, and explain how kinetic energy depends on speed (squared) and mass.', 'Both', false, array['find-energy', 'find-speed-or-mass']::text[], '{"numeric":true,"application":true,"templated":true}'::jsonb, array['Finding speed needs a square root: band 3 / Higher']::text[], 'approved', 'curriculum/physics/energy.js')
 on conflict (id) do update set subject = excluded.subject, home_domain = excluded.home_domain, name = excluded.name, objective = excluded.objective, tier = excluded.tier, separate_only = excluded.separate_only, required_contexts = excluded.required_contexts, evidence = excluded.evidence, boundaries = excluded.boundaries, status = excluded.status, source_file = excluded.source_file, updated_at = now();
 insert into public.concepts (id, subject, home_domain, name, objective, tier, separate_only, required_contexts, evidence, boundaries, status, source_file)
-values ('phy.energy.gravitational', 'Physics', 'phy.energy', 'Gravitational potential energy (Ep = mgh)', 'Recall and use Ep = mgh for a change in height, with g given, including finding m or h.', 'Both', false, array['find-energy', 'find-height-or-mass']::text[], '{"numeric":true,"application":true,"templated":true}'::jsonb, array['g is always stated in the item']::text[], 'approved', 'curriculum/physics/energy.js')
+values ('phy.energy.gravitational', 'Physics', 'phy.energy', 'Gravitational potential energy (Ep = mgh)', 'Recall and use Ep = mgh for a change in height, with g given, including finding m or h.', 'Both', false, array['find-energy', 'find-height-or-mass']::text[], '{"numeric":true,"application":true,"templated":true}'::jsonb, array['g is always stated in the item', 'Weight = mg is assumed from KS3: items may give a weight in newtons (Ep = weight × height)']::text[], 'approved', 'curriculum/physics/energy.js')
 on conflict (id) do update set subject = excluded.subject, home_domain = excluded.home_domain, name = excluded.name, objective = excluded.objective, tier = excluded.tier, separate_only = excluded.separate_only, required_contexts = excluded.required_contexts, evidence = excluded.evidence, boundaries = excluded.boundaries, status = excluded.status, source_file = excluded.source_file, updated_at = now();
 insert into public.concepts (id, subject, home_domain, name, objective, tier, separate_only, required_contexts, evidence, boundaries, status, source_file)
 values ('phy.energy.elastic', 'Physics', 'phy.energy', 'Elastic potential energy (Ee = ½ke²)', 'Select and use the given equation Ee = ½ke² for a spring within its limit of proportionality, with extension in metres.', 'Both', false, array['find-energy', 'extension-in-cm']::text[], '{"numeric":true,"application":false,"templated":true}'::jsonb, array['Assume limit of proportionality not exceeded; Hooke''s law itself belongs to Forces']::text[], 'approved', 'curriculum/physics/energy.js')
@@ -50,6 +50,9 @@ values ('phy.energy.dissipation-efficiency', 'Physics', 'phy.energy', 'Dissipati
 on conflict (id) do update set subject = excluded.subject, home_domain = excluded.home_domain, name = excluded.name, objective = excluded.objective, tier = excluded.tier, separate_only = excluded.separate_only, required_contexts = excluded.required_contexts, evidence = excluded.evidence, boundaries = excluded.boundaries, status = excluded.status, source_file = excluded.source_file, updated_at = now();
 insert into public.concepts (id, subject, home_domain, name, objective, tier, separate_only, required_contexts, evidence, boundaries, status, source_file)
 values ('phy.energy.resources', 'Physics', 'phy.energy', 'National and global energy resources', 'Describe the main energy resources and their uses, distinguish renewable from non-renewable, compare reliability and environmental impact, explain trends, and evaluate why science alone cannot always resolve the issues.', 'Both', false, array['classification', 'evaluation']::text[], '{"numeric":false,"application":true,"templated":false}'::jsonb, array['How resources generate electricity is not required']::text[], 'approved', 'curriculum/physics/energy.js')
+on conflict (id) do update set subject = excluded.subject, home_domain = excluded.home_domain, name = excluded.name, objective = excluded.objective, tier = excluded.tier, separate_only = excluded.separate_only, required_contexts = excluded.required_contexts, evidence = excluded.evidence, boundaries = excluded.boundaries, status = excluded.status, source_file = excluded.source_file, updated_at = now();
+insert into public.concepts (id, subject, home_domain, name, objective, tier, separate_only, required_contexts, evidence, boundaries, status, source_file)
+values ('phy.forces.work-done', 'Physics', 'phy.forces', 'Work done (W = Fs)', 'Recall and use W = Fs for a force acting along the direction of motion, and explain that work done is energy transferred (1 J = 1 N m).', 'Both', false, array['find-work', 'work-as-energy-transferred']::text[], '{"numeric":true,"application":true,"templated":true}'::jsonb, array['Force along the line of motion only (no angles)', 'Work done against friction dissipates energy to thermal stores']::text[], 'approved', 'curriculum/physics/energy.js')
 on conflict (id) do update set subject = excluded.subject, home_domain = excluded.home_domain, name = excluded.name, objective = excluded.objective, tier = excluded.tier, separate_only = excluded.separate_only, required_contexts = excluded.required_contexts, evidence = excluded.evidence, boundaries = excluded.boundaries, status = excluded.status, source_file = excluded.source_file, updated_at = now();
 
 -- Misconceptions (approved with the concepts they belong to)
@@ -110,12 +113,36 @@ on conflict (id) do update set subject = excluded.subject, kind = excluded.kind,
 insert into public.misconceptions (id, subject, kind, statement, correct_conception, indicators, family, status)
 values ('MIS-PHY-ENE-013', 'Physics', 'conceptual', 'Equates renewable with "no environmental impact" or "always reliable".', 'Renewable means it is (or can be) replenished as it is used. Many renewables have environmental impacts and several (wind, solar, waves) are not always available.', array['chooses renewable as "does not harm the environment"']::text[], null, 'approved')
 on conflict (id) do update set subject = excluded.subject, kind = excluded.kind, statement = excluded.statement, correct_conception = excluded.correct_conception, indicators = excluded.indicators, family = excluded.family, status = excluded.status, updated_at = now();
+insert into public.misconceptions (id, subject, kind, statement, correct_conception, indicators, family, status)
+values ('MIS-PHY-ENE-014', 'Physics', 'procedural', 'Adds a factor ½ to Ep = mgh by analogy with Ek = ½mv².', 'Ep = mgh has no ½.', array['answer exactly half the correct Ep']::text[], null, 'approved')
+on conflict (id) do update set subject = excluded.subject, kind = excluded.kind, statement = excluded.statement, correct_conception = excluded.correct_conception, indicators = excluded.indicators, family = excluded.family, status = excluded.status, updated_at = now();
+insert into public.misconceptions (id, subject, kind, statement, correct_conception, indicators, family, status)
+values ('MIS-PHY-ENE-015', 'Physics', 'procedural', 'Does not square the extension in Ee = ½ke².', 'The extension is squared: Ee = ½ × k × e².', array['answer = ½ke']::text[], null, 'approved')
+on conflict (id) do update set subject = excluded.subject, kind = excluded.kind, statement = excluded.statement, correct_conception = excluded.correct_conception, indicators = excluded.indicators, family = excluded.family, status = excluded.status, updated_at = now();
+insert into public.misconceptions (id, subject, kind, statement, correct_conception, indicators, family, status)
+values ('MIS-PHY-ENE-016', 'Physics', 'conceptual', 'Confuses the force stretching a spring (F = ke) with the energy stored in it (Ee = ½ke²).', 'F = ke gives the force in newtons; the energy stored is Ee = ½ke², in joules.', array['answer = ke', 'gives energy stored in N']::text[], null, 'approved')
+on conflict (id) do update set subject = excluded.subject, kind = excluded.kind, statement = excluded.statement, correct_conception = excluded.correct_conception, indicators = excluded.indicators, family = excluded.family, status = excluded.status, updated_at = now();
+insert into public.misconceptions (id, subject, kind, statement, correct_conception, indicators, family, status)
+values ('MIS-PHY-ENE-017', 'Physics', 'conceptual', 'Classes nuclear fuel as renewable (because it is low-carbon or lasts a long time).', 'Nuclear fuel (uranium, plutonium) is not replenished as it is used, so it is non-renewable, even though it produces little carbon dioxide.', array['chooses nuclear as renewable']::text[], null, 'approved')
+on conflict (id) do update set subject = excluded.subject, kind = excluded.kind, statement = excluded.statement, correct_conception = excluded.correct_conception, indicators = excluded.indicators, family = excluded.family, status = excluded.status, updated_at = now();
+insert into public.misconceptions (id, subject, kind, statement, correct_conception, indicators, family, status)
+values ('MIS-PHY-ENE-018', 'Physics', 'conceptual', 'Thinks lubrication adds energy to a machine, rather than reducing the energy dissipated by friction.', 'A lubricant reduces friction, so less energy is dissipated to thermal stores; it supplies no energy.', array['chooses "the oil gives the machine energy"']::text[], null, 'approved')
+on conflict (id) do update set subject = excluded.subject, kind = excluded.kind, statement = excluded.statement, correct_conception = excluded.correct_conception, indicators = excluded.indicators, family = excluded.family, status = excluded.status, updated_at = now();
+insert into public.misconceptions (id, subject, kind, statement, correct_conception, indicators, family, status)
+values ('MIS-PHY-ENE-019', 'Physics', 'conceptual', 'Thinks energy dissipated to the surroundings can easily be recovered and used.', 'Dissipated energy is spread out in the thermal store of the surroundings and becomes less useful; in practice it cannot be recovered.', array['chooses "the wasted energy can be collected and reused"']::text[], null, 'approved')
+on conflict (id) do update set subject = excluded.subject, kind = excluded.kind, statement = excluded.statement, correct_conception = excluded.correct_conception, indicators = excluded.indicators, family = excluded.family, status = excluded.status, updated_at = now();
+insert into public.misconceptions (id, subject, kind, statement, correct_conception, indicators, family, status)
+values ('MIS-PHY-ENE-020', 'Physics', 'conceptual', 'Thinks the gravitational potential energy gained depends only on the height, not the mass.', 'Ep = mgh: for the same height, twice the mass gains twice the energy.', array['says two different masses lifted the same height gain the same energy']::text[], null, 'approved')
+on conflict (id) do update set subject = excluded.subject, kind = excluded.kind, statement = excluded.statement, correct_conception = excluded.correct_conception, indicators = excluded.indicators, family = excluded.family, status = excluded.status, updated_at = now();
+insert into public.misconceptions (id, subject, kind, statement, correct_conception, indicators, family, status)
+values ('MIS-PHY-FOR-001', 'Physics', 'conceptual', 'Uses a distance that is not in the direction of the force (e.g. the horizontal distance moved when something is lifted).', 'In W = Fs, s is the distance moved along the line of action of the force.', array['uses the wrong distance in W = Fs']::text[], null, 'approved')
+on conflict (id) do update set subject = excluded.subject, kind = excluded.kind, statement = excluded.statement, correct_conception = excluded.correct_conception, indicators = excluded.indicators, family = excluded.family, status = excluded.status, updated_at = now();
 
 -- Links are replaced as a set for these concepts
-delete from public.domain_concepts where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources');
-delete from public.concept_prerequisites where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources');
-delete from public.spec_statement_concepts where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources');
-delete from public.misconception_concepts where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources');
+delete from public.domain_concepts where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources', 'phy.forces.work-done');
+delete from public.concept_prerequisites where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources', 'phy.forces.work-done');
+delete from public.spec_statement_concepts where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources', 'phy.forces.work-done');
+delete from public.misconception_concepts where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources', 'phy.forces.work-done');
 
 -- phy.skills.units-prefixes
 insert into public.domain_concepts (domain, concept_id) values ('phy.skills', 'phy.skills.units-prefixes');
@@ -152,6 +179,7 @@ insert into public.spec_statements (curriculum, board, ref) values ('gcse-uk', '
 insert into public.spec_statement_concepts (statement_id, concept_id, note) select id, 'phy.energy.conservation', null from public.spec_statements where curriculum = 'gcse-uk' and board = 'AQA' and ref = '4.1.2.1';
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-001', 'phy.energy.conservation');
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-003', 'phy.energy.conservation');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-019', 'phy.energy.conservation');
 -- phy.energy.kinetic
 insert into public.domain_concepts (domain, concept_id) values ('phy.energy', 'phy.energy.kinetic');
 insert into public.domain_concepts (domain, concept_id) values ('phy.forces', 'phy.energy.kinetic');
@@ -161,6 +189,7 @@ insert into public.spec_statements (curriculum, board, ref) values ('gcse-uk', '
 insert into public.spec_statement_concepts (statement_id, concept_id, note) select id, 'phy.energy.kinetic', 'recall equation' from public.spec_statements where curriculum = 'gcse-uk' and board = 'AQA' and ref = '4.1.1.2';
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-004', 'phy.energy.kinetic');
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-005', 'phy.energy.kinetic');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-011', 'phy.energy.kinetic');
 -- phy.energy.gravitational
 insert into public.domain_concepts (domain, concept_id) values ('phy.energy', 'phy.energy.gravitational');
 insert into public.concept_prerequisites (concept_id, prerequisite_id, strength) values ('phy.energy.gravitational', 'phy.skills.rearranging', 'hard');
@@ -169,6 +198,9 @@ insert into public.spec_statements (curriculum, board, ref) values ('gcse-uk', '
 insert into public.spec_statement_concepts (statement_id, concept_id, note) select id, 'phy.energy.gravitational', 'recall equation; g always given' from public.spec_statements where curriculum = 'gcse-uk' and board = 'AQA' and ref = '4.1.1.2';
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-006', 'phy.energy.gravitational');
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-007', 'phy.energy.gravitational');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-014', 'phy.energy.gravitational');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-020', 'phy.energy.gravitational');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-011', 'phy.energy.gravitational');
 -- phy.energy.elastic
 insert into public.domain_concepts (domain, concept_id) values ('phy.energy', 'phy.energy.elastic');
 insert into public.domain_concepts (domain, concept_id) values ('phy.forces', 'phy.energy.elastic');
@@ -180,6 +212,8 @@ insert into public.spec_statements (curriculum, board, ref) values ('gcse-uk', '
 insert into public.spec_statement_concepts (statement_id, concept_id, note) select id, 'phy.energy.elastic', null from public.spec_statements where curriculum = 'gcse-uk' and board = 'AQA' and ref = '4.5.3';
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-005', 'phy.energy.elastic');
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-008', 'phy.energy.elastic');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-015', 'phy.energy.elastic');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-016', 'phy.energy.elastic');
 -- phy.energy.transfer-calcs
 insert into public.domain_concepts (domain, concept_id) values ('phy.energy', 'phy.energy.transfer-calcs');
 insert into public.concept_prerequisites (concept_id, prerequisite_id, strength) values ('phy.energy.transfer-calcs', 'phy.energy.kinetic', 'hard');
@@ -191,6 +225,7 @@ insert into public.spec_statements (curriculum, board, ref) values ('gcse-uk', '
 insert into public.spec_statement_concepts (statement_id, concept_id, note) select id, 'phy.energy.transfer-calcs', null from public.spec_statements where curriculum = 'gcse-uk' and board = 'AQA' and ref = '4.1.1.2';
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-003', 'phy.energy.transfer-calcs');
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-004', 'phy.energy.transfer-calcs');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-014', 'phy.energy.transfer-calcs');
 -- phy.energy.shc
 insert into public.domain_concepts (domain, concept_id) values ('phy.energy', 'phy.energy.shc');
 insert into public.concept_prerequisites (concept_id, prerequisite_id, strength) values ('phy.energy.shc', 'phy.skills.rearranging', 'hard');
@@ -216,11 +251,24 @@ insert into public.spec_statements (curriculum, board, ref) values ('gcse-uk', '
 insert into public.spec_statement_concepts (statement_id, concept_id, note) select id, 'phy.energy.dissipation-efficiency', 'both recall; increasing efficiency is HT' from public.spec_statements where curriculum = 'gcse-uk' and board = 'AQA' and ref = '4.1.2.2';
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-003', 'phy.energy.dissipation-efficiency');
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-012', 'phy.energy.dissipation-efficiency');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-018', 'phy.energy.dissipation-efficiency');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-019', 'phy.energy.dissipation-efficiency');
 -- phy.energy.resources
 insert into public.domain_concepts (domain, concept_id) values ('phy.energy', 'phy.energy.resources');
 insert into public.spec_statements (curriculum, board, ref) values ('gcse-uk', 'AQA', '4.1.3') on conflict (curriculum, board, ref) do nothing;
 insert into public.spec_statement_concepts (statement_id, concept_id, note) select id, 'phy.energy.resources', null from public.spec_statements where curriculum = 'gcse-uk' and board = 'AQA' and ref = '4.1.3';
 insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-013', 'phy.energy.resources');
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-ENE-017', 'phy.energy.resources');
+-- phy.forces.work-done
+insert into public.domain_concepts (domain, concept_id) values ('phy.forces', 'phy.forces.work-done');
+insert into public.domain_concepts (domain, concept_id) values ('phy.energy', 'phy.forces.work-done');
+insert into public.concept_prerequisites (concept_id, prerequisite_id, strength) values ('phy.forces.work-done', 'phy.skills.rearranging', 'hard');
+insert into public.concept_prerequisites (concept_id, prerequisite_id, strength) values ('phy.forces.work-done', 'phy.skills.units-prefixes', 'soft');
+insert into public.spec_statements (curriculum, board, ref) values ('gcse-uk', 'AQA', '4.5.2') on conflict (curriculum, board, ref) do nothing;
+insert into public.spec_statement_concepts (statement_id, concept_id, note) select id, 'phy.forces.work-done', 'recall equation' from public.spec_statements where curriculum = 'gcse-uk' and board = 'AQA' and ref = '4.5.2';
+insert into public.spec_statements (curriculum, board, ref) values ('gcse-uk', 'AQA', '4.1.1.1') on conflict (curriculum, board, ref) do nothing;
+insert into public.spec_statement_concepts (statement_id, concept_id, note) select id, 'phy.forces.work-done', 'energy transferred by work done' from public.spec_statements where curriculum = 'gcse-uk' and board = 'AQA' and ref = '4.1.1.1';
+insert into public.misconception_concepts (misconception_id, concept_id) values ('MIS-PHY-FOR-001', 'phy.forces.work-done');
 
 -- Programme sequences that use these concepts
 insert into public.programme_units (id, programme, subject, position, name) values ('ism-y10-physics.toolkit', 'ism-y10-physics', 'Physics', 1, 'The Physicist''s Toolkit')
@@ -234,7 +282,7 @@ insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y1
 insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.toolkit', 'phy.skills.standard-form');
 insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.toolkit', 'phy.skills.rearranging');
 insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.toolkit', 'phy.skills.graph-reading');
-delete from public.programme_unit_concepts where unit_id = 'ism-y10-physics.energy' and concept_id in ('phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources');
+delete from public.programme_unit_concepts where unit_id = 'ism-y10-physics.energy' and concept_id in ('phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources', 'phy.forces.work-done');
 insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.energy', 'phy.energy.stores-systems');
 insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.energy', 'phy.energy.conservation');
 insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.energy', 'phy.energy.kinetic');
@@ -245,11 +293,12 @@ insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y1
 insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.energy', 'phy.energy.power');
 insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.energy', 'phy.energy.dissipation-efficiency');
 insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.energy', 'phy.energy.resources');
+insert into public.programme_unit_concepts (unit_id, concept_id) values ('ism-y10-physics.energy', 'phy.forces.work-done');
 
 commit;
 
--- Check. Expected: 14 concepts (14 approved), 19 misconceptions, 16 prerequisite edges.
-select (select count(*) from public.concepts where id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources')) as concepts,
-       (select count(*) from public.concepts where id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources') and status = 'approved') as approved,
-       (select count(*) from public.misconceptions where id in ('MIS-PHY-SKL-001', 'MIS-PHY-SKL-002', 'MIS-PHY-SKL-003', 'MIS-PHY-SKL-004', 'MIS-PHY-SKL-005', 'MIS-PHY-SKL-006', 'MIS-PHY-ENE-001', 'MIS-PHY-ENE-002', 'MIS-PHY-ENE-003', 'MIS-PHY-ENE-004', 'MIS-PHY-ENE-005', 'MIS-PHY-ENE-006', 'MIS-PHY-ENE-007', 'MIS-PHY-ENE-008', 'MIS-PHY-ENE-009', 'MIS-PHY-ENE-010', 'MIS-PHY-ENE-011', 'MIS-PHY-ENE-012', 'MIS-PHY-ENE-013')) as misconceptions,
-       (select count(*) from public.concept_prerequisites where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources')) as prerequisite_edges;
+-- Check. Expected: 15 concepts (15 approved), 27 misconceptions, 18 prerequisite edges.
+select (select count(*) from public.concepts where id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources', 'phy.forces.work-done')) as concepts,
+       (select count(*) from public.concepts where id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources', 'phy.forces.work-done') and status = 'approved') as approved,
+       (select count(*) from public.misconceptions where id in ('MIS-PHY-SKL-001', 'MIS-PHY-SKL-002', 'MIS-PHY-SKL-003', 'MIS-PHY-SKL-004', 'MIS-PHY-SKL-005', 'MIS-PHY-SKL-006', 'MIS-PHY-ENE-001', 'MIS-PHY-ENE-002', 'MIS-PHY-ENE-003', 'MIS-PHY-ENE-004', 'MIS-PHY-ENE-005', 'MIS-PHY-ENE-006', 'MIS-PHY-ENE-007', 'MIS-PHY-ENE-008', 'MIS-PHY-ENE-009', 'MIS-PHY-ENE-010', 'MIS-PHY-ENE-011', 'MIS-PHY-ENE-012', 'MIS-PHY-ENE-013', 'MIS-PHY-ENE-014', 'MIS-PHY-ENE-015', 'MIS-PHY-ENE-016', 'MIS-PHY-ENE-017', 'MIS-PHY-ENE-018', 'MIS-PHY-ENE-019', 'MIS-PHY-ENE-020', 'MIS-PHY-FOR-001')) as misconceptions,
+       (select count(*) from public.concept_prerequisites where concept_id in ('phy.skills.units-prefixes', 'phy.skills.standard-form', 'phy.skills.rearranging', 'phy.skills.graph-reading', 'phy.energy.stores-systems', 'phy.energy.conservation', 'phy.energy.kinetic', 'phy.energy.gravitational', 'phy.energy.elastic', 'phy.energy.transfer-calcs', 'phy.energy.shc', 'phy.energy.power', 'phy.energy.dissipation-efficiency', 'phy.energy.resources', 'phy.forces.work-done')) as prerequisite_edges;

@@ -112,7 +112,7 @@ const CONCEPTS = [
     requiredContexts: ['closed-system', 'with-dissipation'],
     evidence: { numeric: false, application: true, templated: false },
     boundaries: [],
-    misconceptions: ['MIS-PHY-ENE-001', 'MIS-PHY-ENE-003'],
+    misconceptions: ['MIS-PHY-ENE-001', 'MIS-PHY-ENE-003', 'MIS-PHY-ENE-019'],
     status: 'approved'
   },
   {
@@ -129,7 +129,7 @@ const CONCEPTS = [
     requiredContexts: ['find-energy', 'find-speed-or-mass'],
     evidence: { numeric: true, application: true, templated: true },
     boundaries: ['Finding speed needs a square root: band 3 / Higher'],
-    misconceptions: ['MIS-PHY-ENE-004', 'MIS-PHY-ENE-005'],
+    misconceptions: ['MIS-PHY-ENE-004', 'MIS-PHY-ENE-005', 'MIS-PHY-ENE-011'],
     status: 'approved'
   },
   {
@@ -145,8 +145,8 @@ const CONCEPTS = [
     ],
     requiredContexts: ['find-energy', 'find-height-or-mass'],
     evidence: { numeric: true, application: true, templated: true },
-    boundaries: ['g is always stated in the item'],
-    misconceptions: ['MIS-PHY-ENE-006', 'MIS-PHY-ENE-007'],
+    boundaries: ['g is always stated in the item', 'Weight = mg is assumed from KS3: items may give a weight in newtons (Ep = weight × height)'],
+    misconceptions: ['MIS-PHY-ENE-006', 'MIS-PHY-ENE-007', 'MIS-PHY-ENE-014', 'MIS-PHY-ENE-020', 'MIS-PHY-ENE-011'],
     status: 'approved'
   },
   {
@@ -163,7 +163,7 @@ const CONCEPTS = [
     requiredContexts: ['find-energy', 'extension-in-cm'],
     evidence: { numeric: true, application: false, templated: true },
     boundaries: ['Assume limit of proportionality not exceeded; Hooke\'s law itself belongs to Forces'],
-    misconceptions: ['MIS-PHY-ENE-005', 'MIS-PHY-ENE-008'],
+    misconceptions: ['MIS-PHY-ENE-005', 'MIS-PHY-ENE-008', 'MIS-PHY-ENE-015', 'MIS-PHY-ENE-016'],
     status: 'approved'
   },
   {
@@ -181,7 +181,7 @@ const CONCEPTS = [
     requiredContexts: ['no-dissipation', 'with-dissipation'],
     evidence: { numeric: true, application: true, templated: true },
     boundaries: ['Air resistance ignored unless the item gives the energy dissipated'],
-    misconceptions: ['MIS-PHY-ENE-003', 'MIS-PHY-ENE-004'],
+    misconceptions: ['MIS-PHY-ENE-003', 'MIS-PHY-ENE-004', 'MIS-PHY-ENE-014'],
     status: 'approved'
   },
   {
@@ -238,7 +238,7 @@ const CONCEPTS = [
       'No definition of thermal conductivity',
       'Required practical 2 (thermal insulators) is separate-only: tag such items separateOnly'
     ],
-    misconceptions: ['MIS-PHY-ENE-003', 'MIS-PHY-ENE-012'],
+    misconceptions: ['MIS-PHY-ENE-003', 'MIS-PHY-ENE-012', 'MIS-PHY-ENE-018', 'MIS-PHY-ENE-019'],
     status: 'approved'
   },
   {
@@ -252,7 +252,27 @@ const CONCEPTS = [
     requiredContexts: ['classification', 'evaluation'],
     evidence: { numeric: false, application: true, templated: false },
     boundaries: ['How resources generate electricity is not required'],
-    misconceptions: ['MIS-PHY-ENE-013'],
+    misconceptions: ['MIS-PHY-ENE-013', 'MIS-PHY-ENE-017'],
+    status: 'approved'
+  },
+
+  // ── Shared with Forces (approved by Eric 28 Sep 2026 so that power and
+  // transfer calculations can start from a force and a distance) ──
+  {
+    id: 'phy.forces.work-done',
+    name: 'Work done (W = Fs)',
+    homeDomain: 'phy.forces', domains: ['phy.forces', 'phy.energy'],
+    objective: 'Recall and use W = Fs for a force acting along the direction of motion, and explain that work done is energy transferred (1 J = 1 N m).',
+    spec: [{ board: 'AQA', ref: '4.5.2', note: 'recall equation' }, { board: 'AQA', ref: '4.1.1.1', note: 'energy transferred by work done' }],
+    tier: 'Both', separateOnly: false,
+    prerequisites: [
+      { id: 'phy.skills.rearranging', strength: 'hard' },
+      { id: 'phy.skills.units-prefixes', strength: 'soft' }
+    ],
+    requiredContexts: ['find-work', 'work-as-energy-transferred'],
+    evidence: { numeric: true, application: true, templated: true },
+    boundaries: ['Force along the line of motion only (no angles)', 'Work done against friction dissipates energy to thermal stores'],
+    misconceptions: ['MIS-PHY-FOR-001'],
     status: 'approved'
   }
 ];
@@ -327,7 +347,7 @@ const MISCONCEPTIONS = [
     statement: 'Thinks a material with a higher specific heat capacity heats up faster.',
     correct: 'Higher specific heat capacity means more energy is needed per kg per °C, so for the same energy input it warms more slowly.',
     indicators: ['chooses the high-c material as warming fastest'] },
-  { id: 'MIS-PHY-ENE-011', kind: 'conceptual', concepts: ['phy.energy.power'],
+  { id: 'MIS-PHY-ENE-011', kind: 'conceptual', concepts: ['phy.energy.power', 'phy.energy.gravitational', 'phy.energy.kinetic'],
     statement: 'Confuses power with energy: a more powerful device must transfer more energy, regardless of time.',
     correct: 'Power is the rate of transfer. A more powerful device transfers the same energy in less time.',
     indicators: ['says the faster motor transfers more energy lifting the same load the same height'] },
@@ -338,7 +358,42 @@ const MISCONCEPTIONS = [
   { id: 'MIS-PHY-ENE-013', kind: 'conceptual', concepts: ['phy.energy.resources'],
     statement: 'Equates renewable with "no environmental impact" or "always reliable".',
     correct: 'Renewable means it is (or can be) replenished as it is used. Many renewables have environmental impacts and several (wind, solar, waves) are not always available.',
-    indicators: ['chooses renewable as "does not harm the environment"'] }
+    indicators: ['chooses renewable as "does not harm the environment"'] },
+
+  // Added 28 Sep 2026 (approved by Eric), from the reviewer calibration and
+  // the kinetic/gravitational reviews.
+  { id: 'MIS-PHY-ENE-014', kind: 'procedural', concepts: ['phy.energy.gravitational', 'phy.energy.transfer-calcs'],
+    statement: 'Adds a factor ½ to Ep = mgh by analogy with Ek = ½mv².',
+    correct: 'Ep = mgh has no ½.',
+    indicators: ['answer exactly half the correct Ep'] },
+  { id: 'MIS-PHY-ENE-015', kind: 'procedural', concepts: ['phy.energy.elastic'],
+    statement: 'Does not square the extension in Ee = ½ke².',
+    correct: 'The extension is squared: Ee = ½ × k × e².',
+    indicators: ['answer = ½ke'] },
+  { id: 'MIS-PHY-ENE-016', kind: 'conceptual', concepts: ['phy.energy.elastic'],
+    statement: 'Confuses the force stretching a spring (F = ke) with the energy stored in it (Ee = ½ke²).',
+    correct: 'F = ke gives the force in newtons; the energy stored is Ee = ½ke², in joules.',
+    indicators: ['answer = ke', 'gives energy stored in N'] },
+  { id: 'MIS-PHY-ENE-017', kind: 'conceptual', concepts: ['phy.energy.resources'],
+    statement: 'Classes nuclear fuel as renewable (because it is low-carbon or lasts a long time).',
+    correct: 'Nuclear fuel (uranium, plutonium) is not replenished as it is used, so it is non-renewable, even though it produces little carbon dioxide.',
+    indicators: ['chooses nuclear as renewable'] },
+  { id: 'MIS-PHY-ENE-018', kind: 'conceptual', concepts: ['phy.energy.dissipation-efficiency'],
+    statement: 'Thinks lubrication adds energy to a machine, rather than reducing the energy dissipated by friction.',
+    correct: 'A lubricant reduces friction, so less energy is dissipated to thermal stores; it supplies no energy.',
+    indicators: ['chooses "the oil gives the machine energy"'] },
+  { id: 'MIS-PHY-ENE-019', kind: 'conceptual', concepts: ['phy.energy.dissipation-efficiency', 'phy.energy.conservation'],
+    statement: 'Thinks energy dissipated to the surroundings can easily be recovered and used.',
+    correct: 'Dissipated energy is spread out in the thermal store of the surroundings and becomes less useful; in practice it cannot be recovered.',
+    indicators: ['chooses "the wasted energy can be collected and reused"'] },
+  { id: 'MIS-PHY-ENE-020', kind: 'conceptual', concepts: ['phy.energy.gravitational'],
+    statement: 'Thinks the gravitational potential energy gained depends only on the height, not the mass.',
+    correct: 'Ep = mgh: for the same height, twice the mass gains twice the energy.',
+    indicators: ['says two different masses lifted the same height gain the same energy'] },
+  { id: 'MIS-PHY-FOR-001', kind: 'conceptual', concepts: ['phy.forces.work-done'],
+    statement: 'Uses a distance that is not in the direction of the force (e.g. the horizontal distance moved when something is lifted).',
+    correct: 'In W = Fs, s is the distance moved along the line of action of the force.',
+    indicators: ['uses the wrong distance in W = Fs'] }
 ];
 
 module.exports = { CONCEPTS, MISCONCEPTIONS };

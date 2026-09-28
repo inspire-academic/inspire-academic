@@ -34,7 +34,8 @@ const CONCEPT_PROFILE = {
   'phy.energy.transfer-calcs': 'calculation',
   'phy.energy.shc': 'calculation',
   'phy.energy.power': 'calculation',
-  'phy.energy.dissipation-efficiency': 'mixed'
+  'phy.energy.dissipation-efficiency': 'mixed',
+  'phy.forces.work-done': 'calculation'
 };
 
 module.exports = { PROFILES, CONCEPT_PROFILE };
