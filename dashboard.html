@@ -169,6 +169,14 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
      before the art (its right offset plus its ~135px width, plus a gap). */
   .card-artifact + .tq-left{max-width:calc(100% - clamp(190px,24%,300px) - 160px);}
 }
+/* Dark theme: the pale watercolour stands out against navy, so the same
+   picture reads bigger and brighter than in light theme. Step it down 10%
+   (phones 64->58px, desktop 88->79px) and soften it slightly. Light theme
+   is unchanged. */
+html:not([data-theme="light"]) .card-artifact{height:58px;opacity:.85;}
+@media (min-width:901px){
+  html:not([data-theme="light"]) .card-artifact{height:calc(100% - 12px);max-height:79px;}
+}
 .card-artifact--calendar{--art:url(/assets/images/illustrations/daily-calendar.webp);--art-sm:url(/assets/images/illustrations/daily-calendar-sm.webp);}
 .card-artifact--notebook{--art:url(/assets/images/illustrations/daily-notebook.webp);--art-sm:url(/assets/images/illustrations/daily-notebook-sm.webp);}
 .card-artifact--microscope{--art:url(/assets/images/illustrations/diagnostic-microscope.webp);--art-sm:url(/assets/images/illustrations/diagnostic-microscope-sm.webp);}
