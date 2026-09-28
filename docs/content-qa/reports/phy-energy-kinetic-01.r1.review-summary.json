@@ -1,0 +1,33 @@
+{
+ "block": "phy-energy-kinetic-01",
+ "round": 1,
+ "date": "2026-09-28",
+ "reviewer": "physics-subject-reviewer (rubric v1), run as a general-purpose opus agent loading .claude/agents/physics-subject-reviewer.md",
+ "reference_pack_commit": "bf99f80e52418fe311f47c37d9a5f944dd5553bf",
+ "second_solver": "independent opus agent, stems only (b01 b04 b08 b10): agreed with the key on b01, b04, b10; flagged b08 (seed) as having two defensible answers",
+ "decisions": [
+  { "item_ref": "b01", "ref": "kin-mc-3", "source": "pack", "decision": "APPROVE", "key_matches": true },
+  { "item_ref": "b02", "ref": "kin-t2", "source": "pack", "decision": "APPROVE", "key_matches": true },
+  { "item_ref": "b03", "ref": "seed-bus", "source": "seed", "label": "S-A1 'movement energy ... used up'", "decision": "REJECT", "caught_for": "A1, B4: 'used up' and 'movement energy' in the explanation" },
+  { "item_ref": "b04", "ref": "kin-mc-1", "source": "pack", "decision": "APPROVE", "key_matches": true, "note": "convergence clue (216 = 2x key, 108 000 = 1000x key) raised as a systematic concern" },
+  { "item_ref": "b05", "ref": "seed-ball", "source": "seed", "label": "S-B1 assesses momentum", "decision": "REJECT", "caught_for": "B1, B2, B3, A5, C1: momentum (HT Forces), unit clue in the stem" },
+  { "item_ref": "b06", "ref": "kin-prac-c1", "source": "pack", "decision": "APPROVE", "key_matches": true },
+  { "item_ref": "b07", "ref": "kin-t1", "source": "pack", "decision": "APPROVE", "key_matches": true, "note": "ascending order puts the key at b in every instance" },
+  { "item_ref": "b08", "ref": "seed-trolley", "source": "seed", "label": "S-A4 two defensible answers", "decision": "REJECT", "caught_for": "A2, A4, A1, C1, C2: a 41% (sqrt 2) speed increase also doubles Ek" },
+  { "item_ref": "b09", "ref": "kin-diag-1", "source": "pack", "decision": "APPROVE", "key_matches": true },
+  { "item_ref": "b10", "ref": "kin-mc-2", "source": "pack", "decision": "APPROVE", "key_matches": true }
+ ],
+ "seeded_defects": { "total": 3, "caught": 3 },
+ "pack_items": { "total": 7, "approved": 7, "false_rejects": 0 },
+ "systematic_concerns": [
+  "Key position: five of six MCQs keyed b; ascending order always puts the Ek key second.",
+  "Convergence clue in computed-distractor MCQs (x2 and x1000 distractors point to the key).",
+  "Automated checks did not scan explanation/feedback for terminology.md banned phrases.",
+  "Checks cannot verify a conceptual MCQ has one defensible answer (reviewer's job).",
+  "Drafting can drift to an adjacent concept (momentum) under a kinetic tag."
+ ],
+ "actions": [
+  "Added checks: terminology (banned phrases fail in stem/key/explanation, warn in feedback), convergence (warn), key-position (pack), template option order alternates ascending/descending.",
+  "Revised kin-mc-1 (x2 distractor replaced by square-mass, key now c) and kin-prac-c1 (key moved to d); kin-t1 now alternates order. These three re-reviewed in round 2."
+ ]
+}

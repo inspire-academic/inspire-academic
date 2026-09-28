@@ -1,0 +1,99 @@
+[
+ {
+  "label": "S-A5 grammatical clue: only option a follows 'an'",
+  "item": {
+   "ref": "seed-an",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "speed-and-mass-dependence"
+   ],
+   "question_text": "When the speed of a car doubles, the energy in its kinetic energy store undergoes an",
+   "options": {
+    "a": "increase by a factor of four",
+    "b": "doubling",
+    "c": "halving",
+    "d": "small decrease"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "Kinetic energy depends on speed squared, so doubling the speed multiplies it by 4.",
+    "c": "A faster car has more kinetic energy, not less.",
+    "d": "A faster car has more kinetic energy, not less."
+   },
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-004",
+    "c": "slip: inverted the relationship between speed and energy",
+    "d": "slip: thinks speeding up reduces kinetic energy"
+   },
+   "explanation": "Kinetic energy is proportional to speed squared: doubling the speed multiplies it by 2² = 4."
+  }
+ },
+ {
+  "label": "S-D1 mastery check that is the practice template (runner/footballer, find energy, SI) with new numbers",
+  "item": {
+   "ref": "seed-footballer",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "A footballer of mass 80 kg sprints at \\(9\\,\\text{m/s}\\). Calculate the energy in her kinetic energy store.",
+   "calc": {
+    "formula": "ek",
+    "unit": "J",
+    "inputs": {
+     "m": {
+      "value": 80,
+      "unit": "kg"
+     },
+     "v": {
+      "value": 9,
+      "unit": "m/s"
+     }
+    },
+    "wrong": [
+     "no-half",
+     "no-square",
+     "square-mass"
+    ]
+   },
+   "answer": {
+    "value": 3240,
+    "tolerance": 0.01,
+    "unit": "J",
+    "unit_options": [
+     "J",
+     "kJ",
+     "W"
+    ],
+    "wrong": [
+     {
+      "value": 6480,
+      "misconception": "This leaves out the half: \\(\\tfrac{1}{2} \\times 80 \\times 9^{2} = 3240\\,\\text{J}\\)."
+     },
+     {
+      "value": 360,
+      "misconception": "Square the speed: \\(\\tfrac{1}{2} \\times 80 \\times 81 = 3240\\,\\text{J}\\)."
+     },
+     {
+      "value": 28800,
+      "misconception": "Only the speed is squared, not the mass: \\(3240\\,\\text{J}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "360": "MIS-PHY-ENE-004",
+    "6480": "MIS-PHY-ENE-005",
+    "28800": "MIS-PHY-ENE-004"
+   },
+   "explanation": "\\(E_k = \\tfrac{1}{2}mv^{2} = \\tfrac{1}{2} \\times 80 \\times 9^{2} = 3240\\,\\text{J}\\)."
+  }
+ }
+]

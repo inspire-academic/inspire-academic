@@ -22,7 +22,9 @@
 //   family[]      base formulas whose printed equation also counts (ek-speed -> ek)
 //   rearranged    true if the student has to change the subject
 //   sqrt          true if the rearrangement needs a square root (Higher, band 3)
-//   mistakes      { name: { f(si), misconceptions: [ids] | slip: 'text' } }
+//   mistakes      { name: { f(si), misconceptions: [ids] | slip: 'text', uses? } }
+//                 uses: extra inputs (not in inputs{}) the mistake needs, e.g.
+//                 g for a student who wrongly multiplies a weight by g
 //
 // Generic mistakes, available on every formula:
 //   unconverted:x      substitutes input x's number without converting it to SI
@@ -109,7 +111,21 @@ const FORMULAS = {
     equation: { kind: 'recall', patterns: re(/E_\{?p\}?\s*=/, /=\s*m\s*g\s*h\b/, /\bmgh\b/, /mass\s*(\\times|×)\s*gravitational field strength\s*(\\times|×)\s*height/i) },
     mistakes: {
       'no-g': { f: ({ m, h }) => m * h, slip: 'left out g' },
+      'divided-height': { f: ({ m, g, h }) => m * g / h, slip: 'divided by the height instead of multiplying' },
       'weight-as-mass': { f: ({ m, g, h }) => m * g * g * h, misconceptions: ['MIS-PHY-ENE-007'] }
+    }
+  },
+  // Ep from a weight: Ep = mgh = Wh. The weight-as-mass mistake needs g as an
+  // extra input (printed in the stem as data the student should not use).
+  'ep-weight': {
+    family: ['ep'],
+    concepts: ['phy.energy.gravitational'],
+    inputs: { W: 'force', h: 'length' }, output: 'energy',
+    f: ({ W, h }) => W * h,
+    equation: { kind: 'recall', patterns: [] },
+    mistakes: {
+      'weight-as-mass': { f: ({ W, g, h }) => W * g * h, uses: ['g'], misconceptions: ['MIS-PHY-ENE-007'] },
+      'divided-by-g': { f: ({ W, g, h }) => W * h / g, uses: ['g'], slip: 'converted the weight to a mass and then left out g' }
     }
   },
   'ep-height': {

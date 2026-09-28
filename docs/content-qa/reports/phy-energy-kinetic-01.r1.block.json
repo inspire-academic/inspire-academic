@@ -1,0 +1,852 @@
+{
+ "block": "phy-energy-kinetic-01",
+ "subject": "Physics",
+ "concepts": [
+  "phy.energy.kinetic"
+ ],
+ "reference_pack_commit": "bf99f80e52418fe311f47c37d9a5f944dd5553bf",
+ "check_suite": "checks-1",
+ "items": [
+  {
+   "item_ref": "b01",
+   "kind": "item",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 3,
+   "tier": "Higher",
+   "format": "numeric",
+   "context_tags": [
+    "find-speed-or-mass",
+    "unit-conversion"
+   ],
+   "question_text": "A car of mass 1200 kg has \\(150\\,\\text{kJ}\\) of energy in its kinetic energy store. Calculate its speed. Give your answer to 3 significant figures.",
+   "calc": {
+    "formula": "ek-speed",
+    "unit": "m/s",
+    "inputs": {
+     "E": {
+      "value": 150,
+      "unit": "kJ"
+     },
+     "m": {
+      "value": 1200,
+      "unit": "kg"
+     }
+    },
+    "wrong": [
+     "no-root",
+     "no-half",
+     "half-wrong-way",
+     "unconverted:E"
+    ]
+   },
+   "sig_figs": 3,
+   "answer": {
+    "value": 15.8114,
+    "tolerance": 0.01,
+    "unit": "m/s",
+    "unit_options": [
+     "m/s",
+     "J",
+     "kg"
+    ],
+    "wrong": [
+     {
+      "value": 250,
+      "misconception": "This stops before the square root: \\(v^{2} = 250\\), so \\(v = \\sqrt{250} = 15.8\\,\\text{m/s}\\)."
+     },
+     {
+      "value": 11.2,
+      "misconception": "This loses the 2 that comes from the half. \\(v = \\sqrt{\\dfrac{2E_k}{m}} = \\sqrt{\\dfrac{2 \\times 150\\,000}{1200}} = 15.8\\,\\text{m/s}\\)."
+     },
+     {
+      "value": 7.91,
+      "misconception": "The half goes the other way when you rearrange: \\(v = \\sqrt{\\dfrac{2E_k}{m}}\\), not \\(\\sqrt{\\dfrac{E_k}{2m}}\\). That gives \\(15.8\\,\\text{m/s}\\)."
+     },
+     {
+      "value": 0.5,
+      "misconception": "This uses the energy in kilojoules. Convert first: \\(150\\,\\text{kJ} = 150\\,000\\,\\text{J}\\), so \\(v = \\sqrt{\\dfrac{2 \\times 150\\,000}{1200}} = 15.8\\,\\text{m/s}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "250": "MIS-PHY-SKL-005",
+    "11.2": "MIS-PHY-ENE-005",
+    "7.91": "MIS-PHY-SKL-005",
+    "0.5": "MIS-PHY-SKL-002"
+   },
+   "explanation": "Convert: \\(150\\,\\text{kJ} = 150\\,000\\,\\text{J}\\). Rearrange \\(E_k = \\tfrac{1}{2}mv^{2}\\) to \\(v = \\sqrt{\\dfrac{2E_k}{m}} = \\sqrt{\\dfrac{300\\,000}{1200}} = \\sqrt{250} = 15.8\\,\\text{m/s}\\) (3 s.f.).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 5
+   }
+  },
+  {
+   "item_ref": "b02",
+   "kind": "template",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "practice",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-speed-or-mass"
+   ],
+   "stem": "A go-kart and its driver are moving at \\([[v]]\\,\\text{m/s}\\). There is \\([[E]]\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+   "params": {
+    "m": {
+     "min": 100,
+     "max": 200,
+     "step": 10,
+     "unit": "kg",
+     "hidden": true
+    },
+    "v": {
+     "min": 4,
+     "max": 9,
+     "step": 1,
+     "unit": "m/s"
+    }
+   },
+   "derived": {
+    "E": {
+     "formula": "ek",
+     "unit": "J"
+    }
+   },
+   "calc": {
+    "formula": "ek-mass",
+    "unit": "kg",
+    "wrong": [
+     "no-square",
+     "no-half",
+     "half-wrong-way"
+    ]
+   },
+   "misconception_map": {
+    "no-square": "MIS-PHY-ENE-004",
+    "no-half": "MIS-PHY-ENE-005",
+    "half-wrong-way": "MIS-PHY-SKL-005"
+   },
+   "feedback": {
+    "no-square": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times [[E]]}{[[v]]^{2}}\\).",
+    "no-half": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\).",
+    "half-wrong-way": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+   },
+   "explanation": "Rearrange \\(E_k = \\tfrac{1}{2}mv^{2}\\) to \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times [[E]]}{[[v]]^{2}} = [[answer]]\\,\\text{kg}\\).",
+   "unit_options": [
+    "kg",
+    "J",
+    "N"
+   ],
+   "answer_range": [
+    90,
+    215
+   ],
+   "sample_instances": [
+    {
+     "seed": 1,
+     "params": {
+      "m": 100,
+      "v": 9
+     },
+     "words": {},
+     "question_text": "A go-kart and its driver are moving at \\(9\\,\\text{m/s}\\). There is \\(4050\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "answer": {
+      "value": 100,
+      "tolerance": 0.01,
+      "unit": "kg",
+      "unit_options": [
+       "kg",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 900,
+        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 4050}{9^{2}}\\)."
+       },
+       {
+        "value": 50,
+        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       },
+       {
+        "value": 25,
+        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       }
+      ]
+     },
+     "correct": 100
+    },
+    {
+     "seed": 2,
+     "params": {
+      "m": 100,
+      "v": 7
+     },
+     "words": {},
+     "question_text": "A go-kart and its driver are moving at \\(7\\,\\text{m/s}\\). There is \\(2450\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "answer": {
+      "value": 100,
+      "tolerance": 0.01,
+      "unit": "kg",
+      "unit_options": [
+       "kg",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 700,
+        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 2450}{7^{2}}\\)."
+       },
+       {
+        "value": 50,
+        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       },
+       {
+        "value": 25,
+        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       }
+      ]
+     },
+     "correct": 100
+    },
+    {
+     "seed": 3,
+     "params": {
+      "m": 190,
+      "v": 9
+     },
+     "words": {},
+     "question_text": "A go-kart and its driver are moving at \\(9\\,\\text{m/s}\\). There is \\(7700\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "answer": {
+      "value": 190.12345679012347,
+      "tolerance": 0.01,
+      "unit": "kg",
+      "unit_options": [
+       "kg",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 1710,
+        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 7700}{9^{2}}\\)."
+       },
+       {
+        "value": 95.1,
+        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       },
+       {
+        "value": 47.5,
+        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       }
+      ]
+     },
+     "correct": 190.123
+    },
+    {
+     "seed": 4,
+     "params": {
+      "m": 110,
+      "v": 8
+     },
+     "words": {},
+     "question_text": "A go-kart and its driver are moving at \\(8\\,\\text{m/s}\\). There is \\(3520\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "answer": {
+      "value": 110,
+      "tolerance": 0.01,
+      "unit": "kg",
+      "unit_options": [
+       "kg",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 880,
+        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 3520}{8^{2}}\\)."
+       },
+       {
+        "value": 55,
+        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       },
+       {
+        "value": 27.5,
+        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       }
+      ]
+     },
+     "correct": 110
+    },
+    {
+     "seed": 5,
+     "params": {
+      "m": 120,
+      "v": 8
+     },
+     "words": {},
+     "question_text": "A go-kart and its driver are moving at \\(8\\,\\text{m/s}\\). There is \\(3840\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "answer": {
+      "value": 120,
+      "tolerance": 0.01,
+      "unit": "kg",
+      "unit_options": [
+       "kg",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 960,
+        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 3840}{8^{2}}\\)."
+       },
+       {
+        "value": 60,
+        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       },
+       {
+        "value": 30,
+        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+       }
+      ]
+     },
+     "correct": 120
+    }
+   ],
+   "instances_checked": 66,
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 0
+   }
+  },
+  {
+   "item_ref": "b03",
+   "kind": "item",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "A school bus of mass 8000 kg is travelling at \\(10\\,\\text{m/s}\\). Calculate the energy in its kinetic energy store.",
+   "calc": {
+    "formula": "ek",
+    "unit": "J",
+    "inputs": {
+     "m": {
+      "value": 8000,
+      "unit": "kg"
+     },
+     "v": {
+      "value": 10,
+      "unit": "m/s"
+     }
+    },
+    "wrong": [
+     "no-half",
+     "no-square"
+    ]
+   },
+   "answer": {
+    "value": 400000,
+    "tolerance": 0.01,
+    "unit": "J",
+    "unit_options": [
+     "J",
+     "kJ",
+     "W"
+    ],
+    "wrong": [
+     {
+      "value": 800000,
+      "misconception": "This leaves out the half. Kinetic energy is \\(\\tfrac{1}{2} \\times 8000 \\times 10^{2} = 400\\,000\\,\\text{J}\\)."
+     },
+     {
+      "value": 40000,
+      "misconception": "Square the speed: \\(\\tfrac{1}{2} \\times 8000 \\times 10^{2} = 400\\,000\\,\\text{J}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "40000": "MIS-PHY-ENE-004",
+    "800000": "MIS-PHY-ENE-005"
+   },
+   "explanation": "\\(E_k = \\tfrac{1}{2}mv^{2} = \\tfrac{1}{2} \\times 8000 \\times 10^{2} = 400\\,000\\,\\text{J}\\). When the bus brakes to a stop, this movement energy is used up by the brakes.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [
+     "copyright: warning: 18% of its wording matches past paper pasco_pilot_aqa_ph_2h_jun18#39"
+    ],
+    "past_paper_overlap_pct": 18
+   }
+  },
+  {
+   "item_ref": "b04",
+   "kind": "item",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy",
+    "unit-conversion"
+   ],
+   "question_text": "A delivery drone has a mass of 1500 g. It flies horizontally at \\(12\\,\\text{m/s}\\). How much energy is in its kinetic energy store?",
+   "options": {
+    "a": "\\(9\\,\\text{J}\\)",
+    "b": "\\(108\\,\\text{J}\\)",
+    "c": "\\(216\\,\\text{J}\\)",
+    "d": "\\(108\\,000\\,\\text{J}\\)"
+   },
+   "key": "b",
+   "calc": {
+    "formula": "ek",
+    "unit": "J",
+    "inputs": {
+     "m": {
+      "value": 1500,
+      "unit": "g"
+     },
+     "v": {
+      "value": 12,
+      "unit": "m/s"
+     }
+    },
+    "options": {
+     "a": "no-square",
+     "b": "correct",
+     "c": "no-half",
+     "d": "unconverted:m"
+    }
+   },
+   "feedback": {
+    "a": "This multiplies by the speed instead of the speed squared. With the mass in kilograms: \\(\\tfrac{1}{2} \\times 1.5 \\times 12^{2} = 108\\,\\text{J}\\).",
+    "c": "This leaves out the half. \\(\\tfrac{1}{2} \\times 1.5 \\times 12^{2} = 108\\,\\text{J}\\).",
+    "d": "This uses the mass in grams. Convert first: 1500 g = 1.5 kg, so \\(\\tfrac{1}{2} \\times 1.5 \\times 12^{2} = 108\\,\\text{J}\\)."
+   },
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-004",
+    "c": "MIS-PHY-ENE-005",
+    "d": "MIS-PHY-SKL-002"
+   },
+   "explanation": "Convert the mass to kilograms: 1500 g = 1.5 kg. Then kinetic energy \\(= \\tfrac{1}{2} \\times 1.5 \\times 12^{2} = \\tfrac{1}{2} \\times 1.5 \\times 144 = 108\\,\\text{J}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 3
+   }
+  },
+  {
+   "item_ref": "b05",
+   "kind": "item",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "A ball of mass 2 kg moves at 3 m/s. Which of its quantities has the value 6 kg m/s?",
+   "options": {
+    "a": "Its momentum",
+    "b": "Its kinetic energy",
+    "c": "Its weight",
+    "d": "Its speed squared"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "Kinetic energy is measured in joules: here it is \\(\\tfrac{1}{2} \\times 2 \\times 3^{2} = 9\\,\\text{J}\\).",
+    "c": "Weight is a force, measured in newtons.",
+    "d": "The speed squared is 9, in m²/s²."
+   },
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-004",
+    "c": "slip: confused mass times speed with weight",
+    "d": "slip: squared the speed without a reason"
+   },
+   "explanation": "Mass × velocity = 2 × 3 = 6 kg m/s: that is momentum.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 0
+   }
+  },
+  {
+   "item_ref": "b06",
+   "kind": "item",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "practice",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "speed-and-mass-dependence"
+   ],
+   "question_text": "Car P has twice the mass of car Q. Car Q is moving twice as fast as car P. Which car has more energy in its kinetic energy store?",
+   "options": {
+    "a": "Car P, because it has more mass",
+    "b": "Car Q, because the energy depends on speed squared",
+    "c": "Neither: they have the same, because the two effects cancel",
+    "d": "You cannot tell without the actual masses and speeds"
+   },
+   "key": "b",
+   "feedback": {
+    "a": "Mass matters, but speed matters more: kinetic energy depends on speed squared. Doubling the speed multiplies the energy by 4; doubling the mass only multiplies it by 2. So car Q has twice as much.",
+    "c": "The effects would cancel only if kinetic energy depended on speed, not speed squared. Doubling the mass doubles the energy, but doubling the speed multiplies it by 4, so car Q has twice as much.",
+    "d": "You can compare without numbers. Doubling the mass doubles the kinetic energy; doubling the speed multiplies it by 2² = 4. So car Q has twice as much as car P."
+   },
+   "misconception_map": {
+    "a": "slip: judged the energy by the mass alone",
+    "c": "MIS-PHY-ENE-004",
+    "d": "slip: thinks a comparison needs actual values rather than the proportional relationship"
+   },
+   "explanation": "Kinetic energy is proportional to mass and to speed squared. Car P: 2 × mass, so 2 times the energy. Car Q: 2 × speed, so 2² = 4 times the energy. Car Q has twice as much kinetic energy as car P.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 0
+   }
+  },
+  {
+   "item_ref": "b07",
+   "kind": "template",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy"
+   ],
+   "stem": "A [[who]] has a mass of \\([[m]]\\,\\text{kg}\\) and is moving at \\([[v]]\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
+   "params": {
+    "m": {
+     "min": 45,
+     "max": 90,
+     "step": 5,
+     "unit": "kg"
+    },
+    "v": {
+     "min": 3,
+     "max": 10,
+     "step": 1,
+     "unit": "m/s"
+    }
+   },
+   "words": {
+    "who": [
+     "runner",
+     "cyclist",
+     "footballer",
+     "wheelchair racer"
+    ]
+   },
+   "calc": {
+    "formula": "ek",
+    "unit": "J",
+    "wrong": [
+     "no-square",
+     "no-half",
+     "square-mass"
+    ]
+   },
+   "misconception_map": {
+    "no-square": "MIS-PHY-ENE-004",
+    "no-half": "MIS-PHY-ENE-005",
+    "square-mass": "MIS-PHY-ENE-004"
+   },
+   "feedback": {
+    "no-square": "[[wrong]] J multiplies by the speed instead of the speed squared. Square the speed first: \\(\\tfrac{1}{2} \\times [[m]] \\times [[v]]^{2}\\).",
+    "no-half": "[[wrong]] J leaves out the half. \\(\\tfrac{1}{2} \\times [[m]] \\times [[v]]^{2} = [[answer]]\\,\\text{J}\\).",
+    "square-mass": "[[wrong]] J squares the mass instead of the speed. Only the speed is squared: \\(\\tfrac{1}{2} \\times [[m]] \\times [[v]]^{2}\\)."
+   },
+   "explanation": "Kinetic energy \\(= \\tfrac{1}{2} \\times \\text{mass} \\times \\text{speed}^{2} = \\tfrac{1}{2} \\times [[m]] \\times [[v]]^{2} = [[answer]]\\,\\text{J}\\).",
+   "sig_figs": 5,
+   "answer_range": [
+    150,
+    5000
+   ],
+   "sample_instances": [
+    {
+     "seed": 1,
+     "params": {
+      "m": 90,
+      "v": 9
+     },
+     "words": {
+      "who": "footballer"
+     },
+     "question_text": "A footballer has a mass of \\(90\\,\\text{kg}\\) and is moving at \\(9\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
+     "options": {
+      "a": "\\(405\\,\\text{J}\\)",
+      "b": "\\(3645\\,\\text{J}\\)",
+      "c": "\\(7290\\,\\text{J}\\)",
+      "d": "\\(36450\\,\\text{J}\\)"
+     },
+     "key": "b",
+     "correct": 3645
+    },
+    {
+     "seed": 2,
+     "params": {
+      "m": 70,
+      "v": 8
+     },
+     "words": {
+      "who": "cyclist"
+     },
+     "question_text": "A cyclist has a mass of \\(70\\,\\text{kg}\\) and is moving at \\(8\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
+     "options": {
+      "a": "\\(280\\,\\text{J}\\)",
+      "b": "\\(2240\\,\\text{J}\\)",
+      "c": "\\(4480\\,\\text{J}\\)",
+      "d": "\\(19600\\,\\text{J}\\)"
+     },
+     "key": "b",
+     "correct": 2240
+    },
+    {
+     "seed": 3,
+     "params": {
+      "m": 45,
+      "v": 8
+     },
+     "words": {
+      "who": "cyclist"
+     },
+     "question_text": "A cyclist has a mass of \\(45\\,\\text{kg}\\) and is moving at \\(8\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
+     "options": {
+      "a": "\\(180\\,\\text{J}\\)",
+      "b": "\\(1440\\,\\text{J}\\)",
+      "c": "\\(2880\\,\\text{J}\\)",
+      "d": "\\(8100\\,\\text{J}\\)"
+     },
+     "key": "b",
+     "correct": 1440
+    },
+    {
+     "seed": 4,
+     "params": {
+      "m": 80,
+      "v": 7
+     },
+     "words": {
+      "who": "wheelchair racer"
+     },
+     "question_text": "A wheelchair racer has a mass of \\(80\\,\\text{kg}\\) and is moving at \\(7\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
+     "options": {
+      "a": "\\(280\\,\\text{J}\\)",
+      "b": "\\(1960\\,\\text{J}\\)",
+      "c": "\\(3920\\,\\text{J}\\)",
+      "d": "\\(22400\\,\\text{J}\\)"
+     },
+     "key": "b",
+     "correct": 1960
+    },
+    {
+     "seed": 5,
+     "params": {
+      "m": 45,
+      "v": 6
+     },
+     "words": {
+      "who": "runner"
+     },
+     "question_text": "A runner has a mass of \\(45\\,\\text{kg}\\) and is moving at \\(6\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
+     "options": {
+      "a": "\\(135\\,\\text{J}\\)",
+      "b": "\\(810\\,\\text{J}\\)",
+      "c": "\\(1620\\,\\text{J}\\)",
+      "d": "\\(6075\\,\\text{J}\\)"
+     },
+     "key": "b",
+     "correct": 810
+    }
+   ],
+   "instances_checked": 80,
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 0
+   }
+  },
+  {
+   "item_ref": "b08",
+   "kind": "item",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "speed-and-mass-dependence"
+   ],
+   "question_text": "A trolley is rolling along a level floor. Which change would double the energy in its kinetic energy store?",
+   "options": {
+    "a": "Doubling its speed",
+    "b": "Doubling its mass",
+    "c": "Increasing its speed by about 41%",
+    "d": "Doubling both its mass and its speed"
+   },
+   "key": "b",
+   "feedback": {
+    "a": "Doubling the speed multiplies the kinetic energy by 4, because it depends on speed squared.",
+    "c": "Kinetic energy depends on speed squared, so a small increase in speed cannot double it.",
+    "d": "Doubling both multiplies the kinetic energy by 2 × 4 = 8."
+   },
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-004",
+    "c": "slip: underestimates the effect of a speed increase",
+    "d": "slip: thinks the two changes add rather than multiply"
+   },
+   "explanation": "Kinetic energy is proportional to mass, so doubling the mass doubles it.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 0
+   }
+  },
+  {
+   "item_ref": "b09",
+   "kind": "item",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "A motorbike and its rider have a total mass of 150 kg. They travel along a straight road at \\(8\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
+   "options": {
+    "a": "\\(600\\,\\text{J}\\)",
+    "b": "\\(4800\\,\\text{J}\\)",
+    "c": "\\(9600\\,\\text{J}\\)",
+    "d": "\\(90\\,000\\,\\text{J}\\)"
+   },
+   "key": "b",
+   "calc": {
+    "formula": "ek",
+    "unit": "J",
+    "inputs": {
+     "m": {
+      "value": 150,
+      "unit": "kg"
+     },
+     "v": {
+      "value": 8,
+      "unit": "m/s"
+     }
+    },
+    "options": {
+     "a": "no-square",
+     "b": "correct",
+     "c": "no-half",
+     "d": "square-mass"
+    }
+   },
+   "feedback": {
+    "a": "This multiplies by the speed instead of the speed squared. Square the speed first: \\(\\tfrac{1}{2} \\times 150 \\times 8^{2} = 4800\\,\\text{J}\\).",
+    "c": "This leaves out the half: \\(150 \\times 8^{2} = 9600\\). Kinetic energy is half of that, \\(4800\\,\\text{J}\\).",
+    "d": "This squares the mass instead of the speed. Only the speed is squared: \\(\\tfrac{1}{2} \\times 150 \\times 8^{2} = 4800\\,\\text{J}\\)."
+   },
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-004",
+    "c": "MIS-PHY-ENE-005",
+    "d": "MIS-PHY-ENE-004"
+   },
+   "explanation": "Kinetic energy \\(= \\tfrac{1}{2} \\times \\text{mass} \\times \\text{speed}^{2} = \\tfrac{1}{2} \\times 150 \\times 8^{2} = \\tfrac{1}{2} \\times 150 \\times 64 = 4800\\,\\text{J}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 9
+   }
+  },
+  {
+   "item_ref": "b10",
+   "kind": "item",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-speed-or-mass",
+    "select-data"
+   ],
+   "question_text": "A cricket ball leaves the bowler's hand at \\(30\\,\\text{m/s}\\) and travels 20 m to the batter. As it leaves the hand, there is \\(72\\,\\text{J}\\) in its kinetic energy store. Calculate the mass of the ball.",
+   "calc": {
+    "formula": "ek-mass",
+    "unit": "kg",
+    "inputs": {
+     "E": {
+      "value": 72,
+      "unit": "J"
+     },
+     "v": {
+      "value": 30,
+      "unit": "m/s"
+     },
+     "s": {
+      "value": 20,
+      "unit": "m"
+     }
+    },
+    "wrong": [
+     "no-square",
+     "no-half",
+     "half-wrong-way",
+     "substitute:v=s"
+    ]
+   },
+   "answer": {
+    "value": 0.16,
+    "tolerance": 0.01,
+    "unit": "kg",
+    "unit_options": [
+     "kg",
+     "J",
+     "N"
+    ],
+    "wrong": [
+     {
+      "value": 4.8,
+      "misconception": "This divides by the speed, not the speed squared. Rearranging \\(E_k = \\tfrac{1}{2}mv^{2}\\) gives \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{144}{900} = 0.16\\,\\text{kg}\\)."
+     },
+     {
+      "value": 0.08,
+      "misconception": "This loses the 2 that comes from the half. \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 72}{30^{2}} = 0.16\\,\\text{kg}\\)."
+     },
+     {
+      "value": 0.04,
+      "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2 \\times 72}{30^{2}} = 0.16\\,\\text{kg}\\)."
+     },
+     {
+      "value": 0.36,
+      "misconception": "This uses the distance (20 m) instead of the speed. Kinetic energy depends on speed: \\(m = \\dfrac{2 \\times 72}{30^{2}} = 0.16\\,\\text{kg}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "4.8": "MIS-PHY-ENE-004",
+    "0.08": "MIS-PHY-ENE-005",
+    "0.04": "MIS-PHY-SKL-005",
+    "0.36": "slip: used the distance travelled instead of the speed"
+   },
+   "explanation": "Only the speed and the energy are needed; the distance is not. Rearrange \\(E_k = \\tfrac{1}{2}mv^{2}\\) to \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 72}{30^{2}} = \\dfrac{144}{900} = 0.16\\,\\text{kg}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 3
+   }
+  }
+ ]
+}

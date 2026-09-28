@@ -1,0 +1,846 @@
+{
+ "block": "phy-energy-gravitational-01",
+ "subject": "Physics",
+ "concepts": [
+  "phy.energy.gravitational"
+ ],
+ "reference_pack_commit": "bf99f80e52418fe311f47c37d9a5f944dd5553bf",
+ "check_suite": "checks-1",
+ "items": [
+  {
+   "item_ref": "b01",
+   "kind": "item",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "A 2 kg box and a 4 kg box are both lifted from the floor onto the same table. Compare the increase in the energy in their gravitational potential energy stores.",
+   "options": {
+    "a": "It is the same for both boxes",
+    "b": "It is twice as much for the 4 kg box",
+    "c": "It is half as much for the 4 kg box",
+    "d": "It is four times as much for the 4 kg box"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "The boxes are lifted through the same height, so they gain the same energy.",
+    "c": "The heavier box does not gain less energy: both rise the same height.",
+    "d": "Energy does not depend on the square of the mass."
+   },
+   "misconception_map": {
+    "b": "slip: thinks more mass means more energy stored",
+    "c": "slip: inverted the relationship with mass",
+    "d": "slip: squared the mass ratio"
+   },
+   "explanation": "Both boxes rise through the same height, so the increase in their gravitational potential energy stores is the same.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 2
+   }
+  },
+  {
+   "item_ref": "b02",
+   "kind": "item",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-height-or-mass"
+   ],
+   "question_text": "A crane lifts a steel beam 12 m vertically. The energy in the beam's gravitational potential energy store increases by \\(58\\,800\\,\\text{J}\\). Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the mass of the beam.",
+   "calc": {
+    "formula": "ep-mass",
+    "unit": "kg",
+    "inputs": {
+     "E": {
+      "value": 58800,
+      "unit": "J"
+     },
+     "g": {
+      "value": 9.8,
+      "unit": "N/kg"
+     },
+     "h": {
+      "value": 12,
+      "unit": "m"
+     }
+    },
+    "wrong": [
+     "no-g",
+     "upside-down"
+    ]
+   },
+   "answer": {
+    "value": 500,
+    "tolerance": 0.01,
+    "unit": "kg",
+    "unit_options": [
+     "kg",
+     "N",
+     "J"
+    ],
+    "wrong": [
+     {
+      "value": 4900,
+      "misconception": "This leaves out \\(g\\). Rearrange \\(E_p = mgh\\) to \\(m = \\dfrac{E_p}{gh} = \\dfrac{58\\,800}{9.8 \\times 12} = 500\\,\\text{kg}\\)."
+     },
+     {
+      "value": 0.002,
+      "misconception": "This divides the wrong way round. \\(m = \\dfrac{E_p}{gh} = \\dfrac{58\\,800}{117.6} = 500\\,\\text{kg}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "4900": "slip: left out g",
+    "0.002": "MIS-PHY-SKL-004"
+   },
+   "explanation": "Rearrange \\(E_p = mgh\\) to \\(m = \\dfrac{E_p}{gh} = \\dfrac{58\\,800}{9.8 \\times 12} = \\dfrac{58\\,800}{117.6} = 500\\,\\text{kg}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 9
+   }
+  },
+  {
+   "item_ref": "b03",
+   "kind": "item",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "practice",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy"
+   ],
+   "question_text": "A satellite is lifted to an orbit 400 km above the Earth's surface. Why would using g = 9.8 N/kg in the gravitational potential energy equation give the wrong value for the energy needed?",
+   "options": {
+    "a": "The gravitational field strength is smaller at that height",
+    "b": "The satellite has no mass once it is in orbit",
+    "c": "The equation only works for objects touching the ground",
+    "d": "The height is too small compared with the Earth to matter"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "The satellite's mass does not change in orbit.",
+    "c": "The equation applies to changes in height above the ground as well.",
+    "d": "400 km is large enough for g to change noticeably."
+   },
+   "misconception_map": {
+    "b": "slip: thinks objects in orbit have no mass",
+    "c": "slip: thinks the equation only applies at ground level",
+    "d": "slip: underestimated the height"
+   },
+   "explanation": "g decreases with distance from the Earth's centre. At 400 km it is about 8.7 N/kg, so using 9.8 N/kg for the whole height overestimates the energy.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 3
+   }
+  },
+  {
+   "item_ref": "b04",
+   "kind": "item",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy",
+    "weight-given",
+    "height-not-path"
+   ],
+   "question_text": "A hiker has a weight of 600 N. She walks 4 km along a winding mountain path and rises 300 m vertically. Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). How much energy is transferred to her gravitational potential energy store?",
+   "options": {
+    "a": "\\(18\\,400\\,\\text{J}\\)",
+    "b": "\\(180\\,000\\,\\text{J}\\)",
+    "c": "\\(1\\,764\\,000\\,\\text{J}\\)",
+    "d": "\\(2\\,400\\,000\\,\\text{J}\\)"
+   },
+   "key": "b",
+   "calc": {
+    "formula": "ep-weight",
+    "unit": "J",
+    "inputs": {
+     "W": {
+      "value": 600,
+      "unit": "N"
+     },
+     "h": {
+      "value": 300,
+      "unit": "m"
+     },
+     "g": {
+      "value": 9.8,
+      "unit": "N/kg"
+     },
+     "s": {
+      "value": 4,
+      "unit": "km"
+     }
+    },
+    "options": {
+     "a": "divided-by-g",
+     "b": "correct",
+     "c": "weight-as-mass",
+     "d": "substitute:h=s"
+    }
+   },
+   "feedback": {
+    "a": "This finds her mass (600 ÷ 9.8) but then leaves out \\(g\\). Since weight \\(= mg\\), energy gained \\(= mgh = \\text{weight} \\times h = 600 \\times 300 = 180\\,000\\,\\text{J}\\).",
+    "c": "This uses 600 as the mass. 600 N is her weight, which already includes \\(g\\): energy gained \\(= \\text{weight} \\times h = 600 \\times 300 = 180\\,000\\,\\text{J}\\).",
+    "d": "This uses the 4 km along the path. Only the vertical height gained counts: \\(600 \\times 300 = 180\\,000\\,\\text{J}\\)."
+   },
+   "misconception_map": {
+    "a": "slip: converted the weight to a mass and then left out g",
+    "c": "MIS-PHY-ENE-007",
+    "d": "MIS-PHY-ENE-006"
+   },
+   "explanation": "Weight \\(= mg\\), so \\(E_p = mgh = \\text{weight} \\times h = 600 \\times 300 = 180\\,000\\,\\text{J}\\). The distance along the path is not needed, and \\(g\\) is already included in the weight.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 7
+   }
+  },
+  {
+   "item_ref": "b05",
+   "kind": "item",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "height-not-path"
+   ],
+   "question_text": "A box is lifted onto a shelf. Which change would increase the energy transferred to its gravitational potential energy store?",
+   "options": {
+    "a": "Lifting it more slowly",
+    "b": "Lifting it onto a higher shelf",
+    "c": "Using a longer ramp to reach the same shelf",
+    "d": "Painting the box a lighter colour"
+   },
+   "key": "b",
+   "feedback": {
+    "a": "Lifting more slowly changes the power, not the energy stored.",
+    "c": "Only the vertical height gained matters, not the length of the ramp.",
+    "d": "The colour of the box has no effect on the energy stored."
+   },
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-006",
+    "c": "MIS-PHY-ENE-006",
+    "d": "slip: thinks colour affects the energy stored"
+   },
+   "explanation": "Ep = mass × g × height gained, so only a greater mass, or a greater vertical height, increases it.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 2
+   }
+  },
+  {
+   "item_ref": "b06",
+   "kind": "template",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "practice",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-height-or-mass"
+   ],
+   "stem": "A [[who]] of mass \\([[m]]\\,\\text{kg}\\) climbs some stairs. The energy in their gravitational potential energy store increases by \\([[E]]\\,\\text{J}\\). Gravitational field strength, \\(g = [[g]]\\,\\text{N/kg}\\). Calculate the vertical height they climb.",
+   "params": {
+    "h": {
+     "min": 3,
+     "max": 15,
+     "step": 1,
+     "unit": "m",
+     "hidden": true
+    },
+    "m": {
+     "min": 40,
+     "max": 80,
+     "step": 5,
+     "unit": "kg"
+    },
+    "g": {
+     "values": [
+      9.8
+     ],
+     "unit": "N/kg"
+    }
+   },
+   "words": {
+    "who": [
+     "student",
+     "teacher",
+     "nurse",
+     "security guard"
+    ]
+   },
+   "derived": {
+    "E": {
+     "formula": "ep",
+     "unit": "J"
+    }
+   },
+   "calc": {
+    "formula": "ep-height",
+    "unit": "m",
+    "wrong": [
+     "no-g",
+     "upside-down"
+    ]
+   },
+   "misconception_map": {
+    "no-g": "slip: left out g",
+    "upside-down": "MIS-PHY-SKL-004"
+   },
+   "feedback": {
+    "no-g": "This leaves out \\(g\\). Rearrange \\(E_p = mgh\\) to \\(h = \\dfrac{E_p}{mg} = \\dfrac{[[E]]}{[[m]] \\times [[g]]}\\).",
+    "upside-down": "This divides the wrong way round. \\(h = \\dfrac{E_p}{mg}\\): the energy goes on top."
+   },
+   "explanation": "Rearrange \\(E_p = mgh\\) to \\(h = \\dfrac{E_p}{mg} = \\dfrac{[[E]]}{[[m]] \\times [[g]]} = [[answer]]\\,\\text{m}\\).",
+   "unit_options": [
+    "m",
+    "J",
+    "kg"
+   ],
+   "answer_range": [
+    2.5,
+    16
+   ],
+   "sample_instances": [
+    {
+     "seed": 1,
+     "params": {
+      "h": 8,
+      "m": 80,
+      "g": 9.8
+     },
+     "words": {
+      "who": "nurse"
+     },
+     "question_text": "A nurse of mass \\(80\\,\\text{kg}\\) climbs some stairs. The energy in their gravitational potential energy store increases by \\(6270\\,\\text{J}\\). Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the vertical height they climb.",
+     "answer": {
+      "value": 7.997448979591836,
+      "tolerance": 0.01,
+      "unit": "m",
+      "unit_options": [
+       "m",
+       "J",
+       "kg"
+      ],
+      "wrong": [
+       {
+        "value": 78.4,
+        "misconception": "This leaves out \\(g\\). Rearrange \\(E_p = mgh\\) to \\(h = \\dfrac{E_p}{mg} = \\dfrac{6270}{80 \\times 9.8}\\)."
+       },
+       {
+        "value": 0.125,
+        "misconception": "This divides the wrong way round. \\(h = \\dfrac{E_p}{mg}\\): the energy goes on top."
+       }
+      ]
+     },
+     "correct": 7.99745
+    },
+    {
+     "seed": 2,
+     "params": {
+      "h": 14,
+      "m": 55,
+      "g": 9.8
+     },
+     "words": {
+      "who": "nurse"
+     },
+     "question_text": "A nurse of mass \\(55\\,\\text{kg}\\) climbs some stairs. The energy in their gravitational potential energy store increases by \\(7550\\,\\text{J}\\). Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the vertical height they climb.",
+     "answer": {
+      "value": 14.007421150278294,
+      "tolerance": 0.01,
+      "unit": "m",
+      "unit_options": [
+       "m",
+       "J",
+       "kg"
+      ],
+      "wrong": [
+       {
+        "value": 137,
+        "misconception": "This leaves out \\(g\\). Rearrange \\(E_p = mgh\\) to \\(h = \\dfrac{E_p}{mg} = \\dfrac{7550}{55 \\times 9.8}\\)."
+       },
+       {
+        "value": 0.0714,
+        "misconception": "This divides the wrong way round. \\(h = \\dfrac{E_p}{mg}\\): the energy goes on top."
+       }
+      ]
+     },
+     "correct": 14.0074
+    },
+    {
+     "seed": 3,
+     "params": {
+      "h": 3,
+      "m": 70,
+      "g": 9.8
+     },
+     "words": {
+      "who": "security guard"
+     },
+     "question_text": "A security guard of mass \\(70\\,\\text{kg}\\) climbs some stairs. The energy in their gravitational potential energy store increases by \\(2060\\,\\text{J}\\). Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the vertical height they climb.",
+     "answer": {
+      "value": 3.002915451895044,
+      "tolerance": 0.01,
+      "unit": "m",
+      "unit_options": [
+       "m",
+       "J",
+       "kg"
+      ],
+      "wrong": [
+       {
+        "value": 29.4,
+        "misconception": "This leaves out \\(g\\). Rearrange \\(E_p = mgh\\) to \\(h = \\dfrac{E_p}{mg} = \\dfrac{2060}{70 \\times 9.8}\\)."
+       },
+       {
+        "value": 0.333,
+        "misconception": "This divides the wrong way round. \\(h = \\dfrac{E_p}{mg}\\): the energy goes on top."
+       }
+      ]
+     },
+     "correct": 3.00292
+    },
+    {
+     "seed": 4,
+     "params": {
+      "h": 6,
+      "m": 55,
+      "g": 9.8
+     },
+     "words": {
+      "who": "student"
+     },
+     "question_text": "A student of mass \\(55\\,\\text{kg}\\) climbs some stairs. The energy in their gravitational potential energy store increases by \\(3230\\,\\text{J}\\). Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the vertical height they climb.",
+     "answer": {
+      "value": 5.992578849721707,
+      "tolerance": 0.01,
+      "unit": "m",
+      "unit_options": [
+       "m",
+       "J",
+       "kg"
+      ],
+      "wrong": [
+       {
+        "value": 58.7,
+        "misconception": "This leaves out \\(g\\). Rearrange \\(E_p = mgh\\) to \\(h = \\dfrac{E_p}{mg} = \\dfrac{3230}{55 \\times 9.8}\\)."
+       },
+       {
+        "value": 0.167,
+        "misconception": "This divides the wrong way round. \\(h = \\dfrac{E_p}{mg}\\): the energy goes on top."
+       }
+      ]
+     },
+     "correct": 5.99258
+    },
+    {
+     "seed": 5,
+     "params": {
+      "h": 13,
+      "m": 55,
+      "g": 9.8
+     },
+     "words": {
+      "who": "student"
+     },
+     "question_text": "A student of mass \\(55\\,\\text{kg}\\) climbs some stairs. The energy in their gravitational potential energy store increases by \\(7010\\,\\text{J}\\). Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the vertical height they climb.",
+     "answer": {
+      "value": 13.00556586270872,
+      "tolerance": 0.01,
+      "unit": "m",
+      "unit_options": [
+       "m",
+       "J",
+       "kg"
+      ],
+      "wrong": [
+       {
+        "value": 127,
+        "misconception": "This leaves out \\(g\\). Rearrange \\(E_p = mgh\\) to \\(h = \\dfrac{E_p}{mg} = \\dfrac{7010}{55 \\times 9.8}\\)."
+       },
+       {
+        "value": 0.0769,
+        "misconception": "This divides the wrong way round. \\(h = \\dfrac{E_p}{mg}\\): the energy goes on top."
+       }
+      ]
+     },
+     "correct": 13.0056
+    }
+   ],
+   "instances_checked": 117,
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 10
+   }
+  },
+  {
+   "item_ref": "b07",
+   "kind": "template",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "find-energy"
+   ],
+   "stem": "A [[thing]] of mass \\([[m]]\\,\\text{kg}\\) is lifted \\([[h]]\\,\\text{m}\\) vertically onto a shelf. Gravitational field strength, \\(g = [[g]]\\,\\text{N/kg}\\). Calculate the increase in the energy in its gravitational potential energy store.",
+   "params": {
+    "m": {
+     "min": 5,
+     "max": 20,
+     "step": 1,
+     "unit": "kg"
+    },
+    "h": {
+     "values": [
+      0.5,
+      0.6,
+      0.8,
+      1.2,
+      1.4,
+      1.5,
+      1.6,
+      1.8,
+      2
+     ],
+     "unit": "m"
+    },
+    "g": {
+     "values": [
+      9.8
+     ],
+     "unit": "N/kg"
+    }
+   },
+   "words": {
+    "thing": [
+     "box of books",
+     "crate of mangoes",
+     "bag of rice",
+     "toolbox"
+    ]
+   },
+   "calc": {
+    "formula": "ep",
+    "unit": "J",
+    "wrong": [
+     "no-g",
+     "divided-height"
+    ]
+   },
+   "misconception_map": {
+    "no-g": "slip: left out g",
+    "divided-height": "slip: divided by the height instead of multiplying"
+   },
+   "feedback": {
+    "no-g": "This leaves out \\(g\\). Multiply mass, \\(g\\) and height: \\([[m]] \\times [[g]] \\times [[h]]\\).",
+    "divided-height": "This divides by the height. Multiply all three: \\(E_p = mgh = [[m]] \\times [[g]] \\times [[h]]\\)."
+   },
+   "explanation": "\\(E_p = mgh = [[m]] \\times [[g]] \\times [[h]] = [[answer]]\\,\\text{J}\\).",
+   "unit_options": [
+    "J",
+    "N",
+    "W"
+   ],
+   "answer_range": [
+    20,
+    400
+   ],
+   "sample_instances": [
+    {
+     "seed": 1,
+     "params": {
+      "m": 14,
+      "h": 1.2,
+      "g": 9.8
+     },
+     "words": {
+      "thing": "crate of mangoes"
+     },
+     "question_text": "A crate of mangoes of mass \\(14\\,\\text{kg}\\) is lifted \\(1.2\\,\\text{m}\\) vertically onto a shelf. Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the increase in the energy in its gravitational potential energy store.",
+     "answer": {
+      "value": 164.64000000000001,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "W"
+      ],
+      "wrong": [
+       {
+        "value": 16.8,
+        "misconception": "This leaves out \\(g\\). Multiply mass, \\(g\\) and height: \\(14 \\times 9.8 \\times 1.2\\)."
+       },
+       {
+        "value": 114,
+        "misconception": "This divides by the height. Multiply all three: \\(E_p = mgh = 14 \\times 9.8 \\times 1.2\\)."
+       }
+      ]
+     },
+     "correct": 164.64
+    },
+    {
+     "seed": 2,
+     "params": {
+      "m": 6,
+      "h": 0.5,
+      "g": 9.8
+     },
+     "words": {
+      "thing": "toolbox"
+     },
+     "question_text": "A toolbox of mass \\(6\\,\\text{kg}\\) is lifted \\(0.5\\,\\text{m}\\) vertically onto a shelf. Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the increase in the energy in its gravitational potential energy store.",
+     "answer": {
+      "value": 29.400000000000002,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "W"
+      ],
+      "wrong": [
+       {
+        "value": 3,
+        "misconception": "This leaves out \\(g\\). Multiply mass, \\(g\\) and height: \\(6 \\times 9.8 \\times 0.5\\)."
+       },
+       {
+        "value": 118,
+        "misconception": "This divides by the height. Multiply all three: \\(E_p = mgh = 6 \\times 9.8 \\times 0.5\\)."
+       }
+      ]
+     },
+     "correct": 29.4
+    },
+    {
+     "seed": 3,
+     "params": {
+      "m": 5,
+      "h": 1.5,
+      "g": 9.8
+     },
+     "words": {
+      "thing": "box of books"
+     },
+     "question_text": "A box of books of mass \\(5\\,\\text{kg}\\) is lifted \\(1.5\\,\\text{m}\\) vertically onto a shelf. Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the increase in the energy in its gravitational potential energy store.",
+     "answer": {
+      "value": 73.5,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "W"
+      ],
+      "wrong": [
+       {
+        "value": 7.5,
+        "misconception": "This leaves out \\(g\\). Multiply mass, \\(g\\) and height: \\(5 \\times 9.8 \\times 1.5\\)."
+       },
+       {
+        "value": 32.7,
+        "misconception": "This divides by the height. Multiply all three: \\(E_p = mgh = 5 \\times 9.8 \\times 1.5\\)."
+       }
+      ]
+     },
+     "correct": 73.5
+    },
+    {
+     "seed": 4,
+     "params": {
+      "m": 10,
+      "h": 1.2,
+      "g": 9.8
+     },
+     "words": {
+      "thing": "bag of rice"
+     },
+     "question_text": "A bag of rice of mass \\(10\\,\\text{kg}\\) is lifted \\(1.2\\,\\text{m}\\) vertically onto a shelf. Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the increase in the energy in its gravitational potential energy store.",
+     "answer": {
+      "value": 117.6,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "W"
+      ],
+      "wrong": [
+       {
+        "value": 12,
+        "misconception": "This leaves out \\(g\\). Multiply mass, \\(g\\) and height: \\(10 \\times 9.8 \\times 1.2\\)."
+       },
+       {
+        "value": 81.7,
+        "misconception": "This divides by the height. Multiply all three: \\(E_p = mgh = 10 \\times 9.8 \\times 1.2\\)."
+       }
+      ]
+     },
+     "correct": 117.6
+    },
+    {
+     "seed": 5,
+     "params": {
+      "m": 7,
+      "h": 2,
+      "g": 9.8
+     },
+     "words": {
+      "thing": "toolbox"
+     },
+     "question_text": "A toolbox of mass \\(7\\,\\text{kg}\\) is lifted \\(2\\,\\text{m}\\) vertically onto a shelf. Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). Calculate the increase in the energy in its gravitational potential energy store.",
+     "answer": {
+      "value": 137.20000000000002,
+      "tolerance": 0.01,
+      "unit": "J",
+      "unit_options": [
+       "J",
+       "N",
+       "W"
+      ],
+      "wrong": [
+       {
+        "value": 14,
+        "misconception": "This leaves out \\(g\\). Multiply mass, \\(g\\) and height: \\(7 \\times 9.8 \\times 2\\)."
+       },
+       {
+        "value": 34.3,
+        "misconception": "This divides by the height. Multiply all three: \\(E_p = mgh = 7 \\times 9.8 \\times 2\\)."
+       }
+      ]
+     },
+     "correct": 137.2
+    }
+   ],
+   "instances_checked": 144,
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 10
+   }
+  },
+  {
+   "item_ref": "b08",
+   "kind": "item",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "height-not-path"
+   ],
+   "question_text": "Two identical boxes of mangoes are raised from the ground onto the same lorry. Box X is lifted straight up. Box Y is pushed up a long, sloping ramp. Compare the increase in the energy in their gravitational potential energy stores.",
+   "options": {
+    "a": "It is the same for both boxes",
+    "b": "It is greater for box Y, because it moves further",
+    "c": "It is greater for box X, because it rises more steeply",
+    "d": "It depends on how quickly each box is raised"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "The distance along the ramp does not matter. The gravitational store depends on the vertical height gained, which is the same for both boxes.",
+    "c": "Steepness does not matter. Both boxes gain the same vertical height, so their gravitational stores increase by the same amount.",
+    "d": "The time taken changes the power, not the energy. Both boxes gain the same vertical height, so the same energy is stored."
+   },
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-006",
+    "c": "slip: thinks a steeper path stores more energy",
+    "d": "slip: confuses the energy stored with the rate of transfer"
+   },
+   "explanation": "Energy in the gravitational potential energy store depends on mass, g and the vertical height gained (Ep = mgh). The boxes are identical and end at the same height, so the increase is the same, whatever path they take.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 1
+   }
+  },
+  {
+   "item_ref": "b09",
+   "kind": "item",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "find-energy",
+    "height-not-path"
+   ],
+   "question_text": "A cyclist of mass 50 kg rides 120 m up a hill road. The road rises 6 m vertically. Gravitational field strength, \\(g = 9.8\\,\\text{N/kg}\\). How much energy is transferred to the cyclist's gravitational potential energy store?",
+   "options": {
+    "a": "\\(81.7\\,\\text{J}\\)",
+    "b": "\\(300\\,\\text{J}\\)",
+    "c": "\\(2940\\,\\text{J}\\)",
+    "d": "\\(58\\,800\\,\\text{J}\\)"
+   },
+   "key": "c",
+   "calc": {
+    "formula": "ep",
+    "unit": "J",
+    "inputs": {
+     "m": {
+      "value": 50,
+      "unit": "kg"
+     },
+     "g": {
+      "value": 9.8,
+      "unit": "N/kg"
+     },
+     "h": {
+      "value": 6,
+      "unit": "m"
+     },
+     "s": {
+      "value": 120,
+      "unit": "m"
+     }
+    },
+    "options": {
+     "a": "divided-height",
+     "b": "no-g",
+     "c": "correct",
+     "d": "substitute:h=s"
+    }
+   },
+   "feedback": {
+    "a": "This divides by the height. Multiply mass, \\(g\\) and height: \\(50 \\times 9.8 \\times 6 = 2940\\,\\text{J}\\).",
+    "b": "This leaves out \\(g\\). Energy in the gravitational store \\(= mgh = 50 \\times 9.8 \\times 6 = 2940\\,\\text{J}\\).",
+    "d": "This uses the 120 m along the road. Only the vertical height gained counts: \\(50 \\times 9.8 \\times 6 = 2940\\,\\text{J}\\)."
+   },
+   "misconception_map": {
+    "a": "slip: divided by the height instead of multiplying",
+    "b": "slip: left out g",
+    "d": "MIS-PHY-ENE-006"
+   },
+   "explanation": "Only the vertical height gained matters, not the distance along the road. Gravitational potential energy gained \\(= mgh = 50 \\times 9.8 \\times 6 = 2940\\,\\text{J}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 7
+   }
+  }
+ ]
+}

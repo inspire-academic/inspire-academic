@@ -1,0 +1,54 @@
+[
+ {
+  "label": "S-A4 two defensible answers (option c, a 41% speed increase, also doubles Ek)",
+  "item": {
+   "ref": "seed-trolley", "primary_concept": "phy.energy.kinetic", "evidence_class": "mastery_check", "difficulty_band": 2,
+   "tier": "Both", "format": "mcq", "context_tags": ["speed-and-mass-dependence"],
+   "question_text": "A trolley is rolling along a level floor. Which change would double the energy in its kinetic energy store?",
+   "options": { "a": "Doubling its speed", "b": "Doubling its mass", "c": "Increasing its speed by about 41%", "d": "Doubling both its mass and its speed" },
+   "key": "b",
+   "feedback": {
+    "a": "Doubling the speed multiplies the kinetic energy by 4, because it depends on speed squared.",
+    "c": "Kinetic energy depends on speed squared, so a small increase in speed cannot double it.",
+    "d": "Doubling both multiplies the kinetic energy by 2 × 4 = 8."
+   },
+   "misconception_map": { "a": "MIS-PHY-ENE-004", "c": "slip: underestimates the effect of a speed increase", "d": "slip: thinks the two changes add rather than multiply" },
+   "explanation": "Kinetic energy is proportional to mass, so doubling the mass doubles it."
+  }
+ },
+ {
+  "label": "S-A1 'movement energy ... used up' in the explanation (terminology and conservation error)",
+  "item": {
+   "ref": "seed-bus", "primary_concept": "phy.energy.kinetic", "evidence_class": "practice", "difficulty_band": 1,
+   "tier": "Both", "format": "numeric", "context_tags": ["find-energy"],
+   "question_text": "A school bus of mass 8000 kg is travelling at \\(10\\,\\text{m/s}\\). Calculate the energy in its kinetic energy store.",
+   "calc": { "formula": "ek", "unit": "J", "inputs": { "m": { "value": 8000, "unit": "kg" }, "v": { "value": 10, "unit": "m/s" } }, "wrong": ["no-half", "no-square"] },
+   "answer": {
+    "value": 400000, "tolerance": 0.01, "unit": "J", "unit_options": ["J", "kJ", "W"],
+    "wrong": [
+     { "value": 800000, "misconception": "This leaves out the half. Kinetic energy is \\(\\tfrac{1}{2} \\times 8000 \\times 10^{2} = 400\\,000\\,\\text{J}\\)." },
+     { "value": 40000, "misconception": "Square the speed: \\(\\tfrac{1}{2} \\times 8000 \\times 10^{2} = 400\\,000\\,\\text{J}\\)." }
+    ]
+   },
+   "misconception_map": { "800000": "MIS-PHY-ENE-005", "40000": "MIS-PHY-ENE-004" },
+   "explanation": "\\(E_k = \\tfrac{1}{2}mv^{2} = \\tfrac{1}{2} \\times 8000 \\times 10^{2} = 400\\,000\\,\\text{J}\\). When the bus brakes to a stop, this movement energy is used up by the brakes."
+  }
+ },
+ {
+  "label": "S-B1 assesses momentum (HT Forces), not kinetic energy",
+  "item": {
+   "ref": "seed-ball", "primary_concept": "phy.energy.kinetic", "evidence_class": "diagnostic", "difficulty_band": 1,
+   "tier": "Both", "format": "mcq", "context_tags": ["find-energy"],
+   "question_text": "A ball of mass 2 kg moves at 3 m/s. Which of its quantities has the value 6 kg m/s?",
+   "options": { "a": "Its momentum", "b": "Its kinetic energy", "c": "Its weight", "d": "Its speed squared" },
+   "key": "a",
+   "feedback": {
+    "b": "Kinetic energy is measured in joules: here it is \\(\\tfrac{1}{2} \\times 2 \\times 3^{2} = 9\\,\\text{J}\\).",
+    "c": "Weight is a force, measured in newtons.",
+    "d": "The speed squared is 9, in m²/s²."
+   },
+   "misconception_map": { "b": "MIS-PHY-ENE-004", "c": "slip: confused mass times speed with weight", "d": "slip: squared the speed without a reason" },
+   "explanation": "Mass × velocity = 2 × 3 = 6 kg m/s: that is momentum."
+  }
+ }
+]

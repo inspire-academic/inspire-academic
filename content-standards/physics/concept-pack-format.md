@@ -88,12 +88,39 @@ The misconception mapping must agree with the rule. A new kind of mistake is add
 }
 ```
 
+**Hidden and derived values.** To ask for a mass, a height or a speed, choose that quantity as a hidden param and show a derived value:
+
+```js
+params: { m: { min: 100, max: 200, step: 10, unit: 'kg', hidden: true }, v: { min: 4, max: 9, step: 1, unit: 'm/s' } },
+derived: { E: { formula: 'ek', unit: 'J' } },          // shown as [[E]], rounded to sig_figs
+calc: { formula: 'ek-mass', unit: 'kg', wrong: [...] }  // uses the rounded E, so the key matches the stem
+```
+
+Every generated answer is then realistic. Choosing E directly would give go-karts from 3 kg to 1000 kg. A hidden param never appears in the stem (checked).
+
+**Mistakes that need extra data.** A mistake rule can use an input the formula itself does not, e.g. `weight-as-mass` on `ep-weight` multiplies the weight by g. The formula library declares this (`uses: ['g']`), and the item must then print that value in the stem as data the student should not use.
+
 Placeholders use double square brackets, so they never clash with LaTeX braces. The checks build every instance across the parameter grid (up to 5000; larger grids are sampled). Every instance must pass:
 - the answer is realistic and inside `answer_range`;
 - no known mistake gives the right answer;
 - the wrong answers are distinct;
 - a correct answer rounded to `sig_figs` is marked right;
 - the maths renders.
+
+## Review
+
+After the checks pass, the pack is reviewed as a block:
+
+```
+node curriculum/assemble-block.js <pack> --seeds <seeds.json> --out <folder outside the repo> [--only ref,ref]
+```
+
+- The block holds the pack's items and templates, each template with its five sample instances. It also holds 2–3 **seed** items with deliberate defects the reviewer is not told about, all shuffled under opaque refs.
+- Seeds must pass the code checks. A seed the code already catches tests nothing, and the assembler refuses it.
+- The manifest that says which refs are seeds stays outside the repository until the review is back.
+- `--only` builds a re-review block of just the revised items, still with its own seeds.
+- The Physics Subject Expert Review Agent reviews the block. An independent second solver answers the mastery-check, application and non-calculation MCQ stems blind (`<pack>.second-solver.json`).
+- A block goes to the human spot check only when every seed was caught and every item is approved.
 
 ## What the checks do not decide
 

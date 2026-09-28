@@ -17,11 +17,13 @@ These apply to every item regardless of evidence class. The automated checks (`c
 - Options are parallel in form and similar in length. The key must not be the uniquely longest option more often than about 30% of the time across a pack (checked).
 - **Every distractor comes from a real mistake**: a documented misconception in the library, or a named slip (e.g. "forgot to square the speed", "used grams", "divided the wrong way"). No filler distractors.
 - Numeric distractors are the actual results of those mistakes, computed by code from the same numbers.
-- Options in a logical order (numbers ascending) unless order would give a clue.
+- Options in a logical order: numbers ascending or descending. Templates alternate the direction by instance, so the key's letter is not fixed by the formula (½mv² is always second in ascending order). Across a pack, vary the key's letter: the checks fail a pack whose fixed MCQs share one letter.
+- Avoid a **convergence clue**: when two or more distractors are simple multiples of the key (×2 and ×1000, say), the key is the value they all point back to. Choose mistakes whose results are not all simple multiples of the answer (checked, as a warning).
 
 ## Typed-number items
 
 - Store the correct value, the unit (or unit choices), and a tolerance (default ±1%).
+- Unit choices never include an equivalent unit of the same quantity (kJ beside J, g beside kg): the marker compares the number in the answer's own unit and does not convert, so a correct "3.24 kJ" would be marked wrong (checked). Offer units of other quantities as the wrong choices.
 - Store the named wrong values each mistake produces, with the misconception each maps to, so a typed wrong answer can be diagnosed.
 - Say if a number of significant figures is required.
 
@@ -36,6 +38,11 @@ These apply to every item regardless of evidence class. The automated checks (`c
 - Generated instances must never let a mistake produce the correct answer (e.g. excluding m = 2 for ½mv²), never give a negative or absurd value, and keep the context true (a sprinter at 10 m/s, not 40).
 - Five instances of one template are one piece of distinct evidence, not five.
 - The generator is code in the repo; the reviewer reviews the template and solves a sample of instances.
+
+## Keeping mastery evidence independent
+
+- A mastery-check, retrieval or application item must not be something a practice template can generate. The checks fail one that shares a practice template's formula and either uses one of the template's context words or has every input inside the template's parameter values. Give it a different context **and** a different structure: a conversion, extra data to reject, a rearrangement, or a weight instead of a mass.
+- Conceptual MCQs cannot be checked by code. Before review, an independent second solver answers every mastery-check, application and non-calculation MCQ from the stem alone, to catch a wrong key or a second defensible answer.
 
 ## Metadata every item carries
 

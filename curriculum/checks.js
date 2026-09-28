@@ -233,9 +233,48 @@ function checkMapping(ctx, x, r, where, mapped, rule) {
   }
 }
 
+// ── Terminology (terminology.md "Never use") ──
+//
+// A banned phrase in a stem, the key, the explanation or a mark scheme
+// teaches the misconception, so it fails. In a wrong option or its feedback
+// it may be quoting the misconception to correct it ("energy is not used
+// up"), so it is a warning for the reviewer to judge.
+const BANNED = [
+  [/\bused up\b/i, '"used up" (energy is transferred, not used up)'],
+  [/\b(movement|motion) energy\b/i, '"movement energy" (say the kinetic energy store)'],
+  [/\bheat energy\b/i, '"heat energy" (heat is not a store: say thermal energy store, or energy transferred by heating)'],
+  [/\benergy (is|was|gets|has been) (lost|destroyed|created|made|produced)\b/i, 'energy "lost/destroyed/created/produced" (energy is transferred or dissipated)'],
+  [/\b(lost|destroyed|disappears)\b[^.]{0,40}\benergy\b|\benergy\b[^.]{0,40}\b(disappears|vanishes)\b/i, 'energy "lost/destroyed/disappears" (say dissipated, usually to the thermal store of the surroundings)']
+];
+
+function checkTerminology(x, r) {
+  const strict = [x.question_text || x.stem, x.explanation, ...(x.mark_scheme || []).map(p => p.text)];
+  if (x.options && x.key) strict.push(x.options[x.key]);
+  const lenient = [
+    ...(x.options ? Object.entries(x.options).filter(([k]) => k !== x.key).map(([, v]) => v) : []),
+    ...Object.values(x.feedback || {}),
+    ...(((x.answer || {}).wrong) || []).map(w => w.misconception)
+  ];
+  for (const [re, why] of BANNED) {
+    if (strict.some(t => re.test(String(t || '')))) fail(r, 'terminology', `${why}, in the stem, key, explanation or mark scheme`);
+    else if (lenient.some(t => re.test(String(t || '')))) warn(r, 'terminology', `${why}, in a wrong option or feedback: fine only if it is correcting the misconception`);
+  }
+  pass(r, 'terminology');
+}
+
+// The typed-number marker compares the number in the answer's own unit and
+// never converts, so offering an equivalent unit (kJ beside J) would mark a
+// correct "3.24 kJ" wrong.
+function unitOptionProblems(unit, options) {
+  if (!unit || !Array.isArray(options) || !UNITS[unit]) return [];
+  return options.filter(o => o !== unit && UNITS[o] && UNITS[o][0] === UNITS[unit][0])
+    .map(o => `unit_options offers ${o} beside ${unit}: a correct answer in ${o} would be marked wrong (the marker does not convert units)`);
+}
+
 // ── Checks shared by items and templates ──
 
 function checkCommon(ctx, x, r, isTemplate) {
+  checkTerminology(x, r);
   const ref = isTemplate ? x.id : x.ref;
   if (!/^[a-z0-9][a-z0-9-]*$/.test(ref || '')) fail(r, 'schema', `ref/id "${ref}" must be lower-case letters, digits and hyphens`);
   if (!CLASSES.includes(x.evidence_class)) fail(r, 'schema', `evidence_class "${x.evidence_class}"`);
@@ -300,6 +339,10 @@ function checkCalcShape(ctx, x, r, calc, inputs) {
   for (const rule of [...Object.values(calc.options || {}), ...(calc.wrong || [])]) {
     const m = /^substitute:\w+=(\w+)$/.exec(rule || '');
     if (m) usedBySubstitute.add(m[1]);
+    for (const u of ((f.mistakes[rule] || {}).uses || [])) {
+      usedBySubstitute.add(u);
+      if (!(u in inputs)) { fail(r, 'units', `mistake "${rule}" needs input ${u}`); ok = false; }
+    }
   }
   for (const k of Object.keys(inputs)) {
     if (!(k in f.inputs) && !usedBySubstitute.has(k)) warn(r, 'units', `input ${k} is not used by ${calc.formula} or any mistake rule`);
@@ -369,6 +412,7 @@ function checkItem(ctx, x) {
     if (allNumeric && !x.calc) fail(r, 'recompute', 'numeric options need a calc block so the key and distractors can be recomputed');
   } else if (x.format === 'numeric') {
     specProblems(x.answer).forEach(p => fail(r, 'answers', p));
+    unitOptionProblems((x.answer || {}).unit, (x.answer || {}).unit_options).forEach(p => fail(r, 'answers', p));
     if (x.options || x.key || x.feedback) fail(r, 'answers', 'a numeric item has an answer, not options/key/feedback');
     if (!x.calc) fail(r, 'recompute', 'a numeric item needs a calc block');
     const a = x.answer || {};
@@ -446,6 +490,15 @@ function checkFixedCalc(ctx, x, r) {
     for (let i = 0; i < ks.length; i++) for (let j = i + 1; j < ks.length; j++) {
       if (near(values[ks[i]], values[ks[j]], COINCIDE)) fail(r, 'recompute', `options ${ks[i]} and ${ks[j]} are the same value`);
     }
+    // Convergence clue: when two or more distractors are simple multiples of
+    // the key (×2, ÷2, ×10ⁿ), the key is the value the others point back to.
+    const simple = KEYS.filter(k => k !== x.key && values[k] && values[x.key]).filter(k => {
+      const ratio = values[k] / values[x.key];
+      const lg = Math.log10(Math.abs(ratio));
+      return near(ratio, 2, 0.01) || near(ratio, 0.5, 0.01) || (Math.abs(lg) >= 1 && Math.abs(lg - Math.round(lg)) < 0.005);
+    });
+    if (simple.length >= 2) warn(r, 'convergence', `options ${simple.join(' and ')} are simple multiples of the key (×2, ÷2 or ×10ⁿ): together they point to it`);
+    else pass(r, 'convergence');
   } else if (x.format === 'numeric') {
     const a = x.answer || {};
     if (!near(Number(a.value), correct, 0.001)) fail(r, 'recompute', `answer.value is ${a.value}, the formula gives ${+correct.toPrecision(6)}`);
@@ -483,21 +536,30 @@ function checkTemplate(ctx, t) {
   if (t.format === 'mcq' && (calc.wrong || []).length !== 3) fail(r, 'schema', 'an MCQ template needs exactly 3 wrong rules');
   if (t.format === 'numeric' && !(calc.wrong || []).length) fail(r, 'schema', 'list at least one wrong rule');
   if (t.format === 'numeric' && calc.unit && !(Array.isArray(t.unit_options) && t.unit_options.includes(calc.unit))) fail(r, 'schema', 'unit_options must include calc.unit');
+  if (t.format === 'numeric') unitOptionProblems(calc.unit, t.unit_options).forEach(p => fail(r, 'answers', p));
   for (const rule of calc.wrong || []) {
     if (!String((t.feedback || {})[rule] || '').trim()) fail(r, 'answers', `no feedback for rule "${rule}"`);
   }
-  const placeholders = new Set([...Object.keys(t.params || {}), ...Object.keys(t.words || {}), 'answer', 'wrong']);
+  const placeholders = new Set([...Object.keys(t.params || {}), ...Object.keys(t.derived || {}), ...Object.keys(t.words || {}), 'answer', 'wrong']);
   for (const txt of [t.stem, t.explanation, ...Object.values(t.feedback || {})]) {
     for (const m of String(txt || '').matchAll(/\[\[(\w+)\]\]/g)) if (!placeholders.has(m[1])) fail(r, 'schema', `unknown placeholder [[${m[1]}]]`);
   }
-  for (const p of Object.keys(t.params || {})) if (!String(t.stem || '').includes(`[[${p}]]`)) fail(r, 'stem-inputs', `param ${p} is never printed in the stem`);
+  for (const [p, spec] of Object.entries(t.params || {})) {
+    const shown = String(t.stem || '').includes(`[[${p}]]`);
+    if (spec.hidden && shown) fail(r, 'stem-inputs', `hidden param ${p} is printed in the stem`);
+    if (!spec.hidden && !shown) fail(r, 'stem-inputs', `param ${p} is never printed in the stem`);
+  }
+  for (const [d, spec] of Object.entries(t.derived || {})) {
+    if (!String(t.stem || '').includes(`[[${d}]]`)) fail(r, 'stem-inputs', `derived value ${d} is never printed in the stem`);
+    if (!FORMULAS[spec.formula]) fail(r, 'schema', `derived ${d}: unknown formula "${spec.formula}"`);
+  }
   pass(r, 'stem-inputs');
   pass(r, 'answers');
   if (r.schema.status === 'fail') { set(r, 'instances', 'not_run', 'fix the schema first'); return { r }; }
 
-  const first = T.choose(t, SAMPLE_SEEDS[0]);
-  const inputs = {};
-  for (const [n, p] of Object.entries(t.params)) inputs[n] = { value: first.params[n], unit: p.unit ?? '' };
+  let inputs;
+  try { inputs = T.inputsFor(t, T.choose(t, SAMPLE_SEEDS[0]).params); }
+  catch (e) { fail(r, 'schema', `derived values: ${e.message}`); set(r, 'instances', 'not_run', 'fix the schema first'); return { r }; }
   if (!checkCalcShape(ctx, t, r, calc, inputs)) { set(r, 'instances', 'not_run', 'the calculation is malformed (see units)'); return { r }; }
   checkEquationGiven(t, r, calc);
   checkBand(t, r, calc, inputs);
@@ -523,7 +585,7 @@ function checkTemplate(ctx, t) {
     try { inst = T.build(t, params, wordSets[idx % wordSets.length]); } catch (e) { note('error', params, e.message); return; }
     if (!Number.isFinite(inst.correct) || inst.correct <= 0) note('bad-answer', params, `answer ${inst.correct}`);
     else if (inst.correct < lo || inst.correct > hi) note('range', params, `answer ${+inst.correct.toPrecision(4)} outside answer_range ${lo}–${hi}`);
-    const instInputs = Object.fromEntries(Object.entries(t.params).map(([n, p]) => [n, { value: params[n], unit: p.unit ?? '' }]));
+    const instInputs = T.inputsFor(t, params);
     for (const rule of allRules(calc.formula, instInputs)) {
       let v; try { v = evaluate(calc.formula, instInputs, calc.unit, rule).value; } catch { continue; }
       if (Number.isFinite(v) && near(v, inst.correct, COINCIDE)) note(`trick:${rule}`, params, `mistake "${rule}" gives the right answer`);
@@ -590,6 +652,27 @@ function checkDuplicates(ctx, entries, r, e) {
     if (certifying.includes(a) && b === 'practice') fail(r, 'duplicates', `a ${a} item must not be a near-copy of practice ${other.ref} (${Math.round(s * 100)}% similar)`);
     else if (!(certifying.includes(b) && a === 'practice')) fail(r, 'duplicates', `near-duplicate of ${other.ref} in this pack (${Math.round(s * 100)}% similar)`);
     else fail(r, 'duplicates', `near-duplicate of ${b} ${other.ref} (${Math.round(s * 100)}% similar)`);
+  }
+  // A certifying item that a practice template could itself generate (same
+  // formula, and either one of the template's context words or every shared
+  // input inside the template's parameter values) is practice with new
+  // numbers, however differently it is worded.
+  if (['mastery_check', 'retrieval', 'application'].includes(e.x.evidence_class) && e.kind === 'item' && e.x.calc) {
+    for (const t of entries.filter(o => o.kind === 'template' && o.x.evidence_class === 'practice' && (o.x.calc || {}).formula === e.x.calc.formula)) {
+      const stem = String(e.x.question_text || '').toLowerCase();
+      const word = Object.values(t.x.words || {}).flat().find(w => new RegExp(`\\b${w.toLowerCase()}\\b`).test(stem));
+      const shared = Object.keys(e.x.calc.inputs || {}).filter(k => (t.x.params || {})[k] && !t.x.params[k].hidden);
+      const inRange = shared.length > 0 && shared.every(k => {
+        const q = e.x.calc.inputs[k], p = t.x.params[k];
+        const u = UNITS[p.unit ?? ''], uq = UNITS[q.unit ?? ''];
+        if (!u || !uq || u[0] !== uq[0]) return false;
+        const v = q.value * uq[1] / u[1];
+        return T.paramValues(p).some(pv => near(pv, v, 1e-9));
+      });
+      if (word || inRange) {
+        fail(r, 'duplicates', `practice template ${t.ref} can generate this ${e.x.evidence_class} item (same formula, ${word ? `its context "${word}"` : 'every input inside its parameter values'}): give it a different context or structure`);
+      }
+    }
   }
   for (const b of ctx.bank) {
     const s = similarity(mine, [b.grams]);
@@ -670,6 +753,12 @@ function checkPackLevel(ctx, pack, bankRefs) {
     const max = Math.max(...lens);
     if (lens[KEYS.indexOf(q.key)] === max && lens.filter(l => l === max).length === 1) longest++;
   }
+  // Key position: fixed MCQs keyed on the same letter too often teach it.
+  const letters = {};
+  for (const q of mcq) letters[q.key] = (letters[q.key] || 0) + 1;
+  const [topLetter, topCount] = Object.entries(letters).sort((a, b) => b[1] - a[1])[0] || ['', 0];
+  if ((mcq.length >= 3 && topCount === mcq.length) || (mcq.length >= 4 && topCount / mcq.length > 0.5)) fail(r, 'key-position', `${topCount} of ${mcq.length} fixed MCQs are keyed ${topLetter}: vary the key's position`);
+  else pass(r, 'key-position');
   const share = mcq.length ? longest / mcq.length : 0;
   if (share > MAX_LONGEST_SHARE) fail(r, 'length-cue', `the key is the unique longest option in ${Math.round(share * 100)}% of MCQs (max ${MAX_LONGEST_SHARE * 100}%)`);
   else pass(r, 'length-cue');

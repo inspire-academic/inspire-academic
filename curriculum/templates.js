@@ -8,8 +8,16 @@
 //     ('mcq' | 'numeric'), context_tags
 //   stem          text with [[name]] placeholders (square brackets, so they
 //                 never clash with LaTeX braces)
-//   params        { name: { values: [..] } | { min, max, step }, unit }
-//                 numeric inputs to the formula
+//   params        { name: { values: [..] } | { min, max, step }, unit, hidden? }
+//                 numeric inputs to the formula; a hidden param is chosen but
+//                 not shown (it is what the student works back to) and is
+//                 only used to derive shown values
+//   derived       { name: { formula, unit } } optional shown values computed
+//                 from the params (in the formula library's terms), rounded to
+//                 sig_figs; the calculation then uses the rounded value, so
+//                 the key always matches what the student sees. Lets a "find
+//                 the mass" template choose a realistic mass and speed, and
+//                 show the energy they give.
 //   words         { name: [..] } optional text choices (e.g. the object)
 //   calc          { formula, unit, wrong: [rule, ..] }  unit = asked unit;
 //                 an MCQ template needs exactly 3 wrong rules
@@ -103,18 +111,35 @@ function choose(template, seed) {
   return { params, words };
 }
 
+// The calculation's inputs for given parameter values: the shown params
+// plus the derived values (rounded as displayed).
+function inputsFor(template, params) {
+  const sf = template.sig_figs || 3;
+  const all = {}, inputs = {};
+  for (const [n, p] of Object.entries(template.params || {})) {
+    all[n] = { value: params[n], unit: p.unit ?? '' };
+    if (!p.hidden) inputs[n] = all[n];
+  }
+  for (const [n, d] of Object.entries(template.derived || {})) {
+    inputs[n] = { value: fmtValue(evaluate(d.formula, all, d.unit ?? '').value, sf), unit: d.unit ?? '' };
+  }
+  return inputs;
+}
+
 // Builds the instance for given parameter values. Returns the item as the
 // student sees it plus everything the checks need.
 function build(template, params, words = {}) {
   const sf = template.sig_figs || 3;
-  const inputs = {};
-  for (const [n, p] of Object.entries(template.params || {})) inputs[n] = { value: params[n], unit: p.unit ?? '' };
+  const inputs = inputsFor(template, params);
   const unit = template.calc.unit ?? '';
   const correct = evaluate(template.calc.formula, inputs, unit).value;
   const wrong = (template.calc.wrong || []).map(rule => ({ rule, value: evaluate(template.calc.formula, inputs, unit, rule).value }));
 
+  // Params show exactly as chosen (hidden ones only in feedback and
+  // explanation); derived values show as rounded.
   const shown = {};
   for (const [n, v] of Object.entries(params)) shown[n] = String(v);
+  for (const n of Object.keys(template.derived || {})) shown[n] = fmt(inputs[n].value, sf);
   Object.assign(shown, words);
   const answerText = fmt(correct, sf);
   const values = { ...shown, answer: answerText };
@@ -129,7 +154,10 @@ function build(template, params, words = {}) {
   const ut = unitTex(unit);
   const withUnit = x => `\\(${fmt(x, sf)}${ut ? '\\,' + ut : ''}\\)`;
   if (template.format === 'mcq') {
-    const opts = [{ rule: 'correct', value: correct }, ...wrong].sort((a, b) => a.value - b.value);
+    // Numbers in order, ascending or descending by instance, so the key's
+    // letter is not fixed by the formula (½mv² is always second ascending).
+    const dir = hash(JSON.stringify(params)) % 2 ? -1 : 1;
+    const opts = [{ rule: 'correct', value: correct }, ...wrong].sort((a, b) => dir * (a.value - b.value));
     const keys = ['a', 'b', 'c', 'd'];
     out.options = {}; out.feedback = {}; out.misconception_map = {};
     opts.forEach((o, i) => {
@@ -156,4 +184,4 @@ function instantiate(template, seed) {
   return { seed, ...build(template, params, words) };
 }
 
-module.exports = { rng, hash, paramValues, fmt, fmtValue, fill, grid, gridSize, choose, build, instantiate, FORMULAS };
+module.exports = { rng, hash, paramValues, fmt, fmtValue, fill, grid, gridSize, choose, inputsFor, build, instantiate, FORMULAS };

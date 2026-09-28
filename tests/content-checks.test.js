@@ -95,8 +95,11 @@ test('parseOption and stemNumbers read typeset numbers', () => {
 
 test('the fixture pack passes every check', () => {
   const rep = run(makePack());
-  const bad = rep.items.flatMap(i => Object.entries(i.checks).filter(([, c]) => !['pass', 'n/a'].includes(c.status)).map(([k, c]) => `${i.ref} ${k}: ${c.detail}`));
+  const bad = rep.items.flatMap(i => Object.entries(i.checks).filter(([, c]) => ['fail', 'not_run'].includes(c.status)).map(([k, c]) => `${i.ref} ${k}: ${c.detail}`));
   assert.deepEqual(bad, []);
+  // Its one warning is deliberate: mc-2's ×2 and ×1000 distractors (see the convergence test).
+  const warned = rep.items.flatMap(i => Object.entries(i.checks).filter(([, c]) => c.status === 'warn').map(([k]) => `${i.ref} ${k}`));
+  assert.deepEqual(warned, ['mc-2 convergence']);
   assert.equal(rep.passed, true);
   assert.equal(rep.suite_version, 'checks-1');
   const t1 = item(rep, 'test-kinetic-t1');
@@ -378,4 +381,109 @@ test('loadBank includes the Physics diagnostic batches', () => {
   const bank = loadBank('Physics', null);
   assert.ok(bank.length > 30);
   assert.ok(bank.some(b => b.ref === 'physics_batch_01#0'));
+});
+
+// ── Checks added after the first real review (phy-energy-kinetic-01) ──
+
+test('terminology: banned phrases fail in the stem or explanation, warn in feedback', () => {
+  let rep = run(edit(makePack(), 'mc-1', x => { x.explanation += ' When it stops, the movement energy is used up.'; }));
+  assert.equal(status(rep, 'mc-1', 'terminology'), 'fail');
+  assert.match(details(rep, 'mc-1', 'terminology'), /used up/);
+  rep = run(edit(makePack(), 'prac-c1', x => { x.feedback.a = 'Energy is not used up: it depends on speed as well as mass.'; }));
+  assert.equal(status(rep, 'prac-c1', 'terminology'), 'warn');
+  assert.equal(item(rep, 'prac-c1').passed, true);
+});
+
+test('convergence: two distractors at simple multiples of the key warn', () => {
+  const pack = makePack();
+  const mc2 = pack.items.find(i => i.ref === 'mc-2');
+  // 4.5 (no-square), 27 (key), 54 (x2), 27 000 (x1000)
+  assert.equal(status(run(pack), 'mc-2', 'convergence'), 'warn');
+  mc2.options.c = String.raw`\(6.75\,\text{J}\)`;
+  mc2.calc.options.c = 'square-mass';
+  mc2.misconception_map.c = 'MIS-PHY-ENE-004';
+  const sorted = run(pack);
+  assert.equal(status(sorted, 'mc-2', 'convergence'), 'pass');
+});
+
+test('key-position: every fixed MCQ keyed on the same letter fails', () => {
+  const pack = makePack();
+  const c1 = pack.items.find(i => i.ref === 'prac-c1');
+  // move prac-c1's key (c) to b, the letter diag-1 and mc-2 already use
+  [c1.options.b, c1.options.c] = [c1.options.c, c1.options.b];
+  [c1.feedback.b, c1.feedback.c] = [undefined, c1.feedback.b];
+  delete c1.feedback.b;
+  [c1.misconception_map.b, c1.misconception_map.c] = [undefined, c1.misconception_map.b];
+  delete c1.misconception_map.b;
+  c1.key = 'b';
+  const rep = run(pack);
+  assert.equal(rep.pack_checks['key-position'].status, 'fail');
+});
+
+test('templates: MCQ option order alternates, so the key letter is not fixed', () => {
+  const t = makePack().templates[0];
+  const keys = new Set(T.grid(t).map(p => T.build(t, p, { who: 'runner' }).key));
+  assert.ok(keys.size >= 2, `key letters seen: ${[...keys]}`);
+});
+
+test('templates: hidden params are not shown; derived values are, and drive the key', () => {
+  const t = {
+    id: 'test-kinetic-mass', primary_concept: 'phy.energy.kinetic', evidence_class: 'practice', difficulty_band: 2, tier: 'Both', format: 'numeric', context_tags: ['find-speed-or-mass'],
+    stem: String.raw`A go-kart moves at \([[v]]\,\text{m/s}\) with \([[E]]\,\text{J}\) in its kinetic energy store. Calculate its mass.`,
+    params: { m: { values: [105], unit: 'kg', hidden: true }, v: { values: [7], unit: 'm/s' } },
+    derived: { E: { formula: 'ek', unit: 'J' } },
+    calc: { formula: 'ek-mass', unit: 'kg', wrong: ['no-half'] },
+    misconception_map: { 'no-half': 'MIS-PHY-ENE-005' }, feedback: { 'no-half': 'Use m = 2E/v².' },
+    explanation: 'm = 2 × [[E]] ÷ [[v]]² = [[answer]] kg', unit_options: ['kg', 'J'], answer_range: [90, 120]
+  };
+  const inst = T.build(t, { m: 105, v: 7 });
+  assert.match(inst.question_text, /2570/);          // 2572.5 J shown to 3 s.f.
+  assert.doesNotMatch(inst.question_text, /105/);
+  assert.ok(Math.abs(inst.correct - 2 * 2570 / 49) < 1e-9, 'key computed from the value shown');
+  const pack = makePack();
+  pack.templates.push(t);
+  let rep = run(pack);
+  assert.equal(item(rep, 'test-kinetic-mass').passed, true, JSON.stringify(item(rep, 'test-kinetic-mass').checks));
+  t.stem += ' ([[m]] kg)';
+  rep = run(pack);
+  assert.match(details(rep, 'test-kinetic-mass', 'stem-inputs'), /hidden param m is printed/);
+});
+
+test('units: a mistake that uses an extra input must have it', () => {
+  const pack = makePack();
+  pack.concepts.push('phy.energy.gravitational');
+  pack.items.push({
+    ref: 'w-1', primary_concept: 'phy.energy.gravitational', evidence_class: 'practice', difficulty_band: 2, tier: 'Both', format: 'mcq', context_tags: ['find-energy'],
+    question_text: String.raw`A hiker of weight 600 N climbs 300 m vertically. How much energy is transferred to her gravitational potential energy store?`,
+    options: { a: String.raw`\(18\,400\,\text{J}\)`, b: String.raw`\(180\,000\,\text{J}\)`, c: String.raw`\(1\,764\,000\,\text{J}\)`, d: String.raw`\(3\,600\,000\,\text{J}\)` }, key: 'b',
+    calc: { formula: 'ep-weight', unit: 'J', inputs: { W: { value: 600, unit: 'N' }, h: { value: 300, unit: 'm' } }, options: { a: 'divided-by-g', b: 'correct', c: 'weight-as-mass', d: 'divided-by-g' } },
+    feedback: { a: 'x', c: 'x', d: 'x' }, misconception_map: { a: 'slip: converted weight to mass then left out g', c: 'MIS-PHY-ENE-007', d: 'slip: other' }, explanation: 'x'
+  });
+  const rep = run(pack);
+  assert.match(details(rep, 'w-1', 'units'), /mistake "weight-as-mass" needs input g/);
+});
+
+test('answers: unit options must not offer an equivalent unit the marker would reject', () => {
+  const rep = run(edit(makePack(), 'mc-1', x => { x.answer.unit_options = ['kg', 'g', 'N']; }));
+  assert.match(details(rep, 'mc-1', 'answers'), /offers g beside kg/);
+  const rep2 = run(edit(makePack(), 'test-kinetic-t2', x => { x.unit_options = ['J', 'kJ', 'W']; }));
+  assert.match(details(rep2, 'test-kinetic-t2', 'answers'), /offers kJ beside J/);
+});
+
+test('duplicates: a certifying item a practice template could generate fails, however it is worded', () => {
+  // Different wording (not a text near-duplicate), but t1's context word and formula.
+  let rep = run(edit(makePack(), 'mc-2', x => {
+    x.question_text = String.raw`At the ice rink, a skater of mass 0.4 kg glides at \(6\,\text{m/s}\). How much energy is in her kinetic energy store?`;
+    x.calc.inputs.m = { value: 0.4, unit: 'kg' };
+  }));
+  assert.match(details(rep, 'mc-2', 'duplicates'), /practice template test-kinetic-t1 can generate this mastery_check item \(same formula, its context "skater"\)/);
+  // No shared word, but every input inside t1's parameter values.
+  rep = run(edit(makePack(), 'mc-2', x => {
+    x.question_text = String.raw`A 60 kg jockey on foot jogs at \(4\,\text{m/s}\). How much energy is in his kinetic energy store?`;
+    x.calc.inputs = { m: { value: 60, unit: 'kg' }, v: { value: 4, unit: 'm/s' } };
+    x.options = { a: String.raw`\(120\,\text{J}\)`, b: String.raw`\(480\,\text{J}\)`, c: String.raw`\(960\,\text{J}\)`, d: String.raw`\(7200\,\text{J}\)` };
+    x.calc.options = { a: 'no-square', b: 'correct', c: 'no-half', d: 'square-mass' };
+    x.misconception_map.d = 'MIS-PHY-ENE-004';
+  }));
+  assert.match(details(rep, 'mc-2', 'duplicates'), /every input inside its parameter values/);
 });
