@@ -236,6 +236,14 @@
       <div><div class="qr-h">Worked explanation</div><div class="qr-explanation">${maths(r.explanation)}</div></div>`;
   }
 
+  // A template's outline with its placeholders readable, ⟨m⟩, instead of
+  // raw [[m]] (which KaTeX would draw as brackets inside maths).
+  function outline(text) {
+    return String(text || '')
+      .replace(/\\\(([\s\S]*?)\\\)/g, (m, tex) => '\\(' + tex.replace(/\[\[(\w+)\]\]/g, (p, n) => '\\langle\\text{' + n + '}\\rangle') + '\\)')
+      .replace(/\[\[(\w+)\]\]/g, (p, n) => '⟨' + n + '⟩');
+  }
+
   function templateHtml(e) {
     const t = e.row;
     const def = t.parameters || {};
@@ -246,9 +254,9 @@
         ${s.options ? `<ul class="qr-options">${OPTION_KEYS.map(k => `<li class="qr-option${k === s.key ? ' key' : ''}"><span class="qr-letter">${k.toUpperCase()}${k === s.key ? ' ✓' : ''}</span><span>${maths(s.options[k])}</span></li>`).join('')}</ul>`
           : `<p class="qr-note">Answer: <b>${esc(+Number(s.correct).toPrecision(4))} ${esc((s.answer || {}).unit || '')}</b>; wrong answers ${esc(((s.answer || {}).wrong || []).map(w => w.value).join(', '))}</p>`}
       </li>`).join('');
-    const rules = (t.distractor_rules || []).map(r => `<li><b>${esc(r.rule)}</b> → ${esc(r.misconception || '')}: <span class="muted">${maths(r.feedback || '')}</span></li>`).join('');
+    const rules = (t.distractor_rules || []).map(r => `<li><b>${esc(r.rule)}</b> → ${esc(r.misconception || '')}: <span class="muted">${maths(outline(r.feedback || ''))}</span></li>`).join('');
     return `
-      <div><div class="qr-h">Template</div><div class="qr-question">${maths(t.stem)}</div>
+      <div><div class="qr-h">Template</div><div class="qr-question">${maths(outline(t.stem))}</div>
         <p class="qr-note">${esc(ranges)} · ${esc(t.answer_formula)} · every instance checked by code (${esc((e.check && e.check.results && e.check.results.instances_checked) || '?')} instances)</p></div>
       <div><div class="qr-h">Mistakes it offers as wrong answers</div><ul class="cqa-rules">${rules}</ul></div>
       <div><div class="qr-h">Three generated versions, as students see them</div><ol class="cqa-insts">${inst}</ol></div>`;
