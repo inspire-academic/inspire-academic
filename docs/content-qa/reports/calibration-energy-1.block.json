@@ -1,0 +1,821 @@
+{
+ "block": "calibration-energy-1",
+ "items": [
+  {
+   "item_ref": "cal-01",
+   "format": "mcq",
+   "tier": "Both",
+   "answer_spec": null,
+   "primary_concept": "phy.energy.dissipation-efficiency",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "question_text": "What is the definition of thermal conductivity?",
+   "options": {
+    "a": "The rate of energy transfer by conduction per unit area per unit temperature gradient",
+    "b": "The amount of energy needed to raise 1 kg by 1 °C",
+    "c": "The energy transferred by radiation each second",
+    "d": "The temperature at which a material conducts"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "That is specific heat capacity.",
+    "c": "Conduction, not radiation.",
+    "d": "Conductivity is not a temperature."
+   },
+   "explanation": "Thermal conductivity describes how quickly a material conducts energy.",
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-009",
+    "c": "slip",
+    "d": "slip"
+   }
+  },
+  {
+   "item_ref": "cal-02",
+   "primary_concept": "phy.energy.dissipation-efficiency",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "numeric",
+   "question_text": "An electric motor is supplied with \\(2400\\,\\text{J}\\) of energy. It transfers \\(1800\\,\\text{J}\\) usefully to the kinetic energy store of a fan. Calculate the efficiency of the motor as a percentage.",
+   "options": null,
+   "key": null,
+   "answer_spec": {
+    "value": 75,
+    "unit": "%",
+    "tolerance": 0.01,
+    "wrong": [
+     {
+      "value": 133,
+      "misconception": "MIS-PHY-ENE-012"
+     },
+     {
+      "value": 0.75,
+      "misconception": "slip: gave the decimal when a percentage was asked"
+     },
+     {
+      "value": 25,
+      "misconception": "slip: calculated the wasted fraction"
+     }
+    ]
+   },
+   "feedback": null,
+   "explanation": "efficiency = useful output ÷ total input = 1800 ÷ 2400 = 0.75 = 75%.",
+   "misconception_map": "in answer_spec.wrong"
+  },
+  {
+   "item_ref": "cal-03",
+   "primary_concept": "phy.energy.dissipation-efficiency",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Higher",
+   "format": "mcq",
+   "question_text": "Why does oiling the moving parts of a machine make it more efficient?",
+   "options": {
+    "a": "The oil adds extra energy to the moving parts",
+    "b": "It lowers friction, so less energy is wasted as heat",
+    "c": "It increases the total energy put into the machine",
+    "d": "It stops energy from being conserved in the machine"
+   },
+   "key": "b",
+   "answer_spec": null,
+   "feedback": {
+    "a": "Oil doesn't supply energy to the machine. It reduces friction, so less of the input energy is dissipated as heat.",
+    "c": "The input energy is unchanged. Efficiency rises because less of it is wasted by friction.",
+    "d": "Energy is always conserved. Lubrication just means less of it is dissipated to the surroundings as heat."
+   },
+   "explanation": "Lubrication reduces friction between moving parts, so less energy is dissipated as thermal energy and a greater fraction of the input energy is usefully transferred.",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-04",
+   "format": "mcq",
+   "tier": "Both",
+   "answer_spec": null,
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "retrieval",
+   "difficulty_band": 1,
+   "question_text": "Motor X lifts a crate through a height of 2 m in 4 s. Motor Y lifts an identical crate through the same height in 8 s. Which statement is correct?",
+   "options": {
+    "a": "Motor X transfers more energy to the crate than motor Y.",
+    "b": "Both motors transfer the same energy, but motor X has the greater power.",
+    "c": "Motor Y has the greater power because it works for longer.",
+    "d": "Motor Y transfers more energy because it takes longer."
+   },
+   "key": "b",
+   "feedback": {
+    "a": "The crates gain the same gravitational potential energy (same mass, same height). Power, not energy, is different.",
+    "c": "Power is energy transferred per second. Taking longer means lower power.",
+    "d": "The energy transferred depends on the change in the store, not on how long it takes."
+   },
+   "explanation": "Each crate gains the same Ep = mgh, so the energy transferred is equal. X transfers it in half the time, so X has twice the power (P = E/t).",
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-011",
+    "c": "MIS-PHY-ENE-011",
+    "d": "MIS-PHY-ENE-011"
+   }
+  },
+  {
+   "item_ref": "cal-05",
+   "primary_concept": "phy.energy.elastic",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 2,
+   "tier": "Higher",
+   "format": "mcq",
+   "question_text": "A spring with spring constant \\(100\\,\\text{N/m}\\) is stretched by 0.1 m. How much elastic potential energy does it store?",
+   "options": {
+    "a": "\\(1\\,\\text{J}\\)",
+    "b": "\\(5\\,\\text{J}\\)",
+    "c": "\\(0.5\\,\\text{J}\\)",
+    "d": "\\(10\\,\\text{J}\\)"
+   },
+   "key": "c",
+   "answer_spec": null,
+   "feedback": {
+    "a": "This leaves out the half. \\(E_{e} = \\tfrac{1}{2}ke^{2} = \\tfrac{1}{2} \\times 100 \\times 0.1^{2} = 0.5\\,\\text{J}\\).",
+    "b": "This forgets to square the extension. \\(E_{e} = \\tfrac{1}{2}ke^{2} = 0.5 \\times 100 \\times 0.01 = 0.5\\,\\text{J}\\).",
+    "d": "\\(k \\times e\\) gives the force in newtons, not the energy. \\(E_{e} = \\tfrac{1}{2}ke^{2} = 0.5\\,\\text{J}\\)."
+   },
+   "explanation": "\\(E_{e} = \\tfrac{1}{2}ke^{2} = \\tfrac{1}{2} \\times 100 \\times 0.1^{2} = 50 \\times 0.01 = 0.5\\,\\text{J}\\).",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-06",
+   "primary_concept": "phy.energy.resources",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Foundation",
+   "format": "mcq",
+   "question_text": "Which of these energy resources is renewable?",
+   "options": {
+    "a": "Coal",
+    "b": "Natural gas",
+    "c": "Solar",
+    "d": "Oil"
+   },
+   "key": "c",
+   "answer_spec": null,
+   "feedback": {
+    "a": "Coal is a fossil fuel; it takes millions of years to form, so it will run out.",
+    "b": "Natural gas is a fossil fuel and will run out.",
+    "d": "Oil is a fossil fuel and will run out."
+   },
+   "explanation": "Renewable resources are replaced as they are used. Sunlight keeps arriving, so solar power is renewable.",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-07",
+   "primary_concept": "phy.energy.resources",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Foundation",
+   "format": "mcq",
+   "question_text": "A village in northern Ghana wants electricity. Why might solar panels be a better choice than a diesel generator?",
+   "options": {
+    "a": "Solar panels work equally well at night",
+    "b": "Sunlight is free and the panels release no carbon dioxide while working",
+    "c": "Diesel is a renewable fuel",
+    "d": "Solar panels never need any maintenance"
+   },
+   "key": "b",
+   "answer_spec": null,
+   "feedback": {
+    "a": "Solar panels produce nothing at night; batteries are needed to store energy for then.",
+    "c": "Diesel is made from oil, a fossil fuel. It is not renewable.",
+    "d": "Panels need cleaning and occasional repair, just less than a generator."
+   },
+   "explanation": "Northern Ghana gets strong sunshine. Once panels are installed, the energy is free and no carbon dioxide is released while they run.",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-08",
+   "format": "mcq",
+   "tier": "Both",
+   "answer_spec": null,
+   "primary_concept": "phy.energy.dissipation-efficiency",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "question_text": "A bicycle chain rubs as it moves. What happens to some of the energy?",
+   "options": {
+    "a": "It is used up by friction",
+    "b": "It is stored in the chain as kinetic energy forever",
+    "c": "It is turned into mass",
+    "d": "It is sent back to the rider"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "Kinetic energy is not stored forever.",
+    "c": "Energy is not turned into mass here.",
+    "d": "It does not go back to the rider."
+   },
+   "explanation": "Friction uses up some of the energy.",
+   "misconception_map": {
+    "b": "slip",
+    "c": "slip",
+    "d": "slip"
+   }
+  },
+  {
+   "item_ref": "cal-09",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Higher",
+   "format": "mcq",
+   "question_text": "A motor transfers 1200 J of energy in 30 s. What is its power?",
+   "options": {
+    "a": "\\(36\\,000\\,\\text{W}\\)",
+    "b": "\\(40\\,\\text{W}\\)",
+    "c": "\\(0.025\\,\\text{W}\\)",
+    "d": "\\(1230\\,\\text{W}\\)"
+   },
+   "key": "b",
+   "answer_spec": null,
+   "feedback": {
+    "a": "This multiplies energy by time. Power is energy transferred per second: \\(P = E \\div t = 1200 \\div 30 = 40\\,\\text{W}\\).",
+    "c": "This divides time by energy. Use \\(P = E \\div t = 1200 \\div 30 = 40\\,\\text{W}\\).",
+    "d": "This adds the energy and the time. Power = energy ÷ time \\(= 40\\,\\text{W}\\)."
+   },
+   "explanation": "Power = energy transferred ÷ time: \\(P = 1200 \\div 30 = 40\\,\\text{W}\\).",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-10",
+   "format": "mcq",
+   "tier": "Both",
+   "answer_spec": null,
+   "primary_concept": "phy.energy.shc",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "question_text": "Water has a specific heat capacity of \\(4200\\,\\text{J/kg}\\,^{\\circ}\\text{C}\\). How much energy is needed to raise the temperature of \\(2.0\\,\\text{kg}\\) of water by \\(10\\,^{\\circ}\\text{C}\\)?",
+   "options": {
+    "a": "\\(84\\,000\\,\\text{J}\\)",
+    "b": "\\(8400\\,\\text{J}\\)",
+    "c": "\\(42\\,000\\,\\text{J}\\)",
+    "d": "\\(840\\,000\\,\\text{J}\\)"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "You left out the temperature change.",
+    "c": "You left out the mass.",
+    "d": "Hot water is heavier, so you need to multiply by 10 again."
+   },
+   "explanation": "ΔE = mcΔθ = 2.0 × 4200 × 10 = 84 000 J.",
+   "misconception_map": {
+    "b": "slip",
+    "c": "slip",
+    "d": "MIS-PHY-ENE-099 (hot water is heavier)"
+   }
+  },
+  {
+   "item_ref": "cal-11",
+   "primary_concept": "phy.energy.stores-systems",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Foundation",
+   "format": "mcq",
+   "question_text": "A ball is held still at the top of a hill. Which energy store is largest?",
+   "options": {
+    "a": "Kinetic",
+    "b": "Gravitational potential",
+    "c": "Elastic potential",
+    "d": "Nuclear"
+   },
+   "key": "b",
+   "answer_spec": null,
+   "feedback": {
+    "a": "Kinetic energy is energy of movement; the ball is still, so it has none.",
+    "c": "Elastic potential energy is stored in something stretched or squashed, like a spring.",
+    "d": "Nuclear energy is stored inside atoms; it isn't changed by where the ball is held."
+   },
+   "explanation": "Raised objects store energy in their gravitational potential store. The higher they are, the more they store.",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-12",
+   "primary_concept": "phy.energy.dissipation-efficiency",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Higher",
+   "format": "numeric",
+   "question_text": "A solar-powered water pump in Kano receives \\(800\\,\\text{J}\\) of light energy each second and transfers \\(120\\,\\text{J}\\) usefully. What is its efficiency, as a percentage?",
+   "options": null,
+   "key": null,
+   "answer_spec": {
+    "value": 15,
+    "wrong": [
+     {
+      "value": 0.15,
+      "misconception": "0.15 is the efficiency as a decimal. As a percentage, multiply by 100: 15%."
+     },
+     {
+      "value": 85,
+      "misconception": "85% is the share of the energy that is wasted. Efficiency is the useful share: \\(\\dfrac{120}{800} \\times 100 = 15\\%\\)."
+     },
+     {
+      "value": 667,
+      "misconception": "This divides the wrong way round. Efficiency \\(= \\dfrac{\\text{useful output}}{\\text{total input}} = \\dfrac{120}{800} \\times 100 = 15\\%\\)."
+     }
+    ]
+   },
+   "feedback": null,
+   "explanation": "Efficiency \\(= \\dfrac{\\text{useful output}}{\\text{total input}} \\times 100 = \\dfrac{120}{800} \\times 100 = 15\\%\\).",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-13",
+   "primary_concept": "phy.energy.dissipation-efficiency",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "question_text": "A light bulb transfers \\(100\\,\\text{J}\\) of energy each second. \\(20\\,\\text{J}\\) is transferred as light. What is its efficiency?",
+   "options": {
+    "a": "\\(80\\%\\)",
+    "b": "\\(20\\%\\)",
+    "c": "\\(5\\%\\)",
+    "d": "\\(120\\%\\)"
+   },
+   "key": "b",
+   "answer_spec": null,
+   "feedback": {
+    "a": "80% is the share that is wasted as heat. Efficiency is the useful share: 20 ÷ 100 = 20%.",
+    "c": "This divides 100 by 20. Efficiency = useful ÷ total = 20 ÷ 100 = 20%.",
+    "d": "No device can be more than 100% efficient. Efficiency = 20 ÷ 100 = 20%."
+   },
+   "explanation": "Efficiency \\(= \\dfrac{\\text{useful output}}{\\text{total input}} \\times 100 = \\dfrac{20}{100} \\times 100 = 20\\%\\).",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-14",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 2,
+   "tier": "Higher",
+   "format": "numeric",
+   "question_text": "An electric kettle transfers \\(540\\,000\\,\\text{J}\\) of energy in 4 minutes. What is its power?",
+   "options": null,
+   "key": null,
+   "answer_spec": {
+    "value": 2250,
+    "unit": "W",
+    "unit_options": [
+     "W",
+     "J",
+     "N",
+     "V"
+    ],
+    "wrong": [
+     {
+      "value": 135000,
+      "misconception": "This divides by 4 without changing minutes to seconds. 4 minutes \\(= 240\\,\\text{s}\\), so \\(P = \\dfrac{540\\,000}{240} = 2250\\,\\text{W}\\)."
+     },
+     {
+      "value": 2160000,
+      "misconception": "This multiplies energy by time. Power is energy ÷ time: \\(\\dfrac{540\\,000}{240} = 2250\\,\\text{W}\\)."
+     }
+    ],
+    "unit_feedback": "Power is energy transferred per second, measured in watts (W)."
+   },
+   "feedback": null,
+   "explanation": "4 minutes \\(= 4 \\times 60 = 240\\,\\text{s}\\). \\(P = \\dfrac{E}{t} = \\dfrac{540\\,000}{240} = 2250\\,\\text{W}\\).",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-15",
+   "primary_concept": "phy.energy.dissipation-efficiency",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Foundation",
+   "format": "mcq",
+   "question_text": "A phone charger gets warm while it charges a phone. What happens to the energy that warms the charger?",
+   "options": {
+    "a": "It is destroyed",
+    "b": "It is stored in the phone",
+    "c": "It is wasted, spreading into the surroundings",
+    "d": "It turns back into electricity"
+   },
+   "key": "c",
+   "answer_spec": null,
+   "feedback": {
+    "a": "Energy is never destroyed. It spreads out into the surroundings, where it isn't useful.",
+    "b": "The energy that warms the charger doesn't reach the phone's battery.",
+    "d": "Energy that has spread out as heat can't usefully be turned back into electricity."
+   },
+   "explanation": "Energy is conserved. Energy that heats the charger is dissipated (spread out) into the surroundings, so it is wasted.",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-16",
+   "format": "mcq",
+   "tier": "Both",
+   "answer_spec": null,
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "question_text": "A \\(5.0\\,\\text{kg}\\) box is lifted through a height of \\(3.0\\,\\text{m}\\). Gravitational field strength \\(g = 9.8\\,\\text{N/kg}\\). What is the gain in gravitational potential energy?",
+   "options": {
+    "a": "\\(15\\,\\text{J}\\)",
+    "b": "\\(147\\,\\text{J}\\)",
+    "c": "\\(150\\,\\text{J}\\)",
+    "d": "\\(1470\\,\\text{J}\\)"
+   },
+   "key": "c",
+   "feedback": {
+    "a": "You multiplied mass by height and left out g.",
+    "b": "Check your multiplication.",
+    "d": "You multiplied by an extra factor of 10."
+   },
+   "explanation": "Ep = mgh = 5.0 × 9.8 × 3.0 = 150 J.",
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-007",
+    "b": "slip",
+    "d": "MIS-PHY-SKL-001"
+   }
+  },
+  {
+   "item_ref": "cal-17",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "application",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "constructed",
+   "marks": 1,
+   "question_text": "Kinetic energy. Write down the equation that links kinetic energy, mass and speed. [1 mark]",
+   "options": null,
+   "key": null,
+   "answer_spec": {
+    "model_answer": "kinetic energy = 0.5 × mass × (speed)²",
+    "mark_scheme": [
+     "Ek = ½mv² (1)"
+    ]
+   },
+   "feedback": null,
+   "explanation": "Recall equation from the AQA list.",
+   "misconception_map": null
+  },
+  {
+   "item_ref": "cal-18",
+   "primary_concept": "phy.energy.transfer-calcs",
+   "secondary_concepts": [
+    "phy.energy.gravitational",
+    "phy.energy.kinetic"
+   ],
+   "evidence_class": "application",
+   "difficulty_band": 3,
+   "tier": "Higher",
+   "format": "constructed",
+   "marks": 3,
+   "question_text": "A ball of mass \\(0.50\\,\\text{kg}\\) is dropped from a window \\(3.2\\,\\text{m}\\) above the ground. Air resistance can be ignored. Gravitational field strength \\(g = 9.8\\,\\text{N/kg}\\). Calculate the speed of the ball just before it hits the ground. Give your answer to 2 significant figures. [3 marks]",
+   "options": null,
+   "key": null,
+   "answer_spec": {
+    "value": 7.9,
+    "unit": "m/s",
+    "tolerance": 0.02,
+    "mark_scheme": [
+     "Ep lost = 0.50 × 9.8 × 3.2 = 15.68 J (1)",
+     "Ek gained = Ep lost, so ½ × 0.50 × v² = 15.68 (1)",
+     "v = 7.9 m/s (1)"
+    ],
+    "wrong": [
+     {
+      "value": 62.7,
+      "misconception": "MIS-PHY-SKL-005"
+     },
+     {
+      "value": 5.6,
+      "misconception": "MIS-PHY-ENE-005"
+     }
+    ]
+   },
+   "feedback": null,
+   "explanation": "Energy is conserved: the Ep lost equals the Ek gained. mgh = ½mv², so v = √(2gh) = √(2 × 9.8 × 3.2) = 7.9 m/s.",
+   "misconception_map": "in answer_spec.wrong"
+  },
+  {
+   "item_ref": "cal-19",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 2,
+   "tier": "Higher",
+   "format": "numeric",
+   "question_text": "A tro-tro of mass \\(1200\\,\\text{kg}\\) is travelling at \\(15\\,\\text{m/s}\\). How much kinetic energy does it have?",
+   "options": null,
+   "key": null,
+   "answer_spec": {
+    "value": 135000,
+    "unit": "J",
+    "unit_options": [
+     "J",
+     "W",
+     "N",
+     "kg m/s"
+    ],
+    "wrong": [
+     {
+      "value": 9000,
+      "misconception": "This forgets to square the speed. \\(E_k = \\tfrac{1}{2}mv^{2} = \\tfrac{1}{2} \\times 1200 \\times 15^{2} = 135\\,000\\,\\text{J}\\)."
+     },
+     {
+      "value": 270000,
+      "misconception": "This forgets the \\(\\tfrac{1}{2}\\): \\(E_k = \\tfrac{1}{2}mv^{2}\\), so halve \\(1200 \\times 225\\) to get \\(135\\,000\\,\\text{J}\\)."
+     },
+     {
+      "value": 18000,
+      "misconception": "\\(1200 \\times 15 = 18\\,000\\) is the momentum (\\(mv\\)). Kinetic energy is \\(\\tfrac{1}{2}mv^{2} = 135\\,000\\,\\text{J}\\)."
+     }
+    ],
+    "unit_feedback": "Kinetic energy is energy, so it is measured in joules (J)."
+   },
+   "feedback": null,
+   "explanation": "\\(E_k = \\tfrac{1}{2}mv^{2} = \\tfrac{1}{2} \\times 1200 \\times 15^{2} = 0.5 \\times 1200 \\times 225 = 135\\,000\\,\\text{J}\\).",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-20",
+   "format": "mcq",
+   "tier": "Both",
+   "answer_spec": null,
+   "primary_concept": "phy.energy.dissipation-efficiency",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "question_text": "Efficiency is best described as an…",
+   "options": {
+    "a": "ratio of the useful output energy transfer to the total input energy transfer",
+    "b": "type of energy store",
+    "c": "unit of power",
+    "d": "force that reduces wasted energy"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "Efficiency is not a store.",
+    "c": "The unit of power is the watt.",
+    "d": "Efficiency is not a force."
+   },
+   "explanation": "Efficiency = useful output energy transfer ÷ total input energy transfer.",
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-002",
+    "c": "MIS-PHY-ENE-012",
+    "d": "slip"
+   }
+  },
+  {
+   "item_ref": "cal-21",
+   "primary_concept": "phy.forces.work-done",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Higher",
+   "format": "mcq",
+   "question_text": "A student pushes a box with a force of 50 N through a distance of 4 m in the direction of the force. How much work is done?",
+   "options": {
+    "a": "\\(200\\,\\text{J}\\)",
+    "b": "\\(12.5\\,\\text{J}\\)",
+    "c": "\\(54\\,\\text{J}\\)",
+    "d": "\\(0.08\\,\\text{J}\\)"
+   },
+   "key": "a",
+   "answer_spec": null,
+   "feedback": {
+    "b": "This divides the force by the distance. Work done = force × distance: \\(W = Fs = 50 \\times 4 = 200\\,\\text{J}\\).",
+    "c": "This adds the force and the distance. They multiply: \\(W = Fs = 200\\,\\text{J}\\).",
+    "d": "This divides the distance by the force. Use \\(W = Fs = 50 \\times 4 = 200\\,\\text{J}\\)."
+   },
+   "explanation": "Work done = force × distance moved in the direction of the force: \\(W = Fs = 50 \\times 4 = 200\\,\\text{J}\\).",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-22",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Higher",
+   "format": "mcq",
+   "question_text": "A ball of mass 0.2 kg moves at \\(10\\,\\text{m/s}\\). What is its kinetic energy?",
+   "options": {
+    "a": "\\(20\\,\\text{J}\\)",
+    "b": "\\(1\\,\\text{J}\\)",
+    "c": "\\(2\\,\\text{J}\\)",
+    "d": "\\(10\\,\\text{J}\\)"
+   },
+   "key": "d",
+   "answer_spec": null,
+   "feedback": {
+    "a": "This leaves out the half. \\(E_{k} = \\tfrac{1}{2}mv^{2} = \\tfrac{1}{2} \\times 0.2 \\times 10^{2} = 10\\,\\text{J}\\).",
+    "b": "This forgets to square the speed. \\(E_{k} = \\tfrac{1}{2}mv^{2} = 0.5 \\times 0.2 \\times 100 = 10\\,\\text{J}\\).",
+    "c": "This multiplies mass by speed, which gives momentum, not energy. \\(E_{k} = \\tfrac{1}{2}mv^{2} = 10\\,\\text{J}\\)."
+   },
+   "explanation": "\\(E_{k} = \\tfrac{1}{2}mv^{2} = \\tfrac{1}{2} \\times 0.2 \\times 10^{2} = 0.1 \\times 100 = 10\\,\\text{J}\\).",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-23",
+   "primary_concept": "phy.energy.stores-systems",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Foundation",
+   "format": "mcq",
+   "question_text": "A torch uses a battery to light a bulb. Which energy store does the battery empty?",
+   "options": {
+    "a": "Chemical",
+    "b": "Thermal",
+    "c": "Kinetic",
+    "d": "Gravitational potential"
+   },
+   "key": "a",
+   "answer_spec": null,
+   "feedback": {
+    "b": "The bulb heats up (thermal store), but the battery's energy was in its chemical store.",
+    "c": "Nothing in the battery is moving; its energy is in its chemical store.",
+    "d": "The battery isn't raised; its energy is in its chemical store."
+   },
+   "explanation": "A battery stores energy chemically. The circuit transfers it electrically to the bulb, which transfers it by light and heating.",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-24",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 3,
+   "tier": "Both",
+   "format": "mcq",
+   "question_text": "Two kettles boil the same amount of water. Kettle A takes 2 minutes and kettle B takes 3 minutes. What does this tell you?",
+   "options": {
+    "a": "Kettle A has a higher power",
+    "b": "Kettle B has a higher power",
+    "c": "Kettle B transfers more energy in total",
+    "d": "Both kettles have the same power"
+   },
+   "key": "a",
+   "answer_spec": null,
+   "feedback": {
+    "b": "Taking longer to transfer the same energy means a lower power.",
+    "c": "Both boil the same water, so they transfer about the same useful energy; A just does it faster.",
+    "d": "They take different times for the same job, so their powers are different."
+   },
+   "explanation": "Power is how fast energy is transferred. Kettle A transfers the same energy in less time, so it has the higher power.",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-25",
+   "primary_concept": "phy.energy.gravitational",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Higher",
+   "format": "numeric",
+   "question_text": "At the Akosombo dam, \\(2.0\\,\\text{kg}\\) of water falls through a height of \\(70\\,\\text{m}\\). How much gravitational potential energy does it lose? Use \\(g = 9.8\\,\\text{N/kg}\\).",
+   "options": null,
+   "key": null,
+   "answer_spec": {
+    "value": 1372,
+    "unit": "J",
+    "unit_options": [
+     "J",
+     "N",
+     "W",
+     "kg"
+    ],
+    "wrong": [
+     {
+      "value": 140,
+      "misconception": "This leaves out \\(g\\). \\(E_p = mgh = 2.0 \\times 9.8 \\times 70 = 1372\\,\\text{J}\\)."
+     },
+     {
+      "value": 686,
+      "misconception": "There is no \\(\\tfrac{1}{2}\\) in \\(E_p = mgh\\) (that's kinetic energy): \\(2.0 \\times 9.8 \\times 70 = 1372\\,\\text{J}\\)."
+     }
+    ],
+    "unit_feedback": "Energy is measured in joules (J)."
+   },
+   "feedback": null,
+   "explanation": "\\(E_p = mgh = 2.0 \\times 9.8 \\times 70 = 1372\\,\\text{J}\\).",
+   "misconception_map": "legacy item: prose feedback only, no canonical misconception ids yet — judge C1 on authenticity and propose ids"
+  },
+  {
+   "item_ref": "cal-26",
+   "format": "mcq",
+   "tier": "Both",
+   "answer_spec": null,
+   "primary_concept": "phy.energy.stores-systems",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "question_text": "A car slows down as the driver applies the brakes. Which energy store increases?",
+   "options": {
+    "a": "The thermal energy store of the brakes",
+    "b": "The thermal energy store of the surroundings",
+    "c": "The kinetic energy store of the car",
+    "d": "The chemical energy store of the fuel"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "The surroundings do not warm up while braking.",
+    "c": "The car is slowing down, so its kinetic store decreases.",
+    "d": "Braking does not put energy back into the fuel."
+   },
+   "explanation": "Friction between brake pads and discs transfers energy from the kinetic store to the thermal store of the brakes.",
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-002",
+    "c": "MIS-PHY-ENE-002",
+    "d": "MIS-PHY-ENE-001"
+   }
+  },
+  {
+   "item_ref": "cal-27",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "template": true,
+   "question_text": "A trolley of mass \\({m}\\,\\text{kg}\\) moves at \\({v}\\,\\text{m/s}\\). Calculate its kinetic energy in joules.",
+   "parameters": {
+    "m": {
+     "min": 2,
+     "max": 10,
+     "step": 1,
+     "unit": "kg"
+    },
+    "v": {
+     "min": 2,
+     "max": 10,
+     "step": 1,
+     "unit": "m/s"
+    }
+   },
+   "answer_formula": "0.5 * m * v^2",
+   "distractor_rules": [
+    {
+     "formula": "m * v^2",
+     "misconception": "MIS-PHY-ENE-005"
+    },
+    {
+     "formula": "0.5 * m * v",
+     "misconception": "MIS-PHY-ENE-004"
+    },
+    {
+     "formula": "0.5 * m^2 * v",
+     "misconception": "MIS-PHY-ENE-004 (squared the mass)"
+    }
+   ],
+   "tolerance": 0.01,
+   "explanation": "Ek = ½mv².",
+   "misconception_map": "in distractor_rules"
+  },
+  {
+   "item_ref": "cal-28",
+   "format": "mcq",
+   "tier": "Both",
+   "answer_spec": null,
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "practice",
+   "difficulty_band": 2,
+   "question_text": "A motor does \\(6.0\\,\\text{kJ}\\) of work in \\(2.0\\,\\text{s}\\). What is its power?",
+   "options": {
+    "a": "\\(3.0\\,\\text{W}\\)",
+    "b": "\\(3000\\,\\text{W}\\)",
+    "c": "\\(12\\,000\\,\\text{W}\\)",
+    "d": "\\(0.33\\,\\text{W}\\)"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "You converted kJ to J but check the division.",
+    "c": "You multiplied work by time instead of dividing.",
+    "d": "You divided time by work."
+   },
+   "explanation": "P = W/t = 6.0 / 2.0 = 3.0 W.",
+   "misconception_map": {
+    "b": "slip",
+    "c": "MIS-PHY-SKL-004",
+    "d": "MIS-PHY-SKL-004"
+   }
+  },
+  {
+   "item_ref": "cal-29",
+   "primary_concept": "phy.energy.kinetic",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "question_text": "Kinetic energy is given by \\(E_k = \\tfrac{1}{2}mv^2\\). A \\(60\\,\\text{kg}\\) runner moves at \\(8.0\\,\\text{m/s}\\). Calculate the runner's kinetic energy in joules.",
+   "options": null,
+   "key": null,
+   "answer_spec": {
+    "value": 1920,
+    "unit": "J",
+    "tolerance": 0.01,
+    "wrong": [
+     {
+      "value": 3840,
+      "misconception": "MIS-PHY-ENE-005"
+     },
+     {
+      "value": 240,
+      "misconception": "MIS-PHY-ENE-004"
+     }
+    ]
+   },
+   "feedback": null,
+   "explanation": "Ek = ½ × 60 × 8.0² = 1920 J.",
+   "misconception_map": "in answer_spec.wrong"
+  }
+ ]
+}

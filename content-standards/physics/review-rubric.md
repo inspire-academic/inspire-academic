@@ -36,8 +36,8 @@ Used by the Physics Subject Expert Review Agent on every item. Each criterion is
 ## Decision rules
 
 - **APPROVE:** no FAIL.
-- **APPROVE_WITH_CORRECTIONS:** only Soft FAILs, each fixed by a stated surface edit that changes neither what is assessed nor the key. You write the exact replacement text. The corrected item is re-checked automatically and confirmed by you.
-- **REJECT:** any Hard FAIL, or any fix that would change the key, concept, evidence class or difficulty band. Say what is wrong; do not rewrite the item.
+- **APPROVE_WITH_CORRECTIONS:** only Soft FAILs, each fixed by a stated surface edit that changes neither what is assessed nor the key. You write the exact replacement text. The corrected item is re-checked automatically and confirmed by you. Metadata re-tags count as surface edits **only in the safe direction**: lowering the difficulty band, widening the tier (Higher → Both) or moving an item down the evidence ladder (mastery_check → practice). A re-tag in the other direction would let a correction manufacture mastery evidence, so it is a REJECT.
+- **REJECT:** any Hard FAIL, or any fix that would change the key, concept or content, or re-tag an item upwards (higher band, narrower tier, stronger evidence class). Say what is wrong; do not rewrite the item.
 
 When in doubt between APPROVE_WITH_CORRECTIONS and REJECT, choose REJECT. Approving a defective mastery-check or application item is worse than rejecting a good one: those items certify a child's mastery.
 

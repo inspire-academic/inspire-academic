@@ -51,5 +51,7 @@
 
 - Use AQA symbols exactly: Ek, Ep, Ee (subscripts), ΔE, Δθ, g. In KaTeX write `E_k`, `E_p`, `E_e`, `\Delta E = mc\Delta\theta`.
 - Units as AQA writes them: J, kJ, W, kW, N/kg, N/m, J/kg °C, m/s, m/s².
-- A "given" equation may be printed in the item; a "recall" equation must not be printed in a mastery-check or application item for that concept (it may be printed in practice items as scaffolding, labelled as such).
+- **Given equations are always available to the student:** an item that needs one prints it in the stem (as the exam equation sheet would provide it). An item must never require recall of a given equation.
+- **Recall equations are never printed** in a diagnostic, mastery-check, retrieval or application item for that concept. They may be printed in practice items as scaffolding, labelled as a hint.
+- **Numeric multiple-choice items store their inputs and formula** (like typed-number items) so the automated checks can recompute the key and each distractor from the stem.
 - g is always stated in the item.
