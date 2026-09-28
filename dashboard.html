@@ -144,24 +144,34 @@ main{max-width:1200px;margin:0 auto;padding:1rem 1rem 6rem;}
 .score-low{color:#f87171;}
 .streak-best{margin-left:.5rem;font-size:.8rem;color:var(--muted);}
 .welcome-eyebrow{display:none;}
-.card-artifact,.page-botanical{display:none;}
+.page-botanical{display:none;}
 /* Hand-drawn artefacts: full-colour watercolour illustrations (WebP, the wash
-   is painted in), in both themes. Decorative only; shown from 901px up, so
-   phones never download them. */
+   is painted in), in both themes. Decorative only.
+   Phones and tablets (up to 900px): a small picture on its own line at the top
+   of the card (full width, so it also sits on top when the card becomes a
+   wrapping row at 769px), using the small --art-sm files (~8 KB each).
+   901px and up: the large --art floats between the text and the button; the
+   desktop rule resets everything the small layout sets. */
+.card-artifact{
+  display:block;flex:none;width:100%;height:64px;margin-bottom:-.25rem;
+  pointer-events:none;user-select:none;
+  background:var(--art-sm) left center/contain no-repeat;
+}
 @media (min-width:901px){
   .card-artifact{
-    display:block;position:absolute;top:50%;right:clamp(190px,24%,300px);
+    flex:none;width:auto;margin:0;
+    position:absolute;top:50%;right:clamp(190px,24%,300px);
     height:calc(100% - 12px);max-height:150px;aspect-ratio:26/17;transform:translateY(-50%);
-    pointer-events:none;user-select:none;z-index:0;
+    z-index:0;
     background:var(--art) center/contain no-repeat;
   }
   /* Keep a card's text clear of its illustration: stop the text column
      before the art (its right offset plus its ~230px width, plus a gap). */
   .card-artifact + .tq-left{max-width:calc(100% - clamp(190px,24%,300px) - 250px);}
 }
-.card-artifact--calendar{--art:url(/assets/images/illustrations/daily-calendar.webp);}
-.card-artifact--notebook{--art:url(/assets/images/illustrations/daily-notebook.webp);}
-.card-artifact--microscope{--art:url(/assets/images/illustrations/diagnostic-microscope.webp);}
+.card-artifact--calendar{--art:url(/assets/images/illustrations/daily-calendar.webp);--art-sm:url(/assets/images/illustrations/daily-calendar-sm.webp);}
+.card-artifact--notebook{--art:url(/assets/images/illustrations/daily-notebook.webp);--art-sm:url(/assets/images/illustrations/daily-notebook-sm.webp);}
+.card-artifact--microscope{--art:url(/assets/images/illustrations/diagnostic-microscope.webp);--art-sm:url(/assets/images/illustrations/diagnostic-microscope-sm.webp);}
 
 /* ── LIGHT MODE (approved concept: warm parchment, ivory, heritage gold,
    hand-drawn editorial artefacts). Dark mode above is unchanged. ── */
