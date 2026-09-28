@@ -76,8 +76,8 @@ module.exports = () => ({
       id: 'test-kinetic-t1', primary_concept: 'phy.energy.kinetic', evidence_class: 'practice', difficulty_band: 1,
       tier: 'Both', format: 'mcq', context_tags: ['find-energy'],
       stem: r`A [[who]] of mass \([[m]]\,\text{kg}\) is moving at \([[v]]\,\text{m/s}\). Find the energy in their kinetic store.`,
-      params: { m: { min: 40, max: 90, step: 5, unit: 'kg' }, v: { min: 3, max: 12, step: 1, unit: 'm/s' } },
-      words: { who: ['runner', 'cyclist', 'skater'] },
+      params: { m: { values: [45, 55, 65, 75, 85], unit: 'kg' }, v: { min: 3, max: 12, step: 1, unit: 'm/s' } },
+      words: { who: ['runner', 'rower', 'skater'] },
       calc: { formula: 'ek', unit: 'J', wrong: ['no-square', 'no-half', 'square-mass'] },
       misconception_map: { 'no-square': 'MIS-PHY-ENE-004', 'no-half': 'MIS-PHY-ENE-005', 'square-mass': 'MIS-PHY-ENE-004' },
       feedback: {

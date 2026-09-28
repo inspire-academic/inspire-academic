@@ -1,0 +1,101 @@
+[
+ {
+  "label": "S-A2 wrong key: 500 W means 500 J every second, key says 500 J in total",
+  "item": {
+   "ref": "seed-500w",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "diagnostic",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "comparison-explanation"
+   ],
+   "question_text": "A winch motor has a power of 500 W. What does this tell you?",
+   "options": {
+    "a": "It transfers 500 J of energy every second",
+    "b": "It transfers 500 J of energy in total",
+    "c": "It pulls with a force of 500 N",
+    "d": "It transfers 500 J of energy every minute"
+   },
+   "key": "b",
+   "feedback": {
+    "a": "Power is fixed for the motor, so the energy it transfers is fixed too: 500 J in total.",
+    "c": "Power is measured in watts, not newtons; force is a different quantity.",
+    "d": "The watt does not refer to minutes."
+   },
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-011",
+    "c": "slip: confused power with force",
+    "d": "slip: wrong time unit for the watt"
+   },
+   "explanation": "A power of 500 W means the motor transfers 500 J of energy."
+  }
+ },
+ {
+  "label": "S-B2 outside the taught sequence: National Grid transmission belongs to Electricity (4.2)",
+  "item": {
+   "ref": "seed-grid",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "practice",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "comparison-explanation"
+   ],
+   "question_text": "Why does the National Grid transmit electrical power at a very high potential difference?",
+   "options": {
+    "a": "It lowers the current, so less energy is dissipated in the cables",
+    "b": "It raises the current, so the power reaches homes faster",
+    "c": "A high potential difference makes the cables less likely to break",
+    "d": "It increases the total energy the power stations produce"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "For the same power, a higher potential difference means a lower current, not a higher one.",
+    "c": "The potential difference does not change the strength of the cables.",
+    "d": "Power stations do not produce more energy because of the transmission voltage."
+   },
+   "misconception_map": {
+    "b": "slip: thinks a higher voltage means a higher current for the same power",
+    "c": "slip: confused electrical and mechanical properties of cables",
+    "d": "MIS-PHY-ENE-011"
+   },
+   "explanation": "P = VI: for the same power, a higher potential difference means a smaller current, and a smaller current dissipates less energy heating the cables."
+  }
+ },
+ {
+  "label": "S-D1 mastery check that is the stairs practice item (pow-prac-c1) with new names and times",
+  "item": {
+   "ref": "seed-stairs",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "comparison-explanation"
+   ],
+   "question_text": "Esi and Yaw weigh the same. Both climb the same staircase at school. Esi takes 6 seconds and Yaw takes 10 seconds. Which statement is correct?",
+   "options": {
+    "a": "Esi gains more energy, because she climbs the stairs faster",
+    "b": "Yaw has the greater power, because he works for longer",
+    "c": "They gain the same energy, but Esi has the greater power",
+    "d": "Their powers are equal, because each does the same amount of work"
+   },
+   "key": "c",
+   "feedback": {
+    "a": "The same weight lifted the same height gains the same energy, however fast. Being faster means a greater power.",
+    "b": "Power is the rate of transfer. The same energy in less time is a greater power, so Esi's is greater.",
+    "d": "They do the same work, but Esi does it in less time, so her power is greater."
+   },
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-011",
+    "b": "slip: thinks a longer time means a greater power",
+    "d": "slip: ignored the time taken when comparing powers"
+   },
+   "explanation": "Both gain the same gravitational potential energy. Power = energy ÷ time, and Esi takes less time, so her power is greater."
+  }
+ }
+]

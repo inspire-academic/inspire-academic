@@ -39,9 +39,14 @@ These apply to every item regardless of evidence class. The automated checks (`c
 - Five instances of one template are one piece of distinct evidence, not five.
 - The generator is code in the repo; the reviewer reviews the template and solves a sample of instances.
 
+## Contexts and wording in templates
+
+- Every context word must be realistic across the whole parameter range (a model crane is not 500 W), and must read correctly after its article: "a" or "an" agrees with every word choice (checked).
+- No absolute words (always, never, all) in the distractors unless the key has one too: they tell a test-wise student which option is careful (checked, as a warning).
+
 ## Keeping mastery evidence independent
 
-- A mastery-check, retrieval or application item must not be something a practice template can generate. The checks fail one that shares a practice template's formula and either uses one of the template's context words or has every input inside the template's parameter values. Give it a different context **and** a different structure: a conversion, extra data to reject, a rearrangement, or a weight instead of a mass.
+- No fixed item may be something a practice template can generate (a copy adds no distinct evidence); for a mastery-check, retrieval or application item it would also let practice certify mastery. The checks fail one that shares a practice template's formula and either uses one of the template's context words or has every input inside the template's parameter values. Give it a different context **and** a different structure: a conversion, extra data to reject, a rearrangement, or a weight instead of a mass.
 - Conceptual MCQs cannot be checked by code. Before review, an independent second solver answers every mastery-check, application and non-calculation MCQ from the stem alone, to catch a wrong key or a second defensible answer.
 
 ## Metadata every item carries

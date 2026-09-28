@@ -479,11 +479,28 @@ test('duplicates: a certifying item a practice template could generate fails, ho
   assert.match(details(rep, 'mc-2', 'duplicates'), /practice template test-kinetic-t1 can generate this mastery_check item \(same formula, its context "skater"\)/);
   // No shared word, but every input inside t1's parameter values.
   rep = run(edit(makePack(), 'mc-2', x => {
-    x.question_text = String.raw`A 60 kg jockey on foot jogs at \(4\,\text{m/s}\). How much energy is in his kinetic energy store?`;
-    x.calc.inputs = { m: { value: 60, unit: 'kg' }, v: { value: 4, unit: 'm/s' } };
+    x.question_text = String.raw`A 55 kg jockey on foot jogs at \(4\,\text{m/s}\). How much energy is in his kinetic energy store?`;
+    x.calc.inputs = { m: { value: 55, unit: 'kg' }, v: { value: 4, unit: 'm/s' } };
     x.options = { a: String.raw`\(120\,\text{J}\)`, b: String.raw`\(480\,\text{J}\)`, c: String.raw`\(960\,\text{J}\)`, d: String.raw`\(7200\,\text{J}\)` };
     x.calc.options = { a: 'no-square', b: 'correct', c: 'no-half', d: 'square-mass' };
     x.misconception_map.d = 'MIS-PHY-ENE-004';
   }));
   assert.match(details(rep, 'mc-2', 'duplicates'), /every input inside its parameter values/);
+});
+
+// ── Checks added after the power review ──
+
+test('schema: a template article must agree with every word choice', () => {
+  const rep = run(edit(makePack(), 'test-kinetic-t1', x => { x.stem = x.stem.replace('A [[who]]', 'A [[who]]'); x.words.who.push('electric scooter rider'); }));
+  assert.match(details(rep, 'test-kinetic-t1', 'schema'), /"A electric scooter rider": the article does not agree/);
+});
+
+test('answers: absolute words only in the distractors are a warning', () => {
+  const rep = run(edit(makePack(), 'prac-c1', x => {
+    x.options.a = 'It is always exactly the same as the slower car';
+    x.options.b = 'It is never more than twice as much';
+  }));
+  assert.equal(status(rep, 'prac-c1', 'answers'), 'warn');
+  assert.match(details(rep, 'prac-c1', 'answers'), /absolute words/);
+  assert.equal(item(rep, 'prac-c1').passed, true);
 });

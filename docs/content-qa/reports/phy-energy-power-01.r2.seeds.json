@@ -1,0 +1,68 @@
+[
+ {
+  "label": "S-A5 clue: absolute words in every distractor, and the key is the only careful option",
+  "item": {
+   "ref": "seed-always",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "comparison-explanation"
+   ],
+   "question_text": "Which statement about power is correct?",
+   "options": {
+    "a": "A more powerful machine always transfers more energy",
+    "b": "Power is the rate of energy transfer, in joules per second",
+    "c": "A powerful machine never wastes any energy at all",
+    "d": "Power and energy are always measured in the same unit"
+   },
+   "key": "b",
+   "feedback": {
+    "a": "A more powerful machine transfers energy faster, but not necessarily more in total.",
+    "c": "Every machine dissipates some energy, however powerful.",
+    "d": "Power is measured in watts and energy in joules."
+   },
+   "misconception_map": {
+    "a": "MIS-PHY-ENE-011",
+    "c": "slip: links power with efficiency",
+    "d": "slip: confuses the units of power and energy"
+   },
+   "explanation": "Power is the rate at which energy is transferred: 1 W = 1 J/s."
+  }
+ },
+ {
+  "label": "S-B1 assesses specific heat capacity (phy.energy.shc), tagged as power",
+  "item": {
+   "ref": "seed-shc",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "comparison-explanation"
+   ],
+   "question_text": "The same heater warms 1 kg of water and 1 kg of cooking oil for the same time. The oil gets hotter. Why?",
+   "options": {
+    "a": "Oil has a lower specific heat capacity than water",
+    "b": "The heater has more power when it heats oil",
+    "c": "Oil stores more energy for each degree it warms",
+    "d": "Water loses its energy to the air more quickly"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "The heater has the same power whichever liquid it heats.",
+    "c": "That would make the oil warm more slowly, not faster.",
+    "d": "Both lose some energy to the surroundings; that is not the main reason."
+   },
+   "misconception_map": {
+    "b": "MIS-PHY-ENE-011",
+    "c": "slip: reversed the meaning of heat capacity",
+    "d": "slip: blamed dissipation for a heat-capacity difference"
+   },
+   "explanation": "The same energy is supplied to each. Oil needs less energy per kg per degree (a lower specific heat capacity), so its temperature rises more."
+  }
+ }
+]

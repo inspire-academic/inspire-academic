@@ -427,6 +427,15 @@ function checkItem(ctx, x) {
       texts.push(...ms.map(p => p.text));
     }
   }
+  // Clue: absolute words ("always", "never") in the distractors but not the
+  // key let a test-wise student pick the careful-sounding option.
+  if (x.format === 'mcq' && x.options && KEYS.includes(x.key)) {
+    const ABS = /\b(always|never|all|none|only|every|completely|impossible)\b/i;
+    const wrongAbs = KEYS.filter(k => k !== x.key && ABS.test(String(x.options[k] || ''))).length;
+    if (wrongAbs >= 2 && !ABS.test(String(x.options[x.key] || ''))) {
+      warn(r, 'answers', `${wrongAbs} distractors use absolute words (always, never, all...) and the key does not: a test-wise clue`);
+    }
+  }
   pass(r, 'answers');
 
   const kp = katexProblems(texts);
@@ -549,6 +558,18 @@ function checkTemplate(ctx, t) {
     if (spec.hidden && shown) fail(r, 'stem-inputs', `hidden param ${p} is printed in the stem`);
     if (!spec.hidden && !shown) fail(r, 'stem-inputs', `param ${p} is never printed in the stem`);
   }
+  // "A [[machine]]" with "electric hoist" reads "A electric hoist": the
+  // article must agree with every word choice.
+  for (const [w, list] of Object.entries(t.words || {})) {
+    for (const txt of [t.stem, t.explanation, ...Object.values(t.feedback || {})]) {
+      for (const m of String(txt || '').matchAll(new RegExp(`\\b(a|an|A|An)\\s+\\[\\[${w}\\]\\]`, 'g'))) {
+        const an = m[1].toLowerCase() === 'an';
+        for (const word of list) {
+          if (/^[aeiou]/i.test(word) !== an) fail(r, 'schema', `"${m[1]} ${word}": the article does not agree with the word choice "${word}"`);
+        }
+      }
+    }
+  }
   for (const [d, spec] of Object.entries(t.derived || {})) {
     if (!String(t.stem || '').includes(`[[${d}]]`)) fail(r, 'stem-inputs', `derived value ${d} is never printed in the stem`);
     if (!FORMULAS[spec.formula]) fail(r, 'schema', `derived ${d}: unknown formula "${spec.formula}"`);
@@ -657,7 +678,9 @@ function checkDuplicates(ctx, entries, r, e) {
   // formula, and either one of the template's context words or every shared
   // input inside the template's parameter values) is practice with new
   // numbers, however differently it is worded.
-  if (['mastery_check', 'retrieval', 'application'].includes(e.x.evidence_class) && e.kind === 'item' && e.x.calc) {
+  // Applies to every fixed item: a practice item that copies a template
+  // instance adds no distinct evidence either (power review, round 3).
+  if (e.kind === 'item' && e.x.calc) {
     for (const t of entries.filter(o => o.kind === 'template' && o.x.evidence_class === 'practice' && (o.x.calc || {}).formula === e.x.calc.formula)) {
       const stem = String(e.x.question_text || '').toLowerCase();
       const word = Object.values(t.x.words || {}).flat().find(w => new RegExp(`\\b${w.toLowerCase()}\\b`).test(stem));

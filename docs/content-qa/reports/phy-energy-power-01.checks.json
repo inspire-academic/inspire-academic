@@ -1,9 +1,9 @@
 {
  "suite_version": "checks-1",
- "pack": "phy-energy-kinetic-01",
+ "pack": "phy-energy-power-01",
  "subject": "Physics",
  "concepts": [
-  "phy.energy.kinetic"
+  "phy.energy.power"
  ],
  "corpus": {
   "available": true,
@@ -41,10 +41,10 @@
  },
  "items": [
   {
-   "ref": "kin-diag-1",
+   "ref": "pow-diag-1",
    "kind": "item",
    "evidence_class": "diagnostic",
-   "primary_concept": "phy.energy.kinetic",
+   "primary_concept": "phy.energy.power",
    "passed": true,
    "checks": {
     "terminology": {
@@ -106,15 +106,15 @@
     "copyright": {
      "status": "pass",
      "detail": [],
-     "max_overlap": 9
+     "max_overlap": 14
     }
    }
   },
   {
-   "ref": "kin-prac-c1",
+   "ref": "pow-prac-c1",
    "kind": "item",
    "evidence_class": "practice",
-   "primary_concept": "phy.energy.kinetic",
+   "primary_concept": "phy.energy.power",
    "passed": true,
    "checks": {
     "terminology": {
@@ -177,10 +177,76 @@
    }
   },
   {
-   "ref": "kin-mc-1",
+   "ref": "pow-mc-1",
    "kind": "item",
    "evidence_class": "mastery_check",
-   "primary_concept": "phy.energy.kinetic",
+   "primary_concept": "phy.energy.power",
+   "passed": true,
+   "checks": {
+    "terminology": {
+     "status": "pass",
+     "detail": []
+    },
+    "schema": {
+     "status": "pass",
+     "detail": []
+    },
+    "tags": {
+     "status": "pass",
+     "detail": []
+    },
+    "scaffolding": {
+     "status": "pass",
+     "detail": []
+    },
+    "answers": {
+     "status": "pass",
+     "detail": []
+    },
+    "katex": {
+     "status": "pass",
+     "detail": []
+    },
+    "units": {
+     "status": "pass",
+     "detail": []
+    },
+    "band": {
+     "status": "pass",
+     "detail": []
+    },
+    "stem-inputs": {
+     "status": "pass",
+     "detail": []
+    },
+    "trick-number": {
+     "status": "pass",
+     "detail": []
+    },
+    "recompute": {
+     "status": "pass",
+     "detail": []
+    },
+    "equations": {
+     "status": "pass",
+     "detail": []
+    },
+    "duplicates": {
+     "status": "pass",
+     "detail": []
+    },
+    "copyright": {
+     "status": "pass",
+     "detail": [],
+     "max_overlap": 0
+    }
+   }
+  },
+  {
+   "ref": "pow-mc-2",
+   "kind": "item",
+   "evidence_class": "mastery_check",
+   "primary_concept": "phy.energy.power",
    "passed": true,
    "checks": {
     "terminology": {
@@ -247,10 +313,10 @@
    }
   },
   {
-   "ref": "kin-mc-2",
+   "ref": "pow-mc-3",
    "kind": "item",
    "evidence_class": "mastery_check",
-   "primary_concept": "phy.energy.kinetic",
+   "primary_concept": "phy.energy.power",
    "passed": true,
    "checks": {
     "terminology": {
@@ -277,24 +343,24 @@
      "status": "pass",
      "detail": []
     },
-    "units": {
-     "status": "pass",
+    "recompute": {
+     "status": "n/a",
      "detail": []
     },
-    "band": {
-     "status": "pass",
+    "units": {
+     "status": "n/a",
      "detail": []
     },
     "stem-inputs": {
-     "status": "pass",
+     "status": "n/a",
      "detail": []
     },
     "trick-number": {
-     "status": "pass",
+     "status": "n/a",
      "detail": []
     },
-    "recompute": {
-     "status": "pass",
+    "band": {
+     "status": "n/a",
      "detail": []
     },
     "equations": {
@@ -308,81 +374,15 @@
     "copyright": {
      "status": "pass",
      "detail": [],
-     "max_overlap": 3
+     "max_overlap": 1
     }
    }
   },
   {
-   "ref": "kin-mc-3",
-   "kind": "item",
-   "evidence_class": "mastery_check",
-   "primary_concept": "phy.energy.kinetic",
-   "passed": true,
-   "checks": {
-    "terminology": {
-     "status": "pass",
-     "detail": []
-    },
-    "schema": {
-     "status": "pass",
-     "detail": []
-    },
-    "tags": {
-     "status": "pass",
-     "detail": []
-    },
-    "scaffolding": {
-     "status": "pass",
-     "detail": []
-    },
-    "answers": {
-     "status": "pass",
-     "detail": []
-    },
-    "katex": {
-     "status": "pass",
-     "detail": []
-    },
-    "units": {
-     "status": "pass",
-     "detail": []
-    },
-    "band": {
-     "status": "pass",
-     "detail": []
-    },
-    "stem-inputs": {
-     "status": "pass",
-     "detail": []
-    },
-    "trick-number": {
-     "status": "pass",
-     "detail": []
-    },
-    "recompute": {
-     "status": "pass",
-     "detail": []
-    },
-    "equations": {
-     "status": "pass",
-     "detail": []
-    },
-    "duplicates": {
-     "status": "pass",
-     "detail": []
-    },
-    "copyright": {
-     "status": "pass",
-     "detail": [],
-     "max_overlap": 5
-    }
-   }
-  },
-  {
-   "ref": "kin-t1",
+   "ref": "pow-t1",
    "kind": "template",
    "evidence_class": "practice",
-   "primary_concept": "phy.energy.kinetic",
+   "primary_concept": "phy.energy.power",
    "passed": true,
    "checks": {
     "terminology": {
@@ -444,114 +444,179 @@
     "copyright": {
      "status": "pass",
      "detail": [],
-     "max_overlap": 0
+     "max_overlap": 11
     }
    },
-   "instances_checked": 80,
-   "grid_size": 80,
+   "instances_checked": 117,
+   "grid_size": 117,
    "samples": [
     {
      "seed": 1,
      "params": {
-      "m": 90,
-      "v": 9
+      "P": 500,
+      "t": 30
      },
      "words": {
-      "who": "footballer"
+      "machine": "winch"
      },
-     "question_text": "A footballer has a mass of \\(90\\,\\text{kg}\\) and is moving at \\(9\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
-     "options": {
-      "a": "\\(405\\,\\text{J}\\)",
-      "b": "\\(3645\\,\\text{J}\\)",
-      "c": "\\(7290\\,\\text{J}\\)",
-      "d": "\\(36450\\,\\text{J}\\)"
+     "question_text": "A winch transfers \\(15000\\,\\text{J}\\) of energy in \\(30\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 500,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 450000,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{15000}{30}\\)."
+       },
+       {
+        "value": 0.002,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{15000}{30}\\)."
+       }
+      ]
      },
-     "key": "b",
-     "correct": 3645
+     "correct": 500
     },
     {
      "seed": 2,
      "params": {
-      "m": 70,
-      "v": 8
+      "P": 200,
+      "t": 10
      },
      "words": {
-      "who": "cyclist"
+      "machine": "garden water pump"
      },
-     "question_text": "A cyclist has a mass of \\(70\\,\\text{kg}\\) and is moving at \\(8\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
-     "options": {
-      "a": "\\(19600\\,\\text{J}\\)",
-      "b": "\\(4480\\,\\text{J}\\)",
-      "c": "\\(2240\\,\\text{J}\\)",
-      "d": "\\(280\\,\\text{J}\\)"
+     "question_text": "A garden water pump transfers \\(2000\\,\\text{J}\\) of energy in \\(10\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 200,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 20000,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{2000}{10}\\)."
+       },
+       {
+        "value": 0.005,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{2000}{10}\\)."
+       }
+      ]
      },
-     "key": "c",
-     "correct": 2240
+     "correct": 200
     },
     {
      "seed": 3,
      "params": {
-      "m": 45,
-      "v": 8
+      "P": 100,
+      "t": 8
      },
      "words": {
-      "who": "cyclist"
+      "machine": "conveyor belt motor"
      },
-     "question_text": "A cyclist has a mass of \\(45\\,\\text{kg}\\) and is moving at \\(8\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
-     "options": {
-      "a": "\\(8100\\,\\text{J}\\)",
-      "b": "\\(2880\\,\\text{J}\\)",
-      "c": "\\(1440\\,\\text{J}\\)",
-      "d": "\\(180\\,\\text{J}\\)"
+     "question_text": "A conveyor belt motor transfers \\(800\\,\\text{J}\\) of energy in \\(8\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 100,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 6400,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{800}{8}\\)."
+       },
+       {
+        "value": 0.01,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{800}{8}\\)."
+       }
+      ]
      },
-     "key": "c",
-     "correct": 1440
+     "correct": 100
     },
     {
      "seed": 4,
      "params": {
-      "m": 80,
-      "v": 7
+      "P": 80,
+      "t": 20
      },
      "words": {
-      "who": "wheelchair racer"
+      "machine": "garden water pump"
      },
-     "question_text": "A wheelchair racer has a mass of \\(80\\,\\text{kg}\\) and is moving at \\(7\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
-     "options": {
-      "a": "\\(22400\\,\\text{J}\\)",
-      "b": "\\(3920\\,\\text{J}\\)",
-      "c": "\\(1960\\,\\text{J}\\)",
-      "d": "\\(280\\,\\text{J}\\)"
+     "question_text": "A garden water pump transfers \\(1600\\,\\text{J}\\) of energy in \\(20\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 80,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 32000,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{1600}{20}\\)."
+       },
+       {
+        "value": 0.0125,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{1600}{20}\\)."
+       }
+      ]
      },
-     "key": "c",
-     "correct": 1960
+     "correct": 80
     },
     {
      "seed": 5,
      "params": {
-      "m": 45,
-      "v": 6
+      "P": 50,
+      "t": 20
      },
      "words": {
-      "who": "runner"
+      "machine": "garden water pump"
      },
-     "question_text": "A runner has a mass of \\(45\\,\\text{kg}\\) and is moving at \\(6\\,\\text{m/s}\\). How much energy is in their kinetic energy store?",
-     "options": {
-      "a": "\\(6075\\,\\text{J}\\)",
-      "b": "\\(1620\\,\\text{J}\\)",
-      "c": "\\(810\\,\\text{J}\\)",
-      "d": "\\(135\\,\\text{J}\\)"
+     "question_text": "A garden water pump transfers \\(1000\\,\\text{J}\\) of energy in \\(20\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 50,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 20000,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{1000}{20}\\)."
+       },
+       {
+        "value": 0.02,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{1000}{20}\\)."
+       }
+      ]
      },
-     "key": "c",
-     "correct": 810
+     "correct": 50
     }
    ]
   },
   {
-   "ref": "kin-t2",
+   "ref": "pow-t2",
    "kind": "template",
    "evidence_class": "practice",
-   "primary_concept": "phy.energy.kinetic",
+   "primary_concept": "phy.energy.power",
    "passed": true,
    "checks": {
     "terminology": {
@@ -616,182 +681,172 @@
      "max_overlap": 0
     }
    },
-   "instances_checked": 66,
-   "grid_size": 66,
+   "instances_checked": 100,
+   "grid_size": 100,
    "samples": [
     {
      "seed": 1,
      "params": {
-      "m": 100,
-      "v": 9
+      "P": 800,
+      "t": 6
      },
-     "words": {},
-     "question_text": "A go-kart and its driver are moving at \\(9\\,\\text{m/s}\\). There is \\(4050\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "words": {
+      "machine": "winch"
+     },
+     "question_text": "A winch has a power of \\(800\\,\\text{W}\\). How long does it take to transfer \\(4800\\,\\text{J}\\) of energy?",
      "answer": {
-      "value": 100,
+      "value": 6,
       "tolerance": 0.01,
-      "unit": "kg",
+      "unit": "s",
       "unit_options": [
-       "kg",
-       "J",
-       "N"
+       "s",
+       "W",
+       "J"
       ],
       "wrong": [
        {
-        "value": 900,
-        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 4050}{9^{2}}\\)."
+        "value": 3840000,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{4800}{800}\\)."
        },
        {
-        "value": 50,
-        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
-       },
-       {
-        "value": 25,
-        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+        "value": 0.16667,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{4800}{800}\\)."
        }
       ]
      },
-     "correct": 100
+     "correct": 6
     },
     {
      "seed": 2,
      "params": {
-      "m": 100,
-      "v": 7
+      "P": 50,
+      "t": 45
      },
-     "words": {},
-     "question_text": "A go-kart and its driver are moving at \\(7\\,\\text{m/s}\\). There is \\(2450\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "words": {
+      "machine": "small electric hoist"
+     },
+     "question_text": "A small electric hoist has a power of \\(50\\,\\text{W}\\). How long does it take to transfer \\(2250\\,\\text{J}\\) of energy?",
      "answer": {
-      "value": 100,
+      "value": 45,
       "tolerance": 0.01,
-      "unit": "kg",
+      "unit": "s",
       "unit_options": [
-       "kg",
-       "J",
-       "N"
+       "s",
+       "W",
+       "J"
       ],
       "wrong": [
        {
-        "value": 700,
-        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 2450}{7^{2}}\\)."
+        "value": 112500,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{2250}{50}\\)."
        },
        {
-        "value": 50,
-        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
-       },
-       {
-        "value": 25,
-        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+        "value": 0.022222,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{2250}{50}\\)."
        }
       ]
      },
-     "correct": 100
+     "correct": 45
     },
     {
      "seed": 3,
      "params": {
-      "m": 190,
-      "v": 9
+      "P": 100,
+      "t": 12
      },
-     "words": {},
-     "question_text": "A go-kart and its driver are moving at \\(9\\,\\text{m/s}\\). There is \\(7700\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "words": {
+      "machine": "small electric hoist"
+     },
+     "question_text": "A small electric hoist has a power of \\(100\\,\\text{W}\\). How long does it take to transfer \\(1200\\,\\text{J}\\) of energy?",
      "answer": {
-      "value": 190.12345679012347,
+      "value": 12,
       "tolerance": 0.01,
-      "unit": "kg",
+      "unit": "s",
       "unit_options": [
-       "kg",
-       "J",
-       "N"
+       "s",
+       "W",
+       "J"
       ],
       "wrong": [
        {
-        "value": 1710,
-        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 7700}{9^{2}}\\)."
+        "value": 120000,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{1200}{100}\\)."
        },
        {
-        "value": 95.1,
-        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
-       },
-       {
-        "value": 47.5,
-        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+        "value": 0.083333,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{1200}{100}\\)."
        }
       ]
      },
-     "correct": 190.123
+     "correct": 12
     },
     {
      "seed": 4,
      "params": {
-      "m": 110,
-      "v": 8
+      "P": 150,
+      "t": 45
      },
-     "words": {},
-     "question_text": "A go-kart and its driver are moving at \\(8\\,\\text{m/s}\\). There is \\(3520\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "words": {
+      "machine": "small electric hoist"
+     },
+     "question_text": "A small electric hoist has a power of \\(150\\,\\text{W}\\). How long does it take to transfer \\(6750\\,\\text{J}\\) of energy?",
      "answer": {
-      "value": 110,
+      "value": 45,
       "tolerance": 0.01,
-      "unit": "kg",
+      "unit": "s",
       "unit_options": [
-       "kg",
-       "J",
-       "N"
+       "s",
+       "W",
+       "J"
       ],
       "wrong": [
        {
-        "value": 880,
-        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 3520}{8^{2}}\\)."
+        "value": 1012500,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{6750}{150}\\)."
        },
        {
-        "value": 55,
-        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
-       },
-       {
-        "value": 27.5,
-        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+        "value": 0.022222,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{6750}{150}\\)."
        }
       ]
      },
-     "correct": 110
+     "correct": 45
     },
     {
      "seed": 5,
      "params": {
-      "m": 120,
-      "v": 8
+      "P": 100,
+      "t": 8
      },
-     "words": {},
-     "question_text": "A go-kart and its driver are moving at \\(8\\,\\text{m/s}\\). There is \\(3840\\,\\text{J}\\) of energy in their kinetic energy store. Calculate their total mass.",
+     "words": {
+      "machine": "small electric hoist"
+     },
+     "question_text": "A small electric hoist has a power of \\(100\\,\\text{W}\\). How long does it take to transfer \\(800\\,\\text{J}\\) of energy?",
      "answer": {
-      "value": 120,
+      "value": 8,
       "tolerance": 0.01,
-      "unit": "kg",
+      "unit": "s",
       "unit_options": [
-       "kg",
-       "J",
-       "N"
+       "s",
+       "W",
+       "J"
       ],
       "wrong": [
        {
-        "value": 960,
-        "misconception": "This divides by the speed, not the speed squared. Use \\(m = \\dfrac{2E_k}{v^{2}} = \\dfrac{2 \\times 3840}{8^{2}}\\)."
+        "value": 80000,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{800}{100}\\)."
        },
        {
-        "value": 60,
-        "misconception": "This loses the 2 that comes from the half in \\(E_k = \\tfrac{1}{2}mv^{2}\\). Use \\(m = \\dfrac{2E_k}{v^{2}}\\)."
-       },
-       {
-        "value": 30,
-        "misconception": "The half goes the other way when you rearrange: multiply the energy by 2, don't divide by it. \\(m = \\dfrac{2E_k}{v^{2}}\\)."
+        "value": 0.125,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{800}{100}\\)."
        }
       ]
      },
-     "correct": 120
+     "correct": 8
     }
    ]
   }
  ],
- "pack_commit": "ff11015e91e565f71b55c0730a1ce346847e7541",
+ "pack_commit": "uncommitted",
  "reference_pack_commit": "ff11015e91e565f71b55c0730a1ce346847e7541"
 }

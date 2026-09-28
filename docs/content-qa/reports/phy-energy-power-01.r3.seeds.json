@@ -1,0 +1,93 @@
+[
+ {
+  "label": "S-C1 mastery check with a filler distractor (d, colour) that no student holds",
+  "item": {
+   "ref": "seed-colour",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "comparison-explanation"
+   ],
+   "question_text": "Two winches lift identical crates onto a lorry. Winch X takes 12 s and winch Y takes 30 s. Which winch has the greater power, and why?",
+   "options": {
+    "a": "Winch X, because it transfers the same energy in less time",
+    "b": "Winch Y, because it works on the crate for longer",
+    "c": "Neither, because both crates gain the same energy",
+    "d": "Winch Y, because it is painted a brighter colour"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "Working for longer does not mean more power: the same energy in more time is less power.",
+    "c": "They gain the same energy, but power is energy per second, so the faster winch has more power.",
+    "d": "The colour of the winch has nothing to do with its power."
+   },
+   "misconception_map": {
+    "b": "slip: thinks a longer time means a greater power",
+    "c": "MIS-PHY-ENE-011",
+    "d": "slip: thinks colour affects power"
+   },
+   "explanation": "Both crates gain the same energy. Power = energy ÷ time, and X takes less time, so X has the greater power."
+  }
+ },
+ {
+  "label": "S-G1 unrealistic context: a toy car motor at up to 500 W",
+  "item": {
+   "ref": "seed-toycar",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "calculation"
+   ],
+   "question_text": "A toy car's motor transfers \\(15\\,000\\,\\text{J}\\) of energy in \\(30\\,\\text{s}\\). Calculate its power.",
+   "calc": {
+    "formula": "power",
+    "unit": "W",
+    "inputs": {
+     "E": {
+      "value": 15000,
+      "unit": "J"
+     },
+     "t": {
+      "value": 30,
+      "unit": "s"
+     }
+    },
+    "wrong": [
+     "multiplied",
+     "upside-down"
+    ]
+   },
+   "answer": {
+    "value": 500,
+    "tolerance": 0.01,
+    "unit": "W",
+    "unit_options": [
+     "W",
+     "J",
+     "N"
+    ],
+    "wrong": [
+     {
+      "value": 450000,
+      "misconception": "This multiplies energy by time. Power = energy ÷ time: \\(15\\,000 \\div 30 = 500\\,\\text{W}\\)."
+     },
+     {
+      "value": 0.002,
+      "misconception": "This divides time by energy. Power = energy ÷ time: \\(15\\,000 \\div 30 = 500\\,\\text{W}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "450000": "MIS-PHY-ENE-011",
+    "0.002": "MIS-PHY-SKL-004"
+   },
+   "explanation": "Power = energy ÷ time = \\(15\\,000 \\div 30 = 500\\,\\text{W}\\)."
+  }
+ }
+]

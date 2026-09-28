@@ -1,0 +1,619 @@
+{
+ "block": "phy-energy-power-01 (re-review)",
+ "subject": "Physics",
+ "concepts": [
+  "phy.energy.power"
+ ],
+ "reference_pack_commit": "ff11015e91e565f71b55c0730a1ce346847e7541",
+ "check_suite": "checks-1",
+ "items": [
+  {
+   "item_ref": "b01",
+   "kind": "item",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "mastery_check",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "mcq",
+   "context_tags": [
+    "comparison-explanation"
+   ],
+   "question_text": "Two winches lift identical crates onto a lorry. Winch X takes 12 s and winch Y takes 30 s. Which winch has the greater power, and why?",
+   "options": {
+    "a": "Winch X, because it transfers the same energy in less time",
+    "b": "Winch Y, because it works on the crate for longer",
+    "c": "Neither, because both crates gain the same energy",
+    "d": "Winch Y, because it is painted a brighter colour"
+   },
+   "key": "a",
+   "feedback": {
+    "b": "Working for longer does not mean more power: the same energy in more time is less power.",
+    "c": "They gain the same energy, but power is energy per second, so the faster winch has more power.",
+    "d": "The colour of the winch has nothing to do with its power."
+   },
+   "misconception_map": {
+    "b": "slip: thinks a longer time means a greater power",
+    "c": "MIS-PHY-ENE-011",
+    "d": "slip: thinks colour affects power"
+   },
+   "explanation": "Both crates gain the same energy. Power = energy ÷ time, and X takes less time, so X has the greater power.",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 0
+   }
+  },
+  {
+   "item_ref": "b02",
+   "kind": "template",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "practice",
+   "difficulty_band": 2,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "calculation"
+   ],
+   "stem": "A [[machine]] has a power of \\([[P]]\\,\\text{W}\\). How long does it take to transfer \\([[E]]\\,\\text{J}\\) of energy?",
+   "params": {
+    "P": {
+     "values": [
+      50,
+      80,
+      100,
+      150,
+      200,
+      250,
+      400,
+      500,
+      800,
+      1000
+     ],
+     "unit": "W"
+    },
+    "t": {
+     "values": [
+      6,
+      8,
+      12,
+      15,
+      20,
+      25,
+      30,
+      40,
+      45,
+      60
+     ],
+     "unit": "s",
+     "hidden": true
+    }
+   },
+   "words": {
+    "machine": [
+     "winch",
+     "garden water pump",
+     "conveyor belt motor",
+     "small electric hoist"
+    ]
+   },
+   "derived": {
+    "E": {
+     "formula": "power-energy",
+     "unit": "J"
+    }
+   },
+   "sig_figs": 5,
+   "calc": {
+    "formula": "power-time",
+    "unit": "s",
+    "wrong": [
+     "multiplied",
+     "upside-down"
+    ]
+   },
+   "misconception_map": {
+    "multiplied": "MIS-PHY-SKL-004",
+    "upside-down": "MIS-PHY-SKL-004"
+   },
+   "feedback": {
+    "multiplied": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{[[E]]}{[[P]]}\\).",
+    "upside-down": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{[[E]]}{[[P]]}\\)."
+   },
+   "explanation": "Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{[[E]]}{[[P]]} = [[answer]]\\,\\text{s}\\).",
+   "unit_options": [
+    "s",
+    "W",
+    "J"
+   ],
+   "answer_range": [
+    5,
+    65
+   ],
+   "sample_instances": [
+    {
+     "seed": 1,
+     "params": {
+      "P": 800,
+      "t": 6
+     },
+     "words": {
+      "machine": "winch"
+     },
+     "question_text": "A winch has a power of \\(800\\,\\text{W}\\). How long does it take to transfer \\(4800\\,\\text{J}\\) of energy?",
+     "answer": {
+      "value": 6,
+      "tolerance": 0.01,
+      "unit": "s",
+      "unit_options": [
+       "s",
+       "W",
+       "J"
+      ],
+      "wrong": [
+       {
+        "value": 3840000,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{4800}{800}\\)."
+       },
+       {
+        "value": 0.16667,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{4800}{800}\\)."
+       }
+      ]
+     },
+     "correct": 6
+    },
+    {
+     "seed": 2,
+     "params": {
+      "P": 50,
+      "t": 45
+     },
+     "words": {
+      "machine": "small electric hoist"
+     },
+     "question_text": "A small electric hoist has a power of \\(50\\,\\text{W}\\). How long does it take to transfer \\(2250\\,\\text{J}\\) of energy?",
+     "answer": {
+      "value": 45,
+      "tolerance": 0.01,
+      "unit": "s",
+      "unit_options": [
+       "s",
+       "W",
+       "J"
+      ],
+      "wrong": [
+       {
+        "value": 112500,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{2250}{50}\\)."
+       },
+       {
+        "value": 0.022222,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{2250}{50}\\)."
+       }
+      ]
+     },
+     "correct": 45
+    },
+    {
+     "seed": 3,
+     "params": {
+      "P": 100,
+      "t": 12
+     },
+     "words": {
+      "machine": "small electric hoist"
+     },
+     "question_text": "A small electric hoist has a power of \\(100\\,\\text{W}\\). How long does it take to transfer \\(1200\\,\\text{J}\\) of energy?",
+     "answer": {
+      "value": 12,
+      "tolerance": 0.01,
+      "unit": "s",
+      "unit_options": [
+       "s",
+       "W",
+       "J"
+      ],
+      "wrong": [
+       {
+        "value": 120000,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{1200}{100}\\)."
+       },
+       {
+        "value": 0.083333,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{1200}{100}\\)."
+       }
+      ]
+     },
+     "correct": 12
+    },
+    {
+     "seed": 4,
+     "params": {
+      "P": 150,
+      "t": 45
+     },
+     "words": {
+      "machine": "small electric hoist"
+     },
+     "question_text": "A small electric hoist has a power of \\(150\\,\\text{W}\\). How long does it take to transfer \\(6750\\,\\text{J}\\) of energy?",
+     "answer": {
+      "value": 45,
+      "tolerance": 0.01,
+      "unit": "s",
+      "unit_options": [
+       "s",
+       "W",
+       "J"
+      ],
+      "wrong": [
+       {
+        "value": 1012500,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{6750}{150}\\)."
+       },
+       {
+        "value": 0.022222,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{6750}{150}\\)."
+       }
+      ]
+     },
+     "correct": 45
+    },
+    {
+     "seed": 5,
+     "params": {
+      "P": 100,
+      "t": 8
+     },
+     "words": {
+      "machine": "small electric hoist"
+     },
+     "question_text": "A small electric hoist has a power of \\(100\\,\\text{W}\\). How long does it take to transfer \\(800\\,\\text{J}\\) of energy?",
+     "answer": {
+      "value": 8,
+      "tolerance": 0.01,
+      "unit": "s",
+      "unit_options": [
+       "s",
+       "W",
+       "J"
+      ],
+      "wrong": [
+       {
+        "value": 80000,
+        "misconception": "This multiplies energy by power. Rearrange P = E ÷ t to \\(t = \\dfrac{E}{P} = \\dfrac{800}{100}\\)."
+       },
+       {
+        "value": 0.125,
+        "misconception": "This divides the power by the energy. The time is energy ÷ power: \\(t = \\dfrac{800}{100}\\)."
+       }
+      ]
+     },
+     "correct": 8
+    }
+   ],
+   "instances_checked": 100,
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 0
+   }
+  },
+  {
+   "item_ref": "b03",
+   "kind": "template",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "calculation"
+   ],
+   "stem": "A [[machine]] transfers \\([[E]]\\,\\text{J}\\) of energy in \\([[t]]\\,\\text{s}\\). Calculate its power.",
+   "params": {
+    "P": {
+     "values": [
+      40,
+      50,
+      60,
+      75,
+      80,
+      100,
+      120,
+      150,
+      200,
+      250,
+      300,
+      400,
+      500
+     ],
+     "unit": "W",
+     "hidden": true
+    },
+    "t": {
+     "values": [
+      4,
+      5,
+      8,
+      10,
+      12,
+      15,
+      20,
+      25,
+      30
+     ],
+     "unit": "s"
+    }
+   },
+   "words": {
+    "machine": [
+     "winch",
+     "garden water pump",
+     "conveyor belt motor"
+    ]
+   },
+   "derived": {
+    "E": {
+     "formula": "power-energy",
+     "unit": "J"
+    }
+   },
+   "sig_figs": 5,
+   "calc": {
+    "formula": "power",
+    "unit": "W",
+    "wrong": [
+     "multiplied",
+     "upside-down"
+    ]
+   },
+   "misconception_map": {
+    "multiplied": "MIS-PHY-ENE-011",
+    "upside-down": "MIS-PHY-SKL-004"
+   },
+   "feedback": {
+    "multiplied": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{[[E]]}{[[t]]}\\).",
+    "upside-down": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{[[E]]}{[[t]]}\\)."
+   },
+   "explanation": "Power = energy transferred ÷ time = \\(\\dfrac{[[E]]}{[[t]]} = [[answer]]\\,\\text{W}\\).",
+   "unit_options": [
+    "W",
+    "J",
+    "N"
+   ],
+   "answer_range": [
+    30,
+    600
+   ],
+   "sample_instances": [
+    {
+     "seed": 1,
+     "params": {
+      "P": 500,
+      "t": 30
+     },
+     "words": {
+      "machine": "winch"
+     },
+     "question_text": "A winch transfers \\(15000\\,\\text{J}\\) of energy in \\(30\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 500,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 450000,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{15000}{30}\\)."
+       },
+       {
+        "value": 0.002,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{15000}{30}\\)."
+       }
+      ]
+     },
+     "correct": 500
+    },
+    {
+     "seed": 2,
+     "params": {
+      "P": 200,
+      "t": 10
+     },
+     "words": {
+      "machine": "garden water pump"
+     },
+     "question_text": "A garden water pump transfers \\(2000\\,\\text{J}\\) of energy in \\(10\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 200,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 20000,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{2000}{10}\\)."
+       },
+       {
+        "value": 0.005,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{2000}{10}\\)."
+       }
+      ]
+     },
+     "correct": 200
+    },
+    {
+     "seed": 3,
+     "params": {
+      "P": 100,
+      "t": 8
+     },
+     "words": {
+      "machine": "conveyor belt motor"
+     },
+     "question_text": "A conveyor belt motor transfers \\(800\\,\\text{J}\\) of energy in \\(8\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 100,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 6400,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{800}{8}\\)."
+       },
+       {
+        "value": 0.01,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{800}{8}\\)."
+       }
+      ]
+     },
+     "correct": 100
+    },
+    {
+     "seed": 4,
+     "params": {
+      "P": 80,
+      "t": 20
+     },
+     "words": {
+      "machine": "garden water pump"
+     },
+     "question_text": "A garden water pump transfers \\(1600\\,\\text{J}\\) of energy in \\(20\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 80,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 32000,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{1600}{20}\\)."
+       },
+       {
+        "value": 0.0125,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{1600}{20}\\)."
+       }
+      ]
+     },
+     "correct": 80
+    },
+    {
+     "seed": 5,
+     "params": {
+      "P": 50,
+      "t": 20
+     },
+     "words": {
+      "machine": "garden water pump"
+     },
+     "question_text": "A garden water pump transfers \\(1000\\,\\text{J}\\) of energy in \\(20\\,\\text{s}\\). Calculate its power.",
+     "answer": {
+      "value": 50,
+      "tolerance": 0.01,
+      "unit": "W",
+      "unit_options": [
+       "W",
+       "J",
+       "N"
+      ],
+      "wrong": [
+       {
+        "value": 20000,
+        "misconception": "This multiplies energy by time. Power is the energy transferred each second: \\(P = \\dfrac{E}{t} = \\dfrac{1000}{20}\\)."
+       },
+       {
+        "value": 0.02,
+        "misconception": "This divides the time by the energy. Power = energy ÷ time: \\(P = \\dfrac{1000}{20}\\)."
+       }
+      ]
+     },
+     "correct": 50
+    }
+   ],
+   "instances_checked": 117,
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 11
+   }
+  },
+  {
+   "item_ref": "b04",
+   "kind": "item",
+   "primary_concept": "phy.energy.power",
+   "evidence_class": "practice",
+   "difficulty_band": 1,
+   "tier": "Both",
+   "format": "numeric",
+   "context_tags": [
+    "calculation"
+   ],
+   "question_text": "A toy car's motor transfers \\(15\\,000\\,\\text{J}\\) of energy in \\(30\\,\\text{s}\\). Calculate its power.",
+   "calc": {
+    "formula": "power",
+    "unit": "W",
+    "inputs": {
+     "E": {
+      "value": 15000,
+      "unit": "J"
+     },
+     "t": {
+      "value": 30,
+      "unit": "s"
+     }
+    },
+    "wrong": [
+     "multiplied",
+     "upside-down"
+    ]
+   },
+   "answer": {
+    "value": 500,
+    "tolerance": 0.01,
+    "unit": "W",
+    "unit_options": [
+     "W",
+     "J",
+     "N"
+    ],
+    "wrong": [
+     {
+      "value": 450000,
+      "misconception": "This multiplies energy by time. Power = energy ÷ time: \\(15\\,000 \\div 30 = 500\\,\\text{W}\\)."
+     },
+     {
+      "value": 0.002,
+      "misconception": "This divides time by energy. Power = energy ÷ time: \\(15\\,000 \\div 30 = 500\\,\\text{W}\\)."
+     }
+    ]
+   },
+   "misconception_map": {
+    "450000": "MIS-PHY-ENE-011",
+    "0.002": "MIS-PHY-SKL-004"
+   },
+   "explanation": "Power = energy ÷ time = \\(15\\,000 \\div 30 = 500\\,\\text{W}\\).",
+   "automated_checks": {
+    "passed": true,
+    "warnings": [],
+    "past_paper_overlap_pct": 8
+   }
+  }
+ ]
+}
