@@ -136,13 +136,13 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Higher$t$, $t$Energy Stores & Transfers$t$, $t$Elastic Potential Energy$t$, $t$aqa-ph-fh-forces-work-energy$t$, 3,
-  $t$A spring with spring constant \(100\,\text{N/m}\) is stretched by 0.1 m. How much elastic potential energy does it store?$t$,
-  $t$\(1\,\text{J}\)$t$, $t$\(5\,\text{J}\)$t$, $t$\(0.5\,\text{J}\)$t$, $t$\(10\,\text{J}\)$t$, 'Not sure', $t$c$t$,
-  $t$This leaves out the half. \(E_{e} = \tfrac{1}{2}ke^{2} = \tfrac{1}{2} \times 100 \times 0.1^{2} = 0.5\,\text{J}\).$t$, $t$This forgets to square the extension. \(E_{e} = \tfrac{1}{2}ke^{2} = 0.5 \times 100 \times 0.01 = 0.5\,\text{J}\).$t$, null, $t$\(k \times e\) gives the force in newtons, not the energy. \(E_{e} = \tfrac{1}{2}ke^{2} = 0.5\,\text{J}\).$t$,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Elastic Potential Energy$t$, $t$aqa-ph-fh-forces-work-energy$t$, 2,
+  $t$A spring with spring constant \(100\,\text{N/m}\) is stretched by \(0.10\,\text{m}\), within its limit of proportionality. The elastic potential energy stored is given by \(E_{e} = \tfrac{1}{2}ke^{2}\). How much elastic potential energy does the spring store?$t$,
+  $t$\(0.5\,\text{J}\)$t$, $t$\(1\,\text{J}\)$t$, $t$\(5\,\text{J}\)$t$, $t$\(10\,\text{J}\)$t$, 'Not sure', $t$a$t$,
+  null, $t$This leaves out the half. \(E_{e} = \tfrac{1}{2}ke^{2} = \tfrac{1}{2} \times 100 \times 0.10^{2} = 0.5\,\text{J}\).$t$, $t$This forgets to square the extension. \(E_{e} = \tfrac{1}{2}ke^{2} = 0.5 \times 100 \times 0.010 = 0.5\,\text{J}\).$t$, $t$\(k \times e\) gives the force in newtons, not the energy. \(E_{e} = \tfrac{1}{2}ke^{2} = 0.5\,\text{J}\).$t$,
   $t$\(E_{e} = \tfrac{1}{2}ke^{2} = \tfrac{1}{2} \times 100 \times 0.1^{2} = 50 \times 0.01 = 0.5\,\text{J}\).$t$,
   'ai_drafted', false, true, 'draft', 'mcq', null, true, null
-where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$A spring with spring constant \(100\,\text{N/m}\) is stretched by 0.1 m. How much elastic potential energy does it store?$t$);
+where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$A spring with spring constant \(100\,\text{N/m}\) is stretched by \(0.10\,\text{m}\), within its limit of proportionality. The elastic potential energy stored is given by \(E_{e} = \tfrac{1}{2}ke^{2}\). How much elastic potential energy does the spring store?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,

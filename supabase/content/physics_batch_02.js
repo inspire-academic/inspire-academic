@@ -22,13 +22,13 @@ module.exports = {
   subject: 'Physics',
   source: 'drafted-2026-09-27-physics-batch-02-numeric',
   questions: [
-    { type: 'numeric', topic: EN, subtopic: 'Kinetic Energy', spec_slug: 'aqa-ph-fh-energy-stores-transfers', difficulty: 3,
+    { type: 'numeric', tier: 'Both', topic: EN, subtopic: 'Kinetic Energy', spec_slug: 'aqa-ph-fh-energy-stores-transfers', difficulty: 2,
       question_text: r`A tro-tro of mass \(1200\,\text{kg}\) is travelling at \(15\,\text{m/s}\). How much kinetic energy does it have?`,
       answer: { value: 135000, unit: 'J', unit_options: ['J', 'W', 'N', 'kg m/s'],
         wrong: [
           { value: 9000, misconception: r`This forgets to square the speed. \(E_k = \tfrac{1}{2}mv^{2} = \tfrac{1}{2} \times 1200 \times 15^{2} = 135\,000\,\text{J}\).` },
           { value: 270000, misconception: r`This forgets the \(\tfrac{1}{2}\): \(E_k = \tfrac{1}{2}mv^{2}\), so halve \(1200 \times 225\) to get \(135\,000\,\text{J}\).` },
-          { value: 18000, misconception: r`\(1200 \times 15 = 18\,000\) is the momentum (\(mv\)). Kinetic energy is \(\tfrac{1}{2}mv^{2} = 135\,000\,\text{J}\).` }
+          { value: 18000, misconception: r`\(1200 \times 15 = 18\,000\) leaves out both the \(\tfrac{1}{2}\) and the square on the speed. Kinetic energy is \(\tfrac{1}{2}mv^{2} = 135\,000\,\text{J}\).` }
         ],
         unit_feedback: 'Kinetic energy is energy, so it is measured in joules (J).' },
       explanation: r`\(E_k = \tfrac{1}{2}mv^{2} = \tfrac{1}{2} \times 1200 \times 15^{2} = 0.5 \times 1200 \times 225 = 135\,000\,\text{J}\).` },

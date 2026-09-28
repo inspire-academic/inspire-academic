@@ -107,12 +107,12 @@ module.exports = {
       },
       explanation: r`Power = energy transferred ÷ time: \(P = 1200 \div 30 = 40\,\text{W}\).` },
 
-    { topic: 'Energy Stores & Transfers', subtopic: 'Elastic Potential Energy', spec_slug: 'aqa-ph-fh-forces-work-energy', difficulty: 3, combined: true,
-      question_text: r`A spring with spring constant \(100\,\text{N/m}\) is stretched by 0.1 m. How much elastic potential energy does it store?`,
-      options: { a: r`\(1\,\text{J}\)`, b: r`\(5\,\text{J}\)`, c: r`\(0.5\,\text{J}\)`, d: r`\(10\,\text{J}\)` }, key: 'c',
+    { tier: 'Both', topic: 'Energy Stores & Transfers', subtopic: 'Elastic Potential Energy', spec_slug: 'aqa-ph-fh-forces-work-energy', difficulty: 2, combined: true,
+      question_text: r`A spring with spring constant \(100\,\text{N/m}\) is stretched by \(0.10\,\text{m}\), within its limit of proportionality. The elastic potential energy stored is given by \(E_{e} = \tfrac{1}{2}ke^{2}\). How much elastic potential energy does the spring store?`,
+      options: { a: r`\(0.5\,\text{J}\)`, b: r`\(1\,\text{J}\)`, c: r`\(5\,\text{J}\)`, d: r`\(10\,\text{J}\)` }, key: 'a',
       feedback: {
-        a: r`This leaves out the half. \(E_{e} = \tfrac{1}{2}ke^{2} = \tfrac{1}{2} \times 100 \times 0.1^{2} = 0.5\,\text{J}\).`,
-        b: r`This forgets to square the extension. \(E_{e} = \tfrac{1}{2}ke^{2} = 0.5 \times 100 \times 0.01 = 0.5\,\text{J}\).`,
+        b: r`This leaves out the half. \(E_{e} = \tfrac{1}{2}ke^{2} = \tfrac{1}{2} \times 100 \times 0.10^{2} = 0.5\,\text{J}\).`,
+        c: r`This forgets to square the extension. \(E_{e} = \tfrac{1}{2}ke^{2} = 0.5 \times 100 \times 0.010 = 0.5\,\text{J}\).`,
         d: r`\(k \times e\) gives the force in newtons, not the energy. \(E_{e} = \tfrac{1}{2}ke^{2} = 0.5\,\text{J}\).`
       },
       explanation: r`\(E_{e} = \tfrac{1}{2}ke^{2} = \tfrac{1}{2} \times 100 \times 0.1^{2} = 50 \times 0.01 = 0.5\,\text{J}\).` },

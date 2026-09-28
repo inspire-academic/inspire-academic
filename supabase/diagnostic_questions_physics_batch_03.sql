@@ -20,12 +20,12 @@ insert into public.diagnostic_questions (
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Energy Stores$t$, $t$aqa-ph-fh-energy-stores-transfers$t$, 1,
-  $t$A ball is held still at the top of a hill. Which energy store is largest?$t$,
-  $t$Kinetic$t$, $t$Gravitational potential$t$, $t$Elastic potential$t$, $t$Nuclear$t$, 'Not sure', $t$b$t$,
-  $t$Kinetic energy is energy of movement; the ball is still, so it has none.$t$, null, $t$Elastic potential energy is stored in something stretched or squashed, like a spring.$t$, $t$Nuclear energy is stored inside atoms; it isn't changed by where the ball is held.$t$,
-  $t$Raised objects store energy in their gravitational potential store. The higher they are, the more they store.$t$,
+  $t$A ball is carried from the bottom of a hill to the top, and then held still. Which of the ball's energy stores has increased?$t$,
+  $t$Kinetic$t$, $t$Gravitational potential$t$, $t$Elastic potential$t$, $t$Chemical$t$, 'Not sure', $t$b$t$,
+  $t$The ball is held still at the top, so its kinetic store is empty. Lifting it filled its gravitational potential store.$t$, null, $t$Nothing about the ball is stretched or squashed, so its elastic potential store has not changed.$t$, $t$The chemical store that changed belongs to the person who carried the ball, and it went down. The ball's chemical store did not change.$t$,
+  $t$Lifting an object higher increases its gravitational potential energy store. The energy came from the chemical store of the person who carried it.$t$,
   'ai_drafted', false, true, 'draft', 'mcq', null, true, null
-where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$A ball is held still at the top of a hill. Which energy store is largest?$t$);
+where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$A ball is carried from the bottom of a hill to the top, and then held still. Which of the ball's energy stores has increased?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
@@ -59,23 +59,23 @@ insert into public.diagnostic_questions (
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
 select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Renewable Resources$t$, $t$aqa-ph-fh-energy-resources$t$, 1,
-  $t$Which of these energy resources is renewable?$t$,
-  $t$Coal$t$, $t$Natural gas$t$, $t$Solar$t$, $t$Oil$t$, 'Not sure', $t$c$t$,
-  $t$Coal is a fossil fuel; it takes millions of years to form, so it will run out.$t$, $t$Natural gas is a fossil fuel and will run out.$t$, null, $t$Oil is a fossil fuel and will run out.$t$,
-  $t$Renewable resources are replaced as they are used. Sunlight keeps arriving, so solar power is renewable.$t$,
+  $t$Solar power is described as a renewable energy resource. What does "renewable" mean here?$t$,
+  $t$It releases no carbon dioxide while it works$t$, $t$It is replaced as quickly as it is used$t$, $t$It is cheap to set up and to run$t$, $t$It can supply energy at any time of day$t$, 'Not sure', $t$b$t$,
+  $t$Solar panels do release no carbon dioxide while they work, but that is not what renewable means. Nuclear power releases none either, and it is not renewable.$t$, null, $t$Cost has nothing to do with whether a resource is renewable.$t$, $t$Solar panels supply nothing at night, yet solar is still renewable. Renewable is about the resource being replaced, not about reliability.$t$,
+  $t$A renewable resource is one that is being (or can be) replenished as it is used. The Sun keeps supplying energy, so solar power is renewable.$t$,
   'ai_drafted', false, true, 'draft', 'mcq', null, true, null
-where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$Which of these energy resources is renewable?$t$);
+where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$Solar power is described as a renewable energy resource. What does "renewable" mean here?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Foundation$t$, $t$Energy Stores & Transfers$t$, $t$Energy Resources$t$, $t$aqa-ph-fh-energy-resources$t$, 2,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Energy Resources$t$, $t$aqa-ph-fh-energy-resources$t$, 2,
   $t$A village in northern Ghana wants electricity. Why might solar panels be a better choice than a diesel generator?$t$,
-  $t$Solar panels work equally well at night$t$, $t$Sunlight is free and the panels release no carbon dioxide while working$t$, $t$Diesel is a renewable fuel$t$, $t$Solar panels never need any maintenance$t$, 'Not sure', $t$b$t$,
-  $t$Solar panels produce nothing at night; batteries are needed to store energy for then.$t$, null, $t$Diesel is made from oil, a fossil fuel. It is not renewable.$t$, $t$Panels need cleaning and occasional repair, just less than a generator.$t$,
-  $t$Northern Ghana gets strong sunshine. Once panels are installed, the energy is free and no carbon dioxide is released while they run.$t$,
+  $t$The panels keep working through the night$t$, $t$Sunlight is free and no fuel is burned$t$, $t$The panels work as well on cloudy days$t$, $t$Making the panels causes no pollution$t$, 'Not sure', $t$b$t$,
+  $t$Solar panels produce nothing at night; batteries are needed to store energy for then.$t$, null, $t$Panels produce much less on cloudy days. Solar is renewable, but it is not always available.$t$, $t$Making, transporting and disposing of panels does cause some pollution. Renewable does not mean no environmental impact.$t$,
+  $t$Northern Ghana gets strong sunshine. Once panels are installed, the energy is free and no fuel is burned, so no carbon dioxide is released while they run.$t$,
   'ai_drafted', false, true, 'draft', 'mcq', null, true, null
 where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$A village in northern Ghana wants electricity. Why might solar panels be a better choice than a diesel generator?$t$);
 
@@ -84,26 +84,26 @@ insert into public.diagnostic_questions (
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Efficiency$t$, $t$aqa-ph-fh-energy-efficiency$t$, 3,
-  $t$A light bulb transfers \(100\,\text{J}\) of energy each second. \(20\,\text{J}\) is transferred as light. What is its efficiency?$t$,
-  $t$\(80\%\)$t$, $t$\(20\%\)$t$, $t$\(5\%\)$t$, $t$\(120\%\)$t$, 'Not sure', $t$b$t$,
-  $t$80% is the share that is wasted as heat. Efficiency is the useful share: 20 ÷ 100 = 20%.$t$, null, $t$This divides 100 by 20. Efficiency = useful ÷ total = 20 ÷ 100 = 20%.$t$, $t$No device can be more than 100% efficient. Efficiency = 20 ÷ 100 = 20%.$t$,
-  $t$Efficiency \(= \dfrac{\text{useful output}}{\text{total input}} \times 100 = \dfrac{20}{100} \times 100 = 20\%\).$t$,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Efficiency$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
+  $t$A light bulb is supplied with \(60\,\text{J}\) of energy each second. It transfers \(12\,\text{J}\) usefully by light each second. What is its efficiency?$t$,
+  $t$\(12\%\)$t$, $t$\(20\%\)$t$, $t$\(80\%\)$t$, $t$\(500\%\)$t$, 'Not sure', $t$b$t$,
+  $t$12 J is the useful energy, not the efficiency. Efficiency = useful ÷ total = 12 ÷ 60 = 0.20 = 20%.$t$, null, $t$80% is the share that is dissipated to the surroundings. Efficiency is the useful share: 12 ÷ 60 = 20%.$t$, $t$This divides the total by the useful energy. No device can be more than 100% efficient. Efficiency = 12 ÷ 60 = 20%.$t$,
+  $t$Efficiency \(= \dfrac{\text{useful output}}{\text{total input}} = \dfrac{12}{60} = 0.20 = 20\%\).$t$,
   'ai_drafted', false, true, 'draft', 'mcq', null, true, null
-where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$A light bulb transfers \(100\,\text{J}\) of energy each second. \(20\,\text{J}\) is transferred as light. What is its efficiency?$t$);
+where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$A light bulb is supplied with \(60\,\text{J}\) of energy each second. It transfers \(12\,\text{J}\) usefully by light each second. What is its efficiency?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
   question_text, option_a, option_b, option_c, option_d, option_e, correct_answer,
   misconception_a, misconception_b, misconception_c, misconception_d, explanation,
   source, validated, active, review_status, question_type, answer_spec, combined_eligible, context_region)
-select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Power$t$, $t$aqa-ph-fh-energy-efficiency$t$, 4,
-  $t$Two kettles boil the same amount of water. Kettle A takes 2 minutes and kettle B takes 3 minutes. What does this tell you?$t$,
-  $t$Kettle A has a higher power$t$, $t$Kettle B has a higher power$t$, $t$Kettle B transfers more energy in total$t$, $t$Both kettles have the same power$t$, 'Not sure', $t$a$t$,
-  null, $t$Taking longer to transfer the same energy means a lower power.$t$, $t$Both boil the same water, so they transfer about the same useful energy; A just does it faster.$t$, $t$They take different times for the same job, so their powers are different.$t$,
-  $t$Power is how fast energy is transferred. Kettle A transfers the same energy in less time, so it has the higher power.$t$,
+select $t$Physics$t$, $t$Universal$t$, 'GCSE', $t$Both$t$, $t$Energy Stores & Transfers$t$, $t$Power$t$, $t$aqa-ph-fh-energy-efficiency$t$, 2,
+  $t$Kettle A and kettle B each heat \(1.0\,\text{kg}\) of water from \(20\,^{\circ}\text{C}\) to \(100\,^{\circ}\text{C}\). Kettle A takes 2 minutes and kettle B takes 3 minutes. Assume all the energy each kettle transfers goes to the water. Which statement is correct?$t$,
+  $t$Kettle A has the greater power$t$, $t$Kettle B has the greater power$t$, $t$Kettle B transfers more energy to the water$t$, $t$Kettle A transfers more energy to the water$t$, 'Not sure', $t$a$t$,
+  null, $t$Kettle B takes longer to transfer the same energy, so its power is lower. Power is energy transferred per second.$t$, $t$Both heat the same mass of water through the same temperature rise, so the water gains the same energy. Taking longer does not mean transferring more.$t$, $t$The water in each kettle gains the same energy. Kettle A just transfers it faster.$t$,
+  $t$Both kettles transfer the same energy to the water (same mass, same temperature rise). Kettle A does it in less time, so its power (energy transferred per second) is greater.$t$,
   'ai_drafted', false, true, 'draft', 'mcq', null, true, null
-where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$Two kettles boil the same amount of water. Kettle A takes 2 minutes and kettle B takes 3 minutes. What does this tell you?$t$);
+where not exists (select 1 from public.diagnostic_questions where subject = $t$Physics$t$ and question_text = $t$Kettle A and kettle B each heat \(1.0\,\text{kg}\) of water from \(20\,^{\circ}\text{C}\) to \(100\,^{\circ}\text{C}\). Kettle A takes 2 minutes and kettle B takes 3 minutes. Assume all the energy each kettle transfers goes to the water. Which statement is correct?$t$);
 
 insert into public.diagnostic_questions (
   subject, exam_board, level, tier, topic, subtopic, spec_slug, difficulty,
