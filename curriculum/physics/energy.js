@@ -7,7 +7,7 @@
 // specification statements are metadata on a concept, so Edexcel or WASSCE
 // can be mapped later without new concepts.
 //
-// status: 'approved' until Eric approves the card; only 'approved' concepts
+// status: 'draft' until Eric approves the card; only 'approved' concepts
 // may receive content or evidence.
 //
 // Fields:
