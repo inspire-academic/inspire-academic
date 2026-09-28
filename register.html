@@ -522,9 +522,32 @@ form.addEventListener('submit', async (e) => {
     if (parentEmail && parentFirstName && parentLastName) {
       await createParentAccount(userId, parentEmail, parentFirstName, parentLastName, parentPhone);
     }
-    
+
+    // 3b. Year 6-8: record the parent's consent on the server, which emails
+    // the parent a link to confirm it (consent-record.js). The browser can't
+    // write the record itself. A failure here doesn't undo the sign-up:
+    // staff see accounts without a consent record and follow up.
+    let consentEmailed = false;
+    if (isUnder13YearGroupSelected()) {
+      try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (authData.session) headers.Authorization = `Bearer ${authData.session.access_token}`;
+        const res = await fetch('/api/v1/consent/record', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ studentId: userId, parentFirstName, parentLastName, parentEmail })
+        });
+        const out = await res.json();
+        consentEmailed = !!(out && out.success && out.emailed);
+      } catch (consentError) {
+        console.warn('Consent record failed:', consentError);
+      }
+    }
+
     // 4. Show success message
-    successMsg.textContent = '✓ Account created! Please check your email to verify your account.';
+    successMsg.textContent = consentEmailed
+      ? '✓ Account created! Please check your email to verify your account. We have also emailed your parent or guardian to confirm their consent.'
+      : '✓ Account created! Please check your email to verify your account.';
     successMsg.style.display = 'block';
     
     // 5. Redirect to login after 3 seconds

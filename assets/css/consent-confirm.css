@@ -1,0 +1,52 @@
+/* consent-confirm.html — the page a parent's consent link opens.
+   Mobile-first; colours and fonts from tokens.css (dark and light themes). */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+.consent-card {
+  width: 100%;
+  max-width: 30rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(var(--gold-rgb), .25);
+}
+
+.consent-logo {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.consent-card h1 {
+  margin: 0 0 .75rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
+.consent-card p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+@media (min-width: 40rem) {
+  .consent-card { padding: 2.25rem; }
+  .consent-card h1 { font-size: 1.75rem; }
+}

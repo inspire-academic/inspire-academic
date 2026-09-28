@@ -74,6 +74,12 @@ function = "create-teacher"
 [functions."diagnostic-item-stats"]
   schedule = "30 2 * * *"
 
+# Weekly (Monday 08:00 UTC) list for admins of parental consents still
+# unconfirmed 14 days after sign-up. Production-only, like birthday-digest.
+# See consent-overdue-digest.js.
+[functions."consent-overdue-digest"]
+  schedule = "0 8 * * 1"
+
 # ism-lesson-content.js inlines the runtime bridge script into every
 # served lesson via fs.readFileSync at request time (see its header
 # comment) — esbuild only bundles files reached by require()/import,
@@ -371,6 +377,21 @@ function = "create-teacher"
 [[redirects]]
   from = "/api/v1/assessment/report/email"
   to = "/.netlify/functions/assessment-report-email"
+  status = 200
+  force = true
+
+# Parental consent for students who may be under 13: record it at sign-up
+# (register.html) and confirm it from the link emailed to the parent
+# (consent-confirm.html). See consent-record.js / consent-verify.js.
+[[redirects]]
+  from = "/api/v1/consent/record"
+  to = "/.netlify/functions/consent-record"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/consent/verify"
+  to = "/.netlify/functions/consent-verify"
   status = 200
   force = true
 
