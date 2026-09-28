@@ -153,7 +153,16 @@ test('scoring helpers', () => {
   ], 75), { score: 3, maxScore: 4, percentage: 75, passed: true });
   assert.equal(markChoice({ correct_answer: 'c ', marks: 2 }, 'C').marks, 2);
   assert.equal(markChoice({ correct_answer: 'C' }, 'x'), null);
-  assert.equal(timeTaken(500, new Date(Date.now() - 60000).toISOString()), 60);
+  // Freeze the clock: timeTaken rounds elapsed time up (a generous cap), so a
+  // single millisecond between building the start time and the call reads 61.
+  const realNow = Date.now;
+  const frozen = realNow();
+  Date.now = () => frozen;
+  try {
+    assert.equal(timeTaken(500, new Date(frozen - 60000).toISOString()), 60);
+  } finally {
+    Date.now = realNow;
+  }
   assert.equal(timeTaken(-1, null), null);
 });
 
