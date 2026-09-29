@@ -240,8 +240,17 @@ function evaluate() {
   }
   {
     const rules = exists('assets/js/mastery-rules.js');
-    add('remediation', 'Remediation pathways present (routing + remediation material per misconception)', true,
-      { status: rules ? PARTIAL : FAIL, evidence: `Routing and remediation steps: ${rules ? 'built (mastery-rules.js REMEDIATION_STEPS)' : 'missing'}. Remediation material (clinics, prerequisite mini-lessons) per misconception: not yet produced; for the pilot, the block lessons and the teacher guide notes carry it.` });
+    // Remediation = routing (which action, in what order) + material to
+    // deliver it. For the pilot, each block lesson's misconception clinic and
+    // the generated guide's per-misconception route are that material.
+    const usable = b => USABLE_LESSON.includes(b.lesson.status);
+    const pilotOk = rules && pilotBlocks.every(usable) && pilotBlocks.every(b => exists(guide(b)));
+    add('remediation-pilot', 'Remediation pathways for the pilot blocks (routing + clinics in the B1/B2 lessons + per-misconception routes in the guides)', true,
+      pilotOk ? { status: PASS, evidence: 'mastery-rules.js routing and REMEDIATION_STEPS; the B1/B2 lessons have misconception clinics; the block guides give a route per misconception.' }
+        : { status: rules ? PARTIAL : FAIL, evidence: `Routing: ${rules ? 'built' : 'missing'}. Pilot lessons with clinics: ${pilotBlocks.filter(usable).map(b => b.id).join(', ') || 'none'} of B1, B2.` });
+    add('remediation', 'Remediation pathways present for every block (routing + lesson clinics + per-misconception material)', false,
+      rules && PROGRAMME.blocks.every(usable) ? { status: PASS, evidence: 'Routing plus a QA-passed lesson with clinics for every block.' }
+        : { status: rules ? PARTIAL : FAIL, evidence: `Routing built; blocks without a QA-passed lesson to carry the clinics: ${list(PROGRAMME.blocks.filter(b => !usable(b)).map(b => b.id))}. Dedicated remediation micro-lessons per misconception: not yet produced (P1).` });
   }
   {
     // The V1 runtime serves fixed items only (template instances are not

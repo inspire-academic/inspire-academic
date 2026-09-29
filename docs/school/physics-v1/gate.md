@@ -4,7 +4,7 @@
 
 ## Status: **NOT READY**
 
-7 pass · 11 partial · 9 fail · 12 awaiting a person · 39 items. Pilot items: 7/20 pass.
+7 pass · 12 partial · 9 fail · 12 awaiting a person · 40 items. Pilot items: 7/20 pass.
 
 PILOT READY means every item marked **P** passes: an internal pilot of Blocks 1–2 with the ISM cohort. SCHOOL READY needs every item.
 
@@ -28,7 +28,8 @@ PILOT READY means every item marked **P** passes: an internal pilot of Blocks 1�
 | ◐ PARTIAL | Mastery checks present (≥ 2 approved mastery-check items per concept) |  | 2/15 concepts. Missing: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources |
 | ◐ PARTIAL | Item-pool depth for a second attempt (≥ 3 approved mastery-check items per concept) |  | 1/15 concepts. Short: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.gravitational, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources |
 | ❌ FAIL | Mastery checks present for the pilot blocks | P | Missing: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done |
-| ◐ PARTIAL | Remediation pathways present (routing + remediation material per misconception) | P | Routing and remediation steps: built (mastery-rules.js REMEDIATION_STEPS). Remediation material (clinics, prerequisite mini-lessons) per misconception: not yet produced; for the pilot, the block lessons and the teacher guide notes carry it. |
+| ◐ PARTIAL | Remediation pathways for the pilot blocks (routing + clinics in the B1/B2 lessons + per-misconception routes in the guides) | P | Routing: built. Pilot lessons with clinics: B2 of B1, B2. |
+| ◐ PARTIAL | Remediation pathways present for every block (routing + lesson clinics + per-misconception material) |  | Routing built; blocks without a QA-passed lesson to carry the clinics: B1, B3, B4, B5, W6. Dedicated remediation micro-lessons per misconception: not yet produced (P1). |
 | ◐ PARTIAL | Reassessment present (parallel form per concept + runtime, live) |  | Concepts without a second approved diagnostic/retrieval item for a parallel form: 15/15. Runtime: built (reassessment mode, unseen items only). Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
 | ◐ PARTIAL | Reporting operational (school intervention report from real data, live) |  | Report built: attendance, baseline, priorities, pathways, block checks, reassessment comparison, profile, individual summaries, next steps; recorded data only; no causal claims. Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
 | ❌ FAIL | Teacher delivery does not depend on Eric: guides complete |  | Guides incomplete (see guides). |
