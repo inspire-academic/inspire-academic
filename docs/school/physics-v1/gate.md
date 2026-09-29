@@ -4,7 +4,7 @@
 
 ## Status: **NOT READY**
 
-7 pass · 10 partial · 10 fail · 12 awaiting a person · 39 items. Pilot items: 7/20 pass.
+7 pass · 11 partial · 9 fail · 12 awaiting a person · 39 items. Pilot items: 7/20 pass.
 
 PILOT READY means every item marked **P** passes: an internal pilot of Blocks 1–2 with the ISM cohort. SCHOOL READY needs every item.
 
@@ -19,7 +19,7 @@ PILOT READY means every item marked **P** passes: an internal pilot of Blocks 1�
 | ◐ PARTIAL | Intervention routing operational (deterministic rules + teacher validation, live) | P | Rules module: built and tested. Teacher view with validate/override: built and tested. Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
 | ❌ FAIL | 100% core lessons present and QA-passed |  | 0/6 usable. B1: qa-failed; B2: qa-failed; B3: missing; B4: missing; B5: missing; W6: missing |
 | ❌ FAIL | Core lessons present and QA-passed for the pilot blocks (B1, B2) | P | B1: qa-failed (docs/school/physics-v1/qa/week1-toolkit.md); B2: qa-failed (docs/school/physics-v1/qa/energy-board.md) |
-| ❌ FAIL | 100% teacher guides present (programme guide + block guides tied to a usable lesson) |  | Programme guide: missing. Block guides missing: B1, B2, B3, B4, B5, W6. Guides generated but without a usable lesson to deliver from: none. |
+| ◐ PARTIAL | 100% teacher guides present (programme guide + block guides tied to a usable lesson) |  | Programme guide: present. Block guides missing: none. Guides generated but without a usable lesson to deliver from: B1, B2, B3, B4, B5, W6. |
 | ❌ FAIL | Teacher guides present for the pilot blocks (B1, B2) | P | The B1/B2 guides need a usable lesson behind them (see lessons-pilot). |
 | ◐ PARTIAL | 100% student practice present (approved practice per concept) |  | 2/15 concepts have approved practice. Missing: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources |
 | ❌ FAIL | Approved practice for the pilot blocks | P | Missing: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done |

@@ -17,6 +17,14 @@ test('docs/school/physics-v1/gate.md is current (run: node curriculum/school/rea
   assert.equal(fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n'), render(evaluate()));
 });
 
+test('the teacher guides are current (run: node curriculum/school/build-guides.js)', () => {
+  const { build } = require('../curriculum/school/build-guides.js');
+  const dir = path.join(__dirname, '..', 'docs', 'school', 'physics-v1', 'guides');
+  for (const [f, text] of Object.entries(build())) {
+    assert.equal(fs.readFileSync(path.join(dir, f), 'utf8').replace(/\r\n/g, '\n'), text, f);
+  }
+});
+
 test('the status is one of the three allowed words and follows the rules', () => {
   const g = evaluate();
   assert.ok(['NOT READY', 'PILOT READY', 'SCHOOL READY'].includes(g.status));
