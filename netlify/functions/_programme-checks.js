@@ -30,6 +30,16 @@ function resolveCheck(checkId) {
     return { id: checkId, kind: part, programme, blockId: null, title: part === 'baseline' ? 'Baseline check' : 'Reassessment',
              concepts: all, evidenceClasses: c.evidenceClasses, perConcept: c.perConcept, minutes: c.minutes, requireUnseen: part === 'reassessment' };
   }
+  // 'B3-practice': the block's approved practice items, answered on the
+  // platform with the full review afterwards. Items may repeat (practice is
+  // for learning); the mastery rules ignore a repeat within 14 days.
+  const practice = /^(B\d+)-practice$/.exec(part);
+  if (practice) {
+    const block = programme.blocks.find(b => b.id === practice[1] && b.concepts.length);
+    if (!block) return null;
+    return { id: checkId, kind: 'practice', programme, blockId: block.id, title: `${block.title}: practice`,
+             concepts: block.concepts, evidenceClasses: ['practice'], perConcept: { min: 1, target: 4 }, minutes: 20, requireUnseen: false };
+  }
   const block = programme.blocks.find(b => b.id === part && b.concepts.length);
   if (!block) return null;
   const c = programme.checks.block;
@@ -144,7 +154,9 @@ function checkResult(check, marked, tagged, optionMisconceptions) {
   const concepts = check.concepts.filter(c => byConcept[c]).map(c => {
     const r = byConcept[c];
     const passed = r.correct === r.answered && r.sureWrong === 0;
-    const outcome = check.kind === 'block' ? (passed ? 'passed' : 'not_yet') : (passed ? 'looks_secure' : r.correct === 0 ? 'looks_insecure' : 'mixed');
+    const outcome = check.kind === 'block' ? (passed ? 'passed' : 'not_yet')
+      : check.kind === 'practice' ? (passed ? 'passed' : 'not_yet')
+      : (passed ? 'looks_secure' : r.correct === 0 ? 'looks_insecure' : 'mixed');
     return { ...r, passed, outcome };
   });
   return { kind: check.kind, checkId: check.id, blockId: check.blockId, concepts, assessed: concepts.length, notAssessed: check.concepts.filter(c => !byConcept[c]) };
@@ -159,6 +171,8 @@ function describeForPupil(result, conceptNames) {
     if (result.kind === 'block') {
       text = r.passed ? 'Passed. Well done: this goes on your mastery record.'
         : 'Not yet. Your teacher will show you what to work on, then you will get a second check on different questions.';
+    } else if (result.kind === 'practice') {
+      text = r.passed ? 'All right. Keep it going.' : 'Look at the answers below: each wrong one says what probably went wrong and how to do it.';
     } else {
       text = r.outcome === 'looks_secure' ? 'Looks secure so far.'
         : r.outcome === 'looks_insecure' ? 'Needs work: we will build this in the programme.'

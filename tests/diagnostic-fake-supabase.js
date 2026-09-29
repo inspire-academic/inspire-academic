@@ -26,6 +26,7 @@ function fakeSupabase(seed) {
       return cell != null && re.test(String(cell));
     }
     if (op === 'gte') return String(cell) >= raw;
+    if (op === 'lte') return String(cell) <= raw;
     if (op === 'lt') return String(cell) < raw;
     if (op === 'in') {
       const list = raw.replace(/^\(|\)$/g, '').split(',').map(s => s.replace(/^"|"$/g, ''));

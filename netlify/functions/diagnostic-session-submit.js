@@ -39,6 +39,7 @@ async function programmeCheckResult(client, session, questions, answers) {
       concepts: checks.describeForPupil(result, CONCEPT_NAMES),
       next: check.kind === 'baseline' ? 'Your teacher will use this to plan your programme.'
         : check.kind === 'block' ? 'Your teacher will see this and tell you what comes next.'
+        : check.kind === 'practice' ? 'Practice counts towards your mastery record. You can do it again later.'
         : 'Your teacher will compare this with your baseline check.'
     }
   };

@@ -28,6 +28,18 @@ test('resolves baseline, block and reassessment checks from the manifest', () =>
   assert.equal(checks.resolveCheck(`${P}:W6`), null, 'week 6 has no concepts, so no block check');
   assert.equal(checks.resolveCheck('nope:baseline'), null);
   assert.deepEqual(checks.programmeChecks(P).map(c => c.id.split(':')[1]), ['baseline', 'B1', 'B2', 'B3', 'B4', 'B5', 'reassessment']);
+  const pr = checks.resolveCheck(`${P}:B3-practice`);
+  assert.equal(pr.kind, 'practice');
+  assert.deepEqual(pr.evidenceClasses, ['practice']);
+  assert.equal(pr.requireUnseen, false);
+  assert.equal(checks.resolveCheck(`${P}:W6-practice`), null);
+});
+
+test('practice serves only practice items, may repeat them, and never counts as a mastery check', () => {
+  const pr = checks.resolveCheck(`${P}:B3-practice`);
+  const tagged = [tag(1, 'phy.energy.kinetic', 'practice'), tag(2, 'phy.energy.kinetic', 'mastery_check')];
+  const r = checks.selectCheckItems(pr, tagged, [q(1), q(2)], { rng: seq(2), seen: [1] });
+  assert.deepEqual(r.questions.map(x => x.id), [1], 'a seen practice item may be practised again; the mastery item is never served');
 });
 
 function tag(id, concept, cls, band = 1, format = 'mcq', ctx = []) {

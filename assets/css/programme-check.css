@@ -1,0 +1,22 @@
+/* Programme-check mode of assessment-engine.html (assets/js/programme-check-mode.js).
+   Only applies when the page runs a programme check. Tokens from tokens.css. */
+.programme-check #section-setup > :not(.pc-panel) { display: none; }
+.pc-kicker { font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-text, #c9a84c); margin: 0 0 .35rem; }
+.pc-title { font-size: 1.6rem; margin: 0 0 1rem; }
+.pc-rules { margin: 0 0 1.25rem; padding-left: 1.1rem; line-height: 1.6; }
+.pc-rules li { margin-bottom: .35rem; }
+.pc-start { width: 100%; font-size: 1rem; padding: .9rem; text-align: center; display: block; }
+.pc-list { list-style: none; margin: 0 0 1rem; padding: 0; }
+.pc-row { padding: .85rem 0; border-bottom: 1px solid var(--border, rgba(255,255,255,.1)); }
+.pc-row:last-child { border-bottom: 0; }
+.pc-row-head { display: flex; justify-content: space-between; gap: .75rem; align-items: baseline; }
+.pc-name { font-weight: 600; }
+.pc-badge { font-size: .8rem; font-weight: 600; padding: .15rem .6rem; border-radius: 999px; white-space: nowrap; }
+.pc-good { background: rgba(16, 185, 129, .15); color: var(--good, #10b981); }
+.pc-mid { background: rgba(201, 168, 76, .15); color: var(--gold-text, #c9a84c); }
+.pc-work { background: rgba(239, 68, 68, .12); color: var(--bad, #ef4444); }
+.pc-text { margin: .35rem 0 0; font-size: .92rem; }
+.pc-next { margin: 0; font-weight: 500; }
+.pc-note { font-size: .85rem; }
+.pc-review-filters { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .75rem; }
+.pc-review-open { width: 100%; }

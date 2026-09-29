@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="/assets/js/theme.js"></script>
+<title>Intervention Programme — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/intervention.css">
+</head>
+<body>
+<header class="iv-top">
+  <a class="iv-logo" href="/teacher/teacher.html">Inspire <span>Science Mastery</span></a>
+  <nav class="iv-nav" aria-label="Teacher">
+    <a href="/teacher/teacher.html">Dashboard</a>
+    <a href="/teacher/attendance.html">Attendance</a>
+    <a href="/teacher/ism-class-management.html">ISM Class</a>
+    <a href="/teacher/intervention.html" aria-current="page">Intervention</a>
+  </nav>
+</header>
+
+<main class="iv-main" id="main">
+  <div class="iv-head">
+    <div>
+      <p class="iv-kicker" id="programme-product">Intervention programme</p>
+      <h1 class="iv-title" id="programme-title">Loading…</h1>
+      <p class="iv-sub" id="programme-claim"></p>
+    </div>
+    <div class="iv-picker">
+      <label for="cohort-select">Group</label>
+      <select id="cohort-select"></select>
+    </div>
+  </div>
+
+  <p class="iv-status" id="status" role="status"></p>
+
+  <section class="iv-card" id="link-panel" hidden aria-labelledby="link-h">
+    <h2 id="link-h">Start this programme for the group</h2>
+    <p>Pick the date of the group's first session. Blocks count as taught from the start of their week, so the view can tell "not yet taught" from "needs work".</p>
+    <div class="iv-row">
+      <label for="start-date">First session</label>
+      <input type="date" id="start-date">
+      <button class="iv-btn" id="link-btn" type="button">Start programme</button>
+    </div>
+  </section>
+
+  <div id="view" hidden>
+    <section class="iv-stats" aria-label="Group summary">
+      <div class="iv-stat"><span class="iv-stat-n" id="st-pupils">–</span><span class="iv-stat-l">pupils</span></div>
+      <div class="iv-stat"><span class="iv-stat-n" id="st-baseline">–</span><span class="iv-stat-l">baseline checks done</span></div>
+      <div class="iv-stat"><span class="iv-stat-n" id="st-flags">–</span><span class="iv-stat-l">pupils to see 1:1</span></div>
+      <div class="iv-stat"><span class="iv-stat-n" id="st-outstanding">–</span><span class="iv-stat-l">checks outstanding</span></div>
+    </section>
+
+    <section class="iv-card" aria-labelledby="links-h">
+      <h2 id="links-h">Check links for pupils</h2>
+      <p class="iv-note">Pupils sign in, open the link, and answer on their own without notes. Each link resumes an unfinished attempt; a block check always uses questions the pupil has not seen.</p>
+      <ul class="iv-links" id="check-links"></ul>
+    </section>
+
+    <section class="iv-card" aria-labelledby="grid-h">
+      <div class="iv-card-head">
+        <h2 id="grid-h">Mastery profile</h2>
+        <a class="iv-btn iv-btn-ghost" id="report-link" href="#">School report →</a>
+      </div>
+      <p class="iv-note">Computed from pupils' recorded answers by the mastery rules (<span id="rule-version"></span>). The machine suggests; you decide. Select a pupil to see the evidence and record your decision.</p>
+      <div class="iv-legend" id="legend"></div>
+      <div class="iv-grid-wrap"><table class="iv-grid" id="grid"></table></div>
+    </section>
+
+    <section id="pupils" aria-label="Pupils"></section>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/intervention-common.js"></script>
+<script src="/assets/js/intervention.js"></script>
+</body>
+</html>

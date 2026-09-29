@@ -234,6 +234,7 @@ input,select,textarea{font-family:var(--font-body);}
 .review-why{color:var(--gold-text);}
 </style>
 <link rel="stylesheet" href="/assets/css/diagnostic-answer-types.css">
+<link rel="stylesheet" href="/assets/css/programme-check.css">
 </head>
 <body>
 
@@ -457,6 +458,7 @@ input,select,textarea{font-family:var(--font-body);}
 <script src="/assets/js/diagram-renderer.js"></script>
 <script src="/assets/js/maths-typeset.js"></script>
 <script src="/assets/js/diagnostic-answer-types.js"></script>
+<script src="/assets/js/programme-check-mode.js" defer></script>
 <script>
 // ═══════════════════════════════════════════════════════════
 // SUPABASE CONFIG — used only for sign-in and for reading this student's
@@ -1139,6 +1141,8 @@ async function runDiagnosis() {
       sessionId: S.sessionId, token: S.token,
       answers: S.answers.map(answerPayload)
     });
+    // A programme check (assets/js/programme-check-mode.js) has a per-concept result, not a diagnosis.
+    if (data.programmeCheck && window.IAProgrammeCheck) { S.review = data.review; window.IAProgrammeCheck.renderResult(data); return; }
     S.diagnosis = data.diagnosis;
     S.review    = data.review;
     S.attemptId = data.attemptId;

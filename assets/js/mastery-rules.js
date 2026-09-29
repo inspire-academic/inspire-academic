@@ -407,7 +407,10 @@ function evidenceFromResponses(responses, items, misconceptionConcepts = {}) {
     const item = items[r.questionId];
     if (!item || !item.concepts || !item.concepts.length) continue;
     const primary = item.concepts.find(c => c.role === 'primary') || item.concepts[0];
-    const key = r.chosen === 'e' || r.chosen == null ? null : (r.chosen === 'typed' ? String(r.answerValue) : r.chosen);
+    // optionKey: the caller's resolved option for a typed answer (the wrong
+    // value it matched, as text), since only the caller has the item's list.
+    const key = r.optionKey !== undefined ? r.optionKey
+      : r.chosen === 'e' || r.chosen == null ? null : (r.chosen === 'typed' ? String(r.answerValue) : r.chosen);
     const misconceptionId = !r.correct && key != null ? (item.optionMisconceptions || {})[key] || null : null;
     const offered = Object.values(item.optionMisconceptions || {}).filter(Boolean);
     const common = {

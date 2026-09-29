@@ -502,6 +502,21 @@ function = "create-teacher"
   status = 200
   force = true
 
+# School programmes (ISM Physics School V1): the teacher programme view and
+# school report read a cohort's checks, levels and pathways; teachers record
+# accept/override/note decisions. Staff only; see programme-cohort.js.
+[[redirects]]
+  from = "/api/v1/programme/cohort"
+  to = "/.netlify/functions/programme-cohort"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/programme/decision"
+  to = "/.netlify/functions/programme-decision"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/api/v1/diagnostic/attempt/plan"
   to = "/.netlify/functions/diagnostic-attempt-plan"

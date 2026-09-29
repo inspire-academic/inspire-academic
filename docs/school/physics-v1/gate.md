@@ -4,7 +4,7 @@
 
 ## Status: **NOT READY**
 
-7 pass · 8 partial · 12 fail · 12 awaiting a person · 39 items. Pilot items: 7/20 pass.
+7 pass · 10 partial · 10 fail · 12 awaiting a person · 39 items. Pilot items: 7/20 pass.
 
 PILOT READY means every item marked **P** passes: an internal pilot of Blocks 1–2 with the ISM cohort. SCHOOL READY needs every item.
 
@@ -15,8 +15,8 @@ PILOT READY means every item marked **P** passes: an internal pilot of Blocks 1�
 | ✅ PASS | Mastery map complete (every concept exists and is approved) | P | 15 approved concepts in curriculum/physics/energy.js. |
 | ✅ PASS | Prerequisites mapped (edges resolve, no cycles) | P | 18 prerequisite edges, acyclic. |
 | ✅ PASS | Common misconceptions mapped | P | 27 canonical misconceptions; every concept has at least one. |
-| ◐ PARTIAL | Baseline diagnostic operational (approved diagnostic item per concept + programme-check runtime) | P | Concepts without an approved diagnostic item: 13/15 (phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources). Programme-check runtime: built. |
-| ◐ PARTIAL | Intervention routing operational (deterministic rules + teacher validation) | P | Rules module: built and tested. Teacher view with validate/override: not built. |
+| ◐ PARTIAL | Baseline diagnostic operational (approved diagnostic item per concept + programme-check runtime, live) | P | Concepts without an approved diagnostic item: 13/15 (phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources). Programme-check runtime: built and tested. Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
+| ◐ PARTIAL | Intervention routing operational (deterministic rules + teacher validation, live) | P | Rules module: built and tested. Teacher view with validate/override: built and tested. Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
 | ❌ FAIL | 100% core lessons present and QA-passed |  | 0/6 usable. B1: qa-failed; B2: qa-failed; B3: missing; B4: missing; B5: missing; W6: missing |
 | ❌ FAIL | Core lessons present and QA-passed for the pilot blocks (B1, B2) | P | B1: qa-failed (docs/school/physics-v1/qa/week1-toolkit.md); B2: qa-failed (docs/school/physics-v1/qa/energy-board.md) |
 | ❌ FAIL | 100% teacher guides present (programme guide + block guides tied to a usable lesson) |  | Programme guide: missing. Block guides missing: B1, B2, B3, B4, B5, W6. Guides generated but without a usable lesson to deliver from: none. |
@@ -29,8 +29,8 @@ PILOT READY means every item marked **P** passes: an internal pilot of Blocks 1�
 | ◐ PARTIAL | Item-pool depth for a second attempt (≥ 3 approved mastery-check items per concept) |  | 1/15 concepts. Short: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.gravitational, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources |
 | ❌ FAIL | Mastery checks present for the pilot blocks | P | Missing: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done |
 | ◐ PARTIAL | Remediation pathways present (routing + remediation material per misconception) | P | Routing and remediation steps: built (mastery-rules.js REMEDIATION_STEPS). Remediation material (clinics, prerequisite mini-lessons) per misconception: not yet produced; for the pilot, the block lessons and the teacher guide notes carry it. |
-| ❌ FAIL | Reassessment present (parallel form per concept + runtime) |  | Concepts with no parallel-form source (template or retrieval item): 11/15. Runtime: built. |
-| ❌ FAIL | Reporting operational (school intervention report from real data) |  | No cohort/school report. The individual diagnostic report exists. |
+| ◐ PARTIAL | Reassessment present (parallel form per concept + runtime, live) |  | Concepts without a second approved diagnostic/retrieval item for a parallel form: 15/15. Runtime: built (reassessment mode, unseen items only). Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
+| ◐ PARTIAL | Reporting operational (school intervention report from real data, live) |  | Report built: attendance, baseline, priorities, pathways, block checks, reassessment comparison, profile, individual summaries, next steps; recorded data only; no causal claims. Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
 | ❌ FAIL | Teacher delivery does not depend on Eric: guides complete |  | Guides incomplete (see guides). |
 | 👤 MANUAL | Teacher delivery does not depend on Eric: a session delivered by a non-author from the guide alone |  | Not yet verified by a person (record it in curriculum/school/approvals.js). |
 | ❌ FAIL | Physics Subject Expert QA passed (every item and every lesson in use) |  | Concepts with reviewed packs: 4/15. Lessons QA-passed: 0/6. |

@@ -160,20 +160,25 @@ function evaluate() {
   }
 
   // ── Diagnostic, routing, runtime ──
+  // Code in the repo is not a working system: runtime items pass only once a
+  // person records that migration 2 ran and the code is live and smoke-tested
+  // (approvals.gate['runtime-live']).
+  const liveRec = APPROVALS.gate['runtime-live'];
+  const liveNote = liveRec ? `Live: verified by ${liveRec.by}, ${liveRec.date}.` : 'Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live.';
   {
     const noDiag = need(concepts, c => c.diagnostic >= 1 && c.approved);
-    const runtime = code('netlify/functions/diagnostic-session-start.js', 'programmeCheck');
-    add('baseline', 'Baseline diagnostic operational (approved diagnostic item per concept + programme-check runtime)', true,
-      !noDiag.length && runtime ? { status: PASS, evidence: 'Every concept has an approved diagnostic item; the runtime serves programme checks.' }
+    const runtime = code('netlify/functions/diagnostic-session-start.js', 'programmeCheck') && exists('tests/programme-checks.test.js');
+    add('baseline', 'Baseline diagnostic operational (approved diagnostic item per concept + programme-check runtime, live)', true,
+      !noDiag.length && runtime && liveRec ? { status: PASS, evidence: `Every concept has an approved diagnostic item; the runtime serves programme checks. ${liveNote}` }
         : { status: noDiag.length < concepts.length || runtime ? PARTIAL : FAIL,
-            evidence: `Concepts without an approved diagnostic item: ${noDiag.length}/${concepts.length} (${list(noDiag)}). Programme-check runtime: ${runtime ? 'built' : 'not built'}.` });
+            evidence: `Concepts without an approved diagnostic item: ${noDiag.length}/${concepts.length} (${list(noDiag)}). Programme-check runtime: ${runtime ? 'built and tested' : 'not built'}. ${liveNote}` });
   }
   {
     const rules = exists('assets/js/mastery-rules.js') && exists('tests/mastery-rules.test.js');
-    const view = exists('teacher/intervention.html');
-    add('routing', 'Intervention routing operational (deterministic rules + teacher validation)', true,
-      rules && view ? { status: PASS, evidence: 'assets/js/mastery-rules.js (tested) and the teacher programme view.' }
-        : { status: rules ? PARTIAL : FAIL, evidence: `Rules module: ${rules ? 'built and tested' : 'missing'}. Teacher view with validate/override: ${view ? 'built' : 'not built'}.` });
+    const view = exists('teacher/intervention.html') && exists('netlify/functions/programme-decision.js') && exists('tests/programme-view.test.js');
+    add('routing', 'Intervention routing operational (deterministic rules + teacher validation, live)', true,
+      rules && view && liveRec ? { status: PASS, evidence: `assets/js/mastery-rules.js (tested) and the teacher programme view with accept/override. ${liveNote}` }
+        : { status: rules ? PARTIAL : FAIL, evidence: `Rules module: ${rules ? 'built and tested' : 'missing'}. Teacher view with validate/override: ${view ? 'built and tested' : 'not built'}. ${liveNote}` });
   }
 
   // ── Content layers per block ──
@@ -238,14 +243,21 @@ function evaluate() {
       { status: rules ? PARTIAL : FAIL, evidence: `Routing and remediation steps: ${rules ? 'built (mastery-rules.js REMEDIATION_STEPS)' : 'missing'}. Remediation material (clinics, prerequisite mini-lessons) per misconception: not yet produced; for the pilot, the block lessons and the teacher guide notes carry it.` });
   }
   {
+    // The V1 runtime serves fixed items only (template instances are not
+    // served yet), so a parallel form needs a second approved fixed
+    // diagnostic or retrieval item per concept, unseen at baseline.
     const runtime = code('netlify/functions/diagnostic-session-start.js', 'programmeCheck');
-    const parallel = need(concepts, c => (c.templates || 0) >= 1 || (c.retrieval || 0) >= 1);
-    add('reassessment', 'Reassessment present (parallel form per concept + runtime)', false,
-      runtime && !parallel.length ? { status: PASS, evidence: 'Parallel items for every concept.' }
-        : { status: FAIL, evidence: `Concepts with no parallel-form source (template or retrieval item): ${parallel.length}/${concepts.length}. Runtime: ${runtime ? 'built' : 'not built'}.` });
+    const parallel = need(concepts, c => ((c.diagnostic || 0) + (c.retrieval || 0)) >= 2 && c.approved);
+    add('reassessment', 'Reassessment present (parallel form per concept + runtime, live)', false,
+      runtime && liveRec && !parallel.length ? { status: PASS, evidence: `Parallel items for every concept. ${liveNote}` }
+        : { status: runtime ? PARTIAL : FAIL, evidence: `Concepts without a second approved diagnostic/retrieval item for a parallel form: ${parallel.length}/${concepts.length}. Runtime: ${runtime ? 'built (reassessment mode, unseen items only)' : 'not built'}. ${liveNote}` });
   }
-  add('reporting', 'Reporting operational (school intervention report from real data)', false,
-    exists('teacher/intervention-report.html') ? { status: PASS, evidence: 'teacher/intervention-report.html' } : { status: FAIL, evidence: 'No cohort/school report. The individual diagnostic report exists.' });
+  {
+    const built = exists('teacher/intervention-report.html') && exists('assets/js/intervention-report.js') && exists('netlify/functions/programme-cohort.js');
+    add('reporting', 'Reporting operational (school intervention report from real data, live)', false,
+      built && liveRec ? { status: PASS, evidence: `teacher/intervention-report.html from recorded data. ${liveNote}` }
+        : { status: built ? PARTIAL : FAIL, evidence: `${built ? 'Report built: attendance, baseline, priorities, pathways, block checks, reassessment comparison, profile, individual summaries, next steps; recorded data only; no causal claims.' : 'No cohort/school report.'} ${liveNote}` });
+  }
 
   // ── People, QA, approval ──
   add('delivery-guides', 'Teacher delivery does not depend on Eric: guides complete', false,
