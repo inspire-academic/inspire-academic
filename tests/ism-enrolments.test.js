@@ -51,11 +51,20 @@ test('seeded timetable image exists and is a small WebP', () => {
   }
 });
 
-test('student page keeps the timetable hidden until an active enrolment is found', () => {
-  assert.match(REVISION, /<details class="timetable-card" id="timetable-card" hidden>/);
-  assert.match(REVISION, /from\('ism_enrolments'\)[\s\S]*?\.eq\('status', 'active'\)/);
+test('timetable cards: pupils only with an active enrolment and their own class; staff every class', () => {
+  const MOD = read('assets/js/ism-timetable.js');
+  assert.match(MOD, /from\('ism_enrolments'\)[\s\S]*?\.eq\('status', 'active'\)/);
+  assert.match(MOD, /if \(!enrolment\) return;/, 'no enrolment, no card');
+  assert.match(MOD, /q = q\.eq\('class_group', enrolment\.class_group\)/, 'pupils see only their own class');
+  assert.match(MOD, /STAFF = \['teacher', 'teacher_manager', 'admin', 'super_admin'\]/, 'staff see every class');
   // image path from the DB is re-checked before use, same rule as the SQL CHECK
-  assert.match(REVISION, /\^\\\/assets\\\/images\\\/ism\\\/\[a-z0-9-\]\+\\\.webp\$/);
+  assert.match(MOD, /\^\\\/assets\\\/images\\\/ism\\\/\[a-z0-9-\]\+\\\.webp\$/);
+  // The pupil page and the teacher dashboard both render it; empty until data arrives.
+  for (const page of [REVISION, read('teacher/teacher.html')]) {
+    assert.match(page, /<div id="ism-timetables"><\/div>/);
+    assert.match(page, /IATimetable\.render\(/);
+    assert.match(page, /\/assets\/js\/ism-timetable\.js/);
+  }
 });
 
 test('Assign Lessons lets admins pick any student, not just their own assigned ones', () => {

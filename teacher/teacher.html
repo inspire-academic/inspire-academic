@@ -11,8 +11,10 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/pathways.js"></script>
+<script src="/assets/js/ism-timetable.js"></script>
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/ism-timetable.css">
 <style>
 :root {
   --white:  #F0EDE6;
@@ -466,6 +468,8 @@ tr:hover td { background: rgba(255,255,255,.025); }
 
     <!-- ══ VIEW: OVERVIEW ══ -->
     <div class="view active" id="view-overview">
+      <!-- ISM class timetables: every class group's current calendar (assets/js/ism-timetable.js) -->
+      <div id="ism-timetables"></div>
       <div class="page-header">
         <div>
           <div class="page-title">Class Overview</div>
@@ -687,6 +691,7 @@ async function init() {
       profile.full_name || session.user.email;
 
     window._myRole = profile.role;
+    IATimetable.render(supa, uid, document.getElementById('ism-timetables'));
     window._teacherId = session.user.id;
 
     if (profile.role === 'admin' || profile.role === 'super_admin') {
