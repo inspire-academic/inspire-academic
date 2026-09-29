@@ -55,7 +55,7 @@
       const res = withBase.map(s => (latest(s, 'baseline').result.concepts || []).find(c => c.conceptId === id)).filter(Boolean);
       if (!res.length) return null;
       const n = o => res.filter(r => r.outcome === o).length;
-      return [esc(name(v, id)), res.length, n('looks_secure'), n('mixed'), n('looks_insecure')];
+      return [esc(name(v, id)), res.length, n('looks_secure'), n('mixed'), n('looks_insecure'), `${n('right_so_far')} right / ${n('not_shown_yet')} not yet`];
     }).filter(Boolean);
 
     // Current profile: concepts ranked by pupils needing work (taught only)
@@ -136,7 +136,7 @@
 
       <section><h2>3. Baseline position</h2>
         <p>${withBase.length} of ${S.length} pupils completed the baseline check. For each concept: how many pupils' answers looked secure, partly there, or needing work. A baseline is an initial hypothesis, validated by the teacher.</p>
-        ${table(['Concept', 'Pupils assessed', 'Looks secure', 'Partly there', 'Needs work'], baseRows)}
+        ${table(['Concept', 'Pupils assessed', 'Looks secure', 'Partly there', 'Needs work', 'Only one question so far'], baseRows)}
       </section>
 
       <section><h2>4. Main priorities in the group</h2>
