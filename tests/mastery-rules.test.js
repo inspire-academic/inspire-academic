@@ -223,6 +223,15 @@ test('a weak hard prerequisite is diagnosed as the cause', () => {
   assert.deepEqual(k.cause.targets, ['phy.skills.rearranging']);
 });
 
+test('an unassessed concept is never "caused" by a weak prerequisite (found in the end-to-end preview)', () => {
+  const rows = [ev({ correct: false, confidence: 'sure', at: at(0) })];   // one sure-wrong kinetic answer
+  const p = M.studentProfile(rows, catalogue, ORDER);
+  const tc = p.concepts.find(c => c.conceptId === 'phy.energy.transfer-calcs');
+  assert.equal(tc.level, 'not_assessed');
+  assert.notEqual(tc.cause.type, 'prerequisite_skill');
+  assert.notEqual(p.next.conceptId, 'phy.energy.transfer-calcs');
+});
+
 test('MASTERED needs a retrieval pass 21+ days after SECURE and an application item when required', () => {
   const rows = secureKinetic();
   const retrieval = ev({ evidenceClass: 'retrieval', format: 'numeric', contexts: ['find-energy'], sessionId: 'r1', at: at(30 * D) });

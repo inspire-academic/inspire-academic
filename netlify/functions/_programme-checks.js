@@ -156,6 +156,9 @@ function checkResult(check, marked, tagged, optionMisconceptions) {
     const passed = r.correct === r.answered && r.sureWrong === 0;
     const outcome = check.kind === 'block' ? (passed ? 'passed' : 'not_yet')
       : check.kind === 'practice' ? (passed ? 'passed' : 'not_yet')
+      // One question is not enough to call anything (nobody is labelled from
+      // one answer): it is only "right so far" or "not shown yet".
+      : r.answered < 2 ? (passed ? 'right_so_far' : 'not_shown_yet')
       : (passed ? 'looks_secure' : r.correct === 0 ? 'looks_insecure' : 'mixed');
     return { ...r, passed, outcome };
   });
@@ -174,7 +177,9 @@ function describeForPupil(result, conceptNames) {
     } else if (result.kind === 'practice') {
       text = r.passed ? 'All right. Keep it going.' : 'Look at the answers below: each wrong one says what probably went wrong and how to do it.';
     } else {
-      text = r.outcome === 'looks_secure' ? 'Looks secure so far.'
+      text = r.outcome === 'right_so_far' ? 'Right on this question. We will check it again.'
+        : r.outcome === 'not_shown_yet' ? 'Not shown yet on this question. We will look at it again.'
+        : r.outcome === 'looks_secure' ? 'Looks secure so far.'
         : r.outcome === 'looks_insecure' ? 'Needs work: we will build this in the programme.'
         : 'Partly there: we know what to work on.';
     }

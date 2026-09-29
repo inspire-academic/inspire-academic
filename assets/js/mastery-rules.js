@@ -243,7 +243,10 @@ function diagnoseCause(concept, level, evidence, misStatus, levelsById, catalogu
   // A skill misconception belongs to a Toolkit concept, not to this one.
   const skillMis = misHere.filter(id => conceptsOf(id).some(c => c !== concept.id && catalogue.concepts[c] && isSkill(c)));
   const hardPrereqs = (concept.prerequisites || []).filter(p => p.strength === 'hard').map(p => p.id);
-  const weakPrereqs = hardPrereqs.filter(p => levelsById[p] && levelsById[p].level === 'insecure');
+  // §9 rule 4: a weak prerequisite explains a concept only when the concept
+  // itself is failing (has wrong answers); an unassessed concept is not
+  // "caused" by anything yet.
+  const weakPrereqs = wrong.length ? hardPrereqs.filter(p => levelsById[p] && levelsById[p].level === 'insecure') : [];
   if (skillMis.length || weakPrereqs.length) {
     const targets = [...new Set([...weakPrereqs, ...skillMis.flatMap(id => conceptsOf(id).filter(isSkill))])];
     return { type: 'prerequisite_skill', targets, misconceptions: skillMis,

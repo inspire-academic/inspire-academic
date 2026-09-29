@@ -87,6 +87,13 @@ test('a typed wrong answer maps to the recorded wrong value within tolerance', (
   assert.equal(checks.typedOptionKey('b', ['a', 'b']), null);
 });
 
+test('one baseline question never labels a concept: it is "right so far" or "not shown yet"', () => {
+  const base = checks.resolveCheck(`${P}:baseline`);
+  const tagged = [tag(1, 'phy.energy.kinetic', 'diagnostic'), tag(2, 'phy.energy.power', 'diagnostic')];
+  const r = checks.checkResult(base, [{ question_id: 1, correct: false, chosen: 'a', confidence: 'sure' }, { question_id: 2, correct: true, chosen: 'b' }], tagged, []);
+  assert.deepEqual(r.concepts.map(c => c.outcome), ['not_shown_yet', 'right_so_far']);
+});
+
 test('a concept passes a block check only if every item is right and nothing sure-wrong', () => {
   const b3 = checks.resolveCheck(`${P}:B3`);
   const tagged = [tag(1, 'phy.energy.kinetic', 'mastery_check'), tag(2, 'phy.energy.kinetic', 'mastery_check'),

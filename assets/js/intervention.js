@@ -102,7 +102,7 @@
         return `<td class="iv-cell ${l.cls}${flag}" title="${esc(conceptName(id))}: ${esc(l.label)}${c.flags && c.flags.length ? ' (see 1:1)' : ''}">${esc(l.short)}</td>`;
       }).join('');
       const next = s.profile.next;
-      return `<tr><th scope="row"><a href="#p-${esc(s.id)}">${esc(s.firstName)} ${esc(s.lastName.slice(0, 1))}</a></th>${cells}<td class="iv-next">${next ? esc(X.ACTION[next.action.action] || next.action.action) + ': ' + esc(conceptName(next.conceptId)) : '—'}</td></tr>`;
+      return `<tr><th scope="row"><a href="#p-${esc(s.id)}">${esc(s.firstName)} ${esc(s.lastName.slice(0, 1))}</a></th>${cells}<td class="iv-next">${next ? esc(X.ACTION[next.action.action] || next.action.action) + (next.conceptId ? ': ' + esc(conceptName(next.conceptId)) : '') : '—'}</td></tr>`;
     }).join('');
     $('grid').innerHTML = `<thead>${head1}${head2}</thead><tbody>${rows || `<tr><td colspan="99">No pupils in this group yet.</td></tr>`}</tbody>`;
   }
@@ -116,7 +116,7 @@
       const concepts = s.profile.concepts.filter(c => c.taught !== false || c.level !== 'not_assessed').map(c => conceptDetail(s, c)).join('');
       return `<article class="iv-card iv-pupil" id="p-${esc(s.id)}">
         <div class="iv-card-head"><h2>${esc(s.firstName)} ${esc(s.lastName)}</h2><span class="iv-muted">${esc(att)}</span></div>
-        <p><strong>Next step:</strong> ${s.profile.next ? esc(X.ACTION[s.profile.next.action.action]) + ' — ' + esc(conceptName(s.profile.next.conceptId)) + '. ' + esc(s.profile.next.action.why || '') : 'Nothing recommended yet.'}</p>
+        <p><strong>Next step:</strong> ${s.profile.next ? esc(X.ACTION[s.profile.next.action.action]) + (s.profile.next.conceptId ? ' — ' + esc(conceptName(s.profile.next.conceptId)) : '') + '. ' + esc(s.profile.next.action.why || '') : 'Nothing recommended yet.'}</p>
         ${flagged.length ? `<p class="iv-alert">See 1:1: ${flagged.map(c => esc(conceptName(c.conceptId)) + ' (' + c.flags.map(f => esc(f.why)).join('; ') + ')').join(' · ')}</p>` : ''}
         <p class="iv-muted">Checks done: ${submitted.length ? submitted.map(c => esc(c.kind === 'block' ? c.blockId : c.kind) + ' ' + X.fmtDate(c.submitted_at)).join(', ') : 'none'}${s.outstanding.length ? ` · Outstanding: ${s.outstanding.map(id => esc(id.split(':')[1])).join(', ')}` : ''}</p>
         <details class="iv-details"><summary>Evidence and decisions by concept</summary>${concepts || '<p class="iv-muted">No evidence yet.</p>'}</details>

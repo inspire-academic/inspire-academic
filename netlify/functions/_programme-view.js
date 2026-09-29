@@ -107,6 +107,9 @@ function buildCohortView({ programme, cohort, startedOn, students, sessions, res
       };
     }), items, MIS_CONCEPTS);
     const profile = M.studentProfile(evidence, CATALOGUE, order, taught);
+    // Programme order comes first: no teaching pathway before the baseline.
+    const baselineDone = mySessions.some(s => s.kind === 'baseline' && s.status === 'submitted');
+    if (!baselineDone) profile.next = { conceptId: null, action: { action: 'baseline', why: 'Take the baseline check first: it decides where this pupil starts.' } };
     const decided = latestDecisions(st.id, decisions);
     return {
       id: st.id, firstName: st.first_name || 'Pupil', lastName: st.last_name || '',

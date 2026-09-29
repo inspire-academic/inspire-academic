@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teacher guide · Block 2 — Energy stores, conservation and work done · ISM Physics</title>
+<style>
+:root{--forest:#0b3a2f;--gold-ink:#7a5a17;--ink:#1a221f;--muted:#555d58;--line:#d9d2c2;--tint:#f5f0e4;--mist:#edf4ef}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.55}
+.wrap{max-width:920px;margin:0 auto;padding:16px}
+header{border-bottom:3px solid var(--forest);padding-bottom:10px;margin-bottom:12px}
+.kicker{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink);font-weight:700;margin:0}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:28px;line-height:1.2;margin:6px 0;color:var(--forest)}
+h2{font-family:Georgia,"Times New Roman",serif;font-size:22px;color:var(--forest);border-bottom:1px solid var(--line);padding-bottom:4px;margin:28px 0 8px}
+h3{font-size:17px;margin:18px 0 6px;color:#26342e}
+h4{font-size:15px;margin:12px 0 4px}
+a{color:var(--forest)}
+a:focus-visible{outline:3px solid #1f5f8b;outline-offset:2px}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f1ede2;color:var(--forest)}
+.tablewrap{overflow-x:auto}
+.box{background:var(--tint);border-left:4px solid var(--gold-ink);padding:8px 12px;margin:10px 0}
+.key{background:var(--mist);border-left:4px solid var(--forest);padding:8px 12px;margin:10px 0}
+.ans{background:#fafaf7;border:1px solid var(--line);border-radius:6px;padding:8px 12px;margin:8px 0}
+.ans p{margin:4px 0}
+.ms{font-size:14px}
+.ms li{margin:2px 0}
+.id{font-family:ui-monospace,Consolas,monospace;font-size:13px;background:#f3f1ea;padding:0 4px;border-radius:3px}
+.small{font-size:13px;color:var(--muted)}
+nav ol{columns:2;font-size:14px}
+@media(max-width:640px){nav ol{columns:1}h1{font-size:23px}}
+@media print{body{font-size:11pt}.wrap{max-width:none;padding:0}h2{break-after:avoid}table,.ans,.box,.key{break-inside:avoid}nav{display:none}a{color:inherit;text-decoration:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <p class="kicker">ISM Physics School V1 · Energy &amp; Physics Calculations Mastery Intervention · Teacher reference</p>
+  <h1>Teacher guide: Block 2 — Energy stores, conservation and work done</h1>
+  <p>Week 2 of 6 · Session 1 (teach, 60 min) + Session 2 (consolidate, 60 min) · Tier: Both · Group of up to 6 · Pupil file: <span class="id">b2-energy-stores-work.html</span></p>
+</header>
+
+<nav aria-label="Guide contents">
+<ol>
+  <li><a href="#purpose">Purpose and objectives</a></li>
+  <li><a href="#prereq">Prerequisites and materials</a></li>
+  <li><a href="#language">Language rules</a></li>
+  <li><a href="#routine">Calculation routine</a></li>
+  <li><a href="#plan1">Session 1 plan (minute by minute)</a></li>
+  <li><a href="#plan2">Session 2 plan (minute by minute)</a></li>
+  <li><a href="#hinge">Hinge questions and routes</a></li>
+  <li><a href="#ans1">Answers: Session 1</a></li>
+  <li><a href="#ans2">Answers: Session 2</a></li>
+  <li><a href="#six">6-mark levels mark scheme</a></li>
+  <li><a href="#anshw">Answers: homework</a></li>
+  <li><a href="#mis">Misconception notes</a></li>
+  <li><a href="#diff">Differentiation</a></li>
+  <li><a href="#mastery">Mastery check, remediation and escalation</a></li>
+  <li><a href="#physics">Physics decisions in this lesson</a></li>
+</ol>
+</nav>
+
+<!-- ================= PURPOSE ================= -->
+<h2 id="purpose">1. Purpose and objectives</h2>
+<p><b>Block intent (programme manifest):</b> a precise language for energy (stores and pathways, never “forms”), conservation in a closed system, and work done as energy transferred by a force.</p>
+<p>This block builds the qualitative model that every later Energy calculation depends on (Block 3 links Ek and Ep by conservation; Block 5 uses dissipation for efficiency). It is also the first time pupils use a <b>recall</b> equation, W = F s, with the programme’s calculation routine. Ek = ½mv² and Ep = mgh are <b>not</b> taught here (Block 3): no question in this block needs them, and all energies in store-to-store questions are given as numbers.</p>
+
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Concept (approved card)</th><th>AQA 8463 ref</th><th>Objective: a pupil who has mastered it can…</th><th>Required contexts covered in this lesson</th></tr></thead>
+  <tbody>
+    <tr><td><span class="id">phy.energy.stores-systems</span><br>Energy stores, systems and transfer pathways</td><td>4.1.1.1</td><td>Describe a system and identify how energy is redistributed between named stores (kinetic, gravitational potential, elastic potential, thermal, chemical, nuclear) and by which pathway (mechanically, electrically, by heating, by radiation) for common situations.</td><td><i>mechanical-situation</i>: ball thrown up, braking, toy car, coconut, bungee, skateboard. <i>heating-situation</i>: kettle, gas cooker (S1 I6).</td></tr>
+    <tr><td><span class="id">phy.energy.conservation</span><br>Conservation of energy in a closed system</td><td>4.1.2.1</td><td>Explain that energy can be transferred usefully, stored or dissipated but never created or destroyed, and that the total energy of a closed system does not change.</td><td><i>closed-system</i>: WE2 (coconut, Earth, sand and air), swing 6-marker (child, swing, Earth and surrounding air), G9(d). <i>with-dissipation</i>: Sankey (Figure 2), parcel (S1 I7), S2 G2, G9.</td></tr>
+    <tr><td><span class="id">phy.forces.work-done</span><br>Work done (W = F s)</td><td>4.5.2 (recall equation); 4.1.1.1 (energy transferred by work done)</td><td>Recall and use W = F s for a force acting along the direction of motion, and explain that work done is energy transferred (1 J = 1 N m).</td><td><i>find-work</i>: WE3, G3, I3, I4, E2, S2 I1, G9. <i>work-as-energy-transferred</i>: WE3, I7, S2 G2, G9, H11.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="small">Boundaries respected: store names as AQA uses them (no “heat” or “movement” stores); force along the line of motion only, no angles; work done against friction dissipates energy to thermal stores. Combined Science: Trilogy (8464) contains the same content under its own numbering. Required practical 2 is not in this block.</p>
+
+<h3>Success criteria (as the pupil sees them)</h3>
+<p>By the end pupils can: define a system and name the eight stores; name the four pathways; describe all store changes for the five AQA situations (projected upwards, hitting an obstacle, accelerated by a constant force, vehicle slowing down, kettle); state conservation and explain dissipation; read and interpret a Sankey diagram drawn to scale; calculate W = F s and rearrange for F or s with the distance along the line of action of the force; explain that work done against friction causes heating.</p>
+
+<!-- ================= PREREQ ================= -->
+<h2 id="prereq">2. Prerequisites and materials</h2>
+<h3>Prerequisites (Block 1: The Physicist’s Toolkit)</h3>
+<ul>
+  <li><span class="id">phy.skills.units-prefixes</span>: cm → m and kJ → J inside a calculation (I4, I5, H7), MJ ↔ J (R1, S2 R2, S2 I1). Hard prerequisite of work done: <span class="id">phy.skills.rearranging</span> (F = W ÷ s, s = W ÷ F). Soft: units-prefixes.</li>
+  <li><span class="id">phy.skills.standard-form</span>: S1 R1, S2 R2, S2 I1 (2.0 × 10⁵ N × 3.0 × 10³ m).</li>
+  <li><span class="id">phy.skills.graph-reading</span>: S1 R3 (gradient of an energy–time line).</li>
+  <li>If a pupil’s Block 1 check showed a Toolkit concept insecure, expect errors in I4, I5 and S2 I1 to be <b>maths errors, not physics errors</b>; log them against the Toolkit concept, not against work done.</li>
+</ul>
+<h3>Materials</h3>
+<ul>
+  <li>Mini-whiteboards and pens (hinge questions are answered by everyone at once).</li>
+  <li>A tennis ball or similar (throw it up in Session 1 while building the “projected upwards” row).</li>
+  <li>Optional: a newton meter, a shoebox with a book in it and a metre rule, to pull the box a measured distance (W = F s) and feel the surfaces warm with repeated rubbing.</li>
+  <li>Devices with platform access for the 15-minute Block 2 mastery check (Session 2, 40–55 min). Check logins before the session.</li>
+  <li>Calculators.</li>
+  <li><b>Do not use</b> the existing Energy Stores &amp; Transfers teaching board diagrams (QA report <span class="id">docs/school/physics-v1/qa/energy-board.md</span>: five of seven diagrams and the Sankey are wrong). This lesson’s three diagrams replace them.</li>
+</ul>
+
+<!-- ================= LANGUAGE ================= -->
+<h2 id="language">3. Language rules</h2>
+<div class="key"><b>From the first minute:</b> model “Energy is transferred from the … store of … to the … store of … by …”. Name every store in full (“the kinetic energy store of the car”). Correct loose language every time, calmly and at once; ask the pupil to say the sentence again.</div>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Pupils say (never accept as a final answer)</th><th>Why it is wrong</th><th>Say instead</th></tr></thead>
+  <tbody>
+    <tr><td>“heat energy”</td><td>Heat is not a store; heating is a pathway.</td><td>“the thermal energy store of …” (store) or “by heating” (pathway)</td></tr>
+    <tr><td>“movement energy”</td><td>Not an AQA store name.</td><td>“the kinetic energy store of …”</td></tr>
+    <tr><td>“electrical energy”</td><td>Electrically is a pathway, not a store.</td><td>“energy is transferred electrically (by the current)”</td></tr>
+    <tr><td>“light energy”, “sound energy”</td><td>Light and sound are ways energy is carried, not stores.</td><td>“transferred by radiation (light)”; “a very small amount is transferred by sound”</td></tr>
+    <tr><td>“used up”, “gone”, “disappears”</td><td>Energy cannot be destroyed (MIS-PHY-ENE-001).</td><td>“transferred to …”; “dissipated to the thermal energy store of the surroundings”</td></tr>
+    <tr><td>“lost” as the final word</td><td>Hides where the energy went.</td><td>Ask <b>“Lost to where?”</b> until the pupil says “dissipated to the thermal energy store of the surroundings”.</td></tr>
+    <tr><td>“converted”, “transformed”, “turned into”, “changes into”</td><td>Forms-of-energy language: implies energy changes type rather than moving between stores.</td><td>“transferred from the … store to the … store”</td></tr>
+    <tr><td>“friction destroys / removes the energy”</td><td>MIS-PHY-ENE-003.</td><td>“friction does work, transferring energy to the thermal energy stores of the surfaces and surroundings”</td></tr>
+    <tr><td>“potential energy” (unqualified)</td><td>Ambiguous.</td><td>“gravitational potential energy store” or “elastic potential energy store”</td></tr>
+    <tr><td>“particles” as a pathway</td><td>Not a pathway.</td><td>mechanically, electrically, by heating, by radiation. (“By sound” is correct and creditable: it is a mechanical transfer.)</td></tr>
+    <tr><td>“internal energy store” (in this programme)</td><td>AQA 4.1 uses “thermal energy store”; mixing the two confuses pupils.</td><td>“thermal energy store”</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>The “lost to where?” move.</b> Pupil: “The energy is lost.” Teacher: “Lost to where?” Pupil: “To the surroundings.” Teacher: “Which store of the surroundings?” Pupil: “The thermal energy store.” Teacher: “Say the whole sentence.” Pupil: “The energy is dissipated to the thermal energy store of the surroundings.” Keep going until the full sentence is said; do not finish it for them.</p>
+<p>Acceptable words: “wasted” and “dissipated” for energy transferred to less useful stores. The only places banned phrases appear in the pupil file are the struck-through “never say” list, the quoted wrong statements in the misconception clinic (Pupil A in C1 and C3, Pupil B in C2 and C4) and the sentence pupils rewrite in exit ticket E3, where they are there to be corrected.</p>
+
+<!-- ================= ROUTINE ================= -->
+<h2 id="routine">4. Calculation routine (programme-wide, 7 steps)</h2>
+<ol>
+  <li><b>GIVEN</b>: list every quantity with its symbol and unit. Convert to SI units now (kg, m, s, J, W).</li>
+  <li><b>FIND</b>: write the symbol of the quantity you need.</li>
+  <li><b>RELATIONSHIP</b>: write the equation in symbols (from memory, or from the equation sheet if it is a given equation).</li>
+  <li><b>REARRANGE</b>: make the unknown the subject before putting numbers in.</li>
+  <li><b>SUBSTITUTE</b>: put the numbers in. This line usually earns the first mark.</li>
+  <li><b>SOLVE</b>: calculate. Give the unit, and the significant figures asked for.</li>
+  <li><b>CHECK</b>: is the size sensible? Is the unit right for the quantity?</li>
+</ol>
+<p><b>W = F s is a recall equation</b> (not on the AQA equation sheet). It is printed in the pupil file only in the teaching text, the worked examples and as labelled hints in guided practice. It is <b>not</b> printed in retrieval, independent practice, the exit ticket, the Grade 9 challenge or the homework. Do not write it on the board during those parts. Symbol warning: W is work done here, but also weight (W = mg) and the unit watt (W); s is distance here but also the unit second.</p>
+
+<!-- ================= PLAN 1 ================= -->
+<h2 id="plan1">5. Session 1 (teach): minute-by-minute plan</h2>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Time</th><th>Part (pupil section)</th><th>Teacher does</th><th>Questioning prompts / watch for</th></tr></thead>
+  <tbody>
+    <tr><td>0–5</td><td>Retrieval (1.1)</td><td>Pupils answer R1–R3 in the lesson, no notes, 3 min. Go through answers for 2 min.</td><td>R1: “Is 0.35 MJ more or less than 1 MJ? So is the answer in joules big or small?” R3: “What is one ‘rise over run’ here? What unit is J per s?” Note any pupil who reads 900 as the gradient (MIS-PHY-SKL-006).</td></tr>
+    <tr><td>5–9</td><td>Concept: system, stores (1.2)</td><td>Throw the ball up. “What is the system?” (ball and Earth). Build the stores table orally; pupils read it.</td><td>“Where is the energy at the top?” “Whose store is the gravitational potential energy store?” (the ball–Earth system). Ban “heat”, “movement”, “electrical” energy now.</td></tr>
+    <tr><td>9–12</td><td>Concept: pathways and the sentence (1.2)</td><td>Four pathways only. Model the sentence frame twice (ball; phone charging). Show Figure 1 (transfer chain).</td><td>“Is ‘electrically’ a store or a pathway?” “Point to the stores in Figure 1. Point to the pathways.” “Where does the light end up?”</td></tr>
+    <tr><td>12–15</td><td>Concept: five AQA situations (1.2)</td><td>Cold-call pupils to read each row of the situations table as a full sentence.</td><td>“Say the braking row as one sentence, starting ‘Energy is transferred from…’.” “How much goes by sound?” (a very small amount).</td></tr>
+    <tr><td>15–18</td><td>Concept: conservation and dissipation (1.2)</td><td>State conservation (read the key box aloud together). Run the “lost to where?” move on the braking and kettle rows. (Sankey diagrams are taught in Session 2 guided practice.)</td><td>“After the kettle has boiled and cooled, where is all the energy?” “Can we get that energy back to boil more water?” (MIS-PHY-ENE-019). “Lost to where?”</td></tr>
+    <tr><td>18–20</td><td>Concept: work done (1.2)</td><td>W = F s; 1 J = 1 N m; pupils rub their hands for 10 s.</td><td>“What did you do work against? Which store increased?” “Which distance goes in W = F s?” (the one along the line of action of the force).</td></tr>
+    <tr><td>20–23</td><td>Worked example 1 (full)</td><td>Talk through the toy car, one numbered line at a time.</td><td>“Why is the kinetic energy store empty at the start?” “Which line proves conservation?”</td></tr>
+    <tr><td>23–25</td><td>Worked example 2 (faded)</td><td>Pupils complete steps 2–4 (2 min), then open the model.</td><td>Circulate: look for “kinetic” without “store of the coconut”, and for “lost” in step 3.</td></tr>
+    <tr><td>25–28</td><td>Worked example 3 (full)</td><td>Model all 7 routine steps aloud with Figure 3.</td><td>“Is 8.0 m along the line of the force? How do you know?” “The sack’s speed is steady: so where did the 1200 J go?”</td></tr>
+    <tr><td>28–30</td><td>Worked example 4 (faded)</td><td>Pupils complete REARRANGE to CHECK, then open the model.</td><td>“Rearrange before you substitute.” Watch for 86 400 × 7200 (MIS-PHY-SKL-004).</td></tr>
+    <tr><td>30–32</td><td>Guided G1 = hinge 1</td><td>All pupils answer on mini-whiteboards, show on “3, 2, 1”.</td><td>Use the hinge routes (section 7).</td></tr>
+    <tr><td>32–35</td><td>Guided G2 = hinge 2</td><td>As above.</td><td>“Lost to where?” Probe any answer that makes sound the main destination.</td></tr>
+    <tr><td>35–37</td><td>Guided G3 = hinge 3</td><td>As above; pupils write the routine lines.</td><td>Follow-up: “The box is now lifted 1 m. How much work does the horizontal push do during the lift?” (0 J).</td></tr>
+    <tr><td>37–40</td><td>Guided G4</td><td>Pupils work; you circulate; open the model at 40.</td><td>“What is the subject? Rearrange first.”</td></tr>
+    <tr><td>40–55</td><td>Independent (1.5)</td><td>Silent individual work, I1 → I7 → Stretch. No answers shown. Circulate and note errors; do not re-teach individuals for more than 30 s.</td><td>Foundation route: I1–I6 and I7(a) (see section 13). Everyone attempts the Stretch if they reach it.</td></tr>
+    <tr><td>55–60</td><td>Exit ticket (1.6)</td><td>Screens down: pupils answer on paper or mini-whiteboards with no notes and no help, then copy their answers unchanged into the lesson boxes. Collect the paper. <b>Mark before Session 2</b> using section 8; tally the errors by misconception id to choose the clinic order.</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ================= PLAN 2 ================= -->
+<h2 id="plan2">6. Session 2 (consolidate): minute-by-minute plan</h2>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Time</th><th>Part (pupil section)</th><th>Teacher does</th><th>Questioning prompts / watch for</th></tr></thead>
+  <tbody>
+    <tr><td>0–5</td><td>Retrieval (2.1)</td><td>Return marked exit tickets. Screens down: pupils correct one answer (R1), then answer R2 and R3 on paper or mini-whiteboards, and copy them into the lesson afterwards. Go through R2 and R3.</td><td>“Read me your corrected sentence. Does it name a store in full?”</td></tr>
+    <tr><td>5–15</td><td>Misconception clinic (2.2)</td><td>Start with the case matching the most common exit-ticket error (E3 “lost” → C1/C3; E1 “electrical energy” → C2; E2 wrong distance → C4). Pupils decide A or B on whiteboards, then write the explanation. Spend about 4 min on the priority case and 2 min on each of the others.</td><td>“What would Pupil A need to change to be right?” “Which word in A is the problem?” For C4: “Draw the force. Draw the movement. Are they along the same line?”</td></tr>
+    <tr><td>15–25</td><td>Guided practice (2.3), including Sankey diagrams</td><td>Pupils attempt G1 (3 min) and G2 (3 min), opening each model after their attempt. Then teach Sankey diagrams from Figure 2 (2 min): width ∝ energy, outputs add up to the input, and the stated scale; measure the widths with a ruler if projected. Pupils then attempt G3 (2 min).</td><td>G1: “Is she still speeding up just after the cord goes tight? When does she start to slow down?” G2: “Why is the track length the right distance?” Figure 2: “Why must 85 + 15 equal 100?” “If the useful output were 60 J, how wide would the wasted arrow be at this scale?” (40 J → 48 units). G3: “Check: do the output widths add up to the input width?”</td></tr>
+    <tr><td>25–40</td><td>Independent + Grade 9 (2.4)</td><td>Silent individual work. I1 (about 3 min), 6-mark extended response (about 8 min), then the Grade 9 challenge. No answers shown. <b>The Grade 9 challenge is extension:</b> pupils who do not reach it (or do not finish it) complete it as homework, alongside the block homework.</td><td>For the 6-marker: “Plan in bullets: start, down, bottom, up, why lower each time, end.”</td></tr>
+    <tr><td>40–55</td><td>Block 2 mastery check (2.5)</td><td>Pupils close the lesson and put notes away. Launch the platform check. Do not help with content; you may read a question aloud.</td><td>Encourage “Not sure” over guessing.</td></tr>
+    <tr><td>55–60</td><td>Error log and self-rating (2.6)</td><td>Each pupil logs at least one error in full (6 fields). Self-rating last.</td><td>“Is your ‘correct physics’ column a full sentence with a store named in full?”</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ================= HINGE ================= -->
+<h2 id="hinge">7. Hinge questions and routes</h2>
+<p>Ask all three in Session 1 guided practice (G1–G3) on mini-whiteboards. “Most” means about half the group or more (3 or more of 6).</p>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Hinge (manifest)</th><th>Correct answer</th><th>If most pupils answer…</th><th>…then do this</th><th>Misconception</th></tr></thead>
+  <tbody>
+    <tr><td rowspan="3">G1. A ball is thrown straight up. As it rises, which energy store increases and which decreases?</td><td rowspan="3">The gravitational potential energy store (of the ball–Earth system) increases; the kinetic energy store of the ball decreases.</td><td>“Movement energy decreases, potential energy increases” (right idea, wrong names)</td><td>Accept the physics, repair the language: pupils rewrite with full store names using the sentence frame. Re-ask: “A lift goes up at a steady speed. Which store increases and which stays the same?” (gravitational potential increases; kinetic stays the same).</td><td>MIS-PHY-ENE-002</td></tr>
+    <tr><td>Both increase, or the directions reversed</td><td>Throw the ball again and freeze the story at the top: “Is it moving at the top? So how full is its kinetic store?” Then run the same questions for the ball falling back down.</td><td>MIS-PHY-ENE-002</td></tr>
+    <tr><td>“Energy is used up as it goes up”</td><td>“Used up into which store?” Walk through the ball–Earth system; restate conservation.</td><td>MIS-PHY-ENE-001</td></tr>
+    <tr><td rowspan="3">G2. A car brakes to a stop. Where is the energy that was in its kinetic energy store now?</td><td rowspan="3">Almost all in the thermal energy stores of the brakes, tyres and surroundings (dissipated); a very small amount was transferred by sound. The total is unchanged.</td><td>“It is lost / used up / gone”</td><td>The “lost to where?” move (section 3) with the whole group. Then everyone writes the full sentence.</td><td>MIS-PHY-ENE-001</td></tr>
+    <tr><td>“Friction destroyed it”</td><td>Rub hands for 10 s: “Did the energy vanish, or do your hands feel warmer?” Link: friction does work, so energy is transferred to thermal energy stores. Preview clinic case C3.</td><td>MIS-PHY-ENE-003</td></tr>
+    <tr><td>“Heat energy and sound energy” or sound as a large share</td><td>Language repair (thermal energy store; by sound). Weighting: “Could you hear a car braking from 100 m away? It is quiet compared with how hot the brakes get.” Sound is a very small amount.</td><td>MIS-PHY-ENE-002</td></tr>
+    <tr><td rowspan="3">G3. A box is pushed 3 m across a floor by a horizontal force of 20 N. How much work is done by the force?</td><td rowspan="3">W = F s = 20 × 3 = 60 J; 60 J of energy is transferred by the force.</td><td>6.7 J (20 ÷ 3) or 0.15 (3 ÷ 20)</td><td>Re-teach the recall equation; pupils say “work done equals force times distance” and write the RELATIONSHIP line before any number. Re-ask with 25 N and 4 m.</td><td>MIS-PHY-SKL-004 (Toolkit)</td></tr>
+    <tr><td>60 N, 60 W or no unit</td><td>1 J = 1 N m: “What is the unit of energy? Work done is energy transferred.” Re-ask; insist on the unit.</td><td>unit slip</td></tr>
+    <tr><td>Correct, but some pupils then say the push does work while the box is lifted (follow-up question)</td><td>Draw the force arrow and the movement arrow. “Is there any movement along the line of the force?” Preview clinic case C4 and the Stretch.</td><td>MIS-PHY-FOR-001</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ================= ANSWERS S1 ================= -->
+<h2 id="ans1">8. Complete answers and mark schemes: Session 1</h2>
+<p class="small">Marking principles: for Calculate questions, 1 mark for correct substitution (or rearrangement), 1 for the answer, and where shown 1 for a conversion; allow error carried forward (ECF) from an earlier step. A correct final answer with a correct unit and no working gets full marks unless the question asks for working. A wrong or missing unit on the final answer loses the answer mark only when the unit is not given in the question. Answers using “heat energy”, “movement energy” or “electrical energy” as store names, or “lost/used up” as the destination, do not earn the mark for that point.</p>
+
+<h3>1.1 Retrieval</h3>
+<div class="ans">
+  <p><b>R1 [1]</b> 3.5 × 10⁵ J (= 350 000 J). The question asks for standard form; 350 000 J alone: 0 marks, but say why. Watch: 3.5 × 10⁻⁷ J or 350 J (MIS-PHY-SKL-001 wrong direction / kilo instead of mega); 3.5 × 10⁻⁵ (MIS-PHY-SKL-003).</p>
+  <p><b>R2 [1]</b> t = s ÷ v (t = s/v). Watch: t = v ÷ s or t = s × v (MIS-PHY-SKL-004).</p>
+  <p><b>R3 [2]</b> Gradient = change in energy ÷ change in time = 900 J ÷ 20 s (1) = 45 J/s (accept 45 W) (1). Watch: “900” (reads a value, not a gradient: MIS-PHY-SKL-006); 0.022 (inverted).</p>
+</div>
+
+<h3>1.3 Worked examples (faded parts)</h3>
+<div class="ans">
+  <p><b>Example 2 (coconut)</b> Step 2: from the gravitational potential energy store of the coconut–Earth system to the kinetic energy store of the coconut. Step 3: to the thermal energy stores of the coconut, the sand and the surroundings (dissipated); a very small amount by sound. Step 4: the total energy of the system (coconut, Earth, sand, air) is unchanged; energy has been transferred, not destroyed.</p>
+  <p><b>Example 4 (lift)</b> REARRANGE s = W ÷ F; SUBSTITUTE s = 86 400 J ÷ 7200 N; SOLVE s = 12 m; CHECK J ÷ N = m, and 12 m is about four storeys, which is sensible.</p>
+</div>
+
+<h3>1.4 Guided practice</h3>
+<div class="ans">
+  <p><b>G1 [2]</b> Gravitational potential energy store of the ball–Earth system increases (1). Kinetic energy store of the ball decreases (1). Accept “gravitational potential energy store of the ball”.</p>
+  <p><b>G2 [2]</b> In the thermal energy stores of the brakes, tyres and/or surroundings, i.e. dissipated (1). Total energy unchanged / not destroyed, <i>or</i> a very small amount transferred by sound (1). No mark for “lost” or for sound as the main destination.</p>
+  <p><b>G3 [2]</b> W = 20 N × 3 m (1) = 60 J (1).</p>
+  <p><b>G4 [3]</b> F = W ÷ s (1); F = 750 J ÷ 25 m (1); F = 30 N (1).</p>
+</div>
+
+<h3>1.5 Independent practice</h3>
+<div class="ans">
+  <p><b>I1 [3]</b> (a) gravitational potential energy store (of the bag–Earth system) (1). (b) elastic potential energy store (of the trampoline bed / its springs) (1). (c) thermal energy store (of the water / pot) (1). Do not accept “potential energy” alone, “heat”, or “stretch energy”.</p>
+  <p><b>I2 [3]</b> Stores: kinetic, chemical, thermal, nuclear. Pathways: by heating, electrically, by radiation, mechanically. All 8 correct: 3; 6–7 correct: 2; 4–5 correct: 1; 3 or fewer: 0.</p>
+  <p><b>I3 [2]</b> W = 320 N × 250 m (1) = 80 000 J (accept 80 kJ, 8.0 × 10⁴ J) (1).</p>
+  <p><b>I4 [3]</b> s = 450 cm = 4.5 m (1); W = 180 N × 4.5 m (1) = 810 J (1). 81 000 J (distance left in cm, MIS-PHY-SKL-002): 1 mark for the method only.</p>
+  <p><b>I5 [3]</b> W = 3.6 kJ = 3600 J (1); s = W ÷ F = 3600 J ÷ 300 N (1) = 12 m (1). Watch: 0.012 m (kJ not converted, MIS-PHY-SKL-002); 1 080 000 (multiplied, MIS-PHY-SKL-004).</p>
+  <p><b>I6 [3]</b> The chemical energy store of the gas (and oxygen) decreases as it burns (1). Energy is transferred by heating to the thermal energy store of the water (and pot), which increases / the water’s temperature rises (1). Some energy is dissipated by heating to the thermal energy store of the surroundings (air, cooker) (1).</p>
+  <p><b>I7 [3]</b> (a) 450 J: the work done against friction equals all the energy that was in its kinetic energy store (1). (b) F = W ÷ s = 450 J ÷ 3.0 m (1) = 150 N (1).</p>
+  <p><b>Stretch [3]</b> W = F s = 400 N × 1.5 m (1) = 600 J (1). During the carry, the lifting force is vertical but the crate moves horizontally: it moves no distance along the line of action of the force, so the lifting force does no work (0 J) during the carry (1). Wrong answers to diagnose: 4000 J (400 × 10) or 4600 J (400 × 11.5): MIS-PHY-FOR-001.</p>
+</div>
+
+<h3>1.6 Exit ticket (mark before Session 2)</h3>
+<div class="ans">
+  <p><b>E1 [1]</b> Electrically (accept “by an electric current”; “by electrical work”). Do not accept “electrical energy” (MIS-PHY-ENE-002).</p>
+  <p><b>E2 [2]</b> Only the lift is along the line of action of the upward force: W = 540 N × 15 m (1) = 8100 J (1). During the sideways swing the load moves at right angles to the upward force, so that force does no work. Diagnostic wrong answers: 12 420 J (540 × 23) and 4320 J (540 × 8.0): MIS-PHY-FOR-001.</p>
+  <p><b>E3 [2]</b> Model: “When the bicycle skids to a stop, friction does work, and energy is transferred from the kinetic energy store of the bicycle (and rider) to the thermal energy stores of the tyre, the road and the surroundings. The energy is dissipated, not destroyed.” (1) energy transferred from the kinetic energy store to named thermal energy stores; (1) dissipated / not destroyed / total unchanged. An answer that still uses “lost” as the destination: 0 for the first mark.</p>
+  <p class="small">Tally by id: E1 wrong → MIS-PHY-ENE-002 (clinic C2); E2 12 420 J or 4320 J → MIS-PHY-FOR-001 (clinic C4); E2 divided instead of multiplied → MIS-PHY-SKL-004; E3 “lost/used up” → MIS-PHY-ENE-001 (C1); “destroyed by friction” → MIS-PHY-ENE-003 (C3).</p>
+</div>
+
+<!-- ================= ANSWERS S2 ================= -->
+<h2 id="ans2">9. Complete answers and mark schemes: Session 2</h2>
+<h3>2.1 Retrieval</h3>
+<div class="ans">
+  <p><b>R1</b> Not scored: check that the corrected answer names stores in full and uses “transferred / dissipated”.</p>
+  <p><b>R2 [1]</b> 3.6 × 10⁶ J.</p>
+  <p><b>R3 [2]</b> Mechanically (by a force doing work), electrically, by heating, by radiation. All four: 2; two or three: 1. If a store (e.g. “kinetic”) or “particles” is listed as a pathway, maximum 1. “By sound” listed as well as the four: no penalty.</p>
+</div>
+
+<h3>2.2 Misconception clinic (each 2 marks: 1 for choosing the correct pupil, 1 for the reason)</h3>
+<div class="ans">
+  <p><b>C1 (MIS-PHY-ENE-001)</b> Pupil B. Energy cannot be created or destroyed. It was transferred electrically from the chemical energy store of the battery to the phone’s circuits and then by radiation (the screen’s light) and by heating; it ends up dissipated in the thermal energy store of the surroundings. The total is unchanged.</p>
+  <p><b>C2 (MIS-PHY-ENE-002)</b> Pupil A. “Electrical” describes a pathway (energy is transferred electrically), not a store, and “heat” is not a store: the store that increases is the thermal energy store of the water. Energy is not changed from one kind into another; it is transferred between stores.</p>
+  <p><b>C3 (MIS-PHY-ENE-003)</b> Pupil B. Friction cannot destroy energy. Friction does work on the skateboard, transferring energy from its kinetic energy store to the thermal energy stores of the wheels, the ground and the air: they warm slightly. The energy is dissipated.</p>
+  <p><b>C4 (MIS-PHY-FOR-001)</b> Pupil A. In W = F s, s is the distance moved along the line of action of the force. The upward force is vertical, but the load moves horizontally and stays at the same height, so the distance along the force is 0 m and W = 200 N × 0 m = 0 J. (If pupils ask: the porter’s body does transfer energy while walking, but not by this upward force on the load.)</p>
+</div>
+
+<h3>2.3 Guided practice</h3>
+<div class="ans">
+  <p><b>G1 bungee [4]</b> (1) gravitational potential energy store of the jumper–Earth system decreases throughout; (1) kinetic energy store of the jumper increases while falling (and for a while after the cord becomes tight, until the pull of the cord equals her weight), then decreases to zero at the lowest point; (1) elastic potential energy store of the cord increases once it is tight, and is greatest at the lowest point; (1) some energy dissipated by air resistance to the thermal energy store of the surroundings, <i>or</i> the conservation statement (decrease in gravitational potential = increase in elastic potential + energy dissipated).</p>
+  <p><b>G2 [3]</b> (a) 2.4 J − 1.9 J = 0.5 J (1). (b) F = W ÷ s = 0.5 J ÷ 2.0 m (1) = 0.25 N (1).</p>
+  <p><b>G3 [3]</b> (a) 250 J − 180 J = 70 J (1). (b) Input 50 mm, useful 36 mm, wasted 14 mm: all three correct 2; two correct 1.</p>
+</div>
+
+<h3>2.4 Independent and Grade 9 challenge</h3>
+<div class="ans">
+  <p><b>I1 tugboat [3]</b> s = 3.0 km = 3.0 × 10³ m (1); W = 2.0 × 10⁵ N × 3.0 × 10³ m = 6.0 × 10⁸ J (1); = 600 MJ (1). Watch: 6.0 × 10⁵ J (km not converted, MIS-PHY-SKL-002); 6.0 × 10¹⁴ MJ or 6.0 × 10² J (prefix conversion the wrong way, MIS-PHY-SKL-001).</p>
+  <p><b>I2 swing (6-mark)</b>: see section 10.</p>
+  <p><b>G9 handcart [8]</b></p>
+  <ol class="ms" type="a">
+    <li>W = F s = 150 N × 10 m (1) = 1500 J (1).</li>
+    <li>Work done against the resistive forces while pushing = 60 N × 10 m = 600 J (1); energy in the kinetic energy store = 1500 J − 600 J = 900 J (1).</li>
+    <li>After she lets go, the resistive forces do work until the kinetic energy store is empty: s = W ÷ F = 900 J ÷ 60 N (1) = 15 m (1). ECF from (b).</li>
+    <li>All 1500 J done by the worker is dissipated by the end, because the cart finishes at rest on level ground, so no energy remains in its kinetic or gravitational potential energy stores (1). It ends in the thermal energy stores of the wheels and axles, the road and the air (the surroundings); check: 60 N × (10 m + 15 m) = 1500 J (1).</li>
+  </ol>
+  <p class="small">Common error: (b) = 1500 J (friction ignored during the push) leading to (c) = 25 m. That is the whole distance, not the roll. Award (c) by ECF (2) but not (b).</p>
+</div>
+
+<!-- ================= SIX-MARK ================= -->
+<h2 id="six">10. 6-mark extended response: levels-based mark scheme</h2>
+<p><b>Question (S2 I2, Explain, 6 marks, new context):</b> A child sits on a playground swing. An adult pulls the swing back and lets go. The child does not push or pump with her legs. The swing moves back and forth, each swing reaching a slightly lower height than the one before, until it stops. Explain the changes in the way energy is stored, from the moment the swing is released until it stops.</p>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Level</th><th>Marks</th><th>Descriptor</th></tr></thead>
+  <tbody>
+    <tr><td>3</td><td>5–6</td><td>A coherent, logically ordered explanation. Describes the repeated transfer between the gravitational potential energy store (of the child/swing–Earth system) and the kinetic energy store, <b>and</b> explains the decreasing height by work done against air resistance and friction at the pivot, which dissipates energy to thermal energy stores, <b>and</b> links this to conservation (the total is constant; at the end the energy is in the thermal energy store of the surroundings). Store and pathway names are used correctly throughout. 6 marks when the chain is complete and precise; 5 when one link is thin.</td></tr>
+    <tr><td>2</td><td>3–4</td><td>Describes the transfer between the gravitational potential and kinetic energy stores in the correct direction for at least one half-swing, <b>and either</b> mentions dissipation to a thermal energy store (or friction / air resistance doing work) <b>or</b> gives a clear, correctly ordered account of a whole swing; the link to the decreasing height or to conservation is missing or unclear. Mostly correct language.</td></tr>
+    <tr><td>1</td><td>1–2</td><td>Identifies one or more relevant stores or processes (e.g. “kinetic energy store increases as it swings down”, “friction slows it”) with little or no logical sequence. May use loose language.</td></tr>
+    <tr><td>0</td><td>0</td><td>No relevant content.</td></tr>
+  </tbody>
+</table>
+</div>
+<p><b>Rule:</b> an answer that says energy is used up, destroyed or disappears, and never corrects it, cannot go above Level 2. Forms-of-energy names (“heat energy”, “movement energy”) cost precision: place the answer at the bottom of its level.</p>
+<h4>Indicative content</h4>
+<ul class="ms">
+  <li>At release the swing is at rest at its highest point: energy is in the gravitational potential energy store of the child/swing–Earth system; the kinetic energy store is empty.</li>
+  <li>Moving down: the gravitational potential energy store decreases and the kinetic energy store of the child and swing increases; energy is transferred mechanically (the weight does work).</li>
+  <li>At the lowest point the kinetic energy store is greatest and the gravitational potential energy store is least.</li>
+  <li>Moving up the other side: the kinetic energy store decreases and the gravitational potential energy store increases, until the swing is momentarily at rest.</li>
+  <li>Air resistance and friction at the pivot (chains, hooks) act against the motion and do work; this transfers energy to the thermal energy stores of the pivot, the swing and the surrounding air. A very small amount is transferred by sound (creaking).</li>
+  <li>So less energy returns to the gravitational potential energy store on each swing, which is why each swing reaches a slightly lower height.</li>
+  <li>When the swing stops, its kinetic energy store is empty and it hangs at the lowest point; the energy it had at release is now in the thermal energy store of the surroundings (dissipated, spread out, not usefully recoverable).</li>
+  <li>The total energy of the closed system (child, swing, Earth, air) is constant throughout; energy is not created or destroyed.</li>
+  <li>(Credit, not required) The energy originally came from the adult: work done pulling the swing back, from the chemical energy store of the adult’s muscles.</li>
+</ul>
+<h4>Exemplar Level 3 answer (for teacher moderation; do not show before the pupils attempt it)</h4>
+<p class="ans">When the adult lets go, the swing is at rest at its highest point, so the energy is in the gravitational potential energy store of the child–Earth system and the kinetic energy store is empty. As the swing moves down, the child’s weight does work, so energy is transferred from the gravitational potential energy store to the kinetic energy store of the child and swing, which is greatest at the lowest point. As the swing rises again, energy is transferred back from the kinetic energy store to the gravitational potential energy store. On every swing, air resistance and friction at the pivot do work against the motion, so some energy is transferred to the thermal energy stores of the pivot and the surrounding air; it is dissipated. This means less energy returns to the gravitational potential energy store each time, so each swing is a little lower. When the swing stops, all the energy it started with is in the thermal energy store of the surroundings. It has not been destroyed: the total energy of the child, swing, Earth and surrounding air stays the same.</p>
+
+<!-- ================= HOMEWORK ================= -->
+<h2 id="anshw">11. Answers and mark schemes: homework (20–30 minutes; 24 marks: Part A 6, Part B 13, Part C 5)</h2>
+<div class="ans">
+  <p><b>H1 [1]</b> An object or a group of objects (that we choose to study).</p>
+  <p><b>H2 [1]</b> Elastic potential energy store (of the spring).</p>
+  <p><b>H3 [2]</b> Energy cannot be created or destroyed; it can only be transferred usefully, stored or dissipated (1). The total energy of a closed system is constant / there is no net change (1).</p>
+  <p><b>H4 [1]</b> N m (newton metre).</p>
+  <p><b>H5 [1]</b> 750 J.</p>
+  <p><b>H6 [2]</b> W = 350 N × 18 m (1) = 6300 J (1).</p>
+  <p><b>H7 [3]</b> W = 2.8 kJ = 2800 J (1); F = W ÷ s = 2800 J ÷ 40 m (1) = 70 N (1). Watch: 0.07 N (kJ not converted); 112 000 (multiplied).</p>
+  <p><b>H8 [3]</b> The gravitational potential energy store of the skydiver–Earth system decreases (1). Her kinetic energy store does not change, because her speed is constant (1). Energy is transferred mechanically (work done against air resistance) to the thermal energy store of the air / surroundings: it is dissipated (1).</p>
+  <p><b>H9 [3]</b> (a) 50 J − 42 J = 8 J (1). (b) Input 50 ÷ 2 = 25 mm; useful 42 ÷ 2 = 21 mm; wasted 8 ÷ 2 = 4 mm (all three 2; two correct 1). Check 21 + 4 = 25.</p>
+  <p><b>H10 [2]</b> The energy is spread out through the surroundings (in their thermal energy store) (1), warming them by only a very small amount, so it is stored in a less useful way and cannot easily be transferred to a useful store again (1). (MIS-PHY-ENE-019 if the pupil says it can be collected and reused.)</p>
+  <p><b>H11 [5]</b> (a) W = 500 N × 6.0 m = 3000 J (1). (b) Work done against the weight = 1600 N × 1.5 m = 2400 J (1). Distance used: the vertical height gained, 1.5 m, because the weight acts vertically and s must be the distance moved along the line of action of the force; the 6.0 m is along the ramp (1). (This energy goes to the gravitational potential energy store; Block 3 calculates it with Ep = mgh.) (c) The box moves at a steady speed, so its kinetic energy store does not change: 3000 J − 2400 J = 600 J dissipated (1). (d) F = W ÷ s = 600 J ÷ 6.0 m = 100 N (1). Using 6.0 m in (b) (9600 J, more than the 3000 J supplied) is MIS-PHY-FOR-001; ask “can more energy go into a store than was supplied?”</p>
+</div>
+
+<!-- ================= MISCONCEPTIONS ================= -->
+<h2 id="mis">12. Misconception notes</h2>
+<div class="tablewrap">
+<table>
+  <thead><tr><th>Id</th><th>Statement (what the pupil believes)</th><th>Correct idea</th><th>What it looks like in pupil work</th><th>The fix</th></tr></thead>
+  <tbody>
+    <tr><td><span class="id">MIS-PHY-ENE-001</span> (conceptual)</td><td>Energy is “used up”, destroyed or lost when something happens.</td><td>Energy is transferred between stores; the total is conserved. “Wasted” energy is dissipated to less useful stores, usually the thermal energy store of the surroundings.</td><td>“The battery’s energy is used up”; “the energy is lost”; totals after a change that are smaller than before, with no dissipated share (e.g. G2(a) left blank or “it disappeared”).</td><td>The “lost to where?” move every time. Conservation bookkeeping: before = after, with a named line for “dissipated”. Clinic C1. Figure 1: follow every arrow to a store.</td></tr>
+    <tr><td><span class="id">MIS-PHY-ENE-002</span> (conceptual)</td><td>Confuses stores with pathways, or uses non-store names (“heat energy”, “movement energy”, “electrical energy” as a store).</td><td>Stores: kinetic, gravitational potential, elastic potential, thermal, chemical, nuclear (and magnetic, electrostatic). Pathways: mechanically (work done by a force), electrically (work done when a current flows), by heating, by radiation.</td><td>“Electrical energy” in E1; a pathway listed as a store in I2 or S2 R3; “heat” as a destination; “light energy”.</td><td>Two-column sort (I2) repeated orally; the sentence frame, in which a store follows “from/to the …” and a pathway follows “by”. Clinic C2.</td></tr>
+    <tr><td><span class="id">MIS-PHY-ENE-003</span> (conceptual)</td><td>Friction or air resistance destroys energy.</td><td>Work done against friction transfers energy to the thermal energy stores of the object and the surroundings; it is dissipated, not destroyed.</td><td>“Friction takes the energy away / destroys it”; I7 or G9 answers with no destination for the energy.</td><td>Rub hands for 10 s; link the warmth to work done against friction. WE3 (sack: steady speed, all 1200 J to thermal stores). Clinic C3.</td></tr>
+    <tr><td><span class="id">MIS-PHY-ENE-019</span> (conceptual)</td><td>Energy dissipated to the surroundings can easily be recovered and used.</td><td>Dissipated energy is spread out in the thermal energy store of the surroundings and becomes less useful; in practice it cannot be recovered.</td><td>“The wasted energy can be collected and used again”; H10 answers that suggest reuse.</td><td>Ask: “The 15 J from the kettle warmed a whole kitchen by a tiny fraction of a degree. Could you boil anything with that?” Use the word “spread out”. Revisit in Block 5 (efficiency).</td></tr>
+    <tr><td><span class="id">MIS-PHY-FOR-001</span> (conceptual)</td><td>Uses a distance that is not in the direction of the force (e.g. the horizontal distance moved when something is lifted).</td><td>In W = F s, s is the distance moved along the line of action of the force.</td><td>Stretch: 4000 J or 4600 J; E2: 12 420 J or 4320 J; C4: 10 000 J (Pupil B’s answer); H11(b): 9600 J (1600 × 6.0).</td><td>Draw two arrows every time: the force, and the movement. Ask: “How far did it move <i>along the force</i>?” Figure 3. Clinic C4.</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="small">Toolkit errors seen in this block (not Block 2 misconceptions, but log them): MIS-PHY-SKL-001/002 (kJ, MJ, cm conversions: I4, I5, H7, S2 I1), MIS-PHY-SKL-003 (standard form: R1, S2 R2), MIS-PHY-SKL-004 (rearranging a product: WE4, G4, I5, I7, H7), MIS-PHY-SKL-006 (gradient: R3).</p>
+
+<!-- ================= DIFFERENTIATION ================= -->
+<h2 id="diff">13. Differentiation</h2>
+<h3>Foundation support</h3>
+<ul>
+  <li>Give a printed card with the sentence frame and the two lists (8 stores, 4 pathways). Allow it in guided practice only, never in the exit ticket or the mastery check.</li>
+  <li>Session 1 independent: I1–I6 and I7(a). Pupils who finish then attempt I7(b) with the prompt “work done by friction = energy in the kinetic store”.</li>
+  <li>For I4 and I5, ask pupils to complete the GIVEN line with converted units before anything else.</li>
+  <li>Session 2 independent: I1 and the 6-mark response; plan the 6-marker with the prompts “at release / going down / at the bottom / going up / why lower / at the end”. Grade 9 parts (a) and (b) are accessible.</li>
+  <li>Homework: all of Parts A and B are Foundation-accessible; H11 is optional.</li>
+</ul>
+<h3>Higher stretch</h3>
+<ul>
+  <li>Send secure pupils straight to I7 and the Stretch in Session 1 if they finish I3–I6 accurately in under 8 minutes.</li>
+  <li>Grade 9 challenge extension: “If the resistive force were 75 N, how far would the cart roll after she lets go?” (1500 − 75 × 10 = 750 J; 750 ÷ 75 = 10 m.)</li>
+  <li>Sankey extension: “Draw the kettle Sankey for 2.0 kJ supplied at 1 mm per 50 J” (input 40 mm, useful 34 mm, wasted 6 mm).</li>
+  <li>Ask Higher pupils to explain why the gravitational potential energy store belongs to the object–Earth system, not to the object alone.</li>
+</ul>
+
+<!-- ================= MASTERY ================= -->
+<h2 id="mastery">14. Block 2 mastery check, remediation and escalation</h2>
+<h3>The platform mastery check (Session 2, 40–55 min)</h3>
+<ul>
+  <li>A 15-minute programme check on the platform (diagnostic runtime in “programme check” mode). Items are approved <b>mastery-check</b> items tagged to the three concepts: at least 2 per concept, target 3, independent of the teaching examples and practice items.</li>
+  <li>Pupils work alone, no notes, lesson closed. You may read a question aloud; do not explain content. Encourage “Not sure” rather than guessing: a confident wrong answer is recorded as signalling a misconception.</li>
+  <li>The check does not produce a grade. <b>Do not use answers to this lesson’s questions as mastery evidence</b>: they are practice evidence.</li>
+  <li>If the platform says the Block 2 check is unavailable (for example, a concept does not yet have enough approved mastery-check items), do not substitute questions from this lesson or the homework. Record it and tell the programme lead.</li>
+</ul>
+<h3>Remediation policy (programme manifest)</h3>
+<div class="tablewrap">
+<table>
+  <tbody>
+    <tr><th scope="row">Pass</th><td>A concept passes the block check when every mastery-check item on it is right and no sure-wrong answer signals one of its misconceptions.</td></tr>
+    <tr><th scope="row">After a first fail</th><td>The pupil gets the recommended remediation (misconception clinic, prerequisite repair or worked-example re-teach), then a second mastery check on items they have not seen.</td></tr>
+    <tr><th scope="row">After a second fail</th><td>Escalate to the teacher (E1): a 5-minute 1:1 on the evidence; the teacher chooses a live re-teach, a prerequisite mini-lesson, or an override with a reason.</td></tr>
+    <tr><th scope="row">Never</th><td>Never “You scored 45%. Next topic.” Never label a pupil from one answer. Never show an untaught concept as insecure.</td></tr>
+  </tbody>
+</table>
+</div>
+<h3>Which remediation fits which evidence (Block 2)</h3>
+<ul>
+  <li><b>Misconception clinic</b>: sure-wrong answers signalling MIS-PHY-ENE-001, -002, -003, -019 or MIS-PHY-FOR-001. Re-use the matching clinic case with new numbers or a new context; the pupil explains both pupils’ views aloud.</li>
+  <li><b>Prerequisite repair</b>: work-done errors that are really Toolkit errors (unit conversion, rearranging, standard form). Send to the Block 1 concept, not to W = F s.</li>
+  <li><b>Worked-example re-teach</b>: a pupil who cannot start a W = F s question, or cannot structure a store-change description. Re-run WE1/WE3 with new numbers, then fade.</li>
+</ul>
+<h3>Escalation flags (act the same week)</h3>
+<ul>
+  <li>A pupil still writes “used up”, “lost” (as a destination), “heat energy” or “electrical energy” after the clinic and in the mastery check.</li>
+  <li>A confident wrong answer on the line-of-action distance (MIS-PHY-FOR-001) after clinic case C4.</li>
+  <li>Toolkit errors in more than one work-done question: the Block 1 skill is not secure; tell the programme lead so the pupil’s pathway includes prerequisite repair.</li>
+  <li>A second failed mastery check on any Block 2 concept (E1: 5-minute 1:1).</li>
+  <li>The platform check is unavailable or a pupil could not complete it (record it; the pupil must not be shown as insecure on an unchecked concept).</li>
+</ul>
+
+<!-- ================= PHYSICS DECISIONS ================= -->
+<h2 id="physics">15. Physics decisions in this lesson (so you can defend them)</h2>
+<ul>
+  <li><b>Four pathways in this course</b>: mechanically (work done by a force), electrically (work done when a current flows), by heating, by radiation. There is no “particles” pathway.</li>
+  <li><b>Sound</b> is treated as a mechanical transfer (a vibrating surface does work on the air) and always as a <b>very small amount</b> that also ends in the thermal energy store of the surroundings. Accept “by sound” or “by sound waves” from pupils (creditable; no penalty when listed alongside the four pathways); do not accept “sound energy” as a store.</li>
+  <li><b>Gravitational potential energy</b> is stored by the object–Earth system; “the gravitational potential energy store of the ball” is accepted at GCSE.</li>
+  <li><b>Kettle</b>: the useful store is the thermal energy store of the <b>water</b>; the wasted energy goes to the thermal energy stores of the kettle and the surroundings (a little by sound).</li>
+  <li><b>Braking</b>: friction between the brake pads and discs does the work; the brakes heat up first, then the surroundings.</li>
+  <li><b>Sankey (Figure 2)</b> is drawn to scale at 1 J = 1.2 units of width: 100 J → 120 units; 85 J → 102 units; 15 J → 18 units; 102 + 18 = 120. Scale bar 24 units = 20 J. Arrowheads do not widen the bands.</li>
+  <li><b>Number format</b>: a space separates thousands in numbers of five or more digits (86 400 J); four-digit numbers are written without a space (7200 N), as SI allows.</li>
+  <li>“Thermal energy store” is used throughout, never “internal energy store”.</li>
+  <li><b>Diagram fonts</b>: the SVG labels use the system sans-serif stack (system-ui), not Plus Jakarta Sans as the Inspire Scientific Diagram Standard specifies, because the lesson must not load external fonts. This is a recorded deviation from the standard.</li>
+  <li><b>Sankey teaching</b> sits in Session 2 guided practice (before G3), not in Session 1 concept construction, so that Session 1 concept construction fits its 15 minutes.</li>
+</ul>
+
+<p class="small" style="margin-top:28px">ISM Physics School V1 · Block 2 teacher guide · draft for review · pairs with <span class="id">curriculum/school/lessons/physics/b2-energy-stores-work.html</span></p>
+</div>
+</body>
+</html>

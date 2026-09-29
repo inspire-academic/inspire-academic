@@ -121,7 +121,8 @@ function evaluate() {
   const teachingBlocks = PROGRAMME.blocks.filter(b => b.concepts.length);
   const pilotBlocks = teachingBlocks.slice(0, 2);
   const pilotConcepts = pilotBlocks.flatMap(b => b.concepts);
-  const usedAssets = new Set(PROGRAMME.blocks.filter(b => USABLE_LESSON.includes(b.lesson.status)).map(b => b.id));
+  // Findings name the asset they are about; a block's lesson is '<block>-lesson'.
+  const usedAssets = new Set(PROGRAMME.blocks.filter(b => USABLE_LESSON.includes(b.lesson.status)).map(b => `${b.id}-lesson`));
   const guide = b => `docs/school/physics-v1/guides/${b.id}.md`;
   const need = (ids, fn) => ids.filter(id => !fn(inv[id] || {}, id));
   const code = (file, marker) => exists(file) && read(file).includes(marker);
@@ -285,11 +286,11 @@ function evaluate() {
   add('preserved', 'Historical/current production functionality preserved (full test suite + live smoke check)', true, manual('preserved'));
   add('routes', 'No critical broken routes', true, manual('routes'));
   {
-    const openCritical = findings.filter(f => f.severity === 'critical' && f.status === 'open');
+    const openCritical = findings.filter(f => ['critical', 'major'].includes(f.severity) && f.status === 'open');
     const inProgramme = openCritical.filter(f => usedAssets.has(f.asset));
     add('errors', 'No known scientific errors in programme content', true,
-      inProgramme.length ? { status: FAIL, evidence: `Open critical findings in programme content: ${inProgramme.map(f => f.id).join(', ')}` }
-        : { status: PASS, evidence: `No open critical findings in content the programme uses. ${openCritical.length} open critical findings in assets the programme does NOT use (qa-failed): ${list(openCritical.map(f => f.id))}. Some of those assets are live elsewhere; see the findings register.` });
+      inProgramme.length ? { status: FAIL, evidence: `Open critical or major findings in programme content: ${inProgramme.map(f => f.id).join(', ')}` }
+        : { status: PASS, evidence: `No open critical or major findings in content the programme uses. ${openCritical.length} open critical or major findings in assets the programme does NOT use (qa-failed): ${list(openCritical.map(f => f.id))}. Some of those assets are live elsewhere; see the findings register.` });
   }
   {
     const files = ['docs/school/physics-v1/README.md', ...PROGRAMME.blocks.map(guide), 'docs/school/physics-v1/guides/00-programme.md'].filter(exists);

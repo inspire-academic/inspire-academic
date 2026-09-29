@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block 2 — Energy stores, conservation and work done · ISM Physics</title>
+<style>
+:root{
+  --forest:#0b3a2f; --forest-2:#1d654f; --gold:#c2a15d; --gold-ink:#7a5a17;
+  --paper:#fffdf8; --cream:#f6f2e8; --ink:#1a221f; --muted:#555d58;
+  --line:#e2dccd; --line-strong:#cfc6b3; --tint:#f5f0e4; --mist:#eef3ef;
+  --diagram-ink:#1a221f; --diagram-ink-muted:#555d58; --diagram-axis:#8f877a;
+  --diagram-force:#1f5f8b; --sankey-main:#2c6e58; --sankey-waste:#b8691c;
+  --focus:#1f5f8b;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;line-height:1.6}
+a{color:var(--forest)}
+a:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding:12px}
+header.hero{background:var(--forest);color:#fff;border-radius:10px;padding:20px 18px}
+.kicker{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#e7d7aa;font-weight:700;margin:0}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:28px;line-height:1.15;margin:8px 0}
+.hero p{margin:6px 0;color:#f2efe6;font-size:15px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pill{font-size:12px;border:1px solid rgba(231,215,170,.7);border-radius:99px;padding:2px 10px;color:#fff}
+nav.toc{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:12px 0}
+nav.toc h2{font-size:15px;margin:0 0 6px;font-family:system-ui,sans-serif}
+nav.toc ol{margin:0;padding-left:20px;font-size:14px}
+section{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:12px 0}
+.session-head{background:var(--mist);border:1px solid #cfdcd3}
+h2{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:23px;line-height:1.2;margin:0 0 6px;color:var(--forest)}
+h3{font-family:Georgia,"Times New Roman",serif;font-weight:600;font-size:19px;margin:18px 0 6px;color:#26342e}
+h4{font-size:16px;margin:14px 0 4px}
+.time{display:inline-block;font-size:13px;font-weight:700;color:var(--forest);background:var(--mist);border:1px solid #cfdcd3;border-radius:6px;padding:2px 8px;margin:0 0 8px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 10px}
+.shape{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0 0;padding:0;list-style:none}
+.shape li{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px}
+.shape b{color:var(--forest)}
+.callout{background:var(--tint);border-left:4px solid var(--gold);padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0}
+.key{background:#edf4ef;border-left:4px solid var(--forest);padding:10px 12px;border-radius:0 8px 8px 0;margin:10px 0}
+.frame{font-weight:600;background:#fff;border:1px dashed var(--line-strong);border-radius:8px;padding:10px 12px}
+.eq{display:inline-block;font-family:"Cambria Math","Times New Roman",serif;font-size:18px;background:#fff;border:1px solid var(--line);border-radius:7px;padding:6px 12px;margin:4px 0}
+.avoid{color:#7b2d12;text-decoration:line-through;text-decoration-thickness:1px}
+.tablewrap{overflow-x:auto;margin:8px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;background:#fff}
+th,td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{background:#f1ede2;color:var(--forest);font-size:13px}
+.q{border-top:1px dashed var(--line-strong);padding:12px 0}
+.q:first-of-type{border-top:0}
+.q label,.q .stem{display:block;font-weight:600;margin-bottom:6px}
+.qn{display:inline-block;min-width:2.4em;color:var(--forest)}
+.mk{font-weight:400;color:var(--muted);font-size:14px;white-space:nowrap}
+.band{font-size:12px;font-weight:700;color:var(--gold-ink);border:1px solid var(--gold);border-radius:99px;padding:0 8px;margin-left:4px;white-space:nowrap}
+input[type=text],textarea,select{width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;border:1px solid #b9b2a3;border-radius:7px;padding:8px 10px}
+textarea{min-height:90px;resize:vertical}
+textarea.long{min-height:220px}
+.hint{font-size:14px;color:var(--muted);font-weight:400;margin:2px 0 6px}
+details{border:1px solid var(--line);border-radius:8px;background:#fcfbf6;padding:8px 12px;margin:8px 0}
+summary{cursor:pointer;font-weight:700;color:var(--forest);font-size:14px}
+details > div{margin-top:8px;font-size:15px}
+.routine{list-style:none;padding:0;margin:8px 0;display:grid;grid-template-columns:1fr;gap:6px}
+.routine li{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:14px}
+.routine b{color:var(--forest);display:inline-block;min-width:8.5em}
+.worked{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.worked ol{margin:6px 0;padding-left:20px}
+.step-label{font-weight:700;color:var(--forest)}
+figure{margin:12px 0;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:14px;color:var(--muted);margin-top:8px}
+.panel-check{border:2px solid var(--forest);background:#edf4ef}
+.panel-check h2{color:var(--forest)}
+.contrast{display:grid;grid-template-columns:1fr;gap:8px;margin:8px 0}
+.pupil{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:15px}
+.pupil b{color:var(--forest)}
+.errlog td{min-width:150px}
+.errlog td input,.errlog td textarea{min-height:0}
+.errlog textarea{min-height:70px}
+.rating{display:grid;grid-template-columns:1fr;gap:8px}
+.rating label{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:15px}
+.rating select{margin-top:4px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:16px 0 28px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(min-width:640px){
+  .wrap{padding:20px}
+  header.hero{padding:26px 28px}
+  h1{font-size:34px}
+  section{padding:20px 24px}
+  .shape{grid-template-columns:1fr 1fr 1fr}
+  .routine{grid-template-columns:1fr 1fr}
+  .contrast{grid-template-columns:1fr 1fr}
+  .rating{grid-template-columns:1fr 1fr}
+}
+@media print{body{background:#fff}section,figure{break-inside:avoid}details{display:block}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <p class="kicker">ISM Class · Physics · Energy &amp; Physics Calculations Mastery Intervention</p>
+  <h1>Block 2 — Energy stores, conservation and work done</h1>
+  <p>Week 2 of 6 · two 60-minute sessions · Tier: Both (Foundation and Higher)</p>
+  <p>This week you learn a precise language for energy: where it is stored, how it is transferred, why the total never changes, and how a force transfers energy by doing work.</p>
+  <div class="meta"><span class="pill">AQA 8463 4.1.1.1</span><span class="pill">4.1.2.1</span><span class="pill">4.5.2</span></div>
+</header>
+
+<nav class="toc" aria-label="Lesson contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#goals">Learning goals, calculation routine and language</a></li>
+    <li><a href="#s1">Session 1 (teach)</a>: <a href="#s1-ret">retrieval</a> · <a href="#s1-concept">concept construction</a> · <a href="#s1-we">worked examples</a> · <a href="#s1-gp">guided practice</a> · <a href="#s1-ind">independent practice</a> · <a href="#s1-exit">exit ticket</a></li>
+    <li><a href="#s2">Session 2 (consolidate)</a>: <a href="#s2-ret">retrieval</a> · <a href="#s2-clinic">misconception clinic</a> · <a href="#s2-gp">guided practice</a> · <a href="#s2-ind">independent and Grade 9 challenge</a> · <a href="#s2-check">mastery check</a> · <a href="#s2-log">error log and self-rating</a></li>
+    <li><a href="#hw">Homework</a></li>
+  </ol>
+</nav>
+
+<!-- ============ GOALS ============ -->
+<section id="goals" aria-labelledby="goals-h">
+  <h2 id="goals-h">Learning goals</h2>
+  <p><b>By the end I can…</b></p>
+  <ol>
+    <li>say what a system is, and name the eight energy stores: kinetic, gravitational potential, elastic potential, thermal, chemical, nuclear, magnetic and electrostatic;</li>
+    <li>name the four ways energy is transferred (pathways): mechanically, electrically, by heating and by radiation, and never mix up a store with a pathway;</li>
+    <li>describe all the changes in energy stores for an object projected upwards, a moving object hitting an obstacle, an object accelerated by a constant force, a vehicle slowing down and water brought to the boil in an electric kettle;</li>
+    <li>explain that energy is never created or destroyed: the total energy of a closed system is constant, and wasted energy is dissipated, usually to the thermal energy store of the surroundings;</li>
+    <li>read and interpret a Sankey diagram drawn to scale;</li>
+    <li>calculate work done with W = F s, rearrange it to find F or s, and use the distance moved along the line of action of the force;</li>
+    <li>explain that work done against friction transfers energy to thermal energy stores (the surfaces warm up).</li>
+  </ol>
+
+  <h3>The calculation routine (use it for every calculation)</h3>
+  <ol class="routine">
+    <li><b>1. GIVEN</b> List every quantity with its symbol and unit. Convert to SI units now (kg, m, s, J, W, N).</li>
+    <li><b>2. FIND</b> Write the symbol of the quantity you need.</li>
+    <li><b>3. RELATIONSHIP</b> Write the equation in symbols (from memory, or from the equation sheet if it is a given equation).</li>
+    <li><b>4. REARRANGE</b> Make the unknown the subject before putting numbers in.</li>
+    <li><b>5. SUBSTITUTE</b> Put the numbers in. This line usually earns the first mark.</li>
+    <li><b>6. SOLVE</b> Calculate. Give the unit, and the significant figures asked for.</li>
+    <li><b>7. CHECK</b> Is the size sensible? Is the unit right for the quantity?</li>
+  </ol>
+
+  <h3>Precise language</h3>
+  <div class="callout">
+    <p style="margin-top:0"><b>Always say:</b> “Energy is transferred from the … store of … to the … store of … by … (mechanically / electrically / by heating / by radiation).”</p>
+    <p>Name every store in full, for example “the kinetic energy store of the car”, never just “kinetic”.</p>
+    <p><b>Never say</b> (these are the mistakes examiners look for): <span class="avoid">heat energy</span>, <span class="avoid">movement energy</span>, <span class="avoid">electrical energy</span>, energy is <span class="avoid">used up</span>, energy is <span class="avoid">lost</span> (as a final answer).</p>
+    <p style="margin-bottom:0">If you want to write “lost”, ask yourself: <b>lost to where?</b> The answer is nearly always “dissipated to the thermal energy store of the surroundings”.</p>
+  </div>
+</section>
+
+<!-- ============ SESSION 1 ============ -->
+<section id="s1" class="session-head" aria-labelledby="s1-h">
+  <h2 id="s1-h">Session 1 (teach) — stores, pathways, conservation and work done</h2>
+  <p class="sub">60 minutes. Answer in the boxes; your teacher reads your answers.</p>
+  <ul class="shape" aria-label="Session 1 timings">
+    <li><b>0–5 min</b> Retrieval</li>
+    <li><b>5–20 min</b> Concept construction</li>
+    <li><b>20–30 min</b> Worked examples</li>
+    <li><b>30–40 min</b> Guided practice</li>
+    <li><b>40–55 min</b> Independent practice</li>
+    <li><b>55–60 min</b> Exit ticket</li>
+  </ul>
+</section>
+
+<section id="s1-ret" aria-labelledby="s1-ret-h">
+  <h2 id="s1-ret-h">1.1 Retrieval: Block 1 Toolkit</h2>
+  <span class="time">0–5 min · 5 minutes · no notes</span>
+  <p class="sub">Three questions from last week’s Toolkit. Your teacher goes through the answers with the class.</p>
+  <div class="q">
+    <label for="b2_s1_ret1"><span class="qn">R1</span> Convert 0.35 MJ into joules. Give your answer in standard form. <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_s1_ret1" data-save="b2_s1_ret1" autocomplete="off">
+  </div>
+  <div class="q">
+    <label for="b2_s1_ret2"><span class="qn">R2</span> Rearrange v = s ÷ t to make t the subject. <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_s1_ret2" data-save="b2_s1_ret2" autocomplete="off">
+  </div>
+  <div class="q">
+    <label for="b2_s1_ret3"><span class="qn">R3</span> A straight-line graph has energy transferred (in J) on the vertical axis and time (in s) on the horizontal axis. The line passes through (0 s, 0 J) and (20 s, 900 J). Calculate the gradient of the line and give its unit. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s1_ret3" data-save="b2_s1_ret3"></textarea>
+  </div>
+</section>
+
+<section id="s1-concept" aria-labelledby="s1-concept-h">
+  <h2 id="s1-concept-h">1.2 Concept construction</h2>
+  <span class="time">5–20 min · 15 minutes</span>
+
+  <h3>A system</h3>
+  <p>A <b>system</b> is an object or a group of objects that we choose to study. When a system changes, the way energy is stored in it changes.</p>
+  <p>Example: a ball thrown upwards. We can choose the system to be <i>the ball and the Earth</i>. As the ball rises, energy moves from one store of this system to another.</p>
+  <p>A <b>closed system</b> is one where no energy enters or leaves. In a closed system there is no net change to the total energy.</p>
+
+  <h3>The eight energy stores</h3>
+  <p>A store is <b>where</b> energy is. Always name the store and what it belongs to.</p>
+  <div class="tablewrap">
+  <table>
+    <caption class="sr">The eight energy stores with an example of each</caption>
+    <thead><tr><th scope="col">Energy store</th><th scope="col">Energy is in this store when…</th><th scope="col">Example</th></tr></thead>
+    <tbody>
+      <tr><td>kinetic energy store</td><td>an object is moving</td><td>a bus driving along a road</td></tr>
+      <tr><td>gravitational potential energy store</td><td>an object is raised in a gravitational field (the store belongs to the object–Earth system)</td><td>water held high behind a dam</td></tr>
+      <tr><td>elastic potential energy store</td><td>an object is stretched, squashed or bent</td><td>a stretched bungee cord; a squashed spring</td></tr>
+      <tr><td>thermal energy store</td><td>an object is warmer (for the same object, a higher temperature means more energy in its thermal energy store)</td><td>a pot of hot soup</td></tr>
+      <tr><td>chemical energy store</td><td>substances can take part in chemical reactions</td><td>food; cooking gas and oxygen; a battery</td></tr>
+      <tr><td>nuclear energy store</td><td>energy is stored in the nuclei of atoms</td><td>uranium fuel in a nuclear reactor</td></tr>
+      <tr><td>magnetic energy store</td><td>magnets (or magnetic materials) attract or repel</td><td>two magnets held apart</td></tr>
+      <tr><td>electrostatic energy store</td><td>electric charges attract or repel</td><td>a charged balloon held near a wall</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>The four pathways</h3>
+  <p>A pathway is <b>how</b> energy is transferred from one store to another. In this course we use four pathways.</p>
+  <div class="tablewrap">
+  <table>
+    <caption class="sr">The four energy transfer pathways</caption>
+    <thead><tr><th scope="col">Pathway</th><th scope="col">What happens</th><th scope="col">Example</th></tr></thead>
+    <tbody>
+      <tr><td><b>mechanically</b></td><td>a force does work as an object moves (pushing, pulling, stretching, squashing, a collision)</td><td>a person pushing a wheelbarrow</td></tr>
+      <tr><td><b>electrically</b></td><td>work is done when a current flows in a circuit</td><td>a battery driving a current through a motor</td></tr>
+      <tr><td><b>by heating</b></td><td>energy is transferred from a hotter object to a cooler one because of a temperature difference</td><td>a hot stove warming a pan</td></tr>
+      <tr><td><b>by radiation</b></td><td>electromagnetic waves such as light and infrared carry energy</td><td>sunlight warming a roof</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="key"><b>Store or pathway?</b> “Electrically” is a pathway, so there is no <span class="avoid">electrical energy</span> store. “Heating” is a pathway; the store is the <b>thermal</b> energy store. Sound: a vibrating object pushes on the air and does work on it, so energy carried by sound waves is a mechanical transfer. In answers write “a small amount of energy is transferred by sound to the surroundings”; examiners accept this. Never write “sound energy”: sound is not a store. The energy carried by sound ends up in the thermal energy store of the surroundings.</div>
+
+  <h3>The sentence to use every time</h3>
+  <p class="frame">Energy is transferred from the <u>… store of …</u> to the <u>… store of …</u> <u>by …</u> (mechanically / electrically / by heating / by radiation).</p>
+
+  <figure>
+    <svg viewBox="0 0 720 270" role="img" aria-labelledby="chain-title chain-desc" xmlns="http://www.w3.org/2000/svg">
+      <title id="chain-title">Transfer chain for a battery-powered LED lantern</title>
+      <desc id="chain-desc">Energy is transferred electrically from the chemical energy store of the battery to the LED lamp. From the lamp it is transferred by radiation (light, useful) and by heating (wasted). Both routes end in the thermal energy store of the surroundings.</desc>
+      <defs>
+        <marker id="ah-ink" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 Z" fill="#1a221f"/></marker>
+      </defs>
+      <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif">
+        <rect x="16" y="100" width="170" height="64" rx="12" fill="#edf4ef" stroke="#0b3a2f" stroke-width="2"/>
+        <text x="101" y="127" font-size="13" text-anchor="middle" fill="#1a221f" font-weight="600">Chemical energy store</text>
+        <text x="101" y="146" font-size="13" text-anchor="middle" fill="#1a221f" font-weight="600">of the battery</text>
+        <line x1="186" y1="132" x2="277" y2="132" stroke="#1a221f" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah-ink)"/>
+        <text x="231" y="120" font-size="13" text-anchor="middle" fill="#1a221f">electrically</text>
+        <rect x="280" y="100" width="120" height="64" fill="#ffffff" stroke="#555d58" stroke-width="2"/>
+        <text x="340" y="137" font-size="13" text-anchor="middle" fill="#1a221f" font-weight="600">LED lamp</text>
+        <text x="340" y="184" font-size="11" text-anchor="middle" fill="#555d58">(a device, not a store)</text>
+        <path d="M400,114 Q470,40 538,113" fill="none" stroke="#1a221f" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah-ink)"/>
+        <text x="470" y="60" font-size="13" text-anchor="middle" fill="#1a221f">by radiation (light): useful</text>
+        <path d="M400,150 Q470,224 538,151" fill="none" stroke="#1a221f" stroke-width="2.5" stroke-linecap="round" marker-end="url(#ah-ink)"/>
+        <text x="470" y="214" font-size="13" text-anchor="middle" fill="#1a221f">by heating: wasted</text>
+        <rect x="540" y="100" width="164" height="64" rx="12" fill="#edf4ef" stroke="#0b3a2f" stroke-width="2"/>
+        <text x="622" y="127" font-size="13" text-anchor="middle" fill="#1a221f" font-weight="600">Thermal energy store</text>
+        <text x="622" y="146" font-size="13" text-anchor="middle" fill="#1a221f" font-weight="600">of the surroundings</text>
+        <text x="360" y="252" font-size="13" text-anchor="middle" fill="#7a5a17" font-weight="700">All the energy ends in the thermal energy store of the surroundings</text>
+      </g>
+    </svg>
+    <figcaption>Figure 1. Transfer chain for a battery-powered LED lantern. Rounded boxes are stores; the square box is the device; arrows are pathways. Energy is transferred electrically from the chemical energy store of the battery to the lamp. The lamp transfers energy by radiation (light: the useful output) and by heating (wasted). The light is absorbed by the walls and objects it lands on, so in the end all the energy is in the thermal energy store of the surroundings. Schematic: box and arrow sizes do not show amounts of energy.</figcaption>
+  </figure>
+
+  <h3>The five situations AQA expects you to describe</h3>
+  <div class="tablewrap">
+  <table>
+    <caption class="sr">Changes in energy stores for the five AQA situations</caption>
+    <thead><tr><th scope="col">Situation</th><th scope="col">Store that decreases</th><th scope="col">How (pathway)</th><th scope="col">Store(s) that increase</th></tr></thead>
+    <tbody>
+      <tr><td>An object projected upwards (a ball thrown straight up)</td><td>kinetic energy store of the ball</td><td>mechanically: work is done against the ball’s weight (the gravitational force) as it rises</td><td>gravitational potential energy store of the ball–Earth system; a little is dissipated by air resistance to the thermal energy store of the surroundings</td></tr>
+      <tr><td>A moving object hitting an obstacle (a car hitting a crash barrier)</td><td>kinetic energy store of the car</td><td>mechanically: forces do work as the car and barrier bend</td><td>thermal energy stores of the car, the barrier and the surroundings; a very small amount is transferred by sound</td></tr>
+      <tr><td>An object accelerated by a constant force (a car speeding up)</td><td>chemical energy store of the fuel (and oxygen)</td><td>mechanically: the driving force does work on the car</td><td>kinetic energy store of the car; some is dissipated to the thermal energy stores of the engine and the surroundings</td></tr>
+      <tr><td>A vehicle slowing down (braking)</td><td>kinetic energy store of the vehicle</td><td>mechanically: friction between the brake pads and discs does work</td><td>thermal energy stores of the brakes, then of the surroundings (dissipated); a very small amount is transferred by sound</td></tr>
+      <tr><td>Bringing water to the boil in an electric kettle</td><td>energy is supplied electrically from the mains (the store that decreases is at the power station, e.g. the chemical energy store of the fuel)</td><td>electrically to the heating element, then by heating from the element to the water</td><td>thermal energy store of the water (useful); some is dissipated by heating to the thermal energy stores of the kettle and the surroundings</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Conservation of energy</h3>
+  <div class="key">
+    <p style="margin:0">Energy can be <b>transferred usefully</b>, <b>stored</b> or <b>dissipated</b>, but it <b>cannot be created or destroyed</b>. <b>The total energy of a closed system is constant.</b></p>
+  </div>
+  <h3>Dissipation (“wasted” energy)</h3>
+  <p>In every real change, some energy is transferred to stores where it is less useful. We say the energy is <b>dissipated</b>. It usually ends up in the <b>thermal energy store of the surroundings</b>: it spreads out, warming the surroundings by a very small amount, so it is very hard to use again. It has not been destroyed.</p>
+
+  <h3>Work done: energy transferred by a force</h3>
+  <p>When a force moves an object, the force <b>does work</b>. <b>Work done is energy transferred.</b></p>
+  <p><span class="eq">W = F s</span> &nbsp; work done (J) = force (N) × distance (m)</p>
+  <ul>
+    <li><b>s is the distance moved along the line of action of the force</b>, that is, in the direction the force acts. A distance moved at right angles to the force does not count.</li>
+    <li><b>1 J = 1 N m</b>: one joule of work is done when a force of 1 N moves an object 1 m along the line of action of the force.</li>
+    <li><b>Work done against friction causes heating.</b> Rub your hands together: you do work against friction, energy is transferred to the thermal energy stores of your hands, and they get warmer.</li>
+  </ul>
+  <p class="sub">You must remember W = F s: it is not on the exam equation sheet.</p>
+</section>
+
+<section id="s1-we" aria-labelledby="s1-we-h">
+  <h2 id="s1-we-h">1.3 Worked examples</h2>
+  <span class="time">20–30 min · 10 minutes</span>
+  <p class="sub">Examples 1 and 3 are fully worked. In examples 2 and 4 you finish the working, then check.</p>
+
+  <h3>Example 1 (fully worked): describing store changes</h3>
+  <p><b>A battery-powered toy car starts from rest and speeds up along a level floor. Describe the changes in the way energy is stored.</b></p>
+  <div class="worked">
+    <ol>
+      <li><span class="step-label">System:</span> the toy car, including its battery and motor.</li>
+      <li><span class="step-label">Start:</span> energy is in the chemical energy store of the battery. The car is at rest, so its kinetic energy store is empty.</li>
+      <li><span class="step-label">Transfer 1:</span> energy is transferred electrically (by the current) from the chemical energy store of the battery to the motor.</li>
+      <li><span class="step-label">Transfer 2:</span> the motor’s force does work on the wheels, so energy is transferred mechanically to the kinetic energy store of the car, which increases as the car speeds up.</li>
+      <li><span class="step-label">Dissipation:</span> some energy is transferred by heating to the thermal energy stores of the motor, the axles and the surroundings (from the current in the motor and from friction). A very small amount is transferred by sound.</li>
+      <li><span class="step-label">Conservation:</span> decrease in the chemical energy store = increase in the kinetic energy store + energy dissipated. The total energy of the car and its surroundings is unchanged.</li>
+    </ol>
+  </div>
+
+  <h3>Example 2 (faded): you finish it</h3>
+  <p><b>A coconut falls from a palm tree, hits the sand and stops. Air resistance is very small. Describe the changes in the way energy is stored.</b></p>
+  <div class="worked">
+    <ol>
+      <li>Before it falls: energy is in the gravitational potential energy store of the coconut–Earth system.</li>
+      <li>As it falls: energy is transferred from the ______ store to the ______ store, mechanically, because the coconut’s weight does work on it.</li>
+      <li>When it hits the sand: the kinetic energy store of the coconut decreases to zero. The coconut does work pushing the sand aside, so energy is transferred mechanically to ______.</li>
+      <li>Conservation: ______.</li>
+    </ol>
+  </div>
+  <div class="q">
+    <label for="b2_s1_we2">Complete steps 2, 3 and 4.</label>
+    <textarea id="b2_s1_we2" data-save="b2_s1_we2"></textarea>
+    <details><summary>Check the model answer (after you have written yours)</summary><div>
+      <p>2. From the gravitational potential energy store of the coconut–Earth system to the kinetic energy store of the coconut.</p>
+      <p>3. The thermal energy stores of the coconut, the sand and the surroundings (the energy is dissipated). A very small amount is transferred by sound.</p>
+      <p>4. The total energy of the coconut, Earth, sand and air is the same before and after: energy has been transferred, not destroyed.</p>
+    </div></details>
+  </div>
+
+  <h3>Example 3 (fully worked): calculating work done</h3>
+  <p><b>A market trader drags a sack of yams 8.0 m across a level concrete floor. She pulls with a steady horizontal force of 150 N, and the sack moves at a steady speed. Calculate the work done by her pulling force, and say where the energy goes.</b></p>
+  <figure>
+    <svg viewBox="0 0 640 230" role="img" aria-labelledby="work-title work-desc" xmlns="http://www.w3.org/2000/svg">
+      <title id="work-title">A horizontal force of 150 N moves a sack 8.0 m along its line of action: work done is 1200 J</title>
+      <desc id="work-desc">A sack is shown at its start position and its end position on a level floor. A horizontal force arrow labelled 150 N points to the right, the direction the sack moves. A dimension line under the floor, with end ticks and no arrowheads, shows the distance moved, 8.0 m, along the line of action of the force.</desc>
+      <defs>
+        <marker id="ah-force" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="12" markerHeight="12" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 Z" fill="#1f5f8b"/></marker>
+      </defs>
+      <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif">
+        <text x="320" y="34" font-size="13" text-anchor="middle" fill="#7a5a17" font-weight="700">W = F × s = 150 N × 8.0 m = 1200 J</text>
+        <line x1="16" y1="150" x2="624" y2="150" stroke="#8f877a" stroke-width="2" stroke-linecap="round"/>
+        <rect x="60" y="100" width="80" height="50" rx="6" fill="#ffffff" stroke="#555d58" stroke-width="2"/>
+        <text x="100" y="92" font-size="11" text-anchor="middle" fill="#555d58">start</text>
+        <rect x="460" y="100" width="80" height="50" rx="6" fill="#e8e1cf" stroke="#1a221f" stroke-width="2"/>
+        <text x="500" y="92" font-size="11" text-anchor="middle" fill="#555d58">end</text>
+        <line x1="140" y1="125" x2="238" y2="125" stroke="#1f5f8b" stroke-width="3" stroke-linecap="round" marker-end="url(#ah-force)"/>
+        <text x="190" y="112" font-size="13" text-anchor="middle" fill="#1f5f8b" font-weight="700">F = 150 N</text>
+        <line x1="60" y1="180" x2="460" y2="180" stroke="#1a221f" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="60" y1="174" x2="60" y2="186" stroke="#1a221f" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="460" y1="174" x2="460" y2="186" stroke="#1a221f" stroke-width="1.5" stroke-linecap="round"/>
+        <text x="260" y="206" font-size="13" text-anchor="middle" fill="#1a221f">s = 8.0 m, along the line of action of the force</text>
+      </g>
+    </svg>
+    <figcaption>Figure 3. The pulling force (150 N, horizontal) and the distance the sack moves (8.0 m) are in the same direction, so s = 8.0 m. W = 150 N × 8.0 m = 1200 J. Schematic: not to scale.</figcaption>
+  </figure>
+  <div class="worked">
+    <p><span class="step-label">GIVEN</span> F = 150 N; s = 8.0 m (horizontal, the same direction as the force). Both already in SI units.</p>
+    <p><span class="step-label">FIND</span> W</p>
+    <p><span class="step-label">RELATIONSHIP</span> W = F s</p>
+    <p><span class="step-label">REARRANGE</span> not needed: W is already the subject.</p>
+    <p><span class="step-label">SUBSTITUTE</span> W = 150 N × 8.0 m</p>
+    <p><span class="step-label">SOLVE</span> W = 1200 J</p>
+    <p><span class="step-label">CHECK</span> N × m = N m = J, so the unit is right. 1200 J is a sensible amount for dragging a heavy sack across a room.</p>
+    <p><span class="step-label">Where the energy goes:</span> the sack moves at a steady speed, so its kinetic energy store does not change. The work is done against friction, so 1200 J is transferred to the thermal energy stores of the sack, the floor and the surroundings: the underside of the sack and the floor warm up slightly. The energy is dissipated.</p>
+  </div>
+
+  <h3>Example 4 (faded): rearranging W = F s</h3>
+  <p><b>The cable of a lift in a block of flats pulls upwards on the lift with a steady force of 7200 N. The work done by this force is 86 400 J. Calculate how far the lift rises.</b></p>
+  <div class="worked">
+    <p><span class="step-label">GIVEN</span> F = 7200 N; W = 86 400 J</p>
+    <p><span class="step-label">FIND</span> s</p>
+    <p><span class="step-label">RELATIONSHIP</span> W = F s</p>
+    <p><span class="step-label">REARRANGE</span> s = ______</p>
+    <p><span class="step-label">SUBSTITUTE</span> s = ______ ÷ ______</p>
+    <p><span class="step-label">SOLVE</span> s = ______ m</p>
+    <p><span class="step-label">CHECK</span> ______</p>
+  </div>
+  <div class="q">
+    <label for="b2_s1_we4">Complete REARRANGE, SUBSTITUTE, SOLVE and CHECK.</label>
+    <textarea id="b2_s1_we4" data-save="b2_s1_we4"></textarea>
+    <details><summary>Check the model answer (after you have written yours)</summary><div>
+      <p>REARRANGE: s = W ÷ F. SUBSTITUTE: s = 86 400 J ÷ 7200 N. SOLVE: s = 12 m.</p>
+      <p>CHECK: J ÷ N = N m ÷ N = m, so the unit is right. 12 m is about four floors of a block of flats, which is sensible.</p>
+    </div></details>
+  </div>
+</section>
+
+<section id="s1-gp" aria-labelledby="s1-gp-h">
+  <h2 id="s1-gp-h">1.4 Guided practice</h2>
+  <span class="time">30–40 min · 10 minutes</span>
+  <p class="sub">Answer each question on your own first. Your teacher will ask everyone to show an answer at the same time. Then check the model answer.</p>
+
+  <div class="q">
+    <label for="b2_s1_gp1"><span class="qn">G1</span> A ball is thrown straight up. As it rises, which energy store increases and which decreases? <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s1_gp1" data-save="b2_s1_gp1"></textarea>
+    <details><summary>Check the model answer (after you have written yours)</summary><div>
+      <p>The gravitational potential energy store of the ball–Earth system increases. The kinetic energy store of the ball decreases (the ball slows down as it rises).</p>
+    </div></details>
+  </div>
+
+  <div class="q">
+    <label for="b2_s1_gp2"><span class="qn">G2</span> A car brakes to a stop. Where is the energy that was in its kinetic energy store now? <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s1_gp2" data-save="b2_s1_gp2"></textarea>
+    <details><summary>Check the model answer (after you have written yours)</summary><div>
+      <p>Almost all of it is in the thermal energy stores of the brakes, the tyres and the surroundings: it has been dissipated. A very small amount was transferred by sound. The total energy is unchanged.</p>
+    </div></details>
+  </div>
+
+  <div class="q">
+    <label for="b2_s1_gp3"><span class="qn">G3</span> A box is pushed 3 m across a floor by a horizontal force of 20 N. How much work is done by the force? <span class="mk">[2 marks]</span></label>
+    <p class="hint">Hint: W = F s</p>
+    <textarea id="b2_s1_gp3" data-save="b2_s1_gp3"></textarea>
+    <details><summary>Check the model answer (after you have written yours)</summary><div>
+      <p>W = F s = 20 N × 3 m = 60 J. So 60 J of energy is transferred by the force.</p>
+    </div></details>
+  </div>
+
+  <div class="q">
+    <label for="b2_s1_gp4"><span class="qn">G4</span> A traveller pushes a luggage trolley 25 m along a level station platform. Her push is horizontal, in the direction the trolley moves. The work done by her push is 750 J. Calculate the force she pushes with. <span class="mk">[3 marks]</span></label>
+    <p class="hint">Hint: rearrange W = F s before you substitute.</p>
+    <textarea id="b2_s1_gp4" data-save="b2_s1_gp4"></textarea>
+    <details><summary>Check the model answer (after you have written yours)</summary><div>
+      <p>GIVEN W = 750 J, s = 25 m. FIND F. RELATIONSHIP W = F s. REARRANGE F = W ÷ s. SUBSTITUTE F = 750 J ÷ 25 m. SOLVE F = 30 N. CHECK: J ÷ m = N m ÷ m = N; 30 N is a gentle push, which is sensible for a trolley on a level platform.</p>
+    </div></details>
+  </div>
+</section>
+
+<section id="s1-ind" aria-labelledby="s1-ind-h">
+  <h2 id="s1-ind-h">1.5 Independent practice</h2>
+  <span class="time">40–55 min · 15 minutes · work on your own</span>
+  <p class="sub">The questions get harder (band 1 → band 3). Show your working and use the calculation routine. Your teacher has the answers.</p>
+
+  <div class="q">
+    <p class="stem"><span class="qn">I1</span> Name the energy store that increases in each case. <span class="band">band 1</span> <span class="mk">[3 marks]</span></p>
+    <label for="b2_s1_ind1a">(a) A bag of cement is lifted onto the roof of a lorry.</label>
+    <input type="text" id="b2_s1_ind1a" data-save="b2_s1_ind1a" autocomplete="off">
+    <label for="b2_s1_ind1b" style="margin-top:8px">(b) A jumper pushes the bed of a trampoline down.</label>
+    <input type="text" id="b2_s1_ind1b" data-save="b2_s1_ind1b" autocomplete="off">
+    <label for="b2_s1_ind1c" style="margin-top:8px">(c) A pot of water is left on a hot stove.</label>
+    <input type="text" id="b2_s1_ind1c" data-save="b2_s1_ind1c" autocomplete="off">
+  </div>
+
+  <div class="q">
+    <label for="b2_s1_ind2"><span class="qn">I2</span> Sort these into two lists, <b>stores</b> and <b>pathways</b>: kinetic, by heating, chemical, electrically, thermal, by radiation, nuclear, mechanically. <span class="band">band 1</span> <span class="mk">[3 marks]</span></label>
+    <textarea id="b2_s1_ind2" data-save="b2_s1_ind2"></textarea>
+  </div>
+
+  <div class="q">
+    <label for="b2_s1_ind3"><span class="qn">I3</span> A donkey pulls a cart 250 m along a level road. Its pull is a steady horizontal force of 320 N, in the direction the cart moves. Calculate the work done by the donkey’s pull. <span class="band">band 1</span> <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s1_ind3" data-save="b2_s1_ind3"></textarea>
+  </div>
+
+  <div class="q">
+    <label for="b2_s1_ind4"><span class="qn">I4</span> A removal worker pushes a wardrobe 450 cm across a level floor with a horizontal force of 180 N, in the direction the wardrobe moves. Calculate the work done by the worker’s push. <span class="band">band 2</span> <span class="mk">[3 marks]</span></label>
+    <textarea id="b2_s1_ind4" data-save="b2_s1_ind4"></textarea>
+  </div>
+
+  <div class="q">
+    <label for="b2_s1_ind5"><span class="qn">I5</span> The brakes of a bicycle do 3.6 kJ of work to stop it. The average braking force is 300 N. Calculate the distance the bicycle travels while it is braking. <span class="band">band 2</span> <span class="mk">[3 marks]</span></label>
+    <textarea id="b2_s1_ind5" data-save="b2_s1_ind5"></textarea>
+  </div>
+
+  <div class="q">
+    <label for="b2_s1_ind6"><span class="qn">I6</span> A pot of water is heated on a gas cooker. Describe the changes in the way energy is stored. <span class="band">band 2</span> <span class="mk">[3 marks]</span></label>
+    <textarea id="b2_s1_ind6" data-save="b2_s1_ind6"></textarea>
+  </div>
+
+  <div class="q">
+    <p class="stem"><span class="qn">I7</span> A heavy parcel slides across a level warehouse floor and comes to rest. At the moment it is released, there is 450 J in its kinetic energy store. <span class="band">band 3</span> <span class="mk">[3 marks]</span></p>
+    <label for="b2_s1_ind7a">(a) How much work is done against friction as the parcel comes to rest? <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_s1_ind7a" data-save="b2_s1_ind7a" autocomplete="off">
+    <label for="b2_s1_ind7b" style="margin-top:8px">(b) The parcel slides 3.0 m. Calculate the average friction force on it. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s1_ind7b" data-save="b2_s1_ind7b"></textarea>
+  </div>
+
+  <div class="q">
+    <label for="b2_s1_stretch"><span class="qn">Stretch</span> A crate is lifted 1.5 m vertically by a force of 400 N, then carried 10 m horizontally at the same height. Calculate how much work the lifting force does. Explain why the horizontal carry adds nothing to this. <span class="band">band 3</span> <span class="mk">[3 marks]</span></label>
+    <textarea id="b2_s1_stretch" data-save="b2_s1_stretch"></textarea>
+  </div>
+</section>
+
+<section id="s1-exit" aria-labelledby="s1-exit-h">
+  <h2 id="s1-exit-h">1.6 Exit ticket</h2>
+  <span class="time">55–60 min · 5 minutes · no notes, on your own</span>
+  <p class="sub">Your teacher marks these before Session 2.</p>
+  <div class="q">
+    <label for="b2_s1_exit1"><span class="qn">E1</span> A phone is plugged in to charge. Energy is transferred to the chemical energy store of its battery. Name the pathway by which energy reaches the battery. <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_s1_exit1" data-save="b2_s1_exit1" autocomplete="off">
+  </div>
+  <div class="q">
+    <label for="b2_s1_exit2"><span class="qn">E2</span> A crane lifts a load of weight 540 N straight up at a steady speed through 15 m. It then swings the load 8.0 m sideways at the same height. Calculate the work done by the crane’s upward force on the load. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s1_exit2" data-save="b2_s1_exit2"></textarea>
+  </div>
+  <div class="q">
+    <label for="b2_s1_exit3"><span class="qn">E3</span> A pupil writes: “When a bicycle skids to a stop, its kinetic energy is lost.” Rewrite the sentence so that it is correct physics. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s1_exit3" data-save="b2_s1_exit3"></textarea>
+  </div>
+</section>
+
+<!-- ============ SESSION 2 ============ -->
+<section id="s2" class="session-head" aria-labelledby="s2-h">
+  <h2 id="s2-h">Session 2 (consolidate) — misconceptions, new contexts and the mastery check</h2>
+  <p class="sub">60 minutes.</p>
+  <ul class="shape" aria-label="Session 2 timings">
+    <li><b>0–5 min</b> Retrieval</li>
+    <li><b>5–15 min</b> Misconception clinic</li>
+    <li><b>15–25 min</b> Guided practice</li>
+    <li><b>25–40 min</b> Independent + Grade 9 challenge</li>
+    <li><b>40–55 min</b> Block 2 mastery check (platform)</li>
+    <li><b>55–60 min</b> Error log</li>
+  </ul>
+</section>
+
+<section id="s2-ret" aria-labelledby="s2-ret-h">
+  <h2 id="s2-ret-h">2.1 Retrieval</h2>
+  <span class="time">0–5 min · 5 minutes · no notes</span>
+  <div class="q">
+    <label for="b2_s2_ret1"><span class="qn">R1</span> Look at your marked exit ticket from Session 1. Rewrite one answer that was wrong or incomplete, correctly.</label>
+    <textarea id="b2_s2_ret1" data-save="b2_s2_ret1"></textarea>
+  </div>
+  <div class="q">
+    <label for="b2_s2_ret2"><span class="qn">R2</span> Write 3.6 MJ in joules, in standard form. <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_s2_ret2" data-save="b2_s2_ret2" autocomplete="off">
+  </div>
+  <div class="q">
+    <label for="b2_s2_ret3"><span class="qn">R3</span> Name the four pathways by which energy can be transferred. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s2_ret3" data-save="b2_s2_ret3"></textarea>
+  </div>
+</section>
+
+<section id="s2-clinic" aria-labelledby="s2-clinic-h">
+  <h2 id="s2-clinic-h">2.2 Misconception clinic</h2>
+  <span class="time">5–15 min · 10 minutes</span>
+  <p class="sub">Two pupils disagree. Decide who is right and explain why. Your teacher starts with the case the class found hardest in the exit ticket.</p>
+
+  <div class="q">
+    <p class="stem"><span class="qn">C1</span> A phone battery is flat at the end of the day. <span class="mk">[2 marks]</span></p>
+    <div class="contrast">
+      <div class="pupil"><b>Pupil A says:</b> “The energy in the battery has been used up. It has gone.”</div>
+      <div class="pupil"><b>Pupil B says:</b> “The energy has been transferred from the chemical energy store of the battery. Most of it is now in the thermal energy store of the surroundings.”</div>
+    </div>
+    <label for="b2_s2_clinic1">Who is right? Explain your answer.</label>
+    <textarea id="b2_s2_clinic1" data-save="b2_s2_clinic1"></textarea>
+  </div>
+
+  <div class="q">
+    <p class="stem"><span class="qn">C2</span> An electric kettle boils some water. <span class="mk">[2 marks]</span></p>
+    <div class="contrast">
+      <div class="pupil"><b>Pupil A says:</b> “Energy is transferred electrically to the heating element, then by heating to the thermal energy store of the water.”</div>
+      <div class="pupil"><b>Pupil B says:</b> “The kettle changes electrical energy into heat energy.”</div>
+    </div>
+    <label for="b2_s2_clinic2">Who is right? Explain your answer.</label>
+    <textarea id="b2_s2_clinic2" data-save="b2_s2_clinic2"></textarea>
+  </div>
+
+  <div class="q">
+    <p class="stem"><span class="qn">C3</span> A skateboard rolls along level ground and slows to a stop. <span class="mk">[2 marks]</span></p>
+    <div class="contrast">
+      <div class="pupil"><b>Pupil A says:</b> “Friction destroys the kinetic energy. That is why the skateboard stops.”</div>
+      <div class="pupil"><b>Pupil B says:</b> “Friction does work on the skateboard. This transfers energy from its kinetic energy store to the thermal energy stores of the wheels, the ground and the air.”</div>
+    </div>
+    <label for="b2_s2_clinic3">Who is right? Explain your answer.</label>
+    <textarea id="b2_s2_clinic3" data-save="b2_s2_clinic3"></textarea>
+  </div>
+
+  <div class="q">
+    <p class="stem"><span class="qn">C4</span> A porter carries a load of weight 200 N on her head. She walks 50 m along a level path, and the load stays at the same height. Her head pushes up on the load with a force of 200 N. <span class="mk">[2 marks]</span></p>
+    <div class="contrast">
+      <div class="pupil"><b>Pupil A says:</b> “The upward force does no work on the load during the walk, because the load does not move up or down.”</div>
+      <div class="pupil"><b>Pupil B says:</b> “The work done by the upward force on the load is 200 N × 50 m = 10 000 J.”</div>
+    </div>
+    <label for="b2_s2_clinic4">Who is right? Explain your answer.</label>
+    <textarea id="b2_s2_clinic4" data-save="b2_s2_clinic4"></textarea>
+  </div>
+</section>
+
+<section id="s2-gp" aria-labelledby="s2-gp-h">
+  <h2 id="s2-gp-h">2.3 Guided practice: less familiar contexts</h2>
+  <span class="time">15–25 min · 10 minutes</span>
+  <p class="sub">Try each one yourself first, then check.</p>
+
+  <div class="q">
+    <label for="b2_s2_gp1"><span class="qn">G1</span> A bungee jumper steps off a high bridge. Partway down the cord becomes tight. It stretches until she is momentarily at rest at the lowest point. Describe the changes in the way energy is stored, from the moment she steps off until the lowest point. <span class="mk">[4 marks]</span></label>
+    <textarea id="b2_s2_gp1" data-save="b2_s2_gp1" class="long"></textarea>
+    <details><summary>Check the model answer (after you have written yours)</summary><div>
+      <p>The gravitational potential energy store of the jumper–Earth system decreases all the way down.</p>
+      <p>While she falls freely, energy is transferred mechanically (her weight does work) to her kinetic energy store, which increases.</p>
+      <p>Once the cord is tight it starts to stretch, and energy is also transferred to the elastic potential energy store of the cord. At first her weight is bigger than the pull of the cord, so she keeps speeding up and her kinetic energy store still increases. When the cord pulls up more strongly than her weight, she slows down: her kinetic energy store decreases while the elastic potential energy store of the cord keeps increasing. At the lowest point her kinetic energy store is empty and the elastic potential energy store of the cord is at its largest.</p>
+      <p>Throughout, some energy is dissipated by air resistance to the thermal energy store of the surroundings. At the lowest point: decrease in the gravitational potential energy store = increase in the elastic potential energy store of the cord + energy dissipated.</p>
+    </div></details>
+  </div>
+
+  <div class="q">
+    <p class="stem"><span class="qn">G2</span> A toy car is released from rest at the top of a curved track. Between the top and the bottom, the energy in the gravitational potential energy store of the car–Earth system decreases by 2.4 J. At the bottom there is 1.9 J in the kinetic energy store of the car.</p>
+    <label for="b2_s2_gp2a">(a) How much energy has been dissipated? <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_s2_gp2a" data-save="b2_s2_gp2a" autocomplete="off">
+    <label for="b2_s2_gp2b" style="margin-top:8px">(b) The track is 2.0 m long. Calculate the average resistive force on the car along the track. <span class="mk">[2 marks]</span></label>
+    <p class="hint">Hint: the energy dissipated is the work done against the resistive force; W = F s.</p>
+    <textarea id="b2_s2_gp2b" data-save="b2_s2_gp2b"></textarea>
+    <details><summary>Check the model answer (after you have written yours)</summary><div>
+      <p>(a) 2.4 J − 1.9 J = 0.5 J dissipated (to the thermal energy stores of the car, the track and the air).</p>
+      <p>(b) W = F s, so F = W ÷ s = 0.5 J ÷ 2.0 m = 0.25 N. The resistive force acts along the track, so the distance along the track is the right distance.</p>
+    </div></details>
+  </div>
+
+  <h3>Sankey diagrams (read this with your teacher before G3)</h3>
+  <p>A Sankey diagram shows energy transfers as arrows. <b>The width of each arrow is proportional to the energy.</b> The output arrows together are exactly as wide as the input arrow, because energy is conserved.</p>
+  <figure>
+    <svg viewBox="0 0 760 320" role="img" aria-labelledby="sankey-title sankey-desc" xmlns="http://www.w3.org/2000/svg">
+      <title id="sankey-title">Sankey diagram, drawn to scale, for an electric kettle: 100 J in, 85 J useful, 15 J wasted</title>
+      <desc id="sankey-desc">An input arrow 120 units wide represents 100 J supplied electrically. It splits into a straight useful arrow 102 units wide (85 J to the thermal energy store of the water) and a downward wasted arrow 18 units wide (15 J dissipated to the thermal energy stores of the kettle and the surroundings). A scale bar 24 units long represents 20 J.</desc>
+      <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif">
+        <text x="360" y="28" font-size="13" text-anchor="middle" fill="#7a5a17" font-weight="700">Total out = 85 J + 15 J = 100 J = total in</text>
+        <rect x="150" y="70" width="180" height="120" fill="#2c6e58"/>
+        <rect x="330" y="70" width="190" height="102" fill="#2c6e58"/>
+        <polygon points="520,70 556,121 520,172" fill="#2c6e58"/>
+        <path d="M330,172 A48,48 0 0 1 378,220 L378,262 L369,286 L360,262 L360,220 A30,30 0 0 0 330,190 Z" fill="#b8691c"/>
+        <text x="136" y="118" font-size="13" text-anchor="end" fill="#1a221f" font-weight="700">100 J</text>
+        <text x="136" y="136" font-size="11" text-anchor="end" fill="#555d58">supplied</text>
+        <text x="136" y="152" font-size="11" text-anchor="end" fill="#555d58">electrically</text>
+        <text x="340" y="54" font-size="13" text-anchor="start" fill="#1a221f" font-weight="700">Useful: 85 J to the thermal energy store of the water</text>
+        <text x="392" y="248" font-size="13" text-anchor="start" fill="#1a221f" font-weight="700">Wasted: 15 J, dissipated</text>
+        <text x="392" y="266" font-size="13" text-anchor="start" fill="#1a221f" font-weight="700">to the thermal energy stores of</text>
+        <text x="392" y="284" font-size="13" text-anchor="start" fill="#1a221f" font-weight="700">the kettle and the surroundings</text>
+        <line x1="60" y1="250" x2="60" y2="274" stroke="#1a221f" stroke-width="2" stroke-linecap="round"/>
+        <line x1="54" y1="250" x2="66" y2="250" stroke="#1a221f" stroke-width="2" stroke-linecap="round"/>
+        <line x1="54" y1="274" x2="66" y2="274" stroke="#1a221f" stroke-width="2" stroke-linecap="round"/>
+        <text x="74" y="266" font-size="11" text-anchor="start" fill="#555d58">scale: this width = 20 J</text>
+      </g>
+    </svg>
+    <figcaption>Figure 2. Sankey diagram for an electric kettle, <b>drawn to scale</b>: 1 J is shown by 1.2 units of arrow width, so 100 J in is 120 units wide, the useful 85 J is 102 units wide and the wasted 15 J is 18 units wide (102 + 18 = 120). The scale bar is 24 units long and represents 20 J. Of every 100 J supplied electrically, 85 J is transferred to the thermal energy store of the water and 15 J is dissipated by heating to the thermal energy stores of the kettle and the surroundings.</figcaption>
+  </figure>
+
+  <div class="q">
+    <p class="stem"><span class="qn">G3</span> The motor of a sewing machine is supplied with 250 J electrically. 180 J is transferred usefully to the kinetic energy store of the needle and its moving parts. The rest is dissipated.</p>
+    <label for="b2_s2_gp3a">(a) Calculate the energy dissipated. <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_s2_gp3a" data-save="b2_s2_gp3a" autocomplete="off">
+    <label for="b2_s2_gp3b" style="margin-top:8px">(b) A Sankey diagram for the motor is drawn to a scale of 1 mm of width for every 5 J. Calculate the width of each of the three arrows. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s2_gp3b" data-save="b2_s2_gp3b"></textarea>
+    <details><summary>Check the model answer (after you have written yours)</summary><div>
+      <p>(a) 250 J − 180 J = 70 J.</p>
+      <p>(b) Input: 250 ÷ 5 = 50 mm. Useful: 180 ÷ 5 = 36 mm. Wasted: 70 ÷ 5 = 14 mm. Check: 36 mm + 14 mm = 50 mm, the width of the input arrow.</p>
+    </div></details>
+  </div>
+</section>
+
+<section id="s2-ind" aria-labelledby="s2-ind-h">
+  <h2 id="s2-ind-h">2.4 Independent practice and Grade 9 challenge</h2>
+  <span class="time">25–40 min · 15 minutes · work on your own</span>
+  <p class="sub">Do I1 and the extended response first. Then go on to the Grade 9 challenge. Your teacher has the answers.</p>
+
+  <div class="q">
+    <label for="b2_s2_ind1"><span class="qn">I1</span> A tugboat pulls a cargo ship 3.0 km along a harbour channel. The tug’s pull is a steady force of 2.0 × 10<sup>5</sup> N in the direction the ship moves. Calculate the work done by the tug’s pull. Give your answer in MJ. <span class="band">band 2</span> <span class="mk">[3 marks]</span></label>
+    <textarea id="b2_s2_ind1" data-save="b2_s2_ind1"></textarea>
+  </div>
+
+  <div class="q">
+    <p class="stem"><span class="qn">I2</span> Extended response <span class="band">band 3</span> <span class="mk">[6 marks]</span></p>
+    <p>A child sits on a playground swing. An adult pulls the swing back and lets go. The child does not push or pump with her legs. The swing moves back and forth, each swing reaching a slightly lower height than the one before, until it stops.</p>
+    <label for="b2_s2_six">Explain the changes in the way energy is stored, from the moment the swing is released until it stops. Plan in bullet points first, then write in full sentences.</label>
+    <textarea id="b2_s2_six" data-save="b2_s2_six" class="long"></textarea>
+  </div>
+
+  <div class="q">
+    <p class="stem"><span class="qn">G9</span> Grade 9 challenge <span class="band">band 3</span> <span class="mk">[8 marks]</span></p>
+    <p>A worker pushes a loaded handcart from rest along a level road. She pushes with a steady horizontal force of 150 N for 10 m, then lets go. The resistive forces on the cart (friction and air resistance) add up to a steady 60 N the whole time, until the cart stops. The road is level, so the gravitational potential energy store does not change.</p>
+    <label for="b2_s2_g9a">(a) Calculate the work done by the worker. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s2_g9a" data-save="b2_s2_g9a"></textarea>
+    <label for="b2_s2_g9b" style="margin-top:8px">(b) Calculate the energy in the kinetic energy store of the cart at the moment she lets go. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s2_g9b" data-save="b2_s2_g9b"></textarea>
+    <label for="b2_s2_g9c" style="margin-top:8px">(c) Calculate how far the cart rolls after she lets go. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s2_g9c" data-save="b2_s2_g9c"></textarea>
+    <label for="b2_s2_g9d" style="margin-top:8px">(d) Use conservation of energy to explain how much energy is dissipated during the whole journey, and where it ends up. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_s2_g9d" data-save="b2_s2_g9d"></textarea>
+  </div>
+</section>
+
+<section id="s2-check" class="panel-check" aria-labelledby="s2-check-h">
+  <h2 id="s2-check-h">2.5 Block 2 mastery check — do this on the platform when your teacher tells you (no notes)</h2>
+  <span class="time">40–55 min · 15 minutes</span>
+  <p>Close this lesson and put your notes away. Open the Block 2 mastery check on the platform when your teacher says so, and work on your own.</p>
+  <ul>
+    <li>It checks the three ideas of this block: energy stores and systems, conservation of energy, and work done.</li>
+    <li>If you are not sure of an answer, choose “Not sure”. That is more useful to your teacher than a guess.</li>
+    <li>It is not a test with a grade. It tells your teacher what to do next with you.</li>
+  </ul>
+</section>
+
+<section id="s2-log" aria-labelledby="s2-log-h">
+  <h2 id="s2-log-h">2.6 Error log</h2>
+  <span class="time">55–60 min · 5 minutes</span>
+  <p class="sub">Log at least one error from this block (exit ticket, practice or homework): what you did, why, the correct physics, and your next step.</p>
+  <div class="tablewrap">
+  <table class="errlog">
+    <caption class="sr">Error log: three rows of six fields</caption>
+    <thead><tr><th scope="col">Date</th><th scope="col">Topic</th><th scope="col">My mistake</th><th scope="col">Why I made it</th><th scope="col">Correct physics</th><th scope="col">Next step</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><input type="text" data-save="b2_err_date_1" aria-label="Error 1: date"></td>
+        <td><input type="text" data-save="b2_err_topic_1" aria-label="Error 1: topic"></td>
+        <td><textarea data-save="b2_err_mistake_1" aria-label="Error 1: my mistake"></textarea></td>
+        <td><textarea data-save="b2_err_why_1" aria-label="Error 1: why I made it"></textarea></td>
+        <td><textarea data-save="b2_err_correct_1" aria-label="Error 1: correct physics"></textarea></td>
+        <td><textarea data-save="b2_err_next_1" aria-label="Error 1: next step"></textarea></td>
+      </tr>
+      <tr>
+        <td><input type="text" data-save="b2_err_date_2" aria-label="Error 2: date"></td>
+        <td><input type="text" data-save="b2_err_topic_2" aria-label="Error 2: topic"></td>
+        <td><textarea data-save="b2_err_mistake_2" aria-label="Error 2: my mistake"></textarea></td>
+        <td><textarea data-save="b2_err_why_2" aria-label="Error 2: why I made it"></textarea></td>
+        <td><textarea data-save="b2_err_correct_2" aria-label="Error 2: correct physics"></textarea></td>
+        <td><textarea data-save="b2_err_next_2" aria-label="Error 2: next step"></textarea></td>
+      </tr>
+      <tr>
+        <td><input type="text" data-save="b2_err_date_3" aria-label="Error 3: date"></td>
+        <td><input type="text" data-save="b2_err_topic_3" aria-label="Error 3: topic"></td>
+        <td><textarea data-save="b2_err_mistake_3" aria-label="Error 3: my mistake"></textarea></td>
+        <td><textarea data-save="b2_err_why_3" aria-label="Error 3: why I made it"></textarea></td>
+        <td><textarea data-save="b2_err_correct_3" aria-label="Error 3: correct physics"></textarea></td>
+        <td><textarea data-save="b2_err_next_3" aria-label="Error 3: next step"></textarea></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 id="rating-h">Block 2 self-rating — your teacher uses your answers, not this, to judge mastery</h3>
+  <p class="sub">0 = not yet · 1 = with help · 2 = on my own · 3 = on my own, in new contexts</p>
+  <div class="rating" role="group" aria-labelledby="rating-h">
+    <label>I can say what a system is and name the eight energy stores.
+      <select data-save="b2_self_1"><option value=""></option><option>0</option><option>1</option><option>2</option><option>3</option></select></label>
+    <label>I can name the four pathways and keep stores and pathways separate.
+      <select data-save="b2_self_2"><option value=""></option><option>0</option><option>1</option><option>2</option><option>3</option></select></label>
+    <label>I can describe the store changes in the five AQA situations.
+      <select data-save="b2_self_3"><option value=""></option><option>0</option><option>1</option><option>2</option><option>3</option></select></label>
+    <label>I can explain conservation and dissipation using “transferred” and “dissipated”.
+      <select data-save="b2_self_4"><option value=""></option><option>0</option><option>1</option><option>2</option><option>3</option></select></label>
+    <label>I can read and interpret a Sankey diagram drawn to scale.
+      <select data-save="b2_self_5"><option value=""></option><option>0</option><option>1</option><option>2</option><option>3</option></select></label>
+    <label>I can calculate work done with W = F s and rearrange it for F or s, using the distance along the line of action of the force.
+      <select data-save="b2_self_6"><option value=""></option><option>0</option><option>1</option><option>2</option><option>3</option></select></label>
+  </div>
+</section>
+
+<!-- ============ HOMEWORK ============ -->
+<section id="hw" aria-labelledby="hw-h">
+  <h2 id="hw-h">Homework: Retrieve · Practise · Stretch</h2>
+  <span class="time">20–30 minutes · on your own, no notes for Part A</span>
+  <p class="sub">Your teacher marks this. Show your working for every calculation.</p>
+
+  <h3>Part A — Retrieve (5 questions)</h3>
+  <div class="q">
+    <label for="b2_hw1"><span class="qn">H1</span> What is a system, in physics? <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_hw1" data-save="b2_hw1" autocomplete="off">
+  </div>
+  <div class="q">
+    <label for="b2_hw2"><span class="qn">H2</span> A spring in a toy is squashed. Name the energy store that increases. <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_hw2" data-save="b2_hw2" autocomplete="off">
+  </div>
+  <div class="q">
+    <label for="b2_hw3"><span class="qn">H3</span> State the principle of conservation of energy. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_hw3" data-save="b2_hw3"></textarea>
+  </div>
+  <div class="q">
+    <label for="b2_hw4"><span class="qn">H4</span> Complete: 1 J = 1 ____ <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_hw4" data-save="b2_hw4" autocomplete="off">
+  </div>
+  <div class="q">
+    <label for="b2_hw5"><span class="qn">H5</span> Convert 0.75 kJ into joules. <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_hw5" data-save="b2_hw5" autocomplete="off">
+  </div>
+
+  <h3>Part B — Practise (5 questions)</h3>
+  <div class="q">
+    <label for="b2_hw6"><span class="qn">H6</span> A fisherman drags a canoe 18 m along a flat beach. He pulls with a steady horizontal force of 350 N, in the direction the canoe moves. Calculate the work done by his pull. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_hw6" data-save="b2_hw6"></textarea>
+  </div>
+  <div class="q">
+    <label for="b2_hw7"><span class="qn">H7</span> A worker pulls a pallet truck 40 m in a straight line across a level warehouse floor. Her pull is horizontal, in the direction of motion. The work done by her pull is 2.8 kJ. Calculate the force she pulls with. <span class="mk">[3 marks]</span></label>
+    <textarea id="b2_hw7" data-save="b2_hw7"></textarea>
+  </div>
+  <div class="q">
+    <label for="b2_hw8"><span class="qn">H8</span> A skydiver falls at a steady speed: her speed is not changing. Describe the changes in the way energy is stored while she falls at this steady speed. <span class="mk">[3 marks]</span></label>
+    <textarea id="b2_hw8" data-save="b2_hw8"></textarea>
+  </div>
+  <div class="q">
+    <p class="stem"><span class="qn">H9</span> A phone charger is supplied with 50 J electrically. 42 J is transferred to the chemical energy store of the phone’s battery.</p>
+    <label for="b2_hw9a">(a) Calculate the energy wasted. <span class="mk">[1 mark]</span></label>
+    <input type="text" id="b2_hw9a" data-save="b2_hw9a" autocomplete="off">
+    <label for="b2_hw9b" style="margin-top:8px">(b) A Sankey diagram for the charger is drawn to a scale of 1 mm of width for every 2 J. Calculate the width of each of the three arrows. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_hw9b" data-save="b2_hw9b"></textarea>
+  </div>
+  <div class="q">
+    <label for="b2_hw10"><span class="qn">H10</span> Explain why energy that has been dissipated to the surroundings cannot easily be used again. <span class="mk">[2 marks]</span></label>
+    <textarea id="b2_hw10" data-save="b2_hw10"></textarea>
+  </div>
+
+  <h3>Part C — Stretch (1 question)</h3>
+  <div class="q">
+    <p class="stem"><span class="qn">H11</span> A heavy box of floor tiles has a weight of 1600 N. A worker pulls it 6.0 m up a straight ramp at a steady speed, with a steady force of 500 N parallel to the ramp. The top of the ramp is 1.5 m higher than the bottom. <span class="mk">[5 marks]</span></p>
+    <label for="b2_hw11">(a) Calculate the work done by the worker’s pull. [1] (b) Calculate the work done against the weight of the box as it rises. Explain which distance you used. [2] (c) Calculate the energy dissipated. [1] (d) Calculate the average friction force on the box along the ramp. [1]</label>
+    <textarea id="b2_hw11" data-save="b2_hw11" class="long"></textarea>
+  </div>
+</section>
+
+<footer>ISM Physics School V1 · Energy &amp; Physics Calculations Mastery Intervention · Block 2 pupil lesson · draft for review</footer>
+</div>
+</body>
+</html>

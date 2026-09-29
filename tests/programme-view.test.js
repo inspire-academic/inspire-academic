@@ -117,6 +117,12 @@ test('the view routes pupils with similar scores to different pathways, from rea
   assert.equal(a.checks.filter(c => c.status === 'submitted').length, 2);
   assert.ok(a.outstanding.includes(`${P}:B1`), 'taught blocks without a submitted check are outstanding');
   assert.equal(v.ruleVersion, 'mastery-rules-v1.0');
+});
+
+test('a pupil without a baseline is told to take the baseline first (found in the end-to-end preview)', async () => {
+  const s = env();
+  const v = (await get(s, 't1', { programme: P, cohort: COHORT })).body.view;
+  for (const p of v.students) assert.equal(p.profile.next.action.action, 'baseline');
   assert.equal(v.summary.students, 2);
 });
 

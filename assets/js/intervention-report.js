@@ -9,7 +9,7 @@
 (function () {
   const X = window.IAIntervention;
   const { esc } = X;
-  const OUTCOME = { passed: 'passed', not_yet: 'not yet', looks_secure: 'looks secure', mixed: 'partly there', looks_insecure: 'needs work' };
+  const OUTCOME = { passed: 'passed', not_yet: 'not yet', right_so_far: 'right so far (one question)', not_shown_yet: 'not shown yet (one question)', looks_secure: 'looks secure', mixed: 'partly there', looks_insecure: 'needs work' };
 
   async function init() {
     const me = await X.requireStaff();
@@ -102,7 +102,7 @@
         <p>${anyAtt ? `Attended ${s.attendance.present + s.attendance.late} of ${plural(s.attendance.sessions, 'recorded session')}. ` : ''}Completed ${plural(done.length, 'programme check')}.
         ${secure.length ? `Evidence indicates secure understanding of: ${esc(secure.join(', '))}.` : 'No concept has yet met the evidence standard for "secure".'}
         ${work.length ? ` Current priorities: ${esc(work.join(', '))}.` : ''}
-        ${s.profile.next ? ` Recommended next step: ${esc(X.ACTION[s.profile.next.action.action] || s.profile.next.action.action)} (${esc(name(v, s.profile.next.conceptId))}).` : ''}</p>`;
+        ${s.profile.next ? ` Recommended next step: ${esc(X.ACTION[s.profile.next.action.action] || s.profile.next.action.action)} ${s.profile.next.conceptId ? ` (${esc(name(v, s.profile.next.conceptId))})` : ''}.` : ''}</p>`;
     }).join('');
 
     // Unresolved + next steps

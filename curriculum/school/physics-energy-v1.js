@@ -138,7 +138,9 @@ const PROGRAMME = {
       sessions: ['teach', 'consolidate'],
       intent: 'A precise language for energy (stores and pathways, never "forms"), conservation in a closed system, and work done as energy transferred by a force.',
       lesson: {
-        status: 'qa-failed', qa: 'docs/school/physics-v1/qa/energy-board.md',
+        status: 'reviewed', qa: 'docs/school/physics-v1/qa/b2-lesson.md',
+        files: ['curriculum/school/lessons/physics/b2-energy-stores-work.html', 'curriculum/school/lessons/physics/b2-energy-stores-work.teacher.html'],
+        replaces: 'teaching-lessons/physics/*energy_stores_transfers* (QA: docs/school/physics-v1/qa/energy-board.md, NOT FIT)',
         candidates: ['teaching-lessons/physics/inspire_physics_energy_stores_transfers_y10_final_sharp_premium.html (text usable; 5 of 7 diagrams and the Sankey are wrong)'],
         need: 'A lesson built from the premium board text with rebuilt diagrams (four pathways; a real transfer chain; to-scale Sankeys), the AQA situations (projected upwards, hitting an obstacle, accelerated by a force, kettle), and W = Fs with the distance along the line of action of the force.'
       },

@@ -20,6 +20,7 @@
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const OUTCOME = {
     passed: ['Passed', 'pc-good'], not_yet: ['Not yet', 'pc-work'],
+    right_so_far: ['Right so far', 'pc-good'], not_shown_yet: ['Not shown yet', 'pc-mid'],
     looks_secure: ['Looks secure', 'pc-good'], mixed: ['Partly there', 'pc-mid'], looks_insecure: ['Needs work', 'pc-work']
   };
 
@@ -62,6 +63,8 @@
       S.config = { name: S.firstName || 'Student', subject: data.subject || 'Physics', level: data.level || 'GCSE', board: data.board || 'AQA' };
       await beginTest(data, data.resumed ? 'Resumed where you left off' : '"Not sure" is fine; there is no grade');
       const title = S.programmeCheck && S.programmeCheck.title;
+      const heading = document.querySelector('#section-assess h2');
+      if (heading && title) heading.textContent = title;
       if (title) document.getElementById('assess-sub').textContent = `${title} · ${data.totalQuestions} questions · ${data.resumed ? 'resumed where you left off' : 'no notes, and "Not sure" is fine'}`;
     } catch (e) {
       toast(e.message, 'error');

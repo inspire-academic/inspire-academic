@@ -18,6 +18,7 @@
   const NOT_TAUGHT = { label: 'Not yet taught', short: '·', cls: 'lv-untaught' };
 
   const ACTION = {
+    baseline: 'Take the baseline check',
     not_yet_taught: 'Not yet taught (planning only)',
     escalate: 'See the pupil 1:1',
     misconception_clinic: 'Misconception clinic',
