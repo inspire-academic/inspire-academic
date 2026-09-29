@@ -21,6 +21,10 @@ function fakeSupabase(seed) {
     const cell = row[key];
     if (op === 'eq') return String(cell) === raw;
     if (op === 'is') return (cell === undefined ? null : cell) === parseVal(raw) || (raw === 'true' && cell === true);
+    if (op === 'like') {
+      const re = new RegExp('^' + raw.split('*').map(s => s.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('.*') + '$');
+      return cell != null && re.test(String(cell));
+    }
     if (op === 'gte') return String(cell) >= raw;
     if (op === 'lt') return String(cell) < raw;
     if (op === 'in') {

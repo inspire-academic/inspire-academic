@@ -22,6 +22,7 @@ const {
   fail, ok, parseBody, currentUser, clientIp, sha256, newToken, clean, UUID_RE, db, questionPoolFilter
 } = require('./_diagnostic-shared');
 const engine = require('./_diagnostic-engine');
+const checks = require('./_programme-checks');
 
 const SUBJECTS = ['Physics', 'Chemistry', 'Biology', 'Combined Science', 'Mathematics', engine.MATHS_PAPER2];
 const LEVELS = ['GCSE'];
@@ -58,11 +59,99 @@ async function resume(client, event, sessionId) {
   await client.patch(`diagnostic_sessions?id=eq.${session.id}`, { token_hash: sha256(token), updated_at: new Date().toISOString() });
   return ok({
     sessionId: session.id, token, resumed: true,
+    programmeCheck: session.programme_check ? checkInfo(checks.resolveCheck(session.programme_check), []) : undefined,
     subject: session.subject, level: session.level, board: session.exam_board,
     tier: session.tier || (tierChoice === 'route' ? null : 'Higher'), tierChoice,
     totalQuestions: tierChoice === 'route' && !session.tier ? engine.fullTestLength(session.subject) : ordered.length,
     questions: ordered.map(engine.publicQuestion),
     answered: responses.map(r => ({ questionId: Number(r.question_id), chosen: r.chosen }))
+  });
+}
+
+// ── Programme checks ─────────────────────────────────────────────────
+// Body: { programmeCheck: 'ism-physics-energy-v1:baseline' | ':B3' | ':reassessment', tier? }
+// A signed-in pupil in a cohort running the programme (or staff, to try it)
+// gets approved items for the check's concepts and evidence class
+// (_programme-checks.js). An unfinished attempt at the same check is resumed,
+// never replaced, so abandoning a check can't be used to fish for easier
+// questions. No grade is ever produced.
+const STAFF_ROLES = ['teacher', 'teacher_manager', 'admin', 'super_admin'];
+const CHECK_TAG_COLUMNS = 'item_id,concept_id,role,evidence_class,difficulty_band,format,context_tags';
+
+function checkInfo(check, short) {
+  if (!check) return undefined;
+  return { id: check.id, kind: check.kind, title: check.title, minutes: check.minutes, programme: check.programme.title,
+           notAssessed: (short || []).map(s => s.conceptId) };
+}
+
+async function startProgrammeCheck(client, event, body) {
+  const user = await currentUser(event);
+  if (!user) return fail(401, 'unauthorized', 'Please sign in to take this check.');
+  const check = checks.resolveCheck(body.programmeCheck);
+  if (!check) return fail(400, 'invalid_check', 'Unknown check.');
+  const tier = body.tier === 'Foundation' ? 'Foundation' : 'Higher';
+
+  const [profile] = await client.get(`profiles?id=eq.${user.id}&select=first_name,role`);
+  const staff = profile && STAFF_ROLES.includes(profile.role);
+  if (!staff) {
+    const links = await client.get(`programme_cohorts?programme_id=eq.${encodeURIComponent(check.programme.id)}&select=cohort_id`);
+    const cohortIds = links.map(l => l.cohort_id);
+    const member = cohortIds.length
+      ? await client.get(`cohort_members?student_id=eq.${user.id}&cohort_id=in.(${cohortIds.join(',')})&select=cohort_id`)
+      : [];
+    if (!member.length) return fail(403, 'not_enrolled', 'This check is part of a programme you are not enrolled in. Please ask your teacher.');
+  }
+
+  const existing = await client.get(`diagnostic_sessions?student_id=eq.${user.id}&programme_check=eq.${encodeURIComponent(check.id)}` +
+    `&status=eq.in_progress&select=id&order=created_at.desc&limit=1`);
+  if (existing.length) return resume(client, event, existing[0].id);
+
+  const ipHash = sha256('diag:' + clientIp(event));
+  const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const recent = await client.get(`diagnostic_sessions?ip_hash=eq.${ipHash}&created_at=gte.${encodeURIComponent(hourAgo)}&select=id`);
+  if (recent.length >= STARTS_PER_HOUR) return fail(429, 'rate_limited', 'Lots of tests have been started from this connection in the last hour. Please try again a little later.');
+
+  const tagged = await client.get(`item_concepts?item_source=eq.diagnostic&role=eq.primary` +
+    `&concept_id=in.(${check.concepts.map(encodeURIComponent).join(',')})&evidence_class=in.(${check.evidenceClasses.join(',')})&select=${CHECK_TAG_COLUMNS}`);
+  const ids = [...new Set(tagged.map(t => Number(t.item_id)).filter(Number.isFinite))];
+  const questions = ids.length
+    ? await client.get(`diagnostic_questions?id=in.(${ids.join(',')})&review_status=eq.approved&active=is.true&question_type=in.(mcq,numeric)&select=${QUESTION_COLUMNS}`)
+    : [];
+
+  // Everything this pupil has been shown in earlier checks of this programme.
+  const earlier = await client.get(`diagnostic_sessions?student_id=eq.${user.id}` +
+    `&programme_check=like.${encodeURIComponent(check.programme.id + ':')}*&select=question_ids`);
+  const seen = earlier.flatMap(s => (s.question_ids || []).map(Number));
+
+  const picked = checks.selectCheckItems(check, tagged, questions, { tier, seen });
+  if (!picked.questions.length) {
+    return fail(409, 'check_unavailable', check.requireUnseen && earlier.length
+      ? 'There are no new questions left for this check. Your teacher will go through it with you.'
+      : 'This check is not ready yet. Please ask your teacher.');
+  }
+
+  const token = newToken();
+  const versions = {};
+  picked.questions.forEach(q => { versions[q.id] = q.updated_at || null; });
+  const [session] = await client.insert('diagnostic_sessions', {
+    token_hash: sha256(token),
+    student_id: user.id,
+    student_name: clean(profile && profile.first_name, 60) || null,
+    subject: check.programme.subject, level: 'GCSE', exam_board: check.programme.spec.principal.board,
+    tier, tier_choice: tier,
+    question_ids: picked.questions.map(q => q.id),
+    question_versions: versions,
+    status: 'in_progress',
+    ip_hash: ipHash,
+    programme_check: check.id
+  });
+
+  return ok({
+    sessionId: session.id, token, resumed: false,
+    subject: check.programme.subject, level: 'GCSE', board: check.programme.spec.principal.board, tier, tierChoice: tier,
+    totalQuestions: picked.questions.length,
+    questions: picked.questions.map(engine.publicQuestion), answered: [],
+    programmeCheck: checkInfo(check, picked.short)
   });
 }
 
@@ -75,6 +164,7 @@ exports.handler = async (event) => {
 
   try {
     if (body.resumeSessionId) return await resume(client, event, body.resumeSessionId);
+    if (body.programmeCheck) return await startProgrammeCheck(client, event, body);
 
     const subject = String(body.subject || '');
     const level = String(body.level || 'GCSE');
@@ -120,7 +210,7 @@ exports.handler = async (event) => {
     // Only the newest unfinished test per subject stays resumable.
     if (user) {
       await client.patch(
-        `diagnostic_sessions?student_id=eq.${user.id}&subject=eq.${encodeURIComponent(subject)}&status=eq.in_progress`,
+        `diagnostic_sessions?student_id=eq.${user.id}&subject=eq.${encodeURIComponent(subject)}&status=eq.in_progress&programme_check=is.null`,
         { status: 'abandoned', updated_at: new Date().toISOString() }
       );
     }

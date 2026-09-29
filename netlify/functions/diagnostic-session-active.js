@@ -16,7 +16,8 @@ exports.handler = async (event) => {
 
   try {
     const rows = await client.get(
-      `diagnostic_sessions?student_id=eq.${user.id}&status=eq.in_progress` +
+      // Programme checks resume from their own link, not the diagnostic banner.
+      `diagnostic_sessions?student_id=eq.${user.id}&status=eq.in_progress&programme_check=is.null` +
       `&select=id,subject,level,exam_board,question_ids,tier,tier_choice,updated_at&order=created_at.desc`
     );
     const newest = [];

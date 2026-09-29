@@ -14,6 +14,35 @@
 
 const { fail, ok, parseBody, db, loadSession, responseRecord } = require('./_diagnostic-shared');
 const engine = require('./_diagnostic-engine');
+const checks = require('./_programme-checks');
+const { CONCEPTS } = require('../../curriculum/physics/energy.js');
+
+const CONCEPT_NAMES = Object.fromEntries(CONCEPTS.map(c => [c.id, c.name]));
+
+// A programme check (baseline, block mastery check, reassessment): marked
+// exactly like a diagnostic, but the result is per concept, never a grade,
+// and nothing is written to diagnostic_attempts (so it never appears as a
+// diagnostic grade anywhere). Returns the pupil-facing result.
+async function programmeCheckResult(client, session, questions, answers) {
+  const check = checks.resolveCheck(session.programme_check);
+  if (!check) throw new Error('unknown programme check ' + session.programme_check);
+  const ids = questions.map(q => Number(q.id));
+  const [tagged, options] = await Promise.all([
+    client.get(`item_concepts?item_source=eq.diagnostic&item_id=in.(${ids.join(',')})&select=item_id,concept_id,role`),
+    client.get(`item_option_misconceptions?item_source=eq.diagnostic&item_id=in.(${ids.join(',')})&select=item_id,option,misconception_id`)
+  ]);
+  const result = checks.checkResult(check, answers, tagged, options);
+  return {
+    stored: result,
+    shown: {
+      id: check.id, kind: check.kind, title: check.title, programme: check.programme.title,
+      concepts: checks.describeForPupil(result, CONCEPT_NAMES),
+      next: check.kind === 'baseline' ? 'Your teacher will use this to plan your programme.'
+        : check.kind === 'block' ? 'Your teacher will see this and tell you what comes next.'
+        : 'Your teacher will compare this with your baseline check.'
+    }
+  };
+}
 
 const CHOICES = ['a', 'b', 'c', 'd', 'e', 'x'];
 const FULL_COLUMNS = [...engine.PUBLIC_QUESTION_FIELDS, 'correct_answer', 'misconception_a', 'misconception_b',
@@ -82,6 +111,9 @@ exports.handler = async (event) => {
     // stored; the review is rebuilt from the recorded answers.
     if (session.status === 'submitted') {
       if (!session.result) return fail(409, 'submitting', 'Your results are still being worked out. Please try again in a moment.');
+      if (session.programme_check) {
+        return ok({ programmeCheck: session.result.programmeShown, review: engine.reviewItems(questions, engine.markAnswers(questions, choice)) });
+      }
       return ok({
         diagnosis: engine.diagnosisForDisplay(session.result.diagnosis),
         review: engine.reviewItems(questions, engine.markAnswers(questions, choice)),
@@ -110,6 +142,12 @@ exports.handler = async (event) => {
     if (!claimed.length) return fail(409, 'submitting', 'Your results are still being worked out. Please try again in a moment.');
 
     const answers = engine.markAnswers(questions, choice);
+    if (session.programme_check) {
+      const { stored, shown } = await programmeCheckResult(client, session, questions, answers);
+      await client.patch(`diagnostic_sessions?id=eq.${session.id}`,
+        { result: { programme: stored, programmeShown: shown }, updated_at: new Date().toISOString() });
+      return ok({ programmeCheck: shown, review: engine.reviewItems(questions, answers) });
+    }
     const diagnosis = engine.computeDiagnosis(answers, { subject: session.subject, board: session.exam_board, tier });
     if (session.tier_choice === 'route') diagnosis.routed = true;
     const review = engine.reviewItems(questions, answers);
