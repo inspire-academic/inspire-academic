@@ -37,6 +37,62 @@ edge_functions = "netlify/edge-functions"
 [context.staging]
   branch = "staging"
 
+# Source folders that must never be served (publish = "." publishes the whole
+# repo). They hold answer keys (concept packs, pack SQL, question batches,
+# reviewer reports), schema, tests and internal notes. Found 2026-09-29:
+# every mastery-check key was downloadable from production, which bypassed
+# the server-side answer-key lockdown. Netlify functions are unaffected:
+# they bundle required files at build time, not over HTTP. These rules come
+# before every other redirect so nothing can re-expose them. Curriculum
+# Library documents live under /resources/, not /curriculum/.
+[[redirects]]
+  from = "/curriculum/*"
+  to = "/not-published"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/content-standards/*"
+  to = "/not-published"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/supabase/*"
+  to = "/not-published"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/docs/*"
+  to = "/not-published"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/tests/*"
+  to = "/not-published"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/scripts/*"
+  to = "/not-published"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.claude/*"
+  to = "/not-published"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/CLAUDE.md"
+  to = "/not-published"
+  status = 404
+  force = true
+
 # NOTE (2026-08-28): the three edge_functions entries that used to sit
 # here (generate-question, mark-exam-response x2 paths, protege-ai)
 # were REMOVED, not just "kept for reference" as the old comment
