@@ -59,6 +59,26 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
 .remove-x{background:none;border:none;color:var(--muted);font-size:1rem;}
 .remove-x:hover{color:#f87171;}
 
+/* ISM Students tab */
+.enrol-intro{font-size:.85rem;margin-bottom:1rem;}
+.enrol-summary{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;}
+.enrol-summary .status-chip.warn{background:rgba(248,113,113,.12);color:#f87171;}
+.enrol-toolbar{display:flex;flex-direction:column;gap:.6rem;margin-bottom:.6rem;}
+.enrol-toolbar .radio-group{margin-bottom:0;}
+.enrol-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .8rem;padding:.75rem 0;border-bottom:1px solid var(--border);}
+.enrol-row:last-child{border-bottom:none;}
+.enrol-name{flex:1 1 100%;font-size:.9rem;font-weight:600;min-width:0;}
+.enrol-controls{display:flex;gap:.5rem;flex:1 1 100%;}
+.enrol-controls .field-select{padding:.45rem .6rem;font-size:.82rem;}
+.enrol-row.is-left .enrol-name{color:var(--muted);}
+@media(min-width:641px){
+  .enrol-toolbar{flex-direction:row;align-items:center;}
+  .enrol-toolbar .field-input{max-width:280px;}
+  .enrol-name{flex:1 1 auto;}
+  .enrol-controls{flex:0 0 auto;}
+  .enrol-controls .field-select{width:auto;}
+}
+
 .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:.6rem;margin:.8rem 0;}
 .photo-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);border:1px solid var(--border);display:block;}
 .photo-thumb{padding:0;border:none;background:none;cursor:zoom-in;border-radius:var(--r);position:relative;}
@@ -151,6 +171,7 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
     <button class="tab-btn" data-tab="assign" onclick="showTab('assign')">Assign Lessons</button>
     <button class="tab-btn" data-tab="submissions" onclick="showTab('submissions')">Student Submissions</button>
     <button class="tab-btn" data-tab="review" onclick="showTab('review')">Review / Marking</button>
+    <button class="tab-btn" data-tab="students" onclick="showTab('students')">ISM Students</button>
   </div>
 
   <!-- ── UPLOAD ── -->
@@ -224,6 +245,22 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
     </div>
     <div id="review-detail" style="display:none;"></div>
   </div>
+
+  <!-- ── ISM STUDENTS (enrolment) ── -->
+  <div class="tab-panel" id="tab-students">
+    <div class="card">
+      <p class="muted enrol-intro">Mark which students are in ISM and which class they're in. Only <strong>Active</strong> ISM students see their class timetable on their Personalised Learning page.</p>
+      <div class="enrol-summary" id="enrol-summary"></div>
+      <div class="enrol-toolbar">
+        <input class="field-input" type="search" id="enrol-search" placeholder="Search students…" aria-label="Search students">
+        <div class="radio-group">
+          <div class="radio-pill"><input type="radio" name="enrol-show" id="enrol-show-ism" value="ism" checked><label for="enrol-show-ism">ISM students</label></div>
+          <div class="radio-pill"><input type="radio" name="enrol-show" id="enrol-show-all" value="all"><label for="enrol-show-all">All students</label></div>
+        </div>
+      </div>
+      <div id="enrol-list"><div class="spinner"></div></div>
+    </div>
+  </div>
 </main>
 
 <div id="toast"></div>
@@ -260,6 +297,7 @@ let myLessons = [];
 let assignedStudents = [];
 let myCohorts = [];
 let currentReviewSubmission = null;
+let myRole = null;
 
 // Student answers are untrusted text rendered inside the teacher's authenticated
 // session — always escape before putting them in innerHTML.
@@ -420,6 +458,7 @@ function toast(msg, type = 'success') {
 function showTab(name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
+  if (name === 'students') loadEnrolments();
 }
 window.showTab = showTab;
 
@@ -1175,6 +1214,113 @@ async function saveReview(statusAfter) {
 }
 window.saveReview = saveReview;
 
+// ── ISM Students (enrolment) ──
+// ism_enrolments is the one record of who is an ISM student and in which
+// class (supabase/ism_enrolments.sql). Admins see every student; teachers
+// see their own assigned students (RLS enforces the same split).
+const CLASS_GROUPS = ['Year 6','Year 7','Year 8','Year 9','Year 10','Year 11','Year 12','Year 13'];
+const ENROL_STATUSES = [['active','Active'],['paused','Paused'],['left','Left ISM']];
+let enrolStudents = [];
+let enrolById = {};
+
+async function loadEnrolStudents() {
+  const { data: { user } } = await supa.auth.getUser();
+  let query = supa.from('profiles').select('id,first_name,full_name');
+  if (myRole === 'admin' || myRole === 'super_admin') {
+    query = query.eq('role', 'student');
+  } else {
+    const { data: asgn } = await supa.from('teacher_student_assignments')
+      .select('student_id').eq('teacher_id', user.id).eq('is_active', true);
+    const ids = [...new Set((asgn || []).map(a => a.student_id))];
+    if (!ids.length) return [];
+    query = query.in('id', ids);
+  }
+  const { data } = await query;
+  return (data || [])
+    .map(p => ({ id: p.id, name: p.full_name || p.first_name || 'Unnamed student' }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+async function loadEnrolments() {
+  const list = document.getElementById('enrol-list');
+  list.innerHTML = '<div class="spinner"></div>';
+  const [students, enrolRes, ttRes] = await Promise.all([
+    loadEnrolStudents(),
+    supa.from('ism_enrolments').select('student_id,class_group,status'),
+    supa.from('ism_timetables').select('class_group,title,valid_to')
+      .gte('valid_to', new Date().toISOString().slice(0, 10))
+  ]);
+  if (enrolRes.error) {
+    list.innerHTML = '<p class="muted">Could not load ISM enrolments. If this is new, run <code>supabase/ism_enrolments.sql</code> in Supabase first.</p>';
+    return;
+  }
+  enrolStudents = students;
+  enrolById = Object.fromEntries((enrolRes.data || []).map(e => [e.student_id, e]));
+  renderEnrolSummary(ttRes.data || []);
+  renderEnrolList();
+}
+
+function renderEnrolSummary(timetables) {
+  const active = {};
+  Object.values(enrolById).forEach(e => { if (e.status === 'active') active[e.class_group] = (active[e.class_group] || 0) + 1; });
+  const withTimetable = new Set(timetables.map(t => t.class_group));
+  const chips = CLASS_GROUPS.filter(g => active[g]).map(g => withTimetable.has(g)
+    ? `<span class="status-chip">${esc(g)}: ${active[g]} active</span>`
+    : `<span class="status-chip warn" title="No current timetable for this class">${esc(g)}: ${active[g]} active · no timetable</span>`);
+  document.getElementById('enrol-summary').innerHTML = chips.join('') || '<span class="muted">No active ISM students yet.</span>';
+}
+
+function renderEnrolList() {
+  const q = document.getElementById('enrol-search').value.trim().toLowerCase();
+  const showAll = document.querySelector('input[name="enrol-show"]:checked').value === 'all';
+  const rows = enrolStudents.filter(s => (showAll || enrolById[s.id]) && (!q || s.name.toLowerCase().includes(q)));
+  const list = document.getElementById('enrol-list');
+  if (!rows.length) {
+    list.innerHTML = `<p class="muted" style="padding:.6rem 0;">${showAll || q ? 'No students match.' : 'No ISM students yet — choose "All students" to add some.'}</p>`;
+    return;
+  }
+  list.innerHTML = rows.map(s => {
+    const e = enrolById[s.id];
+    const classOpts = (e ? '' : '<option value="">Not in ISM</option>') +
+      CLASS_GROUPS.map(g => `<option value="${g}"${e && e.class_group === g ? ' selected' : ''}>${g}</option>`).join('');
+    const statusSel = e ? `<select class="field-select" data-enrol-field="status" aria-label="ISM status for ${esc(s.name)}">${
+      ENROL_STATUSES.map(([v, l]) => `<option value="${v}"${e.status === v ? ' selected' : ''}>${l}</option>`).join('')}</select>` : '';
+    return `<div class="enrol-row${e && e.status === 'left' ? ' is-left' : ''}" data-student-id="${esc(s.id)}">
+      <div class="enrol-name">${esc(s.name)}</div>
+      <div class="enrol-controls">
+        <select class="field-select" data-enrol-field="class_group" aria-label="ISM class for ${esc(s.name)}">${classOpts}</select>
+        ${statusSel}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function saveEnrolment(studentId, field, value) {
+  const existing = enrolById[studentId];
+  if (!existing && (field !== 'class_group' || !value)) return;
+  const row = {
+    student_id: studentId,
+    class_group: field === 'class_group' ? value : existing.class_group,
+    status: field === 'status' ? value : (existing ? existing.status : 'active'),
+    updated_at: new Date().toISOString()
+  };
+  const { data, error } = await supa.from('ism_enrolments')
+    .upsert(row, { onConflict: 'student_id' }).select('student_id,class_group,status').single();
+  if (error) { toast('Could not save — ' + error.message, 'error'); renderEnrolList(); return; }
+  enrolById[studentId] = data;
+  const name = (enrolStudents.find(s => s.id === studentId) || {}).name || 'Student';
+  toast(existing ? `Updated ${name}` : `${name} added to ISM (${data.class_group})`);
+  await loadEnrolments();
+}
+
+document.getElementById('enrol-list').addEventListener('change', ev => {
+  const field = ev.target.dataset.enrolField;
+  const row = ev.target.closest('.enrol-row');
+  if (field && row) saveEnrolment(row.dataset.studentId, field, ev.target.value);
+});
+document.getElementById('enrol-search').addEventListener('input', renderEnrolList);
+document.querySelectorAll('input[name="enrol-show"]').forEach(r => r.addEventListener('change', renderEnrolList));
+
 // ── Init ──
 (async () => {
   const { data: { session } } = await supa.auth.getSession();
@@ -1182,6 +1328,7 @@ window.saveReview = saveReview;
   const { data: profile } = await supa.from('profiles').select('role').eq('id', session.user.id).maybeSingle();
   if (!profile || !VALID_ROLES.includes(profile.role)) { window.location.href = '/index.html'; return; }
 
+  myRole = profile.role;
   accessToken = session.access_token;
   document.getElementById('staff-email').textContent = session.user.email;
   await loadSubjectsAndLessons();

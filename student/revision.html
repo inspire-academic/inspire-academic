@@ -759,27 +759,26 @@ main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
       <p id="page-sub">Revision packs assigned by your teacher, tailored to your topics.</p>
     </div>
 
-    <!-- ISM TIMETABLE — to update for a new term, add a new dated .webp
-         in /assets/images/ism/ and change the three paths below (a new
-         filename is required: sw.js caches images cache-first). -->
-    <details class="timetable-card">
+    <!-- ISM TIMETABLE — only for students with an active row in
+         ism_enrolments; the calendar for their class comes from
+         ism_timetables (see supabase/ism_enrolments.sql). The image is
+         only fetched once the card is opened. -->
+    <details class="timetable-card" id="timetable-card" hidden>
       <summary class="timetable-summary">
         <span class="timetable-icon" aria-hidden="true">📅</span>
         <span class="timetable-text">
           <span class="timetable-label">ISM Class Timetable</span>
-          <span class="timetable-title">Year 10 · October–December 2026</span>
-          <span class="timetable-desc">Tue &amp; Wed evenings · Sat afternoons</span>
+          <span class="timetable-title" id="timetable-title"></span>
+          <span class="timetable-desc" id="timetable-desc"></span>
         </span>
         <span class="timetable-toggle" aria-hidden="true">View</span>
       </summary>
       <div class="timetable-body">
-        <a href="/assets/images/ism/ism-y10-timetable-2026-oct-dec.webp" target="_blank" rel="noopener">
-          <img src="/assets/images/ism/ism-y10-timetable-2026-oct-dec.webp"
-               alt="ISM Year 10 timetable, October to December 2026: Physics on Tuesdays, Chemistry and Biology alternating on Wednesdays, Maths and Physics alternating on Saturdays; Mastery Lab assessment on 31 October; Christmas break from 26 December."
-               width="1024" height="1536" loading="lazy" decoding="async">
+        <a id="timetable-open" target="_blank" rel="noopener">
+          <img id="timetable-img" alt="" width="1024" height="1536" decoding="async">
         </a>
         <div class="timetable-actions">
-          <a class="btn btn-gold" href="/assets/images/ism/ism-y10-timetable-2026-oct-dec.webp" download="ISM-Year10-Timetable-Oct-Dec-2026.webp">Download</a>
+          <a class="btn btn-gold" id="timetable-download" download>Download</a>
         </div>
       </div>
     </details>
@@ -892,6 +891,44 @@ let currentSubmissionContext = {
   existingSubmissionNumber: 0
 };
 
+// ISM timetable: shown only to actively enrolled ISM students, for their
+// own class group — the current term's calendar, or the next one if the
+// current term has ended. Any failure (including the tables not existing
+// yet) just leaves the card hidden.
+async function loadIsmTimetable(userId) {
+  try {
+    const { data: enrolment } = await sb.from('ism_enrolments')
+      .select('class_group').eq('student_id', userId).eq('status', 'active').maybeSingle();
+    if (!enrolment) return;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const { data: rows } = await sb.from('ism_timetables')
+      .select('title, summary, image_path')
+      .eq('class_group', enrolment.class_group)
+      .gte('valid_to', today)
+      .order('valid_from', { ascending: true })
+      .limit(1);
+    const tt = rows && rows[0];
+    if (!tt || !/^\/assets\/images\/ism\/[a-z0-9-]+\.webp$/.test(tt.image_path)) return;
+
+    const label = `${enrolment.class_group} · ${tt.title}`;
+    document.getElementById('timetable-title').textContent = label;
+    document.getElementById('timetable-desc').textContent = tt.summary || '';
+    document.getElementById('timetable-open').href = tt.image_path;
+    const dl = document.getElementById('timetable-download');
+    dl.href = tt.image_path;
+    dl.download = `ISM-Timetable-${label}.webp`.replace(/[^A-Za-z0-9.-]+/g, '-');
+
+    const card = document.getElementById('timetable-card');
+    const img = document.getElementById('timetable-img');
+    img.alt = `ISM ${label} timetable`;
+    card.addEventListener('toggle', () => {
+      if (card.open && !img.src) img.src = tt.image_path;
+    });
+    card.hidden = false;
+  } catch (e) { /* leave the card hidden */ }
+}
+
 (async () => {
   // Auth check
   const { data: { session } } = await sb.auth.getSession();
@@ -920,6 +957,8 @@ let currentSubmissionContext = {
 
   document.getElementById('page-heading').textContent =
     `${firstName}'s Personalised Learning`;
+
+  loadIsmTimetable(user.id);
 
   // Load assignments with pack data and latest attempt
   const { data: assignments, error } = await sb
