@@ -116,7 +116,9 @@ const PROGRAMME = {
       sessions: ['teach', 'consolidate'],
       intent: 'Repair the quantitative skills every Energy calculation depends on, so later errors can be diagnosed as physics errors rather than maths errors.',
       lesson: {
-        status: 'qa-failed', qa: 'docs/school/physics-v1/qa/week1-toolkit.md',
+        status: 'reviewed', qa: 'docs/school/physics-v1/qa/b1-lesson.md',
+        files: ['curriculum/school/lessons/physics/b1-toolkit.html', 'curriculum/school/lessons/physics/b1-toolkit.teacher.html'],
+        replaces: 'ISM Week 1 lesson for this programme (QA: docs/school/physics-v1/qa/week1-toolkit.md, NOT FIT); Week 1 stays the ISM launch lesson',
         candidates: ['ISM Class: Week 1 - The Physicist\'s Toolkit (live; source not in git)', 'Week 1 Closing Lesson: From Situation to Solution (not in git)'],
         need: 'A Toolkit repair lesson aimed at the four concepts, with real graph work (read a value; find a gradient), M/G/T prefixes, g→kg and min→s, rearranging with a square and a half, and the one calculation routine.'
       },

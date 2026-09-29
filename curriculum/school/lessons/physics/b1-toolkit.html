@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block 1 — The Physicist's Toolkit</title>
+<style>
+:root{--forest:#0b3a2f;--forest-2:#1d654f;--gold:#c2a15d;--gold-ink:#6f5312;--cream:#f6f2e8;--paper:#fffdf8;--ink:#1a221f;--muted:#4f5751;--line:#e2dccd;--line-strong:#cfc6b2;--tint:#f2ebda;--soft:#eaf1ec;--grid-minor:#938d7f;--grid-major:#5f5a4e}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:12px 16px 40px}
+h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;color:var(--forest);line-height:1.25}
+h1{font-size:1.9rem;margin:.3rem 0 .6rem;font-weight:600;color:#fff}
+h2{font-size:1.45rem;margin:0 0 .5rem}
+h3{font-size:1.25rem;margin:0 0 .3rem}
+h4{font-size:1.08rem;margin:1.2rem 0 .4rem}
+p{margin:.45rem 0}
+a{color:var(--forest)}
+sup{line-height:0}
+.hero{background:var(--forest);color:#fff;border-radius:10px;padding:20px 18px;margin:8px 0 12px;border:1px solid #2b5a4b}
+.kicker{text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;font-weight:700;color:#e7d7aa;margin:0}
+.hero-copy{color:#f1f4f1;max-width:62ch}
+.hero-meta{font-size:.9rem;color:#e7d7aa}
+.toc{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.toc-h{font-weight:700;margin:0 0 .3rem}
+.toc ol{margin:0;padding-left:1.3rem}
+.lsec{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 16px;margin:14px 0}
+.session-h{margin:28px 0 8px;padding-top:12px;border-top:3px solid var(--gold);font-size:1.5rem}
+.session-sub{font-family:system-ui,sans-serif;font-size:.9rem;color:var(--muted);font-weight:400}
+.timeline{list-style:none;padding:0;margin:0 0 8px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.timeline li{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:.88rem}
+.timeline b{display:block;color:var(--forest)}
+.time{margin:.2rem 0 .5rem}
+.time-badge{display:inline-block;background:var(--soft);color:var(--forest);font-weight:700;font-size:.85rem;border-radius:999px;padding:2px 10px;border:1px solid #c9dccf}
+.time-range{font-size:.85rem;color:var(--muted)}
+.what{color:var(--muted)}
+.note,.small{font-size:.9rem;color:var(--muted)}
+.no-reveal{font-size:.88rem;background:var(--tint);border-left:3px solid var(--gold);padding:6px 10px;border-radius:0 6px 6px 0}
+.goals li{margin:.35rem 0}
+.routine{border:2px solid var(--forest)}
+.routine-list{list-style:none;counter-reset:r;padding:0;margin:.6rem 0 0;display:grid;gap:6px}
+.routine-list li{counter-increment:r;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start;background:#fbfaf5;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.routine-list li::before{content:counter(r);grid-row:span 2;width:28px;height:28px;border-radius:50%;background:var(--forest);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.rname{font-weight:800;letter-spacing:.06em;color:var(--forest)}
+.rsay{font-size:.93rem}
+.rule-box{background:#fbf8f0;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 14px;margin:.8rem 0}
+.rule-box ul{padding-left:1.2rem;margin:.3rem 0}
+.big-eq{font-size:1.08rem;font-weight:700;text-align:center}
+.eq{font-family:"Cambria Math","Times New Roman",serif;font-size:1.05em}
+span.eq{white-space:nowrap}
+p.eq{overflow-wrap:anywhere}
+.rearr-grid{display:grid;gap:10px}
+.rcard{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#fff}
+.rtitle{font-weight:800;color:var(--forest);margin:0}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem;background:#fff}
+caption{text-align:left;font-weight:700;padding:4px 0;color:var(--forest)}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f1efe8;color:var(--forest);font-size:.82rem}
+.q{border-top:1px dashed var(--line-strong);padding:12px 0}
+.think .q{border-top:0;background:var(--soft);border-radius:8px;padding:10px 12px;margin:10px 0}
+.qstem{margin:.2rem 0 .5rem}
+.qnum{display:inline-block;font-weight:800;color:#fff;background:var(--forest);border-radius:6px;padding:0 7px;margin-right:4px;font-size:.88rem}
+.marks{color:var(--muted);font-size:.88rem;white-space:nowrap}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;border:1px solid var(--gold-ink);color:var(--gold-ink);border-radius:999px;padding:0 8px;margin-right:2px}
+.part{margin:.4rem 0}
+.ptext{margin:.2rem 0}
+.lbl{display:block;font-size:.85rem;font-weight:600;color:var(--muted);margin:.35rem 0 .15rem}
+input[type=text],textarea,select{width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;border:1px solid #bfb8a8;border-radius:7px;padding:8px 10px}
+textarea{resize:vertical;min-height:3.2em}
+:focus-visible{outline:3px solid var(--forest);outline-offset:2px}
+input:focus,textarea:focus,select:focus{border-color:var(--forest)}
+details.model{border:1px solid #c9dccf;background:var(--soft);border-radius:8px;padding:8px 12px;margin:.6rem 0}
+details.model summary{cursor:pointer;font-weight:700;color:var(--forest)}
+.model-body{margin-top:.5rem;font-size:.95rem}
+.hint,.given-eq{font-size:.92rem;background:#fff;border:1px solid var(--line);border-radius:6px;padding:5px 10px;margin:.4rem 0}
+.hint-l{font-weight:700;color:var(--gold-ink)}
+.vehicle{font-style:italic}
+.we{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:14px 0;background:#fff}
+.we.faded{border-style:dashed;border-color:var(--forest-2)}
+.we h4{margin-top:0}
+.wsteps{list-style:none;padding:0;margin:.5rem 0}
+.wsteps li{display:grid;grid-template-columns:1fr;gap:2px;border-top:1px solid var(--line);padding:6px 0}
+.step-tag{font-weight:800;letter-spacing:.06em;font-size:.8rem;color:var(--forest)}
+.band{border-bottom:2px solid var(--gold);padding-bottom:2px}
+.pupils{display:grid;gap:8px;margin:.4rem 0}
+.pupil{border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:#fff}
+.pname{font-weight:700;color:var(--forest);margin:0;font-size:.88rem}
+.ask{font-weight:600}
+.g9{border:2px solid var(--gold);border-radius:10px;padding:4px 14px;margin:12px 0;background:#fffaf0}
+.mastery-panel{border:2px solid var(--forest);background:var(--soft)}
+.elog{border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:10px 0}
+.elog legend{font-weight:700;color:var(--forest);padding:0 4px}
+.elog-grid{display:grid;gap:4px 12px}
+.rating-grid{display:grid;gap:8px}
+figure.graph{margin:14px 0;border:1px solid var(--line);border-radius:8px;background:#fff;padding:8px}
+.graph-scroll{overflow-x:auto}
+figure.graph svg{display:block;width:100%;min-width:300px;max-width:560px;height:auto;margin:0 auto}
+figcaption{font-size:.9rem;color:var(--muted);margin-top:6px}
+svg text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:var(--ink)}
+.g-minor{stroke:var(--grid-minor);stroke-width:.5}
+.g-major{stroke:var(--grid-major);stroke-width:1.1}
+.g-axis{stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.g-tick{font-size:15px;fill:var(--muted)}
+.g-label{font-size:16px;font-weight:600}
+.g-line{fill:none;stroke:var(--forest);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.g-pt{fill:var(--forest)}
+.g-ans{fill:var(--gold-ink);stroke:#fff;stroke-width:2}
+.g-tri{fill:var(--tint);fill-opacity:.85;stroke:var(--gold-ink);stroke-width:1.6;stroke-dasharray:6 4;stroke-linecap:round}
+.g-construct{fill:none;stroke:var(--gold-ink);stroke-width:1.8;stroke-dasharray:6 4;stroke-linecap:round}
+.g-note{font-size:14px;font-weight:700;fill:var(--gold-ink);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.g-sec{font-size:17px;font-weight:700;fill:var(--forest);paint-order:stroke;stroke:#fff;stroke-width:4px}
+.foot{text-align:center;font-size:.8rem;color:var(--muted);margin-top:24px}
+@media (min-width:640px){
+ .wrap{padding:16px 24px 48px}
+ .lsec{padding:22px 24px}
+ h1{font-size:2.3rem}
+ .hero{padding:28px}
+ .timeline{grid-template-columns:repeat(3,1fr)}
+ .rearr-grid{grid-template-columns:repeat(3,1fr)}
+ .pupils{grid-template-columns:1fr 1fr}
+ .elog-grid{grid-template-columns:1fr 1fr}
+ .rating-grid{grid-template-columns:1fr 1fr}
+ .wsteps li{grid-template-columns:120px 1fr;gap:10px}
+}
+@media (min-width:900px){.timeline{grid-template-columns:repeat(6,1fr)}}
+@media print{body{background:#fff}.lsec,.hero{break-inside:avoid-page;box-shadow:none}.hero{background:#fff;color:var(--ink)}h1{color:var(--forest)}.hero-copy,.hero-meta,.kicker{color:var(--ink)}details.model{display:none}}
+</style>
+</head>
+<body>
+<main class="wrap" id="top">
+<header class="hero">
+<p class="kicker">ISM Physics School V1 · Energy &amp; Physics Calculations Mastery Intervention</p>
+<h1>Block 1 — The Physicist's Toolkit</h1>
+<p class="hero-copy">Every Energy calculation needs the same four tools: units and prefixes, standard form, rearranging equations, and reading graphs. This block makes those tools reliable, so that when you make a mistake later it is a physics mistake, not a maths one.</p>
+<p class="hero-meta">Two 60-minute sessions · a block mastery check on the platform · 20–30 minutes of homework</p>
+</header>
+
+<nav class="toc" aria-label="Lesson contents">
+<p class="toc-h">In this lesson</p>
+<ol>
+<li><a href="#goals">Learning goals</a></li>
+<li><a href="#routine">The calculation routine</a></li>
+<li><a href="#s1">Session 1: learn the tools</a></li>
+<li><a href="#s2">Session 2: sharpen the tools</a></li>
+<li><a href="#hw">Homework</a></li>
+</ol>
+</nav>
+
+<section id="goals" class="lsec" data-reveal="none" aria-labelledby="goals-h">
+<h2 id="goals-h">Learning goals</h2>
+<p>By the end of this block I can…</p>
+<ul class="goals">
+<li><b>Units and prefixes:</b> convert between prefixed units and SI base units (T, G, M, k, c, m, µ, n; grams to kilograms; minutes and hours to seconds), and say which way the number should change before I convert.</li>
+<li><b>Standard form:</b> write very large and very small numbers in standard form, read them back, and use them in a calculation on my calculator.</li>
+<li><b>Rearranging:</b> substitute into an equation and rearrange it to make any quantity the subject, including equations with a fraction, a square, a half or a square root.</li>
+<li><b>Graphs:</b> read a value from a graph by working out what one small square is worth, and find the gradient of a straight line and say what it represents.</li>
+</ul>
+<p class="note">How to use this page: write every answer in the boxes, with your working. Where you see <em>“Check the model answer”</em>, write your own attempt first, then open it. The answers to retrieval, independent practice, exit tickets, the Grade 9 challenge and homework are not on this page: your teacher marks them.</p>
+</section>
+
+<section id="routine" class="lsec routine" data-reveal="none" aria-labelledby="routine-h">
+<h2 id="routine-h">The calculation routine</h2>
+<p>Use these seven steps for <b>every</b> calculation in this programme. Each worked example below is set out in these steps. Come back to this panel whenever you are stuck.</p>
+<ol class="routine-list">
+<li><span class="rname">GIVEN</span><span class="rsay">List every quantity with its symbol and unit. Convert to SI units now (kg, m, s, J, W).</span></li>
+<li><span class="rname">FIND</span><span class="rsay">Write the symbol of the quantity you need.</span></li>
+<li><span class="rname">RELATIONSHIP</span><span class="rsay">Write the equation in symbols (from memory, or from the equation sheet if it is a given equation).</span></li>
+<li><span class="rname">REARRANGE</span><span class="rsay">Make the unknown the subject before putting numbers in.</span></li>
+<li><span class="rname">SUBSTITUTE</span><span class="rsay">Put the numbers in. This line usually earns the first mark.</span></li>
+<li><span class="rname">SOLVE</span><span class="rsay">Calculate. Give the unit, and the significant figures asked for.</span></li>
+<li><span class="rname">CHECK</span><span class="rsay">Is the size sensible? Is the unit right for the quantity?</span></li>
+</ol>
+</section>
+
+<h2 class="session-h" id="s1">Session 1: learn the tools <span class="session-sub">(60 minutes)</span></h2>
+<ol class="timeline" aria-label="Session 1 timings">
+<li><b>0–5</b> Retrieval</li><li><b>5–20</b> Concept construction</li><li><b>20–30</b> Worked examples</li><li><b>30–40</b> Guided practice</li><li><b>40–55</b> Independent practice</li><li><b>55–60</b> Exit ticket</li>
+</ol>
+<section id="s1-retrieval" class="lsec" data-reveal="none" aria-labelledby="s1-retrieval-h">
+<h3 id="s1-retrieval-h">Retrieval starter</h3>
+<p class="time"><span class="time-badge">Time guide: 5 minutes</span> <span class="time-range">(minutes 0–5 of the session)</span></p>
+<p class="what">Three quick questions from what you already know. No notes. Answer on your mini-whiteboard if your teacher asks, then write your answer here.</p><p class="no-reveal">Your teacher will go through these answers with the group.</p><div class="q" id="q-R1">
+<p class="qstem"><span class="qnum">R1</span> How many seconds are there in 1 hour? <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_ret1">Your answer to R1</label><input type="text" id="b1_s1_ret1" data-save="b1_s1_ret1" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-R2">
+<p class="qstem"><span class="qnum">R2</span> Write 0.25 kg in grams. <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_ret2">Your answer to R2</label><input type="text" id="b1_s1_ret2" data-save="b1_s1_ret2" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-R3">
+<p class="qstem"><span class="qnum">R3</span> A bus travels 150 m in 10 s at a steady speed. What is its speed? <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_ret3">Your answer to R3</label><input type="text" id="b1_s1_ret3" data-save="b1_s1_ret3" autocomplete="off" spellcheck="false"></div>
+
+</div></section><section id="s1-concepts" class="lsec" data-reveal="none" aria-labelledby="s1-concepts-h">
+<h3 id="s1-concepts-h">Concept construction: the four tools</h3>
+<p class="time"><span class="time-badge">Time guide: 15 minutes</span> <span class="time-range">(minutes 5–20 of the session)</span></p>
+<p class="what">Build each tool from a real situation. Your teacher will lead this part. Answer each “Think” question as you go.</p><p class="no-reveal">The “Think” questions are discussed with your teacher; there is no model answer on the page.</p>
+<h4 id="cc-units">Tool 1: units and prefixes</h4>
+<p>A solar panel array on a clinic roof in Kumasi transfers about 4.5 MJ of energy in an afternoon. A large power station has an output power of 1.2 GW. The sensor circuit in a smoke alarm works at about 15 µW. All of these use the same units, the joule (J) and the watt (W). The <b>prefix</b> tells you the size.</p>
+<div class="tbl-wrap"><table class="prefix">
+<caption>SI prefixes you must know</caption>
+<thead><tr><th scope="col">Prefix</th><th scope="col">Symbol</th><th scope="col">Multiply by</th><th scope="col">As a number</th><th scope="col">Example</th></tr></thead>
+<tbody>
+<tr><td>tera</td><td>T</td><td>10<sup>12</sup></td><td>1 000 000 000 000</td><td>1 TJ = 10<sup>12</sup> J</td></tr>
+<tr><td>giga</td><td>G</td><td>10<sup>9</sup></td><td>1 000 000 000</td><td>a power station: 1.2 GW</td></tr>
+<tr><td>mega</td><td>M</td><td>10<sup>6</sup></td><td>1 000 000</td><td>a solar panel array in an afternoon: 4.5 MJ</td></tr>
+<tr><td>kilo</td><td>k</td><td>10<sup>3</sup></td><td>1000</td><td>a room heater: 1.5 kW</td></tr>
+<tr><td>centi</td><td>c</td><td>10<sup>−2</sup></td><td>0.01</td><td>a spring stretched by 4 cm</td></tr>
+<tr><td>milli</td><td>m</td><td>10<sup>−3</sup></td><td>0.001</td><td>a 35 mm screw</td></tr>
+<tr><td>micro</td><td>µ</td><td>10<sup>−6</sup></td><td>0.000 001</td><td>a smoke alarm sensor: 15 µW</td></tr>
+<tr><td>nano</td><td>n</td><td>10<sup>−9</sup></td><td>0.000 000 001</td><td>the wavelength of green light: about 500 nm</td></tr>
+</tbody></table></div>
+<div class="rule-box">
+<p><b>Which way?</b> Decide before you calculate.</p>
+<ul>
+<li>Converting to a <b>smaller</b> unit: you need <b>more</b> of them, so the number gets <b>bigger</b> (multiply). 3.6 MJ = 3.6 × 10<sup>6</sup> J = 3 600 000 J.</li>
+<li>Converting to a <b>bigger</b> unit: you need <b>fewer</b> of them, so the number gets <b>smaller</b> (divide). 5000 W = 5000 ÷ 1000 = 5 kW.</li>
+</ul>
+<p><b>Two traps in physics calculations.</b></p>
+<ul>
+<li>The SI unit of mass is the <b>kilogram</b>, not the gram. Grams to kilograms: divide by 1000. 500 g = 0.5 kg.</li>
+<li>The SI unit of time is the <b>second</b>. Minutes to seconds: multiply by 60. Hours to seconds: multiply by 3600 (60 × 60). 2.5 h = 2.5 × 3600 s = 9000 s.</li>
+</ul>
+<p class="small">Watch the letters: “m” is the metre (unit) and also milli (prefix), so 5 mm is 5 millimetres. The letter s is the unit “seconds” and also the symbol for distance in W = Fs. Temperature is measured in °C; a change of 1 °C is the same size as a change of 1 K.</p>
+</div>
+<p>In the GIVEN step of the routine, <b>every quantity is converted to SI units before it goes into an equation.</b></p>
+<div class="think"><div class="q" id="q-Think1">
+<p class="qstem"><span class="qnum">Think 1</span> A pupil converts 3.0 km into metres and gets 0.003 m. Without calculating, how can you tell this is wrong? What is the right answer?</p>
+<div class="part"><label class="lbl" for="b1_s1_cc1">Your answer to Think 1</label><textarea id="b1_s1_cc1" data-save="b1_s1_cc1" rows="3"></textarea></div>
+
+</div></div>
+
+<h4 id="cc-sf">Tool 2: standard form</h4>
+<p>Physics numbers are often very large (the energy from a power station) or very small (the power of a sensor). Standard form writes them without long strings of zeros.</p>
+<div class="rule-box">
+<p class="big-eq">A × 10<sup>n</sup>, where 1 ≤ A &lt; 10 and <b>n is an integer</b> (a whole number: positive, negative or zero).</p>
+<ul>
+<li><b>Large number:</b> 3 600 000 J. Move the decimal point until the number is between 1 and 10: 3.6. It moved 6 places, and the number is large, so n = 6: <b>3.6 × 10<sup>6</sup> J</b>.</li>
+<li><b>Small number:</b> 0.000 35 m. The decimal point moves 4 places to give 3.5, and the number is less than 1, so n = −4: <b>3.5 × 10<sup>−4</sup> m</b>.</li>
+<li>A number less than 1 always has a <b>negative</b> power of ten. A number of 10 or more has a positive power.</li>
+</ul>
+<p><b>On your calculator</b>, use the ×10<sup>x</sup> key (on some calculators, EXP). To enter 1.2 × 10<sup>9</sup>, press 1.2 then ×10<sup>x</sup> then 9. Do <b>not</b> also press “× 10”: that makes the number 10 times too big. For a negative power, use the (−) key: 1.5 ×10<sup>x</sup> (−) 5.</p>
+<p class="small">Prefixes and standard form match: k = × 10<sup>3</sup>, M = × 10<sup>6</sup>, G = × 10<sup>9</sup>, T = × 10<sup>12</sup>, m = × 10<sup>−3</sup>, µ = × 10<sup>−6</sup>, n = × 10<sup>−9</sup>.</p>
+</div>
+<div class="think"><div class="q" id="q-Think2">
+<p class="qstem"><span class="qnum">Think 2</span> Why is 58 × 10<sup>5</sup> J not written in standard form? Write it correctly.</p>
+<div class="part"><label class="lbl" for="b1_s1_cc2">Your answer to Think 2</label><textarea id="b1_s1_cc2" data-save="b1_s1_cc2" rows="3"></textarea></div>
+
+</div></div>
+
+<h4 id="cc-rearr">Tool 3: rearranging equations</h4>
+<p>An equation is a balance. Whatever you do to one side, you do to the other. To make a quantity the subject, <b>undo the operations on it in reverse order</b>.</p>
+<div class="rearr-grid">
+<div class="rcard"><p class="rtitle">Product form</p><p class="eq">W = F s</p><p>F is multiplied by s. To undo, divide both sides by s:</p><p class="eq">F = W ÷ s &nbsp;&nbsp; (and s = W ÷ F)</p></div>
+<div class="rcard"><p class="rtitle">Quotient form</p><p class="eq">P = E ÷ t</p><p>E is divided by t. To undo, multiply both sides by t:</p><p class="eq">E = P × t</p><p>Then divide both sides by P to find t: <span class="eq">t = E ÷ P</span></p></div>
+<div class="rcard"><p class="rtitle">With a half and a square</p><p class="eq">E<sub>k</sub> = ½ m v²</p><p>To build E<sub>k</sub> from v: square v, multiply by m, multiply by ½.</p><p>Undo in <b>reverse order</b>: multiply by 2, divide by m, then take the square root.</p><p class="eq">2E<sub>k</sub> = m v² → v² = 2E<sub>k</sub> ÷ m → v = √(2E<sub>k</sub> ÷ m)</p><p>For m, stop after two steps: <span class="eq">m = 2E<sub>k</sub> ÷ v²</span></p></div>
+</div>
+<p class="small">Rearrange <b>before</b> you put numbers in (the REARRANGE step). A quick unit check helps: a watt is a joule per second, so W × s = J. That tells you E = P × t, not P ÷ t. Square-root rearrangements are Higher-tier demand.</p>
+<div class="think"><div class="q" id="q-Think3">
+<p class="qstem"><span class="qnum">Think 3</span> Rearrange W = Fs to make s the subject. Say what you did to both sides.</p>
+<div class="part"><label class="lbl" for="b1_s1_cc3">Your answer to Think 3</label><textarea id="b1_s1_cc3" data-save="b1_s1_cc3" rows="3"></textarea></div>
+
+</div></div>
+
+<h4 id="cc-graph">Tool 4: reading graphs</h4>
+<p>An electric heater warms some water in an insulated beaker. Energy is transferred electrically to the heater and then by heating to the thermal energy store of the water, so its temperature rises. Graph 1 shows the temperature of the water against time.</p>
+<figure class="graph" id="graph1">
+<div class="graph-scroll"><svg viewBox="0 0 522 486" role="img" aria-labelledby="graph1-t graph1-d"><title id="graph1-t">Graph 1: temperature of water against time while an electric heater warms it</title><desc id="graph1-d">Graph 1. Temperature of water against time while an electric heater warms it: a straight line. Time axis 0–300 s; temperature axis 0–60 °C. The dashed reading lines and the shaded gradient triangle belong to Example 7.</desc><line class="g-major" x1="92" y1="22" x2="92" y2="412"/><line class="g-minor" x1="105" y1="22" x2="105" y2="412"/><line class="g-minor" x1="118" y1="22" x2="118" y2="412"/><line class="g-minor" x1="131" y1="22" x2="131" y2="412"/><line class="g-minor" x1="144" y1="22" x2="144" y2="412"/><line class="g-major" x1="157" y1="22" x2="157" y2="412"/><line class="g-minor" x1="170" y1="22" x2="170" y2="412"/><line class="g-minor" x1="183" y1="22" x2="183" y2="412"/><line class="g-minor" x1="196" y1="22" x2="196" y2="412"/><line class="g-minor" x1="209" y1="22" x2="209" y2="412"/><line class="g-major" x1="222" y1="22" x2="222" y2="412"/><line class="g-minor" x1="235" y1="22" x2="235" y2="412"/><line class="g-minor" x1="248" y1="22" x2="248" y2="412"/><line class="g-minor" x1="261" y1="22" x2="261" y2="412"/><line class="g-minor" x1="274" y1="22" x2="274" y2="412"/><line class="g-major" x1="287" y1="22" x2="287" y2="412"/><line class="g-minor" x1="300" y1="22" x2="300" y2="412"/><line class="g-minor" x1="313" y1="22" x2="313" y2="412"/><line class="g-minor" x1="326" y1="22" x2="326" y2="412"/><line class="g-minor" x1="339" y1="22" x2="339" y2="412"/><line class="g-major" x1="352" y1="22" x2="352" y2="412"/><line class="g-minor" x1="365" y1="22" x2="365" y2="412"/><line class="g-minor" x1="378" y1="22" x2="378" y2="412"/><line class="g-minor" x1="391" y1="22" x2="391" y2="412"/><line class="g-minor" x1="404" y1="22" x2="404" y2="412"/><line class="g-major" x1="417" y1="22" x2="417" y2="412"/><line class="g-minor" x1="430" y1="22" x2="430" y2="412"/><line class="g-minor" x1="443" y1="22" x2="443" y2="412"/><line class="g-minor" x1="456" y1="22" x2="456" y2="412"/><line class="g-minor" x1="469" y1="22" x2="469" y2="412"/><line class="g-major" x1="482" y1="22" x2="482" y2="412"/><line class="g-major" x1="92" y1="412" x2="482" y2="412"/><line class="g-minor" x1="92" y1="399" x2="482" y2="399"/><line class="g-minor" x1="92" y1="386" x2="482" y2="386"/><line class="g-minor" x1="92" y1="373" x2="482" y2="373"/><line class="g-minor" x1="92" y1="360" x2="482" y2="360"/><line class="g-major" x1="92" y1="347" x2="482" y2="347"/><line class="g-minor" x1="92" y1="334" x2="482" y2="334"/><line class="g-minor" x1="92" y1="321" x2="482" y2="321"/><line class="g-minor" x1="92" y1="308" x2="482" y2="308"/><line class="g-minor" x1="92" y1="295" x2="482" y2="295"/><line class="g-major" x1="92" y1="282" x2="482" y2="282"/><line class="g-minor" x1="92" y1="269" x2="482" y2="269"/><line class="g-minor" x1="92" y1="256" x2="482" y2="256"/><line class="g-minor" x1="92" y1="243" x2="482" y2="243"/><line class="g-minor" x1="92" y1="230" x2="482" y2="230"/><line class="g-major" x1="92" y1="217" x2="482" y2="217"/><line class="g-minor" x1="92" y1="204" x2="482" y2="204"/><line class="g-minor" x1="92" y1="191" x2="482" y2="191"/><line class="g-minor" x1="92" y1="178" x2="482" y2="178"/><line class="g-minor" x1="92" y1="165" x2="482" y2="165"/><line class="g-major" x1="92" y1="152" x2="482" y2="152"/><line class="g-minor" x1="92" y1="139" x2="482" y2="139"/><line class="g-minor" x1="92" y1="126" x2="482" y2="126"/><line class="g-minor" x1="92" y1="113" x2="482" y2="113"/><line class="g-minor" x1="92" y1="100" x2="482" y2="100"/><line class="g-major" x1="92" y1="87" x2="482" y2="87"/><line class="g-minor" x1="92" y1="74" x2="482" y2="74"/><line class="g-minor" x1="92" y1="61" x2="482" y2="61"/><line class="g-minor" x1="92" y1="48" x2="482" y2="48"/><line class="g-minor" x1="92" y1="35" x2="482" y2="35"/><line class="g-major" x1="92" y1="22" x2="482" y2="22"/><line class="g-axis" x1="92" y1="412" x2="482" y2="412"/><line class="g-axis" x1="92" y1="22" x2="92" y2="412"/><line class="g-axis" x1="157" y1="412" x2="157" y2="418"/><text class="g-tick" x="157" y="436" text-anchor="middle">50</text><line class="g-axis" x1="222" y1="412" x2="222" y2="418"/><text class="g-tick" x="222" y="436" text-anchor="middle">100</text><line class="g-axis" x1="287" y1="412" x2="287" y2="418"/><text class="g-tick" x="287" y="436" text-anchor="middle">150</text><line class="g-axis" x1="352" y1="412" x2="352" y2="418"/><text class="g-tick" x="352" y="436" text-anchor="middle">200</text><line class="g-axis" x1="417" y1="412" x2="417" y2="418"/><text class="g-tick" x="417" y="436" text-anchor="middle">250</text><line class="g-axis" x1="482" y1="412" x2="482" y2="418"/><text class="g-tick" x="482" y="436" text-anchor="middle">300</text><line class="g-axis" x1="86" y1="347" x2="92" y2="347"/><text class="g-tick" x="82" y="352" text-anchor="end">10</text><line class="g-axis" x1="86" y1="282" x2="92" y2="282"/><text class="g-tick" x="82" y="287" text-anchor="end">20</text><line class="g-axis" x1="86" y1="217" x2="92" y2="217"/><text class="g-tick" x="82" y="222" text-anchor="end">30</text><line class="g-axis" x1="86" y1="152" x2="92" y2="152"/><text class="g-tick" x="82" y="157" text-anchor="end">40</text><line class="g-axis" x1="86" y1="87" x2="92" y2="87"/><text class="g-tick" x="82" y="92" text-anchor="end">50</text><line class="g-axis" x1="86" y1="22" x2="92" y2="22"/><text class="g-tick" x="82" y="27" text-anchor="end">60</text><text class="g-tick" x="82" y="434" text-anchor="end">0</text><text class="g-label" x="287" y="470" text-anchor="middle">Time / s</text><text class="g-label" transform="translate(24 217) rotate(-90)" text-anchor="middle">Temperature / °C</text><polygon class="g-tri" points="222,217 482,217 482,87"/><path class="g-construct" d="M170 412 V243 H92"/><polyline class="g-line" points="92,282 482,87"/><circle class="g-pt" cx="92" cy="282" r="5"/><circle class="g-pt" cx="222" cy="217" r="5"/><circle class="g-pt" cx="352" cy="152" r="5"/><circle class="g-pt" cx="482" cy="87" r="5"/><circle class="g-ans" cx="170" cy="243" r="5.5"/><text class="g-note" x="352" y="239" text-anchor="middle">Δt = 200 s</text><text class="g-note" x="474" y="174" text-anchor="end">Δθ = 20 °C</text><text class="g-note" x="180" y="267" text-anchor="start">60 s → 26 °C</text></svg></div>
+<figcaption><b>Graph 1.</b> Temperature of water against time while an electric heater warms it: a straight line. Time axis 0–300 s; temperature axis 0–60 °C. The dashed reading lines and the shaded gradient triangle belong to Example 7.</figcaption>
+</figure>
+<div class="rule-box">
+<p><b>Step 1 — before you read anything: what is one small square worth?</b></p>
+<p class="eq">value of one small square = (difference between two labelled lines) ÷ (number of small squares between them)</p>
+<p>On Graph 1, the time axis goes from 0 s to 50 s in 5 small squares, so one small square is 50 ÷ 5 = 10 s. The temperature axis goes from 0 °C to 10 °C in 5 small squares, so one small square is 2 °C.</p>
+<p><b>Read a value:</b> go straight up from the x-value to the line, then straight across to the y-axis. Count the small squares.</p>
+<p><b>Gradient of a straight line:</b></p>
+<p class="big-eq">gradient = change in y ÷ change in x = Δy ÷ Δx</p>
+<ul>
+<li>Use two points far apart on the line, where the line crosses gridlines. Draw a big triangle.</li>
+<li>The unit of the gradient is the y-unit ÷ the x-unit (°C/s, m/s, J/s).</li>
+<li>Say what it represents: on a distance–time graph the gradient is the <b>speed</b>; on a temperature–time graph it is the <b>rate of temperature rise</b>; on an energy–time graph it is the <b>power</b> (the rate of energy transfer).</li>
+<li>A <b>value</b> tells you how much at one moment. A <b>gradient</b> tells you how fast it is changing. Do not mix them up.</li>
+</ul>
+</div>
+<div class="think"><div class="q" id="q-Think4">
+<p class="qstem"><span class="qnum">Think 4</span> Look at Graph 2 below (the trotro). What is one small square worth on the time axis? On the distance axis?</p>
+<div class="part"><label class="lbl" for="b1_s1_cc4">Your answer to Think 4</label><textarea id="b1_s1_cc4" data-save="b1_s1_cc4" rows="3"></textarea></div>
+
+</div></div>
+<figure class="graph" id="graph2">
+<div class="graph-scroll"><svg viewBox="0 0 522 486" role="img" aria-labelledby="graph2-t graph2-d"><title id="graph2-t">Graph 2: distance–time graph for a trotro on a straight road</title><desc id="graph2-d">Graph 2. Distance–time graph for a trotro on a straight road, in three straight sections labelled A, B and C. Time axis 0–60 s; distance axis 0–600 m.</desc><line class="g-major" x1="92" y1="22" x2="92" y2="412"/><line class="g-minor" x1="105" y1="22" x2="105" y2="412"/><line class="g-minor" x1="118" y1="22" x2="118" y2="412"/><line class="g-minor" x1="131" y1="22" x2="131" y2="412"/><line class="g-minor" x1="144" y1="22" x2="144" y2="412"/><line class="g-major" x1="157" y1="22" x2="157" y2="412"/><line class="g-minor" x1="170" y1="22" x2="170" y2="412"/><line class="g-minor" x1="183" y1="22" x2="183" y2="412"/><line class="g-minor" x1="196" y1="22" x2="196" y2="412"/><line class="g-minor" x1="209" y1="22" x2="209" y2="412"/><line class="g-major" x1="222" y1="22" x2="222" y2="412"/><line class="g-minor" x1="235" y1="22" x2="235" y2="412"/><line class="g-minor" x1="248" y1="22" x2="248" y2="412"/><line class="g-minor" x1="261" y1="22" x2="261" y2="412"/><line class="g-minor" x1="274" y1="22" x2="274" y2="412"/><line class="g-major" x1="287" y1="22" x2="287" y2="412"/><line class="g-minor" x1="300" y1="22" x2="300" y2="412"/><line class="g-minor" x1="313" y1="22" x2="313" y2="412"/><line class="g-minor" x1="326" y1="22" x2="326" y2="412"/><line class="g-minor" x1="339" y1="22" x2="339" y2="412"/><line class="g-major" x1="352" y1="22" x2="352" y2="412"/><line class="g-minor" x1="365" y1="22" x2="365" y2="412"/><line class="g-minor" x1="378" y1="22" x2="378" y2="412"/><line class="g-minor" x1="391" y1="22" x2="391" y2="412"/><line class="g-minor" x1="404" y1="22" x2="404" y2="412"/><line class="g-major" x1="417" y1="22" x2="417" y2="412"/><line class="g-minor" x1="430" y1="22" x2="430" y2="412"/><line class="g-minor" x1="443" y1="22" x2="443" y2="412"/><line class="g-minor" x1="456" y1="22" x2="456" y2="412"/><line class="g-minor" x1="469" y1="22" x2="469" y2="412"/><line class="g-major" x1="482" y1="22" x2="482" y2="412"/><line class="g-major" x1="92" y1="412" x2="482" y2="412"/><line class="g-minor" x1="92" y1="399" x2="482" y2="399"/><line class="g-minor" x1="92" y1="386" x2="482" y2="386"/><line class="g-minor" x1="92" y1="373" x2="482" y2="373"/><line class="g-minor" x1="92" y1="360" x2="482" y2="360"/><line class="g-major" x1="92" y1="347" x2="482" y2="347"/><line class="g-minor" x1="92" y1="334" x2="482" y2="334"/><line class="g-minor" x1="92" y1="321" x2="482" y2="321"/><line class="g-minor" x1="92" y1="308" x2="482" y2="308"/><line class="g-minor" x1="92" y1="295" x2="482" y2="295"/><line class="g-major" x1="92" y1="282" x2="482" y2="282"/><line class="g-minor" x1="92" y1="269" x2="482" y2="269"/><line class="g-minor" x1="92" y1="256" x2="482" y2="256"/><line class="g-minor" x1="92" y1="243" x2="482" y2="243"/><line class="g-minor" x1="92" y1="230" x2="482" y2="230"/><line class="g-major" x1="92" y1="217" x2="482" y2="217"/><line class="g-minor" x1="92" y1="204" x2="482" y2="204"/><line class="g-minor" x1="92" y1="191" x2="482" y2="191"/><line class="g-minor" x1="92" y1="178" x2="482" y2="178"/><line class="g-minor" x1="92" y1="165" x2="482" y2="165"/><line class="g-major" x1="92" y1="152" x2="482" y2="152"/><line class="g-minor" x1="92" y1="139" x2="482" y2="139"/><line class="g-minor" x1="92" y1="126" x2="482" y2="126"/><line class="g-minor" x1="92" y1="113" x2="482" y2="113"/><line class="g-minor" x1="92" y1="100" x2="482" y2="100"/><line class="g-major" x1="92" y1="87" x2="482" y2="87"/><line class="g-minor" x1="92" y1="74" x2="482" y2="74"/><line class="g-minor" x1="92" y1="61" x2="482" y2="61"/><line class="g-minor" x1="92" y1="48" x2="482" y2="48"/><line class="g-minor" x1="92" y1="35" x2="482" y2="35"/><line class="g-major" x1="92" y1="22" x2="482" y2="22"/><line class="g-axis" x1="92" y1="412" x2="482" y2="412"/><line class="g-axis" x1="92" y1="22" x2="92" y2="412"/><line class="g-axis" x1="157" y1="412" x2="157" y2="418"/><text class="g-tick" x="157" y="436" text-anchor="middle">10</text><line class="g-axis" x1="222" y1="412" x2="222" y2="418"/><text class="g-tick" x="222" y="436" text-anchor="middle">20</text><line class="g-axis" x1="287" y1="412" x2="287" y2="418"/><text class="g-tick" x="287" y="436" text-anchor="middle">30</text><line class="g-axis" x1="352" y1="412" x2="352" y2="418"/><text class="g-tick" x="352" y="436" text-anchor="middle">40</text><line class="g-axis" x1="417" y1="412" x2="417" y2="418"/><text class="g-tick" x="417" y="436" text-anchor="middle">50</text><line class="g-axis" x1="482" y1="412" x2="482" y2="418"/><text class="g-tick" x="482" y="436" text-anchor="middle">60</text><line class="g-axis" x1="86" y1="347" x2="92" y2="347"/><text class="g-tick" x="82" y="352" text-anchor="end">100</text><line class="g-axis" x1="86" y1="282" x2="92" y2="282"/><text class="g-tick" x="82" y="287" text-anchor="end">200</text><line class="g-axis" x1="86" y1="217" x2="92" y2="217"/><text class="g-tick" x="82" y="222" text-anchor="end">300</text><line class="g-axis" x1="86" y1="152" x2="92" y2="152"/><text class="g-tick" x="82" y="157" text-anchor="end">400</text><line class="g-axis" x1="86" y1="87" x2="92" y2="87"/><text class="g-tick" x="82" y="92" text-anchor="end">500</text><line class="g-axis" x1="86" y1="22" x2="92" y2="22"/><text class="g-tick" x="82" y="27" text-anchor="end">600</text><text class="g-tick" x="82" y="434" text-anchor="end">0</text><text class="g-label" x="287" y="470" text-anchor="middle">Time / s</text><text class="g-label" transform="translate(24 217) rotate(-90)" text-anchor="middle">Distance / m</text><polyline class="g-line" points="92,412 287,217 352,217 482,61"/><circle class="g-pt" cx="92" cy="412" r="5"/><circle class="g-pt" cx="287" cy="217" r="5"/><circle class="g-pt" cx="352" cy="217" r="5"/><circle class="g-pt" cx="482" cy="61" r="5"/><text class="g-sec" x="154" y="314.5" text-anchor="end">A</text><text class="g-sec" x="319.5" y="203" text-anchor="middle">B</text><text class="g-sec" x="401" y="126" text-anchor="end">C</text></svg></div>
+<figcaption><b>Graph 2.</b> Distance–time graph for a trotro on a straight road, in three straight sections labelled A, B and C. Time axis 0–60 s; distance axis 0–600 m.</figcaption>
+</figure>
+</section><section id="s1-worked" class="lsec" data-reveal="allowed" aria-labelledby="s1-worked-h">
+<h3 id="s1-worked-h">Worked examples</h3>
+<p class="time"><span class="time-badge">Time guide: 10 minutes</span> <span class="time-range">(minutes 20–30 of the session)</span></p>
+<p class="what">For each tool: one example fully worked, then one faded example for you to finish. Every example uses the calculation routine.</p><article class="we" id="we1"><h4>Example 1 (fully worked) — Units: a solar panel array in Kumasi</h4>
+<p>A solar panel array on a clinic roof in Kumasi transfers 4.5 MJ of energy electrically in 2.5 hours. Calculate its average power.</p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> power = energy transferred ÷ time: <span class="eq">P = E ÷ t</span></p>
+<ol class="wsteps"><li><span class="step-tag">GIVEN</span><div class="step-body">E = 4.5 MJ = 4.5 × 10<sup>6</sup> J = 4 500 000 J (MJ to J: smaller unit, bigger number). t = 2.5 h = 2.5 × 3600 s = 9000 s.</div></li><li><span class="step-tag">FIND</span><div class="step-body">P</div></li><li><span class="step-tag">RELATIONSHIP</span><div class="step-body">P = E ÷ t</div></li><li><span class="step-tag">REARRANGE</span><div class="step-body">P is already the subject.</div></li><li><span class="step-tag">SUBSTITUTE</span><div class="step-body">P = 4 500 000 J ÷ 9000 s</div></li><li><span class="step-tag">SOLVE</span><div class="step-body">P = 500 W</div></li><li><span class="step-tag">CHECK</span><div class="step-body">A few hundred watts is sensible for a small array of panels. Energy ÷ time gives J/s = W, the unit of power. ✓</div></li></ol></article><article class="we faded" id="we2"><h4>Example 2 (faded: you do one step) — Units: heating water in a mug</h4>
+<p>250 g of water in a mug is heated in a microwave from 20 °C to 80 °C. The specific heat capacity of water is 4200 J/kg °C. Calculate the energy transferred to the thermal energy store of the water.</p>
+<p class="given-eq"><span class="hint-l">From the equation sheet:</span> change in thermal energy = mass × specific heat capacity × temperature change <span class="eq">ΔE = m c Δθ</span></p>
+<p class="small"><span class="vehicle">(Energy equation used here only to practise the skill: you meet it properly in a later block.)</span></p>
+<ol class="wsteps"><li><span class="step-tag">GIVEN</span><div class="step-body">m = 250 g = <b>?</b> kg (your step) &nbsp; c = 4200 J/kg °C &nbsp; Δθ = 80 °C − 20 °C = 60 °C<label class="lbl" for="b1_s1_we2_given">GIVEN (your step): write the mass in kilograms</label><input type="text" id="b1_s1_we2_given" data-save="b1_s1_we2_given" autocomplete="off" spellcheck="false"></div></li><li><span class="step-tag">FIND</span><div class="step-body">ΔE</div></li><li><span class="step-tag">RELATIONSHIP</span><div class="step-body">ΔE = m c Δθ</div></li><li><span class="step-tag">REARRANGE</span><div class="step-body">ΔE is already the subject.</div></li><li><span class="step-tag">SUBSTITUTE</span><div class="step-body">ΔE = (your mass in kg) × 4200 J/kg °C × 60 °C</div></li><li><span class="step-tag">SOLVE</span><div class="step-body">Use your mass to calculate ΔE: the model answer shows the result.</div></li><li><span class="step-tag">CHECK</span><div class="step-body">If you forget to convert grams to kilograms, your answer comes out 1000 times too big: tens of kilojoules is sensible for a mug of water.</div></li></ol>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">GIVEN: m = 250 ÷ 1000 = 0.250 kg. A kilogram is a bigger unit than a gram, so the number gets smaller. Check: 0.250 × 4200 × 60 = 63 000 J (63 kJ).</div></details>
+</article><article class="we" id="we3"><h4>Example 3 (fully worked) — Standard form: a power station</h4>
+<p>A power station has an output power of 1.2 GW. Calculate the energy it transfers in 1 hour. Give your answer in standard form.</p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> power = energy transferred ÷ time: <span class="eq">P = E ÷ t</span></p>
+<ol class="wsteps"><li><span class="step-tag">GIVEN</span><div class="step-body">P = 1.2 GW = 1.2 × 10<sup>9</sup> W. t = 1 h = 3600 s.</div></li><li><span class="step-tag">FIND</span><div class="step-body">E</div></li><li><span class="step-tag">RELATIONSHIP</span><div class="step-body">P = E ÷ t</div></li><li><span class="step-tag">REARRANGE</span><div class="step-body">Multiply both sides by t: E = P × t</div></li><li><span class="step-tag">SUBSTITUTE</span><div class="step-body">E = 1.2 × 10<sup>9</sup> W × 3600 s</div></li><li><span class="step-tag">SOLVE</span><div class="step-body">Calculator: 1.2 ×10<sup>x</sup> 9 × 3600 = 4 320 000 000 000. E = 4.32 × 10<sup>12</sup> J</div></li><li><span class="step-tag">CHECK</span><div class="step-body">10<sup>12</sup> is the prefix T, so this is 4.32 TJ: a huge amount of energy, as expected for a power station. The first number, 4.32, is between 1 and 10. ✓</div></li></ol></article><article class="we faded" id="we4"><h4>Example 4 (faded: you do one step) — Standard form: a smoke alarm sensor</h4>
+<p>The sensor circuit in a smoke alarm has a power of 15 µW. Calculate the energy it transfers in 1 minute. Give your answer in standard form.</p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> power = energy transferred ÷ time: <span class="eq">P = E ÷ t</span></p>
+<ol class="wsteps"><li><span class="step-tag">GIVEN</span><div class="step-body">P = 15 µW = 15 × 10<sup>−6</sup> W = 1.5 × 10<sup>−5</sup> W. t = 1 min = 60 s.</div></li><li><span class="step-tag">FIND</span><div class="step-body">E</div></li><li><span class="step-tag">RELATIONSHIP</span><div class="step-body">P = E ÷ t</div></li><li><span class="step-tag">REARRANGE</span><div class="step-body">E = P × t</div></li><li><span class="step-tag">SUBSTITUTE</span><div class="step-body">E = 1.5 × 10<sup>−5</sup> W × 60 s</div></li><li><span class="step-tag">SOLVE</span><div class="step-body"><label class="lbl" for="b1_s1_we4_solve">SOLVE (your step): the answer in standard form, with its unit</label><input type="text" id="b1_s1_we4_solve" data-save="b1_s1_we4_solve" autocomplete="off" spellcheck="false"></div></li><li><span class="step-tag">CHECK</span><div class="step-body">A tiny power for a short time gives a tiny energy, less than 1 J, so the power of ten must be negative.</div></li></ol>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">SOLVE: calculator 1.5 ×10<sup>x</sup> (−) 5 × 60 = 0.0009. E = 9.0 × 10<sup>−4</sup> J (0.000 90 J).</div></details>
+</article><article class="we" id="we5"><h4>Example 5 (fully worked) — Rearranging with a half and a square: a delivery van</h4>
+<p>A loaded delivery van is moving at 12 m/s. There is 216 kJ of energy in its kinetic energy store. Calculate the mass of the loaded van.</p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> kinetic energy = 0.5 × mass × (speed)²: <span class="eq">E<sub>k</sub> = ½ m v²</span></p>
+<ol class="wsteps"><li><span class="step-tag">GIVEN</span><div class="step-body">E<sub>k</sub> = 216 kJ = 216 000 J. v = 12 m/s.</div></li><li><span class="step-tag">FIND</span><div class="step-body">m</div></li><li><span class="step-tag">RELATIONSHIP</span><div class="step-body">E<sub>k</sub> = ½ m v²</div></li><li><span class="step-tag">REARRANGE</span><div class="step-body">m was multiplied by v² and by ½. Undo in reverse order. Multiply both sides by 2: 2E<sub>k</sub> = m v². Divide both sides by v²: m = 2E<sub>k</sub> ÷ v²</div></li><li><span class="step-tag">SUBSTITUTE</span><div class="step-body">m = 2 × 216 000 J ÷ (12 m/s)²</div></li><li><span class="step-tag">SOLVE</span><div class="step-body">m = 432 000 ÷ 144 = 3000 kg</div></li><li><span class="step-tag">CHECK</span><div class="step-body">About 3 tonnes is sensible for a loaded van. If you divided by 2 instead of multiplying, you would get 750 kg: too light for a loaded van. ✓</div></li></ol></article><article class="we faded" id="we6"><h4>Example 6 (faded: you do one step) — Rearranging a quotient: a classroom heater</h4>
+<p>An electric heater in a classroom in Leeds has a power of 1.5 kW. It transfers 2.7 MJ of energy. Calculate how long it was switched on. Give your answer in minutes.</p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> power = energy transferred ÷ time: <span class="eq">P = E ÷ t</span></p>
+<ol class="wsteps"><li><span class="step-tag">GIVEN</span><div class="step-body">P = 1.5 kW = 1500 W. E = 2.7 MJ = 2 700 000 J.</div></li><li><span class="step-tag">FIND</span><div class="step-body">t</div></li><li><span class="step-tag">RELATIONSHIP</span><div class="step-body">P = E ÷ t</div></li><li><span class="step-tag">REARRANGE</span><div class="step-body"><label class="lbl" for="b1_s1_we6_rearr">REARRANGE (your step): make t the subject</label><input type="text" id="b1_s1_we6_rearr" data-save="b1_s1_we6_rearr" autocomplete="off" spellcheck="false"></div></li><li><span class="step-tag">SUBSTITUTE</span><div class="step-body">Put E = 2 700 000 J and P = 1500 W into your rearranged equation.</div></li><li><span class="step-tag">SOLVE</span><div class="step-body">t = 1800 s = 1800 ÷ 60 = 30 minutes</div></li><li><span class="step-tag">CHECK</span><div class="step-body">Half an hour is a sensible time for a heater. If your rearranged equation gives 0.000 56, it is the wrong way up.</div></li></ol>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">REARRANGE: multiply both sides by t (P t = E), then divide both sides by P: t = E ÷ P. So t = 2 700 000 J ÷ 1500 W = 1800 s.</div></details>
+</article><article class="we" id="we7"><h4>Example 7 (fully worked) — Graphs: reading a value and finding a gradient</h4>
+<p>Use Graph 1 (above, in Tool 4). (a) What is the temperature of the water at 60 s? (b) Calculate the gradient of the line and say what it represents.</p>
+<ol class="wsteps"><li><span class="step-tag">GIVEN</span><div class="step-body">Scale first: one small square is 10 s across and 2 °C up. (a) t = 60 s. (b) Two points far apart on the line, on gridline crossings: (100 s, 30 °C) and (300 s, 50 °C).</div></li><li><span class="step-tag">FIND</span><div class="step-body">(a) The temperature θ at 60 s. (b) The gradient.</div></li><li><span class="step-tag">RELATIONSHIP</span><div class="step-body">(a) Go up from 60 s to the line, then across. (b) gradient = Δy ÷ Δx = Δθ ÷ Δt</div></li><li><span class="step-tag">REARRANGE</span><div class="step-body">Not needed.</div></li><li><span class="step-tag">SUBSTITUTE</span><div class="step-body">(a) From 60 s, the line is 13 small squares up: 13 × 2 °C = 26 °C. (b) gradient = (50 °C − 30 °C) ÷ (300 s − 100 s) = 20 °C ÷ 200 s</div></li><li><span class="step-tag">SOLVE</span><div class="step-body">(a) θ = 26 °C. (b) gradient = 0.10 °C/s</div></li><li><span class="step-tag">CHECK</span><div class="step-body">The unit is °C per second (y-unit ÷ x-unit). It represents the <b>rate of temperature rise</b>: the water gets 0.10 °C hotter every second. Check with the start: from 20 °C, after 60 s it should be 20 + 60 × 0.10 = 26 °C, which matches (a). ✓</div></li></ol></article><article class="we faded" id="we8"><h4>Example 8 (faded: you do one step) — Graphs: reading from the time axis</h4>
+<p>Use Graph 1. (a) At what time does the water reach 44 °C? (b) By how much does the temperature rise in the first 3 minutes?</p>
+<ol class="wsteps"><li><span class="step-tag">GIVEN</span><div class="step-body">One small square: 10 s across, 2 °C up. (b) t = 3 min = 3 × 60 s = 180 s.</div></li><li><span class="step-tag">FIND</span><div class="step-body">(a) the time t when θ = 44 °C. (b) the rise Δθ.</div></li><li><span class="step-tag">RELATIONSHIP</span><div class="step-body">(a) Go across from 44 °C to the line, then down to the time axis. (b) rise = temperature at the end − temperature at the start.</div></li><li><span class="step-tag">REARRANGE</span><div class="step-body">Not needed.</div></li><li><span class="step-tag">SUBSTITUTE</span><div class="step-body">(a) Your step: read the time.<label class="lbl" for="b1_s1_we8_a">(a) your step: the time when the water reaches 44 °C</label><input type="text" id="b1_s1_we8_a" data-save="b1_s1_we8_a" autocomplete="off" spellcheck="false">(b) At 180 s the line is at 38 °C; at 0 s it is at 20 °C.</div></li><li><span class="step-tag">SOLVE</span><div class="step-body">(b) rise = 38 °C − 20 °C = 18 °C</div></li><li><span class="step-tag">CHECK</span><div class="step-body">(b) 180 s × 0.10 °C/s (the gradient from Example 7) = 18 °C ✓. Use the same gradient to check your answer to (a).</div></li></ol>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">(a) 44 °C is 22 small squares up. Across to the line and down: 24 small squares along, 24 × 10 s = 240 s. Check: (44 − 20) °C ÷ 0.10 °C/s = 240 s ✓.</div></details>
+</article></section><section id="s1-guided" class="lsec" data-reveal="allowed" aria-labelledby="s1-guided-h">
+<h3 id="s1-guided-h">Guided practice</h3>
+<p class="time"><span class="time-badge">Time guide: 10 minutes</span> <span class="time-range">(minutes 30–40 of the session)</span></p>
+<p class="what">Work through these while your teacher circulates. The three hinge questions are answered on mini-whiteboards first: hold up your answer when your teacher asks, then write it here. Your teacher shows the hinge answers. For the other questions, write your answer, then check the model answer.</p><div class="q" id="q-Hinge1">
+<p class="qstem"><span class="qnum">Hinge 1</span> <span class="tag">Hinge</span> Convert 2.4 MJ into joules.</p>
+<div class="part"><label class="lbl" for="b1_s1_hinge1">Your answer to Hinge 1</label><input type="text" id="b1_s1_hinge1" data-save="b1_s1_hinge1" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-G1">
+<p class="qstem"><span class="qnum">G1</span> Convert (a) 45 minutes into seconds; (b) 750 g into kilograms.</p>
+<div class="part"><label class="lbl" for="b1_s1_g1a">Your answer to G1(a)</label><input type="text" id="b1_s1_g1a" data-save="b1_s1_g1a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_g1b">Your answer to G1(b)</label><input type="text" id="b1_s1_g1b" data-save="b1_s1_g1b" autocomplete="off" spellcheck="false"></div>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">(a) Minutes to seconds: multiply by 60. 45 × 60 = 2700 s.<br>(b) Grams to kilograms: a kilogram is a bigger unit, so the number gets smaller. 750 ÷ 1000 = 0.75 kg.</div></details>
+</div><div class="q" id="q-G2">
+<p class="qstem"><span class="qnum">G2</span> Write in standard form: (a) 3 500 000 000 W; (b) 0.000 068 m.</p>
+<div class="part"><label class="lbl" for="b1_s1_g2a">Your answer to G2(a)</label><input type="text" id="b1_s1_g2a" data-save="b1_s1_g2a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_g2b">Your answer to G2(b)</label><input type="text" id="b1_s1_g2b" data-save="b1_s1_g2b" autocomplete="off" spellcheck="false"></div>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">(a) The decimal point moves 9 places: 3.5 × 10<sup>9</sup> W. That is 3.5 GW.<br>(b) The decimal point moves 5 places, and the number is less than 1: 6.8 × 10<sup>−5</sup> m.</div></details>
+</div><div class="q" id="q-Hinge2">
+<p class="qstem"><span class="qnum">Hinge 2</span> <span class="tag">Hinge</span> <span class="tag">Higher</span> Rearrange E<sub>k</sub> = ½mv² to make v the subject.</p>
+<div class="part"><label class="lbl" for="b1_s1_hinge2">Your answer to Hinge 2</label><input type="text" id="b1_s1_hinge2" data-save="b1_s1_hinge2" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-G3">
+<p class="qstem"><span class="qnum">G3</span> Rearrange (a) P = E/t to make E the subject; (b) E<sub>p</sub> = mgh to make h the subject.</p>
+<div class="part"><label class="lbl" for="b1_s1_g3a">Your answer to G3(a)</label><input type="text" id="b1_s1_g3a" data-save="b1_s1_g3a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_g3b">Your answer to G3(b)</label><input type="text" id="b1_s1_g3b" data-save="b1_s1_g3b" autocomplete="off" spellcheck="false"></div>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">(a) E is divided by t, so multiply both sides by t: E = P t.<br>(b) h is multiplied by m and by g, so divide both sides by both: h = E<sub>p</sub> ÷ (m g).</div></details>
+</div><div class="q" id="q-Hinge3">
+<p class="qstem"><span class="qnum">Hinge 3</span> <span class="tag">Hinge</span> A straight line on a distance–time graph goes from (0 s, 0 m) to (8 s, 40 m). What is the speed?</p>
+<div class="part"><label class="lbl" for="b1_s1_hinge3">Your answer to Hinge 3</label><input type="text" id="b1_s1_hinge3" data-save="b1_s1_hinge3" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-G4">
+<p class="qstem"><span class="qnum">G4</span> Use Graph 2 (the trotro). (a) Read the distance travelled at 12 s. (b) At what time has the trotro travelled 240 m?</p>
+<div class="part"><label class="lbl" for="b1_s1_g4a">Your answer to G4(a)</label><input type="text" id="b1_s1_g4a" data-save="b1_s1_g4a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_g4b">Your answer to G4(b)</label><input type="text" id="b1_s1_g4b" data-save="b1_s1_g4b" autocomplete="off" spellcheck="false"></div>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">(a) One small square is 2 s across and 20 m up (Think 4). 12 s is 6 small squares along. Up to line A, then across: 6 small squares up, 6 × 20 m = 120 m.<br>(b) 240 m is 12 small squares up. Across to line A, then down: 12 small squares along, 12 × 2 s = 24 s.</div></details>
+</div></section><section id="s1-independent" class="lsec" data-reveal="none" aria-labelledby="s1-independent-h">
+<h3 id="s1-independent-h">Independent practice</h3>
+<p class="time"><span class="time-badge">Time guide: 15 minutes</span> <span class="time-range">(minutes 40–55 of the session)</span></p>
+<p class="what">Work on your own. Use the routine for every calculation and show your working. Start at Band 1; if your teacher says you are secure on a tool, start at Band 2. The last question is the stretch.</p><p class="no-reveal">No answers on the page: your teacher marks this section.</p><h4 class="band">Band 1 — secure the basics</h4><div class="q" id="q-I1">
+<p class="qstem"><span class="qnum">I1</span> Convert each quantity into its SI base unit: (a) 3.5 kJ into J; (b) 820 g into kg; (c) 5 minutes into s; (d) 25 cm into m; (e) 35 mm into m. <span class="marks">[5 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_i1a">Your answer to I1(a)</label><input type="text" id="b1_s1_i1a" data-save="b1_s1_i1a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_i1b">Your answer to I1(b)</label><input type="text" id="b1_s1_i1b" data-save="b1_s1_i1b" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_i1c">Your answer to I1(c)</label><input type="text" id="b1_s1_i1c" data-save="b1_s1_i1c" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_i1d">Your answer to I1(d)</label><input type="text" id="b1_s1_i1d" data-save="b1_s1_i1d" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_i1e">Your answer to I1(e)</label><input type="text" id="b1_s1_i1e" data-save="b1_s1_i1e" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-I2">
+<p class="qstem"><span class="qnum">I2</span> Write in standard form: (a) 72 000 J; (b) 0.000 91 s. <span class="marks">[2 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_i2a">Your answer to I2(a)</label><input type="text" id="b1_s1_i2a" data-save="b1_s1_i2a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_i2b">Your answer to I2(b)</label><input type="text" id="b1_s1_i2b" data-save="b1_s1_i2b" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-I3">
+<p class="qstem"><span class="qnum">I3</span> Rearrange F = ke to make e the subject. <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_i3">Your answer to I3</label><input type="text" id="b1_s1_i3" data-save="b1_s1_i3" autocomplete="off" spellcheck="false"></div>
+
+</div><h4 class="band">Band 2 — apply</h4><div class="q" id="q-I4">
+<p class="qstem"><span class="qnum">I4</span> Write each quantity in its SI base unit, in standard form: (a) 0.6 GW; (b) 450 nm; (c) 2.5 TJ. <span class="marks">[3 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_i4a">Your answer to I4(a)</label><input type="text" id="b1_s1_i4a" data-save="b1_s1_i4a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_i4b">Your answer to I4(b)</label><input type="text" id="b1_s1_i4b" data-save="b1_s1_i4b" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_i4c">Your answer to I4(c)</label><input type="text" id="b1_s1_i4c" data-save="b1_s1_i4c" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-I5">
+<p class="qstem"><span class="qnum">I5</span> Use Graph 2 (the trotro). (a) Calculate the speed of the trotro in section A. (b) Calculate its speed in section C. (c) Describe the motion of the trotro in section B. <span class="marks">[5 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_i5a">Your answer to I5(a)</label><textarea id="b1_s1_i5a" data-save="b1_s1_i5a" rows="3"></textarea></div>
+<div class="part"><label class="lbl" for="b1_s1_i5b">Your answer to I5(b)</label><textarea id="b1_s1_i5b" data-save="b1_s1_i5b" rows="3"></textarea></div>
+<div class="part"><label class="lbl" for="b1_s1_i5c">Your answer to I5(c)</label><textarea id="b1_s1_i5c" data-save="b1_s1_i5c" rows="2"></textarea></div>
+
+</div><div class="q" id="q-I6">
+<p class="qstem"><span class="qnum">I6</span> A heater in a school laboratory has a power of 800 W. Calculate the energy it transfers in 15 minutes. Give your answer in kJ. <span class="marks">[3 marks]</span></p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> power = energy transferred ÷ time: <span class="eq">P = E ÷ t</span></p><div class="part"><label class="lbl" for="b1_s1_i6">Your answer to I6</label><textarea id="b1_s1_i6" data-save="b1_s1_i6" rows="5"></textarea></div>
+
+</div><h4 class="band">Band 3 — stretch</h4><div class="q" id="q-I7">
+<p class="qstem"><span class="qnum">I7</span> An iron cooking pot has a mass of 1.2 kg. The specific heat capacity of iron is 450 J/kg °C. 27 kJ of energy is transferred to the thermal energy store of the pot. Calculate the rise in temperature of the pot. <span class="marks">[3 marks]</span></p>
+<p class="given-eq"><span class="hint-l">From the equation sheet:</span> change in thermal energy = mass × specific heat capacity × temperature change <span class="eq">ΔE = m c Δθ</span></p><div class="part"><label class="lbl" for="b1_s1_i7">Your answer to I7</label><textarea id="b1_s1_i7" data-save="b1_s1_i7" rows="5"></textarea></div>
+
+</div><div class="q" id="q-I8stretch">
+<p class="qstem"><span class="qnum">I8 (stretch)</span> <span class="tag">Higher</span> A 60 kg cyclist has 3.0 kJ in her kinetic energy store. Calculate her speed. <span class="marks">[3 marks]</span></p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> kinetic energy = 0.5 × mass × (speed)²: <span class="eq">E<sub>k</sub> = ½ m v²</span></p><div class="part"><label class="lbl" for="b1_s1_i8">Your answer to I8 (stretch)</label><textarea id="b1_s1_i8" data-save="b1_s1_i8" rows="6"></textarea></div>
+
+</div></section><section id="s1-exit" class="lsec" data-reveal="none" aria-labelledby="s1-exit-h">
+<h3 id="s1-exit-h">Exit ticket</h3>
+<p class="time"><span class="time-badge">Time guide: 5 minutes</span> <span class="time-range">(minutes 55–60 of the session)</span></p>
+<p class="what">Close your notes. Answer on your own. Your teacher marks these before the next session.</p><p class="no-reveal">No answers on the page. Your teacher uses these to plan Session 2.</p><div class="q" id="q-E1">
+<p class="qstem"><span class="qnum">E1</span> Convert (a) 1.5 hours into seconds; (b) 2.6 MJ into joules, in standard form. <span class="marks">[2 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_exit1a">Your answer to E1(a)</label><input type="text" id="b1_s1_exit1a" data-save="b1_s1_exit1a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s1_exit1b">Your answer to E1(b)</label><input type="text" id="b1_s1_exit1b" data-save="b1_s1_exit1b" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-E2">
+<p class="qstem"><span class="qnum">E2</span> Rearrange E<sub>e</sub> = ½ke² to make k the subject. <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_exit2">Your answer to E2</label><input type="text" id="b1_s1_exit2" data-save="b1_s1_exit2" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-E3">
+<p class="qstem"><span class="qnum">E3</span> A straight line on a temperature–time graph goes from (0 s, 18 °C) to (200 s, 58 °C). Calculate the gradient of the line, with its unit. <span class="marks">[2 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_s1_exit3">Your answer to E3</label><textarea id="b1_s1_exit3" data-save="b1_s1_exit3" rows="3"></textarea></div>
+
+</div></section><h2 class="session-h" id="s2">Session 2: sharpen the tools <span class="session-sub">(60 minutes)</span></h2>
+<ol class="timeline" aria-label="Session 2 timings">
+<li><b>0–5</b> Retrieval</li><li><b>5–15</b> Misconception clinic</li><li><b>15–25</b> Guided practice</li><li><b>25–40</b> Independent + Grade 9 challenge</li><li><b>40–55</b> Block mastery check</li><li><b>55–60</b> Error log</li>
+</ol><section id="s2-retrieval" class="lsec" data-reveal="none" aria-labelledby="s2-retrieval-h">
+<h3 id="s2-retrieval-h">Retrieval</h3>
+<p class="time"><span class="time-badge">Time guide: 5 minutes</span> <span class="time-range">(minutes 0–5 of the session)</span></p>
+<p class="what">Exit-ticket style questions, then fix one of your own exit-ticket errors. No notes.</p><p class="no-reveal">Your teacher goes through these answers with the group.</p><div class="q" id="q-R4">
+<p class="qstem"><span class="qnum">R4</span> Convert (a) 3.2 kJ into joules; (b) 40 minutes into seconds. <span class="marks">[2 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_s2_ret1a">Your answer to R4(a)</label><input type="text" id="b1_s2_ret1a" data-save="b1_s2_ret1a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s2_ret1b">Your answer to R4(b)</label><input type="text" id="b1_s2_ret1b" data-save="b1_s2_ret1b" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-R5">
+<p class="qstem"><span class="qnum">R5</span> Rearrange ρ = m/V to make V the subject. <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_s2_ret2">Your answer to R5</label><input type="text" id="b1_s2_ret2" data-save="b1_s2_ret2" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-R6">
+<p class="qstem"><span class="qnum">R6</span> Write 0.000 52 m in standard form. <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_s2_ret3">Your answer to R6</label><input type="text" id="b1_s2_ret3" data-save="b1_s2_ret3" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-Fixit">
+<p class="qstem"><span class="qnum">Fix it</span> Choose one exit-ticket question from Session 1 that you got wrong (or that your teacher points to). Write the question number, then the correct working, step by step.</p>
+<div class="part"><label class="lbl" for="b1_s2_ret_fix">Your answer to Fix it</label><textarea id="b1_s2_ret_fix" data-save="b1_s2_ret_fix" rows="4"></textarea></div>
+
+</div></section><section id="s2-clinic" class="lsec" data-reveal="none" aria-labelledby="s2-clinic-h">
+<h3 id="s2-clinic-h">Misconception clinic</h3>
+<p class="time"><span class="time-badge">Time guide: 10 minutes</span> <span class="time-range">(minutes 5–15 of the session)</span></p>
+<p class="what">Two pupils answered the same question. Decide who is right, and explain the mistake the other pupil made. Your teacher may choose the cases that match the class’s exit-ticket errors first.</p><p class="no-reveal">You discuss these with your teacher; there is no model answer on the page.</p><div class="q" id="q-Case1">
+<p class="qstem"><span class="qnum">Case 1</span> <span class="tag">Grams to kilograms</span> <b>The question:</b> Convert 350 g into kilograms.</p>
+<div class="pupils"><div class="pupil"><p class="pname">Pupil A wrote</p><p>350 ÷ 1000 = 0.35 kg</p></div><div class="pupil"><p class="pname">Pupil B wrote</p><p>350 × 1000 = 350 000 kg</p></div></div><p class="ask">Who is right, and why? What mistake did the other pupil make?</p><div class="part"><label class="lbl" for="b1_s2_mc1">Your answer to Case 1: who is right and why</label><textarea id="b1_s2_mc1" data-save="b1_s2_mc1" rows="3"></textarea></div>
+
+</div><div class="q" id="q-Case2">
+<p class="qstem"><span class="qnum">Case 2</span> <span class="tag">Converting before substituting</span> <b>The question:</b> A 1.2 kW heater is switched on for 5 minutes. Calculate the energy transferred.</p>
+<div class="pupils"><div class="pupil"><p class="pname">Pupil A wrote</p><p>E = P × t = 1.2 × 5 = 6 J</p></div><div class="pupil"><p class="pname">Pupil B wrote</p><p>E = P × t = 1200 W × 300 s = 360 000 J</p></div></div><p class="ask">Who is right, and why? What mistake did the other pupil make?</p><div class="part"><label class="lbl" for="b1_s2_mc2">Your answer to Case 2: who is right and why</label><textarea id="b1_s2_mc2" data-save="b1_s2_mc2" rows="3"></textarea></div>
+
+</div><div class="q" id="q-Case3">
+<p class="qstem"><span class="qnum">Case 3</span> <span class="tag">Rearranging a quotient</span> <b>The question:</b> A 40 W fan transfers 2400 J of energy. Calculate how long it runs. (Hint: P = E ÷ t.)</p>
+<div class="pupils"><div class="pupil"><p class="pname">Pupil A wrote</p><p>t = P ÷ E = 40 ÷ 2400 = 0.017 s</p></div><div class="pupil"><p class="pname">Pupil B wrote</p><p>t = E ÷ P = 2400 ÷ 40 = 60 s</p></div></div><p class="ask">Who is right, and why? What mistake did the other pupil make?</p><div class="part"><label class="lbl" for="b1_s2_mc3">Your answer to Case 3: who is right and why</label><textarea id="b1_s2_mc3" data-save="b1_s2_mc3" rows="3"></textarea></div>
+
+</div><div class="q" id="q-Case4">
+<p class="qstem"><span class="qnum">Case 4</span> <span class="tag">Square root (Higher)</span> <b>The question:</b> A rugby player of mass 80 kg has 3240 J in their kinetic energy store. Calculate their speed. (Hint: E<sub>k</sub> = ½mv².)</p>
+<div class="pupils"><div class="pupil"><p class="pname">Pupil A wrote</p><p>v² = 2E<sub>k</sub> ÷ m = 2 × 3240 ÷ 80 = 81, so v = √81 = 9.0 m/s</p></div><div class="pupil"><p class="pname">Pupil B wrote</p><p>v = 2E<sub>k</sub> ÷ m = 2 × 3240 ÷ 80 = 81 m/s</p></div></div><p class="ask">Who is right, and why? What mistake did the other pupil make?</p><div class="part"><label class="lbl" for="b1_s2_mc4">Your answer to Case 4: who is right and why</label><textarea id="b1_s2_mc4" data-save="b1_s2_mc4" rows="3"></textarea></div>
+
+</div><div class="q" id="q-Case5">
+<p class="qstem"><span class="qnum">Case 5</span> <span class="tag">Value or gradient?</span> <b>The question:</b> Use Graph 2. What is the speed of the trotro in section A?</p>
+<div class="pupils"><div class="pupil"><p class="pname">Pupil A wrote</p><p>300 m/s. I read the line at the end of section A.</p></div><div class="pupil"><p class="pname">Pupil B wrote</p><p>speed = gradient = 300 m ÷ 30 s = 10 m/s</p></div></div><p class="ask">Who is right, and why? What mistake did the other pupil make?</p><div class="part"><label class="lbl" for="b1_s2_mc5">Your answer to Case 5: who is right and why</label><textarea id="b1_s2_mc5" data-save="b1_s2_mc5" rows="3"></textarea></div>
+
+</div></section><section id="s2-guided" class="lsec" data-reveal="allowed" aria-labelledby="s2-guided-h">
+<h3 id="s2-guided-h">Guided practice: less familiar contexts</h3>
+<p class="time"><span class="time-badge">Time guide: 10 minutes</span> <span class="time-range">(minutes 15–25 of the session)</span></p>
+<p class="what">Harder questions in new situations. Your teacher circulates. Write your answer, then check the model answer.</p><p>Graph 3 shows the total energy transferred electrically by a solar panel array on a clinic roof in Kumasi on a sunny afternoon.</p><figure class="graph" id="graph3">
+<div class="graph-scroll"><svg viewBox="0 0 522 486" role="img" aria-labelledby="graph3-t graph3-d"><title id="graph3-t">Graph 3: energy transferred by a solar panel array in Kumasi against time</title><desc id="graph3-d">Graph 3. Total energy transferred electrically by a solar panel array on a clinic roof in Kumasi, against time, in steady afternoon sunshine: a straight line. Time axis 0–10 min; energy axis 0–300 kJ. The small squares are not square: read each axis separately.</desc><line class="g-major" x1="92" y1="22" x2="92" y2="412"/><line class="g-minor" x1="111.5" y1="22" x2="111.5" y2="412"/><line class="g-minor" x1="131" y1="22" x2="131" y2="412"/><line class="g-minor" x1="150.5" y1="22" x2="150.5" y2="412"/><line class="g-major" x1="170" y1="22" x2="170" y2="412"/><line class="g-minor" x1="189.5" y1="22" x2="189.5" y2="412"/><line class="g-minor" x1="209" y1="22" x2="209" y2="412"/><line class="g-minor" x1="228.5" y1="22" x2="228.5" y2="412"/><line class="g-major" x1="248" y1="22" x2="248" y2="412"/><line class="g-minor" x1="267.5" y1="22" x2="267.5" y2="412"/><line class="g-minor" x1="287" y1="22" x2="287" y2="412"/><line class="g-minor" x1="306.5" y1="22" x2="306.5" y2="412"/><line class="g-major" x1="326" y1="22" x2="326" y2="412"/><line class="g-minor" x1="345.5" y1="22" x2="345.5" y2="412"/><line class="g-minor" x1="365" y1="22" x2="365" y2="412"/><line class="g-minor" x1="384.5" y1="22" x2="384.5" y2="412"/><line class="g-major" x1="404" y1="22" x2="404" y2="412"/><line class="g-minor" x1="423.5" y1="22" x2="423.5" y2="412"/><line class="g-minor" x1="443" y1="22" x2="443" y2="412"/><line class="g-minor" x1="462.5" y1="22" x2="462.5" y2="412"/><line class="g-major" x1="482" y1="22" x2="482" y2="412"/><line class="g-major" x1="92" y1="412" x2="482" y2="412"/><line class="g-minor" x1="92" y1="399" x2="482" y2="399"/><line class="g-minor" x1="92" y1="386" x2="482" y2="386"/><line class="g-minor" x1="92" y1="373" x2="482" y2="373"/><line class="g-minor" x1="92" y1="360" x2="482" y2="360"/><line class="g-major" x1="92" y1="347" x2="482" y2="347"/><line class="g-minor" x1="92" y1="334" x2="482" y2="334"/><line class="g-minor" x1="92" y1="321" x2="482" y2="321"/><line class="g-minor" x1="92" y1="308" x2="482" y2="308"/><line class="g-minor" x1="92" y1="295" x2="482" y2="295"/><line class="g-major" x1="92" y1="282" x2="482" y2="282"/><line class="g-minor" x1="92" y1="269" x2="482" y2="269"/><line class="g-minor" x1="92" y1="256" x2="482" y2="256"/><line class="g-minor" x1="92" y1="243" x2="482" y2="243"/><line class="g-minor" x1="92" y1="230" x2="482" y2="230"/><line class="g-major" x1="92" y1="217" x2="482" y2="217"/><line class="g-minor" x1="92" y1="204" x2="482" y2="204"/><line class="g-minor" x1="92" y1="191" x2="482" y2="191"/><line class="g-minor" x1="92" y1="178" x2="482" y2="178"/><line class="g-minor" x1="92" y1="165" x2="482" y2="165"/><line class="g-major" x1="92" y1="152" x2="482" y2="152"/><line class="g-minor" x1="92" y1="139" x2="482" y2="139"/><line class="g-minor" x1="92" y1="126" x2="482" y2="126"/><line class="g-minor" x1="92" y1="113" x2="482" y2="113"/><line class="g-minor" x1="92" y1="100" x2="482" y2="100"/><line class="g-major" x1="92" y1="87" x2="482" y2="87"/><line class="g-minor" x1="92" y1="74" x2="482" y2="74"/><line class="g-minor" x1="92" y1="61" x2="482" y2="61"/><line class="g-minor" x1="92" y1="48" x2="482" y2="48"/><line class="g-minor" x1="92" y1="35" x2="482" y2="35"/><line class="g-major" x1="92" y1="22" x2="482" y2="22"/><line class="g-axis" x1="92" y1="412" x2="482" y2="412"/><line class="g-axis" x1="92" y1="22" x2="92" y2="412"/><line class="g-axis" x1="170" y1="412" x2="170" y2="418"/><text class="g-tick" x="170" y="436" text-anchor="middle">2</text><line class="g-axis" x1="248" y1="412" x2="248" y2="418"/><text class="g-tick" x="248" y="436" text-anchor="middle">4</text><line class="g-axis" x1="326" y1="412" x2="326" y2="418"/><text class="g-tick" x="326" y="436" text-anchor="middle">6</text><line class="g-axis" x1="404" y1="412" x2="404" y2="418"/><text class="g-tick" x="404" y="436" text-anchor="middle">8</text><line class="g-axis" x1="482" y1="412" x2="482" y2="418"/><text class="g-tick" x="482" y="436" text-anchor="middle">10</text><line class="g-axis" x1="86" y1="347" x2="92" y2="347"/><text class="g-tick" x="82" y="352" text-anchor="end">50</text><line class="g-axis" x1="86" y1="282" x2="92" y2="282"/><text class="g-tick" x="82" y="287" text-anchor="end">100</text><line class="g-axis" x1="86" y1="217" x2="92" y2="217"/><text class="g-tick" x="82" y="222" text-anchor="end">150</text><line class="g-axis" x1="86" y1="152" x2="92" y2="152"/><text class="g-tick" x="82" y="157" text-anchor="end">200</text><line class="g-axis" x1="86" y1="87" x2="92" y2="87"/><text class="g-tick" x="82" y="92" text-anchor="end">250</text><line class="g-axis" x1="86" y1="22" x2="92" y2="22"/><text class="g-tick" x="82" y="27" text-anchor="end">300</text><text class="g-tick" x="82" y="434" text-anchor="end">0</text><text class="g-label" x="287" y="470" text-anchor="middle">Time / min</text><text class="g-label" transform="translate(24 217) rotate(-90)" text-anchor="middle">Energy transferred / kJ</text><polyline class="g-line" points="92,412 482,22"/><circle class="g-pt" cx="92" cy="412" r="5"/><circle class="g-pt" cx="170" cy="334" r="5"/><circle class="g-pt" cx="248" cy="256" r="5"/><circle class="g-pt" cx="326" cy="178" r="5"/><circle class="g-pt" cx="404" cy="100" r="5"/><circle class="g-pt" cx="482" cy="22" r="5"/></svg></div>
+<figcaption><b>Graph 3.</b> Total energy transferred electrically by a solar panel array on a clinic roof in Kumasi, against time, in steady afternoon sunshine: a straight line. Time axis 0–10 min; energy axis 0–300 kJ. The small squares are not square: read each axis separately.</figcaption>
+</figure><div class="q" id="q-GP1">
+<p class="qstem"><span class="qnum">GP1</span> Use Graph 3. (a) What is one small square worth on each axis? (b) How much energy does the array transfer in the first 5.0 minutes? (c) Calculate the gradient of the line in kJ/min, and say what it represents. (d) Convert your gradient into watts.</p>
+<div class="part"><label class="lbl" for="b1_s2_gp1a">Your answer to GP1(a)</label><input type="text" id="b1_s2_gp1a" data-save="b1_s2_gp1a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s2_gp1b">Your answer to GP1(b)</label><input type="text" id="b1_s2_gp1b" data-save="b1_s2_gp1b" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_s2_gp1c">Your answer to GP1(c)</label><textarea id="b1_s2_gp1c" data-save="b1_s2_gp1c" rows="3"></textarea></div>
+<div class="part"><label class="lbl" for="b1_s2_gp1d">Your answer to GP1(d)</label><textarea id="b1_s2_gp1d" data-save="b1_s2_gp1d" rows="4"></textarea></div>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">(a) Time: 2 min across 4 small squares, so 0.5 min (30 s). Energy: 50 kJ in 5 small squares, so 10 kJ. The squares are different on each axis.<br>(b) Up from 5.0 min to the line, then across: 150 kJ.<br>(c) gradient = Δy ÷ Δx = (300 kJ − 0 kJ) ÷ (10 min − 0 min) = 30 kJ/min. Energy transferred per unit time is the <b>power</b>.<br>(d) GIVEN: 30 kJ = 30 000 J, 1 min = 60 s. P = E ÷ t = 30 000 J ÷ 60 s = 500 W. CHECK: a few hundred watts is sensible for a small array.</div></details>
+</div><div class="q" id="q-GP2">
+<p class="qstem"><span class="qnum">GP2</span> <span class="tag">Higher</span> The spring in a toy pinball launcher has a spring constant of 800 N/m. When it is pulled back, 3.6 J is stored in its elastic potential energy store. Calculate how far the spring is compressed. Give your answer in cm to 2 significant figures.</p>
+<p class="given-eq"><span class="hint-l">From the equation sheet:</span> elastic potential energy = 0.5 × spring constant × (extension)² <span class="eq">E<sub>e</sub> = ½ k e²</span></p><p class="small"><span class="vehicle">(Energy equation used here only to practise the skill: you meet it properly in a later block.)</span> For a compressed spring, e is the compression.</p><div class="part"><label class="lbl" for="b1_s2_gp2">Your answer to GP2</label><textarea id="b1_s2_gp2" data-save="b1_s2_gp2" rows="5"></textarea></div>
+<details class="model"><summary>Check the model answer (only after you have written yours)</summary><div class="model-body">REARRANGE: multiply both sides by 2, divide by k, take the square root: e = √(2E<sub>e</sub> ÷ k).<br>SUBSTITUTE: e = √(2 × 3.6 J ÷ 800 N/m) = √0.009<br>SOLVE: e = 0.0949 m = 9.49 cm = 9.5 cm (2 s.f.). Metres to centimetres: smaller unit, bigger number (× 100).<br>CHECK: about 10 cm is sensible for a toy launcher.</div></details>
+</div></section><section id="s2-independent" class="lsec" data-reveal="none" aria-labelledby="s2-independent-h">
+<h3 id="s2-independent-h">Independent practice and Grade 9 challenge</h3>
+<p class="time"><span class="time-badge">Time guide: 15 minutes</span> <span class="time-range">(minutes 25–40 of the session)</span></p>
+<p class="what">Work on your own, with the routine. Aim to reach the Grade 9 challenge.</p><p class="no-reveal">No answers on the page: your teacher marks this section.</p><div class="q" id="q-I9">
+<p class="qstem"><span class="qnum">I9</span> <span class="tag">Optional if you started Session 1 at Band 2</span> A 3.0 kW electric water heater in a guesthouse in Tamale is switched on for 12 minutes. Calculate the energy transferred. Give your answer in MJ and in standard form (in J). <span class="marks">[3 marks]</span></p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> power = energy transferred ÷ time: <span class="eq">P = E ÷ t</span></p><div class="part"><label class="lbl" for="b1_s2_i1">Your answer to I9</label><textarea id="b1_s2_i1" data-save="b1_s2_i1" rows="5"></textarea></div>
+
+</div><div class="q" id="q-I10">
+<p class="qstem"><span class="qnum">I10</span> A group of friends push a broken-down car 8.0 m along a flat road. The force they apply does 2.4 kJ of work on the car. Calculate the force they apply, in the direction the car moves. <span class="marks">[3 marks]</span></p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> work done = force × distance (along the line of action of the force): <span class="eq">W = F s</span></p><div class="part"><label class="lbl" for="b1_s2_i2">Your answer to I10</label><textarea id="b1_s2_i2" data-save="b1_s2_i2" rows="5"></textarea></div>
+
+</div><div class="q" id="q-I11">
+<p class="qstem"><span class="qnum">I11</span> Use Graph 2 (the trotro). (a) Calculate the average speed of the trotro for the whole 60 s. [2 marks] (b) A pupil says the average speed is (10 + 12) ÷ 2 = 11 m/s. Explain why this is wrong. [2 marks] <span class="marks">[4 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_s2_i3a">Your answer to I11(a)</label><textarea id="b1_s2_i3a" data-save="b1_s2_i3a" rows="3"></textarea></div>
+<div class="part"><label class="lbl" for="b1_s2_i3b">Your answer to I11(b)</label><textarea id="b1_s2_i3b" data-save="b1_s2_i3b" rows="3"></textarea></div>
+
+</div><div class="g9"><h4>Grade 9 challenge <span class="tag">Band 3</span></h4><div class="q" id="q-Grade9">
+<p class="qstem"><span class="qnum">Grade 9</span> A school kitchen in Accra heats 25 kg of water in a large pot on a gas burner, from 22 °C to 100 °C. The specific heat capacity of water is 4200 J/kg °C. Assume energy is transferred to the thermal energy store of the water at a steady rate of 6.5 kW. <br>(a) Calculate the time taken to heat the water, in minutes. <br>(b) In practice it takes longer than your answer to (a). Explain why. <span class="marks">[7 marks]</span></p>
+<p class="given-eq"><span class="hint-l">From the equation sheet:</span> change in thermal energy = mass × specific heat capacity × temperature change <span class="eq">ΔE = m c Δθ</span></p><p class="small">You must also choose and use a second equation yourself.</p><div class="part"><label class="lbl" for="b1_s2_g9a">Your answer to Grade 9(a)</label><textarea id="b1_s2_g9a" data-save="b1_s2_g9a" rows="8"></textarea></div>
+<div class="part"><label class="lbl" for="b1_s2_g9b">Your answer to Grade 9(b)</label><textarea id="b1_s2_g9b" data-save="b1_s2_g9b" rows="3"></textarea></div>
+
+</div></div></section><section id="s2-mastery" class="lsec mastery-panel" data-reveal="none" aria-labelledby="s2-mastery-h">
+<h3 id="s2-mastery-h">Block 1 mastery check — do this on the platform when your teacher tells you (no notes)</h3>
+<p class="time"><span class="time-badge">Time guide: 15 minutes</span> <span class="time-range">(minutes 40–55 of the session)</span></p>
+<ul>
+<li>Close this lesson page and put your notes away.</li>
+<li>Work on your own, on paper, with a calculator. Use the calculation routine for every calculation.</li>
+<li>If you are not sure, choose “Not sure” rather than guessing: it helps your teacher find the right next step for you.</li>
+<li>The check does not give you a grade. It shows which tools are secure and what to do next.</li>
+</ul>
+</section><section id="s2-errorlog" class="lsec" data-reveal="none" aria-labelledby="s2-errorlog-h">
+<h3 id="s2-errorlog-h">Error log</h3>
+<p class="time"><span class="time-badge">Time guide: 5 minutes</span> <span class="time-range">(minutes 55–60 of the session)</span></p>
+<p class="what">Log at least one error from this block: from your exit ticket, the clinic or your practice. Be specific: what you did, why, the correct physics and your next step.</p><fieldset class="elog"><legend>Error 1</legend><div class="elog-grid">
+<div><label class="lbl" for="b1_err1_date">Error 1: date</label><input type="text" id="b1_err1_date" data-save="b1_err1_date" autocomplete="off" spellcheck="false"></div>
+<div><label class="lbl" for="b1_err1_topic">Error 1: topic (which tool?)</label><input type="text" id="b1_err1_topic" data-save="b1_err1_topic" autocomplete="off" spellcheck="false"></div>
+<div><label class="lbl" for="b1_err1_mistake">Error 1: my mistake (what I wrote)</label><textarea id="b1_err1_mistake" data-save="b1_err1_mistake" rows="2"></textarea></div>
+<div><label class="lbl" for="b1_err1_why">Error 1: why I made it</label><textarea id="b1_err1_why" data-save="b1_err1_why" rows="2"></textarea></div>
+<div><label class="lbl" for="b1_err1_correct">Error 1: the correct physics</label><textarea id="b1_err1_correct" data-save="b1_err1_correct" rows="2"></textarea></div>
+<div><label class="lbl" for="b1_err1_next">Error 1: my next step</label><textarea id="b1_err1_next" data-save="b1_err1_next" rows="2"></textarea></div>
+</div></fieldset><fieldset class="elog"><legend>Error 2</legend><div class="elog-grid">
+<div><label class="lbl" for="b1_err2_date">Error 2: date</label><input type="text" id="b1_err2_date" data-save="b1_err2_date" autocomplete="off" spellcheck="false"></div>
+<div><label class="lbl" for="b1_err2_topic">Error 2: topic (which tool?)</label><input type="text" id="b1_err2_topic" data-save="b1_err2_topic" autocomplete="off" spellcheck="false"></div>
+<div><label class="lbl" for="b1_err2_mistake">Error 2: my mistake (what I wrote)</label><textarea id="b1_err2_mistake" data-save="b1_err2_mistake" rows="2"></textarea></div>
+<div><label class="lbl" for="b1_err2_why">Error 2: why I made it</label><textarea id="b1_err2_why" data-save="b1_err2_why" rows="2"></textarea></div>
+<div><label class="lbl" for="b1_err2_correct">Error 2: the correct physics</label><textarea id="b1_err2_correct" data-save="b1_err2_correct" rows="2"></textarea></div>
+<div><label class="lbl" for="b1_err2_next">Error 2: my next step</label><textarea id="b1_err2_next" data-save="b1_err2_next" rows="2"></textarea></div>
+</div></fieldset><fieldset class="elog"><legend>Error 3</legend><div class="elog-grid">
+<div><label class="lbl" for="b1_err3_date">Error 3: date</label><input type="text" id="b1_err3_date" data-save="b1_err3_date" autocomplete="off" spellcheck="false"></div>
+<div><label class="lbl" for="b1_err3_topic">Error 3: topic (which tool?)</label><input type="text" id="b1_err3_topic" data-save="b1_err3_topic" autocomplete="off" spellcheck="false"></div>
+<div><label class="lbl" for="b1_err3_mistake">Error 3: my mistake (what I wrote)</label><textarea id="b1_err3_mistake" data-save="b1_err3_mistake" rows="2"></textarea></div>
+<div><label class="lbl" for="b1_err3_why">Error 3: why I made it</label><textarea id="b1_err3_why" data-save="b1_err3_why" rows="2"></textarea></div>
+<div><label class="lbl" for="b1_err3_correct">Error 3: the correct physics</label><textarea id="b1_err3_correct" data-save="b1_err3_correct" rows="2"></textarea></div>
+<div><label class="lbl" for="b1_err3_next">Error 3: my next step</label><textarea id="b1_err3_next" data-save="b1_err3_next" rows="2"></textarea></div>
+</div></fieldset><h4>Self-rating — your teacher uses your answers, not this, to judge mastery</h4>
+<p class="small">0 = I can’t do this yet · 1 = only with help · 2 = mostly on my own · 3 = confidently, on my own</p>
+<div class="rating-grid"><div class="rate"><label class="lbl" for="b1_rate_units">Units and prefixes (self-rating)</label><select id="b1_rate_units" data-save="b1_rate_units"><option value="">Choose 0–3</option><option value="0">0 — can’t do this yet</option><option value="1">1 — only with help</option><option value="2">2 — mostly on my own</option><option value="3">3 — confidently, on my own</option></select></div><div class="rate"><label class="lbl" for="b1_rate_sf">Standard form (self-rating)</label><select id="b1_rate_sf" data-save="b1_rate_sf"><option value="">Choose 0–3</option><option value="0">0 — can’t do this yet</option><option value="1">1 — only with help</option><option value="2">2 — mostly on my own</option><option value="3">3 — confidently, on my own</option></select></div><div class="rate"><label class="lbl" for="b1_rate_rearr">Rearranging equations (self-rating)</label><select id="b1_rate_rearr" data-save="b1_rate_rearr"><option value="">Choose 0–3</option><option value="0">0 — can’t do this yet</option><option value="1">1 — only with help</option><option value="2">2 — mostly on my own</option><option value="3">3 — confidently, on my own</option></select></div><div class="rate"><label class="lbl" for="b1_rate_graph">Reading values and gradients from graphs (self-rating)</label><select id="b1_rate_graph" data-save="b1_rate_graph"><option value="">Choose 0–3</option><option value="0">0 — can’t do this yet</option><option value="1">1 — only with help</option><option value="2">2 — mostly on my own</option><option value="3">3 — confidently, on my own</option></select></div></div></section><h2 class="session-h" id="hw">Homework <span class="session-sub">(20–30 minutes)</span></h2><section id="hw-retrieve" class="lsec" data-reveal="none" aria-labelledby="hw-retrieve-h">
+<h3 id="hw-retrieve-h">Part 1: Retrieve (5 short questions)</h3>
+<p class="time"><span class="time-badge">Time guide: about 5 minutes</span></p>
+<p class="what">Answer from memory first. No notes.</p><p class="no-reveal">Your teacher marks the homework; the answers are not on this page.</p><div class="q" id="q-H1">
+<p class="qstem"><span class="qnum">H1</span> What number does the prefix M (mega) multiply a unit by? <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_hw_r1">Your answer to H1</label><input type="text" id="b1_hw_r1" data-save="b1_hw_r1" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-H2">
+<p class="qstem"><span class="qnum">H2</span> What number does the prefix µ (micro) multiply a unit by? <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_hw_r2">Your answer to H2</label><input type="text" id="b1_hw_r2" data-save="b1_hw_r2" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-H3">
+<p class="qstem"><span class="qnum">H3</span> Convert 1.25 hours into seconds. <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_hw_r3">Your answer to H3</label><input type="text" id="b1_hw_r3" data-save="b1_hw_r3" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-H4">
+<p class="qstem"><span class="qnum">H4</span> Write 5.6 × 10<sup>−3</sup> as an ordinary number. <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_hw_r4">Your answer to H4</label><input type="text" id="b1_hw_r4" data-save="b1_hw_r4" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-H5">
+<p class="qstem"><span class="qnum">H5</span> What does the gradient of a distance–time graph represent? <span class="marks">[1 mark]</span></p>
+<div class="part"><label class="lbl" for="b1_hw_r5">Your answer to H5</label><input type="text" id="b1_hw_r5" data-save="b1_hw_r5" autocomplete="off" spellcheck="false"></div>
+
+</div></section><section id="hw-practise" class="lsec" data-reveal="none" aria-labelledby="hw-practise-h">
+<h3 id="hw-practise-h">Part 2: Practise (5 questions)</h3>
+<p class="time"><span class="time-badge">Time guide: about 15 minutes</span></p>
+<p class="what">Use the calculation routine and show your working.</p><div class="q" id="q-H6">
+<p class="qstem"><span class="qnum">H6</span> Convert (a) 640 g into kilograms; (b) 72 cm into metres. <span class="marks">[2 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_hw_p1a">Your answer to H6(a)</label><input type="text" id="b1_hw_p1a" data-save="b1_hw_p1a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_hw_p1b">Your answer to H6(b)</label><input type="text" id="b1_hw_p1b" data-save="b1_hw_p1b" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-H7">
+<p class="qstem"><span class="qnum">H7</span> A hydroelectric power station has an output power of 900 MW. Calculate the energy it transfers in 24 hours. Give your answer in standard form to 2 significant figures. <span class="marks">[3 marks]</span></p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> power = energy transferred ÷ time: <span class="eq">P = E ÷ t</span></p><div class="part"><label class="lbl" for="b1_hw_p2">Your answer to H7</label><textarea id="b1_hw_p2" data-save="b1_hw_p2" rows="5"></textarea></div>
+
+</div><div class="q" id="q-H8">
+<p class="qstem"><span class="qnum">H8</span> A 2.5 kg bunch of plantains is lifted onto a shelf. The energy in its gravitational potential energy store increases by 44.1 J. Gravitational field strength, g = 9.8 N/kg. Calculate the height it is lifted. <span class="marks">[3 marks]</span></p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> gravitational potential energy = mass × gravitational field strength × height: <span class="eq">E<sub>p</sub> = m g h</span></p><div class="part"><label class="lbl" for="b1_hw_p3">Your answer to H8</label><textarea id="b1_hw_p3" data-save="b1_hw_p3" rows="4"></textarea></div>
+
+</div><div class="q" id="q-H9">
+<p class="qstem"><span class="qnum">H9</span> Use Graph 2 (the trotro). (a) How far has the trotro travelled after 50 s? (b) At what time has it travelled 200 m? <span class="marks">[2 marks]</span></p>
+<div class="part"><label class="lbl" for="b1_hw_p4a">Your answer to H9(a)</label><input type="text" id="b1_hw_p4a" data-save="b1_hw_p4a" autocomplete="off" spellcheck="false"></div>
+<div class="part"><label class="lbl" for="b1_hw_p4b">Your answer to H9(b)</label><input type="text" id="b1_hw_p4b" data-save="b1_hw_p4b" autocomplete="off" spellcheck="false"></div>
+
+</div><div class="q" id="q-H10">
+<p class="qstem"><span class="qnum">H10</span> A microwave oven transfers 5.4 × 10<sup>5</sup> J of energy in 12 minutes. Calculate its power. <span class="marks">[3 marks]</span></p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> power = energy transferred ÷ time: <span class="eq">P = E ÷ t</span></p><div class="part"><label class="lbl" for="b1_hw_p5">Your answer to H10</label><textarea id="b1_hw_p5" data-save="b1_hw_p5" rows="4"></textarea></div>
+
+</div></section><section id="hw-stretch" class="lsec" data-reveal="none" aria-labelledby="hw-stretch-h">
+<h3 id="hw-stretch-h">Part 3: Stretch (1 question)</h3>
+<p class="time"><span class="time-badge">Time guide: about 5–10 minutes</span></p>
+<p class="what">A multi-step question. Use the routine.</p><div class="q" id="q-H11">
+<p class="qstem"><span class="qnum">H11</span> <span class="tag">Band 3</span> A trotro has a mass of 3600 kg. It travels along a straight road at 54 km/h. Calculate the energy in its kinetic energy store. Give your answer in kJ. <span class="marks">[4 marks]</span></p>
+<p class="hint"><span class="hint-l">Hint — recall equation (learn it):</span> kinetic energy = 0.5 × mass × (speed)²: <span class="eq">E<sub>k</sub> = ½ m v²</span></p><div class="part"><label class="lbl" for="b1_hw_s1">Your answer to H11</label><textarea id="b1_hw_s1" data-save="b1_hw_s1" rows="6"></textarea></div>
+
+</div></section><footer class="foot"><p>Inspire Science Mastery · ISM Physics School V1 · Block 1 — The Physicist's Toolkit · Draft for review</p></footer>
+</main>
+</body>
+</html>

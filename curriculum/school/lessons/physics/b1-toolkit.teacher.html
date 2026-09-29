@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block 1 — The Physicist's Toolkit: teacher guide</title>
+<style>
+:root{--forest:#0b3a2f;--gold:#c2a15d;--gold-ink:#6f5312;--paper:#fffdf8;--ink:#1a221f;--muted:#4f5751;--line:#e2dccd;--tint:#f2ebda;--soft:#eaf1ec}
+*{box-sizing:border-box}
+body{margin:0;background:#f6f2e8;color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:12px 16px 40px}
+h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;color:var(--forest);line-height:1.25}
+h1{font-size:1.8rem;margin:.2rem 0 .5rem}
+h2{font-size:1.4rem;margin:0 0 .5rem;border-bottom:2px solid var(--gold);padding-bottom:3px}
+h3{font-size:1.15rem;margin:1rem 0 .4rem}
+h4{font-size:1.02rem;margin:1rem 0 .3rem;color:#314039}
+.kicker{text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;font-weight:700;color:var(--gold-ink);margin:0}
+.hd,section,.toc{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;margin:12px 0}
+.toc ol{margin:0;padding-left:1.3rem;columns:2 220px}
+a{color:var(--forest)}
+code{font-size:.88em;background:#f1efe8;padding:0 4px;border-radius:4px;word-break:break-word}
+.tw{overflow-x:auto;margin:.5rem 0}
+table{border-collapse:collapse;width:100%;font-size:.9rem;background:#fff}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f1efe8;color:var(--forest)}
+.callout{background:var(--tint);border-left:4px solid var(--gold);padding:8px 12px;border-radius:0 8px 8px 0}
+.ans{border-top:1px dashed #cfc6b2;padding:8px 0}
+.ans p{margin:.25rem 0}
+.ans-session{border-top:3px solid var(--forest);padding-top:6px;margin-top:1.4rem}
+.mk{font-weight:700;color:var(--gold-ink)}
+.rv{display:inline-block;font-size:.75rem;border:1px solid #9bb8a6;color:var(--forest);border-radius:999px;padding:0 7px}
+.fid{display:block;font-size:.78rem;color:var(--muted);font-family:ui-monospace,Consolas,monospace;word-break:break-word}
+.ms{background:var(--soft);border-radius:6px;padding:4px 10px;margin:.3rem 0}
+.ms ol{margin:.2rem 0;padding-left:1.4rem}
+.watch{font-size:.9rem;color:#5a3d0a}
+.tn{font-size:.9rem;color:var(--muted)}
+figure.graph{margin:12px 0;border:1px solid var(--line);border-radius:8px;background:#fff;padding:8px;break-inside:avoid}
+figure.graph svg{display:block;width:100%;max-width:520px;height:auto;margin:0 auto}
+figcaption{font-size:.88rem;color:var(--muted)}
+svg text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#1a221f}
+.g-minor{stroke:#938d7f;stroke-width:.5}.g-major{stroke:#5f5a4e;stroke-width:1.1}.g-axis{stroke:#1a221f;stroke-width:2;stroke-linecap:round}
+.g-tick{font-size:15px;fill:#4f5751}.g-label{font-size:16px;font-weight:600}
+.g-line{fill:none;stroke:#0b3a2f;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.g-pt{fill:#0b3a2f}
+.g-ans{fill:#6f5312;stroke:#fff;stroke-width:2}
+.g-tri{fill:#f2ebda;fill-opacity:.85;stroke:#6f5312;stroke-width:1.6;stroke-dasharray:6 4}
+.g-construct{fill:none;stroke:#6f5312;stroke-width:1.8;stroke-dasharray:6 4}
+.g-note{font-size:14px;font-weight:700;fill:#6f5312;paint-order:stroke;stroke:#fff;stroke-width:4px}
+.g-sec{font-size:17px;font-weight:700;fill:#0b3a2f;paint-order:stroke;stroke:#fff;stroke-width:4px}
+.ft{text-align:center;font-size:.8rem;color:var(--muted);margin:20px 0}
+:focus-visible{outline:3px solid var(--forest);outline-offset:2px}
+@media print{body{background:#fff;font-size:11pt}.hd,section,.toc{border:0;padding:0;margin:0 0 10pt}section{break-before:auto}h2{break-after:avoid}.ans,tr{break-inside:avoid}.toc{display:none}a{color:inherit;text-decoration:none}}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header class="hd">
+<p class="kicker">ISM Physics School V1 · Energy &amp; Physics Calculations Mastery Intervention · Teacher guide</p>
+<h1>Block 1 — The Physicist's Toolkit: teacher guide</h1>
+<p>Two 60-minute sessions (Session 1: teach; Session 2: consolidate) for a group of up to 6 pupils (ideal 5), plus 20–30 minutes of independent homework. Pupil lesson: <code>curriculum/school/lessons/physics/b1-toolkit.html</code>. Status: draft for subject QA.</p>
+</header>
+
+<nav class="toc" aria-label="Guide contents"><ol>
+<li><a href="#purpose">Purpose and objectives</a></li>
+<li><a href="#prep">Prerequisites and materials</a></li>
+<li><a href="#routine">The calculation routine</a></li>
+<li><a href="#s1plan">Session 1 plan</a></li>
+<li><a href="#hinges">Hinge questions and response routes</a></li>
+<li><a href="#s2plan">Session 2 plan</a></li>
+<li><a href="#answers">Answers, worked solutions and mark schemes</a></li>
+<li><a href="#misc">Misconception notes</a></li>
+<li><a href="#diff">Differentiation</a></li>
+<li><a href="#mastery">Mastery and next steps</a></li>
+<li><a href="#escalate">Escalation flags</a></li>
+<li><a href="#integrity">Evidence integrity and saved fields</a></li>
+</ol></nav>
+
+<section id="purpose"><h2>1. Purpose and objectives</h2>
+<p><b>Block intent (programme manifest):</b> repair the quantitative skills every Energy calculation depends on, so later errors can be diagnosed as physics errors rather than maths errors. The block covers four approved concepts. It is not a complete maths course: each tool is taught only as far as Energy calculations need it.</p>
+<div class="tw"><table class=""><thead><tr><th scope="col">Concept (id)</th><th scope="col">Objective: a pupil who has mastered it can…</th><th scope="col">Spec / maths skill</th><th scope="col">Required contexts</th><th scope="col">Success looks like</th></tr></thead><tbody><tr><td>Units, prefixes and conversions<br><code>phy.skills.units-prefixes</code></td><td>Use SI units and convert between prefixed and base units (T, G, M, k, c, m, µ, n; g→kg; minutes and hours→s) before substituting into an equation.</td><td>AQA 8463 WS 4.4–4.6, MS 1a</td><td>to-base-unit; from-base-unit</td><td>Converts in the GIVEN step, every time, and states which way the number must change before converting.</td></tr><tr><td>Standard form<br><code>phy.skills.standard-form</code></td><td>Write and interpret numbers in standard form, including negative powers, and use them in calculations.</td><td>AQA 8463 MS 1b</td><td>large-number; small-number</td><td>Writes A × 10<sup>n</sup> with 1 ≤ A &lt; 10 and n an integer; enters it with the ×10<sup>x</sup> key; negative powers for numbers below 1.</td></tr><tr><td>Substituting into and rearranging equations<br><code>phy.skills.rearranging</code></td><td>Substitute values with correct units into a physics equation and rearrange it to make any quantity the subject, including equations with a square or a fraction.</td><td>AQA 8463 MS 3b, 3c, 3d</td><td>product-form; quotient-form</td><td>Rearranges before substituting; undoes operations in reverse order; square roots (Higher, band 3).</td></tr><tr><td>Reading values and gradients from graphs<br><code>phy.skills.graph-reading</code></td><td>Read values from a graph with the correct scale and unit, and find the gradient of a straight-line graph and say what it represents.</td><td>AQA 8463 MS 4a, 4c, 4d</td><td>read-value; gradient</td><td>States what one small square is worth before reading; uses a large triangle; gives the gradient a unit and a meaning. (Tangents to curves are out of scope: MS 4e, later domains.)</td></tr></tbody></table></div>
+<p><b>Misconceptions this block targets:</b> MIS-PHY-SKL-001 to MIS-PHY-SKL-006 (section 8).</p>
+</section>
+
+<section id="prep"><h2>2. Prerequisites and materials</h2>
+<p><b>Prerequisites:</b> the four Toolkit concepts have no prerequisite concepts in the curriculum graph. Pupils need KS3 arithmetic and: times tables and multiplying/dividing by 10, 100 and 1000; the idea of an equation with symbols; speed = distance ÷ time (KS3); plotting and reading points on a grid. Check the baseline programme check first: a pupil who is secure on a tool skips that part (see Differentiation).</p>
+<p><b>Materials:</b></p>
+<ul>
+<li>Scientific calculator for every pupil (check each has a ×10<sup>x</sup> or EXP key and a (−) key; a class model on the board if possible).</li>
+<li>Mini-whiteboards and pens (retrieval and hinge questions).</li>
+<li>A ruler per pupil for graph reading (drawing the reading lines and the gradient triangle on paper or on screen).</li>
+<li>Device access to ISM Class for the pupil lesson; platform access for the Block 1 mastery check in Session 2.</li>
+<li>Optional: a printed copy of Graphs 1–3 per pupil so they can draw on them. The pupil page prints cleanly (model answers are hidden in print).</li>
+</ul>
+<p><b>Energy equations as vehicles.</b> This block uses P = E/t, E<sub>k</sub> = ½mv², E<sub>p</sub> = mgh, W = Fs (recall equations) and ΔE = mcΔθ, E<sub>e</sub> = ½ke² (given on the AQA equation sheet) only as material for converting, substituting and rearranging. In practice questions, recall equations are printed and labelled “Hint — recall equation”; given equations are printed as on the equation sheet. Do not teach the physics of these equations yet: it comes in Blocks 2–5. Use the store language (“energy is transferred to the thermal energy store of the water”) and never say energy is “used up” or “lost”.</p>
+</section>
+
+<section id="routine"><h2>3. The calculation routine</h2>
+<p>One routine for the whole programme (programme manifest, <code>calculationRoutine</code>, status: proposed, pending approval). Every worked example on the pupil page is set out in these seven steps. Insist on it for every question this week: it is the scaffold for Blocks 2–5.</p>
+<div class="tw"><table class=""><thead><tr><th scope="col">#</th><th scope="col">Step</th><th scope="col">What pupils say / do</th></tr></thead><tbody><tr><td>1</td><td><b>GIVEN</b></td><td>List every quantity with its symbol and unit. Convert to SI units now (kg, m, s, J, W).</td></tr><tr><td>2</td><td><b>FIND</b></td><td>Write the symbol of the quantity you need.</td></tr><tr><td>3</td><td><b>RELATIONSHIP</b></td><td>Write the equation in symbols (from memory, or from the equation sheet if it is a given equation).</td></tr><tr><td>4</td><td><b>REARRANGE</b></td><td>Make the unknown the subject before putting numbers in.</td></tr><tr><td>5</td><td><b>SUBSTITUTE</b></td><td>Put the numbers in. This line usually earns the first mark.</td></tr><tr><td>6</td><td><b>SOLVE</b></td><td>Calculate. Give the unit, and the significant figures asked for.</td></tr><tr><td>7</td><td><b>CHECK</b></td><td>Is the size sensible? Is the unit right for the quantity?</td></tr></tbody></table></div>
+<p class="callout"><b>SUBSTITUTE usually earns the first mark.</b> In AQA “calculate” questions, the first marking point is normally the correct substitution (or the correct rearrangement with numbers in), not the equation alone. A pupil who writes the substituted line gets that mark even if the arithmetic goes wrong; a pupil who writes only the final number and gets it wrong scores nothing. Tell pupils this explicitly, and mark their practice this way.</p>
+</section>
+
+<section id="s1plan"><h2>4. Session 1 plan (teach shape, 60 minutes)</h2>
+<p><b>Before the session:</b> look at each pupil’s baseline result for the four Toolkit concepts. Pupils already secure on a tool skip its concept construction and worked examples and go to that tool’s Band 2–3 questions and the stretch (manifest teacher note: diagnose before re-teaching).</p>
+<div class="tw"><table class=""><thead><tr><th scope="col">Minutes</th><th scope="col">Phase (pupil page section)</th><th scope="col">What you do</th><th scope="col">What to say / ask</th></tr></thead><tbody><tr><td>0–5</td><td>Retrieval starter (R1–R3)</td><td>Pupils answer R1–R3 on mini-whiteboards, then type answers. Show all boards at once; note who says 0.000 25 g for R2.</td><td>“Hold up on three… How did you know the number should get bigger?” “What equation did you use for R3? What would its graph look like?”</td></tr><tr><td>5–9</td><td>Concept construction: Tool 1 units and prefixes</td><td>Build the prefix table from the three situations (MJ, GW, µW). Model the direction rule with 3.6 MJ and 5000 W. Then the two traps: g→kg and min/h→s. Think 1 on whiteboards.</td><td>“Is a joule bigger or smaller than a megajoule? So will I need more or fewer of them?” “What is the SI unit of mass? Why is it odd?” “How many seconds in 2.5 hours? Talk me through it.”</td></tr><tr><td>9–12</td><td>Tool 2 standard form</td><td>Define A × 10<sup>n</sup>, 1 ≤ A &lt; 10, n an integer. One large and one small example. Demonstrate the ×10<sup>x</sup> key and the “× 10 ×10<sup>x</sup>” error. Think 2.</td><td>“What must be true of the first number?” “A number less than 1: positive or negative power? Why?” “Type 1.2 × 10<sup>9</sup>. What does your screen show?”</td></tr><tr><td>12–16</td><td>Tool 3 rearranging</td><td>Balance model; product, quotient, then E<sub>k</sub> = ½mv² as the “build it, then undo it in reverse” case. Unit check W × s = J. Think 3.</td><td>“What has happened to v on its way to becoming E<sub>k</sub>? So what is the first thing we undo?” “Why is E = P ÷ t impossible? Check the units.”</td></tr><tr><td>16–20</td><td>Tool 4 graphs (Graph 1, Graph 2)</td><td>Always start with “what is one small square worth?” (manifest teacher note). Read one value; draw a big triangle; gradient with unit and meaning; value vs gradient. Think 4 on Graph 2.</td><td>“Before anyone reads a number: what is one small square worth on this axis? And on that one?” “What is the unit of the gradient? What does it tell us about the water?”</td></tr><tr><td>20–30</td><td>Worked examples 1–8</td><td>For each tool: model the fully worked example aloud in the seven steps (about 1½ min), then pupils do the one faded step (under 1 min) and open the model answer. Skip pairs for tools the group is secure on and spend the time on the weakest tool.</td><td>“Which step are we on? What goes in GIVEN?” “Where would the first mark be?” “CHECK: is 750 kg sensible for a loaded van?”</td></tr><tr><td>30–40</td><td>Guided practice (Hinge 1–3, G1–G4)</td><td>Hinge 1 at about minute 30, Hinge 2 at about 34, Hinge 3 at about 38: all pupils show whiteboards at once; follow the response routes in section 5. Between hinges pupils do G1–G4 and self-check with the model answers. Circulate.</td><td>“Show me… now.” “Convince me your answer is right.” “Which step of the routine did you skip?”</td></tr><tr><td>40–55</td><td>Independent practice (I1–I8)</td><td>Silent, independent work, no model answers on the page. Pupils secure from the baseline start at Band 2. Everyone should attempt I8 (the stretch) by minute 52. Circulate, mark as you go on a class list: note any MIS-PHY-SKL code you see.</td><td>Prompt the routine only (“Which step are you on?”), do not give the method. For I8: “What was done to v? In what order will you undo it?”</td></tr><tr><td>55–60</td><td>Exit ticket (E1–E3)</td><td>Notes closed; pupils answer alone. Mark before Session 2 (about 2 minutes per pupil) and record which misconception each error signals: this chooses the clinic cases for Session 2.</td><td>“On your own now. This tells me what we do next time, not a grade.”</td></tr></tbody></table></div>
+</section>
+
+<section id="hinges"><h2>5. Hinge questions and response routes</h2>
+<p><b>Run every hinge with pupil screens down:</b> read the question aloud and show it on the board. The worked answer to Hinge 2 is on the pupil page (Tool 3).</p>
+<p>All pupils show their answer on mini-whiteboards at the same moment. Decide in 30 seconds: if most are right, move on and see the few who are not during guided practice; if most are wrong, stop and use the route for the most common wrong answer.</p>
+<h3>Hinge 1 (minute ≈30): Convert 2.4 MJ into joules.</h3>
+<p><b>Correct:</b> 2.4 × 10<sup>6</sup> J (2 400 000 J). Watch: MIS-PHY-SKL-001, MIS-PHY-SKL-003.</p>
+<div class="tw"><table class=""><thead><tr><th scope="col">If most pupils answer…</th><th scope="col">It probably means…</th><th scope="col">Do this</th></tr></thead><tbody><tr><td>0.000 002 4 J or 2.4 × 10<sup>−6</sup> J</td><td>Converted in the wrong direction (MIS-PHY-SKL-001), or flipped the sign of the power (MIS-PHY-SKL-003).</td><td>Re-teach the direction rule with a concrete ladder: “Is a joule smaller or bigger than a megajoule? Then I need more joules.” Do three quick ones on whiteboards: 3 kJ → J, 5 MJ → J, 7000 W → kW.</td></tr><tr><td>2400 J</td><td>Used the kilo factor for mega: prefix values not secure (MIS-PHY-SKL-001, prefix recall).</td><td>Put the prefix table back on the board. Ask pupils to say each multiplier aloud; drill M = 10<sup>6</sup>, G = 10<sup>9</sup>, T = 10<sup>12</sup>. Re-ask with 6.3 MJ.</td></tr><tr><td>24 × 10<sup>5</sup> J or 2.4 × 10<sup>5</sup> J</td><td>Standard form: first number out of range, or miscounted places (MIS-PHY-SKL-003).</td><td>Write 2 400 000 and count the places with the group; restate 1 ≤ A &lt; 10. Re-ask with 7.1 MJ.</td></tr><tr><td>2 400 000 000 J (2.4 × 10<sup>9</sup> J)</td><td>Confused mega with giga.</td><td>Same as the 2400 J route: prefix recall. Pair M, G, T with the examples in the table (MJ solar array, GW power station, TJ).</td></tr></tbody></table></div>
+<h3>Hinge 2 (minute ≈34, Higher): Rearrange E<sub>k</sub> = ½mv² to make v the subject.</h3>
+<p><b>Correct:</b> v = √(2E<sub>k</sub> ÷ m). Watch: MIS-PHY-SKL-005.</p>
+<div class="tw"><table class=""><thead><tr><th scope="col">If most pupils answer…</th><th scope="col">It probably means…</th><th scope="col">Do this</th></tr></thead><tbody><tr><td>v = 2E<sub>k</sub> ÷ m (no square root)</td><td>Stopped one step early: the square is not undone (MIS-PHY-SKL-005).</td><td>Write the “build” chain: v → square → × m → × ½ = E<sub>k</sub>. Ask “how many operations were done to v? how many have you undone?” Then do Case 4 of the clinic now (81 m/s vs 9.0 m/s).</td></tr><tr><td>v = √(E<sub>k</sub> ÷ 2m) or v = √(½E<sub>k</sub> ÷ m)</td><td>Undid the ½ the wrong way (divided by 2 instead of multiplying) (MIS-PHY-SKL-005).</td><td>“½ means divide by 2. What undoes dividing by 2?” Show with numbers: if ½ × 8 = 4, what do you do to 4 to get back to 8?</td></tr><tr><td>v = √(2E<sub>k</sub>) ÷ m</td><td>The square root is applied to the wrong quantity.</td><td>Show that the root undoes v², so it must cover everything on the other side: v² = 2E<sub>k</sub> ÷ m, then root both sides. Brackets matter.</td></tr><tr><td>m = 2E<sub>k</sub> ÷ v², or blank</td><td>Rearranged for the wrong quantity, or not yet ready for band 3.</td><td>For Foundation pupils this is fine: switch them to the m version (Example 5) and G3. Higher pupils: re-model with Example 5 then extend one step.</td></tr></tbody></table></div>
+<h3>Hinge 3 (minute ≈38): A straight line on a distance–time graph goes from (0 s, 0 m) to (8 s, 40 m). What is the speed?</h3>
+<p><b>Correct:</b> 5 m/s: the gradient, 40 m ÷ 8 s. Watch: MIS-PHY-SKL-006.</p>
+<div class="tw"><table class=""><thead><tr><th scope="col">If most pupils answer…</th><th scope="col">It probably means…</th><th scope="col">Do this</th></tr></thead><tbody><tr><td>40 m/s (or 40)</td><td>Read a value, not the gradient (MIS-PHY-SKL-006).</td><td>Sketch it. “40 m is how far it went. Speed is how far each second. How far in 1 second?” Contrast value and gradient explicitly; then do Case 5 of the clinic now.</td></tr><tr><td>0.2 (s/m)</td><td>Gradient upside down: Δx ÷ Δy.</td><td>“Gradient is change in y ÷ change in x: up ÷ across.” Check with the unit: speed is in m/s, so metres must be on top.</td></tr><tr><td>320</td><td>Multiplied distance and time.</td><td>Use the KS3 idea from R3: speed = distance ÷ time. Link it to gradient = Δy ÷ Δx on a d–t graph.</td></tr><tr><td>8 m/s</td><td>Read the time as the answer: not linking gradient to the quantities.</td><td>Same as the 40 m/s route; ask for the unit of each axis first.</td></tr></tbody></table></div>
+</section>
+
+<section id="s2plan"><h2>6. Session 2 plan (consolidate shape, 60 minutes)</h2>
+<p><b>Before the session:</b> mark the Session 1 exit tickets. Tally the errors by misconception code. The most common code picks the clinic case you lead first; tell each pupil which exit-ticket question to fix in “Fix it”.</p>
+<div class="tw"><table class=""><thead><tr><th scope="col">Minutes</th><th scope="col">Phase (pupil page section)</th><th scope="col">What you do</th><th scope="col">What to say / ask</th></tr></thead><tbody><tr><td>0–5</td><td>Retrieval (R4–R6, Fix it)</td><td>R4–R6 on whiteboards then typed. Then each pupil fixes one exit-ticket error in writing (you name the question). Pupils with no errors redo I8 without looking.</td><td>“What went wrong last time, in one sentence? Which step of the routine would have caught it?”</td></tr><tr><td>5–15</td><td>Misconception clinic (Cases 1–5)</td><td>Lead with the case matching the class’s most common exit-ticket error. Pupils decide individually (write), then pair-discuss, then you take answers. Do at least 3 cases; the rest are done by the pupils who need them (use the tally).</td><td>“Who is right? Convince your partner. What exactly did the other pupil do? Which step of the routine would have caught it?”</td></tr><tr><td>15–25</td><td>Guided practice (GP1–GP2)</td><td>Less familiar contexts. GP1 is essential (a graph whose small squares are different on each axis, and a gradient that has to be converted to watts). GP2 is Higher. (The power-station question is now homework H7.) Pupils write, then open the model answers. Circulate; check every pupil has answered GP1(a) before (b).</td><td>“What is one small square worth? Are the squares the same on both axes?” “Your gradient is in kJ/min: what would it be in J/s?”</td></tr><tr><td>25–40</td><td>Independent + Grade 9 challenge (I9–I11, Grade 9)</td><td>Silent, independent. I9 is optional for pupils who started Session 1 at Band 2: they go straight to I10–I11. Everyone starts the Grade 9 challenge by minute 33 (25–28 I9, 28–33 I10–I11, 33–40 Grade 9). Stop at minute 40 so the mastery check starts on time. Foundation pupils: I9–I11, then Grade 9 (a) with the step prompts in Differentiation.</td><td>Prompt the routine only. For the Grade 9 challenge: “Which two equations? Which quantity links them?”</td></tr><tr><td>40–55</td><td>Block 1 mastery check (platform)</td><td>Check before Session 2: the Block 1 check needs approved mastery-check items for the four Toolkit concepts. At the time of writing there are none (School-Ready Gate). If the check is not live on the platform, do not build a substitute from this lesson’s questions: use minutes 40–55 for the Grade 9 challenge and the exit-ticket ‘Fix it’ for pupils who need it, and record the block check as pending. If it is live: pupils close the lesson and notes; launch the Block 1 check on the platform (programme check mode); independent, no help with the physics; paper and calculators allowed; remind them to choose “Not sure” rather than guess.</td><td>Only procedural help (“Read the question again”). Do not confirm answers.</td></tr><tr><td>55–60</td><td>Error log and self-rating</td><td>Each pupil logs at least one error in the error log (what I did, why, the correct physics, my next step) and completes the self-rating. The self-rating is not used to judge mastery.</td><td>“Be specific: not ‘I got it wrong’ but ‘I divided by 1000 when I should have multiplied’.”</td></tr></tbody></table></div>
+</section>
+
+<section id="answers"><h2>7. Answers, worked solutions and mark schemes</h2>
+<p>Every pupil question, in the order it appears on the pupil page. Marks are shown in square brackets. Mark schemes give one mark per marking point; allow error carried forward from an earlier step unless stated. Accept equivalent answers (for example 2 400 000 J for 2.4 × 10<sup>6</sup> J) unless the question asks for a particular form or unit. Where a question asks for a unit, a wrong or missing unit loses the final mark only: for example “50” with correct working scores 2 of 3 on I7, and a unitless answer scores at most 1 of 2 on a 2-mark question that requires a unit. A correct final answer with no working earns full marks unless the question asks for working.</p>
+<h3>The graphs (copies for reference)</h3>
+<p>The pupil captions give only the axis ranges, so that reading questions still test reading. Full data: <b>Graph 1</b> straight line from (0 s, 20 °C) to (300 s, 50 °C), plotted points at (0, 20), (100, 30), (200, 40), (300, 50); one small square = 10 s × 2 °C; the worked reading (60 s, 26 °C) and the gradient triangle (100 s, 30 °C)–(300 s, 50 °C) are drawn for Example 7. <b>Graph 2</b> A: (0 s, 0 m) to (30 s, 300 m); B: (30 s, 300 m) to (40 s, 300 m); C: (40 s, 300 m) to (60 s, 540 m); one small square = 2 s × 20 m. <b>Graph 3</b> straight line from (0 min, 0 kJ) to (10 min, 300 kJ), points every 2 min; one small square = 0.5 min × 10 kJ. For a pupil who needs a screen-reader arrangement, give the data they need to answer and record their graph reading as not evidenced for this block.</p>
+<p class="tn">Diagram fonts: the graphs use the system-ui sans-serif stack, not the diagram standard’s Plus Jakarta Sans, because the lesson must not load external fonts.</p>
+<figure class="graph" id="graph1">
+<div class="graph-scroll"><svg viewBox="0 0 522 486" role="img" aria-labelledby="graph1-t graph1-d"><title id="graph1-t">Graph 1: temperature of water against time while an electric heater warms it</title><desc id="graph1-d">Graph 1. Temperature of water against time while an electric heater warms it: a straight line. Time axis 0–300 s; temperature axis 0–60 °C. The dashed reading lines and the shaded gradient triangle belong to Example 7.</desc><line class="g-major" x1="92" y1="22" x2="92" y2="412"/><line class="g-minor" x1="105" y1="22" x2="105" y2="412"/><line class="g-minor" x1="118" y1="22" x2="118" y2="412"/><line class="g-minor" x1="131" y1="22" x2="131" y2="412"/><line class="g-minor" x1="144" y1="22" x2="144" y2="412"/><line class="g-major" x1="157" y1="22" x2="157" y2="412"/><line class="g-minor" x1="170" y1="22" x2="170" y2="412"/><line class="g-minor" x1="183" y1="22" x2="183" y2="412"/><line class="g-minor" x1="196" y1="22" x2="196" y2="412"/><line class="g-minor" x1="209" y1="22" x2="209" y2="412"/><line class="g-major" x1="222" y1="22" x2="222" y2="412"/><line class="g-minor" x1="235" y1="22" x2="235" y2="412"/><line class="g-minor" x1="248" y1="22" x2="248" y2="412"/><line class="g-minor" x1="261" y1="22" x2="261" y2="412"/><line class="g-minor" x1="274" y1="22" x2="274" y2="412"/><line class="g-major" x1="287" y1="22" x2="287" y2="412"/><line class="g-minor" x1="300" y1="22" x2="300" y2="412"/><line class="g-minor" x1="313" y1="22" x2="313" y2="412"/><line class="g-minor" x1="326" y1="22" x2="326" y2="412"/><line class="g-minor" x1="339" y1="22" x2="339" y2="412"/><line class="g-major" x1="352" y1="22" x2="352" y2="412"/><line class="g-minor" x1="365" y1="22" x2="365" y2="412"/><line class="g-minor" x1="378" y1="22" x2="378" y2="412"/><line class="g-minor" x1="391" y1="22" x2="391" y2="412"/><line class="g-minor" x1="404" y1="22" x2="404" y2="412"/><line class="g-major" x1="417" y1="22" x2="417" y2="412"/><line class="g-minor" x1="430" y1="22" x2="430" y2="412"/><line class="g-minor" x1="443" y1="22" x2="443" y2="412"/><line class="g-minor" x1="456" y1="22" x2="456" y2="412"/><line class="g-minor" x1="469" y1="22" x2="469" y2="412"/><line class="g-major" x1="482" y1="22" x2="482" y2="412"/><line class="g-major" x1="92" y1="412" x2="482" y2="412"/><line class="g-minor" x1="92" y1="399" x2="482" y2="399"/><line class="g-minor" x1="92" y1="386" x2="482" y2="386"/><line class="g-minor" x1="92" y1="373" x2="482" y2="373"/><line class="g-minor" x1="92" y1="360" x2="482" y2="360"/><line class="g-major" x1="92" y1="347" x2="482" y2="347"/><line class="g-minor" x1="92" y1="334" x2="482" y2="334"/><line class="g-minor" x1="92" y1="321" x2="482" y2="321"/><line class="g-minor" x1="92" y1="308" x2="482" y2="308"/><line class="g-minor" x1="92" y1="295" x2="482" y2="295"/><line class="g-major" x1="92" y1="282" x2="482" y2="282"/><line class="g-minor" x1="92" y1="269" x2="482" y2="269"/><line class="g-minor" x1="92" y1="256" x2="482" y2="256"/><line class="g-minor" x1="92" y1="243" x2="482" y2="243"/><line class="g-minor" x1="92" y1="230" x2="482" y2="230"/><line class="g-major" x1="92" y1="217" x2="482" y2="217"/><line class="g-minor" x1="92" y1="204" x2="482" y2="204"/><line class="g-minor" x1="92" y1="191" x2="482" y2="191"/><line class="g-minor" x1="92" y1="178" x2="482" y2="178"/><line class="g-minor" x1="92" y1="165" x2="482" y2="165"/><line class="g-major" x1="92" y1="152" x2="482" y2="152"/><line class="g-minor" x1="92" y1="139" x2="482" y2="139"/><line class="g-minor" x1="92" y1="126" x2="482" y2="126"/><line class="g-minor" x1="92" y1="113" x2="482" y2="113"/><line class="g-minor" x1="92" y1="100" x2="482" y2="100"/><line class="g-major" x1="92" y1="87" x2="482" y2="87"/><line class="g-minor" x1="92" y1="74" x2="482" y2="74"/><line class="g-minor" x1="92" y1="61" x2="482" y2="61"/><line class="g-minor" x1="92" y1="48" x2="482" y2="48"/><line class="g-minor" x1="92" y1="35" x2="482" y2="35"/><line class="g-major" x1="92" y1="22" x2="482" y2="22"/><line class="g-axis" x1="92" y1="412" x2="482" y2="412"/><line class="g-axis" x1="92" y1="22" x2="92" y2="412"/><line class="g-axis" x1="157" y1="412" x2="157" y2="418"/><text class="g-tick" x="157" y="436" text-anchor="middle">50</text><line class="g-axis" x1="222" y1="412" x2="222" y2="418"/><text class="g-tick" x="222" y="436" text-anchor="middle">100</text><line class="g-axis" x1="287" y1="412" x2="287" y2="418"/><text class="g-tick" x="287" y="436" text-anchor="middle">150</text><line class="g-axis" x1="352" y1="412" x2="352" y2="418"/><text class="g-tick" x="352" y="436" text-anchor="middle">200</text><line class="g-axis" x1="417" y1="412" x2="417" y2="418"/><text class="g-tick" x="417" y="436" text-anchor="middle">250</text><line class="g-axis" x1="482" y1="412" x2="482" y2="418"/><text class="g-tick" x="482" y="436" text-anchor="middle">300</text><line class="g-axis" x1="86" y1="347" x2="92" y2="347"/><text class="g-tick" x="82" y="352" text-anchor="end">10</text><line class="g-axis" x1="86" y1="282" x2="92" y2="282"/><text class="g-tick" x="82" y="287" text-anchor="end">20</text><line class="g-axis" x1="86" y1="217" x2="92" y2="217"/><text class="g-tick" x="82" y="222" text-anchor="end">30</text><line class="g-axis" x1="86" y1="152" x2="92" y2="152"/><text class="g-tick" x="82" y="157" text-anchor="end">40</text><line class="g-axis" x1="86" y1="87" x2="92" y2="87"/><text class="g-tick" x="82" y="92" text-anchor="end">50</text><line class="g-axis" x1="86" y1="22" x2="92" y2="22"/><text class="g-tick" x="82" y="27" text-anchor="end">60</text><text class="g-tick" x="82" y="434" text-anchor="end">0</text><text class="g-label" x="287" y="470" text-anchor="middle">Time / s</text><text class="g-label" transform="translate(24 217) rotate(-90)" text-anchor="middle">Temperature / °C</text><polygon class="g-tri" points="222,217 482,217 482,87"/><path class="g-construct" d="M170 412 V243 H92"/><polyline class="g-line" points="92,282 482,87"/><circle class="g-pt" cx="92" cy="282" r="5"/><circle class="g-pt" cx="222" cy="217" r="5"/><circle class="g-pt" cx="352" cy="152" r="5"/><circle class="g-pt" cx="482" cy="87" r="5"/><circle class="g-ans" cx="170" cy="243" r="5.5"/><text class="g-note" x="352" y="239" text-anchor="middle">Δt = 200 s</text><text class="g-note" x="474" y="174" text-anchor="end">Δθ = 20 °C</text><text class="g-note" x="180" y="267" text-anchor="start">60 s → 26 °C</text></svg></div>
+<figcaption><b>Graph 1.</b> Temperature of water against time while an electric heater warms it: a straight line. Time axis 0–300 s; temperature axis 0–60 °C. The dashed reading lines and the shaded gradient triangle belong to Example 7.</figcaption>
+</figure><figure class="graph" id="graph2">
+<div class="graph-scroll"><svg viewBox="0 0 522 486" role="img" aria-labelledby="graph2-t graph2-d"><title id="graph2-t">Graph 2: distance–time graph for a trotro on a straight road</title><desc id="graph2-d">Graph 2. Distance–time graph for a trotro on a straight road, in three straight sections labelled A, B and C. Time axis 0–60 s; distance axis 0–600 m.</desc><line class="g-major" x1="92" y1="22" x2="92" y2="412"/><line class="g-minor" x1="105" y1="22" x2="105" y2="412"/><line class="g-minor" x1="118" y1="22" x2="118" y2="412"/><line class="g-minor" x1="131" y1="22" x2="131" y2="412"/><line class="g-minor" x1="144" y1="22" x2="144" y2="412"/><line class="g-major" x1="157" y1="22" x2="157" y2="412"/><line class="g-minor" x1="170" y1="22" x2="170" y2="412"/><line class="g-minor" x1="183" y1="22" x2="183" y2="412"/><line class="g-minor" x1="196" y1="22" x2="196" y2="412"/><line class="g-minor" x1="209" y1="22" x2="209" y2="412"/><line class="g-major" x1="222" y1="22" x2="222" y2="412"/><line class="g-minor" x1="235" y1="22" x2="235" y2="412"/><line class="g-minor" x1="248" y1="22" x2="248" y2="412"/><line class="g-minor" x1="261" y1="22" x2="261" y2="412"/><line class="g-minor" x1="274" y1="22" x2="274" y2="412"/><line class="g-major" x1="287" y1="22" x2="287" y2="412"/><line class="g-minor" x1="300" y1="22" x2="300" y2="412"/><line class="g-minor" x1="313" y1="22" x2="313" y2="412"/><line class="g-minor" x1="326" y1="22" x2="326" y2="412"/><line class="g-minor" x1="339" y1="22" x2="339" y2="412"/><line class="g-major" x1="352" y1="22" x2="352" y2="412"/><line class="g-minor" x1="365" y1="22" x2="365" y2="412"/><line class="g-minor" x1="378" y1="22" x2="378" y2="412"/><line class="g-minor" x1="391" y1="22" x2="391" y2="412"/><line class="g-minor" x1="404" y1="22" x2="404" y2="412"/><line class="g-major" x1="417" y1="22" x2="417" y2="412"/><line class="g-minor" x1="430" y1="22" x2="430" y2="412"/><line class="g-minor" x1="443" y1="22" x2="443" y2="412"/><line class="g-minor" x1="456" y1="22" x2="456" y2="412"/><line class="g-minor" x1="469" y1="22" x2="469" y2="412"/><line class="g-major" x1="482" y1="22" x2="482" y2="412"/><line class="g-major" x1="92" y1="412" x2="482" y2="412"/><line class="g-minor" x1="92" y1="399" x2="482" y2="399"/><line class="g-minor" x1="92" y1="386" x2="482" y2="386"/><line class="g-minor" x1="92" y1="373" x2="482" y2="373"/><line class="g-minor" x1="92" y1="360" x2="482" y2="360"/><line class="g-major" x1="92" y1="347" x2="482" y2="347"/><line class="g-minor" x1="92" y1="334" x2="482" y2="334"/><line class="g-minor" x1="92" y1="321" x2="482" y2="321"/><line class="g-minor" x1="92" y1="308" x2="482" y2="308"/><line class="g-minor" x1="92" y1="295" x2="482" y2="295"/><line class="g-major" x1="92" y1="282" x2="482" y2="282"/><line class="g-minor" x1="92" y1="269" x2="482" y2="269"/><line class="g-minor" x1="92" y1="256" x2="482" y2="256"/><line class="g-minor" x1="92" y1="243" x2="482" y2="243"/><line class="g-minor" x1="92" y1="230" x2="482" y2="230"/><line class="g-major" x1="92" y1="217" x2="482" y2="217"/><line class="g-minor" x1="92" y1="204" x2="482" y2="204"/><line class="g-minor" x1="92" y1="191" x2="482" y2="191"/><line class="g-minor" x1="92" y1="178" x2="482" y2="178"/><line class="g-minor" x1="92" y1="165" x2="482" y2="165"/><line class="g-major" x1="92" y1="152" x2="482" y2="152"/><line class="g-minor" x1="92" y1="139" x2="482" y2="139"/><line class="g-minor" x1="92" y1="126" x2="482" y2="126"/><line class="g-minor" x1="92" y1="113" x2="482" y2="113"/><line class="g-minor" x1="92" y1="100" x2="482" y2="100"/><line class="g-major" x1="92" y1="87" x2="482" y2="87"/><line class="g-minor" x1="92" y1="74" x2="482" y2="74"/><line class="g-minor" x1="92" y1="61" x2="482" y2="61"/><line class="g-minor" x1="92" y1="48" x2="482" y2="48"/><line class="g-minor" x1="92" y1="35" x2="482" y2="35"/><line class="g-major" x1="92" y1="22" x2="482" y2="22"/><line class="g-axis" x1="92" y1="412" x2="482" y2="412"/><line class="g-axis" x1="92" y1="22" x2="92" y2="412"/><line class="g-axis" x1="157" y1="412" x2="157" y2="418"/><text class="g-tick" x="157" y="436" text-anchor="middle">10</text><line class="g-axis" x1="222" y1="412" x2="222" y2="418"/><text class="g-tick" x="222" y="436" text-anchor="middle">20</text><line class="g-axis" x1="287" y1="412" x2="287" y2="418"/><text class="g-tick" x="287" y="436" text-anchor="middle">30</text><line class="g-axis" x1="352" y1="412" x2="352" y2="418"/><text class="g-tick" x="352" y="436" text-anchor="middle">40</text><line class="g-axis" x1="417" y1="412" x2="417" y2="418"/><text class="g-tick" x="417" y="436" text-anchor="middle">50</text><line class="g-axis" x1="482" y1="412" x2="482" y2="418"/><text class="g-tick" x="482" y="436" text-anchor="middle">60</text><line class="g-axis" x1="86" y1="347" x2="92" y2="347"/><text class="g-tick" x="82" y="352" text-anchor="end">100</text><line class="g-axis" x1="86" y1="282" x2="92" y2="282"/><text class="g-tick" x="82" y="287" text-anchor="end">200</text><line class="g-axis" x1="86" y1="217" x2="92" y2="217"/><text class="g-tick" x="82" y="222" text-anchor="end">300</text><line class="g-axis" x1="86" y1="152" x2="92" y2="152"/><text class="g-tick" x="82" y="157" text-anchor="end">400</text><line class="g-axis" x1="86" y1="87" x2="92" y2="87"/><text class="g-tick" x="82" y="92" text-anchor="end">500</text><line class="g-axis" x1="86" y1="22" x2="92" y2="22"/><text class="g-tick" x="82" y="27" text-anchor="end">600</text><text class="g-tick" x="82" y="434" text-anchor="end">0</text><text class="g-label" x="287" y="470" text-anchor="middle">Time / s</text><text class="g-label" transform="translate(24 217) rotate(-90)" text-anchor="middle">Distance / m</text><polyline class="g-line" points="92,412 287,217 352,217 482,61"/><circle class="g-pt" cx="92" cy="412" r="5"/><circle class="g-pt" cx="287" cy="217" r="5"/><circle class="g-pt" cx="352" cy="217" r="5"/><circle class="g-pt" cx="482" cy="61" r="5"/><text class="g-sec" x="154" y="314.5" text-anchor="end">A</text><text class="g-sec" x="319.5" y="203" text-anchor="middle">B</text><text class="g-sec" x="401" y="126" text-anchor="end">C</text></svg></div>
+<figcaption><b>Graph 2.</b> Distance–time graph for a trotro on a straight road, in three straight sections labelled A, B and C. Time axis 0–60 s; distance axis 0–600 m.</figcaption>
+</figure><figure class="graph" id="graph3">
+<div class="graph-scroll"><svg viewBox="0 0 522 486" role="img" aria-labelledby="graph3-t graph3-d"><title id="graph3-t">Graph 3: energy transferred by a solar panel array in Kumasi against time</title><desc id="graph3-d">Graph 3. Total energy transferred electrically by a solar panel array on a clinic roof in Kumasi, against time, in steady afternoon sunshine: a straight line. Time axis 0–10 min; energy axis 0–300 kJ. The small squares are not square: read each axis separately.</desc><line class="g-major" x1="92" y1="22" x2="92" y2="412"/><line class="g-minor" x1="111.5" y1="22" x2="111.5" y2="412"/><line class="g-minor" x1="131" y1="22" x2="131" y2="412"/><line class="g-minor" x1="150.5" y1="22" x2="150.5" y2="412"/><line class="g-major" x1="170" y1="22" x2="170" y2="412"/><line class="g-minor" x1="189.5" y1="22" x2="189.5" y2="412"/><line class="g-minor" x1="209" y1="22" x2="209" y2="412"/><line class="g-minor" x1="228.5" y1="22" x2="228.5" y2="412"/><line class="g-major" x1="248" y1="22" x2="248" y2="412"/><line class="g-minor" x1="267.5" y1="22" x2="267.5" y2="412"/><line class="g-minor" x1="287" y1="22" x2="287" y2="412"/><line class="g-minor" x1="306.5" y1="22" x2="306.5" y2="412"/><line class="g-major" x1="326" y1="22" x2="326" y2="412"/><line class="g-minor" x1="345.5" y1="22" x2="345.5" y2="412"/><line class="g-minor" x1="365" y1="22" x2="365" y2="412"/><line class="g-minor" x1="384.5" y1="22" x2="384.5" y2="412"/><line class="g-major" x1="404" y1="22" x2="404" y2="412"/><line class="g-minor" x1="423.5" y1="22" x2="423.5" y2="412"/><line class="g-minor" x1="443" y1="22" x2="443" y2="412"/><line class="g-minor" x1="462.5" y1="22" x2="462.5" y2="412"/><line class="g-major" x1="482" y1="22" x2="482" y2="412"/><line class="g-major" x1="92" y1="412" x2="482" y2="412"/><line class="g-minor" x1="92" y1="399" x2="482" y2="399"/><line class="g-minor" x1="92" y1="386" x2="482" y2="386"/><line class="g-minor" x1="92" y1="373" x2="482" y2="373"/><line class="g-minor" x1="92" y1="360" x2="482" y2="360"/><line class="g-major" x1="92" y1="347" x2="482" y2="347"/><line class="g-minor" x1="92" y1="334" x2="482" y2="334"/><line class="g-minor" x1="92" y1="321" x2="482" y2="321"/><line class="g-minor" x1="92" y1="308" x2="482" y2="308"/><line class="g-minor" x1="92" y1="295" x2="482" y2="295"/><line class="g-major" x1="92" y1="282" x2="482" y2="282"/><line class="g-minor" x1="92" y1="269" x2="482" y2="269"/><line class="g-minor" x1="92" y1="256" x2="482" y2="256"/><line class="g-minor" x1="92" y1="243" x2="482" y2="243"/><line class="g-minor" x1="92" y1="230" x2="482" y2="230"/><line class="g-major" x1="92" y1="217" x2="482" y2="217"/><line class="g-minor" x1="92" y1="204" x2="482" y2="204"/><line class="g-minor" x1="92" y1="191" x2="482" y2="191"/><line class="g-minor" x1="92" y1="178" x2="482" y2="178"/><line class="g-minor" x1="92" y1="165" x2="482" y2="165"/><line class="g-major" x1="92" y1="152" x2="482" y2="152"/><line class="g-minor" x1="92" y1="139" x2="482" y2="139"/><line class="g-minor" x1="92" y1="126" x2="482" y2="126"/><line class="g-minor" x1="92" y1="113" x2="482" y2="113"/><line class="g-minor" x1="92" y1="100" x2="482" y2="100"/><line class="g-major" x1="92" y1="87" x2="482" y2="87"/><line class="g-minor" x1="92" y1="74" x2="482" y2="74"/><line class="g-minor" x1="92" y1="61" x2="482" y2="61"/><line class="g-minor" x1="92" y1="48" x2="482" y2="48"/><line class="g-minor" x1="92" y1="35" x2="482" y2="35"/><line class="g-major" x1="92" y1="22" x2="482" y2="22"/><line class="g-axis" x1="92" y1="412" x2="482" y2="412"/><line class="g-axis" x1="92" y1="22" x2="92" y2="412"/><line class="g-axis" x1="170" y1="412" x2="170" y2="418"/><text class="g-tick" x="170" y="436" text-anchor="middle">2</text><line class="g-axis" x1="248" y1="412" x2="248" y2="418"/><text class="g-tick" x="248" y="436" text-anchor="middle">4</text><line class="g-axis" x1="326" y1="412" x2="326" y2="418"/><text class="g-tick" x="326" y="436" text-anchor="middle">6</text><line class="g-axis" x1="404" y1="412" x2="404" y2="418"/><text class="g-tick" x="404" y="436" text-anchor="middle">8</text><line class="g-axis" x1="482" y1="412" x2="482" y2="418"/><text class="g-tick" x="482" y="436" text-anchor="middle">10</text><line class="g-axis" x1="86" y1="347" x2="92" y2="347"/><text class="g-tick" x="82" y="352" text-anchor="end">50</text><line class="g-axis" x1="86" y1="282" x2="92" y2="282"/><text class="g-tick" x="82" y="287" text-anchor="end">100</text><line class="g-axis" x1="86" y1="217" x2="92" y2="217"/><text class="g-tick" x="82" y="222" text-anchor="end">150</text><line class="g-axis" x1="86" y1="152" x2="92" y2="152"/><text class="g-tick" x="82" y="157" text-anchor="end">200</text><line class="g-axis" x1="86" y1="87" x2="92" y2="87"/><text class="g-tick" x="82" y="92" text-anchor="end">250</text><line class="g-axis" x1="86" y1="22" x2="92" y2="22"/><text class="g-tick" x="82" y="27" text-anchor="end">300</text><text class="g-tick" x="82" y="434" text-anchor="end">0</text><text class="g-label" x="287" y="470" text-anchor="middle">Time / min</text><text class="g-label" transform="translate(24 217) rotate(-90)" text-anchor="middle">Energy transferred / kJ</text><polyline class="g-line" points="92,412 482,22"/><circle class="g-pt" cx="92" cy="412" r="5"/><circle class="g-pt" cx="170" cy="334" r="5"/><circle class="g-pt" cx="248" cy="256" r="5"/><circle class="g-pt" cx="326" cy="178" r="5"/><circle class="g-pt" cx="404" cy="100" r="5"/><circle class="g-pt" cx="482" cy="22" r="5"/></svg></div>
+<figcaption><b>Graph 3.</b> Total energy transferred electrically by a solar panel array on a clinic roof in Kumasi, against time, in steady afternoon sunshine: a straight line. Time axis 0–10 min; energy axis 0–300 kJ. The small squares are not square: read each axis separately.</figcaption>
+</figure>
+<h3 class="ans-session">Session 1</h3><h4>Retrieval starter</h4><div class="ans">
+<p class="aq"><b>R1</b> <span class="mk">[1]</span> How many seconds are there in 1 hour?  <span class="fid">fields: b1_s1_ret1</span></p>
+<p class="aa"><b>Answer:</b> 3600 s (60 minutes × 60 s).</p>
+
+<p class="ms1"><b>Mark:</b> 3600 s</p>
+
+
+</div><div class="ans">
+<p class="aq"><b>R2</b> <span class="mk">[1]</span> Write 0.25 kg in grams.  <span class="fid">fields: b1_s1_ret2</span></p>
+<p class="aa"><b>Answer:</b> 250 g (0.25 × 1000).</p>
+
+<p class="ms1"><b>Mark:</b> 250 g</p>
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001 if 0.000 25 g</p>
+
+</div><div class="ans">
+<p class="aq"><b>R3</b> <span class="mk">[1]</span> A bus travels 150 m in 10 s at a steady speed. What is its speed?  <span class="fid">fields: b1_s1_ret3</span></p>
+<p class="aa"><b>Answer:</b> 15 m/s (150 m ÷ 10 s).</p>
+
+<p class="ms1"><b>Mark:</b> 15 m/s (unit needed)</p>
+
+<p class="tn"><b>Note:</b> KS3 recall of speed = distance ÷ time; it sets up gradient = speed later in the session.</p>
+</div><h4>Concept construction: the four tools</h4><div class="ans">
+<p class="aq"><b>Think 1</b> A pupil converts 3.0 km into metres and gets 0.003 m. Without calculating, how can you tell this is wrong? What is the right answer?  <span class="fid">fields: b1_s1_cc1</span></p>
+<p class="aa"><b>Answer:</b> A metre is a smaller unit than a kilometre, so there must be more metres than kilometres: the number must get bigger, not smaller. 3.0 km = 3.0 × 1000 = 3000 m.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001</p>
+
+</div><div class="ans">
+<p class="aq"><b>Think 2</b> Why is 58 × 10<sup>5</sup> J not written in standard form? Write it correctly.  <span class="fid">fields: b1_s1_cc2</span></p>
+<p class="aa"><b>Answer:</b> The first number must be at least 1 and less than 10; 58 is not. 58 × 10<sup>5</sup> J = 5.8 × 10<sup>6</sup> J (5 800 000 J).</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-003</p>
+
+</div><div class="ans">
+<p class="aq"><b>Think 3</b> Rearrange W = Fs to make s the subject. Say what you did to both sides.  <span class="fid">fields: b1_s1_cc3</span></p>
+<p class="aa"><b>Answer:</b> s = W ÷ F. Both sides were divided by F (s was multiplied by F, so divide to undo it).</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-004</p>
+
+</div><div class="ans">
+<p class="aq"><b>Think 4</b> Look at Graph 2 below (the trotro). What is one small square worth on the time axis? On the distance axis?  <span class="fid">fields: b1_s1_cc4</span></p>
+<p class="aa"><b>Answer:</b> Time: 10 s across 5 small squares, so 2 s. Distance: 100 m across 5 small squares, so 20 m.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006 (scale)</p>
+
+</div><h4>Worked examples</h4><div class="ans">
+<p class="aq"><b>Example 1</b> Solar panel array in Kumasi: 4.5 MJ in 2.5 h; average power.  </p>
+<p class="aa"><b>Answer:</b> Fully worked on the page: 4 500 000 J ÷ 9000 s = 500 W (the same array as Graph 3).</p>
+
+
+
+<p class="tn"><b>Note:</b> Model aloud. Stress the two conversions in GIVEN and the direction check.</p>
+</div><div class="ans">
+<p class="aq"><b>Example 2</b> 250 g water, 20 °C → 80 °C, c = 4200 J/kg °C; ΔE. Faded step: the mass in kg. <span class="rv">model answer visible to pupils after their attempt</span> </p>
+<p class="aa"><b>Answer:</b> m = 0.250 kg (ΔE = 0.250 × 4200 × 60 = 63 000 J, shown in the model answer).</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001 (250 000 kg), MIS-PHY-SKL-002 (63 000 000 J if grams used)</p>
+
+</div><div class="ans">
+<p class="aq"><b>Example 3</b> 1.2 GW for 1 hour; E in standard form.  </p>
+<p class="aa"><b>Answer:</b> Fully worked: E = 1.2 × 10<sup>9</sup> × 3600 = 4.32 × 10<sup>12</sup> J (4.32 TJ).</p>
+
+
+
+<p class="tn"><b>Note:</b> Demonstrate the ×10<sup>x</sup> key on the class calculator model. Show the “× 10 ×10<sup>x</sup> 9” error gives 4.32 × 10<sup>13</sup>.</p>
+</div><div class="ans">
+<p class="aq"><b>Example 4</b> 15 µW for 1 minute; E in standard form. Faded step: SOLVE. <span class="rv">model answer visible to pupils after their attempt</span> </p>
+<p class="aa"><b>Answer:</b> E = 1.5 × 10<sup>−5</sup> × 60 = 9.0 × 10<sup>−4</sup> J.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-003 (9.0 × 10<sup>4</sup>, or 9.0 × 10<sup>−5</sup> from a miscount)</p>
+
+</div><div class="ans">
+<p class="aq"><b>Example 5</b> Van at 12 m/s with 216 kJ; mass.  </p>
+<p class="aa"><b>Answer:</b> Fully worked: m = 2 × 216 000 ÷ 12² = 3000 kg.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-005 (750 kg: half the wrong way)</p>
+
+</div><div class="ans">
+<p class="aq"><b>Example 6</b> 1.5 kW heater transfers 2.7 MJ; time in minutes. Faded step: REARRANGE. <span class="rv">model answer visible to pupils after their attempt</span> </p>
+<p class="aa"><b>Answer:</b> t = E ÷ P (printed: 2 700 000 ÷ 1500 = 1800 s = 30 min).</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-004 (t = P ÷ E, or t = P × E)</p>
+
+</div><div class="ans">
+<p class="aq"><b>Example 7</b> Graph 1: temperature at 60 s; gradient and meaning.  </p>
+<p class="aa"><b>Answer:</b> Fully worked: 26 °C; gradient = 20 ÷ 200 = 0.10 °C/s, the rate of temperature rise.</p>
+
+
+
+<p class="tn"><b>Note:</b> Ask “What is one small square worth?” before anything is read (teacher note from the manifest).</p>
+</div><div class="ans">
+<p class="aq"><b>Example 8</b> Graph 1: time at 44 °C (faded step); rise in first 3 minutes (printed). <span class="rv">model answer visible to pupils after their attempt</span> </p>
+<p class="aa"><b>Answer:</b> (a) 240 s. (b) printed: 180 s → 38 °C; rise 18 °C.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006 (scale: 10 s per small square)</p>
+
+</div><h4>Guided practice</h4><div class="ans">
+<p class="aq"><b>Hinge 1</b> Convert 2.4 MJ into joules.  <span class="fid">fields: b1_s1_hinge1</span></p>
+<p class="aa"><b>Answer:</b> 2.4 × 10<sup>6</sup> J (2 400 000 J).</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001, MIS-PHY-SKL-003</p>
+
+</div><div class="ans">
+<p class="aq"><b>G1</b> Convert (a) 45 minutes into seconds; (b) 750 g into kilograms. <span class="rv">model answer visible to pupils after their attempt</span> <span class="fid">fields: b1_s1_g1a, b1_s1_g1b</span></p>
+<p class="aa"><b>Answer:</b> (a) 45 × 60 = 2700 s. (b) 750 ÷ 1000 = 0.75 kg.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001</p>
+
+</div><div class="ans">
+<p class="aq"><b>G2</b> Write in standard form: (a) 3 500 000 000 W; (b) 0.000 068 m. <span class="rv">model answer visible to pupils after their attempt</span> <span class="fid">fields: b1_s1_g2a, b1_s1_g2b</span></p>
+<p class="aa"><b>Answer:</b> (a) 3.5 × 10<sup>9</sup> W (= 3.5 GW). (b) 6.8 × 10<sup>−5</sup> m.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-003</p>
+
+</div><div class="ans">
+<p class="aq"><b>Hinge 2</b> Rearrange E<sub>k</sub> = ½mv² to make v the subject.  <span class="fid">fields: b1_s1_hinge2</span></p>
+<p class="aa"><b>Answer:</b> v = √(2E<sub>k</sub> ÷ m).</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-005</p>
+
+</div><div class="ans">
+<p class="aq"><b>G3</b> Rearrange (a) P = E/t to make E the subject; (b) E<sub>p</sub> = mgh to make h the subject. <span class="rv">model answer visible to pupils after their attempt</span> <span class="fid">fields: b1_s1_g3a, b1_s1_g3b</span></p>
+<p class="aa"><b>Answer:</b> (a) E = P × t. (b) h = E<sub>p</sub> ÷ (m g).</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-004</p>
+
+</div><div class="ans">
+<p class="aq"><b>Hinge 3</b> A straight line on a distance–time graph goes from (0 s, 0 m) to (8 s, 40 m). What is the speed?  <span class="fid">fields: b1_s1_hinge3</span></p>
+<p class="aa"><b>Answer:</b> 5 m/s: the gradient, 40 m ÷ 8 s.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006</p>
+
+</div><div class="ans">
+<p class="aq"><b>G4</b> Use Graph 2 (the trotro). (a) Read the distance travelled at 12 s. (b) At what time has the trotro travelled 240 m? <span class="rv">model answer visible to pupils after their attempt</span> <span class="fid">fields: b1_s1_g4a, b1_s1_g4b</span></p>
+<p class="aa"><b>Answer:</b> (a) 120 m. (b) 24 s.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006</p>
+
+</div><h4>Independent practice</h4><div class="ans">
+<p class="aq"><b>I1</b> <span class="mk">[5]</span> Convert each quantity into its SI base unit: (a) 3.5 kJ into J; (b) 820 g into kg; (c) 5 minutes into s; (d) 25 cm into m; (e) 35 mm into m.  <span class="fid">fields: b1_s1_i1a, b1_s1_i1b, b1_s1_i1c, b1_s1_i1d, b1_s1_i1e</span></p>
+<p class="aa"><b>Answer:</b> (a) 3500 J (b) 0.82 kg (c) 300 s (d) 0.25 m (e) 0.035 m</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) 3500 J</li><li>(b) 0.82 kg</li><li>(c) 300 s</li><li>(d) 0.25 m</li><li>(e) 0.035 m</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001</p>
+
+</div><div class="ans">
+<p class="aq"><b>I2</b> <span class="mk">[2]</span> Write in standard form: (a) 72 000 J; (b) 0.000 91 s.  <span class="fid">fields: b1_s1_i2a, b1_s1_i2b</span></p>
+<p class="aa"><b>Answer:</b> (a) 7.2 × 10<sup>4</sup> J (b) 9.1 × 10<sup>−4</sup> s</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) 7.2 × 10<sup>4</sup> J</li><li>(b) 9.1 × 10<sup>−4</sup> s</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-003</p>
+
+</div><div class="ans">
+<p class="aq"><b>I3</b> <span class="mk">[1]</span> Rearrange F = ke to make e the subject.  <span class="fid">fields: b1_s1_i3</span></p>
+<p class="aa"><b>Answer:</b> e = F ÷ k</p>
+
+<p class="ms1"><b>Mark:</b> e = F ÷ k (or F/k)</p>
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-004 (e = F × k or k ÷ F)</p>
+
+</div><div class="ans">
+<p class="aq"><b>I4</b> <span class="mk">[3]</span> Write each quantity in its SI base unit, in standard form: (a) 0.6 GW; (b) 450 nm; (c) 2.5 TJ.  <span class="fid">fields: b1_s1_i4a, b1_s1_i4b, b1_s1_i4c</span></p>
+<p class="aa"><b>Answer:</b> (a) 6 × 10<sup>8</sup> W (b) 4.5 × 10<sup>−7</sup> m (c) 2.5 × 10<sup>12</sup> J</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) 6 × 10<sup>8</sup> W (accept 6.0 × 10<sup>8</sup> W)</li><li>(b) 4.5 × 10<sup>−7</sup> m</li><li>(c) 2.5 × 10<sup>12</sup> J</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-003 (0.6 × 10<sup>9</sup> is not standard form: 0 marks for (a) unless rewritten)</p>
+
+</div><div class="ans">
+<p class="aq"><b>I5</b> <span class="mk">[5]</span> Use Graph 2 (the trotro). (a) Calculate the speed of the trotro in section A. (b) Calculate its speed in section C. (c) Describe the motion of the trotro in section B.  <span class="fid">fields: b1_s1_i5a, b1_s1_i5b, b1_s1_i5c</span></p>
+<p class="aa"><b>Answer:</b> (a) 300 m ÷ 30 s = 10 m/s. (b) (540 − 300) m ÷ (60 − 40) s = 240 ÷ 20 = 12 m/s. (c) Stationary (not moving): the distance does not change, the line is horizontal, the gradient (speed) is zero.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) gradient method shown: 300 ÷ 30</li><li>(a) 10 m/s</li><li>(b) 240 ÷ 20 (or equivalent readings from the line)</li><li>(b) 12 m/s</li><li>(c) stationary / not moving / speed = 0 (accept “stopped”)</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006 (300 m/s or 540 m/s = a value read, not a gradient; scale misread as 25 m per small square)</p>
+
+</div><div class="ans">
+<p class="aq"><b>I6</b> <span class="mk">[3]</span> A heater in a school laboratory has a power of 800 W. Calculate the energy it transfers in 15 minutes. Give your answer in kJ.  <span class="fid">fields: b1_s1_i6</span></p>
+<p class="aa"><b>Answer:</b> t = 15 × 60 = 900 s; E = P × t = 800 × 900 = 720 000 J = 720 kJ.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>t = 900 s</li><li>E = 800 × 900 (rearranged and substituted)</li><li>720 kJ (720 000 J scores 2 of 3: the unit asked for is kJ)</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-002 (12 000 J), MIS-PHY-SKL-004 (0.89 J from P ÷ t), MIS-PHY-SKL-001 (720 000 000 kJ)</p>
+
+</div><div class="ans">
+<p class="aq"><b>I7</b> <span class="mk">[3]</span> An iron cooking pot has a mass of 1.2 kg. The specific heat capacity of iron is 450 J/kg °C. 27 kJ of energy is transferred to the thermal energy store of the pot. Calculate the rise in temperature of the pot.  <span class="fid">fields: b1_s1_i7</span></p>
+<p class="aa"><b>Answer:</b> ΔE = 27 kJ = 27 000 J. Δθ = ΔE ÷ (m c) = 27 000 ÷ (1.2 × 450) = 27 000 ÷ 540 = 50 °C.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>27 000 J</li><li>Δθ = ΔE ÷ (m c) with substitution 27 000 ÷ (1.2 × 450)</li><li>50 °C, unit required: “50” with no unit loses this mark (2 of 3)</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-002 (0.05 °C), MIS-PHY-SKL-004 (multiplying)</p>
+
+</div><div class="ans">
+<p class="aq"><b>I8 (stretch)</b> <span class="mk">[3]</span> A 60 kg cyclist has 3.0 kJ in her kinetic energy store. Calculate her speed.  <span class="fid">fields: b1_s1_i8</span></p>
+<p class="aa"><b>Answer:</b> E<sub>k</sub> = 3000 J. v = √(2E<sub>k</sub> ÷ m) = √(2 × 3000 ÷ 60) = √100 = 10 m/s.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>3.0 kJ = 3000 J</li><li>v = √(2E<sub>k</sub> ÷ m) with substitution √(2 × 3000 ÷ 60)</li><li>10 m/s</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-005 (100 m/s: no square root; 5 m/s: half the wrong way), MIS-PHY-SKL-002 (√(2 × 3 ÷ 60) = 0.32 m/s)</p>
+<p class="tn"><b>Note:</b> This is the manifest’s Block 1 stretch question: units, rearranging with a half and a square root in one question.</p>
+</div><h4>Exit ticket</h4><div class="ans">
+<p class="aq"><b>E1</b> <span class="mk">[2]</span> Convert (a) 1.5 hours into seconds; (b) 2.6 MJ into joules, in standard form.  <span class="fid">fields: b1_s1_exit1a, b1_s1_exit1b</span></p>
+<p class="aa"><b>Answer:</b> (a) 1.5 × 3600 = 5400 s. (b) 2.6 × 10<sup>6</sup> J.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) 5400 s</li><li>(b) 2.6 × 10<sup>6</sup> J</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001, MIS-PHY-SKL-003</p>
+
+</div><div class="ans">
+<p class="aq"><b>E2</b> <span class="mk">[1]</span> Rearrange E<sub>e</sub> = ½ke² to make k the subject.  <span class="fid">fields: b1_s1_exit2</span></p>
+<p class="aa"><b>Answer:</b> k = 2E<sub>e</sub> ÷ e²</p>
+
+<p class="ms1"><b>Mark:</b> k = 2E<sub>e</sub> ÷ e² (or 2E<sub>e</sub>/e²)</p>
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-005 (E<sub>e</sub> ÷ 2e²; 2E<sub>e</sub> ÷ e)</p>
+
+</div><div class="ans">
+<p class="aq"><b>E3</b> <span class="mk">[2]</span> A straight line on a temperature–time graph goes from (0 s, 18 °C) to (200 s, 58 °C). Calculate the gradient of the line, with its unit.  <span class="fid">fields: b1_s1_exit3</span></p>
+<p class="aa"><b>Answer:</b> gradient = (58 − 18) °C ÷ (200 − 0) s = 40 ÷ 200 = 0.20 °C/s.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(58 − 18) ÷ 200</li><li>0.20 °C/s, unit required</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006 (58 ÷ 200 = 0.29: used a value, not a change; 5 = inverted)</p>
+
+</div><h3 class="ans-session">Session 2</h3><h4>Retrieval</h4><div class="ans">
+<p class="aq"><b>R4</b> <span class="mk">[2]</span> Convert (a) 3.2 kJ into joules; (b) 40 minutes into seconds.  <span class="fid">fields: b1_s2_ret1a, b1_s2_ret1b</span></p>
+<p class="aa"><b>Answer:</b> (a) 3200 J (b) 2400 s</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) 3200 J</li><li>(b) 2400 s</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001</p>
+
+</div><div class="ans">
+<p class="aq"><b>R5</b> <span class="mk">[1]</span> Rearrange ρ = m/V to make V the subject.  <span class="fid">fields: b1_s2_ret2</span></p>
+<p class="aa"><b>Answer:</b> V = m ÷ ρ</p>
+
+<p class="ms1"><b>Mark:</b> V = m ÷ ρ (or m/ρ)</p>
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-004 (V = ρ ÷ m, or V = m × ρ)</p>
+
+</div><div class="ans">
+<p class="aq"><b>R6</b> <span class="mk">[1]</span> Write 0.000 52 m in standard form.  <span class="fid">fields: b1_s2_ret3</span></p>
+<p class="aa"><b>Answer:</b> 5.2 × 10<sup>−4</sup> m</p>
+
+<p class="ms1"><b>Mark:</b> 5.2 × 10<sup>−4</sup> m</p>
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-003 (5.2 × 10<sup>4</sup>, or 5.2 × 10<sup>−3</sup>)</p>
+
+</div><div class="ans">
+<p class="aq"><b>Fix it</b> Choose one exit-ticket question from Session 1 that you got wrong (or that your teacher points to). Write the question number, then the correct working, step by step.  <span class="fid">fields: b1_s2_ret_fix</span></p>
+<p class="aa"><b>Answer:</b> Pupil-specific. Accept a complete, correct redo of any E1–E3 part using the routine.</p>
+
+
+
+<p class="tn"><b>Note:</b> If a pupil got all three exit questions right, they redo the stretch I8 without looking at their first attempt.</p>
+</div><h4>Misconception clinic</h4><div class="ans">
+<p class="aq"><b>Case 1</b> <b>The question:</b> Convert 350 g into kilograms.  <span class="fid">fields: b1_s2_mc1</span></p>
+<p class="aa"><b>Answer:</b> Pupil A. A kilogram is a bigger unit than a gram, so there are fewer kilograms: divide by 1000. Pupil B converted in the wrong direction; 350 000 kg would be heavier than several lorries.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001</p>
+
+</div><div class="ans">
+<p class="aq"><b>Case 2</b> <b>The question:</b> A 1.2 kW heater is switched on for 5 minutes. Calculate the energy transferred.  <span class="fid">fields: b1_s2_mc2</span></p>
+<p class="aa"><b>Answer:</b> Pupil B. Every quantity must be in SI units before substituting: 1.2 kW = 1200 W and 5 minutes = 300 s. Pupil A substituted kW and minutes, so the answer is 60 000 times too small.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-002</p>
+
+</div><div class="ans">
+<p class="aq"><b>Case 3</b> <b>The question:</b> A 40 W fan transfers 2400 J of energy. Calculate how long it runs. (Hint: P = E ÷ t.)  <span class="fid">fields: b1_s2_mc3</span></p>
+<p class="aa"><b>Answer:</b> Pupil B. Multiply both sides by t, then divide by P: t = E ÷ P. Unit check: J ÷ (J/s) = s. Pupil A put the equation the wrong way up; 0.017 s is absurdly short for a fan.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-004</p>
+
+</div><div class="ans">
+<p class="aq"><b>Case 4</b> <b>The question:</b> A rugby player of mass 80 kg has 3240 J in their kinetic energy store. Calculate their speed. (Hint: E<sub>k</sub> = ½mv².)  <span class="fid">fields: b1_s2_mc4</span></p>
+<p class="aa"><b>Answer:</b> Pupil A. 2E<sub>k</sub> ÷ m gives v², not v; the last undo step is the square root. Pupil B stopped one step early. CHECK catches it: 81 m/s is about 290 km/h, impossible for a person running.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-005</p>
+
+</div><div class="ans">
+<p class="aq"><b>Case 5</b> <b>The question:</b> Use Graph 2. What is the speed of the trotro in section A?  <span class="fid">fields: b1_s2_mc5</span></p>
+<p class="aa"><b>Answer:</b> Pupil B. Speed is the gradient of a distance–time graph (change in distance ÷ change in time). Pupil A read a value (a distance, 300 m) and gave it a speed unit.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006</p>
+
+</div><h4>Guided practice: less familiar contexts</h4><div class="ans">
+<p class="aq"><b>GP1</b> Use Graph 3. (a) What is one small square worth on each axis? (b) How much energy does the array transfer in the first 5.0 minutes? (c) Calculate the gradient of the line in kJ/min, and say what it represents. (d) Convert your gradient into watts. <span class="rv">model answer visible to pupils after their attempt</span> <span class="fid">fields: b1_s2_gp1a, b1_s2_gp1b, b1_s2_gp1c, b1_s2_gp1d</span></p>
+<p class="aa"><b>Answer:</b> (a) 0.5 min (30 s) across; 10 kJ up. (b) 150 kJ. (c) 300 kJ ÷ 10 min = 30 kJ/min: the power, the rate at which energy is transferred. (d) 30 kJ/min = 30 000 J ÷ 60 s = 500 W.</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006, MIS-PHY-SKL-002</p>
+
+</div><div class="ans">
+<p class="aq"><b>GP2</b> The spring in a toy pinball launcher has a spring constant of 800 N/m. When it is pulled back, 3.6 J is stored in its elastic potential energy store. Calculate how far the spring is compressed. Give your answer in cm to 2 significant figures. <span class="rv">model answer visible to pupils after their attempt</span> <span class="fid">fields: b1_s2_gp2</span></p>
+<p class="aa"><b>Answer:</b> e = √(2E<sub>e</sub> ÷ k) = √(2 × 3.6 ÷ 800) = √0.009 = 0.0949 m = 9.5 cm (2 s.f.).</p>
+
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-005 (0.009 m: no root)</p>
+
+</div><h4>Independent practice and Grade 9 challenge</h4><div class="ans">
+<p class="aq"><b>I9</b> <span class="mk">[3]</span> A 3.0 kW electric water heater in a guesthouse in Tamale is switched on for 12 minutes. Calculate the energy transferred. Give your answer in MJ and in standard form (in J).  <span class="fid">fields: b1_s2_i1</span></p>
+<p class="aa"><b>Answer:</b> P = 3000 W; t = 12 × 60 = 720 s; E = 3000 × 720 = 2 160 000 J = 2.16 MJ = 2.16 × 10<sup>6</sup> J.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>P = 3000 W and t = 720 s</li><li>E = 3000 × 720 = 2 160 000 J</li><li>2.16 MJ and 2.16 × 10<sup>6</sup> J (both needed)</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-002 (36 J), MIS-PHY-SKL-003</p>
+
+</div><div class="ans">
+<p class="aq"><b>I10</b> <span class="mk">[3]</span> A group of friends push a broken-down car 8.0 m along a flat road. The force they apply does 2.4 kJ of work on the car. Calculate the force they apply, in the direction the car moves.  <span class="fid">fields: b1_s2_i2</span></p>
+<p class="aa"><b>Answer:</b> W = 2400 J; F = W ÷ s = 2400 ÷ 8.0 = 300 N.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>W = 2400 J</li><li>F = W ÷ s with substitution 2400 ÷ 8.0</li><li>300 N</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-002 (0.3 N), MIS-PHY-SKL-004 (19 200 N)</p>
+
+</div><div class="ans">
+<p class="aq"><b>I11</b> <span class="mk">[4]</span> Use Graph 2 (the trotro). (a) Calculate the average speed of the trotro for the whole 60 s. [2 marks] (b) A pupil says the average speed is (10 + 12) ÷ 2 = 11 m/s. Explain why this is wrong. [2 marks]  <span class="fid">fields: b1_s2_i3a, b1_s2_i3b</span></p>
+<p class="aa"><b>Answer:</b> (a) average speed = total distance ÷ total time = 540 m ÷ 60 s = 9.0 m/s. (b) Average speed is total distance ÷ total time. The trotro spent different times at each speed (30 s at 10 m/s, 20 s at 12 m/s) and was stationary for 10 s (section B); the mean of the two speeds ignores the times.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) 540 ÷ 60</li><li>(a) 9.0 m/s</li><li>(b) average speed = total distance ÷ total time</li><li>(b) it spends different times at each speed, including 10 s stationary in B, so the mean of 10 and 12 m/s is not the average speed</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006</p>
+
+</div><div class="ans">
+<p class="aq"><b>Grade 9</b> <span class="mk">[7]</span> A school kitchen in Accra heats 25 kg of water in a large pot on a gas burner, from 22 °C to 100 °C. The specific heat capacity of water is 4200 J/kg °C. Assume energy is transferred to the thermal energy store of the water at a steady rate of 6.5 kW. <br>(a) Calculate the time taken to heat the water, in minutes. <br>(b) In practice it takes longer than your answer to (a). Explain why.  <span class="fid">fields: b1_s2_g9a, b1_s2_g9b</span></p>
+<p class="aa"><b>Answer:</b> (a) Δθ = 100 − 22 = 78 °C. ΔE = m c Δθ = 25 × 4200 × 78 = 8 190 000 J (8.19 × 10<sup>6</sup> J). P = 6.5 kW = 6500 W. P = E ÷ t, so t = E ÷ P = 8 190 000 ÷ 6500 = 1260 s = 1260 ÷ 60 = 21 minutes. (b) Some energy is transferred by heating to the thermal energy store of the pot and is dissipated to the surroundings, so energy is transferred to the water at less than 6.5 kW; it takes longer to transfer 8.19 MJ to the water.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) Δθ = 78 °C used in ΔE = 25 × 4200 × 78</li><li>(a) ΔE = 8 190 000 J (8.19 × 10<sup>6</sup> J)</li><li>(a) P = 6500 W and t = E ÷ P (rearranged)</li><li>(a) t = 1260 s</li><li>(a) 21 minutes (allow error carried forward from a wrong ΔE for the last three marks)</li><li>(b) energy is transferred to the pot / dissipated to the surroundings (thermal energy store of the surroundings); also accept: the water itself transfers energy to the surroundings, faster as it gets hotter; some water evaporates</li><li>(b) so the rate of energy transfer to the water is less than 6.5 kW (less than 6500 J each second), so a longer time is needed</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-002 (6.5 not 6500: 1 260 000 s), MIS-PHY-SKL-004 (E × P), “lost” / “used up” in (b): no mark for (b) first point unless energy is said to go somewhere</p>
+
+</div><h3 class="ans-session">Homework</h3><h4>Part 1: Retrieve (5 short questions)</h4><div class="ans">
+<p class="aq"><b>H1</b> <span class="mk">[1]</span> What number does the prefix M (mega) multiply a unit by?  <span class="fid">fields: b1_hw_r1</span></p>
+<p class="aa"><b>Answer:</b> 10<sup>6</sup> (1 000 000)</p>
+
+<p class="ms1"><b>Mark:</b> × 10<sup>6</sup> or 1 000 000</p>
+
+
+</div><div class="ans">
+<p class="aq"><b>H2</b> <span class="mk">[1]</span> What number does the prefix µ (micro) multiply a unit by?  <span class="fid">fields: b1_hw_r2</span></p>
+<p class="aa"><b>Answer:</b> 10<sup>−6</sup> (0.000 001)</p>
+
+<p class="ms1"><b>Mark:</b> × 10<sup>−6</sup> or 0.000 001</p>
+
+
+</div><div class="ans">
+<p class="aq"><b>H3</b> <span class="mk">[1]</span> Convert 1.25 hours into seconds.  <span class="fid">fields: b1_hw_r3</span></p>
+<p class="aa"><b>Answer:</b> 1.25 × 3600 = 4500 s</p>
+
+<p class="ms1"><b>Mark:</b> 4500 s</p>
+
+
+</div><div class="ans">
+<p class="aq"><b>H4</b> <span class="mk">[1]</span> Write 5.6 × 10<sup>−3</sup> as an ordinary number.  <span class="fid">fields: b1_hw_r4</span></p>
+<p class="aa"><b>Answer:</b> 0.0056</p>
+
+<p class="ms1"><b>Mark:</b> 0.0056</p>
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-003 (5600)</p>
+
+</div><div class="ans">
+<p class="aq"><b>H5</b> <span class="mk">[1]</span> What does the gradient of a distance–time graph represent?  <span class="fid">fields: b1_hw_r5</span></p>
+<p class="aa"><b>Answer:</b> The speed.</p>
+
+<p class="ms1"><b>Mark:</b> speed</p>
+
+
+</div><h4>Part 2: Practise (5 questions)</h4><div class="ans">
+<p class="aq"><b>H6</b> <span class="mk">[2]</span> Convert (a) 640 g into kilograms; (b) 72 cm into metres.  <span class="fid">fields: b1_hw_p1a, b1_hw_p1b</span></p>
+<p class="aa"><b>Answer:</b> (a) 0.64 kg (b) 0.72 m</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) 0.64 kg</li><li>(b) 0.72 m</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-001</p>
+
+</div><div class="ans">
+<p class="aq"><b>H7</b> <span class="mk">[3]</span> A hydroelectric power station has an output power of 900 MW. Calculate the energy it transfers in 24 hours. Give your answer in standard form to 2 significant figures.  <span class="fid">fields: b1_hw_p2</span></p>
+<p class="aa"><b>Answer:</b> P = 900 MW = 9.0 × 10<sup>8</sup> W; t = 24 × 3600 = 86 400 s; E = P t = 9.0 × 10<sup>8</sup> × 86 400 = 7.776 × 10<sup>13</sup> J = 7.8 × 10<sup>13</sup> J (2 s.f.).</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>P = 9.0 × 10<sup>8</sup> W and t = 86 400 s</li><li>E = 9.0 × 10<sup>8</sup> × 86 400</li><li>7.8 × 10<sup>13</sup> J, to 2 s.f.</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-002 (2.16 × 10<sup>10</sup> from 24 h unconverted), MIS-PHY-SKL-003</p>
+
+</div><div class="ans">
+<p class="aq"><b>H8</b> <span class="mk">[3]</span> A 2.5 kg bunch of plantains is lifted onto a shelf. The energy in its gravitational potential energy store increases by 44.1 J. Gravitational field strength, g = 9.8 N/kg. Calculate the height it is lifted.  <span class="fid">fields: b1_hw_p3</span></p>
+<p class="aa"><b>Answer:</b> h = E<sub>p</sub> ÷ (m g) = 44.1 ÷ (2.5 × 9.8) = 44.1 ÷ 24.5 = 1.8 m.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>h = E<sub>p</sub> ÷ (m g)</li><li>44.1 ÷ (2.5 × 9.8)</li><li>1.8 m</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-004 (1080 m, multiplied)</p>
+
+</div><div class="ans">
+<p class="aq"><b>H9</b> <span class="mk">[2]</span> Use Graph 2 (the trotro). (a) How far has the trotro travelled after 50 s? (b) At what time has it travelled 200 m?  <span class="fid">fields: b1_hw_p4a, b1_hw_p4b</span></p>
+<p class="aa"><b>Answer:</b> (a) 420 m (section C: 50 s is 25 small squares along; the line is 21 small squares up, 21 × 20 m). (b) 20 s (section A: 200 m is 10 small squares up; the line is 10 small squares along, 10 × 2 s).</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>(a) 420 m</li><li>(b) 20 s</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-006 (scale: 2 s and 20 m per small square)</p>
+
+</div><div class="ans">
+<p class="aq"><b>H10</b> <span class="mk">[3]</span> A microwave oven transfers 5.4 × 10<sup>5</sup> J of energy in 12 minutes. Calculate its power.  <span class="fid">fields: b1_hw_p5</span></p>
+<p class="aa"><b>Answer:</b> t = 720 s; P = E ÷ t = 540 000 ÷ 720 = 750 W.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>t = 12 × 60 = 720 s</li><li>P = 5.4 × 10<sup>5</sup> ÷ 720</li><li>750 W</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-002 (45 000 W)</p>
+
+</div><h4>Part 3: Stretch (1 question)</h4><div class="ans">
+<p class="aq"><b>H11</b> <span class="mk">[4]</span> A trotro has a mass of 3600 kg. It travels along a straight road at 54 km/h. Calculate the energy in its kinetic energy store. Give your answer in kJ.  <span class="fid">fields: b1_hw_s1</span></p>
+<p class="aa"><b>Answer:</b> 54 km/h = 54 000 m ÷ 3600 s = 15 m/s. E<sub>k</sub> = ½ × 3600 × 15² = 405 000 J = 405 kJ.</p>
+<div class="ms"><b>Mark scheme (1 mark per point):</b><ol><li>v = 15 m/s (54 000 m ÷ 3600 s)</li><li>E<sub>k</sub> = ½ × 3600 × 15²</li><li>405 000 J</li><li>405 kJ</li></ol></div>
+
+<p class="watch"><b>Watch for:</b> MIS-PHY-SKL-002 (5 248 800 J from 54 km/h unconverted), MIS-PHY-ENE-004 (not squared)</p>
+
+</div>
+</section>
+
+<section id="misc"><h2>8. Misconception notes</h2>
+<div class="tw"><table class=""><thead><tr><th scope="col">Code</th><th scope="col">The misconception</th><th scope="col">The correct idea</th><th scope="col">What it looks like in pupils’ work</th><th scope="col">The fix</th></tr></thead><tbody><tr><td>MIS-PHY-SKL-001<br><i>procedural</i></td><td>Converts in the wrong direction (e.g. 2.5 kJ → 0.0025 J, or 500 g → 500 000 kg).</td><td>Converting to a smaller unit gives a bigger number: 2.5 kJ = 2500 J; 500 g = 0.5 kg.</td><td>Answers 10<sup>6</sup> times too small or too large (1000 × 1000: the wrong direction by the prefix factor squared); 350 000 kg for a bag of flour; R2 = 0.000 25 g; I1(b) = 820 000 kg.</td><td>Before calculating, say aloud: “smaller unit → more of them → bigger number”. Write the direction arrow (↑ or ↓) next to every conversion in GIVEN. Use CHECK: is 350 000 kg sensible? Clinic Case 1.</td></tr><tr><td>MIS-PHY-SKL-002<br><i>procedural</i></td><td>Substitutes non-SI values without converting (grams, kJ, minutes, cm).</td><td>Convert to kg, J, s, m before substituting.</td><td>Answers 1000×, 60×, 3600× or 100× out: 6 J for a 1.2 kW heater on for 5 minutes; 63 000 000 J for a mug of water; 36 J in I9; 1 260 000 s in the Grade 9 challenge.</td><td>Make GIVEN non-negotiable: every quantity is rewritten in SI before RELATIONSHIP. Circle any prefix or non-SI unit in the question first. Clinic Case 2.</td></tr><tr><td>MIS-PHY-SKL-003<br><i>procedural</i></td><td>Reverses the sign of the power of ten or miscounts the decimal places.</td><td>A number below 1 has a negative power: 0.0045 = 4.5 × 10<sup>−3</sup>.</td><td>0.000 52 written as 5.2 × 10<sup>4</sup>; 58 × 10<sup>5</sup> left unconverted; 5.6 × 10<sup>−3</sup> read as 5600; calculator entries “× 10 ×10<sup>x</sup> 9” giving answers 10 times too big.</td><td>Rule: “below 1 → negative power”. Count places with a pencil jump under each digit. Check by converting back. Watch keying: never press “× 10” as well as ×10<sup>x</sup>.</td></tr><tr><td>MIS-PHY-SKL-004<br><i>procedural</i></td><td>Rearranges a quotient the wrong way (P = E/t → E = P/t).</td><td>Multiply both sides by t: E = P × t.</td><td>t = 40 ÷ 2400 = 0.017 s for a 40 W fan (Case 3); t = P ÷ E in Example 6 (0.000 56); Δθ = ΔE × m × c.</td><td>Balance model: “E was divided by t; multiplying undoes dividing.” Unit check: W = J/s, so W × s = J. Use the formula triangle only as a check, never instead of the balance. Clinic Case 3.</td></tr><tr><td>MIS-PHY-SKL-005<br><i>procedural</i></td><td>Applies a square or a half to the wrong quantity when rearranging (e.g. v = 2E<sub>k</sub>/m without the square root).</td><td>Undo operations in reverse order: v = √(2E<sub>k</sub>/m).</td><td>81 m/s for a rugby player (v² not v); 100 m/s in I8; 5 m/s in I8 (half the wrong way); 750 kg in Example 5; 0.009 m in GP2.</td><td>Write the build chain (v → square → × m → × ½), then undo right to left. CHECK the size: 81 m/s is about 290 km/h. Clinic Case 4.</td></tr><tr><td>MIS-PHY-SKL-006<br><i>procedural</i></td><td>Reads the value at a point instead of the gradient, or misreads the axis scale.</td><td>Gradient = change in y ÷ change in x across the line; check the scale of each small square.</td><td>300 m/s for section A of Graph 2 (a distance read as a speed); 25 m instead of 20 m per small square; 0.29 in E3 (a value divided by a value, not a change); GP1(a) assuming the squares are the same on both axes.</td><td>Every graph question starts with “what is one small square worth?” on each axis. Draw a big triangle with Δ labels and units. Ask “how much, or how fast?” to separate value from gradient. Clinic Case 5.</td></tr></tbody></table></div>
+</section>
+
+<section id="diff"><h2>9. Differentiation</h2>
+<h3>Foundation support</h3>
+<ul>
+<li>Square-root rearrangements are Higher demand (band 3): Hinge 2, I8, GP2 and Clinic Case 4 are tagged “Higher”. Foundation pupils do the rearrangements without a root instead (Example 5, E2) and may omit GP2; they should still see Case 4 as a discussion.</li>
+<li>Give a printed routine card and a printed prefix table; allow pupils to annotate GIVEN with ↑ / ↓ arrows for the direction of each conversion.</li>
+<li>For graphs, give the “one small square” sentence frame: “___ across ___ small squares, so one small square is ___”.</li>
+<li>Grade 9 challenge prompts, one at a time only if stuck: (1) “Find ΔE first: what is Δθ?” (2) “Now you know E and P: which equation links energy, power and time?” (3) “Your time is in seconds: the question wants minutes.”</li>
+<li>Reduce, do not change: Band 1 and Band 2 of the independent practice are enough for a Foundation pupil in Session 1 if the stretch is not reached; record that I8 was not attempted rather than marking it wrong.</li>
+</ul>
+<h3>Higher stretch</h3>
+<ul>
+<li>Pupils secure on the baseline start at Band 2 and must reach I8 and the Grade 9 challenge.</li>
+<li>Extension prompts: “Show that v = √(2E<sub>k</sub>/m) has the unit m/s (J = kg m²/s²).” “In GP1, what would the graph look like if clouds covered the sun for 2 minutes? What would the gradient be then?” “In the Grade 9 challenge, estimate the actual rate of energy transfer to the water if it really took 30 minutes.” (8 190 000 J ÷ 1800 s = 4550 W.)</li>
+<li>Ask Higher pupils to write the CHECK line as an estimate before they calculate (MS 1d).</li>
+</ul>
+</section>
+
+<section id="mastery"><h2>10. Mastery and next steps</h2>
+<ul>
+<li><b>Check before Session 2: the Block 1 check needs approved mastery-check items for the four Toolkit concepts. At the time of writing there are none (School-Ready Gate). If the check is not live on the platform, do not build a substitute from this lesson’s questions: use minutes 40–55 for the Grade 9 challenge and the exit-ticket ‘Fix it’ for pupils who need it, and record the block check as pending.</b></li>
+<li><b>When it is live, the block mastery check runs on the platform</b> (programme check mode), in Session 2 minutes 40–55: 15 minutes, independent, no notes. It will use approved mastery-check items tagged to the four Toolkit concepts (at least 2, ideally 3 per concept), kept separate from anything in this lesson. It does not produce a grade. Do not show pupils the items beforehand or go through them afterwards as a class: the second check must use items the pupil has not seen.</li>
+<li><b>What the lesson evidence is for.</b> Exit tickets, the Grade 9 challenge and homework tell you what to re-teach; they are not the mastery decision. The self-rating is self-report only and never certifies mastery.</li>
+<li><b>Recommended next step per pupil.</b> After the check, the teacher programme view recommends each pupil’s next step for each concept: <b>prerequisite repair</b> (a missing earlier skill is the cause), <b>misconception clinic</b> (a sure-wrong answer signalled a named misconception), <b>worked-example re-teach</b> (the method is not yet secure), <b>second check</b> (after remediation, on unseen items), or <b>escalate</b> (to you, after a second fail). Pupils with the same recommended action can work together.</li>
+</ul>
+<h3>Remediation policy (programme manifest)</h3>
+<div class="tw"><table class=""><thead><tr><th scope="col"></th><th scope="col">Policy</th></tr></thead><tbody><tr><td>Pass threshold</td><td>A concept passes the block check when every mastery-check item on it is right and no sure-wrong answer signals one of its misconceptions.</td></tr><tr><td>After a first fail</td><td>The pupil gets the recommended remediation (misconception clinic, prerequisite repair or worked-example re-teach), then a second mastery check on items they have not seen.</td></tr><tr><td>After a second fail</td><td>Escalate to the teacher (E1): 5-minute 1:1 on the evidence; the teacher chooses a live re-teach, a prerequisite mini-lesson, or an override with a reason.</td></tr><tr><td>Never do</td><td>Never “You scored 45%. Next topic.” Never label a pupil from one answer. Never show an untaught concept as insecure.</td></tr></tbody></table></div>
+<p>For remediation material in this block: the clinic cases map one-to-one to MIS-PHY-SKL-001, -002, -004, -005 and -006 (Cases 1–5); Examples 1–8 are the worked-example re-teach; the prefix table and standard-form rule box are the prerequisite repair for conversions.</p>
+</section>
+
+<section id="escalate"><h2>11. Escalation flags: when to stop and see a pupil 1:1</h2>
+<ul>
+<li>The pupil gets <b>both</b> exit-ticket conversions (E1) wrong in the same way as in retrieval (R2 or R4): a stable direction error, not a slip.</li>
+<li>The pupil cannot say what one small square is worth on Graph 2 after the concept construction (Think 4 wrong, or G4 misread): check reading of scales and number sense before any more graph work.</li>
+<li>Arithmetic, not physics, is the barrier: the pupil cannot multiply or divide by 1000 or 60 reliably, or cannot use a calculator’s basic functions. This is below the Toolkit; refer to maths support and tell the programme lead.</li>
+<li>The pupil does not write working even when prompted twice, or copies model answers into the boxes before attempting (the platform saves every field; look for identical wording).</li>
+<li>A second mastery-check fail on the same concept (policy E1): 5-minute 1:1 on the evidence, then a live re-teach, a prerequisite mini-lesson, or an override with a reason.</li>
+<li>Any sign of distress or disengagement around maths (e.g. blank exit ticket, “I’m just bad at maths”): talk privately; do not record it as a mastery failure.</li>
+</ul>
+</section>
+
+<section id="integrity"><h2>12. Evidence integrity and saved fields</h2>
+<ul>
+<li>Model answers open only in worked examples and guided practice. Some answers also appear in the teaching text (Hinge 2 in Tool 3; Think 3 in the product-form card), so run hinges with screens down.</li>
+<li>Apart from Think 3 (answer in the product-form card) and I5(a) (answered by Case 5 in Session 2; mark I5 before the clinic), there are <b>no</b> answers on the pupil page for retrieval, concept-construction “Think” questions, the misconception clinic, independent practice, exit tickets, the Grade 9 challenge or homework. Their answers are only in this guide: do not share this guide with pupils.</li>
+<li>Every pupil box saves to the pupil’s account through a unique <code>data-save</code> id beginning <code>b1_</code> (99 fields). The ids for each question are listed next to it in section 7. The error log uses <code>b1_err1_date</code> … <code>b1_err3_next</code>; the self-ratings use <code>b1_rate_units</code>, <code>b1_rate_sf</code>, <code>b1_rate_rearr</code>, <code>b1_rate_graph</code>. No field is used for teacher input.</li>
+<li>The ISM Class runtime adds the Submit to Teacher button, photo upload and the feedback panel; they are not part of the lesson file.</li>
+</ul>
+</section>
+<footer class="ft">Inspire Science Mastery · ISM Physics School V1 · Block 1 teacher guide · Draft for subject QA</footer>
+
+</main>
+</body>
+</html>

@@ -4,7 +4,7 @@
 
 ## Status: **NOT READY**
 
-7 pass · 12 partial · 9 fail · 12 awaiting a person · 40 items. Pilot items: 7/20 pass.
+10 pass · 11 partial · 7 fail · 12 awaiting a person · 40 items. Pilot items: 10/20 pass.
 
 PILOT READY means every item marked **P** passes: an internal pilot of Blocks 1–2 with the ISM cohort. SCHOOL READY needs every item.
 
@@ -17,25 +17,25 @@ PILOT READY means every item marked **P** passes: an internal pilot of Blocks 1�
 | ✅ PASS | Common misconceptions mapped | P | 27 canonical misconceptions; every concept has at least one. |
 | ◐ PARTIAL | Baseline diagnostic operational (approved diagnostic item per concept + programme-check runtime, live) | P | Concepts without an approved diagnostic item: 13/15 (phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources). Programme-check runtime: built and tested. Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
 | ◐ PARTIAL | Intervention routing operational (deterministic rules + teacher validation, live) | P | Rules module: built and tested. Teacher view with validate/override: built and tested. Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
-| ❌ FAIL | 100% core lessons present and QA-passed |  | 1/6 usable. B1: qa-failed; B3: missing; B4: missing; B5: missing; W6: missing |
-| ❌ FAIL | Core lessons present and QA-passed for the pilot blocks (B1, B2) | P | B1: qa-failed (docs/school/physics-v1/qa/week1-toolkit.md) |
-| ◐ PARTIAL | 100% teacher guides present (programme guide + block guides tied to a usable lesson) |  | Programme guide: present. Block guides missing: none. Guides generated but without a usable lesson to deliver from: B1, B3, B4, B5, W6. |
-| ❌ FAIL | Teacher guides present for the pilot blocks (B1, B2) | P | The B1/B2 guides need a usable lesson behind them (see lessons-pilot). |
+| ❌ FAIL | 100% core lessons present and QA-passed |  | 2/6 usable. B3: missing; B4: missing; B5: missing; W6: missing |
+| ✅ PASS | Core lessons present and QA-passed for the pilot blocks (B1, B2) | P | B1 and B2 lessons reviewed. |
+| ◐ PARTIAL | 100% teacher guides present (programme guide + block guides tied to a usable lesson) |  | Programme guide: present. Block guides missing: none. Guides generated but without a usable lesson to deliver from: B3, B4, B5, W6. |
+| ✅ PASS | Teacher guides present for the pilot blocks (B1, B2) | P | Present. |
 | ◐ PARTIAL | 100% student practice present (approved practice per concept) |  | 2/15 concepts have approved practice. Missing: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources |
 | ❌ FAIL | Approved practice for the pilot blocks | P | Missing: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done |
-| ◐ PARTIAL | 100% answers / worked solutions present |  | Reviewed items (all with worked explanations) for 4/15 concepts. Lessons with QA-passed model answers: 1/6. |
+| ◐ PARTIAL | 100% answers / worked solutions present |  | Reviewed items (all with worked explanations) for 4/15 concepts. Lessons with QA-passed model answers: 2/6. |
 | ❌ FAIL | Exam-application practice mapped (≥ 5 Inspire-written multi-concept items) |  | 0 application items (need ≥ 5). PASCO solutions are private (copyright) and cannot fill this layer. |
 | ◐ PARTIAL | Mastery checks present (≥ 2 approved mastery-check items per concept) |  | 2/15 concepts. Missing: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources |
 | ◐ PARTIAL | Item-pool depth for a second attempt (≥ 3 approved mastery-check items per concept) |  | 1/15 concepts. Short: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done, phy.energy.gravitational, phy.energy.transfer-calcs, phy.energy.elastic, phy.energy.shc, phy.energy.power, phy.energy.dissipation-efficiency, phy.energy.resources |
 | ❌ FAIL | Mastery checks present for the pilot blocks | P | Missing: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done |
-| ◐ PARTIAL | Remediation pathways for the pilot blocks (routing + clinics in the B1/B2 lessons + per-misconception routes in the guides) | P | Routing: built. Pilot lessons with clinics: B2 of B1, B2. |
-| ◐ PARTIAL | Remediation pathways present for every block (routing + lesson clinics + per-misconception material) |  | Routing built; blocks without a QA-passed lesson to carry the clinics: B1, B3, B4, B5, W6. Dedicated remediation micro-lessons per misconception: not yet produced (P1). |
+| ✅ PASS | Remediation pathways for the pilot blocks (routing + clinics in the B1/B2 lessons + per-misconception routes in the guides) | P | mastery-rules.js routing and REMEDIATION_STEPS; the B1/B2 lessons have misconception clinics; the block guides give a route per misconception. |
+| ◐ PARTIAL | Remediation pathways present for every block (routing + lesson clinics + per-misconception material) |  | Routing built; blocks without a QA-passed lesson to carry the clinics: B3, B4, B5, W6. Dedicated remediation micro-lessons per misconception: not yet produced (P1). |
 | ◐ PARTIAL | Reassessment present (parallel form per concept + runtime, live) |  | Concepts without a second approved diagnostic/retrieval item for a parallel form: 15/15. Runtime: built (reassessment mode, unseen items only). Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
 | ◐ PARTIAL | Reporting operational (school intervention report from real data, live) |  | Report built: attendance, baseline, priorities, pathways, block checks, reassessment comparison, profile, individual summaries, next steps; recorded data only; no causal claims. Not live yet: needs supabase/mastery_engine_02_programme.sql run, then deploy, then a smoke test recorded as runtime-live. |
 | ❌ FAIL | Teacher delivery does not depend on Eric: guides complete |  | Guides incomplete (see guides). |
 | 👤 MANUAL | Teacher delivery does not depend on Eric: a session delivered by a non-author from the guide alone |  | Not yet verified by a person (record it in curriculum/school/approvals.js). |
-| ❌ FAIL | Physics Subject Expert QA passed (every item and every lesson in use) |  | Concepts with reviewed packs: 4/15. Lessons QA-passed: 1/6. |
-| ❌ FAIL | Subject QA passed for the pilot blocks | P | Unreviewed concepts: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done; lessons: B1 qa-failed, B2 reviewed |
+| ❌ FAIL | Physics Subject Expert QA passed (every item and every lesson in use) |  | Concepts with reviewed packs: 4/15. Lessons QA-passed: 2/6. |
+| ❌ FAIL | Subject QA passed for the pilot blocks | P | Unreviewed concepts: phy.skills.units-prefixes, phy.skills.standard-form, phy.skills.rearranging, phy.skills.graph-reading, phy.energy.stores-systems, phy.energy.conservation, phy.forces.work-done; lessons: B1 reviewed, B2 reviewed |
 | ◐ PARTIAL | Eric spot-review gate passed (every block approved) |  | Approved: 2/15 (phy.energy.kinetic, phy.energy.gravitational). |
 | 👤 MANUAL | End-to-end student journey tested | P | Not yet verified by a person (record it in curriculum/school/approvals.js). |
 | 👤 MANUAL | End-to-end teacher journey tested | P | Not yet verified by a person (record it in curriculum/school/approvals.js). |

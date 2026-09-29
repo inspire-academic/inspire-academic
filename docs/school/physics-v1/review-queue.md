@@ -26,9 +26,18 @@ For each: **Pass / Fail**, plus one line if it fails.
 
 **Decision you must make on this batch:** the "four pathways, with *by sound* as a mechanical transfer" wording (qa/b2-lesson.md). The reviewer found it defensible. If you prefer "sound" treated as radiation (waves), say so, and it becomes a systematic correction.
 
-## Batch L1: Block 1 lesson "The Physicist's Toolkit" (subject QA round 1: FIT AFTER CORRECTIONS; round 2 in progress)
+## Batch L1: Block 1 lesson "The Physicist's Toolkit" (subject QA: FIT FOR SCHOOL USE, 3 rounds)
 
-This batch is added once round 2 passes (see `gate.md`). The planned sample is: Graph 2 and the questions read from it; the rearranging clinic cases; the Grade 9 challenge; the teacher guide's mastery-check note.
+Files: `curriculum/school/lessons/physics/b1-toolkit.html` (pupil), `b1-toolkit.teacher.html` (teacher). QA record: `qa/b1-lesson.md`.
+
+Sample (seed `20260929-L1`, stratified):
+
+| # | What to check | Why it was sampled | Where |
+|---|---|---|---|
+| 1 | Graph 2 (trotro distance–time) and the questions read from it (G4, H9, I5, I11) | Graph reading had no evidence at all in Week 1; captions leaked values in round 1 | Pupil file Tool 4 / Session 2; teacher §7 (coordinates) |
+| 2 | The misconception clinic, Cases 1–5 | Its correct pupil and two of its cases were changed in round 1 | Pupil §2.2, teacher §9 |
+| 3 | Worked Example 4 (standard form, µW → J) | A pupil-visible placeholder was found in round 2 | Pupil §1.3 |
+| 4 (optional) | The Grade 9 challenge (kitchen in Accra) and its mark scheme | Multi-step; certifies stretch | Pupil §2.4, teacher §9 |
 
 ## Already in your pipeline (unchanged by this sprint)
 
