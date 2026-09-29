@@ -57,3 +57,11 @@ test('student page keeps the timetable hidden until an active enrolment is found
   // image path from the DB is re-checked before use, same rule as the SQL CHECK
   assert.match(REVISION, /\^\\\/assets\\\/images\\\/ism\\\/\[a-z0-9-\]\+\\\.webp\$/);
 });
+
+test('Assign Lessons lets admins pick any student, not just their own assigned ones', () => {
+  const fn = MGMT.match(/async function loadAssignOptions\(\) \{[\s\S]*?\n\}/)[0];
+  assert.match(fn, /loadEnrolStudents\(\)/, 'must reuse the admin-aware student list');
+  assert.doesNotMatch(fn, /teacher_student_assignments/, 'must not re-filter to assigned students');
+  const loader = MGMT.match(/async function loadEnrolStudents\(\) \{[\s\S]*?\n\}/)[0];
+  assert.match(loader, /myRole === 'admin' \|\| myRole === 'super_admin'/);
+});

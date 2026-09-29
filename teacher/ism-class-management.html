@@ -588,20 +588,19 @@ document.querySelectorAll('input[name="assign-type"]').forEach(r => r.addEventLi
   document.getElementById('assign-cohort-field').style.display = type === 'cohort' ? 'block' : 'none';
 }));
 
+// Admins pick from every student and every cohort (see
+// feedback_admin_bypass_consistency); teachers from their own assigned
+// students and cohorts. Same student list as the ISM Students tab.
 async function loadAssignOptions() {
   const { data: { user } } = await supa.auth.getUser();
-  const [{ data: assignments }, { data: cohorts }] = await Promise.all([
-    supa.from('teacher_student_assignments').select('student_id').eq('teacher_id', user.id).eq('is_active', true),
-    supa.from('cohorts').select('id,name').eq('teacher_id', user.id)
-  ]);
+  const isAdmin = myRole === 'admin' || myRole === 'super_admin';
+  let cohortQuery = supa.from('cohorts').select('id,name').order('name');
+  if (!isAdmin) cohortQuery = cohortQuery.eq('teacher_id', user.id);
+  const [students, { data: cohorts }] = await Promise.all([loadEnrolStudents(), cohortQuery]);
   myCohorts = cohorts || [];
-  const studentIds = (assignments || []).map(a => a.student_id);
-  if (studentIds.length) {
-    const { data: profiles } = await supa.from('profiles').select('id,full_name').in('id', studentIds);
-    assignedStudents = profiles || [];
-  }
-  document.getElementById('assign-student-select').innerHTML = assignedStudents.map(s => `<option value="${s.id}">${s.full_name || s.id}</option>`).join('');
-  document.getElementById('assign-cohort-select').innerHTML = myCohorts.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  assignedStudents = students.map(s => ({ id: s.id, full_name: s.name }));
+  document.getElementById('assign-student-select').innerHTML = assignedStudents.map(s => `<option value="${esc(s.id)}">${esc(s.full_name)}</option>`).join('');
+  document.getElementById('assign-cohort-select').innerHTML = myCohorts.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
 }
 
 async function loadAssignments() {
@@ -615,11 +614,11 @@ async function loadAssignments() {
     const el = document.getElementById('assignment-list');
     el.innerHTML = (data.assignments || []).map(a => `
       <div class="lesson-row" style="border-bottom:1px solid var(--border);">
-        <div class="lesson-row-info">${
+        <div class="lesson-row-info">${esc(
           a.assignee_type === 'student' ? (studentById[a.student_id] || a.student_id) :
           a.assignee_type === 'cohort' ? 'Cohort: ' + (cohortById[a.cohort_id] || a.cohort_id) :
           'All my assigned students'
-        }</div>
+        )}</div>
         <button class="mini-btn" onclick="removeAssignment('${lessonId}','${a.id}')">Remove</button>
       </div>`).join('') || '<div class="muted" style="padding:.6rem 0;">No assignments yet.</div>';
   } catch (e) { toast(e.message || 'Could not load assignments', 'error'); }
