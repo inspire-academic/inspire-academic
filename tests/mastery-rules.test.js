@@ -232,6 +232,14 @@ test('an unassessed concept is never "caused" by a weak prerequisite (found in t
   assert.notEqual(p.next.conceptId, 'phy.energy.transfer-calcs');
 });
 
+test('skill errors on a mastery check for another concept are not failed checks of the skill (found in the end-to-end preview)', () => {
+  const charged = s => ev({ conceptId: 'phy.skills.rearranging', role: 'charged', primaryConceptId: 'phy.energy.kinetic', evidenceClass: 'mastery_check',
+    correct: false, misconceptionId: 'MIS-PHY-SKL-005', sessionId: s, at: at(s === 'm1' ? 0 : 2 * D) });
+  const rows = [charged('m1'), charged('m2')];
+  assert.equal(M.failedMasteryChecks('phy.skills.rearranging', rows), 0);
+  assert.equal(M.failedMasteryChecks('phy.energy.kinetic', rows), 2, 'they are failed checks of kinetic energy');
+});
+
 test('MASTERED needs a retrieval pass 21+ days after SECURE and an application item when required', () => {
   const rows = secureKinetic();
   const retrieval = ev({ evidenceClass: 'retrieval', format: 'numeric', contexts: ['find-energy'], sessionId: 'r1', at: at(30 * D) });

@@ -272,7 +272,10 @@ function statusRank(s) { return !s ? 0 : s.status === 'likely' ? 2 : s.status ==
 function failedMasteryChecks(conceptId, evidence) {
   const bySession = new Map();
   for (const e of evidence) {
-    if (e.conceptId !== conceptId || e.evidenceClass !== 'mastery_check') continue;
+    // A mastery check ON a concept is an item whose primary concept it is; a
+    // skill error charged here from another concept's check is evidence, not
+    // a failed check of this concept.
+    if ((e.primaryConceptId || e.conceptId) !== conceptId || e.evidenceClass !== 'mastery_check') continue;
     const s = bySession.get(e.sessionId) || { right: 0, wrong: 0 };
     if (e.correct && !e.notSure) s.right++; else s.wrong++;
     bySession.set(e.sessionId, s);
