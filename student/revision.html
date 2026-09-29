@@ -698,6 +698,24 @@ main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
 [data-theme="light"] .assessments-cta{background:linear-gradient(90deg,#EAEFF4 0%,#E4EBF2 100%);border-color:var(--ia-border-gold);}
 [data-theme="light"] .assessments-cta:hover{box-shadow:var(--ia-shadow-md);}
 @media (prefers-reduced-motion:reduce){.assessments-cta:hover{transform:none;}}
+
+/* ISM class timetable (collapsed by default; image only loads when opened) */
+.timetable-card{background:var(--navy2);border:1px solid rgba(212,160,23,0.35);border-radius:var(--r);margin-bottom:1.5rem;overflow:hidden;}
+.timetable-summary{display:flex;align-items:center;gap:.9rem;padding:1rem 1.2rem;cursor:pointer;list-style:none;}
+.timetable-summary::-webkit-details-marker{display:none;}
+.timetable-summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+.timetable-icon{font-size:1.5rem;line-height:1;}
+.timetable-text{display:flex;flex-direction:column;gap:.15rem;flex:1;min-width:0;}
+.timetable-label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);}
+.timetable-title{font-family:var(--font-display);font-size:1.05rem;font-weight:600;}
+.timetable-desc{font-size:.8rem;color:var(--muted);}
+.timetable-toggle{font-family:var(--font-mono);font-size:.7rem;color:var(--gold);border:1px solid rgba(212,160,23,0.35);border-radius:999px;padding:.3rem .8rem;white-space:nowrap;}
+.timetable-card[open] .timetable-toggle{font-size:0;}
+.timetable-card[open] .timetable-toggle::after{content:"Hide";font-size:.7rem;}
+.timetable-body{padding:0 1.2rem 1.2rem;}
+.timetable-body img{display:block;width:100%;height:auto;max-width:640px;margin:0 auto;border-radius:8px;}
+.timetable-actions{display:flex;justify-content:center;margin-top:1rem;}
+[data-theme="light"] .timetable-card{background:#fff;border-color:var(--ia-border-gold);}
 </style>
 </head>
 <body>
@@ -740,6 +758,31 @@ main { max-width:960px;margin:0 auto;padding:1.5rem 1rem 6rem; }
       <h1 id="page-heading">Your Personalised Learning</h1>
       <p id="page-sub">Revision packs assigned by your teacher, tailored to your topics.</p>
     </div>
+
+    <!-- ISM TIMETABLE — to update for a new term, add a new dated .webp
+         in /assets/images/ism/ and change the three paths below (a new
+         filename is required: sw.js caches images cache-first). -->
+    <details class="timetable-card">
+      <summary class="timetable-summary">
+        <span class="timetable-icon" aria-hidden="true">📅</span>
+        <span class="timetable-text">
+          <span class="timetable-label">ISM Class Timetable</span>
+          <span class="timetable-title">Year 10 · October–December 2026</span>
+          <span class="timetable-desc">Tue &amp; Wed evenings · Sat afternoons</span>
+        </span>
+        <span class="timetable-toggle" aria-hidden="true">View</span>
+      </summary>
+      <div class="timetable-body">
+        <a href="/assets/images/ism/ism-y10-timetable-2026-oct-dec.webp" target="_blank" rel="noopener">
+          <img src="/assets/images/ism/ism-y10-timetable-2026-oct-dec.webp"
+               alt="ISM Year 10 timetable, October to December 2026: Physics on Tuesdays, Chemistry and Biology alternating on Wednesdays, Maths and Physics alternating on Saturdays; Mastery Lab assessment on 31 October; Christmas break from 26 December."
+               width="1024" height="1536" loading="lazy" decoding="async">
+        </a>
+        <div class="timetable-actions">
+          <a class="btn btn-gold" href="/assets/images/ism/ism-y10-timetable-2026-oct-dec.webp" download="ISM-Year10-Timetable-Oct-Dec-2026.webp">Download</a>
+        </div>
+      </div>
+    </details>
 
     <!-- STATS -->
     <div class="stats-row">
