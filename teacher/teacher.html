@@ -49,14 +49,16 @@
 /* (overflow-y: the rail is pinned to the screen and holds ~24 items, taller than a
    phone: without its own scroll the lower ones could never be reached) */
 .sidebar {
-  width: 72px; flex-shrink: 0;
+  width: 76px; flex-shrink: 0;
   background: var(--navy2);
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
   padding: 1rem 0;
   position: sticky; top: 0; height: 100vh;
-  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
+  overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: none; /* scrolls by swipe; a visible bar would squeeze the labels */
 }
+.sidebar::-webkit-scrollbar { display: none; }
 .sidebar-logo, .sidebar-footer { display: none; }
 .sidebar-logo {
   padding: 0 1.5rem 1.5rem;
@@ -79,7 +81,7 @@
 .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(212,160,23,.06); }
 .nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
 .nav-item span:not(.icon) {
-  font-size: .58rem; line-height: 1.15; text-align: center;
+  font-size: .56rem; line-height: 1.15; text-align: center;
   max-width: 100%; overflow-wrap: anywhere; hyphens: auto;
 }
 .nav-item-student-view {
@@ -276,7 +278,8 @@ tr:hover td { background: rgba(255,255,255,.025); }
 @media (min-width: 901px) {
   .sidebar { width: 220px; }
   .sidebar-logo, .sidebar-footer { display: block; }
-  .sidebar { padding: 1.5rem 0; }
+  .sidebar { padding: 1.5rem 0; scrollbar-width: thin; }
+  .sidebar::-webkit-scrollbar { display: block; width: 6px; }
   .nav-item { flex-direction: row; justify-content: flex-start; gap: .75rem; padding: .65rem 1.5rem; }
   .nav-item span:not(.icon) { font-size: inherit; line-height: inherit; text-align: left; }
   .stat-row { grid-template-columns: repeat(4, 1fr); }
