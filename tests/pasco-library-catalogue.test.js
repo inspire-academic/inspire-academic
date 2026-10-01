@@ -94,6 +94,31 @@ test('only PDF and HTML are accepted', () => {
   assert.equal(CAT.mimeFor('a.docx'), null);
 });
 
+test('topic books: the shelf expects every board and subject', () => {
+  for (const b of CAT.BOARDS) {
+    for (const s of CAT.SUBJECTS) assert.ok(CAT.topicBooks(b, s).length >= 7, `${b} ${s} has topic books`);
+  }
+  assert.deepEqual(CAT.topicBooks('AQA', 'Physics').map(b => b.id),
+    ['energy', 'electricity', 'particle-model', 'atomic-structure', 'forces', 'waves', 'magnetism', 'space']);
+});
+
+test('topic books: file names map to their book, by title or id', () => {
+  assert.deepEqual(CAT.parseTopicFileName('PASCO-Topic-AQA-Physics-Particle-Model-of-Matter.html'),
+    { board: 'AQA', subject: 'Physics', bookId: 'particle-model', title: 'Particle Model of Matter' });
+  assert.equal(CAT.parseTopicFileName('PASCO-Topic-Edexcel-Maths-Geometry-Shapes-and-Angles.html').subject, 'Mathematics');
+  assert.equal(CAT.parseTopicFileName('PASCO-Topic-AQA-Physics-energy.html').bookId, 'energy');
+  assert.equal(CAT.parseTopicFileName('PASCO-Topic-AQA-Physics-Unknown-Book.html'), null);
+  // a topic book is never mistaken for a paper slot, nor a solution for a book
+  assert.equal(CAT.parseFileName('PASCO-Topic-AQA-Physics-Energy.html'), null);
+  assert.equal(CAT.parseTopicFileName('PASCO-AQA-Physics-1H-Jun2023-Review.html'), null);
+});
+
+test('topic books live in the private bucket under topic-books/', () => {
+  assert.equal(CAT.topicBookPath('Edexcel', 'Mathematics', 'geometry-shapes-angles'),
+    'topic-books/edexcel/mathematics/geometry-shapes-angles.html');
+  assert.equal(CAT.topicFolder('AQA', 'Physics'), 'topic-books/aqa/physics');
+});
+
 function pick(s) {
   assert.ok(s, 'expected a parse');
   return [s.board, s.subject, s.year, s.series, s.paper, s.docType];

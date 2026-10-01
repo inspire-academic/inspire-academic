@@ -208,12 +208,59 @@
     return ok ? s : null;
   }
 
+  // ── Topic books (the "By topic" shelf) ──
+  // One HTML book per major topic, regrouping the Inspire solutions
+  // (built by the PASCO repo's build-topic-book.js). They live in the same
+  // private bucket under topic-books/, one object per book, so the bucket's
+  // admin-only policy covers them and no table is needed: the shelf lists
+  // the folder. The expected books come from pasco-topic-books-list.js.
+  var TOPIC_BOOKS = (root && root.PASCO_TOPIC_BOOKS) ||
+    (typeof require === 'function' ? require('./pasco-topic-books-list.js') : {});
+  var TOPIC_PREFIX = 'topic-books';
+
+  function topicBooks(board, subject) {
+    return TOPIC_BOOKS[board + '|' + subject] || [];
+  }
+
+  function topicFolder(board, subject) {
+    return [TOPIC_PREFIX, slugify(board), slugify(subject)].join('/');
+  }
+
+  function topicBookPath(board, subject, bookId) {
+    return topicFolder(board, subject) + '/' + bookId + '.html';
+  }
+
+  function topicBookKey(board, subject, bookId) {
+    return [board, subject, bookId].join('|');
+  }
+
+  // Recognises the builder's file names, by book title or id:
+  //   PASCO-Topic-AQA-Physics-Particle-Model-of-Matter.html
+  //   PASCO-Topic-Edexcel-Maths-geometry-shapes-angles.html
+  // Returns { board, subject, bookId, title } or null.
+  function parseTopicFileName(fileName) {
+    var m = /PASCO[-_ ]Topic[-_ ](AQA|Edexcel)[-_ ](Physics|Chemistry|Biology|Maths|Mathematics)[-_ ](.+?)\.html?$/i.exec(String(fileName || ''));
+    if (!m) return null;
+    var board = /^aqa$/i.test(m[1]) ? 'AQA' : 'Edexcel';
+    var subject = /^math/i.test(m[2]) ? 'Mathematics' : m[2].charAt(0).toUpperCase() + m[2].slice(1).toLowerCase();
+    var want = slugify(m[3]);
+    var books = topicBooks(board, subject);
+    for (var i = 0; i < books.length; i++) {
+      if (books[i].id === want || slugify(books[i].title) === want) {
+        return { board: board, subject: subject, bookId: books[i].id, title: books[i].title };
+      }
+    }
+    return null;
+  }
+
   var api = {
     FIRST_YEAR: FIRST_YEAR, BOARDS: BOARDS, SUBJECTS: SUBJECTS, TIERS: TIERS,
     SPEC_CODES: SPEC_CODES, DOC_TYPES: DOC_TYPES, SERIES: SERIES,
     paperCount: paperCount, years: years, seriesFor: seriesFor, paperLabel: paperLabel,
     expectedSlots: expectedSlots, slotKey: slotKey, rowToSlotKey: rowToSlotKey,
-    storagePath: storagePath, extOf: extOf, mimeFor: mimeFor, parseFileName: parseFileName
+    storagePath: storagePath, extOf: extOf, mimeFor: mimeFor, parseFileName: parseFileName,
+    topicBooks: topicBooks, topicFolder: topicFolder, topicBookPath: topicBookPath,
+    topicBookKey: topicBookKey, parseTopicFileName: parseTopicFileName
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

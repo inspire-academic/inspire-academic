@@ -34,12 +34,15 @@
   <section id="libraryPanel">
     <div class="hero">
       <div class="eyebrow">PASCO · Private file cabinet</div>
-      <h1>Past papers, by year.</h1>
-      <p class="subhead">GCSE Higher tier, 9–1 specifications from 2018. Choose a board and subject, then open a year to view or upload its papers, mark schemes and Inspire solutions.</p>
+      <h1 id="heroTitle">Past papers, by year.</h1>
+      <p class="subhead">GCSE Higher tier, 9–1 specifications from 2018. Choose a board and subject, then open a year for its papers, mark schemes and Inspire solutions, or switch to By topic for the solved questions gathered into one book per topic.</p>
     </div>
 
     <div class="toolbar">
-      <div class="seg" role="tablist" aria-label="Exam board" id="boardTabs"></div>
+      <div class="toolbar-row">
+        <div class="seg" role="tablist" aria-label="Exam board" id="boardTabs"></div>
+        <div class="seg" role="tablist" aria-label="View" id="viewTabs"></div>
+      </div>
       <div class="chips" role="tablist" aria-label="Subject" id="subjectTabs"></div>
     </div>
 
@@ -55,6 +58,7 @@
     </div>
 
     <div class="years" id="yearsGrid"></div>
+    <div class="books" id="booksGrid" hidden></div>
   </section>
 
   <!-- ── Year: series → papers → document slots ── -->
@@ -93,7 +97,7 @@
 <div class="modal-overlay pl-modal" id="bulkModal" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="bulkTitle">
     <h2 id="bulkTitle">Bulk upload</h2>
-    <p class="muted small">Files are matched to slots by filename (AQA / Edexcel downloads and Inspire <span class="mono">PASCO-…-Review.html</span> files). Check the matches, then upload.</p>
+    <p class="muted small">Files are matched to slots by filename (AQA / Edexcel downloads, Inspire <span class="mono">PASCO-…-Review.html</span> solutions and <span class="mono">PASCO-Topic-…html</span> topic books). Check the matches, then upload.</p>
     <div id="bulkList" class="bulk-list"></div>
     <div class="action-row">
       <button class="btn btn-outline" id="bulkCancel" type="button">Cancel</button>
@@ -108,6 +112,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/supabase.js"></script>
 <script src="/assets/js/nav-back.js"></script>
+<script src="/assets/js/pasco-topic-books-list.js"></script>
 <script src="/assets/js/pasco-library-catalogue.js"></script>
 <script src="/assets/js/pasco-library.js"></script>
 </body>

@@ -21,7 +21,10 @@
     board: 'AQA',
     subject: 'Physics',
     year: null,
+    view: 'years',      // 'years' | 'topics'
     files: {},          // slotKey -> row
+    books: {},          // topicBookKey -> { path, size, updated } (listed from storage)
+    pendingBook: null,  // topic book being uploaded via #slotInput
     viewerUrl: null,
     pendingSlot: null,  // slot being uploaded via #slotInput
     bulk: []            // [{file, slot, include}]
@@ -82,6 +85,28 @@
     (res.data || []).forEach(function (row) { state.files[CAT.rowToSlotKey(row)] = row; });
   }
 
+  // Topic books have no table: each board/subject folder in the bucket is listed.
+  async function loadBooks() {
+    state.books = {};
+    var lists = [];
+    CAT.BOARDS.forEach(function (b) {
+      CAT.SUBJECTS.forEach(function (s) {
+        lists.push(supa.storage.from(BUCKET).list(CAT.topicFolder(b, s), { limit: 100 }).then(function (res) {
+          (res.data || []).forEach(function (o) {
+            var m = /^([a-z0-9-]+)\.html$/.exec(o.name);
+            if (!m) return;
+            state.books[CAT.topicBookKey(b, s, m[1])] = {
+              path: CAT.topicBookPath(b, s, m[1]),
+              size: o.metadata && o.metadata.size,
+              updated: o.updated_at || o.created_at
+            };
+          });
+        }));
+      });
+    });
+    await Promise.all(lists);
+  }
+
   // ── routing ──
   function slug(s) { return String(s).toLowerCase(); }
 
@@ -90,8 +115,9 @@
     return null;
   }
 
-  function hashFor(board, subject, year) {
-    return '#/' + slug(board) + '/' + slug(subject) + (year ? '/' + year : '');
+  // #/aqa/physics, #/aqa/physics/2024, #/aqa/physics/topics
+  function hashFor(board, subject, yearOrTopics) {
+    return '#/' + slug(board) + '/' + slug(subject) + (yearOrTopics ? '/' + yearOrTopics : '');
   }
 
   function readHash() {
@@ -101,13 +127,16 @@
     var year = parseInt(parts[2], 10);
     if (board) state.board = board;
     if (subject) state.subject = subject;
-    state.year = CAT.years().indexOf(year) !== -1 ? year : null;
+    state.view = parts[2] === 'topics' ? 'topics' : 'years';
+    state.year = state.view === 'years' && CAT.years().indexOf(year) !== -1 ? year : null;
   }
 
   function route() {
     readHash();
     renderTabs();
-    if (state.year) renderYear(); else renderYears();
+    if (state.view === 'topics') renderBooks();
+    else if (state.year) renderYear();
+    else renderYears();
   }
 
   // ── library view ──
@@ -118,11 +147,17 @@
     $('subjectTabs').innerHTML = CAT.SUBJECTS.map(function (s) {
       return '<button type="button" class="chip" role="tab" data-subject="' + s + '" aria-selected="' + (s === state.subject) + '"><span class="dot"></span>' + s + '</button>';
     }).join('');
+    $('viewTabs').innerHTML = [['years', 'By year'], ['topics', 'By topic']].map(function (v) {
+      return '<button type="button" role="tab" data-view="' + v[0] + '" aria-selected="' + (v[0] === state.view) + '">' + v[1] + '</button>';
+    }).join('');
   }
 
   function renderYears() {
     $('libraryPanel').hidden = false;
     $('yearPanel').hidden = true;
+    $('yearsGrid').hidden = false;
+    $('booksGrid').hidden = true;
+    $('heroTitle').textContent = 'Past papers, by year.';
     document.title = 'PASCO Library — Inspire';
 
     var code = CAT.SPEC_CODES[state.board][state.subject];
@@ -156,6 +191,97 @@
     Array.prototype.forEach.call(document.querySelectorAll('.coverage-fill'), function (el) {
       el.style.width = el.getAttribute('data-pct') + '%';
     });
+  }
+
+  // ── topic view: one card per expected book ──
+  function fmtDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    return isNaN(d) ? '' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function renderBooks() {
+    $('libraryPanel').hidden = false;
+    $('yearPanel').hidden = true;
+    $('yearsGrid').hidden = true;
+    $('booksGrid').hidden = false;
+    $('heroTitle').textContent = 'Solved questions, by topic.';
+    document.title = state.board + ' ' + state.subject + ' topic books — PASCO Library';
+
+    var books = CAT.topicBooks(state.board, state.subject);
+    var have = books.filter(function (b) { return state.books[CAT.topicBookKey(state.board, state.subject, b.id)]; }).length;
+    $('subjectTitle').textContent = state.board + ' ' + state.subject + ' · topic books';
+    $('subjectMeta').textContent = books.length + ' books · every solved question on a topic, easiest first · ' + have + ' / ' + books.length + ' uploaded';
+
+    $('booksGrid').innerHTML = books.map(function (b, i) {
+      var key = CAT.topicBookKey(state.board, state.subject, b.id);
+      var f = state.books[key];
+      var info = f
+        ? '<div class="slot-file">' + esc(fmtSize(f.size)) + (f.updated ? ' · updated ' + esc(fmtDate(f.updated)) : '') + '</div>'
+        : '<div class="slot-file">Not uploaded yet</div>';
+      var chapters = b.chapters.length > 1
+        ? '<div class="book-chapters">' + esc(b.chapters.join(' · ')) + '</div>' : '';
+      var actions = f
+        ? '<button type="button" class="icon-btn primary" data-act="view" data-book="' + esc(key) + '">Open</button>' +
+          '<button type="button" class="icon-btn" data-act="upload" data-book="' + esc(key) + '">Replace</button>' +
+          '<button type="button" class="icon-btn danger" data-act="delete" data-book="' + esc(key) + '" aria-label="Delete ' + esc(b.title) + '">✕</button>'
+        : '<button type="button" class="icon-btn" data-act="upload" data-book="' + esc(key) + '">Upload</button>';
+      return '<div class="slot solution book' + (f ? ' filled' : ' slot-empty') + '">' +
+        '<div class="slot-info"><div class="slot-label"><span class="book-num">' + (i + 1) + '</span>' + esc(b.title) + '</div>' +
+        chapters + info + '</div><div class="slot-actions">' + actions + '</div></div>';
+    }).join('');
+  }
+
+  function bookFromKey(key) {
+    var p = key.split('|');
+    var book = CAT.topicBooks(p[0], p[1]).filter(function (b) { return b.id === p[2]; })[0];
+    return { board: p[0], subject: p[1], bookId: p[2], title: book ? book.title : p[2] };
+  }
+
+  async function uploadBook(book, file) {
+    if (CAT.mimeFor(file.name) !== 'text/html') throw new Error('Topic books are HTML files');
+    if (file.size > MAX_BYTES) throw new Error('File is over 50 MB');
+    var path = CAT.topicBookPath(book.board, book.subject, book.bookId);
+    var up = await supa.storage.from(BUCKET).upload(path, file, { contentType: 'text/html', upsert: true });
+    if (up.error) throw up.error;
+    state.books[CAT.topicBookKey(book.board, book.subject, book.bookId)] = { path: path, size: file.size, updated: new Date().toISOString() };
+  }
+
+  async function deleteBook(key) {
+    var f = state.books[key];
+    if (!f) return;
+    var rm = await supa.storage.from(BUCKET).remove([f.path]);
+    if (rm.error) throw rm.error;
+    delete state.books[key];
+  }
+
+  function onBookAction(btn) {
+    var key = btn.getAttribute('data-book');
+    var act = btn.getAttribute('data-act');
+    if (act === 'view') return openBookViewer(key);
+    if (act === 'upload') {
+      state.pendingBook = bookFromKey(key);
+      state.pendingSlot = null;
+      $('slotInput').value = '';
+      $('slotInput').click();
+      return;
+    }
+    if (act === 'delete') {
+      if (!btn.classList.contains('armed')) {
+        btn.classList.add('armed');
+        btn.textContent = 'Delete?';
+        setTimeout(function () { btn.classList.remove('armed'); btn.textContent = '✕'; }, 4000);
+        return;
+      }
+      btn.disabled = true;
+      deleteBook(key).then(function () {
+        toast('Deleted', 'success');
+        renderBooks();
+      }).catch(function (e) {
+        btn.disabled = false;
+        toast('Delete failed: ' + (e.message || e), 'error');
+      });
+    }
   }
 
   // ── year view ──
@@ -249,6 +375,7 @@
     if (act === 'view') return openViewer(key);
     if (act === 'upload') {
       state.pendingSlot = slotFromKey(key);
+      state.pendingBook = null;
       $('slotInput').value = '';
       $('slotInput').click();
       return;
@@ -275,7 +402,20 @@
   async function onSlotFileChosen() {
     var file = $('slotInput').files[0];
     var slot = state.pendingSlot;
+    var book = state.pendingBook;
     state.pendingSlot = null;
+    state.pendingBook = null;
+    if (file && book) {
+      toast('Uploading ' + file.name + '…');
+      try {
+        await uploadBook(book, file);
+        toast('Uploaded ' + book.title, 'success');
+        renderBooks();
+      } catch (e) {
+        toast('Upload failed: ' + (e.message || e), 'error');
+      }
+      return;
+    }
     if (!file || !slot) return;
     toast('Uploading ' + file.name + '…');
     try {
@@ -292,8 +432,21 @@
     var row = state.files[key];
     if (!row) return;
     var slot = slotFromKey(key);
-    $('viewerTitle').textContent = slotTitle(slot);
-    $('viewerSub').textContent = docLabel(slot.docType) + ' · ' + row.file_name;
+    await showInViewer(slotTitle(slot), docLabel(slot.docType) + ' · ' + row.file_name, row.storage_path, row.mime_type, row.file_name);
+  }
+
+  async function openBookViewer(key) {
+    var f = state.books[key];
+    if (!f) return;
+    var b = bookFromKey(key);
+    var name = 'PASCO-Topic-' + b.board + '-' + b.subject + '-' + b.title.replace(/[:,]/g, '').replace(/ +/g, '-') + '.html';
+    await showInViewer(b.board + ' ' + b.subject + ' · ' + b.title, 'Topic book · ' + fmtSize(f.size), f.path, 'text/html', name);
+  }
+
+  async function showInViewer(title, sub, path, mime, fileName) {
+    var row = { storage_path: path, mime_type: mime, file_name: fileName };
+    $('viewerTitle').textContent = title;
+    $('viewerSub').textContent = sub;
     $('viewer').hidden = false;
     $('viewerLoading').hidden = false;
     document.body.classList.add('no-scroll');
@@ -341,8 +494,10 @@
     $('bulkInput').value = '';
     if (!files.length) return;
     state.bulk = files.map(function (f) {
-      var slot = CAT.mimeFor(f.name) ? CAT.parseFileName(f.name) : null;
-      return { file: f, slot: slot, include: !!slot };
+      var ok = !!CAT.mimeFor(f.name);
+      var book = ok ? CAT.parseTopicFileName(f.name) : null;
+      var slot = ok && !book ? CAT.parseFileName(f.name) : null;
+      return { file: f, slot: slot, book: book, include: !!(slot || book) };
     });
     renderBulk();
     $('bulkModal').hidden = false;
@@ -351,12 +506,17 @@
 
   function renderBulk() {
     $('bulkList').innerHTML = state.bulk.map(function (b, i) {
-      var existing = b.slot && state.files[CAT.slotKey(b.slot)];
-      var slotText = b.slot
-        ? esc(slotTitle(b.slot) + ' · ' + docLabel(b.slot.docType))
-        : 'Not recognised — upload it from its slot instead';
-      return '<label class="bulk-item' + (b.slot ? '' : ' unmatched') + '">' +
-        '<input type="checkbox" data-i="' + i + '"' + (b.include ? ' checked' : '') + (b.slot ? '' : ' disabled') + '>' +
+      var matched = b.slot || b.book;
+      var existing = b.book
+        ? state.books[CAT.topicBookKey(b.book.board, b.book.subject, b.book.bookId)]
+        : b.slot && state.files[CAT.slotKey(b.slot)];
+      var slotText = b.book
+        ? esc(b.book.board + ' ' + b.book.subject + ' · Topic book · ' + b.book.title)
+        : b.slot
+          ? esc(slotTitle(b.slot) + ' · ' + docLabel(b.slot.docType))
+          : 'Not recognised — upload it from its slot instead';
+      return '<label class="bulk-item' + (matched ? '' : ' unmatched') + '">' +
+        '<input type="checkbox" data-i="' + i + '"' + (b.include ? ' checked' : '') + (matched ? '' : ' disabled') + '>' +
         '<div><div class="bi-slot">' + slotText + '</div><div class="bi-name">' + esc(b.file.name) + '</div></div>' +
         '<span class="bi-status' + (existing ? ' warn' : '') + '" id="bi-status-' + i + '">' + (existing ? 'replaces existing' : '') + '</span>' +
         '</label>';
@@ -368,12 +528,13 @@
     var ok = 0, failed = 0;
     for (var i = 0; i < state.bulk.length; i++) {
       var b = state.bulk[i];
-      if (!b.include || !b.slot) continue;
+      if (!b.include || !(b.slot || b.book)) continue;
       var st = $('bi-status-' + i);
       st.className = 'bi-status';
       st.textContent = 'uploading…';
       try {
-        await uploadToSlot(b.slot, b.file);
+        if (b.book) await uploadBook(b.book, b.file);
+        else await uploadToSlot(b.slot, b.file);
         st.className = 'bi-status ok';
         st.textContent = 'done';
         ok++;
@@ -392,18 +553,28 @@
   function wire() {
     $('backBtn').addEventListener('click', function () { inspireGoBack('/teacher/teacher.html'); });
 
+    // switching board or subject keeps the current view (By year / By topic)
+    var keepView = function () { return state.view === 'topics' ? 'topics' : null; };
     $('boardTabs').addEventListener('click', function (e) {
       var b = e.target.closest('[data-board]');
-      if (b) window.location.hash = hashFor(b.getAttribute('data-board'), state.subject);
+      if (b) window.location.hash = hashFor(b.getAttribute('data-board'), state.subject, keepView());
     });
     $('subjectTabs').addEventListener('click', function (e) {
       var s = e.target.closest('[data-subject]');
-      if (s) window.location.hash = hashFor(state.board, s.getAttribute('data-subject'));
+      if (s) window.location.hash = hashFor(state.board, s.getAttribute('data-subject'), keepView());
+    });
+    $('viewTabs').addEventListener('click', function (e) {
+      var v = e.target.closest('[data-view]');
+      if (v) window.location.hash = hashFor(state.board, state.subject, v.getAttribute('data-view') === 'topics' ? 'topics' : null);
     });
 
     $('seriesList').addEventListener('click', function (e) {
       var btn = e.target.closest('[data-act]');
       if (btn) onSlotAction(btn);
+    });
+    $('booksGrid').addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-act]');
+      if (btn) onBookAction(btn);
     });
     $('slotInput').addEventListener('change', onSlotFileChosen);
 
@@ -430,7 +601,7 @@
   async function init() {
     if (!(await checkAuth())) return;
     wire();
-    await loadFiles();
+    await Promise.all([loadFiles(), loadBooks()]);
     route();
     $('authLoading').hidden = true;
   }
