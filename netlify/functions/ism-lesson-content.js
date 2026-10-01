@@ -22,6 +22,11 @@
 // never touches progress — used by teacher/ism-class-management.html's
 // Preview button before publishing.
 //
+// Staff (?teacherDoc=true): the lesson's teacher guide (talk track,
+// answers) for its current version — any staff role, never students.
+// Returned raw (no runtime/answers injected); the caller shows it in a
+// sandboxed frame.
+//
 // Staff (?submissionId=...): the student's submitted lesson exactly as
 // they saw it — the lesson version they worked on, with that
 // submission's frozen answers, read-only. Admins, or teachers actively
@@ -61,6 +66,7 @@ exports.handler = async function (event) {
   const qs = event.queryStringParameters || {}
   const lessonId = qs.lessonId
   const preview = qs.preview === 'true'
+  const teacherDoc = qs.teacherDoc === 'true'
   const submissionId = qs.submissionId
   if (!lessonId && !submissionId) return reply(400, { success: false, error: { code: 'missing_fields', message: 'lessonId or submissionId is required.' } })
 
@@ -107,6 +113,25 @@ exports.handler = async function (event) {
         },
         student: { name: studentName }
       })
+    }
+
+    if (teacherDoc) {
+      // Any staff member may read a lesson's teacher guide (a teacher who
+      // delivers the lesson isn't necessarily the one who uploaded it);
+      // students never — this is the only route that serves it.
+      if (!STAFF_ROLES.includes(callerRole)) {
+        return reply(403, { success: false, error: { code: 'forbidden', message: 'Teacher guides are for staff only.' } })
+      }
+      const lessonRows = await sb(`ism_lessons?id=eq.${encodeURIComponent(lessonId)}&select=*`, serviceKey)
+      const lesson = lessonRows[0]
+      if (!lesson || !lesson.current_version_id) return reply(404, { success: false, error: { code: 'not_found', message: 'This lesson has no uploaded content yet.' } })
+      const versionRows = await sb(`ism_lesson_versions?id=eq.${encodeURIComponent(lesson.current_version_id)}&select=id,version_number,teacher_doc_storage_path`, serviceKey)
+      const version = versionRows[0]
+      if (!version || !version.teacher_doc_storage_path) {
+        return reply(404, { success: false, error: { code: 'no_teacher_doc', message: 'No teacher guide was uploaded with this lesson.' } })
+      }
+      const html = await storageDownload('ism-lesson-content', version.teacher_doc_storage_path, serviceKey)
+      return reply(200, { success: true, html, lesson, version: { id: version.id, version_number: version.version_number }, status: 'teacher_doc' })
     }
 
     if (preview) {

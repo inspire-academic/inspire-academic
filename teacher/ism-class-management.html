@@ -558,6 +558,7 @@ function renderManageList() {
       </div>
       <div class="lesson-row-actions">
         <button class="mini-btn" onclick="previewLesson('${l.id}')">Preview</button>
+        <button class="mini-btn" data-teacher-guide="${esc(l.id)}">Teacher guide</button>
         <button class="mini-btn" onclick="togglePublish('${l.id}', ${!l.is_published})">${l.is_published ? 'Unpublish' : 'Publish'}</button>
       </div>
     </div>`).join('');
@@ -580,6 +581,39 @@ async function previewLesson(lessonId) {
   } catch (e) { toast(e.message || 'Could not load preview', 'error'); }
 }
 window.previewLesson = previewLesson;
+
+// Teacher guide: the "Teacher reference doc" uploaded with the lesson.
+// Staff-only on the server (students can never fetch it — it lives in the
+// private ism-lesson-content bucket). Shown in a sandboxed frame so its
+// scripts run (maths typesetting, reveal buttons) without access to this
+// page or the teacher's session. The tab is opened before the request so
+// pop-up blockers don't stop it.
+async function openTeacherGuide(lessonId) {
+  const w = window.open('', '_blank');
+  if (!w) { toast('Allow pop-ups for this site to open the teacher guide', 'error'); return; }
+  w.document.write('<!doctype html><meta charset="utf-8"><title>Loading teacher guide…</title><p style="font-family:sans-serif;padding:1rem">Loading teacher guide…</p>');
+  try {
+    const data = await apiCall(`/api/v1/ism-class/lesson/content?lessonId=${encodeURIComponent(lessonId)}&teacherDoc=true`);
+    const d = w.document;
+    d.open();
+    d.write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<style>html,body{margin:0;height:100%}iframe{border:0;width:100%;height:100%;display:block}</style></head><body></body></html>');
+    d.close();
+    d.title = 'Teacher guide — ' + (data.lesson && data.lesson.title || 'ISM lesson');
+    const frame = d.createElement('iframe');
+    frame.setAttribute('sandbox', 'allow-scripts');
+    frame.setAttribute('title', d.title);
+    frame.srcdoc = data.html;
+    d.body.appendChild(frame);
+  } catch (e) {
+    w.close();
+    toast(e.message || 'Could not open the teacher guide', 'error');
+  }
+}
+document.getElementById('manage-list').addEventListener('click', ev => {
+  const btn = ev.target.closest('[data-teacher-guide]');
+  if (btn) openTeacherGuide(btn.dataset.teacherGuide);
+});
 
 // ── Assign ──
 document.querySelectorAll('input[name="assign-type"]').forEach(r => r.addEventListener('change', () => {
