@@ -466,7 +466,10 @@
     // HTML solutions render in a locked-down sandbox (no scripts, no
     // access to this page's session). PDFs need the browser's own
     // viewer, which a sandbox would block.
-    if (row.mime_type === 'text/html') frame.setAttribute('sandbox', 'allow-popups allow-popups-to-escape-sandbox');
+    // (allow-same-origin only so in-page links work: a sandboxed blob: page with an
+    // opaque origin ignores "#ch-3" and "#q05-1" jumps. With no allow-scripts the page
+    // still runs no code at all, so it can't reach this page or the session.)
+    if (row.mime_type === 'text/html') frame.setAttribute('sandbox', 'allow-same-origin allow-popups allow-popups-to-escape-sandbox');
     else frame.removeAttribute('sandbox');
     // A big typeset book (up to ~7 MB) is still painting when "load" fires, and the
     // sandbox hides its content from this page, so the spinner stays a little longer,
