@@ -30,14 +30,20 @@
     if (!fieldId || el.__ismBound) return;
     el.__ismBound = true;
 
+    // Tick boxes/radios save their ticked state, not their `value` (which
+    // is always "on"): "true" when ticked, "" when not — so an unticked
+    // box counts as unanswered like an empty text box.
+    var isToggle = el.type === 'checkbox' || el.type === 'radio';
+
     if (Object.prototype.hasOwnProperty.call(config.responses, fieldId)) {
-      el.value = config.responses[fieldId];
+      if (isToggle) el.checked = config.responses[fieldId] === 'true';
+      else el.value = config.responses[fieldId];
     }
     applyReadOnly(el);
 
     var handler = function () {
       var fid = el.getAttribute('data-save');
-      var val = el.value;
+      var val = isToggle ? (el.checked ? 'true' : '') : el.value;
       clearTimeout(saveTimers[fid]);
       saveTimers[fid] = setTimeout(function () {
         post('ism:save', { fieldId: fid, value: val });
@@ -85,6 +91,10 @@
 
   function init() {
     scan(document);
+    // Saved answers are now in place. Lessons that draw their own progress
+    // from field state (e.g. a mastery-checklist bar) listen for this,
+    // since setting .checked/.value doesn't fire input/change events.
+    try { document.dispatchEvent(new CustomEvent('ism:hydrated')); } catch (e) { /* very old browser */ }
     trackProgress();
 
     var observer = new MutationObserver(function (mutations) {

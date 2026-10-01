@@ -303,6 +303,36 @@ test('ism-lesson-content: owning teacher preview is always read-only', async () 
   });
 });
 
+// Teacher guide (?teacherDoc=true) — staff only, students never.
+const TEACHER_DOC_VERSION = { id: 'v1', version_number: 1, teacher_doc_storage_path: `${LESSON_ID}/v1/teacher-doc.html` };
+
+test('ism-lesson-content: teacher guide is refused to a student, even one assigned the lesson', async () => {
+  await withMockFetch({ callerRole: 'student', assignedToStudent: true, versionRow: TEACHER_DOC_VERSION }, async () => {
+    const res = await content.handler({ httpMethod: 'GET', headers: AUTH_HEADER, queryStringParameters: { lessonId: LESSON_ID, teacherDoc: 'true' } });
+    assert.equal(res.statusCode, 403);
+    assert.ok(!res.body.includes('<html'), 'no lesson HTML in the refusal');
+  });
+});
+
+test('ism-lesson-content: any staff member (not just the owner) gets the raw teacher guide', async () => {
+  await withMockFetch({ ownerId: 'someone-else', versionRow: TEACHER_DOC_VERSION, storedHtml: '<html><body>Talk track</body></html>' }, async () => {
+    const res = await content.handler({ httpMethod: 'GET', headers: AUTH_HEADER, queryStringParameters: { lessonId: LESSON_ID, teacherDoc: 'true' } });
+    assert.equal(res.statusCode, 200);
+    const body = JSON.parse(res.body);
+    assert.equal(body.status, 'teacher_doc');
+    assert.ok(body.html.includes('Talk track'));
+    assert.ok(!body.html.includes('__ISM_CONFIG__'), 'no runtime or student answers injected');
+  });
+});
+
+test('ism-lesson-content: lesson uploaded without a teacher guide returns a clear 404', async () => {
+  await withMockFetch({}, async () => {
+    const res = await content.handler({ httpMethod: 'GET', headers: AUTH_HEADER, queryStringParameters: { lessonId: LESSON_ID, teacherDoc: 'true' } });
+    assert.equal(res.statusCode, 404);
+    assert.equal(JSON.parse(res.body).error.code, 'no_teacher_doc');
+  });
+});
+
 // ── ism-response-save ──
 test('ism-response-save: missing fields returns 400', async () => {
   await withMockFetch({}, async () => {
