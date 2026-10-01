@@ -473,12 +473,10 @@
     // scaled to the file's size (at most 1.5 s), instead of leaving a blank white frame.
     var settle = Math.min(1500, Math.round(blob.size / 4500));
     var token = state.viewerUrl;
+    // (a plain timer: animation-frame callbacks pause in a background tab and
+    // would leave the spinner up)
     frame.onload = function () {
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          setTimeout(function () { if (state.viewerUrl === token) $('viewerLoading').hidden = true; }, settle);
-        });
-      });
+      setTimeout(function () { if (state.viewerUrl === token) $('viewerLoading').hidden = true; }, settle + 50);
     };
     frame.src = state.viewerUrl;
 
