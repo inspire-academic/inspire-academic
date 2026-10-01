@@ -46,13 +46,16 @@
 /* ── Sidebar ── */
 /* Mobile-first: base is the collapsed icon-only rail; the
    min-width:901px block below restores the full labeled sidebar. */
+/* (overflow-y: the rail is pinned to the screen and holds ~24 items, taller than a
+   phone: without its own scroll the lower ones could never be reached) */
 .sidebar {
-  width: 60px; flex-shrink: 0;
+  width: 72px; flex-shrink: 0;
   background: var(--navy2);
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
 }
 .sidebar-logo, .sidebar-footer { display: none; }
 .sidebar-logo {
@@ -64,9 +67,10 @@
 .sidebar-logo .science { font-weight: 700; font-size: 1.1rem; color: var(--white); }
 .sidebar-logo .badge { font-family:var(--font-mono); font-size: .6rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: .2rem; }
 
+/* phone: icon with a small label under it, so the rail isn't a guessing game */
 .nav-item {
-  display: flex; align-items: center; justify-content: center; gap: .75rem;
-  padding: .65rem 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem;
+  padding: .55rem .2rem;
   cursor: pointer; font-size: .9rem;
   color: var(--muted); transition: all .15s;
   border-left: 3px solid transparent;
@@ -74,7 +78,10 @@
 .nav-item:hover { color: var(--white); background: rgba(255,255,255,.04); }
 .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(212,160,23,.06); }
 .nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
-.nav-item span:not(.icon) { display: none; } /* label — icon-only rail on mobile */
+.nav-item span:not(.icon) {
+  font-size: .58rem; line-height: 1.15; text-align: center;
+  max-width: 100%; overflow-wrap: anywhere; hyphens: auto;
+}
 .nav-item-student-view {
   color: #ffffff; font-weight: 700;
   background: linear-gradient(135deg,#22c55e,#16a34a);
@@ -269,8 +276,9 @@ tr:hover td { background: rgba(255,255,255,.025); }
 @media (min-width: 901px) {
   .sidebar { width: 220px; }
   .sidebar-logo, .sidebar-footer { display: block; }
-  .nav-item { justify-content: flex-start; padding: .65rem 1.5rem; }
-  .nav-item span:not(.icon) { display: inline; }
+  .sidebar { padding: 1.5rem 0; }
+  .nav-item { flex-direction: row; justify-content: flex-start; gap: .75rem; padding: .65rem 1.5rem; }
+  .nav-item span:not(.icon) { font-size: inherit; line-height: inherit; text-align: left; }
   .stat-row { grid-template-columns: repeat(4, 1fr); }
 }
 </style>
