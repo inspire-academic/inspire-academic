@@ -53,13 +53,13 @@
   background: var(--navy2);
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
-  padding: 1rem 0;
+  padding: 1rem 0 0; /* no bottom padding: the pinned account footer ends the rail */
   position: sticky; top: 0; height: 100vh;
   overflow-y: auto; overscroll-behavior: contain;
   scrollbar-width: none; /* scrolls by swipe; a visible bar would squeeze the labels */
 }
 .sidebar::-webkit-scrollbar { display: none; }
-.sidebar-logo, .sidebar-footer { display: none; }
+.sidebar-logo { display: none; }
 .sidebar-logo {
   padding: 0 1.5rem 1.5rem;
   border-bottom: 1px solid var(--border);
@@ -91,13 +91,18 @@
 }
 .nav-item-student-view:hover { background: linear-gradient(135deg,#2ecc71,#22c55e); color: #ffffff; }
 
+/* account (name, profile, Sign Out): pinned to the bottom of the rail so it is
+   always in reach. Phone: a 👤 with the name under it; desktop rules below. */
 .sidebar-footer {
   margin-top: auto;
-  padding: 1rem 1.5rem;
+  padding: .55rem .2rem;
   border-top: 1px solid var(--border);
+  position: sticky; bottom: 0; background: var(--navy2);
 }
-.teacher-name { font-size: .8rem; color: var(--muted); }
-.teacher-name strong { display: block; color: var(--white); font-size: .9rem; margin-bottom: .15rem; }
+.teacher-name { font-size: 0; color: var(--muted); text-align: center; }
+.teacher-name::before { content: "👤"; display: block; font-size: 1rem; margin-bottom: .2rem; }
+.teacher-name strong { display: block; color: var(--muted); font-size: .56rem; font-weight: 600; line-height: 1.15; overflow-wrap: anywhere; }
+.teacher-name span { display: none; }
 .sign-out-btn {
   margin-top: .75rem; width: 100%;
   background: transparent; border: 1px solid var(--border);
@@ -107,11 +112,13 @@
 .sign-out-btn:hover { border-color: var(--red); color: var(--red); }
 
 /* profile dropdown for teacher dashboard */
-.sidebar-footer{position:relative;}
+/* fixed, not absolute: the rail scrolls, and a scrolling box would clip the
+   panel. Phone: a sheet across the bottom of the screen. */
 .profile-dropdown{
-  position:absolute;bottom:calc(100% + .5rem);left:0;
+  position:fixed;top:auto;left:.5rem;right:.5rem;bottom:.5rem;
   background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);
-  min-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:1001;
+  min-width:0;max-height:calc(100vh - 1rem);overflow-y:auto;
+  box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:1001;
   display:none;
 }
 .teacher-name-clickable{cursor:pointer;transition:all .15s;}
@@ -277,8 +284,14 @@ tr:hover td { background: rgba(255,255,255,.025); }
    this restores the full desktop sidebar and 4-up stats. ── */
 @media (min-width: 901px) {
   .sidebar { width: 220px; }
-  .sidebar-logo, .sidebar-footer { display: block; }
-  .sidebar { padding: 1.5rem 0; scrollbar-width: thin; }
+  .sidebar-logo { display: block; }
+  .sidebar-footer { padding: 1rem 1.5rem; }
+  .teacher-name { font-size: .8rem; text-align: left; }
+  .teacher-name::before { display: none; }
+  .teacher-name strong { color: var(--white); font-size: .9rem; font-weight: 700; line-height: inherit; margin-bottom: .15rem; }
+  .teacher-name span { display: inline; }
+  .profile-dropdown { left: 1rem; right: auto; bottom: 5.5rem; min-width: 320px; max-height: calc(100vh - 7rem); }
+  .sidebar { padding: 1.5rem 0 0; scrollbar-width: thin; }
   .sidebar::-webkit-scrollbar { display: block; width: 6px; }
   .nav-item { flex-direction: row; justify-content: flex-start; gap: .75rem; padding: .65rem 1.5rem; }
   .nav-item span:not(.icon) { font-size: inherit; line-height: inherit; text-align: left; }
