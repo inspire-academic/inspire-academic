@@ -468,12 +468,23 @@
     // viewer, which a sandbox would block.
     if (row.mime_type === 'text/html') frame.setAttribute('sandbox', 'allow-popups allow-popups-to-escape-sandbox');
     else frame.removeAttribute('sandbox');
+    // A big typeset book (up to ~7 MB) is still painting when "load" fires, and the
+    // sandbox hides its content from this page, so the spinner stays a little longer,
+    // scaled to the file's size (at most 1.5 s), instead of leaving a blank white frame.
+    var settle = Math.min(1500, Math.round(blob.size / 4500));
+    var token = state.viewerUrl;
+    frame.onload = function () {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          setTimeout(function () { if (state.viewerUrl === token) $('viewerLoading').hidden = true; }, settle);
+        });
+      });
+    };
     frame.src = state.viewerUrl;
 
     $('viewerNewTab').href = state.viewerUrl;
     $('viewerDownload').href = state.viewerUrl;
     $('viewerDownload').setAttribute('download', row.file_name);
-    frame.onload = function () { $('viewerLoading').hidden = true; };
   }
 
   function revokeViewerUrl() {
