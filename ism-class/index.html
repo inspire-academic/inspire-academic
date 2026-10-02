@@ -112,7 +112,9 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
 
   const [{ data: subjectRows }, { data: lessonRows }] = await Promise.all([
     supa.from('subjects').select('id,name'),
-    supa.from('ism_lessons').select('id,subject_id') // RLS already scopes to published + assigned-to-me
+    // RLS scopes students to published + assigned-to-me; staff (Student View)
+    // can read drafts too, so filter to published to match what students see.
+    supa.from('ism_lessons').select('id,subject_id').eq('is_published', true)
   ]);
 
   const grid = document.getElementById('subject-grid');
