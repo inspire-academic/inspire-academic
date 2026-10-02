@@ -9,6 +9,9 @@
 // this function's bundle) before </body>. The stored file in Supabase
 // Storage is never modified.
 //
+// Staff without ?preview (Student View): any published lesson, as a
+// student — own progress row, autosave and submit, no assignment needed.
+//
 // Students: lesson must be published AND assigned to them
 // (ism_lesson_assigned_to RPC — same check the ism_lessons RLS policy
 // uses, reimplemented here explicitly because this function reads via
@@ -162,9 +165,15 @@ exports.handler = async function (event) {
       return reply(404, { success: false, error: { code: 'not_found', message: 'Lesson not found.' } })
     }
 
-    const assignedResult = await sbRpc('ism_lesson_assigned_to', { p_lesson_id: lessonId, p_student_id: user.id }, serviceKey)
-    if (assignedResult !== true) {
-      return reply(404, { success: false, error: { code: 'not_found', message: 'Lesson not found.' } })
+    // Staff using Student View get every published lesson exactly as a
+    // student would (their own progress, autosave, submit) without
+    // needing an assignment — "all" assignments only resolve to
+    // role=student accounts, so admins/teachers otherwise hit "not found".
+    if (!STAFF_ROLES.includes(callerRole)) {
+      const assignedResult = await sbRpc('ism_lesson_assigned_to', { p_lesson_id: lessonId, p_student_id: user.id }, serviceKey)
+      if (assignedResult !== true) {
+        return reply(404, { success: false, error: { code: 'not_found', message: 'Lesson not found.' } })
+      }
     }
 
     let progressRows = await sb(`ism_student_lesson_progress?student_id=eq.${encodeURIComponent(user.id)}&lesson_id=eq.${encodeURIComponent(lessonId)}&select=*`, serviceKey)

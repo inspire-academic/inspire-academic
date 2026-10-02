@@ -115,6 +115,7 @@ function fmtDate(d){
   const { data: lessons } = await supa.from('ism_lessons')
     .select('id,title,week_number,due_date')
     .eq('subject_id', subjectId)
+    .eq('is_published', true) // staff in Student View can read drafts; students never see them
     .order('week_number', { ascending: true });
 
   const list = document.getElementById('lesson-list');

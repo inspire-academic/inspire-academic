@@ -303,6 +303,24 @@ test('ism-lesson-content: owning teacher preview is always read-only', async () 
   });
 });
 
+// Student View: staff open published lessons as a student, without an assignment.
+test('ism-lesson-content: admin in Student View opens a published lesson they are not assigned', async () => {
+  await withMockFetch({ callerRole: 'admin', assignedToStudent: false }, async () => {
+    const res = await content.handler({ httpMethod: 'GET', headers: AUTH_HEADER, queryStringParameters: { lessonId: LESSON_ID } });
+    assert.equal(res.statusCode, 200);
+    const body = JSON.parse(res.body);
+    assert.ok(body.html.includes('__ISM_CONFIG__'), 'gets the interactive student runtime');
+    assert.ok(body.progress, 'has their own progress row, so autosave and submit work');
+  });
+});
+
+test('ism-lesson-content: teacher in Student View still cannot open an unpublished draft', async () => {
+  await withMockFetch({ callerRole: 'teacher', assignedToStudent: false, lessonRow: { id: LESSON_ID, is_published: false, current_version_id: 'v1', created_by: 'x' } }, async () => {
+    const res = await content.handler({ httpMethod: 'GET', headers: AUTH_HEADER, queryStringParameters: { lessonId: LESSON_ID } });
+    assert.equal(res.statusCode, 404);
+  });
+});
+
 // Teacher guide (?teacherDoc=true) — staff only, students never.
 const TEACHER_DOC_VERSION = { id: 'v1', version_number: 1, teacher_doc_storage_path: `${LESSON_ID}/v1/teacher-doc.html` };
 
