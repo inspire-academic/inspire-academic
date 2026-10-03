@@ -261,11 +261,11 @@ tr.clickable:hover td{background:rgba(255,255,255,.03);}
         <div class="full"><label class="flabel">Objection — parent's own words</label><textarea class="ftextarea" id="f-objection"></textarea></div>
         <div>
           <label class="flabel">Recommended tier</label>
-          <select class="fselect" id="f-recommended-tier"><option value="">—</option><option value="founding">Founding</option><option value="core">Core</option><option value="plus">Plus</option></select>
+          <select class="fselect" id="f-recommended-tier"><option value="">—</option><option value="standard">Standard (£245)</option><option value="preferred">Preferred Family Rate (£225)</option></select>
         </div>
         <div>
           <label class="flabel">Offered tier</label>
-          <select class="fselect" id="f-offered-tier"><option value="">—</option><option value="founding">Founding</option><option value="core">Core</option><option value="plus">Plus</option></select>
+          <select class="fselect" id="f-offered-tier"><option value="">—</option><option value="standard">Standard (£245)</option><option value="preferred">Preferred Family Rate (£225)</option></select>
         </div>
         <div><label class="flabel">Monthly value (£)</label><input class="finput" type="number" step="0.01" id="f-monthly-value"></div>
         <div><label class="flabel">Next action</label><input class="finput" id="f-next-action" placeholder="e.g. 24h follow-up call"></div>
@@ -603,10 +603,12 @@ function parseCsv(text){
   });
 }
 
-// Maps the template's free-text Offer column onto our founding/core/plus
-// enum without guessing at anything the sheet doesn't already say.
+// Maps the template's free-text Offer column onto our tier values (standard/preferred,
+// plus the retired founding/core/plus) without guessing at anything the sheet doesn't already say.
 function mapTier(offer){
   const s=(offer||'').toLowerCase();
+  if(s.includes('preferred')||s.includes('225')) return 'preferred';
+  if(s.includes('standard')||s.includes('245')) return 'standard';
   if(s.includes('founding')) return 'founding';
   if(s.includes('plus')) return 'plus';
   if(s.includes('core')) return 'core';

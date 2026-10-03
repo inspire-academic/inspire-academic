@@ -20,7 +20,9 @@ const STATUS_VALUES = [
   'REVIEW_BOOKED', 'OFFERED', 'PAID',
   'NURTURE', 'NOT_NOW', 'NOT_FIT', 'LOST'
 ]
-const TIER_VALUES = ['founding', 'core', 'plus']
+// 'founding', 'core' and 'plus' are the retired launch tiers. They stay valid
+// so a record that already holds one can still be saved.
+const TIER_VALUES = ['standard', 'preferred', 'founding', 'core', 'plus']
 
 // Every writable field a client may set. Keeps the insert/patch body
 // to exactly what the schema defines — no arbitrary passthrough.
