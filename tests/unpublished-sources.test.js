@@ -15,7 +15,7 @@ const redirects = [...toml.matchAll(/\[\[redirects\]\]([\s\S]*?)(?=\n\[\[|\n\[(?
   return { from: get('from'), status: get('status'), force: get('force') };
 });
 
-const MUST_BLOCK = ['/curriculum/*', '/content-standards/*', '/supabase/*', '/docs/*', '/tests/*', '/scripts/*', '/.claude/*', '/CLAUDE.md'];
+const MUST_BLOCK = ['/curriculum/*', '/content-standards/*', '/supabase/*', '/docs/*', '/tests/*', '/scripts/*', '/.claude/*', '/CLAUDE.md', '/Campaign_ubuntu/*'];
 
 test('every source folder with keys or internal notes is blocked with a forced 404', () => {
   for (const from of MUST_BLOCK) {

@@ -93,6 +93,14 @@ edge_functions = "netlify/edge-functions"
   status = 404
   force = true
 
+# Internal ISM launch pack (runbook, decisions, call script, pipeline sheet)
+# and a draft landing page showing retired prices. Never meant to be served.
+[[redirects]]
+  from = "/Campaign_ubuntu/*"
+  to = "/not-published"
+  status = 404
+  force = true
+
 # NOTE (2026-08-28): the three edge_functions entries that used to sit
 # here (generate-question, mark-exam-response x2 paths, protege-ai)
 # were REMOVED, not just "kept for reference" as the old comment
