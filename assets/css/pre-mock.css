@@ -1,11 +1,16 @@
 /* ================================================================
    pre-mock.css — the Pre-Mock Mastery Check campaign page (/pre-mock).
 
-   Follows the approved "Know before the mocks" artwork: ivory page,
-   deep Inspire green, heritage gold, the Inspire Academic crest.
+   The page IS the approved "Know before the mocks" artwork: one
+   poster, the artwork's 2:3 shape, that always fits the screen with
+   nothing to scroll to. The poster is as wide as the screen (or as
+   wide as the screen's height allows), and everything inside is
+   sized in em from the poster's width, so it scales as one piece,
+   exactly like the picture. 1em = 16px of the 1024px-wide artwork.
+   The max() floors keep small text readable on a phone.
+
    Colours come from tokens.css (the --ia-crest-* and --ia-gold-*
-   tokens); nothing is redefined here. Written for a phone first;
-   the min-width blocks only add to it.
+   tokens); nothing is redefined here.
    ================================================================ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,29 +18,19 @@
 html { -webkit-text-size-adjust: 100%; }
 
 body {
+  --poster: min(100vw, 66.667vh);
   font-family: var(--font-body);
   background: var(--ia-crest-ivory);
   color: var(--ia-crest-green-ink);
-  line-height: 1.55;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
+  line-height: 1.4;
+}
+@supports (height: 100svh) {
+  body { --poster: min(100vw, 66.667svh); }
 }
 
 ul { list-style: none; }
 a { color: inherit; }
 svg { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-
-.pm { flex: 1; }
-.pm-wrap { position: relative; max-width: 62rem; margin: 0 auto; padding: 0 1.25rem; }
-
-.pm-skip {
-  position: absolute; left: .75rem; top: -4rem; z-index: 10;
-  background: var(--ia-crest-green); color: var(--ia-crest-ivory);
-  padding: .7rem 1rem; border-radius: 8px; font-weight: 600;
-}
-.pm-skip:focus { top: .75rem; }
 
 a:focus-visible {
   outline: 3px solid var(--ia-crest-green);
@@ -43,45 +38,58 @@ a:focus-visible {
   border-radius: 6px;
 }
 
-/* ── Hero ───────────────────────────────────────────────────── */
-.pm-hero { position: relative; padding: 1.1rem 0 1.75rem; overflow: hidden; }
+/* ── The poster ─────────────────────────────────────────────── */
+.pm {
+  position: relative;
+  width: var(--poster);
+  min-height: 100vh;
+  margin: 0 auto;
+  font-size: calc(var(--poster) / 64);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1em;
+  padding-top: 2em;
+  overflow: hidden;
+}
+@supports (height: 100svh) {
+  .pm { min-height: 100svh; }
+}
+.pm > * { position: relative; margin-left: 3.4em; margin-right: 3.4em; }
 
 /* The artwork's sunlit desk, top right, fading into the page. */
-.pm-photo {
-  position: absolute; top: 0; right: 0;
-  width: 46%; max-width: 20rem; height: auto;
-  opacity: .5;
-  -webkit-mask-image: linear-gradient(to left, #000 15%, transparent 92%), linear-gradient(to bottom, #000 45%, transparent 88%);
+.pm > .pm-photo {
+  position: absolute; top: 0; right: 0; margin: 0;
+  width: 44%; height: auto;
+  -webkit-mask-image: linear-gradient(to left, #000 18%, transparent 88%), linear-gradient(to bottom, #000 45%, transparent 84%);
   -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to left, #000 15%, transparent 92%), linear-gradient(to bottom, #000 45%, transparent 88%);
+  mask-image: linear-gradient(to left, #000 18%, transparent 88%), linear-gradient(to bottom, #000 45%, transparent 84%);
   mask-composite: intersect;
   pointer-events: none;
 }
 
-.pm-brand { display: flex; align-items: center; gap: .9rem; margin-bottom: 1.1rem; }
+.pm-brand { display: flex; align-items: center; gap: 2.4em; }
 .pm-crest { display: block; flex: none; }
-.pm-crest img { display: block; width: 4.6rem; height: auto; }
+.pm-crest img { display: block; width: 11.5em; height: auto; }
 .pm-tagline {
   border-left: 1px solid var(--ia-gold);
-  padding-left: .9rem;
-  font-size: .62rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase;
-  line-height: 1.9;
+  padding-left: 1.8em;
+  font-size: max(7.5px, 1em); font-weight: 500; letter-spacing: .26em; text-transform: uppercase;
+  line-height: 1.75;
 }
 
 .pm-eyebrow {
   color: var(--ia-gold-text);
-  font-size: .78rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
-  margin-bottom: .35rem;
+  font-size: max(10px, 1.85em); font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
 }
 
 h1 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.9rem, 14.5vw, 5.6rem);
-  line-height: .98;
+  font-size: 9.4em;
+  line-height: .96;
   letter-spacing: -.025em;
-  max-width: 6.4em;
-  margin-bottom: .9rem;
+  margin: .04em 0 .12em;
 }
 h1 em {
   font-style: italic; font-weight: 600;
@@ -92,130 +100,84 @@ h1 em {
 .pm-sub {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(1.2rem, 5.4vw, 1.7rem);
-  line-height: 1.25;
-  max-width: 22em;
-  margin-bottom: .9rem;
+  font-size: max(14px, 2.6em);
+  line-height: 1.2;
 }
-.pm-sub span { display: block; }
 
-.pm-lead { font-size: 1rem; max-width: 34rem; margin-bottom: 1.25rem; }
+.pm-lead { font-size: max(12.5px, 1.9em); max-width: 30em; margin-top: .9em; }
 .pm-lead strong { color: var(--ia-gold-text); font-weight: 700; }
 
-/* ── The button ─────────────────────────────────────────────── */
-.pm-cta {
-  display: flex; align-items: center; justify-content: center; gap: .6rem;
-  width: 100%; max-width: 34rem; min-height: 3.75rem;
-  padding: .85rem 1.25rem;
-  border-radius: 999px;
-  background: linear-gradient(var(--ia-crest-gold), var(--ia-crest-gold-deep));
-  border: 1px solid var(--ia-gold-dark);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 0 rgba(127,97,22,.22), 0 6px 18px rgba(169,130,37,.28);
-  color: var(--ia-crest-green-ink);
-  font-family: var(--font-display); font-weight: 500; font-size: 1.08rem; line-height: 1.2;
-  text-align: center; text-decoration: none;
-  transition: transform .25s var(--spring-out), box-shadow .2s;
-}
-.pm-cta strong { font-family: var(--font-body); font-weight: 700; }
-.pm-cta svg { flex: none; width: 1.4rem; height: 1.4rem; stroke-width: 2; }
-.pm-cta:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 0 rgba(127,97,22,.22), 0 10px 26px rgba(169,130,37,.36); }
-.pm-cta:active { transform: translateY(0) scale(.985); }
-
-.pm-micro { margin-top: .7rem; font-size: .85rem; color: var(--ia-text-2); max-width: 34rem; }
-
-/* ── Benefits ───────────────────────────────────────────────── */
-.pm-benefits { padding-top: .5rem; padding-bottom: 1.5rem; }
-.pm-benefits ul { display: grid; grid-template-columns: 1fr; gap: .15rem; }
+/* ── Five benefits ──────────────────────────────────────────── */
+.pm-benefits { display: grid; grid-template-columns: repeat(5, 1fr); }
+.pm > .pm-benefits { margin-left: 2.4em; margin-right: 2.4em; }
 .pm-benefits li {
-  display: flex; align-items: center; gap: .9rem;
-  padding: .55rem 0;
-  font-family: var(--font-display); font-weight: 500; font-size: 1.08rem; line-height: 1.25;
-  border-bottom: 1px solid var(--ia-border);
+  display: flex; flex-direction: column; align-items: center; gap: .5em;
+  padding: 0 .35em;
+  text-align: center;
+  font-family: var(--font-display); font-weight: 500;
+  font-size: max(9.5px, 1.5em); line-height: 1.15;
+  border-left: 1px solid var(--ia-border-gold);
 }
-.pm-benefits li:last-child { border-bottom: 0; }
+.pm-benefits li:first-child { border-left: 0; }
 .pm-icon {
-  flex: none; display: grid; place-items: center;
-  width: 2.9rem; height: 2.9rem; border-radius: 50%;
+  display: grid; place-items: center;
+  width: 3.9em; height: 3.9em; border-radius: 50%;
   background: var(--ia-crest-cream);
 }
-.pm-icon svg { width: 1.45rem; height: 1.45rem; }
+.pm-icon svg { width: 2em; height: 2em; }
 .pm-benefits li:nth-child(even) .pm-icon { color: var(--ia-gold-dark); }
 
 /* ── Who and how long ───────────────────────────────────────── */
 .pm-facts {
-  display: grid; gap: 1rem;
+  display: grid; grid-template-columns: 1.15fr 1fr;
   background: var(--ia-crest-cream);
-  border-radius: 14px;
-  padding: 1.1rem 1.15rem;
+  border-radius: .7em;
+  padding: 1.4em 1em;
 }
-.pm-fact { display: flex; align-items: center; gap: .9rem; }
-.pm-fact > svg { flex: none; width: 2.3rem; height: 2.3rem; stroke-width: 1.4; }
-.pm-fact-main { font-family: var(--font-display); font-weight: 500; font-size: 1.12rem; line-height: 1.25; }
-.pm-fact-sub { font-size: .7rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; margin-top: .2rem; }
-.pm-fact-sub span + span { margin-left: .6rem; padding-left: .6rem; border-left: 1px solid var(--ia-gold-dark); }
+.pm > .pm-facts { margin-left: 3em; margin-right: 3em; }
+.pm-fact { display: flex; align-items: center; gap: 1em; padding: 0 .6em; min-width: 0; }
+.pm-fact + .pm-fact { border-left: 1px solid var(--ia-border-gold); padding-left: 1.4em; }
+.pm-fact > svg { flex: none; width: 3.4em; height: 3.4em; stroke-width: 1.4; }
+.pm-fact-main { font-family: var(--font-display); font-weight: 500; font-size: max(10px, 1.6em); line-height: 1.2; }
+.pm-fact-sub { font-size: max(6.5px, .95em); font-weight: 500; letter-spacing: .14em; text-transform: uppercase; margin-top: .3em; white-space: nowrap; }
+.pm-fact-sub span + span { margin-left: .5em; padding-left: .5em; border-left: 1px solid var(--ia-gold-dark); }
 
-/* ── What to expect ─────────────────────────────────────────── */
-.pm-expect { padding-top: 2rem; padding-bottom: 2.5rem; }
-.pm-expect h2 { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; margin-bottom: .9rem; }
-.pm-expect ul { display: grid; gap: .85rem; max-width: 44rem; margin-bottom: 1.75rem; }
-.pm-expect li { position: relative; padding-left: 1.35rem; font-size: .98rem; }
-.pm-expect li::before {
-  content: ""; position: absolute; left: 0; top: .62em;
-  width: .5rem; height: .5rem; border-radius: 50%; background: var(--ia-gold);
+/* ── The button ─────────────────────────────────────────────── */
+.pm-cta {
+  display: flex; align-items: center; justify-content: center; gap: .5em;
+  min-height: max(48px, 2.7em);
+  padding: .2em .4em;
+  border-radius: 999px;
+  background: linear-gradient(var(--ia-crest-gold), var(--ia-crest-gold-deep));
+  border: 1px solid var(--ia-gold-dark);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 0 rgba(127,97,22,.22), 0 .15em .5em rgba(169,130,37,.3);
+  color: var(--ia-crest-green-ink);
+  font-family: var(--font-display); font-weight: 500; font-size: max(13.5px, 2.4em); line-height: 1.15;
+  text-align: center; text-decoration: none; white-space: nowrap;
+  transition: transform .25s var(--spring-out), box-shadow .2s;
 }
+.pm > .pm-cta { margin-left: 3em; margin-right: 3em; }
+.pm-cta strong { font-family: var(--font-body); font-weight: 700; }
+.pm-cta svg { flex: none; width: 1.3em; height: 1.3em; stroke-width: 2; }
+.pm-cta:hover { transform: translateY(-2px); }
+.pm-cta:active { transform: scale(.985); }
 
 /* ── Green band ─────────────────────────────────────────────── */
-.pm-footer { background: var(--ia-crest-green); color: var(--ia-text-on-dark); padding: 1.75rem 1.25rem 1.5rem; }
-.pm-outcomes { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 1rem; max-width: 62rem; margin: 0 auto; }
+.pm > .pm-outcomes {
+  margin: .4em 0 0;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  background: var(--ia-crest-green); color: var(--ia-text-on-dark);
+  padding: 2em 1.5em 2.2em;
+}
 .pm-outcomes li {
-  display: flex; flex-direction: column; align-items: center; gap: .6rem;
+  display: flex; flex-direction: column; align-items: center; gap: .7em;
+  padding: 0 .4em;
   text-align: center;
-  font-size: .68rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; line-height: 1.6;
+  font-size: max(6.5px, .98em); font-weight: 500; letter-spacing: .16em; text-transform: uppercase; line-height: 1.5;
+  border-left: 1px solid rgba(253,200,72,.4);
 }
-.pm-outcomes svg { width: 2rem; height: 2rem; color: var(--ia-crest-gold); stroke-width: 1.5; }
-.pm-legal {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem 1.4rem;
-  max-width: 62rem; margin: 1.6rem auto 0; padding-top: 1.1rem;
-  border-top: 1px solid rgba(248,247,242,.18);
-  font-size: .8rem;
-}
-.pm-legal a { display: inline-block; padding: .8rem .4rem; text-decoration: none; color: rgba(248,247,242,.82); }
-.pm-legal a:hover { color: var(--ia-text-on-dark); text-decoration: underline; }
-.pm-footer a:focus-visible { outline-color: var(--ia-crest-gold); }
-
-/* ── Larger screens ─────────────────────────────────────────── */
-@media (min-width: 40rem) {
-  .pm-wrap { padding: 0 2rem; }
-  .pm-hero { padding: 2rem 0 2.25rem; }
-  .pm-photo { width: 42%; max-width: 26rem; opacity: .8; }
-  .pm-crest img { width: 6rem; }
-  .pm-tagline { font-size: .7rem; }
-  .pm-eyebrow { font-size: .95rem; }
-  .pm-lead { font-size: 1.1rem; }
-  .pm-cta { font-size: 1.3rem; min-height: 4.25rem; }
-  .pm-benefits ul { grid-template-columns: repeat(5, 1fr); gap: 0; }
-  .pm-benefits li {
-    flex-direction: column; text-align: center; gap: .7rem;
-    padding: .25rem .8rem; font-size: 1rem;
-    border-bottom: 0; border-left: 1px solid var(--ia-border-gold);
-  }
-  .pm-benefits li:first-child { border-left: 0; }
-  .pm-icon { width: 3.6rem; height: 3.6rem; }
-  .pm-icon svg { width: 1.8rem; height: 1.8rem; }
-  .pm-facts { grid-template-columns: 1fr 1fr; padding: 1.25rem 1.5rem; }
-  .pm-fact + .pm-fact { border-left: 1px solid var(--ia-border-gold); padding-left: 1.5rem; }
-  .pm-outcomes { grid-template-columns: repeat(4, 1fr); gap: 0; }
-  .pm-outcomes li { padding: 0 1rem; border-left: 1px solid rgba(253,200,72,.4); }
-  .pm-outcomes li:first-child { border-left: 0; }
-  .pm-footer { padding: 2.25rem 2rem 1.5rem; }
-}
-
-@media (min-width: 64rem) {
-  .pm-hero { padding: 2.5rem 0 2.75rem; }
-  .pm-photo { width: 30rem; max-width: none; right: max(0px, calc(50% - 38rem)); opacity: 1; }
-  h1 { font-size: 6.2rem; }
-  .pm-expect { padding-top: 2.75rem; padding-bottom: 3.5rem; }
-}
+.pm-outcomes li:first-child { border-left: 0; }
+.pm-outcomes svg { width: 3.4em; height: 3.4em; color: var(--ia-crest-gold); stroke-width: 1.5; }
 
 @media (prefers-reduced-motion: reduce) {
   .pm-cta { transition: none; }
