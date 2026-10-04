@@ -94,8 +94,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
 
 <main>
   <div class="eyebrow">Inspire Science Mastery</div>
-  <h1>Start the Mastery Diagnostic</h1>
-  <p class="sub">Tell us a little about your child. We'll register your interest and take you straight to the diagnostic — no account needed to begin.</p>
+  <h1 data-funnel-done-text="Request your Mastery Review">Start the Mastery Diagnostic</h1>
+  <p class="sub" data-funnel-done-text="Tell us a little about your child and a member of the Inspire Academic team will be in touch about the next step.">Tell us a little about your child. We'll register your interest and take you straight to the diagnostic — no account needed to begin.</p>
 
   <form id="leadForm" novalidate>
     <div class="row2">
@@ -176,13 +176,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
     <input type="hidden" name="page_url" value="">
     <input type="hidden" name="submitted_at" value="">
 
-    <button type="submit" class="submit-btn">Register &amp; Continue to Diagnostic</button>
+    <button type="submit" class="submit-btn" data-funnel-done-text="Request my Mastery Review">Register &amp; Continue to Diagnostic</button>
     <p class="privacy-note">This registers your interest only — it does not create a student account or enrol your child. A member of the Inspire Academic team will follow up by email, phone or WhatsApp.</p>
   </form>
 </main>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
+<script src="/assets/js/funnel.js"></script>
 <script src="/assets/js/recruitment.js"></script>
 <script src="/assets/js/nav-back.js"></script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "115b324e79814b58b430653d922e778a"}'></script>
@@ -214,6 +215,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
 
       var data = Object.fromEntries(new FormData(form).entries());
       var submitBtn = form.querySelector('.submit-btn');
+      var submitLabel = submitBtn.textContent;
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending…';
 
@@ -238,7 +240,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--sm);outline-offset:
         })
         .catch(function (err) {
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Register & Continue to Diagnostic';
+          submitBtn.textContent = submitLabel;
           showToast(err.message, true);
         });
     });

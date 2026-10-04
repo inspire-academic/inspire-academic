@@ -459,6 +459,8 @@ input,select,textarea{font-family:var(--font-body);}
 <script src="/assets/js/maths-typeset.js"></script>
 <script src="/assets/js/diagnostic-answer-types.js"></script>
 <script src="/assets/js/programme-check-mode.js" defer></script>
+<script src="/assets/js/funnel.js"></script>
+<script src="/assets/js/campaign-diagnostic.js" defer></script>
 <script>
 // ═══════════════════════════════════════════════════════════
 // SUPABASE CONFIG — used only for sign-in and for reading this student's
@@ -808,6 +810,7 @@ async function startAssessment() {
       leadId: S.leadId || undefined
     });
     await beginTest(data, 'Choose "Not sure" rather than guess: wrong guesses count against you, "Not sure" doesn\'t');
+    if (window.IACampaign) window.IACampaign.started(); // campaign visitors only (campaign-diagnostic.js)
     toast('Assessment ready — good luck ' + name + '!', 'success');
   } catch(e) {
     toast(e.message, 'error');
@@ -1147,6 +1150,7 @@ async function runDiagnosis() {
     S.review    = data.review;
     S.attemptId = data.attemptId;
     renderDiagnosis();
+    if (window.IACampaign) window.IACampaign.completed();
     toast('Diagnosis complete!', 'success');
     setSaveStatus(data.saved === true ? 'saved' : data.saved === false ? 'failed' : null);
   } catch(e) {
@@ -1447,6 +1451,7 @@ async function runPlan() {
   S.plan = await computePlan();
   // Show the plan first; save behind it.
   renderPlan();
+  if (window.IACampaign) window.IACampaign.planShown();
   toast('Study plan ready!', 'success');
   await savePlan();
 }

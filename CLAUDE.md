@@ -166,6 +166,9 @@ inspire-academic/
 ├── programmes/                  ← Registration/recruitment landing pages
 │   ├── inspire-academic/          (general registration of interest, /interest)
 │   ├── year-6-science-bridge/     (Year 6 bridging programme registration)
+│   ├── pre-mock/                  (Pre-Mock Mastery Check campaign page, live at
+│   │                                /pre-mock — a doorway into /diagnostic; funnel
+│   │                                events via assets/js/funnel.js)
 │   └── admin/leads.html           (leads admin — shareable registration links)
 │
 ├── year6/                       ← Year 6 Science Bridging programme (live at /bridge)
