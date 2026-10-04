@@ -55,35 +55,47 @@ body {
 }
 
 /* ── The button again, in the green below the poster ─────────────
-   Only on screens tall enough to leave real room under the poster
-   (a phone held upright); otherwise the poster's own button is the
-   only one and nothing is added to scroll to. */
+   A phone is taller than the 2:3 poster, which leaves green under it.
+   The button fills that green in balance: the same margin above,
+   below and at the sides as the poster's own button has from the
+   poster's edge, and its words grow with the room there is (the screen's
+   height less the poster's). Once the words reach their largest, any
+   room left over is shared equally above and below.
+
+   Only on screens tall enough to leave real room under the poster;
+   otherwise the poster's own button is the only one and nothing is
+   added to scroll to. */
 .pm-below { display: none; }
 @media (max-aspect-ratio: 11/20) {
   .pm-below {
     flex: 1;
     display: flex; align-items: center; justify-content: center;
-    padding: 0 6.84% 4%;
+    padding: 0 6.84%;
   }
 }
 .pm-start {
-  display: flex; align-items: center; justify-content: center; gap: .5em;
+  display: flex; align-items: center; justify-content: center; gap: .45em;
   width: 100%;
   padding: .6em .7em;
-  border-radius: 999px;
+  border-radius: 1.15em;
   background: linear-gradient(var(--ia-crest-gold), var(--ia-crest-gold-deep));
   box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -3px 0 rgba(127,97,22,.25), 0 0 0 4px rgba(253,200,72,.18), 0 10px 28px rgba(0,0,0,.35);
   color: var(--ia-crest-green-ink);
   font-family: var(--font-display); font-weight: 600;
   font-size: calc(var(--poster) / 18.5);
-  line-height: 1.15;
-  text-align: center; text-decoration: none;
+  font-size: clamp(calc(var(--poster) / 18.5), calc((100vh - var(--poster) * 1.5) * .15), calc(var(--poster) / 13));
+  line-height: 1.12;
+  text-align: center; text-decoration: none; text-wrap: balance;
   transition: transform .25s var(--spring-out);
 }
+.pm-nb { white-space: nowrap; }
 .pm-start strong { font-family: var(--font-body); font-weight: 800; }
 .pm-start svg {
-  flex: none; width: 1.2em; height: 1.2em;
+  flex: none; width: 1.1em; height: 1.1em;
   fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+}
+@supports (height: 100svh) {
+  .pm-start { font-size: clamp(calc(var(--poster) / 18.5), calc((100svh - var(--poster) * 1.5) * .15), calc(var(--poster) / 13)); }
 }
 .pm-start:active { transform: scale(.98); }
 .pm-start:focus-visible { outline: 3px solid var(--ia-crest-ivory); outline-offset: 3px; }
