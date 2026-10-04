@@ -1,185 +1,54 @@
 /* ================================================================
    pre-mock.css — the Pre-Mock Mastery Check campaign page (/pre-mock).
 
-   The page IS the approved "Know before the mocks" artwork: one
-   poster, the artwork's 2:3 shape, that always fits the screen with
-   nothing to scroll to. The poster is as wide as the screen (or as
-   wide as the screen's height allows), and everything inside is
-   sized in em from the poster's width, so it scales as one piece,
-   exactly like the picture. 1em = 16px of the 1024px-wide artwork.
-   The max() floors keep small text readable on a phone.
+   The page is the approved "Know before the mocks" artwork itself,
+   shown whole: one 2:3 poster that always fits the screen, with
+   nothing to scroll to. The poster's gold button is a real link laid
+   exactly over the button in the picture. The words in the picture
+   are repeated in the page for screen readers (.pm-words).
 
-   Colours come from tokens.css (the --ia-crest-* and --ia-gold-*
-   tokens); nothing is redefined here.
+   Colours come from tokens.css; nothing is redefined here.
    ================================================================ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { -webkit-text-size-adjust: 100%; }
-
 body {
   --poster: min(100vw, 66.667vh);
-  font-family: var(--font-body);
   background: var(--ia-crest-ivory);
-  color: var(--ia-crest-green-ink);
-  line-height: 1.4;
 }
 @supports (height: 100svh) {
   body { --poster: min(100vw, 66.667svh); }
 }
 
-ul { list-style: none; }
-a { color: inherit; }
-svg { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-
-a:focus-visible {
-  outline: 3px solid var(--ia-crest-green);
-  outline-offset: 3px;
-  border-radius: 6px;
-}
-
-/* ── The poster ─────────────────────────────────────────────── */
+/* The poster ends in its green band, so any screen left below it is
+   the same green. */
 .pm {
-  position: relative;
   width: var(--poster);
   min-height: 100vh;
   margin: 0 auto;
-  font-size: calc(var(--poster) / 64);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1em;
-  padding-top: 2em;
-  overflow: hidden;
+  background: var(--ia-crest-green);
 }
 @supports (height: 100svh) {
   .pm { min-height: 100svh; }
 }
-.pm > * { position: relative; margin-left: 3.4em; margin-right: 3.4em; }
 
-/* The artwork's sunlit desk, top right, fading into the page. */
-.pm > .pm-photo {
-  position: absolute; top: 0; right: 0; margin: 0;
-  width: 44%; height: auto;
-  -webkit-mask-image: linear-gradient(to left, #000 18%, transparent 88%), linear-gradient(to bottom, #000 45%, transparent 84%);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to left, #000 18%, transparent 88%), linear-gradient(to bottom, #000 45%, transparent 84%);
-  mask-composite: intersect;
-  pointer-events: none;
-}
+.pm-poster { position: relative; }
+.pm-poster img { display: block; width: 100%; height: auto; }
 
-.pm-brand { display: flex; align-items: center; gap: 2.4em; }
-.pm-crest { display: block; flex: none; }
-.pm-crest img { display: block; width: 11.5em; height: auto; }
-.pm-tagline {
-  border-left: 1px solid var(--ia-gold);
-  padding-left: 1.8em;
-  font-size: max(7.5px, 1em); font-weight: 500; letter-spacing: .26em; text-transform: uppercase;
-  line-height: 1.75;
-}
-
-.pm-eyebrow {
-  color: var(--ia-gold-text);
-  font-size: max(10px, 1.85em); font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
-}
-
-h1 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 9.4em;
-  line-height: .96;
-  letter-spacing: -.025em;
-  margin: .04em 0 .12em;
-}
-h1 em {
-  font-style: italic; font-weight: 600;
-  background: linear-gradient(var(--ia-gold), var(--ia-gold)) left 92% / 100% .055em no-repeat;
-  padding-bottom: .04em;
-}
-
-.pm-sub {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: max(14px, 2.6em);
-  line-height: 1.2;
-}
-
-.pm-lead { font-size: max(12.5px, 1.9em); max-width: 30em; margin-top: .9em; }
-.pm-lead strong { color: var(--ia-gold-text); font-weight: 700; }
-
-/* ── Five benefits ──────────────────────────────────────────── */
-.pm-benefits { display: grid; grid-template-columns: repeat(5, 1fr); }
-.pm > .pm-benefits { margin-left: 2.4em; margin-right: 2.4em; }
-.pm-benefits li {
-  display: flex; flex-direction: column; align-items: center; gap: .5em;
-  padding: 0 .35em;
-  text-align: center;
-  font-family: var(--font-display); font-weight: 500;
-  font-size: max(9.5px, 1.5em); line-height: 1.15;
-  border-left: 1px solid var(--ia-border-gold);
-}
-.pm-benefits li:first-child { border-left: 0; }
-.pm-icon {
-  display: grid; place-items: center;
-  width: 3.9em; height: 3.9em; border-radius: 50%;
-  background: var(--ia-crest-cream);
-}
-.pm-icon svg { width: 2em; height: 2em; }
-.pm-benefits li:nth-child(even) .pm-icon { color: var(--ia-gold-dark); }
-
-/* ── Who and how long ───────────────────────────────────────── */
-.pm-facts {
-  display: grid; grid-template-columns: 1.15fr 1fr;
-  background: var(--ia-crest-cream);
-  border-radius: .7em;
-  padding: 1.4em 1em;
-}
-.pm > .pm-facts { margin-left: 3em; margin-right: 3em; }
-.pm-fact { display: flex; align-items: center; gap: 1em; padding: 0 .6em; min-width: 0; }
-.pm-fact + .pm-fact { border-left: 1px solid var(--ia-border-gold); padding-left: 1.4em; }
-.pm-fact > svg { flex: none; width: 3.4em; height: 3.4em; stroke-width: 1.4; }
-.pm-fact-main { font-family: var(--font-display); font-weight: 500; font-size: max(10px, 1.6em); line-height: 1.2; }
-.pm-fact-sub { font-size: max(6.5px, .95em); font-weight: 500; letter-spacing: .14em; text-transform: uppercase; margin-top: .3em; white-space: nowrap; }
-.pm-fact-sub span + span { margin-left: .5em; padding-left: .5em; border-left: 1px solid var(--ia-gold-dark); }
-
-/* ── The button ─────────────────────────────────────────────── */
+/* Over the picture's button (70–953 across, 1206–1315 down, of
+   1024 × 1536), a little taller so it is easy to tap. */
 .pm-cta {
-  display: flex; align-items: center; justify-content: center; gap: .5em;
-  min-height: max(48px, 2.7em);
-  padding: .2em .4em;
+  position: absolute;
+  left: 6.84%; width: 86.3%;
+  top: 77.6%; height: 8.9%;
   border-radius: 999px;
-  background: linear-gradient(var(--ia-crest-gold), var(--ia-crest-gold-deep));
-  border: 1px solid var(--ia-gold-dark);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 0 rgba(127,97,22,.22), 0 .15em .5em rgba(169,130,37,.3);
-  color: var(--ia-crest-green-ink);
-  font-family: var(--font-display); font-weight: 500; font-size: max(13.5px, 2.4em); line-height: 1.15;
-  text-align: center; text-decoration: none; white-space: nowrap;
-  transition: transform .25s var(--spring-out), box-shadow .2s;
 }
-.pm > .pm-cta { margin-left: 3em; margin-right: 3em; }
-.pm-cta strong { font-family: var(--font-body); font-weight: 700; }
-.pm-cta svg { flex: none; width: 1.3em; height: 1.3em; stroke-width: 2; }
-.pm-cta:hover { transform: translateY(-2px); }
-.pm-cta:active { transform: scale(.985); }
+.pm-cta:focus-visible {
+  outline: 3px solid var(--ia-crest-green);
+  outline-offset: 2px;
+}
 
-/* ── Green band ─────────────────────────────────────────────── */
-.pm > .pm-outcomes {
-  margin: .4em 0 0;
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  background: var(--ia-crest-green); color: var(--ia-text-on-dark);
-  padding: 2em 1.5em 2.2em;
-}
-.pm-outcomes li {
-  display: flex; flex-direction: column; align-items: center; gap: .7em;
-  padding: 0 .4em;
-  text-align: center;
-  font-size: max(6.5px, .98em); font-weight: 500; letter-spacing: .16em; text-transform: uppercase; line-height: 1.5;
-  border-left: 1px solid rgba(253,200,72,.4);
-}
-.pm-outcomes li:first-child { border-left: 0; }
-.pm-outcomes svg { width: 3.4em; height: 3.4em; color: var(--ia-crest-gold); stroke-width: 1.5; }
-
-@media (prefers-reduced-motion: reduce) {
-  .pm-cta { transition: none; }
-  .pm-cta:hover, .pm-cta:active { transform: none; }
+.pm-words {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }
