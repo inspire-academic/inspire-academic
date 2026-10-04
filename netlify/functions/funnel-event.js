@@ -23,6 +23,7 @@ const { fail, ok, parseBody, clean, UUID_RE, db } = require('./_diagnostic-share
 const EVENTS = [
   'pre_mock_page_view',
   'pre_mock_cta_click',
+  'pre_mock_call_click',
   'diagnostic_started',
   'diagnostic_completed',
   'result_viewed',

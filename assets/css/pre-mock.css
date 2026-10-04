@@ -69,7 +69,8 @@ body {
 @media (max-aspect-ratio: 11/20) {
   .pm-below {
     flex: 1;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: calc(var(--poster) * .035);
     padding: 0 6.84%;
   }
 }
@@ -102,4 +103,33 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .pm-start { transition: none; }
   .pm-start:active { transform: none; }
+}
+
+/* ── Call us, under the button ────────────────────────────────────
+   Shown when the green is tall enough for both. The big button's
+   words then grow with the room that is left after this one. */
+.pm-call { display: none; }
+@media (max-aspect-ratio: 12/23) {
+  .pm-call {
+    display: flex; align-items: center; justify-content: center; gap: .5em;
+    width: 100%;
+    min-height: max(44px, calc(var(--poster) * .115));
+    border: 1.5px solid var(--ia-crest-gold);
+    border-radius: 999px;
+    color: var(--ia-text-on-dark);
+    font-family: var(--font-body); font-weight: 600;
+    font-size: max(15px, calc(var(--poster) / 23));
+    letter-spacing: .02em;
+    text-decoration: none;
+  }
+  .pm-call svg {
+    flex: none; width: 1.15em; height: 1.15em;
+    fill: none; stroke: var(--ia-crest-gold); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .pm-call:active { background: rgba(253,200,72,.12); }
+  .pm-call:focus-visible { outline: 3px solid var(--ia-crest-ivory); outline-offset: 3px; }
+  .pm-start { font-size: clamp(calc(var(--poster) / 18.5), calc((100vh - var(--poster) * 1.66 - 8px) * .17), calc(var(--poster) / 13)); }
+  @supports (height: 100svh) {
+    .pm-start { font-size: clamp(calc(var(--poster) / 18.5), calc((100svh - var(--poster) * 1.66 - 8px) * .17), calc(var(--poster) / 13)); }
+  }
 }
