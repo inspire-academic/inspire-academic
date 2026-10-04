@@ -15,8 +15,11 @@
 (function () {
   function init() {
     var params = new URLSearchParams(window.location.search);
-    var source = params.get('source') || '';
-    var campaign = params.get('campaign') || '';
+    // A visitor who came through a campaign landing page (e.g. /pre-mock)
+    // has no parameters in the address: funnel.js remembered the campaign.
+    var remembered = (window.IAFunnel && window.IAFunnel.attribution()) || {};
+    var source = params.get('source') || remembered.source || '';
+    var campaign = params.get('campaign') || remembered.campaign || '';
 
     if (source || campaign) {
       document.querySelectorAll('.js-register-cta').forEach(function (link) {

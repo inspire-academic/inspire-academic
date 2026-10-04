@@ -401,6 +401,25 @@ function = "create-teacher"
   to = "/assessment-engine/assessment-engine.html"
   status = 302
 
+# Pre-Mock Mastery Check campaign (WhatsApp artwork -> /pre-mock -> the
+# existing /diagnostic). A 200 rewrite, not a 302 like the short URLs above:
+# the address stays /pre-mock, which is the link people share and the page's
+# canonical URL, and a link-preview crawler gets the page's own title and
+# image without following a redirect. ?utm_source= etc. reach the page
+# either way (assets/js/funnel.js reads them).
+[[redirects]]
+  from = "/pre-mock"
+  to = "/programmes/pre-mock/index.html"
+  status = 200
+
+# Campaign funnel events (assets/js/funnel.js -> funnel_events table).
+# Same /api/v1/resource/action convention.
+[[redirects]]
+  from = "/api/v1/funnel/event"
+  to = "/.netlify/functions/funnel-event"
+  status = 200
+  force = true
+
 # Inspire Science Mastery (ISM) — Campaign Ubuntu acquisition landing
 # page. Same short-URL/302 rationale as /bridge above.
 [[redirects]]
