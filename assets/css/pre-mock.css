@@ -23,6 +23,7 @@ body {
 /* The poster ends in its green band, so any screen left below it is
    the same green. */
 .pm {
+  display: flex; flex-direction: column;
   width: var(--poster);
   min-height: 100vh;
   margin: 0 auto;
@@ -51,4 +52,42 @@ body {
 .pm-words {
   position: absolute; width: 1px; height: 1px; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* ── The button again, in the green below the poster ─────────────
+   Only on screens tall enough to leave real room under the poster
+   (a phone held upright); otherwise the poster's own button is the
+   only one and nothing is added to scroll to. */
+.pm-below { display: none; }
+@media (max-aspect-ratio: 11/20) {
+  .pm-below {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 6.84% 4%;
+  }
+}
+.pm-start {
+  display: flex; align-items: center; justify-content: center; gap: .5em;
+  width: 100%;
+  padding: .6em .7em;
+  border-radius: 999px;
+  background: linear-gradient(var(--ia-crest-gold), var(--ia-crest-gold-deep));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), inset 0 -3px 0 rgba(127,97,22,.25), 0 0 0 4px rgba(253,200,72,.18), 0 10px 28px rgba(0,0,0,.35);
+  color: var(--ia-crest-green-ink);
+  font-family: var(--font-display); font-weight: 600;
+  font-size: calc(var(--poster) / 18.5);
+  line-height: 1.15;
+  text-align: center; text-decoration: none;
+  transition: transform .25s var(--spring-out);
+}
+.pm-start strong { font-family: var(--font-body); font-weight: 800; }
+.pm-start svg {
+  flex: none; width: 1.2em; height: 1.2em;
+  fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+}
+.pm-start:active { transform: scale(.98); }
+.pm-start:focus-visible { outline: 3px solid var(--ia-crest-ivory); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .pm-start { transition: none; }
+  .pm-start:active { transform: none; }
 }
