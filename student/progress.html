@@ -123,6 +123,19 @@ main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 6rem;}
 .mob-nav-btn.active{color:var(--gold);}
 .mob-nav-btn:hover{color:var(--white);}
 
+/* ── Inspire Test & Teach summary (assets/js/itt-card.js) ── */
+.itt-progress{margin-bottom:2rem;}
+.itt-progress-title{font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:.3rem;}
+.itt-progress-note{font-size:.8rem;color:var(--muted);margin-bottom:.8rem;}
+.itt-progress-wrap{overflow-x:auto;background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);}
+.itt-progress-table{width:100%;border-collapse:collapse;font-size:.85rem;}
+.itt-progress-table th,.itt-progress-table td{padding:.7rem .8rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;}
+.itt-progress-table thead th{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;}
+.itt-progress-table tbody tr:last-child th,.itt-progress-table tbody tr:last-child td{border-bottom:none;}
+.itt-progress-table tbody th{font-weight:600;min-width:11rem;}
+.itt-progress-table a{color:var(--gold);text-decoration:underline;}
+.itt-progress-subject{display:block;font-size:.75rem;font-weight:400;color:var(--muted);}
+
 /* ── Mobile-first: base above is the phone layout; these steps
    restore the desktop layout. Kept last so they reliably win. ── */
 @media(min-width:481px){
@@ -219,6 +232,9 @@ main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 6rem;}
     </div>
   </div>
 
+  <!-- Inspire Test & Teach: filled in (and shown) only when the student has assignments -->
+  <section class="fade-in itt-progress" id="itt-progress" hidden></section>
+
   <!-- Achievements -->
   <div class="fade-in">
     <div class="section-title">🏆 Achievements</div>
@@ -243,6 +259,7 @@ main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 6rem;}
 <script src="/assets/js/capacitor-utils.js"></script>
 <script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/itt-card.js"></script>
 <script>
 const SUPA_URL='https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -329,6 +346,10 @@ function calcAchievements(attempts, progress, streak){
     {icon:'🧠',name:'Scholar',desc:'Score 80%+ on 5 quizzes',unlocked:scores.filter(s=>s>=80).length>=5},
   ];
 }
+
+  // Inspire Test & Teach has its own records (first attempts, mastery checks),
+  // kept apart from quiz mastery. Loads on its own; cannot hold up this page.
+  if(window.ITTCard) ITTCard.progress(document.getElementById('itt-progress'), supa);
 
   // Load all data in parallel
   const [attemptsRes, progressRes, streakRes, subjectsRes, topicsRes]=await Promise.all([

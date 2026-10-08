@@ -1,0 +1,126 @@
+/* ==========================================================================
+   itt-teacher.css — Inspire Test & Teach, teacher workspace
+   (teacher/test-and-teach.html). Loaded after itt.css, whose buttons,
+   panels, tabs and text styles it reuses. Mobile-first.
+   ========================================================================== */
+
+.tt-main{max-width:1100px;margin:0 auto;padding:1rem 1rem 5rem;}
+.tt-main :focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+:root[data-theme="light"] .tt-main :focus-visible{outline-color:var(--ia-focus);}
+.tt-staff{font-family:var(--font-body);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;border:1px solid currentColor;border-radius:3px;padding:.1rem .4rem;margin-left:.3rem;vertical-align:middle;}
+.tt-a{color:var(--gold);text-decoration:underline;}
+.tt-status{color:var(--itt-no);font-size:.88rem;min-height:1em;}
+.tt-vn{font-family:var(--font-body);font-size:.75rem;font-weight:700;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:.05rem .45rem;vertical-align:middle;}
+.tt-tabs .itt-tab,.tt-subtabs .itt-tab{flex:0 1 auto;padding:.5rem .9rem;}
+.tt-subtabs{overflow-x:auto;}
+.tt-subtabs .itt-tab{white-space:nowrap;}
+.tt-subtabs .itt-tab:disabled{opacity:.45;cursor:not-allowed;}
+
+/* ── import ── */
+.tt-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;text-align:center;min-height:9rem;padding:1.5rem 1rem;
+  border:2px dashed var(--border);border-radius:var(--itt-radius);background:var(--navy2);cursor:pointer;transition:border-color .15s,background .15s;}
+.tt-drop:hover,.tt-drop-over,.tt-drop:focus-within{border-color:var(--ia-gold);background:var(--itt-chosen);}
+.tt-drop-title{font-family:var(--font-display);font-size:1.15rem;font-weight:700;}
+.tt-drop-sub{font-size:.85rem;color:var(--muted);}
+.tt-rejected{border-color:var(--itt-no);border-left-width:5px;}
+.tt-accepted{border-color:var(--itt-ok);border-left-width:5px;}
+.tt-rejected .itt-h2,.tt-accepted .itt-h2{margin-top:0;}
+.tt-valid{color:var(--itt-ok);font-weight:700;font-size:.9rem;margin:.75rem 0;}
+.tt-problems{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:.6rem;}
+.tt-problems li{display:grid;gap:.15rem;padding:.6rem .75rem;border-left:3px solid var(--itt-no);background:var(--navy);border-radius:0 6px 6px 0;font-size:.88rem;}
+.tt-warnings li{border-left-color:var(--itt-idea);}
+.tt-where{font-weight:700;}
+.tt-path{font-size:.72rem;color:var(--muted);overflow-wrap:anywhere;}
+
+/* ── library ── */
+.tt-package{padding:.9rem;}
+.tt-version{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;}
+.tt-version-main{flex:1 1 100%;display:flex;flex-direction:column;gap:.2rem;min-width:0;}
+.tt-version-title{font-family:var(--font-display);font-size:1.05rem;font-weight:700;}
+.tt-version .itt-btn{flex:1;}
+.tt-version-older{padding-top:.75rem;margin-top:.75rem;border-top:1px solid var(--border);}
+.tt-older{margin-top:.75rem;font-size:.88rem;}
+.tt-older summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;color:var(--muted);}
+
+/* ── an open package ── */
+.tt-detail{margin-top:1.5rem;padding-top:1.25rem;border-top:2px solid var(--border);scroll-margin-top:4rem;}
+.tt-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;}
+.tt-detail-head .itt-h1,.tt-detail-head .itt-h2{margin:0 0 .3rem;}
+.tt-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin:1rem 0;}
+.tt-stats div{background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:.6rem .75rem;}
+.tt-stats dt{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+.tt-stats dd{margin:.15rem 0 0;font-size:1.05rem;font-weight:700;}
+.tt-objectives{margin:0;padding-left:1.3rem;display:grid;gap:.3rem;font-size:.92rem;}
+.tt-approve{border-color:var(--ia-gold);}
+.tt-approve .itt-h2{margin-top:0;}
+.tt-check{display:flex;align-items:flex-start;gap:.6rem;min-height:44px;padding:.5rem 0;font-size:.92rem;cursor:pointer;}
+.tt-check input{flex:none;width:1.25rem;height:1.25rem;margin-top:.1rem;accent-color:var(--ia-gold);}
+
+.tt-table-wrap{position:relative;overflow-x:auto;border:1px solid var(--border);border-radius:8px;background:var(--navy2);}
+.tt-table{width:100%;border-collapse:collapse;font-size:.86rem;}
+.tt-table th,.tt-table td{padding:.6rem .75rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;}
+.tt-table thead th{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap;}
+.tt-table tbody tr:last-child th,.tt-table tbody tr:last-child td{border-bottom:none;}
+.tt-table tbody th{font-weight:600;min-width:9rem;}
+.tt-row-actions{white-space:nowrap;}
+.tt-row-actions .itt-btn{min-height:40px;padding:.4rem .7rem;font-size:.8rem;margin:0 .25rem .25rem 0;}
+.tt-answers tbody th{min-width:14rem;font-weight:400;}
+.tt-answers td{min-width:11rem;}
+.tt-attempt{margin-bottom:.4rem;}
+.tt-mark{font-weight:700;}
+.tt-right .tt-mark{color:var(--itt-ok);}
+.tt-wrong .tt-mark{color:var(--itt-no);}
+.tt-unsure .tt-mark{color:var(--itt-idea);}
+.tt-miscon{display:block;font-size:.78rem;color:var(--muted);font-style:italic;margin:.2rem 0 0;}
+.tt-result{scroll-margin-top:4rem;}
+.tt-filter{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;}
+.tt-select{min-height:44px;padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:.9rem;max-width:100%;}
+
+/* ── preview: a phone-width column, as a student holds it ── */
+.tt-preview-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.25rem;margin-bottom:1rem;}
+.tt-preview-bar .itt-small{flex:1 1 100%;margin:0;}
+.tt-phone{max-width:412px;margin:0 auto;border:1px solid var(--border);border-radius:22px;background:var(--navy);padding:.5rem;}
+.tt-phone-screen{padding:1rem .9rem 2rem;min-height:30rem;}
+
+/* ── full content ── */
+.tt-csection{margin-top:1.5rem;padding-top:.5rem;border-top:1px solid var(--border);}
+.tt-cq{background:var(--navy2);border:1px solid var(--border);border-radius:var(--itt-radius);padding:1rem;margin-top:1rem;}
+.tt-cq .itt-stem{font-size:1.02rem;}
+.tt-fb{border-left:3px solid var(--border);padding:.45rem 0 .45rem .75rem;margin-top:.6rem;font-size:.9rem;}
+.tt-fb .itt-text{font-size:.9rem;color:var(--muted);}
+.tt-fb-label{display:block;font-weight:700;margin-bottom:.15rem;}
+.tt-fb-right{border-left-color:var(--itt-ok);}
+.tt-fb-right .tt-fb-label{color:var(--itt-ok);}
+.tt-fb-unsure{border-left-style:dashed;}
+.tt-fb-note{border-left-color:var(--itt-idea);}
+
+/* ── assign ── */
+.tt-assign{display:grid;gap:1.1rem;margin-top:.5rem;}
+.tt-field{border:none;margin:0;padding:0;min-width:0;display:grid;gap:.4rem;}
+.tt-row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:flex-end;}
+.tt-row > *{flex:1 1 12rem;}
+.tt-grow{flex:3 1 16rem;}
+.tt-search{font-size:.95rem;}
+.tt-students{max-height:17rem;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:var(--navy2);}
+.tt-student{display:flex;align-items:center;gap:.7rem;min-height:44px;padding:.4rem .8rem;border-bottom:1px solid var(--border);cursor:pointer;font-size:.92rem;}
+.tt-student:last-child{border-bottom:none;}
+.tt-student[hidden]{display:none;}
+.tt-student input{width:1.2rem;height:1.2rem;accent-color:var(--ia-gold);flex:none;}
+.tt-sections{padding-left:1.85rem;}
+.tt-links{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:.6rem;}
+.tt-links li{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;padding-bottom:.6rem;border-bottom:1px solid var(--border);}
+.tt-links li:last-child{border-bottom:none;padding-bottom:0;}
+.tt-link-name{font-weight:700;flex:1 1 100%;}
+.tt-link-url{flex:1 1 100%;font-size:.75rem;color:var(--muted);overflow-wrap:anywhere;}
+.tt-links .itt-btn{flex:1;min-height:44px;}
+
+@media (min-width:640px){
+  .tt-main{padding:1.5rem 1.5rem 5rem;}
+  .tt-stats{grid-template-columns:repeat(auto-fit,minmax(9rem,1fr));}
+  .tt-version-main{flex:1 1 0;}
+  .tt-version .itt-btn{flex:none;}
+  .tt-link-name{flex:0 0 11rem;}
+  .tt-link-url{flex:1 1 0;}
+  .tt-links .itt-btn{flex:none;}
+  .tt-preview-bar .itt-small{flex:1 1 0;}
+}

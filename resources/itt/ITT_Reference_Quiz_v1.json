@@ -1,0 +1,682 @@
+{
+  "schema": "itt.quiz.v1",
+  "package": {
+    "id": "itt-reference-ionic-bonding",
+    "title": "ITT Reference Quiz: Ions and Ionic Bonding",
+    "description": "A short technical reference package for Inspire Test & Teach. It uses every supported question type, response-specific teaching feedback, typeset chemistry and mathematics, an embedded diagram, a retry rule, section prerequisites and an independent mastery check.",
+    "subject": "Chemistry",
+    "year_group": "Year 10",
+    "exam_board": "AQA",
+    "tier": "Higher",
+    "specification": "AQA GCSE Chemistry 8462, 4.2 Bonding, structure and the properties of matter (ionic bonding and ionic compounds)",
+    "author": {
+      "source": "Inspire Academic",
+      "notes": "Technical fixture written by hand for importer and player testing. Not the full Year 10 package."
+    },
+    "created": "2026-10-08",
+    "content_version": "1.0.0",
+    "estimated_minutes": 20
+  },
+  "objectives": [
+    {
+      "id": "LO1",
+      "text": "Describe how atoms form ions by losing or gaining electrons."
+    },
+    {
+      "id": "LO2",
+      "text": "Describe the structure of an ionic lattice and the forces that hold it together."
+    },
+    {
+      "id": "LO3",
+      "text": "Explain the melting points and electrical conductivity of ionic compounds."
+    },
+    {
+      "id": "LO4",
+      "text": "Work out the numbers of particles in ions, and the formulae and formula masses of ionic compounds."
+    }
+  ],
+  "topics": [
+    {
+      "id": "ions",
+      "title": "Formation of ions",
+      "description": "Electron transfer, cations and anions, charges of Group 1, 2, 6 and 7 ions."
+    },
+    {
+      "id": "lattice",
+      "title": "Ionic lattices",
+      "description": "Giant ionic structures and electrostatic attraction."
+    },
+    {
+      "id": "properties",
+      "title": "Properties of ionic compounds",
+      "description": "Melting point and conductivity."
+    },
+    {
+      "id": "formulae",
+      "title": "Formulae and formula mass",
+      "description": "Balancing charges and simple calculations."
+    }
+  ],
+  "assets": [
+    {
+      "id": "nacl-lattice",
+      "media_type": "image/svg+xml",
+      "data": "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMjQwIiB3aWR0aD0iMjQwIiBoZWlnaHQ9IjI0MCI+PHJlY3Qgd2lkdGg9IjI0MCIgaGVpZ2h0PSIyNDAiIGZpbGw9IiNGQkZBRjYiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0iI0M3QTEzQiIvPjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMTcyMzNBIj5OYSs8L3RleHQ+PGNpcmNsZSBjeD0iMTIwIiBjeT0iNTAiIHI9IjI4IiBmaWxsPSIjMjk0RTc4Ii8+PHRleHQgeD0iMTIwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkZGRkZGIj5DbC08L3RleHQ+PGNpcmNsZSBjeD0iMTkwIiBjeT0iNTAiIHI9IjIwIiBmaWxsPSIjQzdBMTNCIi8+PHRleHQgeD0iMTkwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMTcyMzNBIj5OYSs8L3RleHQ+PGNpcmNsZSBjeD0iNTAiIGN5PSIxMjAiIHI9IjI4IiBmaWxsPSIjMjk0RTc4Ii8+PHRleHQgeD0iNTAiIHk9IjEyNSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkZGRkZGIj5DbC08L3RleHQ+PGNpcmNsZSBjeD0iMTIwIiBjeT0iMTIwIiByPSIyMCIgZmlsbD0iI0M3QTEzQiIvPjx0ZXh0IHg9IjEyMCIgeT0iMTI1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxNzIzM0EiPk5hKzwvdGV4dD48Y2lyY2xlIGN4PSIxOTAiIGN5PSIxMjAiIHI9IjI4IiBmaWxsPSIjMjk0RTc4Ii8+PHRleHQgeD0iMTkwIiB5PSIxMjUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjcwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0ZGRkZGRiI+Q2wtPC90ZXh0PjxjaXJjbGUgY3g9IjUwIiBjeT0iMTkwIiByPSIyMCIgZmlsbD0iI0M3QTEzQiIvPjx0ZXh0IHg9IjUwIiB5PSIxOTUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9IjcwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzE3MjMzQSI+TmErPC90ZXh0PjxjaXJjbGUgY3g9IjEyMCIgY3k9IjE5MCIgcj0iMjgiIGZpbGw9IiMyOTRFNzgiLz48dGV4dCB4PSIxMjAiIHk9IjE5NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkZGRkZGIj5DbC08L3RleHQ+PGNpcmNsZSBjeD0iMTkwIiBjeT0iMTkwIiByPSIyMCIgZmlsbD0iI0M3QTEzQiIvPjx0ZXh0IHg9IjE5MCIgeT0iMTk1IiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI3MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMxNzIzM0EiPk5hKzwvdGV4dD48L3N2Zz4=",
+      "alt": "A square grid of nine ions in three rows of three. Small gold circles labelled Na+ alternate with larger navy circles labelled Cl-, so every ion is next to ions of the opposite charge.",
+      "caption": "Part of one layer of a sodium chloride lattice."
+    }
+  ],
+  "settings": {
+    "retries": 0
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "title": "Foundation: how ions form",
+      "description": "The vocabulary and the single idea everything else rests on: ions form when atoms lose or gain electrons.",
+      "type": "foundation",
+      "purpose": "Check and secure the prerequisite knowledge of electron transfer before explaining bonding.",
+      "estimated_minutes": 4,
+      "topic_ids": [
+        "ions"
+      ],
+      "objective_ids": [
+        "LO1"
+      ],
+      "retries": 1,
+      "questions": [
+        {
+          "id": "s1-q01",
+          "type": "mcq",
+          "stem": "Which particle does an atom lose or gain when it becomes an ion?",
+          "marks": 1,
+          "difficulty": "foundation",
+          "objective_ids": [
+            "LO1"
+          ],
+          "topic_ids": [
+            "ions"
+          ],
+          "options": [
+            {
+              "id": "A",
+              "text": "A proton",
+              "feedback": "Incorrect. Protons are held in the nucleus and do not move in chemical reactions. If the number of protons changed, the atom would become a different element. Ions form when electrons are lost or gained.",
+              "misconception": "Ions form by changing the number of protons"
+            },
+            {
+              "id": "B",
+              "text": "A neutron",
+              "feedback": "Incorrect. Neutrons have no charge, so losing or gaining one could not give the atom a charge. Changing the number of neutrons gives a different isotope, not an ion.",
+              "misconception": "Confuses ions with isotopes"
+            },
+            {
+              "id": "C",
+              "text": "An electron",
+              "feedback": "Correct. Electrons are in the outer shells and can be transferred. Losing negative electrons leaves more protons than electrons, giving a positive ion. Gaining electrons gives a negative ion."
+            },
+            {
+              "id": "D",
+              "text": "A nucleus",
+              "feedback": "Incorrect. The nucleus stays intact in every chemical reaction. Only the electrons in the outer shell are transferred when an ion forms."
+            }
+          ],
+          "answer": "C",
+          "not_sure": {
+            "feedback": "An atom is neutral because it has equal numbers of protons (positive) and electrons (negative). The protons are locked in the nucleus, so the only way to become charged is to lose or gain electrons."
+          },
+          "teaching_note": "An ion is an atom, or group of atoms, with an overall charge. Metals lose electrons to form positive ions. Non-metals gain electrons to form negative ions."
+        },
+        {
+          "id": "s1-q02",
+          "type": "true_false",
+          "stem": "True or false? A sodium atom becomes a sodium ion, \\(\\mathrm{Na^{+}}\\), by gaining one electron.",
+          "marks": 1,
+          "difficulty": "foundation",
+          "objective_ids": [
+            "LO1"
+          ],
+          "answer": false,
+          "feedback": {
+            "true": "Incorrect. Gaining an electron would add negative charge and give \\(\\mathrm{Na^{-}}\\). Sodium is in Group 1, with one electron in its outer shell. It loses that electron, leaving 11 protons and 10 electrons, so the ion has a charge of 1+.",
+            "false": "Correct. Sodium is in Group 1 and loses its one outer electron. The ion has 11 protons but only 10 electrons, so its overall charge is 1+."
+          },
+          "not_sure": {
+            "feedback": "Look at the sign of the charge. A positive ion has fewer electrons than protons, so it must have lost electrons. Sodium has one outer electron, and losing it leaves a full outer shell."
+          },
+          "teaching_note": "Electrons are negative. Losing electrons makes an ion positive; gaining electrons makes it negative. Students often expect \"gaining\" to mean \"positive\"."
+        },
+        {
+          "id": "s1-q03",
+          "type": "short_text",
+          "stem": "What one-word name is given to a positively charged ion?",
+          "marks": 1,
+          "difficulty": "foundation",
+          "objective_ids": [
+            "LO1"
+          ],
+          "answer": {
+            "accepted": [
+              "cation",
+              "cations",
+              "a cation"
+            ]
+          },
+          "feedback": {
+            "correct": "Correct. A cation is a positive ion. Metals form cations because they lose electrons, for example \\(\\mathrm{Na^{+}}\\) and \\(\\mathrm{Mg^{2+}}\\).",
+            "incorrect": "Not quite. A positive ion is called a cation. Metal atoms form cations by losing electrons. A negative ion is called an anion."
+          },
+          "wrong_answers": [
+            {
+              "accepted": [
+                "anion",
+                "anions",
+                "an anion"
+              ],
+              "feedback": "Not quite: you have the two names the wrong way round. An anion is a negative ion, formed when a non-metal gains electrons. A positive ion is a cation.",
+              "misconception": "Swaps cation and anion"
+            }
+          ],
+          "not_sure": {
+            "feedback": "There are two names to learn. A cation is a positive ion (metals form these by losing electrons). An anion is a negative ion (non-metals form these by gaining electrons)."
+          }
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Conceptual understanding: the ionic lattice",
+      "description": "Why ionic compounds are held together so strongly, and when they can conduct electricity.",
+      "type": "conceptual",
+      "purpose": "Build the explanation that links structure to properties.",
+      "estimated_minutes": 6,
+      "topic_ids": [
+        "lattice",
+        "properties"
+      ],
+      "objective_ids": [
+        "LO2",
+        "LO3"
+      ],
+      "requires": [
+        "s1"
+      ],
+      "questions": [
+        {
+          "id": "s2-q01",
+          "type": "mcq",
+          "stem": "The diagram shows part of a sodium chloride lattice.\n\nWhat holds the ions together in this structure?",
+          "asset_ids": [
+            "nacl-lattice"
+          ],
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO2"
+          ],
+          "topic_ids": [
+            "lattice"
+          ],
+          "options": [
+            {
+              "id": "A",
+              "text": "Shared pairs of electrons between the ions",
+              "feedback": "Incorrect. Shared pairs of electrons are covalent bonds, which form between non-metal atoms. In sodium chloride the electrons have been transferred, not shared, leaving oppositely charged ions that attract each other.",
+              "misconception": "Describes ionic bonding as electron sharing"
+            },
+            {
+              "id": "B",
+              "text": "Strong electrostatic attraction between oppositely charged ions",
+              "feedback": "Correct. Each positive sodium ion attracts the negative chloride ions around it, and each chloride ion attracts the sodium ions around it. This electrostatic attraction acts in all directions throughout the lattice."
+            },
+            {
+              "id": "C",
+              "text": "Weak intermolecular forces between sodium chloride molecules",
+              "feedback": "Incorrect. Sodium chloride is not made of separate molecules, so there are no intermolecular forces to consider. It is a giant lattice of ions, each strongly attracted to its oppositely charged neighbours.",
+              "misconception": "Treats an ionic compound as simple molecules"
+            },
+            {
+              "id": "D",
+              "text": "A sea of delocalised electrons",
+              "feedback": "Incorrect. Delocalised electrons hold metals together. An ionic lattice has no free electrons: all the electrons belong to particular ions, and the ions attract each other because they have opposite charges.",
+              "misconception": "Confuses ionic and metallic bonding"
+            }
+          ],
+          "answer": "B",
+          "not_sure": {
+            "feedback": "Look at the charges in the diagram. Every ion is surrounded by ions of the opposite charge, and opposite charges attract. That attraction, repeated in every direction, is the ionic bond."
+          },
+          "teaching_note": "Ionic bonding is the strong electrostatic attraction between oppositely charged ions. It is not a single link between one pair of ions: each ion attracts all of its neighbours, in all directions."
+        },
+        {
+          "id": "s2-q02",
+          "type": "mcq",
+          "stem": "Why does molten sodium chloride conduct electricity, while solid sodium chloride does not?",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO3"
+          ],
+          "topic_ids": [
+            "properties"
+          ],
+          "options": [
+            {
+              "id": "A",
+              "text": "The ions gain electrons when heated.",
+              "feedback": "Incorrect. Sodium and chloride ions do not need to gain electrons when the compound melts. They are already charged particles. The important change is that the ions are no longer held in fixed positions within a rigid lattice."
+            },
+            {
+              "id": "B",
+              "text": "The ions become free to move when the substance melts.",
+              "feedback": "Correct. Solid sodium chloride contains charged ions held in fixed positions. When it melts, the ions become mobile and can carry electrical charge through the liquid."
+            },
+            {
+              "id": "C",
+              "text": "Covalent bonds break during melting.",
+              "feedback": "Incorrect. Sodium chloride is an ionic compound, not a simple covalent substance. Melting allows ions to move as the ordered solid lattice is disrupted.",
+              "misconception": "Treats an ionic compound as covalent"
+            },
+            {
+              "id": "D",
+              "text": "Electrons become delocalised when the solid melts.",
+              "feedback": "Incorrect. Delocalised electrons carry the current in metals and in graphite. In molten sodium chloride the charge is carried by the ions themselves, which can move once the lattice has broken down.",
+              "misconception": "Believes electrons carry the current in ionic liquids"
+            }
+          ],
+          "answer": "B",
+          "not_sure": {
+            "feedback": "To conduct electricity, a substance needs mobile charged particles. Sodium chloride contains ions in both solid and molten states, but only in the molten state can those ions move through the substance."
+          },
+          "teaching_note": "Ask two questions of any substance: does it contain charged particles, and are they free to move? Solid ionic compounds pass the first test and fail the second."
+        },
+        {
+          "id": "s2-q03",
+          "type": "true_false",
+          "stem": "True or false? Ionic compounds have high melting points because a large amount of energy is needed to overcome the strong electrostatic attraction between their ions.",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO2",
+            "LO3"
+          ],
+          "answer": true,
+          "feedback": {
+            "true": "Correct. The lattice is held together by strong electrostatic attraction acting in all directions between a very large number of ions. Melting means overcoming enough of that attraction for the ions to move, which takes a lot of energy.",
+            "false": "Incorrect. The statement is true. An ionic lattice contains a very large number of strongly attracted ions. A large amount of energy is needed to overcome that attraction, so the melting point is high (sodium chloride melts at 801 °C)."
+          },
+          "not_sure": {
+            "feedback": "Melting point tells you how much energy is needed to separate the particles enough for them to move. In an ionic lattice every ion is strongly attracted to its neighbours in all directions, so a great deal of energy is needed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Application: charges, formulae and calculations",
+      "description": "Using the ideas with numbers and formulae.",
+      "type": "application",
+      "purpose": "Apply electron transfer and charge balance to particle counts, formulae and formula-mass calculations.",
+      "estimated_minutes": 6,
+      "topic_ids": [
+        "ions",
+        "formulae"
+      ],
+      "objective_ids": [
+        "LO4"
+      ],
+      "requires": [
+        "s2"
+      ],
+      "questions": [
+        {
+          "id": "s3-q01",
+          "type": "numeric",
+          "stem": "A magnesium atom has 12 protons.\n\nHow many electrons are there in a magnesium ion, \\(\\mathrm{Mg^{2+}}\\)?",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO4",
+            "LO1"
+          ],
+          "topic_ids": [
+            "ions"
+          ],
+          "answer": {
+            "value": 10
+          },
+          "feedback": {
+            "correct": "Correct. A neutral magnesium atom has 12 electrons to balance its 12 protons. The 2+ charge shows it has lost two electrons, leaving 10.",
+            "incorrect": "Not quite. Start from the neutral atom: 12 protons means 12 electrons. A charge of 2+ means two electrons have been lost, so the ion has 12 − 2 = 10 electrons."
+          },
+          "wrong_answers": [
+            {
+              "value": 14,
+              "feedback": "Not quite: you have added two electrons instead of taking them away. A positive charge means electrons have been lost. Magnesium starts with 12 electrons and loses 2, leaving 10.",
+              "misconception": "Adds electrons for a positive charge"
+            },
+            {
+              "value": 12,
+              "feedback": "Not quite: 12 is the number of electrons in the neutral atom. The 2+ charge tells you the ion has two fewer electrons than protons, so it has 10.",
+              "misconception": "Ignores the charge when counting electrons"
+            }
+          ],
+          "not_sure": {
+            "feedback": "Use two facts. First, a neutral atom has the same number of electrons as protons. Second, each positive charge means one electron has been lost. Work from 12 and take away the charge."
+          },
+          "worked_solution": "Protons in Mg: 12, so electrons in the neutral atom: 12.\n\nCharge on the ion: 2+, so two electrons have been lost.\n\n\\[ 12 - 2 = 10 \\text{ electrons} \\]"
+        },
+        {
+          "id": "s3-q02",
+          "type": "mcq",
+          "stem": "Magnesium forms \\(\\mathrm{Mg^{2+}}\\) ions and chlorine forms \\(\\mathrm{Cl^{-}}\\) ions.\n\nWhat is the formula of magnesium chloride?",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO4"
+          ],
+          "topic_ids": [
+            "formulae"
+          ],
+          "options": [
+            {
+              "id": "A",
+              "text": "\\(\\mathrm{MgCl}\\)",
+              "feedback": "Incorrect. One \\(\\mathrm{Mg^{2+}}\\) and one \\(\\mathrm{Cl^{-}}\\) would leave an overall charge of 1+. A compound has no overall charge, so a second chloride ion is needed to balance the 2+ charge.",
+              "misconception": "Pairs ions one to one without balancing charge"
+            },
+            {
+              "id": "B",
+              "text": "\\(\\mathrm{Mg_2Cl}\\)",
+              "feedback": "Incorrect. Two \\(\\mathrm{Mg^{2+}}\\) ions carry a total charge of 4+, and one \\(\\mathrm{Cl^{-}}\\) cannot balance that. It is the ion with the smaller charge that you need more of: two chloride ions for each magnesium ion.",
+              "misconception": "Puts the multiplier on the wrong ion"
+            },
+            {
+              "id": "C",
+              "text": "\\(\\mathrm{MgCl_2}\\)",
+              "feedback": "Correct. One \\(\\mathrm{Mg^{2+}}\\) ion has a charge of 2+, and two \\(\\mathrm{Cl^{-}}\\) ions have a total charge of 2−. The charges cancel, so the formula is \\(\\mathrm{MgCl_2}\\)."
+            },
+            {
+              "id": "D",
+              "text": "\\(\\mathrm{Mg_2Cl_2}\\)",
+              "feedback": "Incorrect. Two \\(\\mathrm{Mg^{2+}}\\) ions carry 4+ but two \\(\\mathrm{Cl^{-}}\\) ions carry only 2−, so the charges do not cancel. One magnesium ion needs two chloride ions."
+            }
+          ],
+          "answer": "C",
+          "not_sure": {
+            "feedback": "The total positive charge must equal the total negative charge. One magnesium ion carries 2+. Each chloride ion carries 1−. Ask how many chloride ions are needed to make 2−."
+          },
+          "worked_solution": "Charges must cancel:\n\n\\[ (1 \\times 2+) + (2 \\times 1-) = 0 \\]\n\nSo one \\(\\mathrm{Mg^{2+}}\\) needs two \\(\\mathrm{Cl^{-}}\\), giving \\(\\mathrm{MgCl_2}\\)."
+        },
+        {
+          "id": "s3-q03",
+          "type": "numeric",
+          "stem": "Calculate the relative formula mass, \\(M_r\\), of magnesium chloride, \\(\\mathrm{MgCl_2}\\).\n\nRelative atomic masses: Mg = 24, Cl = 35.5",
+          "marks": 2,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO4"
+          ],
+          "topic_ids": [
+            "formulae"
+          ],
+          "answer": {
+            "value": 95,
+            "tolerance": {
+              "type": "relative",
+              "value": 0.005
+            }
+          },
+          "feedback": {
+            "correct": "Correct. The formula contains one magnesium and two chlorines, so the relative formula mass is 24 + (2 × 35.5) = 95.",
+            "incorrect": "Not quite. Add the relative atomic mass of every atom in the formula. The small 2 applies to chlorine only: 24 + (2 × 35.5) = 95."
+          },
+          "wrong_answers": [
+            {
+              "value": 59.5,
+              "feedback": "Not quite: 59.5 is 24 + 35.5, which counts only one chlorine. The subscript 2 in the formula means there are two chlorines, so the total is 24 + (2 × 35.5) = 95.",
+              "misconception": "Ignores the subscript in a formula"
+            },
+            {
+              "value": 119,
+              "feedback": "Not quite: 119 is 2 × (24 + 35.5), which doubles the magnesium as well. The subscript 2 applies only to the chlorine it follows, so the total is 24 + (2 × 35.5) = 95.",
+              "misconception": "Applies a subscript to the whole formula"
+            }
+          ],
+          "not_sure": {
+            "feedback": "A relative formula mass is the sum of the relative atomic masses of all the atoms in the formula. Count the atoms first: the formula shows one Mg and two Cl. Then add their masses."
+          },
+          "worked_solution": "\\[ M_r(\\mathrm{MgCl_2}) = 24 + (2 \\times 35.5) = 24 + 71 = 95 \\]"
+        },
+        {
+          "id": "s3-q04",
+          "type": "numeric",
+          "stem": "Calculate the percentage by mass of sodium in sodium chloride, \\(\\mathrm{NaCl}\\). Give your answer to 1 decimal place.\n\nRelative atomic masses: Na = 23, Cl = 35.5",
+          "marks": 2,
+          "difficulty": "challenge",
+          "objective_ids": [
+            "LO4"
+          ],
+          "topic_ids": [
+            "formulae"
+          ],
+          "answer": {
+            "value": 39.3,
+            "tolerance": {
+              "type": "absolute",
+              "value": 0.1
+            },
+            "unit": "%"
+          },
+          "feedback": {
+            "correct": "Correct. The relative formula mass of sodium chloride is 23 + 35.5 = 58.5, and sodium contributes 23 of that: (23 ÷ 58.5) × 100 = 39.3%.",
+            "incorrect": "Not quite. Divide the mass of sodium in the formula by the relative formula mass of the whole compound, then multiply by 100: (23 ÷ 58.5) × 100 = 39.3%."
+          },
+          "wrong_answers": [
+            {
+              "value": 60.7,
+              "feedback": "Not quite: 60.7% is the percentage of chlorine, (35.5 ÷ 58.5) × 100. The question asks for sodium, so use 23 on the top: (23 ÷ 58.5) × 100 = 39.3%.",
+              "misconception": "Calculates the percentage of the other element"
+            },
+            {
+              "value": 64.8,
+              "feedback": "Not quite: 64.8 comes from dividing 23 by 35.5, which compares sodium with chlorine. Divide by the mass of the whole formula instead: (23 ÷ 58.5) × 100 = 39.3%.",
+              "misconception": "Divides by the other element instead of the formula mass"
+            }
+          ],
+          "not_sure": {
+            "feedback": "A percentage by mass compares a part with the whole. The part is the mass of sodium in the formula (23). The whole is the relative formula mass of sodium chloride. Find the whole first."
+          },
+          "worked_solution": "\\[ M_r(\\mathrm{NaCl}) = 23 + 35.5 = 58.5 \\]\n\n\\[ \\%\\,\\mathrm{Na} = \\frac{23}{58.5} \\times 100 = 39.3\\% \\]"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "Independent mastery check",
+      "description": "New questions on the same ideas. One attempt each, with no hints before you answer.",
+      "type": "mastery",
+      "purpose": "Find out whether the understanding built in Sections 1 to 3 can be used unaided in unfamiliar examples.",
+      "estimated_minutes": 4,
+      "topic_ids": [
+        "ions",
+        "properties",
+        "formulae"
+      ],
+      "objective_ids": [
+        "LO1",
+        "LO3",
+        "LO4"
+      ],
+      "requires": [
+        "s3"
+      ],
+      "questions": [
+        {
+          "id": "s4-q01",
+          "type": "mcq",
+          "stem": "Solid potassium bromide does not conduct electricity, but a solution of potassium bromide in water does.\n\nWhich statement explains this?",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO3"
+          ],
+          "topic_ids": [
+            "properties"
+          ],
+          "options": [
+            {
+              "id": "A",
+              "text": "Water molecules carry the current through the solution.",
+              "feedback": "Incorrect. Water molecules have no overall charge, and pure water is a very poor conductor. The current is carried by the potassium and bromide ions, which separate and move freely once the solid dissolves."
+            },
+            {
+              "id": "B",
+              "text": "Dissolving releases electrons from the bromide ions.",
+              "feedback": "Incorrect. Dissolving does not remove electrons from ions. The ions stay as \\(\\mathrm{K^{+}}\\) and \\(\\mathrm{Br^{-}}\\). What changes is that they are no longer fixed in a lattice, so they can move and carry charge.",
+              "misconception": "Believes electrons carry the current in ionic solutions"
+            },
+            {
+              "id": "C",
+              "text": "The ions are fixed in the solid but free to move in the solution.",
+              "feedback": "Correct. Potassium bromide contains ions in both cases. In the solid they are held in fixed positions in the lattice. When it dissolves, the lattice breaks up and the ions can move, so they carry charge through the solution."
+            },
+            {
+              "id": "D",
+              "text": "Ions only form when potassium bromide is added to water.",
+              "feedback": "Incorrect. The ions are already present in solid potassium bromide: that is what an ionic compound is. Dissolving does not create ions. It frees them from their fixed positions so that they can move.",
+              "misconception": "Believes ions form on dissolving"
+            }
+          ],
+          "answer": "C",
+          "not_sure": {
+            "feedback": "Conduction needs charged particles that are free to move. Potassium bromide is ionic, so it contains ions as a solid and in solution. Think about which of the two lets those ions move."
+          }
+        },
+        {
+          "id": "s4-q02",
+          "type": "short_text",
+          "stem": "Oxygen is in Group 6. State the charge on an oxide ion.",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO1"
+          ],
+          "topic_ids": [
+            "ions"
+          ],
+          "answer": {
+            "accepted": [
+              "2-",
+              "-2",
+              "2−",
+              "−2",
+              "2 -",
+              "- 2",
+              "O2-",
+              "O2−",
+              "minus 2",
+              "2 minus",
+              "negative 2",
+              "2 negative"
+            ]
+          },
+          "feedback": {
+            "correct": "Correct. An oxygen atom has six outer electrons and gains two to fill its outer shell. Two extra electrons give the oxide ion a charge of 2−.",
+            "incorrect": "Not quite. An oxygen atom has six electrons in its outer shell and gains two more to fill it. Two extra negative electrons give a charge of 2−."
+          },
+          "wrong_answers": [
+            {
+              "accepted": [
+                "2+",
+                "+2",
+                "O2+",
+                "plus 2",
+                "2 plus",
+                "positive 2",
+                "2 positive"
+              ],
+              "feedback": "Not quite: the size is right but the sign is wrong. Oxygen is a non-metal and gains two electrons. Extra electrons are negative, so the charge is 2−, not 2+.",
+              "misconception": "Gives a positive charge to a non-metal ion"
+            },
+            {
+              "accepted": [
+                "6-",
+                "-6",
+                "6−",
+                "−6",
+                "6+",
+                "+6"
+              ],
+              "feedback": "Not quite: 6 is the number of outer electrons in an oxygen atom, not the charge on its ion. The atom needs two more electrons to fill its outer shell, so the ion has a charge of 2−.",
+              "misconception": "Uses the group number as the charge"
+            }
+          ],
+          "not_sure": {
+            "feedback": "A Group 6 atom has six outer electrons. A full outer shell holds eight. Work out how many electrons must be gained, and remember that each extra electron adds one negative charge."
+          }
+        },
+        {
+          "id": "s4-q03",
+          "type": "numeric",
+          "stem": "A calcium atom has 20 protons.\n\nHow many electrons are there in a calcium ion, \\(\\mathrm{Ca^{2+}}\\)?",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO4",
+            "LO1"
+          ],
+          "topic_ids": [
+            "ions"
+          ],
+          "answer": {
+            "value": 18
+          },
+          "feedback": {
+            "correct": "Correct. The neutral atom has 20 electrons to match its 20 protons. A charge of 2+ means two electrons have been lost, leaving 18.",
+            "incorrect": "Not quite. A neutral calcium atom has 20 electrons. The 2+ charge means it has lost two of them, so the ion has 20 − 2 = 18 electrons."
+          },
+          "wrong_answers": [
+            {
+              "value": 22,
+              "feedback": "Not quite: you have added two electrons. A positive charge means electrons have been lost, not gained. Calcium starts with 20 and loses 2, leaving 18.",
+              "misconception": "Adds electrons for a positive charge"
+            },
+            {
+              "value": 20,
+              "feedback": "Not quite: 20 is the number of electrons in the neutral atom. The 2+ charge shows the ion has two fewer electrons than protons, so it has 18.",
+              "misconception": "Ignores the charge when counting electrons"
+            }
+          ],
+          "not_sure": {
+            "feedback": "Begin with the neutral atom, where electrons equal protons. Then use the charge: each positive charge stands for one electron lost. Take the charge away from the number of protons."
+          },
+          "worked_solution": "\\[ 20 - 2 = 18 \\text{ electrons} \\]"
+        },
+        {
+          "id": "s4-q04",
+          "type": "true_false",
+          "stem": "True or false? When calcium reacts with chlorine, each calcium atom transfers one electron to each of two chlorine atoms.",
+          "marks": 1,
+          "difficulty": "challenge",
+          "objective_ids": [
+            "LO1",
+            "LO4"
+          ],
+          "topic_ids": [
+            "ions",
+            "formulae"
+          ],
+          "answer": true,
+          "feedback": {
+            "true": "Correct. Calcium is in Group 2 and loses two electrons. A chlorine atom needs only one electron to fill its outer shell, so the two electrons go to two different chlorine atoms. That is why the formula is \\(\\mathrm{CaCl_2}\\).",
+            "false": "Incorrect. The statement is true. Calcium loses two electrons, but each chlorine atom can accept only one, so two chlorine atoms are needed. This gives one \\(\\mathrm{Ca^{2+}}\\) ion and two \\(\\mathrm{Cl^{-}}\\) ions, and the formula \\(\\mathrm{CaCl_2}\\)."
+          },
+          "not_sure": {
+            "feedback": "Count outer electrons. Calcium (Group 2) has two to lose. Chlorine (Group 7) has seven and needs one more. Ask how many chlorine atoms it takes to accept both of calcium's electrons."
+          }
+        }
+      ]
+    }
+  ]
+}
