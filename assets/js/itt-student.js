@@ -61,7 +61,11 @@
   }
 
   // ── Signing in, and coming back to the same link ────────────────────
-  function here() { return PAGE + location.search.replace(/[^?A-Za-z0-9_\-=&%.]/g, ''); }
+  // This page's own address, carrying the assignment id and nothing else.
+  function here() {
+    var id = (new URLSearchParams(location.search).get('a') || '').replace(/[^A-Za-z0-9-]/g, '');
+    return PAGE + (id ? '?a=' + id : '');
+  }
 
   function askToSignIn() {
     if (player) { player.destroy(); player = null; }

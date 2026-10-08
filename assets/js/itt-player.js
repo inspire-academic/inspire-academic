@@ -155,7 +155,7 @@
         (state.chosen && state.wrong ? ' itt-option-wrong' : '') + '">' +
         '<input type="radio" name="' + name + '" value="' + esc(value) + '"' + (state.chosen ? ' checked' : '') + (state.locked ? ' disabled' : '') + '>' +
         (keyHtml ? '<span class="itt-option-key" aria-hidden="true">' + keyHtml + '</span>' : '') +
-        '<span class="itt-option-text itt-text">' + textHtml + '</span>' + (tags ? '<span class="itt-tags">' + tags + '</span>' : '') + '</label>';
+        '<span class="itt-option-text">' + textHtml + '</span>' + (tags ? '<span class="itt-tags">' + tags + '</span>' : '') + '</label>';
     }
 
     function answerHtml(q, last, locked) {
@@ -163,7 +163,7 @@
       var unsure = { unsure: true, chosen: !!(chosen && chosen.notSure), locked: locked };
       if (q.type === 'mcq' || q.type === 'true_false') {
         var opts = q.type === 'mcq'
-          ? q.options.map(function (o) { return { value: o.id, key: esc(o.id), html: R.html(o.text), chosen: !!chosen && chosen.option === o.id, right: !!reveal && reveal.answer.option === o.id }; })
+          ? q.options.map(function (o) { return { value: o.id, key: esc(o.id), html: R.inline(o.text), chosen: !!chosen && chosen.option === o.id, right: !!reveal && reveal.answer.option === o.id }; })
           : [true, false].map(function (v) { return { value: String(v), key: '', html: v ? 'True' : 'False', chosen: !!chosen && chosen.value === v, right: !!reveal && reveal.answer.value === v }; });
         return '<fieldset class="itt-options"><legend class="itt-sr">Choose one answer</legend>' +
           opts.map(function (o) { return optionRow('itt-answer', o.value, o.key, o.html, { chosen: o.chosen, right: o.right, wrong: !!last && !last.correct, locked: locked }); }).join('') +
@@ -183,7 +183,7 @@
       var a = reveal.answer;
       if (q.type === 'mcq') {
         var o = q.options.filter(function (x) { return x.id === a.option; })[0];
-        return '<strong>' + esc(a.option) + '</strong> ' + (o ? R.html(o.text) : '');
+        return '<strong>' + esc(a.option) + '</strong> ' + (o ? R.inline(o.text) : '');
       }
       if (q.type === 'true_false') return '<strong>' + (a.value ? 'True' : 'False') + '</strong>';
       if (q.type === 'numeric') return '<strong>' + esc(String(a.number)) + (a.unit ? ' ' + esc(a.unit) : '') + '</strong>';
@@ -200,7 +200,7 @@
         '<h2 class="itt-verdict" id="itt-verdict">' + verdict[1] + ' ' + verdict[2] +
         (last.attemptsAllowed > 1 ? ' <span class="itt-attempt">attempt ' + last.attempt + ' of ' + last.attemptsAllowed + '</span>' : '') + '</h2>' +
         '<div class="itt-feedback-text itt-text">' + R.html(last.feedback) + '</div>';
-      if (last.reveal && !last.correct) out += '<p class="itt-correct-answer"><span class="itt-correct-label">Correct answer</span> <span class="itt-text itt-inline">' + revealedAnswer(q, last.reveal) + '</span></p>';
+      if (last.reveal && !last.correct) out += '<p class="itt-correct-answer"><span class="itt-correct-label">Correct answer</span> <span>' + revealedAnswer(q, last.reveal) + '</span></p>';
       if (earlier) out += '<ul class="itt-earlier">' + earlier + '</ul>';
       out += '</section>';
       if (last.reveal && last.reveal.teachingNote) {

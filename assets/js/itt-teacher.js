@@ -368,7 +368,7 @@
             var body = '';
             if (q.type === 'mcq') body = q.options.map(function (o) {
               var right = o.id === q.answer;
-              return fb((right ? '✓ ' : '') + esc(o.id) + '. <span class="itt-inline itt-text">' + R.html(o.text) + '</span>', o.feedback, right ? 'tt-fb-right' : '', right ? null : o.misconception);
+              return fb((right ? '✓ ' : '') + esc(o.id) + '. ' + R.inline(o.text), o.feedback, right ? 'tt-fb-right' : '', right ? null : o.misconception);
             }).join('');
             else if (q.type === 'true_false') body = fb((q.answer ? '✓ ' : '') + 'True', q.feedback['true'], q.answer ? 'tt-fb-right' : '') + fb((q.answer ? '' : '✓ ') + 'False', q.feedback['false'], q.answer ? '' : 'tt-fb-right');
             else {
@@ -547,10 +547,10 @@
             s.questions.map(function (q, i) {
               var given = q.attempts.length ? q.attempts.map(function (t) {
                 return '<div class="tt-attempt ' + (t.correct ? 'tt-right' : t.unsure ? 'tt-unsure' : 'tt-wrong') + '"><span class="tt-mark">' + (t.correct ? '✓ Correct' : t.unsure ? '? Not sure' : '✗ Incorrect') + '</span> ' +
-                  (q.attempts.length > 1 ? '<span class="itt-small">attempt ' + t.attempt + '</span> ' : '') + '<span class="itt-inline itt-text">' + R.html(answerText(q, t.response)) + '</span>' +
+                  (q.attempts.length > 1 ? '<span class="itt-small">attempt ' + t.attempt + '</span> ' : '') + '<span>' + R.inline(answerText(q, t.response)) + '</span>' +
                   (t.misconception ? '<span class="tt-miscon">Misconception: ' + esc(t.misconception) + '</span>' : '') + '</div>';
               }).join('') : '<span class="itt-small">Not answered</span>';
-              return '<tr><th scope="row"><span class="itt-small">Q' + (i + 1) + '</span><div class="itt-text">' + R.html(q.stem) + '</div></th><td>' + given + '</td><td><span class="itt-inline itt-text">' + R.html(answerText(q, q.answer)) + '</span></td></tr>';
+              return '<tr><th scope="row"><span class="itt-small">Q' + (i + 1) + '</span><div class="itt-text">' + R.html(q.stem) + '</div></th><td>' + given + '</td><td>' + R.inline(answerText(q, q.answer)) + '</td></tr>';
             }).join('') + '</tbody></table></div>';
         }).join('') +
         '<div class="itt-actions"><button type="button" class="itt-btn" id="tt-withdraw">Withdraw this assignment</button></div></div>';
