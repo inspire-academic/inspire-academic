@@ -746,6 +746,41 @@ function = "create-teacher"
   status = 200
   force = true
 
+# Inspire Test & Teach (ITT): teacher-imported quiz packages, assigned to
+# students and answered inside ISM Class. Answers and teaching feedback stay
+# on the server until a response is recorded (see itt-student.js).
+[[redirects]]
+  from = "/api/v1/itt/packages"
+  to = "/.netlify/functions/itt-packages"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/itt/assignments"
+  to = "/.netlify/functions/itt-assignments"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/itt/student/assignments"
+  to = "/.netlify/functions/itt-student"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/itt/student/answer"
+  to = "/.netlify/functions/itt-student"
+  status = 200
+  force = true
+
+# The short link teachers send on WhatsApp: inspireacademic.org/itt?a=<id>.
+# The id names an assignment and nothing else; the page asks the student to
+# sign in and the server only ever shows an assignment to its own student.
+[[redirects]]
+  from = "/itt"
+  to = "/student/test-and-teach.html"
+  status = 200
+
 # Next-phase architecture, Section 16 of the handoff brief / decision 5 in
 # docs/architecture-migration-plan.md — a human-friendly interim gateway
 # ("go to inspireacademic.org/learn") pending the real learn.inspireacademic.org

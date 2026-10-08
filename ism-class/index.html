@@ -15,6 +15,7 @@
 <script src="/assets/js/capacitor-utils.js"></script>
 <script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/itt-card.js"></script>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#c9a84c">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
@@ -36,12 +37,28 @@ main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 4rem;}
 .subject-card.chemistry::before{background:linear-gradient(90deg,#059669,#34d399);}
 .subject-card.biology::before{background:linear-gradient(90deg,#7c3aed,#a78bfa);}
 .subject-card.maths::before{background:linear-gradient(90deg,#d97706,#fbbf24);}
-.subject-card-body{padding:1.4rem;flex:1;display:flex;flex-direction:column;gap:.6rem;}
-.subject-card-title{font-family:var(--font-display);font-size:1.2rem;font-weight:700;}
-.subject-card-count{font-size:.82rem;color:var(--muted);}
-.subject-card-cta{margin-top:auto;align-self:flex-start;}
+.subject-card.itt::before{background:linear-gradient(90deg,#10233F,#c9a84c);}
+/* Phones: title and count on the left, the button on the right, so five
+   cards fit without a long scroll. The whole card is the link, so the
+   touch target is the full row. The stacked layout returns at 600px. */
+.subject-card-body{padding:.9rem 1rem;flex:1;display:grid;grid-template-columns:1fr auto;align-items:center;gap:.15rem .9rem;}
+.subject-card-title{font-family:var(--font-display);font-size:1.15rem;font-weight:700;grid-column:1;}
+.subject-card-count{font-size:.82rem;color:var(--muted);grid-column:1;}
+.subject-card-next{font-size:.82rem;font-weight:600;grid-column:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+.subject-card-cta{grid-column:2;grid-row:1 / span 2;min-height:44px;}
+.subject-card.itt .subject-card-cta{grid-column:1 / -1;grid-row:auto;justify-content:center;margin-top:.5rem;}
 .subject-card.disabled{opacity:.5;}
 .subject-card.disabled .subject-card-cta{pointer-events:none;}
+@media(min-width:600px){
+  .subject-card-body{padding:1.4rem;display:flex;flex-direction:column;align-items:stretch;gap:.6rem;}
+  .subject-card-title{font-size:1.2rem;}
+  .subject-card-cta,.subject-card.itt .subject-card-cta{margin-top:auto;align-self:flex-start;}
+  .subject-card.itt{grid-column:1 / -1;}
+}
+
+.itt-notice{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-height:48px;padding:.7rem 1rem;margin-bottom:1rem;
+  background:var(--navy2);border:1px solid var(--gold);border-left-width:4px;border-radius:var(--r);font-size:.9rem;}
+.itt-notice:hover{background:var(--navy3);}
 
 .empty-state{text-align:center;padding:2.5rem;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);margin-top:1rem;}
 </style>
@@ -71,6 +88,8 @@ main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 4rem;}
     <h1 class="page-title">ISM Class</h1>
     <p class="page-sub">Your weekly Inspire Science Mastery lessons — pick a subject to continue.</p>
   </div>
+
+  <div id="itt-notice" hidden></div>
 
   <div class="subject-grid" id="subject-grid">
     <div class="card"><div class="spinner"></div></div>
@@ -136,6 +155,9 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
       </div>`;
     grid.appendChild(card);
   });
+
+  // Fifth card, under Mathematics: the student's Test & Teach assignments.
+  if (window.ITTCard) ITTCard.mount(grid, document.getElementById('itt-notice'), supa);
 })();
 </script>
 </body>

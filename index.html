@@ -302,6 +302,7 @@ input,select{font-family:var(--font-body),sans-serif;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0" defer></script>
 <script src="/assets/js/perf-utils.js" defer></script>
+<script src="/assets/js/safe-next.js" defer></script>
 <script defer>
 window.addEventListener('DOMContentLoaded', () => {
 
@@ -397,9 +398,10 @@ async function doLogin(){
   const redirect=params.get('redirect');
   if(redirect==='flashcards'){window.location.href='/student/flashcards.html';return;}
 
-  // Safe next-page redirect (only allow plain .html filenames, no paths or external URLs)
-  const next=params.get('next');
-  if(next&&/^[a-zA-Z0-9_-]+\.html$/.test(next)){window.location.href=next;return;}
+  // Safe next-page redirect: a page on this site only, never an external URL
+  // (assets/js/safe-next.js). A Test & Teach link opened signed-out comes back here.
+  const next=typeof iaSafeNext==='function'?iaSafeNext(params.get('next')):null;
+  if(next){window.location.href=next;return;}
 
   perfStart('profile-fetch');
   const {data:profile}=await supa.from('profiles').select('*').eq('id',data.user.id).single();
@@ -485,8 +487,8 @@ const checkSession = async () => {
   if(session){
     const params=new URLSearchParams(window.location.search);
     if(params.get('redirect')==='flashcards'){window.location.href='/student/flashcards.html';return;}
-    const next=params.get('next');
-    if(next&&/^[a-zA-Z0-9_-]+\.html$/.test(next)){window.location.href=next;return;}
+    const next=typeof iaSafeNext==='function'?iaSafeNext(params.get('next')):null;
+    if(next){window.location.href=next;return;}
     window.location.href='/dashboard.html';
   }
 };
