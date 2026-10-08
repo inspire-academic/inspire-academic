@@ -56,7 +56,7 @@
 .tt-check{display:flex;align-items:flex-start;gap:.6rem;min-height:44px;padding:.5rem 0;font-size:.92rem;cursor:pointer;}
 .tt-check input{flex:none;width:1.25rem;height:1.25rem;margin-top:.1rem;accent-color:var(--ia-gold);}
 
-.tt-table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px;background:var(--navy2);}
+.tt-table-wrap{position:relative;overflow-x:auto;border:1px solid var(--border);border-radius:8px;background:var(--navy2);}
 .tt-table{width:100%;border-collapse:collapse;font-size:.86rem;}
 .tt-table th,.tt-table td{padding:.6rem .75rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;}
 .tt-table thead th{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap;}
@@ -89,7 +89,6 @@
 .tt-fb{border-left:3px solid var(--border);padding:.45rem 0 .45rem .75rem;margin-top:.6rem;font-size:.9rem;}
 .tt-fb .itt-text{font-size:.9rem;color:var(--muted);}
 .tt-fb-label{display:block;font-weight:700;margin-bottom:.15rem;}
-.tt-fb-label .itt-text{font-size:.9rem;color:inherit;}
 .tt-fb-right{border-left-color:var(--itt-ok);}
 .tt-fb-right .tt-fb-label{color:var(--itt-ok);}
 .tt-fb-unsure{border-left-style:dashed;}

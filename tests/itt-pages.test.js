@@ -38,6 +38,10 @@ test('text formatting: paragraphs, line breaks, bold, inline and display maths',
   const block = R.html('So:\n\n\\[ 12 - 2 = 10 \\]\n\nDone.');
   assert.match(block, /^<div class="itt-p">So:<\/div><div class="itt-maths-block"[^>]*><span class="ia-maths" data-ia-tex="\\displaystyle 12 - 2 = 10">/);
   assert.match(block, /<div class="itt-p">Done\.<\/div>$/);
+  // Inside a label or a sentence: the same text with no block elements.
+  assert.equal(R.inline('The ions **move**.'), 'The ions <strong>move</strong>.');
+  assert.match(R.inline('\\(\\mathrm{MgCl_2}\\)'), /^<span class="ia-maths" data-ia-tex="\\mathrm\{MgCl_2\}">[^<]*<\/span>$/);
+  assert.doesNotMatch(R.inline('One.\n\nTwo <b>x</b>'), /<div|<b>/);
 });
 
 test('the sign-in return link accepts pages on this site only', () => {

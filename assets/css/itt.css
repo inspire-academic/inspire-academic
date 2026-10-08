@@ -32,6 +32,7 @@
 .itt-topbar-title{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--gold);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .itt-topbar-link{font-size:.82rem;font-weight:600;color:var(--muted);padding:.5rem .25rem;min-height:44px;display:inline-flex;align-items:center;}
 .itt-topbar-link:hover{color:var(--white);}
+.topnav .topnav-logo{display:inline-flex;align-items:center;min-height:44px;}
 
 /* ── type ── */
 .itt-h1{font-family:var(--font-display);font-size:1.45rem;font-weight:800;line-height:1.2;margin:0 0 .5rem;}
@@ -52,7 +53,6 @@
 .itt-maths-block{overflow-x:auto;overflow-y:hidden;padding:.6rem .25rem;margin:0 0 .7em;text-align:center;-webkit-overflow-scrolling:touch;}
 .itt-maths-block:last-child{margin-bottom:0;}
 .itt-maths-block .ia-maths{display:inline-block;white-space:nowrap;}
-.itt-inline .itt-p{display:inline;overflow:visible;}
 
 .itt-figure{margin:1rem 0;text-align:center;}
 .itt-figure img{max-width:100%;height:auto;max-height:60vh;border-radius:8px;border:1px solid var(--border);background:#FBFAF6;}
@@ -156,8 +156,8 @@
 .itt-option-wrong,.itt-option-wrong:has(input:disabled):hover,.itt-option-wrong:has(input:checked){border-color:var(--itt-no);background:var(--itt-no-bg);}
 .itt-option-right.itt-option-chosen,.itt-option-right:has(input:checked){border-color:var(--itt-ok);background:var(--itt-ok-bg);}
 .itt-tags{flex-basis:100%;display:flex;gap:.4rem;flex-wrap:wrap;padding-left:2rem;}
-.itt-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.15rem .5rem;border-radius:999px;border:1px solid currentColor;color:var(--muted);display:inline-flex;align-items:center;gap:.25rem;}
-.itt-tag-ok{color:var(--itt-ok);}
+.itt-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.15rem .5rem;border-radius:999px;border:1px solid var(--muted);color:var(--white);display:inline-flex;align-items:center;gap:.25rem;}
+.itt-tag-ok{border-color:var(--itt-ok);}
 
 .itt-typed{display:grid;gap:.75rem;}
 .itt-label{font-size:.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}

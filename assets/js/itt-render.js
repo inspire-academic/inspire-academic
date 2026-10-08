@@ -11,6 +11,8 @@
 //   ITTRender.fill(el, text)      set el's content and typeset its maths
 //   ITTRender.html(text)          the same as an HTML string for templates;
 //                                 call ITTRender.typeset(container) after
+//   ITTRender.inline(text)        as html(), without block elements, for text
+//                                 inside a label or a sentence
 //   ITTRender.figure(asset)       a <figure> for an embedded package image
 //   ITTRender.esc(text)           plain escaping
 (function (root) {
@@ -56,6 +58,18 @@
     }).join('');
   }
 
+  // The same text for places that must stay inline (an option's label, an
+  // answer quoted in a sentence): no block elements, paragraphs run on.
+  function inline(text) {
+    if (text === null || text === undefined || text === '') return '';
+    var parts = root.ITTPackage.splitMaths(String(text).replace(/\r\n/g, '\n'));
+    if (!parts) return inlineText(text);
+    return parts.map(function (p) {
+      if (!p.maths) return inlineText(p.text.replace(/\n[ \t]*\n+/g, '\n'));
+      return '<span class="ia-maths" data-ia-tex="' + esc(p.text.trim()) + '">' + esc(plain(p.text)) + '</span>';
+    }).join('');
+  }
+
   function typeset(container) {
     if (root.IAMaths) root.IAMaths.typeset(container);
   }
@@ -74,7 +88,6 @@
     var img = document.createElement('img');
     img.src = 'data:' + asset.media_type + ';base64,' + asset.data;
     img.alt = asset.alt || '';
-    img.loading = 'lazy';
     img.decoding = 'async';
     fig.appendChild(img);
     if (asset.caption) {
@@ -85,7 +98,7 @@
     return fig;
   }
 
-  var api = { esc: esc, html: html, fill: fill, typeset: typeset, figure: figure };
+  var api = { esc: esc, html: html, inline: inline, fill: fill, typeset: typeset, figure: figure };
   root.ITTRender = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
