@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="/assets/js/theme.js"></script>
+<title>Inspire Test &amp; Teach — Teacher — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/itt.css">
+<link rel="stylesheet" href="/assets/css/itt-teacher.css">
+<meta name="robots" content="noindex">
+</head>
+<body>
+
+<nav class="topnav" aria-label="Teacher">
+  <a class="itt-topbar-title" href="/teacher/teacher.html">Inspire <span class="tt-staff">Staff</span></a>
+  <a class="itt-topbar-link" href="/teacher/teacher.html">← Teacher dashboard</a>
+</nav>
+
+<main class="tt-main" id="tt-main">
+  <header class="tt-head">
+    <h1 class="itt-h1">Inspire Test &amp; Teach</h1>
+    <p class="itt-desc">Upload a finished quiz package, check it, and assign it. The package is delivered exactly as written.</p>
+  </header>
+
+  <div class="itt-tabs tt-tabs" role="tablist" aria-label="Test and Teach">
+    <button type="button" class="itt-tab" role="tab" id="tt-tab-import" data-panel="import" aria-controls="tt-import" aria-selected="true">Import</button>
+    <button type="button" class="itt-tab" role="tab" id="tt-tab-library" data-panel="library" aria-controls="tt-library" aria-selected="false" tabindex="-1">Library</button>
+    <button type="button" class="itt-tab" role="tab" id="tt-tab-progress" data-panel="progress" aria-controls="tt-progress" aria-selected="false" tabindex="-1">Progress</button>
+  </div>
+
+  <p class="tt-status" id="tt-status" role="status" aria-live="polite"></p>
+
+  <!-- ── Import ───────────────────────────────────────────────────── -->
+  <section id="tt-import" role="tabpanel" aria-labelledby="tt-tab-import" tabindex="0">
+    <label class="tt-drop" id="tt-drop" for="tt-file">
+      <span class="tt-drop-title">Drop an ITT quiz file here</span>
+      <span class="tt-drop-sub">or choose a file · one <code>.json</code> package (<code>itt.quiz.v1</code>)</span>
+      <input class="itt-sr" type="file" id="tt-file" accept=".json,application/json">
+    </label>
+    <p class="itt-small">Writing a package with ChatGPT? Give it the
+      <a class="tt-a" href="/resources/itt/ITT_Quiz_Authoring_Standard_v1.md" download>authoring standard</a> and the
+      <a class="tt-a" href="/resources/itt/ITT_Quiz_Schema_v1.json" download>schema</a>.
+      A complete <a class="tt-a" href="/resources/itt/ITT_Reference_Quiz_v1.json" download>reference quiz</a> is available to try the import.</p>
+    <div id="tt-import-result" aria-live="polite"></div>
+  </section>
+
+  <!-- ── Library ──────────────────────────────────────────────────── -->
+  <section id="tt-library" role="tabpanel" aria-labelledby="tt-tab-library" tabindex="0" hidden>
+    <div id="tt-library-list"><p class="itt-loading" role="status"><span class="spinner"></span> Loading the library…</p></div>
+  </section>
+
+  <!-- ── Progress ─────────────────────────────────────────────────── -->
+  <section id="tt-progress" role="tabpanel" aria-labelledby="tt-tab-progress" tabindex="0" hidden>
+    <div class="tt-filter">
+      <label class="itt-label" for="tt-progress-filter">Package</label>
+      <select class="tt-select" id="tt-progress-filter"><option value="">All packages</option></select>
+    </div>
+    <div id="tt-progress-list"><p class="itt-loading" role="status"><span class="spinner"></span> Loading…</p></div>
+  </section>
+
+  <!-- A package opened from Import or Library: preview, approve, assign, results. -->
+  <section id="tt-detail" class="tt-detail" hidden aria-live="polite"></section>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/maths-typeset.js"></script>
+<script src="/assets/js/diagnostic-numeric.js"></script>
+<script src="/assets/js/itt-package.js"></script>
+<script src="/assets/js/itt-render.js"></script>
+<script src="/assets/js/itt-player.js"></script>
+<script src="/assets/js/itt-teacher.js"></script>
+</body>
+</html>

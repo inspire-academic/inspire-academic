@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="/assets/js/theme.js"></script>
+<title>Inspire Test &amp; Teach — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/itt.css">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#10233F">
+<meta name="robots" content="noindex">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+</head>
+<body>
+
+<nav class="topnav" aria-label="Inspire Academic">
+  <a class="topnav-logo" href="/ism-class/index.html" aria-label="Back to ISM Class">
+    <img src="/assets/images/shared/1775416612494_image.webp" alt="" width="36" height="36">
+  </a>
+  <span class="itt-topbar-title">Inspire Test &amp; Teach</span>
+  <a class="itt-topbar-link" href="/ism-class/index.html">ISM Class</a>
+</nav>
+
+<main class="itt-main" id="itt-main">
+  <div id="itt-offline" class="itt-offline" role="status" hidden>You are offline. Answers cannot be saved until you reconnect.</div>
+
+  <!-- Signed out: a WhatsApp link lands here first. -->
+  <section id="itt-signin" class="itt-panel itt-signin" hidden aria-labelledby="itt-signin-h">
+    <h1 class="itt-h1" id="itt-signin-h">Sign in to open your work</h1>
+    <p>Your teacher has set you Test &amp; Teach work. Sign in to your Inspire Academic account and you will come straight back to it.</p>
+    <a class="itt-btn itt-btn-primary" id="itt-signin-link" href="/index.html">Sign in</a>
+    <div class="itt-hint" id="itt-inapp" hidden>
+      <p><strong>Opened this from WhatsApp?</strong> If signing in does not work here, open the link in your phone's own browser (Chrome or Safari).</p>
+      <div class="itt-actions">
+        <a class="itt-btn" id="itt-open-chrome" href="#" hidden>Open in Chrome</a>
+        <button type="button" class="itt-btn" id="itt-copy-link">Copy link</button>
+      </div>
+      <p class="itt-small" id="itt-copy-status" role="status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- The student's assignments. -->
+  <section id="itt-home" hidden aria-labelledby="itt-home-h">
+    <header class="itt-head">
+      <p class="itt-kicker">ISM Class</p>
+      <h1 class="itt-h1" id="itt-home-h">Inspire Test &amp; Teach</h1>
+      <p class="itt-desc" id="itt-greeting">Questions chosen for you by your teacher, with a full explanation after every answer.</p>
+    </header>
+    <div class="itt-tabs" role="tablist" aria-label="Your assignments">
+      <button type="button" class="itt-tab" role="tab" id="itt-tab-todo" data-tab="todo" aria-controls="itt-list" aria-selected="true">To Do <span class="itt-tab-count" id="itt-count-todo">0</span></button>
+      <button type="button" class="itt-tab" role="tab" id="itt-tab-progress" data-tab="progress" aria-controls="itt-list" aria-selected="false" tabindex="-1">In Progress <span class="itt-tab-count" id="itt-count-progress">0</span></button>
+      <button type="button" class="itt-tab" role="tab" id="itt-tab-done" data-tab="done" aria-controls="itt-list" aria-selected="false" tabindex="-1">Completed <span class="itt-tab-count" id="itt-count-done">0</span></button>
+    </div>
+    <div id="itt-list" role="tabpanel" aria-labelledby="itt-tab-todo" tabindex="0">
+      <p class="itt-loading" role="status"><span class="spinner"></span> Loading your assignments…</p>
+    </div>
+  </section>
+
+  <!-- One assignment, in the player. -->
+  <section id="itt-player" hidden aria-label="Assignment"></section>
+</main>
+
+<nav class="mobile-nav itt-mobile-nav" aria-label="Main">
+  <div class="mobile-nav-inner">
+    <a class="mob-nav-btn" href="/dashboard.html"><span class="mob-icon" aria-hidden="true">🏠</span>Home</a>
+    <a class="mob-nav-btn" href="/subjects.html"><span class="mob-icon" aria-hidden="true">📚</span>Subjects</a>
+    <a class="mob-nav-btn active" href="/ism-class/index.html" aria-current="page"><span class="mob-icon" aria-hidden="true">🎓</span>ISM Class</a>
+    <a class="mob-nav-btn" href="/tools/protege.html"><span class="mob-icon" aria-hidden="true">✦</span>Protégé</a>
+    <a class="mob-nav-btn" href="/tools/tools.html"><span class="mob-icon" aria-hidden="true">🔧</span>Tools</a>
+  </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
+<script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/maths-typeset.js"></script>
+<script src="/assets/js/diagnostic-numeric.js"></script>
+<script src="/assets/js/itt-package.js"></script>
+<script src="/assets/js/itt-render.js"></script>
+<script src="/assets/js/itt-player.js"></script>
+<script src="/assets/js/itt-student.js"></script>
+</body>
+</html>
