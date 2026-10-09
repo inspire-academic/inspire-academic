@@ -10,6 +10,10 @@
 // GET ?versionId=<id>      the same, for one package version
 // GET ?id=<assignmentId>   one student's assignment in full: progress by
 //                          section and objective, and every answer given
+// GET ?versionId=<id>&insights=1
+//                          the class on one package version: each question
+//                          by how many missed it first time, the commonest
+//                          wrong answers, and the weakest objectives
 // POST { action, ... }
 //   assign { versionId, studentIds?, cohortId?, sectionIds?, dueAt?, note? }
 //          One assignment row per student, each pointing at this exact
@@ -68,6 +72,60 @@ async function listAssignments(client, who, versionId) {
   const byId = Object.fromEntries((versions || []).map(v => [v.id, v]));
   return ok({
     assignments: rows.map(a => ({ ...assignmentCard(a, byId[a.package_version_id]), studentId: a.student_id, studentName: names[a.student_id] || 'Unnamed student', cohortId: a.cohort_id || null }))
+  });
+}
+
+// Every stored response for a package version. The database returns at most
+// 1,000 rows a request, so a class's answers are read a page at a time.
+const PAGE = 1000, MAX_PAGES = 60;
+async function responsesFor(client, versionId) {
+  const seen = new Map();
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const rows = (await client.get(`itt_responses?package_version_id=eq.${versionId}` +
+      `&select=id,assignment_id,question_id,attempt_number,response,is_correct,is_unsure,feedback_key&order=id&limit=${PAGE}&offset=${page * PAGE}`)) || [];
+    const before = seen.size;
+    for (const r of rows) seen.set(r.id || `${r.assignment_id}|${r.question_id}|${r.attempt_number}`, r);
+    if (rows.length < PAGE || seen.size === before) break;
+  }
+  return [...seen.values()];
+}
+
+// The class as a whole on one package version: per question, how the
+// caller's students did on their first attempt, most missed first.
+async function insights(client, who, versionId) {
+  if (!UUID_RE.test(String(versionId || ''))) return fail(400, 'invalid_version', 'Unknown package version.');
+  const [version] = (await client.get(`itt_package_versions?id=eq.${versionId}&select=${VERSION_COLUMNS},content`)) || [];
+  if (!version || version.status === 'discarded') return fail(404, 'not_found', 'Unknown package version.');
+  const allowed = await accessibleStudentIds(client, who.user, who.role);
+  const filters = ['revoked_at=is.null', `package_version_id=eq.${versionId}`, 'select=id,student_id,section_ids,status'];
+  if (allowed) filters.push(`student_id=${inList(allowed)}`);
+  const assignments = allowed && !allowed.length ? [] : ((await client.get(`itt_assignments?${filters.join('&')}`)) || []);
+
+  // Only these students' answers are counted, whoever else has the package.
+  const mine = new Set(assignments.map(a => a.id));
+  const rows = assignments.length ? (await responsesFor(client, versionId)).filter(r => mine.has(r.assignment_id)) : [];
+  const report = ITT.insights(version.content, assignments, rows);
+  const names = await namesById(client, assignments.map(a => a.student_id));
+  const nameOf = Object.fromEntries(assignments.map(a => [a.id, names[a.student_id] || 'Unnamed student']));
+
+  const index = ITT.index(version.content);
+  const questions = report.questions.filter(q => q.attempted).map(q => {
+    const full = index.get(q.id).question;
+    const { missedBy, ...rest } = q;
+    return {
+      ...rest,
+      answer: ITT.reveal(full).answer,
+      options: full.type === 'mcq' ? full.options.map(o => ({ id: o.id, text: o.text })) : undefined,
+      missedBy: missedBy.map(id => nameOf[id]).sort((a, b) => a.localeCompare(b))
+    };
+  // Most missed first; among equals, the question more students have reached.
+  }).sort((a, b) => (b.missed / b.attempted) - (a.missed / a.attempted) || b.missed - a.missed || b.attempted - a.attempted);
+
+  return ok({
+    title: version.title, versionNumber: version.version_number,
+    students: report.students, started: report.started, completed: assignments.filter(a => a.status === 'completed').length,
+    questions,
+    objectives: report.objectives.sort((a, b) => (a.correct / a.attempted) - (b.correct / b.attempted))
   });
 }
 
@@ -213,6 +271,7 @@ exports.handler = async (event) => {
       const q = event.queryStringParameters || {};
       if (q.roster) return await roster(client, who);
       if (q.id) return await detail(client, who, q.id);
+      if (q.insights) return await insights(client, who, q.versionId);
       return await listAssignments(client, who, q.versionId);
     }
 

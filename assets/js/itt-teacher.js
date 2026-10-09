@@ -206,7 +206,7 @@
     }, function (e) { d.innerHTML = '<div class="itt-panel" role="alert"><p>' + esc(e.message) + '</p></div>'; });
   }
 
-  var MODES = [['summary', 'Summary'], ['preview', 'Student preview'], ['content', 'Full content'], ['assign', 'Assign'], ['results', 'Results']];
+  var MODES = [['summary', 'Summary'], ['preview', 'Student preview'], ['content', 'Full content'], ['assign', 'Assign'], ['results', 'Results'], ['insights', 'Most missed']];
 
   function renderDetail(mode) {
     var v = current, s = v.summary;
@@ -222,7 +222,7 @@
         return '<button type="button" class="itt-tab" role="tab" data-mode="' + m[0] + '" aria-selected="' + (m[0] === mode) + '"' + (off ? ' disabled title="Approve the package first"' : '') + '>' + m[1] + '</button>';
       }).join('') + '</div><div id="tt-view"></div>';
     $('tt-close').addEventListener('click', closeDetail);
-    ({ summary: viewSummary, preview: viewPreview, content: viewContent, assign: viewAssign, results: viewResults })[mode]($('tt-view'));
+    ({ summary: viewSummary, preview: viewPreview, content: viewContent, assign: viewAssign, results: viewResults, insights: viewInsights })[mode]($('tt-view'));
   }
 
   // Asks KaTeX to typeset every maths span in the package, so a formula
@@ -538,6 +538,74 @@
     el.innerHTML = '<p class="itt-loading" role="status"><span class="spinner"></span> Loading results…</p>';
     api('GET', '/api/v1/itt/assignments?versionId=' + encodeURIComponent(v.id)).then(function (r) {
       el.innerHTML = assignmentsTable(r.assignments, false) + '<div id="tt-result-detail"></div>';
+    }, function (e) { el.innerHTML = '<div class="itt-panel" role="alert"><p>' + esc(e.message) + '</p></div>'; });
+  }
+
+  // ── Most missed: the class as a whole ──────────────────────────────
+  // Each question by how many students missed it on their first attempt,
+  // with the wrong answer most of them gave: what to reteach next lesson.
+  var INSIGHTS_SHOWN = 10;
+
+  function insightAnswer(q) {
+    var a = q.answer;
+    if (q.type === 'mcq') { var o = (q.options || []).filter(function (x) { return x.id === a.option; })[0]; return a.option + (o ? '. ' + o.text : ''); }
+    if (q.type === 'true_false') return a.value ? 'True' : 'False';
+    if (q.type === 'numeric') return String(a.number) + (a.unit ? ' ' + a.unit : '');
+    return String(a.text);
+  }
+
+  function insightHtml(q, rank) {
+    var pct = Math.round(q.missed / q.attempted * 100);
+    var parts = [];
+    if (q.firstWrong) parts.push(q.firstWrong + ' wrong');
+    if (q.firstUnsure) parts.push(q.firstUnsure + ' not sure');
+    var wrong = q.wrong.map(function (w) {
+      return '<li><span class="tt-insight-count">' + w.count + '</span> <span class="itt-text">' + R.inline(w.label) + '</span>' +
+        (w.misconception ? '<span class="tt-miscon">Misconception: ' + R.inline(w.misconception) + '</span>' : '') + '</li>';
+    }).join('');
+    return '<li class="tt-insight' + (q.missed ? '' : ' tt-insight-ok') + '">' +
+      '<p class="tt-insight-where"><span class="tt-insight-rank">' + rank + '</span> ' + esc(q.sectionTitle) + ' · Question ' + q.number +
+      (q.mastery ? ' <span class="tt-vn">mastery check</span>' : '') + '</p>' +
+      '<div class="itt-text tt-insight-stem">' + R.html(q.stem) + '</div>' +
+      '<div class="tt-insight-bar" role="img" aria-label="' + q.missed + ' of ' + q.attempted + ' missed it first time"><span data-pct="' + pct + '"></span></div>' +
+      '<p class="tt-insight-score"><strong>' + q.missed + ' of ' + q.attempted + '</strong> missed it first time' + (parts.length ? ' (' + parts.join(', ') + ')' : '') +
+      (q.attempted < q.assigned ? ' · ' + (q.assigned - q.attempted) + ' not reached yet' : '') +
+      (q.correctLater ? ' · ' + q.correctLater + ' then got it right after the feedback' : '') + '</p>' +
+      (wrong ? '<p class="tt-insight-label">Wrong answers given</p><ul class="tt-insight-wrong">' + wrong + '</ul>' : '') +
+      '<p class="tt-insight-answer"><span class="tt-insight-label">Correct answer</span> <span class="itt-text">' + R.inline(insightAnswer(q)) + '</span></p>' +
+      (q.missedBy.length ? '<details class="tt-older"><summary>Who missed it (' + q.missedBy.length + ')</summary><p class="itt-small">' + esc(q.missedBy.join(', ')) + '</p></details>' : '') +
+      '</li>';
+  }
+
+  function viewInsights(el) {
+    var v = current;
+    el.innerHTML = '<p class="itt-loading" role="status"><span class="spinner"></span> Adding up the class’s answers…</p>';
+    api('GET', '/api/v1/itt/assignments?versionId=' + encodeURIComponent(v.id) + '&insights=1').then(function (r) {
+      if (!current || current.id !== v.id) return;
+      if (!r.students) { el.innerHTML = '<p class="itt-empty">No students have been assigned this yet. Once they answer, the questions they find hardest appear here.</p>'; return; }
+      if (!r.questions.length) { el.innerHTML = '<p class="itt-empty">' + plural(r.students, 'student') + ' assigned, but nobody has answered a question yet.</p>'; return; }
+      var missed = r.questions.filter(function (q) { return q.missed; });
+      var showAll = false;
+      function render() {
+        var list = showAll ? r.questions : missed.slice(0, INSIGHTS_SHOWN);
+        el.innerHTML =
+          '<p class="itt-small tt-insight-intro"><strong>' + r.started + ' of ' + plural(r.students, 'student') + '</strong> ' + (r.started === 1 ? 'has' : 'have') + ' started' +
+          (r.completed ? ', ' + r.completed + ' finished' : '') + '. These figures count each student’s <strong>first attempt</strong> at a question: what they knew before any feedback. ' +
+          (r.started < 5 ? 'With so few students, treat them as a first look, not a pattern.' : '') + '</p>' +
+          (missed.length ? '<h3 class="itt-h2">' + (showAll ? 'Every question answered so far' : 'Most missed questions') + '</h3>'
+            : '<p class="tt-valid">✓ Nobody has missed a question on their first attempt so far.</p>') +
+          '<ol class="tt-insights">' + list.map(function (q, i) { return insightHtml(q, i + 1); }).join('') + '</ol>' +
+          (r.questions.length > list.length || showAll ? '<div class="itt-actions"><button type="button" class="itt-btn" id="tt-insights-more">' +
+            (showAll ? 'Show only the most missed' : 'Show all ' + r.questions.length + ' answered questions') + '</button></div>' : '') +
+          (r.objectives.length ? '<h3 class="itt-h2">By learning objective, weakest first</h3><div class="tt-table-wrap"><table class="tt-table"><thead><tr><th scope="col">Objective</th><th scope="col">Correct first time</th></tr></thead><tbody>' +
+            r.objectives.map(function (o) {
+              return '<tr><th scope="row"><span class="itt-text">' + R.inline(o.text) + '</span></th><td>' + o.correct + ' of ' + o.attempted + ' answers (' + Math.round(o.correct / o.attempted * 100) + '%)</td></tr>';
+            }).join('') + '</tbody></table></div>' : '');
+        Array.prototype.forEach.call(el.querySelectorAll('.tt-insight-bar span'), function (s) { s.style.width = s.getAttribute('data-pct') + '%'; });
+        R.typeset(el);
+        if ($('tt-insights-more')) $('tt-insights-more').addEventListener('click', function () { showAll = !showAll; render(); el.scrollIntoView({ block: 'start' }); });
+      }
+      render();
     }, function (e) { el.innerHTML = '<div class="itt-panel" role="alert"><p>' + esc(e.message) + '</p></div>'; });
   }
 

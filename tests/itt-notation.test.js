@@ -233,7 +233,7 @@ test('notation typed as plain text is reported as a note, with the LaTeX to use'
   label.sections[0].questions[0].options[0].misconception = 'Pairs Al3+ with O2-';
   assert.deepEqual(P.validate(label, { katex }).warnings.map(w => [w.code, w.path]), [['plain_notation', '$.sections[0].questions[0].options[0].misconception']]);
   const teacher = read('assets/js/itt-teacher.js');
-  assert.equal((teacher.match(/Misconception: ' \+ R\.inline\(/g) || []).length, 2, 'both teacher views typeset the label');
+  assert.equal((teacher.match(/Misconception: ' \+ R\.inline\(/g) || []).length, 3, 'every teacher view typesets the label');
   assert.doesNotMatch(teacher, /Misconception: ' \+ esc\(/);
   // The copied problem list carries the notes as well as the errors.
   assert.match(teacher, /report\.warnings\.length \? '\\n\\nThese do not block the import, but correct them as well:/);
