@@ -107,3 +107,66 @@ test('the ITT pages follow the site rules: shared tokens, no inline script or st
   assert.doesNotMatch(css, /@media\s*\(max-width/, 'mobile-first: only min-width steps');
   assert.doesNotMatch(read('assets/css/itt-teacher.css'), /@media\s*\(max-width/);
 });
+
+test('WhatsApp: a formal homework message, the same from every share button', () => {
+  const Share = require('../assets/js/itt-share.js');
+  const info = {
+    link: 'https://www.inspireacademic.org/itt?a=00000000-0000-4000-8000-000000000001', studentName: 'Ama Boateng',
+    title: 'Year 10 Chemistry: Structure and Bonding', subject: 'Chemistry', questionCount: 117, estimatedMinutes: 234,
+    dueAt: '2026-10-16T22:59:00.000Z', note: 'Finish Sections 1 and 2 first.'
+  };
+  const text = Share.message(info);
+  assert.deepEqual(text.split('\n').slice(0, 9), [
+    '*INSPIRE ACADEMIC*', '_Test & Teach · Homework assigned_', '', 'Hello Ama,', '', 'You have been set new homework:', '',
+    '*Year 10 Chemistry: Structure and Bonding*', 'Chemistry · 117 questions · about 3 hr 55 min'
+  ]);
+  assert.match(text, /\n\*Due:\* Friday 16 October\n/);
+  assert.match(text, /\n\*From your teacher:\* Finish Sections 1 and 2 first\.\n/);
+  assert.match(text, /\nOpen your assignment:\nhttps:\/\/www\.inspireacademic\.org\/itt\?a=00000000-0000-4000-8000-000000000001\n/);
+  assert.match(text, /Your answers are saved as you go/);
+  assert.ok(text.endsWith('_Inspire Academic · inspireacademic.org_'));
+  // The link is on a line of its own, so WhatsApp builds its preview from it.
+  assert.equal(text.split('\n').filter(l => /^https:\/\//.test(l)).length, 1);
+
+  // Nothing is invented when a detail is missing, and a placeholder name is not a greeting.
+  const bare = Share.message({ link: info.link, studentName: 'Unnamed student', title: 'Ions' });
+  assert.match(bare, /\nHello,\n/);
+  assert.doesNotMatch(bare, /Due:|From your teacher|questions|about|undefined|null/);
+  // Stray formatting characters in a title cannot break the bold.
+  assert.match(Share.message({ link: info.link, studentName: 'Kofi', title: 'Acids *and* _alkalis_' }), /\n\*Acids and alkalis\*\n/);
+  assert.equal(Share.duration(45), 'about 45 min');
+  assert.equal(Share.duration(60), 'about 1 hr');
+  assert.equal(Share.duration(0), '');
+
+  const url = Share.whatsappUrl(info);
+  assert.ok(url.startsWith('https://wa.me/?text='));
+  assert.equal(decodeURIComponent(url.slice('https://wa.me/?text='.length)), text);
+
+  // Both places a link is offered use it: after assigning, and in the results table.
+  const teacher = read('assets/js/itt-teacher.js');
+  assert.match(read('teacher/test-and-teach.html'), /<script src="\/assets\/js\/itt-share\.js"><\/script>/);
+  assert.match(teacher, /data-copy="' \+ esc\(linkFor\(a\.id\)\) \+ '">Copy link<\/button>' \+ whatsappButton\(a\)/);
+  assert.match(teacher, /whatsappButton\(Object\.assign\(\{\}, details, c\)\)/);
+  assert.match(teacher, /target="_blank" rel="noopener" href="' \+ esc\(ITTShare\.whatsappUrl\(/);
+  assert.doesNotMatch(teacher, /wa\.me/, 'the address is built in one place');
+});
+
+test('a shared assignment link carries the Inspire preview card, and nothing about the student', () => {
+  const html = read('student/test-and-teach.html');
+  const og = name => (html.match(new RegExp('<meta property="og:' + name + '" content="([^"]*)">')) || [])[1];
+  assert.equal(og('site_name'), 'Inspire Academic');
+  assert.equal(og('title'), 'Inspire Test &amp; Teach: homework assigned');
+  assert.match(og('description'), /Sign in to open your assignment/);
+  assert.equal(og('image'), 'https://www.inspireacademic.org/assets/images/itt/og-test-and-teach.jpg');
+  assert.equal(og('image:width'), '1200');
+  assert.equal(og('image:height'), '630');
+  assert.ok(og('image:alt'));
+  // The tags are in the page itself: WhatsApp reads the HTML and runs no script.
+  assert.ok(html.indexOf('og:image') < html.indexOf('</head>'));
+  // The picture exists, is a JPEG, and is small enough for WhatsApp to use.
+  const image = fs.readFileSync(path.join(ROOT, 'assets/images/itt/og-test-and-teach.jpg'));
+  assert.deepEqual([...image.subarray(0, 3)], [0xff, 0xd8, 0xff]);
+  assert.ok(image.length > 20000 && image.length < 300000, `${image.length} bytes`);
+  // /itt?a=<id> serves this page, so the link in the message gets the card.
+  assert.match(read('netlify.toml'), /from = "\/itt"\s+to = "\/student\/test-and-teach\.html"\s+status = 200/);
+});
