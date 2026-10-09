@@ -1,2 +1,6 @@
 # Shell scripts must keep LF endings to run under sh.
 *.sh text eol=lf
+
+# The ITT kit files are compared byte for byte by the tests and handed to
+# authors as they are: keep LF on every platform.
+resources/itt/* text eol=lf

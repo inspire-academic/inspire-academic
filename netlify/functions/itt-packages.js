@@ -24,6 +24,12 @@ const {
   authoringAccess, requireUser, sha256, newId
 } = require('./_itt-shared');
 
+// The typesetter the pages use, so a formula that would not display is
+// refused at import, not discovered by a student. If it cannot be loaded the
+// import still runs with the structural checks.
+let katex = null;
+try { katex = require('../../assets/vendor/katex-0.16.47/katex.min.js'); } catch (e) { console.error('itt-packages: KaTeX not available:', e.message); }
+
 // Problems are capped so a badly broken file can't produce an enormous reply.
 const MAX_PROBLEMS = 200;
 
@@ -56,7 +62,7 @@ async function list(client) {
 
 async function importPackage(client, user, body, bytes) {
   const pkg = body.package;
-  const result = ITT.validate(pkg, { bytes });
+  const result = ITT.validate(pkg, { bytes, katex });
   if (!result.valid) {
     return {
       statusCode: 422, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
@@ -142,7 +148,7 @@ exports.handler = async (event) => {
 
     switch (body.action) {
       case 'validate':
-        return ok({ report: report(ITT.validate(body.package, { bytes: Buffer.byteLength(JSON.stringify(body.package || null)) })) });
+        return ok({ report: report(ITT.validate(body.package, { bytes: Buffer.byteLength(JSON.stringify(body.package || null)), katex })) });
       case 'import':
         return await importPackage(client, who.user, body, Buffer.byteLength(JSON.stringify(body.package || null)));
       case 'approve':
