@@ -515,18 +515,21 @@
 
   function assignmentsTable(rows, withPackage) {
     if (!rows.length) return '<p class="itt-empty">No students have been assigned this yet.</p>';
-    return '<div class="tt-table-wrap"><table class="tt-table"><thead><tr><th scope="col">Student</th>' + (withPackage ? '<th scope="col">Package</th>' : '') +
+    // On a phone or a narrow window each student is a card; on a wide screen
+    // the same markup is a table (itt-teacher.css). The data-label on each
+    // cell is what the card shows beside its value.
+    return '<div class="tt-table-wrap tt-assignments"><table class="tt-table"><thead><tr><th scope="col">Student</th>' + (withPackage ? '<th scope="col">Package</th>' : '') +
       '<th scope="col">Status</th><th scope="col">Sections</th><th scope="col">First attempts</th><th scope="col">Mastery check</th><th scope="col">Due</th><th scope="col">Completed</th><th scope="col"><span class="itt-sr">Actions</span></th></tr></thead><tbody>' +
       rows.map(function (a) {
         var s = a.summary || {}, f = s.firstAttempt, m = s.mastery, st = A_STATUS[a.status] || [a.status, 'badge-blue'];
-        return '<tr><th scope="row">' + esc(a.studentName) + '</th>' + (withPackage ? '<td>' + esc(a.title) + ' <span class="tt-vn">v' + a.versionNumber + '</span>' + (a.wholePackage ? '' : ' <span class="itt-small">(part)</span>') + '</td>' : '') +
-          '<td><span class="badge ' + st[1] + '">' + st[0] + '</span></td>' +
-          '<td>' + (s.sectionsComplete || 0) + ' of ' + a.sectionCount + '</td>' +
-          '<td>' + (f && f.answered ? f.correct + ' of ' + f.answered + ' correct' : '–') + '</td>' +
-          '<td>' + (m ? (m.answered ? m.correct + ' of ' + m.answered + ' correct' : 'not reached') : 'none') + '</td>' +
-          '<td>' + (date(a.dueAt) || '–') + '</td><td>' + (date(a.completedAt) || '–') + '</td>' +
-          '<td class="tt-row-actions"><button type="button" class="itt-btn" data-result="' + esc(a.id) + '">Answers</button>' +
-          '<button type="button" class="itt-btn" data-copy="' + esc(linkFor(a.id)) + '">Copy link</button>' + whatsappButton(a) + '</td></tr>';
+        return '<tr><th scope="row">' + esc(a.studentName) + '</th>' + (withPackage ? '<td data-label="Package">' + esc(a.title) + ' <span class="tt-vn">v' + a.versionNumber + '</span>' + (a.wholePackage ? '' : ' <span class="itt-small">(part)</span>') + '</td>' : '') +
+          '<td data-label="Status"><span class="badge ' + st[1] + '">' + st[0] + '</span></td>' +
+          '<td data-label="Sections">' + (s.sectionsComplete || 0) + ' of ' + a.sectionCount + '</td>' +
+          '<td data-label="First attempts">' + (f && f.answered ? f.correct + ' of ' + f.answered + ' correct' : '–') + '</td>' +
+          '<td data-label="Mastery check">' + (m ? (m.answered ? m.correct + ' of ' + m.answered + ' correct' : 'not reached') : 'none') + '</td>' +
+          '<td data-label="Due">' + (date(a.dueAt) || '–') + '</td><td data-label="Completed">' + (date(a.completedAt) || '–') + '</td>' +
+          '<td class="tt-row-actions"><div class="tt-row-buttons"><button type="button" class="itt-btn" data-result="' + esc(a.id) + '">Answers</button>' +
+          '<button type="button" class="itt-btn" data-copy="' + esc(linkFor(a.id)) + '">Copy link</button>' + whatsappButton(a) + '</div></td></tr>';
       }).join('') + '</tbody></table></div>';
   }
 
