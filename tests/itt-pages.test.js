@@ -198,7 +198,7 @@ test('Revisit: the player offers missed questions again, and only the shared cod
   const pkg = JSON.parse(read('resources/itt/ITT_Reference_Quiz_v1.json'));
   const at = hoursAgo => new Date(Date.UTC(2026, 9, 10, 12) - hoursAgo * 3600000).toISOString();
   const now = Date.UTC(2026, 9, 10, 12);
-  const row = (question_id, attempt_number, is_correct, hoursAgo) => ({ question_id, attempt_number, is_correct, is_unsure: false, feedback_key: 'correct', submitted_at: at(hoursAgo) });
+  const row = (question_id, attempt_number, is_correct, hoursAgo) => ({ question_id, attempt_number, is_correct, is_unsure: false, feedback_key: 'not_sure', submitted_at: at(hoursAgo) });
 
   // Section 1 unfinished: nothing to revisit, however wrong the answers.
   assert.equal(P.revisit(pkg, null, [row('s1-q01', 1, false, 48)], now).missed, 0);
