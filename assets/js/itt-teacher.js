@@ -101,8 +101,11 @@
   }
 
   function problemsText(report, name) {
+    function line(p, i) { return (i + 1) + '. ' + p.where + ' [' + p.path + ']: ' + p.message; }
     return 'The ITT package "' + name + '" failed import validation (' + P.SCHEMA + '). Fix every problem below and return the complete corrected JSON file.\n\n' +
-      report.errors.map(function (p, i) { return (i + 1) + '. ' + p.where + ' [' + p.path + ']: ' + p.message; }).join('\n');
+      report.errors.map(line).join('\n') +
+      // The notes do not block an import, but the author should fix them in the same pass.
+      (report.warnings.length ? '\n\nThese do not block the import, but correct them as well:\n\n' + report.warnings.map(line).join('\n') : '');
   }
 
   function renderRejected(report, name, heading) {
@@ -378,7 +381,7 @@
     var pkg = current.content, assets = {};
     (pkg.assets || []).forEach(function (a) { assets[a.id] = a; });
     function fb(label, text, cls, extra) {
-      return '<div class="tt-fb ' + (cls || '') + '"><span class="tt-fb-label">' + label + '</span><div class="itt-text">' + R.html(text) + '</div>' + (extra ? '<p class="tt-miscon">Misconception: ' + esc(extra) + '</p>' : '') + '</div>';
+      return '<div class="tt-fb ' + (cls || '') + '"><span class="tt-fb-label">' + label + '</span><div class="itt-text">' + R.html(text) + '</div>' + (extra ? '<p class="tt-miscon">Misconception: ' + R.inline(extra) + '</p>' : '') + '</div>';
     }
     el.innerHTML = '<p class="itt-small">Read every answer and explanation here before approving. ✓ marks the answer the package gives as correct.</p>' +
       pkg.sections.map(function (s, si) {
@@ -568,7 +571,7 @@
               var given = q.attempts.length ? q.attempts.map(function (t) {
                 return '<div class="tt-attempt ' + (t.correct ? 'tt-right' : t.unsure ? 'tt-unsure' : 'tt-wrong') + '"><span class="tt-mark">' + (t.correct ? '✓ Correct' : t.unsure ? '? Not sure' : '✗ Incorrect') + '</span> ' +
                   (q.attempts.length > 1 ? '<span class="itt-small">attempt ' + t.attempt + '</span> ' : '') + '<span>' + R.inline(answerText(q, t.response)) + '</span>' +
-                  (t.misconception ? '<span class="tt-miscon">Misconception: ' + esc(t.misconception) + '</span>' : '') + '</div>';
+                  (t.misconception ? '<span class="tt-miscon">Misconception: ' + R.inline(t.misconception) + '</span>' : '') + '</div>';
               }).join('') : '<span class="itt-small">Not answered</span>';
               return '<tr><th scope="row"><span class="itt-small">Q' + (i + 1) + '</span><div class="itt-text">' + R.html(q.stem) + '</div></th><td>' + given + '</td><td>' + R.inline(answerText(q, q.answer)) + '</td></tr>';
             }).join('') + '</tbody></table></div>';

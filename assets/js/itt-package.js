@@ -58,7 +58,7 @@
   var NOT_SURE_TEXT_RE = /^\s*(i('|’)?m|i am)?\s*(not sure|unsure|don('|’)?t know|do not know)\b/i;
   var MIN_FEEDBACK_CHARS = 30;
   // The fields whose LaTeX is typeset. Every other text field is a label.
-  var RICH_FIELDS = ['description', 'stem', 'text', 'feedback', 'teaching_note', 'worked_solution'];
+  var RICH_FIELDS = ['description', 'stem', 'text', 'feedback', 'teaching_note', 'worked_solution', 'misconception'];
 
   function isObject(v) { return v !== null && typeof v === 'object' && !Array.isArray(v); }
   function isText(v) { return typeof v === 'string' && v.trim().length > 0; }
