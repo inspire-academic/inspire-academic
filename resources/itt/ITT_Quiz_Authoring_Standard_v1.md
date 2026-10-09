@@ -220,7 +220,7 @@ A section with `"type": "mastery"` is an **independent mastery check**:
 - 2 to 6 options, displayed in the order written. Do not rely on shuffling; "Both A and B" style options are discouraged.
 - Each option: `id` (letters or digits, e.g. `"A"`), `text`, `feedback`. All three required.
 - `answer`: the `id` of the **one** correct option. Exactly one option is correct.
-- `misconception` (optional, wrong options only): a short label for the misunderstanding that option reveals. Teachers see these labels in results.
+- `misconception` (optional, wrong options only): a short label for the misunderstanding that option reveals. Teachers see these labels in results. A formula in the label is written as LaTeX, as everywhere else.
 - Feedback for a wrong option should say why that particular idea is wrong and point to the right idea. Feedback for the correct option must explain why it is right.
 
 ### 7.2 `true_false`
@@ -368,7 +368,7 @@ The platform typesets **only** what is written as LaTeX. It never decides that a
 - Maths that cannot be typeset (a misspelt command, a missing brace) is **refused** at import.
 - Put an equation, or any formula longer than about 25 characters, on its own line with `\[ ... \]`. Long formulae inside a sentence do not fit on a phone.
 - Inside a sentence a fraction written with `\frac` is small. Use `\dfrac` where it needs to be read easily, or put the calculation on its own line.
-- These fields are always plain text and must **not** contain LaTeX: titles, `purpose`, `misconception`, a numeric `unit`, and an image's `alt` and `caption`. For a unit write `cm³` or `mol/dm³` with ordinary characters.
+- These fields are always plain text and must **not** contain LaTeX: titles, `purpose`, a numeric `unit`, and an image's `alt` and `caption`. For a unit write `cm³` or `mol/dm³` with ordinary characters.
 
 ### Images
 
