@@ -163,13 +163,16 @@ async function detail(client, who, id) {
       options: q.type === 'mcq' ? q.options.map(o => ({ id: o.id, text: o.text })) : undefined,
       answer: ITT.reveal(q).answer,
       attempts: ITT.results(pkg, index.get(q.id), attemptsOf(q.id))
-        .map((a, i) => ({ ...a, submittedAt: attemptsOf(q.id)[i].submitted_at || null }))
+        .map((a, i) => ({ ...a, submittedAt: ITT.regularRows(attemptsOf(q.id))[i].submitted_at || null })),
+      // Later returns to a question missed first time, kept apart from the attempts above.
+      revisits: attemptsOf(q.id).filter(ITT.isRevisit).map(r => ITT.revisitResult(q, r))
     }))
   }));
   const { content, ...meta } = version;
   return ok({
     assignment: { ...assignmentCard(assignment, meta), studentId: assignment.student_id, studentName: names[assignment.student_id] || 'Unnamed student', revokedAt: assignment.revoked_at || null },
     progress: ITT.progress(pkg, assignment.section_ids, rows),
+    revisit: ITT.revisit(pkg, assignment.section_ids, rows, Date.now()),
     sections
   });
 }
