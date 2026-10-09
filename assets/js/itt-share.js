@@ -49,7 +49,7 @@
       '',
       name ? 'Hello ' + plain(name) + ',' : 'Hello,',
       '',
-      'You have been set new homework:',
+      'You have been assigned a new homework:',
       '',
       '*' + plain(info.title) + '*'
     ];
