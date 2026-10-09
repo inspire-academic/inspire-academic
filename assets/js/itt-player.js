@@ -131,6 +131,7 @@
         '<p class="itt-small">' + p.answered + ' of ' + p.questions + ' questions answered</p>' +
         '<button type="button" class="itt-btn itt-btn-primary itt-btn-wide" data-act="resume">' + action + '</button>' +
         '</header>' +
+        revisitHtml() +
         (p.answered ? summaryHtml() : '') +
         '<h2 class="itt-h2">Sections</h2><ol class="itt-sections">' + sections + '</ol>';
       rootEl.querySelector('.itt-bar span').style.width = (p.questions ? Math.round(p.answered / p.questions * 100) : 0) + '%';
@@ -189,7 +190,7 @@
       return '<strong>' + esc(a.text) + '</strong>';
     }
 
-    function feedbackHtml(q, attempts, nav) {
+    function feedbackHtml(q, attempts, nav, note) {
       var last = attempts[attempts.length - 1];
       // The heading sets the tone; the teaching is the author's own words,
       // shown in full and never replaced or shortened. A response that was
@@ -207,6 +208,7 @@
         '<div class="itt-feedback-text itt-text">' + R.html(last.feedback) + '</div>';
       if (last.reveal && !last.correct) out += '<p class="itt-correct-answer"><span class="itt-correct-label">Correct answer</span> <span>' + revealedAnswer(q, last.reveal) + '</span></p>';
       if (earlier) out += '<ul class="itt-earlier">' + earlier + '</ul>';
+      if (note) out += '<p class="itt-small itt-revisit-note">' + esc(note) + '</p>';
       out += '</section>';
       if (last.reveal && last.reveal.teachingNote) {
         out += '<aside class="itt-learn" aria-labelledby="itt-note-h"><h3 class="itt-h3" id="itt-note-h">Key idea</h3><div class="itt-text">' + R.html(last.reveal.teachingNote) + '</div></aside>';
@@ -269,7 +271,7 @@
       return q.type === 'numeric' ? { number: typed } : { text: typed };
     }
 
-    function wireForm(q, attempt) {
+    function wireForm(q, attempt, asRevisit) {
       var form = rootEl.querySelector('#itt-form'), submit = rootEl.querySelector('#itt-submit'), status = rootEl.querySelector('#itt-save');
       var input = form.querySelector('#itt-typed-input'), unsureBox = form.querySelector('input[name="itt-unsure"]');
       function refresh() {
@@ -289,18 +291,20 @@
         submit.textContent = 'Saving…';
         status.className = 'itt-save';
         status.textContent = options.preview ? '' : 'Saving your answer…';
-        backend.answer(q.id, response, attempt).then(function (r) {
+        (asRevisit ? backend.revisit(q.id, response, attempt) : backend.answer(q.id, response, attempt)).then(function (r) {
           saving = false;
           if (!alive) return;
-          data.results[q.id] = r.results;
+          if (asRevisit) view.result = r.result;
+          else data.results[q.id] = r.results;
           data.progress = r.progress;
+          if (r.revisit) data.revisit = r.revisit;
           view.retrying = false;
           render();
           focus('#itt-feedback', true);
         }, function (e) {
           saving = false;
           if (!alive) return;
-          if (e.code === 'out_of_step' || e.code === 'no_attempts_left') { load(); return; }
+          if (e.code === 'out_of_step' || e.code === 'no_attempts_left' || e.code === 'not_due') { load(); return; }
           // Nothing is shown as saved unless the server said so. Sending the
           // same attempt again is safe: it can never be counted twice.
           status.className = 'itt-save itt-save-failed';
@@ -320,6 +324,7 @@
       var sections = data.package.sections, at = sections.indexOf(s);
       var nextSection = sections.slice(at + 1).filter(function (x) { return !progressOf(x.id).locked && !progressOf(x.id).complete; })[0];
       var done = data.progress.status === 'completed';
+      var missedHere = sp.questions - sp.correct;
       var lines = '<div class="itt-stat"><dt>' + (s.mastery ? 'Mastery check' : 'First attempts') + '</dt><dd>' + sp.correct + ' of ' + sp.questions + ' correct</dd></div>';
       if (sp.correctAfterFeedback) lines += '<div class="itt-stat"><dt>Correct after feedback</dt><dd>' + plural(sp.correctAfterFeedback, 'question') + '</dd></div>';
       if (sp.unsure) lines += '<div class="itt-stat"><dt>Marked “I’m not sure”</dt><dd>' + plural(sp.unsure, 'question') + '</dd></div>';
@@ -328,15 +333,89 @@
         '<h1 class="itt-h1" id="itt-done-h">' + (done ? 'Assignment complete' : 'Section complete') + '</h1>' +
         '<p class="itt-meta">' + esc(s.title) + '</p><dl class="itt-stats">' + lines + '</dl>' +
         '<p class="itt-small">' + (options.preview ? 'This is a preview: nothing has been saved.' : 'Your answers are saved.') + '</p>' +
+        (missedHere ? '<p class="itt-small itt-revisit-note">' + plural(missedHere, 'question') + ' you missed first time will come back for a second look' +
+          (data.revisit && data.revisit.due.length ? ': see “Revisit what you missed” on the sections page.' : (data.revisit && data.revisit.nextAt ? ' from ' + esc(whenText(data.revisit.nextAt)) + '.' : '.')) + '</p>' : '') +
         '<div class="itt-actions itt-actions-stack">' +
         (nextSection ? '<button type="button" class="itt-btn itt-btn-primary" data-act="section" data-id="' + esc(nextSection.id) + '">Next: ' + esc(nextSection.title) + '</button>' : '') +
         '<button type="button" class="itt-btn' + (nextSection ? '' : ' itt-btn-primary') + '" data-act="overview">' + (done ? 'See your results' : 'Back to sections') + '</button>' +
         '<button type="button" class="itt-btn" data-act="section" data-id="' + esc(s.id) + '" data-review="1">Review this section</button></div></div>';
     }
 
+    // ── Revisit: questions missed first time, after a break ─────────────
+    function questionById(id) {
+      var found = null;
+      data.package.sections.forEach(function (s) { s.questions.forEach(function (q) { if (q.id === id) found = { question: q, section: s }; }); });
+      return found;
+    }
+
+    function whenText(iso) {
+      var d = new Date(iso);
+      if (isNaN(d)) return 'later';
+      return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // The panel on the overview: what is ready, what is coming back, and
+    // how many have been secured.
+    function revisitHtml() {
+      var r = data.revisit;
+      if (!r || !r.missed) return '';
+      var lines = '';
+      if (r.due.length) lines += '<p><strong>' + plural(r.due.length, 'question') + '</strong> you missed first time ' + (r.due.length === 1 ? 'is' : 'are') + ' ready to try again.</p>';
+      if (r.waiting.length) lines += '<p class="itt-small">' + (r.due.length ? plural(r.waiting.length, 'more question') + ' come' + (r.waiting.length === 1 ? 's' : '') + ' back'
+        : plural(r.waiting.length, 'question') + ' you missed first time will come back') + ' from ' + esc(whenText(r.nextAt)) + '. A break first is what makes the answer stick.</p>';
+      if (!r.due.length && !r.waiting.length) lines += '<p>' + (r.secured === r.missed ? 'You have now answered every question you missed first time.' : 'Nothing left to revisit here.') + '</p>';
+      return '<section class="itt-panel itt-revisit" aria-labelledby="itt-revisit-h"><h2 class="itt-h2" id="itt-revisit-h">Revisit what you missed</h2>' + lines +
+        '<p class="itt-small">' + r.secured + ' of ' + r.missed + ' secured on a revisit' + (r.exhausted ? ' · ' + r.exhausted + ' to go through with your teacher' : '') + '.</p>' +
+        (r.due.length ? '<button type="button" class="itt-btn itt-btn-primary itt-btn-wide" data-act="revisit">Revisit ' + plural(r.due.length, 'question') + '</button>' : '') + '</section>';
+    }
+
+    function renderRevisit() {
+      var item = view.queue[view.index], found = questionById(item.questionId), q = found.question;
+      var last = view.result || null, isLast = view.index === view.queue.length - 1;
+      var html =
+        '<div class="itt-qbar"><button type="button" class="itt-link" data-act="overview">← Sections</button>' +
+        '<span class="itt-qsection">' + esc(found.section.title) + '</span></div>' +
+        '<div class="itt-bar" role="progressbar" aria-valuemin="1" aria-valuemax="' + view.queue.length + '" aria-valuenow="' + (view.index + 1) + '" aria-label="Revisit question ' + (view.index + 1) + ' of ' + view.queue.length + '"><span></span></div>' +
+        '<p class="itt-qcount" id="itt-qcount">Revisit · Question ' + (view.index + 1) + ' of ' + view.queue.length + '</p>' +
+        '<p class="itt-mastery-flag">You missed this one first time. One try, from memory: see whether it has stuck.</p>' +
+        '<div class="itt-stem itt-text" id="itt-stem" role="heading" aria-level="1">' + R.html(q.stem) + '</div>' +
+        '<div id="itt-figures"></div>' +
+        '<form class="itt-answer" id="itt-form" novalidate>' + answerHtml(q, last, !!last);
+      if (!last) {
+        html += '<p class="itt-save" id="itt-save" role="status" aria-live="polite"></p>' +
+          '<div class="itt-actions"><button type="submit" class="itt-btn itt-btn-primary itt-btn-grow" id="itt-submit" disabled>Submit answer</button></div>';
+      }
+      html += '</form>';
+      if (last) {
+        html += feedbackHtml(q, [last], '<button type="button" class="itt-btn itt-btn-primary" data-act="revisit-next">' + (isLast ? 'Finish revisit' : 'Next question') + '</button>',
+          last.correct ? 'Secured on your revisit.' : 'This one will come back again after another break.');
+      }
+      rootEl.innerHTML = html;
+      rootEl.querySelector('.itt-bar span').style.width = Math.round((view.index + 1) / view.queue.length * 100) + '%';
+      var figures = rootEl.querySelector('#itt-figures');
+      (q.asset_ids || []).forEach(function (id) { var a = assetById(id); if (a) figures.appendChild(R.figure(a)); });
+      R.typeset(rootEl);
+      if (!last) wireForm(q, item.attempt, true);
+    }
+
+    function renderRevisitDone() {
+      var r = data.revisit || { due: [], waiting: [], secured: 0, missed: 0 };
+      var got = view.correct || 0, n = view.queue.length;
+      rootEl.innerHTML =
+        '<div class="itt-panel itt-done"><p class="itt-kicker">Revisit</p>' +
+        '<h1 class="itt-h1" id="itt-done-h">Revisit complete</h1>' +
+        '<dl class="itt-stats"><div class="itt-stat"><dt>This time</dt><dd>' + got + ' of ' + n + ' correct</dd></div>' +
+        '<div class="itt-stat"><dt>Secured so far</dt><dd>' + r.secured + ' of ' + r.missed + '</dd></div></dl>' +
+        (r.waiting.length ? '<p class="itt-small">' + plural(r.waiting.length, 'question') + ' will come back from ' + esc(whenText(r.nextAt)) + '.</p>' : '') +
+        '<p class="itt-small">' + (options.preview ? 'This is a preview: nothing has been saved.' : 'Your answers are saved. Your first attempts stay exactly as they were.') + '</p>' +
+        '<div class="itt-actions itt-actions-stack"><button type="button" class="itt-btn itt-btn-primary" data-act="overview">Back to sections</button></div></div>';
+    }
+
     function render() {
       if (view.name === 'overview') { renderOverview(); return; }
       if (view.name === 'question') { renderQuestion(); return; }
+      if (view.name === 'revisit') { renderRevisit(); return; }
+      if (view.name === 'revisit-done') { renderRevisitDone(); return; }
       if (view.name === 'section-done') renderSectionDone();
     }
 
@@ -365,6 +444,15 @@
       else if (act === 'section') openSection(btn.getAttribute('data-id'), !!btn.getAttribute('data-review'));
       else if (act === 'prev') { go({ name: 'question', sectionId: view.sectionId, index: view.index - 1 }); focus('#itt-stem'); }
       else if (act === 'next') { go({ name: 'question', sectionId: view.sectionId, index: view.index + 1 }); focus('#itt-stem'); }
+      else if (act === 'revisit') {
+        var due = (data.revisit && data.revisit.due) || [];
+        if (due.length) { go({ name: 'revisit', queue: due.slice(), index: 0, result: null, correct: 0 }); focus('#itt-stem'); }
+      }
+      else if (act === 'revisit-next') {
+        var got = view.correct + (view.result && view.result.correct ? 1 : 0);
+        if (view.index === view.queue.length - 1) { go({ name: 'revisit-done', queue: view.queue, correct: got }); focus('#itt-done-h'); }
+        else { go({ name: 'revisit', queue: view.queue, index: view.index + 1, result: null, correct: got }); focus('#itt-stem'); }
+      }
       else if (act === 'retry') { view.retrying = true; render(); focus('#itt-stem'); }
       else if (act === 'finish-section') { go({ name: 'section-done', sectionId: view.sectionId }); focus('#itt-done-h'); }
     }
@@ -382,11 +470,14 @@
   function previewBackend(pkg) {
     var P = root.ITTPackage, rows = [], index = P.index(pkg);
     var state = function () { return P.progress(pkg, null, rows); };
+    // In a preview there is no waiting: a missed question can be revisited
+    // as soon as its section is finished, so the whole cycle can be seen.
+    var revisits = function () { return P.revisit(pkg, null, rows, Date.now(), 0); };
     return {
       load: function () {
         return Promise.resolve({
           assignment: { estimatedMinutes: pkg.package.estimated_minutes || null },
-          package: P.publicPackage(pkg), results: {}, progress: state()
+          package: P.publicPackage(pkg), results: {}, progress: state(), revisit: revisits()
         });
       },
       answer: function (questionId, response, attempt) {
@@ -394,7 +485,14 @@
         if (!m) { var e = new Error(entry.question.type === 'numeric' ? 'Enter your answer as a number.' : 'Choose or enter an answer first.'); e.code = 'invalid_answer'; return Promise.reject(e); }
         rows.push({ question_id: questionId, attempt_number: attempt, response: m.response, is_correct: m.correct, is_unsure: m.unsure, marks_awarded: m.marks, feedback_key: m.feedbackKey, submitted_at: new Date().toISOString() });
         var results = P.results(pkg, entry, rows.filter(function (r) { return r.question_id === questionId; }));
-        return Promise.resolve({ result: results[results.length - 1], results: results, progress: state() });
+        return Promise.resolve({ result: results[results.length - 1], results: results, progress: state(), revisit: revisits() });
+      },
+      revisit: function (questionId, response, attempt) {
+        var entry = index.get(questionId), m = P.mark(entry.question, response);
+        if (!m) { var e = new Error(entry.question.type === 'numeric' ? 'Enter your answer as a number.' : 'Choose or enter an answer first.'); e.code = 'invalid_answer'; return Promise.reject(e); }
+        var row = { question_id: questionId, attempt_number: attempt, response: m.response, is_correct: m.correct, is_unsure: m.unsure, marks_awarded: 0, feedback_key: m.feedbackKey, submitted_at: new Date().toISOString() };
+        rows.push(row);
+        return Promise.resolve({ result: P.revisitResult(entry.question, row), progress: state(), revisit: revisits() });
       }
     };
   }
