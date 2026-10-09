@@ -55,6 +55,10 @@
 
     fetchAssignments(supa).then(function (data) {
       if (!data || !data.counts) return;
+      if (data.staffView && !data.counts.outstanding && !data.counts.completed) {
+        document.getElementById('itt-card-count').textContent = 'Student View: see every approved quiz as a student does.';
+        return;
+      }
       var n = data.counts.outstanding;
       document.getElementById('itt-card-count').textContent = n
         ? n + (n === 1 ? ' assignment' : ' assignments') + ' to do'

@@ -632,6 +632,36 @@ test('import typesets every formula: broken maths is refused, plain-text notatio
   }
 });
 
+test('Student View: staff are told they may preview; students are not, and cannot read a package', async () => {
+  const s = setup();
+  const version = await published(s);
+  await assignTo(s, version, [AMA]);
+
+  // A teacher or admin on the student page has no assignments of their own.
+  for (const who of [TEACHER, ADMIN]) {
+    const mine = await s.student('GET', null, as(who));
+    assert.equal(mine.status, 200);
+    assert.equal(mine.body.staffView, true);
+    assert.deepEqual(mine.body.assignments, []);
+  }
+  // The page then lists approved packages from the library, and opens one.
+  const library = await s.packages('GET', null, as(TEACHER));
+  assert.deepEqual(library.body.versions.map(v => v.status), ['published']);
+  assert.equal((await s.packages('GET', { id: version.id }, as(TEACHER))).body.version.content.schema, 'itt.quiz.v1');
+
+  // A student gets no such flag, and the library and its content stay closed.
+  const ama = await s.student('GET', null, as(AMA));
+  assert.equal(ama.body.staffView, false);
+  assert.equal(ama.body.assignments.length, 1);
+  assert.equal((await s.packages('GET', null, as(AMA))).status, 403);
+  assert.equal((await s.packages('GET', { id: version.id }, as(AMA))).status, 403);
+
+  // Previewing records nothing, and staff still cannot answer as a student.
+  const id = s.fake.tables.itt_assignments[0].id;
+  assert.equal((await answer(s, TEACHER, id, 's1-q01', { option: 'C' })).status, 403);
+  assert.equal(s.fake.tables.itt_responses.length, 0);
+});
+
 test('the endpoints fail safely when the service is not configured', async () => {
   const s = setup();
   delete process.env.SUPABASE_SERVICE_ROLE_KEY;
