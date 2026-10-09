@@ -24,12 +24,12 @@
 // overwritten.
 
 const {
-  ITT, FLAGS, VERSION_COLUMNS, UUID_RE, fail, ok, parseBody, db, requireUser, inList, compactSummary, assignmentCard
+  ITT, FLAGS, VERSION_COLUMNS, UUID_RE, fail, ok, parseBody, db, requireUser, isStaff, inList, compactSummary, assignmentCard
 } = require('./_itt-shared');
 
 const byAttempt = (a, b) => a.attempt_number - b.attempt_number;
 
-async function list(client, user) {
+async function list(client, user, role) {
   const rows = ((await client.get(`itt_assignments?student_id=eq.${encodeURIComponent(user.id)}&revoked_at=is.null&select=*`)) || [])
     .sort((a, b) => String(b.assigned_at).localeCompare(String(a.assigned_at)));
   const versionIds = [...new Set(rows.map(r => r.package_version_id))];
@@ -40,7 +40,10 @@ async function list(client, user) {
   return ok({
     assignments,
     counts: { todo: count('assigned'), inProgress: count('in_progress'), completed: count('completed'), outstanding: count('assigned') + count('in_progress') },
-    features: { studentGeneration: FLAGS.itt_student_generation_enabled }
+    features: { studentGeneration: FLAGS.itt_student_generation_enabled },
+    // Tells the page a teacher or admin is looking, so it can offer Student
+    // View. It grants nothing: the packages endpoint checks the role itself.
+    staffView: isStaff(role)
   });
 }
 
@@ -151,7 +154,7 @@ exports.handler = async (event) => {
 
     if (event.httpMethod === 'GET') {
       const id = event.queryStringParameters && event.queryStringParameters.id;
-      return id ? await detail(client, who.user, id) : await list(client, who.user);
+      return id ? await detail(client, who.user, id) : await list(client, who.user, who.role);
     }
     const body = parseBody(event);
     if (!body) return fail(400, 'invalid_json', 'Request body must be valid JSON.');

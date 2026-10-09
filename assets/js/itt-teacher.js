@@ -333,27 +333,9 @@
     }, function () {});
   }
 
-  // Marks answers in the page from the package itself, with the code the
-  // server uses. Nothing is saved, and the teacher may open every section.
-  function previewBackend(pkg) {
-    var rows = [], index = P.index(pkg);
-    var state = function () { return P.progress(pkg, null, rows); };
-    return {
-      load: function () {
-        return Promise.resolve({
-          assignment: { estimatedMinutes: pkg.package.estimated_minutes || null },
-          package: P.publicPackage(pkg), results: {}, progress: state()
-        });
-      },
-      answer: function (questionId, response, attempt) {
-        var entry = index.get(questionId), m = P.mark(entry.question, response);
-        if (!m) { var e = new Error(entry.question.type === 'numeric' ? 'Enter your answer as a number.' : 'Choose or enter an answer first.'); e.code = 'invalid_answer'; return Promise.reject(e); }
-        rows.push({ question_id: questionId, attempt_number: attempt, response: m.response, is_correct: m.correct, is_unsure: m.unsure, marks_awarded: m.marks, feedback_key: m.feedbackKey, submitted_at: new Date().toISOString() });
-        var results = P.results(pkg, entry, rows.filter(function (r) { return r.question_id === questionId; }));
-        return Promise.resolve({ result: results[results.length - 1], results: results, progress: state() });
-      }
-    };
-  }
+  // The preview marks answers in the page (ITTPlayer.previewBackend): nothing
+  // is saved, and the teacher may open every section.
+  var previewBackend = ITTPlayer.previewBackend;
 
   function viewPreview(el) {
     el.innerHTML =
