@@ -224,9 +224,22 @@ test('notation typed as plain text is reported as a note, with the LaTeX to use'
   assert.ok(stem.message.includes(r`\(\mathrm{Al^{3+}}\), \(\mathrm{O^{2-}}\)`), 'the note gives the LaTeX to write');
   assert.match(stem.where, /Section 1 .* Question 1 \(s1-q01\)/);
   assert.ok(report.warnings.find(w => w.code === 'plain_unit_power').message.includes(r`\(\mathrm{cm^3}\)`));
-  // Labels that are always plain text are not nagged about notation.
-  pkg.sections[0].questions[0].options[0].misconception = 'Pairs Al3+ with O2-';
-  assert.equal(P.validate(pkg, { katex }).warnings.filter(w => /misconception/.test(w.path)).length, 0);
+  // A misconception label is typeset for teachers, so LaTeX in it is fine
+  // and plain-text notation in it is noted like anywhere else.
+  const label = clone(FIXTURE);
+  label.sections[0].questions[0].options[0].misconception = r`Pairs one \(\mathrm{Al^{3+}}\) with one \(\mathrm{O^{2-}}\)`;
+  assert.deepEqual(P.validate(label, { katex }).warnings, []);
+  label.sections[0].questions[0].options[0].misconception = 'Pairs Al3+ with O2-';
+  assert.deepEqual(P.validate(label, { katex }).warnings.map(w => [w.code, w.path]), [['plain_notation', '$.sections[0].questions[0].options[0].misconception']]);
+  const teacher = read('assets/js/itt-teacher.js');
+  assert.equal((teacher.match(/Misconception: ' \+ R\.inline\(/g) || []).length, 2, 'both teacher views typeset the label');
+  assert.doesNotMatch(teacher, /Misconception: ' \+ esc\(/);
+  // The copied problem list carries the notes as well as the errors.
+  assert.match(teacher, /report\.warnings\.length \? '\\n\\nThese do not block the import, but correct them as well:/);
+  // A label that really is plain text (an image description) is not nagged.
+  const unit = clone(FIXTURE);
+  unit.sections[0].questions[3].answer.unit = 'g/cm3';
+  assert.deepEqual(P.validate(unit, { katex }).warnings, []);
 });
 
 test('repeated notation notes are counted, not listed hundreds of times', () => {
