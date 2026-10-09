@@ -19,10 +19,16 @@
   var $ = function (id) { return document.getElementById(id); };
   var esc = ITTRender.esc;
   var player = null, assignments = [], tab = 'todo';
+  // Student View: a teacher or admin on this page sees every approved quiz
+  // as a student would, and opens it as a preview that saves nothing.
+  var PREVIEW = 'preview:';
+  var staff = false, previewing = null;
 
   function show(id) {
     ['itt-signin', 'itt-home', 'itt-player'].forEach(function (x) { $(x).hidden = x !== id; });
     document.body.classList.toggle('itt-playing', id !== 'itt-home');
+    $('itt-staff-home').hidden = !(staff && id === 'itt-home');
+    $('itt-staff-player').hidden = !(previewing && id === 'itt-player');
   }
 
   // ── Talking to the server ───────────────────────────────────────────
@@ -143,10 +149,34 @@
     });
   }
 
+  // Every approved package version as the card a student would be shown.
+  function previewCards(versions) {
+    var published = versions.filter(function (v) { return v.status === 'published'; });
+    return published.map(function (v) {
+      var s = v.summary || {};
+      var several = published.filter(function (x) { return x.package_key === v.package_key; }).length > 1;
+      return {
+        id: PREVIEW + v.id, status: 'assigned', title: v.title + (several ? ' (version ' + v.version_number + ')' : ''), subject: v.subject,
+        description: s.description, sectionCount: s.sectionCount || 0, questionCount: s.questionCount || 0, estimatedMinutes: s.estimatedMinutes || null
+      };
+    });
+  }
+
   function loadList() {
+    previewing = null;
     show('itt-home');
     $('itt-list').innerHTML = '<p class="itt-loading" role="status"><span class="spinner"></span> Loading your assignments…</p>';
     api('GET', API + 'assignments').then(function (r) {
+      if (!r.staffView) return r;
+      staff = true;
+      return api('GET', '/api/v1/itt/packages').then(function (lib) {
+        var cards = previewCards(lib.versions || []);
+        r.assignments = (r.assignments || []).concat(cards);
+        r.counts.todo += cards.length;
+        return r;
+      }, function () { return r; });
+    }).then(function (r) {
+      show('itt-home');
       assignments = r.assignments || [];
       $('itt-count-todo').textContent = r.counts.todo;
       $('itt-count-progress').textContent = r.counts.inProgress;
@@ -179,7 +209,10 @@
   });
   $('itt-list').addEventListener('click', function (ev) {
     var b = ev.target.closest('[data-open]');
-    if (b) open(b.getAttribute('data-open'), true);
+    if (!b) return;
+    var id = b.getAttribute('data-open');
+    if (id.indexOf(PREVIEW) === 0) openPreview(id.slice(PREVIEW.length), true);
+    else open(id, true);
   });
 
   // ── One assignment ──────────────────────────────────────────────────
@@ -190,9 +223,39 @@
     withdrawn: ['This assignment has been withdrawn', 'Your teacher has taken this work back. Your other assignments are in your list.']
   };
 
+  // Staff only: a package version in the same player, marked in the page.
+  // The server refuses the package to anyone who is not staff.
+  function openPreview(versionId, push) {
+    if (push) history.pushState({ preview: versionId }, '', PAGE + '?preview=' + encodeURIComponent(versionId));
+    if (player) player.destroy();
+    previewing = versionId;
+    show('itt-player');
+    var inner = null;
+    player = ITTPlayer.mount($('itt-player'), {
+      load: function () {
+        return api('GET', '/api/v1/itt/packages?id=' + encodeURIComponent(versionId)).then(function (r) {
+          var pkg = r.version.content;
+          if ($('itt-staff-unlock').checked) {
+            pkg = JSON.parse(JSON.stringify(pkg));
+            pkg.sections.forEach(function (s) { delete s.requires; });
+          }
+          inner = ITTPlayer.previewBackend(pkg);
+          return inner.load();
+        }, function (e) {
+          if (e.code === 'signed_out') throw e;
+          throw problem(e.code, 'Student View is for teachers and admins, and only shows approved quizzes.', { title: 'This preview could not be opened', final: true });
+        });
+      },
+      answer: function (questionId, response, attempt) { return inner.answer(questionId, response, attempt); }
+    }, { preview: true, onExit: function () { history.pushState({}, '', PAGE); route(); }, exitLabel: 'All quizzes' });
+  }
+
+  $('itt-staff-unlock').addEventListener('change', function () { if (previewing) openPreview(previewing, false); });
+
   function open(id, push) {
     if (push) history.pushState({ a: id }, '', PAGE + '?a=' + encodeURIComponent(id));
     if (player) player.destroy();
+    previewing = null;
     show('itt-player');
     player = ITTPlayer.mount($('itt-player'), {
       load: function () {
@@ -209,8 +272,9 @@
   }
 
   function route() {
-    var id = new URLSearchParams(location.search).get('a');
+    var params = new URLSearchParams(location.search), id = params.get('a'), preview = params.get('preview');
     if (id) { open(id, false); return; }
+    if (preview) { openPreview(preview, false); return; }
     if (player) { player.destroy(); player = null; }
     loadList();
   }

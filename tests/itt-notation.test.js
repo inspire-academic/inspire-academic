@@ -163,6 +163,7 @@ test('the teacher preview and the student player typeset with the same code', ()
   }
   // One player, mounted by both pages; one renderer, used for every field.
   assert.match(read('assets/js/itt-teacher.js'), /ITTPlayer\.mount\(\$\('tt-player'\), previewBackend\(pkg\), \{ preview: true \}\)/);
+  assert.match(read('assets/js/itt-teacher.js'), /var previewBackend = ITTPlayer\.previewBackend;/);
   assert.match(read('assets/js/itt-student.js'), /ITTPlayer\.mount\(/);
   const player = read('assets/js/itt-player.js');
   for (const field of ['q.stem', 'last.feedback', 'last.reveal.teachingNote', 'last.reveal.workedSolution', 's.description', 'pkg.package.description']) {
