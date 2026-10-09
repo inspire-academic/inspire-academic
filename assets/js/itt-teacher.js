@@ -139,17 +139,22 @@
           '</strong> could not be read as JSON: ' + esc(e.message) + '.' + esc(hint) + '</p><p class="itt-small">Ask ChatGPT to return the package again as one valid JSON object and nothing else.</p></div>';
         return;
       }
-      var local = P.validate(pkg, { bytes: file.size });
-      if (!local.valid) { renderRejected(local, file.name); return; }
-      out.innerHTML = '<p class="itt-loading" role="status"><span class="spinner"></span> Importing…</p>';
-      api('POST', '/api/v1/itt/packages', { action: 'import', package: pkg }).then(function (r) {
-        out.innerHTML = '<div class="itt-panel tt-accepted"><p><strong>' + esc(file.name) + '</strong> ' +
-          (r.duplicate ? 'is already in the library (version ' + r.version.version_number + '). Nothing new was stored.'
-            : 'passed every check and is saved as ' + (r.previousVersions ? '<strong>version ' + r.version.version_number + '</strong> of an existing package.' : 'a draft.')) + '</p></div>';
-        openVersion(r.version.id, r.version.status === 'draft' ? 'summary' : 'assign');
-      }, function (e) {
-        if (e.report) renderRejected(e.report, file.name);
-        else out.innerHTML = '<div class="itt-panel tt-rejected" role="alert"><p>' + esc(e.message) + '</p></div>';
+      // The typesetter is fetched first so every formula is test-typeset
+      // here too; without it (offline, blocked) the server still checks.
+      var ready = window.IAMaths ? window.IAMaths.ready(4000) : Promise.resolve();
+      ready.then(function () {
+        var local = P.validate(pkg, { bytes: file.size, katex: window.katex });
+        if (!local.valid) { renderRejected(local, file.name); return; }
+        out.innerHTML = '<p class="itt-loading" role="status"><span class="spinner"></span> Importing…</p>';
+        api('POST', '/api/v1/itt/packages', { action: 'import', package: pkg }).then(function (r) {
+          out.innerHTML = '<div class="itt-panel tt-accepted"><p><strong>' + esc(file.name) + '</strong> ' +
+            (r.duplicate ? 'is already in the library (version ' + r.version.version_number + '). Nothing new was stored.'
+              : 'passed every check and is saved as ' + (r.previousVersions ? '<strong>version ' + r.version.version_number + '</strong> of an existing package.' : 'a draft.')) + '</p></div>';
+          openVersion(r.version.id, r.version.status === 'draft' ? 'summary' : 'assign');
+        }, function (e) {
+          if (e.report) renderRejected(e.report, file.name);
+          else out.innerHTML = '<div class="itt-panel tt-rejected" role="alert"><p>' + esc(e.message) + '</p></div>';
+        });
       });
     };
     reader.readAsText(file);
@@ -221,10 +226,12 @@
   // that would not display is found before a student meets it.
   function mathsProblems(pkg) {
     var bad = [];
+    bad.formulas = 0;
     (function walk(v, path) {
       if (typeof v === 'string') {
         (P.splitMaths(v) || []).forEach(function (part) {
           if (!part.maths) return;
+          bad.formulas++;
           try { window.katex.renderToString(part.text, { throwOnError: true }); }
           catch (e) { bad.push({ path: path, tex: part.text.trim().slice(0, 60) }); }
         });
@@ -236,6 +243,8 @@
 
   function viewSummary(el) {
     var v = current, s = v.summary, warnings = (v.validation && v.validation.warnings) || [];
+    var isNotation = function (w) { return /^(plain_|maths_wide|dollar_maths|maths_in_plain_field)/.test(w.code); };
+    var notation = warnings.filter(isNotation), notes = warnings.filter(function (w) { return !isNotation(w); });
     var stats = [['Sections', s.sectionCount], ['Questions', s.questionCount], ['Marks', s.totalMarks], ['Mastery-check questions', s.masteryQuestionCount],
       ['Estimated time', s.estimatedMinutes ? s.estimatedMinutes + ' min' : 'not given']];
     var actions = '';
@@ -255,9 +264,14 @@
       '<div class="itt-desc itt-text">' + R.html(s.description) + '</div>' +
       '<dl class="tt-stats">' + stats.map(function (x) { return '<div><dt>' + x[0] + '</dt><dd>' + esc(x[1]) + '</dd></div>'; }).join('') + '</dl>' +
       '<div id="tt-maths"></div>' +
-      (warnings.length ? '<details class="tt-older"><summary>' + plural(warnings.length, 'note') + ' from the check (not blocking)</summary>' + problemsHtml(warnings, 'tt-warnings') + '</details>' : '') +
+      (notation.length ? '<div class="itt-panel tt-notation"><h3 class="itt-h2">Scientific notation to check</h3>' +
+        '<p>Some formulae, charges or units look as if they were typed as plain text. They will be shown exactly as typed, without raised or lowered characters. ' +
+        'This does not block the import, but it is worth correcting in the file before students see it.</p>' +
+        '<div class="itt-actions"><button type="button" class="itt-btn" id="tt-copy-notation">Copy these notes for ChatGPT</button></div>' +
+        '<details class="tt-older" open><summary>' + plural(notation.length, 'note') + '</summary>' + problemsHtml(notation, 'tt-warnings') + '</details></div>' : '') +
+      (notes.length ? '<details class="tt-older"><summary>' + plural(notes.length, 'other note') + ' from the check (not blocking)</summary>' + problemsHtml(notes, 'tt-warnings') + '</details>' : '') +
       actions +
-      '<h3 class="itt-h3">Learning objectives</h3><ol class="tt-objectives">' + s.objectives.map(function (o) { return '<li>' + esc(o.text) + '</li>'; }).join('') + '</ol>' +
+      '<h3 class="itt-h3">Learning objectives</h3><ol class="tt-objectives">' + s.objectives.map(function (o) { return '<li>' + R.inline(o.text) + '</li>'; }).join('') + '</ol>' +
       '<h3 class="itt-h3">Sections, in order</h3><div class="tt-table-wrap"><table class="tt-table"><thead><tr><th scope="col">#</th><th scope="col">Section</th><th scope="col">Type</th><th scope="col">Questions</th><th scope="col">Marks</th><th scope="col">Retries</th><th scope="col">Opens after</th></tr></thead><tbody>' +
       s.sections.map(function (x, i) {
         return '<tr><td>' + (i + 1) + '</td><th scope="row">' + esc(x.title) + '</th><td>' + esc(ITTPlayer.TYPE_LABELS[x.type] || x.type) + '</td><td>' + x.questions + '</td><td>' + x.marks + '</td><td>' + x.retries + '</td><td>' +
@@ -265,6 +279,11 @@
       }).join('') + '</tbody></table></div>' +
       '<div class="itt-actions"><button type="button" class="itt-btn" id="tt-download">Download package (.json)</button></div>';
     R.typeset(el);
+
+    if ($('tt-copy-notation')) $('tt-copy-notation').addEventListener('click', function () {
+      copy('The ITT package "' + v.title + '" was imported, but its scientific notation needs correcting. Write every formula, ion, power and equation as LaTeX between \\( and \\) (doubling each backslash in JSON), change nothing else, and return the complete corrected JSON file.\n\n' +
+        notation.map(function (p, i) { return (i + 1) + '. ' + p.where + ' [' + p.path + ']: ' + p.message; }).join('\n'), 'Notes copied');
+    });
 
     $('tt-download').addEventListener('click', function () {
       var url = URL.createObjectURL(new Blob([JSON.stringify(v.content, null, 2) + '\n'], { type: 'application/json' }));
@@ -306,7 +325,8 @@
       $('tt-maths').innerHTML = bad.length
         ? '<div class="itt-panel tt-rejected"><p><strong>' + plural(bad.length, 'formula') + ' will not typeset</strong> and would be shown as plain text. Fix the LaTeX and import the file again.</p><ul class="tt-problems tt-warnings">' +
           bad.slice(0, 30).map(function (b) { return '<li><span class="tt-msg">' + esc(b.tex) + '</span><code class="tt-path">' + esc(b.path) + '</code></li>'; }).join('') + '</ul></div>'
-        : '<p class="tt-valid">✓ Every formula typesets correctly.</p>';
+        : (bad.formulas ? '<p class="tt-valid">✓ ' + (bad.formulas === 1 ? 'The one formula in this package typesets' : 'All ' + bad.formulas + ' formulae in this package typeset') + ' correctly.</p>'
+          : '<p class="itt-small">This package has no LaTeX formulae: all of its text is shown exactly as typed.</p>');
     }, function () {});
   }
 

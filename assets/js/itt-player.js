@@ -27,7 +27,6 @@
     misconceptions: 'Misconceptions and reasoning', review: 'Review', mastery: 'Independent mastery check'
   };
   var ICON_OK = '<svg class="itt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
-  var ICON_NO = '<svg class="itt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>';
   var ICON_IDEA = '<svg class="itt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>';
   var ICON_LOCK = '<svg class="itt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
 
@@ -89,7 +88,7 @@
       if (p.mastery && p.mastery.answered) rows += '<div class="itt-stat itt-stat-mastery"><dt>Independent mastery check</dt><dd>' + p.mastery.correct + ' of ' + p.mastery.answered + ' correct</dd></div>';
       var objectives = p.objectives.filter(function (o) { return o.attempted || o.masteryAttempted; }).map(function (o) {
         var attempted = o.attempted + o.masteryAttempted, correct = o.firstCorrect + o.masteryCorrect;
-        return '<li class="itt-objective' + (correct < attempted ? ' itt-objective-review' : '') + '"><span class="itt-objective-text">' + esc(o.text) + '</span>' +
+        return '<li class="itt-objective' + (correct < attempted ? ' itt-objective-review' : '') + '"><span class="itt-objective-text">' + R.inline(o.text) + '</span>' +
           '<span class="itt-objective-score">' + correct + ' of ' + attempted + ' correct first time' + (correct < attempted ? ' · worth another look' : '') + '</span></li>';
       }).join('');
       return '<section class="itt-panel itt-summary" aria-labelledby="itt-summary-h"><h2 class="itt-h2" id="itt-summary-h">' +
@@ -192,13 +191,19 @@
 
     function feedbackHtml(q, attempts, nav) {
       var last = attempts[attempts.length - 1];
-      var verdict = last.correct ? ['itt-ok', ICON_OK, 'Correct'] : last.unsure ? ['itt-idea', ICON_IDEA, 'Here is the idea'] : ['itt-no', ICON_NO, 'Not quite'];
+      // The heading sets the tone; the teaching is the author's own words,
+      // shown in full and never replaced or shortened. A response that was
+      // not correct is said so once, quietly, so nobody is left unsure.
+      var verdict = last.correct ? ['itt-ok', ICON_OK, 'Correct', '']
+        : last.unsure ? ['itt-idea', ICON_IDEA, 'Understanding the concept', '']
+          : ['itt-no', ICON_IDEA, 'Let’s examine the reasoning', last.canRetry ? 'Not yet correct' : 'Not the correct answer'];
       var earlier = attempts.slice(0, -1).map(function (a) {
-        return '<li>Attempt ' + a.attempt + ': ' + esc(answerLabel(q, a.response)) + ' (' + (a.correct ? 'correct' : a.unsure ? 'not sure' : 'not quite') + ')</li>';
+        return '<li>Attempt ' + a.attempt + ': ' + esc(answerLabel(q, a.response)) + ' (' + (a.correct ? 'correct' : a.unsure ? 'not sure' : 'not correct') + ')</li>';
       }).join('');
       var out = '<section class="itt-feedback ' + verdict[0] + '" id="itt-feedback" aria-labelledby="itt-verdict">' +
-        '<h2 class="itt-verdict" id="itt-verdict">' + verdict[1] + ' ' + verdict[2] +
-        (last.attemptsAllowed > 1 ? ' <span class="itt-attempt">attempt ' + last.attempt + ' of ' + last.attemptsAllowed + '</span>' : '') + '</h2>' +
+        '<h2 class="itt-verdict" id="itt-verdict">' + verdict[1] + ' ' + verdict[2] + '</h2>' +
+        (verdict[3] || last.attemptsAllowed > 1 ? '<p class="itt-status">' + (verdict[3] ? '<span class="itt-status-result">' + verdict[3] + '</span>' : '') +
+          (last.attemptsAllowed > 1 ? '<span class="itt-attempt">Attempt ' + last.attempt + ' of ' + last.attemptsAllowed + '</span>' : '') + '</p>' : '') +
         '<div class="itt-feedback-text itt-text">' + R.html(last.feedback) + '</div>';
       if (last.reveal && !last.correct) out += '<p class="itt-correct-answer"><span class="itt-correct-label">Correct answer</span> <span>' + revealedAnswer(q, last.reveal) + '</span></p>';
       if (earlier) out += '<ul class="itt-earlier">' + earlier + '</ul>';
@@ -210,7 +215,7 @@
         out += '<details class="itt-learn itt-worked"' + (last.correct ? '' : ' open') + '><summary>Worked solution</summary><div class="itt-text">' + R.html(last.reveal.workedSolution) + '</div></details>';
       }
       out += '<div class="itt-actions">';
-      if (last.canRetry) out += '<button type="button" class="itt-btn itt-btn-primary" data-act="retry">Try again</button>';
+      if (last.canRetry) out += '<button type="button" class="itt-btn itt-btn-primary" data-act="retry">Answer again</button>';
       out += nav + '</div>';
       return out;
     }
@@ -230,6 +235,8 @@
         '<div class="itt-bar" role="progressbar" aria-valuemin="1" aria-valuemax="' + s.questions.length + '" aria-valuenow="' + (i + 1) + '" aria-label="Question ' + (i + 1) + ' of ' + s.questions.length + '"><span></span></div>' +
         '<p class="itt-qcount" id="itt-qcount">Question ' + (i + 1) + ' of ' + s.questions.length + ' · ' + plural(q.marks, 'mark') + '</p>' +
         (s.mastery ? '<p class="itt-mastery-flag">Mastery check. One attempt, on your own: no notes, no help.</p>' : '') +
+        // The author's introduction to the section, before its first question.
+        (i === 0 && s.description ? '<details class="itt-learn itt-intro"' + (attempts.length ? '' : ' open') + '><summary>About this section</summary><div class="itt-text">' + R.html(s.description) + '</div></details>' : '') +
         '<div class="itt-stem itt-text" id="itt-stem" role="heading" aria-level="1">' + R.html(q.stem) + '</div>' +
         '<div id="itt-figures"></div>' +
         '<form class="itt-answer" id="itt-form" novalidate>' + answerHtml(q, answering && view.retrying ? null : last, !answering);
