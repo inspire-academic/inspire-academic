@@ -773,6 +773,14 @@ function = "create-teacher"
   status = 200
   force = true
 
+# A parent's view of their own child's Test & Teach homework: progress only,
+# never the questions or answers (see itt-parent.js).
+[[redirects]]
+  from = "/api/v1/itt/parent/assignments"
+  to = "/.netlify/functions/itt-parent"
+  status = 200
+  force = true
+
 # The short link teachers send on WhatsApp: inspireacademic.org/itt?a=<id>.
 # The id names an assignment and nothing else; the page asks the student to
 # sign in and the server only ever shows an assignment to its own student.

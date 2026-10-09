@@ -31,7 +31,9 @@ const PEOPLE = {
   ama: { id: uuid(11), role: 'student', full_name: 'Ama Boateng', first_name: 'Ama', year_group: '10' },
   kofi: { id: uuid(12), role: 'student', full_name: 'Kofi Addo', first_name: 'Kofi', year_group: '10' },
   esi: { id: uuid(13), role: 'student', full_name: 'Esi Darko', first_name: 'Esi', year_group: '10' },
-  yaw: { id: uuid(14), role: 'student', full_name: 'Yaw Sarpong', first_name: 'Yaw', year_group: '10' }
+  yaw: { id: uuid(14), role: 'student', full_name: 'Yaw Sarpong', first_name: 'Yaw', year_group: '10' },
+  // Ama's mother, for the parent report (/parent/parent-child-details.html).
+  parent: { id: uuid(31), role: 'parent', full_name: 'Abena Boateng', first_name: 'Abena' }
 };
 const COHORT = uuid(21);
 
@@ -42,7 +44,9 @@ const fake = fakeSupabase({
   cohorts: [{ id: COHORT, teacher_id: PEOPLE.teacher.id, name: 'Year 10 Thursday' }],
   cohort_members: [{ cohort_id: COHORT, student_id: PEOPLE.kofi.id }, { cohort_id: COHORT, student_id: PEOPLE.esi.id }],
   subjects: [{ id: 1, name: 'Physics' }, { id: 2, name: 'Chemistry' }, { id: 3, name: 'Biology' }, { id: 4, name: 'Mathematics' }],
-  ism_lessons: [], quiz_attempts: [], topic_progress: [], streaks: [], topics: [],
+  ism_lessons: [], quiz_attempts: [], topic_progress: [], streaks: [], topics: [], srs_stats: [], srs_cards: [],
+  parent_profiles: [{ id: uuid(41), user_id: uuid(31), first_name: 'Abena', last_name: 'Boateng' }],
+  student_parent_links: [{ parent_id: uuid(41), student_id: uuid(11) }],
   itt_package_versions: [], itt_assignments: [], itt_responses: []
 });
 for (const [key, p] of Object.entries(PEOPLE)) fake.users[`dev-${key}`] = { id: p.id, email: `${key}@example.test` };
@@ -53,7 +57,8 @@ const FUNCTIONS = {
   '/api/v1/itt/packages': require('../netlify/functions/itt-packages.js').handler,
   '/api/v1/itt/assignments': require('../netlify/functions/itt-assignments.js').handler,
   '/api/v1/itt/student/assignments': require('../netlify/functions/itt-student.js').handler,
-  '/api/v1/itt/student/answer': require('../netlify/functions/itt-student.js').handler
+  '/api/v1/itt/student/answer': require('../netlify/functions/itt-student.js').handler,
+  '/api/v1/itt/parent/assignments': require('../netlify/functions/itt-parent.js').handler
 };
 const REWRITES = { '/': '/__dev/index', '/itt': '/student/test-and-teach.html' };
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json',
