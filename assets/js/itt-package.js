@@ -57,6 +57,8 @@
   var VERDICT_RE = /^\s*(that('?s| is)\s+)?(correct|incorrect|right|wrong|yes|no|true|false|well done|good job|great|not quite|try again|exactly|nice work)\b[\s.!,:;–-]*/i;
   var NOT_SURE_TEXT_RE = /^\s*(i('|’)?m|i am)?\s*(not sure|unsure|don('|’)?t know|do not know)\b/i;
   var MIN_FEEDBACK_CHARS = 30;
+  // The fields whose LaTeX is typeset. Every other text field is a label.
+  var RICH_FIELDS = ['description', 'stem', 'text', 'feedback', 'teaching_note', 'worked_solution'];
 
   function isObject(v) { return v !== null && typeof v === 'object' && !Array.isArray(v); }
   function isText(v) { return typeof v === 'string' && v.trim().length > 0; }
@@ -136,10 +138,123 @@
     return out;
   }
 
+  // ── Notation that was probably meant to be typeset ──────────────────
+  // The platform typesets only what is written as LaTeX; it never guesses
+  // that a digit in a sentence is a subscript. So "Mg2+" or "Al2O3" typed as
+  // plain text is shown exactly like that. These checks spot the common
+  // cases and say so at import. They are notes, never errors: "KS3" and
+  // "blood group O+" are not chemistry.
+  var ELEMENTS = ('He Li Be Ne Na Mg Al Si Cl Ar Ca Sc Ti Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Zr Ag Cd Sn Sb Te Xe Cs Ba Pt Au Hg Pb Bi ' +
+    'H B C N O F P S K V Y I W U').split(' ');
+  var EL = '(?:' + ELEMENTS.join('|') + ')';
+  var UNIT = EL + '\\d{0,2}';
+  var FORMULA_SRC = '((?:' + UNIT + '|\\((?:' + UNIT + ')+\\)\\d{1,2})+)';
+  // A formula, then perhaps a charge: "Al2O3", "Ca(OH)2", "Mg2+", "Cl-".
+  var NOTATION_RE = new RegExp('(^|[^A-Za-z0-9])' + FORMULA_SRC + '([+\\u2212-])?(?![A-Za-z0-9])', 'g');
+  var EL_RE = new RegExp(EL, 'g');
+  var ELEMENTAL = ['H2', 'N2', 'O2', 'F2', 'Cl2', 'Br2', 'I2', 'O3', 'S8', 'P4', 'C60'];
+  var NOT_CHEMISTRY_RE = /^(KS[1-5]|Y\d+|H1N1|PS\d)$/;
+
+  // "Mg2+" -> "\mathrm{Mg^{2+}}", "Al2O3" -> "\mathrm{Al_2O_3}". A guide for
+  // the author, shown in the note; the package itself is never changed.
+  function suggestTex(formula, sign) {
+    var body = formula, charge = '';
+    if (sign) {
+      var s = sign === '+' ? '+' : '-';
+      var count = (body.match(EL_RE) || []).length, tail = /(\d+)$/.exec(body);
+      // One element, or two trailing digits: the last digit is the size of
+      // the charge (Mg2+, SO42-). Otherwise it is a subscript (NH4+).
+      if (tail && (count === 1 && body.indexOf('(') === -1 || tail[1].length === 2)) {
+        charge = tail[1].slice(-1) + s;
+        body = body.slice(0, -1);
+      } else charge = s;
+    }
+    var tex = body.replace(/(\d+)/g, function (d) { return d.length > 1 ? '_{' + d + '}' : '_' + d; });
+    if (charge) tex += charge.length > 1 ? '^{' + charge + '}' : '^' + charge;
+    return '\\(\\mathrm{' + tex + '}\\)';
+  }
+
+  // Every piece of plain-text chemical notation in text that is outside maths.
+  function plainNotation(plain) {
+    var found = [], seen = {}, m;
+    NOTATION_RE.lastIndex = 0;
+    while ((m = NOTATION_RE.exec(plain))) {
+      var formula = m[2], sign = m[3] || '', written = formula + sign;
+      var count = (formula.match(EL_RE) || []).length, digits = /\d/.test(formula);
+      if (NOT_CHEMISTRY_RE.test(formula)) continue;
+      var isIon = false;
+      if (sign === '+' || sign === '−') isIon = true;
+      // A plain hyphen is usually just a hyphen: only "Cl-", "OH-", "O2-".
+      else if (sign === '-') isIon = digits || formula.length > 1;
+      var isFormula = digits && (count > 1 || formula.indexOf('(') !== -1 || ELEMENTAL.indexOf(formula) !== -1);
+      if (!isIon && !isFormula) continue;
+      if (!isIon) { written = formula; sign = ''; }
+      if (!seen[written]) { seen[written] = true; found.push({ written: written, tex: suggestTex(formula, sign) }); }
+    }
+    return found;
+  }
+
+  // Roughly how many characters wide a piece of LaTeX is once typeset.
+  function texWidth(tex) {
+    return tex.replace(/\\(text|mathrm|mathbf|mathit|operatorname)\b/g, '').replace(/\\[A-Za-z]+/g, 'x').replace(/[{}^_\s\\]/g, '').length;
+  }
+
   function textWarnings(value) {
+    var out = [];
     var parts = splitMaths(String(value)) || [];
     var plain = parts.filter(function (p) { return !p.maths; }).map(function (p) { return p.text; }).join(' ');
-    return /\$[^$\n]{1,80}\$/.test(plain) ? [['dollar_maths', 'looks like maths written between $ signs, which is shown as plain text. Use \\( … \\).']] : [];
+    if (/\$[^$\n]{1,80}\$/.test(plain)) out.push(['dollar_maths', 'looks like maths written between $ signs, which is shown as plain text. Use \\( … \\).']);
+
+    var notation = plainNotation(plain);
+    if (notation.length) {
+      var shown = notation.slice(0, 3);
+      out.push(['plain_notation', 'has chemical notation typed as plain text (' + shown.map(function (n) { return '"' + n.written + '"'; }).join(', ') +
+        (notation.length > 3 ? ' and ' + (notation.length - 3) + ' more' : '') + '), so its numbers and charges are shown on the line, not raised or lowered. Write it as LaTeX: ' +
+        shown.map(function (n) { return n.tex; }).join(', ') + '. Ignore this note if it is not a formula.']);
+    }
+    var script = /[A-Za-z0-9)\]]\^\{?[-+]?[0-9A-Za-z]|[A-Za-z]_\{?[0-9]/.exec(plain);
+    if (script) out.push(['plain_scripts', 'uses ^ or _ outside maths ("' + plain.slice(Math.max(0, script.index - 6), script.index + 8).trim() + '"), which is shown as typed. Put the expression between \\( and \\), e.g. \\(10^{3}\\), \\(\\mathrm{H_2O}\\).']);
+    var unit = /(^|[^A-Za-z])((?:mm|cm|dm|km|m)[23])(?![A-Za-z0-9])/.exec(plain);
+    if (unit) out.push(['plain_unit_power', 'has the unit "' + unit[2] + '" typed as plain text, so the power is not raised. Write \\(\\mathrm{' + unit[2].slice(0, -1) + '^' + unit[2].slice(-1) + '}\\).']);
+    if (/[A-Za-z0-9)]\s?(-{1,2}>|=>)\s?[A-Za-z0-9(]/.test(plain)) out.push(['plain_arrow', 'has an arrow typed as "->". For a reaction arrow write the equation as maths with \\rightarrow, e.g. \\[2\\mathrm{Mg}+\\mathrm{O_2}\\rightarrow2\\mathrm{MgO}\\].']);
+
+    parts.forEach(function (p) {
+      if (p.maths === 'inline' && texWidth(p.text) > 28 && !out.some(function (w) { return w[0] === 'maths_wide'; })) {
+        out.push(['maths_wide', 'has a long formula inside a sentence ("' + p.text.trim().slice(0, 40) + '…"). On a phone it will not fit on one line and has to be scrolled sideways. Put it on its own line with \\[ … \\].']);
+      }
+    });
+    return out;
+  }
+
+  // Asks the real typesetter (KaTeX, when the caller has it) whether each
+  // maths span can be displayed. Returns the first failure's message, or ''.
+  var texChecked = {};
+  function texProblem(engine, tex) {
+    if (!engine || !engine.renderToString) return '';
+    if (has(texChecked, tex)) return texChecked[tex];
+    var problem = '';
+    try { engine.renderToString(tex, { throwOnError: true, strict: 'ignore' }); }
+    catch (e) { problem = String(e && e.message || e).replace(/^KaTeX parse error:\s*/, '').slice(0, 160); }
+    texChecked[tex] = problem;
+    return problem;
+  }
+
+  // The same kind of note can repeat hundreds of times in one file. Keep the
+  // first few of each and say how many more there are.
+  var CAPPED = { plain_notation: 25, plain_scripts: 10, plain_unit_power: 10, plain_arrow: 10, maths_wide: 15 };
+  function capWarnings(warnings) {
+    var counts = {}, out = [];
+    warnings.forEach(function (w) {
+      var cap = CAPPED[w.code];
+      counts[w.code] = (counts[w.code] || 0) + 1;
+      if (!cap || counts[w.code] <= cap) out.push(w);
+    });
+    Object.keys(CAPPED).forEach(function (code) {
+      if (counts[code] > CAPPED[code]) {
+        out.push({ code: code, path: '$', where: 'Whole file', message: 'The same note applies in ' + (counts[code] - CAPPED[code]) + ' more places (' + counts[code] + ' in all). Fix it throughout the file.' });
+      }
+    });
+    return out;
   }
 
   // True when feedback explains something rather than only giving a verdict.
@@ -168,6 +283,9 @@
   // Question 3 (s2-q03) › option B").
   function validate(pkg, opts) {
     var errors = [], warnings = [];
+    // opts.katex: the KaTeX library, if the caller has it. With it, every
+    // formula is test-typeset; without it, only its brackets are checked.
+    var engine = (opts && opts.katex) || null;
     function err(code, path, where, message) { errors.push({ code: code, path: path, where: where, message: message }); }
     function warn(code, path, where, message) { warnings.push({ code: code, path: path, where: where, message: message }); }
 
@@ -187,8 +305,26 @@
       if (typeof v !== 'string') { err('wrong_type', p, where, label + ' must be text.'); return false; }
       if (!v.trim()) { if (o.required) err('missing_field', p, where, label + ' is empty.'); return false; }
       if (v.length > (o.max || LIMITS.text)) err('too_long', p, where, label + ' is longer than ' + (o.max || LIMITS.text) + ' characters.');
-      textProblems(v).forEach(function (pr) { err(pr[0], p, where, label + ' ' + pr[1]); });
-      textWarnings(v).forEach(function (pr) { warn(pr[0], p, where, label + ' ' + pr[1]); });
+      var problems = textProblems(v);
+      problems.forEach(function (pr) { err(pr[0], p, where, label + ' ' + pr[1]); });
+      // Notation notes only make sense where LaTeX is typeset. Labels such as
+      // a title, an image's alt text or a unit are always plain text.
+      var rich = !!o.rich || RICH_FIELDS.indexOf(key) !== -1;
+      textWarnings(v).forEach(function (pr) {
+        if (rich || !/^(plain_|maths_wide)/.test(pr[0])) warn(pr[0], p, where, label + ' ' + pr[1]);
+      });
+      // Only when the brackets and braces are sound is it worth asking the
+      // typesetter; otherwise the problems above already say what is wrong.
+      if (engine && !problems.some(function (pr) { return /^maths_|lost_backslash/.test(pr[0]); })) {
+        (splitMaths(v) || []).some(function (part) {
+          if (!part.maths) return false;
+          var tex = part.maths === 'block' ? '\\displaystyle ' + part.text.trim() : part.text.trim();
+          var problem = texProblem(engine, tex);
+          if (problem) err('maths_invalid', p, where, label + ' has maths that cannot be typeset: "' + part.text.trim().slice(0, 60) + '" (' + problem + '). A student would see it as plain text.');
+          return !!problem;
+        });
+      }
+      if (!rich && /\\\(|\\\[/.test(v)) warn('maths_in_plain_field', p, where, label + ' contains LaTeX, but this field is always shown as plain text (titles, labels and image descriptions also appear in lists, links and screen readers). Write it in words or with ordinary characters.');
       return true;
     }
 
@@ -199,7 +335,7 @@
         err('missing_feedback', p, where, 'Teaching feedback is missing for ' + what + '. Every possible response needs its own explanation.');
         return;
       }
-      if (!text(obj, key, path, where, { required: true })) return;
+      if (!text(obj, key, path, where, { required: true, rich: true })) return;
       if (!isInstructional(obj[key])) {
         err('feedback_not_instructional', p, where, 'The feedback for ' + what + ' does not teach anything yet ("' + obj[key].trim().slice(0, 50) + '"). Explain the reasoning in at least a sentence.');
       }
@@ -222,7 +358,7 @@
     }
 
     function finish() {
-      return { valid: errors.length === 0, errors: errors, warnings: warnings, summary: errors.length ? null : summarise(pkg) };
+      return { valid: errors.length === 0, errors: errors, warnings: capWarnings(warnings), summary: errors.length ? null : summarise(pkg) };
     }
 
     if (!isObject(pkg)) {
@@ -862,7 +998,7 @@
     sectionSelectionProblems: sectionSelectionProblems, publicPackage: publicPackage, publicQuestion: publicQuestion,
     attemptsAllowed: attemptsAllowed, isMastery: isMastery, mark: mark, feedbackFor: feedbackFor, reveal: reveal,
     evidenceClass: evidenceClass, results: results, progress: progress,
-    splitMaths: splitMaths, isInstructional: isInstructional, normaliseText: normaliseText, numberMatches: numberMatches
+    splitMaths: splitMaths, plainNotation: plainNotation, isInstructional: isInstructional, normaliseText: normaliseText, numberMatches: numberMatches
   };
   root.ITTPackage = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

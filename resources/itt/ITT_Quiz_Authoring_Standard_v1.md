@@ -354,6 +354,21 @@ Write formulae, charges and equations with `\mathrm` inside maths:
 | SO₄²⁻ | `"\\(\\mathrm{SO_4^{2-}}\\)"` |
 | 2Na + Cl₂ → 2NaCl | `"\\(\\mathrm{2Na + Cl_2 \\rightarrow 2NaCl}\\)"` |
 | State symbols | `"\\(\\mathrm{NaCl(aq)}\\)"` |
+| Al₂O₃ | `"\\(\\mathrm{Al_2O_3}\\)"` |
+| Mg²⁺, O²⁻, Cl⁻ | `"\\(\\mathrm{Mg^{2+}}\\)"`, `"\\(\\mathrm{O^{2-}}\\)"`, `"\\(\\mathrm{Cl^-}\\)"` |
+| An equation on its own line | `"\\[2\\mathrm{Mg}+\\mathrm{O_2}\\rightarrow2\\mathrm{MgO}\\]"` |
+| Units with powers | `"\\(25\\,\\mathrm{cm^3}\\)"`, `"\\(\\mathrm{mol/dm^3}\\)"` |
+
+### Notation is never guessed
+
+The platform typesets **only** what is written as LaTeX. It never decides that a digit in a sentence is a subscript, so text typed as `Mg2+`, `Al2O3`, `H2SO4`, `cm3` or `10^3` is shown exactly like that, on the line, in every question, choice and explanation.
+
+- **Every** formula, ion, charge, power and equation must be LaTeX, everywhere it appears: stems, option text, every feedback field, `not_sure.feedback`, `teaching_note`, `worked_solution`, descriptions and objective text. A formula with no small numbers, such as NaCl or MgO, may be plain text.
+- The importer reports suspected plain-text notation as a note and gives the LaTeX to write. A file with these notes still imports, but it should be corrected first.
+- Maths that cannot be typeset (a misspelt command, a missing brace) is **refused** at import.
+- Put an equation, or any formula longer than about 25 characters, on its own line with `\[ ... \]`. Long formulae inside a sentence do not fit on a phone.
+- Inside a sentence a fraction written with `\frac` is small. Use `\dfrac` where it needs to be read easily, or put the calculation on its own line.
+- These fields are always plain text and must **not** contain LaTeX: titles, `purpose`, `misconception`, a numeric `unit`, and an image's `alt` and `caption`. For a unit write `cm³` or `mol/dm³` with ordinary characters.
 
 ### Images
 

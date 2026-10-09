@@ -1,0 +1,429 @@
+{
+  "schema": "itt.quiz.v1",
+  "package": {
+    "id": "itt-notation-fixture",
+    "title": "ITT Notation Fixture: formulae, ions, equations and maths",
+    "description": "A technical fixture for checking scientific typesetting. It carries a formula such as \\(\\mathrm{Al_2O_3}\\), ions such as \\(\\mathrm{Mg^{2+}}\\) and \\(\\mathrm{O^{2-}}\\), a balanced equation, a fraction, a square root and standard form through every part of a question.",
+    "subject": "Chemistry",
+    "year_group": "Year 10",
+    "exam_board": "AQA",
+    "tier": "Higher",
+    "author": {
+      "source": "Inspire Academic",
+      "notes": "Written by hand for rendering tests. Import it to see how notation looks before approving real content."
+    },
+    "created": "2026-10-09",
+    "content_version": "1.0.0",
+    "estimated_minutes": 10
+  },
+  "objectives": [
+    {
+      "id": "LO1",
+      "text": "Read and write formulae and ions such as \\(\\mathrm{Al_2O_3}\\) and \\(\\mathrm{Mg^{2+}}\\)."
+    },
+    {
+      "id": "LO2",
+      "text": "Use fractions, roots and standard form, for example \\(6.02\\times10^{23}\\), in calculations."
+    }
+  ],
+  "topics": [
+    {
+      "id": "notation",
+      "title": "Chemical notation",
+      "description": "Formulae, ionic charges and balanced equations."
+    },
+    {
+      "id": "maths",
+      "title": "Mathematical notation",
+      "description": "Fractions, powers, roots, standard form and units."
+    }
+  ],
+  "settings": {
+    "retries": 0
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "title": "Notation in every part of a question",
+      "description": "Each question puts notation somewhere different: the question, the choices, the feedback, the key idea and the worked solution. For example, magnesium burns in oxygen:\n\n\\[2\\mathrm{Mg}+\\mathrm{O_2}\\rightarrow2\\mathrm{MgO}\\]",
+      "type": "practice",
+      "purpose": "Show formulae, ions, equations and calculations in each field the player typesets.",
+      "estimated_minutes": 7,
+      "topic_ids": [
+        "notation",
+        "maths"
+      ],
+      "objective_ids": [
+        "LO1",
+        "LO2"
+      ],
+      "retries": 1,
+      "questions": [
+        {
+          "id": "s1-q01",
+          "type": "mcq",
+          "stem": "What is the formula of aluminium oxide?",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO1"
+          ],
+          "topic_ids": [
+            "notation"
+          ],
+          "options": [
+            {
+              "id": "A",
+              "text": "\\(\\mathrm{AlO}\\)",
+              "feedback": "This would need the charges to be equal and opposite, but an aluminium ion is \\(\\mathrm{Al^{3+}}\\) and an oxide ion is \\(\\mathrm{O^{2-}}\\). One of each leaves an overall charge of 1+, so the formula cannot be \\(\\mathrm{AlO}\\).",
+              "misconception": "Pairs one positive ion with one negative ion whatever their charges"
+            },
+            {
+              "id": "B",
+              "text": "\\(\\mathrm{Al_2O_3}\\)",
+              "feedback": "The formula of aluminium oxide is \\(\\mathrm{Al_2O_3}\\), because two aluminium ions, \\(\\mathrm{Al^{3+}}\\), combine with three oxide ions, \\(\\mathrm{O^{2-}}\\), to give an electrically neutral compound: six positive charges balance six negative charges."
+            },
+            {
+              "id": "C",
+              "text": "\\(\\mathrm{Al_3O_2}\\)",
+              "feedback": "The numbers are the right ones but they are attached to the wrong elements. Three \\(\\mathrm{Al^{3+}}\\) ions carry nine positive charges and two \\(\\mathrm{O^{2-}}\\) ions carry only four negative charges, so \\(\\mathrm{Al_3O_2}\\) would not be neutral.",
+              "misconception": "Swaps the subscripts"
+            },
+            {
+              "id": "D",
+              "text": "\\(\\mathrm{Al_2O}\\)",
+              "feedback": "Two \\(\\mathrm{Al^{3+}}\\) ions carry six positive charges, but a single \\(\\mathrm{O^{2-}}\\) ion carries only two negative charges. Three oxide ions are needed to balance them, giving \\(\\mathrm{Al_2O_3}\\)."
+            }
+          ],
+          "answer": "B",
+          "not_sure": {
+            "feedback": "Start from the ions. Aluminium forms \\(\\mathrm{Al^{3+}}\\) and oxygen forms \\(\\mathrm{O^{2-}}\\). Find the smallest numbers of each that make the total positive charge equal the total negative charge."
+          },
+          "teaching_note": "In an ionic formula the total positive charge equals the total negative charge. The subscripts say how many of each ion are needed: \\(\\mathrm{Al_2O_3}\\) means two \\(\\mathrm{Al^{3+}}\\) for every three \\(\\mathrm{O^{2-}}\\).",
+          "worked_solution": "Charge from two aluminium ions: \\(2\\times(+3)=+6\\).\n\nCharge from three oxide ions: \\(3\\times(-2)=-6\\).\n\n\\[(+6)+(-6)=0\\]\n\nThe compound is neutral, so the formula is \\(\\mathrm{Al_2O_3}\\)."
+        },
+        {
+          "id": "s1-q02",
+          "type": "mcq",
+          "stem": "Which ion does a sodium atom form?",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO1"
+          ],
+          "topic_ids": [
+            "notation"
+          ],
+          "options": [
+            {
+              "id": "A",
+              "text": "\\(\\mathrm{Na^+}\\)",
+              "feedback": "Sodium is in Group 1 and has one electron in its outer shell. It loses that electron, leaving 11 protons and 10 electrons, so the ion is \\(\\mathrm{Na^+}\\)."
+            },
+            {
+              "id": "B",
+              "text": "\\(\\mathrm{Na^-}\\)",
+              "feedback": "A negative ion forms when an atom gains electrons. Sodium is a metal with one outer electron, which it loses rather than gains, so it forms \\(\\mathrm{Na^+}\\), not \\(\\mathrm{Na^-}\\).",
+              "misconception": "Thinks metals gain electrons"
+            },
+            {
+              "id": "C",
+              "text": "\\(\\mathrm{Na^{2+}}\\)",
+              "feedback": "A charge of 2+ would mean two electrons had been lost. Sodium has only one electron in its outer shell, so it loses one and forms \\(\\mathrm{Na^+}\\). Magnesium, in Group 2, is the one that forms \\(\\mathrm{Mg^{2+}}\\).",
+              "misconception": "Confuses Group 1 and Group 2 charges"
+            },
+            {
+              "id": "D",
+              "text": "\\(\\mathrm{Na^{2-}}\\)",
+              "feedback": "Both the size and the sign are wrong here. An ion such as \\(\\mathrm{O^{2-}}\\) forms when a non-metal gains two electrons. Sodium is a metal that loses one electron, forming \\(\\mathrm{Na^+}\\)."
+            }
+          ],
+          "answer": "A",
+          "not_sure": {
+            "feedback": "Use the group number. Sodium is in Group 1, so it has one outer electron. Metals lose their outer electrons, and each electron lost gives one positive charge."
+          }
+        },
+        {
+          "id": "s1-q03",
+          "type": "true_false",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO1"
+          ],
+          "topic_ids": [
+            "notation"
+          ],
+          "stem": "True or false? This equation is balanced.\n\n\\[2\\mathrm{Mg}+\\mathrm{O_2}\\rightarrow2\\mathrm{MgO}\\]",
+          "answer": true,
+          "feedback": {
+            "true": "There are two magnesium atoms on each side, and two oxygen atoms on each side: one \\(\\mathrm{O_2}\\) molecule on the left and two \\(\\mathrm{MgO}\\) on the right. The numbers of each kind of atom match, so the equation is balanced.",
+            "false": "Count each kind of atom. On the left there are \\(2\\) magnesium atoms and one \\(\\mathrm{O_2}\\) molecule, which is two oxygen atoms. On the right, \\(2\\mathrm{MgO}\\) contains two magnesium and two oxygen atoms. Both sides match, so the equation is balanced."
+          },
+          "not_sure": {
+            "feedback": "An equation is balanced when each kind of atom appears the same number of times on both sides. The large number in front, as in \\(2\\mathrm{MgO}\\), multiplies everything in that formula. The small number, as in \\(\\mathrm{O_2}\\), counts only the atom it follows."
+          }
+        },
+        {
+          "id": "s1-q04",
+          "type": "numeric",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO2"
+          ],
+          "topic_ids": [
+            "maths"
+          ],
+          "stem": "Calculate the percentage by mass of magnesium in magnesium oxide, \\(\\mathrm{MgO}\\).\n\nRelative atomic masses: \\(\\mathrm{Mg}=24\\), \\(\\mathrm{O}=16\\).",
+          "answer": {
+            "value": 60,
+            "tolerance": {
+              "type": "absolute",
+              "value": 0.5
+            },
+            "unit": "%"
+          },
+          "feedback": {
+            "correct": "The relative formula mass of \\(\\mathrm{MgO}\\) is \\(24+16=40\\), and magnesium contributes 24 of that, so the percentage is \\(\\frac{24}{40}\\times100=60\\%\\).",
+            "incorrect": "Divide the mass of magnesium in the formula by the relative formula mass of the whole compound, then multiply by 100. The formula mass of \\(\\mathrm{MgO}\\) is \\(24+16=40\\), so the percentage is \\(\\frac{24}{40}\\times100=60\\%\\)."
+          },
+          "wrong_answers": [
+            {
+              "value": 40,
+              "feedback": "40 is the percentage of oxygen, \\(\\frac{16}{40}\\times100\\). The question asks for magnesium, so the top of the fraction must be 24: \\(\\frac{24}{40}\\times100=60\\%\\).",
+              "misconception": "Uses the other element"
+            },
+            {
+              "value": 150,
+              "feedback": "150 comes from \\(\\frac{24}{16}\\times100\\), which compares magnesium with oxygen. Compare magnesium with the whole compound instead: \\(\\frac{24}{24+16}\\times100=60\\%\\).",
+              "misconception": "Divides by the other element, not the formula mass"
+            }
+          ],
+          "not_sure": {
+            "feedback": "Percentage by mass compares one element with the whole compound. Work out the relative formula mass first, \\(24+16\\), then find what fraction of it is magnesium and multiply by 100."
+          },
+          "worked_solution": "Relative formula mass of \\(\\mathrm{MgO}\\):\n\n\\[M_r=24+16=40\\]\n\nPercentage by mass of magnesium:\n\n\\[\\frac{24}{40}\\times100=60\\%\\]"
+        },
+        {
+          "id": "s1-q05",
+          "type": "numeric",
+          "marks": 1,
+          "difficulty": "foundation",
+          "objective_ids": [
+            "LO2"
+          ],
+          "topic_ids": [
+            "maths"
+          ],
+          "stem": "A square piece of filter paper has an area of \\(49\\,\\mathrm{cm^2}\\). What is the length of one side?",
+          "answer": {
+            "value": 7,
+            "unit": "cm"
+          },
+          "feedback": {
+            "correct": "The area of a square is the side length squared, so the side is the square root of the area: \\(\\sqrt{49}=7\\), and \\(7\\,\\mathrm{cm}\\times7\\,\\mathrm{cm}=49\\,\\mathrm{cm^2}\\).",
+            "incorrect": "For a square, \\(\\text{area}=\\text{side}^2\\), so the side is the square root of the area. Here \\(\\sqrt{49}=7\\), because \\(7^2=49\\). The side is \\(7\\,\\mathrm{cm}\\)."
+          },
+          "wrong_answers": [
+            {
+              "value": 24.5,
+              "feedback": "24.5 is \\(49\\div2\\). Halving undoes doubling, but area comes from squaring, and the operation that undoes squaring is the square root: \\(\\sqrt{49}=7\\).",
+              "misconception": "Halves instead of taking the square root"
+            }
+          ],
+          "not_sure": {
+            "feedback": "Think about which number multiplied by itself gives 49. That number is the square root of 49, written \\(\\sqrt{49}\\), and it is the length of each side in centimetres."
+          },
+          "worked_solution": "The side of a square is the square root of its area:\n\n\\[\\text{side}=\\sqrt{49\\,\\mathrm{cm^2}}=7\\,\\mathrm{cm}\\]"
+        },
+        {
+          "id": "s1-q06",
+          "type": "mcq",
+          "stem": "The Avogadro constant is \\(6.02\\times10^{23}\\,\\mathrm{mol^{-1}}\\). How many atoms are there in \\(2\\,\\mathrm{mol}\\) of carbon?",
+          "marks": 1,
+          "difficulty": "challenge",
+          "objective_ids": [
+            "LO2"
+          ],
+          "topic_ids": [
+            "maths"
+          ],
+          "options": [
+            {
+              "id": "A",
+              "text": "\\(1.204\\times10^{24}\\)",
+              "feedback": "Two moles contain twice as many atoms as one mole: \\(2\\times6.02\\times10^{23}=12.04\\times10^{23}\\), which is \\(1.204\\times10^{24}\\) in standard form."
+            },
+            {
+              "id": "B",
+              "text": "\\(3.01\\times10^{23}\\)",
+              "feedback": "This is \\(6.02\\times10^{23}\\div2\\), the number of atoms in half a mole. Two moles contain twice as many atoms as one mole, not half as many: \\(2\\times6.02\\times10^{23}=1.204\\times10^{24}\\).",
+              "misconception": "Divides by the number of moles"
+            },
+            {
+              "id": "C",
+              "text": "\\(6.02\\times10^{46}\\)",
+              "feedback": "The power of ten has been doubled, which would mean multiplying \\(10^{23}\\) by itself. Doubling the amount doubles the number in front instead: \\(2\\times6.02\\times10^{23}=1.204\\times10^{24}\\).",
+              "misconception": "Doubles the index"
+            },
+            {
+              "id": "D",
+              "text": "\\(12.04\\times10^{46}\\)",
+              "feedback": "Both the number and the power have been doubled. Only the number in front is multiplied by 2, giving \\(12.04\\times10^{23}\\), which is written \\(1.204\\times10^{24}\\) in standard form."
+            }
+          ],
+          "answer": "A",
+          "not_sure": {
+            "feedback": "One mole of atoms is \\(6.02\\times10^{23}\\) atoms. Two moles is twice that. Multiply only the number in front by 2, then check that the answer is in standard form."
+          }
+        },
+        {
+          "id": "s1-q07",
+          "type": "short_text",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO1"
+          ],
+          "topic_ids": [
+            "notation"
+          ],
+          "stem": "Name the ion with the formula \\(\\mathrm{SO_4^{2-}}\\).",
+          "answer": {
+            "accepted": [
+              "sulfate",
+              "sulphate",
+              "sulfate ion",
+              "sulphate ion",
+              "a sulfate ion"
+            ]
+          },
+          "feedback": {
+            "correct": "\\(\\mathrm{SO_4^{2-}}\\) is the sulfate ion: one sulfur atom and four oxygen atoms, with an overall charge of 2−. It is the negative ion in sulfuric acid, \\(\\mathrm{H_2SO_4}\\).",
+            "incorrect": "\\(\\mathrm{SO_4^{2-}}\\) is the sulfate ion. The ending \"-ate\" shows that the ion contains oxygen as well as sulfur. It is the negative ion in sulfuric acid, \\(\\mathrm{H_2SO_4}\\)."
+          },
+          "wrong_answers": [
+            {
+              "accepted": [
+                "sulfide",
+                "sulphide",
+                "sulfide ion"
+              ],
+              "feedback": "A sulfide ion is \\(\\mathrm{S^{2-}}\\): sulfur on its own, with no oxygen. When oxygen is part of the ion the name ends in \"-ate\", so \\(\\mathrm{SO_4^{2-}}\\) is sulfate.",
+              "misconception": "Confuses -ide and -ate"
+            }
+          ],
+          "not_sure": {
+            "feedback": "Look at which elements are in the ion. A negative ion of one element ends in \"-ide\", like the sulfide ion \\(\\mathrm{S^{2-}}\\). When oxygen is included as well, the name usually ends in \"-ate\"."
+          }
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Independent mastery check",
+      "description": "Two new questions, one attempt each. The first uses a long equation; the second a calculation with units such as \\(\\mathrm{mol/dm^3}\\).",
+      "type": "mastery",
+      "purpose": "Check that long equations and multi-step working stay readable on a narrow screen.",
+      "estimated_minutes": 3,
+      "topic_ids": [
+        "notation",
+        "maths"
+      ],
+      "objective_ids": [
+        "LO1",
+        "LO2"
+      ],
+      "requires": [
+        "s1"
+      ],
+      "questions": [
+        {
+          "id": "s2-q01",
+          "type": "mcq",
+          "stem": "Aluminium hydroxide reacts with sulfuric acid:\n\n\\[2\\mathrm{Al(OH)_3}+3\\mathrm{H_2SO_4}\\rightarrow\\mathrm{Al_2(SO_4)_3}+6\\mathrm{H_2O}\\]\n\nHow many hydrogen atoms are there on the left-hand side?",
+          "marks": 1,
+          "difficulty": "standard",
+          "objective_ids": [
+            "LO1"
+          ],
+          "topic_ids": [
+            "notation"
+          ],
+          "options": [
+            {
+              "id": "A",
+              "text": "6",
+              "feedback": "6 counts only the hydrogen in \\(3\\mathrm{H_2SO_4}\\), which is \\(3\\times2\\). The two units of \\(\\mathrm{Al(OH)_3}\\) contain hydrogen as well, \\(2\\times3=6\\) more, making 12 in all.",
+              "misconception": "Misses the hydrogen inside the brackets"
+            },
+            {
+              "id": "B",
+              "text": "9",
+              "feedback": "9 does not come from multiplying each formula by the number in front of it. \\(2\\mathrm{Al(OH)_3}\\) contains \\(2\\times3=6\\) hydrogen atoms and \\(3\\mathrm{H_2SO_4}\\) contains \\(3\\times2=6\\), giving 12."
+            },
+            {
+              "id": "C",
+              "text": "12",
+              "feedback": "\\(2\\mathrm{Al(OH)_3}\\) contains \\(2\\times3=6\\) hydrogen atoms and \\(3\\mathrm{H_2SO_4}\\) contains \\(3\\times2=6\\). That is 12, matching the 12 hydrogen atoms in \\(6\\mathrm{H_2O}\\) on the right."
+            },
+            {
+              "id": "D",
+              "text": "5",
+              "feedback": "5 adds the small numbers without using the large ones. The number in front multiplies the whole formula: \\(2\\times3=6\\) from \\(2\\mathrm{Al(OH)_3}\\) and \\(3\\times2=6\\) from \\(3\\mathrm{H_2SO_4}\\), so there are 12.",
+              "misconception": "Ignores the coefficients"
+            }
+          ],
+          "answer": "C",
+          "not_sure": {
+            "feedback": "Take one formula at a time. A subscript after a bracket multiplies everything inside the bracket, and the large number in front multiplies the whole formula. Then add the two results."
+          },
+          "purpose": "mastery"
+        },
+        {
+          "id": "s2-q02",
+          "type": "numeric",
+          "purpose": "mastery",
+          "marks": 2,
+          "difficulty": "challenge",
+          "objective_ids": [
+            "LO2"
+          ],
+          "topic_ids": [
+            "maths"
+          ],
+          "stem": "\\(0.50\\,\\mathrm{mol}\\) of sodium hydroxide is dissolved to make \\(250\\,\\mathrm{cm^3}\\) of solution. Calculate the concentration in \\(\\mathrm{mol/dm^3}\\).",
+          "answer": {
+            "value": 2,
+            "tolerance": {
+              "type": "absolute",
+              "value": 0.01
+            },
+            "unit": "mol/dm³"
+          },
+          "feedback": {
+            "correct": "\\(250\\,\\mathrm{cm^3}\\) is \\(0.250\\,\\mathrm{dm^3}\\), and concentration is amount divided by volume: \\(\\frac{0.50}{0.250}=2.0\\,\\mathrm{mol/dm^3}\\).",
+            "incorrect": "Convert the volume first: \\(250\\,\\mathrm{cm^3}=0.250\\,\\mathrm{dm^3}\\). Then divide the amount by the volume: \\(c=\\frac{n}{V}=\\frac{0.50}{0.250}=2.0\\,\\mathrm{mol/dm^3}\\)."
+          },
+          "wrong_answers": [
+            {
+              "value": 0.002,
+              "feedback": "0.002 comes from \\(0.50\\div250\\), which leaves the volume in \\(\\mathrm{cm^3}\\). Divide by 1000 to convert it first: \\(250\\,\\mathrm{cm^3}=0.250\\,\\mathrm{dm^3}\\), and \\(\\frac{0.50}{0.250}=2.0\\,\\mathrm{mol/dm^3}\\).",
+              "misconception": "Does not convert cm³ to dm³"
+            },
+            {
+              "value": 0.125,
+              "feedback": "0.125 is \\(0.50\\times0.250\\). Concentration is amount divided by volume, not multiplied: \\(c=\\frac{n}{V}=\\frac{0.50}{0.250}=2.0\\,\\mathrm{mol/dm^3}\\).",
+              "misconception": "Multiplies amount by volume"
+            }
+          ],
+          "not_sure": {
+            "feedback": "Two steps are needed. There are \\(1000\\,\\mathrm{cm^3}\\) in \\(1\\,\\mathrm{dm^3}\\), so change the volume into \\(\\mathrm{dm^3}\\) first. Then use \\(c=\\frac{n}{V}\\), the amount in moles divided by the volume."
+          },
+          "worked_solution": "Convert the volume:\n\n\\[V=\\frac{250}{1000}=0.250\\,\\mathrm{dm^3}\\]\n\nSubstitute into the equation for concentration:\n\n\\[c=\\frac{n}{V}=\\frac{0.50}{0.250}=2.0\\,\\mathrm{mol/dm^3}\\]"
+        }
+      ]
+    }
+  ]
+}

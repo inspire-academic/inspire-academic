@@ -597,6 +597,41 @@ test('repeated and failed submissions leave consistent records (acceptance 14)',
   assert.equal(s.fake.tables.itt_responses.filter(r => r.student_id === KOFI).length, 0);
 });
 
+test('import typesets every formula: broken maths is refused, plain-text notation is noted', async () => {
+  const s = setup();
+
+  // A formula the typesetter cannot display never reaches a student.
+  const broken = fresh();
+  broken.sections[0].questions[0].stem = 'Which particle is lost when \\(\\mathrm{Na}\\) becomes \\(\\mathrm{Na^{+}\\fraction{1}{2}}\\)?';
+  const refused = await s.packages('POST', { action: 'import', package: broken }, as(TEACHER));
+  assert.equal(refused.status, 422);
+  assert.deepEqual(refused.body.report.errors.map(e => e.code), ['maths_invalid']);
+  assert.match(refused.body.report.errors[0].message, /cannot be typeset/);
+  assert.equal(s.fake.tables.itt_package_versions.length, 0);
+  assert.equal((await s.packages('POST', { action: 'validate', package: broken }, as(TEACHER))).body.report.valid, false);
+
+  // Notation typed as plain text is imported exactly as written, with a note
+  // kept beside the draft for the teacher to read before approving.
+  const plain = fresh();
+  plain.sections[0].questions[0].stem = 'Which particle does Mg lose when it becomes Mg2+?';
+  const imported = await s.packages('POST', { action: 'import', package: plain }, as(TEACHER));
+  assert.equal(imported.status, 200, JSON.stringify(imported.body));
+  assert.deepEqual(imported.body.report.warnings.map(w => w.code), ['plain_notation']);
+  const row = s.fake.tables.itt_package_versions[0];
+  assert.equal(row.content.sections[0].questions[0].stem, 'Which particle does Mg lose when it becomes Mg2+?', 'the text is stored untouched');
+  assert.equal(row.validation.warnings[0].code, 'plain_notation');
+  assert.ok(row.validation.warnings[0].message.includes('\\(\\mathrm{Mg^{2+}}\\)'));
+  assert.equal(row.status, 'draft');
+
+  // The reference quiz and the notation fixture both import with no notes.
+  const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'resources', 'itt', 'ITT_Notation_Fixture_v1.json'), 'utf8'));
+  for (const pkg of [fresh(), fixture]) {
+    const r = await s.packages('POST', { action: 'import', package: pkg }, as(TEACHER));
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    assert.deepEqual(r.body.report.warnings, []);
+  }
+});
+
 test('the endpoints fail safely when the service is not configured', async () => {
   const s = setup();
   delete process.env.SUPABASE_SERVICE_ROLE_KEY;
