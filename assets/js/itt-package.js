@@ -936,11 +936,12 @@
       s.questions.forEach(function (q, qi) {
         var out = {
           id: q.id, sectionId: s.id, sectionTitle: s.title, number: qi + 1, mastery: isMastery(s), type: q.type, stem: q.stem,
-          assigned: holders.length, attempted: 0, firstCorrect: 0, firstWrong: 0, firstUnsure: 0, correctLater: 0, missedBy: [], wrong: []
+          assigned: holders.length, attempted: 0, firstCorrect: 0, firstWrong: 0, firstUnsure: 0, correctLater: 0, securedOnRevisit: 0, missedBy: [], wrong: []
         };
         var groups = {};
         holders.forEach(function (a) {
-          var attempts = (byKey[a.id + '|' + q.id] || []).slice().sort(byAttempt), first = attempts[0];
+          var every = byKey[a.id + '|' + q.id] || [];
+          var attempts = regularRows(every).sort(byAttempt), first = attempts[0];
           if (!first || first.attempt_number !== 1) return;
           out.attempted++;
           (q.objective_ids || []).forEach(function (id) {
@@ -951,6 +952,7 @@
           if (first.is_correct) { out.firstCorrect++; return; }
           out.missedBy.push(a.id);
           if (attempts.some(function (t) { return t.is_correct; })) out.correctLater++;
+          if (every.some(function (t) { return isRevisit(t) && t.is_correct; })) out.securedOnRevisit++;
           if (first.is_unsure) { out.firstUnsure++; return; }
           out.firstWrong++;
           // The same wrong answer from several students is one line. A typed
@@ -973,13 +975,75 @@
     };
   }
 
+  // ── Revisits ─────────────────────────────────────────────────────────
+  // A question missed on its first attempt comes back after a break, so the
+  // student can find out whether the idea has stuck. A revisit is stored in
+  // the same table as every other response, as attempt 101, 102 or 103 of
+  // that question: far above any attempt a package can allow, so the two can
+  // never be confused, and no first attempt, retry or mastery figure ever
+  // counts one.
+  var REVISIT_BASE = 100, MAX_REVISITS = 3, REVISIT_GAP_HOURS = 16;
+
+  function isRevisit(row) { return row.attempt_number > REVISIT_BASE; }
+  function regularRows(rows) { return (rows || []).filter(function (r) { return !isRevisit(r); }); }
+
+  // revisit(pkg, sectionIds, rows, now, gapHours) -> where each missed
+  // question stands. `now` is a time in milliseconds.
+  //   missed     questions missed first time, in sections that are finished
+  //   secured    of those, answered correctly on a revisit
+  //   due        [{ questionId, attempt }] ready to answer now, in package order
+  //   waiting    [{ questionId, readyAt }] coming back later
+  //   exhausted  revisited MAX_REVISITS times and still not secure
+  //   nextAt     when the next waiting question is ready, or null
+  function revisit(pkg, sectionIds, rows, now, gapHours) {
+    var gap = (gapHours === undefined ? REVISIT_GAP_HOURS : gapHours) * 3600000;
+    var byQuestion = {};
+    (rows || []).forEach(function (r) { (byQuestion[r.question_id] = byQuestion[r.question_id] || []).push(r); });
+    var out = { missed: 0, secured: 0, exhausted: 0, due: [], waiting: [], nextAt: null };
+    includedSections(pkg, sectionIds).forEach(function (s) {
+      // Only once the section is finished: until then the student is still
+      // meeting these questions for the first time.
+      var done = s.questions.every(function (q) { return (byQuestion[q.id] || []).some(function (r) { return r.attempt_number === 1; }); });
+      if (!done) return;
+      s.questions.forEach(function (q) {
+        var all = byQuestion[q.id] || [];
+        var first = all.filter(function (r) { return r.attempt_number === 1; })[0];
+        if (!first || first.is_correct) return;
+        out.missed++;
+        var again = all.filter(isRevisit);
+        if (again.some(function (r) { return r.is_correct; })) { out.secured++; return; }
+        if (again.length >= MAX_REVISITS) { out.exhausted++; return; }
+        var last = all.reduce(function (t, r) { var at = Date.parse(r.submitted_at); return at > t ? at : t; }, 0);
+        var readyAt = last + gap;
+        if (!last || now >= readyAt) out.due.push({ questionId: q.id, attempt: REVISIT_BASE + again.length + 1 });
+        else out.waiting.push({ questionId: q.id, readyAt: new Date(readyAt).toISOString() });
+      });
+    });
+    out.open = out.due.length + out.waiting.length;
+    if (out.waiting.length) out.nextAt = out.waiting.map(function (w) { return w.readyAt; }).sort()[0];
+    return out;
+  }
+
+  // A stored revisit as the player shows it. A revisit is always one try,
+  // and always ends with the answer and the explanation.
+  function revisitResult(q, row) {
+    var fb = feedbackFor(q, row.feedback_key);
+    return {
+      questionId: q.id, attempt: row.attempt_number - REVISIT_BASE, attemptsAllowed: 1, revisit: true,
+      response: row.response, correct: !!row.is_correct, unsure: !!row.is_unsure,
+      marksAwarded: 0, marks: q.marks, feedback: fb.text, misconception: fb.misconception,
+      evidenceClass: 'revisit', canRetry: false, reveal: reveal(q),
+      submittedAt: row.submitted_at || null
+    };
+  }
+
   // A question's attempts as the player shows them, from its stored rows
   // ({ attempt_number, response, is_correct, is_unsure, marks_awarded,
   // feedback_key }). Each attempt carries the feedback for what was chosen;
   // the answer and worked solution appear only once the question is settled.
   function results(pkg, entry, rows) {
     var q = entry.question, allowed = attemptsAllowed(pkg, entry.section);
-    var sorted = rows.slice().sort(byAttempt);
+    var sorted = regularRows(rows).sort(byAttempt);
     var settled = sorted.some(function (r) { return r.is_correct; }) || sorted.length >= allowed;
     return sorted.map(function (r, i) {
       var fb = feedbackFor(q, r.feedback_key);
@@ -1004,7 +1068,7 @@
   function progress(pkg, sectionIds, rows) {
     var sections = includedSections(pkg, sectionIds);
     var byQuestion = {};
-    rows.forEach(function (r) { (byQuestion[r.question_id] = byQuestion[r.question_id] || []).push(r); });
+    regularRows(rows).forEach(function (r) { (byQuestion[r.question_id] = byQuestion[r.question_id] || []).push(r); });
     Object.keys(byQuestion).forEach(function (k) { byQuestion[k].sort(byAttempt); });
 
     var complete = {}, objective = {};
@@ -1070,6 +1134,8 @@
     sectionSelectionProblems: sectionSelectionProblems, publicPackage: publicPackage, publicQuestion: publicQuestion,
     attemptsAllowed: attemptsAllowed, isMastery: isMastery, mark: mark, feedbackFor: feedbackFor, reveal: reveal,
     evidenceClass: evidenceClass, results: results, progress: progress, insights: insights,
+    REVISIT_BASE: REVISIT_BASE, MAX_REVISITS: MAX_REVISITS, REVISIT_GAP_HOURS: REVISIT_GAP_HOURS,
+    isRevisit: isRevisit, regularRows: regularRows, revisit: revisit, revisitResult: revisitResult,
     splitMaths: splitMaths, plainNotation: plainNotation, isInstructional: isInstructional, normaliseText: normaliseText, numberMatches: numberMatches
   };
   root.ITTPackage = api;

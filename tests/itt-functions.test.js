@@ -727,6 +727,84 @@ test('Most missed: the class\'s first attempts, per question, for the caller\'s 
   assert.equal((await s.assignments('GET', { versionId: 'nope', insights: '1' }, as(TEACHER))).status, 400);
 });
 
+test('Revisit: questions missed first time come back after a break, apart from every other record', async () => {
+  const s = setup();
+  const version = await published(s);
+  const made = await assignTo(s, version, [AMA, KOFI]);
+  const ama = made.created.find(c => c.studentName.startsWith('Ama')).id, kofi = made.created.find(c => c.studentName.startsWith('Kofi')).id;
+  const view = async (who, id) => (await s.student('GET', { id }, as(who))).body;
+  const again = (who, id, questionId, response, attempt) => s.student('POST', { assignmentId: id, questionId, response, attempt, revisit: true }, as(who));
+  // Lets time pass: every stored answer becomes a day old.
+  const sleepOnIt = () => s.fake.tables.itt_responses.forEach(r => { r.submitted_at = new Date(Date.parse(r.submitted_at) - 24 * 3600000).toISOString(); });
+
+  // Kofi has only begun the section: nothing comes back until it is finished.
+  await answer(s, KOFI, kofi, 's1-q01', { option: 'A' });
+  assert.deepEqual([(await view(KOFI, kofi)).revisit.missed, (await view(KOFI, kofi)).revisit.due.length], [0, 0]);
+
+  // Ama finishes Section 1: misses Q1 (right on the retry) and Q3, gets Q2.
+  await answer(s, AMA, ama, 's1-q01', { option: 'A' });
+  await answer(s, AMA, ama, 's1-q01', { option: 'C' }, 2);
+  await answer(s, AMA, ama, 's1-q02', { value: false });
+  const last = await answer(s, AMA, ama, 's1-q03', { text: 'anion' });
+  assert.deepEqual([last.body.revisit.missed, last.body.revisit.due.length, last.body.revisit.waiting.length], [2, 0, 2], 'a retry straight after the feedback does not count as secured');
+  assert.ok(Date.parse(last.body.revisit.nextAt) > Date.now() + 15 * 3600000, 'they come back after the break, not at once');
+  assert.equal((await again(AMA, ama, 's1-q01', { option: 'C' }, 101)).body.error.code, 'not_due');
+  assert.equal(s.fake.tables.itt_assignments.find(a => a.id === ama).summary.revisit.open, 2);
+
+  sleepOnIt();
+  const ready = (await view(AMA, ama)).revisit;
+  assert.deepEqual(ready.due, [{ questionId: 's1-q01', attempt: 101 }, { questionId: 's1-q03', attempt: 101 }]);
+  assert.equal((await again(AMA, ama, 's1-q01', { option: 'C' }, 102)).body.error.code, 'out_of_step');
+  assert.equal((await again(KOFI, ama, 's1-q01', { option: 'C' }, 101)).status, 403, 'nobody else can revisit her work');
+
+  // Q1: secured. The reply always carries the answer and the explanation.
+  const before = (await view(AMA, ama)).progress;
+  const got = await again(AMA, ama, 's1-q01', { option: 'C' }, 101);
+  assert.equal(got.status, 200, JSON.stringify(got.body));
+  assert.deepEqual([got.body.result.correct, got.body.result.revisit, got.body.result.attempt, got.body.result.canRetry], [true, true, 1, false]);
+  assert.equal(got.body.result.feedback, fresh().sections[0].questions[0].options[2].feedback);
+  assert.deepEqual(got.body.result.reveal.answer, { option: 'C' });
+  assert.deepEqual([got.body.revisit.secured, got.body.revisit.due.length], [1, 1]);
+  const row = s.fake.tables.itt_responses.find(r => r.assignment_id === ama && r.attempt_number === 101);
+  assert.deepEqual([row.question_id, row.evidence_class, row.marks_awarded, row.is_correct], ['s1-q01', 'retry', 0, true]);
+
+  // Nothing about the first attempts, the retry or the status has moved.
+  const after = (await view(AMA, ama));
+  assert.deepEqual(after.progress.firstAttempt, before.firstAttempt);
+  assert.deepEqual([after.progress.firstAttempt.correct, after.progress.firstAttempt.answered, after.progress.firstAttempt.correctAfterFeedback], [1, 3, 1]);
+  assert.equal(after.progress.status, 'in_progress');
+  assert.equal(after.results['s1-q01'].length, 2, 'the question still shows its two ordinary attempts');
+  assert.equal((await answer(s, AMA, ama, 's1-q01', { option: 'C' }, 3)).body.error.code, 'no_attempts_left');
+
+  // Sent twice (a bad connection): stored once.
+  const count = s.fake.tables.itt_responses.length;
+  const dup = await again(AMA, ama, 's1-q01', { option: 'A' }, 101);
+  assert.deepEqual([dup.body.duplicate, dup.body.result.correct, s.fake.tables.itt_responses.length], [true, true, count]);
+
+  // Q3: missed again, so it waits, comes back, and stops after three returns.
+  const miss = await again(AMA, ama, 's1-q03', { text: 'anion' }, 101);
+  assert.deepEqual([miss.body.result.correct, miss.body.revisit.due.length, miss.body.revisit.waiting.length], [false, 0, 1]);
+  assert.equal((await again(AMA, ama, 's1-q03', { text: 'cation' }, 102)).body.error.code, 'not_due');
+  sleepOnIt();
+  assert.equal((await again(AMA, ama, 's1-q03', { notSure: true }, 102)).body.result.unsure, true);
+  sleepOnIt();
+  const third = await again(AMA, ama, 's1-q03', { text: 'anion' }, 103);
+  assert.deepEqual([third.body.revisit.exhausted, third.body.revisit.open, third.body.revisit.secured, third.body.revisit.missed], [1, 0, 1, 2]);
+  sleepOnIt();
+  assert.equal((await again(AMA, ama, 's1-q03', { text: 'cation' }, 104)).body.error.code, 'not_due');
+  assert.deepEqual(s.fake.tables.itt_assignments.find(a => a.id === ama).summary.revisit, { missed: 2, secured: 1, open: 0, readyAt: null });
+
+  // The teacher sees revisits beside, never among, the attempts; and the class view counts them.
+  const detail = (await s.assignments('GET', { id: ama }, as(TEACHER))).body;
+  const [tq1, , tq3] = detail.sections[0].questions;
+  assert.deepEqual([tq1.attempts.length, tq1.revisits.length, tq1.revisits[0].correct], [2, 1, true]);
+  assert.deepEqual(tq3.revisits.map(r => [r.attempt, r.correct, r.unsure]), [[1, false, false], [2, false, true], [3, false, false]]);
+  assert.deepEqual([detail.revisit.secured, detail.revisit.missed, detail.progress.firstAttempt.correct], [1, 2, 1]);
+  const insights = (await s.assignments('GET', { versionId: version.id, insights: '1' }, as(TEACHER))).body;
+  const iq1 = insights.questions.find(q => q.id === 's1-q01');
+  assert.deepEqual([iq1.attempted, iq1.missed, iq1.correctLater, iq1.securedOnRevisit], [2, 2, 1, 1], 'a secured revisit never removes the first miss');
+});
+
 test('the endpoints fail safely when the service is not configured', async () => {
   const s = setup();
   delete process.env.SUPABASE_SERVICE_ROLE_KEY;
