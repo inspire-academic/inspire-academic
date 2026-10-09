@@ -43,6 +43,84 @@
     options = options || {};
     var data = null, view = { name: 'loading' }, alive = true, saving = false;
 
+    // ── An answer the connection could not carry ───────────────────────
+    // When a submit gets no reply (no signal, a timeout, the server
+    // unreachable) the answer is not thrown back at the student. It is held,
+    // shown as theirs, and sent again by itself: when the phone says it is
+    // back online, and on a timer in case it never says so. It is also kept
+    // in options.outbox, if given, so closing the page does not lose it.
+    // Sending the same attempt twice is safe: the server stores it once.
+    // Feedback still waits for the reply; answers are marked on the server.
+    var pending = null, sending = false, retryTimer = null, retryDelay = 0;
+    var box = options.outbox || null;
+
+    function keep(p) { pending = p; if (box) box.set(p); }
+    function forget() {
+      pending = null;
+      if (box) box.clear();
+      if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
+      retryDelay = 0;
+    }
+    function retryable(e) {
+      return !!e && (e.code === 'network' || e.status >= 500 || (root.navigator && root.navigator.onLine === false));
+    }
+    // True when the screen in front of the student is this answer's question.
+    function showing(p) {
+      if (p.revisit) return view.name === 'revisit' && view.queue[view.index].questionId === p.questionId;
+      return view.name === 'question' && sectionById(view.sectionId).questions[view.index].id === p.questionId;
+    }
+    function waitingHtml(here) {
+      return '<p class="itt-save itt-save-waiting" id="itt-save" role="status" aria-live="polite">' +
+        (here ? 'No connection. Your answer is kept on this phone and will be sent as soon as you are back online.'
+          : 'An answer is waiting for a connection. It will be sent as soon as you are back online.') + '</p>' +
+        '<div class="itt-actions"><button type="button" class="itt-btn" data-act="send-now">Send now</button></div>';
+    }
+
+    function send(p, onRefused) {
+      if (sending) return;
+      sending = true; saving = true;
+      (p.revisit ? backend.revisit(p.questionId, p.response, p.attempt) : backend.answer(p.questionId, p.response, p.attempt)).then(function (r) {
+        sending = false; saving = false;
+        if (!alive) return;
+        var here = showing(p);
+        forget();
+        if (p.revisit) { if (here) view.result = r.result; }
+        else data.results[p.questionId] = r.results;
+        data.progress = r.progress;
+        if (r.revisit) data.revisit = r.revisit;
+        if (here) view.retrying = false;
+        render();
+        if (here) focus('#itt-feedback', true);
+      }, function (e) {
+        sending = false;
+        if (!alive) return;
+        if (retryable(e)) {
+          // Held, not lost. Try again soon, a little less often each time.
+          keep(p);
+          retryDelay = Math.min(30000, retryDelay ? retryDelay * 2 : 4000);
+          if (retryTimer) clearTimeout(retryTimer);
+          retryTimer = setTimeout(function () { retryTimer = null; if (pending) send(pending); }, retryDelay);
+          render();
+          return;
+        }
+        // Signed out: keep it in the outbox for after signing in again.
+        if (e && e.code === 'signed_out') { saving = false; if (box) box.set(p); pending = null; return; }
+        saving = false;
+        forget();
+        if (e.code === 'out_of_step' || e.code === 'no_attempts_left' || e.code === 'not_due') { load(); return; }
+        if (onRefused) onRefused(e); else render();
+      });
+    }
+
+    function sendNow() {
+      if (!pending) return;
+      if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
+      retryDelay = 0;
+      send(pending);
+    }
+    function onOnline() { sendNow(); }
+    if (root.addEventListener) root.addEventListener('online', onOnline);
+
     function sectionById(id) { return data.package.sections.filter(function (s) { return s.id === id; })[0]; }
     function progressOf(id) { return data.progress.sections.filter(function (s) { return s.id === id; })[0]; }
     function attemptsOf(qid) { return data.results[qid] || []; }
@@ -69,6 +147,9 @@
         if (!alive) return;
         data = d;
         go({ name: 'overview' });
+        var left = box && !pending ? box.get() : null;
+        if (left && left.questionId && questionById(left.questionId)) { pending = left; render(); send(pending); }
+        else if (left) box.clear();
       }, function (e) {
         if (!alive) return;
         rootEl.innerHTML =
@@ -131,6 +212,7 @@
         '<p class="itt-small">' + p.answered + ' of ' + p.questions + ' questions answered</p>' +
         '<button type="button" class="itt-btn itt-btn-primary itt-btn-wide" data-act="resume">' + action + '</button>' +
         '</header>' +
+        (pending ? waitingHtml(false) : '') +
         revisitHtml() +
         (p.answered ? summaryHtml() : '') +
         '<h2 class="itt-h2">Sections</h2><ol class="itt-sections">' + sections + '</ol>';
@@ -226,6 +308,7 @@
       var s = sectionById(view.sectionId), i = view.index, q = s.questions[i];
       var attempts = attemptsOf(q.id), last = attempts[attempts.length - 1] || null;
       var answering = !last || view.retrying;
+      var held = pending && !pending.revisit && pending.questionId === q.id ? pending : null;
       var isLast = i === s.questions.length - 1;
       var next = isLast
         ? '<button type="button" class="itt-btn' + (last && !last.canRetry ? ' itt-btn-primary' : '') + '" data-act="finish-section">Finish section</button>'
@@ -241,21 +324,23 @@
         (i === 0 && s.description ? '<details class="itt-learn itt-intro"' + (attempts.length ? '' : ' open') + '><summary>About this section</summary><div class="itt-text">' + R.html(s.description) + '</div></details>' : '') +
         '<div class="itt-stem itt-text" id="itt-stem" role="heading" aria-level="1">' + R.html(q.stem) + '</div>' +
         '<div id="itt-figures"></div>' +
-        '<form class="itt-answer" id="itt-form" novalidate>' + answerHtml(q, answering && view.retrying ? null : last, !answering);
-      if (answering) {
+        '<form class="itt-answer" id="itt-form" novalidate>' +
+        (held ? answerHtml(q, { response: held.response, correct: true, reveal: null }, true) : answerHtml(q, answering && view.retrying ? null : last, !answering));
+      if (held) html += waitingHtml(true);
+      else if (answering) {
         html += '<p class="itt-save" id="itt-save" role="status" aria-live="polite"></p>' +
           '<div class="itt-actions">' + (i > 0 ? '<button type="button" class="itt-btn" data-act="prev">Previous</button>' : '') +
           '<button type="submit" class="itt-btn itt-btn-primary itt-btn-grow" id="itt-submit" disabled>Submit answer</button></div>';
       }
       html += '</form>';
-      if (!answering) html += feedbackHtml(q, attempts, (i > 0 ? '<button type="button" class="itt-btn" data-act="prev">Previous</button>' : '') + next);
+      if (!answering && !held) html += feedbackHtml(q, attempts, (i > 0 ? '<button type="button" class="itt-btn" data-act="prev">Previous</button>' : '') + next);
 
       rootEl.innerHTML = html;
       rootEl.querySelector('.itt-bar span').style.width = Math.round((i + 1) / s.questions.length * 100) + '%';
       var figures = rootEl.querySelector('#itt-figures');
       (q.asset_ids || []).forEach(function (id) { var a = assetById(id); if (a) figures.appendChild(R.figure(a)); });
       R.typeset(rootEl);
-      if (answering) wireForm(q, attempts.length + 1);
+      if (answering && !held) wireForm(q, attempts.length + 1);
     }
 
     function readResponse(q, form) {
@@ -281,6 +366,9 @@
       form.addEventListener('change', refresh);
       form.addEventListener('input', refresh);
       refresh();
+      // One answer at a time: while an earlier one waits for a connection,
+      // this form can be read and filled in, and sent once that one is through.
+      if (pending) { status.className = 'itt-save itt-save-waiting'; status.textContent = 'Waiting to send your previous answer. This one can be sent once you are back online.'; }
 
       form.addEventListener('submit', function (ev) {
         ev.preventDefault();
@@ -291,27 +379,12 @@
         submit.textContent = 'Saving…';
         status.className = 'itt-save';
         status.textContent = options.preview ? '' : 'Saving your answer…';
-        (asRevisit ? backend.revisit(q.id, response, attempt) : backend.answer(q.id, response, attempt)).then(function (r) {
-          saving = false;
-          if (!alive) return;
-          if (asRevisit) view.result = r.result;
-          else data.results[q.id] = r.results;
-          data.progress = r.progress;
-          if (r.revisit) data.revisit = r.revisit;
-          view.retrying = false;
-          render();
-          focus('#itt-feedback', true);
-        }, function (e) {
-          saving = false;
-          if (!alive) return;
-          if (e.code === 'out_of_step' || e.code === 'no_attempts_left' || e.code === 'not_due') { load(); return; }
-          // Nothing is shown as saved unless the server said so. Sending the
-          // same attempt again is safe: it can never be counted twice.
+        send({ questionId: q.id, response: response, attempt: attempt, revisit: !!asRevisit }, function (e) {
+          // Refused, not lost in transit: say why and let the student change it.
+          // Nothing is shown as saved unless the server said so.
+          if (!rootEl.contains(status)) { render(); return; }
           status.className = 'itt-save itt-save-failed';
-          status.textContent = e.code === 'invalid_answer' ? e.message
-            : (root.navigator && root.navigator.onLine === false
-              ? 'You are offline. Your answer has not been saved. Reconnect, then tap Try again.'
-              : (e.message || 'Your answer has not been saved.') + ' Tap Try again: it will not be counted twice.');
+          status.textContent = e.code === 'invalid_answer' ? e.message : (e.message || 'Your answer has not been saved.') + ' Tap Try again: it will not be counted twice.';
           submit.textContent = e.code === 'invalid_answer' ? 'Submit answer' : 'Try again';
           refresh();
         });
@@ -372,6 +445,7 @@
     function renderRevisit() {
       var item = view.queue[view.index], found = questionById(item.questionId), q = found.question;
       var last = view.result || null, isLast = view.index === view.queue.length - 1;
+      var held = !last && pending && pending.revisit && pending.questionId === q.id ? pending : null;
       var html =
         '<div class="itt-qbar"><button type="button" class="itt-link" data-act="overview">← Sections</button>' +
         '<span class="itt-qsection">' + esc(found.section.title) + '</span></div>' +
@@ -380,8 +454,9 @@
         '<p class="itt-mastery-flag">You missed this one first time. One try, from memory: see whether it has stuck.</p>' +
         '<div class="itt-stem itt-text" id="itt-stem" role="heading" aria-level="1">' + R.html(q.stem) + '</div>' +
         '<div id="itt-figures"></div>' +
-        '<form class="itt-answer" id="itt-form" novalidate>' + answerHtml(q, last, !!last);
-      if (!last) {
+        '<form class="itt-answer" id="itt-form" novalidate>' + (held ? answerHtml(q, { response: held.response, correct: true, reveal: null }, true) : answerHtml(q, last, !!last));
+      if (held) html += waitingHtml(true);
+      else if (!last) {
         html += '<p class="itt-save" id="itt-save" role="status" aria-live="polite"></p>' +
           '<div class="itt-actions"><button type="submit" class="itt-btn itt-btn-primary itt-btn-grow" id="itt-submit" disabled>Submit answer</button></div>';
       }
@@ -395,7 +470,7 @@
       var figures = rootEl.querySelector('#itt-figures');
       (q.asset_ids || []).forEach(function (id) { var a = assetById(id); if (a) figures.appendChild(R.figure(a)); });
       R.typeset(rootEl);
-      if (!last) wireForm(q, item.attempt, true);
+      if (!last && !held) wireForm(q, item.attempt, true);
     }
 
     function renderRevisitDone() {
@@ -453,6 +528,7 @@
         if (view.index === view.queue.length - 1) { go({ name: 'revisit-done', queue: view.queue, correct: got }); focus('#itt-done-h'); }
         else { go({ name: 'revisit', queue: view.queue, index: view.index + 1, result: null, correct: got }); focus('#itt-stem'); }
       }
+      else if (act === 'send-now') sendNow();
       else if (act === 'retry') { view.retrying = true; render(); focus('#itt-stem'); }
       else if (act === 'finish-section') { go({ name: 'section-done', sectionId: view.sectionId }); focus('#itt-done-h'); }
     }
@@ -460,7 +536,13 @@
     rootEl.addEventListener('click', onClick);
     load();
     return {
-      destroy: function () { alive = false; rootEl.removeEventListener('click', onClick); rootEl.innerHTML = ''; }
+      destroy: function () {
+        alive = false;
+        if (retryTimer) clearTimeout(retryTimer);
+        if (root.removeEventListener) root.removeEventListener('online', onOnline);
+        rootEl.removeEventListener('click', onClick);
+        rootEl.innerHTML = '';
+      }
     };
   }
 
