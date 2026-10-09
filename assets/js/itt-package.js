@@ -901,6 +901,78 @@
 
   function byAttempt(a, b) { return a.attempt_number - b.attempt_number; }
 
+  // ── The class as a whole ─────────────────────────────────────────────
+  // insights(pkg, assignments, rows): for every question, what a group of
+  // students did on their FIRST attempt, which is what they knew before any
+  // feedback. A later correct retry is counted separately and never turns a
+  // first-attempt miss into a success.
+  //   assignments: [{ id, section_ids }], one per student
+  //   rows: stored responses for those assignments
+  // Returns { students, started, questions: [...], objectives: [...] } with
+  // questions in package order; the caller decides how to rank them.
+  function wrongLabel(q, response) {
+    if (q.type === 'mcq') {
+      var o = q.options.filter(function (x) { return x.id === response.option; })[0];
+      return response.option + (o ? '. ' + o.text : '');
+    }
+    if (q.type === 'true_false') return response.value ? 'True' : 'False';
+    if (q.type === 'numeric') return String(response.number) + (q.answer.unit ? ' ' + q.answer.unit : '');
+    return String(response.text);
+  }
+
+  function insights(pkg, assignments, rows) {
+    var byKey = {}, started = {};
+    (rows || []).forEach(function (r) {
+      var k = r.assignment_id + '|' + r.question_id;
+      (byKey[k] = byKey[k] || []).push(r);
+      started[r.assignment_id] = true;
+    });
+    var objectiveStats = {};
+    (pkg.objectives || []).forEach(function (o) { objectiveStats[o.id] = { id: o.id, text: o.text, attempted: 0, correct: 0 }; });
+
+    var questions = [];
+    pkg.sections.forEach(function (s) {
+      var holders = assignments.filter(function (a) { return !a.section_ids || !a.section_ids.length || a.section_ids.indexOf(s.id) !== -1; });
+      s.questions.forEach(function (q, qi) {
+        var out = {
+          id: q.id, sectionId: s.id, sectionTitle: s.title, number: qi + 1, mastery: isMastery(s), type: q.type, stem: q.stem,
+          assigned: holders.length, attempted: 0, firstCorrect: 0, firstWrong: 0, firstUnsure: 0, correctLater: 0, missedBy: [], wrong: []
+        };
+        var groups = {};
+        holders.forEach(function (a) {
+          var attempts = (byKey[a.id + '|' + q.id] || []).slice().sort(byAttempt), first = attempts[0];
+          if (!first || first.attempt_number !== 1) return;
+          out.attempted++;
+          (q.objective_ids || []).forEach(function (id) {
+            if (!objectiveStats[id]) return;
+            objectiveStats[id].attempted++;
+            if (first.is_correct) objectiveStats[id].correct++;
+          });
+          if (first.is_correct) { out.firstCorrect++; return; }
+          out.missedBy.push(a.id);
+          if (attempts.some(function (t) { return t.is_correct; })) out.correctLater++;
+          if (first.is_unsure) { out.firstUnsure++; return; }
+          out.firstWrong++;
+          // The same wrong answer from several students is one line. A typed
+          // answer the author did not anticipate is grouped by what was typed.
+          var label = wrongLabel(q, first.response);
+          var key = first.feedback_key === 'incorrect' ? 'typed:' + normaliseText(label, false) : first.feedback_key;
+          var g = groups[key] = groups[key] || { label: label, count: 0, misconception: feedbackFor(q, first.feedback_key).misconception || null };
+          g.count++;
+        });
+        out.wrong = Object.keys(groups).map(function (k) { return groups[k]; }).sort(function (x, y) { return y.count - x.count; }).slice(0, 3);
+        out.missed = out.firstWrong + out.firstUnsure;
+        questions.push(out);
+      });
+    });
+    return {
+      students: assignments.length,
+      started: assignments.filter(function (a) { return started[a.id]; }).length,
+      questions: questions,
+      objectives: Object.keys(objectiveStats).map(function (id) { return objectiveStats[id]; }).filter(function (o) { return o.attempted; })
+    };
+  }
+
   // A question's attempts as the player shows them, from its stored rows
   // ({ attempt_number, response, is_correct, is_unsure, marks_awarded,
   // feedback_key }). Each attempt carries the feedback for what was chosen;
@@ -997,7 +1069,7 @@
     validate: validate, summarise: summarise, index: index, includedSections: includedSections,
     sectionSelectionProblems: sectionSelectionProblems, publicPackage: publicPackage, publicQuestion: publicQuestion,
     attemptsAllowed: attemptsAllowed, isMastery: isMastery, mark: mark, feedbackFor: feedbackFor, reveal: reveal,
-    evidenceClass: evidenceClass, results: results, progress: progress,
+    evidenceClass: evidenceClass, results: results, progress: progress, insights: insights,
     splitMaths: splitMaths, plainNotation: plainNotation, isInstructional: isInstructional, normaliseText: normaliseText, numberMatches: numberMatches
   };
   root.ITTPackage = api;

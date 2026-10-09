@@ -90,6 +90,27 @@
 .tt-filter{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;}
 .tt-select{min-height:44px;padding:.5rem .75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:.9rem;max-width:100%;}
 
+/* ── most missed: the class as a whole ── */
+.tt-insight-intro{margin:0 0 1rem;}
+.tt-insights{list-style:none;margin:0 0 1rem;padding:0;display:grid;gap:.85rem;}
+.tt-insight{border:1px solid var(--border);border-left:5px solid var(--itt-no);border-radius:var(--itt-radius);background:var(--navy2);padding:.9rem 1rem;min-width:0;}
+.tt-insight-ok{border-left-color:var(--itt-ok);}
+.tt-insight-where{margin:0 0 .4rem;font-size:.78rem;font-weight:700;color:var(--muted);}
+.tt-insight-rank{display:inline-block;min-width:1.5rem;padding:.05rem .35rem;border-radius:999px;background:var(--border);color:var(--white);text-align:center;}
+.tt-insight-stem{font-weight:600;}
+.tt-insight-bar{height:8px;border-radius:4px;background:var(--border);overflow:hidden;margin:.7rem 0 .35rem;}
+.tt-insight-bar span{display:block;height:100%;background:var(--itt-no);border-radius:4px;}
+.tt-insight-ok .tt-insight-bar span{background:var(--itt-ok);}
+.tt-insight-score{margin:0;font-size:.88rem;}
+.tt-insight-label{display:block;margin:.75rem 0 .2rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+.tt-insight-wrong{list-style:none;margin:0;padding:0;display:grid;gap:.35rem;font-size:.9rem;}
+.tt-insight-wrong li{padding-left:.7rem;border-left:3px solid var(--border);overflow-x:auto;overflow-y:hidden;}
+.tt-insight-count{font-weight:800;color:var(--itt-no);margin-right:.25rem;}
+.tt-insight-count::after{content:" ×";font-weight:600;}
+.tt-insight-answer{margin:0;font-size:.9rem;overflow-x:auto;overflow-y:hidden;}
+.tt-insight-answer .tt-insight-label{color:var(--itt-ok);}
+.tt-insight .tt-older{margin-top:.5rem;}
+
 /* ── preview: a phone-width column, as a student holds it ── */
 .tt-preview-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.25rem;margin-bottom:1rem;}
 .tt-preview-bar .itt-small{flex:1 1 100%;margin:0;}
