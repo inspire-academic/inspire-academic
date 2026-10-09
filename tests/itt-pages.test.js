@@ -157,14 +157,14 @@ test('a shared assignment link carries the Inspire preview card, and nothing abo
   assert.equal(og('site_name'), 'Inspire Academic');
   assert.equal(og('title'), 'Inspire Test &amp; Teach: homework assigned');
   assert.match(og('description'), /Sign in to open your assignment/);
-  assert.equal(og('image'), 'https://www.inspireacademic.org/assets/images/itt/og-test-and-teach.jpg');
+  assert.equal(og('image'), 'https://www.inspireacademic.org/assets/images/itt/og-test-and-teach-v2.jpg');
   assert.equal(og('image:width'), '1200');
   assert.equal(og('image:height'), '630');
   assert.ok(og('image:alt'));
   // The tags are in the page itself: WhatsApp reads the HTML and runs no script.
   assert.ok(html.indexOf('og:image') < html.indexOf('</head>'));
   // The picture exists, is a JPEG, and is small enough for WhatsApp to use.
-  const image = fs.readFileSync(path.join(ROOT, 'assets/images/itt/og-test-and-teach.jpg'));
+  const image = fs.readFileSync(path.join(ROOT, 'assets/images/itt/og-test-and-teach-v2.jpg'));
   assert.deepEqual([...image.subarray(0, 3)], [0xff, 0xd8, 0xff]);
   assert.ok(image.length > 20000 && image.length < 300000, `${image.length} bytes`);
   // /itt?a=<id> serves this page, so the link in the message gets the card.
