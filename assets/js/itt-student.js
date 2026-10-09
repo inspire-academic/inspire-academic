@@ -113,6 +113,15 @@
       esc(d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })) + '</span>';
   }
 
+  // Questions missed first time that are ready, or coming back, for a second look.
+  function revisitLine(a) {
+    var r = a.summary && a.summary.revisit;
+    if (!r || !r.open) return '';
+    var at = r.readyAt ? new Date(r.readyAt) : null;
+    if (!at || isNaN(at) || at.getTime() <= Date.now()) return '<p class="itt-revisit-flag">Questions you missed are ready to revisit</p>';
+    return '<p class="itt-small">Questions you missed come back ' + esc(at.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' })) + '.</p>';
+  }
+
   function cardHtml(a) {
     var answered = (a.summary && a.summary.answered) || 0;
     var meta = [a.sectionCount + (a.sectionCount === 1 ? ' section' : ' sections'), a.questionCount + (a.questionCount === 1 ? ' question' : ' questions')];
@@ -129,6 +138,7 @@
       (a.description ? '<p class="itt-card-desc">' + esc(a.description) + '</p>' : '') +
       '<p class="itt-meta">' + esc(meta.join(' · ')) + dueHtml(a) + '</p>' +
       (a.note ? '<p class="itt-note"><strong>From your teacher:</strong> ' + esc(a.note) + '</p>' : '') +
+      revisitLine(a) +
       (a.status === 'in_progress'
         ? '<div class="itt-bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + a.questionCount + '" aria-valuenow="' + answered + '" aria-label="' + answered + ' of ' + a.questionCount + ' questions answered"><span data-pct="' + Math.round(answered / Math.max(1, a.questionCount) * 100) + '"></span></div>' +
           '<p class="itt-small">' + answered + ' of ' + a.questionCount + ' questions answered</p>'
@@ -246,7 +256,8 @@
           throw problem(e.code, 'Student View is for teachers and admins, and only shows approved quizzes.', { title: 'This preview could not be opened', final: true });
         });
       },
-      answer: function (questionId, response, attempt) { return inner.answer(questionId, response, attempt); }
+      answer: function (questionId, response, attempt) { return inner.answer(questionId, response, attempt); },
+      revisit: function (questionId, response, attempt) { return inner.revisit(questionId, response, attempt); }
     }, { preview: true, onExit: function () { history.pushState({}, '', PAGE); route(); }, exitLabel: 'All quizzes' });
   }
 
@@ -267,6 +278,10 @@
       },
       answer: function (questionId, response, attempt) {
         return api('POST', API + 'answer', { assignmentId: id, questionId: questionId, response: response, attempt: attempt });
+      },
+      // A second look at a question missed first time. Saved like any answer.
+      revisit: function (questionId, response, attempt) {
+        return api('POST', API + 'answer', { assignmentId: id, questionId: questionId, response: response, attempt: attempt, revisit: true });
       }
     }, { onExit: function () { history.pushState({}, '', PAGE); route(); }, exitLabel: 'All assignments' });
   }

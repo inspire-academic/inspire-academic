@@ -76,7 +76,8 @@ async function detail(client, user, id) {
     assignment: assignmentCard(assignment, meta),
     package: ITT.publicPackage(pkg, assignment.section_ids),
     results: resultsByQuestion(pkg, rows),
-    progress: ITT.progress(pkg, assignment.section_ids, rows)
+    progress: ITT.progress(pkg, assignment.section_ids, rows),
+    revisit: ITT.revisit(pkg, assignment.section_ids, rows, Date.now())
   });
 }
 
@@ -86,7 +87,11 @@ async function detail(client, user, id) {
 async function syncAssignment(client, assignment, pkg, rows) {
   const progress = ITT.progress(pkg, assignment.section_ids, rows);
   const now = new Date().toISOString();
-  const patch = { status: progress.status, summary: compactSummary(progress), last_activity_at: progress.lastActivityAt || now };
+  // Revisits never change the status or the first-attempt record; they add
+  // their own line to the summary and count as activity.
+  const revisit = ITT.revisit(pkg, assignment.section_ids, rows, Date.now());
+  const latest = rows.reduce((t, r) => (r.submitted_at && r.submitted_at > t ? r.submitted_at : t), progress.lastActivityAt || '');
+  const patch = { status: progress.status, summary: compactSummary(progress, revisit), last_activity_at: latest || now };
   if (!assignment.started_at && progress.answered) patch.started_at = now;
   if (!assignment.completed_at && progress.status === 'completed') patch.completed_at = now;
   await client.patch(`itt_assignments?id=eq.${assignment.id}`, patch);
@@ -105,14 +110,44 @@ async function answer(client, user, body) {
 
   const allRows = async () => (await client.get(`itt_responses?assignment_id=eq.${assignment.id}&select=*`)) || [];
   let rows = await allRows();
-  const mine = () => rows.filter(r => r.question_id === question.id).sort(byAttempt);
+  // A revisit is a separate numbered attempt (see ITT.revisit); everything
+  // below about first attempts and retries looks at the regular ones only.
+  const mine = () => ITT.regularRows(rows).filter(r => r.question_id === question.id).sort(byAttempt);
+  const revisitNow = () => ITT.revisit(pkg, assignment.section_ids, rows, Date.now());
   const reply = async (duplicate) => {
     const progress = await syncAssignment(client, assignment, pkg, rows);
     const results = ITT.results(pkg, entry, mine());
-    return ok({ result: results.find(r => r.attempt === attempt) || results[results.length - 1], results, progress, duplicate });
+    return ok({ result: results.find(r => r.attempt === attempt) || results[results.length - 1], results, progress, revisit: revisitNow(), duplicate });
   };
 
   const attempt = Number.isInteger(body.attempt) && body.attempt >= 1 ? body.attempt : 1;
+  if (body.revisit === true || attempt > ITT.REVISIT_BASE) {
+    const stored = () => rows.find(r => r.question_id === question.id && r.attempt_number === attempt);
+    const replyRevisit = async (duplicate) => {
+      const progress = await syncAssignment(client, assignment, pkg, rows);
+      return ok({ result: ITT.revisitResult(question, stored()), progress, revisit: revisitNow(), duplicate });
+    };
+    // Already recorded: hand back what was stored, mark nothing again.
+    if (stored()) return replyRevisit(true);
+    const due = revisitNow().due.find(d => d.questionId === question.id);
+    if (!due) return fail(409, 'not_due', 'This question is not ready to revisit yet.');
+    if (attempt !== due.attempt) return fail(409, 'out_of_step', 'Your answers have changed on another device. Reload to continue.');
+    const again = ITT.mark(question, body.response);
+    if (!again) return fail(400, 'invalid_answer', question.type === 'numeric' ? 'Enter your answer as a number.' : 'Choose or enter an answer first.');
+    await client.insert('itt_responses?on_conflict=assignment_id,question_id,attempt_number', {
+      assignment_id: assignment.id, student_id: user.id, package_version_id: assignment.package_version_id,
+      section_id: section.id, question_id: question.id, attempt_number: attempt,
+      response: again.response, is_correct: again.correct, is_unsure: again.unsure,
+      // A revisit earns no marks: the marks belong to the first attempt.
+      marks_awarded: 0, marks_available: question.marks, feedback_key: again.feedbackKey,
+      evidence_class: 'retry',
+      objective_ids: question.objective_ids, topic_ids: question.topic_ids || section.topic_ids,
+      submitted_at: new Date().toISOString()
+    }, 'resolution=ignore-duplicates,return=minimal');
+    rows = await allRows();
+    if (!stored()) throw new Error('response was not stored');
+    return replyRevisit(false);
+  }
   // Already recorded: hand back what was stored, mark nothing again.
   if (mine().some(r => r.attempt_number === attempt)) return reply(true);
 

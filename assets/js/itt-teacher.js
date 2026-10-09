@@ -570,7 +570,8 @@
       '<div class="tt-insight-bar" role="img" aria-label="' + q.missed + ' of ' + q.attempted + ' missed it first time"><span data-pct="' + pct + '"></span></div>' +
       '<p class="tt-insight-score"><strong>' + q.missed + ' of ' + q.attempted + '</strong> missed it first time' + (parts.length ? ' (' + parts.join(', ') + ')' : '') +
       (q.attempted < q.assigned ? ' · ' + (q.assigned - q.attempted) + ' not reached yet' : '') +
-      (q.correctLater ? ' · ' + q.correctLater + ' then got it right after the feedback' : '') + '</p>' +
+      (q.correctLater ? ' · ' + q.correctLater + ' then got it right after the feedback' : '') +
+      (q.securedOnRevisit ? ' · ' + q.securedOnRevisit + ' secured it on a later revisit' : '') + '</p>' +
       (wrong ? '<p class="tt-insight-label">Wrong answers given</p><ul class="tt-insight-wrong">' + wrong + '</ul>' : '') +
       '<p class="tt-insight-answer"><span class="tt-insight-label">Correct answer</span> <span class="itt-text">' + R.inline(insightAnswer(q)) + '</span></p>' +
       (q.missedBy.length ? '<details class="tt-older"><summary>Who missed it (' + q.missedBy.length + ')</summary><p class="itt-small">' + esc(q.missedBy.join(', ')) + '</p></details>' : '') +
@@ -628,6 +629,7 @@
         '<div><dt>Correct after feedback</dt><dd>' + p.firstAttempt.correctAfterFeedback + '</dd></div>' +
         '<div><dt>Marked “not sure”</dt><dd>' + (p.firstAttempt.unsure + (p.mastery ? p.mastery.unsure : 0)) + '</dd></div>' +
         '<div><dt>Mastery check</dt><dd>' + (p.mastery ? (p.mastery.answered ? p.mastery.correct + ' of ' + p.mastery.answered : 'not reached') : 'none') + '</dd></div>' +
+        (r.revisit && r.revisit.missed ? '<div><dt>Secured on a revisit</dt><dd>' + r.revisit.secured + ' of ' + r.revisit.missed + ' missed</dd></div>' : '') +
         '<div><dt>Completed</dt><dd>' + (date(a.completedAt) || 'not yet') + '</dd></div></dl>' +
         '<h4 class="itt-h3">Areas needing further work</h4>' +
         (review.length ? '<ul class="itt-objectives">' + review.map(function (o) {
@@ -642,6 +644,11 @@
                   (q.attempts.length > 1 ? '<span class="itt-small">attempt ' + t.attempt + '</span> ' : '') + '<span>' + R.inline(answerText(q, t.response)) + '</span>' +
                   (t.misconception ? '<span class="tt-miscon">Misconception: ' + R.inline(t.misconception) + '</span>' : '') + '</div>';
               }).join('') : '<span class="itt-small">Not answered</span>';
+              // A later return to a question missed first time, shown apart.
+              given += (q.revisits || []).map(function (t) {
+                return '<div class="tt-attempt tt-revisit ' + (t.correct ? 'tt-right' : t.unsure ? 'tt-unsure' : 'tt-wrong') + '"><span class="tt-mark">' + (t.correct ? '✓ Secured' : t.unsure ? '? Not sure' : '✗ Incorrect') + '</span> ' +
+                  '<span class="itt-small">revisit ' + t.attempt + (t.submittedAt ? ', ' + date(t.submittedAt) : '') + '</span> <span>' + R.inline(answerText(q, t.response)) + '</span></div>';
+              }).join('');
               return '<tr><th scope="row"><span class="itt-small">Q' + (i + 1) + '</span><div class="itt-text">' + R.html(q.stem) + '</div></th><td>' + given + '</td><td>' + R.inline(answerText(q, q.answer)) + '</td></tr>';
             }).join('') + '</tbody></table></div>';
         }).join('') +

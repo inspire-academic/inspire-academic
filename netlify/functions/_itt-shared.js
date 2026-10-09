@@ -78,11 +78,17 @@ const newId = () => crypto.randomUUID();
 
 // The small progress record kept on an assignment row so that lists never
 // need a package's content or a student's individual answers.
-function compactSummary(progress) {
+function compactSummary(progress, revisit) {
   return {
     answered: progress.answered, questions: progress.questions,
     sectionsComplete: progress.sectionsComplete, sectionsTotal: progress.sectionsTotal,
-    firstAttempt: progress.firstAttempt, mastery: progress.mastery
+    firstAttempt: progress.firstAttempt, mastery: progress.mastery,
+    // Questions missed first time and what has become of them. readyAt is
+    // when the earliest one can next be answered (now, if any are due).
+    revisit: revisit && revisit.missed ? {
+      missed: revisit.missed, secured: revisit.secured, open: revisit.open,
+      readyAt: revisit.due.length ? new Date().toISOString() : revisit.nextAt
+    } : null
   };
 }
 

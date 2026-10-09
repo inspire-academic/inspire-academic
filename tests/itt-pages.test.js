@@ -192,3 +192,37 @@ test('the teacher\'s student list never runs off the right-hand edge', () => {
   assert.match(css, /\.tt-row-buttons \.tt-wa\{grid-column:1 \/ -1;\}/);
   assert.doesNotMatch(css, /@media\s*\(max-width/);
 });
+
+test('Revisit: the player offers missed questions again, and only the shared code decides when', () => {
+  const P = require('../assets/js/itt-package.js');
+  const pkg = JSON.parse(read('resources/itt/ITT_Reference_Quiz_v1.json'));
+  const at = hoursAgo => new Date(Date.UTC(2026, 9, 10, 12) - hoursAgo * 3600000).toISOString();
+  const now = Date.UTC(2026, 9, 10, 12);
+  const row = (question_id, attempt_number, is_correct, hoursAgo) => ({ question_id, attempt_number, is_correct, is_unsure: false, feedback_key: 'correct', submitted_at: at(hoursAgo) });
+
+  // Section 1 unfinished: nothing to revisit, however wrong the answers.
+  assert.equal(P.revisit(pkg, null, [row('s1-q01', 1, false, 48)], now).missed, 0);
+  // Finished 20 hours ago with two misses: both are due, in package order.
+  const rows = [row('s1-q01', 1, false, 20), row('s1-q01', 2, true, 20), row('s1-q02', 1, true, 20), row('s1-q03', 1, false, 20)];
+  assert.deepEqual(P.revisit(pkg, null, rows, now).due, [{ questionId: 's1-q01', attempt: 101 }, { questionId: 's1-q03', attempt: 101 }]);
+  // Finished 2 hours ago: they wait until 16 hours have passed.
+  const fresh = P.revisit(pkg, null, rows.map(r => ({ ...r, submitted_at: at(2) })), now);
+  assert.deepEqual([fresh.due.length, fresh.waiting.length, fresh.nextAt], [0, 2, at(-14)]);
+  assert.equal(P.REVISIT_GAP_HOURS, 16);
+  // A correct revisit secures the question; first-attempt figures are untouched.
+  const secured = rows.concat([row('s1-q01', 101, true, 1)]);
+  assert.deepEqual([P.revisit(pkg, null, secured, now).secured, P.revisit(pkg, null, secured, now).due.map(d => d.questionId)], [1, ['s1-q03']]);
+  assert.deepEqual(P.progress(pkg, null, secured).firstAttempt, P.progress(pkg, null, rows).firstAttempt);
+  assert.equal(P.results(pkg, P.index(pkg).get('s1-q01'), secured.filter(r => r.question_id === 's1-q01')).length, 2);
+  // A section the student was not assigned is never revisited.
+  assert.equal(P.revisit(pkg, ['s2'], rows, now).missed, 0);
+
+  const player = read('assets/js/itt-player.js'), student = read('assets/js/itt-student.js');
+  assert.match(player, /data-act="revisit">Revisit ' \+ plural\(r\.due\.length, 'question'\)/);
+  assert.match(player, /backend\.revisit\(q\.id, response, attempt\)/);
+  assert.match(player, /One try, from memory/);
+  assert.match(player, /P\.revisit\(pkg, null, rows, Date\.now\(\), 0\)/, 'a preview has no waiting, so the cycle can be seen');
+  assert.match(student, /attempt: attempt, revisit: true \}\)/);
+  assert.match(student, /Questions you missed are ready to revisit/);
+  assert.match(read('assets/css/itt.css'), /\.itt-revisit\{/);
+});
