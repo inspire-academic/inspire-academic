@@ -403,12 +403,21 @@
     return api('GET', '/api/v1/itt/assignments?roster=1').then(function (r) { roster = r; return r; });
   }
 
-  function linksHtml(rows, title) {
+  // Opens WhatsApp with the homework message written (assets/js/itt-share.js);
+  // the teacher picks the contact there. `a` needs id, studentName, title and
+  // whatever else is known: subject, questionCount, estimatedMinutes, dueAt, note.
+  var WA_ICON = '<svg class="itt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5a8.5 8.5 0 0 0-7.300 12.850L3.500 20.500l4.300-1.150A8.500 8.500 0 1 0 12 3.500z"/></svg>';
+  function whatsappButton(a) {
+    return '<a class="itt-btn tt-wa" target="_blank" rel="noopener" href="' + esc(ITTShare.whatsappUrl(Object.assign({ link: linkFor(a.id) }, a))) + '">' +
+      WA_ICON + 'WhatsApp<span class="itt-sr"> message to ' + esc(a.studentName) + '</span></a>';
+  }
+
+  function linksHtml(rows, details) {
     return '<ul class="tt-links">' + rows.map(function (c) {
-      var link = linkFor(c.id), msg = 'Inspire Test & Teach: ' + title + '. Open your assignment here: ' + link;
+      var link = linkFor(c.id);
       return '<li><span class="tt-link-name">' + esc(c.studentName) + '</span><code class="tt-link-url">' + esc(link) + '</code>' +
         '<button type="button" class="itt-btn" data-copy="' + esc(link) + '">Copy link</button>' +
-        '<a class="itt-btn" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(msg) + '">WhatsApp</a></li>';
+        whatsappButton(Object.assign({}, details, c)) + '</li>';
     }).join('') + '</ul>';
   }
 
@@ -469,21 +478,28 @@
         ev.preventDefault();
         var some = form.querySelector('input[name="scope"]:checked').value === 'some';
         var due = $('tt-due').value;
+        var sectionIds = some ? Array.prototype.map.call(form.querySelectorAll('input[name="section"]:checked'), function (i) { return i.value; }) : null;
+        // Due at the end of the chosen day, in the teacher's own time zone.
+        var dueAt = due ? new Date(due + 'T23:59:00').toISOString() : null, note = $('tt-note').value.trim() || null;
+        // What the WhatsApp message says about the work just set.
+        var chosen = sectionIds ? s.sections.filter(function (x) { return sectionIds.indexOf(x.id) !== -1; }) : null;
+        var details = {
+          subject: v.subject, dueAt: dueAt, note: note,
+          questionCount: chosen ? chosen.reduce(function (n, x) { return n + x.questions; }, 0) : s.questionCount,
+          estimatedMinutes: chosen ? null : s.estimatedMinutes
+        };
         btn.disabled = true; btn.textContent = 'Assigning…';
         api('POST', '/api/v1/itt/assignments', {
-          action: 'assign', versionId: v.id, studentIds: picked(),
-          sectionIds: some ? Array.prototype.map.call(form.querySelectorAll('input[name="section"]:checked'), function (i) { return i.value; }) : null,
-          // Due at the end of the chosen day, in the teacher's own time zone.
-          dueAt: due ? new Date(due + 'T23:59:00').toISOString() : null,
-          note: $('tt-note').value.trim() || null
+          action: 'assign', versionId: v.id, studentIds: picked(), sectionIds: sectionIds, dueAt: dueAt, note: note
         }).then(function (res) {
+          details.title = res.title;
           var all = res.created.concat(res.existing);
           $('tt-assign-result').innerHTML = '<div class="itt-panel tt-accepted"><h3 class="itt-h2">' +
             (res.created.length ? 'Assigned to ' + plural(res.created.length, 'student') : 'Already assigned') + '</h3>' +
             (res.existing.length ? '<p class="itt-small">' + plural(res.existing.length, 'student') + ' already had this assignment; nothing was duplicated.</p>' : '') +
             '<p class="itt-small">Each link opens that student’s own assignment after they sign in. A link shows nothing to anyone else.</p>' +
             (all.length > 1 ? '<div class="itt-actions"><button type="button" class="itt-btn" id="tt-copy-all">Copy all links</button></div>' : '') +
-            linksHtml(all, res.title) + '</div>';
+            linksHtml(all, details) + '</div>';
           if ($('tt-copy-all')) $('tt-copy-all').addEventListener('click', function () { copy(all.map(function (c) { return c.studentName + ': ' + linkFor(c.id); }).join('\n'), 'All links copied'); });
           Array.prototype.forEach.call(form.querySelectorAll('input[name="student"]'), function (i) { i.checked = false; });
           refresh();
@@ -510,7 +526,7 @@
           '<td>' + (m ? (m.answered ? m.correct + ' of ' + m.answered + ' correct' : 'not reached') : 'none') + '</td>' +
           '<td>' + (date(a.dueAt) || '–') + '</td><td>' + (date(a.completedAt) || '–') + '</td>' +
           '<td class="tt-row-actions"><button type="button" class="itt-btn" data-result="' + esc(a.id) + '">Answers</button>' +
-          '<button type="button" class="itt-btn" data-copy="' + esc(linkFor(a.id)) + '">Copy link</button></td></tr>';
+          '<button type="button" class="itt-btn" data-copy="' + esc(linkFor(a.id)) + '">Copy link</button>' + whatsappButton(a) + '</td></tr>';
       }).join('') + '</tbody></table></div>';
   }
 
