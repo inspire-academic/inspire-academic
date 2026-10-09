@@ -117,7 +117,7 @@ test('WhatsApp: a formal homework message, the same from every share button', ()
   };
   const text = Share.message(info);
   assert.deepEqual(text.split('\n').slice(0, 9), [
-    '*INSPIRE ACADEMIC*', '_Test & Teach · Homework assigned_', '', 'Hello Ama,', '', 'You have been set new homework:', '',
+    '*INSPIRE ACADEMIC*', '_Test & Teach · Homework assigned_', '', 'Hello Ama,', '', 'You have been assigned a new homework:', '',
     '*Year 10 Chemistry: Structure and Bonding*', 'Chemistry · 117 questions · about 3 hr 55 min'
   ]);
   assert.match(text, /\n\*Due:\* Friday 16 October\n/);
@@ -155,18 +155,40 @@ test('a shared assignment link carries the Inspire preview card, and nothing abo
   const html = read('student/test-and-teach.html');
   const og = name => (html.match(new RegExp('<meta property="og:' + name + '" content="([^"]*)">')) || [])[1];
   assert.equal(og('site_name'), 'Inspire Academic');
-  assert.equal(og('title'), 'Inspire Test &amp; Teach: homework assigned');
-  assert.match(og('description'), /Sign in to open your assignment/);
-  assert.equal(og('image'), 'https://www.inspireacademic.org/assets/images/itt/og-test-and-teach-v2.jpg');
-  assert.equal(og('image:width'), '1200');
-  assert.equal(og('image:height'), '630');
+  assert.equal(og('title'), 'Inspire Test &amp; Teach');
+  assert.ok(og('title').replace('&amp;', '&').length <= 22, 'short enough for WhatsApp to show whole');
+  assert.equal(og('description'), 'Homework assigned. Sign in to open it.');
+  assert.equal(og('image'), 'https://www.inspireacademic.org/assets/images/itt/og-test-and-teach-v3.jpg');
+  // Square: WhatsApp crops the picture to a square, so nothing of the crest is lost.
+  assert.equal(og('image:width'), '800');
+  assert.equal(og('image:height'), '800');
   assert.ok(og('image:alt'));
   // The tags are in the page itself: WhatsApp reads the HTML and runs no script.
   assert.ok(html.indexOf('og:image') < html.indexOf('</head>'));
   // The picture exists, is a JPEG, and is small enough for WhatsApp to use.
-  const image = fs.readFileSync(path.join(ROOT, 'assets/images/itt/og-test-and-teach-v2.jpg'));
+  const image = fs.readFileSync(path.join(ROOT, 'assets/images/itt/og-test-and-teach-v3.jpg'));
   assert.deepEqual([...image.subarray(0, 3)], [0xff, 0xd8, 0xff]);
   assert.ok(image.length > 20000 && image.length < 300000, `${image.length} bytes`);
   // /itt?a=<id> serves this page, so the link in the message gets the card.
   assert.match(read('netlify.toml'), /from = "\/itt"\s+to = "\/student\/test-and-teach\.html"\s+status = 200/);
+});
+
+test('the teacher\'s student list never runs off the right-hand edge', () => {
+  const js = read('assets/js/itt-teacher.js'), css = read('assets/css/itt-teacher.css');
+  // One markup: a card per student on a phone or narrow window, a table when wide.
+  assert.match(js, /<div class="tt-table-wrap tt-assignments"><table class="tt-table">/);
+  for (const label of ['Package', 'Status', 'Sections', 'First attempts', 'Mastery check', 'Due', 'Completed']) {
+    assert.ok(js.includes('<td data-label="' + label + '">'), 'the card labels its ' + label);
+  }
+  assert.match(js, /<td class="tt-row-actions"><div class="tt-row-buttons"><button type="button" class="itt-btn" data-result=/);
+  // Mobile-first: cards are the base style, the table is added at a width it fits.
+  const base = css.slice(0, css.indexOf('@media'));
+  assert.match(base, /\.tt-assignments table,\.tt-assignments tbody,\.tt-assignments tr,\.tt-assignments th,\.tt-assignments td\{display:block;\}/);
+  assert.match(base, /\.tt-assignments tbody td\[data-label\]::before\{content:attr\(data-label\);/);
+  assert.match(base, /\.tt-row-buttons\{display:flex;flex-wrap:wrap;/);
+  assert.match(css, /@media \(min-width:1100px\)\{\s*\.tt-assignments\{overflow-x:auto;/);
+  // The three buttons are never forced onto one line that could be clipped.
+  assert.doesNotMatch(css, /\.tt-row-actions\{white-space:nowrap;\}/);
+  assert.match(css, /\.tt-row-buttons \.tt-wa\{grid-column:1 \/ -1;\}/);
+  assert.doesNotMatch(css, /@media\s*\(max-width/);
 });

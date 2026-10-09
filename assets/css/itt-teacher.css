@@ -62,10 +62,22 @@
 .tt-table thead th{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap;}
 .tt-table tbody tr:last-child th,.tt-table tbody tr:last-child td{border-bottom:none;}
 .tt-table tbody th{font-weight:600;min-width:9rem;}
-.tt-row-actions{white-space:nowrap;}
+/* Students and their assignments. A card per student until the window is
+   wide enough for every column and all three buttons; then a table. Nothing
+   is ever cut off at the right-hand edge. */
+.tt-assignments{overflow-x:visible;border:none;background:none;}
+.tt-assignments table,.tt-assignments tbody,.tt-assignments tr,.tt-assignments th,.tt-assignments td{display:block;}
+.tt-assignments thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+.tt-assignments tbody tr{border:1px solid var(--border);border-radius:var(--itt-radius);background:var(--navy2);padding:.85rem .9rem;margin-bottom:.75rem;}
+.tt-assignments tbody tr:last-child{margin-bottom:0;}
+.tt-assignments tbody th,.tt-assignments tbody td{border-bottom:none;padding:0;min-width:0;}
+.tt-assignments tbody th{font-size:1rem;font-weight:700;margin-bottom:.5rem;}
+.tt-assignments tbody td[data-label]{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.2rem 0;text-align:right;}
+.tt-assignments tbody td[data-label]::before{content:attr(data-label);flex:none;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;}
+.tt-row-buttons{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.7rem;}
+.tt-row-buttons .itt-btn{flex:1 1 6.5rem;min-height:44px;padding:.45rem .6rem;font-size:.82rem;white-space:nowrap;}
 .tt-wa{gap:.35rem;}
 .tt-wa .itt-icon{width:1.05em;height:1.05em;}
-.tt-row-actions .itt-btn{min-height:40px;padding:.4rem .7rem;font-size:.8rem;margin:0 .25rem .25rem 0;}
 .tt-answers tbody th{min-width:14rem;font-weight:400;}
 .tt-answers td{min-width:11rem;}
 .tt-attempt{margin-bottom:.4rem;}
@@ -115,6 +127,25 @@
 .tt-link-name{font-weight:700;flex:1 1 100%;}
 .tt-link-url{flex:1 1 100%;font-size:.75rem;color:var(--muted);overflow-wrap:anywhere;}
 .tt-links .itt-btn{flex:1;min-height:44px;}
+
+@media (min-width:1100px){
+  .tt-assignments{overflow-x:auto;border:1px solid var(--border);background:var(--navy2);}
+  .tt-assignments table{display:table;}
+  .tt-assignments thead{display:table-header-group;position:static;width:auto;height:auto;overflow:visible;clip:auto;}
+  .tt-assignments thead tr{display:table-row;}
+  .tt-assignments thead th{display:table-cell;padding:.6rem .6rem;}
+  .tt-assignments tbody{display:table-row-group;}
+  .tt-assignments tbody tr{display:table-row;border:none;border-radius:0;background:none;padding:0;margin:0;}
+  .tt-assignments tbody th,.tt-assignments tbody td,.tt-assignments tbody td[data-label]{display:table-cell;padding:.6rem .6rem;border-bottom:1px solid var(--border);text-align:left;}
+  .tt-assignments tbody tr:last-child th,.tt-assignments tbody tr:last-child td{border-bottom:none;}
+  .tt-assignments tbody th{font-size:inherit;font-weight:600;min-width:7rem;}
+  .tt-assignments tbody td[data-label]::before{content:none;}
+  /* Answers and Copy link side by side, WhatsApp beneath them: the three
+     always fit inside the table, whatever the other columns need. */
+  .tt-row-buttons{display:grid;grid-template-columns:1fr 1fr;gap:.3rem;margin:0;width:11.5rem;}
+  .tt-row-buttons .itt-btn{min-height:36px;padding:.3rem .5rem;font-size:.78rem;}
+  .tt-row-buttons .tt-wa{grid-column:1 / -1;}
+}
 
 @media (min-width:640px){
   .tt-main{padding:1.5rem 1.5rem 5rem;}
