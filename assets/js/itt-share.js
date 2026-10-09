@@ -39,7 +39,39 @@
     return String(text == null ? '' : text).replace(/[*_~`]/g, '').replace(/\s+/g, ' ').trim();
   }
 
+  // True when an assignment has missed questions that can be answered again
+  // now (summary.revisit, kept by the server: open, and ready at or before now).
+  function revisitReady(a, now) {
+    var r = a && a.summary && a.summary.revisit;
+    if (!r || !r.open) return false;
+    var at = r.readyAt ? Date.parse(r.readyAt) : NaN;
+    return !isNaN(at) && at <= (now === undefined ? Date.now() : now);
+  }
+
+  // The reminder sent when a student's missed questions are ready again.
+  function revisitMessage(info) {
+    var name = firstName(info.studentName), n = info.revisitCount;
+    return [
+      '*INSPIRE ACADEMIC*',
+      '_Test & Teach · Ready to revisit_',
+      '',
+      name ? 'Hello ' + plain(name) + ',' : 'Hello,',
+      '',
+      (n ? (n === 1 ? 'One question' : n + ' questions') : 'Some questions') + ' you missed in this homework ' + (n === 1 ? 'is' : 'are') + ' ready for a second try:',
+      '',
+      '*' + plain(info.title) + '*',
+      '',
+      'Open your assignment:',
+      info.link,
+      '',
+      'One try each, from memory. It only takes a few minutes, and your first answers stay exactly as they were.',
+      '',
+      '_Inspire Academic · inspireacademic.org_'
+    ].join('\n');
+  }
+
   function message(info) {
+    if (info.kind === 'revisit') return revisitMessage(info);
     var name = firstName(info.studentName);
     var facts = [plain(info.subject), info.questionCount ? info.questionCount + (info.questionCount === 1 ? ' question' : ' questions') : '', duration(info.estimatedMinutes)].filter(Boolean);
     var due = dueDate(info.dueAt), note = plain(info.note);
@@ -72,7 +104,7 @@
     return 'https://wa.me/?text=' + encodeURIComponent(message(info));
   }
 
-  var api = { message: message, whatsappUrl: whatsappUrl, duration: duration };
+  var api = { message: message, whatsappUrl: whatsappUrl, duration: duration, revisitReady: revisitReady };
   root.ITTShare = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

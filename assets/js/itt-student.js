@@ -283,7 +283,19 @@
       revisit: function (questionId, response, attempt) {
         return api('POST', API + 'answer', { assignmentId: id, questionId: questionId, response: response, attempt: attempt, revisit: true });
       }
-    }, { onExit: function () { history.pushState({}, '', PAGE); route(); }, exitLabel: 'All assignments' });
+    }, { onExit: function () { history.pushState({}, '', PAGE); route(); }, exitLabel: 'All assignments', outbox: outbox(id) });
+  }
+
+  // Where the player keeps an answer it could not send (no signal), so that
+  // closing the page does not lose it. One answer at most, for a moment: the
+  // record of a student's work is always the server's, never this.
+  function outbox(id) {
+    var key = 'itt-outbox:' + id;
+    return {
+      get: function () { try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; } },
+      set: function (v) { try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) { /* private mode: held in memory only */ } },
+      clear: function () { try { localStorage.removeItem(key); } catch (e) { /* nothing to clear */ } }
+    };
   }
 
   function route() {

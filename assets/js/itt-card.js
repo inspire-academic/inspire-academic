@@ -41,6 +41,15 @@
     })[0] || null;
   }
 
+  // Missed questions that can be answered again now (summary.revisit is
+  // kept by the server: how many are open, and when the first is ready).
+  function revisitReady(a) {
+    var r = a.summary && a.summary.revisit;
+    if (!r || !r.open) return false;
+    var at = r.readyAt ? Date.parse(r.readyAt) : NaN;
+    return !isNaN(at) && at <= Date.now();
+  }
+
   function mount(grid, notice, supa) {
     var card = document.createElement('a');
     card.className = 'card subject-card itt fade-in';
@@ -60,17 +69,25 @@
         return;
       }
       var n = data.counts.outstanding;
+      var revisits = (data.assignments || []).filter(revisitReady);
       document.getElementById('itt-card-count').textContent = n
-        ? n + (n === 1 ? ' assignment' : ' assignments') + ' to do'
+        ? n + (n === 1 ? ' assignment' : ' assignments') + ' to do' + (revisits.length ? ' · questions ready to revisit' : '')
+        : revisits.length ? 'Questions you missed are ready to revisit.'
         : (data.counts.completed ? 'All done. ' + data.counts.completed + ' completed.' : 'No assignments waiting. Personalised work from your teacher appears here.');
-      var next = mostRelevant(data.assignments || []);
+      // New or unfinished work first; otherwise the work with a revisit waiting.
+      var open = mostRelevant(data.assignments || []);
+      var next = open || revisits[0];
       if (next) {
         var line = document.getElementById('itt-card-next');
         line.hidden = false;
-        line.textContent = (next.status === 'in_progress' ? 'Continue: ' : 'Next: ') + next.title;
+        line.textContent = (!open ? 'Revisit: ' : next.status === 'in_progress' ? 'Continue: ' : 'Next: ') + next.title;
         card.href = PAGE + '?a=' + encodeURIComponent(next.id);
       }
       // So new work is seen without scrolling past four subject cards.
+      if (!n && revisits.length && notice) {
+        notice.hidden = false;
+        notice.innerHTML = '<a class="itt-notice" href="' + esc(card.getAttribute('href')) + '"><span><strong>Test &amp; Teach:</strong> questions you missed are ready to revisit</span><span aria-hidden="true">→</span></a>';
+      }
       if (n && notice) {
         notice.hidden = false;
         notice.innerHTML = '<a class="itt-notice" href="' + esc(card.getAttribute('href')) + '"><span><strong>' + n + ' Test &amp; Teach ' +
@@ -101,6 +118,6 @@
     });
   }
 
-  root.ITTCard = { mount: mount, progress: progress, mostRelevant: mostRelevant };
+  root.ITTCard = { mount: mount, progress: progress, mostRelevant: mostRelevant, revisitReady: revisitReady };
   if (typeof module !== 'undefined' && module.exports) module.exports = root.ITTCard;
 })(typeof window !== 'undefined' ? window : globalThis);
