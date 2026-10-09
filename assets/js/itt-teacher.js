@@ -407,9 +407,13 @@
   // the teacher picks the contact there. `a` needs id, studentName, title and
   // whatever else is known: subject, questionCount, estimatedMinutes, dueAt, note.
   var WA_ICON = '<svg class="itt-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5a8.5 8.5 0 0 0-7.300 12.850L3.500 20.500l4.300-1.150A8.500 8.500 0 1 0 12 3.500z"/></svg>';
+  // When a student's missed questions are ready again, the same button sends
+  // the revisit reminder instead of the first "homework assigned" message.
   function whatsappButton(a) {
-    return '<a class="itt-btn tt-wa" target="_blank" rel="noopener" href="' + esc(ITTShare.whatsappUrl(Object.assign({ link: linkFor(a.id) }, a))) + '">' +
-      WA_ICON + 'WhatsApp<span class="itt-sr"> message to ' + esc(a.studentName) + '</span></a>';
+    var revisit = ITTShare.revisitReady(a);
+    var info = Object.assign({ link: linkFor(a.id) }, a, revisit ? { kind: 'revisit' } : {});
+    return '<a class="itt-btn tt-wa" target="_blank" rel="noopener" href="' + esc(ITTShare.whatsappUrl(info)) + '">' +
+      WA_ICON + (revisit ? 'WhatsApp: revisit ready' : 'WhatsApp') + '<span class="itt-sr"> message to ' + esc(a.studentName) + '</span></a>';
   }
 
   function linksHtml(rows, details) {
@@ -523,7 +527,8 @@
       rows.map(function (a) {
         var s = a.summary || {}, f = s.firstAttempt, m = s.mastery, st = A_STATUS[a.status] || [a.status, 'badge-blue'];
         return '<tr><th scope="row">' + esc(a.studentName) + '</th>' + (withPackage ? '<td data-label="Package">' + esc(a.title) + ' <span class="tt-vn">v' + a.versionNumber + '</span>' + (a.wholePackage ? '' : ' <span class="itt-small">(part)</span>') + '</td>' : '') +
-          '<td data-label="Status"><span class="badge ' + st[1] + '">' + st[0] + '</span></td>' +
+          '<td data-label="Status"><span class="badge ' + st[1] + '">' + st[0] + '</span>' +
+          (s.revisit && s.revisit.missed ? '<span class="tt-revisit-note">' + (ITTShare.revisitReady(a) ? 'Revisit ready · ' : 'Revisit · ') + s.revisit.secured + ' of ' + s.revisit.missed + ' secured</span>' : '') + '</td>' +
           '<td data-label="Sections">' + (s.sectionsComplete || 0) + ' of ' + a.sectionCount + '</td>' +
           '<td data-label="First attempts">' + (f && f.answered ? f.correct + ' of ' + f.answered + ' correct' : '–') + '</td>' +
           '<td data-label="Mastery check">' + (m ? (m.answered ? m.correct + ' of ' + m.answered + ' correct' : 'not reached') : 'none') + '</td>' +

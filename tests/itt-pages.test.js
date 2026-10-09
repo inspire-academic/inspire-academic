@@ -219,10 +219,68 @@ test('Revisit: the player offers missed questions again, and only the shared cod
 
   const player = read('assets/js/itt-player.js'), student = read('assets/js/itt-student.js');
   assert.match(player, /data-act="revisit">Revisit ' \+ plural\(r\.due\.length, 'question'\)/);
-  assert.match(player, /backend\.revisit\(q\.id, response, attempt\)/);
+  assert.match(player, /backend\.revisit\(p\.questionId, p\.response, p\.attempt\)/);
   assert.match(player, /One try, from memory/);
   assert.match(player, /P\.revisit\(pkg, null, rows, Date\.now\(\), 0\)/, 'a preview has no waiting, so the cycle can be seen');
   assert.match(student, /attempt: attempt, revisit: true \}\)/);
   assert.match(student, /Questions you missed are ready to revisit/);
   assert.match(read('assets/css/itt.css'), /\.itt-revisit\{/);
+});
+
+test('a dropped connection holds the answer and sends it again; it is never thrown away', () => {
+  const player = read('assets/js/itt-player.js'), student = read('assets/js/itt-student.js');
+  // Held on a failure in transit, retried on "online" and on a timer, stored once by the server.
+  assert.match(player, /function retryable\(e\) \{\s*return !!e && \(e\.code === 'network' \|\| e\.status >= 500 \|\|/);
+  assert.match(player, /if \(retryable\(e\)\) \{[\s\S]{0,200}keep\(p\);/);
+  assert.match(player, /root\.addEventListener\('online', onOnline\)/);
+  assert.match(player, /root\.removeEventListener\('online', onOnline\)/);
+  assert.match(player, /retryDelay = Math\.min\(30000, retryDelay \? retryDelay \* 2 : 4000\)/);
+  assert.match(player, /data-act="send-now">Send now</);
+  // A held answer is shown as the student's, locked, with no verdict: marking stays on the server.
+  assert.match(player, /answerHtml\(q, \{ response: held\.response, correct: true, reveal: null \}, true\)/);
+  assert.match(player, /Your answer is kept on this phone and will be sent as soon as you are back online/);
+  // It survives closing the page, and is resent when the assignment is opened again.
+  assert.match(player, /var left = box && !pending \? box\.get\(\) : null;/);
+  assert.match(student, /outbox: outbox\(id\)/);
+  assert.match(student, /var key = 'itt-outbox:' \+ id;/);
+  // The old message, which left the retry to the student, is gone.
+  assert.doesNotMatch(player, /Your answer has not been saved\. Reconnect, then tap Try again/);
+  assert.match(read('student/test-and-teach.html'), /An answer you submit is kept on this phone and sent when you reconnect\./);
+  // The teacher's preview never needs it: it is only given to the student's own assignment.
+  assert.doesNotMatch(read('assets/js/itt-teacher.js'), /outbox/);
+});
+
+test('revisit prompts: the ISM Class card and the WhatsApp button say when a second try is ready', () => {
+  const Share = require('../assets/js/itt-share.js');
+  const now = Date.UTC(2026, 9, 10, 12);
+  const a = (revisit) => ({ id: 'x', status: 'completed', title: 'Ions', summary: { revisit } });
+  const earlier = new Date(now - 3600000).toISOString(), later = new Date(now + 3600000).toISOString();
+  assert.equal(Share.revisitReady(a({ missed: 2, secured: 0, open: 2, readyAt: earlier }), now), true);
+  assert.equal(Share.revisitReady(a({ missed: 2, secured: 0, open: 2, readyAt: later }), now), false, 'not before the break is over');
+  assert.equal(Share.revisitReady(a({ missed: 2, secured: 2, open: 0, readyAt: null }), now), false);
+  assert.equal(Share.revisitReady(a(null), now), false);
+  assert.equal(Share.revisitReady({ summary: {} }, now), false);
+  // The card on ISM Class uses the same rule.
+  assert.equal(ITTCard.revisitReady(a({ missed: 1, secured: 0, open: 1, readyAt: '2020-01-01T00:00:00.000Z' })), true);
+  assert.equal(ITTCard.revisitReady(a({ missed: 1, secured: 0, open: 1, readyAt: '2999-01-01T00:00:00.000Z' })), false);
+  assert.equal(ITTCard.revisitReady(a(null)), false);
+  const card = read('assets/js/itt-card.js');
+  assert.match(card, /Questions you missed are ready to revisit\./);
+  assert.match(card, /var next = open \|\| revisits\[0\];/);
+
+  const text = Share.message({ kind: 'revisit', link: 'https://www.inspireacademic.org/itt?a=1', studentName: 'Ama Boateng', title: 'Year 10 Chemistry: Structure and Bonding' });
+  assert.deepEqual(text.split('\n'), [
+    '*INSPIRE ACADEMIC*', '_Test & Teach · Ready to revisit_', '', 'Hello Ama,', '',
+    'Some questions you missed in this homework are ready for a second try:', '',
+    '*Year 10 Chemistry: Structure and Bonding*', '', 'Open your assignment:', 'https://www.inspireacademic.org/itt?a=1', '',
+    'One try each, from memory. It only takes a few minutes, and your first answers stay exactly as they were.', '',
+    '_Inspire Academic · inspireacademic.org_'
+  ]);
+  assert.match(Share.message({ kind: 'revisit', link: 'l', studentName: 'Kofi', title: 'T', revisitCount: 1 }), /\nOne question you missed in this homework is ready for a second try:\n/);
+  // Without the flag the first message is unchanged.
+  assert.match(Share.message({ link: 'l', studentName: 'Kofi', title: 'T' }), /You have been assigned a new homework:/);
+
+  const teacher = read('assets/js/itt-teacher.js');
+  assert.match(teacher, /var revisit = ITTShare\.revisitReady\(a\);/);
+  assert.match(teacher, /revisit \? 'WhatsApp: revisit ready' : 'WhatsApp'/);
 });
