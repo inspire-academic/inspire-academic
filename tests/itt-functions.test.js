@@ -662,6 +662,71 @@ test('Student View: staff are told they may preview; students are not, and canno
   assert.equal(s.fake.tables.itt_responses.length, 0);
 });
 
+test('Most missed: the class\'s first attempts, per question, for the caller\'s own students', async () => {
+  const s = setup();
+  const version = await published(s);
+  const made = await assignTo(s, version, [AMA, KOFI, ESI]);
+  const of = name => made.created.find(c => c.studentName.startsWith(name)).id;
+  const yaw = (await s.assignments('POST', { action: 'assign', versionId: version.id, studentIds: [YAW] }, as(ADMIN))).body.created[0].id;
+  const insights = who => s.assignments('GET', { versionId: version.id, insights: '1' }, as(who));
+
+  const empty = await insights(TEACHER);
+  assert.equal(empty.status, 200);
+  assert.deepEqual([empty.body.students, empty.body.started, empty.body.questions.length], [3, 0, 0]);
+
+  // Ama misses Q1, then gets it after the feedback; misses Q3 with the anticipated slip.
+  await answer(s, AMA, of('Ama'), 's1-q01', { option: 'A' });
+  await answer(s, AMA, of('Ama'), 's1-q01', { option: 'C' }, 2);
+  await answer(s, AMA, of('Ama'), 's1-q02', { value: false });
+  await answer(s, AMA, of('Ama'), 's1-q03', { text: 'Anion' });
+  // Kofi makes the same Q1 mistake, and is not sure about Q2.
+  await answer(s, KOFI, of('Kofi'), 's1-q01', { option: 'A' });
+  await answer(s, KOFI, of('Kofi'), 's1-q02', { notSure: true });
+  await answer(s, KOFI, of('Kofi'), 's1-q03', { text: 'cation' });
+  // Esi gets Q1 right. Yaw, another teacher's student, gets it wrong.
+  await answer(s, ESI, of('Esi'), 's1-q01', { option: 'C' });
+  await answer(s, YAW, yaw, 's1-q01', { option: 'B' });
+
+  const r = (await insights(TEACHER)).body;
+  assert.deepEqual([r.students, r.started, r.completed], [3, 3, 0]);
+  assert.deepEqual(r.questions.map(q => [q.id, q.attempted, q.missed]), [['s1-q01', 3, 2], ['s1-q02', 2, 1], ['s1-q03', 2, 1]], 'most missed first, unanswered questions left out');
+
+  const q1 = r.questions[0];
+  assert.deepEqual([q1.assigned, q1.firstCorrect, q1.firstWrong, q1.firstUnsure, q1.correctLater], [3, 1, 2, 0, 1], 'a later correct retry never hides the first miss');
+  assert.deepEqual(q1.wrong, [{ label: 'A. A proton', count: 2, misconception: 'Ions form by changing the number of protons' }]);
+  assert.deepEqual(q1.missedBy, ['Ama Boateng', 'Kofi Addo']);
+  assert.deepEqual(q1.answer, { option: 'C' });
+  assert.equal(q1.sectionTitle, 'Foundation: how ions form');
+  assert.equal(q1.number, 1);
+
+  const q2 = r.questions[1];
+  assert.deepEqual([q2.firstWrong, q2.firstUnsure, q2.wrong.length], [0, 1, 0], '"I\'m not sure" is counted as missed, apart from wrong answers');
+  assert.deepEqual(q2.missedBy, ['Kofi Addo']);
+  const q3 = r.questions[2];
+  assert.deepEqual(q3.wrong, [{ label: 'Anion', count: 1, misconception: 'Swaps cation and anion' }]);
+  assert.deepEqual(r.objectives.map(o => [o.id, o.correct, o.attempted]), [['LO1', 3, 7]]);
+
+  // An admin sees every student; the other teacher only their own.
+  const all = (await insights(ADMIN)).body;
+  assert.equal(all.students, 4);
+  assert.deepEqual([all.questions[0].attempted, all.questions[0].missed], [4, 3]);
+  assert.deepEqual(all.questions[0].wrong.map(w => [w.label, w.count]), [['A. A proton', 2], ['B. A neutron', 1]]);
+  const other = (await insights(OTHER_TEACHER)).body;
+  assert.deepEqual([other.students, other.questions.length, other.questions[0].missedBy], [1, 1, ['Yaw Sarpong']]);
+
+  // A withdrawn assignment drops out of the count; its answers stay stored.
+  await s.assignments('POST', { action: 'revoke', id: of('Kofi') }, as(TEACHER));
+  const after = (await insights(TEACHER)).body;
+  const q1After = after.questions.find(q => q.id === 's1-q01');
+  assert.deepEqual([after.students, q1After.attempted, q1After.missed], [2, 2, 1]);
+  assert.equal(after.questions[0].id, 's1-q03', 'the ranking follows the students who remain');
+  assert.equal(s.fake.tables.itt_responses.filter(x => x.assignment_id === of('Kofi')).length, 3);
+
+  // Students cannot read it, and a bad id is refused.
+  assert.equal((await insights(AMA)).status, 403);
+  assert.equal((await s.assignments('GET', { versionId: 'nope', insights: '1' }, as(TEACHER))).status, 400);
+});
+
 test('the endpoints fail safely when the service is not configured', async () => {
   const s = setup();
   delete process.env.SUPABASE_SERVICE_ROLE_KEY;
