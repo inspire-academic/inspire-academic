@@ -50,6 +50,11 @@
       <h1 class="itt-h1" id="itt-home-h">Inspire Test &amp; Teach</h1>
       <p class="itt-desc" id="itt-greeting">Questions chosen for you by your teacher, with a full explanation after every answer.</p>
     </header>
+    <!-- Teachers and admins only: every approved quiz, as a student sees it. -->
+    <div class="itt-staffbar" id="itt-staff-home" hidden>
+      <p><strong>Student View.</strong> You are signed in as staff, so every approved quiz is listed here as a student would see it once assigned. Nothing you answer is saved.</p>
+      <a class="itt-btn" href="/teacher/test-and-teach.html">Teacher workspace</a>
+    </div>
     <div class="itt-tabs" role="tablist" aria-label="Your assignments">
       <button type="button" class="itt-tab" role="tab" id="itt-tab-todo" data-tab="todo" aria-controls="itt-list" aria-selected="true">To Do <span class="itt-tab-count" id="itt-count-todo">0</span></button>
       <button type="button" class="itt-tab" role="tab" id="itt-tab-progress" data-tab="progress" aria-controls="itt-list" aria-selected="false" tabindex="-1">In Progress <span class="itt-tab-count" id="itt-count-progress">0</span></button>
@@ -61,6 +66,10 @@
   </section>
 
   <!-- One assignment, in the player. -->
+  <div class="itt-staffbar" id="itt-staff-player" hidden>
+    <p><strong>Student View.</strong> A preview: nothing you answer is saved.</p>
+    <label class="itt-staff-check"><input type="checkbox" id="itt-staff-unlock"> <span>Open every section</span></label>
+  </div>
   <section id="itt-player" hidden aria-label="Assignment"></section>
 </main>
 
