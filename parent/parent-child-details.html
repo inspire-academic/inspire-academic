@@ -13,6 +13,9 @@
 <script src="/assets/js/nav-back.js"></script>
   <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/itt-parent.css">
+<script src="/assets/js/maths-typeset.js" defer></script>
+<script src="/assets/js/itt-parent.js" defer></script>
 <style>
     :root {
       --gold-light: #f5e9c8;
@@ -529,6 +532,10 @@
 
       </div>
 
+      <!-- TEST & TEACH HOMEWORK: shown only when the child has some.
+           Filled in by assets/js/itt-parent.js; never holds questions or answers. -->
+      <section class="ittp" id="itt-parent" hidden aria-label="Test and Teach homework"></section>
+
       <!-- RECENT ACTIVITY -->
       <div class="card" style="margin-bottom:2rem;">
         <div class="section-header">
@@ -641,6 +648,12 @@ async function init() {
   const srsCards = (srsCardsRes.data || []).map(r => r.data);
 
   renderPage(profile, attempts, progress, streak, srsStats, srsCards);
+
+  // Test & Teach homework, if the child has any. Loaded after the report so
+  // it can never hold the report up, and it hides itself if it fails.
+  if (window.ITTParent) {
+    ITTParent.mount(document.getElementById('itt-parent'), supa, studentId, profile.first_name || (profile.full_name || '').split(' ')[0] || '');
+  }
 }
 
 function renderPage(profile, attempts, progress, streak, srsStats, srsCards) {
