@@ -42,13 +42,18 @@
   }
 
   // ── plain-text fallback for a LaTeX span ──────────────────────────
-  var SUP = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻', 'n': 'ⁿ', '+': '⁺' };
-  var SUB = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉', 'n': 'ₙ', '+': '₊', '-': '₋' };
+  var SUP = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻', '−': '⁻', 'n': 'ⁿ', '+': '⁺' };
+  var SUB = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉', 'n': 'ₙ', '+': '₊', '-': '₋', '−': '₋' };
   var SYMBOLS = {
     times: '×', div: '÷', pm: '±', le: '≤', ge: '≥', ne: '≠', approx: '≈', to: '→',
     infty: '∞', pi: 'π', theta: 'θ', circ: '°', cdot: '·', checkmark: '✓',
     sin: 'sin', cos: 'cos', tan: 'tan', quad: ' ', left: '', right: '',
-    ldots: '…', dots: '…', cdots: '⋯', Rightarrow: '⇒', propto: '∝', lt: '<', gt: '>'
+    ldots: '…', dots: '…', cdots: '⋯', Rightarrow: '⇒', propto: '∝', lt: '<', gt: '>',
+    // Chemistry and physics: a reaction arrow must never fall back to the
+    // word "rightarrow".
+    rightarrow: '→', longrightarrow: '→', leftarrow: '←', rightleftharpoons: '⇌', leftrightarrow: '↔', uparrow: '↑', downarrow: '↓',
+    leq: '≤', geq: '≥', neq: '≠', sim: '~', degree: '°', Delta: 'Δ', delta: 'δ', alpha: 'α', beta: 'β', gamma: 'γ',
+    lambda: 'λ', mu: 'μ', rho: 'ρ', sigma: 'σ', omega: 'ω', Omega: 'Ω', displaystyle: '', textstyle: ''
   };
 
   // Reads one {...} group starting at s[i] === '{'; returns [content, nextIndex].
@@ -94,9 +99,9 @@
           var rad = group(s, i);
           out += (index === '3' ? '∛' : index ? index + '√' : '√') + wrap(toPlain(rad[0]));
           i = rad[1];
-        } else if (name === 'text' || name === 'mathbf' || name === 'overrightarrow' || name === 'mathrm') {
+        } else if (name === 'text' || name === 'mathbf' || name === 'overrightarrow' || name === 'mathrm' || name === 'mathit' || name === 'textbf' || name === 'operatorname') {
           var g = group(s, i);
-          out += name === 'text' ? g[0] : toPlain(g[0]);
+          out += (name === 'text' || name === 'textbf') ? g[0] : toPlain(g[0]);
           i = g[1];
         } else if (name === 'dot') {
           var d = group(s, i);

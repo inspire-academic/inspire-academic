@@ -52,7 +52,15 @@
 .itt-text strong{font-weight:700;}
 .itt-maths-block{overflow-x:auto;overflow-y:hidden;padding:.6rem .25rem;margin:0 0 .7em;text-align:center;-webkit-overflow-scrolling:touch;}
 .itt-maths-block:last-child{margin-bottom:0;}
-.itt-maths-block .ia-maths{display:inline-block;white-space:nowrap;}
+/* A long equation breaks where a textbook would break it, after the arrow or
+   a plus sign, never inside a formula. Only a single piece wider than the
+   screen (a very wide fraction) falls back to scrolling inside this box. */
+.itt-maths-block .ia-maths{display:inline-block;max-width:100%;}
+/* Typeset maths keeps the size of the words around it: charges and
+   subscripts stay legible on a phone, and a line holding a fraction or a
+   raised charge is given the room instead of crowding the line above. */
+.itt-text .ia-maths,.itt-option-text .ia-maths,.itt-correct-answer .ia-maths,.itt-objective-text .ia-maths{line-height:1.7;}
+.itt-correct-answer,.itt-objective-text{overflow-x:auto;overflow-y:hidden;}
 
 .itt-figure{margin:1rem 0;text-align:center;}
 .itt-figure img{max-width:100%;height:auto;max-height:60vh;border-radius:8px;border:1px solid var(--border);background:#FBFAF6;}
@@ -145,7 +153,8 @@
 .itt-option:hover{border-color:var(--gold);}
 .itt-option input{flex:none;width:1.3rem;height:1.3rem;margin:.15rem 0 0;accent-color:var(--ia-gold);}
 .itt-option-key{flex:none;font-weight:800;min-width:1.1rem;line-height:1.6;}
-.itt-option-text{flex:1;min-width:0;}
+/* A formula too wide for the row scrolls inside the row; the page never does. */
+.itt-option-text{flex:1;min-width:0;overflow-x:auto;overflow-y:hidden;padding:2px 0;}
 .itt-option:has(input:checked){border-color:var(--ia-gold);background:var(--itt-chosen);}
 .itt-option:has(input:focus-visible){outline:3px solid var(--gold);outline-offset:2px;}
 .itt-option:has(input:disabled){cursor:default;}
@@ -179,16 +188,21 @@
 .itt-feedback.itt-idea{border-color:var(--itt-idea);}
 .itt-verdict{font-family:var(--font-body);font-size:1.05rem;font-weight:800;margin:0 0 .6rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
 .itt-ok .itt-verdict{color:var(--itt-ok);}
-.itt-no .itt-verdict{color:var(--itt-no);}
+.itt-no .itt-verdict{color:var(--white);}
+.itt-no .itt-verdict .itt-icon{color:var(--itt-idea);}
 .itt-idea .itt-verdict{color:var(--itt-idea);}
+.itt-status{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .75rem;margin:0 0 .75rem;}
+.itt-status-result{font-size:.78rem;font-weight:700;color:var(--itt-no);border:1px solid currentColor;border-radius:999px;padding:.1rem .6rem;}
 .itt-attempt{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
 .itt-correct-answer{margin:.9rem 0 0;padding-top:.8rem;border-top:1px solid var(--border);}
 .itt-correct-label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--itt-ok);margin-bottom:.15rem;}
 .itt-earlier{list-style:none;margin:.8rem 0 0;padding:0;font-size:.8rem;color:var(--muted);}
 .itt-learn{margin-top:.85rem;border:1px solid var(--border);border-radius:var(--itt-radius);padding:.9rem 1rem;background:var(--navy2);}
 .itt-learn .itt-h3{margin-top:0;color:var(--gold);}
-.itt-worked summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center;}
-.itt-worked[open] summary{margin-bottom:.5rem;}
+.itt-worked summary,.itt-intro summary{font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center;}
+.itt-worked[open] summary,.itt-intro[open] summary{margin-bottom:.5rem;}
+.itt-intro{margin:.25rem 0 1rem;}
+.itt-intro summary{color:var(--gold);font-size:.9rem;}
 
 /* ── sign-in prompt ── */
 .itt-signin .itt-btn{width:100%;margin-top:1rem;}
