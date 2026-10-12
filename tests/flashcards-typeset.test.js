@@ -90,6 +90,19 @@ test('flashcards: every maths span on every card renders with KaTeX', () => {
   assert.deepEqual(problems, []);
 });
 
+// The sciences follow the quiz bank: chemistry in Unicode (CO₂, Cu²⁺, →),
+// equations with fractions, powers or roots in LaTeX.
+test('flashcards: science cards have no typed-out notation (CO2, x^2, ->, sqrt)', () => {
+  const problems = [];
+  for (const { id, subject, text } of cardTexts()) {
+    if (TYPESET_SUBJECTS.includes(subject)) continue;
+    const outside = text.replace(/\\\([\s\S]*?\\\)/g, ' ');
+    const found = /\^|->|<=>|\bsqrt\b|\d ?x ?10\b|\b(?:CO2|H2O|O2|H2|N2|CH4|NH3|SO2|H2SO4|HCl2|CaCO3|NaOH2|Cl2)\b|\b(?:Cu|Fe|Mg|Ca|Zn|Al)[23]\+|\bdegrees C\b/.exec(outside);
+    if (found) problems.push(`${id}: "${found[0]}" in ${outside.trim().slice(0, 80)}`);
+  }
+  assert.deepEqual(problems, []);
+});
+
 test('flashcards: typeset subjects have no plain-text maths left beside the LaTeX', () => {
   const problems = [];
   for (const { id, subject, text } of cardTexts()) {
