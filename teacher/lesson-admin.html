@@ -409,8 +409,9 @@ async function logout(){
 
 // ── Subjects / Topics ──
 async function loadSubjects(){
-  const { data } = await supa.from('subjects').select('id, name').order('name');
-  allSubjects = data || [];
+  const { data } = await supa.from('subjects').select('*').order('name');
+  // GCSE only: lessons are GCSE (subjects.level).
+  allSubjects = (data || []).filter(s => (s.level || 'gcse') === 'gcse');
   const sel = document.getElementById('subject-select');
   sel.innerHTML = '<option value="">Select subject…</option>' +
     allSubjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
