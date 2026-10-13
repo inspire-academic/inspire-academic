@@ -147,7 +147,13 @@ test('graph: the flashcard app shows a published graph, and draws drafts for a t
   assert.match(app, /\$\('fc-a'\)\.innerHTML = html\(card\.a\) \+ \(card\.afig \|\| ''\);/);
   assert.match(app, /script\('\/assets\/js\/physics-graph\.js'\)/, 'loaded only for the draft preview');
   assert.doesNotMatch(read('student/flashcards-v2.html'), /physics-graph\.js/, 'students download no drawing script');
-  assert.match(read('assets/css/flashcards-v2.css'), /\.fc-q svg,\.fc-a svg\{display:block;width:100%;max-width:360px;height:auto;/);
+  // Styled by its own class: the typeset maths has small svgs of its own
+  // (root signs), which a rule for every svg would stretch across the card.
+  const css = read('assets/css/flashcards-v2.css');
+  assert.match(css, /\.fc-main \.pg-svg\{display:block;width:100%;max-width:360px;height:auto;/);
+  for (const f of ['assets/css/flashcards-v2.css', 'assets/css/flashcard-review.css', 'student/quiz.html']) {
+    assert.doesNotMatch(read(f), /[\s,}](?:\.fc-q|\.fc-a|\.fr-figure|\.q-figure) svg\s*\{/, `${f} styles graphs by class, not every svg`);
+  }
   const review = read('assets/js/flashcard-review.js');
   assert.match(review, /figureHtml\(card\.figure\)/);
   assert.match(review, /figureHtml\(card\.answerFigure\)/);
