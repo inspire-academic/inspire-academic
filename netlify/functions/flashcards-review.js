@@ -45,7 +45,12 @@ const TOPICS = {
   'physics-a-level/gravitational-fields': require('../../curriculum/flashcards/physics-a-level/gravitational-fields.json'),
   'physics-a-level/electric-fields': require('../../curriculum/flashcards/physics-a-level/electric-fields.json'),
   'physics-a-level/magnetic-fields': require('../../curriculum/flashcards/physics-a-level/magnetic-fields.json'),
-  'physics-a-level/nuclear': require('../../curriculum/flashcards/physics-a-level/nuclear.json')
+  'physics-a-level/nuclear': require('../../curriculum/flashcards/physics-a-level/nuclear.json'),
+  'physics-a-level/astrophysics': require('../../curriculum/flashcards/physics-a-level/astrophysics.json'),
+  'physics-a-level/medical-physics': require('../../curriculum/flashcards/physics-a-level/medical-physics.json'),
+  'physics-a-level/engineering-physics': require('../../curriculum/flashcards/physics-a-level/engineering-physics.json'),
+  'physics-a-level/turning-points': require('../../curriculum/flashcards/physics-a-level/turning-points.json'),
+  'physics-a-level/electronics': require('../../curriculum/flashcards/physics-a-level/electronics.json')
 };
 const SPECS = {
   'physics-a-level': require('../../curriculum/flashcards/spec/physics-a-level.json')
