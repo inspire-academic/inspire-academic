@@ -66,7 +66,11 @@ const QUIZ_TOPICS = Object.fromEntries([
   require('../../curriculum/quizzes/physics-a-level/materials.json'),
   require('../../curriculum/quizzes/physics-a-level/waves.json'),
   require('../../curriculum/quizzes/physics-a-level/quantum.json'),
-  require('../../curriculum/quizzes/physics-a-level/particles.json')
+  require('../../curriculum/quizzes/physics-a-level/particles.json'),
+  require('../../curriculum/quizzes/physics-a-level/measurements.json'),
+  require('../../curriculum/quizzes/physics-a-level/further-mechanics.json'),
+  require('../../curriculum/quizzes/physics-a-level/oscillations.json'),
+  require('../../curriculum/quizzes/physics-a-level/thermal.json')
 ].map(quizTopic).map(t => [t.topic.id, t]));
 const topicFile = id => (Object.prototype.hasOwnProperty.call(TOPICS, id) && TOPICS[id]) ||
   (Object.prototype.hasOwnProperty.call(QUIZ_TOPICS, id) && QUIZ_TOPICS[id]) || null;
