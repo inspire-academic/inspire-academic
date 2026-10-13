@@ -152,7 +152,9 @@
     // "Approve all" covers the cards still to review. Cards sent back for
     // changes are never swept up with them.
     $('fr-bulk').hidden = !c.todo;
+    // Quiz topics: approving is step 1, publishing is step 2.
     $('fr-publish').hidden = !(data.topic && data.topic.kind === 'quiz' && c.approved);
+    $('fr-publish-text').textContent = c.approved + ' approved ' + (c.approved === 1 ? 'question is' : 'questions are') + ' not in the quiz bank until you publish. Students cannot see them yet.' + (c.todo ? ' You can publish now and again after approving more.' : '');
     $('fr-bulk-start').textContent = 'Approve all ' + c.todo + ' cards still to review';
     $('fr-bulk-text').textContent = 'Approve ' + c.todo + ' cards in this topic? Send back any you disagree with first. ';
     bulkAsk(false);
@@ -190,7 +192,7 @@
     }).then(function (res) {
       buttons.forEach(function (b) { b.disabled = false; });
       todo.forEach(function (c) { if (res.approved.indexOf(c.id) !== -1) c.review = res.review; });
-      toast(res.approved.length + ' cards approved');
+      toast(res.approved.length + ' approved' + (data.topic && data.topic.kind === 'quiz' ? '. Next: publish, at the top of the page.' : ''));
       if (res.changed.length) {
         // Edited while the page was open: fetch the current wording to read.
         $('fr-status').textContent = res.changed.length + ' cards were edited since you opened the page and were not approved. They are shown again below.';
@@ -218,7 +220,7 @@
     api('POST', '/api/v1/flashcards/review', { action: 'publish-quiz', topic: topicId }).then(function (res) {
       out.textContent = (res.boards || []).map(function (b) {
         return b.board + ': ' + PUBLISHED[b.status] + (b.status === 'too_few' ? '' : ', ' + b.questions + ' questions');
-      }).join(' · ');
+      }).join(' · ') + '. Students find the quizzes at /a-level/physics.';
     }, function (e) { out.textContent = e.message; }).then(function () { btn.disabled = false; });
   });
 
@@ -226,7 +228,10 @@
     counts();
     var shown = data.cards.filter(inFilter), box = $('fr-list');
     if (!shown.length) {
-      box.innerHTML = '<p class="fr-empty">' + (filter === 'todo' ? 'Nothing left to review in this topic.' : 'No cards here.') + '</p>';
+      // On a quiz topic, the next step is offered here too, where the reviewer has just finished.
+      var next = filter === 'todo' && !$('fr-publish').hidden;
+      box.innerHTML = '<p class="fr-empty">' + (filter === 'todo' ? 'Nothing left to review in this topic.' : 'No cards here.') +
+        (next ? '<br><button type="button" class="itt-btn itt-btn-primary" data-act="publish">Step 2: publish the approved questions as quizzes</button>' : '') + '</p>';
       return;
     }
     // Grouped by specification point, each group with its own approve button.
@@ -294,6 +299,8 @@
     var btn = ev.target.closest('button[data-act]');
     if (!btn) return;
     if (btn.getAttribute('data-act') === 'section') { approveSection(btn); return; }
+    // The publish button at the foot of a finished topic presses the one at the top.
+    if (btn.getAttribute('data-act') === 'publish') { $('fr-publish').scrollIntoView({ block: 'center' }); $('fr-publish-btn').click(); return; }
     var el = btn.closest('.fr-card');
     var card = data.cards.filter(function (c) { return c.id === el.getAttribute('data-id'); })[0];
     var act = btn.getAttribute('data-act');

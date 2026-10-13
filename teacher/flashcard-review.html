@@ -45,9 +45,11 @@
 
   <p class="fr-progress" id="fr-progress" aria-live="polite"></p>
 
-  <!-- Quiz topics only: put the approved questions into the quiz bank. -->
-  <div class="fr-bulk" id="fr-publish" hidden>
-    <button type="button" class="itt-btn" id="fr-publish-btn">Publish approved questions as quizzes</button>
+  <!-- Quiz topics only: put the approved questions into the quiz bank.
+       Approving is step 1; nothing reaches students until this is pressed. -->
+  <div class="fr-publish" id="fr-publish" hidden>
+    <p class="fr-publish-step"><strong>Step 2: publish.</strong> <span id="fr-publish-text"></span></p>
+    <button type="button" class="itt-btn itt-btn-primary" id="fr-publish-btn">Publish approved questions as quizzes</button>
     <p class="fr-publish-result" id="fr-publish-result" role="status" aria-live="polite"></p>
   </div>
 
