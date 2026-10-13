@@ -103,6 +103,57 @@ test('flashcards: science cards have no typed-out notation (CO2, x^2, ->, sqrt)'
   assert.deepEqual(problems, []);
 });
 
+test('flashcards: every card has a question and a finished answer', () => {
+  const problems = [];
+  for (const [board, bank] of Object.entries(loadBank())) {
+    for (const [subject, data] of Object.entries(bank)) {
+      for (const [topic, modes] of Object.entries(data.topics)) {
+        for (const mode of ['recall', 'exam']) {
+          const seen = new Set();
+          (modes[mode] || []).forEach((card, i) => {
+            const id = `${board} ${subject} / ${topic} / ${mode} ${i + 1}`;
+            const bare = t => String(t == null ? '' : t).replace(/<[^>]+>/g, '').trim();
+            if (bare(card.q).length < 10) problems.push(`${id}: no question`);
+            if (bare(card.a).length < 3) problems.push(`${id}: no answer`);
+            if (seen.has(card.q)) problems.push(`${id}: question repeated in this topic`);
+            seen.add(card.q);
+            // Working-out notes left in a model answer ("let me recalculate").
+            const draft = /\blet me\b|\brecalculate\b|\bre-examine\b|\brecheck\b|wait —/i.exec([card.q, card.a, ...(card.points || [])].join(' '));
+            if (draft) problems.push(`${id}: unfinished working ("${draft[0]}")`);
+          });
+        }
+      }
+    }
+  }
+  assert.deepEqual(problems, []);
+});
+
+test('flashcards: units are not typed out (cm3, 5 ohm)', () => {
+  const problems = [];
+  for (const { id, text } of cardTexts()) {
+    const outside = text.replace(/\\\([\s\S]*?\\\)/g, ' ');
+    const found = /\b(?:c|d|m|k)?m[23]\b|\d ?ohm\b|\d ?degrees?\b/.exec(outside);
+    if (found) problems.push(`${id}: "${found[0]}" in ${outside.trim().slice(0, 80)}`);
+  }
+  assert.deepEqual(problems, []);
+});
+
+// Light mode turns var(--navy) into the parchment page colour. Type on the
+// page's pale surfaces must use --ink, and panels that are dark by design
+// (the answer side of a card, the bars) must carry ia-keep-dark, or their
+// text disappears.
+test('flashcards: card text stays readable in light mode', () => {
+  const css = PAGE.slice(PAGE.indexOf('<style>'), PAGE.indexOf('</style>'));
+  assert.doesNotMatch(css, /[^-]color:\s*var\(--navy\)/, 'text colour must not be var(--navy)');
+  assert.match(css, /\.card-question \{[^}]*color: var\(--ink\)/);
+  assert.match(css, /:root\[data-theme="light"\] \{[^}]*--ink:/);
+  for (const panel of ['card-back', 'app-header', 'session-header', 'dash-hero', 'btn-primary']) {
+    const uses = PAGE.match(new RegExp(`class="${panel}[ "]`, 'g')) || [];
+    const kept = PAGE.match(new RegExp(`class="${panel} ia-keep-dark"`, 'g')) || [];
+    assert.ok(uses.length > 0 && uses.length === kept.length, `every .${panel} is marked ia-keep-dark`);
+  }
+});
+
 test('flashcards: typeset subjects have no plain-text maths left beside the LaTeX', () => {
   const problems = [];
   for (const { id, subject, text } of cardTexts()) {
