@@ -154,6 +154,29 @@ test('flashcards: card text stays readable in light mode', () => {
   }
 });
 
+// A card is saved under one id (subject, topic, recall|exam, position in that
+// list) whichever mode it is studied in. Mixed Mode once numbered exam cards
+// on from the recall cards, so their ratings never reached the topic's mastery.
+test('flashcards: Mixed Mode saves each card under the same id as Recall and Exam Mode', () => {
+  const src = /function sessionCards\([\s\S]*?\n}\n/.exec(PAGE);
+  assert.ok(src, 'sessionCards() found');
+  const ctx = { CONTENT: { Physics: { topics: { Forces: { recall: [{ q: 'r0' }, { q: 'r1' }], exam: [{ q: 'e0' }, { q: 'e1' }, { q: 'e2' }] } } } } };
+  vm.createContext(ctx);
+  vm.runInContext(src[0], ctx);
+  const ids = mode => JSON.parse(JSON.stringify(ctx.sessionCards('Physics', 'Forces', mode))).map(c => `${c.card.q}=${c.mode}${c.index}`);
+  assert.deepEqual(ids('recall'), ['r0=recall0', 'r1=recall1']);
+  assert.deepEqual(ids('exam'), ['e0=exam0', 'e1=exam1', 'e2=exam2']);
+  assert.deepEqual(ids('mixed'), [...ids('recall'), ...ids('exam')]);
+  assert.match(PAGE, /SRS\.rate\(SRS\.getCardId\(STATE\.subject, STATE\.topic, mode, index\), rating\)/);
+});
+
+test('flashcards: the subject pill shows on Home only, and every screen has the theme switch', () => {
+  assert.match(PAGE, /body:not\(\[data-screen="home"\]\) \.ia-subject-back--floating \{ display: none !important; \}/);
+  assert.match(PAGE, /document\.body\.dataset\.screen = screen;/);
+  assert.doesNotMatch(PAGE, /urlParams\.get\('subject'\) \|\| 'physics'/, 'no made-up subject for the pill');
+  assert.match(PAGE, /addThemeToggles\(\);/);
+});
+
 test('flashcards: typeset subjects have no plain-text maths left beside the LaTeX', () => {
   const problems = [];
   for (const { id, subject, text } of cardTexts()) {

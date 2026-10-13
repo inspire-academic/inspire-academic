@@ -171,6 +171,20 @@ html, body {
   transition: var(--transition);
 }
 .back-btn:hover { background: rgba(255,255,255,0.15); }
+/* Light/dark switch: after the back button in a bar, top-right elsewhere. */
+.app-header .back-btn { margin-left: auto; }
+.app-header .ia-theme-toggle { margin-left: 10px; }
+.theme-toggle-corner { position: absolute; top: 14px; right: 16px; z-index: 2; }
+/* On navy (the bars, and the dark theme's floating button) the switch needs
+   a light outline — this page's --border is the faint one for pale cards. */
+.ia-keep-dark .ia-theme-toggle,
+:root:not([data-theme="light"]) .ia-theme-toggle--floating { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.8); }
+.ia-keep-dark .ia-theme-toggle:hover,
+:root:not([data-theme="light"]) .ia-theme-toggle--floating:hover { border-color: var(--gold); color: #fff; }
+/* The floating "← Subject" pill (subject-back.js) sits where the bars put
+   their own controls, so it shows on Home only. Its display is set inline
+   by the script, hence !important. */
+body:not([data-screen="home"]) .ia-subject-back--floating { display: none !important; }
 .back-btn svg { width: 14px; height: 14px; }
 
 /* ── HOME SCREEN ── */
@@ -1141,9 +1155,14 @@ html, body {
 <script src="/assets/js/maths-typeset.js"></script>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
-const currentSubject = urlParams.get('subject') || 'physics';
-// Store for Phase 3 Supabase wiring
-sessionStorage.setItem('currentSubject', currentSubject);
+// The subject page the student came from, for the "← Subject" pill
+// (subject-back.js). Opened without one, the pill says "Back to Subjects"
+// rather than guessing.
+const currentSubject = urlParams.get('ref') || urlParams.get('subject');
+try {
+  if (currentSubject) sessionStorage.setItem('currentSubject', currentSubject);
+  else sessionStorage.removeItem('currentSubject');
+} catch (e) { /* storage may be unavailable */ }
 
 // Global error catcher — exposes silent iOS Safari failures
 window.onerror = function(msg, src, line, col, err) {
@@ -3036,9 +3055,22 @@ function getCards(subject, topic, mode) {
   return [];
 }
 
+// The cards for a session, each with the mode and position it is saved
+// under. A card keeps one id whichever mode it is studied in, so an exam
+// card rated in Mixed Mode counts towards the same mastery as in Exam Mode.
+function sessionCards(subject, topic, mode) {
+  const t = CONTENT[subject]?.topics[topic];
+  if (!t) return [];
+  const from = m => (t[m] || []).map((card, index) => ({ card, mode: m, index }));
+  if (mode === 'mixed') return [...from('recall'), ...from('exam')];
+  return mode === 'recall' || mode === 'exam' ? from(mode) : [];
+}
+
 function goTo(screen) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + screen).classList.add('active');
+  // Which screen is showing — the "← Subject" pill only belongs on Home.
+  document.body.dataset.screen = screen;
   window.scrollTo(0, 0);
   if (screen === 'home') renderHome();
   if (screen === 'subject') renderSubjects();
@@ -3176,10 +3208,10 @@ function renderModes() {
 // ═══════════════════════════════════════════════════════
 function startSession(mode) {
   STATE.mode = mode;
-  STATE.cards = getCards(STATE.subject, STATE.topic, mode);
+  STATE.cards = sessionCards(STATE.subject, STATE.topic, mode);
   if (STATE.cards.length === 0) { showToast('No cards available for this mode yet.'); return; }
   // Sort by due date / priority
-  STATE.cards = STATE.cards.map((card, i) => ({ card, index: i, srs: SRS.getData(SRS.getCardId(STATE.subject, STATE.topic, mode === 'mixed' ? (i < (CONTENT[STATE.subject]?.topics[STATE.topic]?.recall?.length || 0) ? 'recall' : 'exam') : mode, i)) }));
+  STATE.cards.forEach(c => { c.srs = SRS.getData(SRS.getCardId(STATE.subject, STATE.topic, c.mode, c.index)); });
   STATE.cards.sort((a, b) => a.srs.dueDate - b.srs.dueDate);
   STATE.cardIndex = 0;
   STATE.isFlipped = false;
@@ -3324,11 +3356,8 @@ function flipBack() {
 }
 
 function rateCard(rating) {
-  const { card, index } = STATE.cards[STATE.cardIndex];
-  const isExam = 'marks' in card;
-  const baseMode = STATE.mode === 'mixed' ? (index < (CONTENT[STATE.subject]?.topics[STATE.topic]?.recall?.length || 0) ? 'recall' : 'exam') : STATE.mode;
-  const cardId = SRS.getCardId(STATE.subject, STATE.topic, baseMode, index);
-  SRS.rate(cardId, rating);
+  const { mode, index } = STATE.cards[STATE.cardIndex];
+  SRS.rate(SRS.getCardId(STATE.subject, STATE.topic, mode, index), rating);
   // SRS rating recorded above — no score tracking shown to student
   STATE.cardIndex++;
   if (STATE.cardIndex < STATE.sessionTotal) {
@@ -3492,8 +3521,28 @@ function signOut() {
   }
 }
 
+// theme.js adds its light/dark switch to the first top bar only, which is on
+// a screen that starts hidden. Give every screen one: in each bar, and in
+// the corner of the screens that have no bar.
+function addThemeToggles() {
+  const first = document.querySelector('[data-ia-theme-toggle]');
+  if (!first || !window.IATheme) return;
+  const make = extraClass => {
+    const btn = first.cloneNode(true);
+    if (extraClass) btn.classList.add(extraClass);
+    btn.addEventListener('click', IATheme.toggle);
+    return btn;
+  };
+  document.querySelectorAll('.app-header, .session-header').forEach(bar => {
+    if (!bar.querySelector('[data-ia-theme-toggle]')) bar.appendChild(make());
+  });
+  ['screen-home', 'screen-complete'].forEach(id => document.getElementById(id).appendChild(make('ia-theme-toggle--floating')));
+  document.querySelector('.dash-hero').appendChild(make('theme-toggle-corner'));
+}
+
 // Ensure DOM is ready before initialising
 document.addEventListener("DOMContentLoaded", async function() {
+  addThemeToggles();
   // Pull latest SRS data from Supabase into localStorage cache before rendering.
   // Home screen shows immediately; data is ready for any navigation after pull.
   if (window._currentUser) {
