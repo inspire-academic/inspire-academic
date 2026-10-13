@@ -15,7 +15,9 @@ const GCSE = /\(\s*\(?[\w.?]+?\.level\)?\s*\|\|\s*'gcse'\s*\)\s*===\s*'gcse'/;
 const LISTS_SUBJECTS = ['dashboard.html', 'subjects.html', 'student/progress.html', 'ism-class/index.html',
   'teacher/ism-class-management.html', 'teacher/lesson-admin.html', 'teacher/content-coverage.html'];
 // Pages that only look a subject up by id, to show its name.
-const LOOKUP_ONLY = ['teacher/teacher.html', 'ism-class/subject.html'];
+const LOOKUP_ONLY = ['teacher/teacher.html', 'ism-class/subject.html',
+  // The A-level page asks for its one subject by slug.
+  'assets/js/a-level-physics.js'];
 
 test('a-level: every page that lists subjects keeps to GCSE', () => {
   for (const f of LISTS_SUBJECTS) {
@@ -60,4 +62,20 @@ test('a-level: the SQL warns about the order, and its topics match the question 
     assert.ok(slugs.includes(f.replace(/\.json$/, '')), `${f} has a topic row`);
   }
   assert.ok(fs.existsSync(path.join(ROOT, 'supabase/a_level_physics_subject_rollback.sql')));
+});
+
+test('a-level: the subject page keeps the house rules and only offers published quizzes', () => {
+  const page = read('subjects/physics-a-level.html');
+  const js = read('assets/js/a-level-physics.js');
+  const css = read('assets/css/a-level.css');
+  assert.doesNotMatch(page, /\sstyle=|\son[a-z]+=|<style/, 'no inline styles or handlers');
+  assert.doesNotMatch(page, /<script(?![^>]*\ssrc=)[^>]*>/, 'no inline scripts');
+  assert.match(page, /name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/);
+  assert.doesNotMatch(css, /max-width:\s*\d+px\)/, 'mobile first: min-width media queries only');
+  assert.doesNotMatch(js, /localStorage|sessionStorage|innerHTML/);
+  assert.match(js, /from\('quizzes'\)[^;]*\.eq\('is_published', true\)/, 'only published quizzes are offered');
+  assert.match(js, /\.eq\('slug', SUBJECT_SLUG\)/);
+  // Greeted by first name, never "Student" or an email address.
+  assert.doesNotMatch(js, /'Student'|\.email/);
+  assert.match(read('netlify.toml'), /from = "\/a-level\/physics"\s+to = "\/subjects\/physics-a-level\.html"/);
 });

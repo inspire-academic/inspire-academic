@@ -1,0 +1,15 @@
+/* The A-level subject page (subjects/physics-a-level.html). Mobile first:
+   one column of topics on a phone, two from 720px. Builds on the flashcard
+   app's base styles (flashcards-v2.css) and the shared tokens. */
+
+.al-list{list-style:none;margin:0;padding:0;display:grid;gap:.75rem;}
+.al-topic{border:1px solid var(--border);border-radius:14px;padding:.9rem 1rem;background:var(--navy2);}
+.al-name{font-family:var(--font-display);font-size:1.05rem;font-weight:700;line-height:1.3;margin:0 0 .15rem;}
+.al-best{font-size:.82rem;color:var(--muted);margin:0 0 .6rem;}
+.al-actions{display:flex;flex-wrap:wrap;gap:.5rem;}
+.al-actions .fc-btn{flex:1 1 9rem;text-decoration:none;}
+.al-soon{font-size:.85rem;color:var(--muted);margin:0;}
+
+@media (min-width:720px){
+  .al-list{grid-template-columns:1fr 1fr;}
+}
