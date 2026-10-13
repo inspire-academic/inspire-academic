@@ -42,9 +42,9 @@ function texts(card) {
 
 const MATHS_RE = /\\\(([\s\S]*?)\\\)/g;
 
-function checkText(text, where, katex, problems) {
+function checkText(text, where, katex, problems, max) {
   if (typeof text !== 'string' || !text.trim()) { problems.push(`${where}: empty`); return; }
-  const limit = LIMITS[where] || LIMITS.item;
+  const limit = max || LIMITS[where] || LIMITS.item;
   if (text.length > limit) problems.push(`${where}: ${text.length} characters, over the ${limit} limit — split the card`);
   const outside = text.replace(MATHS_RE, ' ');
   if (/\\[a-zA-Z()[\]]/.test(outside)) problems.push(`${where}: LaTeX outside \\( \\): ${outside.trim().slice(0, 60)}`);
@@ -180,4 +180,4 @@ function publishCard(card, katex) {
   return out;
 }
 
-module.exports = { SCHEMA, TYPES, BOARDS, ALLOWED_TAGS, validateTopic, cardHash, canonical, toHtml, publishCard, texts };
+module.exports = { SCHEMA, TYPES, BOARDS, ALLOWED_TAGS, checkText, validateTopic, cardHash, canonical, toHtml, publishCard, texts };
