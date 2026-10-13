@@ -60,7 +60,19 @@ GCSE.
   is run only after the page filters are live on main; before that, live
   GCSE pages would show A-level Physics as a fifth subject.
 
-Still to build: a teacher's approval of questions, creating quizzes in the
+## Approval
+
+A teacher approves quiz questions on the flashcard review page
+(`/teacher/flashcard-review.html`), where each quiz topic is listed as
+"Quiz: <topic>" after the flashcard topics. The page shows the four
+options with the key marked and the worked solution. Decisions are stored
+with the flashcards' (`fc_card_reviews`) under the topic id
+`quiz/<topic id>`, against the question's fingerprint, so an edited
+question comes back for approval. A new quiz topic file must be added to
+`QUIZ_TOPICS` in `netlify/functions/flashcards-review.js` (a test fails
+otherwise).
+
+Still to build: creating quizzes in the
 bank from approved questions (`toBank(question)` in
 `scripts/quizzes/content.js` gives the shape `POST /api/v1/quiz/create`
 accepts), and the A-level subject page.

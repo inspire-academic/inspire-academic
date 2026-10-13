@@ -52,6 +52,20 @@ const TOPICS = {
   'physics-a-level/turning-points': require('../../curriculum/flashcards/physics-a-level/turning-points.json'),
   'physics-a-level/electronics': require('../../curriculum/flashcards/physics-a-level/electronics.json')
 };
+// Quiz questions (curriculum/quizzes/) are reviewed the same way, each topic
+// under "quiz/<topic id>" so its decisions never mix with the flashcards'.
+// Adding a quiz topic file means adding it here.
+const quizTopic = file => ({
+  topic: { ...file.topic, id: `quiz/${file.topic.id}`, title: `Quiz: ${file.topic.title}`, kind: 'quiz' },
+  cards: file.questions
+});
+const QUIZ_TOPICS = Object.fromEntries([
+  require('../../curriculum/quizzes/physics-a-level/electricity.json'),
+  require('../../curriculum/quizzes/physics-a-level/mechanics.json')
+].map(quizTopic).map(t => [t.topic.id, t]));
+const topicFile = id => (Object.prototype.hasOwnProperty.call(TOPICS, id) && TOPICS[id]) ||
+  (Object.prototype.hasOwnProperty.call(QUIZ_TOPICS, id) && QUIZ_TOPICS[id]) || null;
+
 const SPECS = {
   'physics-a-level': require('../../curriculum/flashcards/spec/physics-a-level.json')
 };
@@ -80,7 +94,7 @@ function standing(card, decision) {
 }
 
 async function listTopic(client, topicId) {
-  const file = TOPICS[topicId];
+  const file = topicFile(topicId);
   if (!file) return fail(404, 'unknown_topic', 'Unknown flashcard topic.');
   const latest = await latestDecisions(client, topicId);
   const names = await namesById(client, Object.values(latest).map(d => d.reviewer_id));
@@ -108,7 +122,7 @@ async function listTopic(client, topicId) {
 }
 
 async function decide(client, who, body) {
-  const file = TOPICS[body.topic];
+  const file = topicFile(body.topic);
   if (!file) return fail(404, 'unknown_topic', 'Unknown flashcard topic.');
   const card = file.cards.find(c => c.id === body.cardId);
   if (!card) return fail(404, 'unknown_card', 'Unknown card.');
@@ -130,7 +144,7 @@ async function decide(client, who, body) {
 // approved unseen. Cards already approved as they read now are left alone.
 const MAX_BULK = 300;
 async function approveMany(client, who, body) {
-  const file = TOPICS[body.topic];
+  const file = topicFile(body.topic);
   if (!file) return fail(404, 'unknown_topic', 'Unknown flashcard topic.');
   const list = body.cards;
   if (!Array.isArray(list) || !list.length) return fail(400, 'no_cards', 'No cards to approve.');
@@ -156,7 +170,7 @@ async function approveMany(client, who, body) {
 }
 
 async function approvals(client, topicId) {
-  const file = TOPICS[topicId];
+  const file = topicFile(topicId);
   if (!file) return fail(404, 'unknown_topic', 'Unknown flashcard topic.');
   const latest = await latestDecisions(client, topicId);
   const out = {};
@@ -180,7 +194,8 @@ exports.handler = async event => {
     const who = await requireStaff(event, client);
     if (who.error) return who.error;
     if (event.httpMethod === 'GET') {
-      if (!q.topic) return ok({ topics: Object.values(TOPICS).map(f => ({ ...f.topic, cards: f.cards.length })) });
+      // Flashcard topics, or with ?kind=quiz the quiz topics.
+      if (!q.topic) return ok({ topics: Object.values(q.kind === 'quiz' ? QUIZ_TOPICS : TOPICS).map(f => ({ ...f.topic, cards: f.cards.length })) });
       return await listTopic(client, q.topic);
     }
     if (event.httpMethod === 'POST') {
@@ -202,3 +217,4 @@ exports.handler = async event => {
 exports.approvalsHandler = event => exports.handler({ ...event, approvalsOnly: true });
 
 exports.TOPICS = TOPICS;
+exports.QUIZ_TOPICS = QUIZ_TOPICS;

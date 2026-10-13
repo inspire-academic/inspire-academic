@@ -192,3 +192,43 @@ test('flashcard review: the approve-all button asks twice and leaves sent-back c
   assert.match(js, /\$\('fr-bulk-confirm'\)\.addEventListener\('click', approveAll\);/);
   assert.match(js, /c\.review\.status === 'new' \|\| c\.review\.status === 'edited'/, 'cards sent back for changes are not included');
 });
+
+// ── Quiz questions (curriculum/quizzes/) share the review ────────────────
+const QUIZ = 'quiz/physics-a-level/electricity';
+
+test('quiz review: every quiz topic file can be reviewed, apart from the flashcards', async () => {
+  const s = setup();
+  const dir = path.join(__dirname, '..', 'curriculum', 'quizzes');
+  const onDisk = fs.readdirSync(dir, { withFileTypes: true }).filter(d => d.isDirectory())
+    .flatMap(d => fs.readdirSync(path.join(dir, d.name)).filter(f => f.endsWith('.json')).map(f => `quiz/${d.name}/${f.replace(/\.json$/, '')}`));
+  assert.deepEqual(Object.keys(s.mod.QUIZ_TOPICS).sort(), onDisk.sort(), 'add new quiz topic files to QUIZ_TOPICS in flashcards-review.js');
+  // The plain listing is still flashcards only: the student app's draft
+  // preview reads it and must never be handed a quiz question.
+  const cards = await s.review('GET', {}, as(TEACHER));
+  assert.ok(cards.body.topics.every(t => t.kind !== 'quiz'));
+  const quizzes = await s.review('GET', { kind: 'quiz' }, as(TEACHER));
+  assert.deepEqual(quizzes.body.topics.map(t => t.id), Object.keys(s.mod.QUIZ_TOPICS));
+  assert.ok(quizzes.body.topics.every(t => t.kind === 'quiz' && t.cards > 0));
+});
+
+test('quiz review: a question is approved as it reads, by staff only, without touching the flashcards', async () => {
+  const s = setup();
+  assert.equal((await s.review('GET', { topic: QUIZ }, as(STUDENT))).status, 403);
+  const listed = await s.review('GET', { topic: QUIZ }, as(TEACHER));
+  assert.equal(listed.status, 200);
+  const q = listed.body.cards[0];
+  assert.ok(q.options && q.answer && q.solution, 'the teacher sees the options, the key and the worked solution');
+  assert.equal(q.hash, C.cardHash(s.mod.QUIZ_TOPICS[QUIZ].cards[0]));
+  assert.equal(q.review.status, 'new');
+
+  assert.equal((await s.review('POST', { topic: QUIZ, cardId: q.id, hash: 'stale', decision: 'approved' }, as(TEACHER))).status, 409);
+  assert.equal((await s.review('POST', { topic: QUIZ, cardId: q.id, hash: q.hash, decision: 'approved' }, as(STUDENT))).status, 403);
+  assert.equal((await s.review('POST', { topic: QUIZ, cardId: q.id, hash: q.hash, decision: 'approved' }, as(TEACHER))).status, 200);
+
+  const approved = await s.approvals('GET', { topic: QUIZ });
+  assert.deepEqual(Object.keys(approved.body.approvals), [q.id]);
+  assert.equal(approved.body.approvals[q.id].hash, q.hash);
+  // The flashcard topic of the same name is untouched.
+  assert.deepEqual((await s.approvals('GET', { topic: TOPIC })).body.approvals, {});
+  assert.equal(s.fake.tables.fc_card_reviews[0].topic, QUIZ);
+});
