@@ -152,3 +152,13 @@ test('fc-core: new cards are rationed by the day, not by the session', () => {
   const again = Core.rate(states.n00, 'good', at(9)).state;
   assert.equal(again.first, Core.dayKey(at(1)));
 });
+
+test('fc-core: topics are mixed, a card from each in turn', () => {
+  const a = ['a1', 'a2', 'a3', 'a4'].map(id => card(id)), b = ['b1', 'b2'].map(id => card(id)), c = ['c1'].map(id => card(id));
+  assert.deepEqual(Core.interleave([a, b, c]).map(x => x.id), ['a1', 'b1', 'c1', 'a2', 'b2', 'a3', 'a4']);
+  assert.deepEqual(Core.interleave([a]).map(x => x.id), ['a1', 'a2', 'a3', 'a4']);
+  assert.deepEqual(Core.interleave([]), []);
+  // So a first session of new cards draws on every topic.
+  const first = Core.buildSession(Core.interleave([a, b, c]), {}, at(1), { maxNew: 4 }).queue.map(x => x.id);
+  assert.deepEqual(first, ['a1', 'b1', 'c1', 'a2']);
+});

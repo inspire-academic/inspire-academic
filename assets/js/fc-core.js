@@ -95,6 +95,14 @@
     return state.days.length >= SECURE_DAYS && state.fsrs.scheduled_days >= SECURE_INTERVAL && state.last >= 3 ? 'secure' : 'learning';
   }
 
+  // Several topics' cards as one list, taking a card from each in turn, so
+  // new cards arrive from every chosen topic and not one topic at a time.
+  function interleave(lists) {
+    var out = [], longest = lists.reduce(function (n, l) { return Math.max(n, l.length); }, 0);
+    for (var i = 0; i < longest; i++) lists.forEach(function (l) { if (i < l.length) out.push(l[i]); });
+    return out;
+  }
+
   // The cards a student's exam board examines.
   function forBoard(cards, board) { return cards.filter(function (c) { return c.boards && c.boards[board]; }); }
 
@@ -192,7 +200,7 @@
   return {
     RATINGS: RATINGS, SESSION: SESSION, SECURE_DAYS: SECURE_DAYS, SECURE_INTERVAL: SECURE_INTERVAL,
     dayKey: dayKey, newState: newState, rate: rate, replay: replay, reviewDays: reviewDays, preview: preview, seen: seen, due: due, recall: recall, mastery: mastery,
-    forBoard: forBoard, buildSession: buildSession, newToday: newToday, newAllowance: newAllowance, dueOn: dueOn, coverage: coverage,
+    forBoard: forBoard, interleave: interleave, buildSession: buildSession, newToday: newToday, newAllowance: newAllowance, dueOn: dueOn, coverage: coverage,
     parseNumber: parseNumber, checkNumeric: checkNumeric, studyDays: studyDays, daysLabel: daysLabel
   };
 });
