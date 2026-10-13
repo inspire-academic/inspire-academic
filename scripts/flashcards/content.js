@@ -12,6 +12,7 @@
 // Used by the review endpoint, scripts/flashcards/build.js and the tests.
 
 const crypto = require('crypto');
+const PhysicsGraph = require('../../assets/js/physics-graph.js');
 
 const SCHEMA = 'inspire.flashcards.v1';
 
@@ -94,7 +95,7 @@ function validateTopic(file, { katex = null, spec = null } = {}) {
     if (questions.has(card.q)) bad('the same question appears twice in this topic');
     questions.add(card.q);
     for (const k of Object.keys(card)) {
-      if (!['id', 'type', 'difficulty', 'tags', 'q', 'a', 'why', 'steps', 'marks', 'numeric', 'boards'].includes(k)) bad(`unknown field "${k}"`);
+      if (!['id', 'type', 'difficulty', 'tags', 'q', 'figure', 'a', 'answerFigure', 'why', 'steps', 'marks', 'numeric', 'boards'].includes(k)) bad(`unknown field "${k}"`);
     }
     if (typeof card.q !== 'string') bad('q is missing');
     if (typeof card.a !== 'string') bad('a is missing');
@@ -109,6 +110,8 @@ function validateTopic(file, { katex = null, spec = null } = {}) {
     if (card.type === 'worked-calc' && !card.steps) bad('a worked calculation needs steps');
     if (card.type === 'explain' && !card.marks) bad('an explain card needs marks (the mark-scheme points)');
     if (card.steps && card.marks) bad('a card has steps or marks, not both');
+    // A graph shown with the question, or with the answer (assets/js/physics-graph.js).
+    for (const f of ['figure', 'answerFigure']) if (card[f] !== undefined) PhysicsGraph.check(card[f]).forEach(p => bad(`${f}: ${p}`));
     if (card.numeric !== undefined) {
       const n = card.numeric;
       if (!n || typeof n.value !== 'number' || !isFinite(n.value) || typeof n.unit !== 'string' || !Number.isInteger(n.sf) || n.sf < 1 || n.sf > 4) bad('numeric must be { value: number, unit: text, sf: 1-4 }');
@@ -165,6 +168,10 @@ function toHtml(text, katex) {
 // What the student app is served for one card.
 function publishCard(card, katex) {
   const out = { id: card.id, v: cardHash(card), type: card.type, difficulty: card.difficulty, q: toHtml(card.q, katex), a: toHtml(card.a, katex) };
+  // Graphs are drawn here, so a phone needs no drawing script: `fig` is shown
+  // with the question and `afig` with the answer.
+  if (card.figure) out.fig = PhysicsGraph.svg(card.figure);
+  if (card.answerFigure) out.afig = PhysicsGraph.svg(card.answerFigure);
   if (card.why) out.why = toHtml(card.why, katex);
   for (const f of LIST_FIELDS) if (card[f]) out[f] = card[f].map(t => toHtml(t, katex));
   if (card.numeric) out.numeric = card.numeric;

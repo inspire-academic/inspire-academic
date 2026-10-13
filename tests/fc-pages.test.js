@@ -62,7 +62,9 @@ test('fc app: a student is greeted by first name only, and is asked their board 
 test('fc app: what a phone downloads stays small', () => {
   const gz = f => zlib.gzipSync(fs.readFileSync(path.join(ROOT, f))).length;
   const own = ['student/flashcards-v2.html', 'assets/css/flashcards-v2.css', 'assets/js/fc-core.js', 'assets/js/fc-store.js', 'assets/js/fc-app.js'].reduce((n, f) => n + gz(f), 0);
-  assert.ok(own < 20000, `the app's own files are ${own} bytes compressed`);
+  // Raised from 20 000 on 14 October 2026 to make room for graphs on cards.
+  // CLAUDE.md's limit for a page's scripts is 80 000.
+  assert.ok(own < 21000, `the app's own files are ${own} bytes compressed`);
   assert.ok(gz('assets/vendor/ts-fsrs-5.4.2/ts-fsrs.umd.js') < 20000, 'the scheduler library');
   assert.ok(fs.existsSync(path.join(ROOT, 'assets/vendor/ts-fsrs-5.4.2/LICENSE')), 'the library keeps its licence');
 });
