@@ -125,7 +125,47 @@
     });
     ['todo', 'changes', 'approved', 'all'].forEach(function (k) { $('fr-count-' + k).textContent = c[k]; });
     $('fr-progress').innerHTML = '<strong>' + c.approved + ' of ' + c.all + '</strong> cards approved' + (c.todo ? ' · ' + c.todo + ' to review' : '') + (c.changes ? ' · ' + c.changes + ' sent back' : '');
+    // "Approve all" covers the cards still to review. Cards sent back for
+    // changes are never swept up with them.
+    $('fr-bulk').hidden = !c.todo;
+    $('fr-bulk-start').textContent = 'Approve all ' + c.todo + ' cards still to review';
+    $('fr-bulk-text').textContent = 'Approve ' + c.todo + ' cards in this topic? Send back any you disagree with first. ';
+    bulkAsk(false);
   }
+
+  function bulkAsk(asking) {
+    $('fr-bulk-start').hidden = asking;
+    $('fr-bulk-ask').hidden = !asking;
+  }
+
+  function approveAll() {
+    var todo = data.cards.filter(function (c) { return c.review.status === 'new' || c.review.status === 'edited'; });
+    if (!todo.length) return;
+    var buttons = [$('fr-bulk-confirm'), $('fr-bulk-cancel')];
+    buttons.forEach(function (b) { b.disabled = true; });
+    $('fr-status').textContent = '';
+    api('POST', '/api/v1/flashcards/review', {
+      action: 'approve-all', topic: topicId,
+      cards: todo.map(function (c) { return { cardId: c.id, hash: c.hash }; })
+    }).then(function (res) {
+      buttons.forEach(function (b) { b.disabled = false; });
+      todo.forEach(function (c) { if (res.approved.indexOf(c.id) !== -1) c.review = res.review; });
+      toast(res.approved.length + ' cards approved');
+      if (res.changed.length) {
+        // Edited while the page was open: fetch the current wording to read.
+        $('fr-status').textContent = res.changed.length + ' cards were edited since you opened the page and were not approved. They are shown again below.';
+        load();
+      } else render();
+    }, function (e) {
+      buttons.forEach(function (b) { b.disabled = false; });
+      bulkAsk(false);
+      $('fr-status').textContent = e.message;
+    });
+  }
+
+  $('fr-bulk-start').addEventListener('click', function () { bulkAsk(true); $('fr-bulk-confirm').focus(); });
+  $('fr-bulk-cancel').addEventListener('click', function () { bulkAsk(false); $('fr-bulk-start').focus(); });
+  $('fr-bulk-confirm').addEventListener('click', approveAll);
 
   function render() {
     counts();

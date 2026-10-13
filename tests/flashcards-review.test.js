@@ -152,3 +152,43 @@ test('flashcard review: every topic file can be reviewed', () => {
     .flatMap(d => fs.readdirSync(path.join(dir, d.name)).filter(f => f.endsWith('.json')).map(f => `${d.name}/${f.replace(/\.json$/, '')}`));
   assert.deepEqual(Object.keys(TOPICS).sort(), onDisk.sort(), 'add new topic files to TOPICS in flashcards-review.js');
 });
+
+test('flashcard review: approve-all approves each remaining card as shown, and nothing else', async () => {
+  const s = setup();
+  const cards = s.mod.TOPICS[TOPIC].cards;
+  const [a, b, c, d] = cards;
+  const item = card => ({ cardId: card.id, hash: C.cardHash(card) });
+  // Only staff.
+  assert.equal((await s.review('POST', { action: 'approve-all', topic: TOPIC, cards: [item(a)] }, as(STUDENT))).status, 403);
+  assert.equal(s.fake.tables.fc_card_reviews.length, 0);
+
+  // a is already approved; c was edited after the page was opened.
+  await s.review('POST', { topic: TOPIC, cardId: a.id, hash: C.cardHash(a), decision: 'approved' }, as(TEACHER));
+  const r = await s.review('POST', { action: 'approve-all', topic: TOPIC, cards: [item(a), item(b), { cardId: c.id, hash: 'stale000stale000' }, item(b), { cardId: 'phy-al-elec-999', hash: 'x' }] }, as(ADMIN));
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.deepEqual(r.body.approved, [a.id, b.id]);
+  assert.deepEqual(r.body.changed, [c.id], 'a card edited since is reported, not approved unseen');
+  assert.equal(r.body.review.reviewer, 'Dr Appiah');
+  const rows = s.fake.tables.fc_card_reviews;
+  assert.equal(rows.length, 2, 'one new row: b. a was already approved, c and the unknown card were skipped');
+  assert.deepEqual([rows[1].card_id, rows[1].decision, rows[1].reviewer_id, rows[1].content_hash], [b.id, 'approved', ADMIN, C.cardHash(b)]);
+
+  const pub = await s.approvals('GET', { topic: TOPIC });
+  assert.deepEqual(Object.keys(pub.body.approvals).sort(), [a.id, b.id].sort());
+  assert.ok(!pub.body.approvals[d.id], 'a card not in the list stays unapproved');
+
+  assert.equal((await s.review('POST', { action: 'approve-all', topic: TOPIC, cards: [] }, as(ADMIN))).status, 400);
+  assert.equal((await s.review('POST', { action: 'approve-all', topic: 'nope/nope', cards: [item(a)] }, as(ADMIN))).status, 404);
+  assert.equal((await s.review('POST', { action: 'approve-all', topic: TOPIC, cards: Array.from({ length: 301 }, () => item(a)) }, as(ADMIN))).status, 413);
+});
+
+test('flashcard review: the approve-all button asks twice and leaves sent-back cards alone', () => {
+  const page = fs.readFileSync(path.join(__dirname, '..', 'teacher/flashcard-review.html'), 'utf8');
+  const js = fs.readFileSync(path.join(__dirname, '..', 'assets/js/flashcard-review.js'), 'utf8');
+  assert.match(page, /id="fr-bulk-start"/);
+  assert.match(page, /id="fr-bulk-confirm">Yes, approve them</);
+  // The first press only reveals the question; the second sends.
+  assert.match(js, /\$\('fr-bulk-start'\)\.addEventListener\('click', function \(\) \{ bulkAsk\(true\);/);
+  assert.match(js, /\$\('fr-bulk-confirm'\)\.addEventListener\('click', approveAll\);/);
+  assert.match(js, /c\.review\.status === 'new' \|\| c\.review\.status === 'edited'/, 'cards sent back for changes are not included');
+});
