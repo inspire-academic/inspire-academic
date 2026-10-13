@@ -28,7 +28,8 @@ const C = require('../../scripts/flashcards/content.js');
 
 // Every topic that can be reviewed. Adding a topic file means adding it here.
 const TOPICS = {
-  'physics-a-level/electricity': require('../../curriculum/flashcards/physics-a-level/electricity.json')
+  'physics-a-level/electricity': require('../../curriculum/flashcards/physics-a-level/electricity.json'),
+  'physics-a-level/mechanics': require('../../curriculum/flashcards/physics-a-level/mechanics.json')
 };
 const SPECS = {
   'physics-a-level': require('../../curriculum/flashcards/spec/physics-a-level.json')
