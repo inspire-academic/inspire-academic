@@ -1,5 +1,5 @@
 // A-level subjects share the subjects/topics/quizzes tables with GCSE
-// (subjects.level). Every page that
+// (subjects.level, supabase/a_level_physics_subject.sql). Every page that
 // lists all subjects, or quizzes across subjects, must keep to GCSE, or
 // A-level rows appear on GCSE students' screens.
 const test = require('node:test');
@@ -48,4 +48,16 @@ test('a-level: quizzes offered across subjects keep to GCSE', () => {
     assert.doesNotMatch(page, /subjects\(id,\s*name\)/, `${f} reads the subject's level with each quiz`);
     assert.match(page, /filter\(q\s*=>\s*\(\(q\.topics\?\.subjects\?\.level\)\s*\|\|\s*'gcse'\)\s*===\s*'gcse'\)/, `${f} drops A-level quizzes`);
   }
+});
+
+test('a-level: the SQL warns about the order, and its topics match the question files', () => {
+  const sql = read('supabase/a_level_physics_subject.sql');
+  assert.match(sql, /RUN ONLY AFTER the GCSE-only page filters are live/);
+  const slugs = [...sql.matchAll(/\('al-physics-([a-z-]+)',/g)].map(m => m[1]).sort();
+  const files = fs.readdirSync(path.join(ROOT, 'curriculum/flashcards/physics-a-level')).map(f => f.replace(/\.json$/, '')).sort();
+  assert.deepEqual(slugs, files, 'one topic row per A-level Physics topic file');
+  for (const f of fs.readdirSync(path.join(ROOT, 'curriculum/quizzes/physics-a-level'))) {
+    assert.ok(slugs.includes(f.replace(/\.json$/, '')), `${f} has a topic row`);
+  }
+  assert.ok(fs.existsSync(path.join(ROOT, 'supabase/a_level_physics_subject_rollback.sql')));
 });

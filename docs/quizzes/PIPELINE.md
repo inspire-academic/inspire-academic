@@ -5,8 +5,8 @@ Edexcel 9PH0), written topic by topic alongside the flashcards
 (`docs/flashcards/PIPELINE.md`).
 
 **Status (October 2026): source files only.** Nothing here is served to
-students, and no question is approved. How the questions reach students is
-not yet decided; see "Reaching students" below.
+students, and no question is approved. See "Reaching students" below for
+the route they will take.
 
 ## Files
 
@@ -43,11 +43,24 @@ Numeric answers are also recomputed independently when a topic is written.
 
 ## Reaching students
 
-`toBank(question)` in `scripts/quizzes/content.js` gives the shape
-`POST /api/v1/quiz/create` accepts, so a checked question can go into the
-live quiz bank unchanged and be marked on the server like every other
-quiz. The live bank is GCSE only today: no page that reads its
-`subjects` and `topics` tables filters by level, so every subject page
-lists all topics of a subject. Adding
-A-level topics there needs a decision on how they are kept apart from GCSE
-first.
+Decided 13 October 2026: A-level questions go into the live quiz bank,
+marked on the server like every other quiz, with A-level kept apart from
+GCSE.
+
+- `subjects.level` is 'gcse' or 'a-level'
+  (`supabase/a_level_physics_subject.sql`, which also adds the "A-level
+  Physics" subject and its 19 topics, slug `al-physics-<topic file name>`).
+- Every page that lists all subjects, and the two places that offer quizzes
+  across subjects (the dashboard's daily challenge, and the quiz list
+  opened with no subject), keep to GCSE. They read the level with
+  `select('*')` and treat a missing level as GCSE, so they work before the
+  SQL is run. `tests/a-level-kept-apart.test.js` holds them to it, and
+  fails when a new page reads `subjects` without being classified.
+- **Order matters.** Staging and the live site share one database. The SQL
+  is run only after the page filters are live on main; before that, live
+  GCSE pages would show A-level Physics as a fifth subject.
+
+Still to build: a teacher's approval of questions, creating quizzes in the
+bank from approved questions (`toBank(question)` in
+`scripts/quizzes/content.js` gives the shape `POST /api/v1/quiz/create`
+accepts), and the A-level subject page.
