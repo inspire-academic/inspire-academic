@@ -127,3 +127,15 @@ covered (asked the first time there is more than one, and changeable from
 the Today screen); the choice is kept on the device. The chosen topics'
 cards form one pool, a card from each topic in turn, so sessions mix
 topics. `?topic=<id>` shows one topic only, for a link from a lesson.
+
+### Optional topics
+
+A board may examine several optional topics, of which a student sits one
+(AQA A-level Physics: Astrophysics, Medical Physics, Engineering Physics,
+Turning Points, Electronics). A topic file marks this with
+`"optionFor": ["aqa"]` in its `topic` block. On the topic screen those
+topics are offered under "Your option" as a choice of one, or "not started
+yet"; the choice is kept with the ticked topics. A topic can be an option
+for one board and compulsory for another: Space and Astrophysics is an
+ordinary tick for an Edexcel student. Options with no cards for a
+student's board are never shown.

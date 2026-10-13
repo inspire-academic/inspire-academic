@@ -70,6 +70,10 @@ function validateTopic(file, { katex = null, spec = null } = {}) {
   if (!file || file.schema !== SCHEMA) errors.push(`schema must be "${SCHEMA}"`);
   const topic = (file && file.topic) || {};
   for (const k of ['id', 'subject', 'level', 'title', 'spec']) if (!topic[k]) errors.push(`topic.${k} is missing`);
+  // The boards for which this topic is an option a student chooses.
+  if (topic.optionFor !== undefined && !(Array.isArray(topic.optionFor) && topic.optionFor.length && topic.optionFor.every(b => BOARDS.includes(b)))) {
+    errors.push(`topic.optionFor must list boards from ${BOARDS.join(', ')}`);
+  }
   const cards = (file && Array.isArray(file.cards)) ? file.cards : [];
   if (!cards.length) errors.push('no cards');
 
