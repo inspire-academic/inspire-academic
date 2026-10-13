@@ -14,7 +14,7 @@
 //     alt: 'What the graph shows, for a student who cannot see it.',
 //     x: { label: 'time / s', min: 0, max: 10, ticks: [{ at: 4, label: '4.0' }] },
 //     y: { label: 'velocity / m s⁻¹', min: 0, max: 14, ticks: [...] },
-//     curves: [{ fn: {...}, from: 0, to: 10, dashed: false, label: 'X', labelAt: 6, labelBelow: false }],
+//     curves: [{ fn: {...}, from: 0, to: 10, dashed: false, label: 'X', labelAt: 6, labelBelow: false, labelLeft: false, ink: 0 }],
 //     marks:  [{ x: 4, y: 12, label: 'P', labelBelow: false }],   dots on the graph
 //     guides: [{ x: 4, y: 12 }],                      dashed lines from a point to the axes
 //     shade:  [{ upper: 0, lower: 1, from: 0, to: 5 }] the area between two curves (or a curve and the x-axis)
@@ -35,26 +35,30 @@
   var W = 360, H = 250, PAD = { l: 52, r: 22, t: 20, b: 46 };
   var INK = '#1a1a1a', COLOURS = ['#0b4fa8', '#b3261e', '#1b7f3b', '#6a3fa0'];
   var KINDS = ['linear', 'power', 'exp', 'sine', 'resonance', 'points'];
-  var SAMPLES = 240;
+  var SAMPLES = 240;   // points checked along each curve
+  var DRAWN = 120;     // points drawn along each curve
 
   function num(v) { return typeof v === 'number' && isFinite(v); }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   function r2(v) { return Math.round(v * 100) / 100; }
+  function r1(v) { return Math.round(v * 10) / 10; }
 
-  // Powers in a unit (m s⁻¹, 10¹⁴ Hz) are drawn as raised small digits, not
-  // left to the font: many fonts have no superscript minus.
+  // Powers and subscripts (m s⁻¹, 10¹⁴ Hz, V₀) are drawn as small raised or
+  // lowered digits, not left to the font: many fonts lack these characters.
   var SUPER = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '−', '⁺': '+' };
+  var SUB = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
   function label(s) {
-    var parts = String(s).split(/([⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+)/), out = '', raised = false;
+    var parts = String(s).split(/([⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+|[₀₁₂₃₄₅₆₇₈₉]+)/), out = '', shift = 0;
     parts.forEach(function (part, i) {
       if (!part) return;
       if (i % 2) {
-        out += '<tspan dy="-4" font-size="9">' + esc(part.split('').map(function (c) { return SUPER[c]; }).join('')) + '</tspan>';
-        raised = true;
-      } else if (raised) {
-        // Back down to the baseline for the text that follows a power.
-        out += '<tspan dy="4">' + esc(part) + '</tspan>';
-        raised = false;
+        var up = SUPER[part.charAt(0)] !== undefined, to = up ? -4 : 3;
+        out += '<tspan dy="' + (to - shift) + '" font-size="9">' + esc(part.split('').map(function (c) { return (up ? SUPER : SUB)[c]; }).join('')) + '</tspan>';
+        shift = to;
+      } else if (shift) {
+        // Back to the baseline for the text that follows.
+        out += '<tspan dy="' + (-shift) + '">' + esc(part) + '</tspan>';
+        shift = 0;
       } else out += esc(part);
     });
     return out;
@@ -142,13 +146,21 @@
     var text = function (x, y, s, anchor, extra) {
       out.push('<text x="' + r2(x) + '" y="' + r2(y) + '" text-anchor="' + (anchor || 'middle') + '" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="' + INK + '"' + (extra || '') + '>' + label(s) + '</text>');
     };
-    var path = function (fn, from, to) {
-      var d = '';
-      for (var s = 0; s <= SAMPLES; s++) {
-        var x = from + (to - from) * s / SAMPLES;
-        d += (s ? 'L' : 'M') + sx(x) + ' ' + sy(value(fn, x)) + ' ';
+    // Straight lines need only their corners; curves are sampled finely.
+    var xs = function (fn, from, to) {
+      var out = [], s;
+      if (fn.kind === 'linear') return [from, to];
+      if (fn.kind === 'points') {
+        out.push(from);
+        fn.points.forEach(function (p) { if (p[0] > from && p[0] < to) out.push(p[0]); });
+        out.push(to);
+        return out;
       }
-      return d.trim();
+      for (s = 0; s <= DRAWN; s++) out.push(from + (to - from) * s / DRAWN);
+      return out;
+    };
+    var path = function (fn, from, to) {
+      return xs(fn, from, to).map(function (x, i) { return (i ? 'L' : 'M') + r1(sx(x)) + ' ' + r1(sy(value(fn, x))); }).join(' ');
     };
     var span = function (c) { return [c.from === undefined ? fig.x.min : c.from, c.to === undefined ? fig.x.max : c.to]; };
 
@@ -182,18 +194,19 @@
     });
 
     fig.curves.forEach(function (c, i) {
-      var s = span(c), colour = COLOURS[i % COLOURS.length];
+      // Each curve has its own colour, unless it says it is part of another (`ink`).
+      var s = span(c), colour = COLOURS[(c.ink === undefined ? i : c.ink) % COLOURS.length];
       out.push('<path d="' + path(c.fn, s[0], s[1]) + '" fill="none" stroke="' + colour + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"' + (c.dashed ? ' stroke-dasharray="7 4"' : '') + '/>');
       if (c.label) {
         var lx = c.labelAt === undefined ? s[0] + (s[1] - s[0]) * 0.8 : c.labelAt;
         // Above and to the right of the curve, or below it where that is clearer.
-        text(sx(lx) + 8, sy(value(c.fn, lx)) + (c.labelBelow ? 18 : -8), c.label, 'start', ' font-weight="700"');
+        text(sx(lx) + (c.labelLeft ? -8 : 8), sy(value(c.fn, lx)) + (c.labelBelow ? 18 : -8), c.label, c.labelLeft ? 'end' : 'start', ' font-weight="700"');
       }
     });
 
     (fig.marks || []).forEach(function (m) {
       out.push('<circle cx="' + sx(m.x) + '" cy="' + sy(m.y) + '" r="3.2" fill="' + INK + '"/>');
-      if (m.label) text(sx(m.x) + 7, sy(m.y) + (m.labelBelow ? 16 : -7), m.label, 'start', ' font-weight="700"');
+      if (m.label) text(sx(m.x) + (m.labelLeft ? -7 : 7), sy(m.y) + (m.labelBelow ? 16 : -7), m.label, m.labelLeft ? 'end' : 'start', ' font-weight="700"');
     });
 
     out.push('</svg>');

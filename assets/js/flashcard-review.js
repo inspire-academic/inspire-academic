@@ -89,15 +89,18 @@
     return '<' + tag + ' class="fr-list">' + items.map(function (t) { return '<li>' + text(t) + '</li>'; }).join('') + '</' + tag + '>';
   }
 
+  // A graph, drawn exactly as the student will see it.
+  function figureHtml(figure) {
+    if (!figure) return '';
+    try { return '<div class="fr-figure">' + PhysicsGraph.svg(figure) + '</div>'; }
+    catch (e) { return '<p class="fr-asked">This graph could not be drawn.</p>'; }
+  }
+
   // A quiz question: the four options with the key marked, then the worked
   // solution a student sees after answering.
   function quizBody(card) {
     var h = '<p class="fr-label">Question</p><p class="fr-q">' + text(card.q) + '</p>';
-    if (card.figure) {
-      // Drawn exactly as the student will see it.
-      try { h += '<div class="fr-figure">' + PhysicsGraph.svg(card.figure) + '</div>'; }
-      catch (e) { h += '<p class="fr-asked">The graph for this question could not be drawn.</p>'; }
-    }
+    h += figureHtml(card.figure);
     h += '<p class="fr-label">Options (shuffled for each student)</p><ul class="fr-list fr-options">';
     ['A', 'B', 'C', 'D'].forEach(function (L) {
       var key = L === card.answer;
@@ -116,8 +119,8 @@
     h += '<ul class="fr-spec">' + specLines(card) + '</ul>';
     if (card.options) h += quizBody(card);
     else {
-    h += '<p class="fr-label">Question</p><p class="fr-q">' + text(card.q) + '</p>';
-    h += '<p class="fr-label">Answer</p><p class="fr-a">' + text(card.a) + '</p>';
+      h += '<p class="fr-label">Question</p><p class="fr-q">' + text(card.q) + '</p>' + figureHtml(card.figure);
+      h += '<p class="fr-label">Answer</p><p class="fr-a">' + text(card.a) + '</p>' + figureHtml(card.answerFigure);
     }
     if (card.steps) h += '<p class="fr-label">Steps, shown one at a time</p>' + list(card.steps, true);
     if (card.marks) h += '<p class="fr-label">Mark points the student ticks</p>' + list(card.marks, false);
