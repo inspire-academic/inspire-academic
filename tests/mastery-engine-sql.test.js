@@ -94,6 +94,12 @@ test('each reviewed concept pack has current load SQL', { skip: !fs.existsSync(p
     // The pack's commit id (draft_ref, generator@) changes whenever history is
     // rebased; the loaded SQL is still current if nothing else differs.
     const noCommit = s => s.replace(/\$t\$[0-9a-f]{7,40}\$t\$/g, '$t$<commit>$t$').replace(/templates\.js@[0-9a-f]{7,40}/g, 'templates.js@<commit>');
-    assert.equal(noCommit(read(file)), noCommit(build(p)), `regenerate: node curriculum/build-pack-sql.js ${p}`);
+    // Nor is it out of date because the past-paper corpus has grown since: each
+    // item's overlap figure is measured against whatever papers are on this
+    // machine, so it moves as papers are added. Its verdict (pass, warn or
+    // fail) is still compared, so wording that newly matches a paper closely
+    // enough to change the verdict does fail here.
+    const noOverlap = s => s.replace(/"max_overlap":\d+/g, '"max_overlap":<n>');
+    assert.equal(noOverlap(noCommit(read(file))), noOverlap(noCommit(build(p))), `regenerate: node curriculum/build-pack-sql.js ${p}`);
   }
 });
