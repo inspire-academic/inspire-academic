@@ -75,7 +75,9 @@ test('flashcards: publishing writes only the cards a teacher approved, as they r
   const out = fs.mkdtempSync(path.join(os.tmpdir(), 'fc-publish-'));
   try {
     const t = topics[0];
-    const [a, b, c] = t.data.cards;
+    // a: a card with maths in its answer (to see it typeset); b and c: two others.
+    const a = t.data.cards.find(card => card.a.includes('\\('));
+    const [b, c] = t.data.cards.filter(card => card !== a);
     const approved = { [t.id]: {
       [a.id]: { hash: C.cardHash(a), approvedAt: '2026-10-13T10:00:00Z' },
       // Approved, then edited: the approval is for wording that no longer exists.
