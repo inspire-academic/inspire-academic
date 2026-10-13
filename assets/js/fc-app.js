@@ -5,17 +5,19 @@
 // file is what the student sees and presses. Cards are the published files
 // under /content/flashcards/ (approved by a teacher, maths already typeset).
 //
-// ?topic=<id>        which topic (default: A-level Physics, Electricity)
+// ?topic=<id>        just that topic (otherwise the topics the student chose)
 // ?preview=drafts    staff only: run the app on the unapproved drafts, with
 //                    nothing saved, to see cards as a student would
 (function () {
   var Core = window.FCCore;
   var $ = function (id) { return document.getElementById(id); };
   var params = new URLSearchParams(location.search);
-  var topicId = params.get('topic') || 'physics-a-level/electricity';
+  // A link to one topic shows just that topic; without it, the student's
+  // own choice of topics.
+  var onlyTopic = params.get('topic');
   var previewing = params.get('preview') === 'drafts';
 
-  var store, board, cards = [], states = {}, days = [], specTitles = {}, firstName = '';
+  var store, board, files = [], chosen = [], cards = [], cardTopic = {}, states = {}, days = [], firstName = '';
   var html = function (s) { return s; };          // published text is ready to show
   var afterRender = function () {};
   var session = null, current = null, lastAction = null, undoTimer = null;
@@ -26,7 +28,7 @@
     'uncertainty': 'Uncertainty', 'misconception': 'Common mistake', 'unit': 'Units', 'explain': 'Explain', 'concept': 'Concept'
   };
   var BOARD_NAMES = { aqa: 'AQA', edexcel: 'Edexcel' };
-  var SCREENS = ['fc-loading', 'fc-board', 'fc-today', 'fc-session', 'fc-done'];
+  var SCREENS = ['fc-loading', 'fc-board', 'fc-topics', 'fc-today', 'fc-session', 'fc-done'];
 
   function show(id, focusId) {
     SCREENS.forEach(function (s) { $(s).hidden = s !== id; });
@@ -47,43 +49,52 @@
   }
 
   // ── Loading the cards ────────────────────────────────────────────────
+  // Every published topic (or just the one a link asked for): [file, ...].
+  function wanted(t) { return !onlyTopic || t.id === onlyTopic; }
+
   function loadPublished() {
     return getJson('/content/flashcards/manifest.json').then(function (manifest) {
-      var entry = (manifest.topics || []).filter(function (t) { return t.id === topicId; })[0];
-      if (!entry) return null;
-      return getJson(entry.file);
-    }, function (e) { if (e.status === 404) return null; throw e; });
+      return Promise.all((manifest.topics || []).filter(wanted).map(function (t) { return getJson(t.file); }));
+    }, function (e) { if (e.status === 404) return []; throw e; });
   }
 
   // Staff preview: the drafts, typeset in the browser.
   function loadDrafts(token) {
+    var auth = { Authorization: 'Bearer ' + token };
     return new Promise(function (resolve, reject) {
       var s = document.createElement('script');
       s.src = '/assets/js/maths-typeset.js';
       s.onload = resolve; s.onerror = reject;
       document.head.appendChild(s);
     }).then(function () {
-      return getJson('/api/v1/flashcards/review?topic=' + encodeURIComponent(topicId), { Authorization: 'Bearer ' + token });
+      return getJson('/api/v1/flashcards/review', auth);
     }).then(function (res) {
       html = function (s) { return IAMaths.markup(String(s).replace(/\\\(/g, '\\(\\displaystyle ')); };
       afterRender = function (el) { IAMaths.typeset(el); };
-      var spec = {};
-      ['aqa', 'edexcel'].forEach(function (b) {
-        spec[b] = {};
-        Object.keys(res.spec[b] || {}).forEach(function (k) { spec[b][k] = res.spec[b][k].title; });
-      });
-      return {
-        topic: res.topic, spec: spec,
-        cards: res.cards.map(function (c) {
-          var boards = {};
-          Object.keys(c.boards).forEach(function (b) {
-            var e = c.boards[b];
-            boards[b] = { refs: (e.refs || e.points).map(String), given: e.given, practical: e.practical, note: e.note };
-          });
-          return Object.assign({}, c, { v: c.hash, boards: boards });
-        })
-      };
+      return Promise.all((res.topics || []).filter(wanted).map(function (t) {
+        return getJson('/api/v1/flashcards/review?topic=' + encodeURIComponent(t.id), auth).then(draftFile);
+      }));
     });
+  }
+
+  // A topic's drafts in the shape of a published file.
+  function draftFile(res) {
+    var spec = {};
+    ['aqa', 'edexcel'].forEach(function (b) {
+      spec[b] = {};
+      Object.keys(res.spec[b] || {}).forEach(function (k) { spec[b][k] = res.spec[b][k].title; });
+    });
+    return {
+      topic: res.topic, spec: spec,
+      cards: res.cards.map(function (c) {
+        var boards = {};
+        Object.keys(c.boards).forEach(function (b) {
+          var e = c.boards[b];
+          boards[b] = { refs: (e.refs || e.points).map(String), given: e.given, practical: e.practical, note: e.note };
+        });
+        return Object.assign({}, c, { v: c.hash, boards: boards });
+      })
+    };
   }
 
   // ── Today ────────────────────────────────────────────────────────────
@@ -108,9 +119,31 @@
     var study = Core.studyDays(days, now);
     $('fc-week').textContent = plural(study.week, 'day') + ' studied this week · ' + plural(study.total, 'study day') + ' in total';
 
-    var list = $('fc-cover');
-    list.textContent = '';
-    Core.coverage(cards, states, board).forEach(function (p) {
+    var active = activeFiles();
+    $('fc-topic').textContent = files[0].topic.level + ' ' + files[0].topic.subject + ' · ' +
+      (active.length <= 2 ? active.map(function (f) { return f.topic.title; }).join(' and ') : active.length + ' topics');
+    $('fc-choose').hidden = !!onlyTopic || files.length < 2;
+
+    // Coverage, topic by topic.
+    var cover = $('fc-cover');
+    cover.textContent = '';
+    active.forEach(function (f) {
+      if (active.length > 1) {
+        var h = document.createElement('h3');
+        h.className = 'fc-h3';
+        h.textContent = f.topic.title;
+        cover.appendChild(h);
+      }
+      var list = document.createElement('ul');
+      list.className = 'fc-cover';
+      cover.appendChild(list);
+      coverageRows(list, Core.forBoard(f.cards, board), (f.spec && f.spec[board]) || {});
+    });
+    show('fc-today', 'fc-greeting');
+  }
+
+  function coverageRows(list, topicCards, specTitles) {
+    Core.coverage(topicCards, states, board).forEach(function (p) {
       var li = document.createElement('li');
       li.className = 'fc-cover-row';
       var name = document.createElement('span');
@@ -133,7 +166,40 @@
       li.appendChild(name); li.appendChild(bar); li.appendChild(count);
       list.appendChild(li);
     });
-    show('fc-today', 'fc-greeting');
+  }
+
+  // ── Which topics ─────────────────────────────────────────────────────
+  // A student switches on the topics they have been taught. New cards only
+  // come from those; a link to one topic (?topic=) shows just that topic.
+  function activeFiles() {
+    return files.filter(function (f) { return onlyTopic ? f.topic.id === onlyTopic : chosen.indexOf(f.topic.id) !== -1; });
+  }
+
+  function showTopics() {
+    var list = $('fc-topic-list');
+    list.textContent = '';
+    files.forEach(function (f, i) {
+      var n = Core.forBoard(f.cards, board).length;
+      if (!n) return;
+      var li = document.createElement('li');
+      var box = document.createElement('input');
+      box.type = 'checkbox'; box.id = 'fc-topic-' + i; box.className = 'fc-tick'; box.value = f.topic.id;
+      box.checked = chosen.indexOf(f.topic.id) !== -1;
+      var label = document.createElement('label');
+      label.htmlFor = box.id;
+      label.textContent = f.topic.title + ' (' + plural(n, 'card') + ')';
+      li.appendChild(box); li.appendChild(label);
+      list.appendChild(li);
+    });
+    $('fc-topics-save').disabled = !list.querySelector(':checked');
+    show('fc-topics', 'fc-topics-title');
+  }
+
+  function saveTopics() {
+    chosen = Array.prototype.map.call($('fc-topic-list').querySelectorAll(':checked'), function (b) { return b.value; });
+    if (!chosen.length) return;
+    store.setMeta('topics', chosen);
+    ready();
   }
 
   // ── A session ────────────────────────────────────────────────────────
@@ -274,7 +340,7 @@
     if (days.indexOf(today) === -1) { days.push(today); store.setMeta('days', days); }
     store.addReview({
       card: card.id, v: card.v, rating: Core.RATINGS[name], at: now.toISOString(), ms: Date.now() - current.shownAt,
-      repeat: result.repeat, correct: current.verdict, board: board, topic: topicId
+      repeat: result.repeat, correct: current.verdict, board: board, topic: cardTopic[card.id]
     }).then(function (row) { action.reviewUid = row.uid; });
     syncSoon();
 
@@ -342,6 +408,9 @@
     var btn = ev.target.closest('[data-rating]');
     if (btn && !btn.disabled) rate(btn.getAttribute('data-rating'));
   });
+  $('fc-choose').addEventListener('click', showTopics);
+  $('fc-topics-save').addEventListener('click', saveTopics);
+  $('fc-topic-list').addEventListener('change', function () { $('fc-topics-save').disabled = !this.querySelector(':checked'); });
   $('fc-board').addEventListener('click', function (ev) {
     var btn = ev.target.closest('[data-board]');
     if (!btn) return;
@@ -428,12 +497,24 @@
   }
 
   // ── Starting up ──────────────────────────────────────────────────────
-  var file = null;
   function ready() {
     if (!board) { show('fc-board'); return; }
-    cards = Core.forBoard(file.cards, board);
-    specTitles = (file.spec && file.spec[board]) || {};
-    if (!cards.length) { stop('There are no cards for ' + BOARD_NAMES[board] + ' in this topic yet.'); return; }
+    // Only topics that still exist and have cards for this board count.
+    var available = files.filter(function (f) { return Core.forBoard(f.cards, board).length; }).map(function (f) { return f.topic.id; });
+    if (!available.length) { stop('There are no cards for ' + BOARD_NAMES[board] + ' here yet.'); return; }
+    chosen = chosen.filter(function (id) { return available.indexOf(id) !== -1; });
+    if (!onlyTopic && !chosen.length) {
+      if (available.length > 1) { showTopics(); return; }
+      chosen = available;
+    }
+    // One pool, the topics' cards taken in turn, so new cards and reviews
+    // from different topics are mixed in every session.
+    cardTopic = {};
+    cards = Core.interleave(activeFiles().map(function (f) {
+      var list = Core.forBoard(f.cards, board);
+      list.forEach(function (c) { cardTopic[c.id] = f.topic.id; });
+      return list;
+    }));
     renderToday();
   }
 
@@ -449,19 +530,19 @@
       // A preview keeps nothing: it runs from memory.
       return Promise.all([profile, content, FCStore.open(previewing ? null : s.user.id)]).then(function (got) {
         var p = got[0];
-        file = got[1];
+        files = got[1] || [];
         store = got[2];
         var name = String(p.first_name || '').trim() || String(p.full_name || '').trim().split(/\s+/)[0];
         if (name) firstName = name;
-        if (!file) { stop('These cards are still being checked by a teacher. Please come back soon.'); return; }
-        $('fc-topic').textContent = file.topic.level + ' ' + file.topic.subject + ' · ' + file.topic.title;
-        $('fc-nav-topic').textContent = file.topic.title;
-        document.title = file.topic.title + ' flashcards — Inspire Academic';
+        if (!files.length) { stop('These cards are still being checked by a teacher. Please come back soon.'); return; }
+        var subject = files[0].topic.level + ' ' + files[0].topic.subject;
+        $('fc-nav-topic').textContent = subject;
+        document.title = subject + ' flashcards — Inspire Academic';
         $('fc-unsaved').hidden = store.persistent || previewing;
         $('fc-preview-note').hidden = !previewing;
         var fromProfile = String(p.exam_board || '').toLowerCase();
-        return Promise.all([store.states(), store.meta('days', []), store.meta('board', null), store.meta('name', '')]).then(function (saved) {
-          states = saved[0]; days = saved[1];
+        return Promise.all([store.states(), store.meta('days', []), store.meta('board', null), store.meta('name', ''), store.meta('topics', [])]).then(function (saved) {
+          states = saved[0]; days = saved[1]; chosen = saved[4] || [];
           board = BOARD_NAMES[fromProfile] ? fromProfile : saved[2];
           if (previewing && params.get('board')) board = params.get('board');
           // Remembered on the device, so the app still knows the student

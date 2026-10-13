@@ -119,3 +119,11 @@ Known limits:
 - A teacher who has approved cards cannot be deleted from Supabase Auth
   while `fc_card_reviews` holds their rows (the approval record is kept on
   purpose). A student's ratings are deleted with their account.
+
+## Several topics
+
+The app loads every published topic. A student ticks the topics they have
+covered (asked the first time there is more than one, and changeable from
+the Today screen); the choice is kept on the device. The chosen topics'
+cards form one pool, a card from each topic in turn, so sessions mix
+topics. `?topic=<id>` shows one topic only, for a link from a lesson.
