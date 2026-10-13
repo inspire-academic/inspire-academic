@@ -89,15 +89,31 @@
     return '<' + tag + ' class="fr-list">' + items.map(function (t) { return '<li>' + text(t) + '</li>'; }).join('') + '</' + tag + '>';
   }
 
+  // A quiz question: the four options with the key marked, then the worked
+  // solution a student sees after answering.
+  function quizBody(card) {
+    var h = '<p class="fr-label">Question</p><p class="fr-q">' + text(card.q) + '</p>';
+    h += '<p class="fr-label">Options (shuffled for each student)</p><ul class="fr-list fr-options">';
+    ['A', 'B', 'C', 'D'].forEach(function (L) {
+      var key = L === card.answer;
+      h += '<li' + (key ? ' class="fr-key"' : '') + '><b>' + L + '</b> ' + text(card.options[L]) + (key ? ' <span class="fr-sheet">correct answer</span>' : '') + '</li>';
+    });
+    h += '</ul><p class="fr-label">Worked solution, shown after answering</p><p class="fr-a">' + text(card.solution) + '</p>';
+    return h;
+  }
+
   function cardHtml(card) {
     var r = card.review, h = '';
     h += '<div class="fr-meta"><span class="fr-id">' + esc(card.id) + '</span>' +
-      '<span class="fr-chip">' + esc(TYPE_NAMES[card.type] || card.type) + '</span>' +
+      '<span class="fr-chip">' + esc(card.options ? 'Quiz question' : TYPE_NAMES[card.type] || card.type) + '</span>' +
       '<span class="fr-chip">' + esc(LEVELS[card.difficulty] || '') + '</span>' +
       '<span class="fr-chip fr-chip-status">' + esc(STATUS_NAMES[r.status]) + '</span></div>';
     h += '<ul class="fr-spec">' + specLines(card) + '</ul>';
+    if (card.options) h += quizBody(card);
+    else {
     h += '<p class="fr-label">Question</p><p class="fr-q">' + text(card.q) + '</p>';
     h += '<p class="fr-label">Answer</p><p class="fr-a">' + text(card.a) + '</p>';
+    }
     if (card.steps) h += '<p class="fr-label">Steps, shown one at a time</p>' + list(card.steps, true);
     if (card.marks) h += '<p class="fr-label">Mark points the student ticks</p>' + list(card.marks, false);
     if (card.numeric) h += '<p class="fr-label">Typed answer accepted</p><p class="fr-a">' + esc(card.numeric.value) + (card.numeric.unit ? ' ' + esc(card.numeric.unit) : '') + ' (' + esc(card.numeric.sf) + ' significant figures)</p>';
@@ -244,13 +260,13 @@
 
   // Every topic with drafted cards, to choose between.
   function loadTopics() {
-    return api('GET', '/api/v1/flashcards/review').then(function (res) {
+    return Promise.all([api('GET', '/api/v1/flashcards/review'), api('GET', '/api/v1/flashcards/review?kind=quiz')]).then(function (got) {
       var select = $('fr-topic');
       select.textContent = '';
-      (res.topics || []).forEach(function (t) {
+      (got[0].topics || []).concat(got[1].topics || []).forEach(function (t) {
         var o = document.createElement('option');
         o.value = t.id;
-        o.textContent = t.level + ' ' + t.subject + ': ' + t.title + ' (' + t.cards + ' cards)';
+        o.textContent = t.level + ' ' + t.subject + ': ' + t.title + ' (' + t.cards + (t.kind === 'quiz' ? ' questions)' : ' cards)');
         o.selected = t.id === topicId;
         select.appendChild(o);
       });
