@@ -89,7 +89,8 @@ test('graph: the review page and the quiz page draw the figure, and the quiz run
   const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
   const review = read('assets/js/flashcard-review.js');
   assert.match(read('teacher/flashcard-review.html'), /<script src="\/assets\/js\/physics-graph\.js"><\/script>/);
-  assert.match(review, /if \(card\.figure\) \{[\s\S]*?PhysicsGraph\.svg\(card\.figure\)/);
+  assert.match(review, /function figureHtml\(figure\) \{[\s\S]*?PhysicsGraph\.svg\(figure\)/);
+  assert.match(review, /h \+= figureHtml\(card\.figure\);/);
   const quiz = read('student/quiz.html');
   assert.match(quiz, /<script src="\/assets\/js\/physics-graph\.js"><\/script>/);
   assert.match(quiz, /<div class="q-figure" id="q-figure" hidden><\/div>/);
@@ -102,4 +103,60 @@ test('graph: the review page and the quiz page draw the figure, and the quiz run
   const sql = read('supabase/question_figures.sql');
   assert.match(sql, /add column if not exists figure jsonb/);
   assert.doesNotMatch(sql, /^grant /m, 'browsers get no access: the server sends the graph');
+});
+
+// ── Graphs on flashcards ─────────────────────────────────────────────────
+const cardsBuild = require(path.join(ROOT, 'scripts/flashcards/build.js'));
+const C = require(path.join(ROOT, 'scripts/flashcards/content.js'));
+const cardTopics = cardsBuild.topics();
+const cardsWithGraphs = cardTopics.flatMap(t => t.data.cards.filter(c => c.figure || c.answerFigure));
+
+test('graph: flashcards carry graphs with the question or the answer, drawn when they are published', () => {
+  assert.ok(cardsWithGraphs.length >= 20, 'the graph cards have graphs');
+  for (const card of cardsWithGraphs) {
+    for (const f of ['figure', 'answerFigure']) if (card[f]) assert.deepEqual(PG.check(card[f]), [], `${card.id} ${f}`);
+    const out = C.publishCard(card, katex);
+    // The phone is sent the finished drawing, so it needs no drawing script.
+    if (card.figure) assert.equal(out.fig, PG.svg(card.figure), card.id);
+    if (card.answerFigure) assert.equal(out.afig, PG.svg(card.answerFigure), card.id);
+    assert.equal('figure' in out || 'answerFigure' in out, false, `${card.id}: the description itself is not published`);
+  }
+  const plain = cardTopics[0].data.cards.find(c => !c.figure && !c.answerFigure);
+  const out = C.publishCard(plain, katex);
+  assert.equal('fig' in out || 'afig' in out, false, 'a card without a graph publishes none');
+});
+
+test('graph: a card\'s graph is part of what a teacher approves, and an unsound one is refused', () => {
+  const card = clone(cardsWithGraphs[0]);
+  const hash = C.cardHash(card);
+  const f = card.figure ? 'figure' : 'answerFigure';
+  card[f].alt += ' Changed.';
+  assert.notEqual(C.cardHash(card), hash, 'changing the graph sends the card back for approval');
+
+  const t = clone(cardTopics.find(x => x.data.cards.some(c => c.answerFigure)));
+  const bad = t.data.cards.find(c => c.answerFigure);
+  bad.answerFigure.curves[0].fn = { kind: 'squiggle' };
+  const errors = C.validateTopic(t.data, { katex, spec: t.spec }).errors;
+  assert.ok(errors.some(e => e.includes(`${bad.id}: answerFigure: curve 1: unknown kind`)), JSON.stringify(errors.slice(0, 3)));
+});
+
+test('graph: the flashcard app shows a published graph, and draws drafts for a teacher\'s preview', () => {
+  const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
+  const app = read('assets/js/fc-app.js');
+  assert.match(app, /\$\('fc-q'\)\.innerHTML = html\(card\.q\) \+ \(card\.fig \|\| ''\);/);
+  assert.match(app, /\$\('fc-a'\)\.innerHTML = html\(card\.a\) \+ \(card\.afig \|\| ''\);/);
+  assert.match(app, /script\('\/assets\/js\/physics-graph\.js'\)/, 'loaded only for the draft preview');
+  assert.doesNotMatch(read('student/flashcards-v2.html'), /physics-graph\.js/, 'students download no drawing script');
+  assert.match(read('assets/css/flashcards-v2.css'), /\.fc-q svg,\.fc-a svg\{display:block;width:100%;max-width:360px;height:auto;/);
+  const review = read('assets/js/flashcard-review.js');
+  assert.match(review, /figureHtml\(card\.figure\)/);
+  assert.match(review, /figureHtml\(card\.answerFigure\)/);
+});
+
+test('graph: subscripts are drawn as lowered digits', () => {
+  const f = base();
+  f.marks = [{ x: 0, y: 10, label: 'ln V₀' }];
+  const svg = PG.svg(f);
+  assert.match(svg, /ln V<tspan dy="3" font-size="9">0<\/tspan>/);
+  assert.doesNotMatch(svg, /[₀₁₂₃₄₅₆₇₈₉]/);
 });

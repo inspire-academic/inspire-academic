@@ -61,12 +61,16 @@
   // Staff preview: the drafts, typeset in the browser.
   function loadDrafts(token) {
     var auth = { Authorization: 'Bearer ' + token };
-    return new Promise(function (resolve, reject) {
-      var s = document.createElement('script');
-      s.src = '/assets/js/maths-typeset.js';
-      s.onload = resolve; s.onerror = reject;
-      document.head.appendChild(s);
-    }).then(function () {
+    var script = function (src) {
+      return new Promise(function (resolve, reject) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = resolve; s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    };
+    // Drafts are typeset, and their graphs drawn, here in the browser.
+    return Promise.all([script('/assets/js/maths-typeset.js'), script('/assets/js/physics-graph.js')]).then(function () {
       return getJson('/api/v1/flashcards/review', auth);
     }).then(function (res) {
       html = function (s) { return IAMaths.markup(String(s).replace(/\\\(/g, '\\(\\displaystyle ')); };
@@ -92,7 +96,8 @@
           var e = c.boards[b];
           boards[b] = { refs: (e.refs || e.points).map(String), given: e.given, practical: e.practical, note: e.note };
         });
-        return Object.assign({}, c, { v: c.hash, boards: boards });
+        return Object.assign({}, c, { v: c.hash, boards: boards,
+          fig: c.figure && PhysicsGraph.svg(c.figure), afig: c.answerFigure && PhysicsGraph.svg(c.answerFigure) });
       })
     };
   }
@@ -248,7 +253,8 @@
     $('fc-fill').style.width = Math.round(100 * session.pos / session.queue.length) + '%';
     $('fc-count').textContent = (session.pos + 1) + ' of ' + session.queue.length;
     $('fc-meta').textContent = (TYPE_NAMES[card.type] || '') + ' · ' + BOARD_NAMES[board] + ' ' + entry.refs.join(', ') + (entry.practical ? ' · ' + entry.practical : '');
-    $('fc-q').innerHTML = html(card.q);
+    // A card's graphs arrive already drawn (fig with the question, afig with the answer).
+    $('fc-q').innerHTML = html(card.q) + (card.fig || '');
     $('fc-answer').hidden = true;
     $('fc-typed').hidden = !card.numeric;
     if (card.numeric) { $('fc-input').value = ''; $('fc-input').disabled = false; $('fc-unit').textContent = card.numeric.unit; }
@@ -280,7 +286,7 @@
         verdict.hidden = false;
       }
     }
-    $('fc-a').innerHTML = html(card.a);
+    $('fc-a').innerHTML = html(card.a) + (card.afig || '');
 
     var steps = $('fc-steps');
     steps.hidden = !card.steps;

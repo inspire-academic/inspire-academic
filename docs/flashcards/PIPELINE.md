@@ -56,6 +56,7 @@ the review page. It adds one table and changes nothing else.
 | `marks` | Mark-scheme points the student ticks off (explain cards). |
 | `why` | One line of explanation shown with the answer. |
 | `numeric` | `{ value, unit, sf }` for a typed numeric answer. |
+| `figure`, `answerFigure` | Optional graphs, shown with the question and with the answer. Each is a description (axes, and curves by equation or points) that `assets/js/physics-graph.js` draws exactly; see that file for the format. The drawing is made when the card is published, so a phone downloads no drawing script. A graph is part of the card's fingerprint. |
 | `boards` | `aqa: { refs: [...] }` and/or `edexcel: { points: [...] }`, with optional `given` (is the equation on that board's formulae sheet), `practical`, and a board-only `note`. A card is shown only to students of a board it lists. |
 | `difficulty` | 1 core, 2 standard, 3 stretch. |
 
