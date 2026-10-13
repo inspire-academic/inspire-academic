@@ -29,6 +29,7 @@
 
 const { fail, ok, parseBody, db, clean, requireStaff, namesById } = require('./_itt-shared');
 const C = require('../../scripts/flashcards/content.js');
+const { publishQuizTopic } = require('./_quiz-publish');
 
 // Every topic that can be reviewed. Adding a topic file means adding it here.
 const TOPICS = {
@@ -169,6 +170,18 @@ async function approveMany(client, who, body) {
   });
 }
 
+// A teacher puts a quiz topic's approved questions into the live quiz bank
+// (_quiz-publish.js). Nothing unapproved, or edited since approval, goes in.
+async function publishQuiz(client, body) {
+  const entry = Object.prototype.hasOwnProperty.call(QUIZ_TOPICS, body.topic) ? QUIZ_TOPICS[body.topic] : null;
+  if (!entry) return fail(404, 'unknown_topic', 'Unknown quiz topic.');
+  const latest = await latestDecisions(client, body.topic);
+  const approved = entry.cards.filter(q => standing(q, latest[q.id]) === 'approved');
+  const result = await publishQuizTopic(client, entry, approved);
+  if (result.error === 'no_topic') return fail(409, 'not_set_up', 'This topic is not in the quiz bank yet (supabase/a_level_physics_subject.sql).');
+  return ok(result);
+}
+
 async function approvals(client, topicId) {
   const file = topicFile(topicId);
   if (!file) return fail(404, 'unknown_topic', 'Unknown flashcard topic.');
@@ -202,6 +215,7 @@ exports.handler = async event => {
       const body = parseBody(event);
       if (!body) return fail(400, 'invalid_json', 'The request could not be read.');
       if (body.action === 'approve-all') return await approveMany(client, who, body);
+      if (body.action === 'publish-quiz') return await publishQuiz(client, body);
       return await decide(client, who, body);
     }
     return fail(405, 'method_not_allowed', 'Use GET or POST.');
