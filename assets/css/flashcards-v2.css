@@ -82,6 +82,8 @@
 /* The thumb zone */
 .fc-dock{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--navy);border-top:1px solid var(--border);padding:.6rem 1rem calc(.75rem + env(safe-area-inset-bottom));}
 .fc-dock > *{max-width:608px;margin-left:auto;margin-right:auto;}
+/* Block-level, so the auto margins centre it on a wide screen. */
+.fc-dock .fc-btn{display:flex;}
 .fc-dock-hint{font-size:.8rem;color:var(--muted);text-align:center;min-height:1.2em;margin-top:0;margin-bottom:.5rem;}
 .fc-rate{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;}
 .fc-rate[hidden]{display:none;}
