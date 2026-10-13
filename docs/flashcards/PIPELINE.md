@@ -91,3 +91,31 @@ their profile has no board they are asked; the app never assumes one.
 Teachers can try the app on the drafts before approving anything:
 `/student/flashcards-v2.html?preview=drafts` (add `&board=edexcel` to see it
 as an Edexcel student). A preview saves nothing.
+
+## Sync and offline (step 4, October 2026)
+
+Run `supabase/flashcard_progress.sql` once before students use the app. It
+adds one table, `fc_reviews`.
+
+- **The log is the record.** Every rating is one row in `fc_reviews`
+  (server-only, rows never updated). A card's schedule, "secure", study days
+  and coverage are all worked out from the log by `Core.replay()` in
+  `assets/js/fc-core.js`, identically on every device.
+- **`/api/v1/flashcards/reviews`** (`netlify/functions/flashcards-reviews.js`):
+  POST adds a student's ratings (the id is made on the device, so a retry is
+  stored once); GET returns their ratings since a cursor, in pages.
+- **`assets/js/fc-sync.js`** sends unsent ratings and brings down new ones:
+  when the app opens, a few seconds after each rating (once it can no longer
+  be undone), when the connection returns, and at once when the page is
+  left. Two devices only ever add rows, so neither can overwrite the other.
+- **Offline.** `sw.js` keeps the app's files and the published cards
+  (network first, cache as fallback). Ratings made offline stay on the
+  device, marked unsent, and go with the next sync.
+
+Known limits:
+- A rating undone after the page was hidden and reopened inside the
+  five-second undo window may already be on the server.
+- Days are counted by each device's own clock and time zone.
+- A teacher who has approved cards cannot be deleted from Supabase Auth
+  while `fc_card_reviews` holds their rows (the approval record is kept on
+  purpose). A student's ratings are deleted with their account.

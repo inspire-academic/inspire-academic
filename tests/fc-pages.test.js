@@ -66,3 +66,21 @@ test('fc app: what a phone downloads stays small', () => {
   assert.ok(gz('assets/vendor/ts-fsrs-5.4.2/ts-fsrs.umd.js') < 20000, 'the scheduler library');
   assert.ok(fs.existsSync(path.join(ROOT, 'assets/vendor/ts-fsrs-5.4.2/LICENSE')), 'the library keeps its licence');
 });
+
+test('fc app: progress syncs to the server and the app opens offline', () => {
+  const SYNC = read('assets/js/fc-sync.js');
+  const SW = read('sw.js');
+  const toml = read('netlify.toml');
+  assert.match(PAGE, /<script src="\/assets\/js\/fc-sync\.js" defer><\/script>/);
+  assert.doesNotMatch(SYNC, /localStorage|sessionStorage/);
+  assert.match(toml, /from = "\/api\/v1\/flashcards\/reviews"\s+to = "\/\.netlify\/functions\/flashcards-reviews"/);
+  // A rating is sent after it can no longer be undone, and at once on leaving.
+  assert.match(APP, /setTimeout\(runSync, FCSync\.UNDO_WINDOW_MS \+ 2000\)/);
+  assert.match(APP, /visibilityState === 'hidden'\) runSync\(\{ force: true, keepalive: true \}\)/);
+  assert.match(APP, /if \(!previewing\) startSync\(\);/, 'a teacher\'s preview of drafts sends nothing');
+  // Offline: the service worker keeps the cards, and the Supabase script is
+  // requested in a way that lets it be cached.
+  assert.match(APP, /navigator\.serviceWorker\.register\('\/sw\.js'\)/);
+  assert.match(SW, /url\.pathname\.startsWith\('\/content\/flashcards\/'\)\) \{\s+e\.respondWith\(networkFirst\(e\.request, CACHE_PAGES\)\);/);
+  assert.match(PAGE, /supabase-js@2\.111\.0" crossorigin="anonymous" defer/);
+});
