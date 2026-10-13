@@ -24,6 +24,7 @@ the route they will take.
 | `difficulty` | 1 (recall or one step) to 3 (several steps or a subtle idea). |
 | `boards` | `aqa: { refs: [...] }` and/or `edexcel: { points: [...] }`: verified points from `curriculum/flashcards/spec/`. |
 | `q` | The question. Plain text, maths as LaTeX in `\( \)`. No markup. |
+| `figure` | Optional. A graph shown with the question: see "Graphs" below. |
 | `options` | `A` to `D`. Numeric options in ascending order. |
 | `answer` | The key: `A`, `B`, `C` or `D`. |
 | `solution` | The worked solution a student sees after answering. It ends on the keyed value; a common slip is named in brackets, not worked through. |
@@ -60,6 +61,26 @@ GCSE.
   is run only after the page filters are live on main; before that, live
   GCSE pages would show A-level Physics as a fifth subject.
 
+## Graphs
+
+A question about a graph carries the graph, as a `figure`: axes, and curves
+given by their equations or points (`assets/js/physics-graph.js`, which
+documents the format). The same file draws it as an SVG on the review page
+and on the quiz page, and checks it in the build, so every curve is the
+real shape. The checker refuses a figure with a curve that leaves its axes,
+a missing text alternative (`alt`), or an unknown field.
+
+- Graphs are dark ink on a white card whatever the theme, like an exam paper.
+- Unit powers in labels are written with superscript characters
+  (`m s⁻¹`) and drawn as raised digits.
+- A figure is part of the question's fingerprint: changing it sends the
+  question back for approval.
+- In the quiz bank a figure is stored in `questions.figure`
+  (`supabase/question_figures.sql`). The server sends it with the question
+  when a quiz starts; browsers have no access to the column. Until the SQL
+  is run, publishing a topic whose approved questions include a graph is
+  refused with a message naming the file, and nothing is written.
+
 ## Approval
 
 A teacher approves quiz questions on the flashcard review page
@@ -71,6 +92,11 @@ with the flashcards' (`fc_card_reviews`) under the topic id
 question comes back for approval. A new quiz topic file must be added to
 `QUIZ_TOPICS` in `netlify/functions/flashcards-review.js` (a test fails
 otherwise).
+
+Cards and questions are listed in sections, one per specification point,
+each with its own "Approve these N" button (two presses). "Approve all"
+still covers the whole topic. Cards sent back for changes are never
+included in either.
 
 ## Publishing to the quiz bank
 

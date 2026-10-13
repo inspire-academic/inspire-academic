@@ -52,6 +52,27 @@ test('starting a quiz needs a signed-in student and returns questions without an
   assert.equal(attempt.max_score, 5);
 });
 
+test('the graph of a question is sent with it, and a quiz still starts when graphs cannot be read', async () => {
+  const figure = { kind: 'graph', alt: 'Velocity against time: a straight line rising from the origin.',
+    x: { label: 'time / s', min: 0, max: 10 }, y: { label: 'velocity', min: 0, max: 20 }, curves: [{ fn: { kind: 'linear', m: 2, c: 0 } }] };
+  const s = setup();
+  s.fake.tables.questions[1].figure = figure;
+  const res = await post(s.start, { quizId: 7 }, AUTH);
+  assert.deepEqual(res.body.questions.map(q => q.figure || null), [null, figure, null, null]);
+  for (const q of res.body.questions) for (const f of SECRET_FIELDS) assert.equal(f in q, false, `start leaked ${f}`);
+
+  // The figure column not there yet (supabase/question_figures.sql not run).
+  const realFetch = global.fetch;
+  global.fetch = (url, opts) => (String(url).includes('figure=not.is.null')
+    ? Promise.resolve({ ok: false, status: 400, text: async () => 'column questions.figure does not exist' })
+    : realFetch(url, opts));
+  const plain = await post(s.start, { quizId: 7 }, AUTH);
+  global.fetch = realFetch;
+  assert.equal(plain.status, 200);
+  assert.deepEqual(plain.body.questions.map(q => q.id), [1, 2, 3, 4]);
+  assert.ok(plain.body.questions.every(q => !('figure' in q)));
+});
+
 test('each answer is marked on the server by stored letter, once', async () => {
   const s = setup();
   const { body: st } = await post(s.start, { quizId: 7 }, AUTH);

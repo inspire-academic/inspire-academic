@@ -87,6 +87,8 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
   font-family:var(--font-display);font-size:1.05rem;line-height:1.5;
   margin-bottom:1.2rem;color:var(--white);
 }
+.q-figure{max-width:360px;margin:0 auto 1.2rem;}
+.q-figure svg{display:block;width:100%;height:auto;}
 
 .options{display:flex;flex-direction:column;gap:.7rem;}
 .option{
@@ -329,6 +331,7 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
         <span class="q-marks" id="q-marks-label">1 mark</span>
       </div>
       <div class="q-text" id="q-text"></div>
+      <div class="q-figure" id="q-figure" hidden></div>
       <div class="options" id="options-wrap"></div>
       <div class="free-response-wrap" id="free-response-wrap" style="display:none;">
         <textarea class="fr-textarea" id="fr-textarea" placeholder="Write your answer here — show your working where relevant."></textarea>
@@ -393,6 +396,7 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
 <script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/maths-typeset.js"></script>
+<script src="/assets/js/physics-graph.js"></script>
 <script>
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -455,6 +459,16 @@ function masteryLabel(m){
 
 <script>
 let quizData=null, questions=[], currentQ=0, answers=[], startTime=null, timerInterval=null, attemptId=null;
+
+// Draws the question's graph (assets/js/physics-graph.js), or clears the slot.
+function showFigure(q){
+  const el=document.getElementById('q-figure');
+  const fig=q&&q.figure;   // sent with the question by the server, when it has one
+  el.textContent='';
+  el.hidden=true;
+  if(!fig) return;
+  try{ el.innerHTML=PhysicsGraph.svg(fig); el.hidden=false; }catch(e){ /* the question still reads without it */ }
+}
 const params=new URLSearchParams(window.location.search);
 const quizId=params.get('id') ? parseInt(params.get('id')) : null;
 const subjectParam=params.get('subject');
@@ -601,6 +615,7 @@ function renderQuestion(){
   document.getElementById('q-num-label').textContent=`Question ${currentQ+1} of ${total}`;
   document.getElementById('q-marks-label').textContent=`${q.marks} mark${q.marks>1?'s':''}`;
   IAMaths.render(document.getElementById('q-text'),q.question_text);
+  showFigure(q);
   document.getElementById('explanation').style.display='none';
   document.getElementById('btn-next').style.display='none';
   document.getElementById('btn-finish').style.display='none';
