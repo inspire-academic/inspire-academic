@@ -773,6 +773,21 @@ function = "create-teacher"
   status = 200
   force = true
 
+# Flashcard review: a teacher approves each drafted flashcard before students
+# can see it; the build script reads the approvals (ids and fingerprints only)
+# to publish. See netlify/functions/flashcards-review.js.
+[[redirects]]
+  from = "/api/v1/flashcards/review"
+  to = "/.netlify/functions/flashcards-review"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/flashcards/approvals"
+  to = "/.netlify/functions/flashcards-approvals"
+  status = 200
+  force = true
+
 # A parent's view of their own child's Test & Teach homework: progress only,
 # never the questions or answers (see itt-parent.js).
 [[redirects]]
