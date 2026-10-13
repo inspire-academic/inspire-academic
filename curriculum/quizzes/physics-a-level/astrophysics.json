@@ -39,9 +39,10 @@
       "options": { "A": "O", "B": "A", "C": "G", "D": "M" }, "answer": "A",
       "solution": "The spectral classes in order of falling temperature are O, B, A, F, G, K, M. Class O stars are the hottest and look blue; class M stars are the coolest and look red. The Sun is class G." },
     { "id": "phy-al-astro-q010", "difficulty": 2, "boards": { "aqa": { "refs": ["3.9.2.5"] }, "edexcel": { "points": [159] } },
-      "q": "On a Hertzsprung–Russell diagram, with temperature decreasing to the right, where are white dwarfs found?",
-      "options": { "A": "Top left", "B": "Top right", "C": "Bottom left", "D": "Bottom right" }, "answer": "C",
-      "solution": "White dwarfs are hot but very small, so they are dim: hot puts them on the left, dim puts them at the bottom. Red giants and supergiants are cool but very bright, at the top right. The main sequence runs from top left to bottom right." },
+      "q": "The diagram is a Hertzsprung–Russell diagram, with temperature decreasing to the right. Four positions are marked P, Q, R and S. Which one is where white dwarfs are found?",
+      "figure": {"kind":"graph","alt":"A Hertzsprung–Russell diagram: luminosity against surface temperature, with temperature falling to the right. A line, the main sequence, runs from top left to bottom right. P is at its top left end and S at its bottom right end. Q is at the top right, away from the line. R is at the bottom left, away from the line.","x":{"label":"surface temperature (falling)","min":0,"max":10},"y":{"label":"luminosity","min":0,"max":10},"curves":[{"fn":{"kind":"points","points":[[0.8,9],[3,6.5],[5.5,4.2],[8,2],[9.3,0.9]]},"smooth":true}],"marks":[{"x":0.8,"y":9,"label":"P"},{"x":8,"y":8.4,"label":"Q"},{"x":2,"y":1.5,"label":"R"},{"x":9.3,"y":0.9,"label":"S"}]},
+      "options": { "A": "P", "B": "Q", "C": "R", "D": "S" }, "answer": "C",
+      "solution": "White dwarfs are hot but very small, so they are dim: hot puts them on the left, dim puts them at the bottom, which is R. P and S are at the two ends of the main sequence, and Q, cool but very bright, is where red giants are found." },
     { "id": "phy-al-astro-q011", "difficulty": 1, "boards": { "aqa": { "refs": ["3.9.2.5"] }, "edexcel": { "points": [160] } },
       "q": "Which sequence describes the future evolution of a star like the Sun?",
       "options": { "A": "Main sequence, supergiant, supernova, neutron star", "B": "Main sequence, red giant, white dwarf", "C": "Main sequence, white dwarf, red giant", "D": "Main sequence, red giant, black hole" }, "answer": "B",
@@ -63,8 +64,9 @@
       "options": { "A": "\\(0.35\\ \\text{km s}^{-1}\\)", "B": "\\(2.9\\ \\text{km s}^{-1}\\)", "C": "\\(270\\ \\text{km s}^{-1}\\)", "D": "\\(1.4 \\times 10^{4}\\ \\text{km s}^{-1}\\)" }, "answer": "D",
       "solution": "Hubble's law: \\(v = Hd = 70 \\times 200 = 1.4 \\times 10^{4}\\ \\text{km s}^{-1}\\). With the distance in megaparsecs and the constant in these units, the speed comes out in \\(\\text{km s}^{-1}\\)." },
     { "id": "phy-al-astro-q016", "difficulty": 2, "boards": { "aqa": { "refs": ["3.9.3.4"] } },
-      "q": "How does the transit method detect a planet orbiting another star?",
-      "options": { "A": "By seeing the planet directly through a telescope.", "B": "By measuring the red shift of the planet's light.", "C": "By detecting a regular small dip in the star's brightness as the planet passes in front of it.", "D": "By detecting radio signals from the planet." }, "answer": "C",
-      "solution": "When a planet crosses the face of its star as seen from Earth, it blocks a little of the star's light. The dip repeats once every orbit. The other main method looks for a wobble in the star's own spectrum, a changing Doppler shift, caused by the planet's pull." }
+      "q": "The graph shows the brightness of a distant star measured over several weeks. What is the most likely cause of the regular dips?",
+      "figure": {"kind":"graph","alt":"Brightness of a star against time: level, with two identical small flat-bottomed dips at a regular interval.","x":{"label":"time","min":0,"max":10.4},"y":{"label":"brightness of star","min":0.8,"max":1.06},"curves":[{"fn":{"kind":"points","points":[[0,1],[2,1],[2.3,0.94],[3.2,0.94],[3.5,1],[7,1],[7.3,0.94],[8.2,0.94],[8.5,1],[10,1]]}}]},
+      "options": { "A": "The surface temperature of the star rising and falling.", "B": "The star moving towards and away from the Earth.", "C": "A planet passing in front of the star once in each orbit.", "D": "Radio signals sent from a planet." }, "answer": "C",
+      "solution": "When a planet crosses the face of its star as seen from Earth, it blocks a little of the star's light, giving a small flat-bottomed dip that repeats once every orbit. This is the transit method of detecting exoplanets. Motion towards and away from the Earth would shift the star's spectrum, not dim it." }
   ]
 }
