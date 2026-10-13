@@ -12,7 +12,9 @@ const katex = require(path.join(ROOT, 'assets/vendor/katex-0.16.47/katex.min.js'
 
 const topics = build.topics();
 const clone = v => JSON.parse(JSON.stringify(v));
-const errorsFor = edit => { const t = clone(topics[0]); edit(t.data); return Q.validateTopic(t.data, { katex, spec: t.spec }).errors; };
+// A fixed sample, so these tests do not depend on which topic sorts first.
+const SAMPLE = topics.find(t => t.id === 'physics-a-level/electricity');
+const errorsFor = edit => { const t = clone(SAMPLE); edit(t.data); return Q.validateTopic(t.data, { katex, spec: t.spec }).errors; };
 
 test('quizzes: every topic file passes the checker', () => {
   assert.ok(topics.length > 0, 'at least one topic file');

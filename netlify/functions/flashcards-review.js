@@ -70,7 +70,16 @@ const QUIZ_TOPICS = Object.fromEntries([
   require('../../curriculum/quizzes/physics-a-level/measurements.json'),
   require('../../curriculum/quizzes/physics-a-level/further-mechanics.json'),
   require('../../curriculum/quizzes/physics-a-level/oscillations.json'),
-  require('../../curriculum/quizzes/physics-a-level/thermal.json')
+  require('../../curriculum/quizzes/physics-a-level/thermal.json'),
+  require('../../curriculum/quizzes/physics-a-level/gravitational-fields.json'),
+  require('../../curriculum/quizzes/physics-a-level/electric-fields.json'),
+  require('../../curriculum/quizzes/physics-a-level/magnetic-fields.json'),
+  require('../../curriculum/quizzes/physics-a-level/nuclear.json'),
+  require('../../curriculum/quizzes/physics-a-level/astrophysics.json'),
+  require('../../curriculum/quizzes/physics-a-level/medical-physics.json'),
+  require('../../curriculum/quizzes/physics-a-level/engineering-physics.json'),
+  require('../../curriculum/quizzes/physics-a-level/turning-points.json'),
+  require('../../curriculum/quizzes/physics-a-level/electronics.json')
 ].map(quizTopic).map(t => [t.topic.id, t]));
 const topicFile = id => (Object.prototype.hasOwnProperty.call(TOPICS, id) && TOPICS[id]) ||
   (Object.prototype.hasOwnProperty.call(QUIZ_TOPICS, id) && QUIZ_TOPICS[id]) || null;
