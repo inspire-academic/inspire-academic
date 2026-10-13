@@ -30,7 +30,8 @@
     var actions = el('div', 'al-actions');
     mine.forEach(function (q) {
       var a = el('a', 'fc-btn' + (mine.length === 1 ? ' fc-btn-primary' : ''), board ? 'Start the quiz' : q.exam_board + ' quiz');
-      a.href = '/student/quiz.html?id=' + encodeURIComponent(q.id);
+      // ref: the quiz page's back button returns here, not to a GCSE subject.
+      a.href = '/student/quiz.html?id=' + encodeURIComponent(q.id) + '&ref=physics-a-level';
       actions.appendChild(a);
     });
     li.appendChild(actions);
