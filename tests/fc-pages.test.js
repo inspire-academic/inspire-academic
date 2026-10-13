@@ -84,3 +84,15 @@ test('fc app: progress syncs to the server and the app opens offline', () => {
   assert.match(SW, /url\.pathname\.startsWith\('\/content\/flashcards\/'\)\) \{\s+e\.respondWith\(networkFirst\(e\.request, CACHE_PAGES\)\);/);
   assert.match(PAGE, /supabase-js@2\.111\.0" crossorigin="anonymous" defer/);
 });
+
+test('fc app: students choose their topics, and sessions mix them', () => {
+  assert.match(PAGE, /<section class="fc-screen" id="fc-topics" hidden>/);
+  assert.match(PAGE, /<button type="button" class="fc-btn" id="fc-choose" hidden>Change topics<\/button>/);
+  // One pool across the chosen topics, a card from each in turn.
+  assert.match(APP, /cards = Core\.interleave\(activeFiles\(\)\.map\(/);
+  // With several topics and no choice yet, the student is asked: no topic is assumed.
+  assert.match(APP, /if \(available\.length > 1\) \{ showTopics\(\); return; \}/);
+  assert.doesNotMatch(APP, /physics-a-level\//, 'no topic is hard-coded');
+  // Each rating records the topic its card belongs to.
+  assert.match(APP, /topic: cardTopic\[card\.id\]/);
+});

@@ -37,6 +37,15 @@
     </div>
   </section>
 
+  <!-- Which topics? Asked the first time there is more than one, and
+       whenever the student wants to change it. -->
+  <section class="fc-screen" id="fc-topics" hidden>
+    <h1 class="fc-h1" id="fc-topics-title" tabindex="-1">Which topics have you covered?</h1>
+    <p class="fc-quiet">New cards only come from the topics you tick, mixed together. You can change this at any time.</p>
+    <ul class="fc-ticks" id="fc-topic-list"></ul>
+    <button type="button" class="fc-btn fc-btn-primary fc-btn-wide" id="fc-topics-save">Save</button>
+  </section>
+
   <!-- Today -->
   <section class="fc-screen" id="fc-today" hidden>
     <p class="fc-kicker" id="fc-topic"></p>
@@ -52,8 +61,9 @@
     <p class="fc-quiet" id="fc-sync" aria-live="polite"></p>
 
     <h2 class="fc-h2">Specification coverage</h2>
+    <button type="button" class="fc-btn" id="fc-choose" hidden>Change topics</button>
     <p class="fc-quiet fc-legend"><span class="fc-key fc-key-secure"></span> Secure <span class="fc-key fc-key-learning"></span> Learning <span class="fc-key fc-key-unseen"></span> Not started</p>
-    <ul class="fc-cover" id="fc-cover"></ul>
+    <div id="fc-cover"></div>
     <p class="fc-quiet">A card is secure when you have recalled it well on three separate days and it is not due again for at least three weeks.</p>
   </section>
 
