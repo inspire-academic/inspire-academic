@@ -166,3 +166,24 @@ test('graph: subscripts are drawn as lowered digits', () => {
   assert.match(svg, /ln V<tspan dy="3" font-size="9">0<\/tspan>/);
   assert.doesNotMatch(svg, /[₀₁₂₃₄₅₆₇₈₉]/);
 });
+
+test('graph: every flashcard about a graph has its graph', () => {
+  const without = cardTopics.flatMap(t => t.data.cards.filter(c => c.type === 'graph' && !c.figure && !c.answerFigure).map(c => c.id));
+  assert.deepEqual(without, [], 'a "graph" card shows the graph, with the question or the answer');
+});
+
+test('graph: smooth curves, error bars and label-only marks', () => {
+  const f = base();
+  f.curves = [{ fn: { kind: 'points', points: [[0, 2], [4, 12], [10, 6]] }, smooth: true }];
+  f.marks = [{ x: 5, y: 10, err: 2 }, { x: 2, y: 4, label: 'area = work done', plain: true }];
+  assert.deepEqual(PG.check(f), []);
+  const svg = PG.svg(f);
+  assert.match(svg, /<path d="M52 185.6 C[^"]*" fill="none" stroke="#0b4fa8"/, 'a smooth curve is drawn with Bézier segments through its points');
+  assert.equal((svg.match(/ C/g) || []).length, 2, 'one segment between each pair of points');
+  assert.match(svg, /<path d="M195 130\.4 V93\.6 M191 130\.4 h8 M191 93\.6 h8"/, 'the error bar spans y ± err, with caps');
+  assert.equal((svg.match(/<circle/g) || []).length, 1, 'a plain mark is a label with no dot');
+  const bad = base(); bad.marks = [{ x: 5, y: 19, err: 5 }];
+  assert.ok(PG.check(bad).some(p => p.includes('error bar')), 'an error bar may not leave the axes');
+  const notPoints = base(); notPoints.curves[0].smooth = true;
+  assert.ok(PG.check(notPoints).some(p => p.includes('only a curve through points can be smooth')));
+});
