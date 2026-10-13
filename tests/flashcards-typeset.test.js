@@ -13,7 +13,8 @@ const vm = require('vm');
 const ROOT = path.join(__dirname, '..');
 const IAMaths = require(path.join(ROOT, 'assets/js/maths-typeset.js'));
 const katex = require(path.join(ROOT, 'assets/vendor/katex-0.16.47/katex.min.js'));
-const PAGE = fs.readFileSync(path.join(ROOT, 'student/flashcards.html'), 'utf8');
+// Line endings normalised, so a Windows checkout (CRLF) tests the same text.
+const PAGE = fs.readFileSync(path.join(ROOT, 'student/flashcards.html'), 'utf8').replace(/\r\n/g, '\n');
 
 // Subjects whose cards have been converted to LaTeX. A converted subject
 // must not slip back to plain-text maths (x^2, sqrt(3), ², √).
