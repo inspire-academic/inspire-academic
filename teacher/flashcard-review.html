@@ -24,7 +24,7 @@
 <main class="tt-main" id="fr-main">
   <header class="tt-head">
     <h1 class="itt-h1" id="fr-title">Flashcard review</h1>
-    <p class="itt-desc">Read each card as a student will see it and decide. A card reaches students only after a teacher approves it here. If a card is edited later, it comes back for approval.</p>
+    <p class="itt-desc">Read each card as a student will see it and decide. Cards are grouped by specification point: approve them one at a time, a section at a time, or a whole topic at once. A card reaches students only after a teacher approves it here. If a card is edited later, it comes back for approval.</p>
   </header>
 
   <div class="fr-topic-row">
@@ -48,7 +48,7 @@
   <!-- Quiz topics only: put the approved questions into the quiz bank. -->
   <div class="fr-bulk" id="fr-publish" hidden>
     <button type="button" class="itt-btn" id="fr-publish-btn">Publish approved questions as quizzes</button>
-    <p class="fr-bulk-ask" id="fr-publish-result" role="status" aria-live="polite"></p>
+    <p class="fr-publish-result" id="fr-publish-result" role="status" aria-live="polite"></p>
   </div>
 
   <div class="itt-tabs" role="tablist" aria-label="Show cards" id="fr-filters">
@@ -68,6 +68,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/supabase.js"></script>
 <script src="/assets/js/maths-typeset.js"></script>
+<script src="/assets/js/physics-graph.js"></script>
 <script src="/assets/js/flashcard-review.js"></script>
 </body>
 </html>

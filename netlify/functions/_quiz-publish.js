@@ -36,23 +36,33 @@ function questionRow(q, order) {
     question_text: text(bank.question_text, 4000),
     option_a: byLabel.A, option_b: byLabel.B, option_c: byLabel.C, option_d: byLabel.D,
     correct_answer: bank.correct_answer,
-    explanation: text(bank.worked_solution, 6000)
+    explanation: text(bank.worked_solution, 6000),
+    // The graph shown with the question, if it has one (supabase/question_figures.sql).
+    ...(q.figure ? { figure: q.figure } : {})
   };
 }
 const FIELDS = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer', 'explanation'];
+const figureOf = r => JSON.stringify(r.figure || null);
 const same = (rows, stored) => rows.length === stored.length &&
-  rows.every((r, i) => FIELDS.every(f => String(r[f]) === String(stored[i][f])));
+  rows.every((r, i) => FIELDS.every(f => String(r[f]) === String(stored[i][f])) && figureOf(r) === figureOf(stored[i]));
 
 // entry: a quiz topic from flashcards-review.js ({ topic, cards });
 // approved: the questions approved as they read now.
 // Returns { topic, boards: [{ board, status, questions, quizId? }] } where
-// status is created | replaced | up_to_date | too_few, or { error } when
-// the topic has no row in the quiz bank.
+// status is created | replaced | up_to_date | too_few, or { error }:
+// 'no_topic' when the topic has no row in the quiz bank, 'no_figures' when
+// a question has a graph and the bank cannot store graphs yet.
 async function publishQuizTopic(client, entry, approved) {
   const sourceId = entry.topic.id.replace(/^quiz\//, '');
   const slug = topicSlug(sourceId);
   const [topicRow] = slug ? ((await client.get(`topics?slug=eq.${encodeURIComponent(slug)}&select=id`)) || []) : [];
   if (!topicRow) return { error: 'no_topic' };
+  // Questions with a graph need somewhere to keep it (supabase/question_figures.sql).
+  // Checked before anything is written, so a refusal leaves nothing behind.
+  if (approved.some(q => q.figure)) {
+    try { await client.get('questions?select=figure&limit=1'); }
+    catch (e) { if (e.status === 400 || e.status === 404) return { error: 'no_figures' }; throw e; }
+  }
   // "Quiz: Medical Physics (AQA option)" is published as "Medical Physics".
   const title = entry.topic.title.replace(/^Quiz:\s*/, '').replace(/\s*\([^)]*option\)$/i, '');
 
@@ -69,7 +79,7 @@ async function publishQuizTopic(client, entry, approved) {
     const live = ((await client.get(`quizzes?topic_id=eq.${topicRow.id}&exam_board=eq.${BOARDS[b]}&is_published=eq.true&select=id`)) || [])
       .sort((x, y) => Number(y.id) - Number(x.id));
     if (live.length) {
-      const stored = ((await client.get(`questions?quiz_id=eq.${live[0].id}&select=${FIELDS.join(',')},order_idx`)) || [])
+      const stored = ((await client.get(`questions?quiz_id=eq.${live[0].id}&select=${FIELDS.join(',')},order_idx${rows.some(r => r.figure) ? ',figure' : ''}`)) || [])
         .sort((x, y) => Number(x.order_idx) - Number(y.order_idx));
       if (live.length === 1 && same(rows, stored)) { boards.push({ board: BOARDS[b], status: 'up_to_date', questions: rows.length, quizId: live[0].id }); continue; }
     }

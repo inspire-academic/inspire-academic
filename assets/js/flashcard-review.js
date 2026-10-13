@@ -93,6 +93,11 @@
   // solution a student sees after answering.
   function quizBody(card) {
     var h = '<p class="fr-label">Question</p><p class="fr-q">' + text(card.q) + '</p>';
+    if (card.figure) {
+      // Drawn exactly as the student will see it.
+      try { h += '<div class="fr-figure">' + PhysicsGraph.svg(card.figure) + '</div>'; }
+      catch (e) { h += '<p class="fr-asked">The graph for this question could not be drawn.</p>'; }
+    }
     h += '<p class="fr-label">Options (shuffled for each student)</p><ul class="fr-list fr-options">';
     ['A', 'B', 'C', 'D'].forEach(function (L) {
       var key = L === card.answer;
@@ -155,10 +160,25 @@
     $('fr-bulk-ask').hidden = !asking;
   }
 
+  function isTodo(c) { return c.review.status === 'new' || c.review.status === 'edited'; }
+
+  // A section is one specification point: the first one a card cites
+  // (AQA's where it has one). Cards are approved a section at a time.
+  function sectionOf(card) {
+    var aqa = card.boards.aqa, edx = card.boards.edexcel;
+    var board = aqa ? 'aqa' : 'edexcel';
+    var ref = String(aqa ? aqa.refs[0] : edx.points[0]);
+    var known = (data.spec[board] || {})[ref];
+    return { key: board + ':' + ref, title: (aqa ? 'AQA ' : 'Edexcel ') + ref + (known ? ' ' + known.title : '') };
+  }
+
   function approveAll() {
-    var todo = data.cards.filter(function (c) { return c.review.status === 'new' || c.review.status === 'edited'; });
+    approveCards(data.cards.filter(isTodo), [$('fr-bulk-confirm'), $('fr-bulk-cancel')]);
+  }
+
+  // Approves the given cards, each against the wording on screen.
+  function approveCards(todo, buttons) {
     if (!todo.length) return;
-    var buttons = [$('fr-bulk-confirm'), $('fr-bulk-cancel')];
     buttons.forEach(function (b) { b.disabled = true; });
     $('fr-status').textContent = '';
     api('POST', '/api/v1/flashcards/review', {
@@ -176,7 +196,9 @@
     }, function (e) {
       buttons.forEach(function (b) { b.disabled = false; });
       bulkAsk(false);
+      // Said twice: the status line is at the top, the reviewer may be far below it.
       $('fr-status').textContent = e.message;
+      toast('Not approved: ' + e.message);
     });
   }
 
@@ -204,10 +226,43 @@
       box.innerHTML = '<p class="fr-empty">' + (filter === 'todo' ? 'Nothing left to review in this topic.' : 'No cards here.') + '</p>';
       return;
     }
-    box.innerHTML = shown.map(function (card) {
-      return '<article class="fr-card" id="card-' + esc(card.id) + '" data-id="' + esc(card.id) + '" data-status="' + esc(card.review.status) + '" tabindex="-1">' + cardHtml(card) + '</article>';
+    // Grouped by specification point, each group with its own approve button.
+    var sections = [], byKey = {};
+    shown.forEach(function (card) {
+      var s = sectionOf(card);
+      if (!byKey[s.key]) { byKey[s.key] = { key: s.key, title: s.title, cards: [] }; sections.push(byKey[s.key]); }
+      byKey[s.key].cards.push(card);
+    });
+    box.innerHTML = sections.map(function (s) {
+      var todo = s.cards.filter(isTodo).length;
+      return '<section class="fr-section" data-section="' + esc(s.key) + '">' +
+        '<div class="fr-section-head"><h2 class="fr-section-title">' + esc(s.title) + '</h2>' +
+        (todo ? '<button type="button" class="itt-btn" data-act="section" data-count="' + todo + '">Approve these ' + todo + '</button>' : '') + '</div>' +
+        s.cards.map(function (card) {
+          return '<article class="fr-card" id="card-' + esc(card.id) + '" data-id="' + esc(card.id) + '" data-status="' + esc(card.review.status) + '" tabindex="-1">' + cardHtml(card) + '</article>';
+        }).join('') + '</section>';
     }).join('');
     IAMaths.typeset(box);
+  }
+
+  // Two presses, like "approve all": the first arms the button and says what
+  // it will do, the second approves the cards still to review in that section.
+  function approveSection(btn) {
+    var n = btn.getAttribute('data-count');
+    if (btn.getAttribute('data-armed') !== 'yes') {
+      document.querySelectorAll('#fr-list [data-armed="yes"]').forEach(disarm);
+      btn.setAttribute('data-armed', 'yes');
+      btn.classList.add('itt-btn-primary');
+      btn.textContent = 'Press again to approve ' + n + ' in this section';
+      return;
+    }
+    var key = btn.closest('.fr-section').getAttribute('data-section');
+    approveCards(data.cards.filter(function (c) { return isTodo(c) && inFilter(c) && sectionOf(c).key === key; }), [btn]);
+  }
+  function disarm(btn) {
+    btn.removeAttribute('data-armed');
+    btn.classList.remove('itt-btn-primary');
+    btn.textContent = 'Approve these ' + btn.getAttribute('data-count');
   }
 
   function decide(card, decision, note, el) {
@@ -218,7 +273,8 @@
       card.review = res.review;
       toast(decision === 'approved' ? 'Approved' : 'Sent back for changes');
       // Keep the reviewer's place: the next card in the list takes focus.
-      var next = el.nextElementSibling;
+      var all = Array.prototype.slice.call(document.querySelectorAll('#fr-list .fr-card'));
+      var next = all[all.indexOf(el) + 1];
       var nextId = next && next.getAttribute('data-id');
       render();
       var target = nextId && $('card-' + nextId);
@@ -226,6 +282,7 @@
     }, function (e) {
       buttons.forEach(function (b) { b.disabled = false; });
       $('fr-status').textContent = e.message;
+      toast('Not saved: ' + e.message);
       if (e.code === 'card_changed') load();
     });
   }
@@ -233,6 +290,7 @@
   $('fr-list').addEventListener('click', function (ev) {
     var btn = ev.target.closest('button[data-act]');
     if (!btn) return;
+    if (btn.getAttribute('data-act') === 'section') { approveSection(btn); return; }
     var el = btn.closest('.fr-card');
     var card = data.cards.filter(function (c) { return c.id === el.getAttribute('data-id'); })[0];
     var act = btn.getAttribute('data-act');

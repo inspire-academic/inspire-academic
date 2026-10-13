@@ -336,3 +336,44 @@ test('quiz publish: an option topic is published under its plain name', async ()
   assert.deepEqual(r.body.boards.map(b => [b.board, b.status]), [['AQA', 'created'], ['Edexcel', 'too_few']]);
   assert.deepEqual(s.fake.tables.quizzes.map(q => q.title), ['Medical Physics: AQA A-level']);
 });
+
+// ── Graphs travel with their questions into the quiz bank ────────────────
+test('quiz publish: a question keeps its graph, and graphs are refused cleanly until the bank can store them', async () => {
+  const s = bankSetup();
+  const approved = await approveQuestions(s, () => true);
+  const withGraph = approved.filter(c => c.figure);
+  assert.ok(withGraph.length > 0, 'the sample topic has graph questions');
+
+  // No figure column yet (supabase/question_figures.sql not run): nothing is written.
+  const realFetch = global.fetch;
+  global.fetch = (url, opts) => (String(url).includes('questions?select=figure')
+    ? Promise.resolve({ ok: false, status: 400, text: async () => 'column questions.figure does not exist' })
+    : realFetch(url, opts));
+  const refused = await publish(s);
+  assert.equal(refused.status, 409);
+  assert.match(refused.body.error.message, /question_figures\.sql/);
+  assert.equal(s.fake.tables.quizzes.length, 0, 'no half-made quiz is left behind');
+  assert.equal(s.fake.tables.questions.length, 0);
+  global.fetch = realFetch;
+
+  const r = await publish(s);
+  assert.deepEqual(r.body.boards.map(b => b.status), ['created', 'created']);
+  for (const src of withGraph) {
+    const rows = s.fake.tables.questions.filter(q => q.question_text === src.q);
+    assert.ok(rows.length >= 1);
+    for (const row of rows) assert.deepEqual(row.figure, src.figure);
+  }
+  assert.ok(s.fake.tables.questions.filter(q => !q.figure).length > 0, 'questions without a graph store none');
+  assert.deepEqual((await publish(s)).body.boards.map(b => b.status), ['up_to_date', 'up_to_date']);
+});
+
+test('flashcard review: cards are grouped by specification point, each group with a two-press approve button', () => {
+  const js = fs.readFileSync(path.join(__dirname, '..', 'assets/js/flashcard-review.js'), 'utf8');
+  assert.match(js, /data-act="section" data-count="' \+ todo \+ '">Approve these ' \+ todo/);
+  // The first press arms the button; only the second approves.
+  assert.match(js, /if \(btn\.getAttribute\('data-armed'\) !== 'yes'\) \{[\s\S]*?btn\.setAttribute\('data-armed', 'yes'\);[\s\S]*?return;\s+\}/);
+  // Only cards still to review, in that section, are sent: never ones sent back for changes.
+  assert.match(js, /approveCards\(data\.cards\.filter\(function \(c\) \{ return isTodo\(c\) && inFilter\(c\) && sectionOf\(c\)\.key === key; \}\), \[btn\]\);/);
+  // A failure is said where the reviewer is looking, not only at the top of the page.
+  assert.match(js, /toast\('Not approved: ' \+ e\.message\);/);
+});

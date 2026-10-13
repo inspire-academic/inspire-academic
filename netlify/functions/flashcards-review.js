@@ -196,6 +196,7 @@ async function publishQuiz(client, body) {
   const approved = entry.cards.filter(q => standing(q, latest[q.id]) === 'approved');
   const result = await publishQuizTopic(client, entry, approved);
   if (result.error === 'no_topic') return fail(409, 'not_set_up', 'This topic is not in the quiz bank yet (supabase/a_level_physics_subject.sql).');
+  if (result.error === 'no_figures') return fail(409, 'not_set_up', 'Some of these questions have graphs, and the quiz bank cannot store graphs yet. Run supabase/question_figures.sql, then publish again.');
   return ok(result);
 }
 
