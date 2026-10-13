@@ -84,6 +84,11 @@ function fakeSupabase(seed) {
       rows.forEach(r => Object.assign(r, JSON.parse(opts.body)));
       return reply(200, rows.map(r => ({ ...r })));
     }
+    if (method === 'DELETE') {
+      const gone = query(table, params);
+      tables[table] = tables[table].filter(r => !gone.includes(r));
+      return reply(204);
+    }
     throw new Error('unsupported method ' + method);
   }
   return { tables, users, fetchImpl };
