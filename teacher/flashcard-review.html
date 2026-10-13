@@ -32,6 +32,17 @@
     <select class="tt-select" id="fr-topic"></select>
   </div>
 
+  <!-- For a teacher who has read the topic: approve what is left in one go.
+       Two presses, so it cannot happen by accident. -->
+  <div class="fr-bulk" id="fr-bulk" hidden>
+    <button type="button" class="itt-btn" id="fr-bulk-start"></button>
+    <p class="fr-bulk-ask" id="fr-bulk-ask" hidden>
+      <span id="fr-bulk-text"></span>
+      <button type="button" class="itt-btn itt-btn-primary" id="fr-bulk-confirm">Yes, approve them</button>
+      <button type="button" class="itt-btn" id="fr-bulk-cancel">Cancel</button>
+    </p>
+  </div>
+
   <p class="fr-progress" id="fr-progress" aria-live="polite"></p>
 
   <div class="itt-tabs" role="tablist" aria-label="Show cards" id="fr-filters">

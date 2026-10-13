@@ -5,6 +5,10 @@
 //   GET ?topic=<id>                every card of a topic, with its current
 //                                  fingerprint and where its review stands
 //   GET                            the topics available to review
+//   POST { action: 'approve-all', topic, cards: [{ cardId, hash }] }
+//                                  approve every listed card whose wording is
+//                                  still what the reviewer was shown; replies
+//                                  { approved: [ids], changed: [ids] }
 //   POST { topic, cardId, hash, decision: 'approved' | 'changes', note? }
 //                                  record a decision on one card. `hash` is
 //                                  the fingerprint the reviewer was shown; if
@@ -110,6 +114,37 @@ async function decide(client, who, body) {
   return ok({ cardId: card.id, review: { status: body.decision, note, reviewedAt: row.reviewed_at, reviewer: (who.profile && (who.profile.full_name || who.profile.first_name)) || null } });
 }
 
+// A teacher who has read a whole topic approves what is left in one press.
+// Each card is still approved individually, against the wording that was on
+// the teacher's screen: a card edited since is skipped and reported, never
+// approved unseen. Cards already approved as they read now are left alone.
+const MAX_BULK = 300;
+async function approveMany(client, who, body) {
+  const file = TOPICS[body.topic];
+  if (!file) return fail(404, 'unknown_topic', 'Unknown flashcard topic.');
+  const list = body.cards;
+  if (!Array.isArray(list) || !list.length) return fail(400, 'no_cards', 'No cards to approve.');
+  if (list.length > MAX_BULK) return fail(413, 'too_many', `Approve at most ${MAX_BULK} cards at a time.`);
+  const latest = await latestDecisions(client, body.topic);
+  const reviewedAt = new Date().toISOString();
+  const rows = [], approved = [], changed = [], seen = new Set();
+  for (const item of list) {
+    const card = item && file.cards.find(c => c.id === item.cardId);
+    if (!card || seen.has(card.id)) continue;
+    seen.add(card.id);
+    const hash = C.cardHash(card);
+    if (item.hash !== hash) { changed.push(card.id); continue; }
+    approved.push(card.id);
+    if (standing(card, latest[card.id]) === 'approved') continue;
+    rows.push({ topic: body.topic, card_id: card.id, content_hash: hash, decision: 'approved', note: null, reviewer_id: who.user.id, reviewed_at: reviewedAt });
+  }
+  if (rows.length) await client.insert('fc_card_reviews', rows, 'return=minimal');
+  return ok({
+    approved, changed,
+    review: { status: 'approved', note: null, reviewedAt, reviewer: (who.profile && (who.profile.full_name || who.profile.first_name)) || null }
+  });
+}
+
 async function approvals(client, topicId) {
   const file = TOPICS[topicId];
   if (!file) return fail(404, 'unknown_topic', 'Unknown flashcard topic.');
@@ -141,6 +176,7 @@ exports.handler = async event => {
     if (event.httpMethod === 'POST') {
       const body = parseBody(event);
       if (!body) return fail(400, 'invalid_json', 'The request could not be read.');
+      if (body.action === 'approve-all') return await approveMany(client, who, body);
       return await decide(client, who, body);
     }
     return fail(405, 'method_not_allowed', 'Use GET or POST.');
