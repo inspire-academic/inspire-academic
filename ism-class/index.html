@@ -130,7 +130,7 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
   document.getElementById('nav-avatar').textContent = (profile?.full_name || 'S')[0].toUpperCase();
 
   const [{ data: subjectRows }, { data: lessonRows }] = await Promise.all([
-    supa.from('subjects').select('id,name'),
+    supa.from('subjects').select('*'),
     // RLS scopes students to published + assigned-to-me; staff (Student View)
     // can read drafts too, so filter to published to match what students see.
     supa.from('ism_lessons').select('id,subject_id').eq('is_published', true)
@@ -140,7 +140,7 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
   grid.innerHTML = '';
 
   SUBJECTS.forEach(s => {
-    const subjectRow = (subjectRows || []).find(r => s.match((r.name || '').toLowerCase()));
+    const subjectRow = (subjectRows || []).find(r => (r.level || 'gcse') === 'gcse' && s.match((r.name || '').toLowerCase()));
     const count = subjectRow ? (lessonRows || []).filter(l => l.subject_id === subjectRow.id).length : 0;
     const enabled = !!subjectRow;
 

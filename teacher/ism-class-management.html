@@ -485,9 +485,9 @@ async function logout() { await supa.auth.signOut(); window.location.href = '/in
 
 // ── Upload ──
 async function loadSubjectsAndLessons() {
-  const { data: subjectRows } = await supa.from('subjects').select('id,name');
+  const { data: subjectRows } = await supa.from('subjects').select('*');
   const subjectSel = document.getElementById('upload-subject');
-  const relevant = (subjectRows || []).filter(s => SUBJECTS.some(m => m.match((s.name || '').toLowerCase())));
+  const relevant = (subjectRows || []).filter(s => (s.level || 'gcse') === 'gcse' && SUBJECTS.some(m => m.match((s.name || '').toLowerCase())));
   subjectSel.innerHTML = relevant.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
 
   const { data: lessons } = await supa.from('ism_lessons').select('*, subjects(name)').order('created_at', { ascending: false });

@@ -369,8 +369,9 @@ function calcAchievements(attempts, progress, streak){
   const attempts=attemptsRes.data||[];
   const progress=progressRes.data||[];
   const streak=streakRes.data;
-  const subjects=subjectsRes.data||[];
-  const topics=topicsRes.data||[];
+  // GCSE only: A-level subjects have their own pages (subjects.level).
+  const subjects=(subjectsRes.data||[]).filter(s=>(s.level||'gcse')==='gcse');
+  const topics=(topicsRes.data||[]).filter(t=>subjects.some(s=>s.id===t.subject_id));
   const subjectMeta=Object.fromEntries(subjects.map(s=>[s.id,{
     name:s.name,
     icon:s.icon||SUBJECT_ICONS[s.name]||'📖',
