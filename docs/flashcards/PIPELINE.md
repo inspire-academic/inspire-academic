@@ -66,3 +66,28 @@ the review page. It adds one table and changes nothing else.
 - `netlify/functions/flashcards-review.js`: `/api/v1/flashcards/review` (staff) and, through `flashcards-approvals.js`, `/api/v1/flashcards/approvals` (public: ids and fingerprints only).
 - `teacher/flashcard-review.html`, `assets/js/flashcard-review.js`, `assets/css/flashcard-review.css`: the review page.
 - `tests/flashcards-content.test.js`, `tests/flashcards-review.test.js`.
+
+## The student app (step 3, October 2026)
+
+`student/flashcards-v2.html` is the new app. It is not linked from any
+student page yet: it becomes the real thing once progress syncs to the
+server (step 4). Until then a student's progress lives on their device only.
+
+- `assets/js/fc-core.js`: the rules. Scheduling (FSRS through the vendored
+  `assets/vendor/ts-fsrs-5.4.2/`, 90% target retention, whole days, one year
+  at most), what a session contains (20 cards at most, 8 new cards a day,
+  weakest due cards first), what "secure" means (recalled well on three
+  separate days and not due for three weeks), marking typed answers.
+- `assets/js/fc-store.js`: IndexedDB, one database per student. `reviews` is
+  an append-only log with a `synced` flag, ready for the sync endpoint.
+- `assets/js/fc-app.js`, `assets/css/flashcards-v2.css`: the page. The
+  answer appears under the question (no flip), everything pressed is in a
+  bottom bar, "Again" brings a card back in the same session, a rating can
+  be undone for five seconds, and the keyboard works (Space, 1 to 4, Z).
+
+A student sees only published (approved) cards for their own exam board. If
+their profile has no board they are asked; the app never assumes one.
+
+Teachers can try the app on the drafts before approving anything:
+`/student/flashcards-v2.html?preview=drafts` (add `&board=edexcel` to see it
+as an Edexcel student). A preview saves nothing.
