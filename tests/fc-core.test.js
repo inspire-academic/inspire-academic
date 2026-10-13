@@ -96,6 +96,17 @@ test('fc-core: a session is capped, puts the weakest due cards first and spreads
   assert.equal(Core.dueOn(cards, states, at(20)), 40);
 });
 
+test('fc-core: an optional topic is a choice of one, per board', () => {
+  const astro = { id: 'p/astro', optionFor: ['aqa'] };
+  assert.equal(Core.isOption(astro, 'aqa'), true);
+  assert.equal(Core.isOption(astro, 'edexcel'), false, 'compulsory for the other board');
+  assert.equal(Core.isOption({ id: 'p/waves' }, 'aqa'), false);
+  const options = ['p/astro', 'p/medical'];
+  assert.deepEqual(Core.oneOption(['p/waves', 'p/medical', 'p/astro', 'p/nuclear'], options), ['p/waves', 'p/medical', 'p/nuclear']);
+  assert.deepEqual(Core.oneOption(['p/waves'], options), ['p/waves']);
+  assert.deepEqual(Core.oneOption(['p/astro', 'p/medical'], []), ['p/astro', 'p/medical'], 'no options for this board: nothing dropped');
+});
+
 test('fc-core: a student only gets the cards their board examines', () => {
   const cards = [card('both'), card('aqa-only', { aqa: { refs: ['3.5.1.3'] } }), card('edexcel-only', { edexcel: { refs: ['41'] } })];
   assert.deepEqual(Core.forBoard(cards, 'aqa').map(c => c.id), ['both', 'aqa-only']);

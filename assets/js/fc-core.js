@@ -106,6 +106,21 @@
   // The cards a student's exam board examines.
   function forBoard(cards, board) { return cards.filter(function (c) { return c.boards && c.boards[board]; }); }
 
+  // An optional topic: a board examines several, and a student sits one.
+  // A topic can be an option for one board and compulsory for another.
+  function isOption(topic, board) { return !!topic && Array.isArray(topic.optionFor) && topic.optionFor.indexOf(board) !== -1; }
+
+  // A student's chosen topics, holding at most one option: the first.
+  function oneOption(chosen, optionIds) {
+    var kept = false;
+    return chosen.filter(function (id) {
+      if (optionIds.indexOf(id) === -1) return true;
+      if (kept) return false;
+      kept = true;
+      return true;
+    });
+  }
+
   // Today's session: the weakest due cards first, with a few new ones spread
   // through them, capped so a missed week never becomes a mountain.
   function buildSession(cards, states, now, opts) {
@@ -200,7 +215,7 @@
   return {
     RATINGS: RATINGS, SESSION: SESSION, SECURE_DAYS: SECURE_DAYS, SECURE_INTERVAL: SECURE_INTERVAL,
     dayKey: dayKey, newState: newState, rate: rate, replay: replay, reviewDays: reviewDays, preview: preview, seen: seen, due: due, recall: recall, mastery: mastery,
-    forBoard: forBoard, interleave: interleave, buildSession: buildSession, newToday: newToday, newAllowance: newAllowance, dueOn: dueOn, coverage: coverage,
+    forBoard: forBoard, isOption: isOption, oneOption: oneOption, interleave: interleave, buildSession: buildSession, newToday: newToday, newAllowance: newAllowance, dueOn: dueOn, coverage: coverage,
     parseNumber: parseNumber, checkNumeric: checkNumeric, studyDays: studyDays, daysLabel: daysLabel
   };
 });

@@ -74,6 +74,8 @@ test('flashcards: the checker refuses the mistakes it exists to catch', () => {
   has(d => { const c = d.cards.find(x => x.type === 'worked-calc'); delete c.steps; }, 'needs steps');
   has(d => { const c = d.cards.find(x => x.type === 'explain'); delete c.marks; }, 'needs marks');
   has(d => { d.cards[0].numeric = { value: 'ten', unit: 'V', sf: 2 }; }, 'numeric must be');
+  has(d => { d.topic.optionFor = ['ocr']; }, 'topic.optionFor must list boards');
+  has(d => { d.topic.optionFor = 'aqa'; }, 'topic.optionFor must list boards');
 });
 
 test('flashcards: a card\'s fingerprint follows what a student sees', () => {

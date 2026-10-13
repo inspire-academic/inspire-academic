@@ -175,28 +175,52 @@
     return files.filter(function (f) { return onlyTopic ? f.topic.id === onlyTopic : chosen.indexOf(f.topic.id) !== -1; });
   }
 
+  // The board's optional topics are a separate choice of one (or none yet).
+  function optionIds() {
+    return files.filter(function (f) { return Core.isOption(f.topic, board) && Core.forBoard(f.cards, board).length; })
+      .map(function (f) { return f.topic.id; });
+  }
+
+  function pickerRow(list, type, id, value, checked, text) {
+    var li = document.createElement('li');
+    var box = document.createElement('input');
+    box.type = type; box.id = id; box.className = 'fc-tick'; box.value = value; box.checked = checked;
+    if (type === 'radio') box.name = 'fc-option';
+    var label = document.createElement('label');
+    label.htmlFor = id;
+    label.textContent = text;
+    li.appendChild(box); li.appendChild(label);
+    list.appendChild(li);
+  }
+
+  function pickedTopics() {
+    return Array.prototype.map.call($('fc-topics').querySelectorAll('.fc-tick:checked'), function (b) { return b.value; })
+      .filter(function (v) { return v; });
+  }
+
   function showTopics() {
-    var list = $('fc-topic-list');
+    var list = $('fc-topic-list'), options = $('fc-option-list'), ids = optionIds();
     list.textContent = '';
+    options.textContent = '';
+    var mine = chosen.filter(function (id) { return ids.indexOf(id) !== -1; })[0] || '';
     files.forEach(function (f, i) {
       var n = Core.forBoard(f.cards, board).length;
       if (!n) return;
-      var li = document.createElement('li');
-      var box = document.createElement('input');
-      box.type = 'checkbox'; box.id = 'fc-topic-' + i; box.className = 'fc-tick'; box.value = f.topic.id;
-      box.checked = chosen.indexOf(f.topic.id) !== -1;
-      var label = document.createElement('label');
-      label.htmlFor = box.id;
-      label.textContent = f.topic.title + ' (' + plural(n, 'card') + ')';
-      li.appendChild(box); li.appendChild(label);
-      list.appendChild(li);
+      var option = ids.indexOf(f.topic.id) !== -1;
+      // Under "Your option" the title needs no "(AQA option)".
+      var title = option ? f.topic.title.replace(/\s*\([^)]*option\)$/i, '') : f.topic.title;
+      pickerRow(option ? options : list, option ? 'radio' : 'checkbox', 'fc-topic-' + i, f.topic.id,
+        option ? f.topic.id === mine : chosen.indexOf(f.topic.id) !== -1, title + ' (' + plural(n, 'card') + ')');
     });
-    $('fc-topics-save').disabled = !list.querySelector(':checked');
+    if (ids.length) pickerRow(options, 'radio', 'fc-option-none', '', !mine, 'We have not started our option yet');
+    $('fc-options').hidden = !ids.length;
+    $('fc-options-help').textContent = BOARD_NAMES[board] + ' has one optional topic. Pick the one your school teaches.';
+    $('fc-topics-save').disabled = !pickedTopics().length;
     show('fc-topics', 'fc-topics-title');
   }
 
   function saveTopics() {
-    chosen = Array.prototype.map.call($('fc-topic-list').querySelectorAll(':checked'), function (b) { return b.value; });
+    chosen = pickedTopics();
     if (!chosen.length) return;
     store.setMeta('topics', chosen);
     ready();
@@ -410,7 +434,7 @@
   });
   $('fc-choose').addEventListener('click', showTopics);
   $('fc-topics-save').addEventListener('click', saveTopics);
-  $('fc-topic-list').addEventListener('change', function () { $('fc-topics-save').disabled = !this.querySelector(':checked'); });
+  $('fc-topics').addEventListener('change', function () { $('fc-topics-save').disabled = !pickedTopics().length; });
   $('fc-board').addEventListener('click', function (ev) {
     var btn = ev.target.closest('[data-board]');
     if (!btn) return;
@@ -502,7 +526,7 @@
     // Only topics that still exist and have cards for this board count.
     var available = files.filter(function (f) { return Core.forBoard(f.cards, board).length; }).map(function (f) { return f.topic.id; });
     if (!available.length) { stop('There are no cards for ' + BOARD_NAMES[board] + ' here yet.'); return; }
-    chosen = chosen.filter(function (id) { return available.indexOf(id) !== -1; });
+    chosen = Core.oneOption(chosen.filter(function (id) { return available.indexOf(id) !== -1; }), optionIds());
     if (!onlyTopic && !chosen.length) {
       if (available.length > 1) { showTopics(); return; }
       chosen = available;
