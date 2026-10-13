@@ -21,6 +21,10 @@
 //   IAMaths.html(text)            same, as an HTML string for templates;
 //                                 call IAMaths.typeset(container) after
 //                                 inserting it
+//   IAMaths.markup(trustedHtml)   like html(), for content that is already
+//                                 trusted HTML (the flashcard bank marks key
+//                                 phrases with <strong>): typesets the maths
+//                                 spans, leaves the markup around them alone
 //   IAMaths.preload()             start loading KaTeX early (returns a promise)
 //   IAMaths.prepareForSnapshot(el) call before an html2canvas/html2pdf snapshot
 //   IAMaths.hasMaths(text)        true if text contains a maths span
@@ -53,7 +57,8 @@
     // word "rightarrow".
     rightarrow: '→', longrightarrow: '→', leftarrow: '←', rightleftharpoons: '⇌', leftrightarrow: '↔', uparrow: '↑', downarrow: '↓',
     leq: '≤', geq: '≥', neq: '≠', sim: '~', degree: '°', Delta: 'Δ', delta: 'δ', alpha: 'α', beta: 'β', gamma: 'γ',
-    lambda: 'λ', mu: 'μ', rho: 'ρ', sigma: 'σ', omega: 'ω', Omega: 'Ω', displaystyle: '', textstyle: ''
+    lambda: 'λ', mu: 'μ', rho: 'ρ', sigma: 'σ', omega: 'ω', Omega: 'Ω', displaystyle: '', textstyle: '',
+    pounds: '£', mid: '|', cup: '∪', cap: '∩', sum: 'Σ', int: '∫'
   };
 
   // Reads one {...} group starting at s[i] === '{'; returns [content, nextIndex].
@@ -163,17 +168,31 @@
     return preload().then(function () { typeset(document); }, function () {});
   }
 
-  function html(text) {
-    if (text === null || text === undefined) return '';
-    if (!hasMaths(text)) return esc(text);
+  // Swaps each maths span for its placeholder; outside() handles the text
+  // between spans.
+  function spans(text, outside) {
     var out = '', last = 0, m;
     SPAN_RE.lastIndex = 0;
     while ((m = SPAN_RE.exec(text))) {
-      out += esc(text.slice(last, m.index));
+      out += outside(text.slice(last, m.index));
       out += '<span class="ia-maths" data-ia-tex="' + esc(m[1].trim()) + '">' + esc(toPlain(m[1])) + '</span>';
       last = m.index + m[0].length;
     }
-    return out + esc(text.slice(last));
+    return out + outside(text.slice(last));
+  }
+
+  function html(text) {
+    if (text === null || text === undefined) return '';
+    if (!hasMaths(text)) return esc(text);
+    return spans(text, esc);
+  }
+
+  // Only for HTML we wrote ourselves, never for anything a user typed: the
+  // text between maths spans goes into the page as it is.
+  function markup(trusted) {
+    if (trusted === null || trusted === undefined) return '';
+    if (!hasMaths(trusted)) return String(trusted);
+    return spans(trusted, function (s) { return s; });
   }
 
   function render(el, text) {
@@ -246,7 +265,7 @@
     ]);
   }
 
-  var api = { render: render, html: html, typeset: typeset, preload: preload, ready: ready, hasMaths: hasMaths, toPlain: toPlain, prepareForSnapshot: prepareForSnapshot, styles: styles };
+  var api = { render: render, html: html, markup: markup, typeset: typeset, preload: preload, ready: ready, hasMaths: hasMaths, toPlain: toPlain, prepareForSnapshot: prepareForSnapshot, styles: styles };
   root.IAMaths = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
