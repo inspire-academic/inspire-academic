@@ -91,9 +91,10 @@
      light mode turns that token into the parchment page colour. */
   --ink: #0b1628;
   --surface: #ffffff;
+  --gold-ink: #8B6B20; /* gold dark enough to read as text on a pale surface */
   --text-primary: #0B1D3A;
   --text-secondary: #4A5568;
-  --text-muted: #8B96A8;
+  --text-muted: #687385;
   --border: rgba(11,29,58,0.10);
   --border-gold: rgba(201,168,76,0.3);
   --shadow-sm: 0 2px 8px rgba(11,29,58,0.08);
@@ -216,7 +217,7 @@ html, body {
   left: 0; right: 0;
   text-align: center;
   font-size: 10.5px;
-  color: rgba(255,255,255,0.28);
+  color: rgba(255,255,255,0.5);
   letter-spacing: 0.06em;
   font-weight: 400;
   z-index: 1;
@@ -541,6 +542,7 @@ html, body {
   padding: 4px 10px;
   border-radius: 100px;
   margin-bottom: 20px;
+  width: fit-content;
 }
 .marking-points { margin-top: 16px; }
 .marking-points-title { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
@@ -751,7 +753,7 @@ html, body {
 }
 .stat-num { font-family: var(--font-serif); font-size: 30px; font-weight: 600; color: var(--ink); }
 .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-.stat-sub { font-size: 11px; color: var(--gold); font-weight: 500; margin-top: 2px; }
+.stat-sub { font-size: 11px; color: var(--gold-ink); font-weight: 500; margin-top: 2px; }
 .weakness-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -904,7 +906,7 @@ html, body {
 .card-scene { animation: fadeUp 0.4s ease forwards; }
 
 /* ── UTILITY ── */
-.text-gold { color: var(--gold); }
+.text-gold { color: var(--gold-ink); }
 .text-muted { color: var(--text-muted); }
 .mt-4 { margin-top: 16px; }
 .gap-pill {
@@ -966,7 +968,7 @@ html, body {
 /* Light mode, inside the app: ivory cards on parchment with ink type. The
    bars and the answer side of a card stay navy (class="ia-keep-dark"), as
    the site's top bar does, so their pale type keeps a dark ground. */
-:root[data-theme="light"] { --ink: var(--ia-text); --cream: var(--ia-bg); --surface: var(--ia-surface); }
+:root[data-theme="light"] { --ink: var(--ia-text); --cream: var(--ia-bg); --surface: var(--ia-surface); --gold-ink: var(--ia-gold-text); }
 [data-theme="light"] .flashcard-btn:not(.flashcard-btn--ghost) { background: var(--ia-gold); color: var(--ia-text); }
 [data-theme="light"] .flashcard-btn:not(.flashcard-btn--ghost):hover { background: var(--ia-gold-dark); color: #fff; }
 [data-theme="light"] .topic-progress-fill { background: var(--ia-gold); }
