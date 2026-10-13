@@ -788,6 +788,14 @@ function = "create-teacher"
   status = 200
   force = true
 
+# A student's flashcard ratings, kept as an append-only log and synced
+# between their devices. See netlify/functions/flashcards-reviews.js.
+[[redirects]]
+  from = "/api/v1/flashcards/reviews"
+  to = "/.netlify/functions/flashcards-reviews"
+  status = 200
+  force = true
+
 # A parent's view of their own child's Test & Teach homework: progress only,
 # never the questions or answers (see itt-parent.js).
 [[redirects]]

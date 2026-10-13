@@ -64,6 +64,26 @@
     return out;
   }
 
+  // A card's record rebuilt from its ratings (oldest first or not: they are
+  // put in order here). This is how a second device, or a device catching up
+  // with ratings made elsewhere, arrives at the same schedule.
+  function replay(id, reviews) {
+    var rows = reviews.slice().sort(function (a, b) { return String(a.at).localeCompare(String(b.at)); });
+    var state = null;
+    rows.forEach(function (r) {
+      if (!state) state = newState(id, r.at);
+      state = rate(state, r.rating, new Date(r.at)).state;
+    });
+    return state;
+  }
+
+  // The calendar days on which any of these ratings were made.
+  function reviewDays(reviews) {
+    var out = [];
+    reviews.forEach(function (r) { var k = dayKey(r.at); if (out.indexOf(k) === -1) out.push(k); });
+    return out.sort();
+  }
+
   function seen(state) { return !!state && state.fsrs.reps > 0; }
   // Due on or before today (by the student's calendar, not to the hour).
   function due(state, now) { return seen(state) && dayKey(state.fsrs.due) <= dayKey(now); }
@@ -171,7 +191,7 @@
 
   return {
     RATINGS: RATINGS, SESSION: SESSION, SECURE_DAYS: SECURE_DAYS, SECURE_INTERVAL: SECURE_INTERVAL,
-    dayKey: dayKey, newState: newState, rate: rate, preview: preview, seen: seen, due: due, recall: recall, mastery: mastery,
+    dayKey: dayKey, newState: newState, rate: rate, replay: replay, reviewDays: reviewDays, preview: preview, seen: seen, due: due, recall: recall, mastery: mastery,
     forBoard: forBoard, buildSession: buildSession, newToday: newToday, newAllowance: newAllowance, dueOn: dueOn, coverage: coverage,
     parseNumber: parseNumber, checkNumeric: checkNumeric, studyDays: studyDays, daysLabel: daysLabel
   };

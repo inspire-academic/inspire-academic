@@ -66,9 +66,18 @@
     });
   }
 
+  // A version 4 UUID: the server keeps a rating under this id, so it must be
+  // one even on a browser without crypto.randomUUID (Safari before 15.4).
   function uid() {
-    if (root.crypto && root.crypto.randomUUID) return root.crypto.randomUUID();
-    return 'r-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+    var c = typeof globalThis !== 'undefined' ? globalThis.crypto : root.crypto;
+    if (c && c.randomUUID) return c.randomUUID();
+    var bytes = [];
+    if (c && c.getRandomValues) bytes = Array.prototype.slice.call(c.getRandomValues(new Uint8Array(16)));
+    else for (var i = 0; i < 16; i++) bytes.push(Math.floor(Math.random() * 256));
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    var hex = bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join('');
+    return hex.slice(0, 8) + '-' + hex.slice(8, 12) + '-' + hex.slice(12, 16) + '-' + hex.slice(16, 20) + '-' + hex.slice(20);
   }
 
   function wrap(db) {
@@ -86,6 +95,11 @@
         return db.put('reviews', row).then(function () { return row; });
       },
       removeReview: function (id) { return db.remove('reviews', id); },
+      reviews: function () { return db.all('reviews'); },
+      hasReview: function (id) { return db.get('reviews', id).then(function (row) { return !!row; }); },
+      // Keep a row exactly as given (a rating brought down from the server,
+      // or one whose synced flag has changed).
+      putReview: function (row) { return db.put('reviews', row); },
       unsynced: function () { return db.all('reviews').then(function (rows) { return rows.filter(function (r) { return !r.synced; }); }); },
       meta: function (key, fallback) { return db.get('meta', key).then(function (row) { return row ? row.value : fallback; }); },
       setMeta: function (key, value) { return db.put('meta', { key: key, value: value }); }
