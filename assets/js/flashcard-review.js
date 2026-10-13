@@ -202,6 +202,30 @@
     });
   }
 
+  // Every topic with drafted cards, to choose between.
+  function loadTopics() {
+    return api('GET', '/api/v1/flashcards/review').then(function (res) {
+      var select = $('fr-topic');
+      select.textContent = '';
+      (res.topics || []).forEach(function (t) {
+        var o = document.createElement('option');
+        o.value = t.id;
+        o.textContent = t.level + ' ' + t.subject + ': ' + t.title + ' (' + t.cards + ' cards)';
+        o.selected = t.id === topicId;
+        select.appendChild(o);
+      });
+    }, function () { /* the cards themselves report the problem */ });
+  }
+
+  $('fr-topic').addEventListener('change', function () {
+    topicId = this.value;
+    history.replaceState(null, '', PAGE + '?topic=' + encodeURIComponent(topicId));
+    data = null;
+    $('fr-list').innerHTML = '<p class="itt-loading" role="status"><span class="spinner"></span> Loading the cards2026</p>';
+    load();
+  });
+
   IAMaths.preload().catch(function () { /* cards still read as plain text */ });
+  loadTopics();
   load();
 })();
