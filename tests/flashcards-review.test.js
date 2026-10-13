@@ -377,3 +377,59 @@ test('flashcard review: cards are grouped by specification point, each group wit
   // A failure is said where the reviewer is looking, not only at the top of the page.
   assert.match(js, /toast\('Not approved: ' \+ e\.message\);/);
 });
+
+// ── Publishing against a quiz bank that pushes back ──────────────────────
+test('quiz publish: questions sent together all have the same columns', async () => {
+  const s = bankSetup();
+  await approveQuestions(s, () => true);
+  const sent = [];
+  const realFetch = global.fetch;
+  global.fetch = (url, opts = {}) => {
+    if (opts.method === 'POST' && String(url).endsWith('/rest/v1/questions')) sent.push(JSON.parse(opts.body));
+    return realFetch(url, opts);
+  };
+  await publish(s);
+  global.fetch = realFetch;
+  assert.equal(sent.length, 2, 'one insert of questions for each board');
+  for (const rows of sent) {
+    const keys = JSON.stringify(Object.keys(rows[0]).sort());
+    assert.ok(rows.every(r => JSON.stringify(Object.keys(r).sort()) === keys), 'the database refuses a batch whose rows differ in their columns');
+    assert.ok(rows.some(r => r.figure) && rows.some(r => r.figure === null));
+  }
+});
+
+test('quiz publish: a refusal by the quiz bank is reported in full and leaves no empty quiz', async () => {
+  const s = bankSetup();
+  await approveQuestions(s, () => true);
+  const realFetch = global.fetch;
+  global.fetch = (url, opts = {}) => (opts.method === 'POST' && String(url).endsWith('/rest/v1/questions')
+    ? Promise.resolve({ ok: false, status: 400, text: async () => '{"code":"PGRST102","message":"All object keys must match"}' })
+    : realFetch(url, opts));
+  const r = await publish(s);
+  global.fetch = realFetch;
+  assert.equal(r.status, 502);
+  assert.equal(r.body.error.code, 'publish_failed');
+  assert.match(r.body.error.message, /The quiz bank said: POST questions 400: .*All object keys must match/);
+  assert.equal(s.fake.tables.quizzes.length, 0, 'the quiz made for those questions is removed again');
+});
+
+test('quiz publish: an id counter left behind its rows does not stop a quiz being created', async () => {
+  const s = bankSetup();
+  s.fake.tables.quizzes.push({ id: 481, topic_id: 1, title: 'An older quiz', exam_board: 'AQA', is_published: true });
+  await approveQuestions(s, () => true);
+  const realFetch = global.fetch;
+  let refused = 0;
+  global.fetch = (url, opts = {}) => {
+    // The database's counter hands out an id that is already taken.
+    if (opts.method === 'POST' && String(url).endsWith('/rest/v1/quizzes') && !('id' in [].concat(JSON.parse(opts.body))[0])) {
+      refused++;
+      return Promise.resolve({ ok: false, status: 409, text: async () => '{"code":"23505","message":"duplicate key value violates unique constraint \\"quizzes_pkey\\""}' });
+    }
+    return realFetch(url, opts);
+  };
+  const r = await publish(s);
+  global.fetch = realFetch;
+  assert.equal(refused, 2);
+  assert.deepEqual(r.body.boards.map(b => [b.status, b.quizId]), [['created', 482], ['created', 483]]);
+  assert.equal(s.fake.tables.questions.filter(q => q.quiz_id === 482).length, r.body.boards[0].questions);
+});
