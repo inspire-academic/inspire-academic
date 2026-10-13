@@ -433,3 +433,16 @@ test('quiz publish: an id counter left behind its rows does not stop a quiz bein
   assert.deepEqual(r.body.boards.map(b => [b.status, b.quizId]), [['created', 482], ['created', 483]]);
   assert.equal(s.fake.tables.questions.filter(q => q.quiz_id === 482).length, r.body.boards[0].questions);
 });
+
+test('quiz review: publishing is shown as a clear second step, at the top and where the reviewer finishes', () => {
+  const page = fs.readFileSync(path.join(__dirname, '..', 'teacher/flashcard-review.html'), 'utf8');
+  const js = fs.readFileSync(path.join(__dirname, '..', 'assets/js/flashcard-review.js'), 'utf8');
+  // A filled button, with a line saying that approved questions are not yet with students.
+  assert.match(page, /<strong>Step 2: publish\.<\/strong>/);
+  assert.match(page, /class="itt-btn itt-btn-primary" id="fr-publish-btn">Publish approved questions as quizzes</);
+  assert.match(js, /not in the quiz bank until you publish\. Students cannot see them yet\./);
+  // Offered again in place of the empty list, and named in the message after approving.
+  assert.match(js, /data-act="publish">Step 2: publish the approved questions as quizzes</);
+  assert.match(js, /getAttribute\('data-act'\) === 'publish'\) \{ \$\('fr-publish'\)\.scrollIntoView/);
+  assert.match(js, /Next: publish, at the top of the page\./);
+});
