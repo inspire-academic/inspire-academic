@@ -91,7 +91,15 @@ function publish(all, approved, OUT = DEFAULT_OUT) {
       continue;
     }
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, JSON.stringify({ schema: C.SCHEMA, topic: t.data.topic, cards: cards.map(c => C.publishCard(c, katex)) }) + '\n');
+    const published = cards.map(c => C.publishCard(c, katex));
+    // The title of each specification point the cards cite, for the
+    // student's coverage list.
+    const spec = {};
+    for (const card of published) for (const b of Object.keys(card.boards)) for (const ref of card.boards[b].refs) {
+      const known = t.spec && t.spec[b] && t.spec[b].points[ref];
+      if (known) (spec[b] = spec[b] || {})[ref] = known.title;
+    }
+    fs.writeFileSync(file, JSON.stringify({ schema: C.SCHEMA, topic: t.data.topic, spec, cards: published }) + '\n');
     manifest.topics.push({ ...t.data.topic, file: `/content/flashcards/${t.id}.json`, cards: cards.length });
     console.log(`  ${t.id}: ${cards.length} of ${t.data.cards.length} cards published`);
   }
