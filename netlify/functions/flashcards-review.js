@@ -30,7 +30,8 @@ const C = require('../../scripts/flashcards/content.js');
 const TOPICS = {
   'physics-a-level/electricity': require('../../curriculum/flashcards/physics-a-level/electricity.json'),
   'physics-a-level/mechanics': require('../../curriculum/flashcards/physics-a-level/mechanics.json'),
-  'physics-a-level/materials': require('../../curriculum/flashcards/physics-a-level/materials.json')
+  'physics-a-level/materials': require('../../curriculum/flashcards/physics-a-level/materials.json'),
+  'physics-a-level/waves': require('../../curriculum/flashcards/physics-a-level/waves.json')
 };
 const SPECS = {
   'physics-a-level': require('../../curriculum/flashcards/spec/physics-a-level.json')
