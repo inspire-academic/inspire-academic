@@ -32,14 +32,61 @@ const CloudSync = {
     try {
       const uid = window._currentUser && window._currentUser.id;
       if (!uid || !window._supa) return;
-      const { data, error } = await window._supa
-        .from('srs_cards')
-        .select('card_id, data')
-        .eq('user_id', uid);
-      if (error) { console.warn('SRS pull error', error.message); return; }
-      (data || []).forEach(row => {
-        localStorage.setItem('srs_' + row.card_id, JSON.stringify(row.data));
+      // Every row, a page at a time — one request stops at the API's row
+      // limit, which a keen student's card count can pass.
+      const PAGE = 1000;
+      const data = [];
+      for (let from = 0; ; from += PAGE) {
+        const { data: rows, error } = await window._supa
+          .from('srs_cards')
+          .select('card_id, data')
+          .eq('user_id', uid)
+          .order('card_id')
+          .range(from, from + PAGE - 1);
+        if (error) { console.warn('SRS pull error', error.message); return; }
+        data.push(...(rows || []));
+        if (!rows || rows.length < PAGE) break;
+      }
+
+      // The cache on this device belongs to whoever last synced here. On a
+      // shared phone another student's cache must never be merged into
+      // this account, so it is cleared. A cache from before ownership was
+      // recorded is trusted only as far as the server agrees with it.
+      const owner = localStorage.getItem(this._OWNER_KEY);
+      const mine = owner === uid;
+      if (owner && !mine) {
+        this._localCardIds().forEach(id => { if (!this._queue[id]) localStorage.removeItem('srs_' + id); });
+        localStorage.removeItem('inspire_stats');
+      }
+
+      // Whichever copy was reviewed most recently wins. Reviews made on
+      // this device that never reached Supabase (offline, tab closed
+      // before the flush) are kept and queued again, not overwritten.
+      const onServer = new Set();
+      data.forEach(row => {
+        onServer.add(row.card_id);
+        if (this._queue[row.card_id]) return; // rated on this page while the pull was in flight
+        const key = 'srs_' + row.card_id;
+        let local = null;
+        try { local = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { /* unreadable: take the server copy */ }
+        if (mine && local && this._lastReviewed(local) > this._lastReviewed(row.data)) {
+          this.push(row.card_id, local);
+        } else {
+          localStorage.setItem(key, JSON.stringify(row.data));
+        }
       });
+      // Cards reviewed here that the server has never seen.
+      if (mine) {
+        this._localCardIds().forEach(id => {
+          if (onServer.has(id)) return;
+          try {
+            const local = JSON.parse(localStorage.getItem('srs_' + id));
+            if (local && local.seen > 0) this.push(id, local);
+          } catch (e) { /* unreadable: nothing to send */ }
+        });
+      }
+      localStorage.setItem(this._OWNER_KEY, uid);
+      const statsAreMine = mine;
       // Pull global stats
       const { data: sd } = await window._supa
         .from('srs_stats')
@@ -47,16 +94,41 @@ const CloudSync = {
         .eq('user_id', uid)
         .maybeSingle();
       if (sd && sd.data) {
-        localStorage.setItem('inspire_stats', JSON.stringify(sd.data));
-        // Sync STATE.stats live if STATE already initialised
-        if (typeof STATE !== 'undefined') {
-          Object.assign(STATE.stats, sd.data);
+        let localStats = null;
+        try { localStats = JSON.parse(localStorage.getItem('inspire_stats') || 'null'); } catch (e) { /* take the server copy */ }
+        if (statsAreMine && localStats && (localStats.lastStudied || 0) > (sd.data.lastStudied || 0)) {
+          // This device studied more recently than the server knows.
+          this.queueStats(localStats);
+        } else {
+          localStorage.setItem('inspire_stats', JSON.stringify(sd.data));
+          // Sync STATE.stats live if STATE already initialised
+          if (typeof STATE !== 'undefined') {
+            Object.assign(STATE.stats, sd.data);
+          }
         }
       }
       this._synced = true;
     } catch(e) {
       console.warn('CloudSync.pull failed', e);
     }
+  },
+
+  _OWNER_KEY: 'srs_owner', // user id the local cache was last synced for
+
+  // Ids of every card with a record on this device.
+  _localCardIds() {
+    const ids = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('srs_') && key !== this._OWNER_KEY) ids.push(key.slice(4));
+    }
+    return ids;
+  },
+
+  // When a card's record was last reviewed (ms), from its rating history.
+  _lastReviewed(data) {
+    const h = data && data.history;
+    return (h && h.length && h[h.length - 1].time) || 0;
   },
 
   // Queue a card upsert — batched flush every 3 s
@@ -195,6 +267,17 @@ const SRS = {
     CloudSync.push(cardId, data);
   },
 
+  // Days until a card comes back after a rating, given its record.
+  _days(d, rating) {
+    return Math.max(1, Math.round(this.intervals[rating] * (d.ef || 1)));
+  },
+
+  // What rate() would schedule for this card, without rating it — for
+  // labels that tell the student when they will see the card again.
+  previewDays(cardId, rating) {
+    return this._days(this.getData(cardId), rating);
+  },
+
   rate(cardId, rating) {
     const d = this.getData(cardId);
     d.seen++;
@@ -204,8 +287,7 @@ const SRS = {
     const isCorrect = rating === 'good' || rating === 'easy';
     if (isCorrect) d.correct++;
 
-    const intervalDays = this.intervals[rating] * (d.ef || 1);
-    d.interval = Math.max(1, Math.round(intervalDays));
+    d.interval = this._days(d, rating);
     d.ef = Math.max(1.3, (d.ef || 2.5) * this.multipliers[rating]);
     d.dueDate = Date.now() + d.interval * 86400000;
 
