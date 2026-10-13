@@ -59,12 +59,14 @@
       "options": { "A": "14%", "B": "37%", "C": "50%", "D": "63%" }, "answer": "B",
       "solution": "\\(Q = Q_{0}e^{-\\frac{t}{RC}}\\). After one time constant, \\(t = RC\\), so the fraction left is \\(e^{-1}\\) = 0.37, which is 37%. The 63% is the fraction that has gone." },
     { "id": "phy-al-efield-q015", "difficulty": 3, "boards": { "aqa": { "refs": ["3.7.4.4"] }, "edexcel": { "points": [120] } },
-      "q": "A capacitor charged to 12 V discharges through a resistor. The time constant of the circuit is 5.0 s. What is the potential difference across the capacitor after 10 s?",
+      "q": "A capacitor charged to 12 V discharges through a resistor, as the graph shows. The time constant of the circuit is 5.0 s. What is the potential difference across the capacitor after 10 s?",
+      "figure": {"kind":"graph","alt":"Potential difference against time: an exponential decay that starts at 12 volts and falls ever more slowly towards zero over 20 seconds.","x":{"label":"time / s","min":0,"max":21.5,"ticks":[{"at":5,"label":"5"},{"at":10,"label":"10"},{"at":15,"label":"15"},{"at":20,"label":"20"}]},"y":{"label":"potential difference / V","min":0,"max":13,"ticks":[{"at":4,"label":"4"},{"at":8,"label":"8"},{"at":12,"label":"12"}]},"curves":[{"fn":{"kind":"exp","a":12,"k":-0.2},"from":0,"to":20}]},
       "options": { "A": "1.6 V", "B": "4.4 V", "C": "6.0 V", "D": "10 V" }, "answer": "A",
       "solution": "\\(V = V_{0}e^{-\\frac{t}{RC}}\\), and 10 s is two time constants. So \\(V = 12e^{-2}\\) = 1.6 V. After only one time constant it would be 4.4 V." },
     { "id": "phy-al-efield-q016", "difficulty": 2, "boards": { "aqa": { "refs": ["3.7.4.4"] }, "edexcel": { "points": [118] } },
-      "q": "A capacitor is charged from a battery through a resistor. Which describes the graph of current against time?",
-      "options": { "A": "It rises steadily from zero.", "B": "It stays constant, then drops to zero.", "C": "It rises quickly at first, then levels off at a maximum.", "D": "It starts at a maximum and falls exponentially towards zero." }, "answer": "D",
-      "solution": "At first the capacitor is uncharged, so the full battery voltage is across the resistor and the current is at its largest. As charge builds up, the voltage across the capacitor rises, leaving less across the resistor, so the current decays exponentially. The charge and voltage graphs are the ones that rise and level off." }
+      "q": "A capacitor is charged from a battery through a resistor. The graph shows how one quantity varies with time during charging. Which quantity is it?",
+      "figure": {"kind":"graph","alt":"A quantity against time: it starts at its maximum value and decays exponentially towards zero.","x":{"label":"time","min":0,"max":5.3},"y":{"label":"quantity","min":0,"max":1.1},"curves":[{"fn":{"kind":"exp","a":1,"k":-1},"from":0,"to":5}]},
+      "options": { "A": "The charge on the capacitor.", "B": "The potential difference across the capacitor.", "C": "The energy stored in the capacitor.", "D": "The current in the circuit." }, "answer": "D",
+      "solution": "The graph starts at a maximum and decays exponentially towards zero. Only the current does that: at first the full battery voltage is across the resistor, and as the capacitor charges, less and less of it is. The charge, the potential difference and the energy all start at zero and rise towards a maximum." }
   ]
 }

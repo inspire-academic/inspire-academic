@@ -22,6 +22,13 @@ exports.handler = async (event) => {
     const quizzes = await client.get(`quizzes?id=eq.${quizId}&select=id`);
     if (!quizzes || !quizzes.length) return fail(404, 'not_found', 'Quiz not found.');
     const questions = (await client.get(`questions?quiz_id=eq.${quizId}&select=${PUBLIC_COLUMNS}&order=order_idx`)) || [];
+    // Graphs, for the questions that have one (supabase/question_figures.sql).
+    // Read separately so a quiz still starts if the column is not there yet.
+    try {
+      const figures = (await client.get(`questions?quiz_id=eq.${quizId}&figure=not.is.null&select=id,figure`)) || [];
+      const byId = new Map(figures.map(f => [String(f.id), f.figure]));
+      for (const q of questions) if (byId.has(String(q.id))) q.figure = byId.get(String(q.id));
+    } catch (e) { /* no graphs: the questions still read without them */ }
     const [attempt] = await client.insert('quiz_attempts', {
       student_id: user.id, quiz_id: quizId, score: 0,
       max_score: questions.reduce((s, q) => s + marksOf(q), 0)

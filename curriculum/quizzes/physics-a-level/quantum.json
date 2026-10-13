@@ -62,9 +62,10 @@
       "q": "Which pair gives evidence for the particle nature of light and for the wave nature of electrons, in that order?",
       "options": { "A": "Diffraction of light; the photoelectric effect", "B": "Interference of light; electron diffraction", "C": "The photoelectric effect; electron diffraction", "D": "Electron diffraction; the photoelectric effect" }, "answer": "C",
       "solution": "The photoelectric effect shows light delivering energy in separate photons: its particle nature. Electron diffraction shows particles spreading and interfering like waves. Together they are the evidence for wave–particle duality." },
-    { "id": "phy-al-quant-q016", "difficulty": 1, "boards": { "aqa": { "refs": ["3.2.2.1"] }, "edexcel": { "points": [93] } },
-      "q": "What is the work function of a metal?",
-      "options": { "A": "The minimum energy needed to remove an electron from the surface of the metal.", "B": "The energy of each photon that falls on the metal.", "C": "The maximum kinetic energy of the electrons emitted.", "D": "The energy needed to ionise one atom of the metal as a gas." }, "answer": "A",
-      "solution": "The work function is the least energy an electron needs to escape from the surface of the metal. A photon must carry at least this much energy to cause photoelectric emission, which is why there is a threshold frequency." }
+    { "id": "phy-al-quant-q016", "difficulty": 2, "boards": { "aqa": { "refs": ["3.2.2.1"] }, "edexcel": { "points": [93] } },
+      "q": "The graph shows the maximum kinetic energy of photoelectrons from a metal against the frequency of the light. What does the intercept on the frequency axis represent?",
+      "figure": {"kind":"graph","alt":"Maximum kinetic energy against frequency: a straight line that starts on the frequency axis at 5.0 times ten to the fourteen hertz and rises steadily.","x":{"label":"frequency / 10¹⁴ Hz","min":0,"max":11,"ticks":[{"at":5,"label":"5.0"},{"at":10,"label":"10.0"}]},"y":{"label":"kinetic energy / eV","min":0,"max":2.4},"curves":[{"fn":{"kind":"linear","m":0.4144,"c":-2.072},"from":5,"to":10}]},
+      "options": { "A": "The threshold frequency of the metal.", "B": "The work function of the metal.", "C": "The Planck constant.", "D": "The stopping potential." }, "answer": "A",
+      "solution": "\\(E_{k(max)} = hf - \\phi\\). The line meets the frequency axis where the maximum kinetic energy is zero, so \\(hf_{0} = \\phi\\): this is the threshold frequency, below which no electrons are emitted. The gradient of the line is the Planck constant, and the work function is the size of the intercept the line would make on the energy axis." }
   ]
 }

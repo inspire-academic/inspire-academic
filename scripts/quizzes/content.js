@@ -20,6 +20,7 @@
 
 const F = require('../flashcards/content.js');
 const { checkQuestion } = require('../../netlify/functions/_question-checks.js');
+const PhysicsGraph = require('../../assets/js/physics-graph.js');
 
 const SCHEMA = 'inspire.quiz.v1';
 const LETTERS = ['A', 'B', 'C', 'D'];
@@ -52,7 +53,7 @@ function validateTopic(file, { katex = null, spec = null } = {}) {
     const id = (q && q.id) || `question ${i + 1}`;
     const bad = msg => errors.push(`${id}: ${msg}`);
     if (!q || typeof q !== 'object') { bad('not a question'); return; }
-    for (const k of Object.keys(q)) if (!['id', 'difficulty', 'boards', 'q', 'options', 'answer', 'solution'].includes(k)) bad(`unknown field "${k}"`);
+    for (const k of Object.keys(q)) if (!['id', 'difficulty', 'boards', 'q', 'figure', 'options', 'answer', 'solution'].includes(k)) bad(`unknown field "${k}"`);
     if (!ID_RE.test(String(q.id || ''))) bad('id must look like phy-al-elec-q001');
     if (ids.has(q.id)) bad('id used twice');
     ids.add(q.id);
@@ -72,6 +73,8 @@ function validateTopic(file, { katex = null, spec = null } = {}) {
     for (const s of [q.q, q.solution, ...LETTERS.map(L => options[L])]) {
       if (/<[a-zA-Z/]/.test(String(s || '').replace(/\\\(([\s\S]*?)\\\)/g, ' '))) { bad('markup is not allowed in a quiz question'); break; }
     }
+    // A graph shown with the question (assets/js/physics-graph.js).
+    if (q.figure !== undefined) PhysicsGraph.check(q.figure).forEach(p => bad(`figure: ${p}`));
     const bank = checkQuestion(toBank(q), { questionType: 'mcq', marks: 1, typeset: true });
     // A warning there ("check the key") is a failure here: nothing unsure is kept.
     [...bank.errors, ...bank.warnings].forEach(bad);

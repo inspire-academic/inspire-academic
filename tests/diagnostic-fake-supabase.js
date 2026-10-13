@@ -20,6 +20,7 @@ function fakeSupabase(seed) {
     const raw = decodeURIComponent(expr.slice(dot + 1));
     const cell = row[key];
     if (op === 'eq') return String(cell) === raw;
+    if (op === 'not' && raw === 'is.null') return cell !== undefined && cell !== null;
     if (op === 'is') return (cell === undefined ? null : cell) === parseVal(raw) || (raw === 'true' && cell === true);
     if (op === 'like') {
       const re = new RegExp('^' + raw.split('*').map(s => s.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('.*') + '$');
