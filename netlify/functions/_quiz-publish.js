@@ -53,7 +53,8 @@ async function publishQuizTopic(client, entry, approved) {
   const slug = topicSlug(sourceId);
   const [topicRow] = slug ? ((await client.get(`topics?slug=eq.${encodeURIComponent(slug)}&select=id`)) || []) : [];
   if (!topicRow) return { error: 'no_topic' };
-  const title = entry.topic.title.replace(/^Quiz:\s*/, '');
+  // "Quiz: Medical Physics (AQA option)" is published as "Medical Physics".
+  const title = entry.topic.title.replace(/^Quiz:\s*/, '').replace(/\s*\([^)]*option\)$/i, '');
 
   const boards = [];
   for (const b of Object.keys(BOARDS)) {
