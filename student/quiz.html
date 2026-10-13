@@ -496,7 +496,9 @@ async function initPicker(){
   const {user} = await requireAuth() || {};
   if(!user) return;
 
-  let query = supa.from('quizzes').select('*,topics(id,name,subjects(*))');
+  // Only published quizzes are offered: one that has been withdrawn or
+  // replaced stays in the bank, for its past attempts, but is not listed.
+  let query = supa.from('quizzes').select('*,topics(id,name,subjects(*))').eq('is_published',true);
   const {data:all} = await query;
   const quizzes = subjectParam
     ? (all||[]).filter(q=>String(q.topics?.subjects?.id)===String(subjectParam))
