@@ -601,8 +601,9 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
   const streak     = streakRes.data;
   const attempts   = attemptsRes.data || [];
   const progress   = progressRes.data || [];
-  const subjects   = subjectsRes.data || [];
-  const topics     = topicsRes.data || [];
+  // GCSE only: A-level subjects have their own pages (subjects.level).
+  const subjects   = (subjectsRes.data || []).filter(s => (s.level || 'gcse') === 'gcse');
+  const topics     = (topicsRes.data || []).filter(t => subjects.some(s => s.id === t.subject_id));
   const recent     = recentRes.data || [];
 
   // 4. Streak
@@ -868,7 +869,7 @@ async function loadDailyChallenge(profile) {
 
     // Fetch all quizzes with subject info, board-filtered where possible
     let query = supa.from('quizzes')
-      .select('id, title, difficulty, topics(name, subjects(id, name))')
+      .select('id, title, difficulty, topics(name, subjects(*))')
       .order('id', { ascending: true });
 
     if (board) {
@@ -880,10 +881,13 @@ async function loadDailyChallenge(profile) {
     // Fallback: if board filter returns nothing, fetch without board filter
     if (!error && (!quizzes || quizzes.length === 0)) {
       const { data: fallback } = await supa.from('quizzes')
-        .select('id, title, difficulty, topics(name, subjects(id, name))')
+        .select('id, title, difficulty, topics(name, subjects(*))')
         .order('id', { ascending: true });
       quizzes = fallback;
     }
+
+    // GCSE only: an A-level quiz is never a GCSE student's daily challenge.
+    quizzes = (quizzes || []).filter(q => ((q.topics?.subjects?.level) || 'gcse') === 'gcse');
 
     if (error || !quizzes || quizzes.length === 0) {
       document.getElementById('tq-title').textContent = 'No challenge available';
