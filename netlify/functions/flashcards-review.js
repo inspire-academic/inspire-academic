@@ -194,7 +194,14 @@ async function publishQuiz(client, body) {
   if (!entry) return fail(404, 'unknown_topic', 'Unknown quiz topic.');
   const latest = await latestDecisions(client, body.topic);
   const approved = entry.cards.filter(q => standing(q, latest[q.id]) === 'approved');
-  const result = await publishQuizTopic(client, entry, approved);
+  let result;
+  try {
+    result = await publishQuizTopic(client, entry, approved);
+  } catch (e) {
+    // Only staff reach this, so they are told what the quiz bank said.
+    console.error('quiz publish:', e.message);
+    return fail(502, 'publish_failed', `The quiz could not be published. The quiz bank said: ${String(e.message).slice(0, 300)}`);
+  }
   if (result.error === 'no_topic') return fail(409, 'not_set_up', 'This topic is not in the quiz bank yet (supabase/a_level_physics_subject.sql).');
   if (result.error === 'no_figures') return fail(409, 'not_set_up', 'Some of these questions have graphs, and the quiz bank cannot store graphs yet. Run supabase/question_figures.sql, then publish again.');
   return ok(result);

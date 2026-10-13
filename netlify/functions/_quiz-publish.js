@@ -46,6 +46,21 @@ const figureOf = r => JSON.stringify(r.figure || null);
 const same = (rows, stored) => rows.length === stored.length &&
   rows.every((r, i) => FIELDS.every(f => String(r[f]) === String(stored[i][f])) && figureOf(r) === figureOf(stored[i]));
 
+// Inserts rows and returns them. The bank's tables were first filled with
+// rows that carried their own ids, which can leave a table's id counter
+// behind its rows; an insert then fails with "duplicate key". When that
+// happens the rows are given the next free ids and sent again.
+async function insert(client, table, rows) {
+  try {
+    return await client.insert(table, rows);
+  } catch (e) {
+    if (e.status !== 409 || !/23505|duplicate key/.test(e.message)) throw e;
+    const last = (await client.get(`${table}?select=id&order=id.desc&limit=1`)) || [];
+    const top = last.reduce((m, r) => Math.max(m, Number(r.id) || 0), 0);
+    return client.insert(table, rows.map((r, i) => ({ id: top + 1 + i, ...r })));
+  }
+}
+
 // entry: a quiz topic from flashcards-review.js ({ topic, cards });
 // approved: the questions approved as they read now.
 // Returns { topic, boards: [{ board, status, questions, quizId? }] } where
@@ -75,6 +90,9 @@ async function publishQuizTopic(client, entry, approved) {
       if (r.errors.length) throw new Error(`${q.id} failed the automatic checks: ${r.errors[0]}`);
     }
     const rows = questions.map((q, i) => questionRow(q, i + 1));
+    // Rows sent together must all have the same columns: where one question
+    // has a graph, the others say they have none.
+    if (rows.some(r => r.figure)) for (const r of rows) if (!r.figure) r.figure = null;
 
     const live = ((await client.get(`quizzes?topic_id=eq.${topicRow.id}&exam_board=eq.${BOARDS[b]}&is_published=eq.true&select=id`)) || [])
       .sort((x, y) => Number(y.id) - Number(x.id));
@@ -85,13 +103,19 @@ async function publishQuizTopic(client, entry, approved) {
     }
 
     // Written unpublished, shown to students only once its questions are in.
-    const [quiz] = await client.insert('quizzes', {
+    const [quiz] = await insert(client, 'quizzes', [{
       title: `${title}: ${BOARDS[b]} A-level`,
       description: `Exam-style multiple choice for ${BOARDS[b]} A-level Physics.`,
       topic_id: topicRow.id, difficulty: 'higher', exam_board: BOARDS[b],
       time_limit: rows.length * SECONDS_PER_QUESTION, pass_mark: 60, is_published: false
-    });
-    await client.insert('questions', rows.map(r => ({ quiz_id: quiz.id, ...r })), 'return=minimal');
+    }]);
+    try {
+      await insert(client, 'questions', rows.map(r => ({ quiz_id: quiz.id, ...r })));
+    } catch (e) {
+      // No empty quiz is left behind if its questions could not be written.
+      await client.del(`quizzes?id=eq.${quiz.id}`).catch(() => {});
+      throw e;
+    }
     await client.patch(`quizzes?id=eq.${quiz.id}`, { is_published: true });
     for (const old of live) await client.patch(`quizzes?id=eq.${old.id}`, { is_published: false });
     boards.push({ board: BOARDS[b], status: live.length ? 'replaced' : 'created', questions: rows.length, quizId: quiz.id });
