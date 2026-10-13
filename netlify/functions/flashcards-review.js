@@ -33,7 +33,10 @@ const TOPICS = {
   'physics-a-level/materials': require('../../curriculum/flashcards/physics-a-level/materials.json'),
   'physics-a-level/waves': require('../../curriculum/flashcards/physics-a-level/waves.json'),
   'physics-a-level/quantum': require('../../curriculum/flashcards/physics-a-level/quantum.json'),
-  'physics-a-level/particles': require('../../curriculum/flashcards/physics-a-level/particles.json')
+  'physics-a-level/particles': require('../../curriculum/flashcards/physics-a-level/particles.json'),
+  'physics-a-level/measurements': require('../../curriculum/flashcards/physics-a-level/measurements.json'),
+  'physics-a-level/further-mechanics': require('../../curriculum/flashcards/physics-a-level/further-mechanics.json'),
+  'physics-a-level/oscillations': require('../../curriculum/flashcards/physics-a-level/oscillations.json')
 };
 const SPECS = {
   'physics-a-level': require('../../curriculum/flashcards/spec/physics-a-level.json')
