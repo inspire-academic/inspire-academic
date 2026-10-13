@@ -427,14 +427,15 @@ let activeFilter='all';
     supa.from('quizzes').select('id,topic_id,title,exam_board,difficulty').eq('is_published',true).ilike('exam_board',board),
   ]);
 
-  allSubjects=sRes.data||[];
+  // GCSE only: A-level subjects have their own pages (subjects.level).
+  allSubjects=(sRes.data||[]).filter(s=>(s.level||'gcse')==='gcse');
   subjectMeta=Object.fromEntries(allSubjects.map(s=>[s.id,{
     cls:s.cls||'maths',
     icon:SUBJECT_ICONS[s.name]||'📚',
     color:s.color||'var(--gold)',
     badge:SUBJECT_BADGES[s.name]||'badge-gold',
   }]));
-  allTopics=tRes.data||[];
+  allTopics=(tRes.data||[]).filter(t=>allSubjects.some(s=>s.id===t.subject_id));
   allProgress=pRes.data||[];
   allQuizzes=(qRes.data||[]).filter(q=>tierDifficulties.includes(q.difficulty));
 

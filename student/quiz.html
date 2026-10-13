@@ -481,11 +481,12 @@ async function initPicker(){
   const {user} = await requireAuth() || {};
   if(!user) return;
 
-  let query = supa.from('quizzes').select('*,topics(id,name,subjects(id,name))');
+  let query = supa.from('quizzes').select('*,topics(id,name,subjects(*))');
   const {data:all} = await query;
   const quizzes = subjectParam
     ? (all||[]).filter(q=>String(q.topics?.subjects?.id)===String(subjectParam))
-    : (all||[]);
+    // With no subject asked for, GCSE only: A-level quizzes are reached from their own pages.
+    : (all||[]).filter(q=>((q.topics?.subjects?.level)||'gcse')==='gcse');
 
   const subjectName = quizzes[0]?.topics?.subjects?.name || '';
   if(subjectName){

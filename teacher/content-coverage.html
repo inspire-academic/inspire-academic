@@ -168,8 +168,8 @@ function coverageClass(have, want) {
 }
 
 async function loadCoverage() {
-  const [{ data: subjects }, { data: topics }, { data: quizzes }, { data: questions }, { data: lessons }] = await Promise.all([
-    supa.from('subjects').select('id,name').order('id'),
+  const [{ data: allSubjectRows }, { data: topics }, { data: quizzes }, { data: questions }, { data: lessons }] = await Promise.all([
+    supa.from('subjects').select('*').order('id'),
     supa.from('topics').select('id,name,subject_id'),
     supa.from('quizzes').select('id,topic_id,exam_board'),
     supa.from('questions').select('id,quiz_id,question_type'),
@@ -179,6 +179,9 @@ async function loadCoverage() {
   document.getElementById('loading-row').style.display = 'none'
   const container = document.getElementById('subject-cards')
   container.style.display = 'grid'
+
+  // GCSE only: the specification map this page checks against is GCSE (subjects.level).
+  const subjects = allSubjectRows && allSubjectRows.filter(s => (s.level || 'gcse') === 'gcse')
 
   if (!subjects) {
     container.innerHTML = '<div style="color:var(--danger);">Could not load subjects — check Supabase connection.</div>'
