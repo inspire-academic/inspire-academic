@@ -15,7 +15,8 @@
 //     x: { label: 'time / s', min: 0, max: 10, ticks: [{ at: 4, label: '4.0' }] },
 //     y: { label: 'velocity / m s⁻¹', min: 0, max: 14, ticks: [...] },
 //     curves: [{ fn: {...}, from: 0, to: 10, dashed: false, label: 'X', labelAt: 6, labelBelow: false, labelLeft: false, ink: 0 }],
-//     marks:  [{ x: 4, y: 12, label: 'P', labelBelow: false }],   dots on the graph
+//     marks:  [{ x: 4, y: 12, label: 'P', labelBelow: false, labelLeft: false,
+//               plain: false (a label with no dot), err: 0.5 (an error bar) }],
 //     guides: [{ x: 4, y: 12 }],                      dashed lines from a point to the axes
 //     shade:  [{ upper: 0, lower: 1, from: 0, to: 5 }] the area between two curves (or a curve and the x-axis)
 //   }
@@ -26,6 +27,7 @@
 //   { kind: 'sine', a, w, phase, c }          y = a·sin(wx + phase) + c
 //   { kind: 'resonance', a, x0, w }           y = a / √(1 + ((x − x0)/w)²)
 //   { kind: 'points', points: [[x, y], ...] } straight lines through the points
+//                                            (a smooth curve, with smooth: true on the curve)
 // Labels are plain text. The graph is always dark ink on a white card, like
 // an exam paper, whatever the app's theme.
 (function (root, factory) {
@@ -99,7 +101,7 @@
     checkAxis(fig.y, 'y', problems);
     if (problems.length) return problems;
     var curves = fig.curves;
-    if (!Array.isArray(curves) || !curves.length || curves.length > 4) return problems.concat('a graph has one to four curves');
+    if (!Array.isArray(curves) || !curves.length || curves.length > 8) return problems.concat('a graph has one to eight curves');
     curves.forEach(function (c, i) {
       var at = 'curve ' + (i + 1) + ': ';
       var fn = c && c.fn;
@@ -114,7 +116,8 @@
       }
       var from = c.from === undefined ? fig.x.min : c.from, to = c.to === undefined ? fig.x.max : c.to;
       if (!num(from) || !num(to) || to <= from || from < fig.x.min || to > fig.x.max) { problems.push(at + 'from and to must lie on the x-axis, in order'); return; }
-      if (c.label !== undefined && (typeof c.label !== 'string' || c.label.length > 24)) problems.push(at + 'label is at most 24 characters');
+      if (c.label !== undefined && (typeof c.label !== 'string' || c.label.length > 28)) problems.push(at + 'label is at most 28 characters');
+      if (c.smooth && fn.kind !== 'points') problems.push(at + 'only a curve through points can be smooth');
       // Every drawn point must be a real number inside the axes: nothing is clipped.
       for (var s = 0; s <= SAMPLES; s++) {
         var x = from + (to - from) * s / SAMPLES, y = value(fn, x);
@@ -123,7 +126,8 @@
     });
     (fig.marks || []).concat(fig.guides || []).forEach(function (m) {
       if (!m || !num(m.x) || !num(m.y) || m.x < fig.x.min || m.x > fig.x.max || m.y < fig.y.min || m.y > fig.y.max) problems.push('a mark or guide is outside the axes');
-      else if (m.label !== undefined && (typeof m.label !== 'string' || m.label.length > 24)) problems.push('a mark label is at most 24 characters');
+      else if (m.label !== undefined && (typeof m.label !== 'string' || m.label.length > 28)) problems.push('a mark label is at most 28 characters');
+      else if (m.err !== undefined && (!num(m.err) || m.err <= 0 || m.y - m.err < fig.y.min || m.y + m.err > fig.y.max)) problems.push('an error bar must be a positive size and stay inside the axes');
     });
     (fig.shade || []).forEach(function (s) {
       var ok = s && Number.isInteger(s.upper) && curves[s.upper] && (s.lower === undefined || (Number.isInteger(s.lower) && curves[s.lower])) &&
@@ -162,6 +166,15 @@
     var path = function (fn, from, to) {
       return xs(fn, from, to).map(function (x, i) { return (i ? 'L' : 'M') + r1(sx(x)) + ' ' + r1(sy(value(fn, x))); }).join(' ');
     };
+    // A smooth curve through measured or typical points (Catmull-Rom, drawn as Béziers).
+    var smoothPath = function (points) {
+      var q = points.map(function (pt) { return [sx(pt[0]), sy(pt[1])]; }), d = 'M' + r1(q[0][0]) + ' ' + r1(q[0][1]);
+      for (var i = 0; i < q.length - 1; i++) {
+        var a = q[Math.max(i - 1, 0)], b = q[i], c = q[i + 1], e = q[Math.min(i + 2, q.length - 1)];
+        d += ' C' + r1(b[0] + (c[0] - a[0]) / 6) + ' ' + r1(b[1] + (c[1] - a[1]) / 6) + ' ' + r1(c[0] - (e[0] - b[0]) / 6) + ' ' + r1(c[1] - (e[1] - b[1]) / 6) + ' ' + r1(c[0]) + ' ' + r1(c[1]);
+      }
+      return d;
+    };
     var span = function (c) { return [c.from === undefined ? fig.x.min : c.from, c.to === undefined ? fig.x.max : c.to]; };
 
     out.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(fig.alt) + '" class="pg-svg">');
@@ -196,7 +209,7 @@
     fig.curves.forEach(function (c, i) {
       // Each curve has its own colour, unless it says it is part of another (`ink`).
       var s = span(c), colour = COLOURS[(c.ink === undefined ? i : c.ink) % COLOURS.length];
-      out.push('<path d="' + path(c.fn, s[0], s[1]) + '" fill="none" stroke="' + colour + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"' + (c.dashed ? ' stroke-dasharray="7 4"' : '') + '/>');
+      out.push('<path d="' + (c.smooth ? smoothPath(c.fn.points) : path(c.fn, s[0], s[1])) + '" fill="none" stroke="' + colour + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"' + (c.dashed ? ' stroke-dasharray="7 4"' : '') + '/>');
       if (c.label) {
         var lx = c.labelAt === undefined ? s[0] + (s[1] - s[0]) * 0.8 : c.labelAt;
         // Above and to the right of the curve, or below it where that is clearer.
@@ -205,7 +218,9 @@
     });
 
     (fig.marks || []).forEach(function (m) {
-      out.push('<circle cx="' + sx(m.x) + '" cy="' + sy(m.y) + '" r="3.2" fill="' + INK + '"/>');
+      // A dot, unless the mark is only a label (`plain`); and an error bar if it has one.
+      if (!m.plain) out.push('<circle cx="' + sx(m.x) + '" cy="' + sy(m.y) + '" r="3.2" fill="' + INK + '"/>');
+      if (m.err) out.push('<path d="M' + sx(m.x) + ' ' + sy(m.y - m.err) + ' V' + sy(m.y + m.err) + ' M' + (sx(m.x) - 4) + ' ' + sy(m.y - m.err) + ' h8 M' + (sx(m.x) - 4) + ' ' + sy(m.y + m.err) + ' h8" fill="none" stroke="' + INK + '" stroke-width="1.4"/>');
       if (m.label) text(sx(m.x) + (m.labelLeft ? -7 : 7), sy(m.y) + (m.labelBelow ? 16 : -7), m.label, m.labelLeft ? 'end' : 'start', ' font-weight="700"');
     });
 
