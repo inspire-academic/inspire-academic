@@ -276,6 +276,7 @@
       card: card.id, v: card.v, rating: Core.RATINGS[name], at: now.toISOString(), ms: Date.now() - current.shownAt,
       repeat: result.repeat, correct: current.verdict, board: board, topic: topicId
     }).then(function (row) { action.reviewUid = row.uid; });
+    syncSoon();
 
     // Not known yet: see it again before the session ends (twice at most).
     if (name === 'again' && (session.repeats[card.id] || 0) < 2) {
@@ -370,6 +371,62 @@
     }
   });
 
+  // ── Keeping the server in step ───────────────────────────────────────
+  var sync = null, syncTimer = null;
+
+  function accessToken() {
+    return supa.auth.getSession().then(function (r) { return r.data && r.data.session ? r.data.session.access_token : null; });
+  }
+
+  // Ratings made on another device have arrived: rebuild those cards'
+  // records from the full log, exactly as the other device built them.
+  function applySync(result) {
+    var done = Promise.resolve();
+    if (result.pulled.length) {
+      done = store.reviews().then(function (all) {
+        var touched = {};
+        result.pulled.forEach(function (r) { touched[r.card] = true; });
+        Object.keys(touched).forEach(function (id) {
+          var state = Core.replay(id, all.filter(function (r) { return r.card === id; }));
+          if (state) { states[id] = state; store.saveState(state); }
+        });
+        days = Core.reviewDays(all);
+        store.setMeta('days', days);
+        // Never redraw under a student in the middle of a card.
+        if (!$('fc-today').hidden) renderToday();
+      });
+    }
+    return done.then(function () { return sync.pending(); }).then(function (waiting) {
+      $('fc-sync').textContent = !waiting ? (result.ok ? 'Your progress is saved to your account.' : '')
+        : result.ok ? '' : 'Saved on this device. It will be sent to your account when you are back online.';
+    });
+  }
+
+  function runSync(opts) {
+    if (!sync) return;
+    clearTimeout(syncTimer);
+    sync.run(opts).then(function (result) { if (!(opts && opts.keepalive)) applySync(result); });
+  }
+  // After a rating: once it can no longer be undone.
+  function syncSoon() {
+    if (!sync) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(runSync, FCSync.UNDO_WINDOW_MS + 2000);
+  }
+
+  function startSync() {
+    sync = FCSync.create({ store: store, token: accessToken });
+    runSync();
+    window.addEventListener('online', function () { runSync(); });
+    // Leaving the page or switching app: send what there is, straight away.
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') runSync({ force: true, keepalive: true });
+      else runSync();
+    });
+    // Keep the app's files for the next visit with no connection (sw.js).
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(function () {});
+  }
+
   // ── Starting up ──────────────────────────────────────────────────────
   var file = null;
   function ready() {
@@ -403,11 +460,16 @@
         $('fc-unsaved').hidden = store.persistent || previewing;
         $('fc-preview-note').hidden = !previewing;
         var fromProfile = String(p.exam_board || '').toLowerCase();
-        return Promise.all([store.states(), store.meta('days', []), store.meta('board', null)]).then(function (saved) {
+        return Promise.all([store.states(), store.meta('days', []), store.meta('board', null), store.meta('name', '')]).then(function (saved) {
           states = saved[0]; days = saved[1];
           board = BOARD_NAMES[fromProfile] ? fromProfile : saved[2];
           if (previewing && params.get('board')) board = params.get('board');
+          // Remembered on the device, so the app still knows the student
+          // (and their board) when it is opened with no connection.
+          if (name) store.setMeta('name', name); else if (!firstName) firstName = saved[3];
+          if (BOARD_NAMES[fromProfile]) store.setMeta('board', fromProfile);
           ready();
+          if (!previewing) startSync();
         });
       });
     }).catch(function (e) {

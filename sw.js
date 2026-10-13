@@ -147,6 +147,15 @@ self.addEventListener('fetch', e => {
     return;
   }
 
+  // Published flashcards (/content/flashcards/*.json) — network first, fall
+  // back to cache, like the pages. A card a teacher has corrected must reach
+  // a student on their next visit, not the one after; the cached copy is
+  // what lets the flashcard app open with no connection.
+  if (url.origin === self.location.origin && url.pathname.startsWith('/content/flashcards/')) {
+    e.respondWith(networkFirst(e.request, CACHE_PAGES));
+    return;
+  }
+
   // Everything else (images, fonts, third-party vendor bundles) — cache
   // first, update in background. These rarely change, so instant-from-
   // cache is the right tradeoff for a student on a slow connection.
