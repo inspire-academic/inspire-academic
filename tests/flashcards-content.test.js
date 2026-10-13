@@ -14,7 +14,14 @@ const katex = require(path.join(ROOT, 'assets/vendor/katex-0.16.47/katex.min.js'
 
 const topics = build.topics();
 const clone = v => JSON.parse(JSON.stringify(v));
-const sample = () => clone(topics[0]);
+// The sample's first card cites both boards and has maths in its answer,
+// whichever topic sorts first and whatever order its cards are in.
+const sample = () => {
+  const t = clone(topics.find(x => x.data.cards.some(c => c.boards.aqa && c.boards.edexcel)));
+  const i = t.data.cards.findIndex(c => c.boards.aqa && c.boards.edexcel);
+  t.data.cards.unshift(t.data.cards.splice(i, 1)[0]);
+  return t;
+};
 const errorsFor = (t, edit) => { edit(t.data); return C.validateTopic(t.data, { katex, spec: t.spec }).errors; };
 
 test('flashcards: every topic file passes the checker', () => {
@@ -23,6 +30,17 @@ test('flashcards: every topic file passes the checker', () => {
     assert.ok(t.spec, `${t.id}: its specification file exists`);
     assert.equal(t.data.topic.id, t.id, `${t.id}: topic.id matches the file path`);
     assert.deepEqual(C.validateTopic(t.data, { katex, spec: t.spec }).errors, [], t.id);
+  }
+});
+
+test('flashcards: no card id is used in two topics', () => {
+  // A student's progress and a teacher's approval are both keyed by card id.
+  const seen = new Map();
+  for (const t of topics) {
+    for (const card of t.data.cards) {
+      assert.ok(!seen.has(card.id), `${card.id} is in both ${seen.get(card.id)} and ${t.id}`);
+      seen.set(card.id, t.id);
+    }
   }
 });
 
