@@ -324,3 +324,15 @@ test('quiz publish: publishing again changes nothing, and a new approval replace
   for (const b of third.body.boards) assert.equal(s.fake.tables.quizzes.find(q => q.id === b.quizId).is_published, true);
   assert.equal(s.fake.tables.quizzes.filter(q => q.is_published).length, 2);
 });
+
+test('quiz publish: an option topic is published under its plain name', async () => {
+  const s = setup();
+  const OPTION = 'quiz/physics-a-level/medical-physics';
+  Object.assign(s.fake.tables, { topics: [{ id: 601, slug: 'al-physics-medical-physics' }], quizzes: [], questions: [] });
+  const listed = (await s.review('GET', { topic: OPTION }, as(TEACHER))).body.cards;
+  await s.review('POST', { action: 'approve-all', topic: OPTION, cards: listed.map(c => ({ cardId: c.id, hash: c.hash })) }, as(TEACHER));
+  const r = await s.review('POST', { action: 'publish-quiz', topic: OPTION }, as(TEACHER));
+  // An AQA-only option: one quiz, and nothing for Edexcel.
+  assert.deepEqual(r.body.boards.map(b => [b.board, b.status]), [['AQA', 'created'], ['Edexcel', 'too_few']]);
+  assert.deepEqual(s.fake.tables.quizzes.map(q => q.title), ['Medical Physics: AQA A-level']);
+});
