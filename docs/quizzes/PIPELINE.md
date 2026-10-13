@@ -4,7 +4,7 @@ Exam-style multiple-choice questions for A-level Physics (AQA 7408 and
 Edexcel 9PH0), written topic by topic alongside the flashcards
 (`docs/flashcards/PIPELINE.md`).
 
-**Status (October 2026): source files only.** Nothing here is served to
+**Status (October 2026):** questions are source files, never served. Nothing reaches
 students, and no question is approved. See "Reaching students" below for
 the route they will take.
 
@@ -72,7 +72,26 @@ question comes back for approval. A new quiz topic file must be added to
 `QUIZ_TOPICS` in `netlify/functions/flashcards-review.js` (a test fails
 otherwise).
 
-Still to build: creating quizzes in the
-bank from approved questions (`toBank(question)` in
-`scripts/quizzes/content.js` gives the shape `POST /api/v1/quiz/create`
-accepts), and the A-level subject page.
+## Publishing to the quiz bank
+
+On a quiz topic, once at least one question is approved, the review page
+shows "Publish approved questions as quizzes". A teacher's press
+(`POST /api/v1/flashcards/review`, `action: 'publish-quiz'`,
+`netlify/functions/_quiz-publish.js`) creates one quiz per exam board for
+that topic, holding the approved questions that board examines. A board
+needs at least 5 approved questions.
+
+- Only an approval of a question's current wording counts, and every
+  question is re-checked before it is written.
+- Publishing again when nothing has changed does nothing.
+- After more approvals or an edit, the old quiz is unpublished and a new
+  one created. A quiz is never rewritten in place, so a student part-way
+  through, and every past attempt, is left as it was.
+
+## Where students find them
+
+`/a-level/physics` (`subjects/physics-a-level.html`): every topic, with the
+quiz for the student's exam board (both, if their profile does not say)
+and their best score. Quizzes are taken on the ordinary quiz page
+(`student/quiz.html?id=`), marked on the server. The page is not linked
+from the GCSE navigation.

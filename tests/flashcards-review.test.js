@@ -232,3 +232,95 @@ test('quiz review: a question is approved as it reads, by staff only, without to
   assert.deepEqual((await s.approvals('GET', { topic: TOPIC })).body.approvals, {});
   assert.equal(s.fake.tables.fc_card_reviews[0].topic, QUIZ);
 });
+
+// ── Publishing approved quiz questions into the quiz bank ────────────────
+function bankSetup() {
+  const s = setup();
+  Object.assign(s.fake.tables, {
+    topics: [{ id: 501, slug: 'al-physics-electricity' }],
+    quizzes: [], questions: []
+  });
+  return s;
+}
+const publish = (s, who = TEACHER) => s.review('POST', { action: 'publish-quiz', topic: QUIZ }, as(who));
+async function approveQuestions(s, pick) {
+  const listed = (await s.review('GET', { topic: QUIZ }, as(TEACHER))).body.cards.filter(pick);
+  await s.review('POST', { action: 'approve-all', topic: QUIZ, cards: listed.map(c => ({ cardId: c.id, hash: c.hash })) }, as(TEACHER));
+  return listed;
+}
+
+test('quiz publish: only staff, only quiz topics, only once the topic is in the bank', async () => {
+  const s = bankSetup();
+  assert.equal((await publish(s, STUDENT)).status, 403);
+  assert.equal((await s.review('POST', { action: 'publish-quiz', topic: TOPIC }, as(TEACHER))).status, 404, 'a flashcard topic is not a quiz');
+  s.fake.tables.topics = [];
+  const r = await publish(s);
+  assert.equal(r.status, 409);
+  assert.equal(r.body.error.code, 'not_set_up');
+});
+
+test('quiz publish: nothing unapproved reaches the bank', async () => {
+  const s = bankSetup();
+  const none = await publish(s);
+  assert.deepEqual(none.body.boards.map(b => b.status), ['too_few', 'too_few']);
+  assert.equal(s.fake.tables.quizzes.length, 0);
+  // Four approved: still short of a quiz.
+  let n = 0;
+  await approveQuestions(s, () => n++ < 4);
+  assert.deepEqual((await publish(s)).body.boards.map(b => b.status), ['too_few', 'too_few']);
+  assert.equal(s.fake.tables.questions.length, 0);
+});
+
+test('quiz publish: one quiz per board, holding the approved questions that board examines', async () => {
+  const s = bankSetup();
+  const approved = await approveQuestions(s, () => true);
+  const r = await publish(s);
+  assert.equal(r.status, 200);
+  assert.deepEqual(r.body.boards.map(b => [b.board, b.status]), [['AQA', 'created'], ['Edexcel', 'created']]);
+  for (const b of r.body.boards) {
+    const key = b.board.toLowerCase();
+    const quiz = s.fake.tables.quizzes.find(q => q.id === b.quizId);
+    assert.equal(quiz.is_published, true);
+    assert.equal(quiz.topic_id, 501);
+    assert.equal(quiz.exam_board, b.board);
+    assert.equal(quiz.title, `Electricity: ${b.board} A-level`);
+    const expected = approved.filter(c => c.boards[key]);
+    const rows = s.fake.tables.questions.filter(q => q.quiz_id === quiz.id);
+    assert.equal(rows.length, expected.length);
+    assert.equal(b.questions, expected.length);
+    assert.equal(quiz.time_limit, expected.length * 90);
+    rows.forEach((row, i) => {
+      assert.equal(row.question_text, expected[i].q);
+      assert.equal(row.correct_answer, expected[i].answer);
+      assert.equal(row[`option_${expected[i].answer.toLowerCase()}`], expected[i].options[expected[i].answer]);
+      assert.equal(row.explanation, expected[i].solution);
+      assert.equal(row.order_idx, i + 1);
+    });
+  }
+  // The AQA-only question is not in the Edexcel quiz, and the other way round.
+  const text = b => s.fake.tables.questions.filter(q => q.quiz_id === r.body.boards.find(x => x.board === b).quizId).map(q => q.question_text).join(' ');
+  assert.match(text('AQA'), /superconductor/);
+  assert.doesNotMatch(text('Edexcel'), /superconductor/);
+  assert.match(text('Edexcel'), /drift velocity/);
+  assert.doesNotMatch(text('AQA'), /drift velocity/);
+});
+
+test('quiz publish: publishing again changes nothing, and a new approval replaces the quiz without rewriting it', async () => {
+  const s = bankSetup();
+  let n = 0;
+  await approveQuestions(s, c => c.boards.aqa && c.boards.edexcel && n++ < 6);
+  const first = await publish(s);
+  const again = await publish(s);
+  assert.deepEqual(again.body.boards.map(b => [b.status, b.quizId]), first.body.boards.map(b => ['up_to_date', b.quizId]));
+  assert.equal(s.fake.tables.quizzes.length, 2);
+  const before = JSON.stringify(s.fake.tables.questions);
+
+  await approveQuestions(s, () => true);
+  const third = await publish(s);
+  assert.deepEqual(third.body.boards.map(b => b.status), ['replaced', 'replaced']);
+  // The old quizzes keep their questions (and so their attempts) but are no longer offered.
+  assert.equal(JSON.stringify(s.fake.tables.questions.slice(0, 12)), before);
+  for (const b of first.body.boards) assert.equal(s.fake.tables.quizzes.find(q => q.id === b.quizId).is_published, false);
+  for (const b of third.body.boards) assert.equal(s.fake.tables.quizzes.find(q => q.id === b.quizId).is_published, true);
+  assert.equal(s.fake.tables.quizzes.filter(q => q.is_published).length, 2);
+});

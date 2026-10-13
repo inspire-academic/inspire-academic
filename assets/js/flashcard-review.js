@@ -144,6 +144,7 @@
     // "Approve all" covers the cards still to review. Cards sent back for
     // changes are never swept up with them.
     $('fr-bulk').hidden = !c.todo;
+    $('fr-publish').hidden = !(data.topic && data.topic.kind === 'quiz' && c.approved);
     $('fr-bulk-start').textContent = 'Approve all ' + c.todo + ' cards still to review';
     $('fr-bulk-text').textContent = 'Approve ' + c.todo + ' cards in this topic? Send back any you disagree with first. ';
     bulkAsk(false);
@@ -182,6 +183,19 @@
   $('fr-bulk-start').addEventListener('click', function () { bulkAsk(true); $('fr-bulk-confirm').focus(); });
   $('fr-bulk-cancel').addEventListener('click', function () { bulkAsk(false); $('fr-bulk-start').focus(); });
   $('fr-bulk-confirm').addEventListener('click', approveAll);
+
+  // Quiz topics: the approved questions become one quiz per exam board.
+  var PUBLISHED = { created: 'quiz created', replaced: 'quiz replaced with the current questions', up_to_date: 'already up to date', too_few: 'not enough approved questions yet (5 needed)' };
+  $('fr-publish-btn').addEventListener('click', function () {
+    var btn = this, out = $('fr-publish-result');
+    btn.disabled = true;
+    out.textContent = 'Publishing…';
+    api('POST', '/api/v1/flashcards/review', { action: 'publish-quiz', topic: topicId }).then(function (res) {
+      out.textContent = (res.boards || []).map(function (b) {
+        return b.board + ': ' + PUBLISHED[b.status] + (b.status === 'too_few' ? '' : ', ' + b.questions + ' questions');
+      }).join(' · ');
+    }, function (e) { out.textContent = e.message; }).then(function () { btn.disabled = false; });
+  });
 
   function render() {
     counts();
@@ -277,7 +291,9 @@
     topicId = this.value;
     history.replaceState(null, '', PAGE + '?topic=' + encodeURIComponent(topicId));
     data = null;
-    $('fr-list').innerHTML = '<p class="itt-loading" role="status"><span class="spinner"></span> Loading the cards2026</p>';
+    $('fr-publish').hidden = true;
+    $('fr-publish-result').textContent = '';
+    $('fr-list').innerHTML = '<p class="itt-loading" role="status"><span class="spinner"></span> Loading the cards…</p>';
     load();
   });
 

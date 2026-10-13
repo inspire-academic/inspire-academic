@@ -45,6 +45,12 @@
 
   <p class="fr-progress" id="fr-progress" aria-live="polite"></p>
 
+  <!-- Quiz topics only: put the approved questions into the quiz bank. -->
+  <div class="fr-bulk" id="fr-publish" hidden>
+    <button type="button" class="itt-btn" id="fr-publish-btn">Publish approved questions as quizzes</button>
+    <p class="fr-bulk-ask" id="fr-publish-result" role="status" aria-live="polite"></p>
+  </div>
+
   <div class="itt-tabs" role="tablist" aria-label="Show cards" id="fr-filters">
     <button type="button" class="itt-tab" role="tab" data-filter="todo" aria-selected="true">To review <span class="itt-tab-count" id="fr-count-todo">0</span></button>
     <button type="button" class="itt-tab" role="tab" data-filter="changes" aria-selected="false" tabindex="-1">Needs changes <span class="itt-tab-count" id="fr-count-changes">0</span></button>
