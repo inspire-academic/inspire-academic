@@ -64,6 +64,13 @@ test('a-level: the SQL warns about the order, and its topics match the question 
   assert.ok(fs.existsSync(path.join(ROOT, 'supabase/a_level_physics_subject_rollback.sql')));
 });
 
+test('a-level: the dashboard offers A-level Physics to A Level students only', () => {
+  const page = read('dashboard.html');
+  // The card is drawn only when the subject exists and the profile's year group is "A Level".
+  assert.match(page, /if\(aLevelPhysics && profile\?\.year_group==='A Level'\)\{\s+grid\.innerHTML\+=`\s+<div class="subject-card physics" onclick="location\.href='\/a-level\/physics'">/);
+  assert.match(page, /find\(s=>s\.level==='a-level'&&s\.slug==='physics-a-level'\)/);
+});
+
 test('a-level: the subject page keeps the house rules and only offers published quizzes', () => {
   const page = read('subjects/physics-a-level.html');
   const js = read('assets/js/a-level-physics.js');
