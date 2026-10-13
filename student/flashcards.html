@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <script src="/assets/js/theme.js"></script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -33,17 +33,31 @@
     if (!session) { redirectToLogin(); return; }
     window._currentUser = session.user;
     var meta = session.user.user_metadata || {};
-    window._userName = meta.full_name || session.user.email || 'Student';
+    // A student is only ever greeted by their registered first name — never
+    // an email address or "Student". With no name on record the space
+    // stays empty.
+    function firstName(first, full) {
+      return String(first || '').trim() || String(full || '').trim().split(/\s+/)[0] || '';
+    }
+    window._userName = firstName(meta.first_name, meta.full_name);
+    function setName() {
+      var el = document.getElementById('student-name');
+      if (el) el.textContent = window._userName;
+    }
     // Fetch student exam board, then point CONTENT at the right data set
     function finishLoad() {
-      function setName() {
-        var el = document.getElementById('student-name');
-        if (el) el.textContent = window._userName.split(' ')[0];
-      }
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', setName);
       } else { setName(); }
     }
+    // The profile holds the registered name; asked for separately so a
+    // failure here can never affect which exam board's cards are shown.
+    window._supa.from('profiles').select('first_name, full_name').eq('id', session.user.id).single()
+      .then(function(res) {
+        var name = res.data && firstName(res.data.first_name, res.data.full_name);
+        if (name) { window._userName = name; setName(); }
+      })
+      .catch(function() {});
     window._supa.from('profiles').select('exam_board').eq('id', session.user.id).single()
       .then(function(res) {
         var board = (res.data && res.data.exam_board) ? res.data.exam_board.toUpperCase() : 'AQA';
@@ -962,6 +976,7 @@ body:not([data-screen="home"]) .ia-subject-back--floating { display: none !impor
 .flashcard-btn--ghost { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); box-shadow: none; border: 1.5px solid rgba(255,255,255,0.15); }
 .home-copyright-name { color: rgba(255,255,255,0.55); font-size: 10.5px; letter-spacing: 0.06em; }
 .home-copyright-sep { color: rgba(255,255,255,0.15); margin: 0 8px; }
+.home-copyright-name:empty + .home-copyright-sep { display: none; }
 .home-copyright-signout { display: inline-flex; padding: 3px 8px; font-size: 10px; }
 
 /* Light mode: the home screen becomes a parchment page with ink type. */
@@ -3232,8 +3247,12 @@ function renderCard() {
 
   if (idx >= total) { endSession(); return; }
 
-  const { card } = STATE.cards[idx];
+  const { card, mode, index } = STATE.cards[idx];
   STATE.isFlipped = false;
+  // When each rating will bring this card back — worked out by the
+  // scheduler for this card, so the buttons say what will really happen.
+  const cardId = SRS.getCardId(STATE.subject, STATE.topic, mode, index);
+  const due = rating => { const days = SRS.previewDays(cardId, rating); return days === 1 ? 'Tomorrow' : `${days} days`; };
   const isExam = 'marks' in card;
   const subjectColor = CONTENT[STATE.subject]?.color || '#0B1D3A';
 
@@ -3264,10 +3283,10 @@ function renderCard() {
     <div class="rating-section" id="rating-section" style="display:none">
       <div class="rating-label">How well did you know this?</div>
       <div class="rating-grid">
-        <button class="rating-btn rating-again" onclick="rateCard('again')"><span class="rating-emoji">😣</span><span class="rating-name">Again</span><span class="rating-time">Tomorrow</span></button>
-        <button class="rating-btn rating-hard" onclick="rateCard('hard')"><span class="rating-emoji">😕</span><span class="rating-name">Hard</span><span class="rating-time">3 days</span></button>
-        <button class="rating-btn rating-good" onclick="rateCard('good')"><span class="rating-emoji">🙂</span><span class="rating-name">Good</span><span class="rating-time">7 days</span></button>
-        <button class="rating-btn rating-easy" onclick="rateCard('easy')"><span class="rating-emoji">😄</span><span class="rating-name">Easy</span><span class="rating-time">21 days</span></button>
+        <button class="rating-btn rating-again" onclick="rateCard('again')"><span class="rating-emoji">😣</span><span class="rating-name">Again</span><span class="rating-time">${due('again')}</span></button>
+        <button class="rating-btn rating-hard" onclick="rateCard('hard')"><span class="rating-emoji">😕</span><span class="rating-name">Hard</span><span class="rating-time">${due('hard')}</span></button>
+        <button class="rating-btn rating-good" onclick="rateCard('good')"><span class="rating-emoji">🙂</span><span class="rating-name">Good</span><span class="rating-time">${due('good')}</span></button>
+        <button class="rating-btn rating-easy" onclick="rateCard('easy')"><span class="rating-emoji">😄</span><span class="rating-name">Easy</span><span class="rating-time">${due('easy')}</span></button>
       </div>
       <button class="flip-back-btn" onclick="flipBack()">↩ See question again</button>
       <div class="swipe-hint">← Swipe cards to navigate</div>
