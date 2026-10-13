@@ -86,3 +86,19 @@ test('a-level: the subject page keeps the house rules and only offers published 
   assert.doesNotMatch(js, /'Student'|\.email/);
   assert.match(read('netlify.toml'), /from = "\/a-level\/physics"\s+to = "\/subjects\/physics-a-level\.html"/);
 });
+
+test('a-level: an A-level quiz gives no GCSE grade and leads back to the A-level page', () => {
+  const quiz = read('student/quiz.html');
+  // The quiz's subject is read with its level.
+  assert.match(quiz, /from\('quizzes'\)\.select\('\*,topics\(name,subjects\(\*\)\)'\)\.eq\('id',quizId\)/);
+  assert.match(quiz, /isALevel=quiz\.topics\?\.subjects\?\.level==='a-level';/);
+  // Results: GCSE wording names grades 4 to 9; the A-level wording names none.
+  assert.match(quiz, /textContent=isALevel\?aLevelWords:gcseGrade;/);
+  const words = /const aLevelWords=([\s\S]*?);\n/.exec(quiz)[1];
+  assert.doesNotMatch(words, /Grade|\d\/\d/, 'no grade is claimed for an A-level quiz');
+  assert.match(/const gcseGrade=([\s\S]*?);\n/.exec(quiz)[1], /Grade 9 territory/);
+  // The way back.
+  assert.match(quiz, /back\.onclick=\(\)=>\{ location\.href='\/a-level\/physics'; \};/);
+  assert.match(read('assets/js/a-level-physics.js'), /\+ '&ref=physics-a-level'/);
+  assert.match(read('assets/js/subject-back.js'), /'physics-a-level': \{ label: '← A-level Physics', href: '\/a-level\/physics'/);
+});
