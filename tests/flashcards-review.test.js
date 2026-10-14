@@ -365,6 +365,14 @@ test('quiz publish: a question keeps its graph, and graphs are refused cleanly u
   }
   assert.ok(s.fake.tables.questions.filter(q => !q.figure).length > 0, 'questions without a graph store none');
   assert.deepEqual((await publish(s)).body.boards.map(b => b.status), ['up_to_date', 'up_to_date']);
+
+  // The real bank stores graphs as jsonb, which reorders their keys: an
+  // unchanged graph read back that way must still count as up to date.
+  const reorder = v => Array.isArray(v) ? v.map(reorder)
+    : v && typeof v === 'object' ? Object.keys(v).reverse().reduce((o, k) => { o[k] = reorder(v[k]); return o; }, {})
+    : v;
+  for (const row of s.fake.tables.questions) if (row.figure) row.figure = reorder(row.figure);
+  assert.deepEqual((await publish(s)).body.boards.map(b => b.status), ['up_to_date', 'up_to_date']);
 });
 
 test('flashcard review: cards are grouped by specification point, each group with a two-press approve button', () => {

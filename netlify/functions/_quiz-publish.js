@@ -42,7 +42,12 @@ function questionRow(q, order) {
   };
 }
 const FIELDS = ['question_text', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer', 'explanation'];
-const figureOf = r => JSON.stringify(r.figure || null);
+// Postgres stores a graph as jsonb, which reorders its keys, so graphs are
+// compared with their keys sorted: an unchanged graph must not look edited.
+const canonical = v => Array.isArray(v) ? v.map(canonical)
+  : v && typeof v === 'object' ? Object.keys(v).sort().reduce((o, k) => { o[k] = canonical(v[k]); return o; }, {})
+  : v;
+const figureOf = r => JSON.stringify(canonical(r.figure || null));
 const same = (rows, stored) => rows.length === stored.length &&
   rows.every((r, i) => FIELDS.every(f => String(r[f]) === String(stored[i][f])) && figureOf(r) === figureOf(stored[i]));
 
