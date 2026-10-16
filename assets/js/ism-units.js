@@ -5,6 +5,13 @@
   // A lesson counts as done once the student has handed it in.
   const DONE_STATUSES = ['submitted', 'reviewed'];
 
+  // Labels for ism_student_lesson_progress.status (pill styles in
+  // assets/css/ism-search.css).
+  const STATUS_LABEL = {
+    not_started: 'Not Started', in_progress: 'In Progress',
+    submitted: 'Submitted', reviewed: 'Reviewed', returned: 'Returned'
+  };
+
   // Units in unit_number order, lessons by lesson_number within each (week
   // as the tie-break). Lessons not yet filed under a unit go last. Each
   // lesson gets displayNumber: its lesson_number, or its position if unset.
@@ -32,5 +39,5 @@
     return null;
   }
 
-  window.ISMUnits = { DONE_STATUSES, groupIntoUnits, nextLesson };
+  window.ISMUnits = { DONE_STATUSES, STATUS_LABEL, groupIntoUnits, nextLesson };
 })();
