@@ -1,9 +1,12 @@
 // POST /api/v1/ism-class/lesson/upload
 // Teacher/admin only. Creates a new ism_lessons row (pass no `lessonId`)
 // or a new ism_lesson_versions row on an existing one (pass `lessonId`).
-// Body: { lessonId?, subjectId, title, weekNumber, description?,
-//         teachWeekStart?, teachWeekEnd?, dueDate?, htmlContent,
-//         teacherDocContent? }
+// Body: { lessonId?, subjectId, title, weekNumber?, unitId?, lessonNumber?,
+//         description?, teachWeekStart?, teachWeekEnd?, dueDate?,
+//         htmlContent, teacherDocContent? }
+// unitId/lessonNumber file the lesson as "Unit N · Lesson M" (see
+// supabase/ism_units.sql). A new lesson needs weekNumber or lessonNumber;
+// week_number falls back to lessonNumber because the column is NOT NULL.
 // htmlContent/teacherDocContent are plain HTML text, not base64 — these
 // files are tens of KB, well within the JSON body limit.
 
@@ -27,7 +30,7 @@ exports.handler = async function (event) {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!serviceKey) return reply(503, { success: false, error: { code: 'not_configured', message: 'Not configured' } })
 
-  const { lessonId, subjectId, title, weekNumber, description, teachWeekStart, teachWeekEnd, dueDate, htmlContent, teacherDocContent } = body
+  const { lessonId, subjectId, title, unitId, lessonNumber, description, teachWeekStart, teachWeekEnd, dueDate, htmlContent, teacherDocContent } = body
 
   if (!htmlContent || typeof htmlContent !== 'string' || !htmlContent.trim()) {
     return reply(400, { success: false, error: { code: 'missing_html', message: 'htmlContent is required.' } })
@@ -36,14 +39,27 @@ exports.handler = async function (event) {
   if (fieldManifest.length === 0) {
     return reply(400, { success: false, error: { code: 'no_save_fields', message: 'This file has no data-save fields — it will not autosave any student work. See docs/reference/ism-lesson-contract.md.' } })
   }
+  const weekNumber = body.weekNumber || (lessonId ? undefined : lessonNumber)
   if (!lessonId && (!subjectId || !title || !weekNumber)) {
-    return reply(400, { success: false, error: { code: 'missing_fields', message: 'subjectId, title and weekNumber are required to create a new lesson.' } })
+    return reply(400, { success: false, error: { code: 'missing_fields', message: 'subjectId, title and a lesson number are required to create a new lesson.' } })
   }
 
   try {
     const callerRole = await getRole(user.id, serviceKey)
     if (!STAFF_ROLES.includes(callerRole)) {
       return reply(403, { success: false, error: { code: 'forbidden', message: 'Teacher/admin access required.' } })
+    }
+
+    if (unitId) {
+      const units = await sb(`ism_units?id=eq.${encodeURIComponent(unitId)}&select=subject_id`, serviceKey)
+      let lessonSubject = subjectId
+      if (!lessonSubject && lessonId) {
+        const current = await sb(`ism_lessons?id=eq.${encodeURIComponent(lessonId)}&select=subject_id`, serviceKey)
+        lessonSubject = current[0]?.subject_id
+      }
+      if (!units.length || String(units[0].subject_id) !== String(lessonSubject)) {
+        return reply(400, { success: false, error: { code: 'invalid_unit', message: 'That unit does not belong to this subject.' } })
+      }
     }
 
     let lesson
@@ -56,6 +72,8 @@ exports.handler = async function (event) {
         body: JSON.stringify({
           ...(title ? { title } : {}), ...(subjectId ? { subject_id: subjectId } : {}),
           ...(weekNumber ? { week_number: weekNumber } : {}),
+          ...(unitId ? { unit_id: unitId } : {}),
+          ...(lessonNumber ? { lesson_number: lessonNumber } : {}),
           ...(description !== undefined ? { description } : {}),
           ...(teachWeekStart !== undefined ? { teach_week_start: teachWeekStart || null } : {}),
           ...(teachWeekEnd !== undefined ? { teach_week_end: teachWeekEnd || null } : {}),
@@ -70,6 +88,8 @@ exports.handler = async function (event) {
         method: 'POST', headers: { Prefer: 'return=representation' },
         body: JSON.stringify({
           subject_id: subjectId, title, week_number: weekNumber,
+          ...(unitId ? { unit_id: unitId } : {}),
+          ...(lessonNumber ? { lesson_number: lessonNumber } : {}),
           description: description || null,
           teach_week_start: teachWeekStart || null, teach_week_end: teachWeekEnd || null,
           due_date: dueDate || null, created_by: user.id
