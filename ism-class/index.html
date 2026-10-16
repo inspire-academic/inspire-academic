@@ -16,6 +16,7 @@
 <script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/itt-card.js"></script>
+<script src="/assets/js/ism-units.js"></script>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#c9a84c">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
@@ -46,6 +47,22 @@ main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 4rem;}
 .subject-card-count{font-size:.82rem;color:var(--muted);grid-column:1;}
 .subject-card-next{font-size:.82rem;font-weight:600;grid-column:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
 .subject-card-cta{grid-column:2;grid-row:1 / span 2;min-height:44px;}
+/* Unit progress summary: lessons done across the subject, and the unit the
+   student is working in now. More than one unit lists each one (wider
+   screens only, so phone cards stay short). */
+.subject-card-progress{grid-column:1;display:flex;align-items:center;gap:.6rem;font-size:.78rem;color:var(--muted);margin-top:.2rem;}
+.progress-bar{flex:1;max-width:180px;height:5px;border-radius:99px;background:var(--navy3);overflow:hidden;}
+.progress-bar-fill{display:block;height:100%;background:var(--gold);border-radius:99px;}
+.subject-card-next .muted{color:var(--muted);font-weight:500;}
+.unit-summary{display:none;}
+@media(min-width:600px){
+  .unit-summary{display:flex;flex-direction:column;gap:.45rem;margin:.2rem 0 0;padding:.7rem 0 0;border-top:1px solid var(--border);list-style:none;}
+  .unit-summary li{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.2rem .7rem;font-size:.78rem;}
+  .unit-summary-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+  .unit-summary-count{color:var(--muted);font-family:var(--font-mono);font-size:.7rem;}
+  .unit-summary .progress-bar{grid-column:1 / -1;max-width:none;height:3px;}
+  .unit-summary li.done .unit-summary-count{color:var(--gold);}
+}
 .subject-card.itt .subject-card-cta{grid-column:1 / -1;grid-row:auto;justify-content:center;margin-top:.5rem;}
 .subject-card.disabled{opacity:.5;}
 .subject-card.disabled .subject-card-cta{pointer-events:none;}
@@ -129,20 +146,34 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
   document.getElementById('nav-name').textContent = profile?.full_name?.split(' ')[0] || 'Student';
   document.getElementById('nav-avatar').textContent = (profile?.full_name || 'S')[0].toUpperCase();
 
-  const [{ data: subjectRows }, { data: lessonRows }] = await Promise.all([
+  const [{ data: subjectRows }, { data: lessonRows }, { data: unitRows }] = await Promise.all([
     supa.from('subjects').select('*'),
     // RLS scopes students to published + assigned-to-me; staff (Student View)
     // can read drafts too, so filter to published to match what students see.
-    supa.from('ism_lessons').select('id,subject_id').eq('is_published', true)
+    supa.from('ism_lessons').select('*').eq('is_published', true),
+    supa.from('ism_units').select('id,subject_id,unit_number,title')
   ]);
+
+  const lessonIds = (lessonRows || []).map(l => l.id);
+  const { data: progressRows } = lessonIds.length
+    ? await supa.from('ism_student_lesson_progress').select('lesson_id,status').eq('student_id', user.id).in('lesson_id', lessonIds)
+    : { data: [] };
+  const statusByLesson = Object.fromEntries((progressRows || []).map(p => [p.lesson_id, p.status]));
+  const isDone = l => ISMUnits.DONE_STATUSES.includes(statusByLesson[l.id]);
 
   const grid = document.getElementById('subject-grid');
   grid.innerHTML = '';
 
   SUBJECTS.forEach(s => {
     const subjectRow = (subjectRows || []).find(r => (r.level || 'gcse') === 'gcse' && s.match((r.name || '').toLowerCase()));
-    const count = subjectRow ? (lessonRows || []).filter(l => l.subject_id === subjectRow.id).length : 0;
+    const lessons = subjectRow ? (lessonRows || []).filter(l => l.subject_id === subjectRow.id) : [];
+    const count = lessons.length;
     const enabled = !!subjectRow;
+
+    const groups = ISMUnits.groupIntoUnits(lessons, (unitRows || []).filter(u => subjectRow && u.subject_id === subjectRow.id));
+    const doneCount = lessons.filter(isDone).length;
+    const next = ISMUnits.nextLesson(groups, statusByLesson);
+    const cta = !enabled ? 'Not available' : !count ? 'Open' : !doneCount ? 'Start' : next ? 'Continue' : 'Review';
 
     const card = document.createElement(enabled ? 'a' : 'div');
     card.className = `card subject-card ${s.key} ${enabled ? '' : 'disabled'} fade-in`;
@@ -150,11 +181,44 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
     card.innerHTML = `
       <div class="subject-card-body">
         <div class="subject-card-title">${s.label}</div>
-        <div class="subject-card-count">${enabled ? (count ? `${count} lesson${count === 1 ? '' : 's'} available` : 'No lessons assigned yet') : 'Coming soon'}</div>
-        <span class="btn btn-gold subject-card-cta">${enabled ? 'Open' : 'Not available'}</span>
+        ${count ? progressSummary(groups, doneCount, count, next) : `<div class="subject-card-count">${enabled ? 'No lessons assigned yet' : 'Coming soon'}</div>`}
+        <span class="btn btn-gold subject-card-cta">${cta}</span>
       </div>`;
     grid.appendChild(card);
   });
+
+  // Overall bar, then where the student is now ("Now: Unit 1 · Quadratic
+  // Equations"), then — when the subject has more than one unit — a
+  // line per unit.
+  function progressSummary(groups, doneCount, count, next) {
+    const pct = Math.round((doneCount / count) * 100);
+    const unitName = g => (g.unit ? `Unit ${g.unit.unit_number} · ${g.unit.title}` : 'Other lessons');
+    const now = next
+      ? `<span class="muted">Now:</span> ${esc(unitName(next.group))}`
+      : `All ${count} lessons done ✓`;
+    const unitList = groups.filter(g => g.unit).length > 1
+      ? `<ul class="unit-summary">${groups.map(g => {
+          const d = g.lessons.filter(isDone).length;
+          const p = Math.round((d / g.lessons.length) * 100);
+          return `<li class="${d === g.lessons.length ? 'done' : ''}">
+            <span class="unit-summary-name">${esc(unitName(g))}</span>
+            <span class="unit-summary-count">${d}/${g.lessons.length}</span>
+            <span class="progress-bar" aria-hidden="true"><span class="progress-bar-fill" style="width:${p}%"></span></span>
+          </li>`;
+        }).join('')}</ul>`
+      : '';
+    return `
+      <div class="subject-card-progress">
+        <span class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Lessons done"><span class="progress-bar-fill" style="width:${pct}%"></span></span>
+        <span>${doneCount} of ${count} lesson${count === 1 ? '' : 's'} done</span>
+      </div>
+      <div class="subject-card-next">${now}</div>
+      ${unitList}`;
+  }
+
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
 
   // Fifth card, under Mathematics: the student's Test & Teach assignments.
   if (window.ITTCard) ITTCard.mount(grid, document.getElementById('itt-notice'), supa);
