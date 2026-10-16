@@ -711,6 +711,12 @@ function = "create-teacher"
   force = true
 
 [[redirects]]
+  from = "/api/v1/ism-class/unit/save"
+  to = "/.netlify/functions/ism-unit-save"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/api/v1/ism-class/lesson/publish"
   to = "/.netlify/functions/ism-lesson-publish"
   status = 200

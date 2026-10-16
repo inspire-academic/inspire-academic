@@ -32,6 +32,7 @@ h1.page-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;m
 label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.4rem;}
 .field{margin-bottom:1rem;}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.field-row[hidden]{display:none;}
 .field-input,.field-select,.field-textarea{background:var(--navy);border:1.5px solid var(--border);color:var(--white);border-radius:var(--r);padding:.6rem .85rem;font-size:.88rem;width:100%;}
 .field-input:focus,.field-select:focus,.field-textarea:focus{border-color:var(--gold);outline:none;}
 .field-textarea{min-height:70px;resize:vertical;}
@@ -183,9 +184,17 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
       </div>
       <div class="field-row">
         <div class="field"><label>Subject</label><select class="field-select" id="upload-subject"></select></div>
-        <div class="field"><label>Week number</label><input class="field-input" type="number" min="1" id="upload-week"></div>
+        <div class="field"><label>Unit</label><select class="field-select" id="upload-unit"></select></div>
       </div>
-      <div class="field"><label>Title</label><input class="field-input" type="text" id="upload-title" placeholder="Week 1 — The Physicist's Toolkit"></div>
+      <div class="field-row" id="upload-new-unit" hidden>
+        <div class="field"><label>New unit number</label><input class="field-input" type="number" min="1" id="upload-new-unit-number"></div>
+        <div class="field"><label>New unit title</label><input class="field-input" type="text" id="upload-new-unit-title" placeholder="Algebra"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Lesson number (in unit)</label><input class="field-input" type="number" min="1" id="upload-lesson-number"></div>
+        <div class="field"><label>Teaching week (optional)</label><input class="field-input" type="number" min="1" id="upload-week"></div>
+      </div>
+      <div class="field"><label>Title</label><input class="field-input" type="text" id="upload-title" placeholder="Solving quadratics by factorising"></div>
       <div class="field"><label>Description (optional)</label><textarea class="field-textarea" id="upload-description"></textarea></div>
       <div class="field-row">
         <div class="field"><label>Teach week start</label><input class="field-input" type="date" id="upload-week-start"></div>
@@ -294,6 +303,7 @@ const SUBJECTS = [
 
 let accessToken = null;
 let myLessons = [];
+let myUnits = [];
 let assignedStudents = [];
 let myCohorts = [];
 let currentReviewSubmission = null;
@@ -490,20 +500,107 @@ async function loadSubjectsAndLessons() {
   const relevant = (subjectRows || []).filter(s => (s.level || 'gcse') === 'gcse' && SUBJECTS.some(m => m.match((s.name || '').toLowerCase())));
   subjectSel.innerHTML = relevant.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
 
-  const { data: lessons } = await supa.from('ism_lessons').select('*, subjects(name)').order('created_at', { ascending: false });
-  myLessons = lessons || [];
+  const [{ data: lessons }, { data: unitRows }] = await Promise.all([
+    supa.from('ism_lessons').select('*, subjects(name)').order('created_at', { ascending: false }),
+    supa.from('ism_units').select('*').order('unit_number', { ascending: true })
+  ]);
+  myUnits = unitRows || [];
+  // Course order — unit, then lesson within it — so the pickers read like the
+  // student's Unit → Lesson list rather than upload order.
+  myLessons = (lessons || []).sort(compareLessons);
+  renderUnitOptions();
 
   const existingSel = document.getElementById('upload-existing-lesson');
   existingSel.innerHTML = '<option value="">— Create a new lesson —</option>' +
-    myLessons.map(l => `<option value="${l.id}">${l.subjects?.name || ''} · Week ${l.week_number} · ${l.title}</option>`).join('');
+    myLessons.map(l => `<option value="${l.id}">${esc(lessonLabel(l))}</option>`).join('');
 
   const assignSel = document.getElementById('assign-lesson-select');
-  assignSel.innerHTML = myLessons.map(l => `<option value="${l.id}">${l.subjects?.name || ''} · Week ${l.week_number} · ${l.title}</option>`).join('');
+  assignSel.innerHTML = myLessons.map(l => `<option value="${l.id}">${esc(lessonLabel(l))}</option>`).join('');
   const subSel = document.getElementById('submissions-lesson-select');
-  subSel.innerHTML = myLessons.map(l => `<option value="${l.id}">${l.subjects?.name || ''} · Week ${l.week_number} · ${l.title}</option>`).join('');
+  subSel.innerHTML = myLessons.map(l => `<option value="${l.id}">${esc(lessonLabel(l))}</option>`).join('');
 
   renderManageList();
   if (myLessons.length) { loadAssignments(); loadSubmissionsRoster(); }
+}
+
+// ── Units (Subject → Unit → Lesson; see supabase/ism_units.sql) ──
+function unitOf(l) { return myUnits.find(u => u.id === l.unit_id) || null; }
+
+function lessonPosition(l) {
+  const u = unitOf(l);
+  return `${u ? `Unit ${u.unit_number} · ` : ''}Lesson ${l.lesson_number || l.week_number}`;
+}
+
+function lessonLabel(l) {
+  return [l.subjects?.name || '', lessonPosition(l), l.title].filter(Boolean).join(' · ');
+}
+
+function compareLessons(a, b) {
+  const ua = unitOf(a), ub = unitOf(b);
+  return (a.subjects?.name || '').localeCompare(b.subjects?.name || '')
+    || (ua ? ua.unit_number : Infinity) - (ub ? ub.unit_number : Infinity)
+    || (a.lesson_number || a.week_number) - (b.lesson_number || b.week_number);
+}
+
+function renderUnitOptions() {
+  const subjectId = document.getElementById('upload-subject').value;
+  const unitSel = document.getElementById('upload-unit');
+  const keep = unitSel.value;
+  const units = myUnits.filter(u => String(u.subject_id) === String(subjectId));
+  unitSel.innerHTML = '<option value="">— No unit —</option>' +
+    units.map(u => `<option value="${u.id}">Unit ${u.unit_number} · ${esc(u.title)}</option>`).join('') +
+    '<option value="__new">+ New unit…</option>';
+  if ([...unitSel.options].some(o => o.value === keep)) unitSel.value = keep;
+  toggleNewUnitFields();
+}
+
+function toggleNewUnitFields() {
+  const isNew = document.getElementById('upload-unit').value === '__new';
+  document.getElementById('upload-new-unit').hidden = !isNew;
+  if (isNew && !document.getElementById('upload-new-unit-number').value) {
+    const subjectId = document.getElementById('upload-subject').value;
+    const taken = myUnits.filter(u => String(u.subject_id) === String(subjectId)).map(u => u.unit_number);
+    document.getElementById('upload-new-unit-number').value = (taken.length ? Math.max(...taken) : 0) + 1;
+  }
+}
+
+// Picking an existing lesson fills in where it sits, so a new version
+// doesn't silently keep a stale unit or number.
+function prefillFromExistingLesson() {
+  const l = myLessons.find(x => x.id === document.getElementById('upload-existing-lesson').value);
+  if (!l) return;
+  document.getElementById('upload-subject').value = l.subject_id;
+  renderUnitOptions();
+  document.getElementById('upload-unit').value = l.unit_id || '';
+  toggleNewUnitFields();
+  document.getElementById('upload-lesson-number').value = l.lesson_number || '';
+  document.getElementById('upload-week').value = l.week_number || '';
+  document.getElementById('upload-title').value = l.title || '';
+}
+
+document.getElementById('upload-subject').addEventListener('change', renderUnitOptions);
+document.getElementById('upload-unit').addEventListener('change', toggleNewUnitFields);
+document.getElementById('upload-existing-lesson').addEventListener('change', prefillFromExistingLesson);
+
+// Returns the unit id to file the lesson under, creating the unit first
+// when "+ New unit…" is chosen. '' means no unit.
+async function resolveUploadUnit() {
+  const value = document.getElementById('upload-unit').value;
+  if (value !== '__new') return value;
+  const title = document.getElementById('upload-new-unit-title').value.trim();
+  const unitNumber = Number(document.getElementById('upload-new-unit-number').value);
+  if (!title || !unitNumber) throw new Error('Give the new unit a number and a title');
+  const res = await apiCall('/api/v1/ism-class/unit/save', {
+    method: 'POST',
+    body: JSON.stringify({ subjectId: Number(document.getElementById('upload-subject').value), unitNumber, title })
+  });
+  myUnits.push(res.unit);
+  renderUnitOptions();
+  document.getElementById('upload-unit').value = res.unit.id;
+  toggleNewUnitFields();
+  document.getElementById('upload-new-unit-title').value = '';
+  document.getElementById('upload-new-unit-number').value = '';
+  return res.unit.id;
 }
 
 async function submitUpload() {
@@ -518,6 +615,8 @@ async function submitUpload() {
   try {
     const htmlContent = await readFileAsText(htmlFile);
     const teacherDocContent = teacherFile ? await readFileAsText(teacherFile) : undefined;
+    const unitId = await resolveUploadUnit();
+    const lessonNumber = document.getElementById('upload-lesson-number').value;
 
     await apiCall('/api/v1/ism-class/lesson/upload', {
       method: 'POST',
@@ -526,6 +625,8 @@ async function submitUpload() {
         subjectId: document.getElementById('upload-subject').value || undefined,
         title: document.getElementById('upload-title').value.trim() || undefined,
         weekNumber: document.getElementById('upload-week').value ? Number(document.getElementById('upload-week').value) : undefined,
+        unitId: unitId || undefined,
+        lessonNumber: lessonNumber ? Number(lessonNumber) : undefined,
         description: document.getElementById('upload-description').value.trim() || undefined,
         teachWeekStart: document.getElementById('upload-week-start').value || undefined,
         teachWeekEnd: document.getElementById('upload-week-end').value || undefined,
@@ -553,7 +654,7 @@ function renderManageList() {
   el.innerHTML = myLessons.map(l => `
     <div class="lesson-row" style="border-bottom:1px solid var(--border);">
       <div class="lesson-row-info">
-        <div class="lesson-row-title">${l.subjects?.name || ''} · Week ${l.week_number} · ${l.title}</div>
+        <div class="lesson-row-title">${esc(lessonLabel(l))}</div>
         <div class="lesson-row-meta">${l.is_published ? 'Published' : 'Draft'}${l.due_date ? ' · Due ' + new Date(l.due_date).toLocaleDateString('en-GB') : ''}</div>
       </div>
       <div class="lesson-row-actions">
@@ -726,7 +827,7 @@ document.addEventListener('click', e => {
 
 function lessonMeta() {
   const l = (reviewContent && reviewContent.lesson) || myLessons.find(x => x.id === currentReviewSubmission.lesson_id) || {};
-  return { title: l.title || 'Lesson', week: l.week_number, subject: (l.subjects && l.subjects.name) || '' };
+  return { title: l.title || 'Lesson', position: l.week_number ? lessonPosition(l) : '', subject: (l.subjects && l.subjects.name) || '' };
 }
 
 function answerCounts() {
@@ -780,7 +881,7 @@ async function openReview(submission, studentName) {
       <div class="card review-head">
         <div class="rh-top">
           <div>
-            <div class="rh-eyebrow">${esc(meta.subject)}${meta.week ? ` · Week ${esc(meta.week)}` : ''}</div>
+            <div class="rh-eyebrow">${esc(meta.subject)}${meta.position ? ` · ${esc(meta.position)}` : ''}</div>
             <h2 class="rh-title">${esc(meta.title)}</h2>
             <div class="rh-student">${esc(reviewStudentName)}</div>
           </div>
@@ -1087,7 +1188,7 @@ async function renderCoverPage(lessonPageCount) {
     </div>
     <div class="pc-body">
       <div>
-        <div class="pc-eyebrow">${esc(meta.subject)}${meta.week ? ` · Week ${esc(meta.week)}` : ''}</div>
+        <div class="pc-eyebrow">${esc(meta.subject)}${meta.position ? ` · ${esc(meta.position)}` : ''}</div>
         <div class="pc-title">${esc(meta.title)}</div>
       </div>
       <div>
@@ -1135,7 +1236,7 @@ function pdfText(s) {
 
 function pdfFileName() {
   const meta = lessonMeta();
-  const parts = ['ISM', reviewStudentName, meta.subject, meta.week ? `Week ${meta.week}` : '', meta.title, `submission ${currentReviewSubmission.submission_number}`];
+  const parts = ['ISM', reviewStudentName, meta.subject, meta.position, meta.title, `submission ${currentReviewSubmission.submission_number}`];
   return pdfText(parts.filter(Boolean).join(' - ')).replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ').slice(0, 150) + '.pdf';
 }
 
