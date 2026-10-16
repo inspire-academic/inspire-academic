@@ -126,6 +126,18 @@ const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 
+// Header line under the title: "Unit 1 · Quadratic Equations · Lesson 2".
+// Falls back to the lesson number alone when the lesson has no unit (or
+// supabase/ism_units.sql has not been run yet).
+async function setLessonPosition(lesson) {
+  const el = document.getElementById('header-week');
+  const lessonPart = `Lesson ${lesson.lesson_number || lesson.week_number}`;
+  el.textContent = lessonPart;
+  if (!lesson.unit_id) return;
+  const { data: unit } = await supa.from('ism_units').select('unit_number,title').eq('id', lesson.unit_id).maybeSingle();
+  if (unit) el.textContent = `Unit ${unit.unit_number} · ${unit.title} · ${lessonPart}`;
+}
+
 const STATUS_LABEL = {
   not_started: 'Not Started', in_progress: 'In Progress',
   submitted: 'Submitted', reviewed: 'Reviewed', returned: 'Returned'
@@ -189,7 +201,7 @@ async function loadLesson() {
 
   lessonVersionId = (data.progress && data.progress.lesson_version_id) || (data.version && data.version.id) || null;
   document.getElementById('header-title').textContent = data.lesson.title;
-  document.getElementById('header-week').textContent = `Week ${data.lesson.week_number}`;
+  setLessonPosition(data.lesson);
   document.title = data.lesson.title + ' — ISM Class';
   setStatus(data.progress?.status || 'not_started');
 
