@@ -15,6 +15,7 @@
 <script src="/assets/js/capacitor-utils.js"></script>
 <script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/perf-utils.js"></script>
+<script src="/assets/js/ism-units.js"></script>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#c9a84c">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
@@ -166,16 +167,16 @@ function fmtDate(d){
     .select('lesson_id,status').eq('student_id', user.id).in('lesson_id', lessonIds);
   const statusByLesson = Object.fromEntries((progressRows || []).map(p => [p.lesson_id, p.status]));
 
-  const groups = groupIntoUnits(lessons, unitRows || []);
-  const isDone = l => DONE_STATUSES.includes(statusByLesson[l.id]);
+  const groups = ISMUnits.groupIntoUnits(lessons, unitRows || []);
+  const isDone = l => ISMUnits.DONE_STATUSES.includes(statusByLesson[l.id]);
 
   const unitCount = groups.filter(g => g.unit).length;
   document.getElementById('subject-sub').textContent =
     [unitCount ? plural(unitCount, 'unit') : '', plural(lessons.length, 'lesson')].filter(Boolean).join(' · ');
 
   // "Continue" = the first lesson, in course order, the student still has to do.
-  let next = null;
-  for (const g of groups) { next = g.lessons.find(l => !isDone(l)); if (next) { next.group = g; break; } }
+  const found = ISMUnits.nextLesson(groups, statusByLesson);
+  const next = found && Object.assign(found.lesson, { group: found.group });
 
   if (next) {
     const cont = document.createElement('a');
@@ -233,8 +234,6 @@ function fmtDate(d){
   });
 })();
 
-const DONE_STATUSES = ['submitted', 'reviewed'];
-
 function esc(v) {
   return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
@@ -243,23 +242,6 @@ function plural(n, word) { return `${n} ${word}${n === 1 ? '' : 's'}`; }
 
 function lessonLabel(lesson, group) {
   return `${group && group.unit ? `Unit ${group.unit.unit_number} · ` : ''}Lesson ${lesson.displayNumber}`;
-}
-
-// Units in unit_number order, lessons by lesson_number within each (week
-// as the tie-break). Lessons not yet filed under a unit go last. Each
-// lesson gets displayNumber: its lesson_number, or its position if unset.
-function groupIntoUnits(lessons, units) {
-  const byId = Object.fromEntries(units.map(u => [u.id, { unit: u, lessons: [] }]));
-  const loose = { unit: null, lessons: [] };
-  lessons.forEach(l => (byId[l.unit_id] || loose).lessons.push(l));
-  const groups = Object.values(byId).sort((a, b) => a.unit.unit_number - b.unit.unit_number);
-  if (loose.lessons.length) groups.push(loose);
-  const num = v => (v == null ? Infinity : v);
-  return groups.filter(g => g.lessons.length).map(g => {
-    g.lessons.sort((a, b) => num(a.lesson_number) - num(b.lesson_number) || a.week_number - b.week_number);
-    g.lessons.forEach((l, i) => { l.displayNumber = l.lesson_number || i + 1; });
-    return g;
-  });
 }
 </script>
 </body>
