@@ -46,6 +46,7 @@ main{max-width:820px;margin:0 auto;padding:1.2rem 1rem 4rem;}
 .unit-head-info{flex:1;min-width:0;}
 .unit-eyebrow{font-family:var(--font-mono);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem;}
 .unit-title{font-family:var(--font-display);font-weight:700;font-size:1.12rem;line-height:1.25;}
+.unit-desc{font-size:.84rem;color:var(--muted);line-height:1.5;margin-top:.3rem;max-width:60ch;}
 .unit-progress{display:flex;align-items:center;gap:.6rem;margin-top:.55rem;font-size:.75rem;color:var(--muted);}
 .unit-bar{flex:1;max-width:220px;height:5px;border-radius:99px;background:var(--navy3);overflow:hidden;}
 .unit-bar-fill{height:100%;background:var(--gold);border-radius:99px;}
@@ -202,6 +203,7 @@ function fmtDate(d){
         <div class="unit-head-info">
           <div class="unit-eyebrow">${g.unit ? `Unit ${g.unit.unit_number}` : (unitCount ? 'More lessons' : 'Lessons')}</div>
           <div class="unit-title">${esc(g.unit ? g.unit.title : (unitCount ? 'Other lessons' : subjectRow?.name || 'All lessons'))}</div>
+          ${g.unit && g.unit.description ? `<div class="unit-desc">${esc(g.unit.description)}</div>` : ''}
           <div class="unit-progress">
             <div class="unit-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Unit progress"><div class="unit-bar-fill" style="width:${pct}%"></div></div>
             <span>${doneCount} of ${plural(g.lessons.length, 'lesson')} done</span>
