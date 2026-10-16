@@ -28,10 +28,38 @@ main{max-width:820px;margin:0 auto;padding:1.2rem 1rem 4rem;}
 .page-header{margin-bottom:1.6rem;}
 .page-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;}
 
-.lesson-list{display:flex;flex-direction:column;gap:.8rem;}
-.lesson-row{display:flex;align-items:center;gap:1rem;}
-.lesson-week{font-family:var(--font-mono);font-size:.7rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;}
-.lesson-title{font-weight:700;font-size:1rem;margin-bottom:.3rem;}
+.page-sub{font-size:.85rem;color:var(--muted);margin-top:.3rem;}
+
+/* Subject → Unit → Lesson. One card per unit; lessons are rows inside it. */
+.lesson-list{display:flex;flex-direction:column;gap:.9rem;}
+
+.continue-card{display:flex;align-items:center;gap:1rem;border-color:var(--gold);padding:1rem 1.2rem;color:inherit;text-decoration:none;}
+.continue-card:hover{border-color:var(--gold2);}
+.continue-label{font-family:var(--font-mono);font-size:.65rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.2rem;}
+.continue-title{font-weight:700;font-size:.98rem;}
+.continue-arrow{margin-left:auto;font-size:1.2rem;color:var(--gold);}
+
+.unit{padding:0;overflow:hidden;}
+.unit-head{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.2rem;cursor:pointer;list-style:none;}
+.unit-head::-webkit-details-marker{display:none;}
+.unit-head:focus-visible{outline:2px solid var(--gold);outline-offset:-2px;}
+.unit-head-info{flex:1;min-width:0;}
+.unit-eyebrow{font-family:var(--font-mono);font-size:.68rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem;}
+.unit-title{font-family:var(--font-display);font-weight:700;font-size:1.12rem;line-height:1.25;}
+.unit-progress{display:flex;align-items:center;gap:.6rem;margin-top:.55rem;font-size:.75rem;color:var(--muted);}
+.unit-bar{flex:1;max-width:220px;height:5px;border-radius:99px;background:var(--navy3);overflow:hidden;}
+.unit-bar-fill{height:100%;background:var(--gold);border-radius:99px;}
+.unit-chevron{flex:none;width:.6rem;height:.6rem;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s ease;margin-right:.3rem;}
+.unit[open] .unit-chevron{transform:rotate(-135deg);}
+.unit-lessons{border-top:1px solid var(--border);}
+
+.lesson-row{display:flex;align-items:center;gap:.9rem;padding:.9rem 1.2rem;color:inherit;text-decoration:none;border-bottom:1px solid var(--border);}
+.lesson-row:last-child{border-bottom:none;}
+.lesson-row:hover{background:var(--navy3);}
+.lesson-num{flex:none;width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.78rem;border:1px solid var(--border);color:var(--muted);}
+.lesson-num.done{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+.lesson-week{font-family:var(--font-mono);font-size:.65rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem;}
+.lesson-title{font-weight:700;font-size:.95rem;margin-bottom:.2rem;}
 .lesson-meta{font-size:.78rem;color:var(--muted);display:flex;gap:.7rem;flex-wrap:wrap;}
 .lesson-info{flex:1;min-width:0;}
 .status-pill{font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;padding:.25rem .6rem;border-radius:99px;white-space:nowrap;}
@@ -68,6 +96,7 @@ main{max-width:820px;margin:0 auto;padding:1.2rem 1rem 4rem;}
   <a class="back-link" href="/ism-class/index.html">← ISM Class</a>
   <div class="page-header fade-in">
     <h1 class="page-title" id="subject-title">Loading…</h1>
+    <div class="page-sub" id="subject-sub"></div>
   </div>
 
   <div class="lesson-list" id="lesson-list">
@@ -112,11 +141,16 @@ function fmtDate(d){
   const { data: subjectRow } = await supa.from('subjects').select('name').eq('id', subjectId).single();
   document.getElementById('subject-title').textContent = `ISM Class — ${subjectRow?.name || 'Subject'}`;
 
-  const { data: lessons } = await supa.from('ism_lessons')
-    .select('id,title,week_number,due_date')
-    .eq('subject_id', subjectId)
-    .eq('is_published', true) // staff in Student View can read drafts; students never see them
-    .order('week_number', { ascending: true });
+  // select('*') rather than naming unit_id/lesson_number, so the page
+  // still lists lessons if supabase/ism_units.sql has not been run yet.
+  const [{ data: lessons }, { data: unitRows }] = await Promise.all([
+    supa.from('ism_lessons')
+      .select('*')
+      .eq('subject_id', subjectId)
+      .eq('is_published', true) // staff in Student View can read drafts; students never see them
+      .order('week_number', { ascending: true }),
+    supa.from('ism_units').select('id,unit_number,title,description').eq('subject_id', subjectId)
+  ]);
 
   const list = document.getElementById('lesson-list');
   list.innerHTML = '';
@@ -131,21 +165,100 @@ function fmtDate(d){
     .select('lesson_id,status').eq('student_id', user.id).in('lesson_id', lessonIds);
   const statusByLesson = Object.fromEntries((progressRows || []).map(p => [p.lesson_id, p.status]));
 
-  lessons.forEach(lesson => {
-    const status = statusByLesson[lesson.id] || 'not_started';
-    const row = document.createElement('a');
-    row.href = `/ism-class/lesson.html?lesson=${lesson.id}`;
-    row.className = 'card lesson-row fade-in';
-    row.innerHTML = `
-      <div class="lesson-info">
-        <div class="lesson-week">Week ${lesson.week_number}</div>
-        <div class="lesson-title">${lesson.title}</div>
-        <div class="lesson-meta">${lesson.due_date ? `<span>Due ${fmtDate(lesson.due_date)}</span>` : ''}</div>
+  const groups = groupIntoUnits(lessons, unitRows || []);
+  const isDone = l => DONE_STATUSES.includes(statusByLesson[l.id]);
+
+  const unitCount = groups.filter(g => g.unit).length;
+  document.getElementById('subject-sub').textContent =
+    [unitCount ? plural(unitCount, 'unit') : '', plural(lessons.length, 'lesson')].filter(Boolean).join(' · ');
+
+  // "Continue" = the first lesson, in course order, the student still has to do.
+  let next = null;
+  for (const g of groups) { next = g.lessons.find(l => !isDone(l)); if (next) { next.group = g; break; } }
+
+  if (next) {
+    const cont = document.createElement('a');
+    cont.href = `/ism-class/lesson.html?lesson=${next.id}`;
+    cont.className = 'card continue-card fade-in';
+    cont.innerHTML = `
+      <div>
+        <div class="continue-label">${statusByLesson[next.id] && statusByLesson[next.id] !== 'not_started' ? 'Continue' : 'Up next'} · ${esc(lessonLabel(next, next.group))}</div>
+        <div class="continue-title">${esc(next.title)}</div>
       </div>
-      <span class="status-pill status-${status}">${STATUS_LABEL[status] || status}</span>`;
-    list.appendChild(row);
+      <span class="continue-arrow" aria-hidden="true">→</span>`;
+    list.appendChild(cont);
+  }
+
+  groups.forEach(g => {
+    const doneCount = g.lessons.filter(isDone).length;
+    const pct = Math.round((doneCount / g.lessons.length) * 100);
+    const unitEl = document.createElement('details');
+    unitEl.className = 'card unit fade-in';
+    // Open the unit the student is working in; if they have finished
+    // everything, open the first. Keeps the page short as units grow.
+    unitEl.open = groups.length === 1 || (next ? next.group === g : g === groups[0]);
+    unitEl.innerHTML = `
+      <summary class="unit-head">
+        <div class="unit-head-info">
+          <div class="unit-eyebrow">${g.unit ? `Unit ${g.unit.unit_number}` : (unitCount ? 'More lessons' : 'Lessons')}</div>
+          <div class="unit-title">${esc(g.unit ? g.unit.title : (unitCount ? 'Other lessons' : subjectRow?.name || 'All lessons'))}</div>
+          <div class="unit-progress">
+            <div class="unit-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Unit progress"><div class="unit-bar-fill" style="width:${pct}%"></div></div>
+            <span>${doneCount} of ${plural(g.lessons.length, 'lesson')} done</span>
+          </div>
+        </div>
+        <span class="unit-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="unit-lessons"></div>`;
+    const rows = unitEl.querySelector('.unit-lessons');
+
+    g.lessons.forEach(lesson => {
+      const status = statusByLesson[lesson.id] || 'not_started';
+      const row = document.createElement('a');
+      row.href = `/ism-class/lesson.html?lesson=${lesson.id}`;
+      row.className = 'lesson-row';
+      row.innerHTML = `
+        <span class="lesson-num${isDone(lesson) ? ' done' : ''}" aria-hidden="true">${isDone(lesson) ? '✓' : lesson.displayNumber}</span>
+        <div class="lesson-info">
+          <div class="lesson-week">Lesson ${lesson.displayNumber}</div>
+          <div class="lesson-title">${esc(lesson.title)}</div>
+          <div class="lesson-meta">${lesson.due_date ? `<span>Due ${fmtDate(lesson.due_date)}</span>` : ''}</div>
+        </div>
+        <span class="status-pill status-${status}">${STATUS_LABEL[status] || status}</span>`;
+      rows.appendChild(row);
+    });
+    list.appendChild(unitEl);
   });
 })();
+
+const DONE_STATUSES = ['submitted', 'reviewed'];
+
+function esc(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function plural(n, word) { return `${n} ${word}${n === 1 ? '' : 's'}`; }
+
+function lessonLabel(lesson, group) {
+  return `${group && group.unit ? `Unit ${group.unit.unit_number} · ` : ''}Lesson ${lesson.displayNumber}`;
+}
+
+// Units in unit_number order, lessons by lesson_number within each (week
+// as the tie-break). Lessons not yet filed under a unit go last. Each
+// lesson gets displayNumber: its lesson_number, or its position if unset.
+function groupIntoUnits(lessons, units) {
+  const byId = Object.fromEntries(units.map(u => [u.id, { unit: u, lessons: [] }]));
+  const loose = { unit: null, lessons: [] };
+  lessons.forEach(l => (byId[l.unit_id] || loose).lessons.push(l));
+  const groups = Object.values(byId).sort((a, b) => a.unit.unit_number - b.unit.unit_number);
+  if (loose.lessons.length) groups.push(loose);
+  const num = v => (v == null ? Infinity : v);
+  return groups.filter(g => g.lessons.length).map(g => {
+    g.lessons.sort((a, b) => num(a.lesson_number) - num(b.lesson_number) || a.week_number - b.week_number);
+    g.lessons.forEach((l, i) => { l.displayNumber = l.lesson_number || i + 1; });
+    return g;
+  });
+}
 </script>
 </body>
 </html>
