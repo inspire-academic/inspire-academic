@@ -17,6 +17,8 @@
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/itt-card.js"></script>
 <script src="/assets/js/ism-units.js"></script>
+<script src="/assets/js/ism-search.js"></script>
+<link rel="stylesheet" href="/assets/css/ism-search.css">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#c9a84c">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
@@ -73,6 +75,26 @@ main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 4rem;}
   .subject-card.itt{grid-column:1 / -1;}
 }
 
+/* Lesson search across every subject: while searching, a results list
+   grouped by subject replaces the subject cards. */
+.subject-grid[hidden]{display:none;}
+.search-results{display:flex;flex-direction:column;gap:.9rem;}
+.search-results[hidden]{display:none;}
+.result-group{padding:0;overflow:hidden;}
+.result-group::before{content:'';display:block;height:4px;}
+.result-group.physics::before{background:linear-gradient(90deg,#1d4ed8,#06b6d4);}
+.result-group.chemistry::before{background:linear-gradient(90deg,#059669,#34d399);}
+.result-group.biology::before{background:linear-gradient(90deg,#7c3aed,#a78bfa);}
+.result-group.maths::before{background:linear-gradient(90deg,#d97706,#fbbf24);}
+.result-group-title{font-family:var(--font-display);font-weight:700;font-size:1.05rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--border);}
+.result-row{display:flex;align-items:center;gap:.9rem;padding:.8rem 1.1rem;color:inherit;text-decoration:none;border-bottom:1px solid var(--border);min-height:44px;}
+.result-row:last-child{border-bottom:none;}
+.result-row:hover{background:var(--navy3);}
+.result-info{flex:1;min-width:0;}
+.result-where{font-family:var(--font-mono);font-size:.65rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem;}
+.result-title{font-weight:700;font-size:.95rem;}
+.search-results .empty-state{text-align:center;padding:2.5rem;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);}
+
 .itt-notice{display:flex;align-items:center;justify-content:space-between;gap:.75rem;min-height:48px;padding:.7rem 1rem;margin-bottom:1rem;
   background:var(--navy2);border:1px solid var(--gold);border-left-width:4px;border-radius:var(--r);font-size:.9rem;}
 .itt-notice:hover{background:var(--navy3);}
@@ -108,9 +130,18 @@ main{max-width:960px;margin:0 auto;padding:1.2rem 1rem 4rem;}
 
   <div id="itt-notice" hidden></div>
 
+  <div class="lesson-search" id="lesson-search" hidden>
+    <label class="visually-hidden" for="lesson-search-input">Search all ISM lessons</label>
+    <input class="lesson-search-input" id="lesson-search-input" type="search" autocomplete="off" spellcheck="false"
+           placeholder="Search all lessons, e.g. energy or factorising">
+    <div class="lesson-search-status" id="lesson-search-status" aria-live="polite"></div>
+  </div>
+
   <div class="subject-grid" id="subject-grid">
     <div class="card"><div class="spinner"></div></div>
   </div>
+
+  <div class="search-results" id="search-results" hidden></div>
 </main>
 
 <div id="toast"></div>
@@ -163,6 +194,7 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
 
   const grid = document.getElementById('subject-grid');
   grid.innerHTML = '';
+  const searchIndex = []; // one entry per lesson, for the search below
 
   SUBJECTS.forEach(s => {
     const subjectRow = (subjectRows || []).find(r => (r.level || 'gcse') === 'gcse' && s.match((r.name || '').toLowerCase()));
@@ -174,6 +206,14 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
     const doneCount = lessons.filter(isDone).length;
     const next = ISMUnits.nextLesson(groups, statusByLesson);
     const cta = !enabled ? 'Not available' : !count ? 'Open' : !doneCount ? 'Start' : next ? 'Continue' : 'Review';
+
+    groups.forEach(g => g.lessons.forEach(lesson => {
+      const status = statusByLesson[lesson.id] || 'not_started';
+      searchIndex.push({
+        lesson, unit: g.unit, subject: s, status,
+        text: ISMSearch.haystack(lesson, g.unit, ISMUnits.STATUS_LABEL[status]) + ' ' + ISMSearch.normalise(s.label)
+      });
+    }));
 
     const card = document.createElement(enabled ? 'a' : 'div');
     card.className = `card subject-card ${s.key} ${enabled ? '' : 'disabled'} fade-in`;
@@ -222,7 +262,62 @@ async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window
 
   // Fifth card, under Mathematics: the student's Test & Teach assignments.
   if (window.ITTCard) ITTCard.mount(grid, document.getElementById('itt-notice'), supa);
+
+  if (searchIndex.length) setUpLessonSearch(searchIndex, grid);
 })();
+
+// Search every subject at once (matching rules: assets/js/ism-search.js).
+// While a search is typed, a results list grouped by subject replaces the
+// subject cards; each result opens its lesson directly. Clearing the box
+// (or Esc) brings the cards back.
+function setUpLessonSearch(searchIndex, grid) {
+  const box = document.getElementById('lesson-search');
+  const input = document.getElementById('lesson-search-input');
+  const status = document.getElementById('lesson-search-status');
+  const results = document.getElementById('search-results');
+  const esc = ISMSearch.esc;
+  box.hidden = false;
+
+  function apply() {
+    const words = ISMSearch.words(input.value);
+    const searching = words.length > 0;
+    grid.hidden = searching;
+    results.hidden = !searching;
+    if (!searching) { results.innerHTML = ''; status.textContent = ''; return; }
+
+    const hits = searchIndex.filter(e => ISMSearch.matches(e.text, words));
+    status.textContent = ISMSearch.countText(hits.length);
+
+    if (!hits.length) {
+      results.innerHTML = `<div class="empty-state">No lessons match “${esc(input.value.trim())}”.<br>
+        <button type="button" class="btn btn-outline search-clear">Clear search</button></div>`;
+      results.querySelector('.search-clear').addEventListener('click', () => { input.value = ''; apply(); input.focus(); });
+      return;
+    }
+
+    // Subjects in page order; lessons in course order (searchIndex is built that way).
+    const bySubject = new Map();
+    hits.forEach(e => {
+      if (!bySubject.has(e.subject)) bySubject.set(e.subject, []);
+      bySubject.get(e.subject).push(e);
+    });
+    results.innerHTML = [...bySubject].map(([subject, entries]) => `
+      <section class="card result-group ${subject.key}" aria-label="${esc(subject.label)} results">
+        <div class="result-group-title">${esc(subject.label)}</div>
+        ${entries.map(e => `
+          <a class="result-row" href="/ism-class/lesson.html?lesson=${encodeURIComponent(e.lesson.id)}">
+            <div class="result-info">
+              <div class="result-where">${e.unit ? `Unit ${esc(e.unit.unit_number)} · ${ISMSearch.highlight(e.unit.title, words)} · ` : ''}Lesson ${esc(e.lesson.displayNumber)}</div>
+              <div class="result-title">${ISMSearch.highlight(e.lesson.title, words)}</div>
+            </div>
+            <span class="status-pill status-${e.status}">${esc(ISMUnits.STATUS_LABEL[e.status] || e.status)}</span>
+          </a>`).join('')}
+      </section>`).join('');
+  }
+
+  input.addEventListener('input', apply);
+  input.addEventListener('keydown', e => { if (e.key === 'Escape' && input.value) { input.value = ''; apply(); } });
+}
 </script>
 </body>
 </html>

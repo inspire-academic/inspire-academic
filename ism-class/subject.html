@@ -10,12 +10,14 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/assets/css/tokens.css">
 <link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/ism-search.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 <script src="/assets/js/nav-back.js"></script>
 <script src="/assets/js/capacitor-utils.js"></script>
 <script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/ism-units.js"></script>
+<script src="/assets/js/ism-search.js"></script>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#c9a84c">
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
@@ -30,22 +32,6 @@ main{max-width:820px;margin:0 auto;padding:1.2rem 1rem 4rem;}
 .page-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;}
 
 .page-sub{font-size:.85rem;color:var(--muted);margin-top:.3rem;}
-
-/* Lesson search: filters the unit list in place as the student types. */
-.lesson-search{margin-bottom:1rem;}
-.lesson-search[hidden]{display:none;}
-.lesson-search-input{width:100%;min-height:44px;padding:.65rem .9rem .65rem 2.4rem;font-size:1rem;color:var(--white);background:var(--navy2);
-  border:1.5px solid var(--border);border-radius:var(--r);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a9bb5' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:.85rem center;}
-.lesson-search-input:focus{outline:none;border-color:var(--gold);}
-.lesson-search-input::placeholder{color:var(--muted);}
-.lesson-search-status{font-size:.78rem;color:var(--muted);margin-top:.45rem;min-height:1em;}
-.lesson-search-status:empty{display:none;}
-.search-empty .btn-clear{margin-top:.8rem;}
-.lesson-list .is-filtered-out{display:none;}
-mark.search-hit{background:#c9a84c40;color:inherit;border-radius:3px;padding:0 .1em;}
-.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 
 /* Subject → Unit → Lesson. One card per unit; lessons are rows inside it. */
 .lesson-list{display:flex;flex-direction:column;gap:.9rem;}
@@ -80,12 +66,6 @@ mark.search-hit{background:#c9a84c40;color:inherit;border-radius:3px;padding:0 .
 .lesson-title{font-weight:700;font-size:.95rem;margin-bottom:.2rem;}
 .lesson-meta{font-size:.78rem;color:var(--muted);display:flex;gap:.7rem;flex-wrap:wrap;}
 .lesson-info{flex:1;min-width:0;}
-.status-pill{font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;padding:.25rem .6rem;border-radius:99px;white-space:nowrap;}
-.status-not_started{background:var(--navy3);color:var(--muted);}
-.status-in_progress{background:#e8620a22;color:var(--orange);}
-.status-submitted{background:#1c4f8a22;color:#60a5fa;}
-.status-reviewed{background:#16803c22;color:#4ade80;}
-.status-returned{background:#b92b1a22;color:#f87171;}
 
 .empty-state{text-align:center;padding:2.5rem;color:var(--muted);background:var(--navy2);border:1px solid var(--border);border-radius:var(--r);}
 </style>
@@ -134,10 +114,7 @@ const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
 const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-const STATUS_LABEL = {
-  not_started: 'Not Started', in_progress: 'In Progress',
-  submitted: 'Submitted', reviewed: 'Reviewed', returned: 'Returned'
-};
+const STATUS_LABEL = ISMUnits.STATUS_LABEL;
 
 async function signOut(){ clearProfileCache(); await supa.auth.signOut(); window.location.href='/index.html'; }
 
@@ -243,11 +220,7 @@ function fmtDate(d){
       const row = document.createElement('a');
       row.href = `/ism-class/lesson.html?lesson=${lesson.id}`;
       row.className = 'lesson-row';
-      // Everything a student might type to find this lesson.
-      row.dataset.search = normalise([
-        lesson.title, lesson.description, `lesson ${lesson.displayNumber}`,
-        g.unit ? `unit ${g.unit.unit_number} ${g.unit.title}` : '', STATUS_LABEL[status]
-      ].join(' '));
+      row.dataset.search = ISMSearch.haystack(lesson, g.unit, STATUS_LABEL[status]);
       row.innerHTML = `
         <span class="lesson-num${isDone(lesson) ? ' done' : ''}" aria-hidden="true">${isDone(lesson) ? '✓' : lesson.displayNumber}</span>
         <div class="lesson-info">
@@ -264,15 +237,7 @@ function fmtDate(d){
   setUpLessonSearch(list);
 })();
 
-// Lowercase, accents and punctuation stripped, so "Factorising",
-// "factorising," and "factorísing" all match.
-function normalise(text) {
-  return String(text || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, ' ').trim();
-}
-
-// Filters the unit list in place: every word typed must appear somewhere in
-// a lesson's title, description, "lesson N", its unit, or its status.
+// Filters the unit list in place (matching rules: assets/js/ism-search.js).
 // Units with a match open; units without one hide. Clearing the box puts
 // the page back exactly as it was, including which units were open.
 function setUpLessonSearch(list) {
@@ -286,16 +251,14 @@ function setUpLessonSearch(list) {
   box.hidden = false;
 
   function apply() {
-    const words = normalise(input.value).split(' ').filter(Boolean);
+    const words = ISMSearch.words(input.value);
     const searching = words.length > 0;
     let matches = 0;
 
     units.forEach(u => {
       let unitMatches = 0;
       u.querySelectorAll('.lesson-row').forEach(row => {
-        // Words match from the start of a word: "fact" finds "factorising",
-        // but "in" doesn't find "Completing".
-        const hit = !searching || words.every(w => (' ' + row.dataset.search).includes(' ' + w));
+        const hit = !searching || ISMSearch.matches(row.dataset.search, words);
         row.classList.toggle('is-filtered-out', !hit);
         highlight(row.querySelector('.lesson-title'), searching && hit ? words : []);
         if (hit) unitMatches++;
@@ -314,35 +277,21 @@ function setUpLessonSearch(list) {
       emptyEl.querySelector('button').addEventListener('click', () => { input.value = ''; apply(); input.focus(); });
       list.appendChild(emptyEl);
     }
-    status.textContent = !searching || !matches ? '' : matches === 1 ? '1 lesson matches' : `${matches} lessons match`;
+    status.textContent = searching ? ISMSearch.countText(matches) : '';
   }
 
   input.addEventListener('input', apply);
   input.addEventListener('keydown', e => { if (e.key === 'Escape' && input.value) { input.value = ''; apply(); } });
 }
 
-// Marks the typed words inside a lesson title. Works on the plain title
-// text, so nothing a teacher typed is ever parsed as HTML.
+// Marks the typed words inside a lesson title, keeping its plain text so
+// clearing the search puts it back.
 function highlight(titleEl, words) {
   if (!titleEl) return;
   if (titleEl.dataset.plain === undefined) titleEl.dataset.plain = titleEl.textContent;
   const plain = titleEl.dataset.plain;
   if (!words.length) { titleEl.textContent = plain; return; }
-  const lower = plain.toLowerCase();
-  const marks = new Array(plain.length).fill(false);
-  words.forEach(w => {
-    for (let i = lower.indexOf(w); i !== -1; i = lower.indexOf(w, i + 1)) {
-      if (i > 0 && /[a-z0-9]/.test(lower[i - 1])) continue; // start of a word only, as the filter
-      for (let k = i; k < i + w.length; k++) marks[k] = true;
-    }
-  });
-  let html = '', open = false;
-  for (let i = 0; i < plain.length; i++) {
-    if (marks[i] && !open) { html += '<mark class="search-hit">'; open = true; }
-    if (!marks[i] && open) { html += '</mark>'; open = false; }
-    html += esc(plain[i]);
-  }
-  titleEl.innerHTML = html + (open ? '</mark>' : '');
+  titleEl.innerHTML = ISMSearch.highlight(plain, words);
 }
 
 function esc(v) {
