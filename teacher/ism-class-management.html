@@ -32,7 +32,16 @@ h1.page-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;m
 label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:.4rem;}
 .field{margin-bottom:1rem;}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
-.field-row[hidden]{display:none;}
+.units-card{padding:0;margin-bottom:1rem;}
+.units-head{padding:.8rem 1rem;border-bottom:1px solid var(--border);font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);}
+.unit-row{padding:.8rem 1rem;border-bottom:1px solid var(--border);}
+.unit-row:last-child{border-bottom:none;}
+.unit-row-top{display:flex;align-items:flex-start;gap:.8rem;}
+.unit-row-desc{font-size:.8rem;color:var(--muted);margin-top:.25rem;line-height:1.45;}
+.unit-row-desc.empty{font-style:italic;}
+.unit-edit{margin-top:.7rem;}
+.unit-edit[hidden]{display:none;}
+.unit-edit-actions{display:flex;gap:.5rem;}
 .field-input,.field-select,.field-textarea{background:var(--navy);border:1.5px solid var(--border);color:var(--white);border-radius:var(--r);padding:.6rem .85rem;font-size:.88rem;width:100%;}
 .field-input:focus,.field-select:focus,.field-textarea:focus{border-color:var(--gold);outline:none;}
 .field-textarea{min-height:70px;resize:vertical;}
@@ -186,9 +195,12 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
         <div class="field"><label>Subject</label><select class="field-select" id="upload-subject"></select></div>
         <div class="field"><label>Unit</label><select class="field-select" id="upload-unit"></select></div>
       </div>
-      <div class="field-row" id="upload-new-unit" hidden>
-        <div class="field"><label>New unit number</label><input class="field-input" type="number" min="1" id="upload-new-unit-number"></div>
-        <div class="field"><label>New unit title</label><input class="field-input" type="text" id="upload-new-unit-title" placeholder="Algebra"></div>
+      <div id="upload-new-unit" hidden>
+        <div class="field-row">
+          <div class="field"><label>New unit number</label><input class="field-input" type="number" min="1" id="upload-new-unit-number"></div>
+          <div class="field"><label>New unit title</label><input class="field-input" type="text" id="upload-new-unit-title" placeholder="Algebra"></div>
+        </div>
+        <div class="field"><label>New unit description (shown to students)</label><textarea class="field-textarea" id="upload-new-unit-description" placeholder="One or two sentences on what students will learn in this unit."></textarea></div>
       </div>
       <div class="field-row">
         <div class="field"><label>Lesson number (in unit)</label><input class="field-input" type="number" min="1" id="upload-lesson-number"></div>
@@ -217,6 +229,10 @@ label{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:upperca
 
   <!-- ── MANAGE ── -->
   <div class="tab-panel" id="tab-manage">
+    <div class="card units-card">
+      <div class="units-head">Units</div>
+      <div id="units-list"></div>
+    </div>
     <div class="card" style="padding:0;">
       <div id="manage-list"><div style="padding:1.5rem;"><div class="spinner"></div></div></div>
     </div>
@@ -304,6 +320,7 @@ const SUBJECTS = [
 let accessToken = null;
 let myLessons = [];
 let myUnits = [];
+let subjectNames = {};
 let assignedStudents = [];
 let myCohorts = [];
 let currentReviewSubmission = null;
@@ -499,6 +516,7 @@ async function loadSubjectsAndLessons() {
   const subjectSel = document.getElementById('upload-subject');
   const relevant = (subjectRows || []).filter(s => (s.level || 'gcse') === 'gcse' && SUBJECTS.some(m => m.match((s.name || '').toLowerCase())));
   subjectSel.innerHTML = relevant.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+  subjectNames = Object.fromEntries((subjectRows || []).map(s => [s.id, s.name]));
 
   const [{ data: lessons }, { data: unitRows }] = await Promise.all([
     supa.from('ism_lessons').select('*, subjects(name)').order('created_at', { ascending: false }),
@@ -519,6 +537,7 @@ async function loadSubjectsAndLessons() {
   const subSel = document.getElementById('submissions-lesson-select');
   subSel.innerHTML = myLessons.map(l => `<option value="${l.id}">${esc(lessonLabel(l))}</option>`).join('');
 
+  renderUnitsList();
   renderManageList();
   if (myLessons.length) { loadAssignments(); loadSubmissionsRoster(); }
 }
@@ -590,9 +609,10 @@ async function resolveUploadUnit() {
   const title = document.getElementById('upload-new-unit-title').value.trim();
   const unitNumber = Number(document.getElementById('upload-new-unit-number').value);
   if (!title || !unitNumber) throw new Error('Give the new unit a number and a title');
+  const description = document.getElementById('upload-new-unit-description').value.trim();
   const res = await apiCall('/api/v1/ism-class/unit/save', {
     method: 'POST',
-    body: JSON.stringify({ subjectId: Number(document.getElementById('upload-subject').value), unitNumber, title })
+    body: JSON.stringify({ subjectId: Number(document.getElementById('upload-subject').value), unitNumber, title, description })
   });
   myUnits.push(res.unit);
   renderUnitOptions();
@@ -600,8 +620,67 @@ async function resolveUploadUnit() {
   toggleNewUnitFields();
   document.getElementById('upload-new-unit-title').value = '';
   document.getElementById('upload-new-unit-number').value = '';
+  document.getElementById('upload-new-unit-description').value = '';
   return res.unit.id;
 }
+
+// ── Manage: units (title + the description students see under it) ──
+function renderUnitsList() {
+  const el = document.getElementById('units-list');
+  if (!myUnits.length) {
+    el.innerHTML = '<div class="unit-row muted">No units yet. Create one with "+ New unit…" on the Upload tab.</div>';
+    return;
+  }
+  const units = [...myUnits].sort((a, b) =>
+    (subjectNames[a.subject_id] || '').localeCompare(subjectNames[b.subject_id] || '') || a.unit_number - b.unit_number);
+  el.innerHTML = units.map(u => `
+    <div class="unit-row" data-unit-id="${esc(u.id)}">
+      <div class="unit-row-top">
+        <div class="lesson-row-info">
+          <div class="lesson-row-title">${esc(subjectNames[u.subject_id] || '')} · Unit ${esc(u.unit_number)} · ${esc(u.title)}</div>
+          <div class="unit-row-desc${u.description ? '' : ' empty'}">${u.description ? esc(u.description) : 'No description yet. Students see only the title.'}</div>
+        </div>
+        <button class="mini-btn" data-unit-action="edit">Edit</button>
+      </div>
+      <div class="unit-edit" hidden>
+        <div class="field"><label>Title</label><input class="field-input" type="text" data-unit-field="title" value="${esc(u.title)}"></div>
+        <div class="field"><label>Description (shown to students)</label><textarea class="field-textarea" data-unit-field="description">${esc(u.description || '')}</textarea></div>
+        <div class="unit-edit-actions">
+          <button class="mini-btn" data-unit-action="save">Save</button>
+          <button class="mini-btn" data-unit-action="cancel">Cancel</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('units-list').addEventListener('click', async ev => {
+  const btn = ev.target.closest('[data-unit-action]');
+  if (!btn) return;
+  const row = btn.closest('[data-unit-id]');
+  const form = row.querySelector('.unit-edit');
+  const action = btn.dataset.unitAction;
+  if (action === 'edit') { form.hidden = false; return; }
+  if (action === 'cancel') { renderUnitsList(); return; }
+
+  const title = row.querySelector('[data-unit-field="title"]').value.trim();
+  const description = row.querySelector('[data-unit-field="description"]').value.trim();
+  if (!title) { toast('A unit needs a title', 'error'); return; }
+  btn.disabled = true;
+  try {
+    const res = await apiCall('/api/v1/ism-class/unit/save', {
+      method: 'POST',
+      body: JSON.stringify({ unitId: row.dataset.unitId, title, description })
+    });
+    myUnits = myUnits.map(u => (u.id === res.unit.id ? res.unit : u));
+    renderUnitsList();
+    renderUnitOptions();
+    renderManageList();
+    toast('Unit saved');
+  } catch (e) {
+    toast(e.message || 'Could not save the unit', 'error');
+    btn.disabled = false;
+  }
+});
 
 async function submitUpload() {
   const btn = document.getElementById('upload-submit-btn');
