@@ -55,16 +55,49 @@ test('fc app: progress is kept per student in IndexedDB, never in localStorage',
 
 test('fc app: a student is greeted by first name only, and is asked their board if we do not know it', () => {
   assert.doesNotMatch(APP, /\.email|'Student'/);
-  assert.match(APP, /if \(!board\) \{ show\('fc-board'\); return; \}/);
+  assert.match(APP, /if \(!board\) \{[^}]*show\('fc-board'\);\s+return;\s+\}/);
   assert.doesNotMatch(APP, /\|\| 'aqa'|\|\| "aqa"/i, 'never assume AQA');
+});
+
+test('fc app: one subject at a time, each with its own board and topics', () => {
+  assert.match(PAGE, /<script src="\/assets\/js\/a-level-subjects\.js" defer><\/script>\s*<script src="\/assets\/js\/fc-app\.js" defer>/);
+  assert.match(PAGE, /id="fc-subject"[\s\S]*id="fc-subject-list"/);
+  assert.match(PAGE, /id="fc-switch" hidden>Change subject</);
+  // Only the subject's own files are studied.
+  assert.match(APP, /files = allFiles\.filter\(function \(f\) \{ return subjectOf\(f\.topic\.id\) === slug; \}\);/);
+  // Choosing one subject's topics keeps the other subjects' choice.
+  assert.match(APP, /allChosen = allChosen\.filter\(function \(id\) \{ return subjectOf\(id\) !== subject; \}\)\.concat\(chosen\);/);
+  // A board picked on the device is kept for that subject only.
+  assert.match(APP, /savedBoards\[subject\] = board;\s+store\.setMeta\('boards', savedBoards\);/);
+  // The day's new cards are counted per subject.
+  assert.match(APP, /Core\.newAllowance\(subjectStates\(\), now\)/);
+  // The profile's subjects are read on their own, so the app works before the column exists.
+  assert.match(APP, /select\('a_level_subjects'\)/);
+  assert.doesNotMatch(APP, /select\('first_name, full_name, exam_board, a_level_subjects'\)/);
+});
+
+test('a-level subjects: the list and a student\'s subjects and boards', () => {
+  const A = require('../assets/js/a-level-subjects.js');
+  const slugs = A.SUBJECTS.map(s => s.slug);
+  assert.deepEqual(slugs.slice(0, 2), ['physics-a-level', 'chemistry-a-level']);
+  assert.equal(new Set(slugs).size, slugs.length, 'each subject once');
+  for (const s of A.SUBJECTS) assert.match(s.slug, /^[a-z]+-a-level$/);
+  assert.deepEqual(A.mine({}), [], 'not said yet');
+  assert.deepEqual(A.mine({ a_level_subjects: null }), []);
+  const mine = A.mine({ exam_board: 'AQA', a_level_subjects: { 'chemistry-a-level': 'edexcel', 'physics-a-level': null } });
+  assert.deepEqual(mine.map(s => [s.slug, s.board]), [['physics-a-level', 'aqa'], ['chemistry-a-level', 'edexcel']], 'list order; a missing board falls back to the profile');
+  assert.deepEqual(A.mine({ exam_board: 'OCR', a_level_subjects: { 'physics-a-level': null } })[0].board, null, 'an unknown board is not guessed');
+  assert.deepEqual(A.mine({ a_level_subjects: { 'biology-a-level': 'aqa' } }), [], 'a subject not on the list is ignored');
 });
 
 test('fc app: what a phone downloads stays small', () => {
   const gz = f => zlib.gzipSync(fs.readFileSync(path.join(ROOT, f))).length;
-  const own = ['student/flashcards-v2.html', 'assets/css/flashcards-v2.css', 'assets/js/fc-core.js', 'assets/js/fc-store.js', 'assets/js/fc-app.js'].reduce((n, f) => n + gz(f), 0);
-  // Raised from 20 000 on 14 October 2026 to make room for graphs on cards.
-  // CLAUDE.md's limit for a page's scripts is 80 000.
-  assert.ok(own < 21000, `the app's own files are ${own} bytes compressed`);
+  const own = ['student/flashcards-v2.html', 'assets/css/flashcards-v2.css', 'assets/js/fc-core.js', 'assets/js/fc-store.js', 'assets/js/fc-app.js',
+    'assets/js/a-level-subjects.js'].reduce((n, f) => n + gz(f), 0);
+  // Raised from 20 000 on 14 October 2026 to make room for graphs on cards,
+  // and to 23 000 on 17 October 2026 for several subjects (and the subject
+  // list). CLAUDE.md's limit for a page's scripts is 80 000.
+  assert.ok(own < 23000, `the app's own files are ${own} bytes compressed`);
   assert.ok(gz('assets/vendor/ts-fsrs-5.4.2/ts-fsrs.umd.js') < 20000, 'the scheduler library');
   assert.ok(fs.existsSync(path.join(ROOT, 'assets/vendor/ts-fsrs-5.4.2/LICENSE')), 'the library keeps its licence');
 });
