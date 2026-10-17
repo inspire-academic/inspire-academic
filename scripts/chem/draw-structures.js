@@ -5,6 +5,8 @@
 //   node scripts/chem/draw-structures.js           draw the ones not drawn yet
 //   node scripts/chem/draw-structures.js --all     redraw every one
 //   node scripts/chem/draw-structures.js --prune   also delete drawings nothing uses
+//   --files a.json,b.json   only these topic files (a draft not yet in curriculum/)
+//   --store <dir>           keep the drawings there instead (a draft's own store)
 //
 // A figure { kind: 'structure', smiles } or { kind: 'reaction', rxn, above,
 // below } (assets/js/chem-figure.js) is stored under ChemFigure.structureKey()
@@ -22,15 +24,25 @@ const path = require('path');
 const ChemFigure = require('../../assets/js/chem-figure.js');
 
 const ROOT = path.join(__dirname, '..', '..');
-const OUT = path.join(ROOT, 'assets', 'chem', 'structures');
+let OUT = path.join(ROOT, 'assets', 'chem', 'structures');
 const SOURCES = [path.join(ROOT, 'curriculum', 'flashcards'), path.join(ROOT, 'curriculum', 'quizzes')];
 const INK = '#1a1a1a';
 const BOND = 30;          // px per bond, the same in every drawing
 const RDKIT_BOND = 1.5;   // RDKit's bond length in its own coordinates
 
 // Every structure and reaction figure in the curriculum files: [{ key, fig, where }].
-function used() {
+function used(files) {
   const out = [];
+  const read = p => {
+    const data = JSON.parse(fs.readFileSync(p, 'utf8'));
+    for (const item of [...(data.cards || []), ...(data.questions || [])]) {
+      for (const f of ['figure', 'answerFigure']) {
+        const fig = item[f];
+        if (fig && (fig.kind === 'structure' || fig.kind === 'reaction')) out.push({ key: ChemFigure.structureKey(fig), fig, where: `${path.relative(ROOT, p)} ${item.id}` });
+      }
+    }
+  };
+  if (files) { files.forEach(read); return out; }
   const walk = dir => {
     if (!fs.existsSync(dir)) return;
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -140,6 +152,9 @@ function drawReaction(RDKit, fig) {
 async function main() {
   const argv = process.argv.slice(2);
   const all = argv.includes('--all'), prune = argv.includes('--prune');
+  const opt = k => { const i = argv.indexOf('--' + k); return i === -1 ? null : argv[i + 1]; };
+  if (opt('store')) OUT = path.resolve(opt('store'));
+  const files = opt('files') ? opt('files').split(',').map(f => path.resolve(f)) : null;
   let initRDKit;
   try { initRDKit = require('@rdkit/rdkit'); }
   catch (e) { console.error('RDKit is not installed: run npm install (it is a development dependency).'); process.exit(1); }
@@ -147,7 +162,7 @@ async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   const indexFile = path.join(OUT, 'index.json');
   const index = fs.existsSync(indexFile) ? JSON.parse(fs.readFileSync(indexFile, 'utf8')) : {};
-  const figures = used();
+  const figures = used(files);
   let drawn = 0, failed = 0;
   for (const { key, fig, where } of figures) {
     if (!all && index[key] && fs.existsSync(path.join(OUT, key + '.svg'))) continue;
