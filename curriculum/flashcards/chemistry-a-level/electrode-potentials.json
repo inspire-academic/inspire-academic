@@ -1,0 +1,1281 @@
+{
+ "schema": "inspire.flashcards.v1",
+ "topic": {
+  "id": "chemistry-a-level/electrode-potentials",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Electrode Potentials and Cells",
+  "spec": "chemistry-a-level"
+ },
+ "cards": [
+  {
+   "id": "che-al-elec-001",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "electrode-potential"
+   ],
+   "q": "Define the standard electrode potential, \\(E^{\\ominus}\\), of a half-cell.",
+   "a": "The <strong>emf</strong> of a cell made from the half-cell connected to a <strong>standard hydrogen electrode</strong>, measured under <strong>standard conditions</strong>.",
+   "why": "The standard hydrogen electrode is given a potential of exactly 0.00 V, so the cell emf is the potential of the other half-cell.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-002",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "electrode-potential",
+    "standard-conditions"
+   ],
+   "q": "What are the standard conditions for measuring \\(E^{\\ominus}\\)?",
+   "a": "Temperature 298 K; gas pressure 100 kPa; every ion at a concentration of \\(1.00\\ \\text{mol dm}^{-3}\\).",
+   "why": "The potential depends on these conditions, so they must be fixed for values to be compared.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-003",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "electrode-potential",
+    "conventions"
+   ],
+   "q": "How are half-equations written in a table of standard electrode potentials (the IUPAC convention)?",
+   "a": "As <strong>reductions</strong>, with the electrons on the left, e.g. \\(\\mathrm{Zn^{2+}(aq) + 2e^{-} \\rightleftharpoons Zn(s)}\\), \\(E^{\\ominus} = -0.76\\ \\text{V}\\).",
+   "why": "Each half-equation is an equilibrium; the sign of E tells you how readily it goes in the reduction direction.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.3",
+      "14.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-004",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "hydrogen-electrode"
+   ],
+   "q": "Describe the standard hydrogen electrode.",
+   "a": "Hydrogen gas at 100 kPa bubbled over a platinum electrode (coated with platinum black) dipping into a solution of \\(\\mathrm{H^{+}}\\) ions at \\(1.00\\ \\text{mol dm}^{-3}\\) (e.g. hydrochloric acid), at 298 K.",
+   "why": "Half-equation: \\(\\mathrm{2H^{+}(aq) + 2e^{-} \\rightleftharpoons H_{2}(g)}\\); its potential is defined as 0.00 V.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-005",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "hydrogen-electrode",
+    "reference"
+   ],
+   "q": "Explain why a reference electrode is needed to measure electrode potentials.",
+   "a": "The potential of a single half-cell cannot be measured; only the potential difference between two half-cells can.",
+   "marks": [
+    "A voltmeter needs two connections, so it can only measure a potential difference between two electrodes.",
+    "So each half-cell is measured against the same reference half-cell, the standard hydrogen electrode.",
+    "The reference is assigned 0.00 V, giving every other half-cell a value on the same scale."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-006",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "platinum",
+    "half-cells"
+   ],
+   "q": "Why is platinum used as the electrode in a half-cell with no solid metal, such as the hydrogen electrode?",
+   "a": "Platinum is <strong>inert</strong> (it does not react) and it <strong>conducts electricity</strong>, so it provides a surface for electron transfer.",
+   "why": "Platinum black (finely divided platinum) has a large surface area, so equilibrium is set up quickly.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.5",
+      "14.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-007",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "half-cells",
+    "methods"
+   ],
+   "q": "How is a half-cell set up for (a) a metal and its ions, and (b) a non-metal gas and its ions?",
+   "a": "(a) A clean strip of the metal dipping into a \\(1.00\\ \\text{mol dm}^{-3}\\) solution of its ions, e.g. Cu in \\(\\mathrm{CuSO_{4}(aq)}\\).<br>(b) The gas at 100 kPa bubbled over a platinum electrode in a \\(1.00\\ \\text{mol dm}^{-3}\\) solution of its ions, e.g. \\(\\mathrm{Cl_{2}}\\) with \\(\\mathrm{Cl^{-}(aq)}\\).",
+   "why": "Every half-cell is then connected to a standard hydrogen electrode at 298 K.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-008",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "half-cells",
+    "methods"
+   ],
+   "q": "How is a half-cell set up for ions of the same element in different oxidation states, such as \\(\\mathrm{Fe^{3+}}\\) and \\(\\mathrm{Fe^{2+}}\\)?",
+   "a": "A <strong>platinum</strong> electrode dipping into a solution containing <strong>both ions</strong>, each at \\(1.00\\ \\text{mol dm}^{-3}\\).",
+   "why": "There is no solid metal in the half-equation, so an inert electrode is needed to carry the electrons.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-009",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "salt-bridge"
+   ],
+   "q": "What is a salt bridge, and what does it do?",
+   "a": "Usually filter paper soaked in saturated potassium nitrate solution. It connects the two solutions.",
+   "marks": [
+    "It completes the circuit by allowing ions to move between the two half-cells.",
+    "This keeps each solution electrically neutral as the reaction proceeds.",
+    "Potassium nitrate is used because its ions do not react with, or precipitate, the ions in the half-cells (KCl would precipitate silver ions as AgCl)."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-010",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "salt-bridge"
+   ],
+   "q": "True or false: electrons flow through the salt bridge from one half-cell to the other.",
+   "a": "<strong>False.</strong> Electrons flow through the external wire; <strong>ions</strong> move through the salt bridge.",
+   "why": "Electrons cannot travel through a solution; the salt bridge carries charge by the movement of ions.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-011",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "emf",
+    "practical"
+   ],
+   "q": "Describe how to measure the emf of a cell made from a copper half-cell and a zinc half-cell.",
+   "a": "Make the two half-cells, join the solutions with a salt bridge and the electrodes to a high-resistance voltmeter.",
+   "steps": [
+    "Clean the metal strips with emery paper; place Zn in \\(1.00\\ \\text{mol dm}^{-3}\\ \\mathrm{ZnSO_{4}(aq)}\\) and Cu in \\(1.00\\ \\text{mol dm}^{-3}\\ \\mathrm{CuSO_{4}(aq)}\\).",
+    "Connect the solutions with a salt bridge of filter paper soaked in saturated potassium nitrate.",
+    "Connect the electrodes with wires to a high-resistance voltmeter and record the reading at 298 K."
+   ],
+   "why": "The voltmeter has a high resistance so almost no current flows: the concentrations do not change and the full emf is measured.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ],
+     "practical": "RP8"
+    },
+    "edexcel": {
+     "points": [
+      "14.6",
+      "14.7"
+     ],
+     "practical": "CP10"
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-012",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "cell-diagram",
+    "conventions"
+   ],
+   "q": "Write the conventional cell diagram for a cell made from a zinc half-cell and a copper half-cell, and say what each line means.",
+   "a": "\\(\\mathrm{Zn(s)\\,|\\,Zn^{2+}(aq)\\,||\\,Cu^{2+}(aq)\\,|\\,Cu(s)}\\)<br>A single line is a phase boundary; the double line is the salt bridge.",
+   "why": "The more negative half-cell (where oxidation happens) is written on the left; in each half-cell the species are written in the direction of the reaction.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-013",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "emf",
+    "cell-diagram"
+   ],
+   "q": "How is \\(E^{\\ominus}_{\\text{cell}}\\) calculated from the electrode potentials of the two half-cells?",
+   "a": "\\(E^{\\ominus}_{\\text{cell}} = E^{\\ominus}_{\\text{right}} - E^{\\ominus}_{\\text{left}}\\)<br>or \\(E^{\\ominus}_{\\text{positive}} - E^{\\ominus}_{\\text{negative}}\\)",
+   "why": "With the cell written conventionally, the right-hand electrode is the positive one and the emf is positive.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-014",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "emf",
+    "calculation"
+   ],
+   "q": "Calculate \\(E^{\\ominus}_{\\text{cell}}\\) for \\(\\mathrm{Zn(s)\\,|\\,Zn^{2+}(aq)\\,||\\,Cu^{2+}(aq)\\,|\\,Cu(s)}\\).<br>\\(\\mathrm{Zn^{2+} + 2e^{-} \\rightleftharpoons Zn}\\) \\(E^{\\ominus} = -0.76\\ \\text{V}\\)<br>\\(\\mathrm{Cu^{2+} + 2e^{-} \\rightleftharpoons Cu}\\) \\(E^{\\ominus} = +0.34\\ \\text{V}\\)",
+   "a": "<strong>\\(E^{\\ominus}_{\\text{cell}} = +1.10\\ \\text{V}\\)</strong>",
+   "steps": [
+    "\\(E^{\\ominus}_{\\text{cell}} = E^{\\ominus}_{\\text{right}} - E^{\\ominus}_{\\text{left}}\\)",
+    "\\(E^{\\ominus}_{\\text{cell}} = +0.34 - (-0.76) = +1.10\\ \\text{V}\\)"
+   ],
+   "why": "Copper, the more positive half-cell, is the positive electrode; zinc is oxidised.",
+   "numeric": {
+    "value": 1.1,
+    "unit": "V",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-015",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "emf",
+    "cell-diagram",
+    "calculation"
+   ],
+   "q": "A cell is made from a copper half-cell (\\(E^{\\ominus} = +0.34\\ \\text{V}\\)) and a silver half-cell (\\(\\mathrm{Ag^{+} + e^{-} \\rightleftharpoons Ag}\\), \\(E^{\\ominus} = +0.80\\ \\text{V}\\)). Write the cell diagram and calculate the emf.",
+   "a": "\\(\\mathrm{Cu(s)\\,|\\,Cu^{2+}(aq)\\,||\\,Ag^{+}(aq)\\,|\\,Ag(s)}\\); <strong>\\(E^{\\ominus}_{\\text{cell}} = +0.46\\ \\text{V}\\)</strong>",
+   "steps": [
+    "Silver has the more positive potential, so it is the positive electrode: write it on the right.",
+    "\\(E^{\\ominus}_{\\text{cell}} = +0.80 - (+0.34) = +0.46\\ \\text{V}\\)"
+   ],
+   "why": "Copper is oxidised and silver ions are reduced; the potential of the silver half-cell is not doubled even though 2 Ag⁺ react per Cu.",
+   "numeric": {
+    "value": 0.46,
+    "unit": "V",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.7",
+      "14.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-016",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "cell-diagram",
+    "conventions",
+    "platinum"
+   ],
+   "q": "Write the cell diagram for a standard hydrogen electrode connected to an \\(\\mathrm{Fe^{3+}/Fe^{2+}}\\) half-cell (\\(E^{\\ominus} = +0.77\\ \\text{V}\\)).",
+   "a": "\\(\\mathrm{Pt(s)\\,|\\,H_{2}(g)\\,|\\,H^{+}(aq)\\,||\\,Fe^{3+}(aq),\\,Fe^{2+}(aq)\\,|\\,Pt(s)}\\)",
+   "why": "A comma separates two species in the same phase. The platinum electrodes go on the outside. On the right, the oxidised form \\(\\mathrm{Fe^{3+}}\\) comes first because it is being reduced.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-017",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "emf",
+    "calculation"
+   ],
+   "q": "A nickel half-cell is connected to a standard copper half-cell (\\(E^{\\ominus} = +0.34\\ \\text{V}\\)). The emf is 0.59 V and copper is the positive electrode. Calculate \\(E^{\\ominus}\\) for \\(\\mathrm{Ni^{2+} + 2e^{-} \\rightleftharpoons Ni}\\).",
+   "a": "<strong>\\(E^{\\ominus} = -0.25\\ \\text{V}\\)</strong>",
+   "steps": [
+    "\\(E^{\\ominus}_{\\text{cell}} = E^{\\ominus}_{\\text{positive}} - E^{\\ominus}_{\\text{negative}}\\), so \\(0.59 = 0.34 - E^{\\ominus}_{\\text{Ni}}\\)",
+    "\\(E^{\\ominus}_{\\text{Ni}} = 0.34 - 0.59 = -0.25\\ \\text{V}\\)"
+   ],
+   "why": "Any standard half-cell of known potential can act as a reference once its value is known.",
+   "numeric": {
+    "value": -0.25,
+    "unit": "V",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-018",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "emf",
+    "electron-flow"
+   ],
+   "q": "In the cell \\(\\mathrm{Mg(s)\\,|\\,Mg^{2+}(aq)\\,||\\,Cu^{2+}(aq)\\,|\\,Cu(s)}\\), which electrode is negative, and which way do electrons flow in the external circuit?",
+   "a": "Magnesium (\\(E^{\\ominus} = -2.37\\ \\text{V}\\)) is the <strong>negative</strong> electrode. Electrons flow through the wire <strong>from Mg to Cu</strong>.",
+   "why": "Magnesium is oxidised, releasing electrons; \\(\\mathrm{Cu^{2+}}\\) ions gain them at the copper electrode. \\(E^{\\ominus}_{\\text{cell}} = 0.34 - (-2.37) = +2.71\\ \\text{V}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1",
+      "3.1.11.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-019",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "electrochemical-series"
+   ],
+   "q": "What is an electrochemical series?",
+   "a": "A list of half-equations (written as reductions) in order of their standard electrode potentials.",
+   "why": "It ranks oxidising and reducing agents by strength, so it can be used to predict reactions.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-020",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "electrochemical-series",
+    "redox"
+   ],
+   "q": "In an electrochemical series, where are the strongest oxidising agent and the strongest reducing agent found?",
+   "a": "Strongest <strong>oxidising agent</strong>: on the left of the half-equation with the <strong>most positive</strong> \\(E^{\\ominus}\\).<br>Strongest <strong>reducing agent</strong>: on the right of the half-equation with the <strong>most negative</strong> \\(E^{\\ominus}\\).",
+   "why": "From the data booklet: \\(\\mathrm{H_{2}O_{2}}\\) in acid (+1.77 V) is the strongest oxidising agent listed; Na (−2.71 V) is the strongest reducing agent.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-021",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "feasibility",
+    "halogens"
+   ],
+   "q": "Use \\(E^{\\ominus}\\) values to decide whether chlorine will oxidise bromide ions.<br>\\(\\mathrm{Cl_{2} + 2e^{-} \\rightleftharpoons 2Cl^{-}}\\) \\(+1.36\\ \\text{V}\\)<br>\\(\\mathrm{Br_{2} + 2e^{-} \\rightleftharpoons 2Br^{-}}\\) \\(+1.09\\ \\text{V}\\)",
+   "a": "<strong>Yes.</strong> \\(\\mathrm{Cl_{2} + 2Br^{-} \\rightarrow 2Cl^{-} + Br_{2}}\\), \\(E^{\\ominus}_{\\text{cell}} = +0.27\\ \\text{V}\\).",
+   "steps": [
+    "Chlorine is reduced and bromide is oxidised.",
+    "\\(E^{\\ominus}_{\\text{cell}} = E^{\\ominus}_{\\text{reduced}} - E^{\\ominus}_{\\text{oxidised}} = 1.36 - 1.09 = +0.27\\ \\text{V}\\)",
+    "The emf is positive, so the reaction is feasible."
+   ],
+   "why": "The half-equation with the more positive potential goes forwards (reduction); the other goes backwards (oxidation).",
+   "numeric": {
+    "value": 0.27,
+    "unit": "V",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-022",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "feasibility",
+    "iron"
+   ],
+   "q": "Will iodine oxidise iron(II) ions to iron(III)?<br>\\(\\mathrm{Fe^{3+} + e^{-} \\rightleftharpoons Fe^{2+}}\\) \\(+0.77\\ \\text{V}\\)<br>\\(\\mathrm{I_{2} + 2e^{-} \\rightleftharpoons 2I^{-}}\\) \\(+0.54\\ \\text{V}\\)",
+   "a": "<strong>No.</strong> \\(E^{\\ominus}_{\\text{cell}} = 0.54 - 0.77 = -0.23\\ \\text{V}\\), which is negative.",
+   "steps": [
+    "For \\(\\mathrm{I_{2}}\\) to oxidise \\(\\mathrm{Fe^{2+}}\\): iodine is reduced, iron(II) is oxidised.",
+    "\\(E^{\\ominus}_{\\text{cell}} = 0.54 - 0.77 = -0.23\\ \\text{V}\\): not feasible.",
+    "The reverse is feasible: \\(\\mathrm{2Fe^{3+} + 2I^{-} \\rightarrow 2Fe^{2+} + I_{2}}\\), \\(E^{\\ominus}_{\\text{cell}} = +0.23\\ \\text{V}\\)."
+   ],
+   "why": "\\(\\mathrm{Fe^{3+}}\\) is the stronger oxidising agent of the two, so it oxidises iodide.",
+   "numeric": {
+    "value": -0.23,
+    "unit": "V",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-023",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "feasibility",
+    "redox-equations"
+   ],
+   "q": "Write the overall equation, and calculate \\(E^{\\ominus}_{\\text{cell}}\\), for the reaction of acidified manganate(VII) with iron(II) ions.<br>\\(\\mathrm{MnO_{4}^{-} + 8H^{+} + 5e^{-} \\rightleftharpoons Mn^{2+} + 4H_{2}O}\\) \\(+1.51\\ \\text{V}\\)<br>\\(\\mathrm{Fe^{3+} + e^{-} \\rightleftharpoons Fe^{2+}}\\) \\(+0.77\\ \\text{V}\\)",
+   "a": "\\(\\mathrm{MnO_{4}^{-} + 8H^{+} + 5Fe^{2+} \\rightarrow Mn^{2+} + 4H_{2}O + 5Fe^{3+}}\\); <strong>\\(E^{\\ominus}_{\\text{cell}} = +0.74\\ \\text{V}\\)</strong>",
+   "steps": [
+    "Manganate(VII) has the more positive potential, so it is reduced; \\(\\mathrm{Fe^{2+}}\\) is oxidised: \\(\\mathrm{Fe^{2+} \\rightarrow Fe^{3+} + e^{-}}\\).",
+    "Multiply the iron half-equation by 5 to balance the electrons, then add.",
+    "\\(E^{\\ominus}_{\\text{cell}} = 1.51 - 0.77 = +0.74\\ \\text{V}\\)"
+   ],
+   "why": "Electrode potentials are never multiplied when a half-equation is multiplied.",
+   "numeric": {
+    "value": 0.74,
+    "unit": "V",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.7",
+      "14.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-024",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "feasibility",
+    "redox-equations"
+   ],
+   "q": "Write the overall equation, and calculate \\(E^{\\ominus}_{\\text{cell}}\\), for the oxidation of iron(II) ions by acidified dichromate(VI).<br>\\(\\mathrm{Cr_{2}O_{7}^{2-} + 14H^{+} + 6e^{-} \\rightleftharpoons 2Cr^{3+} + 7H_{2}O}\\) \\(+1.33\\ \\text{V}\\)<br>\\(\\mathrm{Fe^{3+} + e^{-} \\rightleftharpoons Fe^{2+}}\\) \\(+0.77\\ \\text{V}\\)",
+   "a": "\\(\\mathrm{Cr_{2}O_{7}^{2-} + 14H^{+} + 6Fe^{2+} \\rightarrow 2Cr^{3+} + 7H_{2}O + 6Fe^{3+}}\\); <strong>\\(E^{\\ominus}_{\\text{cell}} = +0.56\\ \\text{V}\\)</strong>",
+   "steps": [
+    "Six electrons are gained by one dichromate ion, so six iron(II) ions are oxidised.",
+    "Check charge: left \\(-2 + 14 + 12 = +24\\); right \\(6 + 18 = +24\\).",
+    "\\(E^{\\ominus}_{\\text{cell}} = 1.33 - 0.77 = +0.56\\ \\text{V}\\)"
+   ],
+   "why": "Always check that atoms and charges balance in the final equation.",
+   "numeric": {
+    "value": 0.56,
+    "unit": "V",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.7",
+      "14.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-025",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "feasibility"
+   ],
+   "q": "How can you tell from \\(E^{\\ominus}_{\\text{cell}}\\) whether a redox reaction is feasible?",
+   "a": "Calculate \\(E^{\\ominus}_{\\text{cell}} = E^{\\ominus}_{\\text{(species reduced)}} - E^{\\ominus}_{\\text{(species oxidised)}}\\). If it is <strong>positive</strong>, the reaction is thermodynamically feasible.",
+   "why": "Equivalently: the oxidised form in the more positive half-equation will oxidise the reduced form in the more negative one.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-026",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "emf",
+    "calculation"
+   ],
+   "q": "True or false: when a half-equation is multiplied by 2 to balance electrons, its \\(E^{\\ominus}\\) value is also doubled.",
+   "a": "<strong>False.</strong> \\(E^{\\ominus}\\) values are never multiplied.",
+   "why": "An electrode potential is a property of the half-cell (energy per unit charge), not of the amount reacting.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-027",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "conditions",
+    "concentration"
+   ],
+   "q": "Explain how the electrode potential of \\(\\mathrm{Zn^{2+}(aq) + 2e^{-} \\rightleftharpoons Zn(s)}\\) changes if \\([\\mathrm{Zn^{2+}}]\\) is lowered below \\(1.00\\ \\text{mol dm}^{-3}\\), and the effect on the emf of a zinc–copper cell.",
+   "a": "The zinc electrode potential becomes more negative, so the emf of the cell increases.",
+   "marks": [
+    "Lowering \\([\\mathrm{Zn^{2+}}]\\) shifts the equilibrium to the left (Le Chatelier).",
+    "More zinc atoms release electrons, so the electrode becomes more negative.",
+    "The difference between the copper and zinc potentials increases, so \\(E_{\\text{cell}}\\) increases above 1.10 V."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-028",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "conditions"
+   ],
+   "q": "Why are the conditions important when measuring an electrode potential?",
+   "a": "Each half-cell is an equilibrium. Changing a concentration, a gas pressure or the temperature shifts that equilibrium and so changes the potential.",
+   "why": "So a measured \\(E\\) only equals \\(E^{\\ominus}\\) at 298 K, 100 kPa and \\(1.00\\ \\text{mol dm}^{-3}\\) ions.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-029",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "limitations",
+    "kinetics"
+   ],
+   "q": "\\(E^{\\ominus}_{\\text{cell}}\\) is positive for a reaction, but no reaction is seen. Give two reasons.",
+   "a": "The reaction may be too slow (kinetic inhibition), or the conditions may not be standard.",
+   "marks": [
+    "The activation energy may be very high, so the rate is too slow to observe (the reaction is kinetically inhibited).",
+    "\\(E^{\\ominus}\\) values apply only at standard conditions; real concentrations, pressures or temperatures can change the potentials enough to change the prediction.",
+    "\\(E^{\\ominus}\\) values predict feasibility only; they say nothing about rate."
+   ],
+   "boards": {
+    "edexcel": {
+     "points": [
+      "14.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-030",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "limitations",
+    "kinetics"
+   ],
+   "q": "Show that acidified manganate(VII) should oxidise water to oxygen, and suggest why its solutions are nevertheless stable for long periods.<br>\\(\\mathrm{MnO_{4}^{-}/Mn^{2+}}\\) \\(+1.51\\ \\text{V}\\); \\(\\mathrm{O_{2} + 4H^{+} + 4e^{-} \\rightleftharpoons 2H_{2}O}\\) \\(+1.23\\ \\text{V}\\)",
+   "a": "\\(E^{\\ominus}_{\\text{cell}} = 1.51 - 1.23 = +0.28\\ \\text{V}\\), so the reaction is feasible, but its activation energy is so high that it is extremely slow.",
+   "steps": [
+    "Manganate(VII) is reduced; water is oxidised to oxygen.",
+    "\\(E^{\\ominus}_{\\text{cell}} = 1.51 - 1.23 = +0.28\\ \\text{V}\\): positive, so feasible.",
+    "The solution does not visibly change: the reaction is kinetically inhibited."
+   ],
+   "why": "A positive emf means a reaction can happen, not that it happens at a noticeable rate.",
+   "numeric": {
+    "value": 0.28,
+    "unit": "V",
+    "sf": 2
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "14.12",
+      "14.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-031",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "limitations",
+    "conditions"
+   ],
+   "q": "\\(\\mathrm{MnO_{2} + 4H^{+} + 2e^{-} \\rightleftharpoons Mn^{2+} + 2H_{2}O}\\), \\(E^{\\ominus} = +1.23\\ \\text{V}\\); \\(\\mathrm{Cl_{2} + 2e^{-} \\rightleftharpoons 2Cl^{-}}\\), \\(E^{\\ominus} = +1.36\\ \\text{V}\\). Explain why \\(\\mathrm{MnO_{2}}\\) does oxidise <em>concentrated</em> hydrochloric acid to chlorine.",
+   "a": "Under standard conditions \\(E^{\\ominus}_{\\text{cell}} = -0.13\\ \\text{V}\\), but the high concentrations shift both equilibria and make the reaction feasible.",
+   "marks": [
+    "Under standard conditions \\(E^{\\ominus}_{\\text{cell}} = 1.23 - 1.36 = -0.13\\ \\text{V}\\): not feasible.",
+    "High \\([\\mathrm{H^{+}}]\\) shifts the \\(\\mathrm{MnO_{2}}\\) equilibrium to the right, making its potential more positive.",
+    "High \\([\\mathrm{Cl^{-}}]\\) shifts the chlorine equilibrium to the left, making its potential less positive.",
+    "The emf becomes positive, so the reaction occurs (helped by heating and loss of chlorine gas)."
+   ],
+   "boards": {
+    "edexcel": {
+     "points": [
+      "14.12",
+      "14.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-032",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "thermodynamics",
+    "entropy"
+   ],
+   "q": "How is \\(E^{\\ominus}_{\\text{cell}}\\) related to the total entropy change and to the equilibrium constant, \\(K\\), of a reaction?",
+   "a": "\\(E^{\\ominus}_{\\text{cell}}\\) is <strong>directly proportional</strong> to \\(\\Delta S_{\\text{total}}\\) and to \\(\\ln K\\).",
+   "why": "\\(\\Delta S_{\\text{total}} = R \\ln K\\). A positive \\(E^{\\ominus}_{\\text{cell}}\\) means \\(\\Delta S_{\\text{total}}\\) is positive and \\(K > 1\\).",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "14.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-033",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "thermodynamics",
+    "equilibrium"
+   ],
+   "q": "What do a large positive \\(E^{\\ominus}_{\\text{cell}}\\) and an \\(E^{\\ominus}_{\\text{cell}}\\) close to zero each tell you about the extent of a reaction?",
+   "a": "Large and positive: \\(K\\) is very large, so the reaction goes <strong>almost to completion</strong>.<br>Close to zero: \\(K\\) is close to 1, so an <strong>equilibrium mixture</strong> of reactants and products forms.",
+   "why": "\\(\\ln K\\) is proportional to \\(E^{\\ominus}_{\\text{cell}}\\), so even a few tenths of a volt correspond to a very large \\(K\\).",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "14.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-034",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "disproportionation",
+    "copper"
+   ],
+   "q": "Use \\(E^{\\ominus}\\) values to show that copper(I) ions disproportionate in aqueous solution.<br>\\(\\mathrm{Cu^{+} + e^{-} \\rightleftharpoons Cu}\\) \\(+0.52\\ \\text{V}\\)<br>\\(\\mathrm{Cu^{2+} + e^{-} \\rightleftharpoons Cu^{+}}\\) \\(+0.15\\ \\text{V}\\)",
+   "a": "\\(\\mathrm{2Cu^{+}(aq) \\rightarrow Cu(s) + Cu^{2+}(aq)}\\); <strong>\\(E^{\\ominus}_{\\text{cell}} = +0.37\\ \\text{V}\\)</strong>, so feasible.",
+   "steps": [
+    "One \\(\\mathrm{Cu^{+}}\\) is reduced to Cu (\\(+0.52\\ \\text{V}\\)); another is oxidised to \\(\\mathrm{Cu^{2+}}\\) (reverse of the \\(+0.15\\ \\text{V}\\) half-equation).",
+    "\\(E^{\\ominus}_{\\text{cell}} = 0.52 - 0.15 = +0.37\\ \\text{V}\\)",
+    "Positive, so the disproportionation is feasible."
+   ],
+   "why": "In disproportionation the same species is both oxidised and reduced.",
+   "numeric": {
+    "value": 0.37,
+    "unit": "V",
+    "sf": 2
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "14.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-035",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "disproportionation"
+   ],
+   "q": "How can \\(E^{\\ominus}\\) values show whether a species X will disproportionate?",
+   "a": "Find the half-equation in which X is <strong>reduced</strong> and the one in which X is <strong>formed</strong> by reduction (so X is oxidised in reverse). If \\(E^{\\ominus}\\)(X reduced) is more positive than \\(E^{\\ominus}\\)(X formed), \\(E^{\\ominus}_{\\text{cell}}\\) is positive and X disproportionates.",
+   "why": "E.g. \\(\\mathrm{H_{2}O_{2}}\\): \\(E^{\\ominus}_{\\text{cell}} = 1.77 - 0.68 = +1.09\\ \\text{V}\\) for \\(\\mathrm{2H_{2}O_{2} \\rightarrow 2H_{2}O + O_{2}}\\).",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "14.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-036",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "commercial-cells"
+   ],
+   "q": "Name the three types of commercial electrochemical cell, and give an example of each.",
+   "a": "Non-rechargeable (e.g. an alkaline battery), rechargeable (e.g. the lithium-ion cell in a mobile phone), and fuel cells (e.g. hydrogen–oxygen).",
+   "why": "In a non-rechargeable cell the reaction cannot be reversed; in a rechargeable cell it can; a fuel cell is supplied with fuel continuously.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.15",
+      "14.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-037",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "commercial-cells",
+    "current"
+   ],
+   "q": "Explain how the electrode reactions in a cell generate an electric current.",
+   "a": "Oxidation releases electrons at the negative electrode; they flow through the external circuit to the positive electrode, where reduction takes place.",
+   "marks": [
+    "At the negative electrode, a species is oxidised and releases electrons.",
+    "The electrons flow through the external circuit (doing work, e.g. powering a phone) to the positive electrode.",
+    "At the positive electrode, a species gains the electrons and is reduced; ions move within the cell to balance the charge."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-038",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "lithium",
+    "commercial-cells"
+   ],
+   "q": "Give the simplified electrode reactions in a lithium cell while it is being used.",
+   "a": "Positive electrode: \\(\\mathrm{Li^{+} + CoO_{2} + e^{-} \\rightarrow Li^{+}[CoO_{2}]^{-}}\\)<br>Negative electrode: \\(\\mathrm{Li \\rightarrow Li^{+} + e^{-}}\\)",
+   "why": "Overall: \\(\\mathrm{Li + CoO_{2} \\rightarrow Li^{+}[CoO_{2}]^{-}}\\). Cobalt is reduced from +4 to +3.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-039",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "lithium",
+    "emf",
+    "commercial-cells"
+   ],
+   "q": "Given \\(\\mathrm{Li^{+} + CoO_{2} + e^{-} \\rightarrow Li^{+}[CoO_{2}]^{-}}\\), \\(E^{\\ominus} = +0.56\\ \\text{V}\\), and \\(\\mathrm{Li^{+} + e^{-} \\rightarrow Li}\\), \\(E^{\\ominus} = -3.04\\ \\text{V}\\), calculate the emf of the cell, and give the reaction at the negative electrode during recharging.",
+   "a": "<strong>emf = 3.60 V</strong>. On recharging: \\(\\mathrm{Li^{+} + e^{-} \\rightarrow Li}\\) at the negative electrode.",
+   "steps": [
+    "\\(E^{\\ominus}_{\\text{cell}} = 0.56 - (-3.04) = 3.60\\ \\text{V}\\)",
+    "Recharging applies an external voltage that reverses both electrode reactions.",
+    "So lithium ions are reduced back to lithium at the negative electrode."
+   ],
+   "why": "In a rechargeable cell the products stay on the electrodes, so the reactions can be driven backwards.",
+   "numeric": {
+    "value": 3.6,
+    "unit": "V",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-040",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "nicad",
+    "emf",
+    "commercial-cells"
+   ],
+   "q": "A rechargeable nickel–cadmium cell uses:<br>\\(\\mathrm{NiO(OH) + H_{2}O + e^{-} \\rightleftharpoons Ni(OH)_{2} + OH^{-}}\\) \\(E^{\\ominus} = +0.52\\ \\text{V}\\)<br>\\(\\mathrm{Cd(OH)_{2} + 2e^{-} \\rightleftharpoons Cd + 2OH^{-}}\\) \\(E^{\\ominus} = -0.88\\ \\text{V}\\)<br>Deduce the overall reaction when the cell is used, and its emf.",
+   "a": "\\(\\mathrm{Cd + 2NiO(OH) + 2H_{2}O \\rightarrow Cd(OH)_{2} + 2Ni(OH)_{2}}\\); <strong>emf = 1.40 V</strong>",
+   "steps": [
+    "The more positive half-equation goes forwards (reduction of NiO(OH)); cadmium is oxidised at the negative electrode.",
+    "Double the nickel half-equation to balance electrons, then add; the \\(\\mathrm{OH^{-}}\\) ions cancel.",
+    "\\(E^{\\ominus}_{\\text{cell}} = 0.52 - (-0.88) = 1.40\\ \\text{V}\\)"
+   ],
+   "why": "On recharging, both reactions are reversed.",
+   "numeric": {
+    "value": 1.4,
+    "unit": "V",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-041",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "commercial-cells",
+    "rechargeable"
+   ],
+   "q": "What makes a storage cell rechargeable?",
+   "a": "Its electrode reactions can be <strong>reversed</strong> by applying an external voltage greater than the cell’s emf, because the products stay in contact with the electrodes.",
+   "why": "Electrode potentials give the voltage of each cell; cells are joined in series to make a battery of higher voltage.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-042",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "fuel-cell"
+   ],
+   "q": "What is a fuel cell?",
+   "a": "A cell in which the energy released when a fuel reacts with oxygen is used to generate a voltage. Fuel and oxygen are supplied continuously, so it <strong>does not need to be recharged</strong>.",
+   "why": "Hydrogen, methanol and other hydrogen-rich fuels are used.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-043",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "fuel-cell",
+    "alkaline"
+   ],
+   "q": "Give the electrode reactions in an alkaline hydrogen–oxygen fuel cell.",
+   "a": "Negative electrode: \\(\\mathrm{H_{2} + 2OH^{-} \\rightarrow 2H_{2}O + 2e^{-}}\\)<br>Positive electrode: \\(\\mathrm{O_{2} + 2H_{2}O + 4e^{-} \\rightarrow 4OH^{-}}\\)",
+   "why": "Overall: \\(\\mathrm{2H_{2} + O_{2} \\rightarrow 2H_{2}O}\\). The electrolyte is aqueous KOH or NaOH.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-044",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "fuel-cell",
+    "alkaline",
+    "emf"
+   ],
+   "q": "Calculate the emf of an alkaline hydrogen–oxygen fuel cell.<br>\\(\\mathrm{O_{2} + 2H_{2}O + 4e^{-} \\rightleftharpoons 4OH^{-}}\\) \\(E^{\\ominus} = +0.40\\ \\text{V}\\)<br>\\(\\mathrm{2H_{2}O + 2e^{-} \\rightleftharpoons H_{2} + 2OH^{-}}\\) \\(E^{\\ominus} = -0.83\\ \\text{V}\\)",
+   "a": "<strong>emf = 1.23 V</strong>",
+   "steps": [
+    "Oxygen is reduced at the positive electrode; hydrogen is oxidised at the negative electrode.",
+    "\\(E^{\\ominus}_{\\text{cell}} = 0.40 - (-0.83) = 1.23\\ \\text{V}\\)"
+   ],
+   "why": "It is the same as for the acidic cell, because the overall reaction is the same.",
+   "numeric": {
+    "value": 1.23,
+    "unit": "V",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.17",
+      "14.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-045",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "fuel-cell",
+    "acidic"
+   ],
+   "q": "Give the electrode reactions in a hydrogen–oxygen fuel cell with an acidic electrolyte.",
+   "a": "Negative electrode: \\(\\mathrm{H_{2} \\rightarrow 2H^{+} + 2e^{-}}\\)<br>Positive electrode: \\(\\mathrm{O_{2} + 4H^{+} + 4e^{-} \\rightarrow 2H_{2}O}\\)",
+   "why": "\\(E^{\\ominus}_{\\text{cell}} = 1.23 - 0.00 = 1.23\\ \\text{V}\\). \\(\\mathrm{H^{+}}\\) ions move through the electrolyte from the negative to the positive electrode.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "14.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-046",
+   "type": "equation",
+   "difficulty": 3,
+   "tags": [
+    "fuel-cell",
+    "methanol"
+   ],
+   "q": "In a methanol fuel cell with an acidic electrolyte, give the reaction at the negative electrode and the overall reaction.",
+   "a": "Negative electrode: \\(\\mathrm{CH_{3}OH + H_{2}O \\rightarrow CO_{2} + 6H^{+} + 6e^{-}}\\)<br>Overall: \\(\\mathrm{2CH_{3}OH + 3O_{2} \\rightarrow 2CO_{2} + 4H_{2}O}\\)",
+   "why": "The positive electrode reaction is \\(\\mathrm{O_{2} + 4H^{+} + 4e^{-} \\rightarrow 2H_{2}O}\\). Methanol is a liquid, so it is easier to store and carry than hydrogen.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "14.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-047",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "fuel-cell",
+    "society"
+   ],
+   "q": "Give the benefits and risks to society of using hydrogen fuel cells and lithium-ion cells.",
+   "a": "Both reduce the use of fossil fuels where they are used, but their materials and energy sources carry costs and hazards.",
+   "marks": [
+    "Hydrogen fuel cells: the only product is water, and they convert fuel energy to electrical energy more efficiently than burning it.",
+    "But hydrogen is mostly made using fossil fuels or electricity, and it is flammable and hard to store and transport.",
+    "Rechargeable lithium-ion cells: reused many times, reducing waste; power phones, laptops and electric vehicles.",
+    "But lithium is flammable and cells can catch fire if damaged; mining cobalt and lithium has environmental and human costs, and used cells must be recycled safely."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-048",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "fuel-cell"
+   ],
+   "q": "True or false: a fuel cell stores electrical energy, like a rechargeable battery.",
+   "a": "<strong>False.</strong> A fuel cell does not store energy; it converts chemical energy from a continuous supply of fuel into electrical energy.",
+   "why": "It works for as long as fuel and oxygen are supplied, and never needs electrical recharging.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-elec-049",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "feasibility",
+    "kinetics"
+   ],
+   "q": "True or false: the larger \\(E^{\\ominus}_{\\text{cell}}\\) is, the faster the reaction.",
+   "a": "<strong>False.</strong> \\(E^{\\ominus}_{\\text{cell}}\\) shows how feasible a reaction is, not how fast it goes.",
+   "why": "Rate depends on the activation energy. A reaction with a large positive emf can still be very slow.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "14.12"
+     ]
+    }
+   }
+  }
+ ]
+}

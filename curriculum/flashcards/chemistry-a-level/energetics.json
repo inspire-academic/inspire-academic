@@ -1,0 +1,1367 @@
+{
+ "schema": "inspire.flashcards.v1",
+ "topic": {
+  "id": "chemistry-a-level/energetics",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Energetics",
+  "spec": "chemistry-a-level"
+ },
+ "cards": [
+  {
+   "id": "che-al-energy-001",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "enthalpy"
+   ],
+   "q": "What is an enthalpy change, \\(\\Delta H\\)?",
+   "a": "The heat energy change measured under conditions of <strong>constant pressure</strong>.",
+   "why": "Enthalpy changes are usually given in \\(\\text{kJ mol}^{-1}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-002",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "enthalpy",
+    "exothermic"
+   ],
+   "q": "What is the sign of \\(\\Delta H\\) for an exothermic and for an endothermic reaction?",
+   "a": "Exothermic: \\(\\Delta H\\) <strong>negative</strong> (heat given out to the surroundings).<br>Endothermic: \\(\\Delta H\\) <strong>positive</strong> (heat taken in from the surroundings).",
+   "why": "\\(\\Delta H\\) is measured from the point of view of the reacting chemicals: if they lose energy, \\(\\Delta H\\) is negative.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-003",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "standard-conditions"
+   ],
+   "q": "What are standard conditions for enthalpy changes?",
+   "a": "A pressure of <strong>100 kPa</strong> and a stated temperature, usually <strong>298 K</strong>, written \\(\\Delta H^{\\circ}_{298}\\). Each substance is in its standard state.",
+   "why": "The standard state is the normal physical state of the substance under these conditions, for example water as a liquid.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-004",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "enthalpy-diagrams"
+   ],
+   "q": "Describe the enthalpy level diagram for an exothermic reaction.",
+   "a": "The products are drawn at a <strong>lower</strong> enthalpy level than the reactants. A downward arrow from reactants to products is labelled with the negative \\(\\Delta H\\).",
+   "why": "For an endothermic reaction the products are higher than the reactants and the arrow points up.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-005",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "enthalpy-diagrams"
+   ],
+   "q": "How does an enthalpy level diagram differ from a reaction profile diagram?",
+   "a": "An enthalpy level diagram shows only the levels of the reactants and products and the enthalpy change. A reaction profile also shows the energy barrier: the <strong>activation energy</strong>.",
+   "why": "Activation energy is not shown on an enthalpy level diagram.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "8.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-006",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "definitions",
+    "combustion"
+   ],
+   "q": "Define standard enthalpy of combustion, \\(\\Delta_{\\text{c}}H^{\\circ}\\).",
+   "a": "The enthalpy change when <strong>one mole</strong> of a substance is <strong>completely burned in oxygen</strong> under standard conditions, with all reactants and products in their standard states.",
+   "why": "“Completely” means the products are \\(\\mathrm{CO_{2}}\\) and \\(\\mathrm{H_{2}O}\\) for a hydrocarbon, not carbon monoxide or soot.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-007",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "definitions",
+    "formation"
+   ],
+   "q": "Define standard enthalpy of formation, \\(\\Delta_{\\text{f}}H^{\\circ}\\).",
+   "a": "The enthalpy change when <strong>one mole</strong> of a compound is formed <strong>from its elements</strong> in their standard states, under standard conditions.",
+   "why": "By this definition, \\(\\Delta_{\\text{f}}H^{\\circ}\\) of an element in its standard state is zero.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-008",
+   "type": "definition",
+   "difficulty": 2,
+   "tags": [
+    "definitions"
+   ],
+   "q": "Define standard enthalpy change of reaction, \\(\\Delta_{\\text{r}}H^{\\circ}\\).",
+   "a": "The enthalpy change when the <strong>molar quantities of reactants shown in the equation</strong> react together under standard conditions, with all substances in their standard states.",
+   "why": "So the value depends on the equation written: doubling the equation doubles \\(\\Delta_{\\text{r}}H^{\\circ}\\).",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-009",
+   "type": "definition",
+   "difficulty": 2,
+   "tags": [
+    "definitions",
+    "neutralisation"
+   ],
+   "q": "Define standard enthalpy change of neutralisation, \\(\\Delta_{\\text{neut}}H^{\\circ}\\).",
+   "a": "The enthalpy change when an acid and an alkali react together to form <strong>one mole of water</strong> under standard conditions.",
+   "why": "Defining it per mole of water lets acids with different numbers of H⁺ ions, such as HCl and H₂SO₄, be compared fairly.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-010",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "definitions",
+    "formation"
+   ],
+   "q": "Write the equation for the standard enthalpy of formation of ethanol, \\(\\mathrm{C_{2}H_{5}OH(l)}\\).",
+   "a": "\\(\\mathrm{2C(s) + 3H_{2}(g) + \\tfrac{1}{2}O_{2}(g) \\rightarrow C_{2}H_{5}OH(l)}\\)",
+   "why": "Exactly one mole of product, so a fraction may be needed in front of an element. Carbon is graphite in its standard state.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-011",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "definitions",
+    "combustion"
+   ],
+   "q": "Write the equation for the standard enthalpy of combustion of methane.",
+   "a": "\\(\\mathrm{CH_{4}(g) + 2O_{2}(g) \\rightarrow CO_{2}(g) + 2H_{2}O(l)}\\)",
+   "why": "Water is a liquid in its standard state (298 K, 100 kPa).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-012",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "definitions",
+    "formation"
+   ],
+   "q": "Write the equation for the standard enthalpy of formation of sodium chloride.",
+   "a": "\\(\\mathrm{Na(s) + \\tfrac{1}{2}Cl_{2}(g) \\rightarrow NaCl(s)}\\)",
+   "why": "Chlorine exists as diatomic molecules in its standard state, so half a mole is needed for one mole of NaCl.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-013",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "definitions"
+   ],
+   "q": "Why is \\(\\Delta_{\\text{c}}H^{\\circ}\\) of hydrogen the same as \\(\\Delta_{\\text{f}}H^{\\circ}\\) of water?",
+   "a": "Both describe the same reaction: \\(\\mathrm{H_{2}(g) + \\tfrac{1}{2}O_{2}(g) \\rightarrow H_{2}O(l)}\\).",
+   "why": "Burning one mole of hydrogen forms one mole of water from its elements in their standard states.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-014",
+   "type": "misconception",
+   "difficulty": 1,
+   "tags": [
+    "definitions",
+    "formation"
+   ],
+   "q": "True or false: \\(\\Delta_{\\text{f}}H^{\\circ}\\) of oxygen atoms, \\(\\mathrm{O(g)}\\), is zero because oxygen is an element.",
+   "a": "<strong>False.</strong> Only \\(\\mathrm{O_{2}(g)}\\), the standard state, has \\(\\Delta_{\\text{f}}H^{\\circ} = 0\\).",
+   "why": "Making \\(\\mathrm{O(g)}\\) from \\(\\mathrm{O_{2}(g)}\\) needs energy to break the O=O bond, so its value is positive.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-015",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "calorimetry"
+   ],
+   "q": "Give the equation for the heat energy transferred in a calorimetry experiment, with units.",
+   "a": "\\(q = mc\\Delta T\\)<br>\\(q\\) in J, \\(m\\) in g, \\(c\\) in \\(\\text{J g}^{-1}\\,\\text{K}^{-1}\\), \\(\\Delta T\\) in K.",
+   "why": "\\(m\\) is the mass of the substance being heated (usually the water or solution), not the mass of the reactants. Edexcel writes \\(Q\\) for \\(q\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-016",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "calorimetry",
+    "units"
+   ],
+   "q": "A temperature rises from \\(19.5\\ ^{\\circ}\\mathrm{C}\\) to \\(26.0\\ ^{\\circ}\\mathrm{C}\\). What is \\(\\Delta T\\) in kelvin?",
+   "a": "\\(6.5\\ \\text{K}\\)",
+   "why": "A change of \\(1\\ ^{\\circ}\\mathrm{C}\\) is the same size as a change of \\(1\\ \\text{K}\\), so a temperature difference has the same value in both.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-017",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry",
+    "neutralisation"
+   ],
+   "q": "\\(25.0\\ \\text{cm}^{3}\\) of \\(1.00\\ \\text{mol dm}^{-3}\\) HCl is mixed with \\(25.0\\ \\text{cm}^{3}\\) of \\(1.00\\ \\text{mol dm}^{-3}\\) NaOH in a polystyrene cup. The temperature rises by \\(6.7\\ \\text{K}\\). Calculate the enthalpy change of neutralisation. (\\(c = 4.18\\ \\text{J g}^{-1}\\,\\text{K}^{-1}\\))",
+   "a": "<strong>\\(-56\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Mass of solution \\(= 50.0\\ \\text{g}\\) (taking the density as \\(1.00\\ \\text{g cm}^{-3}\\)).",
+    "\\(q = 50.0 \\times 4.18 \\times 6.7 = 1400\\ \\text{J}\\)",
+    "Moles of water formed \\(= 0.0250 \\times 1.00 = 0.0250\\ \\text{mol}\\)",
+    "\\(\\Delta H = -\\frac{1400}{0.0250} = -56\\,000\\ \\text{J mol}^{-1} = -56\\ \\text{kJ mol}^{-1}\\) (2 s.f., as \\(\\Delta T\\) has 2 s.f.)"
+   ],
+   "why": "The temperature rose, so the reaction is exothermic and the sign is negative.",
+   "numeric": {
+    "value": -56,
+    "unit": "kJ mol⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ],
+     "practical": "RP2"
+    },
+    "edexcel": {
+     "points": [
+      "8.5",
+      "8.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-018",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry",
+    "combustion"
+   ],
+   "q": "Burning \\(0.460\\ \\text{g}\\) of ethanol (\\(M_{\\text{r}} = 46.0\\)) in a spirit burner heats \\(100\\ \\text{g}\\) of water in a copper can by \\(15.0\\ \\text{K}\\). Calculate \\(\\Delta_{\\text{c}}H\\) of ethanol. (\\(c = 4.18\\ \\text{J g}^{-1}\\,\\text{K}^{-1}\\))",
+   "a": "<strong>\\(-627\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "\\(q = 100 \\times 4.18 \\times 15.0 = 6270\\ \\text{J}\\)",
+    "Moles of ethanol \\(= \\frac{0.460}{46.0} = 0.0100\\ \\text{mol}\\)",
+    "\\(\\Delta_{\\text{c}}H = -\\frac{6270}{0.0100} = -627\\,000\\ \\text{J mol}^{-1} = -627\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "The data-book value is about \\(-1367\\ \\text{kJ mol}^{-1}\\): much of the heat is lost to the surroundings.",
+   "numeric": {
+    "value": -627,
+    "unit": "kJ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ],
+     "practical": "RP2"
+    },
+    "edexcel": {
+     "points": [
+      "8.5",
+      "8.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-019",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry",
+    "combustion",
+    "errors"
+   ],
+   "q": "Explain why the enthalpy of combustion of an alcohol measured with a spirit burner and a calorimeter is much less exothermic than the data-book value.",
+   "a": "Heat is lost, combustion is incomplete, and conditions are not standard.",
+   "marks": [
+    "Heat is lost to the surroundings and used to heat the calorimeter instead of the water.",
+    "Incomplete combustion: some carbon forms soot or carbon monoxide, releasing less energy.",
+    "Some alcohol evaporates from the wick, so the mass burned is overestimated.",
+    "The water formed is not all liquid, and conditions are not standard."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ],
+     "practical": "RP2"
+    },
+    "edexcel": {
+     "points": [
+      "8.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-020",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry",
+    "method"
+   ],
+   "q": "Outline how to measure the enthalpy change of a reaction in solution, such as zinc with copper(II) sulfate solution.",
+   "a": "Measure the temperature before and after mixing in an insulated cup, and correct for cooling with a graph.",
+   "marks": [
+    "Measure a known volume of solution into a polystyrene cup with a lid, standing in a beaker for stability.",
+    "Record the temperature every 30 s for a few minutes to get a steady starting value.",
+    "Add the second reactant (excess zinc powder) at a recorded time and stir.",
+    "Keep recording the temperature every 30 s for several minutes after the maximum.",
+    "Plot temperature against time and extrapolate the cooling line back to the time of mixing to find the corrected temperature change."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ],
+     "practical": "RP2"
+    },
+    "edexcel": {
+     "points": [
+      "8.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-021",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry",
+    "graphs"
+   ],
+   "q": "Why is the temperature change in a calorimetry experiment found by extrapolating a graph, rather than read directly from the highest temperature recorded?",
+   "a": "The solution loses heat while the reaction is still happening, so the highest reading is lower than the true temperature reached.",
+   "why": "Extrapolating the cooling line back to the time of mixing estimates the temperature if the reaction had been instant with no heat loss.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ],
+     "practical": "RP2"
+    },
+    "edexcel": {
+     "points": [
+      "8.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-022",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry",
+    "displacement"
+   ],
+   "q": "Excess zinc is added to \\(50.0\\ \\text{cm}^{3}\\) of \\(0.200\\ \\text{mol dm}^{-3}\\) \\(\\mathrm{CuSO_{4}(aq)}\\). The extrapolated temperature rise is \\(10.2\\ \\text{K}\\). Calculate \\(\\Delta H\\) for \\(\\mathrm{Zn(s) + CuSO_{4}(aq) \\rightarrow ZnSO_{4}(aq) + Cu(s)}\\). (\\(c = 4.18\\ \\text{J g}^{-1}\\,\\text{K}^{-1}\\))",
+   "a": "<strong>\\(-213\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "\\(q = 50.0 \\times 4.18 \\times 10.2 = 2132\\ \\text{J}\\)",
+    "Moles of \\(\\mathrm{CuSO_{4}}\\) (the limiting reagent) \\(= 0.0500 \\times 0.200 = 0.0100\\ \\text{mol}\\)",
+    "\\(\\Delta H = -\\frac{2132}{0.0100} = -213\\,200\\ \\text{J mol}^{-1} = -213\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "Use the moles of the reactant that is not in excess. Zinc is in excess, so copper(II) sulfate decides how much reaction happens.",
+   "numeric": {
+    "value": -213,
+    "unit": "kJ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ],
+     "practical": "RP2"
+    },
+    "edexcel": {
+     "points": [
+      "8.5",
+      "8.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-023",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry",
+    "endothermic"
+   ],
+   "q": "Dissolving \\(5.00\\ \\text{g}\\) of KCl (\\(M_{\\text{r}} = 74.6\\)) in \\(50.0\\ \\text{g}\\) of water lowers the temperature by \\(5.5\\ \\text{K}\\). Calculate the enthalpy change of solution of KCl. (\\(c = 4.18\\ \\text{J g}^{-1}\\,\\text{K}^{-1}\\))",
+   "a": "<strong>\\(+17\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "\\(q = 50.0 \\times 4.18 \\times 5.5 = 1150\\ \\text{J}\\)",
+    "Moles of KCl \\(= \\frac{5.00}{74.6} = 0.0670\\ \\text{mol}\\)",
+    "\\(\\Delta H = +\\frac{1150}{0.0670} = +17\\,000\\ \\text{J mol}^{-1} = +17\\ \\text{kJ mol}^{-1}\\) (2 s.f.)"
+   ],
+   "why": "The temperature fell, so the process is endothermic and the sign is positive.",
+   "numeric": {
+    "value": 17,
+    "unit": "kJ mol⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ],
+     "practical": "RP2"
+    },
+    "edexcel": {
+     "points": [
+      "8.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-024",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry"
+   ],
+   "q": "\\(50.0\\ \\text{cm}^{3}\\) of \\(2.00\\ \\text{mol dm}^{-3}\\) HCl is mixed with \\(50.0\\ \\text{cm}^{3}\\) of \\(2.00\\ \\text{mol dm}^{-3}\\) NaOH. \\(\\Delta_{\\text{neut}}H = -57.1\\ \\text{kJ mol}^{-1}\\). Calculate the expected temperature rise. (\\(c = 4.18\\ \\text{J g}^{-1}\\,\\text{K}^{-1}\\))",
+   "a": "<strong>\\(13.7\\ \\text{K}\\)</strong>",
+   "steps": [
+    "Moles of water formed \\(= 0.0500 \\times 2.00 = 0.100\\ \\text{mol}\\)",
+    "Heat released \\(= 0.100 \\times 57.1 = 5.71\\ \\text{kJ} = 5710\\ \\text{J}\\)",
+    "\\(\\Delta T = \\frac{q}{mc} = \\frac{5710}{100 \\times 4.18} = 13.7\\ \\text{K}\\)"
+   ],
+   "why": "The total volume is \\(100\\ \\text{cm}^{3}\\), so the mass heated is \\(100\\ \\text{g}\\).",
+   "numeric": {
+    "value": 13.7,
+    "unit": "K",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-025",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry",
+    "assumptions"
+   ],
+   "q": "What assumptions are made when calculating an enthalpy change from a reaction in solution in a polystyrene cup?",
+   "a": "The solution has a density of \\(1.00\\ \\text{g cm}^{-3}\\) and the same specific heat capacity as water; all the heat goes into the solution; the cup absorbs negligible heat.",
+   "why": "Each assumption makes the calculated value slightly different from the true one.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-026",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry",
+    "significant-figures"
+   ],
+   "q": "To how many significant figures should an enthalpy change calculated from calorimetry data be given?",
+   "a": "To the same number of significant figures as the <strong>least precise</strong> measurement used.",
+   "why": "A temperature change of \\(6.7\\ \\text{K}\\) (2 s.f.) limits the answer to 2 s.f., however precise the volumes are.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-027",
+   "type": "misconception",
+   "difficulty": 1,
+   "tags": [
+    "calorimetry",
+    "sign"
+   ],
+   "q": "True or false: the temperature of the solution rose, so \\(\\Delta H\\) is positive.",
+   "a": "<strong>False.</strong> A temperature rise means the reaction is exothermic, so \\(\\Delta H\\) is <strong>negative</strong>.",
+   "why": "The heat that warms the solution has been released by the reacting chemicals, which have lost energy.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-028",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "calorimetry"
+   ],
+   "q": "True or false: in \\(q = mc\\Delta T\\), \\(m\\) is the mass of solid that dissolved or reacted.",
+   "a": "<strong>False.</strong> \\(m\\) is the mass of the substance whose temperature changes, usually the water or solution.",
+   "why": "Also convert \\(q\\) from J to kJ before dividing by moles, to give \\(\\text{kJ mol}^{-1}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-029",
+   "type": "law",
+   "difficulty": 1,
+   "tags": [
+    "hess"
+   ],
+   "q": "State Hess’s law.",
+   "a": "The enthalpy change for a reaction is <strong>independent of the route</strong> taken, provided the initial and final conditions are the same.",
+   "why": "It follows from conservation of energy, and lets us calculate enthalpy changes that cannot be measured directly.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-030",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "hess"
+   ],
+   "q": "Why can \\(\\Delta_{\\text{f}}H^{\\circ}\\) of methane not be measured directly, and how is it found?",
+   "a": "Carbon and hydrogen do not react together cleanly to form only methane. It is found with Hess’s law from the enthalpies of combustion of carbon, hydrogen and methane.",
+   "why": "Combustion reactions are easy to measure, so they provide the data for the cycle.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.5",
+      "8.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-031",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "hess",
+    "formation"
+   ],
+   "q": "How is \\(\\Delta_{\\text{r}}H\\) calculated from enthalpies of formation?",
+   "a": "\\(\\Delta_{\\text{r}}H = \\sum \\Delta_{\\text{f}}H( \\text{products}) - \\sum \\Delta_{\\text{f}}H( \\text{reactants})\\)",
+   "why": "The cycle goes from the elements up to the reactants and to the products. Multiply each value by the number of moles in the equation.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.7",
+      "8.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-032",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "hess",
+    "combustion"
+   ],
+   "q": "How is \\(\\Delta_{\\text{r}}H\\) calculated from enthalpies of combustion?",
+   "a": "\\(\\Delta_{\\text{r}}H = \\sum \\Delta_{\\text{c}}H( \\text{reactants}) - \\sum \\Delta_{\\text{c}}H( \\text{products})\\)",
+   "why": "The cycle goes from reactants and products down to the same combustion products, so the subtraction is the other way round from formation data.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.7",
+      "8.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-033",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "hess",
+    "formation"
+   ],
+   "q": "Calculate \\(\\Delta_{\\text{r}}H\\) for \\(\\mathrm{CH_{4}(g) + 2O_{2}(g) \\rightarrow CO_{2}(g) + 2H_{2}O(l)}\\). \\(\\Delta_{\\text{f}}H\\) in \\(\\text{kJ mol}^{-1}\\): \\(\\mathrm{CH_{4}(g)}\\) \\(-75\\), \\(\\mathrm{CO_{2}(g)}\\) \\(-394\\), \\(\\mathrm{H_{2}O(l)}\\) \\(-286\\).",
+   "a": "<strong>\\(-891\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Products: \\(-394 + 2(-286) = -966\\)",
+    "Reactants: \\(-75 + 2(0) = -75\\) (\\(\\Delta_{\\text{f}}H\\) of \\(\\mathrm{O_{2}}\\) is zero)",
+    "\\(\\Delta_{\\text{r}}H = -966 - (-75) = -891\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "Elements in their standard states have an enthalpy of formation of zero.",
+   "numeric": {
+    "value": -891,
+    "unit": "kJ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-034",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "hess",
+    "formation"
+   ],
+   "q": "Calculate \\(\\Delta_{\\text{r}}H\\) for \\(\\mathrm{Fe_{2}O_{3}(s) + 3CO(g) \\rightarrow 2Fe(s) + 3CO_{2}(g)}\\), the main reaction in a blast furnace. \\(\\Delta_{\\text{f}}H\\) in \\(\\text{kJ mol}^{-1}\\): \\(\\mathrm{Fe_{2}O_{3}}\\) \\(-824\\), \\(\\mathrm{CO}\\) \\(-111\\), \\(\\mathrm{CO_{2}}\\) \\(-394\\).",
+   "a": "<strong>\\(-25\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Products: \\(2(0) + 3(-394) = -1182\\)",
+    "Reactants: \\(-824 + 3(-111) = -1157\\)",
+    "\\(\\Delta_{\\text{r}}H = -1182 - (-1157) = -25\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "Iron is an element in its standard state, so its enthalpy of formation is zero.",
+   "numeric": {
+    "value": -25,
+    "unit": "kJ mol⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-035",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "hess",
+    "combustion"
+   ],
+   "q": "Calculate \\(\\Delta_{\\text{f}}H\\) of ethanol from enthalpies of combustion in \\(\\text{kJ mol}^{-1}\\): \\(\\mathrm{C(s)}\\) \\(-394\\), \\(\\mathrm{H_{2}(g)}\\) \\(-286\\), \\(\\mathrm{C_{2}H_{5}OH(l)}\\) \\(-1367\\).",
+   "a": "<strong>\\(-279\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Equation: \\(\\mathrm{2C(s) + 3H_{2}(g) + \\tfrac{1}{2}O_{2}(g) \\rightarrow C_{2}H_{5}OH(l)}\\)",
+    "Reactants: \\(2(-394) + 3(-286) = -788 - 858 = -1646\\)",
+    "\\(\\Delta_{\\text{f}}H = \\sum\\Delta_{\\text{c}}H( \\text{reactants}) - \\sum\\Delta_{\\text{c}}H( \\text{products}) = -1646 - (-1367) = -279\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "Oxygen is not burned, so it has no enthalpy of combustion.",
+   "numeric": {
+    "value": -279,
+    "unit": "kJ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-036",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "hess",
+    "combustion"
+   ],
+   "q": "Calculate \\(\\Delta_{\\text{r}}H\\) for \\(\\mathrm{C_{2}H_{4}(g) + H_{2}(g) \\rightarrow C_{2}H_{6}(g)}\\). \\(\\Delta_{\\text{c}}H\\) in \\(\\text{kJ mol}^{-1}\\): \\(\\mathrm{C_{2}H_{4}}\\) \\(-1411\\), \\(\\mathrm{H_{2}}\\) \\(-286\\), \\(\\mathrm{C_{2}H_{6}}\\) \\(-1560\\).",
+   "a": "<strong>\\(-137\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Reactants: \\(-1411 + (-286) = -1697\\)",
+    "Products: \\(-1560\\)",
+    "\\(\\Delta_{\\text{r}}H = -1697 - (-1560) = -137\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "With combustion data it is reactants minus products.",
+   "numeric": {
+    "value": -137,
+    "unit": "kJ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-037",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "hess",
+    "practical"
+   ],
+   "q": "Find \\(\\Delta H\\) for \\(\\mathrm{2NaHCO_{3}(s) \\rightarrow Na_{2}CO_{3}(s) + CO_{2}(g) + H_{2}O(l)}\\), given:<br>\\(\\mathrm{NaHCO_{3}(s) + HCl(aq) \\rightarrow NaCl(aq) + CO_{2}(g) + H_{2}O(l)}\\), \\(\\Delta H_{1} = +31\\ \\text{kJ mol}^{-1}\\)<br>\\(\\mathrm{Na_{2}CO_{3}(s) + 2HCl(aq) \\rightarrow 2NaCl(aq) + CO_{2}(g) + H_{2}O(l)}\\), \\(\\Delta H_{2} = -29\\ \\text{kJ mol}^{-1}\\)",
+   "a": "<strong>\\(+91\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Both reactions with acid end at the same products: \\(\\mathrm{2NaCl(aq) + 2CO_{2}(g) + 2H_{2}O(l)}\\).",
+    "Route 1: \\(\\mathrm{2NaHCO_{3}}\\) with acid: \\(2\\Delta H_{1} = +62\\).",
+    "Route 2: decomposition, then \\(\\mathrm{Na_{2}CO_{3}}\\) with acid: \\(\\Delta H + \\Delta H_{2}\\).",
+    "\\(\\Delta H = 2\\Delta H_{1} - \\Delta H_{2} = +62 - (-29) = +91\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "The decomposition cannot be measured directly, but both reactions with acid can be measured by calorimetry.",
+   "numeric": {
+    "value": 91,
+    "unit": "kJ mol⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.7",
+      "8.8"
+     ],
+     "practical": "CP8"
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-038",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "hess",
+    "practical"
+   ],
+   "q": "Outline how to find the enthalpy change for the thermal decomposition of a hydrogencarbonate, which cannot be measured directly.",
+   "a": "Measure the enthalpy changes of the hydrogencarbonate and of the carbonate with acid, then combine them with Hess’s law.",
+   "marks": [
+    "Add a weighed mass of the hydrogencarbonate to excess dilute hydrochloric acid in a polystyrene cup; record the temperature change.",
+    "Repeat with a weighed mass of the carbonate.",
+    "Calculate \\(\\Delta H\\) in \\(\\text{kJ mol}^{-1}\\) for each reaction using \\(q = mc\\Delta T\\) and the moles of solid.",
+    "Construct a Hess cycle in which both reactions with acid give the same products, and combine the two values."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.5",
+      "8.7"
+     ],
+     "practical": "CP8"
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-039",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "hess",
+    "hydration"
+   ],
+   "q": "The enthalpy changes of solution of anhydrous \\(\\mathrm{CuSO_{4}(s)}\\) and of \\(\\mathrm{CuSO_{4}{\\cdot}5H_{2}O(s)}\\) are \\(-66\\) and \\(+11\\ \\text{kJ mol}^{-1}\\). Calculate \\(\\Delta H\\) for \\(\\mathrm{CuSO_{4}(s) + 5H_{2}O(l) \\rightarrow CuSO_{4}{\\cdot}5H_{2}O(s)}\\).",
+   "a": "<strong>\\(-77\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Both solids dissolve to give the same solution, \\(\\mathrm{CuSO_{4}(aq)}\\).",
+    "Direct route: \\(-66\\). Indirect route: hydration (\\(\\Delta H\\)), then dissolving the hydrate (\\(+11\\)).",
+    "\\(-66 = \\Delta H + 11\\), so \\(\\Delta H = -77\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "The hydration of the anhydrous solid cannot be measured directly: it is too slow and hard to control.",
+   "numeric": {
+    "value": -77,
+    "unit": "kJ mol⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.5",
+      "8.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-040",
+   "type": "definition",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy"
+   ],
+   "q": "What is meant by bond enthalpy (bond dissociation enthalpy)?",
+   "a": "The enthalpy change needed to break <strong>one mole</strong> of a particular covalent bond, with all species in the <strong>gaseous</strong> state.",
+   "why": "For example, \\(\\mathrm{H_{2}(g) \\rightarrow 2H(g)}\\) needs \\(+436\\ \\text{kJ mol}^{-1}\\). Bond breaking always needs energy.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "8.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-041",
+   "type": "definition",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy"
+   ],
+   "q": "Define mean bond enthalpy.",
+   "a": "The enthalpy needed to break one mole of a given type of covalent bond in the gaseous state, <strong>averaged over a range of different compounds</strong>.",
+   "why": "The strength of a bond, such as C–H, varies slightly depending on the rest of the molecule, so an average is used.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-042",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "bond-enthalpy"
+   ],
+   "q": "Why is breaking bonds endothermic and making bonds exothermic?",
+   "a": "Energy must be supplied to overcome the attraction between the nuclei and the shared electrons. The same amount is released when that attraction forms.",
+   "why": "A reaction is exothermic overall when more energy is released making bonds than is taken in breaking them.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-043",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy"
+   ],
+   "q": "How is an enthalpy change of reaction calculated from mean bond enthalpies?",
+   "a": "\\(\\Delta H = \\sum( \\text{bonds broken}) - \\sum( \\text{bonds made})\\)",
+   "why": "Bonds broken in the reactants (taken in) minus bonds made in the products (given out). It applies to reactions where everything is gaseous.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-044",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy"
+   ],
+   "q": "Calculate \\(\\Delta H\\) for \\(\\mathrm{CH_{4}(g) + 2O_{2}(g) \\rightarrow CO_{2}(g) + 2H_{2}O(g)}\\). Mean bond enthalpies in \\(\\text{kJ mol}^{-1}\\): C–H 413, O=O 498, C=O 805, O–H 463.",
+   "a": "<strong>\\(-814\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Bonds broken: \\(4(413) + 2(498) = 1652 + 996 = 2648\\)",
+    "Bonds made: \\(2(805) + 4(463) = 1610 + 1852 = 3462\\)",
+    "\\(\\Delta H = 2648 - 3462 = -814\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "Less exothermic than \\(\\Delta_{\\text{c}}H^{\\circ} = -891\\ \\text{kJ mol}^{-1}\\): here the water is a gas, and mean values are used.",
+   "numeric": {
+    "value": -814,
+    "unit": "kJ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-045",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy",
+    "haber"
+   ],
+   "q": "Calculate \\(\\Delta H\\) for \\(\\mathrm{N_{2}(g) + 3H_{2}(g) \\rightarrow 2NH_{3}(g)}\\). Bond enthalpies in \\(\\text{kJ mol}^{-1}\\): N≡N 945, H–H 436, N–H 391.",
+   "a": "<strong>\\(-93\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Bonds broken: \\(945 + 3(436) = 2253\\)",
+    "Bonds made: \\(2 \\times 3 = 6\\) N–H bonds: \\(6(391) = 2346\\)",
+    "\\(\\Delta H = 2253 - 2346 = -93\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "Count the bonds in every molecule: two ammonia molecules contain six N–H bonds.",
+   "numeric": {
+    "value": -93,
+    "unit": "kJ mol⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-046",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy",
+    "limitations"
+   ],
+   "q": "Explain why an enthalpy change calculated from mean bond enthalpies differs from the value found using Hess’s law with enthalpies of formation or combustion.",
+   "a": "Mean bond enthalpies are averages, and they apply only to gases.",
+   "marks": [
+    "Mean bond enthalpies are averaged over many compounds, so they are not exact for the bonds in this particular molecule.",
+    "They apply only to the gaseous state; if a reactant or product is a liquid or solid, the energy of changing state is not included.",
+    "Enthalpies of formation or combustion are measured for the actual substances, so the Hess’s law value is more accurate."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-047",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy"
+   ],
+   "q": "For \\(\\mathrm{H_{2}(g) + Cl_{2}(g) \\rightarrow 2HCl(g)}\\), \\(\\Delta H = -184\\ \\text{kJ mol}^{-1}\\). Bond enthalpies: H–H 436, Cl–Cl 243 \\(\\text{kJ mol}^{-1}\\). Calculate the H–Cl bond enthalpy.",
+   "a": "<strong>\\(+432\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "\\(\\Delta H = \\sum( \\text{broken}) - \\sum( \\text{made})\\): \\(-184 = (436 + 243) - 2x\\)",
+    "\\(2x = 679 + 184 = 863\\)",
+    "\\(x = 431.5 \\approx 432\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "Two H–Cl bonds are made, so divide by two.",
+   "numeric": {
+    "value": 432,
+    "unit": "kJ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-048",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy"
+   ],
+   "q": "For \\(\\mathrm{CH_{4}(g) \\rightarrow C(g) + 4H(g)}\\), \\(\\Delta H = +1664\\ \\text{kJ mol}^{-1}\\). Calculate the mean bond enthalpy of the C–H bond.",
+   "a": "<strong>\\(+416\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "All four C–H bonds are broken in this change.",
+    "\\(\\frac{1664}{4} = 416\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "The four bonds are broken one after another and each needs a different amount of energy, so the value is a mean.",
+   "numeric": {
+    "value": 416,
+    "unit": "kJ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "8.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-049",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy",
+    "combustion"
+   ],
+   "q": "Why does \\(\\Delta_{\\text{c}}H\\) become more negative by a nearly constant amount for each extra \\(\\mathrm{CH_{2}}\\) in a homologous series of alcohols?",
+   "a": "Each extra CH₂ adds the same extra bonds to break (one C–C, two C–H, and the O=O bonds in 1.5 more O₂) and the same extra bonds to make (in one more CO₂ and one more H₂O).",
+   "why": "So each step adds roughly the same energy, about \\(-650\\ \\text{kJ mol}^{-1}\\), and a graph of \\(\\Delta_{\\text{c}}H\\) against number of carbon atoms is a straight line.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-050",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "bond-enthalpy",
+    "sign"
+   ],
+   "q": "True or false: \\(\\Delta H = \\sum( \\text{bonds made}) - \\sum( \\text{bonds broken})\\).",
+   "a": "<strong>False.</strong> \\(\\Delta H = \\sum( \\text{bonds broken}) - \\sum( \\text{bonds made})\\).",
+   "why": "Breaking bonds takes energy in (positive); making bonds gives energy out (negative). Reversing the subtraction gives the wrong sign.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.4.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "8.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-energy-051",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "neutralisation"
+   ],
+   "q": "Why is \\(\\Delta_{\\text{neut}}H\\) almost the same (about \\(-57\\ \\text{kJ mol}^{-1}\\)) for any strong acid with any strong alkali?",
+   "a": "The reaction is always the same: \\(\\mathrm{H^{+}(aq) + OH^{-}(aq) \\rightarrow H_{2}O(l)}\\).",
+   "why": "Strong acids and alkalis are fully ionised, and the other ions are spectators that do not react.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "8.4"
+     ]
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,1842 @@
+{
+ "schema": "inspire.flashcards.v1",
+ "topic": {
+  "id": "chemistry-a-level/amount-of-substance",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Amount of Substance",
+  "spec": "chemistry-a-level"
+ },
+ "cards": [
+  {
+   "id": "che-al-amount-001",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "relative-mass"
+   ],
+   "q": "Define relative molecular mass, \\(M_{\\text{r}}\\).",
+   "a": "The <strong>weighted mean</strong> mass of a molecule of a compound compared with \\(\\frac{1}{12}\\) of the mass of an atom of carbon-12.",
+   "why": "In practice it is found by adding up the relative atomic masses of all the atoms in the formula.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-002",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "relative-mass",
+    "water-of-crystallisation"
+   ],
+   "q": "Calculate the relative formula mass of hydrated copper(II) sulfate, \\(\\mathrm{CuSO_{4}{\\cdot}5H_{2}O}\\). (\\(A_{\\text{r}}\\): Cu 63.5, S 32.1, O 16.0, H 1.0)",
+   "a": "<strong>249.6</strong>",
+   "steps": [
+    "\\(\\mathrm{CuSO_{4}}\\): \\(63.5 + 32.1 + (4 \\times 16.0) = 159.6\\)",
+    "\\(\\mathrm{5H_{2}O}\\): \\(5 \\times 18.0 = 90.0\\)",
+    "Total: \\(159.6 + 90.0 = 249.6\\)"
+   ],
+   "why": "The water of crystallisation is part of the formula, so its mass is included. “Formula mass” is used because the compound is ionic.",
+   "numeric": {
+    "value": 249.6,
+    "unit": "",
+    "sf": 4
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-003",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "mole",
+    "avogadro"
+   ],
+   "q": "What is the Avogadro constant?",
+   "a": "The number of particles in one mole of a substance: \\(6.022 \\times 10^{23}\\ \\text{mol}^{-1}\\).",
+   "why": "A mole of any substance contains the same number of particles (atoms, molecules, ions or electrons), so moles let chemists count particles by weighing.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.1",
+      "5.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-004",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "mole"
+   ],
+   "q": "What is the unit of amount of substance, and what is molar mass?",
+   "a": "Amount of substance is measured in <strong>moles (mol)</strong>. Molar mass is the mass per mole of a substance, in \\(\\text{g mol}^{-1}\\).",
+   "why": "Molar mass has the same number as \\(M_{\\text{r}}\\): \\(M_{\\text{r}}\\) of water is 18.0, so its molar mass is \\(18.0\\ \\text{g mol}^{-1}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.1",
+      "5.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-005",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "mole"
+   ],
+   "q": "Write the equation linking amount of substance, mass and molar mass (or relative formula mass).",
+   "a": "\\(n = \\frac{m}{M}\\)<br>amount (mol) = mass (g) ÷ molar mass (\\(\\text{g mol}^{-1}\\))",
+   "why": "The mass must be in grams; convert from kilograms or tonnes first.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.3",
+      "5.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-006",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "mole"
+   ],
+   "q": "Calculate the amount, in mol, in 4.00 g of sodium hydroxide, \\(\\mathrm{NaOH}\\). (\\(A_{\\text{r}}\\): Na 23.0, O 16.0, H 1.0)",
+   "a": "<strong>0.100 mol</strong>",
+   "steps": [
+    "\\(M_{\\text{r}} = 23.0 + 16.0 + 1.0 = 40.0\\)",
+    "\\(n = \\frac{4.00}{40.0} = 0.100\\ \\text{mol}\\)"
+   ],
+   "why": "Give the answer to the same number of significant figures as the data (3).",
+   "numeric": {
+    "value": 0.1,
+    "unit": "mol",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-007",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "mole"
+   ],
+   "q": "Calculate the mass of 0.250 mol of calcium carbonate, \\(\\mathrm{CaCO_{3}}\\). (\\(A_{\\text{r}}\\): Ca 40.1, C 12.0, O 16.0)",
+   "a": "<strong>25.0 g</strong>",
+   "steps": [
+    "\\(M_{\\text{r}} = 40.1 + 12.0 + (3 \\times 16.0) = 100.1\\)",
+    "\\(m = n \\times M = 0.250 \\times 100.1 = 25.0\\ \\text{g}\\)"
+   ],
+   "why": "Rearrange \\(n = \\frac{m}{M}\\) to \\(m = nM\\).",
+   "numeric": {
+    "value": 25,
+    "unit": "g",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-008",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "mole",
+    "avogadro"
+   ],
+   "q": "How many atoms are there in 9.00 g of water, \\(\\mathrm{H_{2}O}\\)? (\\(M_{\\text{r}} = 18.0\\), \\(L = 6.022 \\times 10^{23}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>\\(9.03 \\times 10^{23}\\) atoms</strong>",
+   "steps": [
+    "\\(n(\\mathrm{H_{2}O}) = \\frac{9.00}{18.0} = 0.500\\ \\text{mol}\\)",
+    "Molecules \\(= 0.500 \\times 6.022 \\times 10^{23} = 3.011 \\times 10^{23}\\)",
+    "Each molecule has 3 atoms: \\(3 \\times 3.011 \\times 10^{23} = 9.03 \\times 10^{23}\\)"
+   ],
+   "why": "Read the question carefully: atoms, molecules and ions give different answers.",
+   "numeric": {
+    "value": 9.03e+23,
+    "unit": "",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-009",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "mole",
+    "avogadro"
+   ],
+   "q": "How many ions are there in 5.85 g of sodium chloride? (\\(M_{\\text{r}}\\) NaCl \\(= 58.5\\), \\(L = 6.022 \\times 10^{23}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>\\(1.20 \\times 10^{23}\\) ions</strong>",
+   "steps": [
+    "\\(n(\\mathrm{NaCl}) = \\frac{5.85}{58.5} = 0.100\\ \\text{mol}\\)",
+    "Each formula unit gives two ions, \\(\\mathrm{Na^{+}}\\) and \\(\\mathrm{Cl^{-}}\\): \\(0.200\\ \\text{mol}\\) of ions.",
+    "\\(0.200 \\times 6.022 \\times 10^{23} = 1.20 \\times 10^{23}\\)"
+   ],
+   "why": "The mole applies to any stated particle: here, ions.",
+   "numeric": {
+    "value": 1.2e+23,
+    "unit": "",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-010",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "mole",
+    "avogadro"
+   ],
+   "q": "Calculate the mass, in grams, of one molecule of carbon dioxide. (\\(M_{\\text{r}} = 44.0\\), \\(L = 6.022 \\times 10^{23}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>\\(7.31 \\times 10^{-23}\\ \\text{g}\\)</strong>",
+   "steps": [
+    "One mole (\\(6.022 \\times 10^{23}\\) molecules) has a mass of 44.0 g.",
+    "Mass of one molecule \\(= \\frac{44.0}{6.022 \\times 10^{23}} = 7.31 \\times 10^{-23}\\ \\text{g}\\)"
+   ],
+   "why": "Divide the molar mass by the Avogadro constant to get the mass of one particle.",
+   "numeric": {
+    "value": 7.31e-23,
+    "unit": "g",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-011",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "concentration"
+   ],
+   "q": "Write the equation linking amount, concentration (in \\(\\text{mol dm}^{-3}\\)) and volume of a solution in \\(\\text{cm}^{3}\\).",
+   "a": "\\(n = \\frac{c \\times V}{1000}\\)<br>where \\(V\\) is in \\(\\text{cm}^{3}\\). With \\(V\\) in \\(\\text{dm}^{3}\\): \\(n = cV\\).",
+   "why": "\\(1\\ \\text{dm}^{3} = 1000\\ \\text{cm}^{3}\\), so divide a volume in \\(\\text{cm}^{3}\\) by 1000 to get \\(\\text{dm}^{3}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.7",
+      "5.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-012",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "concentration"
+   ],
+   "q": "Calculate the amount of hydrochloric acid in 25.0 \\(\\text{cm}^{3}\\) of a 0.100 \\(\\text{mol dm}^{-3}\\) solution.",
+   "a": "<strong>\\(2.50 \\times 10^{-3}\\ \\text{mol}\\)</strong>",
+   "steps": [
+    "\\(V = \\frac{25.0}{1000} = 0.0250\\ \\text{dm}^{3}\\)",
+    "\\(n = cV = 0.100 \\times 0.0250 = 2.50 \\times 10^{-3}\\ \\text{mol}\\)"
+   ],
+   "why": "Forgetting to convert \\(\\text{cm}^{3}\\) to \\(\\text{dm}^{3}\\) makes the answer 1000 times too big.",
+   "numeric": {
+    "value": 0.0025,
+    "unit": "mol",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-013",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "concentration",
+    "standard-solution"
+   ],
+   "q": "2.65 g of anhydrous sodium carbonate, \\(\\mathrm{Na_{2}CO_{3}}\\), is dissolved and made up to 250 \\(\\text{cm}^{3}\\) in a volumetric flask. Calculate the concentration in \\(\\text{mol dm}^{-3}\\). (\\(M_{\\text{r}} = 106.0\\))",
+   "a": "<strong>0.100 \\(\\text{mol dm}^{-3}\\)</strong>",
+   "steps": [
+    "\\(n = \\frac{2.65}{106.0} = 0.0250\\ \\text{mol}\\)",
+    "\\(V = 0.250\\ \\text{dm}^{3}\\)",
+    "\\(c = \\frac{n}{V} = \\frac{0.0250}{0.250} = 0.100\\ \\text{mol dm}^{-3}\\)"
+   ],
+   "why": "A solution of accurately known concentration like this is called a standard solution.",
+   "numeric": {
+    "value": 0.1,
+    "unit": "mol dm⁻³",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2",
+      "3.1.2.5"
+     ],
+     "practical": "RP1"
+    },
+    "edexcel": {
+     "points": [
+      "5.7",
+      "5.11"
+     ],
+     "practical": "CP2"
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-014",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "concentration"
+   ],
+   "q": "Convert a sodium hydroxide concentration of 0.150 \\(\\text{mol dm}^{-3}\\) into \\(\\text{g dm}^{-3}\\). (\\(M_{\\text{r}}\\) NaOH \\(= 40.0\\))",
+   "a": "<strong>6.00 \\(\\text{g dm}^{-3}\\)</strong>",
+   "steps": [
+    "Each \\(\\text{dm}^{3}\\) contains 0.150 mol.",
+    "Mass \\(= 0.150 \\times 40.0 = 6.00\\ \\text{g}\\), so the concentration is \\(6.00\\ \\text{g dm}^{-3}\\)."
+   ],
+   "why": "Concentration in \\(\\text{g dm}^{-3}\\) \\(=\\) concentration in \\(\\text{mol dm}^{-3}\\) \\(\\times\\ M_{\\text{r}}\\).",
+   "numeric": {
+    "value": 6,
+    "unit": "g dm⁻³",
+    "sf": 3
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-015",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "concentration",
+    "dilution"
+   ],
+   "q": "25.0 \\(\\text{cm}^{3}\\) of 2.00 \\(\\text{mol dm}^{-3}\\) sulfuric acid is diluted with water to 250 \\(\\text{cm}^{3}\\). Calculate the new concentration.",
+   "a": "<strong>0.200 \\(\\text{mol dm}^{-3}\\)</strong>",
+   "steps": [
+    "\\(n = 2.00 \\times \\frac{25.0}{1000} = 0.0500\\ \\text{mol}\\)",
+    "Dilution does not change the amount of acid.",
+    "\\(c = \\frac{0.0500}{0.250} = 0.200\\ \\text{mol dm}^{-3}\\)"
+   ],
+   "why": "The volume increased ten times, so the concentration fell to one tenth.",
+   "numeric": {
+    "value": 0.2,
+    "unit": "mol dm⁻³",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-016",
+   "type": "misconception",
+   "difficulty": 1,
+   "tags": [
+    "concentration"
+   ],
+   "q": "True or false: \\(n = c \\times V\\) can be used with the volume in \\(\\text{cm}^{3}\\).",
+   "a": "<strong>False.</strong> With \\(c\\) in \\(\\text{mol dm}^{-3}\\), \\(V\\) must be in \\(\\text{dm}^{3}\\): divide \\(\\text{cm}^{3}\\) by 1000.",
+   "why": "25.0 \\(\\text{cm}^{3}\\) is 0.0250 \\(\\text{dm}^{3}\\), not 25.0 \\(\\text{dm}^{3}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-017",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "ideal-gas"
+   ],
+   "q": "State the ideal gas equation and the SI unit of each quantity.",
+   "a": "\\(pV = nRT\\)<br>\\(p\\): pressure in Pa<br>\\(V\\): volume in \\(\\text{m}^{3}\\)<br>\\(n\\): amount in mol<br>\\(R\\): gas constant, \\(8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\)<br>\\(T\\): temperature in K",
+   "why": "Students are not expected to recall R; it is given. Getting the units right is where most marks are lost.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-018",
+   "type": "unit",
+   "difficulty": 1,
+   "tags": [
+    "ideal-gas",
+    "units"
+   ],
+   "q": "Convert these into SI units for \\(pV = nRT\\): 250 \\(\\text{cm}^{3}\\); 2.00 \\(\\text{dm}^{3}\\); 101 kPa; 25 °C.",
+   "a": "\\(2.50 \\times 10^{-4}\\ \\text{m}^{3}\\); \\(2.00 \\times 10^{-3}\\ \\text{m}^{3}\\); \\(1.01 \\times 10^{5}\\ \\text{Pa}\\); 298 K.",
+   "why": "\\(1\\ \\text{cm}^{3} = 10^{-6}\\ \\text{m}^{3}\\), \\(1\\ \\text{dm}^{3} = 10^{-3}\\ \\text{m}^{3}\\), \\(1\\ \\text{kPa} = 10^{3}\\ \\text{Pa}\\), and temperature in K \\(=\\) temperature in °C \\(+\\ 273\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-019",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "ideal-gas"
+   ],
+   "q": "Calculate the volume, in \\(\\text{dm}^{3}\\), occupied by 0.500 mol of an ideal gas at 100 kPa and 298 K. (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>12.4 \\(\\text{dm}^{3}\\)</strong>",
+   "steps": [
+    "\\(V = \\frac{nRT}{p} = \\frac{0.500 \\times 8.31 \\times 298}{100 \\times 10^{3}}\\)",
+    "\\(V = 1.24 \\times 10^{-2}\\ \\text{m}^{3}\\)",
+    "\\(\\times 1000\\): \\(V = 12.4\\ \\text{dm}^{3}\\)"
+   ],
+   "why": "The equation gives \\(V\\) in \\(\\text{m}^{3}\\); convert at the end if the question asks for \\(\\text{dm}^{3}\\).",
+   "numeric": {
+    "value": 12.4,
+    "unit": "dm³",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5",
+      "5.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-020",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "ideal-gas"
+   ],
+   "q": "0.0200 mol of a gas occupies 500 \\(\\text{cm}^{3}\\) at 150 kPa. Calculate its temperature in kelvin. (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>451 K</strong>",
+   "steps": [
+    "\\(p = 1.50 \\times 10^{5}\\ \\text{Pa}\\); \\(V = 500 \\times 10^{-6} = 5.00 \\times 10^{-4}\\ \\text{m}^{3}\\)",
+    "\\(T = \\frac{pV}{nR} = \\frac{1.50 \\times 10^{5} \\times 5.00 \\times 10^{-4}}{0.0200 \\times 8.31}\\)",
+    "\\(T = \\frac{75.0}{0.1662} = 451\\ \\text{K}\\)"
+   ],
+   "why": "Rearrange first, then substitute values already in SI units.",
+   "numeric": {
+    "value": 451,
+    "unit": "K",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-021",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "ideal-gas",
+    "relative-mass"
+   ],
+   "q": "0.362 g of a volatile liquid is vaporised. The vapour occupies 150 \\(\\text{cm}^{3}\\) at 101 kPa and 373 K. Calculate the relative molecular mass of the liquid. (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>74.1</strong>",
+   "steps": [
+    "\\(n = \\frac{pV}{RT} = \\frac{1.01 \\times 10^{5} \\times 1.50 \\times 10^{-4}}{8.31 \\times 373}\\)",
+    "\\(n = \\frac{15.15}{3099.6} = 4.888 \\times 10^{-3}\\ \\text{mol}\\)",
+    "\\(M_{\\text{r}} = \\frac{m}{n} = \\frac{0.362}{4.888 \\times 10^{-3}} = 74.1\\)"
+   ],
+   "why": "Keep unrounded values in the calculator until the final step.",
+   "numeric": {
+    "value": 74.1,
+    "unit": "",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-022",
+   "type": "misconception",
+   "difficulty": 1,
+   "tags": [
+    "ideal-gas",
+    "units"
+   ],
+   "q": "True or false: in \\(pV = nRT\\) you can use the temperature in °C, the pressure in kPa and the volume in \\(\\text{dm}^{3}\\).",
+   "a": "<strong>False.</strong> Use SI units: K, Pa and \\(\\text{m}^{3}\\).",
+   "why": "Using °C gives nonsense (at 0 °C the volume would come out as zero), and mixing kPa with \\(\\text{m}^{3}\\) makes the answer 1000 times out.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-023",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "molar-volume",
+    "gases"
+   ],
+   "q": "What is the molar volume of a gas at room temperature and pressure, and what does it allow you to do?",
+   "a": "<strong>24 \\(\\text{dm}^{3}\\ \\text{mol}^{-1}\\)</strong> (24 000 \\(\\text{cm}^{3}\\ \\text{mol}^{-1}\\)). Amount of gas \\(=\\) volume ÷ 24 \\(\\text{dm}^{3}\\ \\text{mol}^{-1}\\).",
+   "why": "One mole of any gas occupies the same volume at the same temperature and pressure; the value 24 applies only at room temperature and pressure.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.7",
+      "5.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-024",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "molar-volume",
+    "gases",
+    "reacting-masses"
+   ],
+   "q": "5.00 g of calcium carbonate reacts with excess hydrochloric acid. Calculate the volume of carbon dioxide formed at room temperature and pressure. (\\(M_{\\text{r}}\\) \\(\\mathrm{CaCO_{3}} = 100.1\\); molar volume \\(= 24.0\\ \\text{dm}^{3}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>1.20 \\(\\text{dm}^{3}\\)</strong>",
+   "steps": [
+    "\\(\\mathrm{CaCO_{3}(s) + 2HCl(aq) \\rightarrow CaCl_{2}(aq) + H_{2}O(l) + CO_{2}(g)}\\)",
+    "\\(n(\\mathrm{CaCO_{3}}) = \\frac{5.00}{100.1} = 0.04995\\ \\text{mol} = n(\\mathrm{CO_{2}})\\)",
+    "\\(V = 0.04995 \\times 24.0 = 1.20\\ \\text{dm}^{3}\\)"
+   ],
+   "why": "The 1 : 1 ratio of \\(\\mathrm{CaCO_{3}}\\) to \\(\\mathrm{CO_{2}}\\) comes from the balanced equation.",
+   "numeric": {
+    "value": 1.2,
+    "unit": "dm³",
+    "sf": 3
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-025",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "gases",
+    "reacting-volumes"
+   ],
+   "q": "20 \\(\\text{cm}^{3}\\) of propane burns completely: \\(\\mathrm{C_{3}H_{8}(g) + 5O_{2}(g) \\rightarrow 3CO_{2}(g) + 4H_{2}O(l)}\\). Calculate the volume of oxygen used and of carbon dioxide made, at the same temperature and pressure.",
+   "a": "<strong>100 \\(\\text{cm}^{3}\\) of oxygen; 60 \\(\\text{cm}^{3}\\) of carbon dioxide</strong>",
+   "steps": [
+    "Equal volumes of gases at the same temperature and pressure contain equal amounts, so volume ratio \\(=\\) mole ratio.",
+    "\\(\\mathrm{O_{2}}\\): \\(5 \\times 20 = 100\\ \\text{cm}^{3}\\)",
+    "\\(\\mathrm{CO_{2}}\\): \\(3 \\times 20 = 60\\ \\text{cm}^{3}\\)"
+   ],
+   "why": "The water is a liquid at room temperature, so it does not count as a gas volume.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-026",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "molar-volume",
+    "gases"
+   ],
+   "q": "Outline how the molar volume of a gas can be measured in the laboratory.",
+   "a": "React a weighed amount of a reactant (for example magnesium ribbon) with excess acid in a sealed flask. Collect the gas in a gas syringe or an inverted measuring cylinder of water and measure its volume. Calculate the amount of gas from the equation; molar volume \\(=\\) volume ÷ amount.",
+   "why": "The other reactant must be in excess so the weighed reactant reacts completely.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.10"
+     ],
+     "practical": "CP1"
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-027",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "molar-volume",
+    "gases"
+   ],
+   "q": "0.0360 g of magnesium reacts with excess hydrochloric acid and gives 36.0 \\(\\text{cm}^{3}\\) of hydrogen at room temperature. Calculate the molar volume of hydrogen in \\(\\text{dm}^{3}\\) \\(\\text{mol}^{-1}\\). (\\(A_{\\text{r}}\\) Mg \\(= 24.3\\))",
+   "a": "<strong>24.3 \\(\\text{dm}^{3}\\ \\text{mol}^{-1}\\)</strong>",
+   "steps": [
+    "\\(\\mathrm{Mg(s) + 2HCl(aq) \\rightarrow MgCl_{2}(aq) + H_{2}(g)}\\)",
+    "\\(n(\\mathrm{H_{2}}) = n(\\mathrm{Mg}) = \\frac{0.0360}{24.3} = 1.481 \\times 10^{-3}\\ \\text{mol}\\)",
+    "Molar volume \\(= \\frac{0.0360\\ \\text{dm}^{3}}{1.481 \\times 10^{-3}\\ \\text{mol}} = 24.3\\ \\text{dm}^{3}\\ \\text{mol}^{-1}\\)"
+   ],
+   "why": "Compare it with the data-book value of 24 to judge the error.",
+   "numeric": {
+    "value": 24.3,
+    "unit": "dm³ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.10"
+     ],
+     "practical": "CP1"
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-028",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "molar-volume",
+    "gases"
+   ],
+   "q": "True or false: one mole of any gas always occupies 24 \\(\\text{dm}^{3}\\).",
+   "a": "<strong>False.</strong> \\(24\\ \\text{dm}^{3}\\ \\text{mol}^{-1}\\) is the molar volume only at room temperature and pressure.",
+   "why": "Gas volume depends on temperature and pressure; under other conditions use \\(pV = nRT\\).",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-029",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "formulae"
+   ],
+   "q": "Define empirical formula and molecular formula.",
+   "a": "Empirical formula: the <strong>simplest whole-number ratio</strong> of atoms of each element in a compound.<br>Molecular formula: the <strong>actual number</strong> of atoms of each element in a molecule.",
+   "why": "Ethene, \\(\\mathrm{C_{2}H_{4}}\\), has the empirical formula \\(\\mathrm{CH_{2}}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-030",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "formulae"
+   ],
+   "q": "A compound contains 40.0% carbon, 6.7% hydrogen and 53.3% oxygen by mass. Its \\(M_{\\text{r}}\\) is 180. Find its empirical and molecular formulae. (\\(A_{\\text{r}}\\): C 12.0, H 1.0, O 16.0)",
+   "a": "Empirical: <strong>\\(\\mathrm{CH_{2}O}\\)</strong>. Molecular: <strong>\\(\\mathrm{C_{6}H_{12}O_{6}}\\)</strong>",
+   "steps": [
+    "Divide by \\(A_{\\text{r}}\\): C \\(\\frac{40.0}{12.0} = 3.33\\); H \\(\\frac{6.7}{1.0} = 6.7\\); O \\(\\frac{53.3}{16.0} = 3.33\\)",
+    "Divide by the smallest (3.33): C 1, H 2, O 1, so \\(\\mathrm{CH_{2}O}\\).",
+    "\\(M_{\\text{r}}\\) of \\(\\mathrm{CH_{2}O} = 30.0\\); \\(\\frac{180}{30.0} = 6\\), so \\(\\mathrm{C_{6}H_{12}O_{6}}\\)."
+   ],
+   "why": "Glucose has this formula. Multiply every subscript in the empirical formula by the same whole number.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-031",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "formulae",
+    "practical"
+   ],
+   "q": "1.27 g of copper is heated in air until its mass is constant at 1.59 g. Find the empirical formula of the oxide. (\\(A_{\\text{r}}\\): Cu 63.5, O 16.0)",
+   "a": "<strong>\\(\\mathrm{CuO}\\)</strong>",
+   "steps": [
+    "Mass of oxygen \\(= 1.59 - 1.27 = 0.32\\ \\text{g}\\)",
+    "Cu: \\(\\frac{1.27}{63.5} = 0.0200\\); O: \\(\\frac{0.32}{16.0} = 0.020\\)",
+    "Ratio 1 : 1, so \\(\\mathrm{CuO}\\)."
+   ],
+   "why": "Heating to constant mass shows the reaction is complete.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-032",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "formulae"
+   ],
+   "q": "A hydrocarbon has the empirical formula \\(\\mathrm{CH_{2}}\\) and \\(M_{\\text{r}} = 56.0\\). What is its molecular formula?",
+   "a": "<strong>\\(\\mathrm{C_{4}H_{8}}\\)</strong>",
+   "steps": [
+    "\\(M_{\\text{r}}\\) of \\(\\mathrm{CH_{2}} = 12.0 + 2.0 = 14.0\\)",
+    "\\(\\frac{56.0}{14.0} = 4\\), so \\(\\mathrm{C_{4}H_{8}}\\)."
+   ],
+   "why": "The molecular formula is always a whole-number multiple of the empirical formula.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-033",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "formulae",
+    "ideal-gas"
+   ],
+   "q": "A gaseous hydrocarbon has the empirical formula \\(\\mathrm{CH_{2}}\\). 0.210 g of it occupies 124 \\(\\text{cm}^{3}\\) at 100 kPa and 298 K. Find its molecular formula. (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>\\(\\mathrm{C_{3}H_{6}}\\)</strong>",
+   "steps": [
+    "\\(n = \\frac{pV}{RT} = \\frac{1.00 \\times 10^{5} \\times 1.24 \\times 10^{-4}}{8.31 \\times 298} = 5.007 \\times 10^{-3}\\ \\text{mol}\\)",
+    "\\(M_{\\text{r}} = \\frac{0.210}{5.007 \\times 10^{-3}} = 41.9 \\approx 42\\)",
+    "\\(\\frac{42}{14.0} = 3\\), so \\(\\mathrm{C_{3}H_{6}}\\)."
+   ],
+   "why": "The ideal gas equation gives the amount, and mass ÷ amount gives \\(M_{\\text{r}}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.3",
+      "3.1.2.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-034",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "formulae",
+    "water-of-crystallisation"
+   ],
+   "q": "2.46 g of hydrated magnesium sulfate, \\(\\mathrm{MgSO_{4}{\\cdot}xH_{2}O}\\), is heated to constant mass, leaving 1.20 g of anhydrous \\(\\mathrm{MgSO_{4}}\\). Find \\(x\\). (\\(M_{\\text{r}}\\): \\(\\mathrm{MgSO_{4}}\\) 120.4, \\(\\mathrm{H_{2}O}\\) 18.0)",
+   "a": "<strong>\\(x = 7\\)</strong>",
+   "steps": [
+    "Mass of water lost \\(= 2.46 - 1.20 = 1.26\\ \\text{g}\\)",
+    "\\(n(\\mathrm{MgSO_{4}}) = \\frac{1.20}{120.4} = 9.97 \\times 10^{-3}\\); \\(n(\\mathrm{H_{2}O}) = \\frac{1.26}{18.0} = 0.0700\\)",
+    "\\(\\frac{0.0700}{9.97 \\times 10^{-3}} = 7.02\\), so \\(x = 7\\)."
+   ],
+   "why": "This is Epsom salts, \\(\\mathrm{MgSO_{4}{\\cdot}7H_{2}O}\\). Round to the nearest whole number only at the end.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.4",
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-035",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "water-of-crystallisation",
+    "practical"
+   ],
+   "q": "When finding the water of crystallisation in a hydrated salt by heating, why must the salt be heated to constant mass, and what error results if it is not?",
+   "a": "Constant mass shows all the water has been driven off.",
+   "marks": [
+    "Heat, cool and weigh repeatedly until two readings agree.",
+    "If some water remains, the mass of water lost is too small.",
+    "So the calculated value of \\(x\\) is too low."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-036",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "equations"
+   ],
+   "q": "Balance the equation for the complete combustion of butane, including state symbols.",
+   "a": "\\(\\mathrm{2C_{4}H_{10}(g) + 13O_{2}(g) \\rightarrow 8CO_{2}(g) + 10H_{2}O(l)}\\)",
+   "why": "Balance C, then H, then O last. Halves are allowed while working (\\(6\\tfrac{1}{2}\\ \\mathrm{O_{2}}\\)), then double everything.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-037",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "equations"
+   ],
+   "q": "Iron(III) oxide is reduced by carbon monoxide to iron and carbon dioxide. Write the balanced equation.",
+   "a": "\\(\\mathrm{Fe_{2}O_{3}(s) + 3CO(g) \\rightarrow 2Fe(l) + 3CO_{2}(g)}\\)",
+   "why": "Each CO takes one oxygen atom from the oxide, so three CO are needed for Fe₂O₃.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-038",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "equations",
+    "ionic-equations"
+   ],
+   "q": "What is an ionic equation, and what are spectator ions?",
+   "a": "An ionic equation shows only the species that take part in the reaction. Spectator ions are present in the solution but are unchanged, so they are left out.",
+   "why": "In \\(\\mathrm{HCl(aq) + NaOH(aq)}\\), \\(\\mathrm{Na^{+}}\\) and \\(\\mathrm{Cl^{-}}\\) are spectator ions.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-039",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "ionic-equations",
+    "acids"
+   ],
+   "q": "Write the ionic equation for the neutralisation of any strong acid by any alkali.",
+   "a": "\\(\\mathrm{H^{+}(aq) + OH^{-}(aq) \\rightarrow H_{2}O(l)}\\)",
+   "why": "All the other ions are spectators, so every strong acid–alkali neutralisation has the same ionic equation.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.6",
+      "5.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-040",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "ionic-equations",
+    "acids"
+   ],
+   "q": "Marble chips react with dilute hydrochloric acid. Give the ionic equation, with state symbols, and two observations.",
+   "a": "\\(\\mathrm{CaCO_{3}(s) + 2H^{+}(aq) \\rightarrow Ca^{2+}(aq) + H_{2}O(l) + CO_{2}(g)}\\)<br>Observations: effervescence (fizzing); the solid gets smaller and disappears.",
+   "why": "\\(\\mathrm{CaCO_{3}}\\) is insoluble, so it is written in full as a solid, not as separate ions.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.6",
+      "5.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-041",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "ionic-equations",
+    "precipitation"
+   ],
+   "q": "Silver nitrate solution is added to sodium chloride solution. Give the ionic equation and the observation.",
+   "a": "\\(\\mathrm{Ag^{+}(aq) + Cl^{-}(aq) \\rightarrow AgCl(s)}\\)<br>A white precipitate forms.",
+   "why": "\\(\\mathrm{Na^{+}}\\) and \\(\\mathrm{NO_{3}^{-}}\\) are spectator ions.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.6",
+      "5.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-042",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "ionic-equations",
+    "displacement"
+   ],
+   "q": "Zinc powder is added to blue copper(II) sulfate solution. Give the ionic equation and two observations.",
+   "a": "\\(\\mathrm{Zn(s) + Cu^{2+}(aq) \\rightarrow Zn^{2+}(aq) + Cu(s)}\\)<br>The blue colour fades to colourless; a pink-brown solid forms (and the mixture warms).",
+   "why": "Zinc is more reactive than copper, so it displaces copper from its ions.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.6",
+      "5.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-043",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "reacting-masses"
+   ],
+   "q": "Calculate the mass of calcium oxide formed when 10.0 g of calcium carbonate is completely decomposed: \\(\\mathrm{CaCO_{3}(s) \\rightarrow CaO(s) + CO_{2}(g)}\\). (\\(M_{\\text{r}}\\): \\(\\mathrm{CaCO_{3}}\\) 100.1, CaO 56.1)",
+   "a": "<strong>5.60 g</strong>",
+   "steps": [
+    "\\(n(\\mathrm{CaCO_{3}}) = \\frac{10.0}{100.1} = 0.09990\\ \\text{mol}\\)",
+    "1 : 1 ratio, so \\(n(\\mathrm{CaO}) = 0.09990\\ \\text{mol}\\)",
+    "\\(m = 0.09990 \\times 56.1 = 5.60\\ \\text{g}\\)"
+   ],
+   "why": "Mass → moles, use the ratio from the equation, then moles → mass.",
+   "numeric": {
+    "value": 5.6,
+    "unit": "g",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-044",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "reacting-masses"
+   ],
+   "q": "Calculate the maximum mass of iron, in tonnes, that can be made from 1.00 tonne of iron(III) oxide: \\(\\mathrm{Fe_{2}O_{3} + 3CO \\rightarrow 2Fe + 3CO_{2}}\\). (\\(A_{\\text{r}}\\): Fe 55.8, O 16.0)",
+   "a": "<strong>0.699 tonnes</strong>",
+   "steps": [
+    "\\(M_{\\text{r}}(\\mathrm{Fe_{2}O_{3}}) = 159.6\\); 1.00 tonne \\(= 1.00 \\times 10^{6}\\ \\text{g}\\)",
+    "\\(n(\\mathrm{Fe_{2}O_{3}}) = \\frac{1.00 \\times 10^{6}}{159.6} = 6266\\ \\text{mol}\\); \\(n(\\mathrm{Fe}) = 2 \\times 6266 = 12\\,531\\ \\text{mol}\\)",
+    "\\(m = 12\\,531 \\times 55.8 = 6.99 \\times 10^{5}\\ \\text{g} = 0.699\\ \\text{tonnes}\\)"
+   ],
+   "why": "Shortcut check: \\(\\frac{2 \\times 55.8}{159.6} = 0.699\\) of the oxide’s mass is iron.",
+   "numeric": {
+    "value": 0.699,
+    "unit": "tonnes",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-045",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "reacting-masses",
+    "limiting-reagent"
+   ],
+   "q": "2.43 g of magnesium is added to 50.0 \\(\\text{cm}^{3}\\) of 1.00 \\(\\text{mol dm}^{-3}\\) hydrochloric acid. Which reagent is in excess, and what amount of hydrogen forms? (\\(A_{\\text{r}}\\) Mg \\(= 24.3\\))",
+   "a": "<strong>Magnesium is in excess; 0.0250 mol of hydrogen forms.</strong>",
+   "steps": [
+    "\\(\\mathrm{Mg + 2HCl \\rightarrow MgCl_{2} + H_{2}}\\)",
+    "\\(n(\\mathrm{Mg}) = \\frac{2.43}{24.3} = 0.100\\ \\text{mol}\\); \\(n(\\mathrm{HCl}) = 1.00 \\times 0.0500 = 0.0500\\ \\text{mol}\\)",
+    "0.100 mol Mg needs 0.200 mol HCl, but only 0.0500 mol is present, so HCl limits.",
+    "\\(n(\\mathrm{H_{2}}) = \\frac{0.0500}{2} = 0.0250\\ \\text{mol}\\)"
+   ],
+   "why": "The amount of product is set by the limiting reagent, not by the one in excess.",
+   "numeric": {
+    "value": 0.025,
+    "unit": "mol",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.7",
+      "5.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-046",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "yield"
+   ],
+   "q": "How is percentage yield calculated?",
+   "a": "\\(\\text{percentage yield} = \\frac{\\text{actual mass of product}}{\\text{theoretical (maximum) mass of product}} \\times 100\\)",
+   "why": "Amounts in moles can be used instead of masses, as long as top and bottom match.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-047",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "yield"
+   ],
+   "q": "Heating 10.0 g of calcium carbonate should give 5.60 g of calcium oxide, but a student obtains 4.80 g. Calculate the percentage yield.",
+   "a": "<strong>85.7%</strong>",
+   "steps": [
+    "Theoretical yield \\(= 5.60\\ \\text{g}\\); actual yield \\(= 4.80\\ \\text{g}\\)",
+    "\\(\\frac{4.80}{5.60} \\times 100 = 85.7\\%\\)"
+   ],
+   "why": "The theoretical yield always comes from the balanced equation and the limiting reagent.",
+   "numeric": {
+    "value": 85.7,
+    "unit": "%",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-048",
+   "type": "explain",
+   "difficulty": 1,
+   "tags": [
+    "yield"
+   ],
+   "q": "Give reasons why the percentage yield of a reaction is usually less than 100%.",
+   "a": "Product is not formed or is lost.",
+   "marks": [
+    "The reaction may be reversible or incomplete.",
+    "Side reactions may make other products.",
+    "Product is lost when it is separated or purified (filtering, transferring, recrystallising)."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-049",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "atom-economy"
+   ],
+   "q": "How is percentage atom economy calculated?",
+   "a": "\\(\\text{atom economy} = \\frac{M_{\\text{r}}\\ \\text{of desired product}}{\\text{sum of}\\ M_{\\text{r}}\\ \\text{of all reactants}} \\times 100\\)",
+   "why": "Use the balanced equation, multiplying each \\(M_{\\text{r}}\\) by its coefficient. The sum for all reactants equals the sum for all products.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ],
+     "note": "AQA writes the bottom line as the sum of the molecular masses of all reactants."
+    },
+    "edexcel": {
+     "points": [
+      "5.14"
+     ],
+     "note": "Edexcel writes the bottom line as the sum of the molar masses of all products; the value is the same."
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-050",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "atom-economy"
+   ],
+   "q": "Ethanol can be made by fermentation, \\(\\mathrm{C_{6}H_{12}O_{6} \\rightarrow 2C_{2}H_{5}OH + 2CO_{2}}\\), or by hydrating ethene, \\(\\mathrm{C_{2}H_{4} + H_{2}O \\rightarrow C_{2}H_{5}OH}\\). Calculate the atom economy of fermentation. (\\(M_{\\text{r}}\\): glucose 180.0, ethanol 46.0)",
+   "a": "<strong>51.1%</strong> (hydration of ethene is 100%)",
+   "steps": [
+    "Desired product: \\(2 \\times 46.0 = 92.0\\)",
+    "\\(\\frac{92.0}{180.0} \\times 100 = 51.1\\%\\)"
+   ],
+   "why": "In fermentation almost half the mass is lost as \\(\\mathrm{CO_{2}}\\); an addition reaction has only one product, so its atom economy is 100%.",
+   "numeric": {
+    "value": 51.1,
+    "unit": "%",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-051",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "atom-economy"
+   ],
+   "q": "Calculate the atom economy for making iron by \\(\\mathrm{Fe_{2}O_{3} + 3CO \\rightarrow 2Fe + 3CO_{2}}\\). (\\(M_{\\text{r}}\\): \\(\\mathrm{Fe_{2}O_{3}}\\) 159.6, CO 28.0; \\(A_{\\text{r}}\\) Fe 55.8)",
+   "a": "<strong>45.8%</strong>",
+   "steps": [
+    "Reactants: \\(159.6 + (3 \\times 28.0) = 243.6\\)",
+    "Desired product: \\(2 \\times 55.8 = 111.6\\)",
+    "\\(\\frac{111.6}{243.6} \\times 100 = 45.8\\%\\)"
+   ],
+   "why": "Check: products \\(111.6 + (3 \\times 44.0) = 243.6\\), the same total.",
+   "numeric": {
+    "value": 45.8,
+    "unit": "%",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-052",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "atom-economy",
+    "sustainability"
+   ],
+   "q": "Explain the advantages to industry and society of developing processes with a high atom economy.",
+   "a": "Less of the starting material ends up as waste.",
+   "marks": [
+    "Economic: more of the raw materials become saleable product, so costs are lower.",
+    "Less waste to separate, treat or dispose of, which also costs money.",
+    "Environmental: less waste and pollution, and finite raw materials last longer.",
+    "Ethical: more sustainable use of resources for future generations."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-053",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "atom-economy",
+    "yield"
+   ],
+   "q": "True or false: a reaction with a 95% yield must have a high atom economy.",
+   "a": "<strong>False.</strong> Yield and atom economy measure different things.",
+   "why": "Yield compares the product obtained with the maximum possible; atom economy depends only on the equation, i.e. how much of the reactants’ mass can ever end up in the desired product.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-054",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "titration",
+    "standard-solution"
+   ],
+   "q": "Describe how to make up 250 \\(\\text{cm}^{3}\\) of a standard solution from a solid.",
+   "a": "Weigh the solid accurately; dissolve it in a little distilled water in a beaker; transfer the solution to a 250 \\(\\text{cm}^{3}\\) volumetric flask, rinsing the beaker and funnel into the flask; make up to the mark with distilled water so the bottom of the meniscus is on the line; stopper and invert to mix.",
+   "why": "The rinsings make sure all the solid reaches the flask, so the concentration is exactly known.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ],
+     "practical": "RP1"
+    },
+    "edexcel": {
+     "points": [
+      "5.11"
+     ],
+     "practical": "CP2"
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-055",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "titration"
+   ],
+   "q": "Give the key steps in carrying out an accurate acid–base titration.",
+   "a": "Rinse the pipette and burette with the solutions they will hold. Pipette a measured volume into a conical flask and add a few drops of indicator. Fill the burette, removing the air bubble below the tap. Add from the burette while swirling, dropwise near the end point, over a white tile. Read the burette at eye level from the bottom of the meniscus. Repeat until titres are concordant.",
+   "why": "Rinsing with water instead would dilute the solution and change its concentration.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ],
+     "practical": "RP1"
+    },
+    "edexcel": {
+     "points": [
+      "5.11"
+     ],
+     "practical": "CP3"
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-056",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "titration",
+    "indicators"
+   ],
+   "q": "Give the colour change at the end point when (a) phenolphthalein and (b) methyl orange is used, with acid added from the burette to alkali.",
+   "a": "(a) Phenolphthalein: pink to colourless.<br>(b) Methyl orange: yellow to orange.",
+   "why": "Phenolphthalein is colourless in acid and pink in alkali; methyl orange is red in acid and yellow in alkali, orange at the end point.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-057",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "titration"
+   ],
+   "q": "Titres of 24.10 (rough), 23.45, 23.95, 23.50 and 23.40 \\(\\text{cm}^{3}\\) are recorded. Which should be used to calculate the mean titre, and what is it?",
+   "a": "Use the concordant titres, within 0.10 \\(\\text{cm}^{3}\\) of each other: 23.45, 23.50 and 23.40.<br>Mean \\(= 23.45\\ \\text{cm}^{3}\\).",
+   "why": "The rough titre and the outlier (23.95) are left out.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ],
+     "practical": "RP1"
+    },
+    "edexcel": {
+     "points": [
+      "5.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-058",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "titration"
+   ],
+   "q": "25.0 \\(\\text{cm}^{3}\\) of sodium hydroxide solution is neutralised by 22.50 \\(\\text{cm}^{3}\\) of 0.100 \\(\\text{mol dm}^{-3}\\) hydrochloric acid. Calculate the concentration of the sodium hydroxide.",
+   "a": "<strong>0.0900 \\(\\text{mol dm}^{-3}\\)</strong>",
+   "steps": [
+    "\\(n(\\mathrm{HCl}) = 0.100 \\times \\frac{22.50}{1000} = 2.250 \\times 10^{-3}\\ \\text{mol}\\)",
+    "\\(\\mathrm{HCl + NaOH \\rightarrow NaCl + H_{2}O}\\): 1 : 1, so \\(n(\\mathrm{NaOH}) = 2.250 \\times 10^{-3}\\ \\text{mol}\\)",
+    "\\(c = \\frac{2.250 \\times 10^{-3}}{0.0250} = 0.0900\\ \\text{mol dm}^{-3}\\)"
+   ],
+   "why": "Moles of the known solution → ratio → moles of the unknown → concentration.",
+   "numeric": {
+    "value": 0.09,
+    "unit": "mol dm⁻³",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ],
+     "practical": "RP1"
+    },
+    "edexcel": {
+     "points": [
+      "5.11"
+     ],
+     "practical": "CP3"
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-059",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "titration"
+   ],
+   "q": "25.0 \\(\\text{cm}^{3}\\) of sodium hydroxide is neutralised by 20.00 \\(\\text{cm}^{3}\\) of 0.0500 \\(\\text{mol dm}^{-3}\\) sulfuric acid. Calculate the concentration of the sodium hydroxide.",
+   "a": "<strong>0.0800 \\(\\text{mol dm}^{-3}\\)</strong>",
+   "steps": [
+    "\\(\\mathrm{H_{2}SO_{4} + 2NaOH \\rightarrow Na_{2}SO_{4} + 2H_{2}O}\\)",
+    "\\(n(\\mathrm{H_{2}SO_{4}}) = 0.0500 \\times 0.02000 = 1.000 \\times 10^{-3}\\ \\text{mol}\\)",
+    "\\(n(\\mathrm{NaOH}) = 2 \\times 1.000 \\times 10^{-3} = 2.000 \\times 10^{-3}\\ \\text{mol}\\)",
+    "\\(c = \\frac{2.000 \\times 10^{-3}}{0.0250} = 0.0800\\ \\text{mol dm}^{-3}\\)"
+   ],
+   "why": "Sulfuric acid is diprotic, so the 1 : 2 ratio matters.",
+   "numeric": {
+    "value": 0.08,
+    "unit": "mol dm⁻³",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ],
+     "practical": "RP1"
+    },
+    "edexcel": {
+     "points": [
+      "5.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-060",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "titration",
+    "back-titration"
+   ],
+   "q": "An indigestion tablet containing calcium carbonate is added to 50.0 \\(\\text{cm}^{3}\\) of 1.00 \\(\\text{mol dm}^{-3}\\) HCl (an excess). The leftover acid needs 30.0 \\(\\text{cm}^{3}\\) of 1.00 \\(\\text{mol dm}^{-3}\\) NaOH. Calculate the mass of \\(\\mathrm{CaCO_{3}}\\) in the tablet. (\\(M_{\\text{r}} = 100.1\\))",
+   "a": "<strong>1.00 g</strong>",
+   "steps": [
+    "HCl added: \\(1.00 \\times 0.0500 = 0.0500\\ \\text{mol}\\); HCl left over \\(= n(\\mathrm{NaOH}) = 0.0300\\ \\text{mol}\\)",
+    "HCl that reacted with the tablet \\(= 0.0500 - 0.0300 = 0.0200\\ \\text{mol}\\)",
+    "\\(\\mathrm{CaCO_{3} + 2HCl \\rightarrow CaCl_{2} + H_{2}O + CO_{2}}\\), so \\(n(\\mathrm{CaCO_{3}}) = 0.0100\\ \\text{mol}\\)",
+    "\\(m = 0.0100 \\times 100.1 = 1.00\\ \\text{g}\\)"
+   ],
+   "why": "This is a back titration: an insoluble solid cannot be titrated directly, so you measure the acid it did not use.",
+   "numeric": {
+    "value": 1,
+    "unit": "g",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.7",
+      "5.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-061",
+   "type": "uncertainty",
+   "difficulty": 2,
+   "tags": [
+    "uncertainty",
+    "titration"
+   ],
+   "q": "A burette reads to ±0.05 \\(\\text{cm}^{3}\\). What is the uncertainty in a titre, and the percentage uncertainty in a titre of 23.45 \\(\\text{cm}^{3}\\)?",
+   "a": "<strong>±0.10 \\(\\text{cm}^{3}\\); 0.43%</strong>",
+   "steps": [
+    "A titre uses two readings (start and end), each ±0.05: total ±0.10 \\(\\text{cm}^{3}\\).",
+    "\\(\\frac{0.10}{23.45} \\times 100 = 0.43\\%\\)"
+   ],
+   "why": "Uncertainties add when a value comes from the difference of two readings.",
+   "numeric": {
+    "value": 0.43,
+    "unit": "%",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-062",
+   "type": "uncertainty",
+   "difficulty": 2,
+   "tags": [
+    "uncertainty"
+   ],
+   "q": "A mass of 1.20 g is found by difference using a balance that reads to ±0.005 g. Calculate the percentage uncertainty.",
+   "a": "<strong>0.83%</strong>",
+   "steps": [
+    "Two readings: ±0.005 + 0.005 = ±0.01 g.",
+    "\\(\\frac{0.01}{1.20} \\times 100 = 0.83\\%\\)"
+   ],
+   "why": "Weighing by difference means two readings, so double the uncertainty of one reading.",
+   "numeric": {
+    "value": 0.83,
+    "unit": "%",
+    "sf": 2
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-063",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "uncertainty"
+   ],
+   "q": "How can the percentage uncertainty in a titration or weighing be reduced?",
+   "a": "Make the measured quantity larger, or use more precise apparatus.",
+   "marks": [
+    "Use a larger mass of solid, or a larger volume, so the fixed uncertainty is a smaller fraction of the value.",
+    "For a titration, use concentrations that give a larger titre.",
+    "Use apparatus with a smaller uncertainty, such as a balance reading to more decimal places."
+   ],
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-064",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "errors"
+   ],
+   "q": "What is the difference between a systematic error and a random error? Give an example of each.",
+   "a": "Systematic error: shifts every result the same way, e.g. reading the top instead of the bottom of the meniscus every time.<br>Random error: unpredictable scatter, e.g. judging the end point slightly differently each time.",
+   "why": "Repeats and averaging reduce random error but not systematic error.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-065",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "errors",
+    "molar-volume"
+   ],
+   "q": "An experiment gives the molar volume of a gas as 23.1 \\(\\text{dm}^{3}\\) \\(\\text{mol}^{-1}\\); the accepted value is 24.0. Calculate the percentage error and suggest a source of error.",
+   "a": "<strong>3.8%</strong>; for example, gas escapes before the bung is replaced.",
+   "steps": [
+    "Difference from the accepted value \\(= 24.0 - 23.1 = 0.9\\ \\text{dm}^{3}\\ \\text{mol}^{-1}\\)",
+    "\\(\\frac{0.9}{24.0} \\times 100 = 3.75\\% \\approx 3.8\\%\\)"
+   ],
+   "why": "A low volume means gas was lost or not all collected; some hydrogen or carbon dioxide may also dissolve in water.",
+   "numeric": {
+    "value": 3.8,
+    "unit": "%",
+    "sf": 2
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.12"
+     ],
+     "practical": "CP1"
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-066",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "significant-figures"
+   ],
+   "q": "To how many significant figures should a calculated answer be given?",
+   "a": "To the same number as the <strong>least precise</strong> piece of data used.",
+   "why": "A result can only be as precise as the least accurate measurement. Keep extra figures in the working and round only at the end.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amount-067",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "safety"
+   ],
+   "q": "What is the difference between a hazard and a risk? Give a precaution when using 2 \\(\\text{mol dm}^{-3}\\) sodium hydroxide.",
+   "a": "Hazard: something that could cause harm (sodium hydroxide is corrosive).<br>Risk: the chance of harm happening and how serious it would be.<br>Precaution: wear eye protection (goggles) and wash spills off skin at once.",
+   "why": "Precautions reduce the risk; they do not remove the hazard.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.16"
+     ]
+    }
+   }
+  }
+ ]
+}
