@@ -162,7 +162,9 @@ as one subject, so Chemistry cards would appear in Physics sessions.
 they are published once the app keeps subjects apart and Chemistry is added
 to `SHOWN`. The teacher preview (`?preview=drafts`) does mix them meanwhile.
 
-Topic files, in specification order (AQA section → file):
+Topic files, in specification order (AQA section → file). Written so far
+(17 October 2026): every physical and inorganic topic, 917 cards; the
+organic topics wait on the drawing decision below.
 physical: atomic-structure (3.1.1), amount-of-substance (3.1.2),
 bonding (3.1.3), energetics (3.1.4), kinetics (3.1.5), equilibria (3.1.6,
 3.1.10), redox (3.1.7), thermodynamics (3.1.8), rate-equations (3.1.9),

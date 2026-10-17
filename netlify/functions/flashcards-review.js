@@ -52,7 +52,22 @@ const TOPICS = {
   'physics-a-level/engineering-physics': require('../../curriculum/flashcards/physics-a-level/engineering-physics.json'),
   'physics-a-level/turning-points': require('../../curriculum/flashcards/physics-a-level/turning-points.json'),
   'physics-a-level/electronics': require('../../curriculum/flashcards/physics-a-level/electronics.json'),
-  'chemistry-a-level/atomic-structure': require('../../curriculum/flashcards/chemistry-a-level/atomic-structure.json')
+  'chemistry-a-level/atomic-structure': require('../../curriculum/flashcards/chemistry-a-level/atomic-structure.json'),
+  'chemistry-a-level/amount-of-substance': require('../../curriculum/flashcards/chemistry-a-level/amount-of-substance.json'),
+  'chemistry-a-level/bonding': require('../../curriculum/flashcards/chemistry-a-level/bonding.json'),
+  'chemistry-a-level/energetics': require('../../curriculum/flashcards/chemistry-a-level/energetics.json'),
+  'chemistry-a-level/kinetics': require('../../curriculum/flashcards/chemistry-a-level/kinetics.json'),
+  'chemistry-a-level/equilibria': require('../../curriculum/flashcards/chemistry-a-level/equilibria.json'),
+  'chemistry-a-level/redox': require('../../curriculum/flashcards/chemistry-a-level/redox.json'),
+  'chemistry-a-level/thermodynamics': require('../../curriculum/flashcards/chemistry-a-level/thermodynamics.json'),
+  'chemistry-a-level/rate-equations': require('../../curriculum/flashcards/chemistry-a-level/rate-equations.json'),
+  'chemistry-a-level/electrode-potentials': require('../../curriculum/flashcards/chemistry-a-level/electrode-potentials.json'),
+  'chemistry-a-level/acids-and-bases': require('../../curriculum/flashcards/chemistry-a-level/acids-and-bases.json'),
+  'chemistry-a-level/periodicity': require('../../curriculum/flashcards/chemistry-a-level/periodicity.json'),
+  'chemistry-a-level/group-2': require('../../curriculum/flashcards/chemistry-a-level/group-2.json'),
+  'chemistry-a-level/halogens': require('../../curriculum/flashcards/chemistry-a-level/halogens.json'),
+  'chemistry-a-level/transition-metals': require('../../curriculum/flashcards/chemistry-a-level/transition-metals.json'),
+  'chemistry-a-level/ions-in-solution': require('../../curriculum/flashcards/chemistry-a-level/ions-in-solution.json')
 };
 // Quiz questions (curriculum/quizzes/) are reviewed the same way, each topic
 // under "quiz/<topic id>" so its decisions never mix with the flashcards'.

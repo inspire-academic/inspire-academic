@@ -1,0 +1,1036 @@
+{
+ "schema": "inspire.flashcards.v1",
+ "topic": {
+  "id": "chemistry-a-level/kinetics",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Kinetics",
+  "spec": "chemistry-a-level"
+ },
+ "cards": [
+  {
+   "id": "che-al-kin-001",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "rate"
+   ],
+   "q": "What is meant by the rate of a reaction?",
+   "a": "The change in concentration (or amount) of a reactant or product per unit time.",
+   "why": "Measured as concentration change per second, the unit is \\(\\text{mol dm}^{-3}\\ \\text{s}^{-1}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-002",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "rate",
+    "measuring"
+   ],
+   "q": "Give three ways of following the rate of a reaction that gives off a gas, such as marble chips with hydrochloric acid.",
+   "a": "Measure the volume of gas with a gas syringe; measure the loss in mass as gas escapes (on a balance); or time how long the reaction takes to finish.",
+   "why": "Each gives a measurable quantity that changes with time as the reaction proceeds.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-003",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "rate",
+    "measuring"
+   ],
+   "q": "48 \\(\\text{cm}^{3}\\) of carbon dioxide is collected in the first 30 s of a reaction. Calculate the mean rate of gas production over this time.",
+   "a": "<strong>1.6 \\(\\text{cm}^{3}\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "Mean rate \\(= \\frac{\\text{volume of gas}}{\\text{time}}\\)",
+    "\\(\\frac{48}{30} = 1.6\\ \\text{cm}^{3}\\ \\text{s}^{-1}\\)"
+   ],
+   "why": "This is a mean rate over 30 s; the rate at any instant is found from a tangent.",
+   "numeric": {
+    "value": 1.6,
+    "unit": "cm³ s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-004",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "rate",
+    "measuring"
+   ],
+   "q": "In the reaction between sodium thiosulfate and hydrochloric acid, a cross under the flask disappears after 40 s. What value can be used as a measure of the rate?",
+   "a": "<strong>\\(0.025\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "The same amount of sulfur forms each time the cross disappears, so rate \\(\\propto \\frac{1}{t}\\).",
+    "\\(\\frac{1}{40} = 0.025\\ \\text{s}^{-1}\\)"
+   ],
+   "why": "A longer time means a slower reaction, so 1/time is used as a relative rate.",
+   "numeric": {
+    "value": 0.025,
+    "unit": "s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ],
+     "practical": "RP3"
+    },
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-005",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "rate",
+    "graphs",
+    "tangent"
+   ],
+   "q": "How do you find the rate at a particular time from a concentration–time graph? How do you find the initial rate?",
+   "a": "Draw a tangent to the curve at that time and calculate its gradient (change in y ÷ change in x). For the initial rate, draw the tangent at t = 0.",
+   "why": "Use a long tangent and read two points far apart on it to keep the gradient accurate. The rate is the size of the gradient.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-006",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "rate",
+    "graphs",
+    "tangent"
+   ],
+   "q": "A tangent drawn to a graph of reactant concentration against time at t = 30 s passes through (0 s, 0.080 \\(\\text{mol dm}^{-3}\\)) and (60 s, 0.020 \\(\\text{mol dm}^{-3}\\)). Calculate the rate at 30 s.",
+   "a": "<strong>\\(1.0 \\times 10^{-3}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "Gradient \\(= \\frac{0.020 - 0.080}{60 - 0} = \\frac{-0.060}{60} = -1.0 \\times 10^{-3}\\)",
+    "The concentration of reactant falls, so the gradient is negative; rate \\(= 1.0 \\times 10^{-3}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)."
+   ],
+   "why": "A rate is always quoted as a positive value.",
+   "numeric": {
+    "value": 0.001,
+    "unit": "mol dm⁻³ s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-007",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "rate",
+    "graphs",
+    "tangent"
+   ],
+   "q": "On a graph of volume of hydrogen against time, the tangent drawn at t = 0 passes through (0 s, 0 \\(\\text{cm}^{3}\\)) and (20 s, 50 \\(\\text{cm}^{3}\\)). Calculate the initial rate.",
+   "a": "<strong>2.5 \\(\\text{cm}^{3}\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "Initial rate \\(=\\) gradient of the tangent at \\(t = 0\\)",
+    "\\(\\frac{50 - 0}{20 - 0} = 2.5\\ \\text{cm}^{3}\\ \\text{s}^{-1}\\)"
+   ],
+   "why": "The initial rate is the fastest rate, because reactant concentrations are highest at the start.",
+   "numeric": {
+    "value": 2.5,
+    "unit": "cm³ s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-008",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "rate",
+    "measuring"
+   ],
+   "q": "Marble chips react with hydrochloric acid in a flask on a balance. The mass falls by 0.88 g in the first 60 s. Calculate the mean rate of formation of \\(\\mathrm{CO_{2}}\\) in \\(\\text{mol s}^{-1}\\). (\\(M_{\\text{r}}\\) \\(\\mathrm{CO_{2}} = 44.0\\))",
+   "a": "<strong>\\(3.3 \\times 10^{-4}\\ \\text{mol s}^{-1}\\)</strong>",
+   "steps": [
+    "The mass lost is the carbon dioxide that escaped: \\(n = \\frac{0.88}{44.0} = 0.020\\ \\text{mol}\\)",
+    "Mean rate \\(= \\frac{0.020}{60} = 3.3 \\times 10^{-4}\\ \\text{mol s}^{-1}\\)"
+   ],
+   "why": "A cotton wool plug in the neck of the flask lets the gas out but stops acid spray escaping, which would add to the mass loss.",
+   "numeric": {
+    "value": 0.00033,
+    "unit": "mol s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-009",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "rate",
+    "graphs"
+   ],
+   "q": "A graph of volume of gas against time is steepest at the start and then levels off. Explain its shape.",
+   "a": "The rate is fastest at the start and falls to zero as a reactant is used up.",
+   "marks": [
+    "At the start the concentration of reactants is highest, so collisions are most frequent and the rate is highest.",
+    "As reactants are used up, the concentration falls, so there are fewer collisions per second and the gradient decreases.",
+    "The line becomes horizontal when the limiting reactant is used up: the reaction has stopped."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1",
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-010",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "collision-theory"
+   ],
+   "q": "According to collision theory, what is needed for a reaction to occur between two particles?",
+   "a": "The particles must <strong>collide</strong>, and the collision must have at least the <strong>activation energy</strong>.",
+   "why": "They must also collide with a suitable orientation, so that the right bonds can break.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1",
+      "9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-011",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "activation-energy"
+   ],
+   "q": "Define activation energy.",
+   "a": "The <strong>minimum energy</strong> that particles need when they collide for a reaction to occur, \\(E_{\\text{a}}\\).",
+   "why": "It is the energy needed to start breaking bonds.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-012",
+   "type": "explain",
+   "difficulty": 1,
+   "tags": [
+    "collision-theory",
+    "activation-energy"
+   ],
+   "q": "Explain why most collisions between particles do not lead to a reaction.",
+   "a": "Most colliding particles do not have enough energy.",
+   "marks": [
+    "Only collisions with energy equal to or greater than the activation energy can lead to reaction.",
+    "Most particles have energies below the activation energy, so most collisions are unsuccessful.",
+    "Particles may also collide with the wrong orientation."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-013",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "activation-energy",
+    "reaction-profile"
+   ],
+   "q": "On a reaction profile (enthalpy against progress of reaction), how are the activation energy and the enthalpy change shown?",
+   "a": "\\(E_{\\text{a}}\\): the height from the energy of the reactants up to the top of the peak.<br>\\(\\Delta H\\): the difference in energy between the reactants and the products.",
+   "why": "For an exothermic reaction the products are below the reactants (\\(\\Delta H\\) negative); for an endothermic reaction they are above.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.2",
+      "9.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-014",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "maxwell-boltzmann"
+   ],
+   "q": "What does a Maxwell–Boltzmann distribution show, and what are its axes?",
+   "a": "The spread of energies of the molecules in a gas at a given temperature.<br>x-axis: energy. y-axis: number (or fraction) of molecules with that energy.",
+   "why": "Molecules in a gas do not all have the same energy, because they constantly collide and exchange energy.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-015",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "maxwell-boltzmann"
+   ],
+   "q": "Describe the key features of a Maxwell–Boltzmann distribution curve.",
+   "a": "It starts at the origin; rises to a peak at the most probable energy; has a long tail on the high-energy side; and never meets the energy axis.",
+   "why": "No molecules have zero energy, there is no maximum energy, and the area under the curve equals the total number of molecules.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-016",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "maxwell-boltzmann"
+   ],
+   "q": "On a Maxwell–Boltzmann distribution, where are the most probable energy and the mean energy?",
+   "a": "The most probable energy is at the <strong>peak</strong>. The mean energy is slightly to the <strong>right</strong> of the peak.",
+   "why": "The curve is not symmetrical: its long high-energy tail pulls the mean above the most probable value.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-017",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "maxwell-boltzmann",
+    "temperature"
+   ],
+   "q": "How does the Maxwell–Boltzmann curve change when the temperature of the same gas sample is increased?",
+   "a": "The peak moves to the <strong>right</strong> (higher energy) and is <strong>lower</strong>; the curve is broader; the area under it is <strong>unchanged</strong>.",
+   "why": "The number of molecules is the same, so the area stays the same; more of the area now lies beyond the activation energy.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.2",
+      "3.1.5.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-018",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "maxwell-boltzmann",
+    "temperature"
+   ],
+   "q": "How does the Maxwell–Boltzmann curve change when the temperature is lowered?",
+   "a": "The peak is <strong>higher</strong> and moves to the <strong>left</strong> (lower energy); the area is unchanged.",
+   "why": "Fewer molecules have energy equal to or greater than the activation energy, so the rate is lower.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-019",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "maxwell-boltzmann",
+    "activation-energy"
+   ],
+   "q": "On a Maxwell–Boltzmann distribution, how is the number of molecules able to react shown?",
+   "a": "Mark the activation energy, \\(E_{\\text{a}}\\), on the energy axis. The <strong>area under the curve to the right of \\(E_{\\text{a}}\\)</strong> is the number of molecules with enough energy to react.",
+   "why": "Comparing this area at two temperatures, or with and without a catalyst, explains the change in rate.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4",
+      "9.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-020",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "maxwell-boltzmann",
+    "temperature"
+   ],
+   "q": "Use the Maxwell–Boltzmann distribution to explain why a small increase in temperature causes a large increase in the rate of reaction.",
+   "a": "Many more molecules have energy at or above the activation energy.",
+   "marks": [
+    "At a higher temperature the distribution shifts to higher energies.",
+    "A much larger proportion of molecules have energy \\(\\geq E_{\\text{a}}\\) (larger area to the right of \\(E_{\\text{a}}\\)).",
+    "So a much larger proportion of collisions are successful.",
+    "Collisions are also slightly more frequent, but this is a much smaller effect."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1",
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-021",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "temperature",
+    "collision-theory"
+   ],
+   "q": "True or false: raising the temperature increases the rate mainly because particles collide more often.",
+   "a": "<strong>False.</strong> The main reason is that a much larger proportion of collisions have energy at or above the activation energy.",
+   "why": "Collision frequency rises only slightly with temperature; the number of molecules beyond the activation energy rises sharply.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-022",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "activation-energy",
+    "temperature"
+   ],
+   "q": "True or false: increasing the temperature lowers the activation energy.",
+   "a": "<strong>False.</strong> The activation energy is unchanged; more molecules have energy above it.",
+   "why": "Only a catalyst (a different route) changes the activation energy.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-023",
+   "type": "explain",
+   "difficulty": 1,
+   "tags": [
+    "concentration",
+    "collision-theory"
+   ],
+   "q": "Explain why increasing the concentration of a reactant in solution increases the rate of reaction.",
+   "a": "There are more frequent collisions, so more successful collisions per second.",
+   "marks": [
+    "There are more particles in the same volume.",
+    "So collisions occur more frequently.",
+    "So there are more collisions with energy at or above the activation energy per unit time."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-024",
+   "type": "explain",
+   "difficulty": 1,
+   "tags": [
+    "pressure",
+    "collision-theory"
+   ],
+   "q": "Explain why increasing the pressure of a gaseous reaction increases its rate.",
+   "a": "The same number of gas molecules are in a smaller volume.",
+   "marks": [
+    "Higher pressure means more gas molecules per unit volume (a higher concentration).",
+    "So collisions occur more frequently.",
+    "So there are more successful collisions per unit time."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-025",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "concentration",
+    "collision-theory"
+   ],
+   "q": "True or false: increasing concentration increases the rate because a greater proportion of collisions are successful.",
+   "a": "<strong>False.</strong> The proportion of successful collisions is the same; there are simply more collisions per second.",
+   "why": "Concentration does not change the energies of the molecules: only temperature (or a catalyst) changes the proportion with enough energy.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-026",
+   "type": "explain",
+   "difficulty": 1,
+   "tags": [
+    "surface-area",
+    "collision-theory"
+   ],
+   "q": "Explain why powdered marble reacts faster with hydrochloric acid than the same mass of marble chips.",
+   "a": "The powder has a larger surface area.",
+   "marks": [
+    "Powder has a larger surface area exposed to the acid.",
+    "More particles are available on the surface to collide with acid particles.",
+    "So collisions, and successful collisions, are more frequent."
+   ],
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-027",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "surface-area",
+    "graphs"
+   ],
+   "q": "Excess hydrochloric acid reacts with 1 g of marble chips and, separately, with 1 g of powdered marble. How do the two graphs of volume of CO₂ against time compare?",
+   "a": "The powder’s curve is steeper at the start and levels off sooner, but both level off at the <strong>same final volume</strong>.",
+   "why": "The marble is the limiting reactant and the same mass is used, so the same amount of carbon dioxide forms.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.1",
+      "9.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-028",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "thiosulfate",
+    "practical"
+   ],
+   "q": "Write the ionic equation for the reaction of thiosulfate ions with acid that is used to study rates.",
+   "a": "\\(\\mathrm{S_{2}O_{3}^{2-}(aq) + 2H^{+}(aq) \\rightarrow S(s) + SO_{2}(g) + H_{2}O(l)}\\)",
+   "why": "The sulfur forms a pale yellow precipitate that gradually hides a cross drawn under the flask.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ],
+     "practical": "RP3"
+    },
+    "edexcel": {
+     "points": [
+      "9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-029",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "temperature",
+    "practical",
+    "thiosulfate"
+   ],
+   "q": "Outline how to investigate the effect of temperature on the rate of reaction between sodium thiosulfate and hydrochloric acid.",
+   "a": "Warm the thiosulfate solution in a water bath to a set temperature and measure it. Add the acid, start a timer and time how long until a cross under the flask can no longer be seen. Repeat at several temperatures with the same volumes and concentrations. Plot 1/time (the rate) against temperature.",
+   "why": "Only the temperature is changed; volumes, concentrations, the flask and the cross are kept the same.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ],
+     "practical": "RP3"
+    },
+    "edexcel": {
+     "points": [
+      "9.1",
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-030",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "temperature",
+    "practical",
+    "thiosulfate"
+   ],
+   "q": "Suggest improvements and a safety precaution for the thiosulfate “disappearing cross” experiment.",
+   "a": "Reduce errors in timing and temperature; avoid breathing sulfur dioxide.",
+   "marks": [
+    "Measure the temperature of the mixture at the start and end and use the mean.",
+    "Use the same person, the same cross and the same depth of solution to judge the end point.",
+    "Use a light sensor or colorimeter to detect the end point instead of the eye.",
+    "Sulfur dioxide is toxic: work in a well-ventilated room and dispose of the mixture promptly."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ],
+     "practical": "RP3"
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-031",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "temperature",
+    "context"
+   ],
+   "q": "Use collision theory to explain why food keeps longer in a fridge and why beans cook faster in a pressure cooker.",
+   "a": "In a fridge the lower temperature slows the reactions that spoil food. In a pressure cooker water boils above 100 °C, so the cooking reactions are faster.",
+   "why": "At a higher temperature a greater proportion of molecules have energy at or above the activation energy, and vice versa.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1",
+      "9.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-032",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "catalysts"
+   ],
+   "q": "What is a catalyst?",
+   "a": "A substance that increases the rate of a chemical reaction without being changed in chemical composition or amount at the end.",
+   "why": "Because it is not used up, a small amount of catalyst can be used again and again.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-033",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "catalysts",
+    "activation-energy"
+   ],
+   "q": "How does a catalyst increase the rate of a reaction?",
+   "a": "It provides an <strong>alternative reaction route</strong> (pathway) with a <strong>lower activation energy</strong>.",
+   "why": "More collisions then have energy at or above the new, lower activation energy.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-034",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "catalysts",
+    "maxwell-boltzmann"
+   ],
+   "q": "Use a Maxwell–Boltzmann distribution to explain how a catalyst increases the rate of a gaseous reaction.",
+   "a": "The activation energy is lower, so more molecules have enough energy to react.",
+   "marks": [
+    "The catalyst provides an alternative route with a lower activation energy.",
+    "The distribution curve itself is unchanged (same temperature).",
+    "The lower \\(E_{\\text{a}}\\) is further to the left, so a larger area lies to its right: more molecules have energy \\(\\geq E_{\\text{a}}\\).",
+    "So a greater proportion of collisions are successful and the rate increases."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-035",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "catalysts",
+    "maxwell-boltzmann"
+   ],
+   "q": "True or false: adding a catalyst moves the Maxwell–Boltzmann curve to the right.",
+   "a": "<strong>False.</strong> The curve does not change; only the activation energy is marked further to the left.",
+   "why": "The curve depends only on temperature. A catalyst changes the route, not the energies of the molecules.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-036",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "catalysts",
+    "reaction-profile"
+   ],
+   "q": "Describe the reaction profiles for the same exothermic reaction with and without a catalyst.",
+   "a": "Both start at the same reactant energy and finish at the same product energy. The catalysed route has a <strong>lower peak</strong> (lower activation energy).",
+   "why": "The enthalpy change, \\(\\Delta H\\), is the same: a catalyst does not change the energies of the reactants or products.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-037",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "catalysts",
+    "reaction-profile"
+   ],
+   "q": "True or false: a catalyst makes a reaction more exothermic.",
+   "a": "<strong>False.</strong> \\(\\Delta H\\) is unchanged; only the activation energy is lowered.",
+   "why": "The reactants and products are the same, so the overall energy change is the same.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-038",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "catalysts",
+    "heterogeneous"
+   ],
+   "q": "Explain how a solid (heterogeneous) catalyst speeds up a reaction between gases.",
+   "a": "It provides a surface on which the reaction happens.",
+   "marks": [
+    "Reactant molecules are adsorbed onto the catalyst surface (at active sites).",
+    "Bonds in the reactants are weakened, and the molecules are held close together, so they react more easily.",
+    "The products are desorbed, freeing the surface for more reactant molecules."
+   ],
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-039",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "catalysts",
+    "heterogeneous",
+    "industry"
+   ],
+   "q": "Why is a solid catalyst used in industry as a fine powder, a mesh or a coating on a support?",
+   "a": "To give it a very large surface area, so more reactant molecules can be adsorbed at once and the rate is greater.",
+   "why": "An example is the iron catalyst in the Haber process, \\(\\mathrm{N_{2}(g) + 3H_{2}(g) \\rightleftharpoons 2NH_{3}(g)}\\); catalytic converters spread platinum, palladium and rhodium thinly over a ceramic honeycomb.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-040",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "catalysts",
+    "industry",
+    "sustainability"
+   ],
+   "q": "Explain the economic benefits of using catalysts in industrial processes.",
+   "a": "Catalysts let products be made faster and with less energy.",
+   "marks": [
+    "An acceptable rate is reached at a lower temperature, so less energy (fuel) is needed and costs are lower.",
+    "Product is made faster, so more is produced per day from the same plant.",
+    "The catalyst is not used up, so it can be reused for a long time.",
+    "Burning less fuel also means lower carbon dioxide emissions."
+   ],
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-kin-041",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "factors"
+   ],
+   "q": "List the factors that affect the rate of a reaction, and say which of them change the proportion of collisions that are successful.",
+   "a": "Concentration, pressure (gases), surface area (solids), temperature and catalysts.<br>Only <strong>temperature</strong> and a <strong>catalyst</strong> change the proportion of successful collisions; the others change how often collisions happen.",
+   "why": "Temperature changes the energies of the molecules; a catalyst lowers the energy needed.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3",
+      "3.1.5.4",
+      "3.1.5.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1",
+      "9.4",
+      "9.5"
+     ]
+    }
+   }
+  }
+ ]
+}

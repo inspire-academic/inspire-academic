@@ -1,0 +1,1446 @@
+{
+ "schema": "inspire.flashcards.v1",
+ "topic": {
+  "id": "chemistry-a-level/rate-equations",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Rate Equations",
+  "spec": "chemistry-a-level"
+ },
+ "cards": [
+  {
+   "id": "che-al-rate-001",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "terms"
+   ],
+   "q": "Define the rate of a reaction, and give its usual units.",
+   "a": "The change in concentration of a reactant or product per unit time. Units: \\(\\text{mol dm}^{-3}\\ \\text{s}^{-1}\\).",
+   "why": "On a concentration–time graph, the rate at any moment is the gradient of the tangent at that time.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-002",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "rate-equation"
+   ],
+   "q": "Write the general rate equation for a reaction between A and B, and say what each symbol means.",
+   "a": "\\(\\text{rate} = k[\\mathrm{A}]^{m}[\\mathrm{B}]^{n}\\)<br>\\(k\\): the rate constant; \\(m\\), \\(n\\): the orders with respect to A and B.",
+   "why": "At A-level the orders are 0, 1 or 2.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.1",
+      "16.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-003",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "order"
+   ],
+   "q": "Define the order of reaction with respect to a reactant, and the overall order.",
+   "a": "Order with respect to a reactant: the <strong>power</strong> to which its concentration is raised in the rate equation.<br>Overall order: the <strong>sum</strong> of the orders with respect to each reactant.",
+   "why": "For \\(\\text{rate} = k[\\mathrm{A}]^{2}[\\mathrm{B}]\\) the reaction is second order in A, first order in B, and third order overall.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-004",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "rate-constant"
+   ],
+   "q": "Define the rate constant, \\(k\\).",
+   "a": "The constant of proportionality that links the rate of reaction to the concentrations in the rate equation.",
+   "why": "\\(k\\) is constant at a fixed temperature; it increases as the temperature increases.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-005",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "half-life"
+   ],
+   "q": "Define the half-life of a reaction.",
+   "a": "The time taken for the concentration of a reactant to fall to <strong>half</strong> of its initial value.",
+   "why": "For a first-order reaction the half-life is constant: it does not depend on the starting concentration.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-006",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "mechanism",
+    "rds"
+   ],
+   "q": "What is the rate-determining step of a reaction?",
+   "a": "The <strong>slowest step</strong> in the reaction mechanism.",
+   "why": "The overall reaction can go no faster than its slowest step, so this step controls the rate.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-007",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "activation-energy"
+   ],
+   "q": "Define activation energy.",
+   "a": "The <strong>minimum energy</strong> that colliding particles must have for a reaction to occur.",
+   "why": "Only collisions with at least this energy break the bonds needed to react.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-008",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "catalyst"
+   ],
+   "q": "What is the difference between a homogeneous and a heterogeneous catalyst? Give an example of each.",
+   "a": "<strong>Homogeneous</strong>: in the same phase as the reactants, e.g. \\(\\mathrm{H^{+}(aq)}\\) in the iodination of propanone.<br><strong>Heterogeneous</strong>: in a different phase, e.g. solid iron in the Haber process with gaseous reactants.",
+   "why": "Heterogeneous catalysts work at their surface; homogeneous catalysts take part in the mechanism and are re-formed.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-009",
+   "type": "unit",
+   "difficulty": 2,
+   "tags": [
+    "rate-constant",
+    "units"
+   ],
+   "q": "Give the units of \\(k\\) for a reaction that is zero, first, second and third order overall (rate in \\(\\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)).",
+   "a": "Zero: \\(\\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)<br>First: \\(\\text{s}^{-1}\\)<br>Second: \\(\\text{mol}^{-1}\\ \\text{dm}^{3}\\ \\text{s}^{-1}\\)<br>Third: \\(\\text{mol}^{-2}\\ \\text{dm}^{6}\\ \\text{s}^{-1}\\)",
+   "why": "Rearrange: \\(k = \\frac{\\text{rate}}{\\text{concentration terms}}\\), then cancel the units.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-010",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "rate-constant",
+    "units"
+   ],
+   "q": "Deduce the units of \\(k\\) for \\(\\text{rate} = k[\\mathrm{A}][\\mathrm{B}]^{2}\\).",
+   "a": "<strong>\\(\\text{mol}^{-2}\\ \\text{dm}^{6}\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "\\(k = \\dfrac{\\text{rate}}{[\\mathrm{A}][\\mathrm{B}]^{2}}\\), so units \\(= \\dfrac{\\text{mol dm}^{-3}\\ \\text{s}^{-1}}{( \\text{mol dm}^{-3})^{3}}\\)",
+    "\\(= \\dfrac{\\text{s}^{-1}}{( \\text{mol dm}^{-3})^{2}} = \\text{mol}^{-2}\\ \\text{dm}^{6}\\ \\text{s}^{-1}\\)"
+   ],
+   "why": "One power of concentration cancels with the rate; any left on the bottom become negative powers.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-011",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "rate-constant",
+    "calculation"
+   ],
+   "q": "For \\(\\text{rate} = k[\\mathrm{A}][\\mathrm{B}]\\), the rate is \\(3.6 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\) when \\([\\mathrm{A}] = 0.020\\) and \\([\\mathrm{B}] = 0.030\\ \\text{mol dm}^{-3}\\). Calculate \\(k\\), with units.",
+   "a": "<strong>\\(k = 0.60\\ \\text{mol}^{-1}\\ \\text{dm}^{3}\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "\\(k = \\dfrac{\\text{rate}}{[\\mathrm{A}][\\mathrm{B}]} = \\dfrac{3.6 \\times 10^{-4}}{0.020 \\times 0.030}\\)",
+    "\\(k = \\dfrac{3.6 \\times 10^{-4}}{6.0 \\times 10^{-4}} = 0.60\\)",
+    "Second order overall, so units \\(\\text{mol}^{-1}\\ \\text{dm}^{3}\\ \\text{s}^{-1}\\)."
+   ],
+   "why": "Always work out the units: they are usually worth a mark of their own.",
+   "numeric": {
+    "value": 0.6,
+    "unit": "mol⁻¹ dm³ s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-012",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "rate-equation",
+    "calculation"
+   ],
+   "q": "For \\(\\text{rate} = k[\\mathrm{A}]^{2}\\), \\(k = 0.25\\ \\text{mol}^{-1}\\ \\text{dm}^{3}\\ \\text{s}^{-1}\\). Calculate \\([\\mathrm{A}]\\) when the rate is \\(4.0 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\).",
+   "a": "<strong>\\([\\mathrm{A}] = 0.040\\ \\text{mol dm}^{-3}\\)</strong>",
+   "steps": [
+    "\\([\\mathrm{A}]^{2} = \\dfrac{\\text{rate}}{k} = \\dfrac{4.0 \\times 10^{-4}}{0.25} = 1.6 \\times 10^{-3}\\)",
+    "\\([\\mathrm{A}] = \\sqrt{1.6 \\times 10^{-3}} = 0.040\\ \\text{mol dm}^{-3}\\)"
+   ],
+   "why": "Rearrange before substituting, and take the square root last.",
+   "numeric": {
+    "value": 0.04,
+    "unit": "mol dm⁻³",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-013",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "order"
+   ],
+   "q": "The concentration of a reactant is doubled. By what factor does the rate change if the reaction is zero, first or second order with respect to it?",
+   "a": "Zero order: no change (\\(\\times 1\\)).<br>First order: \\(\\times 2\\).<br>Second order: \\(\\times 4\\).",
+   "why": "The rate changes by \\(2^{\\text{order}}\\). Tripling the concentration changes it by \\(3^{\\text{order}}\\): \\(\\times 1\\), \\(\\times 3\\), \\(\\times 9\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.2",
+      "16.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-014",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "initial-rate",
+    "order",
+    "calculation"
+   ],
+   "q": "For \\(\\mathrm{2NO(g) + 2H_{2}(g) \\rightarrow N_{2}(g) + 2H_{2}O(g)}\\):<br>Exp 1: \\([\\mathrm{NO}] = 0.010\\), \\([\\mathrm{H_{2}}] = 0.010\\), rate \\(2.5 \\times 10^{-5}\\)<br>Exp 2: \\([\\mathrm{NO}] = 0.020\\), \\([\\mathrm{H_{2}}] = 0.010\\), rate \\(1.0 \\times 10^{-4}\\)<br>Exp 3: \\([\\mathrm{NO}] = 0.020\\), \\([\\mathrm{H_{2}}] = 0.030\\), rate \\(3.0 \\times 10^{-4}\\)<br>Deduce the rate equation and calculate \\(k\\).",
+   "a": "<strong>\\(\\text{rate} = k[\\mathrm{NO}]^{2}[\\mathrm{H_{2}}]\\)</strong>; \\(k = 25\\ \\text{mol}^{-2}\\ \\text{dm}^{6}\\ \\text{s}^{-1}\\)",
+   "steps": [
+    "Exp 1 to 2: \\([\\mathrm{NO}]\\) doubles, \\([\\mathrm{H_{2}}]\\) constant, rate \\(\\times 4\\): second order in NO.",
+    "Exp 2 to 3: \\([\\mathrm{H_{2}}]\\) triples, \\([\\mathrm{NO}]\\) constant, rate \\(\\times 3\\): first order in \\(\\mathrm{H_{2}}\\).",
+    "Exp 1: \\(k = \\dfrac{2.5 \\times 10^{-5}}{(0.010)^{2} \\times 0.010} = 25\\ \\text{mol}^{-2}\\ \\text{dm}^{6}\\ \\text{s}^{-1}\\)"
+   ],
+   "why": "Concentrations in mol dm⁻³, rates in mol dm⁻³ s⁻¹. The orders do not match the 2 : 2 in the equation: they must be found by experiment.",
+   "numeric": {
+    "value": 25,
+    "unit": "mol⁻² dm⁶ s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2",
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.7",
+      "16.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-015",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "initial-rate",
+    "order",
+    "calculation"
+   ],
+   "q": "Initial rates (\\(\\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)):<br>Exp 1: \\([\\mathrm{A}] = 0.10\\), \\([\\mathrm{B}] = 0.10\\), rate \\(1.2 \\times 10^{-3}\\)<br>Exp 2: \\([\\mathrm{A}] = 0.20\\), \\([\\mathrm{B}] = 0.10\\), rate \\(2.4 \\times 10^{-3}\\)<br>Exp 3: \\([\\mathrm{A}] = 0.30\\), \\([\\mathrm{B}] = 0.20\\), rate \\(1.44 \\times 10^{-2}\\)<br>Deduce the order with respect to B.",
+   "a": "<strong>Second order</strong> with respect to B.",
+   "steps": [
+    "Exp 1 to 2: \\([\\mathrm{A}]\\) doubles, rate doubles: first order in A.",
+    "Exp 1 to 3: \\([\\mathrm{A}]\\) \\(\\times 3\\) and \\([\\mathrm{B}]\\) \\(\\times 2\\); rate \\(\\times 12\\).",
+    "The change in A accounts for \\(\\times 3\\), so B accounts for \\(\\times 4\\). Doubling B quadruples the rate: second order."
+   ],
+   "why": "When two concentrations change at once, remove the effect of the one you already know.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-016",
+   "type": "graph",
+   "difficulty": 2,
+   "tags": [
+    "graphs",
+    "order"
+   ],
+   "q": "Describe the shape of a rate–concentration graph for a reactant that is zero, first and second order.",
+   "a": "Zero order: a <strong>horizontal line</strong>.<br>First order: a <strong>straight line through the origin</strong>.<br>Second order: an <strong>upward curve</strong> through the origin, getting steeper.",
+   "why": "For first order the gradient is \\(k\\). For second order, rate against \\([\\mathrm{A}]^{2}\\) gives a straight line through the origin.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.6"
+     ]
+    }
+   },
+   "answerFigure": {
+    "kind": "graph",
+    "alt": "Rate against concentration. Zero order: a horizontal line. First order: a straight line through the origin. Second order: a curve through the origin that gets steeper.",
+    "x": {
+     "label": "concentration",
+     "min": 0,
+     "max": 1
+    },
+    "y": {
+     "label": "rate",
+     "min": 0,
+     "max": 1.05
+    },
+    "curves": [
+     {
+      "fn": {
+       "kind": "linear",
+       "m": 0,
+       "c": 0.12
+      },
+      "from": 0,
+      "to": 1,
+      "label": "zero order",
+      "labelAt": 0.85,
+      "labelLeft": true
+     },
+     {
+      "fn": {
+       "kind": "linear",
+       "m": 1,
+       "c": 0
+      },
+      "from": 0,
+      "to": 1,
+      "label": "first order",
+      "labelAt": 0.42,
+      "labelLeft": true
+     },
+     {
+      "fn": {
+       "kind": "power",
+       "a": 1,
+       "n": 2,
+       "c": 0
+      },
+      "from": 0,
+      "to": 1,
+      "label": "second order",
+      "labelAt": 0.62,
+      "labelBelow": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "che-al-rate-017",
+   "type": "graph",
+   "difficulty": 2,
+   "tags": [
+    "graphs",
+    "order"
+   ],
+   "q": "Describe the shape of a concentration–time graph for a reactant that is zero order and one that is first order.",
+   "a": "Zero order: a <strong>straight line</strong> sloping down at a constant gradient.<br>First order: a curve that falls more and more slowly, with a <strong>constant half-life</strong>.",
+   "why": "Zero order: the rate does not depend on concentration, so it never changes. First order: the rate falls as the concentration falls.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.6"
+     ]
+    }
+   },
+   "answerFigure": {
+    "kind": "graph",
+    "alt": "Concentration of reactant against time. Zero order: a straight line falling at a constant rate. First order: a curve that falls more and more slowly, halving in equal times.",
+    "x": {
+     "label": "time",
+     "min": 0,
+     "max": 10
+    },
+    "y": {
+     "label": "concentration",
+     "min": 0,
+     "max": 1.05
+    },
+    "curves": [
+     {
+      "fn": {
+       "kind": "linear",
+       "m": -0.1,
+       "c": 1
+      },
+      "from": 0,
+      "to": 10,
+      "label": "zero order",
+      "labelAt": 6.5
+     },
+     {
+      "fn": {
+       "kind": "exp",
+       "a": 1,
+       "k": -0.3466,
+       "c": 0
+      },
+      "from": 0,
+      "to": 10,
+      "label": "first order",
+      "labelAt": 2.2,
+      "labelBelow": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "che-al-rate-018",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "graphs",
+    "order",
+    "half-life"
+   ],
+   "q": "How can a concentration–time curve be used to tell a first-order reaction from a second-order one?",
+   "a": "Measure successive half-lives. First order: they are <strong>constant</strong>. Second order: each half-life is <strong>longer</strong> than the one before.",
+   "why": "A second-order reaction slows down more sharply as the concentration falls.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-019",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "graphs",
+    "zero-order",
+    "calculation"
+   ],
+   "q": "A concentration–time graph for a zero-order reaction is a straight line falling from \\(0.050\\) to \\(0.020\\ \\text{mol dm}^{-3}\\) in 120 s. Calculate \\(k\\).",
+   "a": "<strong>\\(k = 2.5 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "For zero order, \\(\\text{rate} = k\\), and the rate is constant.",
+    "Gradient \\(= \\dfrac{0.020 - 0.050}{120} = -2.5 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)",
+    "\\(k = 2.5 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\) (the rate is the gradient without the minus sign)."
+   ],
+   "why": "The units of k for a zero-order reaction are the same as the units of rate.",
+   "numeric": {
+    "value": 0.00025,
+    "unit": "mol dm⁻³ s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1",
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.5",
+      "16.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-020",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "graphs",
+    "tangent",
+    "calculation"
+   ],
+   "q": "A tangent drawn to a concentration–time curve at \\(t = 0\\) passes through \\((0\\ \\text{s},\\ 0.080\\ \\text{mol dm}^{-3})\\) and \\((40\\ \\text{s},\\ 0\\ \\text{mol dm}^{-3})\\). Calculate the initial rate.",
+   "a": "<strong>\\(2.0 \\times 10^{-3}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "Gradient \\(= \\dfrac{0 - 0.080}{40 - 0} = -2.0 \\times 10^{-3}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)",
+    "Rate \\(= 2.0 \\times 10^{-3}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\) (a reactant’s concentration falls, so the gradient is negative; the rate is positive)."
+   ],
+   "why": "The initial rate is the gradient of the tangent at time zero; a tangent at a later time gives the rate at that time.",
+   "numeric": {
+    "value": 0.002,
+    "unit": "mol dm⁻³ s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-021",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "half-life",
+    "first-order",
+    "calculation"
+   ],
+   "q": "The concentration of a reactant in a first-order reaction falls from \\(0.80\\) to \\(0.10\\ \\text{mol dm}^{-3}\\) in 75 s. Calculate the half-life.",
+   "a": "<strong>25 s</strong>",
+   "steps": [
+    "\\(0.80 \\rightarrow 0.40 \\rightarrow 0.20 \\rightarrow 0.10\\): three half-lives.",
+    "Half-life \\(= \\dfrac{75}{3} = 25\\ \\text{s}\\)"
+   ],
+   "why": "For a first-order reaction the half-life is the same however much reactant is left.",
+   "numeric": {
+    "value": 25,
+    "unit": "s",
+    "sf": 2
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-022",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "half-life",
+    "first-order",
+    "rate-constant"
+   ],
+   "q": "A first-order reaction has a half-life of 50 s. Use \\(k = \\dfrac{\\ln 2}{t_{1/2}}\\) to calculate the rate constant.",
+   "a": "<strong>\\(k = 0.0139\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "\\(k = \\dfrac{\\ln 2}{t_{1/2}} = \\dfrac{0.693}{50}\\)",
+    "\\(k = 0.0139\\ \\text{s}^{-1}\\)"
+   ],
+   "why": "Units of k for a first-order reaction are s⁻¹. A shorter half-life means a larger rate constant.",
+   "numeric": {
+    "value": 0.0139,
+    "unit": "s⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-023",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "half-life",
+    "graphs"
+   ],
+   "q": "A first-order reaction gives off a gas. The volume–time graph levels off at 60 \\(\\text{cm}^{3}\\). How is the half-life read from the graph?",
+   "a": "Read the time taken to collect half the final volume, 30 \\(\\text{cm}^{3}\\). (Check: the next half-life is the time from 30 to 45 \\(\\text{cm}^{3}\\), and should be the same.)",
+   "why": "The volume still to be collected is proportional to the reactant left, so it halves every half-life.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-024",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "arrhenius"
+   ],
+   "q": "Write the Arrhenius equation and say what each symbol means.",
+   "a": "\\(k = A\\mathrm{e}^{-E_{\\text{a}}/RT}\\)<br>\\(k\\): rate constant; \\(A\\): Arrhenius constant; \\(E_{\\text{a}}\\): activation energy (\\(\\text{J mol}^{-1}\\)); \\(R\\): gas constant, \\(8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\); \\(T\\): temperature in K.",
+   "why": "\\(E_{\\text{a}}\\) must be in J (not kJ) because \\(R\\) is in J.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ],
+     "given": true
+    },
+    "edexcel": {
+     "points": [
+      "16.12"
+     ],
+     "given": true
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-025",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "arrhenius",
+    "temperature"
+   ],
+   "q": "Explain why increasing the temperature increases the rate constant, \\(k\\).",
+   "a": "More collisions have energy at least equal to \\(E_{\\text{a}}\\), so the fraction of successful collisions increases.",
+   "marks": [
+    "At a higher temperature particles have more kinetic energy.",
+    "A greater proportion of collisions have energy greater than or equal to the activation energy.",
+    "So more collisions are successful per second; in the Arrhenius equation, \\(\\mathrm{e}^{-E_{\\text{a}}/RT}\\) increases as \\(T\\) increases, so \\(k\\) increases."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-026",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "arrhenius",
+    "calculation"
+   ],
+   "q": "For a first-order reaction, \\(A = 4.0 \\times 10^{10}\\ \\text{s}^{-1}\\) and \\(E_{\\text{a}} = 75\\ \\text{kJ mol}^{-1}\\). Calculate \\(k\\) at 298 K. (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>\\(k = 2.8 \\times 10^{-3}\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "\\(\\dfrac{E_{\\text{a}}}{RT} = \\dfrac{75\\,000}{8.31 \\times 298} = 30.29\\)",
+    "\\(k = 4.0 \\times 10^{10} \\times \\mathrm{e}^{-30.29}\\)",
+    "\\(k = 2.8 \\times 10^{-3}\\ \\text{s}^{-1}\\)"
+   ],
+   "why": "Convert kJ to J first. \\(k\\) has the same units as \\(A\\).",
+   "numeric": {
+    "value": 0.0028,
+    "unit": "s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-027",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "arrhenius",
+    "calculation"
+   ],
+   "q": "A first-order reaction has \\(k = 1.5 \\times 10^{-3}\\ \\text{s}^{-1}\\) at 300 K and \\(E_{\\text{a}} = 60\\ \\text{kJ mol}^{-1}\\). Calculate the Arrhenius constant, \\(A\\). (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>\\(A = 4.3 \\times 10^{7}\\ \\text{s}^{-1}\\)</strong>",
+   "steps": [
+    "Rearrange: \\(A = \\dfrac{k}{\\mathrm{e}^{-E_{\\text{a}}/RT}} = k\\,\\mathrm{e}^{E_{\\text{a}}/RT}\\)",
+    "\\(\\dfrac{E_{\\text{a}}}{RT} = \\dfrac{60\\,000}{8.31 \\times 300} = 24.07\\)",
+    "\\(A = 1.5 \\times 10^{-3} \\times \\mathrm{e}^{24.07} = 4.3 \\times 10^{7}\\ \\text{s}^{-1}\\)"
+   ],
+   "why": "\\(A\\) has the same units as \\(k\\).",
+   "numeric": {
+    "value": 43000000,
+    "unit": "s⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-028",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "arrhenius",
+    "temperature",
+    "calculation"
+   ],
+   "q": "A reaction has \\(E_{\\text{a}} = 50\\ \\text{kJ mol}^{-1}\\). By what factor does \\(k\\) increase when the temperature rises from 298 K to 308 K? (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>About 1.9</strong> (the rate roughly doubles).",
+   "steps": [
+    "\\(\\dfrac{k_{308}}{k_{298}} = \\dfrac{A\\mathrm{e}^{-E_{\\text{a}}/(R \\times 308)}}{A\\mathrm{e}^{-E_{\\text{a}}/(R \\times 298)}}\\); \\(A\\) cancels.",
+    "\\(\\dfrac{E_{\\text{a}}}{R} = \\dfrac{50\\,000}{8.31} = 6017\\ \\text{K}\\)",
+    "Ratio \\(= \\mathrm{e}^{6017\\left(\\frac{1}{298} - \\frac{1}{308}\\right)} = \\mathrm{e}^{0.656} = 1.93\\)"
+   ],
+   "why": "A small rise in temperature makes a big difference to the fraction of collisions with enough energy.",
+   "numeric": {
+    "value": 1.93,
+    "unit": "",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-029",
+   "type": "derivation",
+   "difficulty": 2,
+   "tags": [
+    "arrhenius",
+    "graphs"
+   ],
+   "q": "Show how \\(k = A\\mathrm{e}^{-E_{\\text{a}}/RT}\\) gives a straight-line graph, and say what the gradient and intercept are.",
+   "a": "\\(\\ln k = -\\dfrac{E_{\\text{a}}}{R} \\times \\dfrac{1}{T} + \\ln A\\): plot \\(\\ln k\\) against \\(\\frac{1}{T}\\). Gradient \\(= -\\dfrac{E_{\\text{a}}}{R}\\); intercept \\(= \\ln A\\).",
+   "steps": [
+    "Take natural logs: \\(\\ln k = \\ln A + \\ln \\mathrm{e}^{-E_{\\text{a}}/RT} = \\ln A - \\dfrac{E_{\\text{a}}}{RT}\\)",
+    "Compare with \\(y = mx + c\\): \\(y = \\ln k\\), \\(x = \\frac{1}{T}\\), \\(m = -\\dfrac{E_{\\text{a}}}{R}\\), \\(c = \\ln A\\)."
+   ],
+   "why": "The line slopes downwards; a steeper line means a larger activation energy.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-030",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "arrhenius",
+    "graphs",
+    "calculation"
+   ],
+   "q": "A graph of \\(\\ln k\\) against \\(\\frac{1}{T}\\) has a gradient of \\(-9.0 \\times 10^{3}\\ \\text{K}\\). Calculate the activation energy. (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>\\(E_{\\text{a}} = 75\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Gradient \\(= -\\dfrac{E_{\\text{a}}}{R}\\), so \\(E_{\\text{a}} = -\\text{gradient} \\times R\\)",
+    "\\(E_{\\text{a}} = 9.0 \\times 10^{3} \\times 8.31 = 74\\,800\\ \\text{J mol}^{-1} = 75\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "The negative gradient gives a positive activation energy; convert J to kJ at the end.",
+   "numeric": {
+    "value": 75,
+    "unit": "kJ mol⁻¹",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-031",
+   "type": "worked-calc",
+   "difficulty": 3,
+   "tags": [
+    "arrhenius",
+    "graphs",
+    "calculation"
+   ],
+   "q": "Two points on a best-fit line of \\(\\ln k\\) against \\(\\frac{1}{T}\\) are \\((3.10 \\times 10^{-3}\\ \\text{K}^{-1},\\ -5.20)\\) and \\((3.30 \\times 10^{-3}\\ \\text{K}^{-1},\\ -6.70)\\). Calculate \\(E_{\\text{a}}\\). (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "a": "<strong>\\(E_{\\text{a}} = 62.3\\ \\text{kJ mol}^{-1}\\)</strong>",
+   "steps": [
+    "Gradient \\(= \\dfrac{-6.70 - (-5.20)}{3.30 \\times 10^{-3} - 3.10 \\times 10^{-3}} = \\dfrac{-1.50}{2.0 \\times 10^{-4}} = -7500\\ \\text{K}\\)",
+    "\\(E_{\\text{a}} = 7500 \\times 8.31 = 62\\,300\\ \\text{J mol}^{-1} = 62.3\\ \\text{kJ mol}^{-1}\\)"
+   ],
+   "why": "Use points on the line, far apart, not individual data points.",
+   "numeric": {
+    "value": 62.3,
+    "unit": "kJ mol⁻¹",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-032",
+   "type": "practical",
+   "difficulty": 3,
+   "tags": [
+    "arrhenius",
+    "practical"
+   ],
+   "q": "Outline how the activation energy of a reaction can be found using a reaction timed to a fixed end point at several temperatures.",
+   "a": "Time the reaction to the same end point at five or more temperatures; plot \\(\\ln(1/t)\\) against \\(\\frac{1}{T}\\); \\(E_{\\text{a}} = -\\text{gradient} \\times R\\).",
+   "steps": [
+    "Use the same volumes and concentrations each time; warm the reactant solutions separately in a water bath to the chosen temperature before mixing.",
+    "Mix, start the timer, and record the time t to reach the end point (e.g. a colour change). Measure the temperature of the mixture.",
+    "The same amount reacts each time, so \\(\\frac{1}{t}\\) is proportional to the rate and hence to \\(k\\).",
+    "Plot \\(\\ln(1/t)\\) against \\(\\frac{1}{T}\\) (T in K); the gradient is \\(-\\frac{E_{\\text{a}}}{R}\\)."
+   ],
+   "why": "\\(\\ln(1/t) = \\ln k + \\text{constant}\\), so the gradient is the same as for \\(\\ln k\\) against \\(\\frac{1}{T}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ],
+     "practical": "RP3"
+    },
+    "edexcel": {
+     "points": [
+      "16.12"
+     ],
+     "practical": "CP14"
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-033",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "mechanism",
+    "rds"
+   ],
+   "q": "What do the orders in a rate equation tell you about the rate-determining step?",
+   "a": "Species in the rate equation are involved in the rate-determining step (or in steps before it), in the numbers given by their orders. A zero-order reactant is not involved until after the rate-determining step.",
+   "why": "\\(\\text{rate} = k[\\mathrm{A}]^{2}[\\mathrm{B}]\\) suggests two A and one B take part in (or before) the slow step.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-034",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "mechanism",
+    "rds"
+   ],
+   "q": "\\(\\mathrm{2NO_{2}(g) + F_{2}(g) \\rightarrow 2NO_{2}F(g)}\\) has \\(\\text{rate} = k[\\mathrm{NO_{2}}][\\mathrm{F_{2}}]\\). Suggest a two-step mechanism, identifying the rate-determining step.",
+   "a": "Step 1 (slow): \\(\\mathrm{NO_{2} + F_{2} \\rightarrow NO_{2}F + F}\\)<br>Step 2 (fast): \\(\\mathrm{NO_{2} + F \\rightarrow NO_{2}F}\\)",
+   "steps": [
+    "The rate equation has one \\(\\mathrm{NO_{2}}\\) and one \\(\\mathrm{F_{2}}\\), so the slow step uses one of each.",
+    "The second \\(\\mathrm{NO_{2}}\\) must react in a fast step after the rate-determining step.",
+    "Check: the steps add up to the overall equation (the F atom cancels)."
+   ],
+   "why": "A mechanism must be consistent with both the rate equation and the overall equation.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.9",
+      "16.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-035",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "mechanism",
+    "rds"
+   ],
+   "q": "The reaction \\(\\mathrm{NO_{2}(g) + CO(g) \\rightarrow NO(g) + CO_{2}(g)}\\) has the mechanism:<br>Step 1 (slow): \\(\\mathrm{2NO_{2} \\rightarrow NO_{3} + NO}\\)<br>Step 2 (fast): \\(\\mathrm{NO_{3} + CO \\rightarrow NO_{2} + CO_{2}}\\)<br>Deduce the rate equation.",
+   "a": "<strong>\\(\\text{rate} = k[\\mathrm{NO_{2}}]^{2}\\)</strong>",
+   "steps": [
+    "The rate-determining step involves two \\(\\mathrm{NO_{2}}\\) molecules, so it is second order in \\(\\mathrm{NO_{2}}\\).",
+    "CO only reacts after the slow step, so it is zero order and does not appear."
+   ],
+   "why": "The rate equation comes from the slow step, not from the overall equation.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-036",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "mechanism",
+    "sn1",
+    "sn2",
+    "halogenoalkanes"
+   ],
+   "q": "Explain how rate equations give evidence for the mechanisms of hydrolysis of a primary and a tertiary halogenoalkane by hydroxide ions.",
+   "a": "Primary: first order in each reactant (SN2, one step). Tertiary: first order in the halogenoalkane only (SN1, two steps).",
+   "marks": [
+    "Primary, e.g. 1-bromobutane: \\(\\text{rate} = k[\\mathrm{RBr}][\\mathrm{OH^{-}}]\\); both are in the rate-determining step.",
+    "This fits SN2: a single step in which the hydroxide ion attacks as the bromide ion leaves.",
+    "Tertiary, e.g. 2-bromo-2-methylpropane: \\(\\text{rate} = k[\\mathrm{RBr}]\\); zero order in \\(\\mathrm{OH^{-}}\\).",
+    "This fits SN1: the slow step is the C–Br bond breaking to form a carbocation; \\(\\mathrm{OH^{-}}\\) reacts with it in a fast second step."
+   ],
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.11",
+      "16.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-037",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "mechanism",
+    "sn1",
+    "halogenoalkanes"
+   ],
+   "q": "Write the two steps of the SN1 hydrolysis of 2-bromo-2-methylpropane, \\(\\mathrm{(CH_{3})_{3}CBr}\\), and say which is rate-determining.",
+   "a": "Step 1 (slow): \\(\\mathrm{(CH_{3})_{3}CBr \\rightarrow (CH_{3})_{3}C^{+} + Br^{-}}\\)<br>Step 2 (fast): \\(\\mathrm{(CH_{3})_{3}C^{+} + OH^{-} \\rightarrow (CH_{3})_{3}COH}\\)",
+   "why": "Only the halogenoalkane is in the slow step, so \\(\\text{rate} = k[\\mathrm{(CH_{3})_{3}CBr}]\\).",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.11",
+      "16.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-038",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "iodination",
+    "propanone"
+   ],
+   "q": "Write the equation for the acid-catalysed reaction of propanone with iodine.",
+   "a": "\\(\\mathrm{CH_{3}COCH_{3}(aq) + I_{2}(aq) \\xrightarrow{H^{+}} CH_{3}COCH_{2}I(aq) + HI(aq)}\\)",
+   "why": "\\(\\mathrm{H^{+}}\\) is a homogeneous catalyst; HI is also formed, so the acid concentration rises slightly as the reaction proceeds.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-039",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "iodination",
+    "propanone",
+    "rds"
+   ],
+   "q": "The iodination of propanone has \\(\\text{rate} = k[\\mathrm{CH_{3}COCH_{3}}][\\mathrm{H^{+}}]\\). What does this tell you about the mechanism?",
+   "a": "<strong>One propanone molecule and one \\(\\mathrm{H^{+}}\\) ion</strong> are involved in (or before) the rate-determining step. Iodine is zero order, so it reacts only in a fast step <strong>after</strong> the rate-determining step.",
+   "why": "A catalyst can appear in a rate equation even though it is not in the overall equation.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.8",
+      "16.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-040",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "iodination",
+    "propanone",
+    "mechanism"
+   ],
+   "q": "Suggest a mechanism for the acid-catalysed iodination of propanone that fits its rate equation.",
+   "a": "Step 1 (fast): \\(\\mathrm{CH_{3}COCH_{3} + H^{+} \\rightleftharpoons CH_{3}C(OH^{+})CH_{3}}\\)<br>Step 2 (slow): \\(\\mathrm{CH_{3}C(OH^{+})CH_{3} \\rightarrow CH_{2}{=}C(OH)CH_{3} + H^{+}}\\)<br>Step 3 (fast): \\(\\mathrm{CH_{2}{=}C(OH)CH_{3} + I_{2} \\rightarrow CH_{3}COCH_{2}I + H^{+} + I^{-}}\\)",
+   "why": "The slow step uses a species made from one propanone and one \\(\\mathrm{H^{+}}\\), so both are first order; \\(\\mathrm{I_{2}}\\) reacts only after it. \\(\\mathrm{H^{+}}\\) is regenerated: a catalyst.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.8",
+      "16.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-041",
+   "type": "practical",
+   "difficulty": 3,
+   "tags": [
+    "iodination",
+    "propanone",
+    "practical",
+    "titration"
+   ],
+   "q": "Describe how the rate of the iodine–propanone reaction can be followed by titration.",
+   "a": "Withdraw samples at timed intervals, quench them, and titrate the iodine left with sodium thiosulfate.",
+   "steps": [
+    "Mix propanone and acid in large excess with iodine solution; start the clock.",
+    "At regular intervals withdraw a 10 cm³ sample with a pipette and add it to sodium hydrogencarbonate solution, which neutralises the acid catalyst and stops (quenches) the reaction.",
+    "Titrate the iodine in each sample with standard sodium thiosulfate solution, adding starch near the end point (blue-black to colourless).",
+    "Plot iodine concentration against time."
+   ],
+   "why": "The graph is a straight line: the rate does not change as iodine is used up, so the reaction is zero order in iodine.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.8",
+      "16.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-042",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "iodination",
+    "propanone",
+    "order"
+   ],
+   "q": "In the iodination of propanone, why are propanone and acid used in large excess when finding the order with respect to iodine?",
+   "a": "So their concentrations stay effectively constant; any change in rate is then due to iodine alone.",
+   "why": "With [propanone] and \\([\\mathrm{H^{+}}]\\) constant, a straight-line iodine–time graph shows zero order in iodine.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-043",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "methods",
+    "techniques"
+   ],
+   "q": "Select and justify a method of following the rate of each reaction:<br>(a) marble chips with hydrochloric acid<br>(b) bromine with methanoic acid in aqueous solution",
+   "a": "(a) Measure the volume of carbon dioxide (or the loss in mass). (b) Colorimetry, following the colour of bromine.",
+   "marks": [
+    "Marble chips: carbon dioxide gas is given off.",
+    "Collect it in a gas syringe and record volume against time, or record the loss of mass on a balance as the gas escapes.",
+    "Bromine with methanoic acid: \\(\\mathrm{Br_{2}}\\) is the only coloured species, and it is used up.",
+    "Use a colorimeter to measure absorbance against time; absorbance is proportional to bromine concentration."
+   ],
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-044",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "methods",
+    "techniques",
+    "titration"
+   ],
+   "q": "When is titration a suitable way of following a reaction rate, and why must each sample be quenched?",
+   "a": "When a reactant or product is an acid, an alkali or iodine that can be titrated. Each sample is quenched (cooled, diluted or the catalyst neutralised) so it stops reacting before it is titrated.",
+   "why": "Otherwise the composition would keep changing during the titration, and the measured concentration would not match the recorded time.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-045",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "methods",
+    "initial-rate",
+    "practical"
+   ],
+   "q": "Describe the initial-rate method of finding the order with respect to one reactant.",
+   "a": "Do separate experiments in which only the initial concentration of that reactant is changed, and find the initial rate of each.",
+   "steps": [
+    "Keep the total volume, the temperature and the concentrations of all other reactants the same (dilute with water).",
+    "For each run, find the initial rate: the gradient of the tangent at t = 0, or 1/t for a clock reaction.",
+    "Compare how the initial rate changes as the concentration changes, or plot initial rate against concentration."
+   ],
+   "why": "At the very start, the concentrations are known exactly: they are the ones you made up.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ],
+     "practical": "RP7"
+    },
+    "edexcel": {
+     "points": [
+      "16.4"
+     ],
+     "practical": "CP13"
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-046",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "methods",
+    "continuous",
+    "practical"
+   ],
+   "q": "What is a continuous monitoring method, and what does it produce?",
+   "a": "A single experiment in which a property linked to concentration (gas volume, mass, colour, or titrated samples) is measured at regular intervals. It gives a concentration–time or volume–time graph.",
+   "why": "Tangents to the graph give the rate at different concentrations; half-lives can be read from it.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ],
+     "practical": "RP7"
+    },
+    "edexcel": {
+     "points": [
+      "16.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-047",
+   "type": "practical",
+   "difficulty": 3,
+   "tags": [
+    "clock-reaction",
+    "practical",
+    "initial-rate"
+   ],
+   "q": "In the hydrogen peroxide–iodide clock (Harcourt–Esson), \\(\\mathrm{H_{2}O_{2} + 2I^{-} + 2H^{+} \\rightarrow I_{2} + 2H_{2}O}\\), a small fixed amount of thiosulfate and some starch are added. Explain how the time t is used.",
+   "a": "Thiosulfate turns the iodine back to iodide until it runs out; then iodine builds up and turns the starch blue-black. The same amount of iodine has formed by that time in every run, so \\(\\frac{1}{t}\\) is proportional to the initial rate.",
+   "why": "\\(\\mathrm{I_{2} + 2S_{2}O_{3}^{2-} \\rightarrow 2I^{-} + S_{4}O_{6}^{2-}}\\). The thiosulfate is kept small so that little reactant is used: the rate measured is close to the initial rate.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ],
+     "practical": "RP7"
+    },
+    "edexcel": {
+     "points": [
+      "16.4"
+     ],
+     "practical": "CP13"
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-048",
+   "type": "misconception",
+   "difficulty": 1,
+   "tags": [
+    "order"
+   ],
+   "q": "True or false: the orders in a rate equation can be read from the coefficients in the balanced equation.",
+   "a": "<strong>False.</strong> Orders can only be found by experiment.",
+   "why": "\\(\\mathrm{2NO + 2H_{2} \\rightarrow N_{2} + 2H_{2}O}\\) is first order in \\(\\mathrm{H_{2}}\\), not second. The rate equation reflects the slow step, not the overall equation.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-049",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "rate-constant"
+   ],
+   "q": "True or false: increasing the concentration of a reactant increases the rate constant, \\(k\\).",
+   "a": "<strong>False.</strong> \\(k\\) is unchanged by concentration; only temperature (or a catalyst) changes it.",
+   "why": "The rate increases because the concentration term in the rate equation increases, not because k does.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-050",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "order",
+    "zero-order"
+   ],
+   "q": "True or false: a reactant that is zero order is not needed for the reaction.",
+   "a": "<strong>False.</strong> It is still a reactant and is used up; it just reacts after the rate-determining step.",
+   "why": "Changing its concentration does not change the rate, because the slow step does not involve it.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-051",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "arrhenius"
+   ],
+   "q": "True or false: in \\(k = A\\mathrm{e}^{-E_{\\text{a}}/RT}\\), you can put \\(E_{\\text{a}}\\) in \\(\\text{kJ mol}^{-1}\\) and the temperature in °C.",
+   "a": "<strong>False.</strong> \\(E_{\\text{a}}\\) must be in \\(\\text{J mol}^{-1}\\) and \\(T\\) in kelvin.",
+   "why": "\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\), so the units only cancel with J and K. Add 273 to a Celsius temperature.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "16.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-rate-052",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "catalyst",
+    "rate-equation"
+   ],
+   "q": "True or false: a catalyst cannot appear in a rate equation because it is not used up.",
+   "a": "<strong>False.</strong> A catalyst can appear in the rate equation if it takes part in the rate-determining step.",
+   "why": "In the iodination of propanone, \\(\\text{rate} = k[\\mathrm{CH_{3}COCH_{3}}][\\mathrm{H^{+}}]\\): the acid catalyst is first order.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "16.8"
+     ]
+    }
+   }
+  }
+ ]
+}
