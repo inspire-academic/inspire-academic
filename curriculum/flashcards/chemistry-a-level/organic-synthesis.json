@@ -1,0 +1,1528 @@
+{
+ "schema": "inspire.flashcards.v1",
+ "topic": {
+  "id": "chemistry-a-level/organic-synthesis",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Organic Synthesis",
+  "spec": "chemistry-a-level"
+ },
+ "cards": [
+  {
+   "id": "che-al-synth-001",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "green-chemistry"
+   ],
+   "q": "Explain why chemists aim to design processes that do not need a solvent and that use non-hazardous starting materials.",
+   "a": "Less waste, less risk, less cost.",
+   "marks": [
+    "Solvents are often toxic or flammable, and many come from crude oil.",
+    "A solvent must be removed and disposed of or recycled, which uses energy and creates waste.",
+    "Hazardous starting materials put workers and the environment at risk, and need costly safety measures.",
+    "So these processes are safer, cheaper and more sustainable."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-002",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "green-chemistry",
+    "atom-economy"
+   ],
+   "q": "Explain why chemists aim to design production methods with fewer steps and a high percentage atom economy.",
+   "a": "More product from less material, energy and waste.",
+   "marks": [
+    "Some product is lost at every step, so fewer steps give a higher overall yield.",
+    "Each step uses energy, reagents and solvents, and needs separating and purifying.",
+    "A high atom economy means more of the reactant atoms end up in the useful product, so less waste is made.",
+    "So the process is cheaper and more sustainable."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-003",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "yield"
+   ],
+   "q": "A three-step synthesis has yields of 80%, 70% and 60%. Calculate the overall percentage yield.",
+   "a": "<strong>33.6%</strong>",
+   "steps": [
+    "Multiply the yields as decimals: \\(0.80 \\times 0.70 \\times 0.60 = 0.336\\)",
+    "Overall yield \\(= 33.6\\%\\)"
+   ],
+   "why": "Losses multiply up, which is why routes with fewer steps are preferred.",
+   "numeric": {
+    "value": 33.6,
+    "unit": "%",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-004",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "atom-economy"
+   ],
+   "q": "Ethanol can be made by \\(\\mathrm{CH_{3}CH_{2}Br + NaOH \\rightarrow CH_{3}CH_{2}OH + NaBr}\\). Calculate the percentage atom economy. (\\(M_{\\text{r}}\\): \\(\\mathrm{CH_{3}CH_{2}Br}\\) 108.9, \\(\\mathrm{NaOH}\\) 40.0, \\(\\mathrm{CH_{3}CH_{2}OH}\\) 46.0)",
+   "a": "<strong>30.9%</strong>",
+   "steps": [
+    "Total mass of reactants \\(= 108.9 + 40.0 = 148.9\\)",
+    "Atom economy \\(= \\frac{46.0}{148.9} \\times 100 = 30.9\\%\\)"
+   ],
+   "why": "Hydration of ethene, by contrast, has an atom economy of 100%: ethanol is the only product.",
+   "numeric": {
+    "value": 30.9,
+    "unit": "%",
+    "sf": 3
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-005",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "reagents",
+    "oxidation"
+   ],
+   "q": "Give the reagents and conditions for this conversion of propan-1-ol into propanoic acid.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "Propan-1-ol is converted into propanoic acid; the reagents over the arrow are missing.",
+    "rxn": "CCCO>>CCC(=O)O",
+    "above": "?"
+   },
+   "a": "Acidified potassium dichromate(VI), \\(\\mathrm{K_{2}Cr_{2}O_{7}}\\) with dilute \\(\\mathrm{H_{2}SO_{4}}\\), in excess; heat under reflux.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Propan-1-ol is oxidised to propanoic acid by acidified potassium dichromate(VI), heating under reflux.",
+    "rxn": "CCCO>>CCC(=O)O",
+    "above": "K2Cr2O7 / H2SO4",
+    "below": "heat under reflux"
+   },
+   "why": "Reflux keeps the aldehyde formed first in the flask, so it is oxidised further to the acid.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "6E.38"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-006",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "reagents",
+    "oxidation"
+   ],
+   "q": "How would you convert butan-1-ol into butanal rather than butanoic acid?",
+   "a": "Warm with acidified potassium dichromate(VI) (alcohol in excess) and <strong>distil off the aldehyde as it forms</strong>.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Butan-1-ol is oxidised to butanal by acidified potassium dichromate(VI), distilling off the aldehyde as it forms.",
+    "rxn": "CCCCO>>CCCC=O",
+    "above": "K2Cr2O7 / H2SO4",
+    "below": "distil off as it forms"
+   },
+   "why": "The aldehyde has a lower boiling point than the alcohol (no hydrogen bonding between its molecules), so it leaves before it can be oxidised further.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "6E.38"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-007",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "reagents",
+    "nitrile"
+   ],
+   "q": "Give the reagent and conditions for this step, which adds a carbon atom to the chain.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "1-Bromopropane is converted into butanenitrile; the reagents over the arrow are missing.",
+    "rxn": "CCCBr>>CCCC#N",
+    "above": "?"
+   },
+   "a": "Potassium cyanide, \\(\\mathrm{KCN}\\), in ethanol (and a little water); heat under reflux.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "1-Bromopropane reacts with potassium cyanide in ethanol, heated under reflux, to give butanenitrile.",
+    "rxn": "CCCBr>>CCCC#N",
+    "above": "KCN in ethanol",
+    "below": "heat under reflux"
+   },
+   "why": "The cyanide ion is a nucleophile. This is one of the few reactions you know that makes a new \\(\\mathrm{C{-}C}\\) bond.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.3.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "6D.32"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-008",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "reagents",
+    "amine"
+   ],
+   "q": "Give the reagents for reducing a nitrile to a primary amine.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "Butanenitrile is converted into butylamine; the reagents over the arrow are missing.",
+    "rxn": "CCCC#N>>CCCCN",
+    "above": "?"
+   },
+   "a": "Hydrogen with a nickel catalyst, or \\(\\mathrm{LiAlH_{4}}\\) in dry ether (followed by dilute acid).",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Butanenitrile is reduced by hydrogen over a nickel catalyst to butylamine.",
+    "rxn": "CCCC#N>>CCCCN",
+    "above": "H2 / Ni"
+   },
+   "why": "\\(\\mathrm{RC{\\equiv}N + 4[H] \\rightarrow RCH_{2}NH_{2}}\\). Unlike making amines from halogenoalkanes, this gives no mixture of products.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "18B.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-009",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "reagents",
+    "nitrile",
+    "carboxylic-acid"
+   ],
+   "q": "Give the reagent and conditions to hydrolyse propanenitrile to propanoic acid.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "Propanenitrile is converted into propanoic acid; the reagents over the arrow are missing.",
+    "rxn": "CCC#N>>CCC(=O)O",
+    "above": "?"
+   },
+   "a": "Dilute hydrochloric acid (or dilute sulfuric acid); heat under reflux.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Propanenitrile is hydrolysed by dilute hydrochloric acid under reflux to propanoic acid.",
+    "rxn": "CCC#N>>CCC(=O)O",
+    "above": "dilute HCl(aq)",
+    "below": "heat under reflux"
+   },
+   "why": "\\(\\mathrm{CH_{3}CH_{2}CN + 2H_{2}O + HCl \\rightarrow CH_{3}CH_{2}COOH + NH_{4}Cl}\\)",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "17C.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-010",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "reagents",
+    "amine"
+   ],
+   "q": "Give the reagent and conditions to make ethylamine from bromoethane, and say why the conditions are chosen.",
+   "a": "<strong>Excess</strong> ammonia, dissolved in ethanol, heated in a sealed tube.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Bromoethane reacts with excess ammonia in ethanol, heated in a sealed tube, to give ethylamine.",
+    "rxn": "CCBr>>CCN",
+    "above": "excess NH3 in ethanol",
+    "below": "heat in a sealed tube"
+   },
+   "why": "Excess ammonia makes it less likely that the amine formed reacts further with the halogenoalkane. The sealed tube stops the volatile ammonia escaping.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "18B.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-011",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "reagents",
+    "aromatic"
+   ],
+   "q": "Give the reagents and conditions for each step in making phenylamine from benzene.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "Benzene is nitrated to nitrobenzene by concentrated nitric and sulfuric acids at 50 °C.",
+    "rxn": "c1ccccc1>>O=[N+]([O-])c1ccccc1",
+    "above": "conc. HNO3 / conc. H2SO4",
+    "below": "below 55 °C"
+   },
+   "a": "Step 1: concentrated \\(\\mathrm{HNO_{3}}\\) and concentrated \\(\\mathrm{H_{2}SO_{4}}\\), below 55 °C, gives nitrobenzene.<br>Step 2: tin and concentrated \\(\\mathrm{HCl}\\), heat under reflux, then add \\(\\mathrm{NaOH(aq)}\\), gives phenylamine.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Nitrobenzene is reduced to phenylamine by tin and concentrated hydrochloric acid, then sodium hydroxide.",
+    "rxn": "O=[N+]([O-])c1ccccc1>>Nc1ccccc1",
+    "above": "Sn / conc. HCl, reflux",
+    "below": "then NaOH(aq)"
+   },
+   "why": "Keeping the temperature low stops further nitration. The NaOH frees the amine from the salt it forms with the acid.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.11.1",
+      "3.3.10.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "18B.12",
+      "18A.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-012",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "reagents",
+    "alcohol"
+   ],
+   "q": "Show how to make propanone from propene in two steps.",
+   "a": "Step 1: steam with a phosphoric acid catalyst, at high temperature and pressure, gives propan-2-ol (major product).<br>Step 2: acidified \\(\\mathrm{K_{2}Cr_{2}O_{7}}\\), heat under reflux, gives propanone.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "Propene is hydrated by steam with a phosphoric acid catalyst to propan-2-ol.",
+    "rxn": "CC=C>>CC(C)O",
+    "above": "H2O(g), H3PO4 catalyst",
+    "below": "high temperature and pressure"
+   },
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Propan-2-ol is oxidised by acidified potassium dichromate(VI) under reflux to propanone.",
+    "rxn": "CC(C)O>>CC(C)=O",
+    "above": "K2Cr2O7 / H2SO4",
+    "below": "heat under reflux"
+   },
+   "why": "Markovnikov: the OH goes on the middle carbon, giving a secondary alcohol, which oxidises to a ketone.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.5.1",
+      "3.3.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "6C.22",
+      "6E.38"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-013",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "reagents",
+    "ester"
+   ],
+   "q": "Starting only from ethanol, how could you make ethyl ethanoate?",
+   "a": "Oxidise some of the ethanol to ethanoic acid (excess acidified \\(\\mathrm{K_{2}Cr_{2}O_{7}}\\), reflux). Then warm the acid with more ethanol and a few drops of concentrated \\(\\mathrm{H_{2}SO_{4}}\\) as a catalyst.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Ethanoic acid and ethanol react, with a concentrated sulfuric acid catalyst, to give ethyl ethanoate.",
+    "rxn": "CC(=O)O.CCO>>CC(=O)OCC",
+    "above": "conc. H2SO4 catalyst",
+    "below": "warm"
+   },
+   "why": "Esterification is reversible; the ester (lowest boiling point) can be distilled off to drive it forward.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "17C.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-014",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "reagents",
+    "hydroxynitrile"
+   ],
+   "q": "Give the reagents to convert propanal into 2-hydroxybutanenitrile, and name the type of reaction.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "Propanal is converted into 2-hydroxybutanenitrile; the reagents over the arrow are missing.",
+    "rxn": "CCC=O>>CCC(O)C#N",
+    "above": "?"
+   },
+   "a": "Potassium cyanide, \\(\\mathrm{KCN}\\), followed by dilute acid (a source of \\(\\mathrm{HCN}\\)). <strong>Nucleophilic addition.</strong>",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Propanal reacts with potassium cyanide followed by dilute acid to give 2-hydroxybutanenitrile.",
+    "rxn": "CCC=O>>CCC(O)C#N",
+    "above": "KCN, then dilute acid"
+   },
+   "why": "Another way to lengthen a carbon chain by one carbon. KCN is very toxic: it is used in a fume cupboard.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.8"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "17B.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-015",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "reagents",
+    "aromatic"
+   ],
+   "q": "Give the reagents for this Friedel–Crafts acylation, and for reducing the product to a secondary alcohol.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "Benzene is converted into phenylethanone; the reagents over the arrow are missing.",
+    "rxn": "c1ccccc1>>CC(=O)c1ccccc1",
+    "above": "?"
+   },
+   "a": "Acylation: ethanoyl chloride with an \\(\\mathrm{AlCl_{3}}\\) catalyst, heated under reflux in dry conditions.<br>Reduction: \\(\\mathrm{NaBH_{4}}\\) (AQA) or \\(\\mathrm{LiAlH_{4}}\\) in dry ether (Edexcel) gives 1-phenylethanol.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Phenylethanone is reduced to 1-phenylethanol.",
+    "rxn": "CC(=O)c1ccccc1>>CC(O)c1ccccc1",
+    "above": "NaBH4 or LiAlH4"
+   },
+   "why": "The catalyst makes the electrophile \\(\\mathrm{CH_{3}CO^{+}}\\); water would destroy the \\(\\mathrm{AlCl_{3}}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.10.2",
+      "3.3.8"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "18A.4",
+      "17B.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-016",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "reagents",
+    "amide"
+   ],
+   "q": "How is phenylamine converted into N-phenylethanamide?",
+   "a": "React it with ethanoyl chloride (or ethanoic anhydride) at room temperature.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Phenylamine reacts with ethanoyl chloride to give N-phenylethanamide.",
+    "rxn": "Nc1ccccc1>>CC(=O)Nc1ccccc1",
+    "above": "CH3COCl",
+    "below": "room temperature"
+   },
+   "why": "Nucleophilic addition–elimination; \\(\\mathrm{HCl}\\) is the other product.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.11.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "18B.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-017",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "reagents",
+    "elimination"
+   ],
+   "q": "Give the reagent and conditions to dehydrate cyclohexanol to cyclohexene.",
+   "a": "Heat with concentrated phosphoric acid, distilling off the cyclohexene as it forms.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Cyclohexanol is dehydrated by concentrated phosphoric acid, with heat, to cyclohexene, which is distilled off.",
+    "rxn": "OC1CCCCC1>>C1=CCCCC1",
+    "above": "conc. H3PO4",
+    "below": "heat; distil off product"
+   },
+   "why": "Cyclohexene (bp 83 °C) boils well below cyclohexanol (bp 161 °C), so it distils out as soon as it forms.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.5.3"
+     ],
+     "practical": "RP5"
+    },
+    "edexcel": {
+     "points": [
+      "6E.38",
+      "6E.39"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-018",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "route"
+   ],
+   "q": "Suggest a two-step synthesis of butylamine from 1-bromopropane. Give reagents and conditions.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of 1-bromopropane: a three-carbon chain with Br on the end carbon.",
+    "smiles": "CCCBr",
+    "formula": "C3H7Br"
+   },
+   "a": "Step 1: \\(\\mathrm{KCN}\\) in ethanol, heat under reflux, gives butanenitrile.<br>Step 2: \\(\\mathrm{H_{2}}\\) with a nickel catalyst (or \\(\\mathrm{LiAlH_{4}}\\)) gives butylamine.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Step 1 of the route: 1-bromopropane gives butanenitrile with potassium cyanide in ethanol under reflux.",
+    "rxn": "CCCBr>>CCCC#N",
+    "above": "KCN in ethanol, reflux"
+   },
+   "why": "The product has one more carbon than the starting material, which tells you a cyanide step is needed.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.11.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "18B.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-019",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "route"
+   ],
+   "q": "Suggest a three-step synthesis of propan-2-amine from propan-1-ol.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of the target, propan-2-amine: a three-carbon chain with NH2 on the middle carbon.",
+    "smiles": "CC(C)N",
+    "formula": "C3H9N"
+   },
+   "a": "Step 1: concentrated \\(\\mathrm{H_{3}PO_{4}}\\) (or \\(\\mathrm{H_{2}SO_{4}}\\)), heat: propene.<br>Step 2: \\(\\mathrm{HBr}\\): 2-bromopropane (major product).<br>Step 3: excess \\(\\mathrm{NH_{3}}\\) in ethanol, heat in a sealed tube: propan-2-amine.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Step 2 of the route: propene adds hydrogen bromide at room temperature to give 2-bromopropane, the major product.",
+    "rxn": "CC=C>>CC(C)Br",
+    "above": "HBr",
+    "below": "room temperature"
+   },
+   "why": "Eliminating water and adding HBr moves the functional group from carbon 1 to carbon 2.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-020",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "route"
+   ],
+   "q": "Suggest a three-step synthesis of N-phenylethanamide from benzene.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of the target, N-phenylethanamide: a benzene ring bonded to the N of an NH–C(=O)–CH3 group.",
+    "smiles": "CC(=O)Nc1ccccc1",
+    "formula": "C8H9NO"
+   },
+   "a": "1. Conc. \\(\\mathrm{HNO_{3}}\\) / conc. \\(\\mathrm{H_{2}SO_{4}}\\), below 55 °C: nitrobenzene.<br>2. \\(\\mathrm{Sn}\\) / conc. \\(\\mathrm{HCl}\\), reflux, then \\(\\mathrm{NaOH(aq)}\\): phenylamine.<br>3. Ethanoyl chloride: N-phenylethanamide.",
+   "why": "Work backwards from the target: an amide comes from an amine plus an acyl chloride; an aromatic amine comes from a nitro compound.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.10.2",
+      "3.3.11.1",
+      "3.3.11.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "18A.4",
+      "18B.12",
+      "18B.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-021",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "route"
+   ],
+   "q": "Suggest a three-step synthesis of 2-hydroxybutanenitrile from 1-chloropropane.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of the target, 2-hydroxybutanenitrile: a four-carbon chain with OH on carbon 2 and the C≡N carbon at the end.",
+    "smiles": "CCC(O)C#N",
+    "formula": "C4H7NO"
+   },
+   "a": "1. \\(\\mathrm{NaOH(aq)}\\), heat under reflux: propan-1-ol.<br>2. Acidified \\(\\mathrm{K_{2}Cr_{2}O_{7}}\\), distil off as it forms: propanal.<br>3. \\(\\mathrm{KCN}\\), then dilute acid: 2-hydroxybutanenitrile.",
+   "why": "The new carbon and the OH on the same carbon point to nucleophilic addition of cyanide to an aldehyde.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.8"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "17B.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-022",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "route"
+   ],
+   "q": "Suggest a two-step synthesis of propanoic acid from bromoethane (Edexcel route).",
+   "a": "1. \\(\\mathrm{KCN}\\) in ethanol, heat under reflux: propanenitrile.<br>2. Dilute \\(\\mathrm{HCl}\\), heat under reflux: propanoic acid.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Bromoethane reacts with potassium cyanide in ethanol to give propanenitrile.",
+    "rxn": "CCBr>>CCC#N",
+    "above": "KCN in ethanol",
+    "below": "heat under reflux"
+   },
+   "why": "The nitrile carbon becomes the carboxylic acid carbon. A Grignard reagent with CO₂ is another route.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "17C.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-023",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "route"
+   ],
+   "q": "Suggest a four-step synthesis of propanone from propane.",
+   "a": "1. \\(\\mathrm{Br_{2}}\\), UV light: 2-bromopropane (with other products).<br>2. Ethanolic \\(\\mathrm{KOH}\\), heat: propene.<br>3. Steam with \\(\\mathrm{H_{3}PO_{4}}\\) catalyst: propan-2-ol.<br>4. Acidified \\(\\mathrm{K_{2}Cr_{2}O_{7}}\\), reflux: propanone.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "Step 1 of the route: propane reacts with bromine in UV light to give 2-bromopropane.",
+    "rxn": "CCC>>CC(C)Br",
+    "above": "Br2",
+    "below": "UV light"
+   },
+   "why": "Step 1 gives a mixture, so it is a poor first step: in practice 2-bromopropane could go straight to propan-2-ol with \\(\\mathrm{NaOH(aq)}\\), making the route three steps.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "6B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-024",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "route",
+    "strategy"
+   ],
+   "q": "How do you approach a “suggest a synthesis” question?",
+   "a": "Compare the start and target: count carbons and note which functional groups change, and where. Work backwards from the target to a compound you can make from the start. Give reagents and conditions for every step, and name each intermediate.",
+   "why": "A change in the number of carbons points to cyanide (or, for Edexcel, a Grignard reagent). A group moving position points to elimination then addition.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-025",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "route"
+   ],
+   "q": "True or false: to convert propan-1-ol into propan-2-ol, you can oxidise it to a ketone and then reduce the ketone.",
+   "a": "<strong>False.</strong> Oxidising a primary alcohol gives an aldehyde (propanal) or a carboxylic acid, never a ketone.",
+   "why": "Instead, eliminate water to give propene, then hydrate it: the OH goes onto the middle carbon (major product).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.14",
+      "3.3.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.19",
+      "6E.38"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-026",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "grignard"
+   ],
+   "q": "How is a Grignard reagent made from bromoethane?",
+   "a": "React bromoethane with magnesium turnings in <strong>dry ether</strong> (under reflux), giving ethylmagnesium bromide.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Bromoethane reacts with magnesium in dry ether to give the Grignard reagent ethylmagnesium bromide.",
+    "rxn": "CCBr>>CC[Mg]Br",
+    "above": "Mg",
+    "below": "dry ether"
+   },
+   "why": "Water must be kept out: it reacts with the Grignard reagent, forming the alkane (ethane).",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.20"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-027",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "grignard"
+   ],
+   "q": "What is made when ethylmagnesium bromide reacts with carbon dioxide, followed by dilute acid?",
+   "a": "<strong>Propanoic acid</strong>, \\(\\mathrm{CH_{3}CH_{2}COOH}\\): one carbon longer than the Grignard reagent.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Ethylmagnesium bromide reacts with carbon dioxide, then dilute acid, to give propanoic acid.",
+    "rxn": "CC[Mg]Br>>CCC(=O)O",
+    "above": "CO2 in dry ether",
+    "below": "then dilute acid"
+   },
+   "why": "Solid \\(\\mathrm{CO_{2}}\\) (dry ice) is often used; the acid hydrolyses the magnesium salt to free the carboxylic acid.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.20"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-028",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "grignard"
+   ],
+   "q": "Which type of alcohol is formed when a Grignard reagent reacts (then is hydrolysed with dilute acid) with (a) methanal, (b) another aldehyde, (c) a ketone?",
+   "a": "(a) A primary alcohol.<br>(b) A secondary alcohol.<br>(c) A tertiary alcohol.",
+   "why": "The alkyl group of the Grignard reagent bonds to the carbonyl carbon, which becomes the carbon carrying the OH.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.20"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-029",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "grignard"
+   ],
+   "q": "Name the product when ethylmagnesium bromide reacts with propanone in dry ether, followed by dilute acid.",
+   "a": "<strong>2-Methylbutan-2-ol</strong>, a tertiary alcohol.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Ethylmagnesium bromide and propanone, then dilute acid, give 2-methylbutan-2-ol.",
+    "rxn": "CC[Mg]Br.CC(C)=O>>CCC(C)(C)O",
+    "above": "dry ether",
+    "below": "then dilute acid"
+   },
+   "why": "The ethyl group joins the C=O carbon, which already carries two methyl groups.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.20"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-030",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "grignard"
+   ],
+   "q": "Which Grignard reagent and carbonyl compound would you use to make butan-2-ol?",
+   "a": "Ethylmagnesium bromide with ethanal (or methylmagnesium bromide with propanal), in dry ether, then dilute acid.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Ethylmagnesium bromide and ethanal, then dilute acid, give butan-2-ol.",
+    "rxn": "CC[Mg]Br.CC=O>>CCC(C)O",
+    "above": "dry ether",
+    "below": "then dilute acid"
+   },
+   "why": "Split the target at the carbon carrying the OH: one group comes from the Grignard reagent, the rest from the aldehyde.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.20"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-031",
+   "type": "practical",
+   "difficulty": 1,
+   "tags": [
+    "reflux"
+   ],
+   "q": "What is heating under reflux, and why is it used?",
+   "a": "Heating a reaction mixture in a flask with a vertical condenser, so vapour condenses and drips back into the flask.",
+   "why": "Volatile reactants and products are not lost, so the mixture can be heated for a long time until the reaction is complete.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "6E.39",
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-032",
+   "type": "practical",
+   "difficulty": 1,
+   "tags": [
+    "reflux",
+    "safety"
+   ],
+   "q": "When setting up reflux, why are anti-bumping granules added, and why must the top of the condenser not be stoppered?",
+   "a": "Granules give smooth boiling, without violent bumping.<br>An open top stops pressure building up in a heated, sealed apparatus, which could explode.",
+   "why": "Water enters the condenser at the bottom and leaves at the top, so the jacket stays full of cold water.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "6E.39",
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-033",
+   "type": "practical",
+   "difficulty": 1,
+   "tags": [
+    "distillation"
+   ],
+   "q": "Describe how a liquid product is separated by simple distillation.",
+   "a": "Heat the mixture in a flask with a still-head and thermometer, connected to a sloping condenser. Collect the liquid that distils over at the boiling point of the product.",
+   "why": "The thermometer bulb is level with the side arm, so it reads the temperature of the vapour going into the condenser.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.5.3"
+     ],
+     "practical": "RP5"
+    },
+    "edexcel": {
+     "points": [
+      "6E.39",
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-034",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "distillation"
+   ],
+   "q": "A student distils an impure product with a boiling point of 82 °C. Which fraction should be collected, and why?",
+   "a": "Collect the liquid that distils at about 80–84 °C (a few degrees either side of the boiling point).",
+   "why": "Liquids distilling at lower temperatures are more volatile impurities; the residue in the flask contains less volatile ones.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.5.3"
+     ],
+     "practical": "RP5"
+    },
+    "edexcel": {
+     "points": [
+      "6E.39",
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-035",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "steam-distillation"
+   ],
+   "q": "What is steam distillation used for?",
+   "a": "Separating volatile organic compounds that are immiscible with water from a mixture, such as essential oils from orange peel, lemongrass or cloves, at a temperature below 100 °C.",
+   "why": "The oil distils over with the water below its own boiling point, so heat-sensitive compounds do not decompose.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-036",
+   "type": "practical",
+   "difficulty": 1,
+   "tags": [
+    "separating-funnel"
+   ],
+   "q": "How is a separating funnel used to separate an organic product from an aqueous layer?",
+   "a": "Add the mixture, stopper, invert and shake, opening the tap often to release pressure. Stand it upright until two layers form, remove the stopper, then run off the lower layer through the tap.",
+   "why": "The two liquids are immiscible; the denser one is the lower layer.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "6E.39",
+      "18C.22"
+     ],
+     "practical": "CP6"
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-037",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "separating-funnel"
+   ],
+   "q": "How can you tell which layer in a separating funnel is the aqueous layer?",
+   "a": "Add a few drops of water: the layer that gets bigger is the aqueous layer.",
+   "why": "Densities vary: water is usually below hydrocarbons, but above denser liquids such as many halogenoalkanes.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "6E.39"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-038",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "washing"
+   ],
+   "q": "Why is an organic product often shaken with aqueous sodium hydrogencarbonate, \\(\\mathrm{NaHCO_{3}}\\), during purification?",
+   "a": "To neutralise and remove acid impurities, such as unreacted acid or acid catalyst, which form soluble salts in the aqueous layer.",
+   "why": "Carbon dioxide is given off, so the funnel must be vented often. Washing ends when no more \\(\\mathrm{CO_{2}}\\) is produced.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22",
+      "6E.39"
+     ],
+     "practical": "CP6"
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-039",
+   "type": "practical",
+   "difficulty": 1,
+   "tags": [
+    "drying"
+   ],
+   "q": "How is an organic liquid dried, and how do you know it is dry?",
+   "a": "Add an anhydrous salt such as \\(\\mathrm{MgSO_{4}}\\), \\(\\mathrm{Na_{2}SO_{4}}\\) or \\(\\mathrm{CaCl_{2}}\\), swirl, and leave. Then decant or filter off the liquid.",
+   "why": "The liquid turns from cloudy to clear, and fresh drying agent no longer clumps together.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "6E.39",
+      "18C.22"
+     ],
+     "practical": "CP6"
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-040",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "preparation",
+    "cp6"
+   ],
+   "q": "Outline how 2-chloro-2-methylpropane is prepared from 2-methylpropan-2-ol and purified.",
+   "figure": {
+    "kind": "reaction",
+    "alt": "2-Methylpropan-2-ol reacts with concentrated hydrochloric acid at room temperature to give 2-chloro-2-methylpropane.",
+    "rxn": "CC(C)(C)O>>CC(C)(C)Cl",
+    "above": "conc. HCl",
+    "below": "room temperature, shake"
+   },
+   "a": "Shake the alcohol with concentrated \\(\\mathrm{HCl}\\) in a separating funnel; discard the lower aqueous layer. Wash with \\(\\mathrm{NaHCO_{3}(aq)}\\), venting often, then with water. Dry with anhydrous \\(\\mathrm{Na_{2}SO_{4}}\\), then distil, collecting at about 51 °C.",
+   "why": "Tertiary alcohols react quickly with HCl, so no heating is needed.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "6E.39"
+     ],
+     "practical": "CP6"
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-041",
+   "type": "practical",
+   "difficulty": 1,
+   "tags": [
+    "recrystallisation"
+   ],
+   "q": "List the steps used to purify an impure organic solid by recrystallisation.",
+   "a": "1. Dissolve in the <strong>minimum</strong> volume of hot solvent.<br>2. Filter while hot to remove insoluble impurities.<br>3. Cool so the product crystallises.<br>4. Filter under reduced pressure (Büchner funnel).<br>5. Wash with a little cold solvent and leave to dry.",
+   "why": "Soluble impurities are present in small amounts, so they stay dissolved when the solution cools.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ],
+     "practical": "CP16"
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-042",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "recrystallisation"
+   ],
+   "q": "In recrystallisation, explain why the minimum volume of hot solvent is used, and why the crystals are washed with cold solvent.",
+   "a": "Both maximise the yield of pure product.",
+   "marks": [
+    "With the minimum hot solvent, the solution is saturated, so most of the product crystallises when it cools.",
+    "Too much solvent would leave more of the product dissolved, lowering the yield.",
+    "Washing removes soluble impurities left on the surface of the crystals.",
+    "Cold solvent is used so that as little product as possible dissolves."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ],
+     "practical": "CP16"
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-043",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "recrystallisation"
+   ],
+   "q": "What makes a good solvent for recrystallising a compound?",
+   "a": "The compound should be very soluble in the hot solvent but only slightly soluble in the cold solvent. Impurities should either stay dissolved when cold or not dissolve at all.",
+   "why": "The solvent must also not react with the compound.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-044",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "aspirin",
+    "preparation"
+   ],
+   "q": "Aspirin is made from 2-hydroxybenzoic acid and ethanoic anhydride. Show the conversion as structures, and name the other product.",
+   "a": "The other product is <strong>ethanoic acid</strong>. A few drops of concentrated \\(\\mathrm{H_{3}PO_{4}}\\) (or \\(\\mathrm{H_{2}SO_{4}}\\)) act as a catalyst; the mixture is warmed.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "2-Hydroxybenzoic acid is converted into aspirin (2-ethanoyloxybenzoic acid) by ethanoic anhydride, warmed with a phosphoric acid catalyst.",
+    "rxn": "OC(=O)c1ccccc1O>>CC(=O)Oc1ccccc1C(=O)O",
+    "above": "(CH3CO)2O, conc. H3PO4",
+    "below": "warm"
+   },
+   "why": "The phenol OH group is acylated to form an ester. The crude aspirin is purified by recrystallisation.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ],
+     "practical": "CP16"
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-045",
+   "type": "practical",
+   "difficulty": 1,
+   "tags": [
+    "melting-point",
+    "purity"
+   ],
+   "q": "How does a melting point show whether an organic solid is pure?",
+   "a": "A pure solid melts sharply (over a range of about 1–2 °C) at the value in the data book. An impure solid melts over a wider range and at a <strong>lower</strong> temperature.",
+   "why": "Impurities disrupt the regular lattice, so less energy is needed to break it down.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ],
+     "practical": "CP16"
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-046",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "melting-point"
+   ],
+   "q": "Describe how to measure the melting point of a solid.",
+   "a": "Seal one end of a capillary tube and fill it with a small amount of the dry, powdered solid. Heat it in melting-point apparatus (or an oil bath next to a thermometer), slowly near the melting point, and record the temperatures at which it starts and finishes melting.",
+   "why": "Heating slowly keeps the solid and the thermometer at the same temperature.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-047",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "boiling-point",
+    "purity"
+   ],
+   "q": "How can the boiling point of a liquid product be used to check its identity and purity?",
+   "a": "Distil or heat it with the thermometer bulb in the vapour, and record the steady temperature at which it boils. A pure liquid boils at a constant temperature that matches the data-book value.",
+   "why": "An impure liquid boils over a range of temperatures. Two liquids can have the same boiling point, so it is not proof on its own.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "6E.39",
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-048",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "melting-point"
+   ],
+   "q": "True or false: if a product has a sharp melting point, it must be the compound you were trying to make.",
+   "a": "<strong>False.</strong> A sharp melting point shows the solid is pure, but it must also <strong>match the data-book value</strong> for the target compound.",
+   "why": "A pure by-product would melt sharply too. Spectra (IR, NMR) confirm the structure.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-049",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "yield"
+   ],
+   "q": "Give three reasons why the percentage yield of an organic preparation is less than 100%.",
+   "a": "The reaction may be incomplete or reversible; side reactions form other products; product is lost when transferring between vessels, filtering, recrystallising or distilling.",
+   "why": "Purification always trades some yield for purity.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2",
+      "3.3.14"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-050",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "safety",
+    "risk"
+   ],
+   "q": "Most organic liquids are flammable. How should a reaction mixture containing them be heated?",
+   "a": "With an electric heating mantle, a water bath or a sand bath, not a Bunsen burner.",
+   "why": "Vapour escaping from the apparatus could catch fire on a naked flame.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.21"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-051",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "safety",
+    "risk"
+   ],
+   "q": "Ethanoyl chloride is corrosive and reacts violently with water, giving off HCl fumes. Suggest control measures for using it.",
+   "a": "Use it in a fume cupboard; wear goggles and gloves; keep it and the apparatus dry; add it slowly (dropwise) to the other reactant.",
+   "why": "The control measures must match the hazard: fumes need a fume cupboard; corrosive liquids need eye and skin protection.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.21"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-052",
+   "type": "practical",
+   "difficulty": 3,
+   "tags": [
+    "procedure"
+   ],
+   "q": "A reaction needs a liquid reactant (bp 78 °C) to be heated for one hour. Should it be heated under reflux or distilled? Justify your choice.",
+   "a": "<strong>Reflux.</strong> Heating for a long time in an open flask would let the volatile reactant boil away; under reflux it condenses and returns, so it stays in the flask until the reaction is complete.",
+   "why": "Distil only when you want to remove a product as it forms (such as an aldehyde) or to separate the product afterwards.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.21",
+      "18C.22"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-synth-053",
+   "type": "practical",
+   "difficulty": 3,
+   "tags": [
+    "procedure"
+   ],
+   "q": "Suggest how to obtain a pure, dry sample of an ester made by refluxing a carboxylic acid with an alcohol and a sulfuric acid catalyst.",
+   "a": "Distil the crude ester from the mixture. Shake it in a separating funnel with \\(\\mathrm{NaHCO_{3}(aq)}\\) to remove acids (venting often), then with water; keep the ester layer. Dry with anhydrous \\(\\mathrm{MgSO_{4}}\\), decant, then redistil, collecting at the ester’s boiling point.",
+   "why": "Each stage removes a different impurity: acids, water-soluble substances, water, then anything with a different boiling point.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.21",
+      "18C.22"
+     ]
+    }
+   }
+  }
+ ]
+}

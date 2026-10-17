@@ -1,0 +1,2812 @@
+{
+ "schema": "inspire.flashcards.v1",
+ "topic": {
+  "id": "chemistry-a-level/carboxylic-acids",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Carboxylic Acids and Derivatives",
+  "spec": "chemistry-a-level"
+ },
+ "cards": [
+  {
+   "id": "che-al-carbox-001",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "functional-groups"
+   ],
+   "q": "What is the functional group of a carboxylic acid?",
+   "a": "The <strong>carboxyl group</strong>, \\(\\mathrm{-COOH}\\): a \\(\\mathrm{C=O}\\) and an \\(\\mathrm{O-H}\\) on the same carbon.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Displayed formula of ethanoic acid: a CH3 group bonded to a carbon that carries a double-bonded O and an O–H group.",
+    "atoms": [
+     {
+      "id": "C",
+      "el": "C",
+      "x": 0,
+      "y": 0
+     },
+     {
+      "id": "M",
+      "el": "H3C",
+      "x": -1.1,
+      "y": 0
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 0.6,
+      "y": 0.9
+     },
+     {
+      "id": "O2",
+      "el": "O",
+      "x": 0.6,
+      "y": -0.9
+     },
+     {
+      "id": "H",
+      "el": "H",
+      "x": 1.6,
+      "y": -0.9
+     }
+    ],
+    "bonds": [
+     {
+      "a": "C",
+      "b": "M"
+     },
+     {
+      "a": "C",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C",
+      "b": "O2"
+     },
+     {
+      "a": "O2",
+      "b": "H"
+     }
+    ]
+   },
+   "why": "Write it as \\(\\mathrm{-COOH}\\) (or \\(\\mathrm{-CO_{2}H}\\)), not \\(\\mathrm{-COHO}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-002",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "naming"
+   ],
+   "q": "Name this carboxylic acid.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of a four-carbon chain ending in a COOH group.",
+    "smiles": "CCCC(=O)O",
+    "formula": "C4H8O2"
+   },
+   "a": "<strong>Butanoic acid</strong>",
+   "why": "The carboxyl carbon is carbon 1 and is counted in the chain.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.1.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-003",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "naming"
+   ],
+   "q": "Name this branched carboxylic acid.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of a three-carbon chain ending in COOH, with a methyl branch on the carbon next to the COOH.",
+    "smiles": "CC(C)C(=O)O",
+    "formula": "C4H8O2"
+   },
+   "a": "<strong>2-methylpropanoic acid</strong>",
+   "why": "It is an isomer of butanoic acid: same formula, branched chain.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.1.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-004",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "naming"
+   ],
+   "q": "Name this compound, found in sorrel and many leafy vegetables.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of a two-carbon molecule with a COOH group on each carbon.",
+    "smiles": "OC(=O)C(=O)O",
+    "formula": "C2H2O4"
+   },
+   "a": "<strong>Ethanedioic acid</strong> (oxalic acid)",
+   "why": "Two carboxyl groups: the suffix becomes -dioic acid.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.1.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.9"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-005",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "physical-properties",
+    "hydrogen-bonding"
+   ],
+   "q": "Explain why ethanoic acid has a higher boiling temperature than propan-1-ol, although their relative molecular masses are the same (60).",
+   "figure": {
+    "kind": "diagram",
+    "alt": "Two ethanoic acid molecules facing each other, joined by two hydrogen bonds (dashed): the O–H hydrogen of each molecule bonds to the C=O oxygen of the other, forming a ring-shaped dimer.",
+    "atoms": [
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 0,
+      "y": 0
+     },
+     {
+      "id": "M1",
+      "el": "H3C",
+      "x": -1.1,
+      "y": 0
+     },
+     {
+      "id": "Oa",
+      "el": "O",
+      "x": 0.6,
+      "y": 0.9,
+      "lp": [
+       90
+      ]
+     },
+     {
+      "id": "Ob",
+      "el": "O",
+      "x": 0.6,
+      "y": -0.9
+     },
+     {
+      "id": "Hb",
+      "el": "H",
+      "x": 1.6,
+      "y": -0.9
+     },
+     {
+      "id": "C2",
+      "el": "C",
+      "x": 3.4,
+      "y": 0
+     },
+     {
+      "id": "M2",
+      "el": "CH3",
+      "x": 4.5,
+      "y": 0
+     },
+     {
+      "id": "Oc",
+      "el": "O",
+      "x": 2.8,
+      "y": -0.9,
+      "lp": [
+       270
+      ]
+     },
+     {
+      "id": "Od",
+      "el": "O",
+      "x": 2.8,
+      "y": 0.9
+     },
+     {
+      "id": "Hd",
+      "el": "H",
+      "x": 1.8,
+      "y": 0.9
+     }
+    ],
+    "bonds": [
+     {
+      "a": "C1",
+      "b": "M1"
+     },
+     {
+      "a": "C1",
+      "b": "Oa",
+      "order": 2
+     },
+     {
+      "a": "C1",
+      "b": "Ob"
+     },
+     {
+      "a": "Ob",
+      "b": "Hb"
+     },
+     {
+      "a": "C2",
+      "b": "M2"
+     },
+     {
+      "a": "C2",
+      "b": "Oc",
+      "order": 2
+     },
+     {
+      "a": "C2",
+      "b": "Od"
+     },
+     {
+      "a": "Od",
+      "b": "Hd"
+     },
+     {
+      "a": "Hb",
+      "b": "Oc",
+      "style": "partial"
+     },
+     {
+      "a": "Hd",
+      "b": "Oa",
+      "style": "partial"
+     }
+    ]
+   },
+   "a": "Ethanoic acid molecules form more hydrogen bonds, and pair up as dimers.",
+   "marks": [
+    "Both have intermolecular hydrogen bonds through their \\(\\mathrm{O-H}\\) groups.",
+    "In ethanoic acid, the \\(\\mathrm{C=O}\\) oxygen can also accept a hydrogen bond, so there are more hydrogen bonds between molecules.",
+    "Pairs of acid molecules hydrogen bond together into dimers, effectively doubling the size of the particle.",
+    "More energy is needed to separate the molecules, so the boiling temperature is higher."
+   ],
+   "boards": {
+    "edexcel": {
+     "points": [
+      "17C.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-006",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "physical-properties",
+    "hydrogen-bonding"
+   ],
+   "q": "Why are the first four carboxylic acids soluble in water, while hexadecanoic acid (palmitic acid, from palm oil) is not?",
+   "a": "The \\(\\mathrm{-COOH}\\) group hydrogen bonds with water. In hexadecanoic acid the long non-polar hydrocarbon chain dominates and cannot hydrogen bond to water.",
+   "why": "Solubility falls as the hydrocarbon chain gets longer.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "17C.10"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-007",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "acidity"
+   ],
+   "q": "Write an equation to show that ethanoic acid is a weak acid in water.",
+   "a": "\\(\\mathrm{CH_{3}COOH(aq) \\rightleftharpoons CH_{3}COO^{-}(aq) + H^{+}(aq)}\\)",
+   "why": "It is only partially dissociated: the equilibrium lies well to the left.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-008",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "acidity",
+    "tests"
+   ],
+   "q": "Write an equation for the reaction of ethanoic acid with sodium carbonate, and state what is seen.",
+   "a": "\\(\\mathrm{2CH_{3}COOH + Na_{2}CO_{3} \\rightarrow 2CH_{3}COONa + CO_{2} + H_{2}O}\\)<br>Effervescence (fizzing).",
+   "why": "Carboxylic acids are weak but strong enough to liberate \\(\\mathrm{CO_{2}}\\) from carbonates; this is the test for a \\(\\mathrm{-COOH}\\) group.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.6.1"
+     ],
+     "practical": "RP6"
+    },
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-009",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "acidity",
+    "salts"
+   ],
+   "q": "Write an equation for the reaction of propanoic acid with sodium hydroxide, and name the organic product.",
+   "a": "\\(\\mathrm{CH_{3}CH_{2}COOH + NaOH \\rightarrow CH_{3}CH_{2}COONa + H_{2}O}\\)<br>Sodium propanoate.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: propanoic acid reacts with sodium hydroxide solution to give sodium propanoate and water.",
+    "rxn": "CCC(=O)O>>CCC(=O)[O-].[Na+].O",
+    "above": "NaOH(aq)"
+   },
+   "why": "An acid–base neutralisation: the carboxylic acid forms a carboxylate salt.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-010",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "acidity",
+    "tests"
+   ],
+   "q": "How could you distinguish ethanoic acid from ethanol using sodium hydrogencarbonate solution?",
+   "a": "Ethanoic acid fizzes, giving \\(\\mathrm{CO_{2}}\\) (which turns limewater milky). Ethanol does not react.",
+   "why": "Alcohols are far too weakly acidic to react with carbonates or hydrogencarbonates.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.6.1"
+     ],
+     "practical": "RP6"
+    },
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ],
+     "practical": "CP15"
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-011",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "preparation"
+   ],
+   "q": "How is a carboxylic acid made from a primary alcohol?",
+   "a": "Heat under reflux with excess acidified potassium dichromate(VI).",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: ethanol is oxidised to ethanoic acid by excess acidified potassium dichromate(VI) under reflux.",
+    "rxn": "CCO>>CC(=O)O",
+    "above": "excess K2Cr2O7 / H^+",
+    "below": "heat under reflux"
+   },
+   "why": "Reflux stops the intermediate aldehyde escaping, so it is oxidised further to the acid.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "17C.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-012",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "preparation",
+    "nitriles"
+   ],
+   "q": "Write an equation for the hydrolysis of propanenitrile by heating under reflux with dilute hydrochloric acid.",
+   "a": "\\(\\mathrm{CH_{3}CH_{2}CN + 2H_{2}O + HCl \\rightarrow CH_{3}CH_{2}COOH + NH_{4}Cl}\\)",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: propanenitrile is hydrolysed to propanoic acid by heating under reflux with water and dilute hydrochloric acid; the nitrogen becomes ammonium chloride.",
+    "rxn": "CCC#N>>CCC(=O)O",
+    "above": "H2O, dilute HCl",
+    "below": "heat under reflux"
+   },
+   "why": "The nitrogen ends up as ammonium ions; the \\(\\mathrm{-CN}\\) carbon becomes the \\(\\mathrm{-COOH}\\) carbon.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "17C.11"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-013",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "preparation",
+    "synthesis"
+   ],
+   "q": "Suggest a two-step route from bromoethane to propanoic acid.",
+   "a": "1. Heat under reflux with KCN in ethanol: \\(\\mathrm{CH_{3}CH_{2}Br \\rightarrow CH_{3}CH_{2}CN}\\).<br>2. Heat under reflux with dilute HCl: \\(\\mathrm{CH_{3}CH_{2}CN \\rightarrow CH_{3}CH_{2}COOH}\\).",
+   "why": "Forming the nitrile adds one carbon to the chain.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "17C.11",
+      "6D.32"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-014",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "reduction"
+   ],
+   "q": "Write an equation, using [H], for the reduction of ethanoic acid by \\(\\mathrm{LiAlH_{4}}\\) in dry ether.",
+   "a": "\\(\\mathrm{CH_{3}COOH + 4[H] \\rightarrow CH_{3}CH_{2}OH + H_{2}O}\\)",
+   "why": "A carboxylic acid is reduced to a primary alcohol. \\(\\mathrm{NaBH_{4}}\\) is not strong enough to do this.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-015",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "acyl-chlorides"
+   ],
+   "q": "Write an equation for the reaction of ethanoic acid with phosphorus(V) chloride, and state what is seen.",
+   "a": "\\(\\mathrm{CH_{3}COOH + PCl_{5} \\rightarrow CH_{3}COCl + POCl_{3} + HCl}\\)<br>Steamy (misty) fumes of HCl.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: ethanoic acid is converted to ethanoyl chloride by phosphorus(V) chloride at room temperature; POCl3 and HCl are also formed.",
+    "rxn": "CC(=O)O>>CC(=O)Cl",
+    "above": "PCl5",
+    "below": "room temperature"
+   },
+   "why": "The \\(\\mathrm{-OH}\\) is replaced by \\(\\mathrm{-Cl}\\), giving an acyl chloride.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-016",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "esters"
+   ],
+   "q": "What are the conditions for making an ester from a carboxylic acid and an alcohol?",
+   "a": "Heat the acid and alcohol with a few drops of <strong>concentrated sulfuric acid</strong> as a catalyst.",
+   "why": "The reaction is reversible and slow, so it does not go to completion.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-017",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "esters"
+   ],
+   "q": "Write an equation for the reaction of ethanoic acid with ethanol, and name the ester.",
+   "a": "\\(\\mathrm{CH_{3}COOH + CH_{3}CH_{2}OH \\rightleftharpoons CH_{3}COOCH_{2}CH_{3} + H_{2}O}\\)<br>Ethyl ethanoate.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: ethanoic acid and ethanol give ethyl ethanoate and water, with concentrated sulfuric acid as catalyst.",
+    "rxn": "CC(=O)O.CCO>>CC(=O)OCC.O",
+    "above": "conc. H2SO4",
+    "below": "heat"
+   },
+   "why": "The alcohol part is named first (ethyl), then the acid part (ethanoate).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.12",
+      "17C.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-018",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "esters",
+    "functional-groups"
+   ],
+   "q": "What is the functional group of an ester?",
+   "a": "\\(\\mathrm{-COO-}\\): a carbon with a \\(\\mathrm{C=O}\\), also single-bonded to an oxygen that joins a second carbon chain.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Displayed formula of the ester group in methyl ethanoate: CH3 bonded to a carbon carrying a double-bonded O and a single-bonded O, which is bonded to a second CH3.",
+    "atoms": [
+     {
+      "id": "C",
+      "el": "C",
+      "x": 0,
+      "y": 0
+     },
+     {
+      "id": "M",
+      "el": "H3C",
+      "x": -1.1,
+      "y": 0
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 0.6,
+      "y": 0.9
+     },
+     {
+      "id": "O2",
+      "el": "O",
+      "x": 0.6,
+      "y": -0.9
+     },
+     {
+      "id": "M2",
+      "el": "CH3",
+      "x": 1.7,
+      "y": -0.9
+     }
+    ],
+    "bonds": [
+     {
+      "a": "C",
+      "b": "M"
+     },
+     {
+      "a": "C",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C",
+      "b": "O2"
+     },
+     {
+      "a": "O2",
+      "b": "M2"
+     }
+    ]
+   },
+   "why": "The general formula is \\(\\mathrm{RCOOR'}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-019",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "esters",
+    "naming"
+   ],
+   "q": "Name this ester.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of an ester: a three-carbon acid part (with the C=O) joined through an oxygen to a one-carbon group.",
+    "smiles": "CCC(=O)OC",
+    "formula": "C4H8O2"
+   },
+   "a": "<strong>Methyl propanoate</strong>",
+   "why": "The carbon chain on the single-bonded O (one carbon, methyl) comes first; the chain containing C=O (three carbons, propanoate) second.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.1.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-020",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "esters",
+    "naming"
+   ],
+   "q": "Give the name of this ester.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of an ester: a two-carbon acid part (with the C=O) joined through an oxygen to a three-carbon chain.",
+    "smiles": "CC(=O)OCCC",
+    "formula": "C5H10O2"
+   },
+   "a": "<strong>Propyl ethanoate</strong>",
+   "why": "Propyl from the alcohol (propan-1-ol); ethanoate from the acid (ethanoic acid).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.1.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-021",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "esters",
+    "naming"
+   ],
+   "q": "Name this ester, and name the acid and alcohol it is made from.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of an ester: an H–C=O group joined through an oxygen to a two-carbon chain.",
+    "smiles": "O=COCC",
+    "formula": "C3H6O2"
+   },
+   "a": "<strong>Ethyl methanoate</strong>, made from methanoic acid and ethanol.",
+   "why": "It is an isomer of methyl ethanoate and of propanoic acid, all \\(\\mathrm{C_{3}H_{6}O_{2}}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.1.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-022",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "esters",
+    "naming"
+   ],
+   "q": "Draw the skeletal formula of ethyl butanoate, which gives pineapple its flavour.",
+   "a": "\\(\\mathrm{CH_{3}CH_{2}CH_{2}COOCH_{2}CH_{3}}\\)",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of ethyl butanoate: a four-carbon chain with C=O at the end, joined through an oxygen to a two-carbon chain.",
+    "smiles": "CCCC(=O)OCC",
+    "formula": "C6H12O2"
+   },
+   "why": "The butanoate part contains the C=O; the ethyl group is on the single-bonded oxygen.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.1.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-023",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "esters",
+    "uses"
+   ],
+   "q": "Give four common uses of esters.",
+   "a": "Solvents (ethyl ethanoate in nail-varnish remover and glues), plasticisers, perfumes, and food flavourings.",
+   "why": "Many esters are volatile and have pleasant, fruity smells.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-024",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "esters",
+    "uses"
+   ],
+   "q": "Why are esters used as plasticisers, and what do plasticisers do?",
+   "a": "Plasticiser molecules fit between polymer chains (for example in PVC), pushing them apart so they slide past each other and the plastic becomes flexible.",
+   "why": "Large, involatile esters are used, so they stay in the plastic.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-025",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "esters",
+    "hydrolysis"
+   ],
+   "q": "Write an equation for the acid hydrolysis of methyl propanoate.",
+   "a": "\\(\\mathrm{CH_{3}CH_{2}COOCH_{3} + H_{2}O \\rightleftharpoons CH_{3}CH_{2}COOH + CH_{3}OH}\\)",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: methyl propanoate and water give propanoic acid and methanol, heated under reflux with dilute acid.",
+    "rxn": "CCC(=O)OC.O>>CCC(=O)O.CO",
+    "above": "dilute H2SO4",
+    "below": "heat under reflux"
+   },
+   "why": "Acid hydrolysis is the reverse of esterification, so it is reversible.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-026",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "esters",
+    "hydrolysis"
+   ],
+   "q": "Write an equation for the hydrolysis of methyl propanoate by sodium hydroxide solution.",
+   "a": "\\(\\mathrm{CH_{3}CH_{2}COOCH_{3} + NaOH \\rightarrow CH_{3}CH_{2}COONa + CH_{3}OH}\\)",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: methyl propanoate heated under reflux with sodium hydroxide solution gives sodium propanoate and methanol.",
+    "rxn": "CCC(=O)OC>>CCC(=O)[O-].[Na+].CO",
+    "above": "NaOH(aq)",
+    "below": "heat under reflux"
+   },
+   "why": "Alkaline hydrolysis gives the salt of the acid, not the acid itself.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-027",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "esters",
+    "hydrolysis"
+   ],
+   "q": "Explain why alkaline hydrolysis of an ester goes to completion, whereas acid hydrolysis does not.",
+   "a": "The carboxylate ion formed in alkali cannot react with the alcohol, so the reaction cannot reverse.",
+   "marks": [
+    "Acid hydrolysis is the reverse of esterification, so an equilibrium mixture forms.",
+    "In alkali, the acid formed is converted to its carboxylate ion, \\(\\mathrm{RCOO^{-}}\\).",
+    "The carboxylate ion does not react with the alcohol to re-form the ester, so the reaction is not reversible.",
+    "All the ester can therefore be hydrolysed."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-028",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "esters",
+    "hydrolysis"
+   ],
+   "q": "After an ester is hydrolysed with sodium hydroxide, how is the free carboxylic acid obtained?",
+   "a": "Add a strong acid such as dilute hydrochloric acid, which protonates the carboxylate ion.",
+   "why": "\\(\\mathrm{RCOO^{-} + H^{+} \\rightarrow RCOOH}\\): many acids, such as benzoic acid, then crystallise out.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-029",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "fats",
+    "esters"
+   ],
+   "q": "What are vegetable oils and animal fats, chemically?",
+   "a": "<strong>Esters of propane-1,2,3-triol (glycerol)</strong> with long-chain carboxylic acids (fatty acids): each glycerol is joined to three acid chains (a triglyceride).",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propane-1,2,3-triol (glycerol): a three-carbon chain with an OH group on each carbon.",
+    "smiles": "OCC(O)CO",
+    "formula": "C3H8O3"
+   },
+   "why": "Palm oil, shea butter and groundnut oil are all mixtures of triglycerides.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-030",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "fats",
+    "esters"
+   ],
+   "q": "Glyceryl tributanoate (tributyrin) is a fat found in butter. Which acid and which alcohol are formed when it is hydrolysed?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of glyceryl tributanoate: a three-carbon glycerol backbone, each carbon joined through an ester linkage to a four-carbon butanoate chain.",
+    "smiles": "CCCC(=O)OCC(COC(=O)CCC)OC(=O)CCC",
+    "formula": "C15H26O6"
+   },
+   "a": "Butanoic acid (or its salt) and propane-1,2,3-triol (glycerol).",
+   "why": "Three ester links break, giving three butanoate units and one glycerol.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-031",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "soap"
+   ],
+   "q": "What is soap, and how is it made?",
+   "a": "Soap is the <strong>sodium or potassium salts of long-chain carboxylic acids</strong>. It is made by heating a vegetable oil or animal fat with sodium (or potassium) hydroxide, which also gives glycerol.",
+   "why": "This alkaline hydrolysis of fats is called saponification.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-032",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "soap"
+   ],
+   "q": "African black soap is traditionally made by boiling palm kernel oil or shea butter with water filtered through the ash of burnt plantain skins and cocoa pods. Explain the chemistry.",
+   "a": "The ash makes an alkaline solution that hydrolyses the fats into soap and glycerol.",
+   "marks": [
+    "The ash contains potassium compounds (such as potassium carbonate and hydroxide), so the solution is alkaline.",
+    "The oils and fats are esters (triglycerides) of glycerol.",
+    "Heating with alkali hydrolyses the ester links.",
+    "The products are potassium salts of long-chain carboxylic acids (soap) and propane-1,2,3-triol (glycerol)."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-033",
+   "type": "equation",
+   "difficulty": 3,
+   "tags": [
+    "soap"
+   ],
+   "q": "Write an equation for the alkaline hydrolysis of glyceryl tributanoate by sodium hydroxide.",
+   "a": "\\(\\mathrm{C_{3}H_{5}(OOCC_{3}H_{7})_{3} + 3NaOH \\rightarrow C_{3}H_{5}(OH)_{3} + 3C_{3}H_{7}COONa}\\)",
+   "why": "One mole of fat needs three moles of hydroxide, one for each ester link.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-034",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "biodiesel"
+   ],
+   "q": "What is biodiesel, and how is it made?",
+   "a": "A mixture of <strong>methyl esters of long-chain carboxylic acids</strong>, made by reacting vegetable oils with <strong>methanol</strong> in the presence of a catalyst (such as KOH).",
+   "why": "Glycerol is the by-product.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-035",
+   "type": "equation",
+   "difficulty": 3,
+   "tags": [
+    "biodiesel"
+   ],
+   "q": "Write an equation for making biodiesel from a triglyceride \\(\\mathrm{C_{3}H_{5}(OOCR)_{3}}\\) and methanol.",
+   "a": "\\(\\mathrm{C_{3}H_{5}(OOCR)_{3} + 3CH_{3}OH \\rightarrow 3RCOOCH_{3} + C_{3}H_{5}(OH)_{3}}\\)",
+   "why": "Each ester link swaps its glycerol part for a methyl group: three methyl esters form.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-036",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "biodiesel"
+   ],
+   "q": "Jatropha, which grows on poor land in countries such as Mali and Ghana, has seeds rich in oil. Suggest why it has been promoted as a source of biodiesel.",
+   "a": "Its oil can be converted to biodiesel with methanol, giving a renewable fuel without using food crops or good farmland.",
+   "why": "Biodiesel is renewable, and the plants absorb carbon dioxide as they grow.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "6B.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-037",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "acyl-chlorides",
+    "functional-groups"
+   ],
+   "q": "What is the functional group of an acyl chloride? Name this one.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of a two-carbon molecule with a C=O group and a Cl atom on the same carbon.",
+    "smiles": "CC(=O)Cl",
+    "formula": "C2H3ClO"
+   },
+   "a": "\\(\\mathrm{-COCl}\\). This is <strong>ethanoyl chloride</strong>, \\(\\mathrm{CH_{3}COCl}\\).",
+   "why": "Name acyl chlorides from the acid: ethanoic acid → ethanoyl chloride.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-038",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "acyl-chlorides",
+    "naming"
+   ],
+   "q": "Name this compound.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of a benzene ring carrying a COCl group.",
+    "smiles": "O=C(Cl)c1ccccc1",
+    "formula": "C7H5ClO"
+   },
+   "a": "<strong>Benzoyl chloride</strong>",
+   "why": "It is the acyl chloride of benzoic acid.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-039",
+   "type": "definition",
+   "difficulty": 2,
+   "tags": [
+    "anhydrides"
+   ],
+   "q": "Name this compound and describe its structure.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of two CH3–C=O groups joined to the same oxygen atom.",
+    "smiles": "CC(=O)OC(C)=O",
+    "formula": "C4H6O3"
+   },
+   "a": "<strong>Ethanoic anhydride</strong>, \\(\\mathrm{(CH_{3}CO)_{2}O}\\): two acyl groups joined through one oxygen atom.",
+   "why": "It is formally two ethanoic acid molecules joined with the loss of water.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-040",
+   "type": "definition",
+   "difficulty": 2,
+   "tags": [
+    "amides"
+   ],
+   "q": "Name these two amides.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formulae of two amides side by side: on the left, CH3–C(=O)–NH2; on the right, CH3–C(=O)–NH–CH3.",
+    "smiles": "CC(N)=O.CNC(C)=O",
+    "formula": "C5H12N2O2"
+   },
+   "a": "<strong>Ethanamide</strong>, \\(\\mathrm{CH_{3}CONH_{2}}\\), and <strong>N-methylethanamide</strong>, \\(\\mathrm{CH_{3}CONHCH_{3}}\\).",
+   "why": "N- shows the methyl group is on the nitrogen. These are made from ethanoyl chloride with ammonia and with methylamine.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-041",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "acyl-chlorides"
+   ],
+   "q": "What type of reaction do acyl chlorides and acid anhydrides undergo with water, alcohols, ammonia and amines?",
+   "a": "<strong>Nucleophilic addition–elimination</strong>.",
+   "why": "The nucleophile adds to the δ+ carbonyl carbon, then the C=O re-forms and a small molecule (HCl, or a carboxylic acid from an anhydride) is eliminated.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-042",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "acyl-chlorides"
+   ],
+   "q": "Write an equation for the reaction of ethanoyl chloride with water, and state what is seen.",
+   "a": "\\(\\mathrm{CH_{3}COCl + H_{2}O \\rightarrow CH_{3}COOH + HCl}\\)<br>A vigorous reaction giving steamy fumes of HCl.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: ethanoyl chloride and water give ethanoic acid and hydrogen chloride at room temperature.",
+    "rxn": "CC(=O)Cl.O>>CC(=O)O.Cl",
+    "above": "room temperature"
+   },
+   "why": "Acyl chlorides are hydrolysed much faster than chloroalkanes.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-043",
+   "type": "equation",
+   "difficulty": 1,
+   "tags": [
+    "acyl-chlorides",
+    "esters"
+   ],
+   "q": "Write an equation for the reaction of ethanoyl chloride with ethanol.",
+   "a": "\\(\\mathrm{CH_{3}COCl + CH_{3}CH_{2}OH \\rightarrow CH_{3}COOCH_{2}CH_{3} + HCl}\\)",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: ethanoyl chloride and ethanol give ethyl ethanoate and hydrogen chloride at room temperature.",
+    "rxn": "CC(=O)Cl.CCO>>CC(=O)OCC.Cl",
+    "above": "room temperature"
+   },
+   "why": "Unlike esterification with the acid, this is fast and goes to completion.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.14"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-044",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "acyl-chlorides",
+    "amides"
+   ],
+   "q": "Write an equation for the reaction of ethanoyl chloride with concentrated ammonia.",
+   "a": "\\(\\mathrm{CH_{3}COCl + 2NH_{3} \\rightarrow CH_{3}CONH_{2} + NH_{4}Cl}\\)",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: ethanoyl chloride and ammonia give ethanamide and hydrogen chloride; with excess ammonia the HCl forms ammonium chloride.",
+    "rxn": "CC(=O)Cl.N>>CC(N)=O.Cl",
+    "above": "conc. NH3"
+   },
+   "why": "The HCl formed reacts with a second \\(\\mathrm{NH_{3}}\\) to give ammonium chloride.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.14",
+      "18B.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-045",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "acyl-chlorides",
+    "amides"
+   ],
+   "q": "Write an equation for the reaction of ethanoyl chloride with methylamine, and name the organic product.",
+   "a": "\\(\\mathrm{CH_{3}COCl + 2CH_{3}NH_{2} \\rightarrow CH_{3}CONHCH_{3} + CH_{3}NH_{3}^{+}Cl^{-}}\\)<br>N-methylethanamide.",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: ethanoyl chloride and methylamine give N-methylethanamide and hydrogen chloride; with excess amine the HCl forms methylammonium chloride.",
+    "rxn": "CC(=O)Cl.CN>>CNC(C)=O.Cl"
+   },
+   "why": "A primary amine gives an N-substituted amide; the second amine molecule removes the HCl.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.14",
+      "18B.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-046",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "acyl-chlorides",
+    "mechanism"
+   ],
+   "q": "Outline the mechanism for the reaction of ethanoyl chloride with water.",
+   "a": "Nucleophilic addition–elimination.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Addition–elimination of water with ethanoyl chloride: a lone pair on the water oxygen attacks the δ+ carbonyl carbon and C=O breaks; in the intermediate the C=O re-forms, chloride leaves, and an O–H bond breaks to lose H+, giving ethanoic acid and HCl.",
+    "atoms": [
+     {
+      "id": "Nu",
+      "el": "O",
+      "x": -1.9,
+      "y": 1.1,
+      "lp": [
+       -30
+      ]
+     },
+     {
+      "id": "Ns0",
+      "el": "H",
+      "x": -2.936,
+      "y": 1.1
+     },
+     {
+      "id": "Ns1",
+      "el": "H",
+      "x": -1.9,
+      "y": 2.1
+     },
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 0,
+      "y": 0,
+      "delta": "+",
+      "deltaAt": 270
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 0,
+      "y": 1.4,
+      "delta": "-",
+      "deltaAt": 0
+     },
+     {
+      "id": "Ra",
+      "el": "H3C",
+      "x": -1.04,
+      "y": -0.6
+     },
+     {
+      "id": "Cl1",
+      "el": "Cl",
+      "x": 1.04,
+      "y": -0.6
+     },
+     {
+      "id": "C2",
+      "el": "C",
+      "x": 5.6,
+      "y": 0
+     },
+     {
+      "id": "O2",
+      "el": "O",
+      "x": 5.6,
+      "y": 1.3,
+      "charge": "-",
+      "chargeAt": 20,
+      "lp": [
+       180,
+       90
+      ]
+     },
+     {
+      "id": "Cl2",
+      "el": "Cl",
+      "x": 5.6,
+      "y": -1.4
+     },
+     {
+      "id": "R2",
+      "el": "CH3",
+      "x": 6.699999999999999,
+      "y": 0
+     },
+     {
+      "id": "N2",
+      "el": "O",
+      "x": 4.3999999999999995,
+      "y": 0,
+      "charge": "+",
+      "chargeAt": 290
+     },
+     {
+      "id": "Q0",
+      "el": "H",
+      "x": 3.7999999999999994,
+      "y": 0.85
+     },
+     {
+      "id": "Q1",
+      "el": "H",
+      "x": 3.7999999999999994,
+      "y": -0.85
+     }
+    ],
+    "bonds": [
+     {
+      "a": "Nu",
+      "b": "Ns0"
+     },
+     {
+      "a": "Nu",
+      "b": "Ns1"
+     },
+     {
+      "a": "C1",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C1",
+      "b": "Ra"
+     },
+     {
+      "a": "C1",
+      "b": "Cl1"
+     },
+     {
+      "a": "C2",
+      "b": "O2"
+     },
+     {
+      "a": "C2",
+      "b": "Cl2"
+     },
+     {
+      "a": "C2",
+      "b": "R2"
+     },
+     {
+      "a": "C2",
+      "b": "N2"
+     },
+     {
+      "a": "N2",
+      "b": "Q0"
+     },
+     {
+      "a": "N2",
+      "b": "Q1"
+     }
+    ],
+    "curly": [
+     {
+      "from": {
+       "lp": "Nu",
+       "at": -30
+      },
+      "to": {
+       "atom": "C1"
+      },
+      "side": "right",
+      "bend": 0.3
+     },
+     {
+      "from": {
+       "bond": [
+        "C1",
+        "O1"
+       ]
+      },
+      "to": {
+       "atom": "O1"
+      },
+      "side": "right",
+      "bend": 0.9
+     },
+     {
+      "from": {
+       "lp": "O2",
+       "at": 180
+      },
+      "to": {
+       "bond": [
+        "C2",
+        "O2"
+       ]
+      },
+      "side": "right",
+      "bend": 0.8
+     },
+     {
+      "from": {
+       "bond": [
+        "C2",
+        "Cl2"
+       ]
+      },
+      "to": {
+       "atom": "Cl2"
+      },
+      "side": "right",
+      "bend": 0.7
+     },
+     {
+      "from": {
+       "bond": [
+        "N2",
+        "Q0"
+       ]
+      },
+      "to": {
+       "atom": "N2"
+      },
+      "side": "left",
+      "bend": 0.8
+     }
+    ],
+    "arrows": [
+     {
+      "from": [
+       1.8,
+       0.3
+      ],
+      "to": [
+       3.3,
+       0.3
+      ]
+     },
+     {
+      "from": [
+       6.199999999999999,
+       -1.2
+      ],
+      "to": [
+       6.8999999999999995,
+       -2.1
+      ]
+     }
+    ],
+    "text": [
+     {
+      "x": 7.05,
+      "y": -2.35,
+      "t": "CH3COOH + HCl"
+     }
+    ]
+   },
+   "marks": [
+    "Lone pair on the O of \\(\\mathrm{H_{2}O}\\) attacks the δ+ carbonyl carbon; arrow from \\(\\mathrm{C=O}\\) to O.",
+    "Intermediate with \\(\\mathrm{O^{-}}\\), and \\(\\mathrm{O^{+}}\\) on the added water.",
+    "Arrow from the \\(\\mathrm{O^{-}}\\) lone pair to re-form \\(\\mathrm{C=O}\\), and arrow from the \\(\\mathrm{C-Cl}\\) bond to Cl.",
+    "Arrow from an \\(\\mathrm{O-H}\\) bond to \\(\\mathrm{O^{+}}\\) to show loss of \\(\\mathrm{H^{+}}\\)."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-047",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "acyl-chlorides",
+    "mechanism"
+   ],
+   "q": "Outline the mechanism for the reaction of ethanoyl chloride with ethanol.",
+   "a": "Nucleophilic addition–elimination; the products are ethyl ethanoate and HCl.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Addition–elimination of ethanol with ethanoyl chloride: the ethanol oxygen lone pair attacks the δ+ carbonyl carbon and C=O breaks; the C=O re-forms, chloride leaves and the O–H bond breaks, giving ethyl ethanoate and HCl.",
+    "atoms": [
+     {
+      "id": "Nu",
+      "el": "O",
+      "x": -1.9,
+      "y": 1.1,
+      "lp": [
+       -30
+      ]
+     },
+     {
+      "id": "Ns0",
+      "el": "C2H5",
+      "x": -3.5216,
+      "y": 1.1
+     },
+     {
+      "id": "Ns1",
+      "el": "H",
+      "x": -1.9,
+      "y": 2.1
+     },
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 0,
+      "y": 0,
+      "delta": "+",
+      "deltaAt": 270
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 0,
+      "y": 1.4,
+      "delta": "-",
+      "deltaAt": 0
+     },
+     {
+      "id": "Ra",
+      "el": "H3C",
+      "x": -1.04,
+      "y": -0.6
+     },
+     {
+      "id": "Cl1",
+      "el": "Cl",
+      "x": 1.04,
+      "y": -0.6
+     },
+     {
+      "id": "C2",
+      "el": "C",
+      "x": 5.6,
+      "y": 0
+     },
+     {
+      "id": "O2",
+      "el": "O",
+      "x": 5.6,
+      "y": 1.3,
+      "charge": "-",
+      "chargeAt": 20,
+      "lp": [
+       180,
+       90
+      ]
+     },
+     {
+      "id": "Cl2",
+      "el": "Cl",
+      "x": 5.6,
+      "y": -1.4
+     },
+     {
+      "id": "R2",
+      "el": "CH3",
+      "x": 6.699999999999999,
+      "y": 0
+     },
+     {
+      "id": "N2",
+      "el": "O",
+      "x": 4.3999999999999995,
+      "y": 0,
+      "charge": "+",
+      "chargeAt": 290
+     },
+     {
+      "id": "Q0",
+      "el": "H",
+      "x": 3.7999999999999994,
+      "y": 0.85
+     },
+     {
+      "id": "Q1",
+      "el": "H5C2",
+      "x": 3.6499999999999995,
+      "y": -0.85
+     }
+    ],
+    "bonds": [
+     {
+      "a": "Nu",
+      "b": "Ns0"
+     },
+     {
+      "a": "Nu",
+      "b": "Ns1"
+     },
+     {
+      "a": "C1",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C1",
+      "b": "Ra"
+     },
+     {
+      "a": "C1",
+      "b": "Cl1"
+     },
+     {
+      "a": "C2",
+      "b": "O2"
+     },
+     {
+      "a": "C2",
+      "b": "Cl2"
+     },
+     {
+      "a": "C2",
+      "b": "R2"
+     },
+     {
+      "a": "C2",
+      "b": "N2"
+     },
+     {
+      "a": "N2",
+      "b": "Q0"
+     },
+     {
+      "a": "N2",
+      "b": "Q1"
+     }
+    ],
+    "curly": [
+     {
+      "from": {
+       "lp": "Nu",
+       "at": -30
+      },
+      "to": {
+       "atom": "C1"
+      },
+      "side": "right",
+      "bend": 0.3
+     },
+     {
+      "from": {
+       "bond": [
+        "C1",
+        "O1"
+       ]
+      },
+      "to": {
+       "atom": "O1"
+      },
+      "side": "right",
+      "bend": 0.9
+     },
+     {
+      "from": {
+       "lp": "O2",
+       "at": 180
+      },
+      "to": {
+       "bond": [
+        "C2",
+        "O2"
+       ]
+      },
+      "side": "right",
+      "bend": 0.8
+     },
+     {
+      "from": {
+       "bond": [
+        "C2",
+        "Cl2"
+       ]
+      },
+      "to": {
+       "atom": "Cl2"
+      },
+      "side": "right",
+      "bend": 0.7
+     },
+     {
+      "from": {
+       "bond": [
+        "N2",
+        "Q0"
+       ]
+      },
+      "to": {
+       "atom": "N2"
+      },
+      "side": "left",
+      "bend": 0.8
+     }
+    ],
+    "arrows": [
+     {
+      "from": [
+       1.8,
+       0.3
+      ],
+      "to": [
+       3.3,
+       0.3
+      ]
+     },
+     {
+      "from": [
+       6.199999999999999,
+       -1.2
+      ],
+      "to": [
+       6.8999999999999995,
+       -2.1
+      ]
+     }
+    ],
+    "text": [
+     {
+      "x": 7.05,
+      "y": -2.35,
+      "t": "CH3COOC2H5 + HCl"
+     }
+    ]
+   },
+   "marks": [
+    "Lone pair on the O of ethanol attacks the δ+ carbonyl carbon; arrow from \\(\\mathrm{C=O}\\) to O.",
+    "Tetrahedral intermediate with \\(\\mathrm{O^{-}}\\) and \\(\\mathrm{O^{+}}\\).",
+    "\\(\\mathrm{C=O}\\) re-forms and \\(\\mathrm{Cl^{-}}\\) is eliminated.",
+    "\\(\\mathrm{H^{+}}\\) is lost from the \\(\\mathrm{O^{+}}\\) (arrow from O–H bond to O)."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-048",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "acyl-chlorides",
+    "mechanism",
+    "amides"
+   ],
+   "q": "Outline the mechanism for the reaction of ethanoyl chloride with ammonia.",
+   "a": "Nucleophilic addition–elimination; ethanamide forms.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Addition–elimination of ammonia with ethanoyl chloride: the nitrogen lone pair attacks the δ+ carbonyl carbon and C=O breaks; in the intermediate the C=O re-forms, chloride leaves and an N–H bond breaks to lose H+, giving ethanamide.",
+    "atoms": [
+     {
+      "id": "Nu",
+      "el": "N",
+      "x": -1.9,
+      "y": 1.1,
+      "lp": [
+       -30
+      ]
+     },
+     {
+      "id": "Ns0",
+      "el": "H",
+      "x": -2.936,
+      "y": 1.1
+     },
+     {
+      "id": "Ns1",
+      "el": "H",
+      "x": -1.9,
+      "y": 2.1
+     },
+     {
+      "id": "Ns2",
+      "el": "H",
+      "x": -2.65,
+      "y": 0.40000000000000013
+     },
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 0,
+      "y": 0,
+      "delta": "+",
+      "deltaAt": 270
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 0,
+      "y": 1.4,
+      "delta": "-",
+      "deltaAt": 0
+     },
+     {
+      "id": "Ra",
+      "el": "H3C",
+      "x": -1.04,
+      "y": -0.6
+     },
+     {
+      "id": "Cl1",
+      "el": "Cl",
+      "x": 1.04,
+      "y": -0.6
+     },
+     {
+      "id": "C2",
+      "el": "C",
+      "x": 5.6,
+      "y": 0
+     },
+     {
+      "id": "O2",
+      "el": "O",
+      "x": 5.6,
+      "y": 1.3,
+      "charge": "-",
+      "chargeAt": 20,
+      "lp": [
+       180,
+       90
+      ]
+     },
+     {
+      "id": "Cl2",
+      "el": "Cl",
+      "x": 5.6,
+      "y": -1.4
+     },
+     {
+      "id": "R2",
+      "el": "CH3",
+      "x": 6.699999999999999,
+      "y": 0
+     },
+     {
+      "id": "N2",
+      "el": "N",
+      "x": 4.3999999999999995,
+      "y": 0,
+      "charge": "+",
+      "chargeAt": 290
+     },
+     {
+      "id": "Q0",
+      "el": "H",
+      "x": 3.7999999999999994,
+      "y": 0.85
+     },
+     {
+      "id": "Q1",
+      "el": "H",
+      "x": 3.3499999999999996,
+      "y": 0
+     },
+     {
+      "id": "Q2",
+      "el": "H",
+      "x": 3.7999999999999994,
+      "y": -0.85
+     }
+    ],
+    "bonds": [
+     {
+      "a": "Nu",
+      "b": "Ns0"
+     },
+     {
+      "a": "Nu",
+      "b": "Ns1"
+     },
+     {
+      "a": "Nu",
+      "b": "Ns2"
+     },
+     {
+      "a": "C1",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C1",
+      "b": "Ra"
+     },
+     {
+      "a": "C1",
+      "b": "Cl1"
+     },
+     {
+      "a": "C2",
+      "b": "O2"
+     },
+     {
+      "a": "C2",
+      "b": "Cl2"
+     },
+     {
+      "a": "C2",
+      "b": "R2"
+     },
+     {
+      "a": "C2",
+      "b": "N2"
+     },
+     {
+      "a": "N2",
+      "b": "Q0"
+     },
+     {
+      "a": "N2",
+      "b": "Q1"
+     },
+     {
+      "a": "N2",
+      "b": "Q2"
+     }
+    ],
+    "curly": [
+     {
+      "from": {
+       "lp": "Nu",
+       "at": -30
+      },
+      "to": {
+       "atom": "C1"
+      },
+      "side": "right",
+      "bend": 0.3
+     },
+     {
+      "from": {
+       "bond": [
+        "C1",
+        "O1"
+       ]
+      },
+      "to": {
+       "atom": "O1"
+      },
+      "side": "right",
+      "bend": 0.9
+     },
+     {
+      "from": {
+       "lp": "O2",
+       "at": 180
+      },
+      "to": {
+       "bond": [
+        "C2",
+        "O2"
+       ]
+      },
+      "side": "right",
+      "bend": 0.8
+     },
+     {
+      "from": {
+       "bond": [
+        "C2",
+        "Cl2"
+       ]
+      },
+      "to": {
+       "atom": "Cl2"
+      },
+      "side": "right",
+      "bend": 0.7
+     },
+     {
+      "from": {
+       "bond": [
+        "N2",
+        "Q0"
+       ]
+      },
+      "to": {
+       "atom": "N2"
+      },
+      "side": "left",
+      "bend": 0.8
+     }
+    ],
+    "arrows": [
+     {
+      "from": [
+       1.8,
+       0.3
+      ],
+      "to": [
+       3.3,
+       0.3
+      ]
+     },
+     {
+      "from": [
+       6.199999999999999,
+       -1.2
+      ],
+      "to": [
+       6.8999999999999995,
+       -2.1
+      ]
+     }
+    ],
+    "text": [
+     {
+      "x": 7.05,
+      "y": -2.35,
+      "t": "CH3CONH2 + HCl"
+     }
+    ]
+   },
+   "marks": [
+    "Lone pair on N of \\(\\mathrm{NH_{3}}\\) attacks the δ+ carbonyl carbon.",
+    "Arrow from the \\(\\mathrm{C=O}\\) bond to O, giving an intermediate with \\(\\mathrm{O^{-}}\\) and \\(\\mathrm{N^{+}}\\).",
+    "\\(\\mathrm{O^{-}}\\) lone pair re-forms \\(\\mathrm{C=O}\\); \\(\\mathrm{C-Cl}\\) bond breaks.",
+    "Arrow from an \\(\\mathrm{N-H}\\) bond to \\(\\mathrm{N^{+}}\\) (a second \\(\\mathrm{NH_{3}}\\) removes the \\(\\mathrm{H^{+}}\\))."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-049",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "acyl-chlorides",
+    "mechanism",
+    "amides"
+   ],
+   "q": "Outline the mechanism for the reaction of ethanoyl chloride with methylamine.",
+   "a": "Nucleophilic addition–elimination; N-methylethanamide forms.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Addition–elimination of methylamine with ethanoyl chloride: the nitrogen lone pair attacks the δ+ carbonyl carbon and C=O breaks; the C=O re-forms, chloride leaves and N–H breaks to lose H+, giving N-methylethanamide.",
+    "atoms": [
+     {
+      "id": "Nu",
+      "el": "N",
+      "x": -1.9,
+      "y": 1.1,
+      "lp": [
+       -30
+      ]
+     },
+     {
+      "id": "Ns0",
+      "el": "H3C",
+      "x": -2.936,
+      "y": 1.1
+     },
+     {
+      "id": "Ns1",
+      "el": "H",
+      "x": -1.9,
+      "y": 2.1
+     },
+     {
+      "id": "Ns2",
+      "el": "H",
+      "x": -2.65,
+      "y": 0.40000000000000013
+     },
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 0,
+      "y": 0,
+      "delta": "+",
+      "deltaAt": 270
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 0,
+      "y": 1.4,
+      "delta": "-",
+      "deltaAt": 0
+     },
+     {
+      "id": "Ra",
+      "el": "H3C",
+      "x": -1.04,
+      "y": -0.6
+     },
+     {
+      "id": "Cl1",
+      "el": "Cl",
+      "x": 1.04,
+      "y": -0.6
+     },
+     {
+      "id": "C2",
+      "el": "C",
+      "x": 5.6,
+      "y": 0
+     },
+     {
+      "id": "O2",
+      "el": "O",
+      "x": 5.6,
+      "y": 1.3,
+      "charge": "-",
+      "chargeAt": 20,
+      "lp": [
+       180,
+       90
+      ]
+     },
+     {
+      "id": "Cl2",
+      "el": "Cl",
+      "x": 5.6,
+      "y": -1.4
+     },
+     {
+      "id": "R2",
+      "el": "CH3",
+      "x": 6.699999999999999,
+      "y": 0
+     },
+     {
+      "id": "N2",
+      "el": "N",
+      "x": 4.3999999999999995,
+      "y": 0,
+      "charge": "+",
+      "chargeAt": 290
+     },
+     {
+      "id": "Q0",
+      "el": "H",
+      "x": 3.7999999999999994,
+      "y": 0.85
+     },
+     {
+      "id": "Q1",
+      "el": "H3C",
+      "x": 3.3639999999999994,
+      "y": 0
+     },
+     {
+      "id": "Q2",
+      "el": "H",
+      "x": 3.7999999999999994,
+      "y": -0.85
+     }
+    ],
+    "bonds": [
+     {
+      "a": "Nu",
+      "b": "Ns0"
+     },
+     {
+      "a": "Nu",
+      "b": "Ns1"
+     },
+     {
+      "a": "Nu",
+      "b": "Ns2"
+     },
+     {
+      "a": "C1",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C1",
+      "b": "Ra"
+     },
+     {
+      "a": "C1",
+      "b": "Cl1"
+     },
+     {
+      "a": "C2",
+      "b": "O2"
+     },
+     {
+      "a": "C2",
+      "b": "Cl2"
+     },
+     {
+      "a": "C2",
+      "b": "R2"
+     },
+     {
+      "a": "C2",
+      "b": "N2"
+     },
+     {
+      "a": "N2",
+      "b": "Q0"
+     },
+     {
+      "a": "N2",
+      "b": "Q1"
+     },
+     {
+      "a": "N2",
+      "b": "Q2"
+     }
+    ],
+    "curly": [
+     {
+      "from": {
+       "lp": "Nu",
+       "at": -30
+      },
+      "to": {
+       "atom": "C1"
+      },
+      "side": "right",
+      "bend": 0.3
+     },
+     {
+      "from": {
+       "bond": [
+        "C1",
+        "O1"
+       ]
+      },
+      "to": {
+       "atom": "O1"
+      },
+      "side": "right",
+      "bend": 0.9
+     },
+     {
+      "from": {
+       "lp": "O2",
+       "at": 180
+      },
+      "to": {
+       "bond": [
+        "C2",
+        "O2"
+       ]
+      },
+      "side": "right",
+      "bend": 0.8
+     },
+     {
+      "from": {
+       "bond": [
+        "C2",
+        "Cl2"
+       ]
+      },
+      "to": {
+       "atom": "Cl2"
+      },
+      "side": "right",
+      "bend": 0.7
+     },
+     {
+      "from": {
+       "bond": [
+        "N2",
+        "Q0"
+       ]
+      },
+      "to": {
+       "atom": "N2"
+      },
+      "side": "left",
+      "bend": 0.8
+     }
+    ],
+    "arrows": [
+     {
+      "from": [
+       1.8,
+       0.3
+      ],
+      "to": [
+       3.3,
+       0.3
+      ]
+     },
+     {
+      "from": [
+       6.199999999999999,
+       -1.2
+      ],
+      "to": [
+       6.8999999999999995,
+       -2.1
+      ]
+     }
+    ],
+    "text": [
+     {
+      "x": 7.05,
+      "y": -2.35,
+      "t": "CH3CONHCH3 + HCl"
+     }
+    ]
+   },
+   "marks": [
+    "Lone pair on N of \\(\\mathrm{CH_{3}NH_{2}}\\) attacks the δ+ carbonyl carbon; arrow from \\(\\mathrm{C=O}\\) to O.",
+    "Intermediate with \\(\\mathrm{O^{-}}\\) and \\(\\mathrm{N^{+}}\\).",
+    "\\(\\mathrm{C=O}\\) re-forms and \\(\\mathrm{Cl^{-}}\\) leaves.",
+    "Loss of \\(\\mathrm{H^{+}}\\) from \\(\\mathrm{N^{+}}\\)."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-050",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "acyl-chlorides"
+   ],
+   "q": "Explain why the carbonyl carbon of an acyl chloride is so readily attacked by nucleophiles.",
+   "a": "Two electronegative atoms, O and Cl, pull electron density away from the carbon, making it strongly δ+.",
+   "marks": [
+    "Oxygen and chlorine are both more electronegative than carbon.",
+    "The carbonyl carbon is therefore strongly δ+.",
+    "Nucleophiles (with a lone pair) are attracted to it, and \\(\\mathrm{Cl^{-}}\\) is a good leaving group."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-051",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "anhydrides"
+   ],
+   "q": "Write an equation for the reaction of ethanoic anhydride with methanol.",
+   "a": "\\(\\mathrm{(CH_{3}CO)_{2}O + CH_{3}OH \\rightarrow CH_{3}COOCH_{3} + CH_{3}COOH}\\)",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: ethanoic anhydride and methanol give methyl ethanoate and ethanoic acid.",
+    "rxn": "CC(=O)OC(C)=O.CO>>CC(=O)OC.CC(=O)O",
+    "above": "warm"
+   },
+   "why": "An anhydride reacts like an acyl chloride, but eliminates a carboxylic acid instead of HCl.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-052",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "anhydrides",
+    "amides"
+   ],
+   "q": "Write an equation for the reaction of ethanoic anhydride with ammonia.",
+   "a": "\\(\\mathrm{(CH_{3}CO)_{2}O + 2NH_{3} \\rightarrow CH_{3}CONH_{2} + CH_{3}COONH_{4}}\\)",
+   "why": "The ethanoic acid formed reacts with a second \\(\\mathrm{NH_{3}}\\) to give ammonium ethanoate.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-053",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "anhydrides",
+    "aspirin"
+   ],
+   "q": "Aspirin is made from 2-hydroxybenzoic acid and ethanoic anhydride. Write the equation.",
+   "a": "\\(\\mathrm{HOC_{6}H_{4}COOH + (CH_{3}CO)_{2}O \\rightarrow CH_{3}COOC_{6}H_{4}COOH + CH_{3}COOH}\\)",
+   "answerFigure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: 2-hydroxybenzoic acid is converted to aspirin by warming with ethanoic anhydride and a phosphoric acid catalyst; ethanoic acid is the by-product.",
+    "rxn": "OC(=O)c1ccccc1O>>CC(=O)Oc1ccccc1C(=O)O",
+    "above": "(CH3CO)2O, H3PO4",
+    "below": "warm"
+   },
+   "why": "The phenol \\(\\mathrm{-OH}\\) group is acylated, forming an ester link.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ],
+     "practical": "CP16"
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-054",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "anhydrides",
+    "aspirin"
+   ],
+   "q": "Give the industrial advantages of using ethanoic anhydride rather than ethanoyl chloride to make aspirin.",
+   "a": "Ethanoic anhydride is cheaper, safer and easier to control.",
+   "marks": [
+    "It is cheaper.",
+    "It is less corrosive and reacts less violently, so the reaction is easier to control.",
+    "It does not react as readily with water (moisture in the air).",
+    "It does not produce toxic, corrosive HCl gas; the by-product is ethanoic acid."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-055",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "practical",
+    "purification"
+   ],
+   "q": "Describe how impure aspirin is purified by recrystallisation.",
+   "a": "Dissolve in the minimum hot solvent, filter hot if needed, cool to crystallise, then filter, wash and dry.",
+   "marks": [
+    "Dissolve the impure solid in the minimum volume of hot solvent.",
+    "Filter the hot solution (if needed) to remove insoluble impurities.",
+    "Cool slowly so that pure crystals form; soluble impurities stay in solution.",
+    "Filter under reduced pressure, wash with a little cold solvent and leave to dry."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ],
+     "practical": "CP16"
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-056",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "practical",
+    "purity"
+   ],
+   "q": "How does the melting point show whether a sample of aspirin is pure?",
+   "a": "A pure solid melts sharply at the value in the data book. An impure solid melts lower and over a wider range.",
+   "why": "Measure it with a melting-point apparatus and compare it with the literature value.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.2"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "18C.22"
+     ],
+     "practical": "CP16"
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-057",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "practical",
+    "purification",
+    "esters"
+   ],
+   "q": "A crude sample of ethyl ethanoate contains ethanoic acid, ethanol and water. Outline how a pure, dry sample is obtained.",
+   "a": "Neutralise the acid, separate the layers, dry, then distil.",
+   "marks": [
+    "Shake with sodium hydrogencarbonate solution in a separating funnel, releasing the pressure, to remove the acid.",
+    "Run off and discard the lower aqueous layer.",
+    "Dry the ester layer with an anhydrous drying agent such as anhydrous calcium chloride or magnesium sulfate.",
+    "Distil, collecting the fraction that boils at the boiling point of the ester."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ],
+     "practical": "RP10"
+    },
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-058",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "practical",
+    "purification"
+   ],
+   "q": "Why must the separating funnel be inverted and its tap opened regularly when ethyl ethanoate is shaken with sodium hydrogencarbonate solution?",
+   "a": "The acid reacts with the hydrogencarbonate to make \\(\\mathrm{CO_{2}}\\), and the pressure must be released.",
+   "why": "Otherwise the stopper can be forced out.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ],
+     "practical": "RP10"
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-059",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "esters",
+    "hydrolysis"
+   ],
+   "q": "True or false: hydrolysing an ester with sodium hydroxide gives the carboxylic acid and the alcohol.",
+   "a": "<strong>False.</strong> It gives the <strong>sodium salt</strong> of the acid and the alcohol.",
+   "why": "The free acid is only obtained after acidifying the mixture.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-060",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "esters",
+    "naming"
+   ],
+   "q": "True or false: \\(\\mathrm{CH_{3}COOCH_{2}CH_{3}}\\) is called ethanoyl ethyl.",
+   "a": "<strong>False.</strong> It is <strong>ethyl ethanoate</strong>: the alkyl group from the alcohol comes first, then the acid part ending in -oate.",
+   "why": "Ethanoyl is the name of the CH3CO– group, used in acyl chlorides such as ethanoyl chloride.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1",
+      "3.3.1.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.13"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-carbox-061",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "acidity"
+   ],
+   "q": "True or false: carboxylic acids are strong acids because they react with carbonates to release carbon dioxide.",
+   "a": "<strong>False.</strong> They are <strong>weak</strong> acids (only partly dissociated), but still strong enough to release carbon dioxide from carbonates.",
+   "why": "Carbonic acid is an even weaker acid, so carboxylic acids can displace it.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.9.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ]
+    }
+   }
+  }
+ ]
+}
