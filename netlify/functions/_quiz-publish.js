@@ -15,8 +15,9 @@ const { checkQuestion } = require('./_question-checks');
 const { toBank } = require('../../scripts/quizzes/content.js');
 
 const BOARDS = { aqa: 'AQA', edexcel: 'Edexcel' };
-// The slug of a topic's row in `topics` (supabase/a_level_physics_subject.sql).
-const SLUG_PREFIX = { 'physics-a-level': 'al-physics' };
+// The slug of a topic's row in `topics` (supabase/a_level_physics_subject.sql,
+// supabase/a_level_chemistry_subject.sql).
+const SLUG_PREFIX = { 'physics-a-level': 'al-physics', 'chemistry-a-level': 'al-chemistry' };
 const MIN_QUESTIONS = 5;
 const SECONDS_PER_QUESTION = 90;
 const text = (v, max) => String(v == null ? '' : v).trim().slice(0, max);

@@ -1,0 +1,677 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/optical-isomerism",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Optical Isomerism",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-optic-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.2"
+          ]
+        }
+      },
+      "q": "What is a chiral centre?",
+      "options": {
+        "A": "A carbon atom bonded to four different atoms or groups",
+        "B": "A carbon atom bonded to four different atoms",
+        "C": "A carbon atom in a C=C double bond with two different groups on each end",
+        "D": "Any carbon atom bonded to an OH group"
+      },
+      "answer": "A",
+      "solution": "A chiral centre (an asymmetric carbon) is bonded to four different groups, so its mirror image cannot be superimposed on it. The groups, not just the atoms joined directly to the carbon, must differ: in butan-2-ol, CH3 and C2H5 both join through carbon but are different groups. (Two different groups on each end of a C=C bond gives E/Z isomerism, not optical isomerism.)"
+    },
+    {
+      "id": "che-al-optic-q002",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.3"
+          ]
+        }
+      },
+      "q": "How do the two enantiomers of a compound differ?",
+      "options": {
+        "A": "They have different boiling points",
+        "B": "One rotates the plane of plane-polarised light and the other does not",
+        "C": "They rotate the plane of plane-polarised light by the same angle in opposite directions",
+        "D": "They rotate the plane of plane-polarised light in the same direction by different angles"
+      },
+      "answer": "C",
+      "solution": "Enantiomers have identical physical properties, such as melting and boiling points, and the same reactions with ordinary reagents. They differ in their effect on plane-polarised light: each rotates the plane by the same angle, one clockwise and the other anticlockwise. (Both enantiomers are optically active, not just one.)"
+    },
+    {
+      "id": "che-al-optic-q003",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.2"
+          ]
+        }
+      },
+      "q": "Which compound has a chiral centre?",
+      "options": {
+        "A": "Propan-2-ol",
+        "B": "3-methylpentane",
+        "C": "2-methylpropan-1-ol",
+        "D": "Butan-2-ol"
+      },
+      "answer": "D",
+      "solution": "In butan-2-ol, carbon 2 carries H, OH, \\(\\mathrm{CH_{3}}\\) and \\(\\mathrm{C_{2}H_{5}}\\): four different groups. Carbon 2 of propan-2-ol has two \\(\\mathrm{CH_{3}}\\) groups, carbon 3 of 3-methylpentane has two ethyl groups, and carbon 2 of 2-methylpropan-1-ol has two \\(\\mathrm{CH_{3}}\\) groups. (Look for two identical groups on each candidate carbon.)"
+    },
+    {
+      "id": "che-al-optic-q004",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.2"
+          ]
+        }
+      },
+      "q": "How many chiral centres does this molecule have?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula: a five-carbon chain with an OH group on carbon 2 and a methyl branch on carbon 3.",
+        "smiles": "CC(O)C(C)CC",
+        "formula": "C6H14O"
+      },
+      "options": {
+        "A": "0",
+        "B": "1",
+        "C": "2",
+        "D": "3"
+      },
+      "answer": "C",
+      "solution": "The molecule is 3-methylpentan-2-ol. Carbon 2 carries H, OH, \\(\\mathrm{CH_{3}}\\) and the rest of the chain: four different groups. Carbon 3 carries H, \\(\\mathrm{CH_{3}}\\), \\(\\mathrm{C_{2}H_{5}}\\) and \\(\\mathrm{CH(OH)CH_{3}}\\): also four different groups. So the number of chiral centres is 2. (Missing carbon 3, because it carries no heteroatom, leads to 1.)"
+    },
+    {
+      "id": "che-al-optic-q005",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.4"
+          ]
+        }
+      },
+      "q": "Why is a racemic mixture optically inactive?",
+      "options": {
+        "A": "It contains no chiral molecules",
+        "B": "It has equal amounts of the two enantiomers, whose equal and opposite rotations cancel",
+        "C": "Its molecules are planar, so they cannot rotate polarised light",
+        "D": "The two enantiomers react with each other to form an achiral product"
+      },
+      "answer": "B",
+      "solution": "A racemic mixture (racemate) contains equal amounts of two enantiomers. Each enantiomer rotates the plane of plane-polarised light by the same angle in opposite directions, so the overall rotation is zero. (Every molecule in it is chiral: the cancelling is between molecules.)"
+    },
+    {
+      "id": "che-al-optic-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7",
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.4",
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Ethanal reacts with potassium cyanide followed by dilute acid. Why is the product optically inactive?",
+      "options": {
+        "A": "The C=O group is planar, so the cyanide ion attacks either face equally, giving a racemic mixture",
+        "B": "The product, 2-hydroxypropanenitrile, has no chiral centre",
+        "C": "The cyanide ion always attacks from the side opposite the oxygen, giving one enantiomer",
+        "D": "The reaction goes through a carbocation, which rearranges"
+      },
+      "answer": "A",
+      "solution": "The product, \\(\\mathrm{CH_{3}CH(OH)CN}\\), does have a chiral centre. But the carbonyl group and the atoms joined to it lie in one plane, and \\(\\mathrm{CN^{-}}\\) is equally likely to attack from above or below. The two enantiomers form in equal amounts, a racemic mixture, whose rotations cancel. (The product is chiral; the mixture is what is inactive.)"
+    },
+    {
+      "id": "che-al-optic-q007",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7",
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.4",
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Which carbonyl compound gives a racemic mixture when it reacts with HCN in the presence of KCN?",
+      "options": {
+        "A": "Propanone",
+        "B": "Propanal",
+        "C": "Methanal",
+        "D": "Pentan-3-one"
+      },
+      "answer": "B",
+      "solution": "HCN adds across C=O, so the carbonyl carbon ends up carrying OH, CN and its two original groups. For propanal these are H and \\(\\mathrm{C_{2}H_{5}}\\), so the carbon has four different groups and both enantiomers form equally. Propanone (two \\(\\mathrm{CH_{3}}\\)), methanal (two H) and pentan-3-one (two \\(\\mathrm{C_{2}H_{5}}\\)) give products with two identical groups. (A product without a chiral centre cannot be a racemate.)"
+    },
+    {
+      "id": "che-al-optic-q008",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "17A.5"
+          ]
+        }
+      },
+      "q": "A single enantiomer of a halogenoalkane is hydrolysed by aqueous hydroxide ions. The product mixture does not rotate plane-polarised light. What does this suggest about the mechanism?",
+      "options": {
+        "A": "It is SN2: the hydroxide ion attacks from the side opposite the halogen",
+        "B": "It is SN2: the product has the same arrangement as the starting enantiomer",
+        "C": "It is SN1: the carbocation is attacked only from the side the halogen left",
+        "D": "It is SN1: a planar carbocation is attacked equally from both sides"
+      },
+      "answer": "D",
+      "solution": "In \\(\\mathrm{S_{N}1}\\) the halogen leaves first, giving a planar carbocation. The hydroxide ion attacks either face with equal probability, giving a racemic mixture, which is optically inactive. In \\(\\mathrm{S_{N}2}\\), attack from the side opposite the halogen inverts the arrangement and gives a single enantiomer, which is optically active. (Inversion still gives an optically active product.)"
+    },
+    {
+      "id": "che-al-optic-q009",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "17A.5"
+          ]
+        }
+      },
+      "q": "This shows the hydrolysis of one enantiomer of 2-bromobutane by an SN2 mechanism. What is formed?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Mechanism diagram: a hydroxide ion approaches the δ+ carbon of 2-bromobutane from the side opposite the bromine; curly arrows run from the hydroxide lone pair to the carbon and from the C–Br bond to Br. Product: butan-2-ol with OH on the left and the other three groups pointing right, plus Br−.",
+        "atoms": [
+          {
+            "id": "Nu",
+            "el": "HO",
+            "x": -2.5,
+            "y": 0,
+            "charge": "-",
+            "chargeAt": 90,
+            "lp": [
+              -10
+            ]
+          },
+          {
+            "id": "C",
+            "el": "C",
+            "x": 0,
+            "y": 0,
+            "delta": "+",
+            "deltaAt": 300
+          },
+          {
+            "id": "Br",
+            "el": "Br",
+            "x": 1.35,
+            "y": 0,
+            "delta": "-",
+            "deltaAt": 90
+          },
+          {
+            "id": "H",
+            "el": "H",
+            "x": -0.35,
+            "y": 1
+          },
+          {
+            "id": "Et",
+            "el": "H3C",
+            "x": -1.15,
+            "y": -0.35
+          },
+          {
+            "id": "Me",
+            "el": "C2H5",
+            "x": -0.75,
+            "y": -1
+          },
+          {
+            "id": "C2",
+            "el": "C",
+            "x": 6.3,
+            "y": 0
+          },
+          {
+            "id": "O2",
+            "el": "HO",
+            "x": 5.1,
+            "y": 0
+          },
+          {
+            "id": "H2",
+            "el": "H",
+            "x": 6.65,
+            "y": 1
+          },
+          {
+            "id": "Et2",
+            "el": "CH3",
+            "x": 7.25,
+            "y": -0.35
+          },
+          {
+            "id": "Me2",
+            "el": "C2H5",
+            "x": 6.75,
+            "y": -1
+          }
+        ],
+        "bonds": [
+          {
+            "a": "C",
+            "b": "Br"
+          },
+          {
+            "a": "C",
+            "b": "H"
+          },
+          {
+            "a": "C",
+            "b": "Et",
+            "style": "hash"
+          },
+          {
+            "a": "C",
+            "b": "Me",
+            "style": "wedge"
+          },
+          {
+            "a": "C2",
+            "b": "O2"
+          },
+          {
+            "a": "C2",
+            "b": "H2"
+          },
+          {
+            "a": "C2",
+            "b": "Et2",
+            "style": "hash"
+          },
+          {
+            "a": "C2",
+            "b": "Me2",
+            "style": "wedge"
+          }
+        ],
+        "curly": [
+          {
+            "from": {
+              "lp": "Nu",
+              "at": -10
+            },
+            "to": {
+              "atom": "C"
+            },
+            "side": "left",
+            "bend": 0.2
+          },
+          {
+            "from": {
+              "bond": [
+                "C",
+                "Br"
+              ]
+            },
+            "to": {
+              "atom": "Br"
+            },
+            "side": "right",
+            "bend": 0.6
+          }
+        ],
+        "arrows": [
+          {
+            "from": [
+              2.4,
+              0
+            ],
+            "to": [
+              3.9,
+              0
+            ]
+          }
+        ],
+        "text": [
+          {
+            "x": 8.7,
+            "y": 0,
+            "t": "+  Br^-"
+          }
+        ]
+      },
+      "options": {
+        "A": "A racemic mixture of the two enantiomers of butan-2-ol",
+        "B": "A single enantiomer of butan-2-ol, with the same arrangement as the starting material",
+        "C": "A single enantiomer of butan-2-ol, with the arrangement of groups inverted",
+        "D": "Butan-2-ol with no chiral centre"
+      },
+      "answer": "C",
+      "solution": "In one step the hydroxide ion attacks the carbon from the side opposite the bromine as the C–Br bond breaks. The other three groups flip over, like an umbrella blown inside out, so only one enantiomer of butan-2-ol forms, with its arrangement inverted. The product is optically active. (A racemic mixture comes from the planar carbocation of SN1.)"
+    },
+    {
+      "id": "che-al-optic-q010",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.2"
+          ]
+        }
+      },
+      "q": "Which describes the two molecules shown?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Two 3D drawings of 2-chlorobutane. Left: H up, CH3 in the plane on the left, Cl on a solid wedge, C2H5 on a hashed wedge. Right: H up, Cl in the plane on the left, CH3 on a solid wedge, C2H5 on a hashed wedge.",
+        "atoms": [
+          {
+            "id": "A",
+            "el": "C",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "Au",
+            "el": "H",
+            "x": 0,
+            "y": 1.05
+          },
+          {
+            "id": "As",
+            "el": "H3C",
+            "x": -0.95,
+            "y": -0.5
+          },
+          {
+            "id": "Aw",
+            "el": "Cl",
+            "x": 0.95,
+            "y": -0.35
+          },
+          {
+            "id": "Ah",
+            "el": "C2H5",
+            "x": 0.25,
+            "y": -1
+          },
+          {
+            "id": "B",
+            "el": "C",
+            "x": 4.4,
+            "y": 0
+          },
+          {
+            "id": "Bu",
+            "el": "H",
+            "x": 4.4,
+            "y": 1.05
+          },
+          {
+            "id": "Bs",
+            "el": "Cl",
+            "x": 3.45,
+            "y": -0.5
+          },
+          {
+            "id": "Bw",
+            "el": "CH3",
+            "x": 5.3500000000000005,
+            "y": -0.35
+          },
+          {
+            "id": "Bh",
+            "el": "C2H5",
+            "x": 4.65,
+            "y": -1
+          }
+        ],
+        "bonds": [
+          {
+            "a": "A",
+            "b": "Au"
+          },
+          {
+            "a": "A",
+            "b": "As"
+          },
+          {
+            "a": "A",
+            "b": "Aw",
+            "style": "wedge"
+          },
+          {
+            "a": "A",
+            "b": "Ah",
+            "style": "hash"
+          },
+          {
+            "a": "B",
+            "b": "Bu"
+          },
+          {
+            "a": "B",
+            "b": "Bs"
+          },
+          {
+            "a": "B",
+            "b": "Bw",
+            "style": "wedge"
+          },
+          {
+            "a": "B",
+            "b": "Bh",
+            "style": "hash"
+          }
+        ]
+      },
+      "options": {
+        "A": "A pair of enantiomers",
+        "B": "Two drawings of the same molecule",
+        "C": "A pair of structural isomers",
+        "D": "A pair of E/Z isomers"
+      },
+      "answer": "A",
+      "solution": "Both are 2-chlorobutane, so they are not structural isomers, and there is no C=C bond, so no E/Z isomerism. The second drawing has Cl and \\(\\mathrm{CH_{3}}\\) swapped. Swapping any two groups on a chiral centre gives the mirror image, so the two are non-superimposable mirror images: enantiomers. (Rotating a molecule never swaps two of its groups.)"
+    },
+    {
+      "id": "che-al-optic-q011",
+      "difficulty": 1,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "17A.3"
+          ]
+        }
+      },
+      "q": "Why is monochromatic light used when the optical activity of a solution is measured?",
+      "options": {
+        "A": "Only monochromatic light can be plane-polarised",
+        "B": "The angle of rotation depends on the wavelength of the light",
+        "C": "White light would react with the chiral molecules",
+        "D": "Monochromatic light is absorbed less by the solvent"
+      },
+      "answer": "B",
+      "solution": "The angle through which a chiral compound rotates the plane of polarisation depends on the wavelength. Using light of a single wavelength, such as the sodium D line, gives a definite angle that can be compared with data. (White light can be plane-polarised too; the problem is that each wavelength rotates by a different angle.)"
+    },
+    {
+      "id": "che-al-optic-q012",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.1"
+          ]
+        }
+      },
+      "q": "What type of isomers are the two enantiomers of butan-2-ol?",
+      "options": {
+        "A": "Structural isomers: same molecular formula, different structural formula",
+        "B": "Chain isomers: different arrangement of the carbon chain",
+        "C": "Positional isomers: the OH group on a different carbon",
+        "D": "Stereoisomers: same structural formula, different arrangement of atoms in space"
+      },
+      "answer": "D",
+      "solution": "Both enantiomers have the structural formula \\(\\mathrm{CH_{3}CH(OH)CH_{2}CH_{3}}\\). They differ only in the 3D arrangement of the groups round the chiral centre, so they are stereoisomers: non-superimposable mirror images. (Butan-1-ol would be a positional isomer of butan-2-ol.)"
+    },
+    {
+      "id": "che-al-optic-q013",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.4"
+          ]
+        }
+      },
+      "q": "A drug molecule has one chiral centre. Why might a manufacturer go to the expense of making a single enantiomer rather than the racemic mixture?",
+      "options": {
+        "A": "Only one enantiomer may fit the target receptor; the other may be inactive or cause harmful side effects",
+        "B": "A racemic mixture is not stable and slowly decomposes",
+        "C": "The two enantiomers have different molecular formulae, so different doses are needed",
+        "D": "A racemic mixture cannot dissolve in water"
+      },
+      "answer": "A",
+      "solution": "Receptors and enzymes in the body are chiral, so the two enantiomers can act differently: one may have the desired effect while the other does nothing or causes side effects. A single enantiomer avoids giving the patient a dose of the unwanted one. (Enantiomers have the same molecular and structural formula.)"
+    },
+    {
+      "id": "che-al-optic-q014",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.2"
+          ]
+        }
+      },
+      "q": "Which statement about the two enantiomers of lactic acid, 2-hydroxypropanoic acid, is correct?",
+      "options": {
+        "A": "They have different melting points because their shapes differ",
+        "B": "Only one of them reacts with sodium hydroxide",
+        "C": "They have different structural formulae",
+        "D": "They have the same melting point and react in the same way with sodium hydroxide"
+      },
+      "answer": "D",
+      "solution": "Enantiomers have identical physical properties (apart from their effect on plane-polarised light) and identical reactions with reagents that are not chiral, such as sodium hydroxide. Only chiral environments, such as enzymes, can tell them apart. (Their structural formula, \\(\\mathrm{CH_{3}CH(OH)COOH}\\), is the same; only the arrangement in space differs.)"
+    },
+    {
+      "id": "che-al-optic-q015",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7",
+            "3.3.1.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.2",
+            "6A.7"
+          ]
+        }
+      },
+      "q": "How many stereoisomers does pent-3-en-2-ol, \\(\\mathrm{CH_{3}CH=CHCH(OH)CH_{3}}\\), have?",
+      "options": {
+        "A": "2",
+        "B": "3",
+        "C": "4",
+        "D": "6"
+      },
+      "answer": "C",
+      "solution": "Carbon 2 carries H, OH, \\(\\mathrm{CH_{3}}\\) and \\(\\mathrm{CH=CHCH_{3}}\\), so it is a chiral centre with two arrangements. The C=C bond has different groups on each carbon, so it has E and Z forms. Each E/Z form exists as two enantiomers: 2 × 2 = 4. (Counting only the optical isomers, or only the E/Z isomers, leads to 2.)"
+    },
+    {
+      "id": "che-al-optic-q016",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.7"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17A.2"
+          ]
+        }
+      },
+      "q": "Which amino acid has no chiral centre?",
+      "options": {
+        "A": "\\(\\mathrm{H_{2}NCH(CH_{3})COOH}\\), alanine",
+        "B": "\\(\\mathrm{H_{2}NCH_{2}COOH}\\), glycine",
+        "C": "\\(\\mathrm{H_{2}NCH(CH_{2}OH)COOH}\\), serine",
+        "D": "\\(\\mathrm{H_{2}NCH(CH(CH_{3})_{2})COOH}\\), valine"
+      },
+      "answer": "B",
+      "solution": "In glycine the central carbon carries two hydrogen atoms, as well as \\(\\mathrm{NH_{2}}\\) and COOH, so it has only three different groups. In the others the central carbon carries H, \\(\\mathrm{NH_{2}}\\), COOH and a different side chain, making it chiral. (Valine has two \\(\\mathrm{CH_{3}}\\) groups, but on the side-chain carbon, not on the central one.)"
+    }
+  ]
+}

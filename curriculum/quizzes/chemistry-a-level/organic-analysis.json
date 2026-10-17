@@ -1,0 +1,400 @@
+{
+ "schema": "inspire.quiz.v1",
+ "topic": {
+  "id": "chemistry-a-level/organic-analysis",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Organic Analysis: Tests, Mass Spectrometry and IR",
+  "spec": "chemistry-a-level"
+ },
+ "questions": [
+  {
+   "id": "che-al-ana-q001",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17C.12"
+     ]
+    }
+   },
+   "q": "Which test gives a positive result with ethanoic acid but not with ethanol?",
+   "options": {
+    "A": "Warming with acidified potassium dichromate(VI): orange to green",
+    "B": "Shaking with bromine water: orange to colourless",
+    "C": "Adding sodium hydrogencarbonate solution: effervescence of a gas that turns limewater milky",
+    "D": "Warming with Tollens’ reagent: a silver mirror"
+   },
+   "answer": "C",
+   "solution": "Carboxylic acids are acidic enough to react with hydrogencarbonate, releasing carbon dioxide: \\(\\mathrm{CH_{3}COOH + NaHCO_{3} \\rightarrow CH_{3}COONa + CO_{2} + H_{2}O}\\). Ethanol does not react. (Acidified dichromate turns green with ethanol, which is oxidised, but not with ethanoic acid.)"
+  },
+  {
+   "id": "che-al-ana-q002",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "17B.8"
+     ]
+    }
+   },
+   "q": "Which compound gives a silver mirror when warmed with Tollens’ reagent?",
+   "options": {
+    "A": "Propanone",
+    "B": "Propanal",
+    "C": "Propan-2-ol",
+    "D": "Propanoic acid"
+   },
+   "answer": "B",
+   "solution": "Tollens’ reagent is a mild oxidising agent. It oxidises aldehydes, such as propanal, to carboxylic acids, and its silver(I) ions are reduced to metallic silver, which coats the tube as a mirror. Ketones, such as propanone, are not oxidised. (Propan-2-ol is oxidised by acidified dichromate(VI) but not by Tollens’ reagent.)"
+  },
+  {
+   "id": "che-al-ana-q003",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "6C.25",
+      "6E.38",
+      "17C.12"
+     ]
+    }
+   },
+   "q": "A compound decolourises bromine water, gives no effervescence with sodium hydrogencarbonate, and turns warm acidified potassium dichromate(VI) from orange to green. Which compound is it?",
+   "options": {
+    "A": "\\(\\mathrm{CH_{2}=CHCH_{2}OH}\\), prop-2-en-1-ol",
+    "B": "\\(\\mathrm{CH_{2}=CHCOOH}\\), propenoic acid",
+    "C": "\\(\\mathrm{CH_{3}CH_{2}CH_{2}OH}\\), propan-1-ol",
+    "D": "Cyclohexene"
+   },
+   "answer": "A",
+   "solution": "Decolourising bromine water shows a C=C bond, which rules out propan-1-ol. No effervescence with hydrogencarbonate rules out a carboxylic acid, so not propenoic acid. Turning dichromate green shows a primary or secondary alcohol, which cyclohexene lacks. Only prop-2-en-1-ol has both the C=C and the primary OH group. (Each test rules out one compound: use all three.)"
+  },
+  {
+   "id": "che-al-ana-q004",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "7A.1"
+     ]
+    }
+   },
+   "q": "Which peak in the mass spectrum of an organic compound gives its relative molecular mass?",
+   "options": {
+    "A": "The tallest peak in the spectrum",
+    "B": "The peak at the lowest m/z",
+    "C": "The peak at m/z = 15",
+    "D": "The molecular ion peak, the peak of highest m/z made by the whole molecule"
+   },
+   "answer": "D",
+   "solution": "The molecular ion, \\(\\mathrm{M^{+}}\\), is the whole molecule with one electron removed, so its m/z value equals \\(M_{\\text{r}}\\). It is the peak of highest m/z (apart from a very small peak just beyond it from carbon-13). (The tallest peak, the base peak, is usually a stable fragment, not the molecular ion.)"
+  },
+  {
+   "id": "che-al-ana-q005",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19A.1"
+     ]
+    }
+   },
+   "q": "A compound has a molecular ion peak at \\(m/z = 70.0417\\). Which formula fits? (Precise masses: H 1.0078, C 12.0000, N 14.0031, O 15.9949)",
+   "options": {
+    "A": "\\(\\mathrm{C_{5}H_{10}}\\)",
+    "B": "\\(\\mathrm{C_{4}H_{6}O}\\)",
+    "C": "\\(\\mathrm{C_{3}H_{6}N_{2}}\\)",
+    "D": "\\(\\mathrm{C_{3}H_{2}O_{2}}\\)"
+   },
+   "answer": "B",
+   "solution": "All four have an integer mass of 70, so the precise masses decide. \\(\\mathrm{C_{4}H_{6}O}\\): 48.0000 + 6.0468 + 15.9949 = 70.0417, which matches. \\(\\mathrm{C_{5}H_{10}}\\) is 70.0780, \\(\\mathrm{C_{3}H_{6}N_{2}}\\) is 70.0530 and \\(\\mathrm{C_{3}H_{2}O_{2}}\\) is 70.0054. (Rounding the masses to whole numbers makes all four look the same.)"
+  },
+  {
+   "id": "che-al-ana-q006",
+   "difficulty": 2,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "7A.1"
+     ]
+    }
+   },
+   "q": "The mass spectrum of butanone (structure shown) has a large peak at \\(m/z = 43\\). Which ion causes it?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of butanone: a four-carbon chain with a C=O group on the second carbon.",
+    "smiles": "CCC(C)=O",
+    "formula": "C4H8O"
+   },
+   "options": {
+    "A": "\\(\\mathrm{CH_{3}CO^{+}}\\)",
+    "B": "\\(\\mathrm{CH_{3}CH_{2}^{+}}\\)",
+    "C": "\\(\\mathrm{CH_{3}CH_{2}CO^{+}}\\)",
+    "D": "\\(\\mathrm{CH_{3}^{+}}\\)"
+   },
+   "answer": "A",
+   "solution": "Breaking the bond between the carbonyl carbon and the ethyl group gives \\(\\mathrm{CH_{3}CO^{+}}\\): 12.0 + 3(1.0) + 12.0 + 16.0 = 43. The other ions are at 29 (\\(\\mathrm{C_{2}H_{5}^{+}}\\)), 57 (\\(\\mathrm{C_{2}H_{5}CO^{+}}\\)) and 15 (\\(\\mathrm{CH_{3}^{+}}\\)). (Only the fragment carrying the positive charge is detected.)"
+  },
+  {
+   "id": "che-al-ana-q007",
+   "difficulty": 3,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "7A.1"
+     ]
+    }
+   },
+   "q": "Pentan-3-one, \\(\\mathrm{CH_{3}CH_{2}COCH_{2}CH_{3}}\\), shown, gives a peak at \\(m/z = 57\\). Which equation shows how this ion forms?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of pentan-3-one: a five-carbon chain with a C=O group on the middle carbon.",
+    "smiles": "CCC(=O)CC",
+    "formula": "C5H10O"
+   },
+   "options": {
+    "A": "\\(\\mathrm{[CH_{3}CH_{2}COCH_{2}CH_{3}]^{+} \\rightarrow CH_{3}CH_{2}CO\\cdot + CH_{3}CH_{2}^{+}}\\)",
+    "B": "\\(\\mathrm{CH_{3}CH_{2}COCH_{2}CH_{3} \\rightarrow CH_{3}CH_{2}CO^{+} + CH_{3}CH_{2}^{-}}\\)",
+    "C": "\\(\\mathrm{[CH_{3}CH_{2}COCH_{2}CH_{3}]^{+} \\rightarrow CH_{3}CH_{2}CO^{+} + CH_{3}CH_{2}\\cdot}\\)",
+    "D": "\\(\\mathrm{[CH_{3}CH_{2}COCH_{2}CH_{3}]^{+} \\rightarrow CH_{3}CH_{2}CO^{+} + CH_{3}CH_{2}^{+}}\\)"
+   },
+   "answer": "C",
+   "solution": "Fragmentation splits the molecular ion into a positive ion and a radical, and only the ion is detected. \\(\\mathrm{CH_{3}CH_{2}CO^{+}}\\) has m/z = 57, so the ethyl group leaves as a radical. (When the charge stays on the ethyl group instead, the peak appears at 29.)"
+  },
+  {
+   "id": "che-al-ana-q008",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "7B.2"
+     ]
+    }
+   },
+   "q": "Which bond causes a strong absorption at about 1700 \\(\\text{cm}^{-1}\\) in an infrared spectrum?",
+   "options": {
+    "A": "O–H",
+    "B": "C–H",
+    "C": "C–O",
+    "D": "C=O"
+   },
+   "answer": "D",
+   "solution": "A strong, sharp absorption near 1700 \\(\\text{cm}^{-1}\\) is characteristic of the C=O bond in aldehydes, ketones, carboxylic acids and esters. O–H and C–H absorb at higher wavenumbers, roughly 2500 to 3550 \\(\\text{cm}^{-1}\\), and C–O at 1000 to 1300 \\(\\text{cm}^{-1}\\). (C–O and C=O are easy to confuse: a double bond absorbs at a higher wavenumber.)"
+  },
+  {
+   "id": "che-al-ana-q009",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "7B.2"
+     ]
+    }
+   },
+   "q": "The infrared spectrum of a compound with \\(M_{\\text{r}} = 58\\) has a broad absorption at 3350 \\(\\text{cm}^{-1}\\) and an absorption at 1650 \\(\\text{cm}^{-1}\\), and no absorption between 1680 and 1750 \\(\\text{cm}^{-1}\\). Which compound is it?",
+   "options": {
+    "A": "\\(\\mathrm{CH_{3}CH_{2}CHO}\\), propanal",
+    "B": "\\(\\mathrm{CH_{3}COCH_{3}}\\), propanone",
+    "C": "\\(\\mathrm{CH_{2}=CHCH_{2}OH}\\), prop-2-en-1-ol",
+    "D": "\\(\\mathrm{CH_{3}CH_{2}CH_{2}OH}\\), propan-1-ol"
+   },
+   "answer": "C",
+   "solution": "The broad absorption at 3350 \\(\\text{cm}^{-1}\\) is O–H in an alcohol, and 1650 \\(\\text{cm}^{-1}\\) is C=C. With no absorption from 1680 to 1750 \\(\\text{cm}^{-1}\\), there is no C=O, which rules out propanal and propanone. Propan-1-ol has \\(M_{\\text{r}} = 60\\) and no C=C. So it is prop-2-en-1-ol, \\(M_{\\text{r}} = 58\\). (Reading 1650 as C=O points wrongly to a carbonyl compound.)"
+  },
+  {
+   "id": "che-al-ana-q010",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "7B.2"
+     ]
+    }
+   },
+   "q": "Propan-1-ol is oxidised and the product, propanal, is distilled off as it forms. How would the infrared spectrum of the distillate show that it contains no propan-1-ol?",
+   "figure": {
+    "kind": "reaction",
+    "alt": "Reaction scheme: propan-1-ol is oxidised to propanal by acidified potassium dichromate.",
+    "rxn": "CCCO>>CCC=O",
+    "above": "K2Cr2O7 / H^+",
+    "below": "distil"
+   },
+   "options": {
+    "A": "There is no broad O–H absorption at about 3300 \\(\\text{cm}^{-1}\\)",
+    "B": "There is no C=O absorption at about 1700 \\(\\text{cm}^{-1}\\)",
+    "C": "There is no C–H absorption at about 2900 \\(\\text{cm}^{-1}\\)",
+    "D": "There is a broad absorption from 2500 to 3000 \\(\\text{cm}^{-1}\\)"
+   },
+   "answer": "A",
+   "solution": "Propan-1-ol has an O–H bond, which gives a broad absorption centred near 3300, spread over roughly 3200 to 3550 \\(\\text{cm}^{-1}\\). Propanal has no O–H bond, so if that absorption is missing the alcohol has gone. Propanal does show a C=O absorption near 1700 \\(\\text{cm}^{-1}\\), and both compounds show C–H absorptions. (A broad absorption from 2500 to 3000 \\(\\text{cm}^{-1}\\) would mean a carboxylic acid had formed.)"
+  },
+  {
+   "id": "che-al-ana-q011",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.3"
+     ]
+    }
+   },
+   "q": "How is the fingerprint region of an infrared spectrum, below about 1500 \\(\\text{cm}^{-1}\\), used?",
+   "options": {
+    "A": "It shows which functional groups are present",
+    "B": "Its pattern is unique to each compound, so comparing it with a database spectrum identifies the compound",
+    "C": "It gives the relative molecular mass of the compound",
+    "D": "It shows how many hydrogen environments the compound has"
+   },
+   "answer": "B",
+   "solution": "The fingerprint region contains many overlapping absorptions from the whole molecule, giving a pattern unique to each compound. Matching it with the spectrum of a known compound identifies the compound, and extra peaks show impurities. (Functional groups are identified mainly from absorptions above 1500 \\(\\text{cm}^{-1}\\).)"
+  },
+  {
+   "id": "che-al-ana-q012",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.3"
+     ]
+    }
+   },
+   "q": "Why do carbon dioxide, methane and water vapour contribute to global warming?",
+   "options": {
+    "A": "They absorb ultraviolet radiation from the Sun before it reaches the ground",
+    "B": "They react with ozone, letting more radiation reach the surface",
+    "C": "Their bonds absorb infrared radiation given out by the Earth’s surface, trapping energy in the atmosphere",
+    "D": "They reflect visible light from the Sun back towards the Earth"
+   },
+   "answer": "C",
+   "solution": "The Earth’s surface, warmed by sunlight, emits infrared radiation. The bonds in these molecules absorb infrared radiation at their characteristic wavenumbers, so the energy is kept in the atmosphere instead of escaping to space. (Absorbing ultraviolet radiation is what ozone does.)"
+  },
+  {
+   "id": "che-al-ana-q013",
+   "difficulty": 3,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18C.18"
+     ]
+    }
+   },
+   "q": "Complete combustion of 0.880 g of a compound containing only C, H and O gives 1.76 g of \\(\\mathrm{CO_{2}}\\) and 0.720 g of \\(\\mathrm{H_{2}O}\\). Its molecular ion is at \\(m/z = 88\\). What is its molecular formula? (\\(A_{\\text{r}}\\): H 1.0, C 12.0, O 16.0)",
+   "options": {
+    "A": "\\(\\mathrm{C_{2}H_{4}O}\\)",
+    "B": "\\(\\mathrm{C_{5}H_{12}O}\\)",
+    "C": "\\(\\mathrm{C_{4}H_{10}O}\\)",
+    "D": "\\(\\mathrm{C_{4}H_{8}O_{2}}\\)"
+   },
+   "answer": "D",
+   "solution": "C: \\(\\frac{1.76}{44.0}\\) = 0.0400 mol, 0.480 g. H: \\(\\frac{0.720}{18.0}\\) × 2 = 0.0800 mol, 0.0800 g. O: 0.880 − 0.480 − 0.0800 = 0.320 g, 0.0200 mol. Ratio C : H : O = 2 : 4 : 1, so the empirical formula is \\(\\mathrm{C_{2}H_{4}O}\\) (44). As 88 ÷ 44 = 2, the molecular formula is \\(\\mathrm{C_{4}H_{8}O_{2}}\\). (\\(\\mathrm{C_{2}H_{4}O}\\) is only the empirical formula; \\(\\mathrm{C_{5}H_{12}O}\\) has the right mass but the wrong ratio.)"
+  },
+  {
+   "id": "che-al-ana-q014",
+   "difficulty": 2,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "7B.2"
+     ]
+    }
+   },
+   "q": "Using the Edexcel Data Booklet, which absorptions would show that a sample is propanal rather than propanone?",
+   "options": {
+    "A": "Two C–H absorptions, at 2900 to 2820 and at 2775 to 2700 \\(\\text{cm}^{-1}\\)",
+    "B": "A C=O absorption at 1740 to 1720 \\(\\text{cm}^{-1}\\)",
+    "C": "A broad O–H absorption at 3300 to 2500 \\(\\text{cm}^{-1}\\)",
+    "D": "A C=C absorption at 1669 to 1645 \\(\\text{cm}^{-1}\\)"
+   },
+   "answer": "A",
+   "solution": "Both compounds have C=O and alkyl C–H bonds. Only an aldehyde has a hydrogen on the carbonyl carbon, and this C–H bond gives two absorptions, at 2900 to 2820 and 2775 to 2700 \\(\\text{cm}^{-1}\\). (The C=O ranges for aldehydes, 1740 to 1720, and ketones, 1720 to 1700, meet at 1720 \\(\\text{cm}^{-1}\\), so C=O alone is not convincing.)"
+  },
+  {
+   "id": "che-al-ana-q015",
+   "difficulty": 3,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "7A.1",
+      "7B.2",
+      "18C.18"
+     ]
+    }
+   },
+   "q": "An alcohol, \\(\\mathrm{C_{4}H_{10}O}\\), has a broad infrared absorption at 3350 \\(\\text{cm}^{-1}\\). Its mass spectrum has a molecular ion at (m/z = 74) and a peak at (m/z = 31). Which alcohol is it?",
+   "options": {
+    "A": "Butan-2-ol",
+    "B": "Butan-1-ol",
+    "C": "2-methylpropan-2-ol",
+    "D": "Butanal"
+   },
+   "answer": "B",
+   "solution": "The peak at 31 is \\(\\mathrm{CH_{2}OH^{+}}\\), which needs a \\(\\mathrm{CH_{2}OH}\\) group at the end of the chain. Butan-1-ol, \\(\\mathrm{CH_{3}CH_{2}CH_{2}CH_{2}OH}\\), has one; butan-2-ol and 2-methylpropan-2-ol do not. Butanal has no O–H bond, and its molecular ion is at 72. (A broad absorption at 3350 \\(\\text{cm}^{-1}\\) shows an alcohol but not which one: the fragments decide.)"
+  },
+  {
+   "id": "che-al-ana-q016",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.6.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "7B.2"
+     ]
+    }
+   },
+   "q": "The infrared spectrum of a compound, \\(\\mathrm{C_{3}H_{6}O_{2}}\\), shows a very broad absorption from 2500 to 3000 \\(\\text{cm}^{-1}\\) and a strong absorption at 1715 \\(\\text{cm}^{-1}\\). Which compound is it?",
+   "options": {
+    "A": "Methyl ethanoate",
+    "B": "Ethyl methanoate",
+    "C": "Propanoic acid",
+    "D": "3-hydroxypropanal"
+   },
+   "answer": "C",
+   "solution": "The strong absorption at 1715 \\(\\text{cm}^{-1}\\) shows C=O. The very broad absorption from 2500 to 3000 \\(\\text{cm}^{-1}\\) is the O–H of a carboxylic acid, broadened by hydrogen bonding. Both fit propanoic acid, (mathrm{CH_{3}CH_{2}COOH}). (The two esters have C=O but no O–H; 3-hydroxypropanal has an alcohol O–H, which absorbs higher, at about 3200 to 3550 \\(\\text{cm}^{-1}\\).)"
+  }
+ ]
+}

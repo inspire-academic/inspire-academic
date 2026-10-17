@@ -168,3 +168,17 @@ test('chem figure: a card with a mechanism is checked and published with its dra
   const out = C.publishCard(card, katex);
   assert.match(out.afig, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"[^>]*class="pg-svg cf-svg"/, 'drawn when published, so a phone needs no drawing script');
 });
+
+test('chem figure: every chemistry drawing in the quiz files is sound and draws', () => {
+  const quizzes = require('../scripts/quizzes/build.js').topics();
+  const index = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/chem/structures/index.json'), 'utf8'));
+  const opts = { structures: index, structureSvg: key => fs.readFileSync(path.join(ROOT, 'assets/chem/structures', key + '.svg'), 'utf8') };
+  let n = 0;
+  for (const t of quizzes) for (const q of t.data.questions) {
+    if (!q.figure || q.figure.kind === 'graph') continue;
+    n++;
+    assert.deepEqual(Figures.check(q.figure, opts), [], q.id);
+    assert.doesNotMatch(Figures.svg(q.figure, opts), /NaN|undefined|<script/, q.id);
+  }
+  if (quizzes.some(t => t.id.startsWith('chemistry-a-level/'))) assert.ok(n > 0, 'the Chemistry quizzes carry drawings');
+});

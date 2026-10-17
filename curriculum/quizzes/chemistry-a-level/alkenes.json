@@ -1,0 +1,872 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/alkenes",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Alkenes",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-alkene-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.18"
+          ]
+        }
+      },
+      "q": "Which molecular formula could be an alkene with one C=C double bond and no ring?",
+      "options": {
+        "A": "\\(\\mathrm{C_{5}H_{12}}\\)",
+        "B": "\\(\\mathrm{C_{5}H_{10}}\\)",
+        "C": "\\(\\mathrm{C_{5}H_{8}}\\)",
+        "D": "\\(\\mathrm{C_{6}H_{6}}\\)"
+      },
+      "answer": "B",
+      "solution": "Alkenes with one C=C double bond have the general formula \\(\\mathrm{C_{n}H_{2n}}\\). With five carbons that is \\(\\mathrm{C_{5}H_{10}}\\). (\\(\\mathrm{C_{5}H_{12}}\\) fits \\(\\mathrm{C_{n}H_{2n+2}}\\), the alkanes.)"
+    },
+    {
+      "id": "che-al-alkene-q002",
+      "difficulty": 1,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "6C.20"
+          ]
+        }
+      },
+      "q": "Which describes the bonding in a C=C double bond?",
+      "options": {
+        "A": "Two σ-bonds, each from end-on overlap of orbitals",
+        "B": "One σ-bond, from sideways overlap of p-orbitals, and one π-bond, from end-on overlap",
+        "C": "One σ-bond, from end-on overlap of orbitals, and one π-bond, from sideways overlap of p-orbitals",
+        "D": "Two π-bonds, each from sideways overlap of p-orbitals"
+      },
+      "answer": "C",
+      "solution": "The first bond between the carbons is a σ-bond, formed by end-on (head-on) overlap between the nuclei. The second is a π-bond, formed by sideways overlap of a p-orbital on each carbon, with electron density above and below the plane. (Mixing up which overlap gives which bond is a common slip.)"
+    },
+    {
+      "id": "che-al-alkene-q003",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.21"
+          ]
+        }
+      },
+      "q": "What is an electrophile?",
+      "options": {
+        "A": "An electron pair acceptor",
+        "B": "An electron pair donor",
+        "C": "A species with an unpaired electron",
+        "D": "A proton donor"
+      },
+      "answer": "A",
+      "solution": "An electrophile is an electron pair acceptor: it is attracted to a region of high electron density, such as a C=C double bond, and accepts a pair of electrons to form a new bond. (An electron pair donor is a nucleophile.)"
+    },
+    {
+      "id": "che-al-alkene-q004",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.25"
+          ]
+        }
+      },
+      "q": "Cyclohexene and cyclohexane are both colourless liquids. Which result is seen only with cyclohexene?",
+      "options": {
+        "A": "Shaken with bromine water, the mixture turns from colourless to orange",
+        "B": "Warmed with acidified potassium dichromate(VI), the mixture turns from orange to green",
+        "C": "Warmed with Tollens’ reagent, a silver mirror forms",
+        "D": "Shaken with bromine water, the mixture turns from orange to colourless"
+      },
+      "answer": "D",
+      "solution": "Bromine adds across the C=C double bond of cyclohexene, using up the orange bromine, so the bromine water is decolourised. Cyclohexane has no C=C bond and the orange colour stays. (Say colourless, not clear: a coloured solution can be clear.)"
+    },
+    {
+      "id": "che-al-alkene-q005",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.24"
+          ]
+        }
+      },
+      "q": "In the first step of this mechanism, which species acts as the electrophile?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Mechanism diagram: ethene beside an H–Br molecule with δ+ on H and δ− on Br. Curly arrows go from the C=C bond to the H, and from the H–Br bond to the Br. A carbocation then forms, and an arrow goes from a lone pair on the bromide ion to the positive carbon. Product: CH3CH2Br.",
+        "atoms": [
+          {
+            "id": "C1",
+            "el": "C",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "C2",
+            "el": "C",
+            "x": 1.2,
+            "y": 0
+          },
+          {
+            "id": "a1",
+            "el": "H",
+            "x": -0.7,
+            "y": 0.7
+          },
+          {
+            "id": "a2",
+            "el": "H",
+            "x": -0.7,
+            "y": -0.7
+          },
+          {
+            "id": "a3",
+            "el": "H",
+            "x": 1.9,
+            "y": 0.7
+          },
+          {
+            "id": "a4",
+            "el": "H",
+            "x": 1.9,
+            "y": -0.7
+          },
+          {
+            "id": "E",
+            "el": "H",
+            "x": 0.6,
+            "y": 1.6,
+            "delta": "+",
+            "deltaAt": 180
+          },
+          {
+            "id": "Y",
+            "el": "Br",
+            "x": 0.6,
+            "y": 3,
+            "delta": "-",
+            "deltaAt": 180
+          },
+          {
+            "id": "D1",
+            "el": "C",
+            "x": 4.6,
+            "y": 0,
+            "charge": "+",
+            "chargeAt": 300
+          },
+          {
+            "id": "D2",
+            "el": "C",
+            "x": 5.8,
+            "y": 0
+          },
+          {
+            "id": "b1",
+            "el": "H",
+            "x": 3.8999999999999995,
+            "y": 0.7
+          },
+          {
+            "id": "b2",
+            "el": "H",
+            "x": 3.8999999999999995,
+            "y": -0.7
+          },
+          {
+            "id": "b3",
+            "el": "H",
+            "x": 6.5,
+            "y": 0.7
+          },
+          {
+            "id": "b4",
+            "el": "H",
+            "x": 6.5,
+            "y": -0.7
+          },
+          {
+            "id": "bE",
+            "el": "H",
+            "x": 5.8,
+            "y": -1.1
+          },
+          {
+            "id": "Ym",
+            "el": "Br",
+            "x": 4.6,
+            "y": 2,
+            "charge": "-",
+            "chargeAt": 45,
+            "lp": [
+              270,
+              90,
+              180
+            ]
+          }
+        ],
+        "bonds": [
+          {
+            "a": "C1",
+            "b": "C2",
+            "order": 2
+          },
+          {
+            "a": "C1",
+            "b": "a1"
+          },
+          {
+            "a": "C1",
+            "b": "a2"
+          },
+          {
+            "a": "C2",
+            "b": "a3"
+          },
+          {
+            "a": "C2",
+            "b": "a4"
+          },
+          {
+            "a": "E",
+            "b": "Y"
+          },
+          {
+            "a": "D1",
+            "b": "D2"
+          },
+          {
+            "a": "D1",
+            "b": "b1"
+          },
+          {
+            "a": "D1",
+            "b": "b2"
+          },
+          {
+            "a": "D2",
+            "b": "b3"
+          },
+          {
+            "a": "D2",
+            "b": "b4"
+          },
+          {
+            "a": "D2",
+            "b": "bE"
+          }
+        ],
+        "curly": [
+          {
+            "from": {
+              "bond": [
+                "C1",
+                "C2"
+              ]
+            },
+            "to": {
+              "atom": "E"
+            },
+            "side": "right",
+            "bend": 0.45
+          },
+          {
+            "from": {
+              "bond": [
+                "E",
+                "Y"
+              ]
+            },
+            "to": {
+              "atom": "Y"
+            },
+            "side": "right",
+            "bend": 0.6
+          },
+          {
+            "from": {
+              "lp": "Ym",
+              "at": 270
+            },
+            "to": {
+              "atom": "D1"
+            },
+            "side": "left",
+            "bend": 0.3
+          }
+        ],
+        "arrows": [
+          {
+            "from": [
+              2.45,
+              0.4
+            ],
+            "to": [
+              3.25,
+              0.4
+            ]
+          },
+          {
+            "from": [
+              7.3,
+              0
+            ],
+            "to": [
+              8.3,
+              0
+            ]
+          }
+        ],
+        "text": [
+          {
+            "x": 8.5,
+            "y": 0,
+            "t": "CH3CH2Br"
+          }
+        ]
+      },
+      "options": {
+        "A": "Ethene, through its C=C double bond",
+        "B": "Hydrogen bromide, through its δ+ hydrogen atom",
+        "C": "The bromide ion",
+        "D": "A bromine radical"
+      },
+      "answer": "B",
+      "solution": "In the first step, the electron-rich C=C bond donates a pair of electrons to the δ+ hydrogen of HBr. HBr accepts the pair, so it is the electrophile; ethene is the electron pair donor. The bromide ion attacks the carbocation in the second step. (No radicals form: the H–Br bond breaks heterolytically.)"
+    },
+    {
+      "id": "che-al-alkene-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.24"
+          ]
+        }
+      },
+      "q": "Propene reacts with hydrogen bromide. Which intermediate leads to the major product?",
+      "options": {
+        "A": "\\(\\mathrm{CH_{3}CH_{2}CH_{2}^{+}}\\), a primary carbocation",
+        "B": "\\(\\mathrm{CH_{3}CH^{+}CH_{3}}\\), a secondary carbocation",
+        "C": "\\(\\mathrm{CH_{3}CHCH_{3}\\cdot}\\), a secondary radical",
+        "D": "\\(\\mathrm{CH_{3}CH_{2}CH_{2}^{-}}\\), a carbanion"
+      },
+      "answer": "B",
+      "solution": "Hydrogen adds to the \\(\\mathrm{CH_{2}}\\) end, leaving the positive charge on the middle carbon, which carries two alkyl groups: a secondary carbocation. This is more stable than the primary carbocation, so this route is faster and 2-bromopropane is the major product. (The primary carbocation leads to the minor product, 1-bromopropane.)"
+    },
+    {
+      "id": "che-al-alkene-q007",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.24"
+          ]
+        }
+      },
+      "q": "This alkene reacts with hydrogen bromide. What is the major product?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of 2-methylbut-2-ene: a four-carbon chain with a double bond between carbons 2 and 3 and a methyl branch on carbon 2.",
+        "smiles": "CC=C(C)C",
+        "formula": "C5H10"
+      },
+      "options": {
+        "A": "2-bromo-3-methylbutane",
+        "B": "1-bromo-2-methylbutane",
+        "C": "2-methylbutan-2-ol",
+        "D": "2-bromo-2-methylbutane"
+      },
+      "answer": "D",
+      "solution": "Adding H to the CH carbon of the double bond leaves the positive charge on the carbon that carries two methyl groups and the chain: a tertiary carbocation, the most stable possible. Bromide then bonds there, giving 2-bromo-2-methylbutane. (2-bromo-3-methylbutane comes from the less stable secondary carbocation and is the minor product.)"
+    },
+    {
+      "id": "che-al-alkene-q008",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.24"
+          ]
+        }
+      },
+      "q": "Why is 2-bromopropane, rather than 1-bromopropane, the major product when propene reacts with hydrogen bromide?",
+      "options": {
+        "A": "The secondary carbocation is more stable, because two alkyl groups push electron density towards its positive carbon",
+        "B": "Hydrogen atoms are attracted to the carbon that already has more hydrogen atoms",
+        "C": "2-bromopropane is a more stable molecule than 1-bromopropane",
+        "D": "The primary carbocation has more alkyl groups to stabilise the positive charge"
+      },
+      "answer": "A",
+      "solution": "The product depends on which carbocation forms in the first step. Alkyl groups release electron density (a positive inductive effect) towards the positive carbon, spreading its charge. The secondary carbocation has two alkyl groups and the primary only one, so the secondary forms more readily. (The rule that H joins the carbon with more H is a pattern, not the reason.)"
+    },
+    {
+      "id": "che-al-alkene-q009",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.5.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.22"
+          ]
+        }
+      },
+      "q": "Which reagent and conditions carry out this conversion industrially?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Reaction scheme: ethene is converted into ethanol. A question mark stands over the arrow in place of the reagent and conditions.",
+        "rxn": "C=C>>CCO",
+        "above": "?"
+      },
+      "options": {
+        "A": "Aqueous sodium hydroxide, heated under reflux",
+        "B": "Hydrogen with a nickel catalyst, about 150 °C",
+        "C": "Steam with a phosphoric acid catalyst, about 300 °C and 60 atm",
+        "D": "Yeast in water, about 35 °C, with air kept out"
+      },
+      "answer": "C",
+      "solution": "Ethanol is made industrially by hydration: ethene and steam react over a phosphoric acid catalyst at about 300 °C and 60 atm. (Yeast ferments glucose, not ethene; hydrogen and nickel would give ethane.)"
+    },
+    {
+      "id": "che-al-alkene-q010",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "6C.22"
+          ]
+        }
+      },
+      "q": "Ethene is shaken with acidified potassium manganate(VII) at room temperature. Which gives the organic product and the colour change?",
+      "options": {
+        "A": "Ethane-1,2-diol; purple to colourless",
+        "B": "Ethanol; purple to colourless",
+        "C": "Ethane-1,2-diol; orange to green",
+        "D": "Ethanoic acid; colourless to purple"
+      },
+      "answer": "A",
+      "solution": "Acidified manganate(VII) oxidises the C=C bond, adding an OH group to each carbon to give ethane-1,2-diol, \\(\\mathrm{HOCH_{2}CH_{2}OH}\\). The purple manganate(VII) is reduced, so the solution turns colourless. (Orange to green is the colour change of acidified dichromate(VI).)"
+    },
+    {
+      "id": "che-al-alkene-q011",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        }
+      },
+      "q": "Ethene reacts with cold, concentrated sulfuric acid, and the product is then warmed with water to give ethanol. What is the overall role of the sulfuric acid?",
+      "options": {
+        "A": "An oxidising agent, because it adds an oxygen atom to ethene",
+        "B": "A dehydrating agent, because it removes water from the product",
+        "C": "A reactant, because it is used up to form ethyl hydrogensulfate",
+        "D": "A catalyst, because it is used in the first step and re-formed in the second"
+      },
+      "answer": "D",
+      "solution": "Ethene adds \\(\\mathrm{H_{2}SO_{4}}\\) to form ethyl hydrogensulfate, \\(\\mathrm{CH_{3}CH_{2}OSO_{2}OH}\\). Warming with water hydrolyses this to ethanol and \\(\\mathrm{H_{2}SO_{4}}\\) again. Since the acid is regenerated, overall it is a catalyst. (It is used up in the first step, but only for a time.)"
+    },
+    {
+      "id": "che-al-alkene-q012",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.22"
+          ]
+        }
+      },
+      "q": "5.60 g of an alkene, \\(\\mathrm{C_{n}H_{2n}}\\), reacts exactly with 16.0 g of bromine, \\(\\mathrm{Br_{2}}\\). What is the molecular formula of the alkene? (\\(A_{\\text{r}}\\): H 1.0, C 12.0, Br 79.9)",
+      "options": {
+        "A": "\\(\\mathrm{C_{2}H_{4}}\\)",
+        "B": "\\(\\mathrm{C_{3}H_{6}}\\)",
+        "C": "\\(\\mathrm{C_{4}H_{8}}\\)",
+        "D": "\\(\\mathrm{C_{5}H_{10}}\\)"
+      },
+      "answer": "C",
+      "solution": "One C=C bond adds one \\(\\mathrm{Br_{2}}\\). Moles of \\(\\mathrm{Br_{2}}\\) = \\(\\frac{16.0}{159.8}\\) = 0.100 mol, so there are 0.100 mol of alkene. \\(M_{\\text{r}} = \\frac{5.60}{0.100}\\) = 56. \\(\\mathrm{C_{n}H_{2n}}\\) has \\(M_{\\text{r}} = 14n\\), so \\(n = 4\\): \\(\\mathrm{C_{4}H_{8}}\\). (Dividing by 79.9, the mass of one bromine atom, makes the moles twice as large and leads to \\(\\mathrm{C_{2}H_{4}}\\).)"
+    },
+    {
+      "id": "che-al-alkene-q013",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.26"
+          ]
+        }
+      },
+      "q": "This is a section of an addition polymer. Which monomer was it made from?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Displayed formula of a section of a polymer chain: six carbons in a row, bonds continuing at both ends; every carbon has a hydrogen above it, and alternate carbons have a hydrogen or a chlorine below.",
+        "atoms": [
+          {
+            "id": "e1",
+            "el": "",
+            "x": -1,
+            "y": 0
+          },
+          {
+            "id": "e2",
+            "el": "",
+            "x": 6,
+            "y": 0
+          },
+          {
+            "id": "c0",
+            "el": "C",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "u0",
+            "el": "H",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "id": "d0",
+            "el": "H",
+            "x": 0,
+            "y": -1
+          },
+          {
+            "id": "c1",
+            "el": "C",
+            "x": 1,
+            "y": 0
+          },
+          {
+            "id": "u1",
+            "el": "H",
+            "x": 1,
+            "y": 1
+          },
+          {
+            "id": "d1",
+            "el": "Cl",
+            "x": 1,
+            "y": -1
+          },
+          {
+            "id": "c2",
+            "el": "C",
+            "x": 2,
+            "y": 0
+          },
+          {
+            "id": "u2",
+            "el": "H",
+            "x": 2,
+            "y": 1
+          },
+          {
+            "id": "d2",
+            "el": "H",
+            "x": 2,
+            "y": -1
+          },
+          {
+            "id": "c3",
+            "el": "C",
+            "x": 3,
+            "y": 0
+          },
+          {
+            "id": "u3",
+            "el": "H",
+            "x": 3,
+            "y": 1
+          },
+          {
+            "id": "d3",
+            "el": "Cl",
+            "x": 3,
+            "y": -1
+          },
+          {
+            "id": "c4",
+            "el": "C",
+            "x": 4,
+            "y": 0
+          },
+          {
+            "id": "u4",
+            "el": "H",
+            "x": 4,
+            "y": 1
+          },
+          {
+            "id": "d4",
+            "el": "H",
+            "x": 4,
+            "y": -1
+          },
+          {
+            "id": "c5",
+            "el": "C",
+            "x": 5,
+            "y": 0
+          },
+          {
+            "id": "u5",
+            "el": "H",
+            "x": 5,
+            "y": 1
+          },
+          {
+            "id": "d5",
+            "el": "Cl",
+            "x": 5,
+            "y": -1
+          }
+        ],
+        "bonds": [
+          {
+            "a": "e1",
+            "b": "c0"
+          },
+          {
+            "a": "c5",
+            "b": "e2"
+          },
+          {
+            "a": "c0",
+            "b": "c1"
+          },
+          {
+            "a": "c1",
+            "b": "c2"
+          },
+          {
+            "a": "c2",
+            "b": "c3"
+          },
+          {
+            "a": "c3",
+            "b": "c4"
+          },
+          {
+            "a": "c4",
+            "b": "c5"
+          },
+          {
+            "a": "c0",
+            "b": "u0"
+          },
+          {
+            "a": "c0",
+            "b": "d0"
+          },
+          {
+            "a": "c1",
+            "b": "u1"
+          },
+          {
+            "a": "c1",
+            "b": "d1"
+          },
+          {
+            "a": "c2",
+            "b": "u2"
+          },
+          {
+            "a": "c2",
+            "b": "d2"
+          },
+          {
+            "a": "c3",
+            "b": "u3"
+          },
+          {
+            "a": "c3",
+            "b": "d3"
+          },
+          {
+            "a": "c4",
+            "b": "u4"
+          },
+          {
+            "a": "c4",
+            "b": "d4"
+          },
+          {
+            "a": "c5",
+            "b": "u5"
+          },
+          {
+            "a": "c5",
+            "b": "d5"
+          }
+        ]
+      },
+      "options": {
+        "A": "\\(\\mathrm{CHCl=CHCl}\\), 1,2-dichloroethene",
+        "B": "\\(\\mathrm{CH_{2}=CH_{2}}\\), ethene",
+        "C": "\\(\\mathrm{CH_{2}=CHCl}\\), chloroethene",
+        "D": "\\(\\mathrm{CH_{2}=CCl_{2}}\\), 1,1-dichloroethene"
+      },
+      "answer": "C",
+      "solution": "The repeating unit is two carbons long: one carbon carries two hydrogens and the next a hydrogen and a chlorine. Putting back the double bond between those two carbons gives \\(\\mathrm{CH_{2}=CHCl}\\), chloroethene, and the polymer is poly(chloroethene), PVC. (Taking one carbon as the repeating unit misses that only every other carbon carries Cl.)"
+    },
+    {
+      "id": "che-al-alkene-q014",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.24"
+          ]
+        }
+      },
+      "q": "Bromine, \\(\\mathrm{Br_{2}}\\), is a non-polar molecule. How does it act as an electrophile when it reacts with ethene?",
+      "options": {
+        "A": "The high electron density of the C=C bond repels electrons in the Br–Br bond, inducing a dipole",
+        "B": "Bromine molecules split into bromine radicals, which attack the double bond",
+        "C": "Bromine is more electronegative than carbon, so a permanent dipole forms",
+        "D": "Ethene donates a proton to the bromine molecule"
+      },
+      "answer": "A",
+      "solution": "As a \\(\\mathrm{Br_{2}}\\) molecule approaches the C=C bond, the π electrons repel the electrons in the Br–Br bond. The nearer bromine becomes δ+ and the further one δ−, so the near bromine accepts a pair of electrons from the double bond. (Radicals form only in UV light, and this mechanism is electrophilic addition.)"
+    },
+    {
+      "id": "che-al-alkene-q015",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.23"
+          ]
+        }
+      },
+      "q": "In the reaction of ethene with hydrogen bromide, how does the H–Br bond break?",
+      "options": {
+        "A": "Homolytically: one bonding electron goes to each atom",
+        "B": "Heterolytically: both bonding electrons go to the hydrogen, forming a hydride ion",
+        "C": "Homolytically, forming a hydrogen ion and a bromide ion",
+        "D": "Heterolytically: both bonding electrons go to the bromine, forming a bromide ion"
+      },
+      "answer": "D",
+      "solution": "Bromine is more electronegative than hydrogen, so when the C=C bond attacks the δ+ hydrogen, the H–Br bond pair moves onto the bromine. Both electrons go to one atom, which is heterolytic fission, giving \\(\\mathrm{Br^{-}}\\). (Homolytic fission gives radicals, not ions.)"
+    },
+    {
+      "id": "che-al-alkene-q016",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.24"
+          ]
+        }
+      },
+      "q": "Which alkene gives only one structural isomer when it reacts with hydrogen bromide?",
+      "options": {
+        "A": "Propene",
+        "B": "But-1-ene",
+        "C": "But-2-ene",
+        "D": "2-methylbut-2-ene"
+      },
+      "answer": "C",
+      "solution": "But-2-ene is symmetrical: whichever carbon of the double bond the hydrogen joins, the bromine ends up on a carbon next to an end methyl group, so the only product is 2-bromobutane. The other alkenes are unsymmetrical, so they give a major and a minor product. (2-methylbut-2-ene also has a C=C in the middle, but its two ends differ.)"
+    },
+    {
+      "id": "che-al-alkene-q017",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.4.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.26"
+          ]
+        }
+      },
+      "q": "Why does poly(ethene) not decolourise bromine water, although it is made from ethene?",
+      "options": {
+        "A": "Its chains are too long to dissolve in water",
+        "B": "Its chains have no C=C double bonds: the polymer is saturated",
+        "C": "Its C=C bonds are protected inside the coiled chains",
+        "D": "Bromine reacts only with gases, not with solids"
+      },
+      "answer": "B",
+      "solution": "When ethene polymerises, the C=C bond in each monomer opens to form single C–C bonds joining the chain. The polymer is saturated, with no double bonds for bromine to add to. (The name poly(ethene) does not mean the polymer still contains ethene.)"
+    }
+  ]
+}

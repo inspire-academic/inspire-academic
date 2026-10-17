@@ -18,7 +18,8 @@ const base = () => ({
   y: { label: 'velocity / m s⁻¹', min: 0, max: 20 },
   curves: [{ fn: { kind: 'linear', m: 2, c: 0 } }]
 });
-const figures = build.topics().flatMap(t => t.data.questions.filter(q => q.figure).map(q => ({ id: q.id, figure: q.figure })));
+// Graphs only: chemistry drawings in question files are held to tests/chem-figure.test.js.
+const figures = build.topics().flatMap(t => t.data.questions.filter(q => q.figure && q.figure.kind === 'graph').map(q => ({ id: q.id, figure: q.figure })));
 
 test('graph: every figure in the question files is sound and draws', () => {
   assert.ok(figures.length >= 10, 'the graph questions have graphs');

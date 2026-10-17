@@ -1,0 +1,452 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/organic-synthesis",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Organic Synthesis",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-synth-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.14"
+          ]
+        }
+      },
+      "q": "A company can make the same product by several routes. Which route is likely to be the most sustainable?",
+      "options": {
+        "A": "A route with fewer steps and a high percentage atom economy, using non-hazardous starting materials",
+        "B": "A route with more steps, so each step can be carried out at a lower temperature",
+        "C": "A route that uses a large volume of an organic solvent to dissolve the reactants",
+        "D": "A route with a high percentage yield but in which most of the atoms end up in waste products"
+      },
+      "answer": "A",
+      "solution": "Each extra step loses product and uses more energy, solvent and materials, so fewer steps is better. A high atom economy means most of the reactant atoms end up in the product rather than as waste. Avoiding solvents and hazardous starting materials reduces waste and risk."
+    },
+    {
+      "id": "che-al-synth-q002",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.14"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18C.19"
+          ]
+        }
+      },
+      "q": "A three-step synthesis has percentage yields of 75%, 80% and 60% for its three steps. What is the overall percentage yield?",
+      "options": {
+        "A": "24%",
+        "B": "36%",
+        "C": "60%",
+        "D": "72%"
+      },
+      "answer": "B",
+      "solution": "The yields multiply, because each step works on only the product of the step before. (A common slip is to average the yields.) Overall yield \\(= 0.75 \\times 0.80 \\times 0.60 \\times 100 = 36\\%\\)."
+    },
+    {
+      "id": "che-al-synth-q003",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.5.2",
+            "3.3.14"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6E.38",
+            "18C.19"
+          ]
+        }
+      },
+      "q": "Which reagents and conditions convert propan-1-ol into propanoic acid, as shown?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Propan-1-ol is converted into propanoic acid; the reagents over the arrow are missing.",
+        "rxn": "CCCO>>CCC(=O)O",
+        "above": "?"
+      },
+      "options": {
+        "A": "Acidified potassium dichromate(VI), with the product distilled off as it forms",
+        "B": "Concentrated sulfuric acid, heated to 170 °C",
+        "C": "Excess acidified potassium dichromate(VI), heated under reflux",
+        "D": "Lithium tetrahydridoaluminate(III) in dry ether"
+      },
+      "answer": "C",
+      "solution": "A primary alcohol is oxidised first to an aldehyde and then to a carboxylic acid. Heating under reflux with excess oxidising agent keeps the aldehyde in the flask until it is oxidised further. Distilling the product off as it forms gives the aldehyde, propanal, instead."
+    },
+    {
+      "id": "che-al-synth-q004",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.5.1",
+            "3.3.5.2",
+            "3.3.14"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6C.22",
+            "6E.38",
+            "18C.19"
+          ]
+        }
+      },
+      "q": "Which two-step route converts propene into propanone, as shown?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Propene is converted into propanone in two steps.",
+        "rxn": "CC=C>>CC(C)=O",
+        "above": "two steps"
+      },
+      "options": {
+        "A": "Step 1: hydrogen with a nickel catalyst. Step 2: acidified potassium dichromate(VI), heated under reflux.",
+        "B": "Step 1: aqueous sodium hydroxide. Step 2: acidified potassium dichromate(VI), distilled.",
+        "C": "Step 1: steam with a phosphoric acid catalyst. Step 2: sodium borohydride.",
+        "D": "Step 1: steam with a phosphoric acid catalyst. Step 2: acidified potassium dichromate(VI), heated under reflux."
+      },
+      "answer": "D",
+      "solution": "Hydration of propene puts the OH mainly on the middle carbon (via the more stable secondary carbocation), giving propan-2-ol. Oxidising a secondary alcohol with acidified dichromate(VI) gives a ketone, propanone. Hydrogenation would give propane, which cannot be oxidised this way; sodium borohydride is a reducing agent."
+    },
+    {
+      "id": "che-al-synth-q005",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.11.1",
+            "3.3.14"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18B.11",
+            "18C.19"
+          ]
+        }
+      },
+      "q": "Which route converts bromoethane, \\(\\mathrm{CH_{3}CH_{2}Br}\\), into propylamine, \\(\\mathrm{CH_{3}CH_{2}CH_{2}NH_{2}}\\)?",
+      "options": {
+        "A": "Excess ammonia in ethanol, heated in a sealed tube",
+        "B": "Potassium cyanide in ethanol, heated under reflux; then reduction with hydrogen and a nickel catalyst",
+        "C": "Aqueous potassium cyanide at room temperature; then hydrolysis with dilute hydrochloric acid",
+        "D": "Aqueous sodium hydroxide, heated under reflux; then excess ammonia"
+      },
+      "answer": "B",
+      "solution": "The product has one more carbon than the starting material, so the chain must be lengthened with cyanide: \\(\\mathrm{CH_{3}CH_{2}Br + CN^{-} \\rightarrow CH_{3}CH_{2}CN + Br^{-}}\\). Reducing the nitrile (\\(\\mathrm{H_{2}}\\)/Ni, or \\(\\mathrm{LiAlH_{4}}\\)) gives \\(\\mathrm{CH_{3}CH_{2}CH_{2}NH_{2}}\\). Ammonia alone gives ethylamine, with no extra carbon; hydrolysing the nitrile gives propanoic acid."
+    },
+    {
+      "id": "che-al-synth-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.2",
+            "3.3.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.4",
+            "18B.12"
+          ]
+        }
+      },
+      "q": "Which two-step route converts benzene into phenylamine?",
+      "options": {
+        "A": "Step 1: concentrated nitric and sulfuric acids, below 55 °C. Step 2: tin and concentrated hydrochloric acid, then sodium hydroxide.",
+        "B": "Step 1: chloromethane and aluminium chloride. Step 2: excess ammonia in ethanol.",
+        "C": "Step 1: bromine with iron(III) bromide. Step 2: excess ammonia in ethanol, heated in a sealed tube.",
+        "D": "Step 1: tin and concentrated hydrochloric acid. Step 2: concentrated nitric and sulfuric acids."
+      },
+      "answer": "A",
+      "solution": "Nitration gives nitrobenzene, and the nitro group is then reduced to an amine by tin and concentrated hydrochloric acid; sodium hydroxide releases the free amine from its salt. A halogen on a benzene ring is not substituted by ammonia under these conditions, because the C–Br bond is strengthened by the ring."
+    },
+    {
+      "id": "che-al-synth-q007",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8",
+            "3.3.14"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.8",
+            "18C.19"
+          ]
+        }
+      },
+      "q": "Propanal, shown, reacts with HCN, from KCN and dilute acid, to form compound X. What is X?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of propanal: a three-carbon chain ending in a CHO group.",
+        "smiles": "CCC=O",
+        "formula": "C3H6O"
+      },
+      "options": {
+        "A": "Butanenitrile",
+        "B": "Propanenitrile",
+        "C": "2-hydroxybutanenitrile",
+        "D": "1-hydroxypropanenitrile"
+      },
+      "answer": "C",
+      "solution": "Cyanide adds across the C=O (nucleophilic addition): \\(\\mathrm{CH_{3}CH_{2}CHO + HCN \\rightarrow CH_{3}CH_{2}CH(OH)CN}\\). The nitrile carbon becomes carbon 1 of a four-carbon chain, and the OH is on carbon 2: 2-hydroxybutanenitrile. (A common slip is to leave the nitrile carbon out of the count.)"
+    },
+    {
+      "id": "che-al-synth-q008",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18C.20"
+          ]
+        }
+      },
+      "q": "Ethylmagnesium bromide in dry ether reacts with carbon dioxide, and the product is then treated with dilute acid. What is the organic product?",
+      "options": {
+        "A": "Ethanoic acid",
+        "B": "Ethanol",
+        "C": "Propan-1-ol",
+        "D": "Propanoic acid"
+      },
+      "answer": "D",
+      "solution": "The Grignard reagent's ethyl group bonds to the carbon of \\(\\mathrm{CO_{2}}\\), adding one carbon to the chain: \\(\\mathrm{CH_{3}CH_{2}MgBr + CO_{2} \\rightarrow CH_{3}CH_{2}COOMgBr}\\), and acid gives \\(\\mathrm{CH_{3}CH_{2}COOH}\\), propanoic acid. (A common slip is to forget the extra carbon and give ethanoic acid.)"
+    },
+    {
+      "id": "che-al-synth-q009",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18C.20"
+          ]
+        }
+      },
+      "q": "Ethylmagnesium bromide reacts with propanone, shown, in dry ether, and the product is then hydrolysed with dilute acid. What is the organic product?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of propanone: a C=O carbon with a methyl group on each side.",
+        "smiles": "CC(C)=O",
+        "formula": "C3H6O"
+      },
+      "options": {
+        "A": "2-methylbutan-2-ol",
+        "B": "Pentan-3-ol",
+        "C": "Butan-2-ol",
+        "D": "2-methylbutanoic acid"
+      },
+      "answer": "A",
+      "solution": "The ethyl group attacks the carbonyl carbon of propanone, which already carries two methyl groups; acid then gives the OH. The product is \\(\\mathrm{(CH_{3})_{2}C(OH)CH_{2}CH_{3}}\\): a four-carbon chain with the OH and a methyl branch on carbon 2, 2-methylbutan-2-ol, a tertiary alcohol. Pentan-3-ol would come from ethylmagnesium bromide and propanal."
+    },
+    {
+      "id": "che-al-synth-q010",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18C.20"
+          ]
+        }
+      },
+      "q": "How is a Grignard reagent made from bromoethane, and why must the apparatus be dry?",
+      "options": {
+        "A": "Bromoethane is heated with aqueous magnesium sulfate; water is needed to dissolve the salt.",
+        "B": "Bromoethane is warmed with magnesium in dry ether; the Grignard reagent reacts with water, which would destroy it.",
+        "C": "Bromoethane is heated with magnesium oxide; water would make the oxide dissolve.",
+        "D": "Bromoethane is warmed with magnesium in ethanol; the ethanol must be dry because it is flammable."
+      },
+      "answer": "B",
+      "solution": "Magnesium inserts between carbon and bromine in dry ether: \\(\\mathrm{CH_{3}CH_{2}Br + Mg \\rightarrow CH_{3}CH_{2}MgBr}\\). The C–Mg bond is very polar, so water (or any OH compound, such as ethanol) protonates the ethyl group to give ethane and destroys the reagent."
+    },
+    {
+      "id": "che-al-synth-q011",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.5.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6E.39",
+            "18C.22"
+          ]
+        }
+      },
+      "q": "Why is a reaction mixture heated under reflux rather than in an open flask?",
+      "options": {
+        "A": "To distil off the product as soon as it forms",
+        "B": "To keep the temperature below room temperature",
+        "C": "So that it can be heated for a long time without volatile reactants or products escaping, because vapour condenses and drips back into the flask",
+        "D": "To remove water from the reaction mixture"
+      },
+      "answer": "C",
+      "solution": "Organic reactions are often slow, so they need heating for a long time. A vertical condenser turns any vapour back into liquid, which runs back into the flask, so volatile (and often flammable) substances are not lost. Distilling off the product needs the condenser arranged for distillation instead."
+    },
+    {
+      "id": "che-al-synth-q012",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.9.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6E.39",
+            "18C.22"
+          ]
+        }
+      },
+      "q": "An ester made by refluxing a carboxylic acid with an alcohol and a sulfuric acid catalyst is shaken with aqueous sodium hydrogencarbonate in a separating funnel. Why?",
+      "options": {
+        "A": "To hydrolyse the ester back to the acid",
+        "B": "To dry the ester",
+        "C": "To make the ester dissolve in the aqueous layer",
+        "D": "To neutralise and remove acidic impurities, such as unreacted carboxylic acid and the sulfuric acid; the tap is opened often to release carbon dioxide"
+      },
+      "answer": "D",
+      "solution": "Sodium hydrogencarbonate reacts with acids to form salts that dissolve in the aqueous layer, which is then run off: \\(\\mathrm{RCOOH + NaHCO_{3} \\rightarrow RCOONa + H_{2}O + CO_{2}}\\). The carbon dioxide builds up pressure, so the funnel is inverted and the tap opened regularly. A weak base is used so that the ester is not hydrolysed."
+    },
+    {
+      "id": "che-al-synth-q013",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.5.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6E.39",
+            "18C.22"
+          ]
+        }
+      },
+      "q": "An organic liquid has been separated from an aqueous layer. How is it dried?",
+      "options": {
+        "A": "Anhydrous magnesium sulfate (or calcium chloride) is added and swirled until the liquid is clear and the solid no longer clumps; the liquid is then decanted or filtered.",
+        "B": "It is heated under reflux for an hour.",
+        "C": "Concentrated sodium hydroxide solution is added and the layers are separated.",
+        "D": "It is left in an open beaker overnight so the water evaporates."
+      },
+      "answer": "A",
+      "solution": "An anhydrous salt absorbs water to form a hydrate. While water remains, the drying agent clumps together and the liquid may look cloudy; once the liquid is clear and fresh solid stays free-flowing, it is dry. Leaving it open would also lose the volatile organic liquid."
+    },
+    {
+      "id": "che-al-synth-q014",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.9.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18C.22"
+          ]
+        }
+      },
+      "q": "An impure organic solid is recrystallised. Why is the minimum volume of hot solvent used to dissolve it?",
+      "options": {
+        "A": "So that the impurities do not dissolve",
+        "B": "So that the solution is saturated, and as much of the product as possible crystallises when it cools",
+        "C": "So that the solvent boils off faster",
+        "D": "So that the crystals form more quickly while the solution is still hot"
+      },
+      "answer": "B",
+      "solution": "Some product always stays dissolved in the cold solvent. Using only enough hot solvent to just dissolve the solid means the solution becomes saturated as it cools, so most of the product crystallises and little is lost. The soluble impurities, present in small amounts, stay in solution and are removed when the crystals are filtered."
+    },
+    {
+      "id": "che-al-synth-q015",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18C.22"
+          ]
+        }
+      },
+      "q": "Steam distillation is used to extract some organic compounds, such as essential oils from plants. Why is it useful?",
+      "options": {
+        "A": "It separates compounds that are very soluble in water.",
+        "B": "It removes all the water from an organic liquid.",
+        "C": "Volatile compounds that are insoluble in water distil with the steam at a temperature below 100 °C, so compounds that would decompose at their own boiling point can be extracted.",
+        "D": "It raises the boiling point of the mixture, so the compounds evaporate faster."
+      },
+      "answer": "C",
+      "solution": "A mixture of two immiscible liquids boils when their combined vapour pressures equal atmospheric pressure, which happens below the boiling point of either. So an oil that would decompose at its own high boiling point distils over with the steam below 100 °C, and is then separated from the water."
+    },
+    {
+      "id": "che-al-synth-q016",
+      "difficulty": 1,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18C.21"
+          ]
+        }
+      },
+      "q": "A reaction mixture contains ethoxyethane, which is highly flammable. How should the mixture be heated?",
+      "options": {
+        "A": "With a Bunsen burner and a blue flame",
+        "B": "In an open beaker on a tripod",
+        "C": "In a stoppered flask heated strongly, so that no vapour escapes",
+        "D": "With an electric heater or a water bath, away from any naked flame"
+      },
+      "answer": "D",
+      "solution": "Flammable organic vapours can be ignited by a naked flame. Using an electric heating mantle or a water bath, with no flames in the laboratory, controls this risk; a reflux condenser also stops vapour escaping. An open beaker would release the vapour."
+    },
+    {
+      "id": "che-al-synth-q017",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.14"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18C.19"
+          ]
+        }
+      },
+      "q": "Which three-step route converts propan-1-ol into propan-2-amine, as shown?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Propan-1-ol is converted into propan-2-amine in three steps.",
+        "rxn": "CCCO>>CC(C)N",
+        "above": "three steps"
+      },
+      "options": {
+        "A": "Step 1: concentrated phosphoric acid, heat. Step 2: HBr. Step 3: excess ammonia in ethanol, heated in a sealed tube.",
+        "B": "Step 1: HBr. Step 2: excess ammonia in ethanol. Step 3: concentrated phosphoric acid, heat.",
+        "C": "Step 1: acidified potassium dichromate(VI), reflux. Step 2: HBr. Step 3: excess ammonia in ethanol.",
+        "D": "Step 1: concentrated phosphoric acid, heat. Step 2: hydrogen with a nickel catalyst. Step 3: excess ammonia in ethanol."
+      },
+      "answer": "A",
+      "solution": "The functional group has to move from carbon 1 to carbon 2. Dehydration gives propene; adding HBr follows Markovnikov's rule (via the secondary carbocation) to give 2-bromopropane; nucleophilic substitution with excess ammonia gives \\(\\mathrm{CH_{3}CH(NH_{2})CH_{3}}\\). Substituting propan-1-ol directly keeps the group on carbon 1, giving propan-1-amine."
+    }
+  ]
+}

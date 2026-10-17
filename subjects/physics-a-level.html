@@ -20,27 +20,21 @@
   <span class="fc-nav-topic">A-level Physics</span>
 </nav>
 
-<main class="fc-main" id="al-main">
+<!-- The subject comes from data-subject; its topic groups from assets/js/a-level-subjects.js. -->
+<main class="fc-main" id="al-main" data-subject="physics-a-level">
   <p class="fc-kicker" id="al-board">A-level Physics</p>
   <h1 class="fc-h1" id="al-greeting" tabindex="-1">A-level Physics</h1>
   <p class="fc-plan">Exam-style multiple-choice quizzes, topic by topic. Each one is marked as you go, with a worked solution for every question.</p>
+  <a class="fc-btn fc-btn-primary fc-btn-wide al-flashcards" id="al-flashcards" hidden>Flashcards</a>
 
   <p class="fc-quiet" id="al-status" role="status" aria-live="polite">Loading your topics…</p>
 
-  <section id="al-core" hidden>
-    <h2 class="fc-h2">Topics</h2>
-    <ul class="al-list" id="al-core-list"></ul>
-  </section>
-
-  <section id="al-options" hidden>
-    <h2 class="fc-h2">Optional topics</h2>
-    <p class="fc-quiet">AQA students study one of these. Your school chooses which.</p>
-    <ul class="al-list" id="al-option-list"></ul>
-  </section>
+  <div id="al-sections"></div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0" crossorigin="anonymous" defer></script>
 <script src="/assets/js/supabase.js" defer></script>
-<script src="/assets/js/a-level-physics.js" defer></script>
+<script src="/assets/js/a-level-subjects.js" defer></script>
+<script src="/assets/js/a-level-subject.js" defer></script>
 </body>
 </html>

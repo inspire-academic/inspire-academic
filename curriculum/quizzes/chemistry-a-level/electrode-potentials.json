@@ -1,0 +1,443 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/electrode-potentials",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Electrode Potentials and Cells",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-elec-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.4"
+          ]
+        }
+      },
+      "q": "Which are the standard conditions for measuring a standard electrode potential, \\(E^{\\ominus}\\)?",
+      "options": {
+        "A": "273 K, 100 kPa, ions at \\(1.00\\ \\text{mol dm}^{-3}\\)",
+        "B": "298 K, 100 kPa, ions at \\(1.00\\ \\text{mol dm}^{-3}\\)",
+        "C": "298 K, 100 kPa, ions at \\(0.100\\ \\text{mol dm}^{-3}\\)",
+        "D": "298 K, 1000 kPa, ions at \\(1.00\\ \\text{mol dm}^{-3}\\)"
+      },
+      "answer": "B",
+      "solution": "Standard conditions are a temperature of 298 K, a pressure of 100 kPa for any gas, and \\(1.00\\ \\text{mol dm}^{-3}\\) for every ion in the half-cell. (273 K is the temperature for standard temperature and pressure of a gas, not for electrode potentials.)"
+    },
+    {
+      "id": "che-al-elec-q002",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.5"
+          ]
+        }
+      },
+      "q": "Which describes the standard hydrogen electrode?",
+      "options": {
+        "A": "Hydrogen gas at 100 kPa bubbled over a platinum electrode dipping into \\(1.00\\ \\text{mol dm}^{-3}\\) sulfuric acid, at 298 K",
+        "B": "Hydrogen gas at 100 kPa bubbled over a platinum electrode dipping into \\(1.00\\ \\text{mol dm}^{-3}\\) sodium hydroxide, at 298 K",
+        "C": "Hydrogen gas at 100 kPa bubbled over a nickel electrode dipping into a solution of \\(\\mathrm{H^{+}}\\) ions at \\(1.00\\ \\text{mol dm}^{-3}\\), at 298 K",
+        "D": "Hydrogen gas at 100 kPa bubbled over a platinum electrode dipping into a solution of \\(\\mathrm{H^{+}}\\) ions at \\(1.00\\ \\text{mol dm}^{-3}\\), at 298 K"
+      },
+      "answer": "D",
+      "solution": "The hydrogen ion concentration must be \\(1.00\\ \\text{mol dm}^{-3}\\); \\(1.00\\ \\text{mol dm}^{-3}\\) sulfuric acid gives about twice that, because it releases two protons. Platinum is used because it is inert and conducts, and adsorbs hydrogen. (Taking any acid at \\(1.00\\ \\text{mol dm}^{-3}\\) as standard is the common slip.)"
+    },
+    {
+      "id": "che-al-elec-q003",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.7"
+          ]
+        }
+      },
+      "q": "A cell is made from a zinc half-cell, \\(\\mathrm{Zn^{2+} + 2e^{-} \\rightleftharpoons Zn}\\) \\(E^{\\ominus} = -0.76\\ \\text{V}\\), and a silver half-cell, \\(\\mathrm{Ag^{+} + e^{-} \\rightleftharpoons Ag}\\) \\(E^{\\ominus} = +0.80\\ \\text{V}\\). What is \\(E^{\\ominus}_{\\text{cell}}\\)?",
+      "options": {
+        "A": "\\(+0.04\\ \\text{V}\\)",
+        "B": "\\(+0.84\\ \\text{V}\\)",
+        "C": "\\(+1.56\\ \\text{V}\\)",
+        "D": "\\(+2.36\\ \\text{V}\\)"
+      },
+      "answer": "C",
+      "solution": "\\(E^{\\ominus}_{\\text{cell}} = E^{\\ominus}_{\\text{positive}} - E^{\\ominus}_{\\text{negative}} = +0.80 - (-0.76) = +1.56\\ \\text{V}\\). Electrode potentials are never multiplied, even when the silver half-equation is doubled to balance electrons. (Doubling the silver value leads to +0.84 V.)"
+    },
+    {
+      "id": "che-al-elec-q004",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.8"
+          ]
+        }
+      },
+      "q": "Which is the conventional cell diagram for a cell made from a zinc half-cell (\\(E^{\\ominus} = -0.76\\ \\text{V}\\)) and an \\(\\mathrm{Fe^{3+}/Fe^{2+}}\\) half-cell (\\(E^{\\ominus} = +0.77\\ \\text{V}\\))?",
+      "options": {
+        "A": "\\(\\mathrm{Zn(s)\\,|\\,Zn^{2+}(aq)\\,||\\,Fe^{3+}(aq),\\,Fe^{2+}(aq)\\,|\\,Pt(s)}\\)",
+        "B": "\\(\\mathrm{Zn^{2+}(aq)\\,|\\,Zn(s)\\,||\\,Fe^{3+}(aq),\\,Fe^{2+}(aq)\\,|\\,Pt(s)}\\)",
+        "C": "\\(\\mathrm{Zn(s)\\,|\\,Zn^{2+}(aq)\\,||\\,Fe^{3+}(aq),\\,Fe^{2+}(aq)\\,|\\,Fe(s)}\\)",
+        "D": "\\(\\mathrm{Zn(s)\\,||\\,Zn^{2+}(aq)\\,|\\,Fe^{3+}(aq),\\,Fe^{2+}(aq)\\,|\\,Pt(s)}\\)"
+      },
+      "answer": "A",
+      "solution": "The negative zinc electrode goes on the left, written metal then ions (the species oxidised). The double line is the salt bridge. Both iron ions are in solution, separated by a comma, and need an inert platinum electrode on the right. (Using an iron electrode is the common slip: no solid iron is in the half-cell.)"
+    },
+    {
+      "id": "che-al-elec-q005",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.10"
+          ]
+        }
+      },
+      "q": "Use these data to decide which species will oxidise \\(\\mathrm{Fe^{2+}}\\) to \\(\\mathrm{Fe^{3+}}\\) under standard conditions. \\(\\mathrm{Fe^{3+}/Fe^{2+}}\\) \\(+0.77\\ \\text{V}\\); \\(\\mathrm{Br_{2}/Br^{-}}\\) \\(+1.09\\ \\text{V}\\); \\(\\mathrm{I_{2}/I^{-}}\\) \\(+0.54\\ \\text{V}\\); \\(\\mathrm{Cu^{2+}/Cu}\\) \\(+0.34\\ \\text{V}\\); \\(\\mathrm{Zn^{2+}/Zn}\\) \\(-0.76\\ \\text{V}\\).",
+      "options": {
+        "A": "\\(\\mathrm{I_{2}}\\)",
+        "B": "\\(\\mathrm{Cu^{2+}}\\)",
+        "C": "\\(\\mathrm{Br_{2}}\\)",
+        "D": "\\(\\mathrm{Zn^{2+}}\\)"
+      },
+      "answer": "C",
+      "solution": "To oxidise \\(\\mathrm{Fe^{2+}}\\), the oxidising agent's half-cell must have a more positive \\(E^{\\ominus}\\) than \\(+0.77\\ \\text{V}\\). Only bromine does: \\(E^{\\ominus}_{\\text{cell}} = 1.09 - 0.77 = +0.32\\ \\text{V}\\). (Iodine is a common wrong choice; \\(0.54 - 0.77\\) is negative.)"
+    },
+    {
+      "id": "che-al-elec-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.13"
+          ]
+        }
+      },
+      "q": "Which is the strongest reducing agent? \\(\\mathrm{Ag^{+}/Ag}\\) \\(+0.80\\ \\text{V}\\); \\(\\mathrm{Fe^{3+}/Fe^{2+}}\\) \\(+0.77\\ \\text{V}\\); \\(\\mathrm{Cu^{2+}/Cu}\\) \\(+0.34\\ \\text{V}\\); \\(\\mathrm{Ni^{2+}/Ni}\\) \\(-0.25\\ \\text{V}\\).",
+      "options": {
+        "A": "\\(\\mathrm{Ag^{+}}\\)",
+        "B": "\\(\\mathrm{Ni}\\)",
+        "C": "\\(\\mathrm{Ni^{2+}}\\)",
+        "D": "\\(\\mathrm{Fe^{2+}}\\)"
+      },
+      "answer": "B",
+      "solution": "Reducing agents are on the right of the half-equations (the reduced forms). The most negative \\(E^{\\ominus}\\) shows the equilibrium furthest to the left, so its reduced form loses electrons most readily: nickel metal. (\\(\\mathrm{Ag^{+}}\\) is the strongest oxidising agent, not reducing agent.)"
+    },
+    {
+      "id": "che-al-elec-q007",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.9"
+          ]
+        }
+      },
+      "q": "In the cell \\(\\mathrm{Zn(s)\\,|\\,Zn^{2+}(aq)\\,||\\,Cu^{2+}(aq)\\,|\\,Cu(s)}\\), the concentration of copper(II) ions is lowered to \\(0.10\\ \\text{mol dm}^{-3}\\). Which statement is correct?",
+      "options": {
+        "A": "The emf rises, because the \\(\\mathrm{Cu^{2+}/Cu}\\) equilibrium shifts left and its electrode potential becomes more positive.",
+        "B": "The emf is unchanged, because electrode potentials are fixed values.",
+        "C": "The emf falls, because the zinc electrode potential becomes more negative.",
+        "D": "The emf falls, because the \\(\\mathrm{Cu^{2+}/Cu}\\) equilibrium shifts left and its electrode potential becomes less positive."
+      },
+      "answer": "D",
+      "solution": "For \\(\\mathrm{Cu^{2+} + 2e^{-} \\rightleftharpoons Cu}\\), removing \\(\\mathrm{Cu^{2+}}\\) moves the equilibrium to the left, releasing electrons, so the copper electrode potential is less positive. The difference between the electrodes, the emf, is smaller. (Standard values are fixed, but the actual potential depends on the conditions.)"
+    },
+    {
+      "id": "che-al-elec-q008",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.7"
+          ]
+        }
+      },
+      "q": "In the cell \\(\\mathrm{Ni(s)\\,|\\,Ni^{2+}(aq)\\,||\\,Ag^{+}(aq)\\,|\\,Ag(s)}\\), which statement is correct when a current flows?",
+      "options": {
+        "A": "Electrons flow from the nickel electrode to the silver electrode through the external wire.",
+        "B": "Electrons flow from the silver electrode to the nickel electrode through the salt bridge.",
+        "C": "The silver electrode is the negative electrode.",
+        "D": "Silver is oxidised at the silver electrode."
+      },
+      "answer": "A",
+      "solution": "Nickel (\\(-0.25\\ \\text{V}\\)) is the negative electrode: nickel is oxidised and releases electrons, which travel through the wire to the silver electrode, where \\(\\mathrm{Ag^{+}}\\) is reduced. (Only ions move through the salt bridge, never electrons.)"
+    },
+    {
+      "id": "che-al-elec-q009",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.6",
+            "14.7"
+          ]
+        }
+      },
+      "q": "A half-cell of metal M in \\(1.00\\ \\text{mol dm}^{-3}\\) \\(\\mathrm{M^{2+}}\\) is connected to a standard copper half-cell (\\(E^{\\ominus} = +0.34\\ \\text{V}\\)). The emf is 0.97 V and M is the negative electrode. What is \\(E^{\\ominus}\\) for \\(\\mathrm{M^{2+}/M}\\)?",
+      "options": {
+        "A": "\\(-1.31\\ \\text{V}\\)",
+        "B": "\\(-0.63\\ \\text{V}\\)",
+        "C": "\\(+0.63\\ \\text{V}\\)",
+        "D": "\\(+1.31\\ \\text{V}\\)"
+      },
+      "answer": "B",
+      "solution": "\\(E^{\\ominus}_{\\text{cell}} = E^{\\ominus}_{\\text{positive}} - E^{\\ominus}_{\\text{negative}}\\), so \\(0.97 = 0.34 - E^{\\ominus}(\\mathrm{M})\\), giving \\(E^{\\ominus}(\\mathrm{M}) = 0.34 - 0.97 = -0.63\\ \\text{V}\\). (Adding the values leads to +1.31 V.)"
+    },
+    {
+      "id": "che-al-elec-q010",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "14.12"
+          ]
+        }
+      },
+      "q": "\\(E^{\\ominus}_{\\text{cell}}\\) calculated for a reaction is \\(+0.40\\ \\text{V}\\), yet no reaction is seen when the reagents are mixed under standard conditions. Which is the most likely reason?",
+      "options": {
+        "A": "The equilibrium lies well to the left.",
+        "B": "The reaction is endothermic.",
+        "C": "The activation energy is high, so the reaction is very slow.",
+        "D": "A positive emf means the reverse reaction is feasible."
+      },
+      "answer": "C",
+      "solution": "A positive \\(E^{\\ominus}_{\\text{cell}}\\) shows the reaction is thermodynamically feasible, with an equilibrium well to the right, but says nothing about its rate. A high activation energy can make it too slow to observe: kinetic inhibition. (Reading a positive value as favouring the reverse reaction is the common slip.)"
+    },
+    {
+      "id": "che-al-elec-q011",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "14.11"
+          ]
+        }
+      },
+      "q": "A cell reaction has \\(E^{\\ominus}_{\\text{cell}} = +1.10\\ \\text{V}\\). Which statement about the reaction is correct?",
+      "options": {
+        "A": "\\(\\Delta S_{\\text{total}}\\) is negative and \\(K\\) is very large.",
+        "B": "\\(\\Delta S_{\\text{total}}\\) is positive and \\(K\\) is less than 1.",
+        "C": "\\(\\Delta S_{\\text{total}}\\) is zero and \\(K = 1\\).",
+        "D": "\\(\\Delta S_{\\text{total}}\\) is positive and \\(K\\) is very large."
+      },
+      "answer": "D",
+      "solution": "\\(E^{\\ominus}_{\\text{cell}}\\) is proportional to both \\(\\Delta S_{\\text{total}}\\) and \\(\\ln K\\). A positive \\(E^{\\ominus}_{\\text{cell}}\\) means \\(\\Delta S_{\\text{total}}\\) is positive and \\(\\ln K\\) is positive; 1.10 V is large, so \\(K\\) is very large. (\\(K\\) below 1 would go with a negative \\(E^{\\ominus}_{\\text{cell}}\\).)"
+    },
+    {
+      "id": "che-al-elec-q012",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "14.14"
+          ]
+        }
+      },
+      "q": "Use the data to decide whether copper(I) ions disproportionate in aqueous solution: \\(\\mathrm{2Cu^{+} \\rightarrow Cu + Cu^{2+}}\\). \\(\\mathrm{Cu^{2+} + e^{-} \\rightleftharpoons Cu^{+}}\\) \\(+0.15\\ \\text{V}\\); \\(\\mathrm{Cu^{+} + e^{-} \\rightleftharpoons Cu}\\) \\(+0.52\\ \\text{V}\\).",
+      "options": {
+        "A": "No; \\(E^{\\ominus}_{\\text{cell}} = -0.37\\ \\text{V}\\)",
+        "B": "Yes; \\(E^{\\ominus}_{\\text{cell}} = +0.37\\ \\text{V}\\)",
+        "C": "Yes; \\(E^{\\ominus}_{\\text{cell}} = +0.67\\ \\text{V}\\)",
+        "D": "No; \\(E^{\\ominus}_{\\text{cell}} = -0.67\\ \\text{V}\\)"
+      },
+      "answer": "B",
+      "solution": "One \\(\\mathrm{Cu^{+}}\\) is reduced to Cu (\\(+0.52\\ \\text{V}\\)) and another is oxidised to \\(\\mathrm{Cu^{2+}}\\) (\\(+0.15\\ \\text{V}\\)). \\(E^{\\ominus}_{\\text{cell}} = 0.52 - 0.15 = +0.37\\ \\text{V}\\), positive, so the disproportionation is feasible. (Adding the two values leads to +0.67 V.)"
+    },
+    {
+      "id": "che-al-elec-q013",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.17"
+          ]
+        }
+      },
+      "q": "In an alkaline hydrogen–oxygen fuel cell, which reaction happens at the negative electrode?",
+      "options": {
+        "A": "\\(\\mathrm{O_{2} + 2H_{2}O + 4e^{-} \\rightarrow 4OH^{-}}\\)",
+        "B": "\\(\\mathrm{H_{2} \\rightarrow 2H^{+} + 2e^{-}}\\)",
+        "C": "\\(\\mathrm{H_{2} + 2OH^{-} \\rightarrow 2H_{2}O + 2e^{-}}\\)",
+        "D": "\\(\\mathrm{2H_{2}O + 2e^{-} \\rightarrow H_{2} + 2OH^{-}}\\)"
+      },
+      "answer": "C",
+      "solution": "Hydrogen is oxidised at the negative electrode, and in alkaline electrolyte it reacts with hydroxide ions: \\(\\mathrm{H_{2} + 2OH^{-} \\rightarrow 2H_{2}O + 2e^{-}}\\). Oxygen is reduced at the positive electrode. (Forming \\(\\mathrm{H^{+}}\\) is the half-equation for an acidic fuel cell.)"
+    },
+    {
+      "id": "che-al-elec-q014",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.2"
+          ]
+        }
+      },
+      "q": "In a lithium-ion cell, which reaction happens at the negative electrode while the cell is supplying current?",
+      "options": {
+        "A": "\\(\\mathrm{Li \\rightarrow Li^{+} + e^{-}}\\)",
+        "B": "\\(\\mathrm{Li^{+} + CoO_{2} + e^{-} \\rightarrow Li^{+}[CoO_{2}]^{-}}\\)",
+        "C": "\\(\\mathrm{Li^{+} + e^{-} \\rightarrow Li}\\)",
+        "D": "\\(\\mathrm{Li^{+}[CoO_{2}]^{-} \\rightarrow Li^{+} + CoO_{2} + e^{-}}\\)"
+      },
+      "answer": "A",
+      "solution": "During discharge lithium is oxidised at the negative electrode, releasing electrons into the circuit: \\(\\mathrm{Li \\rightarrow Li^{+} + e^{-}}\\). The cobalt oxide reaction is the reduction at the positive electrode. (\\(\\mathrm{Li^{+} + e^{-} \\rightarrow Li}\\) happens at that electrode only while the cell is being recharged.)"
+    },
+    {
+      "id": "che-al-elec-q015",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.15"
+          ]
+        }
+      },
+      "q": "A lead–acid cell uses these half-cells: \\(\\mathrm{PbO_{2} + 4H^{+} + SO_{4}^{2-} + 2e^{-} \\rightleftharpoons PbSO_{4} + 2H_{2}O}\\) \\(E^{\\ominus} = +1.69\\ \\text{V}\\); \\(\\mathrm{PbSO_{4} + 2e^{-} \\rightleftharpoons Pb + SO_{4}^{2-}}\\) \\(E^{\\ominus} = -0.36\\ \\text{V}\\). What is the emf of one cell?",
+      "options": {
+        "A": "\\(1.33\\ \\text{V}\\)",
+        "B": "\\(2.05\\ \\text{V}\\)",
+        "C": "\\(3.38\\ \\text{V}\\)",
+        "D": "\\(4.10\\ \\text{V}\\)"
+      },
+      "answer": "B",
+      "solution": "\\(E^{\\ominus}_{\\text{cell}} = E^{\\ominus}_{\\text{positive}} - E^{\\ominus}_{\\text{negative}} = 1.69 - (-0.36) = 2.05\\ \\text{V}\\). (Ignoring the negative sign of the lead electrode leads to 1.33 V.)"
+    },
+    {
+      "id": "che-al-elec-q016",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.6"
+          ]
+        }
+      },
+      "q": "What is the function of the salt bridge in an electrochemical cell?",
+      "options": {
+        "A": "It carries electrons from one half-cell to the other.",
+        "B": "It lets ions move between the two solutions, completing the circuit without mixing the solutions.",
+        "C": "It keeps the concentrations of the two solutions equal.",
+        "D": "It supplies hydrogen ions to both half-cells."
+      },
+      "answer": "B",
+      "solution": "The salt bridge, often filter paper soaked in potassium nitrate solution, lets ions flow to balance the charge as the reactions happen, so the circuit is complete; it does not react with either solution. (Electrons travel only through the external wire.)"
+    },
+    {
+      "id": "che-al-elec-q017",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.16"
+          ]
+        }
+      },
+      "q": "Which statement about hydrogen–oxygen fuel cells is correct?",
+      "options": {
+        "A": "They store electrical energy and must be recharged from the mains.",
+        "B": "Their emf depends on the size of the electrodes.",
+        "C": "They release carbon dioxide where they are used.",
+        "D": "They do not need recharging: they produce a current for as long as hydrogen and oxygen are supplied."
+      },
+      "answer": "D",
+      "solution": "A fuel cell turns the chemical energy of a continuous supply of fuel and oxygen into electrical energy; its only product is water. The emf depends on the electrode reactions, not the electrode size. (Treating it as a rechargeable battery is the common slip.)"
+    },
+    {
+      "id": "che-al-elec-q018",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.11.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "14.10"
+          ]
+        }
+      },
+      "q": "Use \\(\\mathrm{MnO_{4}^{-}/Mn^{2+}}\\) \\(+1.51\\ \\text{V}\\) and \\(\\mathrm{Cl_{2}/Cl^{-}}\\) \\(+1.36\\ \\text{V}\\) to decide which shows the feasible reaction between acidified manganate(VII) ions and chloride ions.",
+      "options": {
+        "A": "\\(\\mathrm{2MnO_{4}^{-} + 16H^{+} + 10Cl^{-} \\rightarrow 2Mn^{2+} + 8H_{2}O + 5Cl_{2}}\\); \\(E^{\\ominus}_{\\text{cell}} = +0.15\\ \\text{V}\\)",
+        "B": "\\(\\mathrm{MnO_{4}^{-} + 8H^{+} + 2Cl^{-} \\rightarrow Mn^{2+} + 4H_{2}O + Cl_{2}}\\); \\(E^{\\ominus}_{\\text{cell}} = +0.15\\ \\text{V}\\)",
+        "C": "\\(\\mathrm{2Mn^{2+} + 8H_{2}O + 5Cl_{2} \\rightarrow 2MnO_{4}^{-} + 16H^{+} + 10Cl^{-}}\\); \\(E^{\\ominus}_{\\text{cell}} = +0.15\\ \\text{V}\\)",
+        "D": "\\(\\mathrm{2MnO_{4}^{-} + 16H^{+} + 10Cl^{-} \\rightarrow 2Mn^{2+} + 8H_{2}O + 5Cl_{2}}\\); \\(E^{\\ominus}_{\\text{cell}} = +2.87\\ \\text{V}\\)"
+      },
+      "answer": "A",
+      "solution": "Manganate(VII) has the more positive \\(E^{\\ominus}\\), so it is reduced and chloride is oxidised. Balancing 5 and 2 electrons needs 2 \\(\\mathrm{MnO_{4}^{-}}\\) to 10 \\(\\mathrm{Cl^{-}}\\). \\(E^{\\ominus}_{\\text{cell}} = 1.51 - 1.36 = +0.15\\ \\text{V}\\). (Adding the potentials leads to +2.87 V.)"
+    }
+  ]
+}

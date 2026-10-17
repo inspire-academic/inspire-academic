@@ -1,0 +1,484 @@
+{
+ "schema": "inspire.quiz.v1",
+ "topic": {
+  "id": "chemistry-a-level/atomic-structure",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Atomic Structure",
+  "spec": "chemistry-a-level"
+ },
+ "questions": [
+  {
+   "id": "che-al-atom-q001",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.4"
+     ]
+    }
+   },
+   "q": "How many protons, neutrons and electrons are there in the ion \\({}^{80}_{34}\\mathrm{Se}^{2-}\\)?",
+   "options": {
+    "A": "34 protons, 46 neutrons, 32 electrons",
+    "B": "34 protons, 46 neutrons, 36 electrons",
+    "C": "34 protons, 80 neutrons, 36 electrons",
+    "D": "36 protons, 46 neutrons, 34 electrons"
+   },
+   "answer": "B",
+   "solution": "The atomic number gives 34 protons. Neutrons = 80 − 34 = 46. The 2− charge means two extra electrons: 34 + 2 = 36 electrons. So 34 protons, 46 neutrons, 36 electrons. (A common slip is to subtract the charge, giving 32 electrons.)"
+  },
+  {
+   "id": "che-al-atom-q002",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.2"
+     ]
+    }
+   },
+   "q": "Which row gives the relative mass and relative charge of a neutron and of an electron?",
+   "options": {
+    "A": "neutron: mass 1, charge 0; electron: mass \\(\\frac{1}{1840}\\), charge −1",
+    "B": "neutron: mass 1, charge +1; electron: mass \\(\\frac{1}{1840}\\), charge −1",
+    "C": "neutron: mass 0, charge 0; electron: mass 1, charge −1",
+    "D": "neutron: mass \\(\\frac{1}{1840}\\), charge 0; electron: mass 1, charge −1"
+   },
+   "answer": "A",
+   "solution": "A neutron has about the same mass as a proton (relative mass 1) and no charge (0). An electron is about 1840 times lighter (relative mass \\(\\frac{1}{1840}\\)) and has a relative charge of −1. (A common slip is to give the neutron a charge of +1, which is the proton's.)"
+  },
+  {
+   "id": "che-al-atom-q003",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.8"
+     ]
+    }
+   },
+   "q": "A sample of gallium is 60.1% \\({}^{69}\\mathrm{Ga}\\) and 39.9% \\({}^{71}\\mathrm{Ga}\\). What is the relative atomic mass of gallium, to one decimal place?",
+   "options": {
+    "A": "69.4",
+    "B": "69.8",
+    "C": "70.0",
+    "D": "70.2"
+   },
+   "answer": "B",
+   "solution": "\\(A_{\\text{r}}\\) is the weighted mean: \\(\\frac{(69 \\times 60.1) + (71 \\times 39.9)}{100} = \\frac{4146.9 + 2832.9}{100}\\) = 69.8. (Swapping the abundances leads to 70.2; a simple average of 69 and 71 leads to 70.0.)"
+  },
+  {
+   "id": "che-al-atom-q004",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.8"
+     ]
+    }
+   },
+   "q": "Iridium has a relative atomic mass of 192.2 and two isotopes, \\({}^{191}\\mathrm{Ir}\\) and \\({}^{193}\\mathrm{Ir}\\). What is the percentage abundance of \\({}^{193}\\mathrm{Ir}\\)?",
+   "options": {
+    "A": "20.0%",
+    "B": "40.0%",
+    "C": "50.0%",
+    "D": "60.0%"
+   },
+   "answer": "D",
+   "solution": "Let the abundance of \\({}^{193}\\mathrm{Ir}\\) be \\(x\\)%. Then \\(\\frac{193x + 191(100 - x)}{100} = 192.2\\), so \\(19100 + 2x = 19220\\) and \\(x\\) = 60.0%. A mean above 192 must lie closer to 193, so iridium-193 is the more abundant isotope. (40.0% is the abundance of iridium-191.)"
+  },
+  {
+   "id": "che-al-atom-q005",
+   "difficulty": 3,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "1.9"
+     ]
+    }
+   },
+   "q": "Chlorine is 75% \\({}^{35}\\mathrm{Cl}\\) and 25% \\({}^{37}\\mathrm{Cl}\\). The mass spectrum of \\(\\mathrm{Cl_{2}}\\) has molecular ion peaks at \\(m/z\\) = 70, 72 and 74. What are the relative heights of these three peaks?",
+   "options": {
+    "A": "1 : 2 : 1",
+    "B": "3 : 2 : 1",
+    "C": "9 : 3 : 1",
+    "D": "9 : 6 : 1"
+   },
+   "answer": "D",
+   "solution": "Probability of each molecule: 35–35 is \\(\\frac{3}{4} \\times \\frac{3}{4} = \\frac{9}{16}\\); 35–37 can form two ways, \\(2 \\times \\frac{3}{4} \\times \\frac{1}{4} = \\frac{6}{16}\\); 37–37 is \\(\\frac{1}{4} \\times \\frac{1}{4} = \\frac{1}{16}\\). So the ratio of peaks at 70, 72 and 74 is 9 : 6 : 1. (Forgetting that 35–37 forms two ways leads to 9 : 3 : 1.)"
+  },
+  {
+   "id": "che-al-atom-q006",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.2"
+     ]
+    }
+   },
+   "q": "In a time of flight (TOF) mass spectrometer, all the positive ions are accelerated to the same kinetic energy. Why do ions of different mass reach the detector at different times?",
+   "options": {
+    "A": "Lighter ions have a higher velocity, so they cross the drift region faster and arrive first.",
+    "B": "Heavier ions are deflected more by the electric field, so they travel a longer path.",
+    "C": "Heavier ions have a higher velocity because they carry more momentum, so they arrive first.",
+    "D": "Lighter ions lose their charge more quickly in the drift region, so they are detected first."
+   },
+   "answer": "A",
+   "solution": "With the same kinetic energy, \\(\\frac{1}{2}mv^{2}\\), an ion of smaller mass must have a larger velocity. The drift region has no field, so each ion keeps that velocity and the lighter ions arrive first. There is no deflection in a TOF spectrometer. (A common slip is to think heavier ions move faster.)"
+  },
+  {
+   "id": "che-al-atom-q007",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.2"
+     ]
+    }
+   },
+   "q": "In a TOF mass spectrometer, \\({}^{35}\\mathrm{Cl}^{+}\\) ions are accelerated to a kinetic energy of \\(1.00 \\times 10^{-16}\\ \\text{J}\\) and then travel through a flight tube \\(1.20\\ \\text{m}\\) long. How long does an ion take to cross the tube? Use \\(KE = \\frac{1}{2}mv^{2}\\) and \\(L = 6.02 \\times 10^{23}\\ \\text{mol}^{-1}\\).",
+   "options": {
+    "A": "\\(3.49 \\times 10^{-10}\\ \\text{s}\\)",
+    "B": "\\(2.05 \\times 10^{-5}\\ \\text{s}\\)",
+    "C": "\\(2.89 \\times 10^{-5}\\ \\text{s}\\)",
+    "D": "\\(6.47 \\times 10^{-4}\\ \\text{s}\\)"
+   },
+   "answer": "B",
+   "solution": "Mass of one ion: \\(m = \\frac{35 \\times 10^{-3}}{6.02 \\times 10^{23}} = 5.81 \\times 10^{-26}\\ \\text{kg}\\). Then \\(v = \\sqrt{\\frac{2 \\times 1.00 \\times 10^{-16}}{5.81 \\times 10^{-26}}} = 5.87 \\times 10^{4}\\ \\text{m s}^{-1}\\), and \\(t = \\frac{1.20}{5.87 \\times 10^{4}}\\) = \\(2.05 \\times 10^{-5}\\ \\text{s}\\). (Leaving the molar mass in grams per mole is the usual slip, and leads to \\(6.47 \\times 10^{-4}\\ \\text{s}\\).)"
+  },
+  {
+   "id": "che-al-atom-q008",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.11"
+     ]
+    }
+   },
+   "q": "Which equation represents the first ionisation energy of calcium?",
+   "options": {
+    "A": "\\(\\mathrm{Ca(s) \\rightarrow Ca^{+}(g) + e^{-}}\\)",
+    "B": "\\(\\mathrm{Ca(g) + e^{-} \\rightarrow Ca^{-}(g)}\\)",
+    "C": "\\(\\mathrm{Ca(g) \\rightarrow Ca^{+}(g) + e^{-}}\\)",
+    "D": "\\(\\mathrm{Ca(g) \\rightarrow Ca^{2+}(g) + 2e^{-}}\\)"
+   },
+   "answer": "C",
+   "solution": "First ionisation energy is the energy to remove one mole of electrons from one mole of gaseous atoms to form one mole of gaseous 1+ ions, so \\(\\mathrm{Ca(g) \\rightarrow Ca^{+}(g) + e^{-}}\\). (A common slip is to start from the solid, which also includes atomisation; removing two electrons is the sum of the first and second ionisation energies.)"
+  },
+  {
+   "id": "che-al-atom-q009",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.11",
+      "1.12"
+     ]
+    }
+   },
+   "q": "The first five ionisation energies of an element X, in \\(\\text{kJ mol}^{-1}\\), are 578, 1817, 2745, 11 577 and 14 842. How many electrons are in the outer shell of an atom of X?",
+   "options": {
+    "A": "2",
+    "B": "3",
+    "C": "4",
+    "D": "5"
+   },
+   "answer": "B",
+   "solution": "The big jump comes between the third (2745) and fourth (11 577) ionisation energies. The fourth electron is removed from a shell closer to the nucleus and less shielded, so the outer shell holds 3 electrons. (Counting up to the jump and including it leads to 4.)"
+  },
+  {
+   "id": "che-al-atom-q010",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.12"
+     ]
+    }
+   },
+   "q": "Which statement best explains why the first ionisation energy of aluminium is lower than that of magnesium?",
+   "options": {
+    "A": "The outer electron of aluminium is in a 3p sub-shell, which is higher in energy than the 3s sub-shell.",
+    "B": "Aluminium has a smaller nuclear charge than magnesium.",
+    "C": "The outer electron of aluminium is removed from an orbital that already holds a paired electron.",
+    "D": "Aluminium atoms have more electrons, so they are larger than magnesium atoms."
+   },
+   "answer": "A",
+   "solution": "Magnesium's outer electron is in 3s; aluminium's is in 3p, which is higher in energy (further out and slightly shielded by the 3s electrons), so less energy is needed to remove it. Aluminium has the larger nuclear charge and the smaller atom. (Pair repulsion explains the drop from phosphorus to sulfur, not this one.)"
+  },
+  {
+   "id": "che-al-atom-q011",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.12"
+     ]
+    }
+   },
+   "q": "Which statement best explains why the first ionisation energy of sulfur is lower than that of phosphorus?",
+   "options": {
+    "A": "Sulfur has a smaller nuclear charge than phosphorus.",
+    "B": "The outer electron of sulfur is in a higher-energy sub-shell than that of phosphorus.",
+    "C": "The outer electron of sulfur is further from the nucleus than that of phosphorus.",
+    "D": "Sulfur has a pair of electrons in one 3p orbital, and their repulsion makes one of them easier to remove."
+   },
+   "answer": "D",
+   "solution": "Phosphorus has three unpaired 3p electrons. In sulfur, \\(\\mathrm{3p^{4}}\\), two electrons share one orbital, and the repulsion between them makes one easier to remove. Both outer electrons are 3p, and sulfur has the larger nuclear charge. (The 3s-to-3p explanation belongs to the drop from magnesium to aluminium.)"
+  },
+  {
+   "id": "che-al-atom-q012",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.14"
+     ]
+    }
+   },
+   "q": "Which statement explains why first ionisation energy decreases down Group 2?",
+   "options": {
+    "A": "The nuclear charge decreases down the group.",
+    "B": "The outer electron is in a p sub-shell in the lower elements.",
+    "C": "The outer electron is further from the nucleus and more shielded, so it is less strongly attracted.",
+    "D": "The outer electrons are paired, so they repel each other more down the group."
+   },
+   "answer": "C",
+   "solution": "Down the group each atom has an extra shell. The outer s electron is further from the nucleus and shielded by more inner electrons, so the attraction is weaker even though the nuclear charge increases. (The nuclear charge rises, not falls, down the group.)"
+  },
+  {
+   "id": "che-al-atom-q013",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.13"
+     ]
+    }
+   },
+   "q": "Which statement best explains the general increase in first ionisation energy from sodium to argon?",
+   "options": {
+    "A": "The outer electrons are in the same shell with similar shielding, but the nuclear charge increases, so the atomic radius decreases and the attraction increases.",
+    "B": "The number of electron shells increases, so the outer electrons are held more tightly.",
+    "C": "The shielding increases across the period, so the outer electrons are held more tightly.",
+    "D": "Each element has more neutrons, so the nucleus is heavier and attracts the electrons more."
+   },
+   "answer": "A",
+   "solution": "Across Period 3 electrons are added to the same third shell, so shielding hardly changes, while the nuclear charge rises by one each time. The outer electrons are pulled closer and held more strongly. Neutrons carry no charge and do not affect the attraction. (The number of shells stays at three across the period.)"
+  },
+  {
+   "id": "che-al-atom-q014",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.21"
+     ]
+    }
+   },
+   "q": "What is the electron configuration of a chromium atom (\\(Z = 24\\))?",
+   "options": {
+    "A": "\\(\\mathrm{[Ar]\\,3d^{4}\\,4s^{2}}\\)",
+    "B": "\\(\\mathrm{[Ar]\\,3d^{5}\\,4s^{1}}\\)",
+    "C": "\\(\\mathrm{[Ar]\\,3d^{6}}\\)",
+    "D": "\\(\\mathrm{[Ar]\\,4s^{2}\\,4p^{4}}\\)"
+   },
+   "answer": "B",
+   "solution": "Chromium is one of two exceptions to the filling order: one 4s electron moves into 3d to give a half-filled d sub-shell, which is more stable. So chromium is \\(\\mathrm{[Ar]\\,3d^{5}\\,4s^{1}}\\). (Following the filling order without the exception leads to \\(\\mathrm{[Ar]\\,3d^{4}\\,4s^{2}}\\).)"
+  },
+  {
+   "id": "che-al-atom-q015",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.21"
+     ]
+    }
+   },
+   "q": "What is the electron configuration of the \\(\\mathrm{Fe^{2+}}\\) ion (\\(Z\\) for iron = 26)?",
+   "options": {
+    "A": "\\(\\mathrm{[Ar]\\,3d^{4}\\,4s^{2}}\\)",
+    "B": "\\(\\mathrm{[Ar]\\,3d^{5}\\,4s^{1}}\\)",
+    "C": "\\(\\mathrm{[Ar]\\,3d^{6}}\\)",
+    "D": "\\(\\mathrm{[Ar]\\,3d^{6}\\,4s^{2}}\\)"
+   },
+   "answer": "C",
+   "solution": "An iron atom is \\(\\mathrm{[Ar]\\,3d^{6}\\,4s^{2}}\\). When a transition metal forms an ion, the 4s electrons are lost first, so \\(\\mathrm{Fe^{2+}}\\) is \\(\\mathrm{[Ar]\\,3d^{6}}\\). (Removing the 3d electrons first, because 4s filled first, leads to \\(\\mathrm{[Ar]\\,3d^{4}\\,4s^{2}}\\).)"
+  },
+  {
+   "id": "che-al-atom-q016",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.21"
+     ]
+    }
+   },
+   "q": "Which species has the electron configuration \\(\\mathrm{1s^{2}\\,2s^{2}\\,2p^{6}\\,3s^{2}\\,3p^{6}\\,3d^{10}}\\)?",
+   "options": {
+    "A": "\\(\\mathrm{Cu}\\)",
+    "B": "\\(\\mathrm{Cu^{+}}\\)",
+    "C": "\\(\\mathrm{Cu^{2+}}\\)",
+    "D": "\\(\\mathrm{Zn}\\)"
+   },
+   "answer": "B",
+   "solution": "Copper is an exception: \\(\\mathrm{[Ar]\\,3d^{10}\\,4s^{1}}\\). Losing the 4s electron gives \\(\\mathrm{Cu^{+}}\\), \\(\\mathrm{[Ar]\\,3d^{10}}\\). \\(\\mathrm{Cu^{2+}}\\) is \\(\\mathrm{3d^{9}}\\), and a zinc atom still has \\(\\mathrm{4s^{2}}\\). (Forgetting copper's exception makes the neutral atom look like the answer.)"
+  },
+  {
+   "id": "che-al-atom-q017",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.20",
+      "1.21"
+     ]
+    }
+   },
+   "q": "How many unpaired electrons does an iron atom (\\(Z = 26\\)) have in its ground state?",
+   "options": {
+    "A": "0",
+    "B": "2",
+    "C": "4",
+    "D": "6"
+   },
+   "answer": "C",
+   "solution": "Iron is \\(\\mathrm{[Ar]\\,3d^{6}\\,4s^{2}}\\). The five 3d orbitals each take one electron before any pairs up, so the sixth electron pairs in one of them: one pair and four single electrons. The 4s electrons are paired. So iron has 4 unpaired electrons. (Assuming all six d electrons are unpaired leads to 6.)"
+  },
+  {
+   "id": "che-al-atom-q018",
+   "difficulty": 2,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "1.15"
+     ]
+    }
+   },
+   "q": "The emission spectrum of hydrogen is a series of separate lines rather than a continuous spectrum. What does this show about the electrons in an atom?",
+   "options": {
+    "A": "They are found in the nucleus as well as around it.",
+    "B": "They can have any energy, so they emit light of every frequency.",
+    "C": "They are all the same distance from the nucleus.",
+    "D": "They can only have certain fixed energies, so each line comes from a transition between two energy levels."
+   },
+   "answer": "D",
+   "solution": "Each line is light of one frequency, so each transition releases a fixed amount of energy, \\(\\Delta E = hf\\). That is only possible if electrons occupy fixed energy levels (quantum shells). A continuous spectrum would mean any energy was possible. (A common slip is to read the lines as showing that all electrons sit at one distance, rather than at a set of fixed energy levels.)"
+  },
+  {
+   "id": "che-al-atom-q019",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.1.2"
+     ]
+    }
+   },
+   "q": "A compound M, with relative molecular mass 180, is analysed in a TOF mass spectrometer using electrospray ionisation. At what \\(m/z\\) value is the peak for the ion formed from M?",
+   "options": {
+    "A": "179",
+    "B": "180",
+    "C": "181",
+    "D": "182"
+   },
+   "answer": "C",
+   "solution": "In electrospray ionisation each molecule gains a proton: \\(\\mathrm{M(g) + H^{+} \\rightarrow MH^{+}(g)}\\). The ion has mass 180 + 1, so it appears at \\(m/z\\) = 181. (Electron impact, which removes an electron, would leave the peak at 180.)"
+  },
+  {
+   "id": "che-al-atom-q020",
+   "difficulty": 1,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "1.6"
+     ]
+    }
+   },
+   "q": "Which is the definition of relative atomic mass, \\(A_{\\text{r}}\\)?",
+   "options": {
+    "A": "The mass of one atom of the element compared with the mass of an atom of carbon-12",
+    "B": "The number of protons and neutrons in the nucleus of an atom of the element",
+    "C": "The mass of an atom of one isotope compared with \\(\\frac{1}{12}\\) of the mass of an atom of carbon-12",
+    "D": "The weighted mean mass of an atom of the element compared with \\(\\frac{1}{12}\\) of the mass of an atom of carbon-12"
+   },
+   "answer": "D",
+   "solution": "\\(A_{\\text{r}}\\) is a weighted mean over all the isotopes, measured against \\(\\frac{1}{12}\\) of the mass of a carbon-12 atom. The definition for a single isotope is relative isotopic mass, and the count of protons and neutrons is the mass number. (Missing out the \\(\\frac{1}{12}\\) is the usual slip.)"
+  }
+ ]
+}

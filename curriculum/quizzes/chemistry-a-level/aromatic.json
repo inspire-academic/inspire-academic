@@ -1,0 +1,536 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/aromatic",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Aromatic Chemistry",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-arom-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.1"
+          ]
+        }
+      },
+      "q": "Which statement best describes the bonding in a benzene molecule?",
+      "options": {
+        "A": "Each carbon atom forms three σ-bonds; the remaining p-orbital on each carbon overlaps sideways with its neighbours to form a ring of delocalised π-electrons above and below the plane of the ring.",
+        "B": "The ring has three C–C single bonds and three C=C double bonds, which alternate around the ring.",
+        "C": "Each carbon atom forms four σ-bonds, and the six spare electrons are delocalised in the plane of the ring between the carbon atoms.",
+        "D": "Each carbon atom has a lone pair of electrons in a p-orbital, and these six lone pairs are delocalised around the ring."
+      },
+      "answer": "A",
+      "solution": "Each carbon uses three of its outer electrons in σ-bonds (two to carbon, one to hydrogen). The fourth electron is in a p-orbital at right angles to the ring; the six p-orbitals overlap sideways to give a delocalised π-system above and below the plane. Alternating single and double bonds is the Kekulé model, which the evidence rules out."
+    },
+    {
+      "id": "che-al-arom-q002",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.2"
+          ]
+        }
+      },
+      "q": "The enthalpy change of hydrogenation of cyclohexene is \\(-120\\ \\text{kJ mol}^{-1}\\). The enthalpy change of hydrogenation of benzene to cyclohexane is \\(-208\\ \\text{kJ mol}^{-1}\\). By how much is benzene more stable than the theoretical molecule cyclohexa-1,3,5-triene?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Benzene reacts with hydrogen, with a nickel catalyst, to form cyclohexane.",
+        "rxn": "c1ccccc1>>C1CCCCC1",
+        "above": "3 H2, Ni",
+        "below": "heat"
+      },
+      "options": {
+        "A": "\\(88\\ \\text{kJ mol}^{-1}\\)",
+        "B": "\\(152\\ \\text{kJ mol}^{-1}\\)",
+        "C": "\\(208\\ \\text{kJ mol}^{-1}\\)",
+        "D": "\\(360\\ \\text{kJ mol}^{-1}\\)"
+      },
+      "answer": "B",
+      "solution": "Cyclohexa-1,3,5-triene has three C=C bonds, so its predicted enthalpy of hydrogenation is \\(3 \\times -120 = -360\\ \\text{kJ mol}^{-1}\\). Benzene releases only \\(208\\ \\text{kJ mol}^{-1}\\), so it is \\(360 - 208 = 152\\ \\text{kJ mol}^{-1}\\) more stable. (A common slip is to compare benzene with one C=C bond: \\(208 - 120 = 88\\).)"
+    },
+    {
+      "id": "che-al-arom-q003",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.2"
+          ]
+        }
+      },
+      "q": "A C–C single bond is 0.154 nm long and a C=C double bond is 0.134 nm long. Which describes the carbon–carbon bonds in benzene?",
+      "options": {
+        "A": "All six bonds 0.139 nm long",
+        "B": "Three bonds of 0.134 nm and three of 0.154 nm, alternating",
+        "C": "All six bonds 0.154 nm long",
+        "D": "All six bonds 0.134 nm long"
+      },
+      "answer": "A",
+      "solution": "X-ray diffraction shows that all six carbon–carbon bonds in benzene are the same length, 0.139 nm, between a single and a double bond. This is evidence for delocalisation: the Kekulé structure would have alternating long and short bonds."
+    },
+    {
+      "id": "che-al-arom-q004",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.3"
+          ]
+        }
+      },
+      "q": "Cyclohexene decolourises bromine water at room temperature but benzene does not. Which is the best explanation?",
+      "options": {
+        "A": "Benzene has no π-electrons, so it cannot attack bromine.",
+        "B": "The bromine molecule is too large to approach the flat benzene ring.",
+        "C": "Benzene is saturated, so it can only take part in substitution reactions.",
+        "D": "The π-electrons in benzene are delocalised, so the electron density between any two carbons is lower than in a C=C bond and cannot polarise bromine enough."
+      },
+      "answer": "D",
+      "solution": "In cyclohexene the π-electrons are localised in one C=C bond, a region of high electron density that induces a dipole in a bromine molecule. In benzene the six π-electrons are spread over the whole ring, so the electron density is lower; benzene needs a halogen carrier to make a stronger electrophile. Benzene does have π-electrons, and it is unsaturated."
+    },
+    {
+      "id": "che-al-arom-q005",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.4"
+          ]
+        }
+      },
+      "q": "Which reagents and conditions are used to convert benzene into nitrobenzene?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Benzene is converted into nitrobenzene; the reagents over the arrow are missing.",
+        "rxn": "c1ccccc1>>O=[N+]([O-])c1ccccc1",
+        "above": "?"
+      },
+      "options": {
+        "A": "Dilute nitric acid, heated under reflux",
+        "B": "Concentrated nitric acid and concentrated sulfuric acid, kept below about 55 °C",
+        "C": "Sodium nitrite and hydrochloric acid, kept below 10 °C",
+        "D": "Concentrated nitric acid with an aluminium chloride catalyst, heated under reflux"
+      },
+      "answer": "B",
+      "solution": "Nitration uses a mixture of concentrated nitric and sulfuric acids. The temperature is kept below about 55 °C so that mainly one nitro group is substituted (above this, more nitration occurs)."
+    },
+    {
+      "id": "che-al-arom-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.5"
+          ]
+        }
+      },
+      "q": "Which equation shows how the electrophile is formed in a mixture of concentrated nitric and sulfuric acids?",
+      "options": {
+        "A": "\\(\\mathrm{HNO_{3} \\rightarrow NO_{2}^{+} + OH^{-}}\\)",
+        "B": "\\(\\mathrm{HNO_{3} + H_{2}SO_{4} \\rightarrow NO_{3}^{-} + H_{3}SO_{4}^{+}}\\)",
+        "C": "\\(\\mathrm{HNO_{3} + H_{2}SO_{4} \\rightarrow NO_{2}^{+} + HSO_{4}^{-} + H_{2}O}\\)",
+        "D": "\\(\\mathrm{H_{2}SO_{4} \\rightarrow SO_{3}H^{+} + OH^{-}}\\)"
+      },
+      "answer": "C",
+      "solution": "Sulfuric acid is the stronger acid, so it protonates nitric acid, which then loses water to give the nitronium ion: \\(\\mathrm{HNO_{3} + H_{2}SO_{4} \\rightarrow NO_{2}^{+} + HSO_{4}^{-} + H_{2}O}\\). (A common slip is to have nitric acid donate a proton to sulfuric acid.) The sulfuric acid is regenerated when \\(\\mathrm{HSO_{4}^{-}}\\) takes the \\(\\mathrm{H^{+}}\\) lost from the ring."
+    },
+    {
+      "id": "che-al-arom-q007",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.5"
+          ]
+        }
+      },
+      "q": "The diagram shows the mechanism for the nitration of benzene. What does the curly arrow that starts on the C–H bond of the intermediate show?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Two stages of a mechanism. Left: a benzene ring with a curly arrow from the ring to an NO2+ ion. Right: an intermediate drawn with a horseshoe and a positive charge, in which one carbon carries both an H atom and an NO2 group, with a curly arrow starting on the C–H bond and ending inside the ring.",
+        "rings": [
+          {
+            "id": "R",
+            "x": 0,
+            "y": 0,
+            "rotate": 30,
+            "circle": true
+          },
+          {
+            "id": "S",
+            "x": 4.2,
+            "y": 0,
+            "rotate": 30,
+            "horseshoe": 90,
+            "charge": "+"
+          }
+        ],
+        "atoms": [
+          {
+            "id": "N",
+            "el": "NO2",
+            "x": 0,
+            "y": 2.1,
+            "charge": "+",
+            "chargeAt": 0
+          },
+          {
+            "id": "Hs",
+            "el": "H",
+            "x": 3.6,
+            "y": 1.9
+          },
+          {
+            "id": "Ns",
+            "el": "NO2",
+            "x": 4.9,
+            "y": 1.9
+          }
+        ],
+        "bonds": [
+          {
+            "a": "S.1",
+            "b": "Hs"
+          },
+          {
+            "a": "S.1",
+            "b": "Ns"
+          }
+        ],
+        "curly": [
+          {
+            "from": {
+              "ring": "R",
+              "at": 90
+            },
+            "to": {
+              "atom": "N"
+            },
+            "side": "right",
+            "bend": 0.5
+          },
+          {
+            "from": {
+              "bond": [
+                "S.1",
+                "Hs"
+              ]
+            },
+            "to": {
+              "ring": "S",
+              "at": 90
+            },
+            "side": "left",
+            "bend": 0.5
+          }
+        ],
+        "arrows": [
+          {
+            "from": [
+              1.4,
+              0
+            ],
+            "to": [
+              2.6,
+              0
+            ]
+          }
+        ]
+      },
+      "options": {
+        "A": "The C–H bond breaks heterolytically; its electrons return to the ring, restoring the delocalised system, and the hydrogen leaves as an H+ ion.",
+        "B": "The C–H bond breaks heterolytically and the hydrogen leaves as a hydride ion, H−.",
+        "C": "The C–H bond breaks homolytically, giving a hydrogen radical and a benzene radical.",
+        "D": "The electrons of the C–H bond move to the nitro group, which then leaves as NO2−."
+      },
+      "answer": "A",
+      "solution": "Both electrons of the C–H bond move back into the ring, so the delocalised ring of six π-electrons is restored and the hydrogen is lost as H+ (which reacts with HSO4− to regenerate the sulfuric acid). Losing H− would leave the ring without its electrons. Restoring the stable delocalised ring is why benzene ends up substituted rather than added to."
+    },
+    {
+      "id": "che-al-arom-q008",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.4"
+          ]
+        }
+      },
+      "q": "Which reagent and catalyst convert benzene into phenylethanone, as shown?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Benzene is converted into phenylethanone; the reagents over the arrow are missing.",
+        "rxn": "c1ccccc1>>CC(=O)c1ccccc1",
+        "above": "?"
+      },
+      "options": {
+        "A": "Ethanoic acid with a concentrated sulfuric acid catalyst",
+        "B": "Ethanal with an aluminium chloride catalyst",
+        "C": "Ethanoyl chloride with an aluminium chloride catalyst",
+        "D": "Ethanoyl chloride with aqueous sodium hydroxide"
+      },
+      "answer": "C",
+      "solution": "This is Friedel–Crafts acylation: benzene is heated under reflux with ethanoyl chloride and anhydrous aluminium chloride, which acts as a catalyst by forming the acylium ion. Ethanoic acid does not form an electrophile strong enough to attack benzene."
+    },
+    {
+      "id": "che-al-arom-q009",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.5"
+          ]
+        }
+      },
+      "q": "In the Friedel–Crafts acylation of benzene with ethanoyl chloride and aluminium chloride, which species attacks the benzene ring?",
+      "options": {
+        "A": "\\(\\mathrm{AlCl_{4}^{-}}\\)",
+        "B": "\\(\\mathrm{CH_{3}^{+}}\\)",
+        "C": "\\(\\mathrm{Cl^{+}}\\)",
+        "D": "\\(\\mathrm{CH_{3}CO^{+}}\\)"
+      },
+      "answer": "D",
+      "solution": "Aluminium chloride removes a chloride ion from ethanoyl chloride: \\(\\mathrm{CH_{3}COCl + AlCl_{3} \\rightarrow CH_{3}CO^{+} + AlCl_{4}^{-}}\\). The electrophile is the acylium ion, \\(\\mathrm{CH_{3}CO^{+}}\\). (A common slip is to give the methyl carbocation, which is the electrophile in alkylation with chloromethane.)"
+    },
+    {
+      "id": "che-al-arom-q010",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.4"
+          ]
+        }
+      },
+      "q": "Benzene is heated under reflux with propanoyl chloride, \\(\\mathrm{CH_{3}CH_{2}COCl}\\), and anhydrous aluminium chloride. What is the organic product?",
+      "options": {
+        "A": "1-phenylpropan-2-one",
+        "B": "Phenyl propanoate",
+        "C": "Propylbenzene",
+        "D": "1-phenylpropan-1-one"
+      },
+      "answer": "D",
+      "solution": "The acylium ion \\(\\mathrm{CH_{3}CH_{2}CO^{+}}\\) substitutes for a hydrogen, so the carbonyl carbon bonds directly to the ring: \\(\\mathrm{C_{6}H_{5}COCH_{2}CH_{3}}\\), 1-phenylpropan-1-one. (Propylbenzene would come from alkylation; phenyl propanoate is an ester, with oxygen between ring and carbonyl.)"
+    },
+    {
+      "id": "che-al-arom-q011",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "18A.4"
+          ]
+        }
+      },
+      "q": "15.6 g of benzene (\\(M_{\\text{r}} = 78.0\\)) is nitrated, and 18.5 g of nitrobenzene (\\(M_{\\text{r}} = 123.0\\)) is obtained. What is the percentage yield?",
+      "options": {
+        "A": "65.2%",
+        "B": "75.2%",
+        "C": "84.3%",
+        "D": "119%"
+      },
+      "answer": "B",
+      "solution": "Amount of benzene \\(= \\frac{15.6}{78.0} = 0.200\\ \\text{mol}\\), so the theoretical yield is \\(0.200 \\times 123.0 = 24.6\\ \\text{g}\\) of nitrobenzene. Percentage yield \\(= \\frac{18.5}{24.6} \\times 100 = 75.2\\%\\). (A common slip is to compare the masses directly, \\(\\frac{15.6}{18.5}\\), giving 84.3%.)"
+    },
+    {
+      "id": "che-al-arom-q012",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18A.4"
+          ]
+        }
+      },
+      "q": "Which reagents and conditions convert benzene into bromobenzene?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Benzene is converted into bromobenzene; the reagents over the arrow are missing.",
+        "rxn": "c1ccccc1>>Brc1ccccc1",
+        "above": "?"
+      },
+      "options": {
+        "A": "Bromine water at room temperature",
+        "B": "Bromine with an iron(III) bromide catalyst, at room temperature",
+        "C": "Bromine in the presence of ultraviolet light",
+        "D": "Hydrogen bromide at room temperature"
+      },
+      "answer": "B",
+      "solution": "Benzene does not react with bromine water. A halogen carrier such as \\(\\mathrm{FeBr_{3}}\\) (or iron filings) polarises bromine to give the electrophile \\(\\mathrm{Br^{+}}\\): \\(\\mathrm{Br_{2} + FeBr_{3} \\rightarrow Br^{+} + FeBr_{4}^{-}}\\). Ultraviolet light gives bromine radicals, which is the route for alkanes."
+    },
+    {
+      "id": "che-al-arom-q013",
+      "difficulty": 1,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18A.6"
+          ]
+        }
+      },
+      "q": "Bromine water is added to an aqueous solution of phenol, shown, at room temperature. What is observed, and what is the organic product?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of phenol: a benzene ring carrying one OH group.",
+        "smiles": "Oc1ccccc1",
+        "formula": "C6H6O"
+      },
+      "options": {
+        "A": "Bromine water is decolourised and a white precipitate of 2,4,6-tribromophenol forms.",
+        "B": "There is no reaction unless an iron(III) bromide catalyst is added.",
+        "C": "Bromine water is decolourised and a colourless solution of 2-bromophenol forms.",
+        "D": "Bromine water is decolourised, and bromine adds across the ring to give a dibromo addition product."
+      },
+      "answer": "A",
+      "solution": "Phenol reacts readily with bromine water without a catalyst. Three hydrogens (at the 2, 4 and 6 positions) are substituted, the orange colour disappears and a white precipitate of 2,4,6-tribromophenol forms: \\(\\mathrm{C_{6}H_{5}OH + 3Br_{2} \\rightarrow C_{6}H_{2}Br_{3}OH + 3HBr}\\). The ring is substituted, not added to."
+    },
+    {
+      "id": "che-al-arom-q014",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18A.7"
+          ]
+        }
+      },
+      "q": "Why does phenol react with bromine much more readily than benzene does?",
+      "options": {
+        "A": "The OH group withdraws electrons from the ring, making the ring carbons δ+ and so more easily attacked.",
+        "B": "Phenol is an acid, and the H+ ions it releases catalyse the reaction.",
+        "C": "The O–H bond is weak, so the hydrogen of the OH group is easily replaced by bromine.",
+        "D": "A lone pair from a p-orbital on the oxygen is partly delocalised into the ring, increasing the electron density, so bromine molecules are polarised more strongly."
+      },
+      "answer": "D",
+      "solution": "One of the lone pairs on the oxygen overlaps with the delocalised π-system, so the ring has a higher electron density than benzene. It can induce a dipole in bromine without a halogen carrier. The substitution is on ring carbons; the O–H hydrogen is not the one replaced."
+    },
+    {
+      "id": "che-al-arom-q015",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18A.4"
+          ]
+        }
+      },
+      "q": "Benzene is warmed with chloroethane in the presence of anhydrous aluminium chloride. What is the main organic product?",
+      "options": {
+        "A": "Chlorobenzene",
+        "B": "Phenylethanone",
+        "C": "Ethylbenzene",
+        "D": "1-chloro-2-ethylbenzene"
+      },
+      "answer": "C",
+      "solution": "This is Friedel–Crafts alkylation. Aluminium chloride takes a chloride ion from chloroethane to give the electrophile \\(\\mathrm{CH_{3}CH_{2}^{+}}\\), which substitutes one hydrogen on the ring: the product is ethylbenzene, \\(\\mathrm{C_{6}H_{5}CH_{2}CH_{3}}\\), with HCl. Phenylethanone would need an acyl chloride."
+    },
+    {
+      "id": "che-al-arom-q016",
+      "difficulty": 1,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "18A.4"
+          ]
+        }
+      },
+      "q": "Benzene burns in air with a very smoky flame. Why?",
+      "options": {
+        "A": "Benzene contains oxygen, which makes the flame smoky.",
+        "B": "Benzene has a high ratio of carbon to hydrogen, so much of the carbon is not fully oxidised and is released as soot.",
+        "C": "Benzene is an aromatic compound, and only aromatic compounds produce carbon monoxide.",
+        "D": "Benzene has a low boiling point, so it evaporates before it burns."
+      },
+      "answer": "B",
+      "solution": "Benzene, \\(\\mathrm{C_{6}H_{6}}\\), has a 1 : 1 ratio of carbon to hydrogen atoms, much higher than an alkane such as hexane. There is not enough oxygen in the flame to oxidise all the carbon, so unburnt carbon (soot) makes the flame smoky."
+    },
+    {
+      "id": "che-al-arom-q017",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.10.2"
+          ]
+        }
+      },
+      "q": "Methyl 3-nitrobenzoate, shown, is made by nitrating methyl benzoate and then recrystallised. The pure compound melts at 78 °C. A student’s sample melts over the range 71–75 °C. What does this show?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of methyl 3-nitrobenzoate: a benzene ring with a CO2CH3 ester group and a nitro group on the carbon two along from it.",
+        "smiles": "COC(=O)c1cccc(c1)[N+](=O)[O-]",
+        "formula": "C8H7NO4"
+      },
+      "options": {
+        "A": "The sample is pure, because the range lies close to 78 °C.",
+        "B": "The sample is pure but the thermometer reads too low.",
+        "C": "The sample is a different compound, because pure compounds always melt above their data-book value.",
+        "D": "The sample is still impure: impurities lower the melting point and make it melt over a range."
+      },
+      "answer": "D",
+      "solution": "A pure solid melts sharply (within about 1–2 °C) at its data-book value. Impurities disrupt the lattice, so the sample melts at a lower temperature and over a wider range. Melting from 71 to 75 °C, below 78 °C, shows the sample needs further recrystallisation."
+    }
+  ]
+}

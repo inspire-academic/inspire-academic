@@ -576,7 +576,9 @@ function goToQuiz(id){
   if(isALevel){
     const back=document.getElementById('btn-back-subjects');
     back.textContent='← '+(quiz.topics?.subjects?.name||'A-level');
-    back.onclick=()=>{ location.href='/a-level/physics'; };
+    // physics-a-level -> /a-level/physics, chemistry-a-level -> /a-level/chemistry
+    const page='/a-level/'+String(quiz.topics?.subjects?.slug||'physics-a-level').replace(/-a-level$/,'');
+    back.onclick=()=>{ location.href=page; };
   }
   questions=started.questions||[];
   attemptId=started.attemptId;
