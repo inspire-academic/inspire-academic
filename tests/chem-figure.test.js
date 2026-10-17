@@ -157,14 +157,14 @@ test('chem figure: the pages load the drawer, and it stays small', () => {
 test('chem figure: a card with a mechanism is checked and published with its drawing', () => {
   const C = require('../scripts/flashcards/content.js');
   const katex = require('../assets/vendor/katex-0.16.47/katex.min.js');
-  const spec = require('../curriculum/flashcards/spec/chemistry-a-level.json');
+  // No specification file: this is about the drawing, not the references.
   const card = { id: 'che-al-halo-901', type: 'concept', difficulty: 2, q: 'Show the mechanism for the reaction of hydroxide ions with bromoethane.',
     a: 'Nucleophilic substitution.', answerFigure: sn2(), boards: { aqa: { refs: ['3.3.3.1'] } } };
   const file = { schema: 'inspire.flashcards.v1', topic: { id: 'chemistry-a-level/halogenoalkanes', subject: 'Chemistry', level: 'A-level', title: 'Halogenoalkanes', spec: 'chemistry-a-level' }, cards: [card] };
-  assert.deepEqual(C.validateTopic(file, { katex, spec }).errors, []);
+  assert.deepEqual(C.validateTopic(file, { katex }).errors, []);
   const broken = JSON.parse(JSON.stringify(file));
   broken.cards[0].answerFigure.curly[0].from.at = 45;
-  assert.ok(C.validateTopic(broken, { katex, spec }).errors.some(e => /answerFigure: curly arrow 1: must start at one of the lone pairs/.test(e)));
+  assert.ok(C.validateTopic(broken, { katex }).errors.some(e => /answerFigure: curly arrow 1: must start at one of the lone pairs/.test(e)));
   const out = C.publishCard(card, katex);
   assert.match(out.afig, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"[^>]*class="pg-svg cf-svg"/, 'drawn when published, so a phone needs no drawing script');
 });
