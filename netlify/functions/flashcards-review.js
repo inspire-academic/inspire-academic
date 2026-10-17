@@ -51,7 +51,8 @@ const TOPICS = {
   'physics-a-level/medical-physics': require('../../curriculum/flashcards/physics-a-level/medical-physics.json'),
   'physics-a-level/engineering-physics': require('../../curriculum/flashcards/physics-a-level/engineering-physics.json'),
   'physics-a-level/turning-points': require('../../curriculum/flashcards/physics-a-level/turning-points.json'),
-  'physics-a-level/electronics': require('../../curriculum/flashcards/physics-a-level/electronics.json')
+  'physics-a-level/electronics': require('../../curriculum/flashcards/physics-a-level/electronics.json'),
+  'chemistry-a-level/atomic-structure': require('../../curriculum/flashcards/chemistry-a-level/atomic-structure.json')
 };
 // Quiz questions (curriculum/quizzes/) are reviewed the same way, each topic
 // under "quiz/<topic id>" so its decisions never mix with the flashcards'.
@@ -85,7 +86,8 @@ const topicFile = id => (Object.prototype.hasOwnProperty.call(TOPICS, id) && TOP
   (Object.prototype.hasOwnProperty.call(QUIZ_TOPICS, id) && QUIZ_TOPICS[id]) || null;
 
 const SPECS = {
-  'physics-a-level': require('../../curriculum/flashcards/spec/physics-a-level.json')
+  'physics-a-level': require('../../curriculum/flashcards/spec/physics-a-level.json'),
+  'chemistry-a-level': require('../../curriculum/flashcards/spec/chemistry-a-level.json')
 };
 
 const DECISIONS = ['approved', 'changes'];

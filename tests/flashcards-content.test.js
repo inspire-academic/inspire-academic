@@ -94,7 +94,7 @@ test('flashcards: a card\'s fingerprint follows what a student sees', () => {
 test('flashcards: publishing writes only the cards a teacher approved, as they read now', () => {
   const out = fs.mkdtempSync(path.join(os.tmpdir(), 'fc-publish-'));
   try {
-    const t = topics[0];
+    const t = topics.find(x => build.SHOWN.includes(x.id.split('/')[0]));
     // a: a card with maths in its answer (to see it typeset); b and c: two others.
     const a = t.data.cards.find(card => card.a.includes('\\('));
     const [b, c] = t.data.cards.filter(card => card !== a);
@@ -118,6 +118,22 @@ test('flashcards: publishing writes only the cards a teacher approved, as they r
     // Nothing approved: nothing is published.
     build.publish(topics, {}, out);
     assert.equal(fs.existsSync(path.join(out, `${t.id}.json`)), false);
+  } finally {
+    fs.rmSync(out, { recursive: true, force: true });
+  }
+});
+
+test('flashcards: a subject the student app cannot show yet is never published', () => {
+  const out = fs.mkdtempSync(path.join(os.tmpdir(), 'fc-publish-'));
+  try {
+    const hidden = topics.filter(x => !build.SHOWN.includes(x.id.split('/')[0]));
+    if (!hidden.length) return;
+    const approved = {};
+    for (const t of hidden) approved[t.id] = Object.fromEntries(t.data.cards.map(c => [c.id, { hash: C.cardHash(c), approvedAt: '2026-10-17T10:00:00Z' }]));
+    build.publish(topics, approved, out);
+    const manifest = JSON.parse(fs.readFileSync(path.join(out, 'manifest.json'), 'utf8'));
+    assert.deepEqual(manifest.topics, []);
+    for (const t of hidden) assert.equal(fs.existsSync(path.join(out, `${t.id}.json`)), false, `${t.id} is not published`);
   } finally {
     fs.rmSync(out, { recursive: true, force: true });
   }
