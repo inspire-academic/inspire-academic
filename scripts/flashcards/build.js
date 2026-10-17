@@ -79,7 +79,16 @@ async function approvals(all, args) {
   return out;
 }
 
+// Subjects the student app can show. It loads every published topic as one
+// subject, so a second subject's cards would appear in the first subject's
+// sessions. A subject is added here once the app tells subjects apart; until
+// then its cards can be drafted and reviewed, but are not published.
+const SHOWN = ['physics-a-level'];
+const shown = t => SHOWN.includes(t.id.split('/')[0]);
+
 function publish(all, approved, OUT = DEFAULT_OUT) {
+  for (const t of all) if (!shown(t)) console.log(`  ${t.id}: its subject is not shown to students yet — nothing published`);
+  all = all.filter(shown);
   const manifest = { schema: C.SCHEMA, topics: [] };
   for (const t of all) {
     const ok = approved[t.id] || {};
@@ -131,4 +140,4 @@ async function main() {
 
 if (require.main === module) main().catch(e => { console.error(e.message); process.exit(1); });
 
-module.exports = { topics, check, publish };
+module.exports = { topics, check, publish, SHOWN };

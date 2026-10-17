@@ -140,3 +140,41 @@ yet"; the choice is kept with the ticked topics. A topic can be an option
 for one board and compulsory for another: Space and Astrophysics is an
 ordinary tick for an Edexcel student. Options with no cards for a
 student's board are never shown.
+
+## A-level Chemistry (started 17 October 2026)
+
+AQA 7405 and Edexcel 9CH0, in `curriculum/flashcards/chemistry-a-level/`,
+cards `che-al-<topic>-NNN`. The specification points are in
+`curriculum/flashcards/spec/chemistry-a-level.json`: 91 AQA sections (Version
+1.1, 1 December 2015) with the 12 required practicals, and 325 Edexcel
+statements (Issue 3, February 2024) with the 16 core practicals. Each point
+carries the topic file it belongs to, AS or A2, and which papers examine it.
+Edexcel numbers statements continuously through a topic, across its
+sub-topics, so the keys follow the printed numbers: 2B starts at 2B.23.
+
+Chemical formulae and equations are LaTeX in `\(\mathrm{...}\)`, such as
+`\(\mathrm{Na(g) \rightarrow Na^{+}(g) + e^{-}}\)` (no mhchem).
+
+**Not shown to students yet.** The student app loads every published topic
+as one subject, so Chemistry cards would appear in Physics sessions.
+`scripts/flashcards/build.js` publishes only the subjects in `SHOWN`
+(Physics). Chemistry cards can be drafted and approved on the review page;
+they are published once the app keeps subjects apart and Chemistry is added
+to `SHOWN`. The teacher preview (`?preview=drafts`) does mix them meanwhile.
+
+Topic files, in specification order (AQA section → file):
+physical: atomic-structure (3.1.1), amount-of-substance (3.1.2),
+bonding (3.1.3), energetics (3.1.4), kinetics (3.1.5), equilibria (3.1.6,
+3.1.10), redox (3.1.7), thermodynamics (3.1.8), rate-equations (3.1.9),
+electrode-potentials (3.1.11), acids-and-bases (3.1.12);
+inorganic: periodicity (3.2.1, 3.2.4), group-2 (3.2.2, also Edexcel
+Group 1), halogens (3.2.3), transition-metals (3.2.5), ions-in-solution
+(3.2.6, also Edexcel 4C);
+organic: organic-intro, alkanes, halogenoalkanes, alkenes, alcohols,
+organic-analysis, optical-isomerism, carbonyls, carboxylic-acids, aromatic,
+amines, polymers, amino-acids-dna, organic-synthesis, nmr-chromatography
+(3.3.1 to 3.3.16).
+
+Organic topics will need structures and mechanisms (skeletal formulae,
+curly arrows), which `physics-graph.js` cannot draw. Decide how before
+writing those topics.
