@@ -177,6 +177,37 @@ organic-analysis, optical-isomerism, carbonyls, carboxylic-acids, aromatic,
 amines, polymers, amino-acids-dna, organic-synthesis, nmr-chromatography
 (3.3.1 to 3.3.16).
 
-Organic topics will need structures and mechanisms (skeletal formulae,
-curly arrows), which `physics-graph.js` cannot draw. Decide how before
-writing those topics.
+## Chemistry drawings (October 2026)
+
+A card's `figure` or `answerFigure` (and a quiz question's `figure`) can be a
+graph or a chemistry drawing. `assets/js/figures.js` sends each to its drawer
+by `kind`; every drawing is dark ink on white, like an exam paper, and is
+drawn into the card when it is published, so a phone downloads no drawing
+code.
+
+- **`structure`**: a molecule from SMILES, `{ kind: 'structure', alt, smiles:
+  'CC(O)CC', formula: 'C4H10O' }`. Skeletal formulae, wedge and hashed bonds,
+  E/Z, Kekulé benzene. Drawn once with RDKit by
+  `node scripts/chem/draw-structures.js` into `assets/chem/structures/`
+  (`<key>.svg` and `index.json`, committed). RDKit is a development
+  dependency; the site never runs it. The checker refuses a structure that has
+  not been drawn, and a `formula` that is not the molecule's.
+- **`reaction`**: a scheme, `{ kind: 'reaction', alt, rxn: 'CCO>>CC(=O)O',
+  above: 'K2Cr2O7 / H^+', below: 'reflux' }`. Each molecule is drawn as a
+  structure, set out with "+" and an arrow carrying the conditions.
+- **`diagram`**: displayed formulae and mechanisms, laid out by hand in bond
+  lengths (`assets/js/chem-figure.js` documents the format): atoms with lone
+  pairs, charges, δ+/δ− and radicals; single, double, triple, wedge, hashed and
+  partial bonds; benzene rings with the delocalised circle or the
+  intermediate's horseshoe; curly arrows (full, or fish-hook with `half`)
+  from a lone pair, a bond or a ring; reaction arrows with conditions;
+  brackets for a transition state. The checker refuses wrong valence, too
+  many lone pairs, an arrow that does not start at a drawn lone pair, bond or
+  ring, and any label, bond or arrow that runs into another label.
+
+Labels typeset themselves: digits after a letter are subscripts (`CH3`), `_`
+forces one (`H_2`) and `^` raises the token after it (`Br^-`, `^δ+`).
+
+To see a topic's drawings before review:
+`node scripts/chem/preview.js curriculum/flashcards/chemistry-a-level/<topic>.json`
+writes an HTML page of every figure and lists any problem.
