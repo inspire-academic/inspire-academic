@@ -1,5 +1,5 @@
 // A-level subjects share the subjects/topics/quizzes tables with GCSE
-// (subjects.level). Every page that
+// (subjects.level, supabase/a_level_physics_subject.sql). Every page that
 // lists all subjects, or quizzes across subjects, must keep to GCSE, or
 // A-level rows appear on GCSE students' screens.
 const test = require('node:test');
@@ -15,7 +15,9 @@ const GCSE = /\(\s*\(?[\w.?]+?\.level\)?\s*\|\|\s*'gcse'\s*\)\s*===\s*'gcse'/;
 const LISTS_SUBJECTS = ['dashboard.html', 'subjects.html', 'student/progress.html', 'ism-class/index.html',
   'teacher/ism-class-management.html', 'teacher/lesson-admin.html', 'teacher/content-coverage.html'];
 // Pages that only look a subject up by id, to show its name.
-const LOOKUP_ONLY = ['teacher/teacher.html', 'ism-class/subject.html'];
+const LOOKUP_ONLY = ['teacher/teacher.html', 'ism-class/subject.html',
+  // The A-level page asks for its one subject by slug.
+  'assets/js/a-level-physics.js'];
 
 test('a-level: every page that lists subjects keeps to GCSE', () => {
   for (const f of LISTS_SUBJECTS) {
@@ -48,4 +50,55 @@ test('a-level: quizzes offered across subjects keep to GCSE', () => {
     assert.doesNotMatch(page, /subjects\(id,\s*name\)/, `${f} reads the subject's level with each quiz`);
     assert.match(page, /filter\(q\s*=>\s*\(\(q\.topics\?\.subjects\?\.level\)\s*\|\|\s*'gcse'\)\s*===\s*'gcse'\)/, `${f} drops A-level quizzes`);
   }
+});
+
+test('a-level: the SQL warns about the order, and its topics match the question files', () => {
+  const sql = read('supabase/a_level_physics_subject.sql');
+  assert.match(sql, /RUN ONLY AFTER the GCSE-only page filters are live/);
+  const slugs = [...sql.matchAll(/\('al-physics-([a-z-]+)',/g)].map(m => m[1]).sort();
+  const files = fs.readdirSync(path.join(ROOT, 'curriculum/flashcards/physics-a-level')).map(f => f.replace(/\.json$/, '')).sort();
+  assert.deepEqual(slugs, files, 'one topic row per A-level Physics topic file');
+  for (const f of fs.readdirSync(path.join(ROOT, 'curriculum/quizzes/physics-a-level'))) {
+    assert.ok(slugs.includes(f.replace(/\.json$/, '')), `${f} has a topic row`);
+  }
+  assert.ok(fs.existsSync(path.join(ROOT, 'supabase/a_level_physics_subject_rollback.sql')));
+});
+
+test('a-level: the dashboard offers A-level Physics to A Level students only', () => {
+  const page = read('dashboard.html');
+  // The card is drawn only when the subject exists and the profile's year group is "A Level".
+  assert.match(page, /if\(aLevelPhysics && profile\?\.year_group==='A Level'\)\{\s+grid\.innerHTML\+=`\s+<div class="subject-card physics" onclick="location\.href='\/a-level\/physics'">/);
+  assert.match(page, /find\(s=>s\.level==='a-level'&&s\.slug==='physics-a-level'\)/);
+});
+
+test('a-level: the subject page keeps the house rules and only offers published quizzes', () => {
+  const page = read('subjects/physics-a-level.html');
+  const js = read('assets/js/a-level-physics.js');
+  const css = read('assets/css/a-level.css');
+  assert.doesNotMatch(page, /\sstyle=|\son[a-z]+=|<style/, 'no inline styles or handlers');
+  assert.doesNotMatch(page, /<script(?![^>]*\ssrc=)[^>]*>/, 'no inline scripts');
+  assert.match(page, /name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/);
+  assert.doesNotMatch(css, /max-width:\s*\d+px\)/, 'mobile first: min-width media queries only');
+  assert.doesNotMatch(js, /localStorage|sessionStorage|innerHTML/);
+  assert.match(js, /from\('quizzes'\)[^;]*\.eq\('is_published', true\)/, 'only published quizzes are offered');
+  assert.match(js, /\.eq\('slug', SUBJECT_SLUG\)/);
+  // Greeted by first name, never "Student" or an email address.
+  assert.doesNotMatch(js, /'Student'|\.email/);
+  assert.match(read('netlify.toml'), /from = "\/a-level\/physics"\s+to = "\/subjects\/physics-a-level\.html"/);
+});
+
+test('a-level: an A-level quiz gives no GCSE grade and leads back to the A-level page', () => {
+  const quiz = read('student/quiz.html');
+  // The quiz's subject is read with its level.
+  assert.match(quiz, /from\('quizzes'\)\.select\('\*,topics\(name,subjects\(\*\)\)'\)\.eq\('id',quizId\)/);
+  assert.match(quiz, /isALevel=quiz\.topics\?\.subjects\?\.level==='a-level';/);
+  // Results: GCSE wording names grades 4 to 9; the A-level wording names none.
+  assert.match(quiz, /textContent=isALevel\?aLevelWords:gcseGrade;/);
+  const words = /const aLevelWords=([\s\S]*?);\n/.exec(quiz)[1];
+  assert.doesNotMatch(words, /Grade|\d\/\d/, 'no grade is claimed for an A-level quiz');
+  assert.match(/const gcseGrade=([\s\S]*?);\n/.exec(quiz)[1], /Grade 9 territory/);
+  // The way back.
+  assert.match(quiz, /back\.onclick=\(\)=>\{ location\.href='\/a-level\/physics'; \};/);
+  assert.match(read('assets/js/a-level-physics.js'), /\+ '&ref=physics-a-level'/);
+  assert.match(read('assets/js/subject-back.js'), /'physics-a-level': \{ label: '← A-level Physics', href: '\/a-level\/physics'/);
 });

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="/assets/js/theme.js"></script>
+<title>Flashcards — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/vendor/katex-0.16.47/katex.min.css">
+<link rel="stylesheet" href="/assets/css/flashcards-v2.css">
+<meta name="robots" content="noindex">
+</head>
+<body>
+
+<nav class="topnav fc-nav" aria-label="Flashcards">
+  <a class="fc-nav-title" href="/subjects.html">Inspire Academic</a>
+  <span class="fc-nav-topic" id="fc-nav-topic"></span>
+</nav>
+
+<main class="fc-main" id="fc-main">
+
+  <!-- Loading, and anything that stops the app starting -->
+  <section class="fc-screen" id="fc-loading" aria-live="polite">
+    <p class="fc-quiet" id="fc-loading-text">Loading your cards…</p>
+  </section>
+
+  <!-- Which exam board? Asked once, only if the profile does not say. -->
+  <section class="fc-screen" id="fc-board" hidden>
+    <h1 class="fc-h1">Which exam board are you studying?</h1>
+    <p class="fc-quiet">You will only see the cards your board examines.</p>
+    <div class="fc-choices">
+      <button type="button" class="fc-btn" data-board="aqa">AQA</button>
+      <button type="button" class="fc-btn" data-board="edexcel">Edexcel</button>
+    </div>
+  </section>
+
+  <!-- Which topics? Asked the first time there is more than one, and
+       whenever the student wants to change it. -->
+  <section class="fc-screen" id="fc-topics" hidden>
+    <h1 class="fc-h1" id="fc-topics-title" tabindex="-1">Which topics have you covered?</h1>
+    <p class="fc-quiet">New cards only come from the topics you tick, mixed together. You can change this at any time.</p>
+    <ul class="fc-ticks" id="fc-topic-list"></ul>
+    <!-- The board's optional topics: a student sits one. -->
+    <fieldset class="fc-options" id="fc-options" hidden>
+      <legend class="fc-h2">Your option</legend>
+      <p class="fc-quiet" id="fc-options-help"></p>
+      <ul class="fc-ticks" id="fc-option-list"></ul>
+    </fieldset>
+    <button type="button" class="fc-btn fc-btn-primary fc-btn-wide" id="fc-topics-save">Save</button>
+  </section>
+
+  <!-- Today -->
+  <section class="fc-screen" id="fc-today" hidden>
+    <p class="fc-kicker" id="fc-topic"></p>
+    <h1 class="fc-h1" id="fc-greeting" tabindex="-1"></h1>
+    <p class="fc-plan" id="fc-plan"></p>
+    <button type="button" class="fc-btn fc-btn-primary fc-btn-wide" id="fc-start">Start</button>
+    <button type="button" class="fc-btn fc-btn-wide" id="fc-extra" hidden>Do a few more</button>
+    <p class="fc-note" id="fc-unsaved" hidden>This browser is not letting us save on this device, so today's progress will not be kept. Leaving private browsing usually fixes it.</p>
+    <p class="fc-note" id="fc-preview-note" hidden>Teacher preview: these are draft cards, not yet approved for students. Nothing you rate here is saved.</p>
+
+    <h2 class="fc-h2">Your week</h2>
+    <p class="fc-week" id="fc-week"></p>
+    <p class="fc-quiet" id="fc-sync" aria-live="polite"></p>
+
+    <h2 class="fc-h2">Specification coverage</h2>
+    <button type="button" class="fc-btn" id="fc-choose" hidden>Change topics</button>
+    <p class="fc-quiet fc-legend"><span class="fc-key fc-key-secure"></span> Secure <span class="fc-key fc-key-learning"></span> Learning <span class="fc-key fc-key-unseen"></span> Not started</p>
+    <div id="fc-cover"></div>
+    <p class="fc-quiet">A card is secure when you have recalled it well on three separate days and it is not due again for at least three weeks.</p>
+  </section>
+
+  <!-- A session: one card at a time -->
+  <section class="fc-screen fc-session" id="fc-session" hidden>
+    <div class="fc-bar">
+      <button type="button" class="fc-icon-btn" id="fc-exit" aria-label="Stop this session">✕</button>
+      <div class="fc-track" aria-hidden="true"><div class="fc-fill" id="fc-fill"></div></div>
+      <span class="fc-count" id="fc-count"></span>
+    </div>
+
+    <article class="fc-card" id="fc-card">
+      <p class="fc-meta" id="fc-meta"></p>
+      <h1 class="fc-q" id="fc-q" tabindex="-1"></h1>
+
+      <div class="fc-typed" id="fc-typed" hidden>
+        <label class="fc-label" for="fc-input">Your answer</label>
+        <div class="fc-typed-row">
+          <input class="fc-input" id="fc-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <span class="fc-unit" id="fc-unit"></span>
+        </div>
+        <p class="fc-quiet">Write powers of ten like 1.9e20 or 1.9 x 10^20.</p>
+      </div>
+
+      <div class="fc-answer" id="fc-answer" hidden>
+        <p class="fc-verdict" id="fc-verdict" hidden></p>
+        <p class="fc-label">Answer</p>
+        <div class="fc-a" id="fc-a"></div>
+        <ol class="fc-steps" id="fc-steps" hidden></ol>
+        <div class="fc-marks" id="fc-marks" hidden>
+          <p class="fc-label">Tick each point you included</p>
+          <ul class="fc-ticks" id="fc-ticks"></ul>
+        </div>
+        <div class="fc-why" id="fc-why" hidden></div>
+        <p class="fc-sheet" id="fc-sheet" hidden></p>
+      </div>
+    </article>
+
+    <!-- The thumb zone: everything a student presses lives here. -->
+    <div class="fc-dock" id="fc-dock">
+      <p class="fc-dock-hint" id="fc-hint" aria-live="polite"></p>
+      <button type="button" class="fc-btn fc-btn-primary fc-btn-wide" id="fc-reveal">Show answer</button>
+      <button type="button" class="fc-btn fc-btn-primary fc-btn-wide" id="fc-step" hidden>Next step</button>
+      <div class="fc-rate" id="fc-rate" hidden>
+        <button type="button" class="fc-rate-btn" data-rating="again"><span class="fc-rate-name">Again</span><span class="fc-rate-when" id="fc-when-again"></span></button>
+        <button type="button" class="fc-rate-btn" data-rating="hard"><span class="fc-rate-name">Hard</span><span class="fc-rate-when" id="fc-when-hard"></span></button>
+        <button type="button" class="fc-rate-btn" data-rating="good"><span class="fc-rate-name">Good</span><span class="fc-rate-when" id="fc-when-good"></span></button>
+        <button type="button" class="fc-rate-btn" data-rating="easy"><span class="fc-rate-name">Easy</span><span class="fc-rate-when" id="fc-when-easy"></span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Done -->
+  <section class="fc-screen" id="fc-done" hidden>
+    <h1 class="fc-h1" id="fc-done-title" tabindex="-1">Done for today</h1>
+    <p class="fc-plan" id="fc-done-win"></p>
+    <p class="fc-quiet" id="fc-done-next"></p>
+    <div class="fc-choices">
+      <button type="button" class="fc-btn" id="fc-finish">Finish</button>
+      <button type="button" class="fc-btn" id="fc-more" hidden>Do a few more</button>
+    </div>
+  </section>
+</main>
+
+<div class="fc-undo" id="fc-undo" hidden>
+  <span id="fc-undo-text"></span>
+  <button type="button" class="fc-undo-btn" id="fc-undo-btn">Undo</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0" crossorigin="anonymous" defer></script>
+<script src="/assets/js/supabase.js" defer></script>
+<script src="/assets/vendor/ts-fsrs-5.4.2/ts-fsrs.umd.js" defer></script>
+<script src="/assets/js/fc-core.js" defer></script>
+<script src="/assets/js/fc-store.js" defer></script>
+<script src="/assets/js/fc-sync.js" defer></script>
+<script src="/assets/js/fc-app.js" defer></script>
+</body>
+</html>

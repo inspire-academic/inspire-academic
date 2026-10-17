@@ -87,6 +87,8 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
   font-family:var(--font-display);font-size:1.05rem;line-height:1.5;
   margin-bottom:1.2rem;color:var(--white);
 }
+.q-figure{max-width:360px;margin:0 auto 1.2rem;}
+.q-figure .pg-svg{display:block;width:100%;height:auto;}
 
 .options{display:flex;flex-direction:column;gap:.7rem;}
 .option{
@@ -329,6 +331,7 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
         <span class="q-marks" id="q-marks-label">1 mark</span>
       </div>
       <div class="q-text" id="q-text"></div>
+      <div class="q-figure" id="q-figure" hidden></div>
       <div class="options" id="options-wrap"></div>
       <div class="free-response-wrap" id="free-response-wrap" style="display:none;">
         <textarea class="fr-textarea" id="fr-textarea" placeholder="Write your answer here — show your working where relevant."></textarea>
@@ -379,7 +382,7 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
     </div>
     <div class="answer-review" id="answer-review"></div>
     <div class="results-actions">
-      <button class="btn btn-outline" onclick="location.href='/subjects.html'">← Back to Subjects</button>
+      <button class="btn btn-outline" id="btn-back-subjects" onclick="location.href='/subjects.html'">← Back to Subjects</button>
       <button class="btn btn-outline" onclick="location.href='/dashboard.html'">Dashboard</button>
       <button class="btn btn-gold" onclick="location.reload()">Retake Quiz ↺</button>
     </div>
@@ -393,6 +396,7 @@ main{max-width:760px;margin:0 auto;padding:1rem 1rem 1.5rem;}
 <script src="/assets/js/app-lock.js"></script>
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/maths-typeset.js"></script>
+<script src="/assets/js/physics-graph.js"></script>
 <script>
 const SUPA_URL = 'https://ygtsrdwoikqnrbexjrtl.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlndHNyZHdvaWtxbnJiZXhqcnRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzMjY1NDYsImV4cCI6MjA5MDkwMjU0Nn0.K0NMpMtD1-Ajv2kFoVy7CIjf2JHJ4vXM0BLiPqvZslo';
@@ -454,7 +458,18 @@ function masteryLabel(m){
 </script>
 
 <script>
+let isALevel=false;
 let quizData=null, questions=[], currentQ=0, answers=[], startTime=null, timerInterval=null, attemptId=null;
+
+// Draws the question's graph (assets/js/physics-graph.js), or clears the slot.
+function showFigure(q){
+  const el=document.getElementById('q-figure');
+  const fig=q&&q.figure;   // sent with the question by the server, when it has one
+  el.textContent='';
+  el.hidden=true;
+  if(!fig) return;
+  try{ el.innerHTML=PhysicsGraph.svg(fig); el.hidden=false; }catch(e){ /* the question still reads without it */ }
+}
 const params=new URLSearchParams(window.location.search);
 const quizId=params.get('id') ? parseInt(params.get('id')) : null;
 const subjectParam=params.get('subject');
@@ -481,7 +496,9 @@ async function initPicker(){
   const {user} = await requireAuth() || {};
   if(!user) return;
 
-  let query = supa.from('quizzes').select('*,topics(id,name,subjects(*))');
+  // Only published quizzes are offered: one that has been withdrawn or
+  // replaced stays in the bank, for its past attempts, but is not listed.
+  let query = supa.from('quizzes').select('*,topics(id,name,subjects(*))').eq('is_published',true);
   const {data:all} = await query;
   const quizzes = subjectParam
     ? (all||[]).filter(q=>String(q.topics?.subjects?.id)===String(subjectParam))
@@ -539,7 +556,7 @@ function goToQuiz(id){
   // is marked by /api/v1/quiz/attempt/answer.
   perfStart('quiz-data');
   const [quizRes, started] = await Promise.all([
-    supa.from('quizzes').select('*,topics(name,subjects(name))').eq('id',quizId).single(),
+    supa.from('quizzes').select('*,topics(name,subjects(*))').eq('id',quizId).single(),
     quizApi('start',{quizId}).catch(e=>({error:e}))
   ]);
   perfEnd('quiz-data');
@@ -549,6 +566,14 @@ function goToQuiz(id){
   if(!quiz){toast('Quiz not found','error');return;}
   if(started.error){ showTimeoutError(() => location.reload()); return; }
   quizData=quiz;
+  // An A-level quiz (subjects.level): its results carry no GCSE grade, and
+  // its way back is the A-level page.
+  isALevel=quiz.topics?.subjects?.level==='a-level';
+  if(isALevel){
+    const back=document.getElementById('btn-back-subjects');
+    back.textContent='← '+(quiz.topics?.subjects?.name||'A-level');
+    back.onclick=()=>{ location.href='/a-level/physics'; };
+  }
   questions=started.questions||[];
   attemptId=started.attemptId;
   if(questions.some(q=>[q.question_text,q.option_a,q.option_b,q.option_c,q.option_d].some(IAMaths.hasMaths))) IAMaths.preload();
@@ -601,6 +626,7 @@ function renderQuestion(){
   document.getElementById('q-num-label').textContent=`Question ${currentQ+1} of ${total}`;
   document.getElementById('q-marks-label').textContent=`${q.marks} mark${q.marks>1?'s':''}`;
   IAMaths.render(document.getElementById('q-text'),q.question_text);
+  showFigure(q);
   document.getElementById('explanation').style.display='none';
   document.getElementById('btn-next').style.display='none';
   document.getElementById('btn-finish').style.display='none';
@@ -838,12 +864,19 @@ function showResults(cor, wrong, pct, passed, elapsed){
   document.getElementById('score-pct').textContent=pct+'%';
   document.getElementById('score-pct').style.color=color;
 
-  const grade=pct>=90?'Outstanding — Grade 9 territory! 🌟':
+  // GCSE quizzes name a grade range. A-level quizzes do not: there is no
+  // agreed mapping from a topic quiz score to an A-level grade.
+  const aLevelWords=pct>=90?'Outstanding 🌟':
+    pct>=75?'Excellent work 💪':
+    pct>=60?'Good effort 👍':
+    pct>=45?'Keep practising 📚':
+    'More revision needed — Let\'s try again 💡';
+  const gcseGrade=pct>=90?'Outstanding — Grade 9 territory! 🌟':
     pct>=75?'Excellent work — Secure Grade 7/8 💪':
     pct>=60?'Good effort — Grade 5/6 range 👍':
     pct>=45?'Keep practising — Grade 4/5 📚':
     'More revision needed — Let\'s try again 💡';
-  document.getElementById('results-grade').textContent=grade;
+  document.getElementById('results-grade').textContent=isALevel?aLevelWords:gcseGrade;
   document.getElementById('results-sub').textContent=
     `${cor} correct out of ${questions.length} questions · ${passed?'PASSED ✓':'Did not pass'}`;
 

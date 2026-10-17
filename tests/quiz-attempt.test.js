@@ -52,6 +52,27 @@ test('starting a quiz needs a signed-in student and returns questions without an
   assert.equal(attempt.max_score, 5);
 });
 
+test('the graph of a question is sent with it, and a quiz still starts when graphs cannot be read', async () => {
+  const figure = { kind: 'graph', alt: 'Velocity against time: a straight line rising from the origin.',
+    x: { label: 'time / s', min: 0, max: 10 }, y: { label: 'velocity', min: 0, max: 20 }, curves: [{ fn: { kind: 'linear', m: 2, c: 0 } }] };
+  const s = setup();
+  s.fake.tables.questions[1].figure = figure;
+  const res = await post(s.start, { quizId: 7 }, AUTH);
+  assert.deepEqual(res.body.questions.map(q => q.figure || null), [null, figure, null, null]);
+  for (const q of res.body.questions) for (const f of SECRET_FIELDS) assert.equal(f in q, false, `start leaked ${f}`);
+
+  // The figure column not there yet (supabase/question_figures.sql not run).
+  const realFetch = global.fetch;
+  global.fetch = (url, opts) => (String(url).includes('figure=not.is.null')
+    ? Promise.resolve({ ok: false, status: 400, text: async () => 'column questions.figure does not exist' })
+    : realFetch(url, opts));
+  const plain = await post(s.start, { quizId: 7 }, AUTH);
+  global.fetch = realFetch;
+  assert.equal(plain.status, 200);
+  assert.deepEqual(plain.body.questions.map(q => q.id), [1, 2, 3, 4]);
+  assert.ok(plain.body.questions.every(q => !('figure' in q)));
+});
+
 test('each answer is marked on the server by stored letter, once', async () => {
   const s = setup();
   const { body: st } = await post(s.start, { quizId: 7 }, AUTH);
@@ -181,4 +202,30 @@ test('quiz routes are wired in netlify.toml', () => {
   for (const action of ['start', 'answer', 'finish']) {
     assert.match(toml, new RegExp(`from = "/api/v1/quiz/attempt/${action}"\\s+to = "/.netlify/functions/quiz-attempt-${action}"`));
   }
+});
+
+test('an unpublished quiz can be started by staff to check it, and by no student', async () => {
+  const s = setup();
+  s.fake.tables.quizzes.push({ id: 9, title: 'Withdrawn', pass_mark: 60, exam_board: 'AQA', is_published: false });
+  s.fake.tables.questions.push(mcq(50, 'A', { quiz_id: 9 }));
+  s.fake.tables.profiles.push({ id: STUDENT.id, role: 'student' }, { id: OTHER.id, role: 'teacher' });
+
+  const student = await post(s.start, { quizId: 9 }, AUTH);
+  assert.equal(student.status, 404);
+  assert.equal(student.body.error.code, 'not_available');
+  assert.equal(s.fake.tables.quiz_attempts.length, 0, 'no attempt is opened');
+
+  const teacher = await post(s.start, { quizId: 9 }, OTHER_AUTH);
+  assert.equal(teacher.status, 200);
+  assert.deepEqual(teacher.body.questions.map(q => q.id), [50]);
+  // A published quiz, and one from before the flag existed, start as always.
+  assert.equal((await post(s.start, { quizId: 7 }, AUTH)).status, 200);
+});
+
+test('students are only offered published quizzes', () => {
+  const read = f => fs.readFileSync(path.join(__dirname, '..', f), 'utf8').replace(/\r\n/g, '\n');
+  // The quiz list, and the dashboard's daily challenge (both of its queries).
+  assert.match(read('student/quiz.html'), /from\('quizzes'\)\.select\('\*,topics\(id,name,subjects\(\*\)\)'\)\.eq\('is_published',true\)/);
+  const dash = read('dashboard.html');
+  assert.equal((dash.match(/\.select\('id, title, difficulty, topics\(name, subjects\(\*\)\)'\)\s+\.eq\('is_published', true\)/g) || []).length, 2);
 });

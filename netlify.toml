@@ -207,6 +207,12 @@ function = "create-teacher"
   to = "/student/quiz.html"
   status = 301
 
+# A-level Physics: topics and quizzes (subjects/physics-a-level.html).
+[[redirects]]
+  from = "/a-level/physics"
+  to = "/subjects/physics-a-level.html"
+  status = 200
+
 [[redirects]]
   from = "/revision.html"
   to = "/student/revision.html"
@@ -776,6 +782,29 @@ function = "create-teacher"
 [[redirects]]
   from = "/api/v1/itt/student/answer"
   to = "/.netlify/functions/itt-student"
+  status = 200
+  force = true
+
+# Flashcard review: a teacher approves each drafted flashcard before students
+# can see it; the build script reads the approvals (ids and fingerprints only)
+# to publish. See netlify/functions/flashcards-review.js.
+[[redirects]]
+  from = "/api/v1/flashcards/review"
+  to = "/.netlify/functions/flashcards-review"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/v1/flashcards/approvals"
+  to = "/.netlify/functions/flashcards-approvals"
+  status = 200
+  force = true
+
+# A student's flashcard ratings, kept as an append-only log and synced
+# between their devices. See netlify/functions/flashcards-reviews.js.
+[[redirects]]
+  from = "/api/v1/flashcards/reviews"
+  to = "/.netlify/functions/flashcards-reviews"
   status = 200
   force = true
 

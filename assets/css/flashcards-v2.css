@@ -1,0 +1,125 @@
+/* The flashcard app (student/flashcards-v2.html). Mobile first: written for a
+   320px phone held in one hand, with everything a student presses in the
+   bottom "thumb zone". Colours come from the shared tokens (app-shared.css),
+   which remap themselves for the light theme. */
+
+.fc-nav{gap:.75rem;}
+.fc-nav-title{display:inline-flex;align-items:center;min-height:44px;font-family:var(--font-display);font-weight:700;color:var(--gold);font-size:1rem;white-space:nowrap;}
+.fc-nav-topic{flex:1;min-width:0;font-size:.82rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right;}
+
+/* `hidden` must win over the display set by a component class. */
+.fc-main [hidden],.fc-dock [hidden],.fc-undo[hidden]{display:none !important;}
+
+.fc-main{max-width:640px;margin:0 auto;padding:1.25rem 1rem 3rem;}
+.fc-main :focus-visible,.fc-undo :focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+.fc-main h1:focus{outline:none;}
+
+.fc-kicker{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 .35rem;}
+.fc-h1{font-family:var(--font-display);font-size:1.6rem;font-weight:800;line-height:1.2;margin:0 0 .6rem;}
+.fc-h2{font-family:var(--font-display);font-size:1.05rem;font-weight:700;margin:2rem 0 .5rem;}
+.fc-h3{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:1.25rem 0 0;}
+#fc-choose{margin:.25rem 0 .5rem;}
+.fc-plan{font-size:1.05rem;line-height:1.5;margin:0 0 1.25rem;}
+.fc-quiet{font-size:.85rem;color:var(--muted);line-height:1.5;margin:.5rem 0;}
+.fc-note{font-size:.85rem;line-height:1.5;margin:1rem 0 0;padding:.7rem .85rem;border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;}
+.fc-week{font-size:.95rem;margin:0;}
+.fc-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 .3rem;display:block;}
+
+/* Buttons: at least 48px tall everywhere, 56px in the thumb zone. */
+.fc-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.7rem 1.25rem;border:1.5px solid var(--border);border-radius:12px;background:var(--navy2);color:var(--white);font-family:var(--font-body);font-size:1rem;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.fc-btn:active{transform:scale(.98);}
+.fc-btn-primary{background:var(--ia-gold);border-color:var(--ia-gold);color:#0b1628;}
+.fc-btn-wide{width:100%;min-height:56px;font-size:1.05rem;}
+.fc-choices{display:flex;gap:.75rem;margin-top:1.25rem;}
+.fc-choices .fc-btn{flex:1;}
+
+/* Specification coverage */
+.fc-legend{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .5rem;}
+.fc-key{display:inline-block;width:.75rem;height:.75rem;border-radius:3px;margin-left:.4rem;}
+.fc-key:first-child{margin-left:0;}
+.fc-key-secure,.fc-seg-secure{background:var(--green);}
+.fc-key-learning,.fc-seg-learning{background:var(--ia-gold);}
+.fc-key-unseen,.fc-seg-unseen{background:var(--border);}
+.fc-cover{list-style:none;margin:.75rem 0;padding:0;}
+.fc-cover-row{display:grid;grid-template-columns:1fr auto;gap:.3rem .75rem;padding:.6rem 0;border-top:1px solid var(--border);}
+.fc-cover-name{font-size:.88rem;font-weight:600;line-height:1.35;}
+.fc-cover-count{font-size:.78rem;color:var(--muted);white-space:nowrap;align-self:start;}
+.fc-cover-bar{grid-column:1 / -1;display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--border);}
+.fc-seg{display:block;flex-basis:0;min-width:3px;}
+
+/* A session */
+.fc-in-session .fc-main{padding-bottom:12.5rem;}
+.fc-bar{display:flex;align-items:center;gap:.75rem;margin:0 0 1rem;}
+.fc-icon-btn{flex:none;width:44px;height:44px;border:1.5px solid var(--border);border-radius:50%;background:transparent;color:var(--muted);font-size:1rem;cursor:pointer;}
+.fc-track{flex:1;height:6px;border-radius:3px;background:var(--border);overflow:hidden;}
+.fc-fill{height:100%;width:0;background:var(--ia-gold);border-radius:3px;transition:width .2s ease;}
+.fc-count{flex:none;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;}
+
+.fc-card{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:1.1rem 1rem 1.25rem;}
+.fc-meta{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 .7rem;}
+.fc-q{font-family:var(--font-display);font-size:1.2rem;font-weight:700;line-height:1.45;margin:0;}
+.fc-answer{margin-top:1.1rem;padding-top:1.1rem;border-top:1px solid var(--border);}
+.fc-a{font-size:1.02rem;line-height:1.65;}
+.fc-a strong,.fc-steps strong{color:var(--gold);}
+/* A card's graph (class pg-svg). Not any svg: the typeset maths draws its
+   root signs with small svgs of its own, which must be left alone. */
+.fc-main .pg-svg{display:block;width:100%;max-width:360px;height:auto;margin:.75rem auto 0;}
+.fc-steps{margin:.9rem 0 0;padding-left:1.4rem;font-size:1rem;line-height:1.65;}
+.fc-steps li{margin:.45rem 0;}
+.fc-marks{margin-top:1rem;}
+.fc-ticks{list-style:none;margin:0;padding:0;}
+.fc-ticks li{display:flex;gap:.7rem;align-items:flex-start;padding:.55rem 0;border-top:1px solid var(--border);}
+.fc-tick{flex:none;width:1.35rem;height:1.35rem;margin:.15rem 0 0;accent-color:var(--ia-gold);}
+.fc-ticks label{font-size:.98rem;line-height:1.55;cursor:pointer;}
+.fc-options{border:0;margin:0;padding:0;min-width:0;}
+.fc-options legend{padding:0;}
+.fc-why{margin-top:1rem;font-size:.92rem;line-height:1.6;color:var(--muted);padding-left:.8rem;border-left:3px solid var(--border);}
+.fc-sheet{margin:1rem 0 0;font-size:.85rem;line-height:1.5;color:var(--muted);}
+/* A wide equation scrolls inside its own line; the page never scrolls sideways. */
+.fc-q,.fc-a,.fc-steps li,.fc-ticks label,.fc-why,.fc-sheet{overflow-x:auto;overflow-y:hidden;}
+
+.fc-typed{margin-top:1.1rem;}
+.fc-typed-row{display:flex;align-items:center;gap:.6rem;}
+.fc-input{flex:1;min-width:0;min-height:52px;padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:10px;background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:1.1rem;}
+.fc-unit{font-size:1.05rem;font-weight:600;white-space:nowrap;}
+.fc-verdict{font-weight:700;margin:0 0 .9rem;padding:.6rem .8rem;border-radius:8px;border:1.5px solid var(--border);}
+.fc-verdict-ok{border-color:var(--green);}
+.fc-verdict-no{border-color:var(--orange);}
+
+/* The thumb zone */
+.fc-dock{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--navy);border-top:1px solid var(--border);padding:.6rem 1rem calc(.75rem + env(safe-area-inset-bottom));}
+.fc-dock > *{max-width:608px;margin-left:auto;margin-right:auto;}
+/* Block-level, so the auto margins centre it on a wide screen. */
+.fc-dock .fc-btn{display:flex;}
+.fc-dock-hint{font-size:.8rem;color:var(--muted);text-align:center;min-height:1.2em;margin-top:0;margin-bottom:.5rem;}
+.fc-rate{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;}
+.fc-rate[hidden]{display:none;}
+.fc-rate-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;min-height:60px;padding:.4rem .2rem;border:1.5px solid var(--border);border-radius:12px;background:var(--navy2);color:var(--white);font-family:var(--font-body);cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.fc-rate-btn:active{transform:scale(.97);}
+.fc-rate-btn:disabled{opacity:.35;cursor:not-allowed;}
+.fc-rate-name{font-size:.95rem;font-weight:700;}
+.fc-rate-when{font-size:.72rem;color:var(--muted);}
+.fc-rate-btn[data-rating="again"]{border-bottom:3px solid var(--orange);}
+.fc-rate-btn[data-rating="hard"]{border-bottom:3px solid var(--ia-gold);}
+.fc-rate-btn[data-rating="good"]{border-bottom:3px solid var(--teal);}
+.fc-rate-btn[data-rating="easy"]{border-bottom:3px solid var(--green);}
+
+/* Undo sits just above the thumb zone for five seconds after a rating. */
+.fc-undo{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(11.5rem + env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;gap:.9rem;padding:.45rem .5rem .45rem 1rem;border:1px solid var(--border);border-radius:999px;background:var(--navy2);font-size:.88rem;box-shadow:0 4px 14px rgba(0,0,0,.25);white-space:nowrap;}
+.fc-undo[hidden]{display:none;}
+body:not(.fc-in-session) .fc-undo{bottom:calc(1.5rem + env(safe-area-inset-bottom));}
+.fc-undo-btn{min-height:40px;padding:.3rem .9rem;border:1.5px solid var(--border);border-radius:999px;background:transparent;color:var(--gold);font-family:var(--font-body);font-size:.88rem;font-weight:700;cursor:pointer;}
+
+@media (min-width:720px){
+  .fc-main{padding-top:2rem;}
+  .fc-h1{font-size:1.9rem;}
+  .fc-card{padding:1.5rem 1.5rem 1.75rem;}
+  .fc-q{font-size:1.35rem;}
+  .fc-btn-wide{max-width:22rem;}
+  .fc-dock .fc-btn-wide{max-width:608px;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .fc-fill{transition:none;}
+  .fc-btn:active,.fc-rate-btn:active{transform:none;}
+}

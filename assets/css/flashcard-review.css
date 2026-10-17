@@ -1,0 +1,72 @@
+/* Flashcard review (teacher/flashcard-review.html). Builds on itt.css and
+   itt-teacher.css for the page frame, tabs and buttons. Mobile first. */
+
+.fr-topic-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .75rem;margin:1rem 0 0;}
+
+.fr-bulk{margin:1rem 0 0;}
+.fr-bulk [hidden]{display:none !important;}
+.fr-bulk-ask{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:0;padding:.75rem .9rem;border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;font-size:.92rem;}
+.fr-bulk-ask span{flex:1 1 16rem;}
+.fr-publish{margin:1rem 0 0;padding:.9rem 1rem;border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:8px;}
+.fr-publish[hidden]{display:none;}
+.fr-publish-step{margin:0 0 .7rem;font-size:.95rem;line-height:1.5;}
+.fr-publish-result{margin:.6rem 0 0;font-size:.92rem;font-weight:600;}
+.fr-empty .itt-btn{margin-top:.75rem;}
+.fr-section{margin:0 0 1.5rem;}
+.fr-section-head{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin:0 0 .75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.fr-section-title{flex:1 1 14rem;margin:0;font-family:var(--font-display);font-size:1.05rem;font-weight:700;line-height:1.3;}
+
+.fr-progress{font-size:.9rem;font-weight:600;color:var(--muted);margin:.75rem 0 0;}
+.fr-progress strong{color:var(--gold);}
+
+.fr-card{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:1rem;margin:0 0 1rem;scroll-margin-top:4.5rem;}
+.fr-card[data-status="approved"]{border-left:4px solid var(--green);}
+.fr-card[data-status="changes"]{border-left:4px solid var(--orange);}
+.fr-card[data-status="edited"]{border-left:4px solid var(--gold);}
+
+.fr-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin:0 0 .6rem;}
+.fr-id{font-size:.75rem;font-weight:700;color:var(--muted);letter-spacing:.04em;}
+.fr-chip{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--border);border-radius:999px;padding:.15rem .6rem;color:var(--muted);}
+.fr-chip-status{margin-left:auto;}
+.fr-card[data-status="approved"] .fr-chip-status{border-color:var(--green);color:var(--green);}
+.fr-card[data-status="changes"] .fr-chip-status{border-color:var(--orange);color:var(--orange);}
+.fr-card[data-status="edited"] .fr-chip-status{border-color:var(--gold);color:var(--gold);}
+
+.fr-spec{list-style:none;margin:0 0 .9rem;padding:0;font-size:.82rem;color:var(--muted);}
+.fr-spec li{margin:.15rem 0;}
+.fr-spec b{color:var(--white);font-weight:700;}
+.fr-sheet{white-space:nowrap;}
+
+.fr-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin:.9rem 0 .25rem;}
+.fr-q{font-family:var(--font-display);font-size:1.12rem;font-weight:700;line-height:1.4;margin:0;}
+.fr-a,.fr-why,.fr-note{font-size:.98rem;line-height:1.6;margin:0;}
+.fr-why,.fr-note{color:var(--muted);}
+.fr-list{margin:0;padding-left:1.3rem;font-size:.98rem;line-height:1.6;}
+.fr-list li{margin:.2rem 0;}
+.fr-options{list-style:none;padding-left:0;}
+.fr-figure{max-width:360px;margin:.6rem 0;}
+.fr-figure .pg-svg{display:block;width:100%;height:auto;}
+.fr-key{font-weight:700;}
+/* A long equation scrolls inside its own line and never widens the page. */
+.fr-q,.fr-a,.fr-why,.fr-note,.fr-list li{overflow-x:auto;overflow-y:hidden;}
+
+.fr-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin:1rem 0 0;}
+.fr-actions .itt-btn{flex:1 1 9rem;}
+.fr-change{margin:.8rem 0 0;}
+.fr-change textarea{display:block;width:100%;min-height:5rem;padding:.6rem .75rem;border:1.5px solid var(--border);border-radius:8px;background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:.95rem;line-height:1.5;}
+.fr-change .itt-btn{margin-top:.6rem;}
+.fr-reviewed{font-size:.8rem;color:var(--muted);margin:.8rem 0 0;}
+.fr-asked{font-size:.9rem;margin:.5rem 0 0;padding:.6rem .75rem;border-left:3px solid var(--orange);background:rgba(232,98,10,.08);}
+.fr-empty{color:var(--muted);text-align:center;padding:2.5rem 0;}
+
+@media (min-width:720px){
+  .fr-card{padding:1.25rem 1.5rem;}
+  .fr-actions .itt-btn{flex:0 0 auto;min-width:11rem;}
+}
+
+/* Light theme: the same card on ivory. */
+[data-theme="light"] .fr-card{background:var(--ia-surface);border-color:var(--ia-border);}
+[data-theme="light"] .fr-spec b{color:var(--ia-text);}
+[data-theme="light"] .fr-label{color:var(--ia-gold-text);}
+[data-theme="light"] .fr-progress strong{color:var(--ia-gold-text);}
+[data-theme="light"] .fr-change textarea{background:var(--ia-bg);color:var(--ia-text);border-color:var(--ia-border-strong);}

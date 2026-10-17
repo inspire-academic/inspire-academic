@@ -19,9 +19,22 @@ exports.handler = async (event) => {
   try {
     const { user, error } = await requireUser(event);
     if (error) return error;
-    const quizzes = await client.get(`quizzes?id=eq.${quizId}&select=id`);
+    const quizzes = await client.get(`quizzes?id=eq.${quizId}&select=id,is_published`);
     if (!quizzes || !quizzes.length) return fail(404, 'not_found', 'Quiz not found.');
+    // A quiz that is not published (withdrawn, or replaced by a newer one)
+    // can be opened by staff to check it, and by no one else.
+    if (quizzes[0].is_published === false) {
+      const [profile] = (await client.get(`profiles?id=eq.${user.id}&select=role`)) || [];
+      if (!profile || !['teacher', 'admin'].includes(profile.role)) return fail(404, 'not_available', 'This quiz is no longer available.');
+    }
     const questions = (await client.get(`questions?quiz_id=eq.${quizId}&select=${PUBLIC_COLUMNS}&order=order_idx`)) || [];
+    // Graphs, for the questions that have one (supabase/question_figures.sql).
+    // Read separately so a quiz still starts if the column is not there yet.
+    try {
+      const figures = (await client.get(`questions?quiz_id=eq.${quizId}&figure=not.is.null&select=id,figure`)) || [];
+      const byId = new Map(figures.map(f => [String(f.id), f.figure]));
+      for (const q of questions) if (byId.has(String(q.id))) q.figure = byId.get(String(q.id));
+    } catch (e) { /* no graphs: the questions still read without them */ }
     const [attempt] = await client.insert('quiz_attempts', {
       student_id: user.id, quiz_id: quizId, score: 0,
       max_score: questions.reduce((s, q) => s + marksOf(q), 0)

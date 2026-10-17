@@ -653,6 +653,18 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
     });
   }
 
+  // A-level students also get their A-level subject. It is kept apart from
+  // GCSE: its own page (/a-level/physics), never in the GCSE lists above.
+  const aLevelPhysics=(subjectsRes.data||[]).find(s=>s.level==='a-level'&&s.slug==='physics-a-level');
+  if(aLevelPhysics && profile?.year_group==='A Level'){
+    grid.innerHTML+=`
+        <div class="subject-card physics" onclick="location.href='/a-level/physics'">
+          <div class="subject-icon">${aLevelPhysics.icon||'⚡'}</div>
+          <div class="subject-name">${aLevelPhysics.name}</div>
+          <div class="subject-topics">Exam-style quizzes, topic by topic</div>
+        </div>`;
+  }
+
   // 7. Recent activity
   const al=document.getElementById('activity-list');
   if(!recent.length){
@@ -870,6 +882,7 @@ async function loadDailyChallenge(profile) {
     // Fetch all quizzes with subject info, board-filtered where possible
     let query = supa.from('quizzes')
       .select('id, title, difficulty, topics(name, subjects(*))')
+      .eq('is_published', true)
       .order('id', { ascending: true });
 
     if (board) {
@@ -882,6 +895,7 @@ async function loadDailyChallenge(profile) {
     if (!error && (!quizzes || quizzes.length === 0)) {
       const { data: fallback } = await supa.from('quizzes')
         .select('id, title, difficulty, topics(name, subjects(*))')
+        .eq('is_published', true)
         .order('id', { ascending: true });
       quizzes = fallback;
     }

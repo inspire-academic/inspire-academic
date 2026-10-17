@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script src="/assets/js/theme.js"></script>
+<title>A-level Physics — Inspire Academic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/app-shared.css">
+<link rel="stylesheet" href="/assets/css/flashcards-v2.css">
+<link rel="stylesheet" href="/assets/css/a-level.css">
+<meta name="robots" content="noindex">
+</head>
+<body>
+
+<nav class="topnav fc-nav" aria-label="A-level Physics">
+  <a class="fc-nav-title" href="/dashboard.html">Inspire Academic</a>
+  <span class="fc-nav-topic">A-level Physics</span>
+</nav>
+
+<main class="fc-main" id="al-main">
+  <p class="fc-kicker" id="al-board">A-level Physics</p>
+  <h1 class="fc-h1" id="al-greeting" tabindex="-1">A-level Physics</h1>
+  <p class="fc-plan">Exam-style multiple-choice quizzes, topic by topic. Each one is marked as you go, with a worked solution for every question.</p>
+
+  <p class="fc-quiet" id="al-status" role="status" aria-live="polite">Loading your topics…</p>
+
+  <section id="al-core" hidden>
+    <h2 class="fc-h2">Topics</h2>
+    <ul class="al-list" id="al-core-list"></ul>
+  </section>
+
+  <section id="al-options" hidden>
+    <h2 class="fc-h2">Optional topics</h2>
+    <p class="fc-quiet">AQA students study one of these. Your school chooses which.</p>
+    <ul class="al-list" id="al-option-list"></ul>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0" crossorigin="anonymous" defer></script>
+<script src="/assets/js/supabase.js" defer></script>
+<script src="/assets/js/a-level-physics.js" defer></script>
+</body>
+</html>
