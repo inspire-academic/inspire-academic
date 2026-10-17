@@ -585,6 +585,14 @@ function = "create-teacher"
   status = 200
   force = true
 
+# Teachers publish or hide GCSE quizzes (teacher/quiz-bank.html). A-level
+# quizzes are refused here; they publish from Flashcard Review. See quiz-bank.js.
+[[redirects]]
+  from = "/api/v1/quiz/bank"
+  to = "/.netlify/functions/quiz-bank"
+  status = 200
+  force = true
+
 # Paid-tier Phase 2 (dormant — see create-checkout-session.js/
 # stripe-webhook.js header comments for the kill switches). Same
 # /api/v1/resource/action convention.
