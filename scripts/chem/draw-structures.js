@@ -99,13 +99,34 @@ function tidy(svg) {
 
 function drawOptions(w, h) {
   return { width: Math.round(w), height: Math.round(h), fixedBondLength: BOND, bondLineWidth: 1.6, multipleBondOffset: 0.18, padding: 0.06,
-    explicitMethyl: true, addStereoAnnotation: false, clearBackground: true, backgroundColour: [1, 1, 1, 1], minFontSize: 13, maxFontSize: 15 };
+    // Skeletal formulae end in a bare line, as in a textbook, not "CH3".
+    explicitMethyl: false, addStereoAnnotation: false, clearBackground: true, backgroundColour: [1, 1, 1, 1], minFontSize: 13, maxFontSize: 15 };
 }
+
+const viewSize = svg => { const m = /viewBox='0 0 ([\d.]+) ([\d.]+)'/.exec(svg); return { w: +m[1], h: +m[2] }; };
 
 function drawStructure(RDKit, fig) {
   const mol = RDKit.get_mol(fig.smiles);
   if (!mol || !mol.is_valid()) throw new Error(`not a valid molecule: ${fig.smiles}`);
   try {
+    // Several molecules (isomers, or an ion pair): each drawn on its own and
+    // set out in a row, in the order written. RDKit would stack and crowd them.
+    if (fig.smiles.includes('.')) {
+      const parts = fig.smiles.split('.').map(smiles => drawStructure(RDKit, { smiles }));
+      const H = Math.max(...parts.map(d => viewSize(d.svg).h));
+      let x = 0;
+      const body = parts.map(d => {
+        const { w, h } = viewSize(d.svg);
+        const out = d.svg.replace(/^<svg[^>]*>/, `<svg x='${x.toFixed(1)}' y='${((H - h) / 2).toFixed(1)}' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>`);
+        x += w + 12;
+        return out;
+      }).join('');
+      const W = x - 12;
+      const withH = RDKit.get_mol(mol.add_hs());
+      const f = formula(withH.get_molblock());
+      withH.delete();
+      return { svg: `<svg version='1.1' xmlns='http://www.w3.org/2000/svg' width='${W.toFixed(0)}px' height='${H.toFixed(0)}px' viewBox='0 0 ${W.toFixed(1)} ${H.toFixed(1)}'><rect width='100%' height='100%' fill='#FFFFFF'/>${body}</svg>`, formula: f };
+    }
     mol.set_new_coords();
     const e = extent(mol.get_molblock());
     const svg = mol.get_svg_with_highlights(JSON.stringify(drawOptions(e.w * BOND + 70, e.h * BOND + 60)));
@@ -125,7 +146,7 @@ function drawReaction(RDKit, fig) {
   const side = s => s.split('.').filter(Boolean).map(smiles => drawStructure(RDKit, { smiles }));
   const reactants = side(left), products = side(right);
   if (!reactants.length || !products.length) throw new Error(`a reaction needs reactants and products: ${fig.rxn}`);
-  const size = svg => { const m = /viewBox='0 0 ([\d.]+) ([\d.]+)'/.exec(svg); return { w: +m[1], h: +m[2] }; };
+  const size = viewSize;
   const H = Math.max(...[...reactants, ...products].map(d => size(d.svg).h));
   const label = t => t ? ChemFigure.textWidth(t, 13) : 0;
   const ARROW = Math.max(70, label(fig.above), label(fig.below)) + 24;
