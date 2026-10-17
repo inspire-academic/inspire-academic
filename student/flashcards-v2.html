@@ -28,8 +28,14 @@
   </section>
 
   <!-- Which exam board? Asked once, only if the profile does not say. -->
+  <!-- Which subject? Asked when a student studies more than one here. -->
+  <section class="fc-screen" id="fc-subject" hidden>
+    <h1 class="fc-h1" id="fc-subject-title" tabindex="-1">Which subject today?</h1>
+    <p class="fc-quiet">Each subject keeps its own topics and its own cards for the day.</p>
+    <div class="fc-choices fc-choices-stack" id="fc-subject-list"></div>
+  </section>
   <section class="fc-screen" id="fc-board" hidden>
-    <h1 class="fc-h1">Which exam board are you studying?</h1>
+    <h1 class="fc-h1" id="fc-board-title">Which exam board are you studying?</h1>
     <p class="fc-quiet">You will only see the cards your board examines.</p>
     <div class="fc-choices">
       <button type="button" class="fc-btn" data-board="aqa">AQA</button>
@@ -68,6 +74,7 @@
 
     <h2 class="fc-h2">Specification coverage</h2>
     <button type="button" class="fc-btn" id="fc-choose" hidden>Change topics</button>
+    <button type="button" class="fc-btn" id="fc-switch" hidden>Change subject</button>
     <p class="fc-quiet fc-legend"><span class="fc-key fc-key-secure"></span> Secure <span class="fc-key fc-key-learning"></span> Learning <span class="fc-key fc-key-unseen"></span> Not started</p>
     <div id="fc-cover"></div>
     <p class="fc-quiet">A card is secure when you have recalled it well on three separate days and it is not due again for at least three weeks.</p>
@@ -145,6 +152,7 @@
 <script src="/assets/js/fc-core.js" defer></script>
 <script src="/assets/js/fc-store.js" defer></script>
 <script src="/assets/js/fc-sync.js" defer></script>
+<script src="/assets/js/a-level-subjects.js" defer></script>
 <script src="/assets/js/fc-app.js" defer></script>
 </body>
 </html>

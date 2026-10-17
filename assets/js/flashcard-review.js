@@ -92,7 +92,7 @@
   // A graph, drawn exactly as the student will see it.
   function figureHtml(figure) {
     if (!figure) return '';
-    try { return '<div class="fr-figure">' + PhysicsGraph.svg(figure) + '</div>'; }
+    try { return '<div class="fr-figure">' + Figures.svg(figure) + '</div>'; }
     catch (e) { return '<p class="fr-asked">This graph could not be drawn.</p>'; }
   }
 

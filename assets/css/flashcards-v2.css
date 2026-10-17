@@ -32,6 +32,7 @@
 .fc-btn-wide{width:100%;min-height:56px;font-size:1.05rem;}
 .fc-choices{display:flex;gap:.75rem;margin-top:1.25rem;}
 .fc-choices .fc-btn{flex:1;}
+.fc-choices-stack{flex-direction:column;}
 
 /* Specification coverage */
 .fc-legend{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .5rem;}
@@ -64,6 +65,9 @@
 /* A card's graph (class pg-svg). Not any svg: the typeset maths draws its
    root signs with small svgs of its own, which must be left alone. */
 .fc-main .pg-svg{display:block;width:100%;max-width:360px;height:auto;margin:.75rem auto 0;}
+/* A chemistry drawing (chem-figure.js) keeps its own size, as printed,
+   and only shrinks to fit a narrow screen. */
+.fc-main .cf-svg{width:auto;max-width:100%;}
 .fc-steps{margin:.9rem 0 0;padding-left:1.4rem;font-size:1rem;line-height:1.65;}
 .fc-steps li{margin:.45rem 0;}
 .fc-marks{margin-top:1rem;}

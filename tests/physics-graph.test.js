@@ -88,18 +88,20 @@ test('graph: the question checker holds a figure to the same rules', () => {
 test('graph: the review page and the quiz page draw the figure, and the quiz runs without it', () => {
   const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/\r\n/g, '\n');
   const review = read('assets/js/flashcard-review.js');
-  assert.match(read('teacher/flashcard-review.html'), /<script src="\/assets\/js\/physics-graph\.js"><\/script>/);
-  assert.match(review, /function figureHtml\(figure\) \{[\s\S]*?PhysicsGraph\.svg\(figure\)/);
+  // Graphs and chemistry drawings both go through figures.js, loaded after the two drawers.
+  const DRAWERS = /<script src="\/assets\/js\/physics-graph\.js"><\/script>\s*<script src="\/assets\/js\/chem-figure\.js"><\/script>\s*<script src="\/assets\/js\/figures\.js"><\/script>/;
+  assert.match(read('teacher/flashcard-review.html'), DRAWERS);
+  assert.match(review, /function figureHtml\(figure\) \{[\s\S]*?Figures\.svg\(figure\)/);
   assert.match(review, /h \+= figureHtml\(card\.figure\);/);
   const quiz = read('student/quiz.html');
-  assert.match(quiz, /<script src="\/assets\/js\/physics-graph\.js"><\/script>/);
+  assert.match(quiz, DRAWERS);
   assert.match(quiz, /<div class="q-figure" id="q-figure" hidden><\/div>/);
   // The graph arrives with the question from the server; the page never reads the questions table.
   assert.match(quiz, /const fig=q&&q\.figure;/);
   assert.doesNotMatch(quiz, /from\('questions'\)/);
   const start = read('netlify/functions/quiz-attempt-start.js');
   assert.match(start, /try \{\s+const figures = \(await client\.get\(`questions\?quiz_id=eq\.\$\{quizId\}&figure=not\.is\.null&select=id,figure`\)\)/, 'read separately, so a quiz starts without the column');
-  assert.match(quiz, /try\{ el\.innerHTML=PhysicsGraph\.svg\(fig\); el\.hidden=false; \}catch\(e\)/);
+  assert.match(quiz, /try\{ el\.innerHTML=Figures\.svg\(fig\); el\.hidden=false; \}catch\(e\)/);
   const sql = read('supabase/question_figures.sql');
   assert.match(sql, /add column if not exists figure jsonb/);
   assert.doesNotMatch(sql, /^grant /m, 'browsers get no access: the server sends the graph');
