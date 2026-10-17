@@ -1,0 +1,2529 @@
+{
+ "schema": "inspire.flashcards.v1",
+ "topic": {
+  "id": "chemistry-a-level/amino-acids-dna",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Amino Acids, Proteins and DNA",
+  "spec": "chemistry-a-level"
+ },
+ "cards": [
+  {
+   "id": "che-al-amino-001",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "amino-acids",
+    "structure"
+   ],
+   "q": "Draw the general structure of a 2-amino acid.",
+   "a": "\\(\\mathrm{H_{2}NCH(R)COOH}\\): an amine group and a carboxylic acid group on the same carbon atom.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Displayed formula of a 2-amino acid: a central carbon bonded to an NH2 group, a hydrogen, an R group and a COOH group (C=O and O–H).",
+    "atoms": [
+     {
+      "id": "N",
+      "el": "H2N",
+      "x": -1.1,
+      "y": 0
+     },
+     {
+      "id": "Ca",
+      "el": "C",
+      "x": 0,
+      "y": 0
+     },
+     {
+      "id": "R",
+      "el": "R",
+      "x": 0,
+      "y": 1
+     },
+     {
+      "id": "H",
+      "el": "H",
+      "x": 0,
+      "y": -1
+     },
+     {
+      "id": "C",
+      "el": "C",
+      "x": 1.1,
+      "y": 0
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 1.65,
+      "y": 0.9
+     },
+     {
+      "id": "O2",
+      "el": "OH",
+      "x": 1.65,
+      "y": -0.9
+     }
+    ],
+    "bonds": [
+     {
+      "a": "N",
+      "b": "Ca"
+     },
+     {
+      "a": "Ca",
+      "b": "R"
+     },
+     {
+      "a": "Ca",
+      "b": "H"
+     },
+     {
+      "a": "Ca",
+      "b": "C"
+     },
+     {
+      "a": "C",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C",
+      "b": "O2"
+     }
+    ]
+   },
+   "why": "It is called a 2-amino acid (α-amino acid) because the NH₂ is on carbon 2, next to the COOH carbon.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-002",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "amino-acids",
+    "structure"
+   ],
+   "q": "Is this molecule, 3-aminopropanoic acid, a 2-amino acid?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of 3-aminopropanoic acid: NH2–CH2–CH2–COOH.",
+    "smiles": "NCCC(=O)O",
+    "formula": "C3H7NO2"
+   },
+   "a": "<strong>No.</strong> It is an amino acid, but the NH₂ is on carbon 3, not on the carbon next to the COOH.",
+   "why": "The amino acids in proteins all have the NH₂ and COOH on the same carbon.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "18B.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-003",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "amino-acids",
+    "naming"
+   ],
+   "q": "Give the IUPAC name of alanine.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of alanine, 2-aminopropanoic acid: a carbon carrying NH2, CH3 and COOH.",
+    "smiles": "CC(N)C(=O)O",
+    "formula": "C3H7NO2"
+   },
+   "a": "<strong>2-aminopropanoic acid</strong>",
+   "why": "Glycine, the simplest amino acid (R = H), is aminoethanoic acid.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-004",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "zwitterions"
+   ],
+   "q": "What is a zwitterion?",
+   "a": "An ion with both a positive and a negative charge in the same molecule, but no overall charge.",
+   "why": "In an amino acid the \\(\\mathrm{-COOH}\\) loses \\(\\mathrm{H^{+}}\\) to the \\(\\mathrm{-NH_{2}}\\), giving \\(\\mathrm{-COO^{-}}\\) and \\(\\mathrm{-NH_{3}^{+}}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-005",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "zwitterions"
+   ],
+   "q": "Draw the zwitterion of glycine.",
+   "a": "\\(\\mathrm{^{+}H_{3}NCH_{2}COO^{-}}\\)",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of glycine, aminoethanoic acid: NH2–CH2–COOH.",
+    "smiles": "NCC(=O)O",
+    "formula": "C2H5NO2"
+   },
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of the zwitterion of glycine: NH3+ at one end and COO− at the other.",
+    "smiles": "[NH3+]CC(=O)[O-]",
+    "formula": "C2H5NO2"
+   },
+   "why": "The proton moves from the acidic COOH group to the basic NH₂ group.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-006",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "zwitterions"
+   ],
+   "q": "Draw the zwitterion of alanine.",
+   "a": "\\(\\mathrm{^{+}H_{3}NCH(CH_{3})COO^{-}}\\)",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of the zwitterion of alanine: a carbon carrying NH3+, CH3 and COO−.",
+    "smiles": "CC([NH3+])C(=O)[O-]",
+    "formula": "C3H7NO2"
+   },
+   "why": "Only the NH₂ and COOH groups change; the side chain does not.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-007",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "zwitterions",
+    "acid"
+   ],
+   "q": "Draw the ion formed by alanine in strongly acidic solution.",
+   "a": "\\(\\mathrm{^{+}H_{3}NCH(CH_{3})COOH}\\): a positive ion.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of alanine in acid solution: NH3+ and an un-ionised COOH group.",
+    "smiles": "CC([NH3+])C(=O)O",
+    "formula": "C3H8NO2+"
+   },
+   "why": "The \\(\\mathrm{-COO^{-}}\\) of the zwitterion accepts \\(\\mathrm{H^{+}}\\), so only the \\(\\mathrm{-NH_{3}^{+}}\\) charge remains.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-008",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "zwitterions",
+    "alkali"
+   ],
+   "q": "Draw the ion formed by alanine in strongly alkaline solution.",
+   "a": "\\(\\mathrm{H_{2}NCH(CH_{3})COO^{-}}\\): a negative ion.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of alanine in alkaline solution: an NH2 group and a COO− group.",
+    "smiles": "CC(N)C(=O)[O-]",
+    "formula": "C3H6NO2-"
+   },
+   "why": "The \\(\\mathrm{-NH_{3}^{+}}\\) of the zwitterion loses \\(\\mathrm{H^{+}}\\) to \\(\\mathrm{OH^{-}}\\), so only the \\(\\mathrm{-COO^{-}}\\) charge remains.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-009",
+   "type": "equation",
+   "difficulty": 2,
+   "tags": [
+    "zwitterions",
+    "acid",
+    "alkali"
+   ],
+   "q": "Write equations to show glycine’s zwitterion acting as a base and as an acid.",
+   "a": "Base: \\(\\mathrm{^{+}H_{3}NCH_{2}COO^{-} + H^{+} \\rightarrow {}^{+}H_{3}NCH_{2}COOH}\\)<br>Acid: \\(\\mathrm{^{+}H_{3}NCH_{2}COO^{-} + OH^{-} \\rightarrow H_{2}NCH_{2}COO^{-} + H_{2}O}\\)",
+   "why": "Amino acids are amphoteric: they can react with both acids and bases, so they act as buffers.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-010",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "zwitterions",
+    "properties"
+   ],
+   "q": "Explain why amino acids are solids with high melting points that dissolve in water.",
+   "a": "In the solid they exist as zwitterions held by strong ionic attractions.",
+   "marks": [
+    "In the solid, amino acids exist as zwitterions.",
+    "There are strong electrostatic attractions between the opposite charges of neighbouring zwitterions.",
+    "Much energy is needed to overcome these, so the melting point is high.",
+    "The charged groups are strongly attracted to polar water molecules, so they dissolve."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-011",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "zwitterions"
+   ],
+   "q": "True or false: solid glycine is made of \\(\\mathrm{H_{2}NCH_{2}COOH}\\) molecules.",
+   "a": "<strong>False.</strong> Solid glycine is made of zwitterions, \\(\\mathrm{^{+}H_{3}NCH_{2}COO^{-}}\\).",
+   "why": "That is why glycine melts (with decomposition) above 200 °C, unlike a simple molecular compound of similar mass.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-012",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "optical-isomerism"
+   ],
+   "q": "Why do aqueous solutions of naturally occurring alanine rotate the plane of plane-polarised light?",
+   "a": "Alanine has a chiral carbon, and living things make only one of its two enantiomers.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "The two enantiomers of alanine, drawn with wedge and hashed bonds: mirror images that cannot be superimposed.",
+    "smiles": "N[C@@H](C)C(=O)O.N[C@H](C)C(=O)O",
+    "formula": "C6H14N2O4"
+   },
+   "why": "A single enantiomer rotates plane-polarised monochromatic light; a racemic mixture would not.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.7"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16",
+      "17A.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-013",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "optical-isomerism"
+   ],
+   "q": "Which is the only common 2-amino acid that is not optically active, and why?",
+   "a": "<strong>Glycine</strong>: its central carbon carries two hydrogen atoms, so it is not chiral.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of glycine, aminoethanoic acid: NH2–CH2–COOH.",
+    "smiles": "NCC(=O)O",
+    "formula": "C2H5NO2"
+   },
+   "why": "A chiral carbon needs four different groups. In glycine R = H.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.7"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.16"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-014",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "peptides"
+   ],
+   "q": "What is a peptide link, and how does it form?",
+   "a": "The amide link \\(\\mathrm{-CONH-}\\) between two amino acids. It forms by <strong>condensation</strong>: the \\(\\mathrm{-COOH}\\) of one reacts with the \\(\\mathrm{-NH_{2}}\\) of another, eliminating water.",
+   "why": "Proteins are condensation polymers of amino acids joined by peptide links.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-015",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "peptides"
+   ],
+   "q": "Glycine’s COOH group reacts with alanine’s NH₂ group. Draw the dipeptide formed.",
+   "a": "\\(\\mathrm{H_{2}NCH_{2}CONHCH(CH_{3})COOH}\\) (Gly-Ala) and water.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Displayed formula of the dipeptide Gly-Ala: H2N–CH2–C(=O)–NH–CH(CH3)–COOH, with the peptide link C(=O)–N(H) in the middle.",
+    "atoms": [
+     {
+      "id": "N0",
+      "el": "H2N",
+      "x": -0.2,
+      "y": 0
+     },
+     {
+      "id": "A0",
+      "el": "C",
+      "x": 1,
+      "y": 0
+     },
+     {
+      "id": "R0",
+      "el": "H",
+      "x": 1,
+      "y": -1
+     },
+     {
+      "id": "h0",
+      "el": "H",
+      "x": 1,
+      "y": 1
+     },
+     {
+      "id": "C0",
+      "el": "C",
+      "x": 2,
+      "y": 0
+     },
+     {
+      "id": "O0",
+      "el": "O",
+      "x": 2,
+      "y": 1
+     },
+     {
+      "id": "N1",
+      "el": "N",
+      "x": 3,
+      "y": 0
+     },
+     {
+      "id": "H1",
+      "el": "H",
+      "x": 3,
+      "y": -1
+     },
+     {
+      "id": "A1",
+      "el": "C",
+      "x": 4,
+      "y": 0
+     },
+     {
+      "id": "R1",
+      "el": "CH3",
+      "x": 4,
+      "y": -1
+     },
+     {
+      "id": "h1",
+      "el": "H",
+      "x": 4,
+      "y": 1
+     },
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 5,
+      "y": 0
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 5,
+      "y": 1
+     },
+     {
+      "id": "OH",
+      "el": "OH",
+      "x": 6,
+      "y": 0
+     }
+    ],
+    "bonds": [
+     {
+      "a": "N0",
+      "b": "A0"
+     },
+     {
+      "a": "A0",
+      "b": "R0"
+     },
+     {
+      "a": "A0",
+      "b": "h0"
+     },
+     {
+      "a": "A0",
+      "b": "C0"
+     },
+     {
+      "a": "C0",
+      "b": "O0",
+      "order": 2
+     },
+     {
+      "a": "N1",
+      "b": "H1"
+     },
+     {
+      "a": "C0",
+      "b": "N1"
+     },
+     {
+      "a": "N1",
+      "b": "A1"
+     },
+     {
+      "a": "A1",
+      "b": "R1"
+     },
+     {
+      "a": "A1",
+      "b": "h1"
+     },
+     {
+      "a": "A1",
+      "b": "C1"
+     },
+     {
+      "a": "C1",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C1",
+      "b": "OH"
+     }
+    ]
+   },
+   "why": "The dipeptide still has a free NH₂ at one end and a free COOH at the other, so the chain can grow.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-016",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "peptides"
+   ],
+   "q": "How many different dipeptides can form from one glycine and one alanine molecule? Name them.",
+   "a": "<strong>Two</strong>: Gly-Ala and Ala-Gly.",
+   "figure": {
+    "kind": "diagram",
+    "alt": "Displayed formula of the dipeptide Gly-Ala: H2N–CH2–C(=O)–NH–CH(CH3)–COOH, with the peptide link C(=O)–N(H) in the middle.",
+    "atoms": [
+     {
+      "id": "N0",
+      "el": "H2N",
+      "x": -0.2,
+      "y": 0
+     },
+     {
+      "id": "A0",
+      "el": "C",
+      "x": 1,
+      "y": 0
+     },
+     {
+      "id": "R0",
+      "el": "H",
+      "x": 1,
+      "y": -1
+     },
+     {
+      "id": "h0",
+      "el": "H",
+      "x": 1,
+      "y": 1
+     },
+     {
+      "id": "C0",
+      "el": "C",
+      "x": 2,
+      "y": 0
+     },
+     {
+      "id": "O0",
+      "el": "O",
+      "x": 2,
+      "y": 1
+     },
+     {
+      "id": "N1",
+      "el": "N",
+      "x": 3,
+      "y": 0
+     },
+     {
+      "id": "H1",
+      "el": "H",
+      "x": 3,
+      "y": -1
+     },
+     {
+      "id": "A1",
+      "el": "C",
+      "x": 4,
+      "y": 0
+     },
+     {
+      "id": "R1",
+      "el": "CH3",
+      "x": 4,
+      "y": -1
+     },
+     {
+      "id": "h1",
+      "el": "H",
+      "x": 4,
+      "y": 1
+     },
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 5,
+      "y": 0
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 5,
+      "y": 1
+     },
+     {
+      "id": "OH",
+      "el": "OH",
+      "x": 6,
+      "y": 0
+     }
+    ],
+    "bonds": [
+     {
+      "a": "N0",
+      "b": "A0"
+     },
+     {
+      "a": "A0",
+      "b": "R0"
+     },
+     {
+      "a": "A0",
+      "b": "h0"
+     },
+     {
+      "a": "A0",
+      "b": "C0"
+     },
+     {
+      "a": "C0",
+      "b": "O0",
+      "order": 2
+     },
+     {
+      "a": "N1",
+      "b": "H1"
+     },
+     {
+      "a": "C0",
+      "b": "N1"
+     },
+     {
+      "a": "N1",
+      "b": "A1"
+     },
+     {
+      "a": "A1",
+      "b": "R1"
+     },
+     {
+      "a": "A1",
+      "b": "h1"
+     },
+     {
+      "a": "A1",
+      "b": "C1"
+     },
+     {
+      "a": "C1",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C1",
+      "b": "OH"
+     }
+    ]
+   },
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Displayed formula of the dipeptide Ala-Gly: H2N–CH(CH3)–C(=O)–NH–CH2–COOH, with the peptide link C(=O)–N(H) in the middle.",
+    "atoms": [
+     {
+      "id": "N0",
+      "el": "H2N",
+      "x": -0.2,
+      "y": 0
+     },
+     {
+      "id": "A0",
+      "el": "C",
+      "x": 1,
+      "y": 0
+     },
+     {
+      "id": "R0",
+      "el": "CH3",
+      "x": 1,
+      "y": -1
+     },
+     {
+      "id": "h0",
+      "el": "H",
+      "x": 1,
+      "y": 1
+     },
+     {
+      "id": "C0",
+      "el": "C",
+      "x": 2,
+      "y": 0
+     },
+     {
+      "id": "O0",
+      "el": "O",
+      "x": 2,
+      "y": 1
+     },
+     {
+      "id": "N1",
+      "el": "N",
+      "x": 3,
+      "y": 0
+     },
+     {
+      "id": "H1",
+      "el": "H",
+      "x": 3,
+      "y": -1
+     },
+     {
+      "id": "A1",
+      "el": "C",
+      "x": 4,
+      "y": 0
+     },
+     {
+      "id": "R1",
+      "el": "H",
+      "x": 4,
+      "y": -1
+     },
+     {
+      "id": "h1",
+      "el": "H",
+      "x": 4,
+      "y": 1
+     },
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 5,
+      "y": 0
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 5,
+      "y": 1
+     },
+     {
+      "id": "OH",
+      "el": "OH",
+      "x": 6,
+      "y": 0
+     }
+    ],
+    "bonds": [
+     {
+      "a": "N0",
+      "b": "A0"
+     },
+     {
+      "a": "A0",
+      "b": "R0"
+     },
+     {
+      "a": "A0",
+      "b": "h0"
+     },
+     {
+      "a": "A0",
+      "b": "C0"
+     },
+     {
+      "a": "C0",
+      "b": "O0",
+      "order": 2
+     },
+     {
+      "a": "N1",
+      "b": "H1"
+     },
+     {
+      "a": "C0",
+      "b": "N1"
+     },
+     {
+      "a": "N1",
+      "b": "A1"
+     },
+     {
+      "a": "A1",
+      "b": "R1"
+     },
+     {
+      "a": "A1",
+      "b": "h1"
+     },
+     {
+      "a": "A1",
+      "b": "C1"
+     },
+     {
+      "a": "C1",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "C1",
+      "b": "OH"
+     }
+    ]
+   },
+   "why": "Either amino acid can provide the COOH group. The figure with the question is Gly-Ala; with the answer, Ala-Gly.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-017",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "peptides"
+   ],
+   "q": "Draw the tripeptide formed from glycine, alanine and serine (\\(\\mathrm{R = CH_{2}OH}\\)), joined in that order.",
+   "a": "\\(\\mathrm{H_{2}NCH_{2}CONHCH(CH_{3})CONHCH(CH_{2}OH)COOH}\\): two peptide links, two molecules of water eliminated.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Displayed formula of the tripeptide Gly-Ala-Ser: H2N–CH2–CO–NH–CH(CH3)–CO–NH–CH(CH2OH)–COOH, with two peptide links.",
+    "atoms": [
+     {
+      "id": "N0",
+      "el": "H2N",
+      "x": -0.2,
+      "y": 0
+     },
+     {
+      "id": "A0",
+      "el": "C",
+      "x": 1,
+      "y": 0
+     },
+     {
+      "id": "R0",
+      "el": "H",
+      "x": 1,
+      "y": -1
+     },
+     {
+      "id": "h0",
+      "el": "H",
+      "x": 1,
+      "y": 1
+     },
+     {
+      "id": "C0",
+      "el": "C",
+      "x": 2,
+      "y": 0
+     },
+     {
+      "id": "O0",
+      "el": "O",
+      "x": 2,
+      "y": 1
+     },
+     {
+      "id": "N1",
+      "el": "N",
+      "x": 3,
+      "y": 0
+     },
+     {
+      "id": "H1",
+      "el": "H",
+      "x": 3,
+      "y": -1
+     },
+     {
+      "id": "A1",
+      "el": "C",
+      "x": 4,
+      "y": 0
+     },
+     {
+      "id": "R1",
+      "el": "CH3",
+      "x": 4,
+      "y": -1
+     },
+     {
+      "id": "h1",
+      "el": "H",
+      "x": 4,
+      "y": 1
+     },
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 5,
+      "y": 0
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 5,
+      "y": 1
+     },
+     {
+      "id": "N2",
+      "el": "N",
+      "x": 6,
+      "y": 0
+     },
+     {
+      "id": "H2",
+      "el": "H",
+      "x": 6,
+      "y": -1
+     },
+     {
+      "id": "A2",
+      "el": "C",
+      "x": 7,
+      "y": 0
+     },
+     {
+      "id": "R2",
+      "el": "CH2OH",
+      "x": 7,
+      "y": -1
+     },
+     {
+      "id": "h2",
+      "el": "H",
+      "x": 7,
+      "y": 1
+     },
+     {
+      "id": "C2",
+      "el": "C",
+      "x": 8,
+      "y": 0
+     },
+     {
+      "id": "O2",
+      "el": "O",
+      "x": 8,
+      "y": 1
+     },
+     {
+      "id": "OH",
+      "el": "OH",
+      "x": 9,
+      "y": 0
+     }
+    ],
+    "bonds": [
+     {
+      "a": "N0",
+      "b": "A0"
+     },
+     {
+      "a": "A0",
+      "b": "R0"
+     },
+     {
+      "a": "A0",
+      "b": "h0"
+     },
+     {
+      "a": "A0",
+      "b": "C0"
+     },
+     {
+      "a": "C0",
+      "b": "O0",
+      "order": 2
+     },
+     {
+      "a": "N1",
+      "b": "H1"
+     },
+     {
+      "a": "C0",
+      "b": "N1"
+     },
+     {
+      "a": "N1",
+      "b": "A1"
+     },
+     {
+      "a": "A1",
+      "b": "R1"
+     },
+     {
+      "a": "A1",
+      "b": "h1"
+     },
+     {
+      "a": "A1",
+      "b": "C1"
+     },
+     {
+      "a": "C1",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "N2",
+      "b": "H2"
+     },
+     {
+      "a": "C1",
+      "b": "N2"
+     },
+     {
+      "a": "N2",
+      "b": "A2"
+     },
+     {
+      "a": "A2",
+      "b": "R2"
+     },
+     {
+      "a": "A2",
+      "b": "h2"
+     },
+     {
+      "a": "A2",
+      "b": "C2"
+     },
+     {
+      "a": "C2",
+      "b": "O2",
+      "order": 2
+     },
+     {
+      "a": "C2",
+      "b": "OH"
+     }
+    ]
+   },
+   "why": "Write the backbone N–C–C(=O) three times, then add each side chain to its central carbon.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-018",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "peptides",
+    "hydrolysis"
+   ],
+   "q": "Give the conditions for hydrolysing a protein into its amino acids.",
+   "a": "Heat under reflux with concentrated (about \\(6\\ \\text{mol dm}^{-3}\\)) hydrochloric acid for several hours.",
+   "why": "In the acid the amino acids are present as their positive ions, such as \\(\\mathrm{^{+}H_{3}NCH_{2}COOH}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-019",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "peptides",
+    "hydrolysis"
+   ],
+   "q": "This tripeptide is hydrolysed. Name the amino acids formed.",
+   "figure": {
+    "kind": "diagram",
+    "alt": "Displayed formula of the tripeptide Gly-Ala-Ser: H2N–CH2–CO–NH–CH(CH3)–CO–NH–CH(CH2OH)–COOH, with two peptide links.",
+    "atoms": [
+     {
+      "id": "N0",
+      "el": "H2N",
+      "x": -0.2,
+      "y": 0
+     },
+     {
+      "id": "A0",
+      "el": "C",
+      "x": 1,
+      "y": 0
+     },
+     {
+      "id": "R0",
+      "el": "H",
+      "x": 1,
+      "y": -1
+     },
+     {
+      "id": "h0",
+      "el": "H",
+      "x": 1,
+      "y": 1
+     },
+     {
+      "id": "C0",
+      "el": "C",
+      "x": 2,
+      "y": 0
+     },
+     {
+      "id": "O0",
+      "el": "O",
+      "x": 2,
+      "y": 1
+     },
+     {
+      "id": "N1",
+      "el": "N",
+      "x": 3,
+      "y": 0
+     },
+     {
+      "id": "H1",
+      "el": "H",
+      "x": 3,
+      "y": -1
+     },
+     {
+      "id": "A1",
+      "el": "C",
+      "x": 4,
+      "y": 0
+     },
+     {
+      "id": "R1",
+      "el": "CH3",
+      "x": 4,
+      "y": -1
+     },
+     {
+      "id": "h1",
+      "el": "H",
+      "x": 4,
+      "y": 1
+     },
+     {
+      "id": "C1",
+      "el": "C",
+      "x": 5,
+      "y": 0
+     },
+     {
+      "id": "O1",
+      "el": "O",
+      "x": 5,
+      "y": 1
+     },
+     {
+      "id": "N2",
+      "el": "N",
+      "x": 6,
+      "y": 0
+     },
+     {
+      "id": "H2",
+      "el": "H",
+      "x": 6,
+      "y": -1
+     },
+     {
+      "id": "A2",
+      "el": "C",
+      "x": 7,
+      "y": 0
+     },
+     {
+      "id": "R2",
+      "el": "CH2OH",
+      "x": 7,
+      "y": -1
+     },
+     {
+      "id": "h2",
+      "el": "H",
+      "x": 7,
+      "y": 1
+     },
+     {
+      "id": "C2",
+      "el": "C",
+      "x": 8,
+      "y": 0
+     },
+     {
+      "id": "O2",
+      "el": "O",
+      "x": 8,
+      "y": 1
+     },
+     {
+      "id": "OH",
+      "el": "OH",
+      "x": 9,
+      "y": 0
+     }
+    ],
+    "bonds": [
+     {
+      "a": "N0",
+      "b": "A0"
+     },
+     {
+      "a": "A0",
+      "b": "R0"
+     },
+     {
+      "a": "A0",
+      "b": "h0"
+     },
+     {
+      "a": "A0",
+      "b": "C0"
+     },
+     {
+      "a": "C0",
+      "b": "O0",
+      "order": 2
+     },
+     {
+      "a": "N1",
+      "b": "H1"
+     },
+     {
+      "a": "C0",
+      "b": "N1"
+     },
+     {
+      "a": "N1",
+      "b": "A1"
+     },
+     {
+      "a": "A1",
+      "b": "R1"
+     },
+     {
+      "a": "A1",
+      "b": "h1"
+     },
+     {
+      "a": "A1",
+      "b": "C1"
+     },
+     {
+      "a": "C1",
+      "b": "O1",
+      "order": 2
+     },
+     {
+      "a": "N2",
+      "b": "H2"
+     },
+     {
+      "a": "C1",
+      "b": "N2"
+     },
+     {
+      "a": "N2",
+      "b": "A2"
+     },
+     {
+      "a": "A2",
+      "b": "R2"
+     },
+     {
+      "a": "A2",
+      "b": "h2"
+     },
+     {
+      "a": "A2",
+      "b": "C2"
+     },
+     {
+      "a": "C2",
+      "b": "O2",
+      "order": 2
+     },
+     {
+      "a": "C2",
+      "b": "OH"
+     }
+    ]
+   },
+   "a": "<strong>Glycine</strong>, <strong>alanine</strong> and <strong>serine</strong>.",
+   "why": "Break each \\(\\mathrm{C(=O){-}NH}\\) bond, adding OH to the C and H to the N. The side chains are H, \\(\\mathrm{CH_{3}}\\) and \\(\\mathrm{CH_{2}OH}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-020",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "peptides",
+    "hydrolysis"
+   ],
+   "q": "A peptide is hydrolysed with hot aqueous sodium hydroxide instead of acid. In what form are the amino acids obtained?",
+   "a": "As their <strong>carboxylate ions</strong> (sodium salts), for example \\(\\mathrm{H_{2}NCH_{2}COO^{-}Na^{+}}\\).",
+   "why": "In alkali the COOH group is deprotonated and the NH₂ group stays neutral.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-021",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "chromatography"
+   ],
+   "q": "How are the amino acids in a protein hydrolysate separated and located by thin-layer chromatography?",
+   "a": "Spot the mixture on a TLC plate (silica or alumina), develop in a solvent, then spray with ninhydrin and warm, or view under UV light.",
+   "why": "Ninhydrin turns amino acid spots purple; on a plate with a fluorescent coating, spots show up dark under UV light.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "18B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-022",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "chromatography",
+    "rf"
+   ],
+   "q": "On a TLC plate an amino acid spot travels 3.6 cm while the solvent front travels 8.0 cm. Calculate its \\(R_{\\text{f}}\\) value.",
+   "a": "<strong>\\(R_{\\text{f}} = 0.45\\)</strong>",
+   "steps": [
+    "\\(R_{\\text{f}} = \\frac{\\text{distance moved by spot}}{\\text{distance moved by solvent front}}\\)",
+    "\\(R_{\\text{f}} = \\frac{3.6}{8.0} = 0.45\\)"
+   ],
+   "why": "Measure both distances from the start line, to the centre of the spot.",
+   "numeric": {
+    "value": 0.45,
+    "unit": "",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "18B.17",
+      "19C.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-023",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "chromatography",
+    "rf"
+   ],
+   "q": "In one solvent the \\(R_{\\text{f}}\\) values are: glycine 0.26, alanine 0.38, valine 0.60. An unknown spot moves 4.5 cm and the solvent front 7.5 cm. Identify the amino acid.",
+   "a": "<strong>Valine</strong>",
+   "steps": [
+    "\\(R_{\\text{f}} = \\frac{4.5}{7.5} = 0.60\\)",
+    "This matches the value for valine in the same solvent."
+   ],
+   "why": "\\(R_{\\text{f}}\\) values depend on the solvent and plate, so compare only with values found under the same conditions.",
+   "numeric": {
+    "value": 0.6,
+    "unit": "",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "18B.17",
+      "19C.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-024",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "chromatography"
+   ],
+   "q": "Explain why different amino acids travel different distances on a TLC plate.",
+   "a": "They have different relative affinities for the stationary and mobile phases.",
+   "marks": [
+    "Each amino acid has a different side chain (R group).",
+    "So each has a different balance between adsorption to the stationary phase and solubility in the mobile phase.",
+    "One held more strongly by the stationary phase moves more slowly and has a lower Rf value."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "18B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-025",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "proteins",
+    "structure"
+   ],
+   "q": "What is the primary structure of a protein?",
+   "a": "The <strong>sequence</strong> of amino acids in the polypeptide chain.",
+   "why": "It is held by covalent peptide links; it determines how the chain folds.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-026",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proteins",
+    "structure"
+   ],
+   "q": "Describe the secondary structure of a protein and how it is maintained.",
+   "a": "The chain coils into an <strong>α-helix</strong> or folds into a <strong>β-pleated sheet</strong>, held by hydrogen bonds between peptide links.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Hydrogen bond between two sections of protein chain: the δ+ hydrogen of an N–H group in the upper chain is attracted to a lone pair on the δ− oxygen of a C=O group in the lower chain, shown as a dashed line.",
+    "atoms": [
+     {
+      "id": "L1",
+      "el": "",
+      "x": -1,
+      "y": -0.55
+     },
+     {
+      "id": "Lc",
+      "el": "C",
+      "x": 0,
+      "y": 0
+     },
+     {
+      "id": "L2",
+      "el": "",
+      "x": 1,
+      "y": -0.55
+     },
+     {
+      "id": "Lo",
+      "el": "O",
+      "x": 0,
+      "y": 1.1,
+      "delta": "-",
+      "deltaAt": 200,
+      "lp": [
+       45,
+       135
+      ]
+     },
+     {
+      "id": "Uh",
+      "el": "H",
+      "x": 0,
+      "y": 2.3,
+      "delta": "+",
+      "deltaAt": 180
+     },
+     {
+      "id": "Un",
+      "el": "N",
+      "x": 0,
+      "y": 3.3
+     },
+     {
+      "id": "U1",
+      "el": "",
+      "x": -1,
+      "y": 3.85
+     },
+     {
+      "id": "U2",
+      "el": "",
+      "x": 1,
+      "y": 3.85
+     }
+    ],
+    "bonds": [
+     {
+      "a": "L1",
+      "b": "Lc"
+     },
+     {
+      "a": "Lc",
+      "b": "L2"
+     },
+     {
+      "a": "Lc",
+      "b": "Lo",
+      "order": 2
+     },
+     {
+      "a": "Lo",
+      "b": "Uh",
+      "style": "partial"
+     },
+     {
+      "a": "Uh",
+      "b": "Un"
+     },
+     {
+      "a": "Un",
+      "b": "U1"
+     },
+     {
+      "a": "Un",
+      "b": "U2"
+     }
+    ],
+    "text": [
+     {
+      "x": 0.7,
+      "y": 1.75,
+      "t": "hydrogen bond",
+      "size": 12
+     }
+    ]
+   },
+   "why": "Hydrogen bonds form between the \\(\\mathrm{C{=}O}\\) oxygen of one peptide link and the \\(\\mathrm{N{-}H}\\) hydrogen of another.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-027",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "proteins",
+    "hydrogen-bonding"
+   ],
+   "q": "Explain how hydrogen bonds form between peptide links in a protein.",
+   "a": "Between a δ+ H on N and a lone pair on a δ− O.",
+   "figure": {
+    "kind": "diagram",
+    "alt": "Hydrogen bond between two sections of protein chain: the δ+ hydrogen of an N–H group in the upper chain is attracted to a lone pair on the δ− oxygen of a C=O group in the lower chain, shown as a dashed line.",
+    "atoms": [
+     {
+      "id": "L1",
+      "el": "",
+      "x": -1,
+      "y": -0.55
+     },
+     {
+      "id": "Lc",
+      "el": "C",
+      "x": 0,
+      "y": 0
+     },
+     {
+      "id": "L2",
+      "el": "",
+      "x": 1,
+      "y": -0.55
+     },
+     {
+      "id": "Lo",
+      "el": "O",
+      "x": 0,
+      "y": 1.1,
+      "delta": "-",
+      "deltaAt": 200,
+      "lp": [
+       45,
+       135
+      ]
+     },
+     {
+      "id": "Uh",
+      "el": "H",
+      "x": 0,
+      "y": 2.3,
+      "delta": "+",
+      "deltaAt": 180
+     },
+     {
+      "id": "Un",
+      "el": "N",
+      "x": 0,
+      "y": 3.3
+     },
+     {
+      "id": "U1",
+      "el": "",
+      "x": -1,
+      "y": 3.85
+     },
+     {
+      "id": "U2",
+      "el": "",
+      "x": 1,
+      "y": 3.85
+     }
+    ],
+    "bonds": [
+     {
+      "a": "L1",
+      "b": "Lc"
+     },
+     {
+      "a": "Lc",
+      "b": "L2"
+     },
+     {
+      "a": "Lc",
+      "b": "Lo",
+      "order": 2
+     },
+     {
+      "a": "Lo",
+      "b": "Uh",
+      "style": "partial"
+     },
+     {
+      "a": "Uh",
+      "b": "Un"
+     },
+     {
+      "a": "Un",
+      "b": "U1"
+     },
+     {
+      "a": "Un",
+      "b": "U2"
+     }
+    ],
+    "text": [
+     {
+      "x": 0.7,
+      "y": 1.75,
+      "t": "hydrogen bond",
+      "size": 12
+     }
+    ]
+   },
+   "marks": [
+    "Nitrogen and oxygen are much more electronegative than hydrogen and carbon.",
+    "So the N–H hydrogen is δ+ and the C=O oxygen is δ−.",
+    "The δ+ hydrogen is attracted to a lone pair on the δ− oxygen of another peptide link."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-028",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proteins",
+    "structure"
+   ],
+   "q": "What is the tertiary structure of a protein, and what holds it in place?",
+   "a": "The overall 3D folding of the whole chain, held by interactions between R groups: hydrogen bonds, ionic attractions and sulfur–sulfur (disulfide) bonds.",
+   "why": "Weaker van der Waals forces between non-polar side chains also contribute.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-029",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proteins",
+    "disulfide"
+   ],
+   "q": "How do two cysteine residues form a sulfur–sulfur bond?",
+   "a": "The \\(\\mathrm{-SH}\\) groups of two cysteines are <strong>oxidised</strong>, losing two H atoms and forming a covalent \\(\\mathrm{-S{-}S-}\\) bond (disulfide bridge).",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of cysteine: 2-amino-3-sulfanylpropanoic acid, with a CH2SH side chain.",
+    "smiles": "NC(CS)C(=O)O",
+    "formula": "C3H7NO2S"
+   },
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of cystine: two cysteine units joined through their side chains by an S–S bond.",
+    "smiles": "NC(CSSCC(N)C(=O)O)C(=O)O",
+    "formula": "C6H12N2O4S2"
+   },
+   "why": "The S–S bond is covalent and strong: it locks parts of the chain together, even far apart in the sequence.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-030",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "proteins",
+    "denaturing"
+   ],
+   "q": "Explain why heating a protein, or changing its pH, can stop it working.",
+   "a": "The bonds holding its 3D shape are broken, so the shape changes (it is denatured).",
+   "marks": [
+    "Heat provides energy to break hydrogen bonds.",
+    "A change of pH changes the charges on R groups such as –NH₃⁺ and –COO⁻, disrupting ionic attractions and hydrogen bonds.",
+    "The tertiary structure changes, so an enzyme’s active site loses its shape."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2",
+      "3.3.13.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-031",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proteins",
+    "structure"
+   ],
+   "q": "A diagram shows a long chain coiled into a regular spiral, with dashed lines joining every fourth peptide link. Which level of protein structure is this?",
+   "a": "<strong>Secondary structure</strong>: an α-helix.",
+   "why": "The dashed lines are hydrogen bonds between C=O and N–H groups of peptide links four residues apart.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.2"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-032",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "enzymes"
+   ],
+   "q": "What is an enzyme?",
+   "a": "A <strong>protein</strong> that acts as a biological <strong>catalyst</strong>.",
+   "why": "It provides an alternative reaction route with a lower activation energy.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-033",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "enzymes",
+    "active-site"
+   ],
+   "q": "What is the active site of an enzyme?",
+   "a": "A region of the enzyme, with a specific 3D shape, where the substrate binds and the reaction takes place.",
+   "why": "Side chains in the active site bind the substrate by hydrogen bonds, ionic attractions and van der Waals forces.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-034",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "enzymes",
+    "stereospecific"
+   ],
+   "q": "Explain why an enzyme’s stereospecific active site binds only one enantiomer of its substrate.",
+   "a": "Only one enantiomer has its groups arranged in 3D to match the binding points of the active site.",
+   "marks": [
+    "The active site has a specific 3D shape, formed from chiral amino acids.",
+    "The substrate must bind at several points, each group to a particular part of the site.",
+    "Enantiomers have the same groups in a mirror-image arrangement.",
+    "Only one enantiomer can line up all its groups with the binding points at once."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.3",
+      "3.3.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-035",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "enzymes",
+    "inhibitors",
+    "drugs"
+   ],
+   "q": "How can a drug act as an enzyme inhibitor?",
+   "a": "Its molecule fits and binds to the <strong>active site</strong>, blocking it so that the substrate cannot bind.",
+   "why": "Such a drug has a shape similar to the substrate, so the enzyme’s reaction slows or stops.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-036",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "enzymes",
+    "drug-design"
+   ],
+   "q": "How are computers used to help design drugs that inhibit enzymes?",
+   "a": "Computer modelling shows the 3D shape of the active site, so chemists can design and test molecules that fit it before making them.",
+   "why": "This saves time and money: fewer compounds need to be synthesised and tested in the laboratory.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-037",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "enzymes",
+    "stereospecific"
+   ],
+   "q": "True or false: both enantiomers of a chiral drug always have the same effect in the body because they have the same structural formula.",
+   "a": "<strong>False.</strong> Only one enantiomer may fit the target active site or receptor; the other may be inactive or harmful.",
+   "why": "Thalidomide is the classic example: one enantiomer was a sedative, the other caused birth defects.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-038",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "dna",
+    "nucleotides"
+   ],
+   "q": "What is a nucleotide made of?",
+   "a": "A <strong>phosphate</strong> group bonded to <strong>2-deoxyribose</strong> (a pentose sugar), which is bonded to one of four <strong>bases</strong>: adenine, cytosine, guanine or thymine.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of a nucleotide, deoxyadenosine monophosphate: a phosphate group bonded to the CH2 of 2-deoxyribose, whose ring carbon is bonded to the base adenine.",
+    "smiles": "Nc1ncnc2c1ncn2[C@H]1C[C@H](O)[C@@H](COP(=O)(O)O)O1",
+    "formula": "C10H14N5O6P"
+   },
+   "why": "The structures of the phosphate ion, 2-deoxyribose and the four bases are in the AQA data booklet.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-039",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "dna",
+    "sugar"
+   ],
+   "q": "Why is the sugar in DNA called 2-deoxyribose?",
+   "a": "It is ribose with the OH group on carbon 2 replaced by H: it has one oxygen fewer.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of 2-deoxyribose in its five-membered ring form: a ring of four carbons and one oxygen, with OH groups and a CH2OH group, and a CH2 with no OH.",
+    "smiles": "OCC1OC(O)CC1O",
+    "formula": "C5H10O4"
+   },
+   "why": "“Deoxy” means without an oxygen.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-040",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "dna",
+    "strand"
+   ],
+   "q": "How are nucleotides joined in a single strand of DNA?",
+   "a": "By covalent bonds between the phosphate group of one nucleotide and the 2-deoxyribose of the next, forming a <strong>sugar–phosphate backbone</strong> with the bases attached to the sugars.",
+   "why": "Each link forms by condensation, eliminating water. DNA is a condensation polymer.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-041",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "dna",
+    "base-pairs"
+   ],
+   "q": "Which bases pair in DNA, and how many hydrogen bonds form in each pair?",
+   "a": "<strong>Adenine–thymine</strong>: 2 hydrogen bonds.<br><strong>Cytosine–guanine</strong>: 3 hydrogen bonds.",
+   "why": "Each base pair has one larger two-ring base and one smaller one-ring base, so the strands stay a constant distance apart.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-042",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "dna",
+    "base-pairs",
+    "hydrogen-bonding"
+   ],
+   "q": "Explain how hydrogen bonding between bases leads to two complementary strands of DNA.",
+   "a": "Each base can hydrogen bond fully only with its partner, so the sequence of one strand fixes the other.",
+   "marks": [
+    "Bases contain N–H groups (δ+ H) and lone pairs on N and O atoms (δ−).",
+    "Hydrogen bonds form between bases on opposite strands.",
+    "The positions of these groups mean A lines up with T (2 hydrogen bonds) and C with G (3 hydrogen bonds), and no other pairing fits.",
+    "So the base sequence of one strand determines the other: the strands are complementary, and twist into a double helix."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-043",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "dna",
+    "base-pairs"
+   ],
+   "q": "One strand of DNA has the base sequence A T G C C A. Give the sequence of the complementary strand.",
+   "a": "<strong>T A C G G T</strong>",
+   "steps": [
+    "A pairs with T, and T with A.",
+    "G pairs with C, and C with G."
+   ],
+   "why": "Complementary base pairing.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-044",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "dna",
+    "structure"
+   ],
+   "q": "Describe the overall structure of DNA.",
+   "a": "Two complementary strands, each a sugar–phosphate backbone with bases attached, twisted into a <strong>double helix</strong> and held together by hydrogen bonds between base pairs.",
+   "why": "The backbones are on the outside; the base pairs are stacked inside.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-045",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "dna",
+    "bases"
+   ],
+   "q": "Which DNA base is this?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of guanine: a fused six-membered and five-membered ring system with an NH2 group and a C=O group on the six-membered ring.",
+    "smiles": "Nc1nc2[nH]cnc2c(=O)[nH]1",
+    "formula": "C5H5N5O"
+   },
+   "a": "<strong>Guanine</strong>",
+   "why": "Guanine and adenine have two fused rings; guanine has a C=O, adenine does not. Guanine is the base cisplatin bonds to.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-046",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "dna",
+    "bases"
+   ],
+   "q": "Identify this DNA base, and the base it pairs with.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of thymine: a six-membered ring containing two N–H groups, with two C=O groups and a methyl group.",
+    "smiles": "Cc1c[nH]c(=O)[nH]c1=O",
+    "formula": "C5H6N2O2"
+   },
+   "a": "<strong>Thymine</strong>; it pairs with adenine.",
+   "why": "Thymine and cytosine are single-ring bases; thymine has two C=O groups and a methyl group.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-047",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "dna",
+    "bonding"
+   ],
+   "q": "True or false: the two strands of DNA are held together by covalent bonds between the bases.",
+   "a": "<strong>False.</strong> The strands are held together by <strong>hydrogen bonds</strong> between bases.",
+   "why": "Covalent bonds join the nucleotides within each strand; the weaker hydrogen bonds let the strands separate for replication.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-048",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "cisplatin",
+    "structure"
+   ],
+   "q": "Describe the structure of cisplatin.",
+   "a": "A square planar platinum(II) complex, \\(\\mathrm{[Pt(NH_{3})_{2}Cl_{2}]}\\), with the two ammonia ligands next to each other (cis) and the two chloride ligands next to each other.",
+   "answerFigure": {
+    "kind": "diagram",
+    "alt": "Two square planar platinum(II) complexes. Cisplatin: the two NH3 ligands are next to each other on the left and the two Cl ligands next to each other on the right. Transplatin: each NH3 is opposite the other, and each Cl opposite the other.",
+    "atoms": [
+     {
+      "id": "P",
+      "el": "Pt",
+      "x": 0,
+      "y": 0
+     },
+     {
+      "id": "a",
+      "el": "H_3N",
+      "x": -1.3,
+      "y": 0.9
+     },
+     {
+      "id": "b",
+      "el": "H_3N",
+      "x": -1.3,
+      "y": -0.9
+     },
+     {
+      "id": "c",
+      "el": "Cl",
+      "x": 1.1,
+      "y": 0.9
+     },
+     {
+      "id": "d",
+      "el": "Cl",
+      "x": 1.1,
+      "y": -0.9
+     },
+     {
+      "id": "Q",
+      "el": "Pt",
+      "x": 4.8,
+      "y": 0
+     },
+     {
+      "id": "e",
+      "el": "H_3N",
+      "x": 3.5,
+      "y": 0.9
+     },
+     {
+      "id": "f",
+      "el": "Cl",
+      "x": 3.7,
+      "y": -0.9
+     },
+     {
+      "id": "g",
+      "el": "Cl",
+      "x": 5.9,
+      "y": 0.9
+     },
+     {
+      "id": "h",
+      "el": "NH_3",
+      "x": 5.9,
+      "y": -0.9
+     }
+    ],
+    "bonds": [
+     {
+      "a": "P",
+      "b": "a"
+     },
+     {
+      "a": "P",
+      "b": "b"
+     },
+     {
+      "a": "P",
+      "b": "c"
+     },
+     {
+      "a": "P",
+      "b": "d"
+     },
+     {
+      "a": "Q",
+      "b": "e"
+     },
+     {
+      "a": "Q",
+      "b": "f"
+     },
+     {
+      "a": "Q",
+      "b": "g"
+     },
+     {
+      "a": "Q",
+      "b": "h"
+     }
+    ],
+    "text": [
+     {
+      "x": 0,
+      "y": -1.9,
+      "t": "cisplatin",
+      "anchor": "middle",
+      "size": 13
+     },
+     {
+      "x": 4.8,
+      "y": -1.9,
+      "t": "transplatin",
+      "anchor": "middle",
+      "size": 13
+     }
+    ]
+   },
+   "why": "Transplatin has the same formula but the like ligands are opposite each other; it is not an effective drug.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "15A.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-049",
+   "type": "explain",
+   "difficulty": 3,
+   "tags": [
+    "cisplatin",
+    "dna"
+   ],
+   "q": "Explain how cisplatin prevents DNA replication in cancer cells.",
+   "a": "It bonds to guanine bases on DNA by ligand replacement, distorting the strand.",
+   "marks": [
+    "In the cell, a chloride ligand on cisplatin is replaced (ligand replacement).",
+    "A bond forms between platinum and a nitrogen atom on a guanine base in DNA.",
+    "Both chloride ligands are replaced, so platinum bonds to two guanines, often on the same strand.",
+    "This distorts the DNA so the strands cannot separate and be copied: the cell cannot divide."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-050",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "cisplatin",
+    "side-effects"
+   ],
+   "q": "Explain why cisplatin has adverse side effects.",
+   "a": "It also stops replication in healthy cells.",
+   "marks": [
+    "Cisplatin bonds to the DNA of any cell, not only cancer cells.",
+    "Healthy cells that divide rapidly, such as hair follicles and blood cells, are most affected.",
+    "This causes effects such as hair loss and a weakened immune system; cisplatin can also damage the kidneys."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-051",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "cisplatin",
+    "ethics"
+   ],
+   "q": "How is the use of a drug such as cisplatin justified, given its harmful side effects?",
+   "a": "Society must weigh the benefits (it cures or controls some cancers, such as testicular cancer) against the risks, and doses are kept as low as possible.",
+   "why": "Cisplatin is given in small doses, in short courses, and directly to the tumour where possible, so healthy cells recover.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-amino-052",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "cisplatin",
+    "ligands"
+   ],
+   "q": "In the reaction of cisplatin with DNA, what acts as the ligand and what type of bond forms?",
+   "a": "A <strong>nitrogen atom on guanine</strong> acts as the ligand: it donates its lone pair to platinum, forming a coordinate (dative covalent) bond.",
+   "why": "It replaces a chloride ligand: a ligand substitution (replacement) reaction.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.13.5"
+     ]
+    }
+   }
+  }
+ ]
+}

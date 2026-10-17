@@ -67,7 +67,22 @@ const TOPICS = {
   'chemistry-a-level/group-2': require('../../curriculum/flashcards/chemistry-a-level/group-2.json'),
   'chemistry-a-level/halogens': require('../../curriculum/flashcards/chemistry-a-level/halogens.json'),
   'chemistry-a-level/transition-metals': require('../../curriculum/flashcards/chemistry-a-level/transition-metals.json'),
-  'chemistry-a-level/ions-in-solution': require('../../curriculum/flashcards/chemistry-a-level/ions-in-solution.json')
+  'chemistry-a-level/ions-in-solution': require('../../curriculum/flashcards/chemistry-a-level/ions-in-solution.json'),
+  'chemistry-a-level/organic-intro': require('../../curriculum/flashcards/chemistry-a-level/organic-intro.json'),
+  'chemistry-a-level/alkanes': require('../../curriculum/flashcards/chemistry-a-level/alkanes.json'),
+  'chemistry-a-level/halogenoalkanes': require('../../curriculum/flashcards/chemistry-a-level/halogenoalkanes.json'),
+  'chemistry-a-level/alkenes': require('../../curriculum/flashcards/chemistry-a-level/alkenes.json'),
+  'chemistry-a-level/alcohols': require('../../curriculum/flashcards/chemistry-a-level/alcohols.json'),
+  'chemistry-a-level/organic-analysis': require('../../curriculum/flashcards/chemistry-a-level/organic-analysis.json'),
+  'chemistry-a-level/optical-isomerism': require('../../curriculum/flashcards/chemistry-a-level/optical-isomerism.json'),
+  'chemistry-a-level/carbonyls': require('../../curriculum/flashcards/chemistry-a-level/carbonyls.json'),
+  'chemistry-a-level/carboxylic-acids': require('../../curriculum/flashcards/chemistry-a-level/carboxylic-acids.json'),
+  'chemistry-a-level/aromatic': require('../../curriculum/flashcards/chemistry-a-level/aromatic.json'),
+  'chemistry-a-level/amines': require('../../curriculum/flashcards/chemistry-a-level/amines.json'),
+  'chemistry-a-level/polymers': require('../../curriculum/flashcards/chemistry-a-level/polymers.json'),
+  'chemistry-a-level/amino-acids-dna': require('../../curriculum/flashcards/chemistry-a-level/amino-acids-dna.json'),
+  'chemistry-a-level/organic-synthesis': require('../../curriculum/flashcards/chemistry-a-level/organic-synthesis.json'),
+  'chemistry-a-level/nmr-chromatography': require('../../curriculum/flashcards/chemistry-a-level/nmr-chromatography.json')
 };
 // Quiz questions (curriculum/quizzes/) are reviewed the same way, each topic
 // under "quiz/<topic id>" so its decisions never mix with the flashcards'.

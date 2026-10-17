@@ -111,7 +111,9 @@ test('graph: the review page and the quiz page draw the figure, and the quiz run
 const cardsBuild = require(path.join(ROOT, 'scripts/flashcards/build.js'));
 const C = require(path.join(ROOT, 'scripts/flashcards/content.js'));
 const cardTopics = cardsBuild.topics();
-const cardsWithGraphs = cardTopics.flatMap(t => t.data.cards.filter(c => c.figure || c.answerFigure));
+// Graphs only: chemistry drawings are held to their own tests (tests/chem-figure.test.js).
+const isGraph = f => !f || f.kind === 'graph';
+const cardsWithGraphs = cardTopics.flatMap(t => t.data.cards.filter(c => (c.figure || c.answerFigure) && isGraph(c.figure) && isGraph(c.answerFigure)));
 
 test('graph: flashcards carry graphs with the question or the answer, drawn when they are published', () => {
   assert.ok(cardsWithGraphs.length >= 20, 'the graph cards have graphs');
@@ -135,8 +137,9 @@ test('graph: a card\'s graph is part of what a teacher approves, and an unsound 
   card[f].alt += ' Changed.';
   assert.notEqual(C.cardHash(card), hash, 'changing the graph sends the card back for approval');
 
-  const t = clone(cardTopics.find(x => x.data.cards.some(c => c.answerFigure)));
-  const bad = t.data.cards.find(c => c.answerFigure);
+  const graphAnswer = c => c.answerFigure && c.answerFigure.kind === 'graph';
+  const t = clone(cardTopics.find(x => x.data.cards.some(graphAnswer)));
+  const bad = t.data.cards.find(graphAnswer);
   bad.answerFigure.curves[0].fn = { kind: 'squiggle' };
   const errors = C.validateTopic(t.data, { katex, spec: t.spec }).errors;
   assert.ok(errors.some(e => e.includes(`${bad.id}: answerFigure: curve 1: unknown kind`)), JSON.stringify(errors.slice(0, 3)));

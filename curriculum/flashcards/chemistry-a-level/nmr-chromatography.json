@@ -1,0 +1,2023 @@
+{
+ "schema": "inspire.flashcards.v1",
+ "topic": {
+  "id": "chemistry-a-level/nmr-chromatography",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "NMR Spectroscopy and Chromatography",
+  "spec": "chemistry-a-level"
+ },
+ "cards": [
+  {
+   "id": "che-al-nmr-001",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "nmr"
+   ],
+   "q": "What information does NMR spectroscopy give about a molecule?",
+   "a": "The different environments of \\(\\mathrm{^{13}C}\\) or \\(\\mathrm{^{1}H}\\) atoms, and so where those atoms are positioned in the molecule.",
+   "why": "Each set of equivalent atoms gives its own signal; its position depends on what it is bonded to and near.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.2",
+      "19B.4"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-002",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "nmr",
+    "analysis"
+   ],
+   "q": "Why do chemists use several analytical techniques together to confirm the structure of a new compound?",
+   "a": "Each technique gives different information: mass spectrometry gives the molecular mass, infrared shows the functional groups, and NMR shows how the carbon and hydrogen atoms are arranged. Together they can pin down a single structure.",
+   "why": "No single technique is enough: isomers can share a molecular mass and functional groups.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "18C.18"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-003",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "nmr",
+    "chemical-shift"
+   ],
+   "q": "What is chemical shift, \\(\\delta\\)?",
+   "a": "The position of an NMR signal relative to the signal from tetramethylsilane (TMS), which is set at \\(\\delta = 0\\). It is measured in parts per million (ppm).",
+   "why": "Using a reference makes the values the same whatever the strength of the spectrometer’s magnet.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3",
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-004",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "nmr",
+    "chemical-shift"
+   ],
+   "q": "What makes the chemical shift of a carbon or hydrogen environment larger?",
+   "a": "Being bonded to, or near, an electronegative atom (such as O, N or a halogen) or a C=O group. These draw electron density away, so the signal appears at a higher δ value.",
+   "why": "For example, in ethanol the \\(\\mathrm{CH_{2}}\\) next to O has a higher shift than the \\(\\mathrm{CH_{3}}\\).",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3",
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-005",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "nmr",
+    "tms"
+   ],
+   "q": "Explain why tetramethylsilane (TMS) is used as the standard in NMR spectroscopy.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of tetramethylsilane: a silicon atom bonded to four methyl groups.",
+    "smiles": "C[Si](C)(C)C",
+    "formula": "C4H12Si"
+   },
+   "a": "TMS, \\(\\mathrm{Si(CH_{3})_{4}}\\), gives one strong signal away from almost all others, and is easy to use.",
+   "marks": [
+    "All 12 hydrogens (and all 4 carbons) are in the same environment, so TMS gives a single, strong peak.",
+    "Its peak is at a lower shift than almost all other compounds, so it does not overlap their signals.",
+    "It is inert, so it does not react with the sample.",
+    "It is volatile (low boiling point), so it is easily removed from the sample afterwards."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-006",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "nmr",
+    "solvent"
+   ],
+   "q": "Why are samples for \\(\\mathrm{^{1}H}\\) NMR dissolved in a deuterated solvent such as \\(\\mathrm{CDCl_{3}}\\), or in \\(\\mathrm{CCl_{4}}\\)?",
+   "a": "These solvents contain no \\(\\mathrm{^{1}H}\\) atoms, so the solvent gives no peaks in the \\(\\mathrm{^{1}H}\\) spectrum.",
+   "why": "A solvent such as \\(\\mathrm{CHCl_{3}}\\) would give a large peak that could hide the sample’s own peaks.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-007",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "nmr",
+    "carbon-13"
+   ],
+   "q": "Why is a \\(\\mathrm{^{13}C}\\) NMR spectrum simpler than a \\(\\mathrm{^{1}H}\\) NMR spectrum?",
+   "a": "In a \\(\\mathrm{^{13}C}\\) spectrum each carbon environment gives a single peak, with no splitting, and the peaks are spread over a wide range (about 0–220 ppm), so they rarely overlap.",
+   "why": "In a \\(\\mathrm{^{1}H}\\) spectrum, you also have to interpret peak areas and splitting patterns.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-008",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "carbon-13",
+    "environments"
+   ],
+   "q": "How many peaks are in the \\(\\mathrm{^{13}C}\\) NMR spectrum of propan-1-ol (shown), and of its isomer propan-2-ol?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propan-1-ol: a three-carbon chain with OH on an end carbon.",
+    "smiles": "CCCO",
+    "formula": "C3H8O"
+   },
+   "a": "Propan-1-ol: <strong>3</strong>. Propan-2-ol: <strong>2</strong>.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propan-2-ol: a three-carbon chain with OH on the middle carbon.",
+    "smiles": "CC(C)O",
+    "formula": "C3H8O"
+   },
+   "why": "In propan-2-ol the two \\(\\mathrm{CH_{3}}\\) carbons are equivalent (by symmetry); in propan-1-ol all three carbons are different.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-009",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "carbon-13",
+    "environments"
+   ],
+   "q": "Which isomer of \\(\\mathrm{C_{4}H_{10}O}\\) that is an alcohol gives only <strong>two</strong> peaks in its \\(\\mathrm{^{13}C}\\) NMR spectrum?",
+   "a": "<strong>2-Methylpropan-2-ol</strong>: the three methyl carbons are equivalent, and the central carbon is the second environment.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of 2-methylpropan-2-ol: a central carbon carrying three methyl groups and an OH group.",
+    "smiles": "CC(C)(C)O",
+    "formula": "C4H10O"
+   },
+   "why": "Butan-1-ol and butan-2-ol give four peaks; 2-methylpropan-1-ol gives three.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-010",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "carbon-13",
+    "environments"
+   ],
+   "q": "How many peaks are in the \\(\\mathrm{^{13}C}\\) NMR spectrum of methylbenzene?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of methylbenzene: a benzene ring carrying one methyl group.",
+    "smiles": "Cc1ccccc1",
+    "formula": "C7H8"
+   },
+   "a": "<strong>Five</strong>: the methyl carbon, the ring carbon bonded to it, the two ring carbons next to it, the two after those, and the one opposite.",
+   "why": "A mirror plane runs through the methyl group and the opposite ring carbon, making the ring carbons equivalent in pairs.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-011",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "carbon-13",
+    "environments"
+   ],
+   "q": "How many peaks are in the \\(\\mathrm{^{13}C}\\) NMR spectrum of benzene-1,4-dicarboxylic acid?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of benzene-1,4-dicarboxylic acid: a benzene ring with COOH groups at opposite corners.",
+    "smiles": "OC(=O)c1ccc(cc1)C(=O)O",
+    "formula": "C8H6O4"
+   },
+   "a": "<strong>Three</strong>: the two C=O carbons, the two ring carbons bonded to COOH, and the four ring carbons bonded to H.",
+   "why": "The molecule is symmetrical, so the eight carbons fall into only three environments.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-012",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "carbon-13",
+    "chemical-shift"
+   ],
+   "q": "Predict the number of peaks, and their approximate chemical shifts, in the \\(\\mathrm{^{13}C}\\) NMR spectrum of ethyl ethanoate.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of ethyl ethanoate: CH3–C(=O)–O–CH2–CH3.",
+    "smiles": "CCOC(C)=O",
+    "formula": "C4H8O2"
+   },
+   "a": "Four peaks: about 170 (ester \\(\\mathrm{C{=}O}\\)), about 60 (\\(\\mathrm{C{-}O}\\) of the \\(\\mathrm{CH_{2}}\\)), and two below 30 (the two \\(\\mathrm{CH_{3}}\\) carbons, which are in different environments).",
+   "why": "Use the data booklet: C=O of acids and esters 160–185; C–O roughly 50–70; C–C below about 50.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-013",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "carbon-13",
+    "chemical-shift"
+   ],
+   "q": "A compound \\(\\mathrm{C_{3}H_{6}O}\\) has a \\(\\mathrm{^{13}C}\\) NMR spectrum with two peaks, at about 206 and 31 ppm. Identify it.",
+   "a": "<strong>Propanone</strong>: the peak at 206 is a ketone C=O; the peak at 31 is the two equivalent methyl carbons.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propanone: a C=O carbon with a methyl group on each side.",
+    "smiles": "CC(C)=O",
+    "formula": "C3H6O"
+   },
+   "why": "A shift of about 190–220 ppm is the C=O of an aldehyde or ketone; only two peaks means a symmetrical molecule.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-014",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "carbon-13",
+    "isomers"
+   ],
+   "q": "How does \\(\\mathrm{^{13}C}\\) NMR distinguish propanal from its isomer propanone?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propanal: CH3–CH2–CHO, an aldehyde.",
+    "smiles": "CCC=O",
+    "formula": "C3H6O"
+   },
+   "a": "Propanal gives <strong>three</strong> peaks (all three carbons are different); propanone gives <strong>two</strong> (its two methyl carbons are equivalent).",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propanone: a C=O carbon with a methyl group on each side.",
+    "smiles": "CC(C)=O",
+    "formula": "C3H6O"
+   },
+   "why": "Both show a C=O peak at around 200 ppm, so the number of peaks is what tells them apart.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-015",
+   "type": "misconception",
+   "difficulty": 1,
+   "tags": [
+    "carbon-13",
+    "environments"
+   ],
+   "q": "True or false: the number of peaks in a \\(\\mathrm{^{13}C}\\) NMR spectrum equals the number of carbon atoms in the molecule.",
+   "a": "<strong>False.</strong> It equals the number of different carbon <em>environments</em>.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of 2,2-dimethylpropane: a central carbon carrying four methyl groups.",
+    "smiles": "CC(C)(C)C",
+    "formula": "C5H12"
+   },
+   "why": "2,2-Dimethylpropane has five carbons but only two environments, so it gives two peaks.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-016",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "proton-nmr",
+    "integration"
+   ],
+   "q": "What does the relative area (integration) of each peak in a \\(\\mathrm{^{1}H}\\) NMR spectrum tell you?",
+   "a": "The relative number of hydrogen atoms in each environment.",
+   "why": "The spectrometer often draws an integration trace: the height of each step is proportional to the number of H atoms.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-017",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "proton-nmr",
+    "environments"
+   ],
+   "q": "How many peaks are in the \\(\\mathrm{^{1}H}\\) NMR spectrum of ethanol, and in what ratio of areas?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of ethanol: CH3–CH2–OH.",
+    "smiles": "CCO",
+    "formula": "C2H6O"
+   },
+   "a": "Three peaks, in the ratio <strong>3 : 2 : 1</strong> (\\(\\mathrm{CH_{3}}\\) : \\(\\mathrm{CH_{2}}\\) : \\(\\mathrm{OH}\\)).",
+   "why": "Each set of equivalent hydrogens gives one peak; the area is proportional to how many hydrogens are in the set.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-018",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "proton-nmr",
+    "splitting"
+   ],
+   "q": "State the n + 1 rule.",
+   "a": "A peak for hydrogens with \\(n\\) hydrogens on <strong>adjacent</strong> carbon atoms is split into \\(n + 1\\) lines.",
+   "why": "Only non-equivalent hydrogens on neighbouring carbons split a signal; hydrogens on the same carbon, or on O–H, do not.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-019",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "proton-nmr",
+    "splitting"
+   ],
+   "q": "Name the splitting pattern for a peak whose hydrogens have 0, 1, 2 or 3 hydrogens on adjacent carbons.",
+   "a": "0: singlet. 1: doublet. 2: triplet. 3: quartet.",
+   "why": "\\(n + 1\\) lines: a quartet has four lines, with heights in the ratio 1 : 3 : 3 : 1.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-020",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "splitting"
+   ],
+   "q": "What splitting pattern does an ethyl group, \\(\\mathrm{-CH_{2}CH_{3}}\\), give in a \\(\\mathrm{^{1}H}\\) NMR spectrum (when the \\(\\mathrm{CH_{2}}\\) is bonded to an atom with no H)?",
+   "a": "A <strong>triplet</strong> of area 3 (\\(\\mathrm{CH_{3}}\\), split by the 2 H on \\(\\mathrm{CH_{2}}\\)) and a <strong>quartet</strong> of area 2 (\\(\\mathrm{CH_{2}}\\), split by the 3 H on \\(\\mathrm{CH_{3}}\\)).",
+   "why": "A triplet plus quartet in a 3 : 2 ratio is the fingerprint of an ethyl group.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-021",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "splitting"
+   ],
+   "q": "In the \\(\\mathrm{^{1}H}\\) NMR spectrum of ethanol, why is the OH peak usually a singlet?",
+   "a": "The OH hydrogen exchanges rapidly between molecules, so it neither splits nor is split by the \\(\\mathrm{CH_{2}}\\) hydrogens.",
+   "why": "So the \\(\\mathrm{CH_{2}}\\) is a quartet (split only by \\(\\mathrm{CH_{3}}\\)), and \\(\\mathrm{OH}\\) and \\(\\mathrm{NH}\\) peaks are normally singlets.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-022",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "splitting"
+   ],
+   "q": "True or false: the \\(\\mathrm{CH_{3}}\\) peak of \\(\\mathrm{CH_{3}CH_{2}Cl}\\) is a quartet, because there are three hydrogens on that carbon.",
+   "a": "<strong>False.</strong> It is a <strong>triplet</strong>: splitting comes from the 2 H on the <em>adjacent</em> carbon, not the hydrogens on the same carbon.",
+   "why": "The \\(\\mathrm{CH_{2}}\\) peak is the quartet, split by the three \\(\\mathrm{CH_{3}}\\) hydrogens next to it.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-023",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "splitting"
+   ],
+   "q": "True or false: in 1,2-dichloroethane, \\(\\mathrm{ClCH_{2}CH_{2}Cl}\\), each \\(\\mathrm{CH_{2}}\\) peak is split into a triplet.",
+   "a": "<strong>False.</strong> All four hydrogens are equivalent, so there is a single peak, a <strong>singlet</strong>.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of 1,2-dichloroethane: Cl–CH2–CH2–Cl.",
+    "smiles": "ClCCCl",
+    "formula": "C2H4Cl2"
+   },
+   "why": "Equivalent hydrogens do not split each other’s signals.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-024",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "isomers"
+   ],
+   "q": "How would the \\(\\mathrm{^{1}H}\\) NMR spectra of 1,1-dichloroethane (shown) and its isomer 1,2-dichloroethane differ?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of 1,1-dichloroethane: CH3–CHCl2.",
+    "smiles": "CC(Cl)Cl",
+    "formula": "C2H4Cl2"
+   },
+   "a": "1,1-Dichloroethane: two peaks, a <strong>doublet</strong> (3H, \\(\\mathrm{CH_{3}}\\)) and a <strong>quartet</strong> (1H, \\(\\mathrm{CHCl_{2}}\\)).<br>1,2-Dichloroethane: one peak, a <strong>singlet</strong> (4H).",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of 1,2-dichloroethane: Cl–CH2–CH2–Cl.",
+    "smiles": "ClCCCl",
+    "formula": "C2H4Cl2"
+   },
+   "why": "Isomers with the same formula are told apart by their numbers of environments and splitting.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-025",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "prediction"
+   ],
+   "q": "Predict the \\(\\mathrm{^{1}H}\\) NMR spectrum of butanone: number of peaks, relative areas and splitting.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of butanone: CH3–C(=O)–CH2–CH3.",
+    "smiles": "CCC(C)=O",
+    "formula": "C4H8O"
+   },
+   "a": "Three peaks: \\(\\mathrm{CH_{3}}\\) next to C=O, singlet, 3H (about 2.1); \\(\\mathrm{CH_{2}}\\), quartet, 2H (about 2.5); \\(\\mathrm{CH_{3}}\\) of the ethyl group, triplet, 3H (about 1.1).",
+   "why": "The CH₃ bonded to C=O has no hydrogens on the adjacent carbon, so it is a singlet.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-026",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "prediction"
+   ],
+   "q": "Predict the \\(\\mathrm{^{1}H}\\) NMR spectrum of pentan-3-one, \\(\\mathrm{CH_{3}CH_{2}COCH_{2}CH_{3}}\\).",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of pentan-3-one: CH3–CH2–C(=O)–CH2–CH3.",
+    "smiles": "CCC(=O)CC",
+    "formula": "C5H10O"
+   },
+   "a": "Two peaks: a triplet (6H, about 1.1) and a quartet (4H, about 2.4). Area ratio 3 : 2.",
+   "why": "The molecule is symmetrical, so both ethyl groups are equivalent.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-027",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "isomers"
+   ],
+   "q": "How could \\(\\mathrm{^{1}H}\\) NMR distinguish ethyl ethanoate from methyl propanoate (both \\(\\mathrm{C_{4}H_{8}O_{2}}\\))?",
+   "a": "Both show a singlet (3H), a quartet (2H) and a triplet (3H), so look at the shifts.<br>Ethyl ethanoate: the quartet is at about 4.1 (\\(\\mathrm{CH_{2}}\\) bonded to O).<br>Methyl propanoate: the quartet is at about 2.3 (\\(\\mathrm{CH_{2}}\\) next to C=O), and the singlet at about 3.7 (\\(\\mathrm{OCH_{3}}\\)).",
+   "why": "A CH₂ or CH₃ bonded to the ester O has a much higher shift than one bonded to the C=O carbon.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-028",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "integration"
+   ],
+   "q": "In a \\(\\mathrm{^{1}H}\\) NMR spectrum of a compound \\(\\mathrm{C_{4}H_{8}O_{2}}\\), the integration trace steps are 1.8 cm, 1.2 cm and 1.8 cm high. How many hydrogens are in each environment?",
+   "a": "<strong>3, 2 and 3</strong>",
+   "steps": [
+    "Simplest ratio: \\(1.8 : 1.2 : 1.8 = 3 : 2 : 3\\)",
+    "Total in ratio \\(= 8\\), which matches the 8 H in \\(\\mathrm{C_{4}H_{8}O_{2}}\\), so the numbers are 3, 2 and 3."
+   ],
+   "why": "Integration gives a ratio; compare its total with the molecular formula to get actual numbers.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-029",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "proton-nmr",
+    "structure"
+   ],
+   "q": "A compound \\(\\mathrm{C_{4}H_{8}O_{2}}\\) has this \\(\\mathrm{^{1}H}\\) NMR spectrum: δ 1.3 (triplet, 3H), 2.0 (singlet, 3H), 4.1 (quartet, 2H). Identify it.",
+   "figure": {
+    "kind": "graph",
+    "alt": "Stick 1H NMR spectrum from 5 to 0 ppm: a quartet of area 2 at 4.1 ppm, a singlet of area 3 at 2.0 ppm, and a triplet of area 3 at 1.3 ppm.",
+    "x": {
+     "label": "δ / ppm",
+     "min": 0.1,
+     "max": 5.3,
+     "ticks": [
+      {
+       "at": 0.2,
+       "label": "5"
+      },
+      {
+       "at": 1.2,
+       "label": "4"
+      },
+      {
+       "at": 2.2,
+       "label": "3"
+      },
+      {
+       "at": 3.2,
+       "label": "2"
+      },
+      {
+       "at": 4.2,
+       "label": "1"
+      },
+      {
+       "at": 5.2,
+       "label": "0"
+      }
+     ]
+    },
+    "y": {
+     "label": "absorption",
+     "min": 0,
+     "max": 10,
+     "ticks": []
+    },
+    "curves": [
+     {
+      "fn": {
+       "kind": "points",
+       "points": [
+        [
+         0.1,
+         0
+        ],
+        [
+         0.938,
+         0
+        ],
+        [
+         0.95,
+         0.88
+        ],
+        [
+         0.962,
+         0
+        ],
+        [
+         1.038,
+         0
+        ],
+        [
+         1.05,
+         2.64
+        ],
+        [
+         1.062,
+         0
+        ],
+        [
+         1.138,
+         0
+        ],
+        [
+         1.15,
+         2.64
+        ],
+        [
+         1.162,
+         0
+        ],
+        [
+         1.238,
+         0
+        ],
+        [
+         1.25,
+         0.88
+        ],
+        [
+         1.262,
+         0
+        ],
+        [
+         3.188,
+         0
+        ],
+        [
+         3.2,
+         6.6
+        ],
+        [
+         3.212,
+         0
+        ],
+        [
+         3.788,
+         0
+        ],
+        [
+         3.8,
+         2.64
+        ],
+        [
+         3.812,
+         0
+        ],
+        [
+         3.888,
+         0
+        ],
+        [
+         3.9,
+         5.28
+        ],
+        [
+         3.912,
+         0
+        ],
+        [
+         3.988,
+         0
+        ],
+        [
+         4,
+         2.64
+        ],
+        [
+         4.012,
+         0
+        ],
+        [
+         5.3,
+         0
+        ]
+       ]
+      },
+      "from": 0.1,
+      "to": 5.3
+     }
+    ],
+    "marks": [
+     {
+      "x": 1.1,
+      "y": 3.5400000000000005,
+      "label": "2H",
+      "plain": true
+     },
+     {
+      "x": 3.2,
+      "y": 7.500000000000001,
+      "label": "3H",
+      "plain": true
+     },
+     {
+      "x": 3.9,
+      "y": 6.1800000000000015,
+      "label": "3H",
+      "plain": true
+     }
+    ]
+   },
+   "a": "<strong>Ethyl ethanoate</strong>, \\(\\mathrm{CH_{3}COOCH_{2}CH_{3}}\\).",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of ethyl ethanoate: CH3–C(=O)–O–CH2–CH3.",
+    "smiles": "CCOC(C)=O",
+    "formula": "C4H8O2"
+   },
+   "why": "Quartet + triplet: an ethyl group; at 4.1 its \\(\\mathrm{CH_{2}}\\) is bonded to O. The singlet at 2.0 is a \\(\\mathrm{CH_{3}}\\) next to C=O with no neighbouring H.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-030",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "proton-nmr",
+    "structure"
+   ],
+   "q": "A compound \\(\\mathrm{C_{4}H_{8}O_{2}}\\) has this \\(\\mathrm{^{1}H}\\) NMR spectrum: δ 1.1 (triplet, 3H), 2.3 (quartet, 2H), 3.7 (singlet, 3H). Identify it.",
+   "figure": {
+    "kind": "graph",
+    "alt": "Stick 1H NMR spectrum from 5 to 0 ppm: a singlet of area 3 at 3.7 ppm, a quartet of area 2 at 2.3 ppm, and a triplet of area 3 at 1.1 ppm.",
+    "x": {
+     "label": "δ / ppm",
+     "min": 0.1,
+     "max": 5.3,
+     "ticks": [
+      {
+       "at": 0.2,
+       "label": "5"
+      },
+      {
+       "at": 1.2,
+       "label": "4"
+      },
+      {
+       "at": 2.2,
+       "label": "3"
+      },
+      {
+       "at": 3.2,
+       "label": "2"
+      },
+      {
+       "at": 4.2,
+       "label": "1"
+      },
+      {
+       "at": 5.2,
+       "label": "0"
+      }
+     ]
+    },
+    "y": {
+     "label": "absorption",
+     "min": 0,
+     "max": 10,
+     "ticks": []
+    },
+    "curves": [
+     {
+      "fn": {
+       "kind": "points",
+       "points": [
+        [
+         0.1,
+         0
+        ],
+        [
+         1.488,
+         0
+        ],
+        [
+         1.5,
+         6.6
+        ],
+        [
+         1.512,
+         0
+        ],
+        [
+         2.738,
+         0
+        ],
+        [
+         2.75,
+         0.88
+        ],
+        [
+         2.762,
+         0
+        ],
+        [
+         2.838,
+         0
+        ],
+        [
+         2.85,
+         2.64
+        ],
+        [
+         2.862,
+         0
+        ],
+        [
+         2.938,
+         0
+        ],
+        [
+         2.95,
+         2.64
+        ],
+        [
+         2.962,
+         0
+        ],
+        [
+         3.038,
+         0
+        ],
+        [
+         3.05,
+         0.88
+        ],
+        [
+         3.062,
+         0
+        ],
+        [
+         3.988,
+         0
+        ],
+        [
+         4,
+         2.64
+        ],
+        [
+         4.012,
+         0
+        ],
+        [
+         4.088,
+         0
+        ],
+        [
+         4.1,
+         5.28
+        ],
+        [
+         4.112,
+         0
+        ],
+        [
+         4.188,
+         0
+        ],
+        [
+         4.2,
+         2.64
+        ],
+        [
+         4.212,
+         0
+        ],
+        [
+         5.3,
+         0
+        ]
+       ]
+      },
+      "from": 0.1,
+      "to": 5.3
+     }
+    ],
+    "marks": [
+     {
+      "x": 1.5,
+      "y": 7.500000000000001,
+      "label": "3H",
+      "plain": true
+     },
+     {
+      "x": 2.9,
+      "y": 3.5400000000000005,
+      "label": "2H",
+      "plain": true
+     },
+     {
+      "x": 4.1,
+      "y": 6.1800000000000015,
+      "label": "3H",
+      "plain": true
+     }
+    ]
+   },
+   "a": "<strong>Methyl propanoate</strong>, \\(\\mathrm{CH_{3}CH_{2}COOCH_{3}}\\).",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of methyl propanoate: CH3–CH2–C(=O)–O–CH3.",
+    "smiles": "CCC(=O)OC",
+    "formula": "C4H8O2"
+   },
+   "why": "The singlet at 3.7 is an \\(\\mathrm{OCH_{3}}\\); the ethyl \\(\\mathrm{CH_{2}}\\) at 2.3 is next to the C=O, not the O.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-031",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "structure"
+   ],
+   "q": "A compound \\(\\mathrm{C_{3}H_{6}O_{2}}\\) has \\(\\mathrm{^{1}H}\\) NMR peaks at δ 1.2 (triplet, 3H), 2.4 (quartet, 2H) and 11.7 (singlet, 1H). Identify it.",
+   "a": "<strong>Propanoic acid</strong>.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propanoic acid: CH3–CH2–COOH.",
+    "smiles": "CCC(=O)O",
+    "formula": "C3H6O2"
+   },
+   "why": "A singlet at 10–12 ppm is the COOH hydrogen; the triplet and quartet show an ethyl group next to C=O.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-032",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "structure"
+   ],
+   "q": "A compound \\(\\mathrm{C_{2}H_{4}O}\\) has two \\(\\mathrm{^{1}H}\\) NMR peaks: δ 2.2 (doublet, 3H) and 9.8 (quartet, 1H). Identify it.",
+   "a": "<strong>Ethanal</strong>, CH₃CHO.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of ethanal: CH3–CHO.",
+    "smiles": "CC=O",
+    "formula": "C2H4O"
+   },
+   "why": "The peak at 9.8 is an aldehyde CHO hydrogen, split into a quartet by the CH₃; the CH₃ is split into a doublet by the single CHO hydrogen.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-033",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "structure"
+   ],
+   "q": "A compound \\(\\mathrm{C_{2}H_{5}Cl}\\) has \\(\\mathrm{^{1}H}\\) NMR peaks at δ 1.5 (triplet, 3H) and 3.6 (quartet, 2H). Explain the shifts and splitting.",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of chloroethane: CH3–CH2–Cl.",
+    "smiles": "CCCl",
+    "formula": "C2H5Cl"
+   },
+   "a": "Chloroethane. The \\(\\mathrm{CH_{2}}\\) is bonded to the electronegative Cl, so it has the higher shift (3.6); it is split into a quartet by the three \\(\\mathrm{CH_{3}}\\) hydrogens. The \\(\\mathrm{CH_{3}}\\) is split into a triplet by the two \\(\\mathrm{CH_{2}}\\) hydrogens.",
+   "why": "Electronegative neighbours raise the chemical shift.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-034",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "proton-nmr",
+    "structure"
+   ],
+   "q": "A compound \\(\\mathrm{C_{3}H_{6}O}\\) gives a single peak in its \\(\\mathrm{^{1}H}\\) NMR spectrum, at δ 2.1. Identify it.",
+   "a": "<strong>Propanone</strong>: all six hydrogens are equivalent, and they are on carbons next to a C=O.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propanone: a C=O carbon with a methyl group on each side.",
+    "smiles": "CC(C)=O",
+    "formula": "C3H6O"
+   },
+   "why": "With no hydrogens on the carbon next to each CH₃ (the C=O carbon), the peak is a singlet.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-035",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "proton-nmr",
+    "isomers"
+   ],
+   "q": "How could \\(\\mathrm{^{1}H}\\) NMR distinguish propan-1-ol (shown) from its isomer propan-2-ol?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propan-1-ol: a three-carbon chain with OH on an end carbon.",
+    "smiles": "CCCO",
+    "formula": "C3H8O"
+   },
+   "a": "Propan-1-ol has <strong>four</strong> peaks (ratio 3 : 2 : 2 : 1). Propan-2-ol has <strong>three</strong> peaks (ratio 6 : 1 : 1); its two equivalent \\(\\mathrm{CH_{3}}\\) groups give a 6H <strong>doublet</strong>.",
+   "answerFigure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of propan-2-ol: a three-carbon chain with OH on the middle carbon.",
+    "smiles": "CC(C)O",
+    "formula": "C3H8O"
+   },
+   "why": "The number of peaks and the integration ratio are often enough to tell isomers apart.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-036",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "proton-nmr",
+    "chemical-shift"
+   ],
+   "q": "Using data-booklet values, give the approximate \\(\\mathrm{^{1}H}\\) chemical shift range for: (a) an alkyl \\(\\mathrm{CH_{3}}\\), (b) \\(\\mathrm{H{-}C{-}C{=}O}\\), (c) \\(\\mathrm{H{-}C{-}O}\\), (d) a benzene ring H, (e) an aldehyde CHO, (f) a carboxylic acid COOH.",
+   "a": "(a) about 0.7–1.2. (b) about 2.0–2.6. (c) about 3.3–4.2. (d) about 6.5–8. (e) about 9–10. (f) about 10–12.",
+   "why": "Learn the pattern, then read exact ranges from your board’s data booklet in the exam.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-037",
+   "type": "misconception",
+   "difficulty": 1,
+   "tags": [
+    "proton-nmr",
+    "environments"
+   ],
+   "q": "True or false: the number of peaks in a \\(\\mathrm{^{1}H}\\) NMR spectrum equals the number of hydrogen atoms in the molecule.",
+   "a": "<strong>False.</strong> There is one peak for each <em>environment</em>; the peak areas show how many hydrogens are in each.",
+   "why": "Propanone has six hydrogens but only one environment, so one peak.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-038",
+   "type": "concept",
+   "difficulty": 3,
+   "tags": [
+    "carbon-13",
+    "proton-nmr"
+   ],
+   "q": "Butan-2-ol: how many peaks are in its \\(\\mathrm{^{13}C}\\) spectrum, and how many in its \\(\\mathrm{^{1}H}\\) spectrum?",
+   "figure": {
+    "kind": "structure",
+    "alt": "Skeletal formula of butan-2-ol: a four-carbon chain with OH on carbon 2.",
+    "smiles": "CCC(C)O",
+    "formula": "C4H10O"
+   },
+   "a": "\\(\\mathrm{^{13}C}\\): <strong>4</strong> (all four carbons are different).<br>\\(\\mathrm{^{1}H}\\): <strong>5</strong> (two different \\(\\mathrm{CH_{3}}\\), the \\(\\mathrm{CH_{2}}\\), the \\(\\mathrm{CH}\\) and the \\(\\mathrm{OH}\\)), in the ratio 3 : 3 : 2 : 1 : 1.",
+   "why": "Count carbon environments and hydrogen environments separately.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.15"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19B.3",
+      "19B.5"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-039",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "chromatography"
+   ],
+   "q": "What do all types of chromatography have in common?",
+   "a": "A <strong>mobile phase</strong> (liquid or gas) moves through or over a <strong>stationary phase</strong> (a solid, or a liquid held on a solid). Components of a mixture separate because each moves at a different rate.",
+   "why": "Chromatography separates and identifies the components of a mixture.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19C.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-040",
+   "type": "explain",
+   "difficulty": 2,
+   "tags": [
+    "chromatography"
+   ],
+   "q": "Explain why components of a mixture separate during chromatography.",
+   "a": "Separation depends on the balance between solubility in the mobile phase and retention by the stationary phase.",
+   "marks": [
+    "Each component is distributed between the mobile phase and the stationary phase.",
+    "A component that is more soluble in the mobile phase moves further or faster.",
+    "A component that is held more strongly by (adsorbed onto) the stationary phase moves more slowly.",
+    "Different components have a different balance, so they separate."
+   ],
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19C.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-041",
+   "type": "concept",
+   "difficulty": 1,
+   "tags": [
+    "tlc"
+   ],
+   "q": "Describe the two phases in thin-layer chromatography (TLC).",
+   "a": "Stationary phase: a thin layer of solid, such as silica or alumina, on a glass, metal or plastic plate.<br>Mobile phase: a solvent that moves up the plate.",
+   "why": "Each spot moves up the plate a different distance, depending on how strongly it is adsorbed onto the solid.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "19C.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-042",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "tlc",
+    "rf"
+   ],
+   "q": "Define the \\(R_{\\text{f}}\\) value.",
+   "a": "\\(R_{\\text{f}} = \\frac{\\text{distance moved by the spot}}{\\text{distance moved by the solvent front}}\\)",
+   "why": "Both distances are measured from the baseline (the start line). Rf is always between 0 and 1.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "19C.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-043",
+   "type": "worked-calc",
+   "difficulty": 1,
+   "tags": [
+    "tlc",
+    "rf"
+   ],
+   "q": "On a TLC plate the solvent front is 8.0 cm from the baseline, and a spot has moved 3.6 cm from the baseline. Calculate its \\(R_{\\text{f}}\\) value.",
+   "a": "<strong>0.45</strong>",
+   "steps": [
+    "\\(R_{\\text{f}} = \\frac{\\text{distance moved by spot}}{\\text{distance moved by solvent front}}\\)",
+    "\\(R_{\\text{f}} = \\frac{3.6}{8.0} = 0.45\\)"
+   ],
+   "why": "\\(R_{\\text{f}}\\) has no units. Measure to the centre of the spot.",
+   "numeric": {
+    "value": 0.45,
+    "unit": "",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "19C.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-044",
+   "type": "worked-calc",
+   "difficulty": 2,
+   "tags": [
+    "tlc",
+    "rf"
+   ],
+   "q": "A spot has an \\(R_{\\text{f}}\\) value of 0.62. The solvent front travelled 6.5 cm. How far did the spot travel from the baseline?",
+   "a": "<strong>4.0 cm</strong>",
+   "steps": [
+    "Distance moved by spot \\(= R_{\\text{f}} \\times\\) distance moved by solvent front",
+    "\\(= 0.62 \\times 6.5 = 4.03 \\approx 4.0\\ \\text{cm}\\)"
+   ],
+   "why": "Rearrange the definition; give the answer to the same precision as the data.",
+   "numeric": {
+    "value": 4,
+    "unit": "cm",
+    "sf": 2
+   },
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "19C.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-045",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "tlc",
+    "method"
+   ],
+   "q": "Outline how to carry out thin-layer chromatography to separate the components of a mixture.",
+   "a": "Draw a pencil baseline about 1 cm from the bottom of the plate. Spot the sample (and known standards) on it with a capillary tube. Stand the plate in a beaker with solvent below the baseline, and cover with a lid. Remove the plate when the solvent nears the top, mark the solvent front at once, and let it dry. Locate colourless spots, then measure distances.",
+   "why": "Keep your fingers off the surface of the plate: grease and other substances would contaminate it.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "19C.6",
+      "19C.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-046",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "tlc",
+    "method"
+   ],
+   "q": "In TLC, why is the baseline drawn in pencil, why must the solvent be below the baseline, and why is a lid used?",
+   "a": "Pencil (graphite) is insoluble, so it does not move with the solvent as ink would.<br>Solvent above the baseline would dissolve the spots off the plate into the solvent.<br>The lid keeps the air saturated with solvent vapour, so solvent does not evaporate from the plate.",
+   "why": "Each step keeps the Rf values accurate and reproducible.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "19C.6"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-047",
+   "type": "practical",
+   "difficulty": 2,
+   "tags": [
+    "tlc",
+    "method"
+   ],
+   "q": "How can colourless spots on a TLC plate be made visible?",
+   "a": "Shine ultraviolet light on the plate (many plates contain a substance that fluoresces, so the spots show up as dark patches), or put the plate in a jar with iodine crystals, which stain the spots brown. Amino acids can be sprayed with ninhydrin, which turns them purple.",
+   "why": "Mark the spots in pencil while you can see them, before they fade.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "19C.6",
+      "18B.17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-048",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "tlc",
+    "identification"
+   ],
+   "q": "How is TLC used to identify the substances in a mixture, such as the painkillers in a tablet?",
+   "a": "Run the mixture and known pure standards (such as paracetamol, aspirin and caffeine) on the same plate, with the same solvent. A spot from the mixture with the same \\(R_{\\text{f}}\\) value as a standard is probably that substance.",
+   "why": "\\(R_{\\text{f}}\\) values depend on the solvent, the plate and the temperature, so standards must be run under the same conditions.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "19C.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-049",
+   "type": "misconception",
+   "difficulty": 2,
+   "tags": [
+    "tlc",
+    "identification"
+   ],
+   "q": "True or false: if two substances have the same \\(R_{\\text{f}}\\) value, they must be the same compound.",
+   "a": "<strong>False.</strong> Different compounds can have the same \\(R_{\\text{f}}\\) in one solvent.",
+   "why": "Run the plate again in a different solvent: if the values still match, the identification is more secure. Spectroscopy can confirm it.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "19C.7"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-050",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "column-chromatography"
+   ],
+   "q": "Describe column chromatography.",
+   "a": "A column is packed with a solid such as silica or alumina (stationary phase). The mixture is added at the top, and a solvent (mobile phase, the eluent) runs down through the column. Components come out at the bottom at different times and are collected as separate fractions.",
+   "why": "Unlike TLC, column chromatography can separate larger amounts, to purify a product.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19C.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-051",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "gc"
+   ],
+   "q": "Describe gas chromatography (GC).",
+   "a": "A long, thin column is packed with a solid, or a solid coated with a liquid (stationary phase), inside an oven. An unreactive carrier gas, such as helium or nitrogen (mobile phase), carries the vaporised sample through the column under pressure at high temperature. A detector records each component as it leaves.",
+   "why": "GC is a type of column chromatography, used for volatile substances.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19C.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-052",
+   "type": "definition",
+   "difficulty": 1,
+   "tags": [
+    "gc",
+    "retention-time"
+   ],
+   "q": "What is the retention time in gas chromatography?",
+   "a": "The time between injecting the sample and a component leaving the column (reaching the detector).",
+   "why": "Each compound has its own retention time under fixed conditions, so comparing with a standard identifies it.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19C.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-053",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "gc",
+    "retention-time"
+   ],
+   "q": "This gas chromatogram is of a mixture of ethanol and two other alcohols, run with standards under the same conditions. Ethanol has a retention time of 2.4 min. Which peak is ethanol, and what affects the order in which components leave?",
+   "figure": {
+    "kind": "graph",
+    "alt": "Gas chromatogram: detector response against retention time from 0 to 10 minutes, with peaks labelled A at 2.4 minutes, B at 4.6 minutes and C at 7.1 minutes.",
+    "x": {
+     "label": "retention time / min",
+     "min": 0,
+     "max": 10,
+     "ticks": [
+      {
+       "at": 2,
+       "label": "2"
+      },
+      {
+       "at": 4,
+       "label": "4"
+      },
+      {
+       "at": 6,
+       "label": "6"
+      },
+      {
+       "at": 8,
+       "label": "8"
+      },
+      {
+       "at": 10,
+       "label": "10"
+      }
+     ]
+    },
+    "y": {
+     "label": "detector response",
+     "min": 0,
+     "max": 10,
+     "ticks": []
+    },
+    "curves": [
+     {
+      "fn": {
+       "kind": "points",
+       "points": [
+        [
+         0,
+         0.3
+        ],
+        [
+         2.05,
+         0.3
+        ],
+        [
+         2.25,
+         2.7
+        ],
+        [
+         2.4,
+         6
+        ],
+        [
+         2.55,
+         2.7
+        ],
+        [
+         2.8,
+         0.3
+        ],
+        [
+         4.25,
+         0.3
+        ],
+        [
+         4.449999999999999,
+         3.6
+        ],
+        [
+         4.6,
+         8
+        ],
+        [
+         4.75,
+         3.6
+        ],
+        [
+         5,
+         0.3
+        ],
+        [
+         6.75,
+         0.3
+        ],
+        [
+         6.949999999999999,
+         1.8
+        ],
+        [
+         7.1,
+         4
+        ],
+        [
+         7.25,
+         1.8
+        ],
+        [
+         7.5,
+         0.3
+        ],
+        [
+         10,
+         0.3
+        ]
+       ]
+      },
+      "from": 0,
+      "to": 10,
+      "smooth": true
+     }
+    ],
+    "marks": [
+     {
+      "x": 2.4,
+      "y": 6.8,
+      "label": "A",
+      "plain": true
+     },
+     {
+      "x": 4.6,
+      "y": 8.8,
+      "label": "B",
+      "plain": true
+     },
+     {
+      "x": 7.1,
+      "y": 4.8,
+      "label": "C",
+      "plain": true
+     }
+    ]
+   },
+   "a": "<strong>Peak A</strong> is ethanol. Components that are more volatile, or held less strongly by the stationary phase, pass through faster and have shorter retention times.",
+   "why": "Retention times depend on the column, temperature and gas flow rate, so standards must be run under the same conditions.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19C.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-054",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "gc",
+    "mass-spectrometry"
+   ],
+   "q": "Why is gas chromatography often combined with mass spectrometry (GC–MS)?",
+   "a": "GC separates the components, but similar compounds can have similar retention times. Each component then goes straight into the mass spectrometer, whose spectrum (molecular ion and fragments) identifies it, by comparison with a database of spectra.",
+   "why": "Uses include forensic analysis, testing athletes for banned drugs, and detecting pollutants in water and food.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "19C.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-055",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "hplc"
+   ],
+   "q": "What is high-performance liquid chromatography (HPLC)?",
+   "a": "A type of column chromatography in which a liquid mobile phase is forced at high pressure through a column packed with very small solid particles. Components are separated by their different retention times.",
+   "why": "HPLC suits substances that are not volatile or that decompose on heating, such as many drugs; like GC, it can be linked to a mass spectrometer.",
+   "boards": {
+    "edexcel": {
+     "points": [
+      "19C.8"
+     ]
+    }
+   }
+  },
+  {
+   "id": "che-al-nmr-056",
+   "type": "concept",
+   "difficulty": 2,
+   "tags": [
+    "chromatography",
+    "amino-acids"
+   ],
+   "q": "A protein is hydrolysed, and the mixture of amino acids is analysed by TLC. How are the amino acids identified?",
+   "a": "Run the mixture beside standard amino acids on the same plate; spray with ninhydrin to show the spots; compare \\(R_{\\text{f}}\\) values.",
+   "why": "The peptide (amide) links are hydrolysed by heating with hydrochloric acid, releasing the individual amino acids.",
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.3.16"
+     ],
+     "practical": "RP12"
+    },
+    "edexcel": {
+     "points": [
+      "18B.17",
+      "19C.7"
+     ]
+    }
+   }
+  }
+ ]
+}

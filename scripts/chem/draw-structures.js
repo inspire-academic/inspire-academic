@@ -5,6 +5,8 @@
 //   node scripts/chem/draw-structures.js           draw the ones not drawn yet
 //   node scripts/chem/draw-structures.js --all     redraw every one
 //   node scripts/chem/draw-structures.js --prune   also delete drawings nothing uses
+//   --files a.json,b.json   only these topic files (a draft not yet in curriculum/)
+//   --store <dir>           keep the drawings there instead (a draft's own store)
 //
 // A figure { kind: 'structure', smiles } or { kind: 'reaction', rxn, above,
 // below } (assets/js/chem-figure.js) is stored under ChemFigure.structureKey()
@@ -22,15 +24,25 @@ const path = require('path');
 const ChemFigure = require('../../assets/js/chem-figure.js');
 
 const ROOT = path.join(__dirname, '..', '..');
-const OUT = path.join(ROOT, 'assets', 'chem', 'structures');
+let OUT = path.join(ROOT, 'assets', 'chem', 'structures');
 const SOURCES = [path.join(ROOT, 'curriculum', 'flashcards'), path.join(ROOT, 'curriculum', 'quizzes')];
 const INK = '#1a1a1a';
 const BOND = 30;          // px per bond, the same in every drawing
 const RDKIT_BOND = 1.5;   // RDKit's bond length in its own coordinates
 
 // Every structure and reaction figure in the curriculum files: [{ key, fig, where }].
-function used() {
+function used(files) {
   const out = [];
+  const read = p => {
+    const data = JSON.parse(fs.readFileSync(p, 'utf8'));
+    for (const item of [...(data.cards || []), ...(data.questions || [])]) {
+      for (const f of ['figure', 'answerFigure']) {
+        const fig = item[f];
+        if (fig && (fig.kind === 'structure' || fig.kind === 'reaction')) out.push({ key: ChemFigure.structureKey(fig), fig, where: `${path.relative(ROOT, p)} ${item.id}` });
+      }
+    }
+  };
+  if (files) { files.forEach(read); return out; }
   const walk = dir => {
     if (!fs.existsSync(dir)) return;
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -87,13 +99,34 @@ function tidy(svg) {
 
 function drawOptions(w, h) {
   return { width: Math.round(w), height: Math.round(h), fixedBondLength: BOND, bondLineWidth: 1.6, multipleBondOffset: 0.18, padding: 0.06,
-    explicitMethyl: true, addStereoAnnotation: false, clearBackground: true, backgroundColour: [1, 1, 1, 1], minFontSize: 13, maxFontSize: 15 };
+    // Skeletal formulae end in a bare line, as in a textbook, not "CH3".
+    explicitMethyl: false, addStereoAnnotation: false, clearBackground: true, backgroundColour: [1, 1, 1, 1], minFontSize: 13, maxFontSize: 15 };
 }
+
+const viewSize = svg => { const m = /viewBox='0 0 ([\d.]+) ([\d.]+)'/.exec(svg); return { w: +m[1], h: +m[2] }; };
 
 function drawStructure(RDKit, fig) {
   const mol = RDKit.get_mol(fig.smiles);
   if (!mol || !mol.is_valid()) throw new Error(`not a valid molecule: ${fig.smiles}`);
   try {
+    // Several molecules (isomers, or an ion pair): each drawn on its own and
+    // set out in a row, in the order written. RDKit would stack and crowd them.
+    if (fig.smiles.includes('.')) {
+      const parts = fig.smiles.split('.').map(smiles => drawStructure(RDKit, { smiles }));
+      const H = Math.max(...parts.map(d => viewSize(d.svg).h));
+      let x = 0;
+      const body = parts.map(d => {
+        const { w, h } = viewSize(d.svg);
+        const out = d.svg.replace(/^<svg[^>]*>/, `<svg x='${x.toFixed(1)}' y='${((H - h) / 2).toFixed(1)}' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>`);
+        x += w + 12;
+        return out;
+      }).join('');
+      const W = x - 12;
+      const withH = RDKit.get_mol(mol.add_hs());
+      const f = formula(withH.get_molblock());
+      withH.delete();
+      return { svg: `<svg version='1.1' xmlns='http://www.w3.org/2000/svg' width='${W.toFixed(0)}px' height='${H.toFixed(0)}px' viewBox='0 0 ${W.toFixed(1)} ${H.toFixed(1)}'><rect width='100%' height='100%' fill='#FFFFFF'/>${body}</svg>`, formula: f };
+    }
     mol.set_new_coords();
     const e = extent(mol.get_molblock());
     const svg = mol.get_svg_with_highlights(JSON.stringify(drawOptions(e.w * BOND + 70, e.h * BOND + 60)));
@@ -113,7 +146,7 @@ function drawReaction(RDKit, fig) {
   const side = s => s.split('.').filter(Boolean).map(smiles => drawStructure(RDKit, { smiles }));
   const reactants = side(left), products = side(right);
   if (!reactants.length || !products.length) throw new Error(`a reaction needs reactants and products: ${fig.rxn}`);
-  const size = svg => { const m = /viewBox='0 0 ([\d.]+) ([\d.]+)'/.exec(svg); return { w: +m[1], h: +m[2] }; };
+  const size = viewSize;
   const H = Math.max(...[...reactants, ...products].map(d => size(d.svg).h));
   const label = t => t ? ChemFigure.textWidth(t, 13) : 0;
   const ARROW = Math.max(70, label(fig.above), label(fig.below)) + 24;
@@ -140,6 +173,9 @@ function drawReaction(RDKit, fig) {
 async function main() {
   const argv = process.argv.slice(2);
   const all = argv.includes('--all'), prune = argv.includes('--prune');
+  const opt = k => { const i = argv.indexOf('--' + k); return i === -1 ? null : argv[i + 1]; };
+  if (opt('store')) OUT = path.resolve(opt('store'));
+  const files = opt('files') ? opt('files').split(',').map(f => path.resolve(f)) : null;
   let initRDKit;
   try { initRDKit = require('@rdkit/rdkit'); }
   catch (e) { console.error('RDKit is not installed: run npm install (it is a development dependency).'); process.exit(1); }
@@ -147,7 +183,7 @@ async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   const indexFile = path.join(OUT, 'index.json');
   const index = fs.existsSync(indexFile) ? JSON.parse(fs.readFileSync(indexFile, 'utf8')) : {};
-  const figures = used();
+  const figures = used(files);
   let drawn = 0, failed = 0;
   for (const { key, fig, where } of figures) {
     if (!all && index[key] && fs.existsSync(path.join(OUT, key + '.svg'))) continue;
