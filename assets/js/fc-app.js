@@ -5,9 +5,14 @@
 // file is what the student sees and presses. Cards are the published files
 // under /content/flashcards/ (approved by a teacher, maths already typeset).
 //
+// ?subject=<slug>    that subject, e.g. chemistry-a-level (otherwise the
+//                    student's A-level subjects, asked when there are several)
 // ?topic=<id>        just that topic (otherwise the topics the student chose)
 // ?preview=drafts    staff only: run the app on the unapproved drafts, with
 //                    nothing saved, to see cards as a student would
+//
+// One subject at a time. The subjects, and the student's board for each,
+// come from assets/js/a-level-subjects.js and profiles.a_level_subjects.
 (function () {
   var Core = window.FCCore;
   var $ = function (id) { return document.getElementById(id); };
@@ -18,6 +23,9 @@
   var previewing = params.get('preview') === 'drafts';
 
   var store, board, files = [], chosen = [], cards = [], cardTopic = {}, states = {}, days = [], firstName = '';
+  // Every subject's files, the subject being studied, the topics chosen in
+  // every subject (kept together on the device), and what the profile says.
+  var allFiles = [], subject = null, allChosen = [], profile = {}, savedBoards = {};
   var html = function (s) { return s; };          // published text is ready to show
   var afterRender = function () {};
   var session = null, current = null, lastAction = null, undoTimer = null;
@@ -28,7 +36,7 @@
     'uncertainty': 'Uncertainty', 'misconception': 'Common mistake', 'unit': 'Units', 'explain': 'Explain', 'concept': 'Concept'
   };
   var BOARD_NAMES = { aqa: 'AQA', edexcel: 'Edexcel' };
-  var SCREENS = ['fc-loading', 'fc-board', 'fc-topics', 'fc-today', 'fc-session', 'fc-done'];
+  var SCREENS = ['fc-loading', 'fc-subject', 'fc-board', 'fc-topics', 'fc-today', 'fc-session', 'fc-done'];
 
   function show(id, focusId) {
     SCREENS.forEach(function (s) { $(s).hidden = s !== id; });
@@ -102,6 +110,64 @@
     };
   }
 
+  // ── Subjects ─────────────────────────────────────────────────────────
+  // A topic's subject is the first part of its id: chemistry-a-level/bonding.
+  function subjectOf(id) { return String(id).split('/')[0]; }
+
+  // The subjects with cards here, in the order of the subject list.
+  function subjectsWithCards() {
+    var here = [];
+    allFiles.forEach(function (f) { var s = subjectOf(f.topic.id); if (here.indexOf(s) === -1) here.push(s); });
+    var order = IAALevel.SUBJECTS.map(function (s) { return s.slug; });
+    return here.sort(function (a, b) { return (order.indexOf(a) + 1 || 99) - (order.indexOf(b) + 1 || 99); });
+  }
+
+  function subjectName(slug) {
+    var f = allFiles.filter(function (x) { return subjectOf(x.topic.id) === slug; })[0];
+    return f ? f.topic.level + ' ' + f.topic.subject : slug;
+  }
+
+  // The subjects this student studies here: those they chose in their
+  // profile that have cards, or, if they have not chosen, every one.
+  function mySubjects() {
+    var here = subjectsWithCards();
+    var picked = IAALevel.mine(profile).map(function (s) { return s.slug; }).filter(function (s) { return here.indexOf(s) !== -1; });
+    return picked.length ? picked : here;
+  }
+
+  // The board for a subject: the profile (that subject's board, or the
+  // profile's board), else what this device was told, else ask.
+  function boardFor(slug) {
+    if (previewing && params.get('board')) return params.get('board');
+    var entry = IAALevel.mine(profile).filter(function (s) { return s.slug === slug; })[0];
+    return (entry && entry.board) || IAALevel.boardOf(profile.exam_board) || savedBoards[slug] || null;
+  }
+
+  function showSubjects() {
+    var list = $('fc-subject-list');
+    list.textContent = '';
+    mySubjects().forEach(function (slug) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'fc-btn fc-btn-wide';
+      btn.setAttribute('data-subject', slug);
+      btn.textContent = subjectName(slug);
+      list.appendChild(btn);
+    });
+    show('fc-subject', 'fc-subject-title');
+  }
+
+  function openSubject(slug) {
+    subject = slug;
+    store.setMeta('subject', slug);
+    files = allFiles.filter(function (f) { return subjectOf(f.topic.id) === slug; });
+    var name = subjectName(slug);
+    $('fc-nav-topic').textContent = name;
+    document.title = name + ' flashcards — Inspire Academic';
+    board = boardFor(slug);
+    ready();
+  }
+
   // ── Today ────────────────────────────────────────────────────────────
   function renderToday() {
     var now = new Date();
@@ -125,9 +191,10 @@
     $('fc-week').textContent = plural(study.week, 'day') + ' studied this week · ' + plural(study.total, 'study day') + ' in total';
 
     var active = activeFiles();
-    $('fc-topic').textContent = files[0].topic.level + ' ' + files[0].topic.subject + ' · ' +
+    $('fc-topic').textContent = subjectName(subject) + ' · ' +
       (active.length <= 2 ? active.map(function (f) { return f.topic.title; }).join(' and ') : active.length + ' topics');
     $('fc-choose').hidden = !!onlyTopic || files.length < 2;
+    $('fc-switch').hidden = !!onlyTopic || !!params.get('subject') || mySubjects().length < 2;
 
     // Coverage, topic by topic.
     var cover = $('fc-cover');
@@ -227,7 +294,9 @@
   function saveTopics() {
     chosen = pickedTopics();
     if (!chosen.length) return;
-    store.setMeta('topics', chosen);
+    // This subject's choice replaces only this subject's.
+    allChosen = allChosen.filter(function (id) { return subjectOf(id) !== subject; }).concat(chosen);
+    store.setMeta('topics', allChosen);
     ready();
   }
 
@@ -235,7 +304,14 @@
   // Today's plan keeps to the daily allowance of new cards. `extra` is the
   // student asking for more: another session's worth, allowance aside.
   function todaysPlan(now, extra) {
-    return Core.buildSession(cards, states, now, extra ? {} : { maxNew: Core.newAllowance(states, now) });
+    return Core.buildSession(cards, states, now, extra ? {} : { maxNew: Core.newAllowance(subjectStates(), now) });
+  }
+  // The daily allowance of new cards is per subject: a Physics session does
+  // not use up the day's new Chemistry cards.
+  function subjectStates() {
+    var out = {};
+    files.forEach(function (f) { f.cards.forEach(function (c) { if (states[c.id]) out[c.id] = states[c.id]; }); });
+    return out;
   }
 
   function startSession(extra) {
@@ -445,9 +521,15 @@
     var btn = ev.target.closest('[data-board]');
     if (!btn) return;
     board = btn.getAttribute('data-board');
-    store.setMeta('board', board);
+    savedBoards[subject] = board;
+    store.setMeta('boards', savedBoards);
     ready();
   });
+  $('fc-subject-list').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('[data-subject]');
+    if (btn) openSubject(btn.getAttribute('data-subject'));
+  });
+  $('fc-switch').addEventListener('click', showSubjects);
 
   // Keyboard: Space or Enter for the main button, 1 to 4 to rate, Z to undo.
   document.addEventListener('keydown', function (ev) {
@@ -528,11 +610,15 @@
 
   // ── Starting up ──────────────────────────────────────────────────────
   function ready() {
-    if (!board) { show('fc-board'); return; }
+    if (!board) {
+      $('fc-board-title').textContent = 'Which exam board are you studying for ' + subjectName(subject) + '?';
+      show('fc-board');
+      return;
+    }
     // Only topics that still exist and have cards for this board count.
     var available = files.filter(function (f) { return Core.forBoard(f.cards, board).length; }).map(function (f) { return f.topic.id; });
     if (!available.length) { stop('There are no cards for ' + BOARD_NAMES[board] + ' here yet.'); return; }
-    chosen = Core.oneOption(chosen.filter(function (id) { return available.indexOf(id) !== -1; }), optionIds());
+    chosen = Core.oneOption(allChosen.filter(function (id) { return available.indexOf(id) !== -1; }), optionIds());
     if (!onlyTopic && !chosen.length) {
       if (available.length > 1) { showTopics(); return; }
       chosen = available;
@@ -554,33 +640,43 @@
       if (!s) { location.href = '/index.html?next=' + encodeURIComponent(location.pathname + location.search); return; }
       var meta = s.user.user_metadata || {};
       firstName = String(meta.first_name || '').trim() || String(meta.full_name || '').trim().split(/\s+/)[0] || '';
-      var profile = supa.from('profiles').select('first_name, full_name, exam_board').eq('id', s.user.id).single()
+      var basics = supa.from('profiles').select('first_name, full_name, exam_board').eq('id', s.user.id).single()
         .then(function (res) { return res.data || {}; }, function () { return {}; });
+      // Read on its own, so the rest of the profile still loads before
+      // supabase/profiles_a_level_subjects.sql has been run.
+      var subjects = supa.from('profiles').select('a_level_subjects').eq('id', s.user.id).single()
+        .then(function (res) { return (res.data && res.data.a_level_subjects) || null; }, function () { return null; });
       var content = previewing ? loadDrafts(s.access_token) : loadPublished();
       // A preview keeps nothing: it runs from memory.
-      return Promise.all([profile, content, FCStore.open(previewing ? null : s.user.id)]).then(function (got) {
+      return Promise.all([basics, subjects, content, FCStore.open(previewing ? null : s.user.id)]).then(function (got) {
         var p = got[0];
-        files = got[1] || [];
-        store = got[2];
+        allFiles = got[2] || [];
+        store = got[3];
         var name = String(p.first_name || '').trim() || String(p.full_name || '').trim().split(/\s+/)[0];
         if (name) firstName = name;
-        if (!files.length) { stop('These cards are still being checked by a teacher. Please come back soon.'); return; }
-        var subject = files[0].topic.level + ' ' + files[0].topic.subject;
-        $('fc-nav-topic').textContent = subject;
-        document.title = subject + ' flashcards — Inspire Academic';
+        if (!allFiles.length) { stop('These cards are still being checked by a teacher. Please come back soon.'); return; }
         $('fc-unsaved').hidden = store.persistent || previewing;
         $('fc-preview-note').hidden = !previewing;
-        var fromProfile = String(p.exam_board || '').toLowerCase();
-        return Promise.all([store.states(), store.meta('days', []), store.meta('board', null), store.meta('name', ''), store.meta('topics', [])]).then(function (saved) {
-          states = saved[0]; days = saved[1]; chosen = saved[4] || [];
-          board = BOARD_NAMES[fromProfile] ? fromProfile : saved[2];
-          if (previewing && params.get('board')) board = params.get('board');
-          // Remembered on the device, so the app still knows the student
-          // (and their board) when it is opened with no connection.
+        return Promise.all([store.states(), store.meta('days', []), store.meta('board', null), store.meta('name', ''), store.meta('topics', []),
+          store.meta('boards', {}), store.meta('subject', null), store.meta('profile', null)]).then(function (saved) {
+          states = saved[0]; days = saved[1]; allChosen = saved[4] || [];
+          savedBoards = saved[5] || {};
+          // Before subjects, the device kept one board, and it was Physics'.
+          if (saved[2] && !savedBoards['physics-a-level']) savedBoards['physics-a-level'] = saved[2];
+          // Remembered on the device, so the app still knows the student,
+          // their subjects and boards when it is opened with no connection.
+          profile = { exam_board: p.exam_board, a_level_subjects: got[1] };
+          if (p.exam_board || got[1]) store.setMeta('profile', profile); else if (saved[7]) profile = saved[7];
           if (name) store.setMeta('name', name); else if (!firstName) firstName = saved[3];
-          if (BOARD_NAMES[fromProfile]) store.setMeta('board', fromProfile);
-          ready();
           if (!previewing) startSync();
+          var mine = mySubjects();
+          var asked = params.get('subject') || (onlyTopic && subjectOf(onlyTopic));
+          if (asked && subjectsWithCards().indexOf(asked) !== -1) { openSubject(asked); return; }
+          if (asked) { stop('There are no ' + (IAALevel.bySlug(asked) ? IAALevel.bySlug(asked).name + ' ' : '') + 'flashcards here yet.'); return; }
+          // The subject studied last time, if it is still one of theirs.
+          if (mine.length === 1) openSubject(mine[0]);
+          else if (mine.indexOf(saved[6]) !== -1) openSubject(saved[6]);
+          else showSubjects();
         });
       });
     }).catch(function (e) {

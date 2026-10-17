@@ -346,7 +346,7 @@ html:not([data-theme="light"]) .card-artifact{height:58px;opacity:.85;}
         </div>
         <div class="profile-form-group">
           <label class="profile-label">Year Group</label>
-          <select class="profile-select" id="profile-year-group">
+          <select class="profile-select" id="profile-year-group" onchange="toggleALevelSubjects()">
             <option value="Y7">Year 7</option>
             <option value="Y8">Year 8</option>
             <option value="Y9">Year 9</option>
@@ -369,6 +369,12 @@ html:not([data-theme="light"]) .card-artifact{height:58px;opacity:.85;}
           <label class="profile-label">Specify Exam Board</label>
           <input type="text" class="profile-input" id="profile-exam-board-custom" placeholder="e.g., OCR, WJEC, Cambridge">
         </div>
+        <!-- A Level only: the subjects taken, each with its own board. -->
+        <fieldset class="profile-form-group profile-subjects" id="a-level-subjects-group" hidden>
+          <legend class="profile-label">A-level subjects</legend>
+          <div id="a-level-subjects"></div>
+          <p class="profile-hint">Tick each subject you take and choose its exam board.</p>
+        </fieldset>
         <div class="profile-form-group" id="app-lock-toggle-group" style="display:none;">
           <label class="profile-label" style="display:flex;align-items:center;gap:.5rem;cursor:pointer;">
             <input type="checkbox" id="app-lock-toggle" onchange="toggleAppLock()">
@@ -518,6 +524,7 @@ html:not([data-theme="light"]) .card-artifact{height:58px;opacity:.85;}
 <script src="/assets/js/perf-utils.js"></script>
 <script src="/assets/js/supabase.js"></script>
 <script src="/assets/js/core-topics.js"></script>
+<script src="/assets/js/a-level-subjects.js"></script>
 <script src="/assets/js/billing-flags.js"></script>
 <script>
 // ── Toast ──
@@ -653,16 +660,22 @@ const subjectClass={1:'maths',2:'physics',3:'chemistry',4:'biology'};
     });
   }
 
-  // A-level students also get their A-level subject. It is kept apart from
-  // GCSE: its own page (/a-level/physics), never in the GCSE lists above.
-  const aLevelPhysics=(subjectsRes.data||[]).find(s=>s.level==='a-level'&&s.slug==='physics-a-level');
-  if(aLevelPhysics && profile?.year_group==='A Level'){
-    grid.innerHTML+=`
-        <div class="subject-card physics" onclick="location.href='/a-level/physics'">
-          <div class="subject-icon">${aLevelPhysics.icon||'⚡'}</div>
-          <div class="subject-name">${aLevelPhysics.name}</div>
+  // A-level students also get their A-level subjects: those ticked in their
+  // profile (or, before they have ticked any, every one), each kept apart
+  // from GCSE on its own page, never in the GCSE lists above. A subject
+  // appears once it has a subjects row and a page (a-level-subjects.js).
+  if(profile?.year_group==='A Level'){
+    const ticked=IAALevel.mine(profile).map(s=>s.slug);
+    IAALevel.SUBJECTS.filter(s=>s.page && (!ticked.length || ticked.includes(s.slug))).forEach(s=>{
+      const row=(subjectsRes.data||[]).find(r=>r.level==='a-level'&&r.slug===s.slug);
+      if(!row) return;
+      grid.innerHTML+=`
+        <div class="subject-card ${s.slug.replace('-a-level','')}" onclick="location.href='${s.page}'">
+          <div class="subject-icon">${row.icon||s.icon}</div>
+          <div class="subject-name">${row.name}</div>
           <div class="subject-topics">Exam-style quizzes, topic by topic</div>
         </div>`;
+    });
   }
 
   // 7. Recent activity
@@ -702,6 +715,33 @@ function toggleProfileDropdown(){
 }
 
 // Toggle custom exam board field visibility
+// A-level subjects (assets/js/a-level-subjects.js): one row per subject,
+// a tick and that subject's board. Shown only for year group "A Level".
+function renderALevelSubjects(profile){
+  const chosen=(profile&&profile.a_level_subjects)||{};
+  const fallback=IAALevel.boardOf(profile&&profile.exam_board)||'aqa';
+  document.getElementById('a-level-subjects').innerHTML=IAALevel.SUBJECTS.map(s=>{
+    const on=Object.prototype.hasOwnProperty.call(chosen,s.slug);
+    const board=IAALevel.boardOf(chosen[s.slug])||fallback;
+    return `<div class="profile-subject-row">
+      <label><input type="checkbox" class="a-level-tick" value="${s.slug}"${on?' checked':''}> ${s.name}</label>
+      <select class="profile-select a-level-board" data-subject="${s.slug}" aria-label="${s.name} exam board">
+        ${Object.keys(IAALevel.BOARDS).map(b=>`<option value="${b}"${b===board?' selected':''}>${IAALevel.BOARDS[b]}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+}
+function toggleALevelSubjects(){
+  document.getElementById('a-level-subjects-group').hidden=document.getElementById('profile-year-group').value!=='A Level';
+}
+function pickedALevelSubjects(){
+  const out={};
+  document.querySelectorAll('.a-level-tick:checked').forEach(t=>{
+    out[t.value]=document.querySelector(`.a-level-board[data-subject="${t.value}"]`).value;
+  });
+  return out;
+}
+
 function toggleCustomExamBoard(){
   const select=document.getElementById('profile-exam-board');
   const customGroup=document.getElementById('custom-exam-board-group');
@@ -769,6 +809,13 @@ async function saveProfile(){
       })
       .eq('id',user.id);
     
+    // Saved on its own, so the rest of the profile still saves before
+    // supabase/profiles_a_level_subjects.sql has been run.
+    if(!error && yearGroup==='A Level'){
+      const {error:subjectsError}=await supa.from('profiles').update({a_level_subjects:pickedALevelSubjects()}).eq('id',user.id);
+      if(subjectsError) console.warn('A-level subjects not saved:',subjectsError.message);
+    }
+
     if(error){
       console.error('Update error:',error);
       alert('Error saving profile: '+error.message);
@@ -806,7 +853,9 @@ function loadProfileData(user, profile){
       document.getElementById('profile-first-name').value=profile.first_name||'';
       document.getElementById('profile-last-name').value=profile.last_name||'';
       document.getElementById('profile-year-group').value=profile.year_group||'Y10';
-      
+      renderALevelSubjects(profile);
+      toggleALevelSubjects();
+
       // Handle exam board - if not AQA or Edexcel, treat as custom
       const examBoard=profile.exam_board||'AQA';
       if(examBoard==='AQA' || examBoard==='Edexcel'){

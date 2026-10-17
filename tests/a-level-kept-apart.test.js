@@ -64,11 +64,18 @@ test('a-level: the SQL warns about the order, and its topics match the question 
   assert.ok(fs.existsSync(path.join(ROOT, 'supabase/a_level_physics_subject_rollback.sql')));
 });
 
-test('a-level: the dashboard offers A-level Physics to A Level students only', () => {
+test('a-level: the dashboard offers A-level subjects to A Level students only', () => {
   const page = read('dashboard.html');
-  // The card is drawn only when the subject exists and the profile's year group is "A Level".
-  assert.match(page, /if\(aLevelPhysics && profile\?\.year_group==='A Level'\)\{\s+grid\.innerHTML\+=`\s+<div class="subject-card physics" onclick="location\.href='\/a-level\/physics'">/);
-  assert.match(page, /find\(s=>s\.level==='a-level'&&s\.slug==='physics-a-level'\)/);
+  // Cards are drawn only for year group "A Level", for the subjects the
+  // student ticked (all, before they tick any), and only when the subject
+  // has a page and an A-level subjects row.
+  assert.match(page, /if\(profile\?\.year_group==='A Level'\)\{\s+const ticked=IAALevel\.mine\(profile\)/);
+  assert.match(page, /IAALevel\.SUBJECTS\.filter\(s=>s\.page && \(!ticked\.length \|\| ticked\.includes\(s\.slug\)\)\)/);
+  assert.match(page, /find\(r=>r\.level==='a-level'&&r\.slug===s\.slug\);\s+if\(!row\) return;/);
+  // The profile form: subjects and their boards, saved on their own.
+  assert.match(page, /<script src="\/assets\/js\/a-level-subjects\.js"><\/script>/);
+  assert.match(page, /update\(\{a_level_subjects:pickedALevelSubjects\(\)\}\)/);
+  assert.doesNotMatch(page, /year_group:yearGroup,\s+exam_board:examBoard,\s+a_level_subjects/, 'not in the main save, which must work before the column exists');
 });
 
 test('a-level: the subject page keeps the house rules and only offers published quizzes', () => {
