@@ -1,0 +1,741 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/organic-intro",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Introduction to Organic Chemistry",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-intro-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.4"
+          ]
+        }
+      },
+      "q": "What is the IUPAC name of this alkane?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of a branched alkane: a zig-zag chain with two one-carbon branches.",
+        "smiles": "CC(C)CC(C)C",
+        "formula": "C7H16"
+      },
+      "options": {
+        "A": "2,4-methylpentane",
+        "B": "2,4-dimethylpentane",
+        "C": "2-methyl-4-methylpentane",
+        "D": "1,3-dimethylpentane"
+      },
+      "answer": "B",
+      "solution": "The longest chain has five carbons (pentane), with methyl groups on carbons 2 and 4 from either end. Two identical groups take the prefix di- and a locant each: 2,4-dimethylpentane. (Every substituent needs its own number, and identical ones are combined with di-, not repeated.)"
+    },
+    {
+      "id": "che-al-intro-q002",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.4"
+          ]
+        }
+      },
+      "q": "What is the IUPAC name of this compound?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of a branched chain carrying an OH group, a Cl atom and a one-carbon branch.",
+        "smiles": "OCC(C)C(C)Cl",
+        "formula": "C5H11ClO"
+      },
+      "options": {
+        "A": "3-chloro-2-methylbutan-1-ol",
+        "B": "2-chloro-3-methylbutan-4-ol",
+        "C": "2-methyl-3-chlorobutan-1-ol",
+        "D": "3-chloro-2-methylbutan-4-ol"
+      },
+      "answer": "A",
+      "solution": "The alcohol is the principal group, so it takes the suffix -ol and the lowest number: the chain is numbered from the OH carbon, giving butan-1-ol. The substituents are then on carbons 2 (methyl) and 3 (chloro), written in alphabetical order: 3-chloro-2-methylbutan-1-ol. (Prefixes go in alphabetical order, so chloro comes before methyl.)"
+    },
+    {
+      "id": "che-al-intro-q003",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.4"
+          ]
+        }
+      },
+      "q": "What is the IUPAC name of this aldehyde?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of a branched compound with an aldehyde group, CHO, at one end of the chain.",
+        "smiles": "CC(C)CC=O",
+        "formula": "C5H10O"
+      },
+      "options": {
+        "A": "2-methylbutanal",
+        "B": "3-methylbutanal",
+        "C": "3-methylbutan-1-one",
+        "D": "2-methylbutan-4-al"
+      },
+      "answer": "B",
+      "solution": "The aldehyde carbon is always carbon 1, so it needs no number. The chain has four carbons (butanal) and the methyl group is on carbon 3: 3-methylbutanal. (Numbering from the other end puts the methyl on carbon 2 but the CHO on carbon 4, which is not allowed.)"
+    },
+    {
+      "id": "che-al-intro-q004",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.4"
+          ]
+        }
+      },
+      "q": "What is the IUPAC name of this alkene?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of a branched alkene with one C=C double bond.",
+        "smiles": "CC=C(C)C",
+        "formula": "C5H10"
+      },
+      "options": {
+        "A": "3-methylbut-2-ene",
+        "B": "2-methylbut-1-ene",
+        "C": "3-methylbut-1-ene",
+        "D": "2-methylbut-2-ene"
+      },
+      "answer": "D",
+      "solution": "The longest chain containing the C=C has four carbons. Number from the end that gives the double bond the lower number: it is between carbons 2 and 3 from either end, so the next rule applies and the methyl group gets the lower number, 2: 2-methylbut-2-ene."
+    },
+    {
+      "id": "che-al-intro-q005",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.4"
+          ]
+        }
+      },
+      "q": "What is the IUPAC name of this carboxylic acid?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of a branched carboxylic acid with a COOH group at one end of the chain.",
+        "smiles": "CCC(C)C(=O)O",
+        "formula": "C5H10O2"
+      },
+      "options": {
+        "A": "2-methylbutanoic acid",
+        "B": "3-methylbutanoic acid",
+        "C": "2-ethylpropanoic acid",
+        "D": "2-methylpropanoic acid"
+      },
+      "answer": "A",
+      "solution": "The COOH carbon is carbon 1. The longest chain including it has four carbons (butanoic acid), and the methyl group is on carbon 2: 2-methylbutanoic acid. (Calling it 2-ethylpropanoic acid misses the longest chain, which runs through the ethyl group.)"
+    },
+    {
+      "id": "che-al-intro-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.4"
+          ]
+        }
+      },
+      "q": "What is the IUPAC name of this ketone?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of a branched ketone with a C=O group within the chain.",
+        "smiles": "CC(=O)C(C)C",
+        "formula": "C5H10O"
+      },
+      "options": {
+        "A": "2-methylbutan-3-one",
+        "B": "3-methylbutan-2-al",
+        "C": "3-methylbutan-2-one",
+        "D": "pentan-2-one"
+      },
+      "answer": "C",
+      "solution": "It is a ketone with a four-carbon chain. Number from the end nearer the C=O, which then gets the lower number: the carbonyl is on carbon 2 and the methyl on carbon 3, so 3-methylbutan-2-one. (The principal group, not the branch, decides the numbering; pentan-2-one is an unbranched isomer.)"
+    },
+    {
+      "id": "che-al-intro-q007",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.2"
+          ]
+        }
+      },
+      "q": "Ethane-1,2-diol, shown here, is used as antifreeze. What is its empirical formula?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of ethane-1,2-diol: a two-carbon chain with an OH group on each carbon.",
+        "smiles": "OCCO"
+      },
+      "options": {
+        "A": "\\(\\mathrm{C_{2}H_{6}O_{2}}\\)",
+        "B": "\\(\\mathrm{CH_{4}O}\\)",
+        "C": "\\(\\mathrm{CH_{2}O}\\)",
+        "D": "\\(\\mathrm{CH_{3}O}\\)"
+      },
+      "answer": "D",
+      "solution": "The molecular formula is \\(\\mathrm{C_{2}H_{6}O_{2}}\\): two \\(\\mathrm{CH_{2}}\\) groups and two OH groups. Dividing by 2 gives the simplest whole-number ratio, \\(\\mathrm{CH_{3}O}\\). (Forgetting the hydrogen atoms of the OH groups leads to \\(\\mathrm{CH_{2}O}\\).)"
+    },
+    {
+      "id": "che-al-intro-q008",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.3"
+          ]
+        }
+      },
+      "q": "Which statement describes a homologous series?",
+      "options": {
+        "A": "Compounds with the same functional group and general formula, in which each member differs from the next by \\(\\mathrm{CH_{2}}\\)",
+        "B": "Compounds with the same molecular formula but different structural formulae",
+        "C": "Compounds with the same empirical formula and the same physical properties",
+        "D": "Compounds containing only carbon and hydrogen, joined by single bonds"
+      },
+      "answer": "A",
+      "solution": "Members of a homologous series share a functional group and a general formula, differ by \\(\\mathrm{CH_{2}}\\), have similar chemical reactions and show a gradual trend in physical properties. (Same molecular formula, different structure describes structural isomers; carbon and hydrogen with single bonds only describes the alkanes, one series.)"
+    },
+    {
+      "id": "che-al-intro-q009",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.6",
+            "6A.7"
+          ]
+        }
+      },
+      "q": "How many alkenes, including stereoisomers, have the molecular formula \\(\\mathrm{C_{5}H_{10}}\\)?",
+      "options": {
+        "A": "4",
+        "B": "5",
+        "C": "6",
+        "D": "7"
+      },
+      "answer": "C",
+      "solution": "Straight chain: pent-1-ene, and pent-2-ene, which has E and Z isomers (3). Branched: 2-methylbut-1-ene, 3-methylbut-1-ene and 2-methylbut-2-ene (3), none with E/Z isomers. Total = 6. (Forgetting that pent-2-ene has two stereoisomers leads to 5.)"
+    },
+    {
+      "id": "che-al-intro-q010",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.6"
+          ]
+        }
+      },
+      "q": "How many structural isomers have the molecular formula \\(\\mathrm{C_{5}H_{11}Cl}\\)?",
+      "options": {
+        "A": "3",
+        "B": "6",
+        "C": "7",
+        "D": "8"
+      },
+      "answer": "D",
+      "solution": "On pentane: 1-, 2- and 3-chloropentane (3). On 2-methylbutane: 1-chloro-2-methylbutane, 2-chloro-2-methylbutane, 2-chloro-3-methylbutane and 1-chloro-3-methylbutane (4). On 2,2-dimethylpropane: 1-chloro-2,2-dimethylpropane (1). Total = 8. (Using only the straight chain leads to 3.)"
+    },
+    {
+      "id": "che-al-intro-q011",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.6"
+          ]
+        }
+      },
+      "q": "Which pair of compounds are chain isomers?",
+      "options": {
+        "A": "But-1-ene and but-2-ene",
+        "B": "Butane and methylpropane",
+        "C": "Propanal and propanone",
+        "D": "(E)-but-2-ene and (Z)-but-2-ene"
+      },
+      "answer": "B",
+      "solution": "Chain isomers have the same molecular formula but a different carbon skeleton. Butane (straight) and methylpropane (branched) are both \\(\\mathrm{C_{4}H_{10}}\\). (But-1-ene and but-2-ene are position isomers; propanal and propanone are functional group isomers; E and Z are stereoisomers.)"
+    },
+    {
+      "id": "che-al-intro-q012",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.6"
+          ]
+        }
+      },
+      "q": "Which compound is a functional group isomer of the compound shown?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of propanal: a three-carbon chain ending in an aldehyde group, CHO.",
+        "smiles": "CCC=O",
+        "formula": "C3H6O"
+      },
+      "options": {
+        "A": "Propan-1-ol",
+        "B": "Propanoic acid",
+        "C": "Propanone",
+        "D": "Butanal"
+      },
+      "answer": "C",
+      "solution": "Propanal is \\(\\mathrm{C_{3}H_{6}O}\\), an aldehyde. Propanone, \\(\\mathrm{CH_{3}COCH_{3}}\\), is also \\(\\mathrm{C_{3}H_{6}O}\\) but is a ketone: the same molecular formula with a different functional group. (Propan-1-ol is \\(\\mathrm{C_{3}H_{8}O}\\), propanoic acid \\(\\mathrm{C_{3}H_{6}O_{2}}\\) and butanal \\(\\mathrm{C_{4}H_{8}O}\\), so they are not isomers of propanal.)"
+    },
+    {
+      "id": "che-al-intro-q013",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.7"
+          ]
+        }
+      },
+      "q": "What is the full name, including E or Z, of the compound shown?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Displayed formula around a C=C double bond. The left carbon carries Cl above and CH3 below; the right carbon carries CH2CH3 above and H below.",
+        "atoms": [
+          {
+            "id": "Ca",
+            "el": "C",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "Cb",
+            "el": "C",
+            "x": 1.2,
+            "y": 0
+          },
+          {
+            "id": "A1",
+            "el": "Cl",
+            "x": -0.6,
+            "y": 1
+          },
+          {
+            "id": "A2",
+            "el": "H3C",
+            "x": -0.6,
+            "y": -1
+          },
+          {
+            "id": "B1",
+            "el": "CH2CH3",
+            "x": 1.8,
+            "y": 1
+          },
+          {
+            "id": "B2",
+            "el": "H",
+            "x": 1.8,
+            "y": -1
+          }
+        ],
+        "bonds": [
+          {
+            "a": "Ca",
+            "b": "Cb",
+            "order": 2
+          },
+          {
+            "a": "Ca",
+            "b": "A1"
+          },
+          {
+            "a": "Ca",
+            "b": "A2"
+          },
+          {
+            "a": "Cb",
+            "b": "B1"
+          },
+          {
+            "a": "Cb",
+            "b": "B2"
+          }
+        ]
+      },
+      "options": {
+        "A": "(E)-2-chloropent-2-ene",
+        "B": "(Z)-2-chloropent-2-ene",
+        "C": "(Z)-4-chloropent-3-ene",
+        "D": "(E)-4-chloropent-3-ene"
+      },
+      "answer": "B",
+      "solution": "The chain is \\(\\mathrm{CH_{3}C(Cl){=}CHCH_{2}CH_{3}}\\): 2-chloropent-2-ene. On the left carbon, Cl (atomic number 17) outranks C; on the right carbon, \\(\\mathrm{CH_{2}CH_{3}}\\) outranks H. Both higher-priority groups are on the same side (above), so it is Z. (Comparing the two carbon chains, which are on opposite sides, wrongly leads to E.)"
+    },
+    {
+      "id": "che-al-intro-q014",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.7"
+          ]
+        }
+      },
+      "q": "Which compound shows E/Z isomerism?",
+      "options": {
+        "A": "Pent-2-ene",
+        "B": "Pent-1-ene",
+        "C": "2-methylbut-2-ene",
+        "D": "1,1-dichloropropene"
+      },
+      "answer": "A",
+      "solution": "E/Z isomerism needs two different groups on each carbon of the C=C. In pent-2-ene one carbon has H and \\(\\mathrm{CH_{3}}\\), the other H and \\(\\mathrm{C_{2}H_{5}}\\). Pent-1-ene has two H atoms on carbon 1, 2-methylbut-2-ene has two \\(\\mathrm{CH_{3}}\\) groups on carbon 2, and 1,1-dichloropropene has two Cl atoms on carbon 1."
+    },
+    {
+      "id": "che-al-intro-q015",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.7"
+          ]
+        }
+      },
+      "q": "Why can alkenes show E/Z isomerism when alkanes cannot?",
+      "options": {
+        "A": "A C=C double bond is weaker than a C–C single bond, so it can twist into two shapes.",
+        "B": "Alkenes contain a carbon atom bonded to four different groups.",
+        "C": "Alkenes have a different general formula from alkanes.",
+        "D": "Rotation about a C=C double bond is restricted, so groups stay fixed on one side or the other."
+      },
+      "answer": "D",
+      "solution": "The π bond above and below the C=C prevents rotation, so groups on each carbon are locked on the same side (Z) or opposite sides (E). Rotation is free about a C–C single bond. (A carbon with four different groups gives optical isomerism, not E/Z.)"
+    },
+    {
+      "id": "che-al-intro-q016",
+      "difficulty": 1,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "6A.5"
+          ]
+        }
+      },
+      "q": "How is this reaction classified?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "2-Bromopropane is heated with potassium hydroxide in ethanol to give propene.",
+        "rxn": "CC(Br)C>>C=CC",
+        "above": "KOH",
+        "below": "ethanol, heat"
+      },
+      "options": {
+        "A": "Substitution",
+        "B": "Addition",
+        "C": "Elimination",
+        "D": "Reduction"
+      },
+      "answer": "C",
+      "solution": "A small molecule, HBr, is removed from 2-bromopropane and a C=C double bond forms: \\(\\mathrm{CH_{3}CHBrCH_{3} \\rightarrow CH_{2}{=}CHCH_{3} + HBr}\\). That is elimination. (With aqueous hydroxide instead, substitution would give propan-2-ol.)"
+    },
+    {
+      "id": "che-al-intro-q017",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "6A.5"
+          ]
+        }
+      },
+      "q": "Which type of reaction is shown?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Ethyl ethanoate reacts with water, heated with an acid catalyst, to give ethanoic acid and ethanol.",
+        "rxn": "CC(=O)OCC.O>>CC(=O)O.CCO",
+        "above": "H^+",
+        "below": "heat"
+      },
+      "options": {
+        "A": "Hydrolysis",
+        "B": "Addition",
+        "C": "Elimination",
+        "D": "Oxidation"
+      },
+      "answer": "A",
+      "solution": "A bond in the ester is broken by reaction with water, giving the acid and the alcohol: hydrolysis. (No small molecule is removed to make a double bond, and no oxygen is added to carbon.)"
+    },
+    {
+      "id": "che-al-intro-q018",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.2"
+          ]
+        }
+      },
+      "q": "In an organic reaction mechanism, what does a curly arrow show?",
+      "options": {
+        "A": "The movement of a single electron",
+        "B": "The movement of an atom from one molecule to another",
+        "C": "The movement of a pair of electrons",
+        "D": "The transfer of a proton"
+      },
+      "answer": "C",
+      "solution": "A curly arrow shows a pair of electrons moving. It starts at a lone pair or a covalent bond and ends where the new bond or lone pair forms. (A single electron is shown by a fish-hook arrow, with half a head.)"
+    },
+    {
+      "id": "che-al-intro-q019",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.2"
+          ]
+        }
+      },
+      "q": "In this mechanism step, what does the curly arrow that starts at the C–Br bond show?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Mechanism step: a lone pair on a hydroxide ion has a curly arrow to the δ+ carbon of bromoethane; a second curly arrow starts at the C–Br bond and ends at the δ− bromine. An arrow leads to ethanol and a bromide ion.",
+        "atoms": [
+          {
+            "id": "O",
+            "el": "HO",
+            "x": -2.2,
+            "y": 0,
+            "charge": "-",
+            "chargeAt": 45,
+            "lp": [
+              0,
+              100,
+              260
+            ]
+          },
+          {
+            "id": "C",
+            "el": "C",
+            "x": 0,
+            "y": 0,
+            "delta": "+",
+            "deltaAt": 50
+          },
+          {
+            "id": "H1",
+            "el": "H",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "id": "H2",
+            "el": "H",
+            "x": -0.5,
+            "y": -0.87
+          },
+          {
+            "id": "Me",
+            "el": "CH3",
+            "x": 0.6,
+            "y": -0.9
+          },
+          {
+            "id": "Br",
+            "el": "Br",
+            "x": 1.5,
+            "y": 0,
+            "delta": "-",
+            "deltaAt": 90
+          }
+        ],
+        "bonds": [
+          {
+            "a": "C",
+            "b": "H1"
+          },
+          {
+            "a": "C",
+            "b": "H2"
+          },
+          {
+            "a": "C",
+            "b": "Me"
+          },
+          {
+            "a": "C",
+            "b": "Br"
+          }
+        ],
+        "curly": [
+          {
+            "from": {
+              "lp": "O",
+              "at": 0
+            },
+            "to": {
+              "atom": "C"
+            },
+            "side": "left",
+            "bend": 0.35
+          },
+          {
+            "from": {
+              "bond": [
+                "C",
+                "Br"
+              ]
+            },
+            "to": {
+              "atom": "Br"
+            },
+            "side": "right",
+            "bend": 0.6
+          }
+        ],
+        "arrows": [
+          {
+            "from": [
+              2.6,
+              0
+            ],
+            "to": [
+              3.8,
+              0
+            ]
+          }
+        ],
+        "text": [
+          {
+            "x": 4,
+            "y": 0,
+            "t": "CH3CH2OH + Br^-",
+            "anchor": "start"
+          }
+        ]
+      },
+      "options": {
+        "A": "One electron of the C–Br bond moves to the bromine atom, forming a bromine radical.",
+        "B": "Both electrons of the C–Br bond move to the bromine atom, which leaves as a bromide ion.",
+        "C": "Both electrons of the C–Br bond move to the carbon atom.",
+        "D": "A lone pair on the bromine atom forms a new bond to the carbon atom."
+      },
+      "answer": "B",
+      "solution": "The arrow starts at the bond and ends at bromine, so the bonding pair moves to bromine: heterolytic fission, giving \\(\\mathrm{Br^{-}}\\). Bromine is more electronegative (\\(\\delta-\\)), so it takes both electrons. (A single electron would be shown by a fish-hook arrow.)"
+    },
+    {
+      "id": "che-al-intro-q020",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6A.2"
+          ]
+        }
+      },
+      "q": "What is the molecular formula of the compound shown?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of a six-membered carbon ring with an OH group on one carbon.",
+        "smiles": "OC1CCCCC1"
+      },
+      "options": {
+        "A": "\\(\\mathrm{C_{6}H_{11}O}\\)",
+        "B": "\\(\\mathrm{C_{6}H_{6}O}\\)",
+        "C": "\\(\\mathrm{C_{6}H_{14}O}\\)",
+        "D": "\\(\\mathrm{C_{6}H_{12}O}\\)"
+      },
+      "answer": "D",
+      "solution": "Six ring carbons: five \\(\\mathrm{CH_{2}}\\) groups (10 H) and one CH bonded to OH (1 H), plus the H of the OH group: 12 H. So the formula is \\(\\mathrm{C_{6}H_{12}O}\\) (cyclohexanol). (Forgetting the hydrogen on the oxygen leads to \\(\\mathrm{C_{6}H_{11}O}\\).)"
+    }
+  ]
+}

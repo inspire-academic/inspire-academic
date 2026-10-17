@@ -1,0 +1,927 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/halogenoalkanes",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Halogenoalkanes",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-haloak-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.30",
+            "6A.4"
+          ]
+        }
+      },
+      "q": "Which gives the name of this compound and its classification?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula: a four-carbon chain; the second carbon carries a methyl branch and a chlorine atom.",
+        "smiles": "CCC(C)(C)Cl",
+        "formula": "C5H11Cl"
+      },
+      "options": {
+        "A": "3-chloro-3-methylbutane, a tertiary halogenoalkane",
+        "B": "2-chloro-2-methylbutane, a secondary halogenoalkane",
+        "C": "2-chloro-2-methylbutane, a tertiary halogenoalkane",
+        "D": "2-chloropentane, a secondary halogenoalkane"
+      },
+      "answer": "C",
+      "solution": "The longest chain has four carbons, numbered from the end nearer the substituents, so both sit on carbon 2: 2-chloro-2-methylbutane. The carbon carrying the chlorine is bonded to three other carbons, so it is tertiary. (Numbering from the wrong end gives 3-chloro-3-methylbutane.)"
+    },
+    {
+      "id": "che-al-haloak-q002",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.31"
+          ]
+        }
+      },
+      "q": "Which of these species cannot act as a nucleophile?",
+      "options": {
+        "A": "\\(\\mathrm{NH_{3}}\\)",
+        "B": "\\(\\mathrm{CN^{-}}\\)",
+        "C": "\\(\\mathrm{H_{2}O}\\)",
+        "D": "\\(\\mathrm{NH_{4}^{+}}\\)"
+      },
+      "answer": "D",
+      "solution": "A nucleophile is an electron pair donor, so it needs a lone pair. In \\(\\mathrm{NH_{4}^{+}}\\) all of nitrogen's electron pairs are used in N–H bonds, so it has no lone pair to donate. Water, ammonia and the cyanide ion all have lone pairs. (Water is often overlooked because it is neutral, but it is the nucleophile in hydrolysis by silver nitrate in aqueous ethanol.)"
+    },
+    {
+      "id": "che-al-haloak-q003",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.36"
+          ]
+        }
+      },
+      "q": "In this mechanism, what does the curly arrow that starts on the hydroxide ion represent?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Mechanism diagram: a hydroxide ion with lone pairs on its oxygen, and bromoethane with δ+ on the carbon and δ− on the bromine. One curly arrow starts at a lone pair on the oxygen and ends at the carbon; a second starts at the C–Br bond and ends at the bromine. Products: ethanol and a bromide ion.",
+        "atoms": [
+          {
+            "id": "O",
+            "el": "HO",
+            "x": -2.2,
+            "y": 0,
+            "charge": "-",
+            "chargeAt": 45,
+            "lp": [
+              0,
+              100,
+              260
+            ]
+          },
+          {
+            "id": "C",
+            "el": "C",
+            "x": 0,
+            "y": 0,
+            "delta": "+",
+            "deltaAt": 50
+          },
+          {
+            "id": "H1",
+            "el": "H",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "id": "H2",
+            "el": "H",
+            "x": -0.5,
+            "y": -0.87
+          },
+          {
+            "id": "R",
+            "el": "CH3",
+            "x": 0.6,
+            "y": -0.9
+          },
+          {
+            "id": "X",
+            "el": "Br",
+            "x": 1.6,
+            "y": 0,
+            "delta": "-",
+            "deltaAt": 90
+          }
+        ],
+        "bonds": [
+          {
+            "a": "C",
+            "b": "H1"
+          },
+          {
+            "a": "C",
+            "b": "H2"
+          },
+          {
+            "a": "C",
+            "b": "R"
+          },
+          {
+            "a": "C",
+            "b": "X"
+          }
+        ],
+        "curly": [
+          {
+            "from": {
+              "lp": "O",
+              "at": 0
+            },
+            "to": {
+              "atom": "C"
+            },
+            "side": "left",
+            "bend": 0.35
+          },
+          {
+            "from": {
+              "bond": [
+                "C",
+                "X"
+              ]
+            },
+            "to": {
+              "atom": "X"
+            },
+            "side": "right",
+            "bend": 0.6
+          }
+        ],
+        "arrows": [
+          {
+            "from": [
+              2.7,
+              0
+            ],
+            "to": [
+              3.9,
+              0
+            ]
+          }
+        ],
+        "text": [
+          {
+            "x": 4.1,
+            "y": 0,
+            "t": "CH3CH2OH + Br^-"
+          }
+        ]
+      },
+      "options": {
+        "A": "The pair of electrons in the C–Br bond moving onto the bromine atom",
+        "B": "A lone pair on the oxygen moving to form a new covalent bond with the carbon",
+        "C": "A single electron moving from the oxygen to the carbon, forming a radical",
+        "D": "The oxygen accepting a pair of electrons from the δ+ carbon"
+      },
+      "answer": "B",
+      "solution": "A curly arrow shows the movement of a pair of electrons, from where they start to where they end up. Here a lone pair on the oxygen of the hydroxide ion is donated to the δ+ carbon, forming the new C–O bond. The second arrow, from the C–Br bond to the bromine, is the bond breaking heterolytically. (A single electron would be shown by a fish-hook arrow.)"
+    },
+    {
+      "id": "che-al-haloak-q004",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.32"
+          ]
+        }
+      },
+      "q": "Which reagent and conditions carry out this conversion?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Reaction scheme: bromoethane is converted into propanenitrile, CH3CH2CN. A question mark stands over the arrow in place of the reagent.",
+        "rxn": "CCBr>>CCC#N",
+        "above": "?"
+      },
+      "options": {
+        "A": "Concentrated ammonia in ethanol, heated in a sealed tube",
+        "B": "Potassium cyanide in ethanol, heated under reflux",
+        "C": "Hydrogen cyanide with an acid catalyst at room temperature",
+        "D": "Aqueous potassium hydroxide, heated under reflux"
+      },
+      "answer": "B",
+      "solution": "The cyanide ion is the nucleophile: it replaces the bromine and lengthens the chain by one carbon, \\(\\mathrm{CH_{3}CH_{2}Br + CN^{-} \\rightarrow CH_{3}CH_{2}CN + Br^{-}}\\). The reagent is potassium cyanide dissolved in ethanol, heated under reflux. (Ammonia would give an amine, and aqueous hydroxide an alcohol.)"
+    },
+    {
+      "id": "che-al-haloak-q005",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.32"
+          ]
+        }
+      },
+      "q": "What is the main organic product when 1-bromopropane is heated in a sealed tube with an excess of ammonia dissolved in ethanol?",
+      "options": {
+        "A": "\\(\\mathrm{CH_{3}CH_{2}CH_{2}NH_{2}}\\)",
+        "B": "\\(\\mathrm{CH_{3}CH_{2}CH_{2}CN}\\)",
+        "C": "\\(\\mathrm{(CH_{3}CH_{2}CH_{2})_{2}NH}\\)",
+        "D": "\\(\\mathrm{CH_{3}CH_{2}CH_{2}OH}\\)"
+      },
+      "answer": "A",
+      "solution": "Ammonia is the nucleophile, and a second ammonia molecule removes \\(\\mathrm{H^{+}}\\) from the ammonium ion formed: \\(\\mathrm{CH_{3}CH_{2}CH_{2}Br + 2NH_{3} \\rightarrow CH_{3}CH_{2}CH_{2}NH_{2} + NH_{4}Br}\\). The product is propylamine (propan-1-amine). The excess ammonia makes further substitution unlikely. (The secondary amine forms when the halogenoalkane is in excess.)"
+    },
+    {
+      "id": "che-al-haloak-q006",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.32"
+          ]
+        }
+      },
+      "q": "2-bromopropane reacts with potassium hydroxide. Which conditions favour this elimination rather than substitution?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Reaction scheme: 2-bromopropane is converted into propene. A question mark stands over the arrow in place of the conditions.",
+        "rxn": "CC(C)Br>>C=CC",
+        "above": "?"
+      },
+      "options": {
+        "A": "Aqueous potassium hydroxide, warmed",
+        "B": "Aqueous potassium hydroxide, heated under reflux",
+        "C": "Potassium hydroxide dissolved in ethanol, heated under reflux",
+        "D": "Aqueous potassium hydroxide with a little ethanol, at room temperature"
+      },
+      "answer": "C",
+      "solution": "Hydroxide ions act mainly as a base, giving propene, when the solvent is ethanol and the mixture is hot. In aqueous solution, warm, they act mainly as a nucleophile and give propan-2-ol. (Heating alone does not switch the reaction to elimination: the solvent matters.)"
+    },
+    {
+      "id": "che-al-haloak-q007",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.2"
+          ]
+        }
+      },
+      "q": "In this mechanism, what is the role of the hydroxide ion?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Mechanism for 2-bromopropane and a hydroxide ion: arrows from a hydroxide lone pair to an H on the carbon next to the C–Br carbon, from that C–H bond to between the two carbons, and from the C–Br bond to Br. Products: propene, water, bromide ion.",
+        "atoms": [
+          {
+            "id": "O",
+            "el": "HO",
+            "x": -1.6,
+            "y": 2,
+            "charge": "-",
+            "chargeAt": 90,
+            "lp": [
+              315
+            ]
+          },
+          {
+            "id": "C1",
+            "el": "C",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "Ht",
+            "el": "H",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "id": "Hl",
+            "el": "H",
+            "x": -1,
+            "y": 0
+          },
+          {
+            "id": "Hb",
+            "el": "H",
+            "x": 0,
+            "y": -1
+          },
+          {
+            "id": "C2",
+            "el": "C",
+            "x": 1.5,
+            "y": 0
+          },
+          {
+            "id": "H2",
+            "el": "H",
+            "x": 1.5,
+            "y": 1
+          },
+          {
+            "id": "Me",
+            "el": "CH3",
+            "x": 2.6,
+            "y": 0
+          },
+          {
+            "id": "Br",
+            "el": "Br",
+            "x": 1.5,
+            "y": -1.4,
+            "delta": "-",
+            "deltaAt": 0
+          }
+        ],
+        "bonds": [
+          {
+            "a": "C1",
+            "b": "Ht"
+          },
+          {
+            "a": "C1",
+            "b": "Hl"
+          },
+          {
+            "a": "C1",
+            "b": "Hb"
+          },
+          {
+            "a": "C1",
+            "b": "C2"
+          },
+          {
+            "a": "C2",
+            "b": "H2"
+          },
+          {
+            "a": "C2",
+            "b": "Me"
+          },
+          {
+            "a": "C2",
+            "b": "Br"
+          }
+        ],
+        "curly": [
+          {
+            "from": {
+              "lp": "O",
+              "at": 315
+            },
+            "to": {
+              "atom": "Ht"
+            },
+            "side": "right",
+            "bend": 0.4
+          },
+          {
+            "from": {
+              "bond": [
+                "C1",
+                "Ht"
+              ]
+            },
+            "to": {
+              "between": [
+                "C1",
+                "C2"
+              ]
+            },
+            "side": "left",
+            "bend": 0.6
+          },
+          {
+            "from": {
+              "bond": [
+                "C2",
+                "Br"
+              ]
+            },
+            "to": {
+              "atom": "Br"
+            },
+            "side": "left",
+            "bend": 0.6
+          }
+        ],
+        "arrows": [
+          {
+            "from": [
+              3.6,
+              0
+            ],
+            "to": [
+              4.7,
+              0
+            ]
+          }
+        ],
+        "text": [
+          {
+            "x": 4.9,
+            "y": 0,
+            "t": "CH2=CHCH3 + H2O + Br^-"
+          }
+        ]
+      },
+      "options": {
+        "A": "A base: it accepts a proton from the carbon next to the C–Br carbon",
+        "B": "A nucleophile: it donates a lone pair to the δ+ carbon atom",
+        "C": "An electrophile: it accepts the electrons from the C–H bond",
+        "D": "A catalyst: it is used and then regenerated"
+      },
+      "answer": "A",
+      "solution": "The hydroxide ion uses its lone pair to remove a hydrogen as \\(\\mathrm{H^{+}}\\) from the carbon next to the one bonded to bromine, so it acts as a base (a proton acceptor). The C–H bond pair forms the C=C bond and bromide leaves. This is elimination. (In substitution the same ion acts as a nucleophile and bonds to the δ+ carbon.)"
+    },
+    {
+      "id": "che-al-haloak-q008",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.2",
+            "3.3.1.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.32",
+            "6A.7"
+          ]
+        }
+      },
+      "q": "2-bromobutane is heated under reflux with potassium hydroxide in ethanol. How many different alkenes, counting stereoisomers separately, can form?",
+      "options": {
+        "A": "1",
+        "B": "2",
+        "C": "3",
+        "D": "4"
+      },
+      "answer": "C",
+      "solution": "Removing H from carbon 1 gives but-1-ene. Removing H from carbon 3 gives but-2-ene, which has E and Z isomers because each carbon of its double bond carries two different groups. The total is 3. (A common slip is to count but-2-ene once, making two.)"
+    },
+    {
+      "id": "che-al-haloak-q009",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.33"
+          ]
+        }
+      },
+      "q": "Equal amounts of 1-chlorobutane, 1-bromobutane and 1-iodobutane are added to separate tubes of silver nitrate solution in ethanol at 50 °C. Which observation is made?",
+      "options": {
+        "A": "A white precipitate appears first, in the tube with 1-chlorobutane",
+        "B": "A cream precipitate appears first, in the tube with 1-bromobutane",
+        "C": "All three precipitates are white and appear at the same time",
+        "D": "A yellow precipitate appears first, in the tube with 1-iodobutane"
+      },
+      "answer": "D",
+      "solution": "Water hydrolyses each halogenoalkane, and the halide ion released forms a silver halide precipitate: AgCl white, AgBr cream, AgI yellow. The C–I bond is the weakest, so 1-iodobutane is hydrolysed fastest and its yellow precipitate appears first. (Choosing the chloroalkane comes from thinking the most polar bond reacts fastest.)"
+    },
+    {
+      "id": "che-al-haloak-q010",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.35"
+          ]
+        }
+      },
+      "q": "Why is 1-iodobutane hydrolysed faster than 1-chlorobutane?",
+      "options": {
+        "A": "The C–I bond is more polar, so its carbon is more δ+",
+        "B": "The C–I bond has the lower bond enthalpy, so it breaks more easily",
+        "C": "The iodide ion is a better nucleophile than the chloride ion",
+        "D": "Iodine is more electronegative than chlorine"
+      },
+      "answer": "B",
+      "solution": "The rate depends mainly on how easily the carbon–halogen bond breaks. Bond enthalpy falls from C–Cl to C–I, so C–I breaks most easily. Polarity works the other way: C–Cl is more polar, yet chloroalkanes react more slowly, so polarity is not the deciding factor. (Iodine is less electronegative than chlorine.)"
+    },
+    {
+      "id": "che-al-haloak-q011",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "6D.34",
+            "6D.33"
+          ]
+        }
+      },
+      "q": "Four isomers of \\(\\mathrm{C_{4}H_{9}Br}\\) are warmed separately with silver nitrate in aqueous ethanol. Which gives a precipitate most quickly?",
+      "options": {
+        "A": "1-bromobutane",
+        "B": "2-bromobutane",
+        "C": "1-bromo-2-methylpropane",
+        "D": "2-bromo-2-methylpropane"
+      },
+      "answer": "D",
+      "solution": "The rate of hydrolysis increases from primary to secondary to tertiary halogenoalkanes. 2-bromo-2-methylpropane is the only tertiary isomer: its C–Br carbon is bonded to three other carbons. (1-bromo-2-methylpropane is branched but primary, because the bromine is on an end carbon.)"
+    },
+    {
+      "id": "che-al-haloak-q012",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "16.11"
+          ]
+        }
+      },
+      "q": "The hydrolysis of 2-bromo-2-methylpropane by hydroxide ions has the rate equation rate \\(= k[\\mathrm{(CH_{3})_{3}CBr}]\\). What happens in the rate-determining step?",
+      "options": {
+        "A": "The C–Br bond breaks heterolytically to form a carbocation and a bromide ion",
+        "B": "The hydroxide ion attacks the carbon as the C–Br bond breaks, in one step",
+        "C": "The C–Br bond breaks homolytically to form two radicals",
+        "D": "The hydroxide ion removes a proton from a methyl group"
+      },
+      "answer": "A",
+      "solution": "Only the halogenoalkane appears in the rate equation, so only it takes part in the rate-determining step. That step is the slow heterolysis of the C–Br bond, giving the tertiary carbocation \\(\\mathrm{(CH_{3})_{3}C^{+}}\\) and \\(\\mathrm{Br^{-}}\\); hydroxide then attacks in a fast second step. This is \\(\\mathrm{S_{N}1}\\). (The one-step attack describes \\(\\mathrm{S_{N}2}\\), which is first order in hydroxide too.)"
+    },
+    {
+      "id": "che-al-haloak-q013",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.3"
+          ]
+        }
+      },
+      "q": "In the stratosphere, ultraviolet radiation breaks a C–Cl bond in \\(\\mathrm{CCl_{2}F_{2}}\\), shown here, but not the C–F bonds. Why?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Displayed formula of CCl2F2: one carbon atom bonded to two chlorine atoms and two fluorine atoms.",
+        "atoms": [
+          {
+            "id": "C",
+            "el": "C",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "Cl1",
+            "el": "Cl",
+            "x": 1.1,
+            "y": 0
+          },
+          {
+            "id": "Cl2",
+            "el": "Cl",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "id": "F1",
+            "el": "F",
+            "x": -1,
+            "y": 0
+          },
+          {
+            "id": "F2",
+            "el": "F",
+            "x": 0,
+            "y": -1
+          }
+        ],
+        "bonds": [
+          {
+            "a": "C",
+            "b": "Cl1"
+          },
+          {
+            "a": "C",
+            "b": "Cl2"
+          },
+          {
+            "a": "C",
+            "b": "F1"
+          },
+          {
+            "a": "C",
+            "b": "F2"
+          }
+        ]
+      },
+      "options": {
+        "A": "The C–Cl bond has a lower bond enthalpy than the C–F bond",
+        "B": "The C–Cl bond is more polar than the C–F bond",
+        "C": "Chlorine is more electronegative than fluorine",
+        "D": "There are more C–Cl bonds than C–F bonds in the molecule"
+      },
+      "answer": "A",
+      "solution": "Ultraviolet radiation breaks the weakest bond. The C–Cl bond has a much lower bond enthalpy than the C–F bond, so it breaks homolytically to release chlorine atoms. (Fluorine is the more electronegative, and C–F is the more polar bond.)"
+    },
+    {
+      "id": "che-al-haloak-q014",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.3"
+          ]
+        }
+      },
+      "q": "Chlorine atoms catalyse the decomposition of ozone: \\(\\mathrm{Cl\\cdot + O_{3} \\rightarrow ClO\\cdot + O_{2}}\\), then \\(\\mathrm{ClO\\cdot + O_{3} \\rightarrow 2O_{2} + Cl\\cdot}\\). What is the overall equation?",
+      "options": {
+        "A": "\\(\\mathrm{O_{3} \\rightarrow O_{2} + O}\\)",
+        "B": "\\(\\mathrm{2ClO\\cdot \\rightarrow Cl_{2} + O_{2}}\\)",
+        "C": "\\(\\mathrm{2O_{3} \\rightarrow 3O_{2}}\\)",
+        "D": "\\(\\mathrm{O_{3} + O \\rightarrow 2O_{2}}\\)"
+      },
+      "answer": "C",
+      "solution": "Add the two steps and cancel species on both sides: \\(\\mathrm{Cl\\cdot}\\) and \\(\\mathrm{ClO\\cdot}\\) each appear once on each side. That leaves \\(\\mathrm{2O_{3} \\rightarrow 3O_{2}}\\). Chlorine atoms are regenerated, so they are a catalyst. (Writing \\(\\mathrm{O_{3} + O}\\) uses a different second step from the one given.)"
+    },
+    {
+      "id": "che-al-haloak-q015",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.32"
+          ]
+        }
+      },
+      "q": "Propan-1-ol is made by the reaction \\(\\mathrm{CH_{3}CH_{2}CH_{2}Br + NaOH \\rightarrow CH_{3}CH_{2}CH_{2}OH + NaBr}\\). What is the percentage atom economy? (\\(A_{\\text{r}}\\): H 1.0, C 12.0, O 16.0, Na 23.0, Br 79.9)",
+      "options": {
+        "A": "36.8%",
+        "B": "48.8%",
+        "C": "58.3%",
+        "D": "63.2%"
+      },
+      "answer": "A",
+      "solution": "\\(M_{\\text{r}}\\) of the reactants: \\(\\mathrm{C_{3}H_{7}Br}\\) = 122.9 and NaOH = 40.0, a total of 162.9. \\(M_{\\text{r}}\\) of propan-1-ol = 60.0. Atom economy = \\(\\frac{60.0}{162.9} \\times 100\\) = 36.8%. (Dividing by the halogenoalkane alone leads to 48.8%.)"
+    },
+    {
+      "id": "che-al-haloak-q016",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "6D.36"
+          ]
+        }
+      },
+      "q": "Bromoethane reacts with excess ammonia in two steps. The second step is shown. What is the role of the ammonia molecule on the right?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Mechanism step: the ethylammonium ion, with a positive charge on its nitrogen, beside an ammonia molecule. Curly arrows go from the ammonia lone pair to a hydrogen on the N+, and from that N–H bond to the nitrogen. Products: CH3CH2NH2 and NH4+.",
+        "atoms": [
+          {
+            "id": "L",
+            "el": "H3C",
+            "x": -1,
+            "y": 0
+          },
+          {
+            "id": "C",
+            "el": "C",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "H1",
+            "el": "H",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "id": "H2",
+            "el": "H",
+            "x": 0,
+            "y": -1
+          },
+          {
+            "id": "N",
+            "el": "N",
+            "x": 1.1,
+            "y": 0,
+            "charge": "+",
+            "chargeAt": 45
+          },
+          {
+            "id": "Na",
+            "el": "H",
+            "x": 1.1,
+            "y": 1
+          },
+          {
+            "id": "Nb",
+            "el": "H",
+            "x": 1.1,
+            "y": -1
+          },
+          {
+            "id": "Nc",
+            "el": "H",
+            "x": 2.5,
+            "y": 0
+          },
+          {
+            "id": "N2",
+            "el": "N",
+            "x": 4,
+            "y": 0,
+            "lp": [
+              180
+            ]
+          },
+          {
+            "id": "Hd",
+            "el": "H",
+            "x": 4.5,
+            "y": 0.87
+          },
+          {
+            "id": "He",
+            "el": "H",
+            "x": 4.5,
+            "y": -0.87
+          },
+          {
+            "id": "Hf",
+            "el": "H",
+            "x": 5,
+            "y": 0
+          }
+        ],
+        "bonds": [
+          {
+            "a": "L",
+            "b": "C"
+          },
+          {
+            "a": "C",
+            "b": "H1"
+          },
+          {
+            "a": "C",
+            "b": "H2"
+          },
+          {
+            "a": "C",
+            "b": "N"
+          },
+          {
+            "a": "N",
+            "b": "Na"
+          },
+          {
+            "a": "N",
+            "b": "Nb"
+          },
+          {
+            "a": "N",
+            "b": "Nc"
+          },
+          {
+            "a": "N2",
+            "b": "Hd"
+          },
+          {
+            "a": "N2",
+            "b": "He"
+          },
+          {
+            "a": "N2",
+            "b": "Hf"
+          }
+        ],
+        "curly": [
+          {
+            "from": {
+              "lp": "N2",
+              "at": 180
+            },
+            "to": {
+              "atom": "Nc"
+            },
+            "side": "right",
+            "bend": 0.5
+          },
+          {
+            "from": {
+              "bond": [
+                "N",
+                "Nc"
+              ]
+            },
+            "to": {
+              "atom": "N"
+            },
+            "side": "left",
+            "bend": 0.6
+          }
+        ],
+        "arrows": [
+          {
+            "from": [
+              5.6,
+              0
+            ],
+            "to": [
+              6.7,
+              0
+            ]
+          }
+        ],
+        "text": [
+          {
+            "x": 6.9,
+            "y": 0,
+            "t": "CH3CH2NH2 + NH4^+"
+          }
+        ]
+      },
+      "options": {
+        "A": "It acts as a nucleophile, attacking the δ+ carbon of bromoethane",
+        "B": "It acts as a catalyst, and is regenerated at the end",
+        "C": "It acts as a base, removing a proton from the ethylammonium ion",
+        "D": "It acts as an electrophile, accepting the bromide ion"
+      },
+      "answer": "C",
+      "solution": "In the first step one ammonia molecule, a nucleophile, substitutes for the bromine, giving \\(\\mathrm{CH_{3}CH_{2}NH_{3}^{+}}\\) and \\(\\mathrm{Br^{-}}\\). In the second step another ammonia molecule uses its lone pair to remove \\(\\mathrm{H^{+}}\\) from the nitrogen, acting as a base, giving ethylamine and \\(\\mathrm{NH_{4}^{+}}\\). (It is used up, as ammonium bromide, so it is not a catalyst.)"
+    },
+    {
+      "id": "che-al-haloak-q017",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.3.1"
+          ]
+        }
+      },
+      "q": "In the mechanism for the reaction of bromoethane with cyanide ions, which atom forms the new bond to the carbon of bromoethane?",
+      "options": {
+        "A": "The nitrogen atom of the cyanide ion, using its lone pair",
+        "B": "The potassium ion, attracted to the δ− bromine",
+        "C": "The bromine atom, which stays bonded as the cyanide joins",
+        "D": "The carbon atom of the cyanide ion, using its lone pair"
+      },
+      "answer": "D",
+      "solution": "In \\(\\mathrm{CN^{-}}\\) the negative charge and the attacking lone pair are on the carbon, so the curly arrow starts at the carbon's lone pair and ends at the δ+ carbon of bromoethane. That is why the product is a nitrile, \\(\\mathrm{CH_{3}CH_{2}CN}\\), with a new C–C bond. (Drawing the arrow from nitrogen would give a C–N bond instead.)"
+    }
+  ]
+}

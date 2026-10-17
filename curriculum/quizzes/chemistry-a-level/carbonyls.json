@@ -1,0 +1,660 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/carbonyls",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Aldehydes and Ketones",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-carbyl-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8",
+            "3.3.1.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.6"
+          ]
+        }
+      },
+      "q": "What is the name of this compound?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula: a four-carbon chain ending in a CHO group, with a methyl branch on the carbon next to the CHO carbon.",
+        "smiles": "CCC(C)C=O",
+        "formula": "C5H10O"
+      },
+      "options": {
+        "A": "3-methylbutanal",
+        "B": "Pentanal",
+        "C": "2-methylbutanal",
+        "D": "2-methylbutan-1-one"
+      },
+      "answer": "C",
+      "solution": "The CHO group is at the end of the chain, so the compound is an aldehyde, and its carbon is always carbon 1. The longest chain including it has four carbons, with a methyl group on carbon 2: 2-methylbutanal. (Numbering from the other end leads to 3-methylbutanal.)"
+    },
+    {
+      "id": "che-al-carbyl-q002",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.6"
+          ]
+        }
+      },
+      "q": "Which compound is a ketone?",
+      "options": {
+        "A": "\\(\\mathrm{CH_{3}COCH_{2}CH_{3}}\\)",
+        "B": "\\(\\mathrm{CH_{3}CH_{2}CHO}\\)",
+        "C": "\\(\\mathrm{CH_{3}COOH}\\)",
+        "D": "\\(\\mathrm{HCHO}\\)"
+      },
+      "answer": "A",
+      "solution": "In a ketone the C=O carbon is bonded to two other carbons, so the C=O is inside the chain: \\(\\mathrm{CH_{3}COCH_{2}CH_{3}}\\), butanone. \\(\\mathrm{CH_{3}CH_{2}CHO}\\) and \\(\\mathrm{HCHO}\\) are aldehydes, with H on the C=O carbon, and \\(\\mathrm{CH_{3}COOH}\\) is a carboxylic acid. (The CO in a formula is not always a ketone: check what is bonded to it.)"
+    },
+    {
+      "id": "che-al-carbyl-q003",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Propanal is warmed with Fehling’s solution in a water bath. What is seen?",
+      "options": {
+        "A": "A silver mirror forms on the inside of the tube",
+        "B": "The orange solution turns green",
+        "C": "The blue solution stays blue",
+        "D": "The blue solution forms a brick-red precipitate"
+      },
+      "answer": "D",
+      "solution": "Propanal, an aldehyde, is oxidised to propanoic acid, and the blue copper(II) ions are reduced to copper(I), which forms a brick-red precipitate of \\(\\mathrm{Cu_{2}O}\\). A ketone would leave the solution blue. (The silver mirror is the result with Tollens’ reagent.)"
+    },
+    {
+      "id": "che-al-carbyl-q004",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Why are ketones not oxidised by acidified potassium dichromate(VI), whereas aldehydes are?",
+      "options": {
+        "A": "Ketones have no C=O double bond",
+        "B": "The carbonyl carbon of a ketone has no hydrogen atom, so oxidation would mean breaking a C–C bond",
+        "C": "The ketone C=O bond is stronger than the aldehyde C=O bond",
+        "D": "Ketones are insoluble in the aqueous oxidising agent"
+      },
+      "answer": "B",
+      "solution": "An aldehyde is oxidised when the H on its carbonyl carbon is replaced by OH, giving a carboxylic acid. In a ketone that carbon carries two carbon groups and no H, so oxidation would need a strong C–C bond to break, which mild oxidising agents cannot do. (Both aldehydes and ketones contain the C=O group.)"
+    },
+    {
+      "id": "che-al-carbyl-q005",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Butanone is reduced, for example with \\(\\mathrm{NaBH_{4}}\\) or \\(\\mathrm{LiAlH_{4}}\\). What is the organic product?",
+      "options": {
+        "A": "Butan-1-ol",
+        "B": "Butan-2-ol",
+        "C": "Butanoic acid",
+        "D": "Butanal"
+      },
+      "answer": "B",
+      "solution": "Reduction adds hydrogen across the C=O bond, so the carbonyl carbon becomes a C–OH carbon in the same position. Ketones give secondary alcohols: butanone becomes butan-2-ol. (Aldehydes, such as butanal, are reduced to primary alcohols, such as butan-1-ol.)"
+    },
+    {
+      "id": "che-al-carbyl-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8"
+          ]
+        }
+      },
+      "q": "This mechanism shows the reduction of propanal by \\(\\mathrm{NaBH_{4}}\\). In the first step, which species is the nucleophile?",
+      "figure": {
+        "kind": "diagram",
+        "alt": "Mechanism diagram: a hydride ion with a lone pair, and propanal with δ+ on the carbonyl carbon and δ− on oxygen. Curly arrows go from the hydride lone pair to the carbonyl carbon and from the C=O bond to the oxygen; the O− formed then takes H+ from water.",
+        "atoms": [
+          {
+            "id": "Hn",
+            "el": "H",
+            "x": -1.9,
+            "y": 1.1,
+            "charge": "-",
+            "chargeAt": 120,
+            "lp": [
+              -30
+            ]
+          },
+          {
+            "id": "C1",
+            "el": "C",
+            "x": 0,
+            "y": 0,
+            "delta": "+",
+            "deltaAt": 270
+          },
+          {
+            "id": "O1",
+            "el": "O",
+            "x": 0,
+            "y": 1.4,
+            "delta": "-",
+            "deltaAt": 0
+          },
+          {
+            "id": "Ra",
+            "el": "H5C2",
+            "x": -1.04,
+            "y": -0.6
+          },
+          {
+            "id": "Rb",
+            "el": "H",
+            "x": 1.04,
+            "y": -0.6
+          },
+          {
+            "id": "C2",
+            "el": "C",
+            "x": 5.307600000000001,
+            "y": 0
+          },
+          {
+            "id": "O2",
+            "el": "O",
+            "x": 5.307600000000001,
+            "y": 1.2,
+            "charge": "-",
+            "chargeAt": 150,
+            "lp": [
+              20,
+              90
+            ]
+          },
+          {
+            "id": "Ra2",
+            "el": "C2H5",
+            "x": 3.686000000000001,
+            "y": 0
+          },
+          {
+            "id": "Rb2",
+            "el": "H",
+            "x": 6.4076,
+            "y": 0
+          },
+          {
+            "id": "HdC2",
+            "el": "H",
+            "x": 5.307600000000001,
+            "y": -1.1
+          },
+          {
+            "id": "Hp",
+            "el": "H",
+            "x": 6.607600000000001,
+            "y": 1.65,
+            "delta": "+",
+            "deltaAt": 90
+          },
+          {
+            "id": "Xp",
+            "el": "OH",
+            "x": 7.707600000000001,
+            "y": 1.65,
+            "delta": "-",
+            "deltaAt": 90
+          },
+          {
+            "id": "C3",
+            "el": "C",
+            "x": 10.851200000000002,
+            "y": 0
+          },
+          {
+            "id": "O3",
+            "el": "O",
+            "x": 10.851200000000002,
+            "y": 1.1
+          },
+          {
+            "id": "Ho3",
+            "el": "H",
+            "x": 11.851200000000002,
+            "y": 1.1
+          },
+          {
+            "id": "Ra3",
+            "el": "C2H5",
+            "x": 9.229600000000001,
+            "y": 0
+          },
+          {
+            "id": "Rb3",
+            "el": "H",
+            "x": 11.951200000000002,
+            "y": 0
+          },
+          {
+            "id": "HdC3",
+            "el": "H",
+            "x": 10.851200000000002,
+            "y": -1.1
+          }
+        ],
+        "bonds": [
+          {
+            "a": "C1",
+            "b": "O1",
+            "order": 2
+          },
+          {
+            "a": "C1",
+            "b": "Ra"
+          },
+          {
+            "a": "C1",
+            "b": "Rb"
+          },
+          {
+            "a": "C2",
+            "b": "O2"
+          },
+          {
+            "a": "C2",
+            "b": "Ra2"
+          },
+          {
+            "a": "C2",
+            "b": "Rb2"
+          },
+          {
+            "a": "C2",
+            "b": "HdC2"
+          },
+          {
+            "a": "Hp",
+            "b": "Xp"
+          },
+          {
+            "a": "C3",
+            "b": "O3"
+          },
+          {
+            "a": "O3",
+            "b": "Ho3"
+          },
+          {
+            "a": "C3",
+            "b": "Ra3"
+          },
+          {
+            "a": "C3",
+            "b": "Rb3"
+          },
+          {
+            "a": "C3",
+            "b": "HdC3"
+          }
+        ],
+        "curly": [
+          {
+            "from": {
+              "lp": "Hn",
+              "at": -30
+            },
+            "to": {
+              "atom": "C1"
+            },
+            "side": "right",
+            "bend": 0.3
+          },
+          {
+            "from": {
+              "bond": [
+                "C1",
+                "O1"
+              ]
+            },
+            "to": {
+              "atom": "O1"
+            },
+            "side": "right",
+            "bend": 0.9
+          },
+          {
+            "from": {
+              "lp": "O2",
+              "at": 20
+            },
+            "to": {
+              "atom": "Hp"
+            },
+            "side": "left",
+            "bend": 0.4
+          },
+          {
+            "from": {
+              "bond": [
+                "Hp",
+                "Xp"
+              ]
+            },
+            "to": {
+              "atom": "Xp"
+            },
+            "side": "left",
+            "bend": 0.6
+          }
+        ],
+        "arrows": [
+          {
+            "from": [
+              1.9,
+              0.3
+            ],
+            "to": [
+              3.1,
+              0.3
+            ]
+          },
+          {
+            "from": [
+              7.443600000000001,
+              0
+            ],
+            "to": [
+              8.643600000000001,
+              0
+            ]
+          }
+        ],
+        "text": [
+          {
+            "x": 10.851200000000002,
+            "y": -2,
+            "t": "propan-1-ol",
+            "anchor": "middle",
+            "size": 12
+          }
+        ]
+      },
+      "options": {
+        "A": "The sodium ion, \\(\\mathrm{Na^{+}}\\)",
+        "B": "The oxygen atom of the carbonyl group",
+        "C": "A water molecule",
+        "D": "The hydride ion, \\(\\mathrm{H^{-}}\\)"
+      },
+      "answer": "D",
+      "solution": "\\(\\mathrm{NaBH_{4}}\\) acts as a source of hydride ions. \\(\\mathrm{H^{-}}\\) donates its lone pair to the δ+ carbonyl carbon, so it is the nucleophile, and the C=O π bond pair moves onto the oxygen. Water then protonates the alkoxide ion in the second step, acting as an acid. (The reaction is nucleophilic addition.)"
+    },
+    {
+      "id": "che-al-carbyl-q007",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Ethanal reacts with potassium cyanide followed by dilute acid, as shown. What is the intermediate formed when the cyanide ion attacks?",
+      "figure": {
+        "kind": "reaction",
+        "alt": "Reaction scheme: ethanal is converted into 2-hydroxypropanenitrile by KCN, then dilute acid.",
+        "rxn": "CC=O>>CC(O)C#N",
+        "above": "KCN, then dilute acid"
+      },
+      "options": {
+        "A": "\\(\\mathrm{CH_{3}C^{+}H(OH)}\\), a carbocation",
+        "B": "\\(\\mathrm{CH_{3}CH(OH)CN}\\), 2-hydroxypropanenitrile",
+        "C": "\\(\\mathrm{CH_{3}CH(O^{-})CN}\\), an alkoxide ion",
+        "D": "\\(\\mathrm{CH_{3}CH(OH)\\cdot}\\), a radical"
+      },
+      "answer": "C",
+      "solution": "The lone pair on the carbon of \\(\\mathrm{CN^{-}}\\) attacks the δ+ carbonyl carbon and the C=O π bond pair moves onto the oxygen, giving the negatively charged alkoxide ion \\(\\mathrm{CH_{3}CH(O^{-})CN}\\). This then takes \\(\\mathrm{H^{+}}\\) from the acid to give 2-hydroxypropanenitrile. (The nitrile is the product, not the intermediate.)"
+    },
+    {
+      "id": "che-al-carbyl-q008",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Butanal reacts with HCN in the presence of KCN. What is the name of the product?",
+      "options": {
+        "A": "2-hydroxypentanenitrile",
+        "B": "2-hydroxybutanenitrile",
+        "C": "1-hydroxypentanenitrile",
+        "D": "4-hydroxypentanenitrile"
+      },
+      "answer": "A",
+      "solution": "HCN adds across C=O: \\(\\mathrm{CH_{3}CH_{2}CH_{2}CHO + HCN \\rightarrow CH_{3}CH_{2}CH_{2}CH(OH)CN}\\). The CN carbon joins the chain, making five carbons, and as part of the nitrile group it is carbon 1. The OH is on the next carbon: 2-hydroxypentanenitrile. (Forgetting that the CN carbon counts leads to a butanenitrile name.)"
+    },
+    {
+      "id": "che-al-carbyl-q009",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Why is potassium cyanide used with, or instead of, hydrogen cyanide when HCN is added to a carbonyl compound?",
+      "options": {
+        "A": "KCN removes water, which would hydrolyse the product",
+        "B": "KCN supplies \\(\\mathrm{H^{+}}\\) ions, which attack the carbonyl oxygen first",
+        "C": "KCN makes the carbonyl carbon δ− so that it attacks HCN",
+        "D": "HCN is a weak acid and gives few \\(\\mathrm{CN^{-}}\\) ions; KCN supplies the \\(\\mathrm{CN^{-}}\\) nucleophile"
+      },
+      "answer": "D",
+      "solution": "The first step is attack by the nucleophile \\(\\mathrm{CN^{-}}\\) on the δ+ carbonyl carbon. HCN is only slightly dissociated, so on its own it provides very few cyanide ions; KCN is ionic and provides plenty. Using KCN and then acid also avoids handling HCN gas, which is very toxic. (KCN contains no H, so it cannot supply \\(\\mathrm{H^{+}}\\).)"
+    },
+    {
+      "id": "che-al-carbyl-q010",
+      "difficulty": 1,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Which observation is made when a few drops of propanone are added to 2,4-dinitrophenylhydrazine (Brady’s reagent)?",
+      "options": {
+        "A": "A silver mirror forms",
+        "B": "An orange precipitate forms",
+        "C": "A pale yellow precipitate with an antiseptic smell forms",
+        "D": "Effervescence occurs"
+      },
+      "answer": "B",
+      "solution": "Aldehydes and ketones react with 2,4-DNPH to give an orange (yellow-orange) precipitate, a 2,4-dinitrophenylhydrazone, so this test shows a C=O group but cannot tell an aldehyde from a ketone. (The pale yellow precipitate with an antiseptic smell is triiodomethane, from iodine in alkali.)"
+    },
+    {
+      "id": "che-al-carbyl-q011",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Which compound gives a pale yellow precipitate when warmed with iodine in sodium hydroxide solution?",
+      "options": {
+        "A": "Propanal",
+        "B": "Pentan-3-one",
+        "C": "Butanone",
+        "D": "Methanal"
+      },
+      "answer": "C",
+      "solution": "The triiodomethane (iodoform) test is positive for a methyl carbonyl group, \\(\\mathrm{CH_{3}CO-}\\). Butanone, \\(\\mathrm{CH_{3}COCH_{2}CH_{3}}\\), has one. Propanal has \\(\\mathrm{CH_{3}CH_{2}CO-}\\), pentan-3-one has ethyl groups on both sides, and methanal has no methyl group. (Ethanal is the only aldehyde that gives the test.)"
+    },
+    {
+      "id": "che-al-carbyl-q012",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "Which alcohol gives a positive result when warmed with iodine in sodium hydroxide solution?",
+      "options": {
+        "A": "Propan-2-ol",
+        "B": "Propan-1-ol",
+        "C": "2-methylpropan-2-ol",
+        "D": "Methanol"
+      },
+      "answer": "A",
+      "solution": "Iodine in alkali oxidises a \\(\\mathrm{CH_{3}CH(OH)-}\\) group to \\(\\mathrm{CH_{3}CO-}\\), which then gives triiodomethane. Propan-2-ol, \\(\\mathrm{CH_{3}CH(OH)CH_{3}}\\), has this group. Propan-1-ol and methanol have no \\(\\mathrm{CH_{3}CH(OH)-}\\) group, and 2-methylpropan-2-ol is tertiary, with no H on its C–OH carbon. (A methyl group next to the C–OH carbon is the key feature.)"
+    },
+    {
+      "id": "che-al-carbyl-q013",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "17B.7"
+          ]
+        }
+      },
+      "q": "Propanone molecules cannot form hydrogen bonds with each other, yet propanone mixes completely with water. Why?",
+      "options": {
+        "A": "The δ+ hydrogens of the methyl groups form hydrogen bonds with water",
+        "B": "Propanone reacts with water to form an alcohol",
+        "C": "Propanone ionises in water",
+        "D": "A lone pair on the carbonyl oxygen forms a hydrogen bond with a δ+ hydrogen of a water molecule"
+      },
+      "answer": "D",
+      "solution": "Propanone has no hydrogen bonded to oxygen, so it cannot hydrogen bond with itself. But its carbonyl oxygen is δ− and has lone pairs, which can accept a hydrogen bond from the δ+ hydrogen of an O–H in water. (The C–H hydrogens are not δ+ enough to form hydrogen bonds.)"
+    },
+    {
+      "id": "che-al-carbyl-q014",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "17B.7"
+          ]
+        }
+      },
+      "q": "Butane, propanal and propan-1-ol have similar relative molecular masses. Which shows them in order of increasing boiling temperature?",
+      "options": {
+        "A": "Propanal, butane, propan-1-ol",
+        "B": "Butane, propan-1-ol, propanal",
+        "C": "Butane, propanal, propan-1-ol",
+        "D": "Propan-1-ol, propanal, butane"
+      },
+      "answer": "C",
+      "solution": "All three have London forces of similar strength. Propanal also has permanent dipole–dipole forces from its polar C=O bond, so it boils higher than butane. Propan-1-ol has hydrogen bonds between its molecules, the strongest intermolecular forces here, so it boils highest. (Propanal cannot hydrogen bond with itself, having no H on oxygen.)"
+    },
+    {
+      "id": "che-al-carbyl-q015",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.8"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "17B.8"
+          ]
+        }
+      },
+      "q": "In the Tollens’ test, an aldehyde gives a silver mirror. What happens to the silver?",
+      "options": {
+        "A": "Silver atoms are oxidised to silver(I) ions",
+        "B": "Silver(I) ions in the complex are reduced to silver atoms",
+        "C": "Silver(I) ions are oxidised to silver(II) ions",
+        "D": "Silver(I) ions form a precipitate of silver oxide"
+      },
+      "answer": "B",
+      "solution": "The aldehyde is oxidised and reduces the silver: \\(\\mathrm{[Ag(NH_{3})_{2}]^{+} + e^{-} \\rightarrow Ag + 2NH_{3}}\\). Each silver(I) ion gains an electron to become a silver atom, and the silver metal coats the glass. (The aldehyde is oxidised, not reduced: it is the reducing agent.)"
+    },
+    {
+      "id": "che-al-carbyl-q016",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "17B.8",
+            "17C.11"
+          ]
+        }
+      },
+      "q": "Which sequence converts propanal, \\(\\mathrm{CH_{3}CH_{2}CHO}\\), into 2-hydroxybutanoic acid, \\(\\mathrm{CH_{3}CH_{2}CH(OH)COOH}\\)?",
+      "options": {
+        "A": "HCN with KCN, then heat the product under reflux with dilute hydrochloric acid",
+        "B": "\\(\\mathrm{LiAlH_{4}}\\) in dry ether, then HCN with KCN",
+        "C": "Acidified potassium dichromate(VI) under reflux, then HCN with KCN",
+        "D": "HCN with KCN, then \\(\\mathrm{LiAlH_{4}}\\) in dry ether"
+      },
+      "answer": "A",
+      "solution": "HCN adds across the C=O bond, giving 2-hydroxybutanenitrile, \\(\\mathrm{CH_{3}CH_{2}CH(OH)CN}\\), with the extra carbon that the acid needs. Heating the nitrile under reflux with dilute acid hydrolyses the CN group to COOH. (Oxidising propanal first gives propanoic acid, which does not react with HCN.)"
+    }
+  ]
+}

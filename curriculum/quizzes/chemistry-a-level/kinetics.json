@@ -1,0 +1,1049 @@
+{
+ "schema": "inspire.quiz.v1",
+ "topic": {
+  "id": "chemistry-a-level/kinetics",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Kinetics",
+  "spec": "chemistry-a-level"
+ },
+ "questions": [
+  {
+   "id": "che-al-kin-q001",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.2"
+     ]
+    }
+   },
+   "q": "In a mixture of gases, the particles collide millions of times a second, but the reaction is slow. Which statement best explains why most collisions do not lead to a reaction?",
+   "options": {
+    "A": "Most collisions are between particles of the same substance.",
+    "B": "Most colliding particles have less than the activation energy.",
+    "C": "Most particles are moving too slowly to collide at all.",
+    "D": "Most collisions release energy, which stops the reaction."
+   },
+   "answer": "B",
+   "solution": "A collision leads to reaction only if the particles have at least the activation energy (and are suitably oriented). At ordinary temperatures only a small fraction of particles have this much energy, so most collisions are unsuccessful. (Collisions do happen very often; it is their energy that is usually too low.)"
+  },
+  {
+   "id": "che-al-kin-q002",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.2"
+     ]
+    }
+   },
+   "q": "What is meant by the activation energy of a reaction?",
+   "options": {
+    "A": "The energy released when the products form",
+    "B": "The enthalpy change of the reaction",
+    "C": "The minimum energy that colliding particles need for a reaction to occur",
+    "D": "The average kinetic energy of the reacting particles"
+   },
+   "answer": "C",
+   "solution": "Activation energy is the minimum energy colliding particles must have for the collision to lead to a reaction; it is needed to start breaking bonds. It is not the same as the enthalpy change, which is the overall energy difference between reactants and products. (The average energy of the particles is usually far below the activation energy.)"
+  },
+  {
+   "id": "che-al-kin-q003",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   },
+   "q": "Which statement about the Maxwell–Boltzmann distribution of molecular energies in a gas is correct?",
+   "options": {
+    "A": "The curve meets the energy axis at high energy, because no molecule can have more than a maximum energy.",
+    "B": "The peak of the curve shows the mean energy of the molecules.",
+    "C": "Most molecules have energies greater than the activation energy.",
+    "D": "The curve starts at the origin, and the area under it equals the total number of molecules."
+   },
+   "answer": "D",
+   "solution": "No molecules have zero energy, so the curve starts at the origin. The area under the curve represents all the molecules. The curve never meets the energy axis, because there is no maximum energy. The peak is the most probable energy, which is lower than the mean. (Only a small fraction of molecules usually has the activation energy.)"
+  },
+  {
+   "id": "che-al-kin-q004",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.2",
+      "3.1.5.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   },
+   "q": "The graph shows the distribution of molecular energies in the same sample of gas at two temperatures, \\(T_{1}\\) and \\(T_{2}\\). \\(E_{\\text{a}}\\) is the activation energy. Which statement is correct?",
+   "figure": {
+    "kind": "graph",
+    "alt": "Two Maxwell–Boltzmann curves starting at the origin. Curve T1 has a higher, narrower peak at lower energy; curve T2 has a lower peak further right and a longer tail. A dashed vertical line marks the activation energy Ea on the energy axis.",
+    "x": {
+     "label": "energy",
+     "min": 0,
+     "max": 6.4,
+     "ticks": [
+      {
+       "at": 3,
+       "label": "Ea"
+      }
+     ]
+    },
+    "y": {
+     "label": "number of molecules",
+     "min": 0,
+     "max": 0.56
+    },
+    "curves": [
+     {
+      "fn": {
+       "kind": "points",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0.1,
+         0.3229
+        ],
+        [
+         0.2,
+         0.4132
+        ],
+        [
+         0.3,
+         0.4579
+        ],
+        [
+         0.4,
+         0.4784
+        ],
+        [
+         0.5,
+         0.4839
+        ],
+        [
+         0.6,
+         0.4797
+        ],
+        [
+         0.7,
+         0.4688
+        ],
+        [
+         0.8,
+         0.4535
+        ],
+        [
+         0.9,
+         0.4352
+        ],
+        [
+         1,
+         0.4151
+        ],
+        [
+         1.1,
+         0.3939
+        ],
+        [
+         1.2,
+         0.3723
+        ],
+        [
+         1.3,
+         0.3506
+        ],
+        [
+         1.4,
+         0.3292
+        ],
+        [
+         1.5,
+         0.3084
+        ],
+        [
+         1.6,
+         0.2882
+        ],
+        [
+         1.7,
+         0.2688
+        ],
+        [
+         1.8,
+         0.2502
+        ],
+        [
+         1.9,
+         0.2326
+        ],
+        [
+         2,
+         0.216
+        ],
+        [
+         2.1,
+         0.2002
+        ],
+        [
+         2.2,
+         0.1854
+        ],
+        [
+         2.3,
+         0.1716
+        ],
+        [
+         2.4,
+         0.1586
+        ],
+        [
+         2.5,
+         0.1464
+        ],
+        [
+         2.6,
+         0.1351
+        ],
+        [
+         2.7,
+         0.1246
+        ],
+        [
+         2.8,
+         0.1148
+        ],
+        [
+         2.9,
+         0.1057
+        ],
+        [
+         3,
+         0.0973
+        ],
+        [
+         3.1,
+         0.0895
+        ],
+        [
+         3.2,
+         0.0823
+        ],
+        [
+         3.3,
+         0.0756
+        ],
+        [
+         3.4,
+         0.0694
+        ],
+        [
+         3.5,
+         0.0637
+        ],
+        [
+         3.6,
+         0.0585
+        ],
+        [
+         3.7,
+         0.0537
+        ],
+        [
+         3.8,
+         0.0492
+        ],
+        [
+         3.9,
+         0.0451
+        ],
+        [
+         4,
+         0.0413
+        ],
+        [
+         4.1,
+         0.0379
+        ],
+        [
+         4.2,
+         0.0347
+        ],
+        [
+         4.3,
+         0.0317
+        ],
+        [
+         4.4,
+         0.0291
+        ],
+        [
+         4.5,
+         0.0266
+        ],
+        [
+         4.6,
+         0.0243
+        ],
+        [
+         4.7,
+         0.0222
+        ],
+        [
+         4.8,
+         0.0203
+        ],
+        [
+         4.9,
+         0.0186
+        ],
+        [
+         5,
+         0.017
+        ],
+        [
+         5.1,
+         0.0155
+        ],
+        [
+         5.2,
+         0.0142
+        ],
+        [
+         5.3,
+         0.013
+        ],
+        [
+         5.4,
+         0.0118
+        ],
+        [
+         5.5,
+         0.0108
+        ],
+        [
+         5.6,
+         0.0099
+        ],
+        [
+         5.7,
+         0.009
+        ],
+        [
+         5.8,
+         0.0082
+        ],
+        [
+         5.9,
+         0.0075
+        ],
+        [
+         6,
+         0.0069
+        ]
+       ]
+      },
+      "smooth": true,
+      "from": 0,
+      "to": 6,
+      "label": "T1",
+      "labelAt": 0.45
+     },
+     {
+      "fn": {
+       "kind": "points",
+       "points": [
+        [
+         0,
+         0
+        ],
+        [
+         0.1,
+         0.1817
+        ],
+        [
+         0.2,
+         0.2404
+        ],
+        [
+         0.3,
+         0.2754
+        ],
+        [
+         0.4,
+         0.2975
+        ],
+        [
+         0.5,
+         0.3112
+        ],
+        [
+         0.6,
+         0.3189
+        ],
+        [
+         0.7,
+         0.3223
+        ],
+        [
+         0.8,
+         0.3223
+        ],
+        [
+         0.9,
+         0.3198
+        ],
+        [
+         1,
+         0.3153
+        ],
+        [
+         1.1,
+         0.3094
+        ],
+        [
+         1.2,
+         0.3023
+        ],
+        [
+         1.3,
+         0.2944
+        ],
+        [
+         1.4,
+         0.2858
+        ],
+        [
+         1.5,
+         0.2767
+        ],
+        [
+         1.6,
+         0.2674
+        ],
+        [
+         1.7,
+         0.2578
+        ],
+        [
+         1.8,
+         0.2482
+        ],
+        [
+         1.9,
+         0.2386
+        ],
+        [
+         2,
+         0.229
+        ],
+        [
+         2.1,
+         0.2195
+        ],
+        [
+         2.2,
+         0.2102
+        ],
+        [
+         2.3,
+         0.201
+        ],
+        [
+         2.4,
+         0.1921
+        ],
+        [
+         2.5,
+         0.1834
+        ],
+        [
+         2.6,
+         0.175
+        ],
+        [
+         2.7,
+         0.1668
+        ],
+        [
+         2.8,
+         0.1589
+        ],
+        [
+         2.9,
+         0.1513
+        ],
+        [
+         3,
+         0.144
+        ],
+        [
+         3.1,
+         0.1369
+        ],
+        [
+         3.2,
+         0.1301
+        ],
+        [
+         3.3,
+         0.1236
+        ],
+        [
+         3.4,
+         0.1174
+        ],
+        [
+         3.5,
+         0.1114
+        ],
+        [
+         3.6,
+         0.1057
+        ],
+        [
+         3.7,
+         0.1003
+        ],
+        [
+         3.8,
+         0.0951
+        ],
+        [
+         3.9,
+         0.0901
+        ],
+        [
+         4,
+         0.0854
+        ],
+        [
+         4.1,
+         0.0808
+        ],
+        [
+         4.2,
+         0.0765
+        ],
+        [
+         4.3,
+         0.0725
+        ],
+        [
+         4.4,
+         0.0686
+        ],
+        [
+         4.5,
+         0.0649
+        ],
+        [
+         4.6,
+         0.0614
+        ],
+        [
+         4.7,
+         0.058
+        ],
+        [
+         4.8,
+         0.0549
+        ],
+        [
+         4.9,
+         0.0518
+        ],
+        [
+         5,
+         0.049
+        ],
+        [
+         5.1,
+         0.0463
+        ],
+        [
+         5.2,
+         0.0437
+        ],
+        [
+         5.3,
+         0.0413
+        ],
+        [
+         5.4,
+         0.039
+        ],
+        [
+         5.5,
+         0.0368
+        ],
+        [
+         5.6,
+         0.0348
+        ],
+        [
+         5.7,
+         0.0328
+        ],
+        [
+         5.8,
+         0.031
+        ],
+        [
+         5.9,
+         0.0292
+        ],
+        [
+         6,
+         0.0276
+        ]
+       ]
+      },
+      "smooth": true,
+      "from": 0,
+      "to": 6,
+      "label": "T2",
+      "labelAt": 3.4
+     },
+     {
+      "fn": {
+       "kind": "points",
+       "points": [
+        [
+         3,
+         0
+        ],
+        [
+         3.001,
+         0.5
+        ]
+       ]
+      },
+      "from": 3,
+      "to": 3.001,
+      "dashed": true
+     }
+    ]
+   },
+   "options": {
+    "A": "\\(T_{1}\\) is the higher temperature, because its peak is higher.",
+    "B": "\\(T_{2}\\) is the higher temperature, and the area under its curve is larger.",
+    "C": "\\(T_{2}\\) is the higher temperature, and more molecules have at least \\(E_{\\text{a}}\\) at \\(T_{2}\\).",
+    "D": "\\(T_{1}\\) is the higher temperature, and more molecules have at least \\(E_{\\text{a}}\\) at \\(T_{1}\\)."
+   },
+   "answer": "C",
+   "solution": "At a higher temperature the curve flattens and moves to the right, so \\(T_{2}\\) is higher. The area under the \\(T_{2}\\) curve beyond \\(E_{\\text{a}}\\) is larger: more molecules can react. The total area stays the same, because the number of molecules is unchanged. (A higher peak means more molecules near a low energy, which belongs to the lower temperature.)"
+  },
+  {
+   "id": "che-al-kin-q005",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   },
+   "q": "Which statement best explains why a small increase in temperature can cause a large increase in the rate of a reaction?",
+   "options": {
+    "A": "The activation energy decreases as the temperature rises.",
+    "B": "The particles collide much more often, which is the main cause of the increase.",
+    "C": "Many more particles have energy equal to or greater than the activation energy.",
+    "D": "The reaction becomes more exothermic at higher temperature."
+   },
+   "answer": "C",
+   "solution": "The tail of the Maxwell–Boltzmann distribution moves to the right as temperature rises, so the fraction of particles with at least the activation energy increases greatly. Collisions also become a little more frequent, but that effect is small. The activation energy does not change. (Collision frequency is the usual wrong answer: it rises only slightly.)"
+  },
+  {
+   "id": "che-al-kin-q006",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.7"
+     ]
+    }
+   },
+   "q": "How does adding a catalyst affect the Maxwell–Boltzmann distribution for a gas reaction at constant temperature?",
+   "options": {
+    "A": "The distribution is unchanged, but a lower activation energy means more molecules have enough energy to react.",
+    "B": "The curve moves to the right, so more molecules have energy above the activation energy.",
+    "C": "The peak of the curve becomes higher, because molecules gain energy from the catalyst.",
+    "D": "The activation energy moves to the right, so fewer molecules have enough energy to react."
+   },
+   "answer": "A",
+   "solution": "A catalyst does not change the energies of the molecules, so the curve is the same. It provides an alternative route with a lower activation energy, so \\(E_{\\text{a}}\\) moves to the left and a larger area under the curve lies beyond it. (Moving the curve is what a rise in temperature does.)"
+  },
+  {
+   "id": "che-al-kin-q007",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1"
+     ]
+    }
+   },
+   "q": "Which statement explains why increasing the concentration of a reactant in solution increases the rate of reaction?",
+   "options": {
+    "A": "The particles have more energy, so more collisions exceed the activation energy.",
+    "B": "The activation energy is lowered by the extra particles.",
+    "C": "The particles move faster, so they collide more often.",
+    "D": "There are more particles in a given volume, so they collide more frequently."
+   },
+   "answer": "D",
+   "solution": "At higher concentration there are more reactant particles per unit volume, so successful collisions happen more often per second. The energy of the particles, and so the fraction with at least the activation energy, depends on temperature, not concentration. (Faster-moving particles is a temperature effect.)"
+  },
+  {
+   "id": "che-al-kin-q008",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.1"
+     ]
+    }
+   },
+   "q": "The pressure of a gas-phase reaction mixture is increased at constant temperature. Which row describes the effect?",
+   "options": {
+    "A": "Collision frequency increases; proportion of molecules with at least the activation energy is unchanged",
+    "B": "Collision frequency is unchanged; proportion of molecules with at least the activation energy increases",
+    "C": "Collision frequency increases; proportion of molecules with at least the activation energy increases",
+    "D": "Collision frequency is unchanged; proportion of molecules with at least the activation energy is unchanged"
+   },
+   "answer": "A",
+   "solution": "Raising the pressure puts more molecules in each unit volume, so they collide more often. The temperature has not changed, so the energy distribution, and the fraction of molecules with at least the activation energy, is the same. (Only temperature or a catalyst changes the fraction able to react.)"
+  },
+  {
+   "id": "che-al-kin-q009",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.5"
+     ]
+    }
+   },
+   "q": "Which statement about a catalyst is correct?",
+   "options": {
+    "A": "It increases the rate of a reaction and is chemically unchanged at the end, because it provides an alternative route with a lower activation energy.",
+    "B": "It gives the reacting particles extra kinetic energy.",
+    "C": "It increases the yield of product at equilibrium.",
+    "D": "It takes no part in the reaction, so it only needs to be near the reactants."
+   },
+   "answer": "A",
+   "solution": "A catalyst speeds up a reaction by providing an alternative reaction route with a lower activation energy. It takes part in the reaction (for example, by forming intermediates or adsorbing reactants) but is regenerated, so it is unchanged in chemical composition and amount at the end. (A catalyst speeds up the forward and reverse reactions equally, so it does not change an equilibrium yield.)"
+  },
+  {
+   "id": "che-al-kin-q010",
+   "difficulty": 2,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.6"
+     ]
+    }
+   },
+   "q": "An exothermic reaction has \\(\\Delta H = -50\\ \\text{kJ mol}^{-1}\\) and an activation energy of \\(75\\ \\text{kJ mol}^{-1}\\). What is the activation energy of the reverse reaction?",
+   "options": {
+    "A": "\\(25\\ \\text{kJ mol}^{-1}\\)",
+    "B": "\\(50\\ \\text{kJ mol}^{-1}\\)",
+    "C": "\\(75\\ \\text{kJ mol}^{-1}\\)",
+    "D": "\\(125\\ \\text{kJ mol}^{-1}\\)"
+   },
+   "answer": "D",
+   "solution": "On the reaction profile the products are \\(50\\ \\text{kJ mol}^{-1}\\) below the reactants, and the peak is \\(75\\ \\text{kJ mol}^{-1}\\) above the reactants. So the climb from the products to the peak = 75 + 50 = \\(125\\ \\text{kJ mol}^{-1}\\). (Subtracting the two values leads to 25.)"
+  },
+  {
+   "id": "che-al-kin-q011",
+   "difficulty": 3,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   },
+   "q": "The graph shows how the concentration of a reactant changes with time. A tangent has been drawn to the curve at point P, when \\(t = 10\\ \\text{s}\\). What is the rate of reaction at P?",
+   "figure": {
+    "kind": "graph",
+    "alt": "Concentration of a reactant against time: a curve falling from about 0.82 mol per dm³ and levelling off. A straight tangent touches the curve at t = 10 s, where the concentration is 0.50, and meets the axes at 0.75 mol per dm³ and 30 s.",
+    "x": {
+     "label": "time / s",
+     "min": 0,
+     "max": 62,
+     "ticks": [
+      {
+       "at": 10,
+       "label": "10"
+      },
+      {
+       "at": 20,
+       "label": "20"
+      },
+      {
+       "at": 30,
+       "label": "30"
+      },
+      {
+       "at": 40,
+       "label": "40"
+      },
+      {
+       "at": 50,
+       "label": "50"
+      },
+      {
+       "at": 60,
+       "label": "60"
+      }
+     ]
+    },
+    "y": {
+     "label": "concentration / mol dm⁻³",
+     "min": 0,
+     "max": 0.9,
+     "ticks": [
+      {
+       "at": 0.25,
+       "label": "0.25"
+      },
+      {
+       "at": 0.5,
+       "label": "0.50"
+      },
+      {
+       "at": 0.75,
+       "label": "0.75"
+      }
+     ]
+    },
+    "curves": [
+     {
+      "fn": {
+       "kind": "exp",
+       "a": 0.82436,
+       "k": -0.05,
+       "c": 0
+      },
+      "from": 0,
+      "to": 60
+     },
+     {
+      "fn": {
+       "kind": "linear",
+       "m": -0.025,
+       "c": 0.75
+      },
+      "from": 0,
+      "to": 30,
+      "dashed": true
+     }
+    ],
+    "marks": [
+     {
+      "x": 10,
+      "y": 0.5,
+      "label": "P"
+     }
+    ]
+   },
+   "options": {
+    "A": "\\(1.67 \\times 10^{-2}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)",
+    "B": "\\(2.50 \\times 10^{-2}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)",
+    "C": "\\(5.00 \\times 10^{-2}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)",
+    "D": "\\(7.50 \\times 10^{-2}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)"
+   },
+   "answer": "B",
+   "solution": "The rate at P is the gradient of the tangent (taken as positive). The tangent falls from \\(0.75\\ \\text{mol dm}^{-3}\\) at 0 s to zero at 30 s, so rate = \\(\\frac{0.75}{30}\\) = \\(2.50 \\times 10^{-2}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\). (Dividing the concentration at P by its time, \\(\\frac{0.50}{10}\\), leads to \\(5.00 \\times 10^{-2}\\).)"
+  },
+  {
+   "id": "che-al-kin-q012",
+   "difficulty": 2,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.8"
+     ]
+    }
+   },
+   "q": "Iron is a heterogeneous catalyst in the Haber process, \\(\\mathrm{N_{2}(g) + 3H_{2}(g) \\rightleftharpoons 2NH_{3}(g)}\\). Which statement describes how it works?",
+   "options": {
+    "A": "The iron dissolves in the gas mixture and forms a compound with nitrogen that decomposes to ammonia.",
+    "B": "The iron heats the gases, so more molecules have the activation energy.",
+    "C": "The iron removes ammonia from the mixture, so the equilibrium moves to the right.",
+    "D": "Nitrogen and hydrogen are adsorbed onto the iron surface, where their bonds are weakened, they react, and ammonia is desorbed."
+   },
+   "answer": "D",
+   "solution": "A heterogeneous catalyst is in a different phase from the reactants. The gas molecules adsorb onto active sites on the solid surface, which weakens their bonds and holds them close together, so they react by a route with a lower activation energy. The ammonia then desorbs and frees the site. (A catalyst does not change the position of equilibrium.)"
+  },
+  {
+   "id": "che-al-kin-q013",
+   "difficulty": 1,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.9"
+     ]
+    }
+   },
+   "q": "Which is an economic benefit of using a catalyst in an industrial process?",
+   "options": {
+    "A": "It increases the equilibrium yield, so less raw material is needed.",
+    "B": "The process can run at a lower temperature, saving energy costs, while still producing product quickly.",
+    "C": "It never needs replacing, because it is not used up.",
+    "D": "It makes the reaction more exothermic, so more heat can be recovered."
+   },
+   "answer": "B",
+   "solution": "With a catalyst a useful rate is reached at a lower temperature, so less fuel is needed and costs fall; product is also made faster in the same plant. A catalyst does not change the equilibrium yield or \\(\\Delta H\\). (Catalysts are not used up chemically, but they do become poisoned or worn and must be replaced.)"
+  },
+  {
+   "id": "che-al-kin-q014",
+   "difficulty": 1,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "9.1"
+     ]
+    }
+   },
+   "q": "Powdered calcium carbonate reacts faster with hydrochloric acid than the same mass of calcium carbonate lumps. Why?",
+   "options": {
+    "A": "The powder has a larger surface area, so acid particles collide with it more frequently.",
+    "B": "The powder has a lower activation energy for the reaction.",
+    "C": "The particles in the powder have more kinetic energy.",
+    "D": "The powder raises the concentration of the acid."
+   },
+   "answer": "A",
+   "solution": "Only particles at the surface of the solid can be hit by acid particles. Breaking the solid into a powder exposes far more surface, so there are more collisions per second and the rate increases. The activation energy and particle energies are unchanged. (Surface area changes collision frequency, not collision energy.)"
+  },
+  {
+   "id": "che-al-kin-q015",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.3"
+     ]
+    }
+   },
+   "q": "Sodium thiosulfate reacts with hydrochloric acid to form a sulfur precipitate. A student times, \\(t\\), how long it takes for a cross under the flask to disappear, at several temperatures. Which quantity is proportional to the rate of the reaction?",
+   "options": {
+    "A": "\\(t\\)",
+    "B": "\\(\\frac{1}{t}\\)",
+    "C": "\\(t^{2}\\)",
+    "D": "\\(\\frac{1}{t^{2}}\\)"
+   },
+   "answer": "B",
+   "solution": "The cross disappears when the same amount of sulfur has formed each time. Rate is amount formed divided by time, and that amount is constant, so rate is proportional to \\(\\frac{1}{t}\\). (A longer time means a slower reaction, so the rate cannot be proportional to \\(t\\) itself.)"
+  },
+  {
+   "id": "che-al-kin-q016",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.4"
+     ]
+    }
+   },
+   "q": "When the temperature of a gas rises, the peak of its Maxwell–Boltzmann curve becomes lower. Which statement best explains why?",
+   "options": {
+    "A": "Some molecules are destroyed at the higher temperature.",
+    "B": "The molecules lose energy when they collide more often.",
+    "C": "Fewer molecules are moving at the higher temperature.",
+    "D": "The number of molecules is unchanged, so as the curve spreads to higher energies, its height must fall to keep the same area."
+   },
+   "answer": "D",
+   "solution": "The area under the curve represents the total number of molecules, which does not change. At a higher temperature the energies spread out over a wider range, with more molecules at high energy, so the curve must be lower to enclose the same area. (No molecules are lost: only their energies change.)"
+  },
+  {
+   "id": "che-al-kin-q017",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.5.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "9.5",
+      "9.6"
+     ]
+    }
+   },
+   "q": "A catalyst is added to an exothermic reaction. How do the activation energy and the enthalpy change, \\(\\Delta H\\), change?",
+   "options": {
+    "A": "activation energy decreases; \\(\\Delta H\\) becomes less negative",
+    "B": "activation energy decreases; \\(\\Delta H\\) becomes more negative",
+    "C": "activation energy decreases; \\(\\Delta H\\) is unchanged",
+    "D": "activation energy is unchanged; \\(\\Delta H\\) becomes less negative"
+   },
+   "answer": "C",
+   "solution": "On the reaction profile, the catalysed route has a lower peak, so the activation energy decreases. The reactants and products are the same substances at the same energies, so the gap between them, \\(\\Delta H\\), is unchanged. (A catalyst changes the route, not the start or the finish.)"
+  }
+ ]
+}

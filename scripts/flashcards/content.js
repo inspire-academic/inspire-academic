@@ -56,6 +56,10 @@ function checkText(text, where, katex, problems, max) {
   if (typeof text !== 'string' || !text.trim()) { problems.push(`${where}: empty`); return; }
   const limit = max || LIMITS[where] || LIMITS.item;
   if (text.length > limit) problems.push(`${where}: ${text.length} characters, over the ${limit} limit — split the card`);
+  // A tab, carriage return or form feed in card text is a LaTeX command that
+  // lost its backslash (\text, \rightarrow, \frac written in an ordinary string).
+  const control = /[\u0000-\u001f\u007f]/.exec(text);
+  if (control) problems.push(`${where}: a control character (code ${control[0].charCodeAt(0)}) near "${text.slice(Math.max(0, control.index - 12), control.index + 12).replace(/[\u0000-\u001f]/g, '·')}": a LaTeX command lost its backslash`);
   const outside = text.replace(MATHS_RE, ' ');
   if (/\\[a-zA-Z()[\]]/.test(outside)) problems.push(`${where}: LaTeX outside \\( \\): ${outside.trim().slice(0, 60)}`);
   for (const tag of outside.matchAll(/<\/?([a-zA-Z][a-zA-Z0-9]*)[^>]*>/g)) {

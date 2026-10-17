@@ -1,0 +1,689 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/rate-equations",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Rate Equations",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-rate-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.2"
+          ]
+        }
+      },
+      "q": "The rate equation for a reaction is \\(\\text{rate} = k[\\mathrm{A}]^{2}[\\mathrm{B}]\\), with the rate in \\(\\text{mol dm}^{-3}\\ \\text{s}^{-1}\\). What are the units of \\(k\\)?",
+      "options": {
+        "A": "\\(\\text{s}^{-1}\\)",
+        "B": "\\(\\text{mol}^{-1}\\ \\text{dm}^{3}\\ \\text{s}^{-1}\\)",
+        "C": "\\(\\text{mol}^{-2}\\ \\text{dm}^{6}\\ \\text{s}^{-1}\\)",
+        "D": "\\(\\text{mol}^{2}\\ \\text{dm}^{-6}\\ \\text{s}^{-1}\\)"
+      },
+      "answer": "C",
+      "solution": "\\(k = \\frac{\\text{rate}}{[\\mathrm{A}]^{2}[\\mathrm{B}]}\\), with units \\(\\frac{\\text{mol dm}^{-3}\\ \\text{s}^{-1}}{(\\text{mol dm}^{-3})^{3}} = \\text{mol}^{-2}\\ \\text{dm}^{6}\\ \\text{s}^{-1}\\) for a third-order reaction. (Inverting the concentration units is the common slip.)"
+    },
+    {
+      "id": "che-al-rate-q002",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.7"
+          ]
+        }
+      },
+      "q": "Initial rates were measured for the reaction of A with B. Experiment 1: \\([\\mathrm{A}] = 0.10\\), \\([\\mathrm{B}] = 0.20\\), initial rate \\(4.0 \\times 10^{-4}\\). Experiment 2: \\([\\mathrm{A}] = 0.20\\), \\([\\mathrm{B}] = 0.20\\), initial rate \\(1.6 \\times 10^{-3}\\). Experiment 3: \\([\\mathrm{A}] = 0.10\\), \\([\\mathrm{B}] = 0.60\\), initial rate \\(1.2 \\times 10^{-3}\\). (Concentrations in \\(\\text{mol dm}^{-3}\\); rates in \\(\\text{mol dm}^{-3}\\ \\text{s}^{-1}\\).) What is the rate equation?",
+      "options": {
+        "A": "\\(\\text{rate} = k[\\mathrm{A}]^{2}[\\mathrm{B}]\\)",
+        "B": "\\(\\text{rate} = k[\\mathrm{A}][\\mathrm{B}]\\)",
+        "C": "\\(\\text{rate} = k[\\mathrm{A}]^{2}\\)",
+        "D": "\\(\\text{rate} = k[\\mathrm{A}][\\mathrm{B}]^{3}\\)"
+      },
+      "answer": "A",
+      "solution": "Experiments 1 and 2: \\([\\mathrm{A}]\\) doubles, \\([\\mathrm{B}]\\) is constant, and the rate goes up 4 times, so the reaction is second order in A. Experiments 1 and 3: \\([\\mathrm{B}]\\) triples and the rate triples, so it is first order in B. Rate \\(= k[\\mathrm{A}]^{2}[\\mathrm{B}]\\). (Reading the threefold rise in experiment 3 as third order in B is the common slip.)"
+    },
+    {
+      "id": "che-al-rate-q003",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.2"
+          ]
+        }
+      },
+      "q": "For the reaction of A with B, \\(\\text{rate} = k[\\mathrm{A}]^{2}[\\mathrm{B}]\\). When \\([\\mathrm{A}] = 0.10\\ \\text{mol dm}^{-3}\\) and \\([\\mathrm{B}] = 0.20\\ \\text{mol dm}^{-3}\\), the initial rate is \\(4.0 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\). What is the value of \\(k\\), in \\(\\text{mol}^{-2}\\ \\text{dm}^{6}\\ \\text{s}^{-1}\\)?",
+      "options": {
+        "A": "\\(0.020\\)",
+        "B": "\\(0.20\\)",
+        "C": "\\(1.0\\)",
+        "D": "\\(5.0\\)"
+      },
+      "answer": "B",
+      "solution": "\\(k =\\frac{4.0 \\times 10^{-4}}{0.10^{2} \\times 0.20} = \\frac{4.0 \\times 10^{-4}}{2.0 \\times 10^{-3}} = 0.20\\). (Forgetting to square \\([\\mathrm{A}]\\) leads to 0.020.)"
+    },
+    {
+      "id": "che-al-rate-q004",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.2"
+          ]
+        }
+      },
+      "q": "A reaction is zero order with respect to reactant X. What happens to the rate when the concentration of X is tripled, with everything else unchanged?",
+      "options": {
+        "A": "It triples.",
+        "B": "It increases nine times.",
+        "C": "It falls to one third.",
+        "D": "It stays the same."
+      },
+      "answer": "D",
+      "solution": "Zero order means \\(\\text{rate} \\propto [\\mathrm{X}]^{0} = 1\\): the concentration of X does not affect the rate at all. (Tripling would be first order and nine times second order.)"
+    },
+    {
+      "id": "che-al-rate-q005",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.6"
+          ]
+        }
+      },
+      "q": "The graph shows how the initial rate of a reaction depends on the concentration of reactant Q. What is the order of reaction with respect to Q?",
+      "figure": {
+        "kind": "graph",
+        "alt": "Initial rate against concentration of Q: a curve through the origin that gets steeper. At 0.20 mol per dm cubed the rate is 0.6; at 0.40 it is 2.4 (units of 10 to the minus 4 mol per dm cubed per second).",
+        "x": {
+          "label": "[Q] / mol dm⁻³",
+          "min": 0,
+          "max": 0.5,
+          "ticks": [
+            {
+              "at": 0.1,
+              "label": "0.10"
+            },
+            {
+              "at": 0.2,
+              "label": "0.20"
+            },
+            {
+              "at": 0.3,
+              "label": "0.30"
+            },
+            {
+              "at": 0.4,
+              "label": "0.40"
+            },
+            {
+              "at": 0.5,
+              "label": "0.50"
+            }
+          ]
+        },
+        "y": {
+          "label": "rate / 10⁻⁴ mol dm⁻³ s⁻¹",
+          "min": 0,
+          "max": 4,
+          "ticks": [
+            {
+              "at": 0.6,
+              "label": "0.6"
+            },
+            {
+              "at": 1.2,
+              "label": "1.2"
+            },
+            {
+              "at": 2.4,
+              "label": "2.4"
+            },
+            {
+              "at": 3.6,
+              "label": "3.6"
+            }
+          ]
+        },
+        "curves": [
+          {
+            "fn": {
+              "kind": "power",
+              "a": 15,
+              "n": 2,
+              "c": 0
+            },
+            "from": 0,
+            "to": 0.5
+          }
+        ],
+        "marks": [
+          {
+            "x": 0.2,
+            "y": 0.6
+          },
+          {
+            "x": 0.4,
+            "y": 2.4
+          }
+        ],
+        "guides": [
+          {
+            "x": 0.2,
+            "y": 0.6
+          },
+          {
+            "x": 0.4,
+            "y": 2.4
+          }
+        ]
+      },
+      "options": {
+        "A": "Zero order",
+        "B": "First order",
+        "C": "Half order",
+        "D": "Second order"
+      },
+      "answer": "D",
+      "solution": "When \\([\\mathrm{Q}]\\) doubles from 0.20 to 0.40, the rate goes from 0.6 to 2.4, four times larger: \\(2^{n} = 4\\), so \\(n = 2\\). The rising, curving line through the origin is the shape for second order. (A curve that bends upward is not first order: first order gives a straight line through the origin.)"
+    },
+    {
+      "id": "che-al-rate-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.5"
+          ]
+        }
+      },
+      "q": "The graph shows how the concentration of reactant X changes during a reaction that is zero order with respect to X. What is the rate constant?",
+      "figure": {
+        "kind": "graph",
+        "alt": "Concentration of X against time: a straight line falling from 0.080 mol per dm cubed at 0 minutes to 0.020 mol per dm cubed at 5 minutes.",
+        "x": {
+          "label": "time / min",
+          "min": 0,
+          "max": 6,
+          "ticks": [
+            {
+              "at": 1,
+              "label": "1"
+            },
+            {
+              "at": 2,
+              "label": "2"
+            },
+            {
+              "at": 3,
+              "label": "3"
+            },
+            {
+              "at": 4,
+              "label": "4"
+            },
+            {
+              "at": 5,
+              "label": "5"
+            },
+            {
+              "at": 6,
+              "label": "6"
+            }
+          ]
+        },
+        "y": {
+          "label": "[X] / 10⁻² mol dm⁻³",
+          "min": 0,
+          "max": 10,
+          "ticks": [
+            {
+              "at": 2,
+              "label": "2.0"
+            },
+            {
+              "at": 4,
+              "label": "4.0"
+            },
+            {
+              "at": 6,
+              "label": "6.0"
+            },
+            {
+              "at": 8,
+              "label": "8.0"
+            },
+            {
+              "at": 10,
+              "label": "10.0"
+            }
+          ]
+        },
+        "curves": [
+          {
+            "fn": {
+              "kind": "linear",
+              "m": -1.2,
+              "c": 8
+            },
+            "from": 0,
+            "to": 5
+          }
+        ],
+        "marks": [
+          {
+            "x": 0,
+            "y": 8
+          },
+          {
+            "x": 5,
+            "y": 2
+          }
+        ],
+        "guides": [
+          {
+            "x": 5,
+            "y": 2
+          }
+        ]
+      },
+      "options": {
+        "A": "\\(6.7 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)",
+        "B": "\\(2.0 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)",
+        "C": "\\(2.7 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)",
+        "D": "\\(1.2 \\times 10^{-2}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\)"
+      },
+      "answer": "B",
+      "solution": "For zero order, rate \\(= k\\), and the rate is the gradient's size. The concentration falls by \\(0.080 - 0.020 = 0.060\\ \\text{mol dm}^{-3}\\) in 5 minutes \\(= 300\\ \\text{s}\\). So \\(k = \\frac{0.060}{300} = 2.0 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\ \\text{s}^{-1}\\). (Leaving the time in minutes leads to \\(1.2 \\times 10^{-2}\\).)"
+    },
+    {
+      "id": "che-al-rate-q007",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "16.5"
+          ]
+        }
+      },
+      "q": "In a first-order reaction, the concentration of the reactant falls from \\(0.64\\) to \\(0.08\\ \\text{mol dm}^{-3}\\) in 90 s. Use \\(k = \\frac{\\ln 2}{t_{1/2}}\\) to find the rate constant.",
+      "options": {
+        "A": "\\(0.00770\\ \\text{s}^{-1}\\)",
+        "B": "\\(0.0231\\ \\text{s}^{-1}\\)",
+        "C": "\\(0.0333\\ \\text{s}^{-1}\\)",
+        "D": "\\(43.3\\ \\text{s}^{-1}\\)"
+      },
+      "answer": "B",
+      "solution": "0.64 to 0.32 to 0.16 to 0.08 is three half-lives, so \\(t_{1/2} = 90 \\div 3 = 30\\ \\text{s}\\). Then \\(k = \\frac{\\ln 2}{30} = 0.0231\\ \\text{s}^{-1}\\). (Taking 90 s as one half-life leads to 0.00770.)"
+    },
+    {
+      "id": "che-al-rate-q008",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "16.6"
+          ]
+        }
+      },
+      "q": "Which feature of a concentration–time graph shows that a reaction is first order with respect to the reactant?",
+      "options": {
+        "A": "Successive half-lives are equal.",
+        "B": "The graph is a straight line with a negative gradient.",
+        "C": "Each half-life is twice as long as the one before.",
+        "D": "The concentration reaches zero after two half-lives."
+      },
+      "answer": "A",
+      "solution": "For a first-order reaction the half-life does not depend on the concentration, so successive half-lives are constant. A straight line is zero order, and half-lives that lengthen as the concentration falls are second order. (Confusing the straight line of zero order with first order is the common slip.)"
+    },
+    {
+      "id": "che-al-rate-q009",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.10"
+          ]
+        }
+      },
+      "q": "For \\(\\mathrm{2NO_{2}(g) + F_{2}(g) \\rightarrow 2NO_{2}F(g)}\\), the rate equation is \\(\\text{rate} = k[\\mathrm{NO_{2}}][\\mathrm{F_{2}}]\\). Which mechanism is consistent with this?",
+      "options": {
+        "A": "One step: \\(\\mathrm{2NO_{2} + F_{2} \\rightarrow 2NO_{2}F}\\)",
+        "B": "Step 1 (fast): \\(\\mathrm{NO_{2} + F_{2} \\rightarrow NO_{2}F + F}\\); step 2 (slow): \\(\\mathrm{NO_{2} + F \\rightarrow NO_{2}F}\\)",
+        "C": "Step 1 (slow): \\(\\mathrm{NO_{2} + F_{2} \\rightarrow NO_{2}F + F}\\); step 2 (fast): \\(\\mathrm{NO_{2} + F \\rightarrow NO_{2}F}\\)",
+        "D": "Step 1 (slow): \\(\\mathrm{F_{2} \\rightarrow 2F}\\); step 2 (fast): \\(\\mathrm{NO_{2} + F \\rightarrow NO_{2}F}\\)"
+      },
+      "answer": "C",
+      "solution": "The rate equation shows one \\(\\mathrm{NO_{2}}\\) and one \\(\\mathrm{F_{2}}\\) take part in the rate-determining step, so the slow step must be \\(\\mathrm{NO_{2} + F_{2} \\rightarrow NO_{2}F + F}\\). The second \\(\\mathrm{NO_{2}}\\) reacts afterwards, in a fast step. A single step would make it second order in \\(\\mathrm{NO_{2}}\\). (Taking the overall equation as the slow step is the common slip.)"
+    },
+    {
+      "id": "che-al-rate-q010",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "16.11"
+          ]
+        }
+      },
+      "q": "The hydrolysis of 2-bromo-2-methylpropane by hydroxide ions has the rate equation \\(\\text{rate} = k[\\mathrm{(CH_{3})_{3}CBr}]\\). What does this show about the mechanism?",
+      "options": {
+        "A": "Hydroxide ions are in the rate-determining step, so the mechanism is SN2.",
+        "B": "Hydroxide ions act as a catalyst.",
+        "C": "The reaction happens in a single step involving both reactants.",
+        "D": "Only the halogenoalkane is in the rate-determining step, so the mechanism is SN1."
+      },
+      "answer": "D",
+      "solution": "Zero order in \\(\\mathrm{OH^{-}}\\) means the hydroxide ion is not in the slow step. The slow step is the halogenoalkane breaking to a carbocation and a bromide ion, which the hydroxide ion then attacks in a fast step: SN1, unimolecular. (Assuming every reactant appears in the rate equation is the common slip.)"
+    },
+    {
+      "id": "che-al-rate-q011",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "16.8"
+          ]
+        }
+      },
+      "q": "The acid-catalysed reaction of propanone with iodine has the rate equation \\(\\text{rate} = k[\\mathrm{CH_{3}COCH_{3}}][\\mathrm{H^{+}}]\\). Which statement is correct?",
+      "options": {
+        "A": "Iodine reacts in a fast step after the rate-determining step.",
+        "B": "Iodine acts as a catalyst.",
+        "C": "Iodine reacts in the rate-determining step.",
+        "D": "The reaction can happen without iodine."
+      },
+      "answer": "A",
+      "solution": "Zero order in iodine means iodine is not in the rate-determining step or any step before it; it reacts in a later, fast step. Propanone and \\(\\mathrm{H^{+}}\\) are in the slow step, and \\(\\mathrm{H^{+}}\\) is the catalyst, regenerated at the end. (Iodine is a reactant and is used up, so it cannot be the catalyst.)"
+    },
+    {
+      "id": "che-al-rate-q012",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.1"
+          ]
+        }
+      },
+      "q": "Which statement best explains why the rate constant, \\(k\\), increases when the temperature is raised?",
+      "options": {
+        "A": "The activation energy decreases as the temperature rises.",
+        "B": "The Arrhenius constant, A, increases sharply with temperature.",
+        "C": "A much larger fraction of collisions have energy equal to or greater than the activation energy.",
+        "D": "The particles collide more often, and this is the main reason for the increase."
+      },
+      "answer": "C",
+      "solution": "In \\(k = A\\mathrm{e}^{-E_{\\text{a}}/RT}\\), raising \\(T\\) makes \\(\\mathrm{e}^{-E_{\\text{a}}/RT}\\), the fraction of collisions with at least \\(E_{\\text{a}}\\), much larger. More frequent collisions add only a little. (The activation energy is fixed for a reaction unless a catalyst is added.)"
+    },
+    {
+      "id": "che-al-rate-q013",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.12"
+          ]
+        }
+      },
+      "q": "The graph of \\(\\ln k\\) against \\(\\frac{1}{T}\\) for a reaction is a straight line. Using \\(\\ln k = -\\frac{E_{\\text{a}}}{RT} + \\ln A\\), what is the activation energy? (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+      "figure": {
+        "kind": "graph",
+        "alt": "ln k against 1/T: a straight line falling from ln k = −4.5 at 1/T = 3.0 × 10⁻³ K⁻¹ to ln k = −8.4 at 1/T = 3.6 × 10⁻³ K⁻¹.",
+        "x": {
+          "label": "1/T / 10⁻³ K⁻¹",
+          "min": 2.9,
+          "max": 3.7,
+          "ticks": [
+            {
+              "at": 3,
+              "label": "3.0"
+            },
+            {
+              "at": 3.2,
+              "label": "3.2"
+            },
+            {
+              "at": 3.4,
+              "label": "3.4"
+            },
+            {
+              "at": 3.6,
+              "label": "3.6"
+            }
+          ]
+        },
+        "y": {
+          "label": "ln k",
+          "min": -9,
+          "max": -4,
+          "ticks": [
+            {
+              "at": -8.4,
+              "label": "−8.4"
+            },
+            {
+              "at": -7,
+              "label": "−7"
+            },
+            {
+              "at": -6,
+              "label": "−6"
+            },
+            {
+              "at": -4.5,
+              "label": "−4.5"
+            }
+          ]
+        },
+        "curves": [
+          {
+            "fn": {
+              "kind": "linear",
+              "m": -6.5,
+              "c": 15
+            },
+            "from": 3,
+            "to": 3.6
+          }
+        ],
+        "marks": [
+          {
+            "x": 3,
+            "y": -4.5
+          },
+          {
+            "x": 3.6,
+            "y": -8.4
+          }
+        ],
+        "guides": [
+          {
+            "x": 3,
+            "y": -4.5
+          },
+          {
+            "x": 3.6,
+            "y": -8.4
+          }
+        ]
+      },
+      "options": {
+        "A": "\\(0.0540\\ \\text{kJ mol}^{-1}\\)",
+        "B": "\\(0.782\\ \\text{kJ mol}^{-1}\\)",
+        "C": "\\(54.0\\ \\text{kJ mol}^{-1}\\)",
+        "D": "\\(782\\ \\text{kJ mol}^{-1}\\)"
+      },
+      "answer": "C",
+      "solution": "Gradient \\(= \\frac{-8.4 - (-4.5)}{(3.6 - 3.0) \\times 10^{-3}} = -6500\\ \\text{K}\\). The gradient is \\(-\\frac{E_{\\text{a}}}{R}\\), so \\(E_{\\text{a}} = 6500 \\times 8.31 = 54000\\ \\text{J mol}^{-1} = 54.0\\ \\text{kJ mol}^{-1}\\). (Ignoring the \\(10^{-3}\\) on the axis leads to 0.0540.)"
+    },
+    {
+      "id": "che-al-rate-q014",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.1"
+          ]
+        }
+      },
+      "q": "For a first-order reaction, \\(A = 2.0 \\times 10^{11}\\ \\text{s}^{-1}\\) and \\(E_{\\text{a}} = 85\\ \\text{kJ mol}^{-1}\\). Use \\(k = A\\mathrm{e}^{-E_{\\text{a}}/RT}\\) to calculate \\(k\\) at 77 °C. (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+      "options": {
+        "A": "\\(4.1 \\times 10^{-47}\\ \\text{s}^{-1}\\)",
+        "B": "\\(2.0 \\times 10^{-13}\\ \\text{s}^{-1}\\)",
+        "C": "\\(0.0406\\ \\text{s}^{-1}\\)",
+        "D": "\\(1.9 \\times 10^{11}\\ \\text{s}^{-1}\\)"
+      },
+      "answer": "C",
+      "solution": "\\(T = 77 + 273 = 350\\ \\text{K}\\) and \\(E_{\\text{a}} = 85000\\ \\text{J mol}^{-1}\\). \\(\\frac{E_{\\text{a}}}{RT} = \\frac{85000}{8.31 \\times 350} = 29.2\\), so \\(k = 2.0 \\times 10^{11} \\times \\mathrm{e}^{-29.2} = 0.0406\\ \\text{s}^{-1}\\). (Using the temperature in °C leads to \\(4.1 \\times 10^{-47}\\).)"
+    },
+    {
+      "id": "che-al-rate-q015",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.3",
+            "16.4"
+          ]
+        }
+      },
+      "q": "Which technique would continuously monitor the rate of the acid-catalysed reaction between propanone and iodine?",
+      "options": {
+        "A": "Measuring the absorbance of the mixture with a colorimeter as the iodine colour fades",
+        "B": "Collecting the gas given off in a gas syringe",
+        "C": "Timing how long a fixed amount of iodine takes to be used up, in separate experiments",
+        "D": "Weighing the reaction flask as mass is lost"
+      },
+      "answer": "A",
+      "solution": "Iodine is the only coloured species, so its concentration can be followed throughout the reaction by colorimetry: continuous monitoring. No gas forms, so the gas syringe and mass-loss methods cannot work, and timing a fixed amount of reaction is an initial-rate (clock) method. (Calling a clock method continuous monitoring is the common slip.)"
+    },
+    {
+      "id": "che-al-rate-q016",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.4"
+          ]
+        }
+      },
+      "q": "In an iodine clock experiment, the time, \\(t\\), taken for the blue-black colour to appear is measured for different starting concentrations. Which quantity is proportional to the initial rate?",
+      "options": {
+        "A": "\\(t\\)",
+        "B": "\\(\\frac{1}{t}\\)",
+        "C": "\\(t^{2}\\)",
+        "D": "\\(\\sqrt{t}\\)"
+      },
+      "answer": "B",
+      "solution": "The colour appears when a fixed amount of iodine has formed, so the rate is that fixed amount divided by the time: \\(\\text{rate} \\propto \\frac{1}{t}\\). A faster reaction gives a shorter time. (Taking the time itself as the rate is the common slip.)"
+    },
+    {
+      "id": "che-al-rate-q017",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.1"
+          ]
+        }
+      },
+      "q": "For a reaction with \\(\\text{rate} = k[\\mathrm{A}][\\mathrm{B}]\\), which change increases the value of \\(k\\)?",
+      "options": {
+        "A": "Doubling the concentration of A",
+        "B": "Halving the volume of the reaction mixture",
+        "C": "Removing the product as it forms",
+        "D": "Raising the temperature"
+      },
+      "answer": "D",
+      "solution": "The rate constant depends on temperature (and on a catalyst), not on concentrations. Changing a concentration changes the rate, but \\(k\\) stays the same. (Confusing a faster rate with a larger \\(k\\) is the common slip.)"
+    },
+    {
+      "id": "che-al-rate-q018",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.9.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "16.9"
+          ]
+        }
+      },
+      "q": "For \\(\\mathrm{2NO(g) + 2H_{2}(g) \\rightarrow N_{2}(g) + 2H_{2}O(g)}\\), the rate equation is \\(\\text{rate} = k[\\mathrm{NO}]^{2}[\\mathrm{H_{2}}]\\). Which statement is correct?",
+      "options": {
+        "A": "The orders could have been predicted from the balanced equation.",
+        "B": "The rate-determining step involves two \\(\\mathrm{H_{2}}\\) molecules.",
+        "C": "The reaction is fourth order overall.",
+        "D": "The rate-determining step involves two \\(\\mathrm{NO}\\) and one \\(\\mathrm{H_{2}}\\), or species formed from them."
+      },
+      "answer": "D",
+      "solution": "The orders show what takes part in the rate-determining step (and any steps before it): two \\(\\mathrm{NO}\\) and one \\(\\mathrm{H_{2}}\\). The second \\(\\mathrm{H_{2}}\\) reacts in a later, fast step. The overall order is \\(2 + 1 = 3\\). (Reading orders from the balanced equation is the common slip: they come only from experiment.)"
+    }
+  ]
+}

@@ -121,3 +121,19 @@ quiz for the student's exam board (both, if their profile does not say)
 and their best score. Quizzes are taken on the ordinary quiz page
 (`student/quiz.html?id=`), marked on the server. The page is not linked
 from the GCSE navigation.
+
+## A-level Chemistry (October 2026)
+
+`curriculum/quizzes/chemistry-a-level/`: 31 topics, 558 questions, ids
+`che-al-<topic>-qNNN`, citing `curriculum/flashcards/spec/chemistry-a-level.json`.
+A question's `figure` can be a chemistry drawing as well as a graph
+(`docs/flashcards/PIPELINE.md`, "Chemistry drawings"); the quiz page draws it
+through `assets/js/figures.js`, and a stored structure is shown from
+`/assets/chem/structures/`. Approve and publish on the review page as for
+Physics; the topics rows come from `supabase/a_level_chemistry_subject.sql`
+(slug `al-chemistry-<topic>`), which is run only once `/a-level/chemistry`
+is live on main.
+
+The A-level subject page is shared: `subjects/<slug>.html` names its subject
+(`<main data-subject>`) and `assets/js/a-level-subject.js` lists its topics,
+grouped as `assets/js/a-level-subjects.js` says.

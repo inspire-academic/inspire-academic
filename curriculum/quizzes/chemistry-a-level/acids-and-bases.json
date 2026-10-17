@@ -1,0 +1,845 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/acids-and-bases",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "Acids and Bases",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-acid-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.3"
+          ]
+        }
+      },
+      "q": "Which is a conjugate acid–base pair in this equilibrium? \\(\\mathrm{HCO_{3}^{-}(aq) + H_{2}O(l) \\rightleftharpoons CO_{3}^{2-}(aq) + H_{3}O^{+}(aq)}\\)",
+      "options": {
+        "A": "\\(\\mathrm{HCO_{3}^{-}}\\) and \\(\\mathrm{H_{2}O}\\)",
+        "B": "\\(\\mathrm{H_{3}O^{+}}\\) and \\(\\mathrm{CO_{3}^{2-}}\\)",
+        "C": "\\(\\mathrm{HCO_{3}^{-}}\\) and \\(\\mathrm{H_{3}O^{+}}\\)",
+        "D": "\\(\\mathrm{HCO_{3}^{-}}\\) and \\(\\mathrm{CO_{3}^{2-}}\\)"
+      },
+      "answer": "D",
+      "solution": "A conjugate pair differs by one proton. \\(\\mathrm{HCO_{3}^{-}}\\) donates a proton to become \\(\\mathrm{CO_{3}^{2-}}\\); the other pair is \\(\\mathrm{H_{3}O^{+}}\\) and \\(\\mathrm{H_{2}O}\\). (Pairing the two acids, or the two reactants, is the common slip.)"
+    },
+    {
+      "id": "che-al-acid-q002",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.1"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.1",
+            "12.2"
+          ]
+        }
+      },
+      "q": "Which species acts as a Brønsted–Lowry acid in this reaction? \\(\\mathrm{NH_{2}^{-} + H_{2}O \\rightarrow NH_{3} + OH^{-}}\\)",
+      "options": {
+        "A": "\\(\\mathrm{NH_{2}^{-}}\\)",
+        "B": "\\(\\mathrm{NH_{3}}\\)",
+        "C": "\\(\\mathrm{H_{2}O}\\)",
+        "D": "\\(\\mathrm{OH^{-}}\\)"
+      },
+      "answer": "C",
+      "solution": "Water gives a proton to \\(\\mathrm{NH_{2}^{-}}\\), becoming \\(\\mathrm{OH^{-}}\\): a proton donor is a Brønsted–Lowry acid. \\(\\mathrm{NH_{2}^{-}}\\) accepts the proton, so it is the base. (Thinking water can only act as a base is the common slip.)"
+    },
+    {
+      "id": "che-al-acid-q003",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.5",
+            "12.8"
+          ]
+        }
+      },
+      "q": "What is the pH of \\(0.0350\\ \\text{mol dm}^{-3}\\) nitric acid?",
+      "options": {
+        "A": "\\(1.15\\)",
+        "B": "\\(1.46\\)",
+        "C": "\\(12.54\\)",
+        "D": "\\(12.85\\)"
+      },
+      "answer": "B",
+      "solution": "Nitric acid is a strong monoprotic acid, so \\([\\mathrm{H^{+}}] = 0.0350\\ \\text{mol dm}^{-3}\\). \\(\\mathrm{pH} = -\\log_{10} 0.0350 = 1.46\\). (Treating the acid as releasing two protons leads to 1.15.)"
+    },
+    {
+      "id": "che-al-acid-q004",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.2"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.6"
+          ]
+        }
+      },
+      "q": "A solution has a pH of 4.30. What is \\([\\mathrm{H^{+}}]\\)?",
+      "options": {
+        "A": "\\(2.0 \\times 10^{-10}\\ \\text{mol dm}^{-3}\\)",
+        "B": "\\(5.0 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\)",
+        "C": "\\(0.633\\ \\text{mol dm}^{-3}\\)",
+        "D": "\\(2.0 \\times 10^{4}\\ \\text{mol dm}^{-3}\\)"
+      },
+      "answer": "B",
+      "solution": "\\([\\mathrm{H^{+}}] = 10^{-\\mathrm{pH}} = 10^{-4.30} = 5.0 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\). (Working out \\(10^{4.30}\\) without the minus sign leads to \\(2.0 \\times 10^{4}\\).)"
+    },
+    {
+      "id": "che-al-acid-q005",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.12"
+          ]
+        }
+      },
+      "q": "What is the pH of \\(0.0250\\ \\text{mol dm}^{-3}\\) barium hydroxide, \\(\\mathrm{Ba(OH)_{2}}\\), at 298 K? (\\(K_{\\text{w}} = 1.00 \\times 10^{-14}\\ \\text{mol}^{2}\\ \\text{dm}^{-6}\\))",
+      "options": {
+        "A": "\\(1.30\\)",
+        "B": "\\(1.60\\)",
+        "C": "\\(12.40\\)",
+        "D": "\\(12.70\\)"
+      },
+      "answer": "D",
+      "solution": "Each \\(\\mathrm{Ba(OH)_{2}}\\) gives two \\(\\mathrm{OH^{-}}\\): \\([\\mathrm{OH^{-}}] = 0.0500\\ \\text{mol dm}^{-3}\\). \\([\\mathrm{H^{+}}] = \\frac{1.00 \\times 10^{-14}}{0.0500} = 2.00 \\times 10^{-13}\\), so \\(\\mathrm{pH} = 12.70\\). (Forgetting the two hydroxide ions leads to 12.40.)"
+    },
+    {
+      "id": "che-al-acid-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.3"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.11",
+            "12.13"
+          ]
+        }
+      },
+      "q": "At 40 °C, \\(K_{\\text{w}} = 2.92 \\times 10^{-14}\\ \\text{mol}^{2}\\ \\text{dm}^{-6}\\). What is the pH of pure water at this temperature, and is the water acidic, neutral or alkaline?",
+      "options": {
+        "A": "pH 6.77; acidic",
+        "B": "pH 7.00; neutral",
+        "C": "pH 13.53; neutral",
+        "D": "pH 6.77; neutral"
+      },
+      "answer": "D",
+      "solution": "In pure water \\([\\mathrm{H^{+}}] = [\\mathrm{OH^{-}}] = \\sqrt{2.92 \\times 10^{-14}} = 1.71 \\times 10^{-7}\\ \\text{mol dm}^{-3}\\), so the pH is 6.77. The water is still neutral because \\([\\mathrm{H^{+}}]\\) equals \\([\\mathrm{OH^{-}}]\\). (Calling any pH below 7 acidic is the common slip.)"
+    },
+    {
+      "id": "che-al-acid-q007",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.4"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.10"
+          ]
+        }
+      },
+      "q": "What is the pH of \\(0.200\\ \\text{mol dm}^{-3}\\) propanoic acid? (\\(K_{\\text{a}} = 1.35 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\))",
+      "options": {
+        "A": "\\(0.70\\)",
+        "B": "\\(2.78\\)",
+        "C": "\\(4.87\\)",
+        "D": "\\(5.57\\)"
+      },
+      "answer": "B",
+      "solution": "Assume \\([\\mathrm{H^{+}}] = [\\mathrm{A^{-}}]\\) and that the acid concentration barely changes: \\([\\mathrm{H^{+}}] = \\sqrt{K_{\\text{a}} \\times c} = \\sqrt{1.35 \\times 10^{-5} \\times 0.200} = 1.64 \\times 10^{-3}\\). \\(\\mathrm{pH} = 2.78\\). (Forgetting the square root leads to 5.57.)"
+    },
+    {
+      "id": "che-al-acid-q008",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.4"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.9"
+          ]
+        }
+      },
+      "q": "A \\(0.0800\\ \\text{mol dm}^{-3}\\) solution of a weak acid HA has a pH of 2.90. What is \\(K_{\\text{a}}\\)?",
+      "options": {
+        "A": "\\(1.58 \\times 10^{-6}\\ \\text{mol dm}^{-3}\\)",
+        "B": "\\(1.98 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\)",
+        "C": "\\(1.26 \\times 10^{-3}\\ \\text{mol dm}^{-3}\\)",
+        "D": "\\(1.57 \\times 10^{-2}\\ \\text{mol dm}^{-3}\\)"
+      },
+      "answer": "B",
+      "solution": "\\([\\mathrm{H^{+}}] = 10^{-2.90} = 1.26 \\times 10^{-3}\\ \\text{mol dm}^{-3}\\), and \\([\\mathrm{A^{-}}] = [\\mathrm{H^{+}}]\\). \\(K_{\\text{a}} = \\frac{(1.26 \\times 10^{-3})^{2}}{0.0800} = 1.98 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\). (Not squaring \\([\\mathrm{H^{+}}]\\) leads to \\(1.57 \\times 10^{-2}\\).)"
+    },
+    {
+      "id": "che-al-acid-q009",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "12.15"
+          ]
+        }
+      },
+      "q": "\\(0.370\\ \\text{g}\\) of propanoic acid (\\(M_{\\text{r}} = 74.0\\)) is dissolved in water to make \\(250\\ \\text{cm}^{3}\\) of solution. The pH is 3.28. What is \\(K_{\\text{a}}\\) for propanoic acid?",
+      "options": {
+        "A": "\\(1.38 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\)",
+        "B": "\\(5.51 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\)",
+        "C": "\\(1.38 \\times 10^{-2}\\ \\text{mol dm}^{-3}\\)",
+        "D": "\\(2.62 \\times 10^{-2}\\ \\text{mol dm}^{-3}\\)"
+      },
+      "answer": "A",
+      "solution": "Moles \\(= 0.370 \\div 74.0 = 5.00 \\times 10^{-3}\\); concentration \\(= 5.00 \\times 10^{-3} \\div 0.250 = 0.0200\\ \\text{mol dm}^{-3}\\). \\([\\mathrm{H^{+}}] = 10^{-3.28} = 5.25 \\times 10^{-4}\\). \\(K_{\\text{a}} = \\frac{(5.25 \\times 10^{-4})^{2}}{0.0200} = 1.38 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\). (Using the moles as the concentration leads to \\(5.51 \\times 10^{-5}\\).)"
+    },
+    {
+      "id": "che-al-acid-q010",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.4"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.13"
+          ]
+        }
+      },
+      "q": "Which of these is the strongest acid?",
+      "options": {
+        "A": "An acid with \\(\\mathrm{p}K_{\\text{a}} = 4.76\\)",
+        "B": "An acid with \\(K_{\\text{a}} = 1.8 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\)",
+        "C": "An acid with \\(K_{\\text{a}} = 6.3 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\)",
+        "D": "An acid with \\(\\mathrm{p}K_{\\text{a}} = 3.17\\)"
+      },
+      "answer": "D",
+      "solution": "Compare like with like: \\(K_{\\text{a}} = 1.8 \\times 10^{-4}\\) is \\(\\mathrm{p}K_{\\text{a}} = 3.74\\), and \\(6.3 \\times 10^{-5}\\) is \\(\\mathrm{p}K_{\\text{a}} = 4.20\\). The strongest acid has the largest \\(K_{\\text{a}}\\), so the smallest \\(\\mathrm{p}K_{\\text{a}}\\): 3.17. (Picking the largest number shown, as if a larger \\(\\mathrm{p}K_{\\text{a}}\\) meant a stronger acid, is the common slip.)"
+    },
+    {
+      "id": "che-al-acid-q011",
+      "difficulty": 3,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "12.14"
+          ]
+        }
+      },
+      "q": "\\(0.100\\ \\text{mol dm}^{-3}\\) ethanoic acid (\\(K_{\\text{a}} = 1.74 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\)) has a pH of 2.88. What is its pH after it is diluted 100 times with water?",
+      "options": {
+        "A": "\\(2.88\\)",
+        "B": "\\(3.38\\)",
+        "C": "\\(3.88\\)",
+        "D": "\\(4.88\\)"
+      },
+      "answer": "C",
+      "solution": "For a weak acid \\([\\mathrm{H^{+}}] = \\sqrt{K_{\\text{a}} c}\\). Diluting 100 times divides \\([\\mathrm{H^{+}}]\\) by \\(\\sqrt{100} = 10\\), so the pH rises by 1: \\(\\sqrt{1.74 \\times 10^{-5} \\times 0.00100} = 1.32 \\times 10^{-4}\\), pH 3.88. (Treating it as a strong acid, with a rise of 2, leads to 4.88.)"
+    },
+    {
+      "id": "che-al-acid-q012",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.5"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.8"
+          ]
+        }
+      },
+      "q": "\\(20.0\\ \\text{cm}^{3}\\) of \\(0.100\\ \\text{mol dm}^{-3}\\) sodium hydroxide is added to \\(25.0\\ \\text{cm}^{3}\\) of \\(0.100\\ \\text{mol dm}^{-3}\\) hydrochloric acid. What is the pH of the mixture?",
+      "options": {
+        "A": "\\(1.95\\)",
+        "B": "\\(3.30\\)",
+        "C": "\\(4.95\\)",
+        "D": "\\(12.05\\)"
+      },
+      "answer": "A",
+      "solution": "Moles of HCl \\(= 2.50 \\times 10^{-3}\\); moles of NaOH \\(= 2.00 \\times 10^{-3}\\); excess \\(\\mathrm{H^{+}}\\) \\(= 5.0 \\times 10^{-4}\\) in a total of \\(45.0\\ \\text{cm}^{3}\\). \\([\\mathrm{H^{+}}] = 5.0 \\times 10^{-4} \\div 0.0450 = 0.0111\\ \\text{mol dm}^{-3}\\), so pH 1.95. (Leaving the volume in \\(\\text{cm}^{3}\\) leads to 4.95.)"
+    },
+    {
+      "id": "che-al-acid-q013",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.5"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.16",
+            "12.17"
+          ]
+        }
+      },
+      "q": "The graph shows the pH curve for adding \\(0.100\\ \\text{mol dm}^{-3}\\) sodium hydroxide to \\(25.0\\ \\text{cm}^{3}\\) of \\(0.100\\ \\text{mol dm}^{-3}\\) ethanoic acid. Which indicator is most suitable for this titration?",
+      "figure": {
+        "kind": "graph",
+        "alt": "pH against volume of sodium hydroxide added to 25 cm³ of ethanoic acid. The pH starts near 2.9, rises gently through a buffer region, then rises steeply from about 7 to 11 at 25 cm³ (equivalence near pH 8.7), and levels off near 12.5.",
+        "x": {
+          "label": "volume of NaOH added / cm³",
+          "min": 0,
+          "max": 50,
+          "ticks": [
+            {
+              "at": 10,
+              "label": "10"
+            },
+            {
+              "at": 20,
+              "label": "20"
+            },
+            {
+              "at": 25,
+              "label": "25"
+            },
+            {
+              "at": 30,
+              "label": "30"
+            },
+            {
+              "at": 40,
+              "label": "40"
+            },
+            {
+              "at": 50,
+              "label": "50"
+            }
+          ]
+        },
+        "y": {
+          "label": "pH",
+          "min": 0,
+          "max": 14,
+          "ticks": [
+            {
+              "at": 2,
+              "label": "2"
+            },
+            {
+              "at": 4,
+              "label": "4"
+            },
+            {
+              "at": 6,
+              "label": "6"
+            },
+            {
+              "at": 8,
+              "label": "8"
+            },
+            {
+              "at": 10,
+              "label": "10"
+            },
+            {
+              "at": 12,
+              "label": "12"
+            },
+            {
+              "at": 14,
+              "label": "14"
+            }
+          ]
+        },
+        "curves": [
+          {
+            "fn": {
+              "kind": "points",
+              "points": [
+                [
+                  0,
+                  2.883
+                ],
+                [
+                  1,
+                  3.422
+                ],
+                [
+                  2,
+                  3.711
+                ],
+                [
+                  3,
+                  3.9
+                ],
+                [
+                  4,
+                  4.043
+                ],
+                [
+                  5,
+                  4.16
+                ],
+                [
+                  6,
+                  4.26
+                ],
+                [
+                  7,
+                  4.351
+                ],
+                [
+                  8,
+                  4.433
+                ],
+                [
+                  9,
+                  4.51
+                ],
+                [
+                  10,
+                  4.584
+                ],
+                [
+                  11,
+                  4.655
+                ],
+                [
+                  12,
+                  4.725
+                ],
+                [
+                  13,
+                  4.795
+                ],
+                [
+                  14,
+                  4.865
+                ],
+                [
+                  15,
+                  4.936
+                ],
+                [
+                  16,
+                  5.01
+                ],
+                [
+                  17,
+                  5.087
+                ],
+                [
+                  18,
+                  5.17
+                ],
+                [
+                  19,
+                  5.26
+                ],
+                [
+                  20,
+                  5.362
+                ],
+                [
+                  21,
+                  5.48
+                ],
+                [
+                  22,
+                  5.625
+                ],
+                [
+                  22.5,
+                  5.714
+                ],
+                [
+                  22.75,
+                  5.764
+                ],
+                [
+                  23,
+                  5.82
+                ],
+                [
+                  23.25,
+                  5.883
+                ],
+                [
+                  23.5,
+                  5.955
+                ],
+                [
+                  23.75,
+                  6.038
+                ],
+                [
+                  24,
+                  6.14
+                ],
+                [
+                  24.25,
+                  6.269
+                ],
+                [
+                  24.5,
+                  6.45
+                ],
+                [
+                  24.75,
+                  6.755
+                ],
+                [
+                  25,
+                  8.729
+                ],
+                [
+                  25.25,
+                  10.697
+                ],
+                [
+                  25.5,
+                  10.996
+                ],
+                [
+                  25.75,
+                  11.17
+                ],
+                [
+                  26,
+                  11.292
+                ],
+                [
+                  26.25,
+                  11.387
+                ],
+                [
+                  26.5,
+                  11.464
+                ],
+                [
+                  26.75,
+                  11.529
+                ],
+                [
+                  27,
+                  11.585
+                ],
+                [
+                  27.25,
+                  11.634
+                ],
+                [
+                  27.5,
+                  11.678
+                ],
+                [
+                  28,
+                  11.753
+                ],
+                [
+                  29,
+                  11.87
+                ],
+                [
+                  30,
+                  11.959
+                ],
+                [
+                  31,
+                  12.03
+                ],
+                [
+                  32,
+                  12.089
+                ],
+                [
+                  33,
+                  12.14
+                ],
+                [
+                  34,
+                  12.183
+                ],
+                [
+                  35,
+                  12.222
+                ],
+                [
+                  36,
+                  12.256
+                ],
+                [
+                  37,
+                  12.287
+                ],
+                [
+                  38,
+                  12.315
+                ],
+                [
+                  39,
+                  12.34
+                ],
+                [
+                  40,
+                  12.363
+                ],
+                [
+                  41,
+                  12.385
+                ],
+                [
+                  42,
+                  12.404
+                ],
+                [
+                  43,
+                  12.423
+                ],
+                [
+                  44,
+                  12.44
+                ],
+                [
+                  45,
+                  12.456
+                ],
+                [
+                  46,
+                  12.471
+                ],
+                [
+                  47,
+                  12.485
+                ],
+                [
+                  48,
+                  12.498
+                ],
+                [
+                  49,
+                  12.511
+                ],
+                [
+                  50,
+                  12.523
+                ]
+              ]
+            },
+            "from": 0,
+            "to": 50
+          }
+        ]
+      },
+      "options": {
+        "A": "Methyl orange, pH range 3.1–4.4",
+        "B": "Methyl red, pH range 4.2–6.3",
+        "C": "Phenolphthalein, pH range 8.3–10.0",
+        "D": "Bromocresol green, pH range 3.8–5.4"
+      },
+      "answer": "C",
+      "solution": "The vertical section at \\(25\\ \\text{cm}^{3}\\) runs from about pH 7 to 11, with the equivalence point near pH 8.7. An indicator must change colour completely within that steep part: phenolphthalein, 8.3–10.0. (The others change in the buffer region, before the equivalence point, which is the common slip.)"
+    },
+    {
+      "id": "che-al-acid-q014",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.4"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.22"
+          ]
+        }
+      },
+      "q": "During the titration of a weak acid HA with sodium hydroxide, the pH at half-neutralisation is 4.20. What is \\(K_{\\text{a}}\\) for HA?",
+      "options": {
+        "A": "\\(6.3 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\)",
+        "B": "\\(1.3 \\times 10^{-4}\\ \\text{mol dm}^{-3}\\)",
+        "C": "\\(0.623\\ \\text{mol dm}^{-3}\\)",
+        "D": "\\(1.6 \\times 10^{4}\\ \\text{mol dm}^{-3}\\)"
+      },
+      "answer": "A",
+      "solution": "At half-neutralisation \\([\\mathrm{HA}] = [\\mathrm{A^{-}}]\\), so \\(K_{\\text{a}} = [\\mathrm{H^{+}}]\\) and \\(\\mathrm{p}K_{\\text{a}} = \\mathrm{pH} = 4.20\\). \\(K_{\\text{a}} = 10^{-4.20} = 6.3 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\). (Thinking half the acid left means \\(K_{\\text{a}} = 2[\\mathrm{H^{+}}]\\) leads to \\(1.3 \\times 10^{-4}\\).)"
+    },
+    {
+      "id": "che-al-acid-q015",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.6"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.20"
+          ]
+        }
+      },
+      "q": "A buffer contains \\(0.150\\ \\text{mol dm}^{-3}\\) ethanoic acid and \\(0.100\\ \\text{mol dm}^{-3}\\) sodium ethanoate. What is its pH? (\\(K_{\\text{a}} = 1.74 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\))",
+      "options": {
+        "A": "\\(4.58\\)",
+        "B": "\\(4.76\\)",
+        "C": "\\(4.94\\)",
+        "D": "\\(9.42\\)"
+      },
+      "answer": "A",
+      "solution": "\\([\\mathrm{H^{+}}] = K_{\\text{a}} \\times \\frac{[\\mathrm{HA}]}{[\\mathrm{A^{-}}]} = 1.74 \\times 10^{-5} \\times \\frac{0.150}{0.100} = 2.61 \\times 10^{-5}\\ \\text{mol dm}^{-3}\\), so pH 4.58. (Putting the ratio upside down leads to 4.94.)"
+    },
+    {
+      "id": "che-al-acid-q016",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.6"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.20"
+          ]
+        }
+      },
+      "q": "\\(1.00\\ \\text{dm}^{3}\\) of a buffer contains 0.200 mol of ethanoic acid and 0.200 mol of sodium ethanoate (\\(\\mathrm{p}K_{\\text{a}} = 4.76\\)). What is the pH after 0.0500 mol of solid sodium hydroxide is dissolved in it?",
+      "options": {
+        "A": "\\(4.54\\)",
+        "B": "\\(4.76\\)",
+        "C": "\\(4.98\\)",
+        "D": "\\(12.70\\)"
+      },
+      "answer": "C",
+      "solution": "The hydroxide ions react with the acid: HA falls to 0.150 mol and \\(\\mathrm{A^{-}}\\) rises to 0.250 mol. \\([\\mathrm{H^{+}}] = 10^{-4.76} \\times \\frac{0.150}{0.250} = 1.04 \\times 10^{-5}\\), so pH 4.98: a small rise. (Adding the hydroxide to the acid instead of the salt leads to 4.54.)"
+    },
+    {
+      "id": "che-al-acid-q017",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.6"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.19"
+          ]
+        }
+      },
+      "q": "How does a buffer of ethanoic acid and sodium ethanoate keep its pH almost constant when a small amount of acid is added?",
+      "options": {
+        "A": "The added \\(\\mathrm{H^{+}}\\) ions react with \\(\\mathrm{CH_{3}COOH}\\) molecules.",
+        "B": "The added \\(\\mathrm{H^{+}}\\) ions react with the large supply of \\(\\mathrm{CH_{3}COO^{-}}\\) ions to form \\(\\mathrm{CH_{3}COOH}\\), so \\([\\mathrm{H^{+}}]\\) hardly changes.",
+        "C": "The added \\(\\mathrm{H^{+}}\\) ions react with the \\(\\mathrm{Na^{+}}\\) ions.",
+        "D": "The ethanoic acid dissociates further, removing the added \\(\\mathrm{H^{+}}\\) ions."
+      },
+      "answer": "B",
+      "solution": "The salt provides a large reservoir of ethanoate ions, which remove added \\(\\mathrm{H^{+}}\\): \\(\\mathrm{CH_{3}COO^{-} + H^{+} \\rightarrow CH_{3}COOH}\\). Because both the acid and the ion are present in large amounts, their ratio, and so \\([\\mathrm{H^{+}}]\\), barely changes. (Further dissociation would add \\(\\mathrm{H^{+}}\\), not remove it.)"
+    },
+    {
+      "id": "che-al-acid-q018",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.1.12.6"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "12.18"
+          ]
+        }
+      },
+      "q": "Which mixture forms a basic buffer solution?",
+      "options": {
+        "A": "Aqueous ammonia and ammonium chloride",
+        "B": "Sodium hydroxide and sodium chloride",
+        "C": "Ethanoic acid and sodium ethanoate",
+        "D": "Hydrochloric acid and ammonium chloride"
+      },
+      "answer": "A",
+      "solution": "A basic buffer is a weak base with a salt of that weak base: ammonia with ammonium chloride. Ethanoic acid with sodium ethanoate is an acidic buffer, and a strong base or strong acid cannot buffer. (Choosing the ethanoate mixture confuses acidic and basic buffers.)"
+    },
+    {
+      "id": "che-al-acid-q019",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "12.23"
+          ]
+        }
+      },
+      "q": "The enthalpy change of neutralisation of ethanoic acid by sodium hydroxide is less exothermic than that of hydrochloric acid. Which statement best explains this?",
+      "options": {
+        "A": "Ethanoic acid forms fewer moles of water per mole of acid.",
+        "B": "Ethanoic acid molecules are more strongly hydrogen bonded to water, which releases extra energy.",
+        "C": "Hydrochloric acid releases two protons per molecule.",
+        "D": "Some energy is used to complete the dissociation of the weak acid as it is neutralised."
+      },
+      "answer": "D",
+      "solution": "Both acids form one mole of water per mole of acid. Ethanoic acid is mostly undissociated, and breaking its O–H bonds to release the protons as it reacts takes in energy, which partly offsets the energy released by forming water. (Thinking fewer moles of water form is the common slip.)"
+    },
+    {
+      "id": "che-al-acid-q020",
+      "difficulty": 2,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "12.24"
+          ]
+        }
+      },
+      "q": "A small amount of acid enters the blood. Which reaction removes most of the added hydrogen ions?",
+      "options": {
+        "A": "\\(\\mathrm{H_{2}CO_{3} + H^{+} \\rightarrow H_{3}CO_{3}^{+}}\\)",
+        "B": "\\(\\mathrm{H_{2}CO_{3} \\rightarrow HCO_{3}^{-} + H^{+}}\\)",
+        "C": "\\(\\mathrm{HCO_{3}^{-} + H^{+} \\rightarrow H_{2}CO_{3}}\\)",
+        "D": "\\(\\mathrm{CO_{2} + H_{2}O \\rightarrow H_{2}CO_{3}}\\)"
+      },
+      "answer": "C",
+      "solution": "The hydrogencarbonate ions in blood act as the base of the buffer: \\(\\mathrm{HCO_{3}^{-} + H^{+} \\rightarrow H_{2}CO_{3}}\\). The carbonic acid then forms carbon dioxide and water, and the carbon dioxide is breathed out. (Dissociation of carbonic acid releases \\(\\mathrm{H^{+}}\\), which is what happens when base is added.)"
+    }
+  ]
+}

@@ -1,0 +1,953 @@
+{
+  "schema": "inspire.quiz.v1",
+  "topic": {
+    "id": "chemistry-a-level/nmr-chromatography",
+    "subject": "Chemistry",
+    "level": "A-level",
+    "title": "NMR Spectroscopy and Chromatography",
+    "spec": "chemistry-a-level"
+  },
+  "questions": [
+    {
+      "id": "che-al-nmr-q001",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        }
+      },
+      "q": "Why is tetramethylsilane, \\(\\mathrm{Si(CH_{3})_{4}}\\), used as the standard in NMR spectroscopy?",
+      "options": {
+        "A": "All its hydrogen atoms are in the same environment, so it gives one strong peak, at a lower shift than almost all organic compounds; it is also inert and volatile.",
+        "B": "It contains no hydrogen atoms, so it gives no peak.",
+        "C": "It gives a peak at a very high chemical shift, away from all other peaks.",
+        "D": "It reacts with the sample to make the peaks larger."
+      },
+      "answer": "A",
+      "solution": "TMS has 12 equivalent hydrogens (and 4 equivalent carbons), so it gives a single intense peak, defined as δ = 0. Almost all other signals appear at higher shift, so it does not overlap them. It is inert, so it does not react with the sample, and volatile, so it is easily removed afterwards."
+    },
+    {
+      "id": "che-al-nmr-q002",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.3"
+          ]
+        }
+      },
+      "q": "How many peaks are in the \\(\\mathrm{^{13}C}\\) NMR spectrum of propan-2-ol, shown?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of propan-2-ol: a three-carbon chain with OH on the middle carbon.",
+        "smiles": "CC(C)O",
+        "formula": "C3H8O"
+      },
+      "options": {
+        "A": "1",
+        "B": "2",
+        "C": "3",
+        "D": "4"
+      },
+      "answer": "B",
+      "solution": "The two \\(\\mathrm{CH_{3}}\\) carbons are both bonded to the same CH(OH) carbon, so they are equivalent (the molecule is symmetrical). The carbon bearing the OH is a second environment. (A common slip is to count every carbon atom, giving 3.) So the number of peaks is 2."
+    },
+    {
+      "id": "che-al-nmr-q003",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.3"
+          ]
+        }
+      },
+      "q": "How many peaks are in the \\(\\mathrm{^{13}C}\\) NMR spectrum of methylbenzene, shown?",
+      "figure": {
+        "kind": "structure",
+        "alt": "Skeletal formula of methylbenzene: a benzene ring carrying one methyl group.",
+        "smiles": "Cc1ccccc1",
+        "formula": "C7H8"
+      },
+      "options": {
+        "A": "3",
+        "B": "4",
+        "C": "5",
+        "D": "7"
+      },
+      "answer": "C",
+      "solution": "The molecule has a line of symmetry through the \\(\\mathrm{CH_{3}}\\) and the ring carbon opposite it. The environments are: the \\(\\mathrm{CH_{3}}\\) carbon; the ring carbon bonded to it; the two carbons next to that; the two carbons after those; and the single carbon opposite. (A common slip is to treat all six ring carbons as equivalent, as in benzene, giving 2.) So the number of peaks is 5."
+    },
+    {
+      "id": "che-al-nmr-q004",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.3"
+          ]
+        }
+      },
+      "q": "A compound with the molecular formula \\(\\mathrm{C_{3}H_{6}O}\\) has two peaks in its \\(\\mathrm{^{13}C}\\) NMR spectrum, at about 206 ppm and 31 ppm. Which compound is it?",
+      "options": {
+        "A": "Propanal",
+        "B": "Methoxyethene",
+        "C": "Prop-2-en-1-ol",
+        "D": "Propanone"
+      },
+      "answer": "D",
+      "solution": "Two peaks means only two carbon environments, so the molecule must be symmetrical: \\(\\mathrm{CH_{3}COCH_{3}}\\), propanone, whose two methyl carbons are equivalent. The peak at about 206 ppm is in the range for the C=O of a ketone or aldehyde (190–220 ppm), and 31 ppm fits the methyl carbons next to it. Propanal has three different carbons, so three peaks."
+    },
+    {
+      "id": "che-al-nmr-q005",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.5"
+          ]
+        }
+      },
+      "q": "Which describes the \\(\\mathrm{^{1}H}\\) NMR spectrum of propan-1-ol, \\(\\mathrm{CH_{3}CH_{2}CH_{2}OH}\\)?",
+      "options": {
+        "A": "Four peaks, with relative areas 3 : 2 : 2 : 1",
+        "B": "Three peaks, with relative areas 6 : 1 : 1",
+        "C": "Three peaks, with relative areas 3 : 4 : 1",
+        "D": "Eight peaks of equal area"
+      },
+      "answer": "A",
+      "solution": "There are four hydrogen environments: \\(\\mathrm{CH_{3}}\\) (3 H), the middle \\(\\mathrm{CH_{2}}\\) (2 H), the \\(\\mathrm{CH_{2}}\\) bonded to O (2 H) and OH (1 H). The two \\(\\mathrm{CH_{2}}\\) groups are not equivalent, because one is next to oxygen. So there are four peaks with areas 3 : 2 : 2 : 1. Three peaks in the ratio 6 : 1 : 1 is propan-2-ol."
+    },
+    {
+      "id": "che-al-nmr-q006",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.5"
+          ]
+        }
+      },
+      "q": "In the \\(\\mathrm{^{1}H}\\) NMR spectrum of chloroethane, \\(\\mathrm{CH_{3}CH_{2}Cl}\\), what is the splitting pattern of the \\(\\mathrm{CH_{3}}\\) peak?",
+      "options": {
+        "A": "Singlet",
+        "B": "Doublet",
+        "C": "Triplet",
+        "D": "Quartet"
+      },
+      "answer": "C",
+      "solution": "By the n + 1 rule, a peak is split by the hydrogens on the adjacent carbon. The \\(\\mathrm{CH_{3}}\\) is next to a \\(\\mathrm{CH_{2}}\\), with 2 hydrogens, so it is split into 2 + 1 = 3 lines, a triplet. (A common slip is to count the hydrogens in the \\(\\mathrm{CH_{3}}\\) itself, giving a quartet; that is the pattern of the \\(\\mathrm{CH_{2}}\\) peak.)"
+    },
+    {
+      "id": "che-al-nmr-q007",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.5"
+          ]
+        }
+      },
+      "q": "The \\(\\mathrm{^{1}H}\\) NMR spectrum shown is of a compound with the molecular formula \\(\\mathrm{C_{4}H_{8}O_{2}}\\). The number above each peak gives its relative area. Which compound is it?",
+      "figure": {
+        "kind": "graph",
+        "alt": "Stick 1H NMR spectrum from 5 to 0 ppm: a quartet of relative area 2 at 4.1 ppm, a singlet of relative area 3 at 2.0 ppm, and a triplet of relative area 3 at 1.3 ppm.",
+        "x": {
+          "label": "δ / ppm",
+          "min": 0.1,
+          "max": 5.3,
+          "ticks": [
+            {
+              "at": 0.2,
+              "label": "5"
+            },
+            {
+              "at": 1.2,
+              "label": "4"
+            },
+            {
+              "at": 2.2,
+              "label": "3"
+            },
+            {
+              "at": 3.2,
+              "label": "2"
+            },
+            {
+              "at": 4.2,
+              "label": "1"
+            },
+            {
+              "at": 5.2,
+              "label": "0"
+            }
+          ]
+        },
+        "y": {
+          "label": "absorption",
+          "min": 0,
+          "max": 10,
+          "ticks": []
+        },
+        "curves": [
+          {
+            "fn": {
+              "kind": "points",
+              "points": [
+                [
+                  0.1,
+                  0
+                ],
+                [
+                  0.938,
+                  0
+                ],
+                [
+                  0.95,
+                  0.88
+                ],
+                [
+                  0.962,
+                  0
+                ],
+                [
+                  1.038,
+                  0
+                ],
+                [
+                  1.05,
+                  2.64
+                ],
+                [
+                  1.062,
+                  0
+                ],
+                [
+                  1.138,
+                  0
+                ],
+                [
+                  1.15,
+                  2.64
+                ],
+                [
+                  1.162,
+                  0
+                ],
+                [
+                  1.238,
+                  0
+                ],
+                [
+                  1.25,
+                  0.88
+                ],
+                [
+                  1.262,
+                  0
+                ],
+                [
+                  3.188,
+                  0
+                ],
+                [
+                  3.2,
+                  6.6
+                ],
+                [
+                  3.212,
+                  0
+                ],
+                [
+                  3.788,
+                  0
+                ],
+                [
+                  3.8,
+                  2.64
+                ],
+                [
+                  3.812,
+                  0
+                ],
+                [
+                  3.888,
+                  0
+                ],
+                [
+                  3.9,
+                  5.28
+                ],
+                [
+                  3.912,
+                  0
+                ],
+                [
+                  3.988,
+                  0
+                ],
+                [
+                  4,
+                  2.64
+                ],
+                [
+                  4.012,
+                  0
+                ],
+                [
+                  5.3,
+                  0
+                ]
+              ]
+            },
+            "from": 0.1,
+            "to": 5.3
+          }
+        ],
+        "marks": [
+          {
+            "x": 1.1,
+            "y": 3.5400000000000005,
+            "label": "2",
+            "plain": true
+          },
+          {
+            "x": 3.2,
+            "y": 7.500000000000001,
+            "label": "3",
+            "plain": true
+          },
+          {
+            "x": 3.9,
+            "y": 6.1800000000000015,
+            "label": "3",
+            "plain": true
+          }
+        ]
+      },
+      "options": {
+        "A": "Ethyl ethanoate",
+        "B": "Methyl propanoate",
+        "C": "Butanoic acid",
+        "D": "Propyl methanoate"
+      },
+      "answer": "A",
+      "solution": "The triplet (3H) and quartet (2H) show a \\(\\mathrm{CH_{3}CH_{2}}\\) group. The quartet is at 4.1 ppm, the range for H on a carbon bonded to the single-bonded O of an ester (3.7–4.1 ppm), so the ethyl group is on the oxygen. The singlet (3H) at 2.0 ppm is a \\(\\mathrm{CH_{3}}\\) next to C=O with no neighbouring H. The compound is \\(\\mathrm{CH_{3}COOCH_{2}CH_{3}}\\), ethyl ethanoate. In methyl propanoate the singlet would be at about 3.7 ppm and the quartet at about 2.3 ppm."
+    },
+    {
+      "id": "che-al-nmr-q008",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.5"
+          ]
+        }
+      },
+      "q": "The \\(\\mathrm{^{1}H}\\) NMR spectrum shown is of a compound with the molecular formula \\(\\mathrm{C_{4}H_{8}O}\\). The number above each peak gives its relative area. Which compound is it?",
+      "figure": {
+        "kind": "graph",
+        "alt": "Stick 1H NMR spectrum from 5 to 0 ppm: a quartet of relative area 2 at 2.4 ppm, a singlet of relative area 3 at 2.1 ppm, and a triplet of relative area 3 at 1.1 ppm.",
+        "x": {
+          "label": "δ / ppm",
+          "min": 0.1,
+          "max": 5.3,
+          "ticks": [
+            {
+              "at": 0.2,
+              "label": "5"
+            },
+            {
+              "at": 1.2,
+              "label": "4"
+            },
+            {
+              "at": 2.2,
+              "label": "3"
+            },
+            {
+              "at": 3.2,
+              "label": "2"
+            },
+            {
+              "at": 4.2,
+              "label": "1"
+            },
+            {
+              "at": 5.2,
+              "label": "0"
+            }
+          ]
+        },
+        "y": {
+          "label": "absorption",
+          "min": 0,
+          "max": 10,
+          "ticks": []
+        },
+        "curves": [
+          {
+            "fn": {
+              "kind": "points",
+              "points": [
+                [
+                  0.1,
+                  0
+                ],
+                [
+                  2.588,
+                  0
+                ],
+                [
+                  2.6,
+                  0.88
+                ],
+                [
+                  2.612,
+                  0
+                ],
+                [
+                  2.688,
+                  0
+                ],
+                [
+                  2.7,
+                  2.64
+                ],
+                [
+                  2.712,
+                  0
+                ],
+                [
+                  2.788,
+                  0
+                ],
+                [
+                  2.8,
+                  2.64
+                ],
+                [
+                  2.812,
+                  0
+                ],
+                [
+                  2.888,
+                  0
+                ],
+                [
+                  2.9,
+                  0.88
+                ],
+                [
+                  2.912,
+                  0
+                ],
+                [
+                  3.138,
+                  0
+                ],
+                [
+                  3.15,
+                  6.6
+                ],
+                [
+                  3.162,
+                  0
+                ],
+                [
+                  3.988,
+                  0
+                ],
+                [
+                  4,
+                  2.64
+                ],
+                [
+                  4.012,
+                  0
+                ],
+                [
+                  4.088,
+                  0
+                ],
+                [
+                  4.1,
+                  5.28
+                ],
+                [
+                  4.112,
+                  0
+                ],
+                [
+                  4.188,
+                  0
+                ],
+                [
+                  4.2,
+                  2.64
+                ],
+                [
+                  4.212,
+                  0
+                ],
+                [
+                  5.3,
+                  0
+                ]
+              ]
+            },
+            "from": 0.1,
+            "to": 5.3
+          }
+        ],
+        "marks": [
+          {
+            "x": 2.75,
+            "y": 3.5400000000000005,
+            "label": "2",
+            "plain": true
+          },
+          {
+            "x": 3.15,
+            "y": 7.500000000000001,
+            "label": "3",
+            "plain": true
+          },
+          {
+            "x": 4.1,
+            "y": 6.1800000000000015,
+            "label": "3",
+            "plain": true
+          }
+        ]
+      },
+      "options": {
+        "A": "Butanal",
+        "B": "Butanone",
+        "C": "2-methylpropanal",
+        "D": "Ethoxyethene"
+      },
+      "answer": "B",
+      "solution": "There is no peak at 9–10 ppm, so there is no aldehyde CHO hydrogen. A quartet (2H) and triplet (3H) show an ethyl group; the quartet at 2.4 ppm is in the range for H on a carbon next to C=O (2.1–2.6 ppm). The singlet (3H) at 2.1 ppm is a \\(\\mathrm{CH_{3}}\\) bonded to C=O with no neighbouring H. The compound is \\(\\mathrm{CH_{3}COCH_{2}CH_{3}}\\), butanone."
+    },
+    {
+      "id": "che-al-nmr-q009",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.5"
+          ]
+        }
+      },
+      "q": "The integrated \\(\\mathrm{^{1}H}\\) NMR spectrum of a compound \\(\\mathrm{C_{3}H_{8}O}\\) has three peaks, whose integration traces rise by 4.8 cm, 0.8 cm and 0.8 cm. How many hydrogen atoms are in the environment that gives the 4.8 cm step?",
+      "options": {
+        "A": "3",
+        "B": "4",
+        "C": "6",
+        "D": "8"
+      },
+      "answer": "C",
+      "solution": "The total height, 4.8 + 0.8 + 0.8 = 6.4 cm, corresponds to all 8 hydrogens, so 1 hydrogen is \\(\\frac{6.4}{8} = 0.8\\) cm. (A common slip is to take the largest step as a \\(\\mathrm{CH_{3}}\\), 3 H, without scaling.) The 4.8 cm step is therefore \\(\\frac{4.8}{0.8} = 6\\) hydrogens: the two equivalent \\(\\mathrm{CH_{3}}\\) groups of propan-2-ol."
+    },
+    {
+      "id": "che-al-nmr-q010",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.5"
+          ]
+        }
+      },
+      "q": "Which describes the \\(\\mathrm{^{1}H}\\) NMR spectrum of 1,2-dichloroethane, \\(\\mathrm{ClCH_{2}CH_{2}Cl}\\)?",
+      "options": {
+        "A": "Two triplets, each of relative area 2",
+        "B": "A doublet and a quartet, in the ratio 3 : 1",
+        "C": "One triplet",
+        "D": "One singlet"
+      },
+      "answer": "D",
+      "solution": "The molecule is symmetrical, so all four hydrogens are in the same environment and give one peak. Hydrogens in the same environment do not split each other's signal, so the peak is a singlet. (A common slip is to apply the n + 1 rule between the two \\(\\mathrm{CH_{2}}\\) groups, giving a triplet; that applies only to non-equivalent neighbours.) A doublet and a quartet is 1,1-dichloroethane."
+    },
+    {
+      "id": "che-al-nmr-q011",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.5"
+          ]
+        }
+      },
+      "q": "In ethyl ethanoate, \\(\\mathrm{CH_{3}COOCH_{2}CH_{3}}\\), which hydrogens give the peak with the largest chemical shift?",
+      "options": {
+        "A": "The hydrogens of the \\(\\mathrm{CH_{3}}\\) in the ethyl group",
+        "B": "The hydrogens of the \\(\\mathrm{CH_{3}}\\) bonded to the C=O",
+        "C": "The hydrogens of the \\(\\mathrm{CH_{2}}\\) bonded to the single-bonded oxygen",
+        "D": "All the hydrogens have the same chemical shift"
+      },
+      "answer": "C",
+      "solution": "Chemical shift increases as electronegative atoms nearby draw electron density away. The \\(\\mathrm{CH_{2}}\\) bonded directly to the ester oxygen is the most deshielded, at about 3.7–4.1 ppm. The \\(\\mathrm{CH_{3}}\\) next to C=O is at about 2.0–2.6 ppm, and the ethyl \\(\\mathrm{CH_{3}}\\) at about 1 ppm."
+    },
+    {
+      "id": "che-al-nmr-q012",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.15"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19B.5"
+          ]
+        }
+      },
+      "q": "In the \\(\\mathrm{^{1}H}\\) NMR spectrum of ethanal, \\(\\mathrm{CH_{3}CHO}\\), what is the splitting pattern of the CHO hydrogen's peak, at about 9.8 ppm?",
+      "options": {
+        "A": "Singlet",
+        "B": "Doublet",
+        "C": "Triplet",
+        "D": "Quartet"
+      },
+      "answer": "D",
+      "solution": "The CHO hydrogen is on the carbon next to the \\(\\mathrm{CH_{3}}\\) group, which has 3 hydrogens. By the n + 1 rule it is split into 3 + 1 = 4 lines, a quartet. The \\(\\mathrm{CH_{3}}\\) peak, next to one hydrogen, is a doublet."
+    },
+    {
+      "id": "che-al-nmr-q013",
+      "difficulty": 1,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.16"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19C.7"
+          ]
+        }
+      },
+      "q": "On a thin-layer chromatogram the solvent front is 6.5 cm from the baseline, and a spot has moved 2.6 cm from the baseline. What is the \\(R_{\\text{f}}\\) value of the spot?",
+      "options": {
+        "A": "0.40",
+        "B": "0.60",
+        "C": "2.5",
+        "D": "3.9"
+      },
+      "answer": "A",
+      "solution": "(A common slip is to divide the solvent distance by the spot distance, giving a value above 1, which is impossible.) \\(R_{\\text{f}} = \\frac{\\text{distance moved by spot}}{\\text{distance moved by solvent front}} = \\frac{2.6}{6.5} = 0.40\\)."
+    },
+    {
+      "id": "che-al-nmr-q014",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.16"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19C.6"
+          ]
+        }
+      },
+      "q": "Why do the components of a mixture separate during chromatography?",
+      "options": {
+        "A": "Each component has a different colour, which affects how fast it moves.",
+        "B": "Each component has a different balance between its solubility in the mobile phase and its retention by the stationary phase, so they move at different rates.",
+        "C": "The heavier components are pulled down by gravity, so they move more slowly.",
+        "D": "The components react with the stationary phase to form new compounds."
+      },
+      "answer": "B",
+      "solution": "All chromatography has a mobile phase moving past a stationary phase. A component that is more soluble in the mobile phase spends more time moving with it, while one that is held more strongly (adsorbed) by the stationary phase lags behind. The components are not changed chemically."
+    },
+    {
+      "id": "che-al-nmr-q015",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.16"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19C.8"
+          ]
+        }
+      },
+      "q": "A mixture of alcohols is analysed by gas chromatography. Under the same conditions, the retention times of pure samples are: ethanol 2.1 min, propan-1-ol 3.4 min, butan-1-ol 5.8 min, pentan-1-ol 8.2 min. The chromatogram of the mixture is shown. Which alcohol is not in the mixture?",
+      "figure": {
+        "kind": "graph",
+        "alt": "Gas chromatogram, detector response against retention time from 0 to 10 minutes: three peaks, P at 2.1 minutes, Q at 5.8 minutes (the tallest) and R at 8.2 minutes.",
+        "x": {
+          "label": "retention time / min",
+          "min": 0,
+          "max": 10,
+          "ticks": [
+            {
+              "at": 2,
+              "label": "2"
+            },
+            {
+              "at": 4,
+              "label": "4"
+            },
+            {
+              "at": 6,
+              "label": "6"
+            },
+            {
+              "at": 8,
+              "label": "8"
+            },
+            {
+              "at": 10,
+              "label": "10"
+            }
+          ]
+        },
+        "y": {
+          "label": "detector response",
+          "min": 0,
+          "max": 10,
+          "ticks": []
+        },
+        "curves": [
+          {
+            "fn": {
+              "kind": "points",
+              "points": [
+                [
+                  0,
+                  0.3
+                ],
+                [
+                  1.75,
+                  0.3
+                ],
+                [
+                  1.9500000000000002,
+                  2.7
+                ],
+                [
+                  2.1,
+                  6
+                ],
+                [
+                  2.25,
+                  2.7
+                ],
+                [
+                  2.5,
+                  0.3
+                ],
+                [
+                  5.45,
+                  0.3
+                ],
+                [
+                  5.6499999999999995,
+                  3.6
+                ],
+                [
+                  5.8,
+                  8
+                ],
+                [
+                  5.95,
+                  3.6
+                ],
+                [
+                  6.2,
+                  0.3
+                ],
+                [
+                  7.85,
+                  0.3
+                ],
+                [
+                  8.049999999999999,
+                  1.8
+                ],
+                [
+                  8.2,
+                  4
+                ],
+                [
+                  8.35,
+                  1.8
+                ],
+                [
+                  8.6,
+                  0.3
+                ],
+                [
+                  10,
+                  0.3
+                ]
+              ]
+            },
+            "from": 0,
+            "to": 10,
+            "smooth": true
+          }
+        ],
+        "marks": [
+          {
+            "x": 2.1,
+            "y": 6.8,
+            "label": "P",
+            "plain": true
+          },
+          {
+            "x": 5.8,
+            "y": 8.8,
+            "label": "Q",
+            "plain": true
+          },
+          {
+            "x": 8.2,
+            "y": 4.8,
+            "label": "R",
+            "plain": true
+          }
+        ]
+      },
+      "options": {
+        "A": "Ethanol",
+        "B": "Butan-1-ol",
+        "C": "Propan-1-ol",
+        "D": "Pentan-1-ol"
+      },
+      "answer": "C",
+      "solution": "Each substance has a characteristic retention time, the time from injection to its peak, when the column, temperature and carrier-gas flow are the same. The peaks P, Q and R are at 2.1, 5.8 and 8.2 minutes, matching ethanol, butan-1-ol and pentan-1-ol. There is no peak at 3.4 minutes, so propan-1-ol is absent."
+    },
+    {
+      "id": "che-al-nmr-q016",
+      "difficulty": 2,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.16"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19C.8"
+          ]
+        }
+      },
+      "q": "Gas chromatography is often linked to a mass spectrometer (GC–MS), for example in forensic analysis. What is the main advantage?",
+      "options": {
+        "A": "The mass spectrometer gives a mass spectrum of each separated component, which can be compared with a database to identify it, whereas different substances can have similar retention times.",
+        "B": "The mass spectrometer makes the components separate faster.",
+        "C": "The mass spectrometer removes the need for a carrier gas.",
+        "D": "The mass spectrometer measures the retention times more accurately."
+      },
+      "answer": "A",
+      "solution": "The GC column separates the mixture, and each component passes straight into the mass spectrometer as it leaves. Its fragmentation pattern and molecular ion peak identify it positively, which a retention time alone cannot do, since several substances can come off the column at similar times."
+    },
+    {
+      "id": "che-al-nmr-q017",
+      "difficulty": 1,
+      "boards": {
+        "edexcel": {
+          "points": [
+            "19C.8"
+          ]
+        }
+      },
+      "q": "What is high-performance liquid chromatography (HPLC)?",
+      "options": {
+        "A": "Chromatography on paper, with water as the solvent",
+        "B": "Chromatography in which a gas carries the sample through a heated column",
+        "C": "Thin-layer chromatography carried out at high temperature",
+        "D": "Column chromatography in which a liquid mobile phase is pumped at high pressure through a column packed with a solid stationary phase"
+      },
+      "answer": "D",
+      "solution": "HPLC is a type of column chromatography. Pumping the liquid at high pressure through a column of very small particles gives fast, efficient separation; components are detected as they leave, and identified by their retention times. A gas mobile phase is gas chromatography."
+    },
+    {
+      "id": "che-al-nmr-q018",
+      "difficulty": 3,
+      "boards": {
+        "aqa": {
+          "refs": [
+            "3.3.16"
+          ]
+        },
+        "edexcel": {
+          "points": [
+            "19C.7"
+          ]
+        }
+      },
+      "q": "A spot from an unknown substance has the same \\(R_{\\text{f}}\\) value as a known painkiller on a TLC plate. How could a student obtain stronger evidence that the two are the same compound?",
+      "options": {
+        "A": "Repeat the chromatogram with the same solvent and measure the \\(R_{\\text{f}}\\) value more carefully",
+        "B": "Run both substances on another plate with a different solvent; the same compound would again give matching values",
+        "C": "Use a longer TLC plate so that the spots move further",
+        "D": "Spray the plate with ninhydrin to see whether the spots change colour"
+      },
+      "answer": "B",
+      "solution": "Different compounds can have the same \\(R_{\\text{f}}\\) value in one solvent by chance. They are very unlikely to match in a second solvent of different polarity as well, so running both with a different solvent gives stronger evidence. Repeating with the same solvent would just give the same match."
+    }
+  ]
+}

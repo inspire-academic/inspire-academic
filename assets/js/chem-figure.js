@@ -221,7 +221,8 @@
     };
     var s = endpoint(fig, scene, c.from, centre(c.to), true), t = endpoint(fig, scene, c.to, centre(c.from), false);
     var dx = t[0] - s[0], dy = t[1] - s[1], L = Math.hypot(dx, dy) || 1;
-    var k = (num(c.bend) ? c.bend : 0.4) * L * (c.side === 'right' ? 1 : -1);
+    // A short arrow (C=O to O, H–Br to Br) still bows enough to be seen.
+    var k = Math.max((num(c.bend) ? c.bend : 0.4) * L, Math.min(12, L)) * (c.side === 'right' ? 1 : -1);
     var nx = -dy / L * k, ny = dx / L * k;
     var c1 = [s[0] + dx * 0.2 + nx, s[1] + dy * 0.2 + ny], c2 = [s[0] + dx * 0.8 + nx, s[1] + dy * 0.8 + ny];
     // An arrow arrives at an atom from the side its curve comes from, not

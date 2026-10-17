@@ -1,0 +1,510 @@
+{
+ "schema": "inspire.quiz.v1",
+ "topic": {
+  "id": "chemistry-a-level/amount-of-substance",
+  "subject": "Chemistry",
+  "level": "A-level",
+  "title": "Amount of Substance",
+  "spec": "chemistry-a-level"
+ },
+ "questions": [
+  {
+   "id": "che-al-amount-q001",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.2"
+     ]
+    }
+   },
+   "q": "How many hydrogen atoms are there in 4.25 g of ammonia, \\(\\mathrm{NH_{3}}\\)? (\\(M_{\\text{r}} = 17.0\\); \\(L = 6.02 \\times 10^{23}\\ \\text{mol}^{-1}\\))",
+   "options": {
+    "A": "\\(1.51 \\times 10^{23}\\)",
+    "B": "\\(4.52 \\times 10^{23}\\)",
+    "C": "\\(6.02 \\times 10^{23}\\)",
+    "D": "\\(7.68 \\times 10^{24}\\)"
+   },
+   "answer": "B",
+   "solution": "Amount of ammonia: \\(\\frac{4.25}{17.0} = 0.250\\ \\text{mol}\\). Each molecule has three hydrogen atoms, so hydrogen atoms = \\(0.250 \\times 3 \\times 6.02 \\times 10^{23}\\) = \\(4.52 \\times 10^{23}\\). (Stopping at the number of molecules leads to \\(1.51 \\times 10^{23}\\).)"
+  },
+  {
+   "id": "che-al-amount-q002",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.7"
+     ]
+    }
+   },
+   "q": "What amount of sodium hydroxide is in \\(25.0\\ \\text{cm}^{3}\\) of a \\(0.200\\ \\text{mol dm}^{-3}\\) solution?",
+   "options": {
+    "A": "\\(5.00 \\times 10^{-3}\\ \\text{mol}\\)",
+    "B": "\\(8.00 \\times 10^{-3}\\ \\text{mol}\\)",
+    "C": "\\(0.125\\ \\text{mol}\\)",
+    "D": "\\(5.00\\ \\text{mol}\\)"
+   },
+   "answer": "A",
+   "solution": "Convert the volume to \\(\\text{dm}^{3}\\): \\(\\frac{25.0}{1000} = 0.0250\\ \\text{dm}^{3}\\). Amount = concentration × volume = \\(0.200 \\times 0.0250\\) = \\(5.00 \\times 10^{-3}\\ \\text{mol}\\). (Leaving the volume in \\(\\text{cm}^{3}\\) leads to 5.00 mol.)"
+  },
+  {
+   "id": "che-al-amount-q003",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5",
+      "5.7"
+     ]
+    }
+   },
+   "q": "What amount of gas occupies \\(500\\ \\text{cm}^{3}\\) at \\(100\\ \\text{kPa}\\) and \\(27\\ ^{\\circ}\\text{C}\\)? (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "options": {
+    "A": "\\(2.01 \\times 10^{-5}\\ \\text{mol}\\)",
+    "B": "\\(0.0201\\ \\text{mol}\\)",
+    "C": "\\(0.223\\ \\text{mol}\\)",
+    "D": "\\(20.1\\ \\text{mol}\\)"
+   },
+   "answer": "B",
+   "solution": "Use SI units: \\(p = 1.00 \\times 10^{5}\\ \\text{Pa}\\), \\(V = 5.00 \\times 10^{-4}\\ \\text{m}^{3}\\), \\(T = 300\\ \\text{K}\\). Then \\(n = \\frac{pV}{RT} = \\frac{1.00 \\times 10^{5} \\times 5.00 \\times 10^{-4}}{8.31 \\times 300}\\) = 0.0201 mol. (Using the temperature in degrees Celsius leads to 0.223 mol.)"
+  },
+  {
+   "id": "che-al-amount-q004",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.3"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   },
+   "q": "A 0.250 g sample of a volatile liquid is vaporised. The vapour occupies \\(98.0\\ \\text{cm}^{3}\\) at \\(101\\ \\text{kPa}\\) and \\(373\\ \\text{K}\\). What is the relative molecular mass of the liquid? (\\(R = 8.31\\ \\text{J K}^{-1}\\ \\text{mol}^{-1}\\))",
+   "options": {
+    "A": "\\(0.0783\\)",
+    "B": "\\(21.0\\)",
+    "C": "\\(78.3\\)",
+    "D": "\\(7.83 \\times 10^{4}\\)"
+   },
+   "answer": "C",
+   "solution": "\\(n = \\frac{pV}{RT} = \\frac{1.01 \\times 10^{5} \\times 9.80 \\times 10^{-5}}{8.31 \\times 373} = 3.19 \\times 10^{-3}\\ \\text{mol}\\). Then \\(M_{\\text{r}} = \\frac{0.250}{3.19 \\times 10^{-3}}\\) = 78.3. (Leaving the pressure in kPa leads to \\(7.83 \\times 10^{4}\\).)"
+  },
+  {
+   "id": "che-al-amount-q005",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.4"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   },
+   "q": "A compound contains 24.3% carbon, 4.1% hydrogen and 71.6% chlorine by mass. Its relative molecular mass is 99.0. What is its molecular formula? (\\(A_{\\text{r}}\\): C = 12.0, H = 1.0, Cl = 35.5)",
+   "options": {
+    "A": "\\(\\mathrm{C_{2}H_{4}Cl_{2}}\\)",
+    "B": "\\(\\mathrm{CH_{2}Cl}\\)",
+    "C": "\\(\\mathrm{C_{2}H_{5}Cl}\\)",
+    "D": "\\(\\mathrm{C_{4}H_{8}Cl_{4}}\\)"
+   },
+   "answer": "A",
+   "solution": "Divide by \\(A_{\\text{r}}\\): C \\(\\frac{24.3}{12.0} = 2.03\\), H \\(\\frac{4.1}{1.0} = 4.1\\), Cl \\(\\frac{71.6}{35.5} = 2.02\\). The ratio is 1 : 2 : 1, so the empirical formula is \\(\\mathrm{CH_{2}Cl}\\), mass 49.5. Since \\(\\frac{99.0}{49.5} = 2\\), the molecular formula is \\(\\mathrm{C_{2}H_{4}Cl_{2}}\\). (Stopping at the empirical formula is the usual slip.)"
+  },
+  {
+   "id": "che-al-amount-q006",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.5"
+     ]
+    }
+   },
+   "q": "A 2.46 g sample of hydrated magnesium sulfate, \\(\\mathrm{MgSO_{4} \\cdot \\mathit{x}H_{2}O}\\), is heated to constant mass. The anhydrous solid left has a mass of 1.20 g. What is the value of \\(x\\)? (\\(M_{\\text{r}}\\): \\(\\mathrm{MgSO_{4}}\\) = 120.4, \\(\\mathrm{H_{2}O}\\) = 18.0)",
+   "options": {
+    "A": "1",
+    "B": "5",
+    "C": "6",
+    "D": "7"
+   },
+   "answer": "D",
+   "solution": "Mass of water lost = 2.46 − 1.20 = 1.26 g. Amounts: \\(\\mathrm{MgSO_{4}}\\) \\(\\frac{1.20}{120.4} = 0.00997\\ \\text{mol}\\); water \\(\\frac{1.26}{18.0} = 0.0700\\ \\text{mol}\\). Ratio \\(\\frac{0.0700}{0.00997} = 7.02\\), so \\(x\\) = 7. (Comparing the masses instead of the amounts leads to 1.)"
+  },
+  {
+   "id": "che-al-amount-q007",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.8"
+     ]
+    }
+   },
+   "q": "Iron is extracted by the reaction \\(\\mathrm{Fe_{2}O_{3} + 3CO \\rightarrow 2Fe + 3CO_{2}}\\). What is the maximum mass of iron that can be made from 80.0 g of iron(III) oxide? (\\(M_{\\text{r}}\\) \\(\\mathrm{Fe_{2}O_{3}}\\) = 159.6; \\(A_{\\text{r}}\\) Fe = 55.8)",
+   "options": {
+    "A": "14.0 g",
+    "B": "28.0 g",
+    "C": "55.9 g",
+    "D": "112 g"
+   },
+   "answer": "C",
+   "solution": "Amount of \\(\\mathrm{Fe_{2}O_{3}}\\) = \\(\\frac{80.0}{159.6} = 0.501\\ \\text{mol}\\). Each mole gives 2 mol of Fe, so 1.00 mol of Fe, and mass = \\(1.00 \\times 55.8\\) = 55.9 g. (Missing the 1 : 2 ratio leads to 28.0 g.)"
+  },
+  {
+   "id": "che-al-amount-q008",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.9"
+     ]
+    }
+   },
+   "q": "Butane burns completely: \\(\\mathrm{2C_{4}H_{10}(g) + 13O_{2}(g) \\rightarrow 8CO_{2}(g) + 10H_{2}O(l)}\\). What volume of oxygen is needed to burn \\(40\\ \\text{cm}^{3}\\) of butane, both volumes measured at the same temperature and pressure?",
+   "options": {
+    "A": "\\(160\\ \\text{cm}^{3}\\)",
+    "B": "\\(200\\ \\text{cm}^{3}\\)",
+    "C": "\\(260\\ \\text{cm}^{3}\\)",
+    "D": "\\(520\\ \\text{cm}^{3}\\)"
+   },
+   "answer": "C",
+   "solution": "Equal volumes of gases at the same temperature and pressure contain equal amounts, so volumes react in the ratio of the equation, 2 : 13. Oxygen needed = \\(40 \\times \\frac{13}{2}\\) = \\(260\\ \\text{cm}^{3}\\). (Multiplying by 13 without dividing by 2 leads to \\(520\\ \\text{cm}^{3}\\).)"
+  },
+  {
+   "id": "che-al-amount-q009",
+   "difficulty": 3,
+   "boards": {
+    "edexcel": {
+     "points": [
+      "5.8",
+      "5.10"
+     ]
+    }
+   },
+   "q": "Sodium hydrogencarbonate decomposes on heating: \\(\\mathrm{2NaHCO_{3}(s) \\rightarrow Na_{2}CO_{3}(s) + CO_{2}(g) + H_{2}O(g)}\\). What mass of \\(\\mathrm{NaHCO_{3}}\\) must be heated to give \\(360\\ \\text{cm}^{3}\\) of carbon dioxide at room temperature and pressure? (\\(M_{\\text{r}}\\) \\(\\mathrm{NaHCO_{3}}\\) = 84.0; molar volume of a gas = \\(24.0\\ \\text{dm}^{3}\\ \\text{mol}^{-1}\\))",
+   "options": {
+    "A": "0.630 g",
+    "B": "1.26 g",
+    "C": "2.52 g",
+    "D": "2520 g"
+   },
+   "answer": "C",
+   "solution": "Amount of \\(\\mathrm{CO_{2}}\\) = \\(\\frac{0.360}{24.0} = 0.0150\\ \\text{mol}\\). The equation needs 2 mol of \\(\\mathrm{NaHCO_{3}}\\) per mole of \\(\\mathrm{CO_{2}}\\), so 0.0300 mol, and mass = \\(0.0300 \\times 84.0\\) = 2.52 g. (Using a 1 : 1 ratio leads to 1.26 g; leaving the volume in \\(\\text{cm}^{3}\\) leads to 2520 g.)"
+  },
+  {
+   "id": "che-al-amount-q010",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.11"
+     ]
+    }
+   },
+   "q": "A \\(25.0\\ \\text{cm}^{3}\\) portion of sodium carbonate solution needs \\(22.50\\ \\text{cm}^{3}\\) of \\(0.100\\ \\text{mol dm}^{-3}\\) hydrochloric acid for complete reaction: \\(\\mathrm{Na_{2}CO_{3} + 2HCl \\rightarrow 2NaCl + H_{2}O + CO_{2}}\\). What is the concentration of the sodium carbonate solution?",
+   "options": {
+    "A": "\\(0.0450\\ \\text{mol dm}^{-3}\\)",
+    "B": "\\(0.0563\\ \\text{mol dm}^{-3}\\)",
+    "C": "\\(0.0900\\ \\text{mol dm}^{-3}\\)",
+    "D": "\\(0.180\\ \\text{mol dm}^{-3}\\)"
+   },
+   "answer": "A",
+   "solution": "Amount of HCl = \\(0.100 \\times 0.02250 = 2.25 \\times 10^{-3}\\ \\text{mol}\\). Sodium carbonate reacts 1 : 2, so it is \\(1.125 \\times 10^{-3}\\ \\text{mol}\\) in \\(0.0250\\ \\text{dm}^{3}\\). Concentration = \\(\\frac{1.125 \\times 10^{-3}}{0.0250}\\) = \\(0.0450\\ \\text{mol dm}^{-3}\\). (Ignoring the 1 : 2 ratio leads to \\(0.0900\\ \\text{mol dm}^{-3}\\).)"
+  },
+  {
+   "id": "che-al-amount-q011",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.11"
+     ]
+    }
+   },
+   "q": "A 0.500 g sample of impure calcium carbonate is added to \\(50.0\\ \\text{cm}^{3}\\) of \\(0.200\\ \\text{mol dm}^{-3}\\) hydrochloric acid, an excess. The acid left over needs \\(22.0\\ \\text{cm}^{3}\\) of \\(0.100\\ \\text{mol dm}^{-3}\\) sodium hydroxide. What is the percentage by mass of calcium carbonate in the sample? (\\(\\mathrm{CaCO_{3} + 2HCl \\rightarrow CaCl_{2} + H_{2}O + CO_{2}}\\); \\(M_{\\text{r}}\\) \\(\\mathrm{CaCO_{3}}\\) = 100.1)",
+   "options": {
+    "A": "22.0%",
+    "B": "44.0%",
+    "C": "56.1%",
+    "D": "78.1%"
+   },
+   "answer": "D",
+   "solution": "HCl added = \\(0.200 \\times 0.0500 = 0.0100\\ \\text{mol}\\). HCl left over = NaOH used = \\(0.100 \\times 0.0220 = 0.00220\\ \\text{mol}\\). HCl that reacted = 0.00780 mol, so \\(\\mathrm{CaCO_{3}}\\) = 0.00390 mol = \\(0.00390 \\times 100.1 = 0.390\\ \\text{g}\\). Percentage = \\(\\frac{0.390}{0.500} \\times 100\\) = 78.1%. (Working from the leftover acid as if it had reacted leads to 22.0%.)"
+  },
+  {
+   "id": "che-al-amount-q012",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.14"
+     ]
+    }
+   },
+   "q": "Burning 12.0 g of magnesium in air gives 16.0 g of magnesium oxide: \\(\\mathrm{2Mg + O_{2} \\rightarrow 2MgO}\\). What is the percentage yield? (\\(A_{\\text{r}}\\) Mg = 24.3; \\(M_{\\text{r}}\\) MgO = 40.3)",
+   "options": {
+    "A": "75.0%",
+    "B": "80.4%",
+    "C": "124%",
+    "D": "133%"
+   },
+   "answer": "B",
+   "solution": "Amount of Mg = \\(\\frac{12.0}{24.3} = 0.494\\ \\text{mol}\\), which gives at most 0.494 mol of MgO = \\(0.494 \\times 40.3 = 19.9\\ \\text{g}\\). Percentage yield = \\(\\frac{16.0}{19.9} \\times 100\\) = 80.4%. (Comparing the two masses directly, \\(\\frac{12.0}{16.0}\\), leads to 75.0%.)"
+  },
+  {
+   "id": "che-al-amount-q013",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.14"
+     ]
+    }
+   },
+   "q": "Ethanol can be made by fermentation: \\(\\mathrm{C_{6}H_{12}O_{6} \\rightarrow 2C_{2}H_{5}OH + 2CO_{2}}\\). What is the percentage atom economy for making ethanol? (\\(M_{\\text{r}}\\): \\(\\mathrm{C_{6}H_{12}O_{6}}\\) = 180.0, \\(\\mathrm{C_{2}H_{5}OH}\\) = 46.0, \\(\\mathrm{CO_{2}}\\) = 44.0)",
+   "options": {
+    "A": "25.6%",
+    "B": "48.9%",
+    "C": "51.1%",
+    "D": "100%"
+   },
+   "answer": "C",
+   "solution": "Atom economy = \\(\\frac{\\text{mass of desired product}}{\\text{total mass of reactants}} \\times 100\\). Two moles of ethanol form: \\(\\frac{2 \\times 46.0}{180.0} \\times 100\\) = 51.1%. (Forgetting the 2 in front of ethanol leads to 25.6%; the carbon dioxide accounts for the other 48.9%.)"
+  },
+  {
+   "id": "che-al-amount-q014",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.6",
+      "5.15"
+     ]
+    }
+   },
+   "q": "Aqueous silver nitrate is added to aqueous sodium chloride and a white precipitate forms. Which is the ionic equation for the reaction?",
+   "options": {
+    "A": "\\(\\mathrm{Ag^{+}(aq) + Cl^{-}(aq) \\rightarrow AgCl(s)}\\)",
+    "B": "\\(\\mathrm{AgNO_{3}(aq) + NaCl(aq) \\rightarrow AgCl(s) + NaNO_{3}(aq)}\\)",
+    "C": "\\(\\mathrm{Na^{+}(aq) + NO_{3}^{-}(aq) \\rightarrow NaNO_{3}(s)}\\)",
+    "D": "\\(\\mathrm{Ag^{+}(aq) + Cl^{-}(aq) \\rightarrow AgCl(aq)}\\)"
+   },
+   "answer": "A",
+   "solution": "An ionic equation shows only the ions that change; sodium and nitrate ions are spectator ions and stay in solution. The precipitate is solid silver chloride: \\(\\mathrm{Ag^{+}(aq) + Cl^{-}(aq) \\rightarrow AgCl(s)}\\). (The full equation is correct but is not the ionic equation; the precipitate must have the state symbol (s).)"
+  },
+  {
+   "id": "che-al-amount-q015",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.6"
+     ]
+    }
+   },
+   "q": "Which is the correctly balanced equation for the reaction of aluminium with sulfuric acid?",
+   "options": {
+    "A": "\\(\\mathrm{Al + H_{2}SO_{4} \\rightarrow AlSO_{4} + H_{2}}\\)",
+    "B": "\\(\\mathrm{2Al + 3H_{2}SO_{4} \\rightarrow Al_{2}(SO_{4})_{3} + 6H_{2}}\\)",
+    "C": "\\(\\mathrm{2Al + 3H_{2}SO_{4} \\rightarrow Al_{2}(SO_{4})_{3} + 3H}\\)",
+    "D": "\\(\\mathrm{2Al + 3H_{2}SO_{4} \\rightarrow Al_{2}(SO_{4})_{3} + 3H_{2}}\\)"
+   },
+   "answer": "D",
+   "solution": "Aluminium forms \\(\\mathrm{Al^{3+}}\\) and sulfate is \\(\\mathrm{SO_{4}^{2-}}\\), so the salt is \\(\\mathrm{Al_{2}(SO_{4})_{3}}\\). Three \\(\\mathrm{H_{2}SO_{4}}\\) supply six hydrogen atoms, which form three \\(\\mathrm{H_{2}}\\) molecules: \\(\\mathrm{2Al + 3H_{2}SO_{4} \\rightarrow Al_{2}(SO_{4})_{3} + 3H_{2}}\\). (Hydrogen gas is diatomic, so it is never written as H.)"
+  },
+  {
+   "id": "che-al-amount-q016",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.12"
+     ]
+    }
+   },
+   "q": "A burette can be read to \\(\\pm 0.05\\ \\text{cm}^{3}\\). A titre is found from an initial reading of \\(0.50\\ \\text{cm}^{3}\\) and a final reading of \\(24.60\\ \\text{cm}^{3}\\). What is the percentage uncertainty in the titre?",
+   "options": {
+    "A": "0.21%",
+    "B": "0.41%",
+    "C": "0.62%",
+    "D": "0.83%"
+   },
+   "answer": "B",
+   "solution": "The titre is 24.60 − 0.50 = \\(24.10\\ \\text{cm}^{3}\\). It comes from two readings, each \\(\\pm 0.05\\ \\text{cm}^{3}\\), so the uncertainty is \\(\\pm 0.10\\ \\text{cm}^{3}\\). Percentage uncertainty = \\(\\frac{0.10}{24.10} \\times 100\\) = 0.41%. (Counting only one reading leads to 0.21%.)"
+  },
+  {
+   "id": "che-al-amount-q017",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.5"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.13"
+     ]
+    }
+   },
+   "q": "A student's titres are about \\(12\\ \\text{cm}^{3}\\). Which change to the method would reduce the percentage uncertainty in each titre?",
+   "options": {
+    "A": "Use a burette that can only be read to the nearest \\(0.1\\ \\text{cm}^{3}\\).",
+    "B": "Use a smaller volume of the solution in the conical flask.",
+    "C": "Use a more concentrated solution in the burette.",
+    "D": "Use a more dilute solution in the burette, so that each titre is larger."
+   },
+   "answer": "D",
+   "solution": "The burette's uncertainty is fixed, about \\(\\pm 0.10\\ \\text{cm}^{3}\\) per titre, so a larger titre makes it a smaller percentage. A more dilute solution in the burette (or a larger volume in the flask) gives a larger titre. (Making the titrant more concentrated, or using less solution in the flask, makes the titre smaller and the percentage uncertainty larger.)"
+  },
+  {
+   "id": "che-al-amount-q018",
+   "difficulty": 1,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.1"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "1.7"
+     ]
+    }
+   },
+   "q": "For which substance should the term relative formula mass be used rather than relative molecular mass?",
+   "options": {
+    "A": "\\(\\mathrm{NaCl}\\)",
+    "B": "\\(\\mathrm{CO_{2}}\\)",
+    "C": "\\(\\mathrm{C_{6}H_{12}O_{6}}\\)",
+    "D": "\\(\\mathrm{NH_{3}}\\)"
+   },
+   "answer": "A",
+   "solution": "Relative molecular mass applies to substances made of molecules. Sodium chloride is ionic, a giant lattice with no molecules, so its formula unit has a relative formula mass. The other three are simple molecular substances. (A large formula does not make a substance ionic: glucose is molecular.)"
+  },
+  {
+   "id": "che-al-amount-q019",
+   "difficulty": 3,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.2"
+     ]
+    }
+   },
+   "q": "Which sample contains the greatest number of atoms? (\\(A_{\\text{r}}\\): H = 1.0, He = 4.0, C = 12.0, O = 16.0)",
+   "options": {
+    "A": "2.0 g of hydrogen, \\(\\mathrm{H_{2}}\\)",
+    "B": "4.0 g of helium, \\(\\mathrm{He}\\)",
+    "C": "32 g of oxygen, \\(\\mathrm{O_{2}}\\)",
+    "D": "8.0 g of methane, \\(\\mathrm{CH_{4}}\\)"
+   },
+   "answer": "D",
+   "solution": "Find the amount of atoms in each. Hydrogen: 1.0 mol of \\(\\mathrm{H_{2}}\\), 2.0 mol of atoms. Helium: 1.0 mol of atoms. Oxygen: 1.0 mol of \\(\\mathrm{O_{2}}\\), 2.0 mol of atoms. Methane: \\(\\frac{8.0}{16.0} = 0.50\\ \\text{mol}\\) of molecules, each of five atoms, so 2.5 mol of atoms. The answer is the 8.0 g of methane. (Comparing amounts of molecules rather than atoms makes the samples look equal.)"
+  },
+  {
+   "id": "che-al-amount-q020",
+   "difficulty": 2,
+   "boards": {
+    "aqa": {
+     "refs": [
+      "3.1.2.2"
+     ]
+    },
+    "edexcel": {
+     "points": [
+      "5.11"
+     ]
+    }
+   },
+   "q": "\\(25.0\\ \\text{cm}^{3}\\) of \\(2.00\\ \\text{mol dm}^{-3}\\) hydrochloric acid is diluted to exactly \\(250\\ \\text{cm}^{3}\\) with water in a volumetric flask. What amount of HCl is in a \\(10.0\\ \\text{cm}^{3}\\) portion of the diluted solution?",
+   "options": {
+    "A": "\\(2.00 \\times 10^{-4}\\ \\text{mol}\\)",
+    "B": "\\(2.00 \\times 10^{-3}\\ \\text{mol}\\)",
+    "C": "\\(2.00 \\times 10^{-2}\\ \\text{mol}\\)",
+    "D": "\\(5.00 \\times 10^{-2}\\ \\text{mol}\\)"
+   },
+   "answer": "B",
+   "solution": "Diluting tenfold, from \\(25.0\\) to \\(250\\ \\text{cm}^{3}\\), gives \\(0.200\\ \\text{mol dm}^{-3}\\). Amount in \\(10.0\\ \\text{cm}^{3}\\) = \\(0.200 \\times 0.0100\\) = \\(2.00 \\times 10^{-3}\\ \\text{mol}\\). (Forgetting the dilution leads to \\(2.00 \\times 10^{-2}\\ \\text{mol}\\).)"
+  }
+ ]
+}
