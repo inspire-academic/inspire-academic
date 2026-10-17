@@ -16,8 +16,8 @@ const LISTS_SUBJECTS = ['dashboard.html', 'subjects.html', 'student/progress.htm
   'teacher/ism-class-management.html', 'teacher/lesson-admin.html', 'teacher/content-coverage.html'];
 // Pages that only look a subject up by id, to show its name.
 const LOOKUP_ONLY = ['teacher/teacher.html', 'ism-class/subject.html',
-  // The A-level page asks for its one subject by slug.
-  'assets/js/a-level-physics.js'];
+  // The A-level subject page asks for its one subject by slug.
+  'assets/js/a-level-subject.js'];
 
 test('a-level: every page that lists subjects keeps to GCSE', () => {
   for (const f of LISTS_SUBJECTS) {
@@ -53,15 +53,35 @@ test('a-level: quizzes offered across subjects keep to GCSE', () => {
 });
 
 test('a-level: the SQL warns about the order, and its topics match the question files', () => {
-  const sql = read('supabase/a_level_physics_subject.sql');
-  assert.match(sql, /RUN ONLY AFTER the GCSE-only page filters are live/);
-  const slugs = [...sql.matchAll(/\('al-physics-([a-z-]+)',/g)].map(m => m[1]).sort();
-  const files = fs.readdirSync(path.join(ROOT, 'curriculum/flashcards/physics-a-level')).map(f => f.replace(/\.json$/, '')).sort();
-  assert.deepEqual(slugs, files, 'one topic row per A-level Physics topic file');
-  for (const f of fs.readdirSync(path.join(ROOT, 'curriculum/quizzes/physics-a-level'))) {
-    assert.ok(slugs.includes(f.replace(/\.json$/, '')), `${f} has a topic row`);
+  const ORDER = { physics: /RUN ONLY AFTER the GCSE-only page filters are live/, chemistry: /RUN ONLY AFTER \/a-level\/chemistry .* is\s+-- !! live on inspireacademic\.org \(main\)/ };
+  for (const subject of ['physics', 'chemistry']) {
+    const sql = read(`supabase/a_level_${subject}_subject.sql`);
+    assert.match(sql, ORDER[subject]);
+    const slugs = [...sql.matchAll(new RegExp(`\\('al-${subject}-([a-z0-9-]+)',`, 'g'))].map(m => m[1]).sort();
+    const files = fs.readdirSync(path.join(ROOT, `curriculum/flashcards/${subject}-a-level`)).map(f => f.replace(/\.json$/, '')).sort();
+    assert.deepEqual(slugs, files, `one topic row per A-level ${subject} topic file`);
+    const quizDir = path.join(ROOT, `curriculum/quizzes/${subject}-a-level`);
+    for (const f of fs.existsSync(quizDir) ? fs.readdirSync(quizDir) : []) {
+      assert.ok(slugs.includes(f.replace(/\.json$/, '')), `${subject}: ${f} has a topic row`);
+    }
+    assert.ok(fs.existsSync(path.join(ROOT, `supabase/a_level_${subject}_subject_rollback.sql`)));
   }
-  assert.ok(fs.existsSync(path.join(ROOT, 'supabase/a_level_physics_subject_rollback.sql')));
+  // The quiz publisher knows each subject's topic slugs.
+  assert.match(read('netlify/functions/_quiz-publish.js'), /SLUG_PREFIX = \{ 'physics-a-level': 'al-physics', 'chemistry-a-level': 'al-chemistry' \}/);
+});
+
+test('a-level: every subject with a page has its route and page, and its groups name real topics', () => {
+  const A = require('../assets/js/a-level-subjects.js');
+  for (const s of A.SUBJECTS.filter(x => x.page)) {
+    const page = read(`subjects/${s.slug}.html`);
+    assert.match(page, new RegExp(`<main class="fc-main" id="al-main" data-subject="${s.slug}">`));
+    assert.match(read('netlify.toml'), new RegExp(`from = "${s.page.replace(/\//g, '\\/')}"\\s+to = "\\/subjects\\/${s.slug}\\.html"`));
+    const prefix = 'al-' + s.slug.replace(/-a-level$/, '') + '-';
+    const files = fs.readdirSync(path.join(ROOT, 'curriculum/flashcards', s.slug)).map(f => prefix + f.replace(/\.json$/, '')).sort();
+    const grouped = [].concat(...(s.sections || []).map(x => x.topics), ...(s.options ? [s.options.topics] : []));
+    for (const t of grouped) assert.ok(files.includes(t), `${s.slug}: ${t} is a topic`);
+    if (s.sections) assert.deepEqual([...new Set([].concat(...s.sections.map(x => x.topics)))].sort(), files, `${s.slug}: the sections hold every topic once`);
+  }
 });
 
 test('a-level: the dashboard offers A-level subjects to A Level students only', () => {
@@ -79,12 +99,17 @@ test('a-level: the dashboard offers A-level subjects to A Level students only', 
 });
 
 test('a-level: the subject page keeps the house rules and only offers published quizzes', () => {
-  const page = read('subjects/physics-a-level.html');
-  const js = read('assets/js/a-level-physics.js');
+  const js = read('assets/js/a-level-subject.js');
   const css = read('assets/css/a-level.css');
-  assert.doesNotMatch(page, /\sstyle=|\son[a-z]+=|<style/, 'no inline styles or handlers');
-  assert.doesNotMatch(page, /<script(?![^>]*\ssrc=)[^>]*>/, 'no inline scripts');
-  assert.match(page, /name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/);
+  for (const f of ['subjects/physics-a-level.html', 'subjects/chemistry-a-level.html']) {
+    const page = read(f);
+    assert.doesNotMatch(page, /\sstyle=|\son[a-z]+=|<style/, `${f}: no inline styles or handlers`);
+    assert.doesNotMatch(page, /<script(?![^>]*\ssrc=)[^>]*>/, `${f}: no inline scripts`);
+    assert.match(page, /name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/);
+    assert.match(page, /<script src="\/assets\/js\/a-level-subjects\.js" defer><\/script>\s*<script src="\/assets\/js\/a-level-subject\.js" defer><\/script>/);
+  }
+  // The subject's flashcards are offered once it has published cards.
+  assert.match(js, /'\/student\/flashcards-v2\.html\?subject=' \+ encodeURIComponent\(SUBJECT_SLUG\)/);
   assert.doesNotMatch(css, /max-width:\s*\d+px\)/, 'mobile first: min-width media queries only');
   assert.doesNotMatch(js, /localStorage|sessionStorage|innerHTML/);
   assert.match(js, /from\('quizzes'\)[^;]*\.eq\('is_published', true\)/, 'only published quizzes are offered');
@@ -105,7 +130,9 @@ test('a-level: an A-level quiz gives no GCSE grade and leads back to the A-level
   assert.doesNotMatch(words, /Grade|\d\/\d/, 'no grade is claimed for an A-level quiz');
   assert.match(/const gcseGrade=([\s\S]*?);\n/.exec(quiz)[1], /Grade 9 territory/);
   // The way back.
-  assert.match(quiz, /back\.onclick=\(\)=>\{ location\.href='\/a-level\/physics'; \};/);
-  assert.match(read('assets/js/a-level-physics.js'), /\+ '&ref=physics-a-level'/);
+  // The way back is the quiz's own A-level page: physics-a-level -> /a-level/physics.
+  assert.match(quiz, /const page='\/a-level\/'\+String\(quiz\.topics\?\.subjects\?\.slug\|\|'physics-a-level'\)\.replace\(\/-a-level\$\/,''\);\s+back\.onclick=\(\)=>\{ location\.href=page; \};/);
+  assert.match(read('assets/js/a-level-subject.js'), /\+ '&ref=' \+ SUBJECT_SLUG/);
   assert.match(read('assets/js/subject-back.js'), /'physics-a-level': \{ label: '← A-level Physics', href: '\/a-level\/physics'/);
+  assert.match(read('assets/js/subject-back.js'), /'chemistry-a-level': \{ label: '← A-level Chemistry', href: '\/a-level\/chemistry'/);
 });

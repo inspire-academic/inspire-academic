@@ -11,11 +11,29 @@
 //   { "physics-a-level": "aqa", "chemistry-a-level": "edexcel" }
 // A subject whose board is not given falls back to profiles.exam_board.
 //
-// Used by dashboard.html and the flashcard app (assets/js/fc-app.js).
+// Each subject's page (assets/js/a-level-subject.js) can group its topics:
+//   sections: [{ title, topics: [topic slug, ...] }]   headed groups, in order
+//   options:  { board, topics, compulsoryFor }        topics a student of that
+//             board sits only one of; compulsoryFor names, per other board,
+//             the ones that are ordinary topics there and hides the rest
+// Topic slugs are the topics rows' slugs (al-<subject>-<file name>).
+//
+// Used by dashboard.html, the flashcard app (assets/js/fc-app.js) and the
+// A-level subject pages.
 (function (root) {
   var SUBJECTS = [
-    { slug: 'physics-a-level', name: 'Physics', icon: '⚡', page: '/a-level/physics' },
-    { slug: 'chemistry-a-level', name: 'Chemistry', icon: '🧪', page: null }
+    { slug: 'physics-a-level', name: 'Physics', icon: '⚡', page: '/a-level/physics',
+      options: { board: 'aqa',
+        topics: ['al-physics-astrophysics', 'al-physics-medical-physics', 'al-physics-engineering-physics', 'al-physics-turning-points', 'al-physics-electronics'],
+        compulsoryFor: { edexcel: ['al-physics-astrophysics'] } } },
+    { slug: 'chemistry-a-level', name: 'Chemistry', icon: '🧪', page: '/a-level/chemistry',
+      sections: [
+        { title: 'Physical chemistry', topics: ['atomic-structure', 'amount-of-substance', 'bonding', 'energetics', 'kinetics', 'equilibria', 'redox',
+          'thermodynamics', 'rate-equations', 'electrode-potentials', 'acids-and-bases'].map(function (t) { return 'al-chemistry-' + t; }) },
+        { title: 'Inorganic chemistry', topics: ['periodicity', 'group-2', 'halogens', 'transition-metals', 'ions-in-solution'].map(function (t) { return 'al-chemistry-' + t; }) },
+        { title: 'Organic chemistry', topics: ['organic-intro', 'alkanes', 'halogenoalkanes', 'alkenes', 'alcohols', 'organic-analysis', 'optical-isomerism', 'carbonyls',
+          'carboxylic-acids', 'aromatic', 'amines', 'polymers', 'amino-acids-dna', 'organic-synthesis', 'nmr-chromatography'].map(function (t) { return 'al-chemistry-' + t; }) }
+      ] }
   ];
   var BOARDS = { aqa: 'AQA', edexcel: 'Edexcel' };
 

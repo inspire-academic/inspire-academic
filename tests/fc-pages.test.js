@@ -96,8 +96,10 @@ test('fc app: what a phone downloads stays small', () => {
     'assets/js/a-level-subjects.js'].reduce((n, f) => n + gz(f), 0);
   // Raised from 20 000 on 14 October 2026 to make room for graphs on cards,
   // and to 23 000 on 17 October 2026 for several subjects (and the subject
-  // list). CLAUDE.md's limit for a page's scripts is 80 000.
-  assert.ok(own < 23000, `the app's own files are ${own} bytes compressed`);
+  // list), then 25 000 the same day as the subject list gained Chemistry's
+  // topic groups (each subject adds a few hundred bytes).
+  // CLAUDE.md's limit for a page's scripts is 80 000.
+  assert.ok(own < 25000, `the app's own files are ${own} bytes compressed`);
   assert.ok(gz('assets/vendor/ts-fsrs-5.4.2/ts-fsrs.umd.js') < 20000, 'the scheduler library');
   assert.ok(fs.existsSync(path.join(ROOT, 'assets/vendor/ts-fsrs-5.4.2/LICENSE')), 'the library keeps its licence');
 });

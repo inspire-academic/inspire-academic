@@ -12,6 +12,7 @@
     chemistry: { label: '← Chemistry', href: '/subjects/chemistry.html', bg: 'rgba(16,185,129,.18)', border: 'rgba(16,185,129,.4)', borderHover: 'rgba(16,185,129,.75)' },
     biology:   { label: '← Biology',   href: '/subjects/biology.html',   bg: 'rgba(22,163,74,.18)',  border: 'rgba(22,163,74,.4)',  borderHover: 'rgba(22,163,74,.75)'  },
     'physics-a-level': { label: '← A-level Physics', href: '/a-level/physics', bg: 'rgba(37,99,235,.18)', border: 'rgba(37,99,235,.4)', borderHover: 'rgba(37,99,235,.75)' },
+    'chemistry-a-level': { label: '← A-level Chemistry', href: '/a-level/chemistry', bg: 'rgba(16,185,129,.18)', border: 'rgba(16,185,129,.4)', borderHover: 'rgba(16,185,129,.75)' },
     maths:     { label: '← Maths',     href: '/subjects/maths.html',     bg: 'rgba(59,130,246,.18)', border: 'rgba(59,130,246,.4)', borderHover: 'rgba(59,130,246,.75)' },
   };
   const FALLBACK = {
