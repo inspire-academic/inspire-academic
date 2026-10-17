@@ -78,7 +78,9 @@
       });
     };
     // Drafts are typeset, and their graphs drawn, here in the browser.
-    return Promise.all([script('/assets/js/maths-typeset.js'), script('/assets/js/physics-graph.js')]).then(function () {
+    return Promise.all([script('/assets/js/maths-typeset.js'), script('/assets/js/physics-graph.js'), script('/assets/js/chem-figure.js')]).then(function () {
+      return script('/assets/js/figures.js');
+    }).then(function () {
       return getJson('/api/v1/flashcards/review', auth);
     }).then(function (res) {
       html = function (s) { return IAMaths.markup(String(s).replace(/\\\(/g, '\\(\\displaystyle ')); };
@@ -105,7 +107,7 @@
           boards[b] = { refs: (e.refs || e.points).map(String), given: e.given, practical: e.practical, note: e.note };
         });
         return Object.assign({}, c, { v: c.hash, boards: boards,
-          fig: c.figure && PhysicsGraph.svg(c.figure), afig: c.answerFigure && PhysicsGraph.svg(c.answerFigure) });
+          fig: c.figure && Figures.svg(c.figure), afig: c.answerFigure && Figures.svg(c.answerFigure) });
       })
     };
   }

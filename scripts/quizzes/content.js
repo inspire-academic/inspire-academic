@@ -20,7 +20,8 @@
 
 const F = require('../flashcards/content.js');
 const { checkQuestion } = require('../../netlify/functions/_question-checks.js');
-const PhysicsGraph = require('../../assets/js/physics-graph.js');
+const Figures = require('../../assets/js/figures.js');
+const STRUCTURES = require('../../assets/chem/structures/index.json');
 
 const SCHEMA = 'inspire.quiz.v1';
 const LETTERS = ['A', 'B', 'C', 'D'];
@@ -73,8 +74,8 @@ function validateTopic(file, { katex = null, spec = null } = {}) {
     for (const s of [q.q, q.solution, ...LETTERS.map(L => options[L])]) {
       if (/<[a-zA-Z/]/.test(String(s || '').replace(/\\\(([\s\S]*?)\\\)/g, ' '))) { bad('markup is not allowed in a quiz question'); break; }
     }
-    // A graph shown with the question (assets/js/physics-graph.js).
-    if (q.figure !== undefined) PhysicsGraph.check(q.figure).forEach(p => bad(`figure: ${p}`));
+    // A graph or chemistry drawing shown with the question (assets/js/figures.js).
+    if (q.figure !== undefined) Figures.check(q.figure, { structures: STRUCTURES }).forEach(p => bad(`figure: ${p}`));
     const bank = checkQuestion(toBank(q), { questionType: 'mcq', marks: 1, typeset: true });
     // A warning there ("check the key") is a failure here: nothing unsure is kept.
     [...bank.errors, ...bank.warnings].forEach(bad);

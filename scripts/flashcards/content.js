@@ -12,7 +12,16 @@
 // Used by the review endpoint, scripts/flashcards/build.js and the tests.
 
 const crypto = require('crypto');
-const PhysicsGraph = require('../../assets/js/physics-graph.js');
+const fs = require('fs');
+const path = require('path');
+const Figures = require('../../assets/js/figures.js');
+// Structures drawn ahead of time by scripts/chem/draw-structures.js.
+const STRUCTURES_DIR = path.join(__dirname, '..', '..', 'assets', 'chem', 'structures');
+const STRUCTURES = require('../../assets/chem/structures/index.json');
+const FIGURE_OPTS = { structures: STRUCTURES };
+// When publishing, a stored structure is put in the card itself, so a phone
+// needs nothing else to show it.
+const PUBLISH_OPTS = { structures: STRUCTURES, structureSvg: key => fs.readFileSync(path.join(STRUCTURES_DIR, key + '.svg'), 'utf8') };
 
 const SCHEMA = 'inspire.flashcards.v1';
 
@@ -110,8 +119,8 @@ function validateTopic(file, { katex = null, spec = null } = {}) {
     if (card.type === 'worked-calc' && !card.steps) bad('a worked calculation needs steps');
     if (card.type === 'explain' && !card.marks) bad('an explain card needs marks (the mark-scheme points)');
     if (card.steps && card.marks) bad('a card has steps or marks, not both');
-    // A graph shown with the question, or with the answer (assets/js/physics-graph.js).
-    for (const f of ['figure', 'answerFigure']) if (card[f] !== undefined) PhysicsGraph.check(card[f]).forEach(p => bad(`${f}: ${p}`));
+    // A graph or chemistry drawing shown with the question, or with the answer (assets/js/figures.js).
+    for (const f of ['figure', 'answerFigure']) if (card[f] !== undefined) Figures.check(card[f], FIGURE_OPTS).forEach(p => bad(`${f}: ${p}`));
     if (card.numeric !== undefined) {
       const n = card.numeric;
       if (!n || typeof n.value !== 'number' || !isFinite(n.value) || typeof n.unit !== 'string' || !Number.isInteger(n.sf) || n.sf < 1 || n.sf > 4) bad('numeric must be { value: number, unit: text, sf: 1-4 }');
@@ -170,8 +179,8 @@ function publishCard(card, katex) {
   const out = { id: card.id, v: cardHash(card), type: card.type, difficulty: card.difficulty, q: toHtml(card.q, katex), a: toHtml(card.a, katex) };
   // Graphs are drawn here, so a phone needs no drawing script: `fig` is shown
   // with the question and `afig` with the answer.
-  if (card.figure) out.fig = PhysicsGraph.svg(card.figure);
-  if (card.answerFigure) out.afig = PhysicsGraph.svg(card.answerFigure);
+  if (card.figure) out.fig = Figures.svg(card.figure, PUBLISH_OPTS);
+  if (card.answerFigure) out.afig = Figures.svg(card.answerFigure, PUBLISH_OPTS);
   if (card.why) out.why = toHtml(card.why, katex);
   for (const f of LIST_FIELDS) if (card[f]) out[f] = card[f].map(t => toHtml(t, katex));
   if (card.numeric) out.numeric = card.numeric;
