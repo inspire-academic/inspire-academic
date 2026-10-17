@@ -120,8 +120,10 @@
   function overlap(a, b, by) { by = by || 0; return a.x1 < b.x2 - by && b.x1 < a.x2 - by && a.y1 < b.y2 - by && b.y1 < a.y2 - by; }
   function inside(b, x, y) { return x > b.x1 && x < b.x2 && y > b.y1 && y < b.y2; }
   // Where the ray from the box centre at angle (degrees, y up) leaves the box.
-  function edge(b, deg, gap) {
-    var cx = (b.x1 + b.x2) / 2, cy = (b.y1 + b.y2) / 2, ux = Math.cos(rad(deg)), uy = -Math.sin(rad(deg));
+  // (ox, oy): where the ray starts, if not the box's centre. A bond starts
+  // at the atom itself, which in "CH3" or "H3N" is not the label's centre.
+  function edge(b, deg, gap, ox, oy) {
+    var cx = ox === undefined ? (b.x1 + b.x2) / 2 : ox, cy = oy === undefined ? (b.y1 + b.y2) / 2 : oy, ux = Math.cos(rad(deg)), uy = -Math.sin(rad(deg));
     var tx = ux ? ((ux > 0 ? b.x2 : b.x1) - cx) / ux : Infinity, ty = uy ? ((uy > 0 ? b.y2 : b.y1) - cy) / uy : Infinity;
     var t = Math.min(Math.abs(tx), Math.abs(ty)) + (gap || 0);
     return [cx + ux * t, cy + uy * t];
@@ -166,7 +168,7 @@
     Object.keys(atoms).forEach(function (id) {
       var at = atoms[id], el = at.a.el || '';
       if (!el) { at.box = at.core = box(at.px, at.py, 0, 0); at.x0 = at.px; return; }
-      var m = /^(Hd*)?([A-Z][a-z]?)/.exec(el), main = m ? m[2] : el.charAt(0);
+      var m = /^(H\d*)?([A-Z][a-z]?)/.exec(el), main = m ? m[2] : el.charAt(0);
       var prefix = m && m[1] && parseLabel(el) ? m[1] : '';
       var pw = prefix ? textWidth(prefix, SIZE) : 0, ew = textWidth(main, SIZE), w = textWidth(el, SIZE), h = SIZE * 0.9;
       at.x0 = at.px - pw - ew / 2;
@@ -433,7 +435,7 @@
     (fig.bonds || []).forEach(function (b) {
       var p = scene.atoms[b.a], q = scene.atoms[b.b];
       var deg = angleTo(p.px, p.py, q.px, q.py);
-      var s = p.a.el ? edge(p.box, deg, 2) : [p.px, p.py], e = q.a.el ? edge(q.box, deg + 180, 2) : [q.px, q.py];
+      var s = p.a.el ? edge(p.box, deg, 2, p.px, p.py) : [p.px, p.py], e = q.a.el ? edge(q.box, deg + 180, 2, q.px, q.py) : [q.px, q.py];
       var dx = e[0] - s[0], dy = e[1] - s[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
       if (b.style === 'wedge') { out.push('<path d="M' + pt(s[0], s[1]) + ' L' + pt(e[0] + nx * 4, e[1] + ny * 4) + ' L' + pt(e[0] - nx * 4, e[1] - ny * 4) + ' Z" fill="' + INK + '"/>'); return; }
       if (b.style === 'hash') { for (var k = 1; k <= 7; k++) { var u = k / 7, w = 4 * u; line(s[0] + dx * u + nx * w, s[1] + dy * u + ny * w, s[0] + dx * u - nx * w, s[1] + dy * u - ny * w, ' stroke-width="1.2"'); } return; }
